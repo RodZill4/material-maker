@@ -5,9 +5,10 @@ var angle = 0.0
 
 func _ready():
 	set_slot(0, true, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
+	initialize_properties([ $rotate ])
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", uv=null, rgb=null, f=null }
+	var rv = { defs="", code="", uv=null }
 	var src = get_source()
 	if src == null:
 		return rv
@@ -15,9 +16,12 @@ func get_shader_code(uv):
 	var src_code = src.get_shader_code(rv.uv)
 	if !generated:
 		rv.defs = src_code.defs+"vec2 "+name+"_uv(vec2 uv) { return rotate(uv, "+str(angle)+"); }\n"
+		rv.code = src_code.code;
 		generated = true
-	rv.f = src_code.f
-	rv.rgb = src_code.rgb
+	if src_code.has("f"):
+		rv.f = src_code.f
+	if src_code.has("rgb"):
+		rv.rgb = src_code.rgb
 	return rv
 
 func _on_Rotate_text_changed(new_text):

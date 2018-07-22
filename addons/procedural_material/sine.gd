@@ -6,6 +6,7 @@ var sharpness = 1.0
 
 func _ready():
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
+	initialize_properties([ $waves, $sharpness ])
 
 func get_shader_code(uv):
 	var rv = { defs="", code="", rgb=null, f=null }
@@ -22,3 +23,6 @@ func _on_Count_text_changed(new_text):
 func _on_Sharpness_text_changed(new_text):
 	sharpness = float(new_text)
 	get_parent().get_parent().generate_shader()
+
+func _get_state_variables():
+	return [ "waves", "sharpness" ]

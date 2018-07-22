@@ -41,7 +41,7 @@ float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
 	float slope_y = 1.0/(bevel*count.y);
 	float f3 = fract_y*slope_y-off;
 	float f4 = (1.0-fract_y)*slope_y-off;
-	return min(min(f1, f2), min(f3, f4));
+	return max(0.0, min(1.0, min(min(f1, f2), min(f3, f4))));
 }
 
 float colored_bricks(vec2 uv, vec2 count, float offset) {

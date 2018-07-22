@@ -10,7 +10,7 @@ func _ready():
 	initialize_properties([ $GridContainer/subdivide, $GridContainer/u, $GridContainer/v ])
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", rgb=null, f=null }
+	var rv = { defs="", code="" }
 	if !generated:
 		rv.defs = "float "+name+"_f(vec2 uv) { return iqnoise(uv, "+str(subdivide)+", "+str(u)+", "+str(v)+"); }\n"
 		generated = true

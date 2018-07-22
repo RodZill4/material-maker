@@ -1,20 +1,20 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/procedural_material/boolean.gd" type="Script" id=1]
+[ext_resource path="res://addons/procedural_material/colorize.gd" type="Script" id=1]
 
 [sub_resource type="Theme" id=1]
 
 
-[node name="Boolean" type="GraphNode" index="0"]
+[node name="Colorize" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 329.0
-margin_top = 117.0
-margin_right = 462.0
-margin_bottom = 279.0
+margin_left = 618.0
+margin_top = 148.0
+margin_right = 751.0
+margin_bottom = 310.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -22,7 +22,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "Boolean"
+title = "Colorize"
 offset = Vector2( 0, 0 )
 show_close = true
 resizable = false
@@ -35,16 +35,16 @@ slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
-slot/1/left_enabled = true
+slot/1/left_enabled = false
 slot/1/left_type = 0
-slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_color = Color( 1, 1, 1, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
-slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="OptionButton" type="OptionButton" parent="." index="0"]
+[node name="color0" type="ColorPickerButton" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -62,16 +62,17 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 toggle_mode = false
-action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
+text = "0"
 flat = false
-align = 0
-items = [  ]
-selected = -1
+align = 1
+color = Color( 0, 0, 0, 1 )
+edit_alpha = true
+_sections_unfolded = [ "Caret", "Placeholder" ]
 
-[node name="OptionButton2" type="OptionButton" parent="." index="1"]
+[node name="color1" type="ColorPickerButton" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -89,14 +90,15 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 toggle_mode = false
-action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
+text = "0"
 flat = false
-align = 0
-items = [  ]
-selected = -1
+align = 1
+color = Color( 1, 1, 1, 1 )
+edit_alpha = true
+_sections_unfolded = [ "Caret", "Placeholder" ]
 
 [connection signal="close_request" from="." to="." method="queue_free"]
 

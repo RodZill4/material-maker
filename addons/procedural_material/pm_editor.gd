@@ -4,12 +4,16 @@ extends Container
 var popup_position = Vector2(0, 0)
 
 const MENU = [
+	{ command="load_texture", description="Load texture" },
+	{ command="save_texture", description="Save texture" },
 	{ name="sine", description="Sine" },
-	{ name="boolean", description="Boolean" },
 	{ name="bricks", description="Bricks" },
 	{ name="iqnoise", description="IQ Noise" },
 	{ name="perlin", description="Perlin noise" },
-	{ name="transform", description="Transform" }
+	{ name="boolean", description="Boolean" },
+	{ name="transform", description="Transform" },
+	{ name="colorize", description="Colorize" },
+	{ name="blend", description="Blend" }
 ]
 
 func _ready():
@@ -24,11 +28,14 @@ func _on_GraphEdit_popup_request(position):
 
 func _on_PopupMenu_id_pressed(id):
 	var node_type = null
-	node_type = load("res://addons/procedural_material/"+MENU[id].name+".tscn")
-	if node_type != null:
-		var node = node_type.instance()
-		$GraphEdit.add_child(node)
-		node.set_begin(popup_position)
+	if MENU[id].has("command"):
+		call(MENU[id].command)
+	elif MENU[id].has("name"):
+		node_type = load("res://addons/procedural_material/"+MENU[id].name+".tscn")
+		if node_type != null:
+			var node = node_type.instance()
+			$GraphEdit.add_child(node)
+			node.set_begin(popup_position)
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
 	var disconnect = $GraphEdit.get_source(to, to_slot)
@@ -36,6 +43,57 @@ func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
 		$GraphEdit.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
 	$GraphEdit.connect_node(from, from_slot, to, to_slot)
 	generate_shader();
+
+func load_texture():
+	var dialog = EditorFileDialog.new()
+	add_child(dialog)
+	dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
+	dialog.mode = EditorFileDialog.MODE_OPEN_FILE
+	dialog.add_filter("*.ptex;Procedural texture file")
+	dialog.connect("file_selected", self, "load_file")
+	dialog.popup_centered()
+
+func load_file(filename):
+	var file = File.new()
+	if file.open(filename, File.READ) != OK:
+		return
+	var data = file.get_var()
+	file.close()
+	$GraphEdit.clear_connections()
+	for c in $GraphEdit.get_children():
+		if c is GraphNode:
+			$GraphEdit.remove_child(c)
+			c.free()
+	for n in data.nodes:
+		var node_type = load("res://addons/procedural_material/"+n.type+".tscn")
+		if node_type != null:
+			var node = node_type.instance()
+			node.name = n.name
+			$GraphEdit.add_child(node)
+			node.deserialize(n)
+	for c in data.connections:
+		$GraphEdit.connect_node(c.from, c.from_port, c.to, c.to_port)
+	generate_shader()
+
+func save_texture():
+	var dialog = EditorFileDialog.new()
+	add_child(dialog)
+	dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
+	dialog.mode = EditorFileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.ptex;Procedural texture file")
+	dialog.connect("file_selected", self, "save_file")
+	dialog.popup_centered()
+
+func save_file(filename):
+	var data = { nodes = [] }
+	for c in $GraphEdit.get_children():
+		if c is GraphNode:
+			data.nodes.append(c.serialize())
+	data.connections = $GraphEdit.get_connection_list()
+	var file = File.new()
+	if file.open(filename, File.WRITE) == OK:
+		file.store_var(data)
+		file.close()
 
 func generate_shader():
 	var code = ""
@@ -47,8 +105,9 @@ func generate_shader():
 	for c in $GraphEdit.get_children():
 		if c is GraphNode:
 			c.generated = false
+			c.generated_variants = []
 	var shader_code = $GraphEdit/Material.get_shader_code("UV")
+	print("GENERATED SHADER:\n"+shader_code.code)
 	code += shader_code.code
-	#print(code)
 	$Preview.material.shader.set_code(code)
 

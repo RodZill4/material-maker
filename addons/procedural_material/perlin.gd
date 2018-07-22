@@ -9,7 +9,7 @@ func _ready():
 	initialize_properties([ $GridContainer/iterations, $GridContainer/turbulence ])
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", rgb=null, f=null }
+	var rv = { defs="", code="" }
 	if !generated:
 		rv.defs = "float "+name+"_f(vec2 uv) { return perlin(uv, "+str(iterations)+", "+str(turbulence)+"); }\n"
 		generated = true

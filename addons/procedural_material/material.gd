@@ -14,12 +14,11 @@ func get_shader_code(uv):
 		var src_code = src.get_shader_code("UV")
 		rv.code += src_code.defs
 		rv.code += "void fragment() {\n"
-		rv.code += src_code.code+"\n"
-		if src_code.rgb != null:
-			rv.code += "vec3 "+name+"_rgb = "+src_code.rgb+"\n"
-			rv.code += "COLOR = vec4("+name+"_rgb.r, "+name+"_rgb.g, "+name+"_rgb.b, 1.0);"
-		elif src_code.f != null:
-			rv.code += "float "+name+"_f = "+src_code.f+";\n"
-			rv.code += "COLOR = vec4("+name+"_f, "+name+"_f, "+name+"_f, 1.0);"
-			rv.code += "\n}\n"
+		rv.code += src_code.code
+		rv.code += "vec3 "+name+"_rgb = "+get_source_rgb(src_code)+";\n"
+		rv.code += "COLOR = vec4("+name+"_rgb, 1.0);\n"
+		rv.code += "}\n"
 	return rv
+
+func _get_state_variables():
+	return [ ]

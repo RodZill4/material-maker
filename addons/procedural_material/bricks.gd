@@ -12,11 +12,15 @@ func _ready():
 	initialize_properties([ $GridContainer/rows, $GridContainer/columns, $GridContainer/row_offset, $GridContainer/mortar, $GridContainer/bevel ])
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", rgb=null, f=null }
-	if !generated:
-		rv.defs = "float "+name+"_f(vec2 uv) { return bricks(uv, vec2("+str(rows)+", "+str(columns)+"), "+str(row_offset)+", "+str(mortar)+", "+str(bevel)+"); }\n"
-		generated = true
-	rv.f = name+"_f("+uv+")"
+	var rv = { defs="", code="" }
+	if generated_variants.empty():
+		rv.defs = "float "+name+"_f(vec2 uv) { return bricks(uv, vec2("+str(rows)+", "+str(columns)+"), "+str(row_offset)+", "+str(mortar)+", "+str(max(0.001, bevel))+"); }\n"
+	var variant_index = generated_variants.find(uv)
+	if variant_index == -1:
+		variant_index = generated_variants.size()
+		generated_variants.append(uv)
+		rv.code = "float "+name+"_"+str(variant_index)+"_f = "+name+"_f("+uv+");\n"
+	rv.f = name+"_"+str(variant_index)+"_f"
 	return rv
 
 func _get_state_variables():
