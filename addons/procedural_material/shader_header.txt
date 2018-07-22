@@ -1,0 +1,93 @@
+shader_type canvas_item;
+
+float hash1(vec2 p) {
+    float q = dot(p,vec2(127.1,311.7));
+	return fract(sin(q)*43758.5453);
+}
+
+vec2 hash2(vec2 p) {
+    vec2 q = vec2( dot(p,vec2(127.1,311.7)), 
+				   dot(p,vec2(269.5,183.3)) );
+	return fract(sin(q)*43758.5453);
+}
+
+vec3 hash3(vec2 p) {
+    vec3 q = vec3( dot(p,vec2(127.1,311.7)), 
+				   dot(p,vec2(269.5,183.3)), 
+				   dot(p,vec2(419.2,371.9)) );
+	return fract(sin(q)*43758.5453);
+}
+
+float sine(vec2 uv, float count, float sharpness) {
+	return max(0.0, min(1.0, (0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x))));
+}
+
+vec2 rotate(vec2 uv, float angle) {
+	vec2 rv;
+	rv.x = cos(angle)*uv.x + sin(angle)*uv.y;
+	rv.y = -sin(angle)*uv.x + cos(angle)*uv.y;
+	return rv;
+}
+
+float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
+	mortar /= max(count.x, count.y);
+	bevel /= max(count.x, count.y);
+	float fract_x = fract(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
+	float slope_x = 1.0/(bevel*count.x);
+	float off = 0.5*mortar/bevel;
+	float f1 = fract_x*slope_x-off;
+	float f2 = (1.0-fract_x)*slope_x-off;
+	float fract_y = fract(uv.y*count.y);
+	float slope_y = 1.0/(bevel*count.y);
+	float f3 = fract_y*slope_y-off;
+	float f4 = (1.0-fract_y)*slope_y-off;
+	return min(min(f1, f2), min(f3, f4));
+}
+
+float colored_bricks(vec2 uv, vec2 count, float offset) {
+	float x = floor(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
+	float y = floor(uv.y*count.y);
+	return fract(x/3.0+y/7.0);
+}
+
+float iqnoise(vec2 uv, float s, float u, float v) {
+	uv *= s;
+    vec2 p = floor(uv);
+    vec2 f = fract(uv);
+		
+	float k = 1.0+63.0*pow(1.0-v,4.0);
+	
+	float va = 0.0;
+	float wt = 0.0;
+    for( int j=-2; j<=2; j++ )
+    for( int i=-2; i<=2; i++ )
+    {
+        vec2 g = vec2( float(i),float(j) );
+		vec3 o = hash3( p + g )*vec3(u,u,1.0);
+		vec2 r = g - f + o.xy;
+		float d = dot(r,r);
+		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );
+		va += o.z*ww;
+		wt += ww;
+    }
+	
+    return va/wt;
+}
+
+float perlin(vec2 uv, int iterations, float turbulence) {
+	float f = 0.0;
+	float c = 1.0;
+	float s = 2.0;
+	float m = 0.0;
+    for(int i = 0; i < iterations; i++) {
+		vec2 uv2 = float(s) * uv;
+		vec2 uv2_floor = floor(uv2);
+		vec2 uv2_fract = fract(uv2);
+		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
+			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
+		m += c;
+		s *= 2.0;
+		c *= turbulence;
+	}
+	return f/m;
+}
