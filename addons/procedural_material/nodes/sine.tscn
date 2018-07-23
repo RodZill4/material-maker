@@ -1,20 +1,19 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/procedural_material/colorize.gd" type="Script" id=1]
+[ext_resource path="res://addons/procedural_material/nodes/sine.gd" type="Script" id=1]
 
 [sub_resource type="Theme" id=1]
 
 
-[node name="Colorize" type="GraphNode" index="0"]
+[node name="Sine" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 618.0
-margin_top = 148.0
-margin_right = 751.0
-margin_bottom = 310.0
+margin_top = 1.0
+margin_right = 133.0
+margin_bottom = 163.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -22,14 +21,14 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "Colorize"
+title = "Sine"
 offset = Vector2( 0, 0 )
 show_close = true
 resizable = false
 selected = false
 comment = false
 overlay = 0
-slot/0/left_enabled = true
+slot/0/left_enabled = false
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = true
@@ -44,7 +43,7 @@ slot/1/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="color0" type="ColorPickerButton" parent="." index="0"]
+[node name="waves" type="LineEdit" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -53,51 +52,47 @@ anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
 margin_right = 117.0
-margin_bottom = 44.0
+margin_bottom = 48.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 0
+mouse_default_cursor_shape = 1
 size_flags_horizontal = 1
 size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "0"
-flat = false
-align = 1
-color = Color( 0, 0, 0, 1 )
-edit_alpha = true
+text = "1"
+focus_mode = 2
+context_menu_enabled = true
+placeholder_alpha = 0.6
+caret_blink = false
+caret_blink_speed = 0.65
+caret_position = 0
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
-[node name="color1" type="ColorPickerButton" parent="." index="1"]
+[node name="sharpness" type="LineEdit" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 44.0
+margin_top = 48.0
 margin_right = 117.0
-margin_bottom = 64.0
+margin_bottom = 72.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 0
+mouse_default_cursor_shape = 1
 size_flags_horizontal = 1
 size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "0"
-flat = false
-align = 1
-color = Color( 1, 1, 1, 1 )
-edit_alpha = true
+text = "1"
+focus_mode = 2
+context_menu_enabled = true
+placeholder_alpha = 0.6
+caret_blink = false
+caret_blink_speed = 0.65
+caret_position = 0
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [connection signal="close_request" from="." to="." method="queue_free"]

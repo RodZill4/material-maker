@@ -11,6 +11,7 @@ const MENU = [
 	{ name="iqnoise", description="IQ Noise" },
 	{ name="perlin", description="Perlin noise" },
 	{ name="transform", description="Transform" },
+	{ name="warp", description="Warp" },
 	{ name="colorize", description="Colorize" },
 	{ name="blend", description="Blend" }
 ]
@@ -30,7 +31,7 @@ func _on_PopupMenu_id_pressed(id):
 	if MENU[id].has("command"):
 		call(MENU[id].command)
 	elif MENU[id].has("name"):
-		node_type = load("res://addons/procedural_material/"+MENU[id].name+".tscn")
+		node_type = load("res://addons/procedural_material/nodes/"+MENU[id].name+".tscn")
 		if node_type != null:
 			var node = node_type.instance()
 			$GraphEdit.add_child(node)
@@ -56,7 +57,7 @@ func load_file(filename):
 	var file = File.new()
 	if file.open(filename, File.READ) != OK:
 		return
-	var data = file.get_var()
+	var data = parse_json(file.get_as_text())
 	file.close()
 	$GraphEdit.clear_connections()
 	for c in $GraphEdit.get_children():
@@ -64,7 +65,9 @@ func load_file(filename):
 			$GraphEdit.remove_child(c)
 			c.free()
 	for n in data.nodes:
-		var node_type = load("res://addons/procedural_material/"+n.type+".tscn")
+		if !n.has("type"):
+			continue
+		var node_type = load("res://addons/procedural_material/nodes/"+n.type+".tscn")
 		if node_type != null:
 			var node = node_type.instance()
 			node.name = n.name
@@ -91,7 +94,7 @@ func save_file(filename):
 	data.connections = $GraphEdit.get_connection_list()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
-		file.store_var(data)
+		file.store_string(to_json(data))
 		file.close()
 
 func generate_shader():

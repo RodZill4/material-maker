@@ -13,7 +13,7 @@ func color_to_string(c):
 	return "vec3("+str(c.r)+","+str(c.g)+","+str(c.b)+")"
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", uv=null, rgb=null, f=null }
+	var rv = { defs="", code="" }
 	var src0 = get_source(0)
 	var src1 = get_source(1)
 	var src2 = get_source(2)
@@ -26,12 +26,15 @@ func get_shader_code(uv):
 	if src2 != null:
 		src2_code = src2.get_shader_code(uv)
 		amount_str = str(src2_code.f)
-	if !generated:
+	if generated_variants.empty():
 		rv.defs = src0_code.defs+src1_code.defs+src2_code.defs
+	var variant_index = generated_variants.find(uv)
+	if variant_index == -1:
+		variant_index = generated_variants.size()
+		generated_variants.append(uv)
 		rv.code = src0_code.code+src1_code.code+src2_code.code
-		rv.code += "vec3 "+name+"_rgb = mix("+get_source_rgb(src0_code)+", "+get_source_rgb(src1_code)+", "+amount_str+");\n"
-		generated = true
-	rv.rgb = name+"_rgb"
+		rv.code += "vec3 "+name+"_"+str(variant_index)+"_rgb = mix("+get_source_rgb(src0_code)+", "+get_source_rgb(src1_code)+", "+amount_str+");\n"
+	rv.rgb = name+"_"+str(variant_index)+"_rgb"
 	return rv
 
 func _get_state_variables():

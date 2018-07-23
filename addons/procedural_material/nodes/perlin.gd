@@ -10,8 +10,12 @@ func _ready():
 
 func get_shader_code(uv):
 	var rv = { defs="", code="" }
-	if !generated:
+	if generated_variants.empty():
 		rv.defs = "float "+name+"_f(vec2 uv) { return perlin(uv, "+str(iterations)+", "+str(turbulence)+"); }\n"
-		generated = true
-	rv.f = name+"_f("+uv+")"
+	var variant_index = generated_variants.find(uv)
+	if variant_index == -1:
+		variant_index = generated_variants.size()
+		generated_variants.append(uv)
+		rv.code = "float "+name+"_"+str(variant_index)+"_f = "+name+"_f("+uv+");\n"
+	rv.f = name+"_"+str(variant_index)+"_f"
 	return rv

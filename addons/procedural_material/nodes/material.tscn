@@ -1,20 +1,19 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/procedural_material/transform.gd" type="Script" id=1]
+[ext_resource path="res://addons/procedural_material/nodes/material.gd" type="Script" id=1]
+
 
 [sub_resource type="Theme" id=1]
 
 
-[node name="Transform" type="GraphNode" index="0"]
+[node name="Material" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 329.0
-margin_top = 117.0
-margin_right = 462.0
-margin_bottom = 279.0
+margin_right = 84.0
+margin_bottom = 43.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -22,9 +21,9 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "Transform"
+title = "Material"
 offset = Vector2( 0, 0 )
-show_close = true
+show_close = false
 resizable = false
 selected = false
 comment = false
@@ -32,13 +31,13 @@ overlay = 0
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
-slot/0/right_enabled = true
+slot/0/right_enabled = false
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="rotate" type="LineEdit" parent="." index="0"]
+[node name="Label" type="Label" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -46,26 +45,17 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 117.0
-margin_bottom = 48.0
+margin_right = 68.0
+margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_filter = 2
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
-size_flags_vertical = 1
-text = "0"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
-_sections_unfolded = [ "Caret", "Placeholder" ]
-
-[connection signal="close_request" from="." to="." method="queue_free"]
-
-[connection signal="text_changed" from="rotate" to="." method="_on_Rotate_text_changed"]
+size_flags_vertical = 4
+text = "Texture"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 

@@ -8,7 +8,7 @@ func _ready():
 	initialize_properties([ $rotate ])
 
 func get_shader_code(uv):
-	var rv = { defs="", code="", uv=null }
+	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:
 		return rv
@@ -16,8 +16,8 @@ func get_shader_code(uv):
 	var src_code = src.get_shader_code(rv.uv)
 	if !generated:
 		rv.defs = src_code.defs+"vec2 "+name+"_uv(vec2 uv) { return rotate(uv, "+str(angle)+"); }\n"
-		rv.code = src_code.code;
 		generated = true
+	rv.code = src_code.code;
 	if src_code.has("f"):
 		rv.f = src_code.f
 	if src_code.has("rgb"):

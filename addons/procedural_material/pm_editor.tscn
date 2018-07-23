@@ -2,7 +2,7 @@
 
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
-[ext_resource path="res://addons/procedural_material/material.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=3]
 
 [sub_resource type="Shader" id=1]
 
@@ -100,11 +100,17 @@ float perlin(vec2 uv, int iterations, float turbulence) {
 	return f/m;
 }
 
-float Bricks_f(vec2 uv) { return bricks(uv, vec2(Null, Null), Null, Null, 0.2); }
+float Perlin_f(vec2 uv) { return perlin(uv, 9, 0.5); }
+float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.1, 0.1); }
 void fragment() {
-float Bricks_0_f = Bricks_f(UV);
-vec3 Colorize_rgb = mix(vec3(0.859375,0.198059,0.198059), vec3(0.890625,0.330505,0.111328), Bricks_0_f);
-vec3 Material_rgb = Colorize_rgb;
+float Perlin_0_f = Perlin_f(UV+vec2(0.01, 0.0));
+float Perlin_1_f = Perlin_f(UV-vec2(0.01, 0.0));
+float Perlin_2_f = Perlin_f(UV+vec2(0.0, 0.01));
+float Perlin_3_f = Perlin_f(UV-vec2(0.0, 0.01));
+vec2 Warp_0_uv = UV+0.5*vec2(Perlin_0_f-Perlin_1_f, Perlin_2_f-Perlin_3_f);
+float Bricks_0_f = Bricks_f(Warp_0_uv);
+vec3 Warp_0_rgb = vec3(Bricks_0_f);
+vec3 Material_rgb = Warp_0_rgb;
 COLOR = vec4(Material_rgb, 1.0);
 }
 "
@@ -156,10 +162,6 @@ _sections_unfolded = [ "Mouse" ]
 
 [node name="Material" parent="GraphEdit" index="0" instance=ExtResource( 3 )]
 
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 84.0
-margin_bottom = 43.0
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot" ]
 
 [node name="PopupMenu" type="PopupMenu" parent="GraphEdit" index="1"]
@@ -181,7 +183,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 popup_exclusive = false
-items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Sine", null, 0, false, false, 2, 0, null, "", false, "Bricks", null, 0, false, false, 3, 0, null, "", false, "IQ Noise", null, 0, false, false, 4, 0, null, "", false, "Perlin noise", null, 0, false, false, 5, 0, null, "", false, "Transform", null, 0, false, false, 6, 0, null, "", false, "Colorize", null, 0, false, false, 7, 0, null, "", false, "Blend", null, 0, false, false, 8, 0, null, "", false ]
+items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Sine", null, 0, false, false, 2, 0, null, "", false, "Bricks", null, 0, false, false, 3, 0, null, "", false, "IQ Noise", null, 0, false, false, 4, 0, null, "", false, "Perlin noise", null, 0, false, false, 5, 0, null, "", false, "Transform", null, 0, false, false, 6, 0, null, "", false, "Warp", null, 0, false, false, 7, 0, null, "", false, "Colorize", null, 0, false, false, 8, 0, null, "", false, "Blend", null, 0, false, false, 9, 0, null, "", false ]
 hide_on_state_item_selection = false
 _sections_unfolded = [ "Rect" ]
 

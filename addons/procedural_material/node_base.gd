@@ -7,7 +7,7 @@ var generated_variants = []
 var property_widgets = []
 
 func _ready():
-	print("ready: "+name)
+	pass
 
 func initialize_properties(object_list):
 	property_widgets = object_list
@@ -41,6 +41,16 @@ func get_source(index = 0):
 				return c
 	return null
 
+func get_source_f(source):
+	var rv
+	if source.has("rgb"):
+		rv = source.rgb+".r"
+	elif source.has("f"):
+		rv = source.f
+	else:
+		rv = "***error***"
+	return rv
+	
 func get_source_rgb(source):
 	var rv
 	if source.has("rgb"):
@@ -71,14 +81,16 @@ func serialize():
 	type = type.right(type.find_last("/")+1)
 	type = type.left(type.find_last("."))
 	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y} }
-	for v in _get_state_variables():
+	for w in property_widgets:
+		var v = w.name
 		data[v] = serialize_element(get(v))
 	return data
 
 func deserialize(data):
 	print("deserialize: "+name)
 	offset = Vector2(data.node_position.x, data.node_position.y)
-	for v in _get_state_variables():
+	for w in property_widgets:
+		var v = w.name
 		set(v, deserialize_element(data[v]))
 		print("  "+v+" = "+str(deserialize_element(data[v])))
 	update_property_widgets()

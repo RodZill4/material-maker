@@ -1,11 +1,12 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/procedural_material/iqnoise.gd" type="Script" id=1]
+[ext_resource path="res://addons/procedural_material/nodes/perlin.gd" type="Script" id=1]
+
 
 [sub_resource type="Theme" id=1]
 
 
-[node name="IQNoise" type="GraphNode" index="0"]
+[node name="Perlin" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -13,8 +14,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 1.0
 margin_top = 2.0
-margin_right = 161.0
-margin_bottom = 139.0
+margin_right = 166.0
+margin_bottom = 83.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -22,7 +23,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "IQNoise"
+title = "Perlin"
 offset = Vector2( 0, 0 )
 show_close = true
 resizable = false
@@ -46,8 +47,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 144.0
-margin_bottom = 104.0
+margin_right = 149.0
+margin_bottom = 76.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -63,7 +64,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 5.0
-margin_right = 66.0
+margin_right = 71.0
 margin_bottom = 19.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -71,19 +72,19 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "Subdivide:"
+text = "Iterations:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="subdivide" type="LineEdit" parent="GridContainer" index="1"]
+[node name="iterations" type="LineEdit" parent="GridContainer" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 70.0
-margin_right = 128.0
+margin_left = 75.0
+margin_right = 133.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -92,7 +93,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 1
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "8"
+text = "3"
 focus_mode = 2
 context_menu_enabled = true
 placeholder_alpha = 0.6
@@ -108,7 +109,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 33.0
-margin_right = 66.0
+margin_right = 71.0
 margin_bottom = 47.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -116,67 +117,21 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "U:"
+text = "Turbulence"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="u" type="LineEdit" parent="GridContainer" index="3"]
+[node name="turbulence" type="LineEdit" parent="GridContainer" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 70.0
+margin_left = 75.0
 margin_top = 28.0
-margin_right = 128.0
+margin_right = 133.0
 margin_bottom = 52.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 1
-size_flags_horizontal = 1
-size_flags_vertical = 1
-text = "0.5"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
-_sections_unfolded = [ "Caret", "Placeholder" ]
-
-[node name="Label3" type="Label" parent="GridContainer" index="4"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 61.0
-margin_right = 66.0
-margin_bottom = 75.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "V:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="v" type="LineEdit" parent="GridContainer" index="5"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 70.0
-margin_top = 56.0
-margin_right = 128.0
-margin_bottom = 80.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
