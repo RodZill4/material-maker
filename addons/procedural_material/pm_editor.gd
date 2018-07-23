@@ -10,7 +10,6 @@ const MENU = [
 	{ name="bricks", description="Bricks" },
 	{ name="iqnoise", description="IQ Noise" },
 	{ name="perlin", description="Perlin noise" },
-	{ name="boolean", description="Boolean" },
 	{ name="transform", description="Transform" },
 	{ name="colorize", description="Colorize" },
 	{ name="blend", description="Blend" }
@@ -35,7 +34,7 @@ func _on_PopupMenu_id_pressed(id):
 		if node_type != null:
 			var node = node_type.instance()
 			$GraphEdit.add_child(node)
-			node.set_begin(popup_position)
+			node.offset = ($GraphEdit.scroll_offset + popup_position - $GraphEdit.rect_global_position) / $GraphEdit.zoom
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
 	var disconnect = $GraphEdit.get_source(to, to_slot)

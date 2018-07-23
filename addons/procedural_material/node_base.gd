@@ -70,13 +70,14 @@ func serialize():
 	var type = get_script().resource_path
 	type = type.right(type.find_last("/")+1)
 	type = type.left(type.find_last("."))
-	var data = { name=name, type=type }
+	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y} }
 	for v in _get_state_variables():
 		data[v] = serialize_element(get(v))
 	return data
 
 func deserialize(data):
 	print("deserialize: "+name)
+	offset = Vector2(data.node_position.x, data.node_position.y)
 	for v in _get_state_variables():
 		set(v, deserialize_element(data[v]))
 		print("  "+v+" = "+str(deserialize_element(data[v])))

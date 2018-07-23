@@ -14,7 +14,7 @@ func _ready():
 func get_shader_code(uv):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
-		rv.defs = "float "+name+"_f(vec2 uv) { return bricks(uv, vec2("+str(rows)+", "+str(columns)+"), "+str(row_offset)+", "+str(mortar)+", "+str(max(0.001, bevel))+"); }\n"
+		rv.defs = "float "+name+"_f(vec2 uv) { return bricks(uv, vec2("+str(columns)+", "+str(rows)+"), "+str(row_offset)+", "+str(mortar)+", "+str(max(0.001, bevel))+"); }\n"
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()

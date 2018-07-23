@@ -100,10 +100,10 @@ float perlin(vec2 uv, int iterations, float turbulence) {
 	return f/m;
 }
 
-float Bricks_f(vec2 uv) { return bricks(uv, vec2(4, 8), 0.5, 0.1, 0.1); }
+float Bricks_f(vec2 uv) { return bricks(uv, vec2(Null, Null), Null, Null, 0.2); }
 void fragment() {
 float Bricks_0_f = Bricks_f(UV);
-vec3 Colorize_rgb = mix(vec3(0.882813,0.134491,0.134491), vec3(0.882813,0.446795,0.062073), Bricks_0_f);
+vec3 Colorize_rgb = mix(vec3(0.859375,0.198059,0.198059), vec3(0.890625,0.330505,0.111328), Bricks_0_f);
 vec3 Material_rgb = Colorize_rgb;
 COLOR = vec4(Material_rgb, 1.0);
 }
@@ -181,7 +181,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 popup_exclusive = false
-items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Sine", null, 0, false, false, 2, 0, null, "", false, "Bricks", null, 0, false, false, 3, 0, null, "", false, "IQ Noise", null, 0, false, false, 4, 0, null, "", false, "Perlin noise", null, 0, false, false, 5, 0, null, "", false, "Boolean", null, 0, false, false, 6, 0, null, "", false, "Transform", null, 0, false, false, 7, 0, null, "", false, "Colorize", null, 0, false, false, 8, 0, null, "", false, "Blend", null, 0, false, false, 9, 0, null, "", false ]
+items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Sine", null, 0, false, false, 2, 0, null, "", false, "Bricks", null, 0, false, false, 3, 0, null, "", false, "IQ Noise", null, 0, false, false, 4, 0, null, "", false, "Perlin noise", null, 0, false, false, 5, 0, null, "", false, "Transform", null, 0, false, false, 6, 0, null, "", false, "Colorize", null, 0, false, false, 7, 0, null, "", false, "Blend", null, 0, false, false, 8, 0, null, "", false ]
 hide_on_state_item_selection = false
 _sections_unfolded = [ "Rect" ]
 
