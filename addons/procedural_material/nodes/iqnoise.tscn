@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/procedural_material/nodes/iqnoise.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
@@ -15,7 +14,7 @@ anchor_bottom = 0.0
 margin_left = 1.0
 margin_top = 2.0
 margin_right = 161.0
-margin_bottom = 139.0
+margin_bottom = 111.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1

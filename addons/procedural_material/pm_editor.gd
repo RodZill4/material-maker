@@ -13,6 +13,7 @@ const MENU = [
 	{ name="transform", description="Transform" },
 	{ name="warp", description="Warp" },
 	{ name="colorize", description="Colorize" },
+	{ name="normal_map", description="Normal Map" },
 	{ name="blend", description="Blend" }
 ]
 
