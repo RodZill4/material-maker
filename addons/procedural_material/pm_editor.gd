@@ -2,6 +2,7 @@ tool
 extends Container
 
 var popup_position = Vector2(0, 0)
+var selected_node = null
 
 const MENU = [
 	{ command="load_texture", description="Load texture" },
@@ -99,18 +100,11 @@ func save_file(filename):
 		file.close()
 
 func generate_shader():
-	var code = ""
-	var file = File.new()
-	file.open("res://addons/procedural_material/shader_header.txt", File.READ)
-	while !file.eof_reached():
-		code += file.get_line()
-		code += "\n"
-	for c in $GraphEdit.get_children():
-		if c is GraphNode:
-			c.generated = false
-			c.generated_variants = []
-	var shader_code = $GraphEdit/Material.get_shader_code("UV")
-	print("GENERATED SHADER:\n"+shader_code.code)
-	code += shader_code.code
-	$Preview.material.shader.set_code(code)
+	$TexturePreview.material.shader.set_code($GraphEdit.generate_shader($GraphEdit/Material))
+	if selected_node != null:
+		$TexturePreview/SelectedPreview.material.shader.set_code($GraphEdit.generate_shader(selected_node))
 
+func _on_GraphEdit_node_selected(node):
+	print("selected "+str(node))
+	selected_node = node
+	$TexturePreview/SelectedPreview.material.shader.set_code($GraphEdit.generate_shader(selected_node))

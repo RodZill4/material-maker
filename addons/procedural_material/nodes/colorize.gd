@@ -23,8 +23,8 @@ func get_shader_code(uv):
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		rv.code = src_code.code+"vec3 "+name+"_"+str(variant_index)+"_rgb = mix("+color_to_string(color0)+", "+color_to_string(color1)+", "+src_code.f+");\n"
-	rv.f = src_code.f
+		rv.code = src_code.code+"vec3 "+name+"_"+str(variant_index)+"_rgb = mix("+color_to_string(color0)+", "+color_to_string(color1)+", "+get_source_f(src_code)+");\n"
+	rv.f = get_source_f(src_code)
 	rv.rgb = name+"_"+str(variant_index)+"_rgb"
 	return rv
 

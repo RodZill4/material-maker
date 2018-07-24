@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
@@ -100,24 +100,23 @@ float perlin(vec2 uv, int iterations, float turbulence) {
 	return f/m;
 }
 
-float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.1, 0.1); }
-float Perlin_f(vec2 uv) { return perlin(uv, 6, 0.8); }
+float Perlin_f(vec2 uv) { return perlin(uv, 9, 0.8); }
+float Perlin2_f(vec2 uv) { return perlin(uv, 6, 0.5); }
+float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.05, 0.1); }
 void fragment() {
-float Bricks_0_f = Bricks_f(UV+vec2(0.01, 0.0));
-float Perlin_0_f = Perlin_f(UV+vec2(0.01, 0.0));
-vec3 Blend_0_rgb = mix(vec3(Bricks_0_f), vec3(Perlin_0_f), 0.5);
-float Bricks_1_f = Bricks_f(UV-vec2(0.01, 0.0));
-float Perlin_1_f = Perlin_f(UV-vec2(0.01, 0.0));
-vec3 Blend_1_rgb = mix(vec3(Bricks_1_f), vec3(Perlin_1_f), 0.5);
-float Bricks_2_f = Bricks_f(UV+vec2(0.0, 0.01));
-float Perlin_2_f = Perlin_f(UV+vec2(0.0, 0.01));
-vec3 Blend_2_rgb = mix(vec3(Bricks_2_f), vec3(Perlin_2_f), 0.5);
-float Bricks_3_f = Bricks_f(UV-vec2(0.0, 0.01));
-float Perlin_3_f = Perlin_f(UV-vec2(0.0, 0.01));
-vec3 Blend_3_rgb = mix(vec3(Bricks_3_f), vec3(Perlin_3_f), 0.5);
-vec3 NormalMap_0_rgb = vec3(0.5, 0.5, 0.5) + 0.5*normalize(3.1*vec3(Blend_0_rgb.r-Blend_1_rgb.r, Blend_2_rgb.r-Blend_3_rgb.r, 0.0) + vec3(0.0, 0.0, 1.0));
-vec3 Material_rgb = NormalMap_0_rgb;
-COLOR = vec4(Material_rgb, 1.0);
+float Perlin_0_f = Perlin_f(UV);
+vec3 Colorize_0_rgb = mix(vec3(0,0,0), vec3(1,1,1), Perlin_0_f);
+vec3 Colorize2_0_rgb = mix(vec3(1,0,0), vec3(0.875,0.461907,0.061523), Perlin_0_f);
+float Perlin2_0_f = Perlin2_f(UV+vec2(0.01, 0.0));
+float Perlin2_1_f = Perlin2_f(UV-vec2(0.01, 0.0));
+float Perlin2_2_f = Perlin2_f(UV+vec2(0.0, 0.01));
+float Perlin2_3_f = Perlin2_f(UV-vec2(0.0, 0.01));
+vec2 Warp_0_uv = UV+0.5*vec2(Perlin2_0_f-Perlin2_1_f, Perlin2_2_f-Perlin2_3_f);
+float Bricks_0_f = Bricks_f(Warp_0_uv);
+vec3 Warp_0_rgb = vec3(Bricks_0_f);
+float Warp_0_f = Bricks_0_f;
+vec3 Blend_0_rgb = mix(Colorize_0_rgb, Colorize2_0_rgb, Warp_0_f);
+COLOR = vec4(Blend_0_rgb, 1.0);
 }
 "
 _sections_unfolded = [ "Resource" ]
@@ -126,6 +125,123 @@ _sections_unfolded = [ "Resource" ]
 
 render_priority = 0
 shader = SubResource( 1 )
+
+[sub_resource type="Shader" id=3]
+
+code = "shader_type canvas_item;
+
+float hash1(vec2 p) {
+    float q = dot(p,vec2(127.1,311.7));
+	return fract(sin(q)*43758.5453);
+}
+
+vec2 hash2(vec2 p) {
+    vec2 q = vec2( dot(p,vec2(127.1,311.7)), 
+				   dot(p,vec2(269.5,183.3)) );
+	return fract(sin(q)*43758.5453);
+}
+
+vec3 hash3(vec2 p) {
+    vec3 q = vec3( dot(p,vec2(127.1,311.7)), 
+				   dot(p,vec2(269.5,183.3)), 
+				   dot(p,vec2(419.2,371.9)) );
+	return fract(sin(q)*43758.5453);
+}
+
+float sine(vec2 uv, float count, float sharpness) {
+	return max(0.0, min(1.0, (0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x))));
+}
+
+vec2 rotate(vec2 uv, float angle) {
+	vec2 rv;
+	rv.x = cos(angle)*uv.x + sin(angle)*uv.y;
+	rv.y = -sin(angle)*uv.x + cos(angle)*uv.y;
+	return rv;
+}
+
+float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
+	mortar /= max(count.x, count.y);
+	bevel /= max(count.x, count.y);
+	float fract_x = fract(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
+	float slope_x = 1.0/(bevel*count.x);
+	float off = 0.5*mortar/bevel;
+	float f1 = fract_x*slope_x-off;
+	float f2 = (1.0-fract_x)*slope_x-off;
+	float fract_y = fract(uv.y*count.y);
+	float slope_y = 1.0/(bevel*count.y);
+	float f3 = fract_y*slope_y-off;
+	float f4 = (1.0-fract_y)*slope_y-off;
+	return max(0.0, min(1.0, min(min(f1, f2), min(f3, f4))));
+}
+
+float colored_bricks(vec2 uv, vec2 count, float offset) {
+	float x = floor(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
+	float y = floor(uv.y*count.y);
+	return fract(x/3.0+y/7.0);
+}
+
+float iqnoise(vec2 uv, float s, float u, float v) {
+	uv *= s;
+    vec2 p = floor(uv);
+    vec2 f = fract(uv);
+		
+	float k = 1.0+63.0*pow(1.0-v,4.0);
+	
+	float va = 0.0;
+	float wt = 0.0;
+    for( int j=-2; j<=2; j++ )
+    for( int i=-2; i<=2; i++ )
+    {
+        vec2 g = vec2( float(i),float(j) );
+		vec3 o = hash3( p + g )*vec3(u,u,1.0);
+		vec2 r = g - f + o.xy;
+		float d = dot(r,r);
+		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );
+		va += o.z*ww;
+		wt += ww;
+    }
+	
+    return va/wt;
+}
+
+float perlin(vec2 uv, int iterations, float turbulence) {
+	float f = 0.0;
+	float c = 1.0;
+	float s = 2.0;
+	float m = 0.0;
+    for(int i = 0; i < iterations; i++) {
+		vec2 uv2 = float(s) * uv;
+		vec2 uv2_floor = floor(uv2);
+		vec2 uv2_fract = fract(uv2);
+		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
+			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
+		m += c;
+		s *= 2.0;
+		c *= turbulence;
+	}
+	return f/m;
+}
+
+float Perlin2_f(vec2 uv) { return perlin(uv, 6, 0.5); }
+float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.05, 0.1); }
+void fragment() {
+float Perlin2_0_f = Perlin2_f(UV+vec2(0.01, 0.0));
+float Perlin2_1_f = Perlin2_f(UV-vec2(0.01, 0.0));
+float Perlin2_2_f = Perlin2_f(UV+vec2(0.0, 0.01));
+float Perlin2_3_f = Perlin2_f(UV-vec2(0.0, 0.01));
+vec2 Warp_0_uv = UV+0.5*vec2(Perlin2_0_f-Perlin2_1_f, Perlin2_2_f-Perlin2_3_f);
+float Bricks_0_f = Bricks_f(Warp_0_uv);
+vec3 Warp_0_rgb = vec3(Bricks_0_f);
+float Warp_0_f = Bricks_0_f;
+COLOR = vec4(Warp_0_rgb, 1.0);
+}
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="ShaderMaterial" id=4]
+
+render_priority = 0
+shader = SubResource( 3 )
 
 [node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
 
@@ -193,7 +309,7 @@ items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save te
 hide_on_state_item_selection = false
 _sections_unfolded = [ "Rect" ]
 
-[node name="Preview" type="ColorRect" parent="." index="1"]
+[node name="TexturePreview" type="ColorRect" parent="." index="1"]
 
 material = SubResource( 2 )
 anchor_left = 0.0
@@ -213,7 +329,30 @@ size_flags_vertical = 0
 color = Color( 1, 1, 1, 1 )
 _sections_unfolded = [ "Material", "Mouse", "Rect" ]
 
+[node name="SelectedPreview" type="ColorRect" parent="TexturePreview" index="0"]
+
+material = SubResource( 4 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 3.0
+margin_top = 189.0
+margin_right = 67.0
+margin_bottom = 253.0
+rect_min_size = Vector2( 64, 64 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Mouse", "Rect" ]
+
 [connection signal="connection_request" from="GraphEdit" to="." method="_on_GraphEdit_connection_request"]
+
+[connection signal="node_selected" from="GraphEdit" to="." method="_on_GraphEdit_node_selected"]
 
 [connection signal="popup_request" from="GraphEdit" to="." method="_on_GraphEdit_popup_request"]
 

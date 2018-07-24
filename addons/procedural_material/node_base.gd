@@ -15,6 +15,9 @@ func initialize_properties(object_list):
 		if o is LineEdit:
 			set(o.name, float(o.text))
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
+		elif o is SpinBox:
+			set(o.name, o.value)
+			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			set(o.name, o.color)
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
@@ -28,6 +31,10 @@ func update_property_widgets():
 
 func _on_text_changed(new_text, variable):
 	set(variable, float(new_text))
+	get_parent().get_parent().generate_shader()
+
+func _on_value_changed(new_value, variable):
+	set(variable, new_value)
 	get_parent().get_parent().generate_shader()
 
 func _on_color_changed(new_color, variable):
@@ -44,7 +51,7 @@ func get_source(index = 0):
 func get_source_f(source):
 	var rv
 	if source.has("rgb"):
-		rv = source.rgb+".r"
+		rv = "dot("+source.rgb+", vec3(1.0, 1.0, 1.0))"
 	elif source.has("f"):
 		rv = source.f
 	else:

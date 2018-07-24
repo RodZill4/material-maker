@@ -12,7 +12,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 1.0
-margin_right = 155.0
+margin_right = 171.0
 margin_bottom = 165.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -45,7 +45,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 138.0
+margin_right = 154.0
 margin_bottom = 160.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -75,29 +75,31 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="rows" type="LineEdit" parent="GridContainer" index="1"]
+[node name="rows" type="SpinBox" parent="GridContainer" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 64.0
-margin_right = 122.0
+margin_right = 138.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "6"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 1.0
+max_value = 64.0
+step = 1.0
+page = 0.0
+value = 6.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [node name="Label2" type="Label" parent="GridContainer" index="2"]
@@ -120,7 +122,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="columns" type="LineEdit" parent="GridContainer" index="3"]
+[node name="columns" type="SpinBox" parent="GridContainer" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -128,22 +130,24 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 64.0
 margin_top = 28.0
-margin_right = 122.0
+margin_right = 138.0
 margin_bottom = 52.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "3"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 1.0
+max_value = 64.0
+step = 1.0
+page = 0.0
+value = 3.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [node name="Label3" type="Label" parent="GridContainer" index="4"]
@@ -166,7 +170,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="row_offset" type="LineEdit" parent="GridContainer" index="5"]
+[node name="row_offset" type="SpinBox" parent="GridContainer" index="5"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -174,22 +178,24 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 64.0
 margin_top = 56.0
-margin_right = 122.0
+margin_right = 138.0
 margin_bottom = 80.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "0.5"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.5
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [node name="Label4" type="Label" parent="GridContainer" index="6"]
@@ -212,7 +218,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="mortar" type="LineEdit" parent="GridContainer" index="7"]
+[node name="mortar" type="SpinBox" parent="GridContainer" index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -220,22 +226,24 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 64.0
 margin_top = 84.0
-margin_right = 122.0
+margin_right = 138.0
 margin_bottom = 108.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "0.1"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.1
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [node name="Label5" type="Label" parent="GridContainer" index="8"]
@@ -258,7 +266,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="bevel" type="LineEdit" parent="GridContainer" index="9"]
+[node name="bevel" type="SpinBox" parent="GridContainer" index="9"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -266,22 +274,24 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 64.0
 margin_top = 112.0
-margin_right = 122.0
+margin_right = 138.0
 margin_bottom = 136.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "0.1"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.1
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [connection signal="close_request" from="." to="." method="queue_free"]
