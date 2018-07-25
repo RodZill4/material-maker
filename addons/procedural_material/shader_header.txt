@@ -20,10 +20,13 @@ float sine(vec2 uv, float count, float sharpness) {
 	return max(0.0, min(1.0, (0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x))));
 }
 
-vec2 rotate(vec2 uv, float angle) {
+vec2 transform(vec2 uv, float rotate, float scale) {
 	vec2 rv;
-	rv.x = cos(angle)*uv.x + sin(angle)*uv.y;
-	rv.y = -sin(angle)*uv.x + cos(angle)*uv.y;
+	uv -= vec2(0.5);
+	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
+	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
+	rv /= scale;
+	rv += vec2(0.5);
 	return rv;
 }
 
@@ -72,20 +75,44 @@ float iqnoise(vec2 uv, float s, float u, float v) {
     return va/wt;
 }
 
-float perlin(vec2 uv, int iterations, float turbulence) {
+float perlin_old(vec2 uv, vec2 scale, int iterations, float turbulence) {
 	float f = 0.0;
 	float c = 1.0;
-	float s = 2.0;
 	float m = 0.0;
     for(int i = 0; i < iterations; i++) {
-		vec2 uv2 = float(s) * uv;
+		vec2 uv2 = scale * mod(uv, vec2(1.0, 1.0));
 		vec2 uv2_floor = floor(uv2);
 		vec2 uv2_fract = fract(uv2);
 		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
 			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
 		m += c;
-		s *= 2.0;
+		scale *= 2.0;
 		c *= turbulence;
 	}
 	return f/m;
+}
+
+float noise(vec2 p, vec2 freq ){
+	vec2 unit = vec2(1.0)/freq;
+	vec2 ij = floor(p/unit);
+	vec2 xy = mod(p,unit)/unit;
+	float a = hash1((ij+vec2(0.0,0.0)));
+	float b = hash1((ij+vec2(1.0,0.0)));
+	float c = hash1((ij+vec2(0.0,1.0)));
+	float d = hash1((ij+vec2(1.0,1.0)));
+	return mix(mix(a, b, xy.x), mix(c, d, xy.x), xy.y);
+}
+
+float perlin(vec2 p, vec2 scale, int iterations, float persistance) {
+	float n = 0.0;
+	float normK = 0.0;
+	vec2 f = scale;
+	float amp = 1.0;
+	for (int i = 0; i<iterations; i++){
+		n += amp*noise(p, f);
+		f*=2.0;
+		normK += amp;
+		amp*=persistance;
+	}
+	return n/normK;
 }

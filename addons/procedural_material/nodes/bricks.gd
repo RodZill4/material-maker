@@ -22,6 +22,3 @@ func get_shader_code(uv):
 		rv.code = "float "+name+"_"+str(variant_index)+"_f = "+name+"_f("+uv+");\n"
 	rv.f = name+"_"+str(variant_index)+"_f"
 	return rv
-
-func _get_state_variables():
-	return [ "rows", "columns", "row_offset", "mortar", "bevel" ]
