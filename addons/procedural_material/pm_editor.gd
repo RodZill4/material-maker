@@ -4,6 +4,9 @@ extends Container
 var popup_position = Vector2(0, 0)
 var selected_node = null
 
+var material_preview_shader = null
+var texture_preview_shader = null
+
 const MENU = [
 	{ command="load_texture", description="Load texture" },
 	{ command="save_texture", description="Save texture" },
@@ -19,10 +22,16 @@ const MENU = [
 ]
 
 func _ready():
+	# Duplicate the materials we'll modify and store the shaders
+	$Container/ViewportContainer/Viewport/Cube.set_surface_material(0, $Container/ViewportContainer/Viewport/Cube.get_surface_material(0).duplicate(true))
+	material_preview_shader = $Container/ViewportContainer/Viewport/Cube.get_surface_material(0).shader
+	$Container/ViewportContainer/SelectedPreview.material = $Container/ViewportContainer/SelectedPreview.material.duplicate(true)
+	texture_preview_shader = $Container/ViewportContainer/SelectedPreview.material.shader
 	$GraphEdit.add_valid_connection_type(0, 0)
 	$GraphEdit/PopupMenu.clear()
 	for i in MENU.size():
 		$GraphEdit/PopupMenu.add_item(MENU[i].description, i)
+	$Container/ViewportContainer/Viewport/AnimationPlayer.play("rotate")
 
 func _on_GraphEdit_popup_request(position):
 	popup_position = position
@@ -100,11 +109,10 @@ func save_file(filename):
 		file.close()
 
 func generate_shader():
-	$TexturePreview.material.shader.set_code($GraphEdit.generate_shader($GraphEdit/Material))
+	material_preview_shader.set_code($GraphEdit.generate_shader($GraphEdit/Material, 1))
 	if selected_node != null:
-		$TexturePreview/SelectedPreview.material.shader.set_code($GraphEdit.generate_shader(selected_node))
+		texture_preview_shader.set_code($GraphEdit.generate_shader(selected_node))
 
 func _on_GraphEdit_node_selected(node):
-	print("selected "+str(node))
 	selected_node = node
-	$TexturePreview/SelectedPreview.material.shader.set_code($GraphEdit.generate_shader(selected_node))
+	texture_preview_shader.set_code($GraphEdit.generate_shader(selected_node))

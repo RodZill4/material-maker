@@ -1,247 +1,268 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=3]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="ProceduralSky" id=1]
+
+radiance_size = 4
+sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
+sky_horizon_color = Color( 0.556863, 0.823529, 0.909804, 1 )
+sky_curve = 0.25
+sky_energy = 1.0
+ground_bottom_color = Color( 0.101961, 0.145098, 0.188235, 1 )
+ground_horizon_color = Color( 0.482353, 0.788235, 0.952941, 1 )
+ground_curve = 0.01
+ground_energy = 1.0
+sun_color = Color( 1, 1, 1, 1 )
+sun_latitude = 35.0
+sun_longitude = 0.0
+sun_angle_min = 1.0
+sun_angle_max = 100.0
+sun_curve = 0.05
+sun_energy = 16.0
+texture_size = 2
+
+[sub_resource type="Environment" id=2]
+
+background_mode = 2
+background_sky = SubResource( 1 )
+background_sky_custom_fov = 0.0
+background_color = Color( 0, 0, 0, 1 )
+background_energy = 1.0
+background_canvas_max_layer = 0
+ambient_light_color = Color( 0, 0, 0, 1 )
+ambient_light_energy = 1.0
+ambient_light_sky_contribution = 1.0
+fog_enabled = false
+fog_color = Color( 0.5, 0.6, 0.7, 1 )
+fog_sun_color = Color( 1, 0.9, 0.7, 1 )
+fog_sun_amount = 0.0
+fog_depth_enabled = true
+fog_depth_begin = 10.0
+fog_depth_curve = 1.0
+fog_transmit_enabled = false
+fog_transmit_curve = 1.0
+fog_height_enabled = false
+fog_height_min = 0.0
+fog_height_max = 100.0
+fog_height_curve = 1.0
+tonemap_mode = 0
+tonemap_exposure = 1.0
+tonemap_white = 1.0
+auto_exposure_enabled = false
+auto_exposure_scale = 0.4
+auto_exposure_min_luma = 0.05
+auto_exposure_max_luma = 8.0
+auto_exposure_speed = 0.5
+ss_reflections_enabled = false
+ss_reflections_max_steps = 64
+ss_reflections_fade_in = 0.15
+ss_reflections_fade_out = 2.0
+ss_reflections_depth_tolerance = 0.2
+ss_reflections_roughness = true
+ssao_enabled = false
+ssao_radius = 1.0
+ssao_intensity = 1.0
+ssao_radius2 = 0.0
+ssao_intensity2 = 1.0
+ssao_bias = 0.01
+ssao_light_affect = 0.0
+ssao_color = Color( 0, 0, 0, 1 )
+ssao_quality = 0
+ssao_blur = 3
+ssao_edge_sharpness = 4.0
+dof_blur_far_enabled = false
+dof_blur_far_distance = 10.0
+dof_blur_far_transition = 5.0
+dof_blur_far_amount = 0.1
+dof_blur_far_quality = 1
+dof_blur_near_enabled = false
+dof_blur_near_distance = 2.0
+dof_blur_near_transition = 1.0
+dof_blur_near_amount = 0.1
+dof_blur_near_quality = 1
+glow_enabled = false
+glow_levels/1 = false
+glow_levels/2 = false
+glow_levels/3 = true
+glow_levels/4 = false
+glow_levels/5 = true
+glow_levels/6 = false
+glow_levels/7 = false
+glow_intensity = 0.8
+glow_strength = 1.0
+glow_bloom = 0.0
+glow_blend_mode = 2
+glow_hdr_threshold = 1.0
+glow_hdr_scale = 2.0
+glow_bicubic_upscale = false
+adjustment_enabled = false
+adjustment_brightness = 1.0
+adjustment_contrast = 1.0
+adjustment_saturation = 1.0
+_sections_unfolded = [ "Background" ]
+
+[sub_resource type="World" id=3]
+
+environment = SubResource( 2 )
+
+[sub_resource type="CubeMesh" id=4]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="Shader" id=5]
+
+code = "shader_type spatial;
+
+void fragment() {
+	ALBEDO = vec3(1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=6]
+
+render_priority = 0
+shader = SubResource( 5 )
+
+[sub_resource type="Animation" id=7]
+
+length = 1.0
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Cube:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="ProceduralSky" id=8]
+
+radiance_size = 4
+sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
+sky_horizon_color = Color( 0.556863, 0.823529, 0.909804, 1 )
+sky_curve = 0.25
+sky_energy = 1.0
+ground_bottom_color = Color( 0.101961, 0.145098, 0.188235, 1 )
+ground_horizon_color = Color( 0.482353, 0.788235, 0.952941, 1 )
+ground_curve = 0.01
+ground_energy = 1.0
+sun_color = Color( 1, 1, 1, 1 )
+sun_latitude = 35.0
+sun_longitude = 0.0
+sun_angle_min = 1.0
+sun_angle_max = 100.0
+sun_curve = 0.05
+sun_energy = 16.0
+texture_size = 2
+_sections_unfolded = [ "Sky" ]
+
+[sub_resource type="Environment" id=9]
+
+background_mode = 2
+background_sky = SubResource( 8 )
+background_sky_custom_fov = 0.0
+background_color = Color( 0, 0, 0, 1 )
+background_energy = 1.0
+background_canvas_max_layer = 0
+ambient_light_color = Color( 0, 0, 0, 1 )
+ambient_light_energy = 1.0
+ambient_light_sky_contribution = 1.0
+fog_enabled = false
+fog_color = Color( 0.5, 0.6, 0.7, 1 )
+fog_sun_color = Color( 1, 0.9, 0.7, 1 )
+fog_sun_amount = 0.0
+fog_depth_enabled = true
+fog_depth_begin = 10.0
+fog_depth_curve = 1.0
+fog_transmit_enabled = false
+fog_transmit_curve = 1.0
+fog_height_enabled = false
+fog_height_min = 0.0
+fog_height_max = 100.0
+fog_height_curve = 1.0
+tonemap_mode = 0
+tonemap_exposure = 1.0
+tonemap_white = 1.0
+auto_exposure_enabled = false
+auto_exposure_scale = 0.4
+auto_exposure_min_luma = 0.05
+auto_exposure_max_luma = 8.0
+auto_exposure_speed = 0.5
+ss_reflections_enabled = false
+ss_reflections_max_steps = 64
+ss_reflections_fade_in = 0.15
+ss_reflections_fade_out = 2.0
+ss_reflections_depth_tolerance = 0.2
+ss_reflections_roughness = true
+ssao_enabled = false
+ssao_radius = 1.0
+ssao_intensity = 1.0
+ssao_radius2 = 0.0
+ssao_intensity2 = 1.0
+ssao_bias = 0.01
+ssao_light_affect = 0.0
+ssao_color = Color( 0, 0, 0, 1 )
+ssao_quality = 0
+ssao_blur = 3
+ssao_edge_sharpness = 4.0
+dof_blur_far_enabled = false
+dof_blur_far_distance = 10.0
+dof_blur_far_transition = 5.0
+dof_blur_far_amount = 0.1
+dof_blur_far_quality = 1
+dof_blur_near_enabled = false
+dof_blur_near_distance = 2.0
+dof_blur_near_transition = 1.0
+dof_blur_near_amount = 0.1
+dof_blur_near_quality = 1
+glow_enabled = false
+glow_levels/1 = false
+glow_levels/2 = false
+glow_levels/3 = true
+glow_levels/4 = false
+glow_levels/5 = true
+glow_levels/6 = false
+glow_levels/7 = false
+glow_intensity = 0.8
+glow_strength = 1.0
+glow_bloom = 0.0
+glow_blend_mode = 2
+glow_hdr_threshold = 1.0
+glow_hdr_scale = 2.0
+glow_bicubic_upscale = false
+adjustment_enabled = false
+adjustment_brightness = 1.0
+adjustment_contrast = 1.0
+adjustment_saturation = 1.0
+_sections_unfolded = [ "Background" ]
+
+[sub_resource type="Shader" id=10]
 
 code = "shader_type canvas_item;
 
-float hash1(vec2 p) {
-    float q = dot(p,vec2(127.1,311.7));
-	return fract(sin(q)*43758.5453);
-}
-
-vec2 hash2(vec2 p) {
-    vec2 q = vec2( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)) );
-	return fract(sin(q)*43758.5453);
-}
-
-vec3 hash3(vec2 p) {
-    vec3 q = vec3( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)), 
-				   dot(p,vec2(419.2,371.9)) );
-	return fract(sin(q)*43758.5453);
-}
-
-float sine(vec2 uv, float count, float sharpness) {
-	return max(0.0, min(1.0, (0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x))));
-}
-
-vec2 rotate(vec2 uv, float angle) {
-	vec2 rv;
-	rv.x = cos(angle)*uv.x + sin(angle)*uv.y;
-	rv.y = -sin(angle)*uv.x + cos(angle)*uv.y;
-	return rv;
-}
-
-float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
-	mortar /= max(count.x, count.y);
-	bevel /= max(count.x, count.y);
-	float fract_x = fract(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
-	float slope_x = 1.0/(bevel*count.x);
-	float off = 0.5*mortar/bevel;
-	float f1 = fract_x*slope_x-off;
-	float f2 = (1.0-fract_x)*slope_x-off;
-	float fract_y = fract(uv.y*count.y);
-	float slope_y = 1.0/(bevel*count.y);
-	float f3 = fract_y*slope_y-off;
-	float f4 = (1.0-fract_y)*slope_y-off;
-	return max(0.0, min(1.0, min(min(f1, f2), min(f3, f4))));
-}
-
-float colored_bricks(vec2 uv, vec2 count, float offset) {
-	float x = floor(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
-	float y = floor(uv.y*count.y);
-	return fract(x/3.0+y/7.0);
-}
-
-float iqnoise(vec2 uv, float s, float u, float v) {
-	uv *= s;
-    vec2 p = floor(uv);
-    vec2 f = fract(uv);
-		
-	float k = 1.0+63.0*pow(1.0-v,4.0);
-	
-	float va = 0.0;
-	float wt = 0.0;
-    for( int j=-2; j<=2; j++ )
-    for( int i=-2; i<=2; i++ )
-    {
-        vec2 g = vec2( float(i),float(j) );
-		vec3 o = hash3( p + g )*vec3(u,u,1.0);
-		vec2 r = g - f + o.xy;
-		float d = dot(r,r);
-		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );
-		va += o.z*ww;
-		wt += ww;
-    }
-	
-    return va/wt;
-}
-
-float perlin(vec2 uv, int iterations, float turbulence) {
-	float f = 0.0;
-	float c = 1.0;
-	float s = 2.0;
-	float m = 0.0;
-    for(int i = 0; i < iterations; i++) {
-		vec2 uv2 = float(s) * uv;
-		vec2 uv2_floor = floor(uv2);
-		vec2 uv2_fract = fract(uv2);
-		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
-			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
-		m += c;
-		s *= 2.0;
-		c *= turbulence;
-	}
-	return f/m;
-}
-
-float Perlin_f(vec2 uv) { return perlin(uv, 9, 0.8); }
-float Perlin2_f(vec2 uv) { return perlin(uv, 6, 0.5); }
-float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.05, 0.1); }
 void fragment() {
-float Perlin_0_f = Perlin_f(UV);
-vec3 Colorize_0_rgb = mix(vec3(0,0,0), vec3(1,1,1), Perlin_0_f);
-vec3 Colorize2_0_rgb = mix(vec3(1,0,0), vec3(0.875,0.461907,0.061523), Perlin_0_f);
-float Perlin2_0_f = Perlin2_f(UV+vec2(0.01, 0.0));
-float Perlin2_1_f = Perlin2_f(UV-vec2(0.01, 0.0));
-float Perlin2_2_f = Perlin2_f(UV+vec2(0.0, 0.01));
-float Perlin2_3_f = Perlin2_f(UV-vec2(0.0, 0.01));
-vec2 Warp_0_uv = UV+0.5*vec2(Perlin2_0_f-Perlin2_1_f, Perlin2_2_f-Perlin2_3_f);
-float Bricks_0_f = Bricks_f(Warp_0_uv);
-vec3 Warp_0_rgb = vec3(Bricks_0_f);
-float Warp_0_f = Bricks_0_f;
-vec3 Blend_0_rgb = mix(Colorize_0_rgb, Colorize2_0_rgb, Warp_0_f);
-COLOR = vec4(Blend_0_rgb, 1.0);
+	COLOR = vec4(1.0);
 }
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=11]
 
 render_priority = 0
-shader = SubResource( 1 )
-
-[sub_resource type="Shader" id=3]
-
-code = "shader_type canvas_item;
-
-float hash1(vec2 p) {
-    float q = dot(p,vec2(127.1,311.7));
-	return fract(sin(q)*43758.5453);
-}
-
-vec2 hash2(vec2 p) {
-    vec2 q = vec2( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)) );
-	return fract(sin(q)*43758.5453);
-}
-
-vec3 hash3(vec2 p) {
-    vec3 q = vec3( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)), 
-				   dot(p,vec2(419.2,371.9)) );
-	return fract(sin(q)*43758.5453);
-}
-
-float sine(vec2 uv, float count, float sharpness) {
-	return max(0.0, min(1.0, (0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x))));
-}
-
-vec2 rotate(vec2 uv, float angle) {
-	vec2 rv;
-	rv.x = cos(angle)*uv.x + sin(angle)*uv.y;
-	rv.y = -sin(angle)*uv.x + cos(angle)*uv.y;
-	return rv;
-}
-
-float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
-	mortar /= max(count.x, count.y);
-	bevel /= max(count.x, count.y);
-	float fract_x = fract(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
-	float slope_x = 1.0/(bevel*count.x);
-	float off = 0.5*mortar/bevel;
-	float f1 = fract_x*slope_x-off;
-	float f2 = (1.0-fract_x)*slope_x-off;
-	float fract_y = fract(uv.y*count.y);
-	float slope_y = 1.0/(bevel*count.y);
-	float f3 = fract_y*slope_y-off;
-	float f4 = (1.0-fract_y)*slope_y-off;
-	return max(0.0, min(1.0, min(min(f1, f2), min(f3, f4))));
-}
-
-float colored_bricks(vec2 uv, vec2 count, float offset) {
-	float x = floor(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
-	float y = floor(uv.y*count.y);
-	return fract(x/3.0+y/7.0);
-}
-
-float iqnoise(vec2 uv, float s, float u, float v) {
-	uv *= s;
-    vec2 p = floor(uv);
-    vec2 f = fract(uv);
-		
-	float k = 1.0+63.0*pow(1.0-v,4.0);
-	
-	float va = 0.0;
-	float wt = 0.0;
-    for( int j=-2; j<=2; j++ )
-    for( int i=-2; i<=2; i++ )
-    {
-        vec2 g = vec2( float(i),float(j) );
-		vec3 o = hash3( p + g )*vec3(u,u,1.0);
-		vec2 r = g - f + o.xy;
-		float d = dot(r,r);
-		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );
-		va += o.z*ww;
-		wt += ww;
-    }
-	
-    return va/wt;
-}
-
-float perlin(vec2 uv, int iterations, float turbulence) {
-	float f = 0.0;
-	float c = 1.0;
-	float s = 2.0;
-	float m = 0.0;
-    for(int i = 0; i < iterations; i++) {
-		vec2 uv2 = float(s) * uv;
-		vec2 uv2_floor = floor(uv2);
-		vec2 uv2_fract = fract(uv2);
-		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
-			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
-		m += c;
-		s *= 2.0;
-		c *= turbulence;
-	}
-	return f/m;
-}
-
-float Perlin2_f(vec2 uv) { return perlin(uv, 6, 0.5); }
-float Bricks_f(vec2 uv) { return bricks(uv, vec2(3, 6), 0.5, 0.05, 0.1); }
-void fragment() {
-float Perlin2_0_f = Perlin2_f(UV+vec2(0.01, 0.0));
-float Perlin2_1_f = Perlin2_f(UV-vec2(0.01, 0.0));
-float Perlin2_2_f = Perlin2_f(UV+vec2(0.0, 0.01));
-float Perlin2_3_f = Perlin2_f(UV-vec2(0.0, 0.01));
-vec2 Warp_0_uv = UV+0.5*vec2(Perlin2_0_f-Perlin2_1_f, Perlin2_2_f-Perlin2_3_f);
-float Bricks_0_f = Bricks_f(Warp_0_uv);
-vec3 Warp_0_rgb = vec3(Bricks_0_f);
-float Warp_0_f = Bricks_0_f;
-COLOR = vec4(Warp_0_rgb, 1.0);
-}
-"
-_sections_unfolded = [ "Resource" ]
-
-[sub_resource type="ShaderMaterial" id=4]
-
-render_priority = 0
-shader = SubResource( 3 )
+shader = SubResource( 10 )
 
 [node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
 
@@ -284,6 +305,11 @@ _sections_unfolded = [ "Mouse" ]
 
 [node name="Material" parent="GraphEdit" index="0" instance=ExtResource( 3 )]
 
+margin_right = 111.0
+margin_bottom = 58.0
+slot/1/left_enabled = true
+slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot" ]
 
 [node name="PopupMenu" type="PopupMenu" parent="GraphEdit" index="1"]
@@ -311,35 +337,164 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="TexturePreview" type="ColorRect" parent="." index="1"]
 
-material = SubResource( 2 )
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 768.0
 margin_right = 1024.0
-margin_bottom = 256.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 256, 256 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Mouse", "Rect" ]
+
+[node name="Container" type="Container" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+_sections_unfolded = [ "Mouse" ]
+
+[node name="ViewportContainer" type="ViewportContainer" parent="Container" index="0"]
+
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = -288.0
+margin_bottom = 294.0
 rect_min_size = Vector2( 256, 256 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Material", "Mouse", "Rect" ]
+size_flags_horizontal = 1
+size_flags_vertical = 1
+stretch = false
+stretch_shrink = 1
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Mouse", "Rect" ]
 
-[node name="SelectedPreview" type="ColorRect" parent="TexturePreview" index="0"]
+[node name="Viewport" type="Viewport" parent="Container/ViewportContainer" index="0"]
 
-material = SubResource( 4 )
+arvr = false
+size = Vector2( 288, 294 )
+own_world = true
+world = SubResource( 3 )
+transparent_bg = false
+msaa = 0
+hdr = true
+disable_3d = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 0
+render_target_update_mode = 3
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = true
+shadow_atlas_size = 0
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+_sections_unfolded = [ "GUI", "Render Target", "Rendering" ]
+
+[node name="Cube" type="MeshInstance" parent="Container/ViewportContainer/Viewport" index="0"]
+
+transform = Transform( -0.196855, 0, 0.980433, 0, 1, 0, -0.980433, 0, -0.196855, 0, 0, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 4 )
+skeleton = NodePath("..")
+material/0 = SubResource( 6 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Container/ViewportContainer/Viewport" index="1"]
+
+root_node = NodePath("..")
+autoplay = "rotate"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 0.1
+anims/rotate = SubResource( 7 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="OmniLight" type="OmniLight" parent="Container/ViewportContainer/Viewport" index="2"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04729, 1.80471, -2.51024 )
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = false
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.15
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+omni_range = 6.46518
+omni_attenuation = 1.0
+omni_shadow_mode = 1
+omni_shadow_detail = 1
+_sections_unfolded = [ "Shadow" ]
+
+[node name="Camera" type="Camera" parent="Container/ViewportContainer/Viewport" index="3"]
+
+transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = SubResource( 9 )
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="SelectedPreview" type="ColorRect" parent="Container/ViewportContainer" index="1"]
+
+material = SubResource( 11 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 3.0
-margin_top = 189.0
-margin_right = 67.0
-margin_bottom = 253.0
+margin_left = 4.0
+margin_top = 225.0
+margin_right = 68.0
+margin_bottom = 289.0
 rect_min_size = Vector2( 64, 64 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false

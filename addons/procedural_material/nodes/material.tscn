@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/procedural_material/nodes/material.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
@@ -34,10 +33,16 @@ slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = false
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="Label" type="Label" parent="." index="0"]
+[node name="Label1" type="Label" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -45,7 +50,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 68.0
+margin_right = 95.0
 margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -53,7 +58,28 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "Texture"
+text = "Albedo"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Label2" type="Label" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 38.0
+margin_right = 95.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Normal map"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
