@@ -8,7 +8,7 @@ func _ready():
 	set_slot(1, true, 0, Color(0.5, 0.5, 1), false, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $amount ])
 
-func get_shader_code(uv):
+func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	var src0 = get_source(0)
 	var src1 = get_source(1)

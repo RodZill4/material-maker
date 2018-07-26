@@ -11,7 +11,7 @@ func _ready():
 func color_to_string(c):
 	return "vec3("+str(c.r)+","+str(c.g)+","+str(c.b)+")"
 
-func get_shader_code(uv):
+func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/procedural_material/material_preview.gd" type="Script" id=4]
+[ext_resource path="res://addons/procedural_material/nodes/godot_logo.png" type="Texture" id=5]
 
 [sub_resource type="ProceduralSky" id=1]
 
@@ -117,7 +118,16 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="CylinderMesh" id=5]
+[sub_resource type="Shader" id=5]
+
+code = ""
+
+[sub_resource type="ShaderMaterial" id=6]
+
+render_priority = 0
+shader = SubResource( 5 )
+
+[sub_resource type="CylinderMesh" id=7]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 top_radius = 1.0
@@ -126,7 +136,7 @@ height = 2.0
 radial_segments = 64
 rings = 4
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=8]
 
 length = 1.0
 loop = true
@@ -144,7 +154,7 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[sub_resource type="ProceduralSky" id=7]
+[sub_resource type="ProceduralSky" id=9]
 
 radiance_size = 4
 sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
@@ -165,10 +175,10 @@ sun_energy = 16.0
 texture_size = 2
 _sections_unfolded = [ "Sky" ]
 
-[sub_resource type="Environment" id=8]
+[sub_resource type="Environment" id=10]
 
 background_mode = 2
-background_sky = SubResource( 7 )
+background_sky = SubResource( 9 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
 background_energy = 1.0
@@ -245,7 +255,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="Shader" id=9]
+[sub_resource type="Shader" id=11]
 
 code = "shader_type canvas_item;
 
@@ -255,12 +265,12 @@ void fragment() {
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=12]
 
 render_priority = 0
-shader = SubResource( 9 )
+shader = SubResource( 11 )
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="Shader" id=13]
 
 code = "shader_type canvas_item;
 
@@ -383,18 +393,18 @@ float perlin(vec2 p, vec2 scale, int iterations, float persistance) {
 	return n/normK;
 }
 
-float Perlin_f(vec2 uv) { return perlin(uv, vec2(8, 9), 7, 1); }
+uniform sampler2D Image_tex;
 void fragment() {
-float Perlin_0_f = Perlin_f(UV);
-vec3 Colorize_0_rgb = mix(vec3(0,0,0), vec3(1,1,1), Perlin_0_f);
-COLOR = vec4(Colorize_0_rgb, 1.0);
+vec3 Image_0_rgb = texture(Image_tex, UV).rgb;
+COLOR = vec4(Image_0_rgb, 1.0);
 }
 "
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id=14]
 
 render_priority = 0
-shader = SubResource( 11 )
+shader = SubResource( 13 )
+shader_param/Image_tex = ExtResource( 5 )
 
 [node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
 
@@ -464,7 +474,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 popup_exclusive = false
-items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Sine", null, 0, false, false, 2, 0, null, "", false, "Bricks", null, 0, false, false, 3, 0, null, "", false, "IQ Noise", null, 0, false, false, 4, 0, null, "", false, "Perlin noise", null, 0, false, false, 5, 0, null, "", false, "Transform", null, 0, false, false, 6, 0, null, "", false, "Warp", null, 0, false, false, 7, 0, null, "", false, "Colorize", null, 0, false, false, 8, 0, null, "", false, "Normal Map", null, 0, false, false, 9, 0, null, "", false, "Blend", null, 0, false, false, 10, 0, null, "", false ]
+items = [ "Load texture", null, 0, false, false, 0, 0, null, "", false, "Save texture", null, 0, false, false, 1, 0, null, "", false, "Export texture", null, 0, false, false, 2, 0, null, "", false, "Image", null, 0, false, false, 3, 0, null, "", false, "Sine", null, 0, false, false, 4, 0, null, "", false, "Bricks", null, 0, false, false, 5, 0, null, "", false, "IQ Noise", null, 0, false, false, 6, 0, null, "", false, "Perlin noise", null, 0, false, false, 7, 0, null, "", false, "Transform", null, 0, false, false, 8, 0, null, "", false, "Warp", null, 0, false, false, 9, 0, null, "", false, "Colorize", null, 0, false, false, 10, 0, null, "", false, "Normal Map", null, 0, false, false, 11, 0, null, "", false, "Blend", null, 0, false, false, 12, 0, null, "", false ]
 hide_on_state_item_selection = false
 _sections_unfolded = [ "Rect" ]
 
@@ -553,7 +563,7 @@ _sections_unfolded = [ "GUI", "Render Target", "Rendering" ]
 
 [node name="Objects" type="Spatial" parent="Container/ViewportContainer/MaterialPreview" index="0"]
 
-transform = Transform( -0.989989, 0, 0.141142, 0, 1, 0, -0.141142, 0, -0.989989, 0, 0, 0 )
+transform = Transform( -0.978305, 0, 0.207164, 0, 1, 0, -0.207164, 0, -0.978305, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="Container/ViewportContainer/MaterialPreview/Objects" index="0"]
@@ -569,7 +579,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 4 )
 skeleton = NodePath("..")
-material/0 = null
+material/0 = SubResource( 6 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="Cylinder" type="MeshInstance" parent="Container/ViewportContainer/MaterialPreview/Objects" index="1"]
@@ -584,9 +594,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 7 )
 skeleton = NodePath("..")
-material/0 = null
+material/0 = SubResource( 6 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Container/ViewportContainer/MaterialPreview" index="1"]
@@ -596,7 +606,7 @@ autoplay = "rotate"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 0.1
-anims/rotate = SubResource( 6 )
+anims/rotate = SubResource( 8 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -628,7 +638,7 @@ _sections_unfolded = [ "Shadow" ]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
 keep_aspect = 1
 cull_mask = 1048575
-environment = SubResource( 8 )
+environment = SubResource( 10 )
 h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
@@ -642,7 +652,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="SelectedPreview" type="ColorRect" parent="Container/ViewportContainer" index="1"]
 
-material = SubResource( 10 )
+material = SubResource( 12 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -673,7 +683,7 @@ hdr = true
 disable_3d = false
 usage = 2
 debug_draw = 0
-render_target_v_flip = false
+render_target_v_flip = true
 render_target_clear_mode = 0
 render_target_update_mode = 1
 audio_listener_enable_2d = false
@@ -690,7 +700,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="ColorRect" type="ColorRect" parent="SaveViewport" index="0"]
 
-material = SubResource( 12 )
+material = SubResource( 14 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -704,7 +714,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Material" ]
+_sections_unfolded = [ "Material", "Rect" ]
 
 [node name="Timer" type="Timer" parent="SaveViewport" index="1"]
 

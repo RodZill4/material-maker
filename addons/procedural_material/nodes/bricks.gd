@@ -11,7 +11,7 @@ func _ready():
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $GridContainer/rows, $GridContainer/columns, $GridContainer/row_offset, $GridContainer/mortar, $GridContainer/bevel ])
 
-func get_shader_code(uv):
+func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
 		rv.defs = "float "+name+"_f(vec2 uv) { return bricks(uv, vec2("+str(columns)+", "+str(rows)+"), "+str(row_offset)+", "+str(mortar)+", "+str(max(0.001, bevel))+"); }\n"

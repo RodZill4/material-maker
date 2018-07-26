@@ -4,13 +4,14 @@ extends Container
 var popup_position = Vector2(0, 0)
 var selected_node = null
 
-var material_preview_shader = null
-var texture_preview_shader = null
+var preview_material = null
+var texture_preview_material = null
 
 const MENU = [
 	{ command="load_texture", description="Load texture" },
 	{ command="save_texture", description="Save texture" },
 	{ command="export_texture", description="Export texture" },
+	{ name="image", description="Image" },
 	{ name="sine", description="Sine" },
 	{ name="bricks", description="Bricks" },
 	{ name="iqnoise", description="IQ Noise" },
@@ -24,9 +25,9 @@ const MENU = [
 
 func _ready():
 	# Duplicate the material we'll modify and store the shaders
-	material_preview_shader = $Container/ViewportContainer/MaterialPreview.material.shader
+	preview_material = $Container/ViewportContainer/MaterialPreview.material
 	$Container/ViewportContainer/SelectedPreview.material = $Container/ViewportContainer/SelectedPreview.material.duplicate(true)
-	texture_preview_shader = $Container/ViewportContainer/SelectedPreview.material.shader
+	texture_preview_material = $Container/ViewportContainer/SelectedPreview.material
 	$GraphEdit.add_valid_connection_type(0, 0)
 	$GraphEdit/PopupMenu.clear()
 	for i in MENU.size():
@@ -108,11 +109,11 @@ func save_file(filename):
 		file.close()
 
 func export_texture():
-	var size = 1024
+	var size = 256
 	$SaveViewport.size = Vector2(size, size)
 	$SaveViewport/ColorRect.rect_position = Vector2(0, 0)
 	$SaveViewport/ColorRect.rect_size = Vector2(size, size)
-	$SaveViewport/ColorRect.material.shader.set_code($GraphEdit.generate_shader(selected_node))
+	setup_material($SaveViewport/ColorRect.material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
 	$SaveViewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	#$SaveViewport/ColorRect.update()
 	$SaveViewport.update_worlds()
@@ -120,13 +121,20 @@ func export_texture():
 	yield($SaveViewport/Timer, "timeout")
 	var viewport_texture = $SaveViewport.get_texture()
 	var viewport_image = viewport_texture.get_data()
-	viewport_image.save_png("res://generated_image.png") 
+	viewport_image.save_png("res://generated_image.png")
+
+func setup_material(shader_material, textures, shader_code):
+	for k in textures.keys():
+		print("Setting param "+k+" to "+str(textures[k]))
+		shader_material.set_shader_param(k+"_tex", textures[k])
+	shader_material.shader.code = shader_code
 
 func generate_shader():
-	material_preview_shader.set_code($GraphEdit.generate_shader($GraphEdit/Material, 1))
+	setup_material(preview_material, $GraphEdit/Material.get_textures(), $GraphEdit.generate_shader($GraphEdit/Material, 1))
 	if selected_node != null:
-		texture_preview_shader.set_code($GraphEdit.generate_shader(selected_node))
+		setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
 
 func _on_GraphEdit_node_selected(node):
 	selected_node = node
-	texture_preview_shader.set_code($GraphEdit.generate_shader(selected_node))
+	setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
+

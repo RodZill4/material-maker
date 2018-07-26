@@ -10,7 +10,7 @@ func _ready():
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $GridContainer/scale_x, $GridContainer/scale_y, $GridContainer/iterations, $GridContainer/persistance ])
 
-func get_shader_code(uv):
+func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
 		rv.defs = "float "+name+"_f(vec2 uv) { return perlin(uv, vec2("+str(scale_x)+", "+str(scale_y)+"), "+str(iterations)+", "+str(persistance)+"); }\n"

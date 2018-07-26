@@ -68,6 +68,19 @@ func get_source_rgb(source):
 		rv = "***error***"
 	return rv
 
+func get_shader_code(uv):
+	return _get_shader_code(uv)
+
+func get_textures():
+	var list = {}
+	for i in range(5):
+		var source = get_source(i)
+		if source != null:
+			var source_list = source.get_textures()
+			for k in source_list.keys():
+				list[k] = source_list[k]
+	return list
+
 func queue_free():
 	get_parent().remove_node(self.name)
 	.queue_free()

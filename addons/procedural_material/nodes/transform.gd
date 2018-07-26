@@ -8,7 +8,7 @@ func _ready():
 	set_slot(0, true, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $GridContainer/rotate, $GridContainer/scale ])
 
-func get_shader_code(uv):
+func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:
