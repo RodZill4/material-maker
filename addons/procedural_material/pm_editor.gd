@@ -28,9 +28,9 @@ const MENU = [
 
 func _ready():
 	# Duplicate the material we'll modify and store the shaders
-	preview_material = $Preview/ViewportContainer/MaterialPreview.material
-	$Preview/ViewportContainer/SelectedPreview.material = $Preview/ViewportContainer/SelectedPreview.material.duplicate(true)
-	texture_preview_material = $Preview/ViewportContainer/SelectedPreview.material
+	preview_material = $Preview/Preview.preview_material
+	$Preview/Preview/SelectedPreview.material = $Preview/Preview/SelectedPreview.material.duplicate(true)
+	texture_preview_material = $Preview/Preview/SelectedPreview.material
 	$GraphEdit.add_valid_connection_type(0, 0)
 	# create or update popup menu
 	if popup_menu != null:

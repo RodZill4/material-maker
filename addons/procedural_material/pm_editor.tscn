@@ -3,149 +3,16 @@
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/procedural_material/material_preview.gd" type="Script" id=4]
+[ext_resource path="res://addons/procedural_material/preview.gd" type="Script" id=4]
+[ext_resource path="res://addons/procedural_material/panoramas/experiment.hdr" type="Texture" id=5]
 
-[sub_resource type="ProceduralSky" id=1]
-
-radiance_size = 4
-sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
-sky_horizon_color = Color( 0.556863, 0.823529, 0.909804, 1 )
-sky_curve = 0.25
-sky_energy = 1.0
-ground_bottom_color = Color( 0.101961, 0.145098, 0.188235, 1 )
-ground_horizon_color = Color( 0.482353, 0.788235, 0.952941, 1 )
-ground_curve = 0.01
-ground_energy = 1.0
-sun_color = Color( 1, 1, 1, 1 )
-sun_latitude = 35.0
-sun_longitude = 0.0
-sun_angle_min = 1.0
-sun_angle_max = 100.0
-sun_curve = 0.05
-sun_energy = 16.0
-texture_size = 2
-
-[sub_resource type="Environment" id=2]
-
-background_mode = 2
-background_sky = SubResource( 1 )
-background_sky_custom_fov = 0.0
-background_color = Color( 0, 0, 0, 1 )
-background_energy = 1.0
-background_canvas_max_layer = 0
-ambient_light_color = Color( 0, 0, 0, 1 )
-ambient_light_energy = 1.0
-ambient_light_sky_contribution = 1.0
-fog_enabled = false
-fog_color = Color( 0.5, 0.6, 0.7, 1 )
-fog_sun_color = Color( 1, 0.9, 0.7, 1 )
-fog_sun_amount = 0.0
-fog_depth_enabled = true
-fog_depth_begin = 10.0
-fog_depth_curve = 1.0
-fog_transmit_enabled = false
-fog_transmit_curve = 1.0
-fog_height_enabled = false
-fog_height_min = 0.0
-fog_height_max = 100.0
-fog_height_curve = 1.0
-tonemap_mode = 0
-tonemap_exposure = 1.0
-tonemap_white = 1.0
-auto_exposure_enabled = false
-auto_exposure_scale = 0.4
-auto_exposure_min_luma = 0.05
-auto_exposure_max_luma = 8.0
-auto_exposure_speed = 0.5
-ss_reflections_enabled = false
-ss_reflections_max_steps = 64
-ss_reflections_fade_in = 0.15
-ss_reflections_fade_out = 2.0
-ss_reflections_depth_tolerance = 0.2
-ss_reflections_roughness = true
-ssao_enabled = false
-ssao_radius = 1.0
-ssao_intensity = 1.0
-ssao_radius2 = 0.0
-ssao_intensity2 = 1.0
-ssao_bias = 0.01
-ssao_light_affect = 0.0
-ssao_color = Color( 0, 0, 0, 1 )
-ssao_quality = 0
-ssao_blur = 3
-ssao_edge_sharpness = 4.0
-dof_blur_far_enabled = false
-dof_blur_far_distance = 10.0
-dof_blur_far_transition = 5.0
-dof_blur_far_amount = 0.1
-dof_blur_far_quality = 1
-dof_blur_near_enabled = false
-dof_blur_near_distance = 2.0
-dof_blur_near_transition = 1.0
-dof_blur_near_amount = 0.1
-dof_blur_near_quality = 1
-glow_enabled = false
-glow_levels/1 = false
-glow_levels/2 = false
-glow_levels/3 = true
-glow_levels/4 = false
-glow_levels/5 = true
-glow_levels/6 = false
-glow_levels/7 = false
-glow_intensity = 0.8
-glow_strength = 1.0
-glow_bloom = 0.0
-glow_blend_mode = 2
-glow_hdr_threshold = 1.0
-glow_hdr_scale = 2.0
-glow_bicubic_upscale = false
-adjustment_enabled = false
-adjustment_brightness = 1.0
-adjustment_contrast = 1.0
-adjustment_saturation = 1.0
-_sections_unfolded = [ "Background" ]
-
-[sub_resource type="World" id=3]
-
-environment = SubResource( 2 )
-
-[sub_resource type="CubeMesh" id=4]
-
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-size = Vector3( 2, 2, 2 )
-subdivide_width = 0
-subdivide_height = 0
-subdivide_depth = 0
-
-[sub_resource type="Shader" id=5]
-
-code = "shader_type spatial;
-void fragment() {
-  ALBEDO=vec3(0.5);
-}
-"
-
-[sub_resource type="ShaderMaterial" id=6]
-
-render_priority = 0
-shader = SubResource( 5 )
-
-[sub_resource type="CylinderMesh" id=7]
-
-custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-top_radius = 1.0
-bottom_radius = 1.0
-height = 2.0
-radial_segments = 64
-rings = 4
-
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=1]
 
 length = 1.0
 loop = true
 step = 0.1
 tracks/0/type = "value"
-tracks/0/path = NodePath("Objects:rotation_degrees")
+tracks/0/path = NodePath("MaterialPreview/Objects:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -157,31 +24,45 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[sub_resource type="ProceduralSky" id=9]
+[sub_resource type="CubeMesh" id=2]
 
-radiance_size = 4
-sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
-sky_horizon_color = Color( 0.556863, 0.823529, 0.909804, 1 )
-sky_curve = 0.25
-sky_energy = 1.0
-ground_bottom_color = Color( 0.101961, 0.145098, 0.188235, 1 )
-ground_horizon_color = Color( 0.482353, 0.788235, 0.952941, 1 )
-ground_curve = 0.01
-ground_energy = 1.0
-sun_color = Color( 1, 1, 1, 1 )
-sun_latitude = 35.0
-sun_longitude = 0.0
-sun_angle_min = 1.0
-sun_angle_max = 100.0
-sun_curve = 0.05
-sun_energy = 16.0
-texture_size = 2
-_sections_unfolded = [ "Sky" ]
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
 
-[sub_resource type="Environment" id=10]
+[sub_resource type="Shader" id=3]
+
+code = "shader_type spatial;
+void fragment() {
+  ALBEDO=vec3(0.5);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=4]
+
+render_priority = 0
+shader = SubResource( 3 )
+
+[sub_resource type="CylinderMesh" id=5]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+top_radius = 1.0
+bottom_radius = 1.0
+height = 2.0
+radial_segments = 64
+rings = 4
+
+[sub_resource type="PanoramaSky" id=6]
+
+radiance_size = 2
+panorama = ExtResource( 5 )
+
+[sub_resource type="Environment" id=7]
 
 background_mode = 2
-background_sky = SubResource( 9 )
+background_sky = SubResource( 6 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
 background_energy = 1.0
@@ -258,7 +139,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="Shader" id=8]
 
 code = "shader_type canvas_item;
 
@@ -268,12 +149,98 @@ void fragment() {
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id=9]
 
 render_priority = 0
-shader = SubResource( 11 )
+shader = SubResource( 8 )
 
-[sub_resource type="Shader" id=13]
+[sub_resource type="Animation" id=10]
+
+resource_name = "maximize"
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("SelectedPreview:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2, 194 ), Vector2( 2, 2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SelectedPreview:rect_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 64, 64 ), Vector2( 256, 256 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MaterialPreview:render_target_update_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=11]
+
+resource_name = "minimize"
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("SelectedPreview:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2, 2 ), Vector2( 2, 194 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("SelectedPreview:rect_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 256, 256 ), Vector2( 64, 64 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MaterialPreview:render_target_update_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 3 ]
+}
+
+[sub_resource type="Shader" id=12]
 
 code = "shader_type canvas_item;
 
@@ -394,12 +361,12 @@ COLOR = vec4(Colorize3_0_rgb, 1.0);
 }
 "
 
-[sub_resource type="ShaderMaterial" id=14]
+[sub_resource type="ShaderMaterial" id=13]
 
 render_priority = 0
-shader = SubResource( 13 )
+shader = SubResource( 12 )
 
-[node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
+[node name="ProceduralMaterialEditor" type="MarginContainer"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -413,7 +380,6 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/margin_left = 0
 script = ExtResource( 1 )
-_sections_unfolded = [ "custom_constants" ]
 
 [node name="GraphEdit" type="GraphEdit" parent="." index="0"]
 
@@ -430,7 +396,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-right_disconnects = false
+right_disconnects = true
 scroll_offset = Vector2( 0, 0 )
 snap_distance = 20
 use_snap = false
@@ -486,17 +452,17 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 _sections_unfolded = [ "Mouse" ]
 
-[node name="ViewportContainer" type="ViewportContainer" parent="Preview" index="0"]
+[node name="Preview" type="ViewportContainer" parent="Preview" index="0"]
 
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.0
-margin_left = -302.0
-margin_top = 7.0
+margin_left = -274.0
+margin_top = 3.0
 margin_right = -14.0
-margin_bottom = 301.0
-rect_min_size = Vector2( 256, 256 )
+margin_bottom = 263.0
+rect_min_size = Vector2( 260, 260 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -505,14 +471,26 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 stretch = false
 stretch_shrink = 1
+script = ExtResource( 4 )
 _sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Mouse", "Rect" ]
 
-[node name="MaterialPreview" type="Viewport" parent="Preview/ViewportContainer" index="0"]
+[node name="ObjectRotate" type="AnimationPlayer" parent="Preview/Preview" index="0"]
+
+root_node = NodePath("..")
+autoplay = "rotate"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 0.1
+anims/rotate = SubResource( 1 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="MaterialPreview" type="Viewport" parent="Preview/Preview" index="1"]
 
 arvr = false
-size = Vector2( 288, 294 )
+size = Vector2( 260, 260 )
 own_world = true
-world = SubResource( 3 )
+world = null
 transparent_bg = false
 msaa = 0
 hdr = true
@@ -520,7 +498,7 @@ disable_3d = false
 usage = 2
 debug_draw = 0
 render_target_v_flip = false
-render_target_clear_mode = 0
+render_target_clear_mode = 1
 render_target_update_mode = 3
 audio_listener_enable_2d = false
 audio_listener_enable_3d = false
@@ -532,15 +510,14 @@ shadow_atlas_quad_0 = 2
 shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
-script = ExtResource( 4 )
-_sections_unfolded = [ "GUI", "Render Target", "Rendering" ]
+_sections_unfolded = [ "GUI", "Render Target" ]
 
-[node name="Objects" type="Spatial" parent="Preview/ViewportContainer/MaterialPreview" index="0"]
+[node name="Objects" type="Spatial" parent="Preview/Preview/MaterialPreview" index="0"]
 
-transform = Transform( -0.972392, 0, 0.233345, 0, 1, 0, -0.233345, 0, -0.972392, 0, 0, 0 )
+transform = Transform( -0.0548036, 0, 0.998495, 0, 1, 0, -0.998495, 0, -0.0548036, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Cube" type="MeshInstance" parent="Preview/ViewportContainer/MaterialPreview/Objects" index="0"]
+[node name="Cube" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="0"]
 
 layers = 1
 material_override = null
@@ -551,12 +528,12 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
+mesh = SubResource( 2 )
 skeleton = NodePath("..")
-material/0 = SubResource( 6 )
+material/0 = SubResource( 4 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
-[node name="Cylinder" type="MeshInstance" parent="Preview/ViewportContainer/MaterialPreview/Objects" index="1"]
+[node name="Cylinder" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="1"]
 
 visible = false
 layers = 1
@@ -568,23 +545,12 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 7 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 6 )
+material/0 = SubResource( 4 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Preview/ViewportContainer/MaterialPreview" index="1"]
-
-root_node = NodePath("..")
-autoplay = "rotate"
-playback_process_mode = 1
-playback_default_blend_time = 0.0
-playback_speed = 0.1
-anims/rotate = SubResource( 8 )
-blend_times = [  ]
-_sections_unfolded = [ "Playback Options" ]
-
-[node name="OmniLight" type="OmniLight" parent="Preview/ViewportContainer/MaterialPreview" index="2"]
+[node name="OmniLight" type="OmniLight" parent="Preview/Preview/MaterialPreview" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04729, 1.80471, -2.51024 )
 layers = 1
@@ -607,12 +573,12 @@ omni_shadow_mode = 1
 omni_shadow_detail = 1
 _sections_unfolded = [ "Shadow" ]
 
-[node name="Camera" type="Camera" parent="Preview/ViewportContainer/MaterialPreview" index="3"]
+[node name="Camera" type="Camera" parent="Preview/Preview/MaterialPreview" index="2"]
 
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
 keep_aspect = 1
 cull_mask = 1048575
-environment = SubResource( 10 )
+environment = SubResource( 7 )
 h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
@@ -624,26 +590,69 @@ near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform" ]
 
-[node name="SelectedPreview" type="ColorRect" parent="Preview/ViewportContainer" index="1"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Preview/Preview/MaterialPreview" index="3"]
 
-material = SubResource( 12 )
+environment = SubResource( 7 )
+
+[node name="Environment" type="OptionButton" parent="Preview/Preview" index="2"]
+
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = -112.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = 22.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Park"
+flat = false
+align = 0
+items = [ "Experiment", null, false, -1, null, "Lobby", null, false, -1, null, "Night", null, false, -1, null, "Park", null, false, -1, null, "Schelde", null, false, -1, null ]
+selected = 3
+
+[node name="SelectedPreview" type="ColorRect" parent="Preview/Preview" index="3"]
+
+material = SubResource( 9 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 4.0
-margin_top = 226.0
-margin_right = 68.0
-margin_bottom = 290.0
+margin_left = 2.0
+margin_top = 194.0
+margin_right = 66.0
+margin_bottom = 258.0
 rect_min_size = Vector2( 64, 64 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 2
+mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Material", "Mouse", "Rect" ]
+_sections_unfolded = [ "Material", "Mouse" ]
+
+[node name="SelectedPreviewAnimation" type="AnimationPlayer" parent="Preview/Preview" index="4"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/maximize = SubResource( 10 )
+anims/minimize = SubResource( 11 )
+blend_times = [  ]
 
 [node name="SaveViewport" type="Viewport" parent="." index="3"]
 
@@ -674,7 +683,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="ColorRect" type="ColorRect" parent="SaveViewport" index="0"]
 
-material = SubResource( 14 )
+material = SubResource( 13 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -706,5 +715,9 @@ autostart = false
 [connection signal="popup_request" from="GraphEdit" to="." method="_on_GraphEdit_popup_request"]
 
 [connection signal="timeout" from="GraphEdit/Timer" to="GraphEdit" method="do_send_changed_signal"]
+
+[connection signal="item_selected" from="Preview/Preview/Environment" to="Preview/Preview" method="_on_Environment_item_selected"]
+
+[connection signal="gui_input" from="Preview/Preview/SelectedPreview" to="Preview/Preview" method="_on_SelectedPreview_gui_input"]
 
 

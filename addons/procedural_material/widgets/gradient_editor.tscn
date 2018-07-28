@@ -5,18 +5,15 @@
 [sub_resource type="Shader" id=1]
 
 code = "shader_type canvas_item;
-
 vec3 gradient(float x) {
-	if (x < 0.2) {
-		return vec3(0.1);
-	} else if (x < 0.8) {
-		return vec3(0.1)+(x-0.2)*vec3(0.7);
-	}
-	return vec3(0.5);
+  if (x < 0.000000000) {
+    return vec3(0.000000000,0.000000000,0.000000000);
+  } else if (x < 1.000000000) {
+    return vec3(0.000000000,0.000000000,0.000000000)+x*vec3(1.000000000,1.000000000,1.000000000);
+  }
+  return vec3(1.000000000,1.000000000,1.000000000);
 }
-
-void fragment() { COLOR = vec4(gradient(UV.x), 1.0); }
-"
+void fragment() { COLOR = vec4(gradient((UV.x-0.041666667)*1.090909091), 1.0); }"
 
 [sub_resource type="ShaderMaterial" id=2]
 

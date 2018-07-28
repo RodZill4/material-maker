@@ -11,8 +11,14 @@ class GradientCursor:
 		rect_size = Vector2(WIDTH, 20)
 
 	func _gui_input(ev):
-		if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
-			get_parent().select_color(self)
+		if ev is InputEventMouseButton && ev.doubleclick:
+			if ev.button_index == 1:
+				get_parent().select_color(self)
+			elif ev.button_index == 2 && get_parent().get_sorted_cursors().size() > 2:
+				var parent = get_parent()
+				parent.remove_child(self)
+				parent.update_shader()
+				queue_free()
 		elif ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			rect_position.x += ev.relative.x
 			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
@@ -46,7 +52,8 @@ func add_cursor(x, color):
 
 func _gui_input(ev):
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick && ev.position.y > 15:
-		add_cursor(ev.position.x, get_color(ev.position.x))
+		var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
+		add_cursor(p, get_color(p))
 
 # Showing a color picker popup to change a cursor's color
 

@@ -3,11 +3,12 @@ extends "res://addons/procedural_material/node_base.gd"
 
 var amount = 0.0
 
+const blend_types = [
+	{ name="Normal", shortname="normal" }
+]
+
 func _ready():
-	set_slot(0, true, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
-	set_slot(1, true, 0, Color(0.5, 0.5, 1), false, 0, Color(0.5, 0.5, 1))
-	set_slot(2, true, 0, Color(0.5, 0.5, 1), false, 0, Color(0.5, 0.5, 1))
-	initialize_properties([ $amount ])
+	initialize_properties([ $HBoxContainer/amount ])
 
 func color_to_string(c):
 	return "vec3("+str(c.r)+","+str(c.g)+","+str(c.b)+")"
