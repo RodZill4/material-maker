@@ -39,3 +39,12 @@ func _on_TextureButton_pressed():
 	dialog.add_filter("*.jpg;JPG image")
 	dialog.connect("file_selected", self, "set_texture")
 	dialog.popup_centered()
+
+func serialize():
+	var data = .serialize()
+	data.file_path = file_path
+	return data
+
+func deserialize(data):
+	set_texture(data.file_path)
+	.deserialize(data)

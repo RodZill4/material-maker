@@ -1,6 +1,7 @@
 tool
 extends Container
 
+var popup_menu = null
 var popup_position = Vector2(0, 0)
 var selected_node = null
 
@@ -11,31 +12,52 @@ const MENU = [
 	{ command="load_texture", description="Load texture" },
 	{ command="save_texture", description="Save texture" },
 	{ command="export_texture", description="Export texture" },
-	{ name="image", description="Image" },
-	{ name="sine", description="Sine" },
-	{ name="bricks", description="Bricks" },
-	{ name="iqnoise", description="IQ Noise" },
-	{ name="perlin", description="Perlin noise" },
-	{ name="transform", description="Transform" },
-	{ name="warp", description="Warp" },
-	{ name="colorize", description="Colorize" },
-	{ name="normal_map", description="Normal Map" },
-	{ name="blend", description="Blend" }
+	{ submenu="generator", description="Generator" },
+	{ name="image", description="Image", in_submenu="generator" },
+	{ name="sine", description="Sine", in_submenu="generator" },
+	{ name="bricks", description="Bricks", in_submenu="generator" },
+	{ name="perlin", description="Perlin noise", in_submenu="generator" },
+	{ name="voronoi", description="Voronoi Noise", in_submenu="generator" },
+	{ submenu="filter", description="Filter" },
+	{ name="colorize", description="Colorize", in_submenu="filter" },
+	{ name="blend", description="Blend", in_submenu="filter" },
+	{ name="transform", description="Transform", in_submenu="filter" },
+	{ name="warp", description="Warp", in_submenu="filter" },
+	{ name="normal_map", description="Normal Map", in_submenu="filter" }
 ]
 
 func _ready():
 	# Duplicate the material we'll modify and store the shaders
-	preview_material = $Container/ViewportContainer/MaterialPreview.material
-	$Container/ViewportContainer/SelectedPreview.material = $Container/ViewportContainer/SelectedPreview.material.duplicate(true)
-	texture_preview_material = $Container/ViewportContainer/SelectedPreview.material
+	preview_material = $Preview/ViewportContainer/MaterialPreview.material
+	$Preview/ViewportContainer/SelectedPreview.material = $Preview/ViewportContainer/SelectedPreview.material.duplicate(true)
+	texture_preview_material = $Preview/ViewportContainer/SelectedPreview.material
 	$GraphEdit.add_valid_connection_type(0, 0)
-	$GraphEdit/PopupMenu.clear()
+	# create or update popup menu
+	if popup_menu != null:
+		popup_menu.queue_free()
+	popup_menu = create_menu()
+	$GraphEdit.add_child(popup_menu)
+
+func create_menu(in_submenu = null):
+	var menu = PopupMenu.new()
+	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
 	for i in MENU.size():
-		$GraphEdit/PopupMenu.add_item(MENU[i].description, i)
+		if MENU[i].has("in_submenu"):
+			if in_submenu != MENU[i].in_submenu:
+				continue
+		elif in_submenu != null:
+			continue
+		if MENU[i].has("submenu"):
+			var submenu = create_menu(MENU[i].submenu)
+			menu.add_child(submenu)
+			menu.add_submenu_item(MENU[i].description, submenu.get_name())
+		else:
+			menu.add_item(MENU[i].description, i)
+	return menu
 
 func _on_GraphEdit_popup_request(position):
 	popup_position = position
-	$GraphEdit/PopupMenu.popup(Rect2(position, $GraphEdit/PopupMenu.rect_size))
+	popup_menu.popup(Rect2(position, popup_menu.rect_size))
 
 func _on_PopupMenu_id_pressed(id):
 	var node_type = null
@@ -45,6 +67,13 @@ func _on_PopupMenu_id_pressed(id):
 		node_type = load("res://addons/procedural_material/nodes/"+MENU[id].name+".tscn")
 		if node_type != null:
 			var node = node_type.instance()
+			var i = 0
+			while true:
+				var name = MENU[id].name+"_"+str(i)
+				if !$GraphEdit.has_node(name):
+					node.set_name(name)
+					break
+				i += 1
 			$GraphEdit.add_child(node)
 			node.offset = ($GraphEdit.scroll_offset + popup_position - $GraphEdit.rect_global_position) / $GraphEdit.zoom
 
@@ -125,7 +154,7 @@ func export_texture():
 
 func setup_material(shader_material, textures, shader_code):
 	for k in textures.keys():
-		print("Setting param "+k+" to "+str(textures[k]))
+		#print("Setting param "+k+" to "+str(textures[k]))
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
@@ -135,6 +164,7 @@ func generate_shader():
 		setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
 
 func _on_GraphEdit_node_selected(node):
-	selected_node = node
-	setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
+	if selected_node != node:
+		selected_node = node
+		setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
 

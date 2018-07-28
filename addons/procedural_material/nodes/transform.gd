@@ -16,7 +16,7 @@ func _get_shader_code(uv):
 	rv.uv = name+"_uv("+uv+")"
 	var src_code = src.get_shader_code(rv.uv)
 	if !generated:
-		rv.defs = src_code.defs+"vec2 "+name+"_uv(vec2 uv) { return transform(uv, "+str(3.1415928*rotate/180.0)+", "+str(scale)+"); }\n"
+		rv.defs = src_code.defs+"vec2 "+name+"_uv(vec2 uv) { return transform(uv, %.9f, %.9f); }\n" % [ 3.1415928*rotate/180.0, scale ]
 		generated = true
 	rv.code = src_code.code;
 	if src_code.has("f"):

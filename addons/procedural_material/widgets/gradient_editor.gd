@@ -1,3 +1,4 @@
+tool
 extends Control
 
 class GradientCursor:
@@ -28,6 +29,8 @@ class GradientCursor:
 		if a.get_position() < b.get_position():
 			return true
 		return false
+
+signal updated
 
 func _ready():
 	$Gradient.material = $Gradient.material.duplicate(true)
@@ -81,13 +84,13 @@ func get_color(x):
 
 # get_color_in_shader
 func gcis(color):
-	return "vec3(%.1f,%.1f,%.1f)" % [color.r, color.g, color.b]
+	return "vec3(%.9f,%.9f,%.9f)" % [color.r, color.g, color.b]
 
 func get_shader(name):
 	var array = get_sorted_cursors()
 	var shader
 	shader  = "vec3 "+name+"(float x) {\n"
-	shader += "  if (x < %.1f) {\n" % array[0].get_position()
+	shader += "  if (x < %.9f) {\n" % array[0].get_position()
 	shader += "    return "+gcis(array[0].color)+";\n"
 	for i in range(array.size()-1):
 		var p0 = array[i].get_position()
@@ -95,7 +98,7 @@ func get_shader(name):
 		var p1mp0 = array[i+1].get_position()-p0
 		var c1mc0 = array[i+1].color-c0
 		if p1mp0 > 0:
-			shader += "  } else if (x < %.1f) {\n" % array[i+1].get_position()
+			shader += "  } else if (x < %.9f) {\n" % array[i+1].get_position()
 			shader += "    return %s+x*%s;\n" % [gcis(c0-c1mc0*(p0/p1mp0)), gcis(c1mc0/p1mp0)]
 	shader += "  }\n"
 	shader += "  return "+gcis(array[array.size()-1].color)+";\n"
@@ -106,8 +109,9 @@ func update_shader():
 	var shader
 	shader  = "shader_type canvas_item;\n"
 	shader += get_shader("gradient")
-	shader += "void fragment() { COLOR = vec4(gradient((UV.x-%.1f)*%.1f), 1.0); }" % [ 0.5*GradientCursor.WIDTH/rect_size.x, (rect_size.x-GradientCursor.WIDTH)/rect_size.x ]
+	shader += "void fragment() { COLOR = vec4(gradient((UV.x-%.9f)*%.9f), 1.0); }" % [ float(GradientCursor.WIDTH)*0.5/float(rect_size.x), rect_size.x/(rect_size.x-GradientCursor.WIDTH) ]
 	$Gradient.material.shader.set_code(shader)
+	emit_signal("updated")
 
 func serialize():
 	var rv = []
@@ -117,6 +121,7 @@ func serialize():
 
 func deserialize(v):
 	for c in get_sorted_cursors():
-		queue_free(c)
+		remove_child(c)
+		c.free()
 	for i in v:
 		add_cursor(i.pos*(rect_size.x-GradientCursor.WIDTH), Color(i.r, i.g, i.b))

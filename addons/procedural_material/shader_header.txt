@@ -1,19 +1,16 @@
-float hash1(vec2 p) {
-    float q = dot(p,vec2(127.1,311.7));
-	return fract(sin(q)*43758.5453);
+float rand(vec2 x) {
+    return fract(sin(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
 }
 
-vec2 hash2(vec2 p) {
-    vec2 q = vec2( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)) );
-	return fract(sin(q)*43758.5453);
+vec2 rand2(vec2 x) {
+    return fract(sin(vec2(dot(x, vec2(13.9898, 8.141)),
+						  dot(x, vec2(3.4562, 17.398)))) * 43758.5453);
 }
 
-vec3 hash3(vec2 p) {
-    vec3 q = vec3( dot(p,vec2(127.1,311.7)), 
-				   dot(p,vec2(269.5,183.3)), 
-				   dot(p,vec2(419.2,371.9)) );
-	return fract(sin(q)*43758.5453);
+vec3 rand3(vec2 x) {
+    return fract(sin(vec3(dot(x, vec2(13.9898, 8.141)),
+                          dot(x, vec2(3.4562, 17.398)),
+                          dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
 float sine(vec2 uv, float count, float sharpness) {
@@ -51,68 +48,54 @@ float colored_bricks(vec2 uv, vec2 count, float offset) {
 	return fract(x/3.0+y/7.0);
 }
 
-float iqnoise(vec2 uv, float s, float u, float v) {
-	uv *= s;
-    vec2 p = floor(uv);
-    vec2 f = fract(uv);
-		
-	float k = 1.0+63.0*pow(1.0-v,4.0);
-	
-	float va = 0.0;
-	float wt = 0.0;
-    for( int j=-2; j<=2; j++ )
-    for( int i=-2; i<=2; i++ )
-    {
-        vec2 g = vec2( float(i),float(j) );
-		vec3 o = hash3( p + g )*vec3(u,u,1.0);
-		vec2 r = g - f + o.xy;
-		float d = dot(r,r);
-		float ww = pow( 1.0-smoothstep(0.0,1.414,sqrt(d)), k );
-		va += o.z*ww;
-		wt += ww;
+float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
+	uv += vec2(float(seed)*0.1234567);
+    float rv = 0.0;
+    float coef = 1.0;
+    float acc = 0.0;
+    for (int i = 0; i < iterations; ++i) {
+    	vec2 step = vec2(1.0)/size;
+        float f0 = rand(floor(fract(uv)*size));
+        float f1 = rand(floor(fract(uv+vec2(step.x, 0.0))*size));
+        float f2 = rand(floor(fract(uv+vec2(0.0, step.y))*size));
+        float f3 = rand(floor(fract(uv+vec2(step.x, step.y))*size));
+        vec2 mixval = fract(uv*size);
+        mixval = 0.5*(1.0-cos(3.1415928*mixval));
+        rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);
+        acc += coef;
+        size *= 2.0;
+        coef *= persistence;
     }
-	
-    return va/wt;
+    
+    return rv / acc;
 }
 
-float perlin_old(vec2 uv, vec2 scale, int iterations, float turbulence) {
-	float f = 0.0;
-	float c = 1.0;
-	float m = 0.0;
-    for(int i = 0; i < iterations; i++) {
-		vec2 uv2 = scale * mod(uv, vec2(1.0, 1.0));
-		vec2 uv2_floor = floor(uv2);
-		vec2 uv2_fract = fract(uv2);
-		f += c * (  (1.0 - uv2_fract.x) * ((1.0 - uv2_fract.y) * hash1(uv2_floor) + uv2_fract.y * hash1(uv2_floor+vec2(0.0, 1.0)))
-			      + uv2_fract.x * ((1.0 - uv2_fract.y) * hash1(uv2_floor+vec2(1.0, 0.0)) + uv2_fract.y * hash1(uv2_floor+vec2(1.0, 1.0))));
-		m += c;
-		scale *= 2.0;
-		c *= turbulence;
-	}
-	return f/m;
-}
-
-float noise(vec2 p, vec2 freq ){
-	vec2 unit = vec2(1.0)/freq;
-	vec2 ij = floor(p/unit);
-	vec2 xy = mod(p,unit)/unit;
-	float a = hash1((ij+vec2(0.0,0.0)));
-	float b = hash1((ij+vec2(1.0,0.0)));
-	float c = hash1((ij+vec2(0.0,1.0)));
-	float d = hash1((ij+vec2(1.0,1.0)));
-	return mix(mix(a, b, xy.x), mix(c, d, xy.x), xy.y);
-}
-
-float perlin(vec2 p, vec2 scale, int iterations, float persistance) {
-	float n = 0.0;
-	float normK = 0.0;
-	vec2 f = scale;
-	float amp = 1.0;
-	for (int i = 0; i<iterations; i++){
-		n += amp*noise(p, f);
-		f*=2.0;
-		normK += amp;
-		amp*=persistance;
-	}
-	return n/normK;
+vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
+	uv += vec2(float(seed)*0.1234567);
+    uv *= size;
+    float best_distance0 = 1.0;
+    float best_distance1 = 1.0;
+    vec2 point0;
+    vec2 point1;
+    vec2 p0 = floor(uv);
+    for (int dx = -1; dx < 2; ++dx) {
+    	for (int dy = -1; dy < 2; ++dy) {
+            vec2 d = vec2(float(dx), float(dy));
+            vec2 p = p0+d;
+            p += rand2(mod(p, size));
+            float distance = length((uv - p) / size);
+            if (best_distance0 > distance) {
+            	best_distance1 = best_distance0;
+            	best_distance0 = distance;
+                point1 = point0;
+                point0 = p;
+            } else if (best_distance1 > distance) {
+            	best_distance1 = distance;
+                point1 = p;
+            }
+        }
+    }
+    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));
+    
+    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);
 }

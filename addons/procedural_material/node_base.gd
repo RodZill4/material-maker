@@ -22,24 +22,32 @@ func initialize_properties(object_list):
 			set(o.name, o.color)
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
 
+func get_seed():
+	return int(offset.x)*3+int(offset.y)*5
+
 func update_property_widgets():
 	for o in property_widgets:
 		if o is LineEdit:
 			o.text = str(get(o.name))
+		elif o is SpinBox:
+			o.value = get(o.name)
 		elif o is ColorPickerButton:
 			o.color = get(o.name)
 
+func update_shaders():
+	get_parent().send_changed_signal()
+
 func _on_text_changed(new_text, variable):
 	set(variable, float(new_text))
-	get_parent().get_parent().generate_shader()
+	update_shaders()
 
 func _on_value_changed(new_value, variable):
 	set(variable, new_value)
-	get_parent().get_parent().generate_shader()
+	update_shaders()
 
 func _on_color_changed(new_color, variable):
 	set(variable, new_color)
-	get_parent().get_parent().generate_shader()
+	update_shaders()
 
 func get_source(index = 0):
 	for c in get_parent().get_children():
@@ -51,7 +59,7 @@ func get_source(index = 0):
 func get_source_f(source):
 	var rv
 	if source.has("rgb"):
-		rv = "dot("+source.rgb+", vec3(1.0, 1.0, 1.0))"
+		rv = "dot("+source.rgb+", vec3(1.0))/3.0"
 	elif source.has("f"):
 		rv = source.f
 	else:
@@ -69,7 +77,12 @@ func get_source_rgb(source):
 	return rv
 
 func get_shader_code(uv):
-	return _get_shader_code(uv)
+	var rv = _get_shader_code(uv)
+	if !rv.has("f") && rv.has("rgb"):
+		rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
+	if !rv.has("rgb") && rv.has("f"):
+		rv.rgb = "vec3("+rv.f+")"
+	return rv
 
 func get_textures():
 	var list = {}
@@ -107,10 +120,9 @@ func serialize():
 	return data
 
 func deserialize(data):
-	print("deserialize: "+name)
 	offset = Vector2(data.node_position.x, data.node_position.y)
 	for w in property_widgets:
-		var v = w.name
-		set(v, deserialize_element(data[v]))
-		print("  "+v+" = "+str(deserialize_element(data[v])))
+		var variable = w.name
+		var value = deserialize_element(data[variable])
+		set(variable, value)
 	update_property_widgets()

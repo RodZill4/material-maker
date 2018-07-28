@@ -1,6 +1,8 @@
 tool
 extends GraphEdit
 
+signal graph_changed
+
 func _ready():
 	pass
 
@@ -13,6 +15,12 @@ func remove_node(node):
 	for c in get_connection_list():
 		if c.from == node or c.to == node:
 			disconnect_node(c.from, c.from_port, c.to, c.to_port)
+
+func send_changed_signal():
+	$Timer.start()
+
+func do_send_changed_signal():
+	emit_signal("graph_changed")
 
 func generate_shader(node, shader_type = 0):
 	var code
@@ -45,6 +53,6 @@ func generate_shader(node, shader_type = 0):
 		else:
 			shader_code += "COLOR = vec4(1.0);\n"
 	shader_code += "}\n"
-	print("GENERATED SHADER:\n"+shader_code)
+	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	return code

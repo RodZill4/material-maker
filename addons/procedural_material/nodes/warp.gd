@@ -24,7 +24,7 @@ func _get_shader_code(uv):
 		var src1_code3 = src1.get_shader_code(uv+"-vec2(0.0, 0.01)")
 		rv.defs = src1_code0.defs
 		rv.code = src1_code0.code+src1_code1.code+src1_code2.code+src1_code3.code
-		rv.code += "vec2 "+name+"_"+str(variant_index)+"_uv = "+uv+"+"+str(amount)+"*vec2("+get_source_f(src1_code0)+"-"+get_source_f(src1_code1)+", "+get_source_f(src1_code2)+"-"+get_source_f(src1_code3)+");\n"
+		rv.code += "vec2 "+name+"_"+str(variant_index)+"_uv = "+uv+"+%.9f*vec2((%s)-(%s), (%s)-(%s));\n" % [ amount, src1_code0.f, src1_code1.f, src1_code2.f, src1_code3.f ]
 		var src0_code = src0.get_shader_code(name+"_"+str(variant_index)+"_uv")
 		rv.defs += src0_code.defs
 		rv.code += src0_code.code

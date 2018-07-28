@@ -22,10 +22,10 @@ func _get_shader_code(uv):
 	var src0_code = src0.get_shader_code(uv)
 	var src1_code = src1.get_shader_code(uv)
 	var src2_code = { defs="", code="" }
-	var amount_str = str(amount)
+	var amount_str = "%.9f" % amount
 	if src2 != null:
 		src2_code = src2.get_shader_code(uv)
-		amount_str = str(src2_code.f)
+		amount_str = src2_code.f
 	if generated_variants.empty():
 		rv.defs = src0_code.defs+src1_code.defs+src2_code.defs
 	var variant_index = generated_variants.find(uv)
