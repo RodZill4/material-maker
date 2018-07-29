@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://addons/procedural_material/pm_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
@@ -6,7 +6,7 @@
 [ext_resource path="res://addons/procedural_material/preview.gd" type="Script" id=4]
 [ext_resource path="res://addons/procedural_material/panoramas/park.hdr" type="Texture" id=5]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id=3]
 
 length = 1.0
 loop = true
@@ -24,45 +24,103 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="ArrayMesh" id=1]
 
+resource_name = "Cube"
+blend_shape_mode = 1
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-size = Vector3( 2, 2, 2 )
-subdivide_width = 0
-subdivide_height = 0
-subdivide_depth = 0
-
-[sub_resource type="Shader" id=3]
-
-code = "shader_type spatial;
-void fragment() {
-  ALBEDO=vec3(0.5);
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2.00001, 2, 2 ),
+"array_data": PoolByteArray( 0, 60, 0, 188, 255, 187, 0, 60, 0, 129, 0, 0, 126, 0, 0, 129, 252, 59, 251, 59, 0, 188, 0, 188, 255, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 4, 18, 60, 25, 0, 60, 0, 188, 0, 60, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 252, 59, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 4, 18, 251, 59, 0, 60, 0, 60, 255, 187, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 252, 59, 251, 59, 0, 188, 0, 60, 255, 59, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 4, 18, 60, 25, 255, 187, 0, 60, 0, 188, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 252, 59, 60, 25, 255, 59, 0, 60, 0, 60, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 4, 18, 251, 59, 0, 60, 0, 188, 255, 187, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 252, 59, 251, 59, 255, 59, 0, 60, 0, 60, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 4, 18, 60, 25, 0, 60, 0, 60, 255, 187, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 252, 59, 60, 25, 0, 60, 0, 188, 0, 60, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 4, 18, 251, 59, 0, 60, 0, 188, 0, 60, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 252, 59, 251, 59, 0, 188, 0, 60, 255, 59, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 4, 18, 60, 25, 255, 59, 0, 60, 0, 60, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 252, 59, 60, 25, 0, 188, 0, 188, 255, 59, 0, 60, 0, 0, 127, 0, 126, 0, 0, 129, 4, 18, 251, 59, 0, 188, 0, 188, 255, 59, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 252, 59, 251, 59, 255, 187, 0, 60, 0, 188, 0, 60, 129, 0, 0, 0, 0, 0, 126, 129, 4, 18, 60, 25, 0, 188, 0, 60, 255, 59, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 252, 59, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 4, 18, 251, 59, 0, 60, 0, 60, 255, 187, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 4, 18, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 0, 0, 129, 0, 130, 0, 0, 129, 252, 59, 251, 59, 0, 60, 0, 188, 255, 187, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 4, 18, 251, 59, 255, 187, 0, 60, 0, 188, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 252, 59, 60, 25 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0, 4, 0, 5, 0, 6, 0, 4, 0, 7, 0, 5, 0, 8, 0, 9, 0, 10, 0, 8, 0, 11, 0, 9, 0, 12, 0, 13, 0, 14, 0, 12, 0, 15, 0, 13, 0, 16, 0, 17, 0, 18, 0, 16, 0, 19, 0, 17, 0, 20, 0, 21, 0, 22, 0, 20, 0, 23, 0, 21, 0 ),
+"blend_shape_data": [  ],
+"format": 98071,
+"index_count": 36,
+"name": "Material",
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 24
 }
-"
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=12]
 
 render_priority = 0
-shader = SubResource( 3 )
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
 
-[sub_resource type="CylinderMesh" id=5]
+[sub_resource type="ArrayMesh" id=2]
 
+resource_name = "Cylinder"
+blend_shape_mode = 1
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-top_radius = 1.0
-bottom_radius = 1.0
-height = 2.0
-radial_segments = 64
-rings = 4
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2, 2, 2 ),
+"array_data": PoolByteArray( 0, 0, 0, 188, 0, 188, 0, 60, 0, 172, 162, 0, 129, 0, 0, 129, 201, 58, 209, 59, 31, 54, 0, 60, 100, 187, 0, 60, 36, 84, 169, 0, 139, 0, 208, 129, 73, 57, 198, 37, 0, 0, 0, 60, 0, 188, 0, 60, 0, 84, 162, 0, 129, 0, 0, 129, 201, 58, 198, 37, 31, 54, 0, 188, 100, 187, 0, 60, 36, 172, 169, 0, 139, 0, 208, 129, 73, 57, 209, 59, 168, 57, 0, 60, 168, 185, 0, 60, 67, 84, 189, 0, 167, 0, 167, 129, 147, 55, 198, 37, 168, 57, 0, 188, 168, 185, 0, 60, 67, 172, 189, 0, 167, 0, 167, 129, 147, 55, 209, 59, 100, 59, 0, 60, 31, 182, 0, 60, 87, 84, 220, 0, 208, 0, 139, 129, 147, 52, 198, 37, 100, 59, 0, 188, 31, 182, 0, 60, 87, 172, 220, 0, 208, 0, 139, 129, 147, 52, 209, 59, 0, 60, 0, 60, 0, 0, 0, 60, 94, 84, 0, 0, 0, 0, 130, 129, 77, 46, 198, 37, 0, 60, 0, 188, 0, 0, 0, 60, 94, 172, 0, 0, 0, 0, 129, 129, 77, 46, 209, 59, 100, 59, 0, 60, 31, 54, 0, 60, 87, 84, 36, 0, 48, 0, 139, 129, 178, 173, 198, 37, 100, 59, 0, 188, 31, 54, 0, 60, 87, 172, 36, 0, 48, 0, 139, 129, 178, 173, 209, 59, 168, 57, 0, 60, 168, 57, 0, 60, 67, 84, 67, 0, 89, 0, 167, 129, 108, 180, 198, 37, 168, 57, 0, 188, 168, 57, 0, 60, 67, 172, 67, 0, 89, 0, 167, 129, 108, 180, 209, 59, 31, 54, 0, 60, 100, 59, 0, 60, 36, 84, 87, 0, 117, 0, 208, 129, 108, 183, 198, 37, 31, 54, 0, 188, 100, 59, 0, 60, 36, 172, 87, 0, 117, 0, 208, 129, 108, 183, 209, 59, 0, 0, 0, 60, 0, 60, 0, 60, 0, 84, 94, 0, 127, 0, 0, 129, 54, 185, 198, 37, 0, 0, 0, 188, 0, 60, 0, 60, 0, 172, 94, 0, 127, 0, 0, 129, 54, 185, 209, 59, 31, 182, 0, 60, 100, 59, 0, 60, 220, 84, 87, 0, 117, 0, 48, 129, 182, 186, 198, 37, 31, 182, 0, 188, 100, 59, 0, 60, 220, 172, 87, 0, 117, 0, 48, 129, 182, 186, 209, 59, 168, 185, 0, 60, 168, 57, 0, 60, 189, 84, 67, 0, 89, 0, 89, 129, 27, 188, 198, 37, 168, 185, 0, 188, 168, 57, 0, 60, 189, 172, 67, 0, 89, 0, 89, 129, 27, 188, 209, 59, 100, 187, 0, 60, 31, 54, 0, 60, 169, 84, 36, 0, 48, 0, 117, 129, 219, 188, 198, 37, 100, 187, 0, 188, 31, 54, 0, 60, 169, 172, 36, 0, 48, 0, 117, 129, 219, 188, 209, 59, 0, 188, 0, 60, 0, 0, 0, 60, 162, 84, 0, 0, 11, 12, 125, 129, 155, 189, 198, 37, 0, 188, 0, 188, 0, 0, 0, 60, 162, 172, 0, 0, 11, 244, 125, 129, 155, 189, 209, 59, 0, 188, 0, 188, 0, 0, 0, 60, 162, 172, 0, 0, 245, 12, 125, 129, 100, 62, 209, 59, 100, 187, 0, 60, 31, 182, 0, 60, 169, 84, 220, 0, 208, 0, 117, 129, 164, 61, 198, 37, 0, 188, 0, 60, 0, 0, 0, 60, 162, 84, 0, 0, 245, 244, 125, 129, 100, 62, 198, 37, 100, 187, 0, 188, 31, 182, 0, 60, 169, 172, 220, 0, 208, 0, 117, 129, 164, 61, 209, 59, 168, 185, 0, 60, 168, 185, 0, 60, 189, 84, 189, 0, 167, 0, 89, 129, 228, 60, 198, 37, 168, 185, 0, 188, 168, 185, 0, 60, 189, 172, 189, 0, 167, 0, 89, 129, 228, 60, 209, 59, 31, 54, 0, 60, 100, 187, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 81, 57, 138, 43, 31, 182, 0, 60, 100, 187, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 201, 52, 138, 43, 0, 0, 0, 60, 0, 188, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 181, 55, 198, 37, 168, 185, 0, 60, 168, 185, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 157, 48, 50, 49, 100, 187, 0, 60, 31, 182, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 56, 41, 19, 53, 0, 188, 0, 60, 0, 0, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 140, 28, 0, 56, 100, 187, 0, 60, 31, 54, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 56, 41, 118, 57, 168, 185, 0, 60, 168, 57, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 157, 48, 179, 58, 31, 182, 0, 60, 100, 59, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 201, 52, 135, 59, 0, 0, 0, 60, 0, 60, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 181, 55, 209, 59, 31, 54, 0, 60, 100, 59, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 81, 57, 135, 59, 168, 57, 0, 60, 168, 57, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 142, 58, 179, 58, 100, 59, 0, 60, 31, 54, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 98, 59, 118, 57, 0, 60, 0, 60, 0, 0, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 172, 59, 0, 56, 100, 59, 0, 60, 31, 182, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 98, 59, 19, 53, 168, 57, 0, 60, 168, 185, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 142, 58, 50, 49, 31, 182, 0, 60, 100, 187, 0, 60, 220, 84, 169, 0, 139, 0, 48, 129, 36, 60, 198, 37, 31, 182, 0, 188, 100, 187, 0, 60, 220, 172, 169, 0, 139, 0, 48, 129, 36, 60, 209, 59, 0, 0, 0, 188, 0, 188, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 181, 55, 198, 37, 168, 57, 0, 188, 168, 185, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 142, 58, 50, 49, 31, 54, 0, 188, 100, 187, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 81, 57, 138, 43, 100, 59, 0, 188, 31, 182, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 98, 59, 19, 53, 0, 60, 0, 188, 0, 0, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 172, 59, 0, 56, 100, 59, 0, 188, 31, 54, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 98, 59, 118, 57, 168, 57, 0, 188, 168, 57, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 142, 58, 179, 58, 31, 54, 0, 188, 100, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 81, 57, 135, 59, 0, 0, 0, 188, 0, 60, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 181, 55, 209, 59, 31, 182, 0, 188, 100, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 201, 52, 135, 59, 168, 185, 0, 188, 168, 57, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 157, 48, 179, 58, 100, 187, 0, 188, 31, 54, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 56, 41, 118, 57, 0, 188, 0, 188, 0, 0, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 140, 28, 0, 56, 100, 187, 0, 188, 31, 182, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 56, 41, 19, 53, 168, 185, 0, 188, 168, 185, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 157, 48, 50, 49, 31, 182, 0, 188, 100, 187, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 201, 52, 138, 43 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0, 3, 0, 4, 0, 1, 0, 3, 0, 5, 0, 4, 0, 5, 0, 6, 0, 4, 0, 5, 0, 7, 0, 6, 0, 7, 0, 8, 0, 6, 0, 7, 0, 9, 0, 8, 0, 9, 0, 10, 0, 8, 0, 9, 0, 11, 0, 10, 0, 11, 0, 12, 0, 10, 0, 11, 0, 13, 0, 12, 0, 13, 0, 14, 0, 12, 0, 13, 0, 15, 0, 14, 0, 15, 0, 16, 0, 14, 0, 15, 0, 17, 0, 16, 0, 17, 0, 18, 0, 16, 0, 17, 0, 19, 0, 18, 0, 19, 0, 20, 0, 18, 0, 19, 0, 21, 0, 20, 0, 21, 0, 22, 0, 20, 0, 21, 0, 23, 0, 22, 0, 23, 0, 24, 0, 22, 0, 23, 0, 25, 0, 24, 0, 26, 0, 27, 0, 28, 0, 26, 0, 29, 0, 27, 0, 29, 0, 30, 0, 27, 0, 29, 0, 31, 0, 30, 0, 32, 0, 33, 0, 34, 0, 32, 0, 35, 0, 33, 0, 32, 0, 36, 0, 35, 0, 32, 0, 37, 0, 36, 0, 32, 0, 38, 0, 37, 0, 32, 0, 39, 0, 38, 0, 32, 0, 40, 0, 39, 0, 32, 0, 41, 0, 40, 0, 32, 0, 42, 0, 41, 0, 32, 0, 43, 0, 42, 0, 32, 0, 44, 0, 43, 0, 32, 0, 45, 0, 44, 0, 32, 0, 46, 0, 45, 0, 32, 0, 47, 0, 46, 0, 31, 0, 48, 0, 30, 0, 31, 0, 49, 0, 48, 0, 49, 0, 2, 0, 48, 0, 49, 0, 0, 0, 2, 0, 50, 0, 51, 0, 52, 0, 50, 0, 53, 0, 51, 0, 50, 0, 54, 0, 53, 0, 50, 0, 55, 0, 54, 0, 50, 0, 56, 0, 55, 0, 50, 0, 57, 0, 56, 0, 50, 0, 58, 0, 57, 0, 50, 0, 59, 0, 58, 0, 50, 0, 60, 0, 59, 0, 50, 0, 61, 0, 60, 0, 50, 0, 62, 0, 61, 0, 50, 0, 63, 0, 62, 0, 50, 0, 64, 0, 63, 0, 50, 0, 65, 0, 64, 0 ),
+"blend_shape_data": [  ],
+"format": 98071,
+"index_count": 180,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 66
+}
+_sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="PanoramaSky" id=6]
+[sub_resource type="PanoramaSky" id=4]
 
 radiance_size = 2
 panorama = ExtResource( 5 )
 
-[sub_resource type="Environment" id=7]
+[sub_resource type="Environment" id=5]
 
 background_mode = 2
-background_sky = SubResource( 6 )
+background_sky = SubResource( 4 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
 background_energy = 1.0
@@ -139,7 +197,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=6]
 
 code = "shader_type canvas_item;
 
@@ -149,12 +207,12 @@ void fragment() {
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id=7]
 
 render_priority = 0
-shader = SubResource( 8 )
+shader = SubResource( 6 )
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=8]
 
 resource_name = "maximize"
 length = 0.2
@@ -197,7 +255,7 @@ tracks/2/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=9]
 
 resource_name = "minimize"
 length = 0.2
@@ -240,7 +298,7 @@ tracks/2/keys = {
 "values": [ 3 ]
 }
 
-[sub_resource type="Shader" id=12]
+[sub_resource type="Shader" id=10]
 
 code = "shader_type canvas_item;
 
@@ -417,10 +475,10 @@ COLOR = vec4(vec3(voronoi_0_0_xyzw.z), 1.0);
 }
 "
 
-[sub_resource type="ShaderMaterial" id=13]
+[sub_resource type="ShaderMaterial" id=11]
 
 render_priority = 0
-shader = SubResource( 12 )
+shader = SubResource( 10 )
 
 [node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
 
@@ -537,7 +595,7 @@ autoplay = "rotate"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 0.1
-anims/rotate = SubResource( 1 )
+anims/rotate = SubResource( 3 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -570,7 +628,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="Preview/Preview/MaterialPreview" index="0"]
 
-transform = Transform( 0.172897, 0, 0.984938, 0, 1, 0, -0.984938, 0, 0.172897, 0, 0, 0 )
+transform = Transform( 0.722041, 0, -0.691848, 0, 1, 0, 0.691848, 0, 0.722041, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="0"]
@@ -584,9 +642,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = SubResource( 4 )
+material/0 = SubResource( 12 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="Cylinder" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="1"]
@@ -601,9 +659,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 2 )
 skeleton = NodePath("..")
-material/0 = SubResource( 4 )
+material/0 = SubResource( 12 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="OmniLight" type="OmniLight" parent="Preview/Preview/MaterialPreview" index="1"]
@@ -634,7 +692,7 @@ _sections_unfolded = [ "Shadow" ]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
 keep_aspect = 1
 cull_mask = 1048575
-environment = SubResource( 7 )
+environment = SubResource( 5 )
 h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
@@ -648,9 +706,37 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Preview/Preview/MaterialPreview" index="3"]
 
-environment = SubResource( 7 )
+environment = SubResource( 5 )
 
-[node name="Environment" type="OptionButton" parent="Preview/Preview" index="2"]
+[node name="Model" type="OptionButton" parent="Preview/Preview" index="2"]
+
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = -258.0
+margin_top = 2.0
+margin_right = -148.0
+margin_bottom = 22.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Cube"
+flat = false
+align = 0
+items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null ]
+selected = 0
+
+[node name="Environment" type="OptionButton" parent="Preview/Preview" index="3"]
 
 anchor_left = 1.0
 anchor_top = 0.0
@@ -675,12 +761,12 @@ group = null
 text = "Park"
 flat = false
 align = 0
-items = [ "Experiment", null, false, -1, null, "Lobby", null, false, -1, null, "Night", null, false, -1, null, "Park", null, false, -1, null, "Schelde", null, false, -1, null ]
+items = [ "Experiment", null, false, 0, null, "Lobby", null, false, 1, null, "Night", null, false, 2, null, "Park", null, false, 3, null, "Schelde", null, false, 4, null ]
 selected = 3
 
-[node name="SelectedPreview" type="ColorRect" parent="Preview/Preview" index="3"]
+[node name="SelectedPreview" type="ColorRect" parent="Preview/Preview" index="4"]
 
-material = SubResource( 9 )
+material = SubResource( 7 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -699,15 +785,15 @@ size_flags_vertical = 0
 color = Color( 1, 1, 1, 1 )
 _sections_unfolded = [ "Material", "Mouse" ]
 
-[node name="SelectedPreviewAnimation" type="AnimationPlayer" parent="Preview/Preview" index="4"]
+[node name="SelectedPreviewAnimation" type="AnimationPlayer" parent="Preview/Preview" index="5"]
 
 root_node = NodePath("..")
 autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/maximize = SubResource( 10 )
-anims/minimize = SubResource( 11 )
+anims/maximize = SubResource( 8 )
+anims/minimize = SubResource( 9 )
 blend_times = [  ]
 
 [node name="SaveViewport" type="Viewport" parent="." index="3"]
@@ -739,7 +825,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="ColorRect" type="ColorRect" parent="SaveViewport" index="0"]
 
-material = SubResource( 13 )
+material = SubResource( 11 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -771,6 +857,8 @@ autostart = false
 [connection signal="popup_request" from="GraphEdit" to="." method="_on_GraphEdit_popup_request"]
 
 [connection signal="timeout" from="GraphEdit/Timer" to="GraphEdit" method="do_send_changed_signal"]
+
+[connection signal="item_selected" from="Preview/Preview/Model" to="Preview/Preview" method="_on_Model_item_selected"]
 
 [connection signal="item_selected" from="Preview/Preview/Environment" to="Preview/Preview" method="_on_Environment_item_selected"]
 

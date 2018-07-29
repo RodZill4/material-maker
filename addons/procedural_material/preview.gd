@@ -27,3 +27,8 @@ func _on_SelectedPreview_gui_input(ev):
 
 func _on_Environment_item_selected(id):
 	$MaterialPreview/WorldEnvironment.environment.background_sky.panorama = load("res://addons/procedural_material/panoramas/"+ENVIRONMENTS[id]+".hdr")
+
+func _on_Model_item_selected(id):
+	var model = $Model.get_item_text(id)
+	for c in $MaterialPreview/Objects.get_children():
+		c.visible = (c.get_name() == model)
