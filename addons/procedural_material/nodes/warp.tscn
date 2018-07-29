@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Warp" type="GraphNode" index="0"]
+[node name="Warp" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -119,7 +119,5 @@ caret_position = 0
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [connection signal="close_request" from="." to="." method="queue_free"]
-
-[connection signal="text_changed" from="amount" to="." method="_on_Rotate_text_changed"]
 
 

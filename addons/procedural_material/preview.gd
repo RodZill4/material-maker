@@ -1,7 +1,6 @@
 tool
 extends ViewportContainer
 
-var preview_material = null
 var preview_maximized = false
 
 const ENVIRONMENTS = [
@@ -9,11 +8,9 @@ const ENVIRONMENTS = [
 ]
 
 func _ready():
-	preview_material = ShaderMaterial.new()
-	preview_material.shader = Shader.new()
-	preview_material.shader.set_code("shader_type spatial;\nvoid fragment() {\n  ALBEDO=vec3(0.5);\n}\n")
-	$MaterialPreview/Objects/Cube.set_surface_material(0, preview_material)
-	$MaterialPreview/Objects/Cylinder.set_surface_material(0, preview_material)
+	var m = $MaterialPreview/Objects/Cube.get_surface_material(0).duplicate()
+	$MaterialPreview/Objects/Cube.set_surface_material(0, m)
+	$MaterialPreview/Objects/Cylinder.set_surface_material(0, m)
 	$ObjectRotate.play("rotate")
 	_on_Environment_item_selected($Environment.selected)
 
@@ -32,3 +29,6 @@ func _on_Model_item_selected(id):
 	var model = $Model.get_item_text(id)
 	for c in $MaterialPreview/Objects.get_children():
 		c.visible = (c.get_name() == model)
+
+func get_materials():
+	return [ $MaterialPreview/Objects/Cube.get_surface_material(0) ]

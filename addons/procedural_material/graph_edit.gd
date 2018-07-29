@@ -56,3 +56,41 @@ func generate_shader(node, shader_type = 0):
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	return code
+
+func setup_material(shader_material, textures, shader_code):
+	for k in textures.keys():
+		shader_material.set_shader_param(k+"_tex", textures[k])
+	shader_material.shader.code = shader_code
+
+
+func export_texture(node, filename, size = 256):
+	if node != null:
+		$SaveViewport.size = Vector2(size, size)
+		$SaveViewport/ColorRect.rect_position = Vector2(0, 0)
+		$SaveViewport/ColorRect.rect_size = Vector2(size, size)
+		setup_material($SaveViewport/ColorRect.material, node.get_textures(), generate_shader(node))
+		$SaveViewport.render_target_update_mode = Viewport.UPDATE_ONCE
+		$SaveViewport.update_worlds()
+		$SaveViewport/Timer.start()
+		yield($SaveViewport/Timer, "timeout")
+		var viewport_texture = $SaveViewport.get_texture()
+		var viewport_image = viewport_texture.get_data()
+		viewport_image.save_png("res://generated_image.png")
+
+func precalculate_texture(node, size, object, method, args):
+	if node == null:
+		return null
+	$SaveViewport.size = Vector2(size, size)
+	$SaveViewport/ColorRect.rect_position = Vector2(0, 0)
+	$SaveViewport/ColorRect.rect_size = Vector2(size, size)
+	setup_material($SaveViewport/ColorRect.material, node.get_textures(), generate_shader(node))
+	$SaveViewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	$SaveViewport.update_worlds()
+	$SaveViewport/Timer.start()
+	yield($SaveViewport/Timer, "timeout")
+	var viewport_texture = $SaveViewport.get_texture()
+	var texture = ImageTexture.new()
+	texture.create_from_image(viewport_texture.get_data())
+	args.append(texture)
+	object.callv(method, args)
+
