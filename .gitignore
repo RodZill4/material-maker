@@ -1,3 +1,14 @@
 .import
 generated_image.png
 generated_image.png
+doc/bricks.png.import
+doc/perlin.png.import
+doc/screenshot.png.import
+doc/sine.png.import
+doc/voronoi.png.import
+examples/test.ptex
+examples/test_blend.ptex
+addons/procedural_material/models/Material.material
+addons/procedural_material/models/models.blend1
+addons/procedural_material/models/models.dae
+addons/procedural_material/models/models.dae.import

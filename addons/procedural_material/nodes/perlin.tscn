@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Perlin" type="GraphNode"]
+[node name="Perlin" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -219,7 +219,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="persistance" type="SpinBox" parent="GridContainer" index="7"]
+[node name="persistence" type="SpinBox" parent="GridContainer" index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
