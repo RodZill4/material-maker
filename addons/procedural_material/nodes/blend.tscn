@@ -55,7 +55,7 @@ slot/3/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme", "slot", "slot/1" ]
 
-[node name="OptionButton" type="OptionButton" parent="." index="0"]
+[node name="blend_type" type="OptionButton" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0

@@ -1,17 +1,24 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
+var blend_type = 0
 var amount = 0.0
 
-const blend_types = [
-	{ name="Normal", shortname="normal" }
+const BLEND_TYPES = [
+	{ name="Normal", shortname="normal" },
+	{ name="Dissolve", shortname="dissolve" },
+	{ name="Multiply", shortname="multiply" },
+	{ name="Screen", shortname="screen" },
+	{ name="Overlay", shortname="overlay" },
+	{ name="Hard Light", shortname="hard_light" },
+	{ name="Soft Light", shortname="soft_light" }
 ]
 
 func _ready():
-	initialize_properties([ $HBoxContainer/amount ])
-
-func color_to_string(c):
-	return "vec3("+str(c.r)+","+str(c.g)+","+str(c.b)+")"
+	$blend_type.clear()
+	for i in range(BLEND_TYPES.size()):
+		$blend_type.add_item(BLEND_TYPES[i].name, i)
+	initialize_properties([ $blend_type, $HBoxContainer/amount ])
 
 func _get_shader_code(uv):
 	var rv = { defs="", code="" }
@@ -34,8 +41,8 @@ func _get_shader_code(uv):
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
 		rv.code = src0_code.code+src1_code.code+src2_code.code
-		rv.code += "vec3 "+name+"_"+str(variant_index)+"_rgb = mix("+get_source_rgb(src0_code)+", "+get_source_rgb(src1_code)+", "+amount_str+");\n"
-	rv.rgb = name+"_"+str(variant_index)+"_rgb"
+		rv.code += "vec3 %s_%d_rgb = blend_%s(%s, %s, %s, %s);\n" % [ name, variant_index, BLEND_TYPES[blend_type].shortname, uv, src0_code.rgb, src1_code.rgb, amount_str ]
+	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
 	return rv
 
 func _get_state_variables():

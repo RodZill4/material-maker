@@ -18,6 +18,9 @@ func initialize_properties(object_list):
 		elif o is SpinBox:
 			set(o.name, o.value)
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is OptionButton:
+			set(o.name, o.selected)
+			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			set(o.name, o.color)
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])

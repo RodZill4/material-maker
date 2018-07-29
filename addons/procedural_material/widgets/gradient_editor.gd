@@ -13,7 +13,7 @@ class GradientCursor:
 	func _gui_input(ev):
 		if ev is InputEventMouseButton && ev.doubleclick:
 			if ev.button_index == 1:
-				get_parent().select_color(self)
+				get_parent().select_color(self, ev.global_position)
 			elif ev.button_index == 2 && get_parent().get_sorted_cursors().size() > 2:
 				var parent = get_parent()
 				parent.remove_child(self)
@@ -59,9 +59,10 @@ func _gui_input(ev):
 
 var active_cursor
 
-func select_color(cursor):
+func select_color(cursor, position):
 	active_cursor = cursor
 	$Gradient/Popup/ColorPicker.connect("color_changed", cursor, "set_color")
+	$Gradient/Popup.rect_position = position
 	$Gradient/Popup.popup()
 
 func _on_Popup_popup_hide():

@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/procedural_material/preview.gd" type="Script" id=4]
-[ext_resource path="res://addons/procedural_material/panoramas/experiment.hdr" type="Texture" id=5]
+[ext_resource path="res://addons/procedural_material/panoramas/night.hdr" type="Texture" id=5]
 
 [sub_resource type="Animation" id=1]
 
@@ -514,7 +514,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="Preview/Preview/MaterialPreview" index="0"]
 
-transform = Transform( -0.0548036, 0, 0.998495, 0, 1, 0, -0.998495, 0, -0.0548036, 0, 0, 0 )
+transform = Transform( 0.277021, 0, -0.960862, 0, 1, 0, 0.960862, 0, 0.277021, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="0"]

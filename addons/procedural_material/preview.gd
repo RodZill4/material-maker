@@ -15,6 +15,7 @@ func _ready():
 	$MaterialPreview/Objects/Cube.set_surface_material(0, preview_material)
 	$MaterialPreview/Objects/Cylinder.set_surface_material(0, preview_material)
 	$ObjectRotate.play("rotate")
+	_on_Environment_item_selected($Environment.selected)
 
 func _on_SelectedPreview_gui_input(ev):
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
