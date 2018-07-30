@@ -1,7 +1,7 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
-var file_path
+var file_path = null
 
 func _ready():
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
@@ -9,7 +9,8 @@ func _ready():
 func set_texture(path):
 	file_path = path
 	var texture = ImageTexture.new()
-	texture.load(path)
+	if path != null:
+		texture.load(path)
 	$TextureButton.texture_normal = texture
 	get_parent().get_parent().generate_shader()
 

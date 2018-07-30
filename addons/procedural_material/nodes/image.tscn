@@ -6,7 +6,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Image" type="GraphNode" index="0"]
+[node name="Image" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -66,8 +66,6 @@ texture_normal = ExtResource( 2 )
 expand = true
 stretch_mode = 5
 _sections_unfolded = [ "Rect", "Textures" ]
-
-[connection signal="close_request" from="." to="." method="queue_free"]
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
 

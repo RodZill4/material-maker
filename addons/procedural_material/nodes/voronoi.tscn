@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Voronoi" type="GraphNode" index="0"]
+[node name="Voronoi" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -248,8 +248,6 @@ editable = true
 prefix = ""
 suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder", "Size Flags" ]
-
-[connection signal="close_request" from="." to="." method="queue_free"]
 
 [connection signal="offset_changed" from="." to="." method="_on_offset_changed"]
 

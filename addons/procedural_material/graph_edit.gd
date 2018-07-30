@@ -11,10 +11,57 @@ func get_source(node, port):
 		if c.to == node && c.to_port == port:
 			return { node=c.from, slot=c.from_port }
 
+func add_node(node, position = null):
+	add_child(node)
+	if position != null:
+		node.offset = position
+	node.connect("close_request", self, "remove_node", [ node ])
+
+func add_node_globalpos(node, global_position):
+	add_node(node, (scroll_offset + global_position - rect_global_position) / zoom)
+
 func remove_node(node):
+	var node_name = node.name
 	for c in get_connection_list():
-		if c.from == node or c.to == node:
+		if c.from == node_name or c.to == node_name:
 			disconnect_node(c.from, c.from_port, c.to, c.to_port)
+	node.queue_free()
+	send_changed_signal()
+
+func load_file(filename):
+	var file = File.new()
+	if file.open(filename, File.READ) != OK:
+		return
+	var data = parse_json(file.get_as_text())
+	file.close()
+	clear_connections()
+	for c in get_children():
+		if c is GraphNode:
+			remove_child(c)
+			c.free()
+	for n in data.nodes:
+		if !n.has("type"):
+			continue
+		var node_type = load("res://addons/procedural_material/nodes/"+n.type+".tscn")
+		if node_type != null:
+			var node = node_type.instance()
+			node.name = n.name
+			add_node(node)
+			node.deserialize(n)
+	for c in data.connections:
+		connect_node(c.from, c.from_port, c.to, c.to_port)
+	do_send_changed_signal()
+
+func save_file(filename):
+	var data = { nodes = [] }
+	for c in get_children():
+		if c is GraphNode:
+			data.nodes.append(c.serialize())
+	data.connections = get_connection_list()
+	var file = File.new()
+	if file.open(filename, File.WRITE) == OK:
+		file.store_string(to_json(data))
+		file.close()
 
 func send_changed_signal():
 	$Timer.start()
@@ -61,7 +108,6 @@ func setup_material(shader_material, textures, shader_code):
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
-
 
 func export_texture(node, filename, size = 256):
 	if node != null:

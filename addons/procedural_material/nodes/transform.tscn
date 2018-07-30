@@ -151,6 +151,4 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
-[connection signal="close_request" from="." to="." method="queue_free"]
-
 

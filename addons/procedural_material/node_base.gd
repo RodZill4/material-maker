@@ -81,10 +81,16 @@ func get_source_rgb(source):
 
 func get_shader_code(uv):
 	var rv = _get_shader_code(uv)
-	if !rv.has("f") && rv.has("rgb"):
-		rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
-	if !rv.has("rgb") && rv.has("f"):
-		rv.rgb = "vec3("+rv.f+")"
+	if !rv.has("f"):
+		if rv.has("rgb"):
+			rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
+		else:
+			rv.f = "0.0"
+	if !rv.has("rgb"):
+		if rv.has("f"):
+			rv.rgb = "vec3("+rv.f+")"
+		else:
+			rv.f = "vec3(0.0)"
 	return rv
 
 func get_textures():
@@ -96,10 +102,6 @@ func get_textures():
 			for k in source_list.keys():
 				list[k] = source_list[k]
 	return list
-
-func queue_free():
-	get_parent().remove_node(self.name)
-	.queue_free()
 
 func serialize_element(e):
 	if typeof(e) == TYPE_COLOR:

@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="NormalMap" type="GraphNode" index="0"]
+[node name="NormalMap" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -63,7 +63,5 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_position = 0
 _sections_unfolded = [ "Caret", "Placeholder" ]
-
-[connection signal="close_request" from="." to="." method="queue_free"]
 
 

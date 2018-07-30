@@ -72,7 +72,7 @@ func _on_PopupMenu_id_pressed(id):
 					node.set_name(name)
 					break
 				i += 1
-			$GraphEdit.add_child(node)
+			$GraphEdit.add_node(node, popup_position)
 			node.offset = ($GraphEdit.scroll_offset + popup_position - $GraphEdit.rect_global_position) / $GraphEdit.zoom
 
 func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
@@ -83,64 +83,32 @@ func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
 	generate_shader();
 
 func load_texture():
-	var dialog = EditorFileDialog.new()
+	var dialog = FileDialog.new()
 	add_child(dialog)
-	dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
-	dialog.mode = EditorFileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.ptex;Procedural texture file")
-	dialog.connect("file_selected", self, "load_file")
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.add_filter("*.ptex;Procedural textures file")
+	dialog.connect("file_selected", $GraphEdit, "load_file")
 	dialog.popup_centered()
-
-func load_file(filename):
-	var file = File.new()
-	if file.open(filename, File.READ) != OK:
-		return
-	var data = parse_json(file.get_as_text())
-	file.close()
-	$GraphEdit.clear_connections()
-	for c in $GraphEdit.get_children():
-		if c is GraphNode:
-			$GraphEdit.remove_child(c)
-			c.free()
-	for n in data.nodes:
-		if !n.has("type"):
-			continue
-		var node_type = load("res://addons/procedural_material/nodes/"+n.type+".tscn")
-		if node_type != null:
-			var node = node_type.instance()
-			node.name = n.name
-			$GraphEdit.add_child(node)
-			node.deserialize(n)
-	for c in data.connections:
-		$GraphEdit.connect_node(c.from, c.from_port, c.to, c.to_port)
-	generate_shader()
 
 func save_texture():
-	var dialog = EditorFileDialog.new()
+	var dialog = FileDialog.new()
 	add_child(dialog)
-	dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
-	dialog.mode = EditorFileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.ptex;Procedural texture file")
-	dialog.connect("file_selected", self, "save_file")
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.ptex;Procedural textures file")
+	dialog.connect("file_selected", $GraphEdit, "save_file")
 	dialog.popup_centered()
-
-func save_file(filename):
-	var data = { nodes = [] }
-	for c in $GraphEdit.get_children():
-		if c is GraphNode:
-			data.nodes.append(c.serialize())
-	data.connections = $GraphEdit.get_connection_list()
-	var file = File.new()
-	if file.open(filename, File.WRITE) == OK:
-		file.store_string(to_json(data))
-		file.close()
 
 func export_texture(size = 256):
 	$GraphEdit.export_texture(selected_node, "res://generated_image.png", size)
 
 func generate_shader():
-	$GraphEdit/Material.update_materials($Preview/Preview.get_materials())
-	if selected_node != null:
+	if $GraphEdit/Material != null:
+		$GraphEdit/Material.update_materials($Preview/Preview.get_materials())
+	if selected_node != null && selected_node is GraphNode:
 		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
 
 func _on_GraphEdit_node_selected(node):
