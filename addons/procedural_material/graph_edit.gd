@@ -69,7 +69,8 @@ func send_changed_signal():
 func do_send_changed_signal():
 	emit_signal("graph_changed")
 
-func generate_shader(node, shader_type = 0):
+func generate_shader(node):
+	var shader_type = 0
 	var code
 	if shader_type == 1:
 		code = "shader_type spatial;\n\n"
@@ -119,6 +120,7 @@ func export_texture(node, filename, size = 256):
 		$SaveViewport.update_worlds()
 		$SaveViewport/Timer.start()
 		yield($SaveViewport/Timer, "timeout")
+		yield(get_tree(), "idle_frame")
 		var viewport_texture = $SaveViewport.get_texture()
 		var viewport_image = viewport_texture.get_data()
 		viewport_image.save_png("res://generated_image.png")
@@ -134,9 +136,13 @@ func precalculate_texture(node, size, object, method, args):
 	$SaveViewport.update_worlds()
 	$SaveViewport/Timer.start()
 	yield($SaveViewport/Timer, "timeout")
+	yield(get_tree(), "idle_frame")
 	var viewport_texture = $SaveViewport.get_texture()
 	var texture = ImageTexture.new()
 	texture.create_from_image(viewport_texture.get_data())
 	args.append(texture)
 	object.callv(method, args)
 
+func _on_ColorRect_draw():
+	print("drawn")
+	

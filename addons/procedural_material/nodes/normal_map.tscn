@@ -38,7 +38,7 @@ slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="amount" type="LineEdit" parent="." index="0"]
+[node name="amount" type="SpinBox" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -50,18 +50,20 @@ margin_right = 107.0
 margin_bottom = 48.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-focus_mode = 2
 mouse_filter = 0
-mouse_default_cursor_shape = 1
+mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = "0.5"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.5
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 

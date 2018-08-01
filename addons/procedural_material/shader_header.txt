@@ -13,6 +13,47 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
+float wave_sin(float x) {
+	return 0.5-0.5*cos(3.1415928*2.0*x);
+}
+
+float wave_saw(float x) {
+	x = fract(x);
+	return min(2.0*x, 2.0-2.0*x);
+}
+
+float wave_square(float x) {
+	return (fract(x) < 0.5) ? 0.0 : 1.0;
+}
+
+float mix_multiply(float x, float y) {
+	return x*y;
+}
+
+float mix_add(float x, float y) {
+	return min(x+y, 1.0);
+}
+
+float mix_max(float x, float y) {
+	return max(x, y);
+}
+
+float mix_min(float x, float y) {
+	return min(x, y);
+}
+
+float mix_min(float x, float y) {
+	return min(x, y);
+}
+
+float mix_xor(float x, float y) {
+	return min(x+y, 2.0-x-y);
+}
+
+float mix_pow(float x, float y) {
+	return pow(x, y);
+}
+
 vec3 blend_normal(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 	return opacity*c1 + (1.0-opacity)*c2;
 }
@@ -75,10 +116,6 @@ vec3 blend_lighten(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 
 vec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 	return opacity*min(c1, c2) + (1.0-opacity)*c2;
-}
-
-float sine(vec2 uv, float count, float sharpness) {
-	return clamp(0.5+sharpness*0.5*sin(count*3.1415928*2.0*uv.x), 0.0, 1.0);
 }
 
 vec2 transform(vec2 uv, float rotate, float scale) {

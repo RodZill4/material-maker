@@ -11,9 +11,10 @@ const MENU = [
 	{ command="load_texture", description="Load texture" },
 	{ command="save_texture", description="Save texture" },
 	{ command="export_texture", description="Export texture" },
+	{ },
 	{ submenu="generator", description="Generator" },
 	{ name="image", description="Image", in_submenu="generator" },
-	{ name="sine", description="Sine", in_submenu="generator" },
+	{ name="pattern", description="Pattern", in_submenu="generator" },
 	{ name="bricks", description="Bricks", in_submenu="generator" },
 	{ name="perlin", description="Perlin noise", in_submenu="generator" },
 	{ name="voronoi", description="Voronoi Noise", in_submenu="generator" },
@@ -49,8 +50,10 @@ func create_menu(in_submenu = null):
 			var submenu = create_menu(MENU[i].submenu)
 			menu.add_child(submenu)
 			menu.add_submenu_item(MENU[i].description, submenu.get_name())
-		else:
+		elif MENU[i].has("description"):
 			menu.add_item(MENU[i].description, i)
+		else:
+			menu.add_separator()
 	return menu
 
 func _on_GraphEdit_popup_request(position):

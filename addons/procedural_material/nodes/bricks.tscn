@@ -35,7 +35,7 @@ slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme" ]
+_sections_unfolded = [ "Mouse", "Theme" ]
 
 [node name="GridContainer" type="GridContainer" parent="." index="0"]
 

@@ -176,19 +176,23 @@ vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
     return vec4(point0, best_distance0*length(size)*intensity, edge_distance);
 }
 
-vec4 voronoi_0_xyzw(vec2 uv) { return voronoi(uv, vec2(6.000000, 6.000000), 0.550000000, 1014); }
-vec3 colorize_2_gradient(float x) {
-  if (x < 0.000000000) {
-    return vec3(0.195312500,0.195312500,0.195312500);
-  } else if (x < 1.000000000) {
-    return vec3(0.195312500,0.195312500,0.195312500)+x*vec3(-0.195312500,-0.195312500,-0.195312500);
-  }
-  return vec3(0.000000000,0.000000000,0.000000000);
-}
+float bricks_0_f(vec2 uv) { return bricks(uv, vec2(5, 1), 0.5, 0.05, 0.001); }
+float perlin_0_f(vec2 uv) { return perlin(uv, vec2(20.000000, 3.000000), 3, 0.500000000, 1161); }
 void fragment() {
-vec4 voronoi_0_0_xyzw = voronoi_0_xyzw(UV);
-vec3 colorize_2_0_rgb = colorize_2_gradient(voronoi_0_0_xyzw.z);
-COLOR = vec4(colorize_2_0_rgb, 1.0);
+float bricks_0_0_f = bricks_0_f(UV+vec2(0.01, 0.0));
+float perlin_0_0_f = perlin_0_f(UV+vec2(0.01, 0.0));
+vec3 blend_0_0_rgb = blend_multiply(UV+vec2(0.01, 0.0), vec3(bricks_0_0_f), vec3(perlin_0_0_f), 1.000000000);
+float bricks_0_1_f = bricks_0_f(UV+vec2(-0.01, 0.0));
+float perlin_0_1_f = perlin_0_f(UV+vec2(-0.01, 0.0));
+vec3 blend_0_1_rgb = blend_multiply(UV+vec2(-0.01, 0.0), vec3(bricks_0_1_f), vec3(perlin_0_1_f), 1.000000000);
+float bricks_0_2_f = bricks_0_f(UV+vec2(0.0, 0.01));
+float perlin_0_2_f = perlin_0_f(UV+vec2(0.0, 0.01));
+vec3 blend_0_2_rgb = blend_multiply(UV+vec2(0.0, 0.01), vec3(bricks_0_2_f), vec3(perlin_0_2_f), 1.000000000);
+float bricks_0_3_f = bricks_0_f(UV+vec2(0.0, -0.01));
+float perlin_0_3_f = perlin_0_f(UV+vec2(0.0, -0.01));
+vec3 blend_0_3_rgb = blend_multiply(UV+vec2(0.0, -0.01), vec3(bricks_0_3_f), vec3(perlin_0_3_f), 1.000000000);
+vec3 normal_map_0_0_rgb = vec3(0.5, 0.5, 0.5) + 0.5*normalize(0.5*vec3(dot(blend_0_0_rgb, vec3(1.0))/3.0-dot(blend_0_1_rgb, vec3(1.0))/3.0, dot(blend_0_2_rgb, vec3(1.0))/3.0-dot(blend_0_3_rgb, vec3(1.0))/3.0, 0.0) + vec3(0.0, 0.0, 1.0));
+COLOR = vec4(normal_map_0_0_rgb, 1.0);
 }
 "
 
@@ -233,7 +237,7 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="SpatialMaterial" id=13]
+[sub_resource type="SpatialMaterial" id=5]
 
 render_priority = 0
 flags_transparent = false
@@ -257,8 +261,8 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-metallic = 0.0
-metallic_specular = 0.0
+metallic = 1.0
+metallic_specular = 1.0
 metallic_texture_channel = 0
 roughness = 1.0
 roughness_texture_channel = 0
@@ -285,7 +289,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Depth" ]
+_sections_unfolded = [ "Depth", "Metallic" ]
 
 [sub_resource type="ArrayMesh" id=6]
 
@@ -389,7 +393,7 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="Shader" id=14]
+[sub_resource type="Shader" id=9]
 
 code = "shader_type canvas_item;
 
@@ -399,10 +403,10 @@ void fragment() {
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id=10]
 
 render_priority = 0
-shader = SubResource( 14 )
+shader = SubResource( 9 )
 
 [sub_resource type="Animation" id=11]
 
@@ -488,12 +492,14 @@ tracks/2/keys = {
 "values": [ 3 ]
 }
 
-[node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
+[node name="ProceduralMaterialEditor" type="MarginContainer"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = -2.0
+rect_min_size = Vector2( 500, 300 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -502,15 +508,17 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/margin_left = 0
 script = ExtResource( 1 )
+_sections_unfolded = [ "Rect" ]
 
 [node name="GraphEdit" type="GraphEdit" parent="." index="0"]
 
+self_modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1024.0
-margin_bottom = 600.0
+margin_bottom = 598.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 focus_mode = 2
@@ -524,7 +532,7 @@ snap_distance = 20
 use_snap = false
 zoom = 1.0
 script = ExtResource( 2 )
-_sections_unfolded = [ "Mouse" ]
+_sections_unfolded = [ "Material", "Mouse", "Visibility" ]
 
 [node name="Material" parent="GraphEdit" index="0" instance=ExtResource( 3 )]
 
@@ -535,7 +543,7 @@ _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot", "slot/2", "
 [node name="Timer" type="Timer" parent="GraphEdit" index="1"]
 
 process_mode = 1
-wait_time = 0.25
+wait_time = 0.1
 one_shot = true
 autostart = false
 
@@ -587,37 +595,18 @@ _sections_unfolded = [ "Material", "Rect" ]
 [node name="Timer" type="Timer" parent="GraphEdit/SaveViewport" index="1"]
 
 process_mode = 1
-wait_time = 0.5
+wait_time = 0.1
 one_shot = true
 autostart = false
 
-[node name="TexturePreview" type="ColorRect" parent="." index="1"]
-
-visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1024.0
-margin_bottom = 600.0
-rect_min_size = Vector2( 256, 256 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Material", "Mouse", "Rect" ]
-
-[node name="Preview" type="Container" parent="." index="2"]
+[node name="Preview" type="Container" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1024.0
-margin_bottom = 600.0
+margin_bottom = 598.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -688,7 +677,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="Preview/Preview/MaterialPreview" index="0"]
 
-transform = Transform( -0.978985, 0, -0.20392, 0, 1, 0, 0.20392, 0, -0.978985, 0, 0, 0 )
+transform = Transform( -0.139228, 0, 0.990259, 0, 1, 0, -0.990259, 0, -0.139228, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="0"]
@@ -704,7 +693,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 4 )
 skeleton = NodePath("..")
-material/0 = SubResource( 13 )
+material/0 = SubResource( 5 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="Cylinder" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="1"]
@@ -721,7 +710,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 6 )
 skeleton = NodePath("..")
-material/0 = SubResource( 13 )
+material/0 = SubResource( 5 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="OmniLight" type="OmniLight" parent="Preview/Preview/MaterialPreview" index="1"]
@@ -826,7 +815,7 @@ selected = 3
 
 [node name="SelectedPreview" type="ColorRect" parent="Preview/Preview" index="4"]
 
-material = SubResource( 15 )
+material = SubResource( 10 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0

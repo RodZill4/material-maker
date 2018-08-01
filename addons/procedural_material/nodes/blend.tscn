@@ -53,7 +53,7 @@ slot/3/right_enabled = false
 slot/3/right_type = 0
 slot/3/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme", "slot", "slot/1" ]
+_sections_unfolded = [ "Mouse", "Theme", "slot", "slot/1" ]
 
 [node name="blend_type" type="OptionButton" parent="." index="0"]
 
