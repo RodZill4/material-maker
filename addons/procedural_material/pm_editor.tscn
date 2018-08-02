@@ -492,7 +492,7 @@ tracks/2/keys = {
 "values": [ 3 ]
 }
 
-[node name="ProceduralMaterialEditor" type="MarginContainer"]
+[node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -677,7 +677,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="Preview/Preview/MaterialPreview" index="0"]
 
-transform = Transform( -0.139228, 0, 0.990259, 0, 1, 0, -0.990259, 0, -0.139228, 0, 0, 0 )
+transform = Transform( -0.822992, 0, -0.568049, 0, 1, 0, 0.568049, 0, -0.822992, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="Preview/Preview/MaterialPreview/Objects" index="0"]

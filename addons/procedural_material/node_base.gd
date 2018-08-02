@@ -34,6 +34,8 @@ func update_property_widgets():
 			o.text = str(get(o.name))
 		elif o is SpinBox:
 			o.value = get(o.name)
+		elif o is OptionButton:
+			o.selected = get(o.name)
 		elif o is ColorPickerButton:
 			o.color = get(o.name)
 

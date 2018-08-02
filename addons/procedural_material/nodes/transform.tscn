@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Transform" type="GraphNode"]
+[node name="Transform" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -46,8 +46,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 139.0
-margin_bottom = 76.0
+margin_right = 168.0
+margin_bottom = 132.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -63,8 +63,103 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 5.0
-margin_right = 45.0
+margin_right = 74.0
 margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Translate X:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="translate_x" type="SpinBox" parent="GridContainer" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 78.0
+margin_right = 152.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+min_value = -1.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Caret", "Placeholder" ]
+
+[node name="Label2" type="Label" parent="GridContainer" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 33.0
+margin_right = 74.0
+margin_bottom = 47.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Translate Y:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="translate_y" type="SpinBox" parent="GridContainer" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 78.0
+margin_top = 28.0
+margin_right = 152.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+min_value = -1.0
+max_value = 1.0
+step = 0.05
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Caret", "Placeholder" ]
+
+[node name="Label3" type="Label" parent="GridContainer" index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 61.0
+margin_right = 74.0
+margin_bottom = 75.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -76,15 +171,16 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="rotate" type="SpinBox" parent="GridContainer" index="1"]
+[node name="rotate" type="SpinBox" parent="GridContainer" index="5"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 49.0
-margin_right = 123.0
-margin_bottom = 24.0
+margin_left = 78.0
+margin_top = 56.0
+margin_right = 152.0
+margin_bottom = 80.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -103,15 +199,15 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
-[node name="Label2" type="Label" parent="GridContainer" index="2"]
+[node name="Label4" type="Label" parent="GridContainer" index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 33.0
-margin_right = 45.0
-margin_bottom = 47.0
+margin_top = 89.0
+margin_right = 74.0
+margin_bottom = 103.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -123,16 +219,16 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="scale" type="SpinBox" parent="GridContainer" index="3"]
+[node name="scale" type="SpinBox" parent="GridContainer" index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 49.0
-margin_top = 28.0
-margin_right = 123.0
-margin_bottom = 52.0
+margin_left = 78.0
+margin_top = 84.0
+margin_right = 152.0
+margin_bottom = 108.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
