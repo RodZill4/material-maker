@@ -1,6 +1,19 @@
 tool
 extends GraphNode
 
+class OutPort:
+	var node = null
+	var port = null
+	
+	func get_shader_code(uv):
+		return node.get_shader_code(uv, port)
+
+	func generate_shader():
+		return node.generate_shader(port)
+		
+	func get_textures():
+		return node.get_textures()
+
 var generated = false
 var generated_variants = []
 
@@ -55,10 +68,15 @@ func _on_color_changed(new_color, variable):
 	update_shaders()
 
 func get_source(index = 0):
-	for c in get_parent().get_children():
-		if c != self && c is GraphNode:
-			if get_parent().is_node_connected(c.name, 0, name, index):
-				return c
+	for c in get_parent().get_connection_list():
+		if c.to == name and c.to_port == index:
+			if c.from_port == 0:
+				return get_parent().get_node(c.from)
+			else:
+				var out_port = OutPort.new()
+				out_port.node = get_parent().get_node(c.from)
+				out_port.port = c.from_port
+				return out_port
 	return null
 
 func get_source_f(source):
@@ -81,8 +99,12 @@ func get_source_rgb(source):
 		rv = "***error***"
 	return rv
 
-func get_shader_code(uv):
-	var rv = _get_shader_code(uv)
+func get_shader_code(uv, slot = 0):
+	var rv
+	if slot == 0:
+		rv = _get_shader_code(uv)
+	else:
+		rv = _get_shader_code(uv, slot)
 	if !rv.has("f"):
 		if rv.has("rgb"):
 			rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
@@ -115,6 +137,27 @@ func deserialize_element(e):
 		if e.type == "Color":
 			return Color(e.r, e.g, e.b, e.a)
 	return e
+
+func generate_shader(slot = 0):
+	var code
+	code = "shader_type canvas_item;\n\n"
+	var file = File.new()
+	file.open("res://addons/procedural_material/common.shader", File.READ)
+	code += file.get_as_text()
+	code += "\n"
+	for c in get_parent().get_children():
+		if c is GraphNode:
+			c.generated = false
+			c.generated_variants = []
+	var src_code = get_shader_code("UV", slot)
+	var shader_code = src_code.defs
+	shader_code += "void fragment() {\n"
+	shader_code += src_code.code
+	shader_code += "COLOR = vec4("+src_code.rgb+", 1.0);\n"
+	shader_code += "}\n"
+	#print("GENERATED SHADER:\n"+shader_code)
+	code += shader_code
+	return code
 
 func serialize():
 	var type = get_script().resource_path

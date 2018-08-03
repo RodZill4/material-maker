@@ -1,14 +1,14 @@
 float rand(vec2 x) {
-    return fract(sin(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
+    return fract(cos(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
 }
 
 vec2 rand2(vec2 x) {
-    return fract(sin(vec2(dot(x, vec2(13.9898, 8.141)),
+    return fract(cos(vec2(dot(x, vec2(13.9898, 8.141)),
 						  dot(x, vec2(3.4562, 17.398)))) * 43758.5453);
 }
 
 vec3 rand3(vec2 x) {
-    return fract(sin(vec3(dot(x, vec2(13.9898, 8.141)),
+    return fract(cos(vec3(dot(x, vec2(13.9898, 8.141)),
                           dot(x, vec2(3.4562, 17.398)),
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
@@ -129,19 +129,21 @@ vec2 transform(vec2 uv, vec2 translate, float rotate, float scale) {
 	return rv;
 }
 
-float bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
+vec3 bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
 	mortar /= max(count.x, count.y);
 	bevel /= max(count.x, count.y);
-	float fract_x = fract(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
+	float x = uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5));
+	float fract_x = fract(x);
 	float slope_x = 1.0/(bevel*count.x);
 	float off = 0.5*mortar/bevel;
 	float f1 = fract_x*slope_x-off;
 	float f2 = (1.0-fract_x)*slope_x-off;
+	float y = uv.y*count.y;
 	float fract_y = fract(uv.y*count.y);
 	float slope_y = 1.0/(bevel*count.y);
 	float f3 = fract_y*slope_y-off;
 	float f4 = (1.0-fract_y)*slope_y-off;
-	return max(0.0, min(1.0, min(min(f1, f2), min(f3, f4))));
+	return vec3(max(0.0, min(1.0, min(min(f1, f2), min(f3, f4)))), floor(mod(x, count.x)), floor(mod(y, count.y)));
 }
 
 float colored_bricks(vec2 uv, vec2 count, float offset) {

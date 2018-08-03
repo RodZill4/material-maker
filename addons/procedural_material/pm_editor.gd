@@ -138,10 +138,10 @@ func generate_shader():
 	if $GraphEdit/Material != null:
 		$GraphEdit/Material.update_materials($Preview/Preview.get_materials())
 	if selected_node != null && selected_node is GraphNode:
-		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
+		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), selected_node.generate_shader())
 
 func _on_GraphEdit_node_selected(node):
 	if selected_node != node && node is GraphNode:
 		selected_node = node
-		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), $GraphEdit.generate_shader(selected_node))
+		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), selected_node.generate_shader())
 

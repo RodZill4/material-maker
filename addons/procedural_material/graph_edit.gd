@@ -91,32 +91,6 @@ func send_changed_signal():
 func do_send_changed_signal():
 	emit_signal("graph_changed")
 
-func generate_shader(node):
-	var code
-	code = "shader_type canvas_item;\n\n"
-	var file = File.new()
-	file.open("res://addons/procedural_material/common.shader", File.READ)
-	code += file.get_as_text()
-	code += "\n"
-	for c in get_children():
-		if c is GraphNode:
-			c.generated = false
-			c.generated_variants = []
-	var src_code = node.get_shader_code("UV")
-	var shader_code = src_code.defs
-	shader_code += "void fragment() {\n"
-	shader_code += src_code.code
-	if src_code.has("rgb"):
-		shader_code += "COLOR = vec4("+src_code.rgb+", 1.0);\n"
-	elif src_code.has("f"):
-		shader_code += "COLOR = vec4(vec3("+src_code.f+"), 1.0);\n"
-	else:
-		shader_code += "COLOR = vec4(1.0);\n"
-	shader_code += "}\n"
-	#print("GENERATED SHADER:\n"+shader_code)
-	code += shader_code
-	return code
-
 func setup_material(shader_material, textures, shader_code):
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
@@ -127,7 +101,7 @@ func setup_material(shader_material, textures, shader_code):
 var render_queue = []
 
 func render_to_viewport(node, size, method, args):
-	render_queue.append( { shader=generate_shader(node), textures=node.get_textures(), size=size, method=method, args=args } )
+	render_queue.append( { shader=node.generate_shader(), textures=node.get_textures(), size=size, method=method, args=args } )
 	if render_queue.size() == 1:
 		while !render_queue.empty():
 			var job = render_queue.front()
