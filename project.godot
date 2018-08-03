@@ -10,9 +10,14 @@ config_version=3
 
 [application]
 
-config/name="Procedural textures addon"
+config/name="Procedural textures"
 run/main_scene="res://addons/procedural_material/pm_editor.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
 
 [editor_plugins]
 

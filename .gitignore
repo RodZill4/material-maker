@@ -12,3 +12,5 @@ addons/procedural_material/models/Material.material
 addons/procedural_material/models/models.blend1
 addons/procedural_material/models/models.dae
 addons/procedural_material/models/models.dae.import
+/examples/*.png
+/examples/*.import

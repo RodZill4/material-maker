@@ -8,8 +8,14 @@ var texture_emission   = null
 var texture_normal_map = null
 var texture_depth_map  = null
 
-var render_queue = []   # render queue for generated textures
-var material_list = []  # materials to be updatedwith generated textures
+const TEXTURE_LIST = [
+		{ port= 0, texture= "albedo" },
+		{ port= 1, texture= "metallic" },
+		{ port= 2, texture= "roughness" },
+		{ port= 3, texture= "emission" },
+		{ port= 4, texture= "normal_map" },
+		{ port= 5, texture= "depth_map" }
+]
 
 func _ready():
 	pass
@@ -31,34 +37,16 @@ func _get_shader_code(uv):
 func _get_state_variables():
 	return [ ]
 
-func update_materials(ml):
-	material_list = ml
-	render_queue = [
-		{ port= 0, texture= "albedo" },
-		{ port= 1, texture= "metallic" },
-		{ port= 2, texture= "roughness" },
-		{ port= 3, texture= "emission" },
-		{ port= 4, texture= "normal_map" },
-		{ port= 5, texture= "depth_map" }
-	]
-	process_render_queue()
-
-func process_render_queue():
-	while !render_queue.empty():
-		var job = render_queue.pop_front()
-		var source = get_source(job.port)
-		if source != null:
-			get_parent().precalculate_texture(source, 1024, self, "store_texture", [ job.texture ])
-			return
+func update_materials(material_list):
+	for t in TEXTURE_LIST:
+		var source = get_source(t.port)
+		if source == null:
+			set("texture_"+t.texture, null)
 		else:
-			set("texture_"+job.texture, null)
-	do_update_materials()
+			get_parent().precalculate_texture(source, 1024, self, "store_texture", [ t.texture, material_list ])
 
-func store_texture(texture_name, texture):
+func store_texture(texture_name, material_list, texture):
 	set("texture_"+texture_name, texture)
-	process_render_queue()
-
-func do_update_materials():
 	for m in material_list:
 		if m is SpatialMaterial:
 			m.albedo_texture = texture_albedo
@@ -80,3 +68,6 @@ func do_update_materials():
 			else:
 				m.depth_enabled = false
 
+func export_textures(prefix):
+	for t in TEXTURE_LIST:
+		get_parent().export_texture(get_source(t.port), prefix+"_"+t.texture+".png", 1024)

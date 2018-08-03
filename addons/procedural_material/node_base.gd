@@ -130,6 +130,7 @@ func deserialize(data):
 	offset = Vector2(data.node_position.x, data.node_position.y)
 	for w in property_widgets:
 		var variable = w.name
-		var value = deserialize_element(data[variable])
-		set(variable, value)
+		if data.has(variable):
+			var value = deserialize_element(data[variable])
+			set(variable, value)
 	update_property_widgets()

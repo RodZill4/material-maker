@@ -1,6 +1,8 @@
 tool
 extends Container
 
+var save_path = null
+
 var popup_menu = null
 var popup_position = Vector2(0, 0)
 var selected_node = null
@@ -8,9 +10,11 @@ var selected_node = null
 var texture_preview_material = null
 
 const MENU = [
-	{ command="load_texture", description="Load texture" },
-	{ command="save_texture", description="Save texture" },
-	{ command="export_texture", description="Export texture" },
+	{ command="new_texture", description="New material" },
+	{ command="load_texture", description="Load material" },
+	{ command="save_texture", description="Save material" },
+	{ command="save_texture_as", description="Save material as..." },
+	{ command="export_texture", description="Export material" },
 	{ },
 	{ submenu="generator", description="Generator" },
 	{ name="image", description="Image", in_submenu="generator" },
@@ -78,35 +82,57 @@ func _on_PopupMenu_id_pressed(id):
 			$GraphEdit.add_node(node, popup_position)
 			node.offset = ($GraphEdit.scroll_offset + popup_position - $GraphEdit.rect_global_position) / $GraphEdit.zoom
 
-func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
-	var disconnect = $GraphEdit.get_source(to, to_slot)
-	if disconnect != null:
-		$GraphEdit.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
-	$GraphEdit.connect_node(from, from_slot, to, to_slot)
-	generate_shader();
+func set_save_path(path):
+	save_path = path
+	if !Engine.editor_hint:
+		if save_path != null:
+			OS.set_window_title("Procedural textures (%s)" % save_path)
+		else:
+			OS.set_window_title("Procedural textures")
+
+func new_texture():
+	$GraphEdit.new_material()
+	set_save_path(null)
 
 func load_texture():
+	selected_node = null
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.ptex;Procedural textures file")
-	dialog.connect("file_selected", $GraphEdit, "load_file")
+	dialog.connect("file_selected", self, "do_load_texture")
 	dialog.popup_centered()
 
+func do_load_texture(path):
+	set_save_path(path)
+	$GraphEdit.load_file(save_path)
+
 func save_texture():
+	if save_path != null:
+		$GraphEdit.save_file(save_path)
+	else:
+		save_texture_as()
+	
+func save_texture_as():
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural textures file")
-	dialog.connect("file_selected", $GraphEdit, "save_file")
+	dialog.connect("file_selected", self, "do_save_texture")
 	dialog.popup_centered()
 
-func export_texture(size = 256):
-	$GraphEdit.export_texture(selected_node, "res://generated_image.png", size)
+func do_save_texture(path):
+	set_save_path(path)
+	$GraphEdit.save_file(save_path)
+
+func export_texture(size = 512):
+	#$GraphEdit.export_texture(selected_node, "res://generated_image.png", size)
+	var prefix = save_path.left(save_path.rfind("."))
+	$GraphEdit/Material.export_textures(prefix)
 
 func generate_shader():
 	if $GraphEdit/Material != null:
