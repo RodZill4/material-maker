@@ -11,10 +11,10 @@ dest_files=[ "res://.import/park.hdr-1e56c84521c4230f03b191409247d136.stex" ]
 
 [params]
 
-compress/mode=0
-compress/lossy_quality=0.7
-compress/hdr_mode=0
-compress/normal_map=0
+compress/mode=1
+compress/lossy_quality=0.1
+compress/hdr_mode=1
+compress/normal_map=2
 flags/repeat=0
 flags/filter=true
 flags/mipmaps=false
