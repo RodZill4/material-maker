@@ -61,6 +61,7 @@ var active_cursor
 
 func select_color(cursor, position):
 	active_cursor = cursor
+	$Gradient/Popup/ColorPicker.color = cursor.color
 	$Gradient/Popup/ColorPicker.connect("color_changed", cursor, "set_color")
 	$Gradient/Popup.rect_position = position
 	$Gradient/Popup.popup()
