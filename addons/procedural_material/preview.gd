@@ -1,8 +1,6 @@
 tool
 extends ViewportContainer
 
-var preview_maximized = false
-
 const ENVIRONMENTS = [
 	"experiment", "lobby", "night", "park", "schelde"
 ]
@@ -14,14 +12,6 @@ func _ready():
 	$ObjectRotate.play("rotate")
 	_on_Environment_item_selected($Environment.selected)
 
-func _on_SelectedPreview_gui_input(ev):
-	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
-		if preview_maximized:
-			$SelectedPreviewAnimation.play("minimize")
-		else:
-			$SelectedPreviewAnimation.play("maximize")
-		preview_maximized = !preview_maximized
-
 func _on_Environment_item_selected(id):
 	$MaterialPreview/WorldEnvironment.environment.background_sky.panorama = load("res://addons/procedural_material/panoramas/"+ENVIRONMENTS[id]+".hdr")
 
@@ -32,3 +22,7 @@ func _on_Model_item_selected(id):
 
 func get_materials():
 	return [ $MaterialPreview/Objects/Cube.get_surface_material(0) ]
+
+
+func _on_Preview_item_rect_changed():
+	$MaterialPreview.size = rect_size

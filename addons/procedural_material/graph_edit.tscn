@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/procedural_material/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/nodes/material.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/procedural_material/nodes/material.gd" type="Script" id=3]
 
 [sub_resource type="Theme" id=1]
 
@@ -249,10 +248,8 @@ shader = SubResource( 2 )
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1280.0
-margin_bottom = 718.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 focus_mode = 2
@@ -268,75 +265,21 @@ zoom = 1.0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Material", "Mouse", "Visibility" ]
 
-[node name="Material" type="GraphNode" parent="." index="2" instance=ExtResource( 2 )]
+[node name="Material" parent="." index="0" instance=ExtResource( 2 )]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_right = 111.0
 margin_bottom = 118.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "Material"
-offset = Vector2( 0, 0 )
-show_close = false
-resizable = false
-selected = false
-comment = false
-overlay = 0
-slot/0/left_enabled = true
-slot/0/left_type = 0
-slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
-slot/0/right_enabled = false
-slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
-slot/1/left_enabled = true
-slot/1/left_type = 0
-slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
-slot/1/right_enabled = false
-slot/1/right_type = 0
-slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
-slot/2/left_enabled = true
-slot/2/left_type = 0
-slot/2/left_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/2/right_enabled = false
-slot/2/right_type = 0
-slot/2/right_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/3/left_enabled = true
-slot/3/left_type = 0
-slot/3/left_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/3/right_enabled = false
-slot/3/right_type = 0
-slot/3/right_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/4/left_enabled = true
-slot/4/left_type = 0
-slot/4/left_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/4/right_enabled = false
-slot/4/right_type = 0
-slot/4/right_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/5/left_enabled = true
-slot/5/left_type = 0
-slot/5/left_color = Color( 0.498039, 0.498039, 1, 1 )
-slot/5/right_enabled = false
-slot/5/right_type = 0
-slot/5/right_color = Color( 0.498039, 0.498039, 1, 1 )
-script = ExtResource( 3 )
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot", "slot/2", "slot/3", "slot/4", "slot/5" ]
 
-[node name="Timer" type="Timer" parent="." index="3"]
+[node name="Timer" type="Timer" parent="." index="1"]
 
 process_mode = 1
-wait_time = 0.1
+wait_time = 0.2
 one_shot = true
 autostart = false
 
-[node name="SaveViewport" type="Viewport" parent="." index="4"]
+[node name="SaveViewport" type="Viewport" parent="." index="2"]
 
 arvr = false
 size = Vector2( 0, 0 )

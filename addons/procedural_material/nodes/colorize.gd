@@ -29,5 +29,6 @@ func serialize():
 	return data
 
 func deserialize(data):
-	$Control.deserialize(data.gradient)
+	if data.has("gradient"):
+		$Control.deserialize(data.gradient)
 	.deserialize(data)

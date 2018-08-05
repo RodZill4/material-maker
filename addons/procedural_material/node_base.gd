@@ -170,7 +170,8 @@ func serialize():
 	return data
 
 func deserialize(data):
-	offset = Vector2(data.node_position.x, data.node_position.y)
+	if data.has("node_position"):
+		offset = Vector2(data.node_position.x, data.node_position.y)
 	for w in property_widgets:
 		var variable = w.name
 		if data.has(variable):

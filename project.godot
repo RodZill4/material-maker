@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="Procedural textures"
-run/main_scene="res://addons/procedural_material/pm_editor.tscn"
+run/main_scene="res://addons/procedural_material/main_window.tscn"
 config/icon="res://icon.png"
 
 [display]

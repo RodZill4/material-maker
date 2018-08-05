@@ -12,7 +12,7 @@ func set_texture(path):
 	if path != null:
 		texture.load(path)
 	$TextureButton.texture_normal = texture
-	get_parent().get_parent().generate_shader()
+	update_shaders()
 
 func get_textures():
 	var list = {}
@@ -47,5 +47,6 @@ func serialize():
 	return data
 
 func deserialize(data):
-	set_texture(data.file_path)
+	if data.has("file_path"):
+		set_texture(data.file_path)
 	.deserialize(data)
