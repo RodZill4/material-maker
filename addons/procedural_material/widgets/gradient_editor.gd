@@ -11,10 +11,10 @@ class GradientCursor:
 		rect_size = Vector2(WIDTH, 20)
 
 	func _gui_input(ev):
-		if ev is InputEventMouseButton && ev.doubleclick:
-			if ev.button_index == 1:
+		if ev is InputEventMouseButton:
+			if ev.button_index == BUTTON_LEFT && ev.doubleclick:
 				get_parent().select_color(self, ev.global_position)
-			elif ev.button_index == 2 && get_parent().get_sorted_cursors().size() > 2:
+			elif ev.button_index == BUTTON_RIGHT && get_parent().get_sorted_cursors().size() > 2:
 				var parent = get_parent()
 				parent.remove_child(self)
 				parent.update_shader()
