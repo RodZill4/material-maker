@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/procedural_material/preview.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/panoramas/park.hdr" type="Texture" id=2]
@@ -195,16 +195,27 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
+[sub_resource type="Shader" id=7]
+
+code = "shader_type canvas_item;
+"
+
+[sub_resource type="ShaderMaterial" id=8]
+
+render_priority = 0
+shader = SubResource( 7 )
+
 [node name="Preview" type="ViewportContainer"]
 
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 0.0
-margin_left = -364.0
+margin_left = -398.0
 margin_top = 3.0
-margin_right = -14.0
-margin_bottom = 353.0
+margin_right = -3.0
+margin_bottom = 373.0
+rect_min_size = Vector2( 200, 200 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -230,7 +241,7 @@ _sections_unfolded = [ "Playback Options" ]
 [node name="MaterialPreview" type="Viewport" parent="." index="1"]
 
 arvr = false
-size = Vector2( 350, 350 )
+size = Vector2( 395, 370 )
 own_world = true
 world = null
 transparent_bg = false
@@ -256,7 +267,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="MaterialPreview" index="0"]
 
-transform = Transform( 0.965183, 0, -0.26156, 0, 1, 0, 0.26156, 0, 0.965183, 0, 0, 0 )
+transform = Transform( -0.376032, 0, -0.926603, 0, 1, 0, 0.926603, 0, -0.376032, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects" index="0"]
@@ -336,14 +347,31 @@ _sections_unfolded = [ "Transform" ]
 
 environment = SubResource( 6 )
 
-[node name="Model" type="OptionButton" parent="." index="2"]
+[node name="Config" type="HBoxContainer" parent="." index="2"]
+
+editor/display_folded = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Model" type="OptionButton" parent="Config" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 110.0
+margin_right = 100.0
 margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -361,15 +389,18 @@ flat = false
 align = 0
 items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null ]
 selected = 0
+_sections_unfolded = [ "Margin", "Rect" ]
 
-[node name="Environment" type="OptionButton" parent="." index="3"]
+[node name="Environment" type="OptionButton" parent="Config" index="1"]
 
-anchor_left = 1.0
+anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 1.0
+anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = -110.0
+margin_left = 104.0
+margin_right = 204.0
 margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -387,9 +418,33 @@ flat = false
 align = 0
 items = [ "Experiment", null, false, 0, null, "Lobby", null, false, 1, null, "Night", null, false, 2, null, "Park", null, false, 3, null, "Schelde", null, false, 4, null ]
 selected = 3
+_sections_unfolded = [ "Rect" ]
 
-[connection signal="item_selected" from="Model" to="." method="_on_Model_item_selected"]
+[node name="Preview2D" type="ColorRect" parent="." index="3"]
 
-[connection signal="item_selected" from="Environment" to="." method="_on_Environment_item_selected"]
+material = SubResource( 8 )
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_top = -64.0
+margin_right = 64.0
+rect_min_size = Vector2( 64, 64 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Anchor", "Material", "Mouse", "Rect", "Size Flags" ]
+
+[connection signal="resized" from="." to="." method="_on_Preview_resized"]
+
+[connection signal="item_selected" from="Config/Model" to="." method="_on_Model_item_selected"]
+
+[connection signal="item_selected" from="Config/Environment" to="." method="_on_Environment_item_selected"]
+
+[connection signal="gui_input" from="Preview2D" to="." method="_on_Preview2D_gui_input"]
 
 

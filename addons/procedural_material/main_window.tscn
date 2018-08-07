@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/procedural_material/library.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/preview.tscn" type="PackedScene" id=3]
 
-[node name="MainWindow" type="Panel" index="0"]
+[node name="MainWindow" type="Panel"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -74,14 +74,64 @@ flat = true
 align = 1
 items = [  ]
 
-[node name="Help" type="MenuButton" parent="VBoxContainer/Menu" index="1"]
+[node name="Edit" type="MenuButton" parent="VBoxContainer/Menu" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 39.0
-margin_right = 81.0
+margin_right = 75.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 0
+shortcut = null
+group = null
+text = "Edit"
+flat = true
+align = 1
+items = [  ]
+
+[node name="Tools" type="MenuButton" parent="VBoxContainer/Menu" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 79.0
+margin_right = 125.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 0
+shortcut = null
+group = null
+text = "Tools"
+flat = true
+align = 1
+items = [  ]
+
+[node name="Help" type="MenuButton" parent="VBoxContainer/Menu" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 129.0
+margin_right = 171.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false

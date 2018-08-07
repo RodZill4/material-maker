@@ -14,6 +14,7 @@ const MENU = [
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="exit", description="Exit" },
+	{ menu="Tools", command="save_icons", description="Save icons for selected nodes" },
 	{ menu="Help", command="about", description="About" }
 ]
 
@@ -37,10 +38,14 @@ func create_menu(menu, menu_name):
 			menu.add_separator()
 	return menu
 
-func new_material():
+func new_pane():
 	var graph_edit = preload("res://addons/procedural_material/graph_edit.tscn").instance()
 	$VBoxContainer/HBoxContainer/Projects.add_child(graph_edit)
 	$VBoxContainer/HBoxContainer/Projects.current_tab = graph_edit.get_index()
+	return graph_edit 
+
+func new_material():
+	var graph_edit = new_pane()
 	graph_edit.update_tab_title()
 
 func load_material():
@@ -54,9 +59,7 @@ func load_material():
 	dialog.popup_centered()
 
 func do_load_material(filename):
-	var graph_edit = preload("res://addons/procedural_material/graph_edit.tscn").instance()
-	$VBoxContainer/HBoxContainer/Projects.add_child(graph_edit)
-	$VBoxContainer/HBoxContainer/Projects.current_tab = graph_edit.get_index()
+	var graph_edit = new_pane()
 	graph_edit.do_load_file(filename)
 
 func save_material():
@@ -68,6 +71,12 @@ func save_material_as():
 func close_material():
 	$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().queue_free()
 
+func save_icons():
+	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	for n in graphedit.get_children():
+		if n is GraphNode and n.selected:
+			graphedit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
+
 func exit():
 	queue_free()
 	
@@ -76,11 +85,28 @@ func _on_PopupMenu_id_pressed(id):
 	if MENU[id].has("command"):
 		call(MENU[id].command)
 
+# Preview
+
 func update_preview():
 	var material_node = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control().get_node("Material")
 	if material_node != null:
 		material_node.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
+	update_preview_2d()
+
+func update_preview_2d(node = null):
+	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
+	if node == null:
+		for n in graphedit.get_children():
+			if n is GraphNode and n.selected:
+				node = n
+				break
+	if node != null:
+		graphedit.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
 
 func _on_Projects_tab_changed(tab):
-	$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("graph_changed", self, "update_preview")
-	current_tab = tab
+	if tab != current_tab:
+		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("graph_changed", self, "update_preview")
+		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("node_selected", self, "update_preview_2d")
+		current_tab = tab
+		update_preview()

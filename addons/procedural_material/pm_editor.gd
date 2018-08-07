@@ -107,12 +107,12 @@ func generate_shader():
 	if $GraphEdit/Material != null:
 		$GraphEdit/Material.update_materials($Preview/Preview.get_materials())
 	if selected_node != null:
-		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), selected_node.generate_shader())
+		$GraphEdit.setup_material($Preview/Preview.get_2d_material(), selected_node.get_textures(), selected_node.generate_shader())
 
 func _on_GraphEdit_node_selected(node):
 	var selected_node = get_selected_node()
 	if selected_node != null:
-		$GraphEdit.setup_material(texture_preview_material, selected_node.get_textures(), selected_node.generate_shader())
+		$GraphEdit.setup_material($Preview/Preview.get_2d_material(), selected_node.get_textures(), selected_node.generate_shader())
 
 func _on_SelectedPreview_gui_input(ev):
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:

@@ -16,3 +16,7 @@ addons/procedural_material/models/models.dae.import
 /examples/*.import
 examples/input_image.png.import
 examples/input_image.png.import
+*.import
+*.import
+*.import
+*.import

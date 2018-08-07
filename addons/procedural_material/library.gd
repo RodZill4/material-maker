@@ -8,13 +8,23 @@ func get_drag_data(position):
 	var selected_item = get_selected()
 	if selected_item != null:
 		var data = selected_item.get_metadata(0)
+		var preview
+		if data.has("icon") && data.has("library"):
+			var filename = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
+			preview = TextureRect.new()
+			preview.texture = ImageTexture.new()
+			preview.texture.load(filename)
+		else:
+			preview = Label.new()
+			preview.text = data.tree_item
+		set_drag_preview(preview)
 		return data 
 	return null
 
-
 func _ready():
 	var root = create_item()
-	add_library("res://addons/procedural_material/material_library.json")
+	add_library("res://addons/procedural_material/library/base.json")
+	add_library("res://addons/procedural_material/library/user.json")
 
 func add_library(filename):
 	var root = get_root()
@@ -24,6 +34,7 @@ func add_library(filename):
 	var lib = parse_json(file.get_as_text())
 	file.close()
 	for m in lib.lib:
+		m.library = filename
 		add_item(m, m.tree_item, root)
 
 func add_item(item, item_name, item_parent):
