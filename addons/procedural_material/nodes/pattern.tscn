@@ -181,7 +181,7 @@ group = null
 text = "Sine"
 flat = false
 align = 0
-items = [ "Sine", null, false, 0, null, "Saw", null, false, 1, null, "Square", null, false, 2, null ]
+items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null ]
 selected = 0
 _sections_unfolded = [ "Rect" ]
 
@@ -276,7 +276,7 @@ group = null
 text = "Sine"
 flat = false
 align = 0
-items = [ "Sine", null, false, 0, null, "Saw", null, false, 1, null, "Square", null, false, 2, null ]
+items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null ]
 selected = 0
 _sections_unfolded = [ "Rect" ]
 

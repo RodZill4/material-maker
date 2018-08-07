@@ -7,7 +7,7 @@ var x_scale = 4.0
 var y_wave = 0
 var y_scale = 4.0
 
-const WAVE_FCT = [ "wave_sin", "wave_saw", "wave_square" ]
+const WAVE_FCT = [ "wave_sin", "wave_triangle", "wave_square", "fract" ]
 const MIX_FCT = [ "mix_multiply", "mix_add", "mix_max", "mix_min", "mix_xor", "mix_pow" ]
 
 func _ready():

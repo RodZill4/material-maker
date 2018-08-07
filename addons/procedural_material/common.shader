@@ -17,7 +17,7 @@ float wave_sin(float x) {
 	return 0.5-0.5*cos(3.1415928*2.0*x);
 }
 
-float wave_saw(float x) {
+float wave_triangle(float x) {
 	x = fract(x);
 	return min(2.0*x, 2.0-2.0*x);
 }
