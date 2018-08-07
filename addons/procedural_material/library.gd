@@ -24,7 +24,7 @@ func get_drag_data(position):
 func _ready():
 	var root = create_item()
 	add_library("res://addons/procedural_material/library/base.json")
-	add_library("res://addons/procedural_material/library/user.json")
+	add_library("user://library/user.json")
 
 func add_library(filename):
 	var root = get_root()
@@ -35,13 +35,24 @@ func add_library(filename):
 	file.close()
 	for m in lib.lib:
 		m.library = filename
-		add_item(m, m.tree_item, root)
+		add_item(m, m.tree_item)
 
-func add_item(item, item_name, item_parent):
+func add_item(item, item_name, item_parent = null):
+	if item_parent == null:
+		item.tree_item = item_name
+		item_parent = get_root()
 	var slash_position = item_name.find("/")
 	if slash_position == -1:
-		var new_item = create_item(item_parent)
-		new_item.set_text(0, item_name)
+		var new_item = null
+		var c = item_parent.get_children()
+		while c != null:
+			if c.get_text(0) == item_name:
+				new_item = c
+				break
+			c = c.get_next()
+		if new_item == null:
+			new_item = create_item(item_parent)
+			new_item.set_text(0, item_name)
 		new_item.set_metadata(0, item)
 		return new_item
 	else:
@@ -58,3 +69,23 @@ func add_item(item, item_name, item_parent):
 			new_parent = create_item(item_parent)
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, new_parent)
+
+func serialize_library(array, library_name, item = null):
+	if item == null:
+		item = get_root()
+	item = item.get_children()
+	while item != null:
+		var m = item.get_metadata(0)
+		if m != null && m.has("library") and m.library == library_name:
+			array.append(m)
+		serialize_library(array, library_name, item)
+		item = item.get_next()
+
+func save_library(library_name, item = null):
+	var array = []
+	serialize_library(array, library_name)
+	print("Saving library "+library_name)
+	var file = File.new()
+	if file.open(library_name, File.WRITE) == OK:
+		file.store_string(to_json({lib=array}))
+		file.close()

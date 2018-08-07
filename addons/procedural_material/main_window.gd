@@ -4,17 +4,19 @@ var current_tab = -1
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="load_material", description="Load material" },
+	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
 	{ menu="File" },
-	{ menu="File", command="save_material", description="Save material" },
-	{ menu="File", command="save_material_as", description="Save material as..." },
+	{ menu="File", command="save_material", shortcut="Control+S", description="Save material" },
+	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
 	{ menu="File", command="save_all_materials", description="Save all materials..." },
 	{ menu="File" },
-	{ menu="File", command="export_material", description="Export material" },
+	{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
-	{ menu="File", command="exit", description="Exit" },
+	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 	{ menu="Tools", command="save_icons", description="Save icons for selected nodes" },
+	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
+	{ menu="Tools", command="save_user_library", description="Save user library" },
 	{ menu="Help", command="about", description="About" }
 ]
 
@@ -33,7 +35,18 @@ func create_menu(menu, menu_name):
 			menu.add_child(submenu)
 			menu.add_submenu_item(MENU[i].description, submenu.get_name())
 		elif MENU[i].has("description"):
-			menu.add_item(MENU[i].description, i)
+			var shortcut = 0
+			if MENU[i].has("shortcut"):
+				for s in MENU[i].shortcut.split("+"):
+					if s == "Alt":
+						shortcut |= KEY_MASK_ALT
+					elif s == "Control":
+						shortcut |= KEY_MASK_CTRL
+					elif s == "Shift":
+						shortcut |= KEY_MASK_SHIFT
+					else:
+						shortcut |= OS.find_scancode_from_string(s)
+			menu.add_item(MENU[i].description, i, shortcut)
 		else:
 			menu.add_separator()
 	return menu
@@ -73,12 +86,40 @@ func close_material():
 
 func save_icons():
 	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	for n in graphedit.get_children():
-		if n is GraphNode and n.selected:
-			graphedit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
+	if graphedit != null and graphedit is GraphEdit:
+		for n in graphedit.get_children():
+			if n is GraphNode and n.selected:
+				graphedit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
 
-func exit():
-	queue_free()
+func add_to_user_library():
+	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graphedit != null and graphedit is GraphEdit:
+		for n in graphedit.get_children():
+			if n is GraphNode and n.selected:
+				var dialog = preload("res://addons/procedural_material/widgets/line_dialog.tscn").instance()
+				add_child(dialog)
+				dialog.connect("ok", self, "do_add_to_user_library", [n])
+				dialog.popup_centered()
+				break
+
+func do_add_to_user_library(name, node):
+	var data = node.serialize()
+	var dir = Directory.new()
+	dir.make_dir("user://library")
+	dir.make_dir("user://library/user")
+	data.erase("node_position")
+	data.library = "user://library/user.json"
+	data.icon = name.right(name.rfind("/")+1).to_lower()
+	$VBoxContainer/HBoxContainer/VBoxContainer/Library.add_item(data, name)
+	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	graphedit.export_texture(node, "user://library/user/"+data.icon+".png", 64)
+
+func save_user_library():
+	print("Saving user library")
+	$VBoxContainer/HBoxContainer/VBoxContainer/Library.save_library("user://library/user.json")
+
+func quit():
+	get_tree().quit()
 	
 func _on_PopupMenu_id_pressed(id):
 	var node_type = null
