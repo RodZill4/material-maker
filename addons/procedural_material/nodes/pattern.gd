@@ -11,7 +11,6 @@ const WAVE_FCT = [ "wave_sin", "wave_triangle", "wave_square", "fract" ]
 const MIX_FCT = [ "mix_multiply", "mix_add", "mix_max", "mix_min", "mix_xor", "mix_pow" ]
 
 func _ready():
-	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $HBoxContainer0/mix, $HBoxContainer1/x_wave, $HBoxContainer1/x_scale, $HBoxContainer2/y_wave, $HBoxContainer2/y_scale ])
 
 func _get_shader_code(uv):

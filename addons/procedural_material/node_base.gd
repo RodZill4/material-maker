@@ -134,7 +134,7 @@ func serialize_element(e):
 	
 func deserialize_element(e):
 	if typeof(e) == TYPE_DICTIONARY:
-		if e.type == "Color":
+		if e.has("type") and e.type == "Color":
 			return Color(e.r, e.g, e.b, e.a)
 	return e
 

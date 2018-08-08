@@ -1,8 +1,13 @@
 {"lib":[
 	{
+		"tree_item":"Generators/Uniform",
+		"type":"uniform",
+		"color":{"type":"Color", "r":1, "g":1, "b":1, "a":1}
+	},
+	{
 		"tree_item":"Generators/Image",
 		"type":"image",
-		"file_path":null
+		"file_path":"res://addons/procedural_material/nodes/godot_logo.png"
 	},
 	{
 		"tree_item":"Generators/Pattern",

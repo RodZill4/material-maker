@@ -1,12 +1,6 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
-var color0
-var color1
-
-func _ready():
-	set_slot(0, true, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
-
 func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	var src = get_source()

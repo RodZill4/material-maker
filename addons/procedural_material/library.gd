@@ -1,19 +1,22 @@
 extends Tree
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
 
 func get_drag_data(position):
 	var selected_item = get_selected()
 	if selected_item != null:
 		var data = selected_item.get_metadata(0)
+		if data == null:
+			return null
 		var preview
 		if data.has("icon") && data.has("library"):
 			var filename = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
 			preview = TextureRect.new()
 			preview.texture = ImageTexture.new()
 			preview.texture.load(filename)
+		elif data.has("type") and data.type == "uniform":
+			preview = ColorRect.new()
+			preview.rect_size = Vector2(32, 32)
+			preview.color = Color(data.color.r, data.color.g, data.color.b, data.color.a)
 		else:
 			preview = Label.new()
 			preview.text = data.tree_item
@@ -33,9 +36,10 @@ func add_library(filename):
 		return
 	var lib = parse_json(file.get_as_text())
 	file.close()
-	for m in lib.lib:
-		m.library = filename
-		add_item(m, m.tree_item)
+	if lib != null && lib.has("lib"):
+		for m in lib.lib:
+			m.library = filename
+			add_item(m, m.tree_item)
 
 func add_item(item, item_name, item_parent = null):
 	if item_parent == null:
