@@ -34,6 +34,9 @@ func initialize_properties(object_list):
 		elif o is OptionButton:
 			set(o.name, o.selected)
 			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
+		elif o is CheckBox:
+			set(o.name, o.pressed)
+			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			set(o.name, o.color)
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
@@ -49,6 +52,8 @@ func update_property_widgets():
 			o.value = get(o.name)
 		elif o is OptionButton:
 			o.selected = get(o.name)
+		elif o is CheckBox:
+			o.pressed = get(o.name)
 		elif o is ColorPickerButton:
 			o.color = get(o.name)
 
@@ -99,6 +104,10 @@ func get_source_rgb(source):
 		rv = "***error***"
 	return rv
 
+func reset():
+	generated = false
+	generated_variants = []
+
 func get_shader_code(uv, slot = 0):
 	var rv
 	if slot == 0:
@@ -147,8 +156,7 @@ func generate_shader(slot = 0):
 	code += "\n"
 	for c in get_parent().get_children():
 		if c is GraphNode:
-			c.generated = false
-			c.generated_variants = []
+			c.reset()
 	var src_code = get_shader_code("UV", slot)
 	var shader_code = src_code.defs
 	shader_code += "void fragment() {\n"
@@ -178,3 +186,56 @@ func deserialize(data):
 			var value = deserialize_element(data[variable])
 			set(variable, value)
 	update_property_widgets()
+
+# Generic code for convolution nodes
+
+func get_shader_code_convolution(convolution, uv):
+	var rv = { defs="", code="" }
+	var src = get_source()
+	if src == null:
+		return rv
+	var variant_index = generated_variants.find(uv)
+	var need_defs = false
+	if generated_variants.empty():
+		need_defs = true
+	if variant_index == -1:
+		variant_index = generated_variants.size()
+		generated_variants.append(uv)
+		var inputs_code = ""
+		var code = "vec3 %s_%d_rgb = " % [ name, variant_index ]
+		if convolution.has("translate"):
+			code += "vec3(%.9f, %.9f, %.9f)+" % [ convolution.translate.x, convolution.translate.y, convolution.translate.z ]
+		if convolution.has("scale"):
+			code += "%.9f*" % [ convolution.scale ]
+		if convolution.has("normalize") and convolution.normalize:
+			code += "normalize"
+		code += "("
+		if convolution.has("translate_before_normalize"):
+			code += "vec3(%.9f, %.9f, %.9f)+" % [ convolution.translate_before_normalize.x, convolution.translate_before_normalize.y, convolution.translate_before_normalize.z ]
+		if convolution.has("scale_before_normalize"):
+			code += "%.9f*" % [ convolution.scale_before_normalize ]
+		code += "("
+		var first = true
+		for dy in range(-2, 3):
+			for dx in range(-2, 3):
+				var i = 5*(dy+2)+dx+2
+				var coef = convolution.kernel[i]
+				if typeof(coef) == TYPE_REAL:
+					coef = Vector3(coef, coef, coef)
+				if typeof(coef) != TYPE_VECTOR3 or coef == Vector3(0, 0, 0):
+					continue
+				var src_code = src.get_shader_code(uv+"+vec2(%.9f, %.9f)" % [ dx*convolution.epsilon, dy*convolution.epsilon ])
+				if need_defs:
+					rv.defs = src_code.defs
+					need_defs = false
+				inputs_code += src_code.code
+				if !first:
+					code += "+"
+				else:
+					first = false
+				code += "vec3(%.9f, %.9f, %.9f)*(%s)"% [ coef.x, coef.y, coef.z, src_code.rgb ]
+		code += "));"
+		rv.code += inputs_code + code
+	rv.rgb = name+"_"+str(variant_index)+"_rgb"
+	return rv
+

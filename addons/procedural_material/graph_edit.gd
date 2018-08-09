@@ -2,6 +2,7 @@ tool
 extends GraphEdit
 
 var save_path = null
+var need_save = false
 
 signal save_path_changed
 signal graph_changed
@@ -45,7 +46,16 @@ func update_tab_title():
 	var title = "[unnamed]"
 	if save_path != null:
 		title = save_path.right(save_path.rfind("/")+1)
+	if need_save:
+		title += " *"
 	get_parent().set_tab_title(get_index(), title)
+	get_parent().update()
+
+func set_need_save(ns):
+	if ns != need_save:
+		need_save = ns
+		if get_parent() is TabContainer:
+			update_tab_title()
 
 func set_save_path(path):
 	if path != save_path:
@@ -111,6 +121,7 @@ func do_load_file(filename):
 		connect_node(c.from, c.from_port, c.to, c.to_port)
 	set_save_path(filename)
 	send_changed_signal()
+	set_need_save(false)
 
 func save_file():
 	if save_path != null:
@@ -139,6 +150,7 @@ func do_save_file(filename):
 		file.store_string(to_json(data))
 		file.close()
 	set_save_path(filename)
+	set_need_save(false)
 
 func export_textures(size = 512):
 	if save_path != null:
@@ -146,7 +158,7 @@ func export_textures(size = 512):
 		$GraphEdit/Material.export_textures(prefix)
 
 func send_changed_signal():
-	$Timer.stop()
+	set_need_save(true)
 	$Timer.start()
 
 func do_send_changed_signal():

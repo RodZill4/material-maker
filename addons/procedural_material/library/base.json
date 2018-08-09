@@ -58,21 +58,27 @@
 		"blend_type":0
 	},
 	{
+		"tree_item":"Filters/Blur",
+		"type":"blur",
+		"sigma":1.0
+	},
+	{
+		"tree_item":"Filters/Normal map",
+		"type":"normal_map",
+		"amount":0.5
+	},
+	{
 		"tree_item":"Filters/Transform",
 		"type":"transform",
 		"rotate":0,
-		"scale":1,
+		"scale_x":1,
+		"scale_y":1,
 		"translate_x":0,
 		"translate_y":0
 	},
 	{
 		"tree_item":"Filters/Warp",
 		"type":"warp",
-		"amount":0.5
-	},
-	{
-		"tree_item":"Filters/Normal map",
-		"type":"normal_map",
 		"amount":0.5
 	}
 ]}

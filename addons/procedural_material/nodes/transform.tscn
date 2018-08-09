@@ -13,8 +13,8 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 1.0
 margin_top = 1.0
-margin_right = 110.0
-margin_bottom = 54.0
+margin_right = 185.0
+margin_bottom = 179.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -35,10 +35,40 @@ slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color( 1, 1, 1, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color( 1, 1, 1, 1 )
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color( 1, 1, 1, 1 )
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color( 1, 1, 1, 1 )
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme" ]
 
-[node name="GridContainer" type="GridContainer" parent="." index="0"]
+[node name="HBoxContainer1" type="HBoxContainer" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -47,16 +77,16 @@ anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
 margin_right = 168.0
-margin_bottom = 132.0
+margin_bottom = 48.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-columns = 2
+alignment = 0
 
-[node name="Label1" type="Label" parent="GridContainer" index="0"]
+[node name="Label" type="Label" parent="HBoxContainer1" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -69,14 +99,14 @@ rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Translate X:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="translate_x" type="SpinBox" parent="GridContainer" index="1"]
+[node name="translate_x" type="SpinBox" parent="HBoxContainer1" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -89,8 +119,8 @@ rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 4
 min_value = -1.0
 max_value = 1.0
 step = 0.05
@@ -101,44 +131,61 @@ rounded = false
 editable = true
 prefix = ""
 suffix = ""
-_sections_unfolded = [ "Caret", "Placeholder" ]
+_sections_unfolded = [ "Caret", "Placeholder", "Rect" ]
 
-[node name="Label2" type="Label" parent="GridContainer" index="2"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 33.0
+margin_left = 16.0
+margin_top = 48.0
+margin_right = 168.0
+margin_bottom = 72.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label" type="Label" parent="HBoxContainer2" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
 margin_right = 74.0
-margin_bottom = 47.0
+margin_bottom = 19.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Translate Y:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="translate_y" type="SpinBox" parent="GridContainer" index="3"]
+[node name="translate_y" type="SpinBox" parent="HBoxContainer2" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 78.0
-margin_top = 28.0
 margin_right = 152.0
-margin_bottom = 52.0
+margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 4
 min_value = -1.0
 max_value = 1.0
 step = 0.05
@@ -151,42 +198,60 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
-[node name="Label3" type="Label" parent="GridContainer" index="4"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 61.0
+margin_left = 16.0
+margin_top = 73.0
+margin_right = 168.0
+margin_bottom = 97.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label" type="Label" parent="HBoxContainer3" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
 margin_right = 74.0
-margin_bottom = 75.0
+margin_bottom = 19.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Rotate:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="rotate" type="SpinBox" parent="GridContainer" index="5"]
+[node name="rotate" type="SpinBox" parent="HBoxContainer3" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 78.0
-margin_top = 56.0
 margin_right = 152.0
-margin_bottom = 80.0
+margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 4
 min_value = 0.0
 max_value = 360.0
 step = 5.0
@@ -197,44 +262,62 @@ rounded = false
 editable = true
 prefix = ""
 suffix = ""
-_sections_unfolded = [ "Caret", "Placeholder" ]
+_sections_unfolded = [ "Caret", "Placeholder", "Size Flags" ]
 
-[node name="Label4" type="Label" parent="GridContainer" index="6"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="." index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 89.0
+margin_left = 16.0
+margin_top = 98.0
+margin_right = 168.0
+margin_bottom = 122.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label" type="Label" parent="HBoxContainer4" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
 margin_right = 74.0
-margin_bottom = 103.0
+margin_bottom = 19.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 4
-text = "Scale:"
+text = "Scale X:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+_sections_unfolded = [ "Size Flags" ]
 
-[node name="scale" type="SpinBox" parent="GridContainer" index="7"]
+[node name="scale_x" type="SpinBox" parent="HBoxContainer4" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 78.0
-margin_top = 84.0
 margin_right = 152.0
-margin_bottom = 108.0
+margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 4
 min_value = 0.05
 max_value = 50.0
 step = 0.05
@@ -246,5 +329,97 @@ editable = true
 prefix = ""
 suffix = ""
 _sections_unfolded = [ "Caret", "Placeholder" ]
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="." index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 123.0
+margin_right = 168.0
+margin_bottom = 147.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label" type="Label" parent="HBoxContainer5" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
+margin_right = 74.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Scale Y:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="scale_y" type="SpinBox" parent="HBoxContainer5" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 78.0
+margin_right = 152.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+min_value = 0.05
+max_value = 50.0
+step = 0.05
+page = 0.0
+value = 1.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Caret", "Placeholder" ]
+
+[node name="repeat" type="CheckBox" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 148.0
+margin_right = 168.0
+margin_bottom = 172.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = true
+pressed = true
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Repeat"
+flat = false
+align = 0
 
 

@@ -23,6 +23,7 @@ const MENU = [
 func _ready():
 	for m in $VBoxContainer/Menu.get_children():
 		create_menu(m.get_popup(), m.name)
+	new_material()
 
 func create_menu(menu, menu_name):
 	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
@@ -72,7 +73,18 @@ func load_material():
 	dialog.popup_centered()
 
 func do_load_material(filename):
-	var graph_edit = new_pane()
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var node_count = 0
+	if graph_edit == null:
+		node_count = 123 # So test below succeeds...
+	else:
+		for c in graph_edit.get_children():
+			if c is GraphNode:
+				node_count += 1
+				if node_count > 1:
+					break
+	if node_count > 1:
+		graph_edit = new_pane()
 	graph_edit.do_load_file(filename)
 
 func save_material():

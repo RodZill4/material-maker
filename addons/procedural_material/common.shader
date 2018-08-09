@@ -118,7 +118,7 @@ vec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 	return opacity*min(c1, c2) + (1.0-opacity)*c2;
 }
 
-vec2 transform(vec2 uv, vec2 translate, float rotate, float scale) {
+vec2 transform(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	vec2 rv;
 	uv -= vec2(0.5);
 	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
@@ -127,6 +127,14 @@ vec2 transform(vec2 uv, vec2 translate, float rotate, float scale) {
 	rv += vec2(0.5);
 	rv -= translate;
 	return rv;
+}
+
+vec2 transform_repeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
+	return fract(transform(uv, translate, rotate, scale));
+}
+
+vec2 transform_norepeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
+	return clamp(transform(uv, translate, rotate, scale), vec2(0.0), vec2(1.0));
 }
 
 vec3 bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {

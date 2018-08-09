@@ -11,7 +11,11 @@ const BLEND_TYPES = [
 	{ name="Screen", shortname="screen" },
 	{ name="Overlay", shortname="overlay" },
 	{ name="Hard Light", shortname="hard_light" },
-	{ name="Soft Light", shortname="soft_light" }
+	{ name="Soft Light", shortname="soft_light" },
+	{ name="Burn", shortname="burn" },
+	{ name="Dodge", shortname="dodge" },
+	{ name="Lighten", shortname="lighten" },
+	{ name="Darken", shortname="darken" }
 ]
 
 func _ready():

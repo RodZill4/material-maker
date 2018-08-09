@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="NormalMap" type="GraphNode"]
+[node name="NormalMap" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -36,7 +36,7 @@ slot/0/right_enabled = true
 slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme" ]
+_sections_unfolded = [ "Theme", "slot", "slot/0" ]
 
 [node name="amount" type="SpinBox" parent="." index="0"]
 
