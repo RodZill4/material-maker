@@ -25,7 +25,7 @@ func _on_Model_item_selected(id):
 		c.visible = (c.get_name() == model)
 
 func get_materials():
-	return [ $MaterialPreview/Objects/Cube.get_surface_material(0) ]
+	return [ $MaterialPreview/Objects/Cube.get_surface_material(0), $MaterialPreview/Objects/Sphere.get_surface_material(0) ]
 	
 func get_2d_material():
 	return $Preview2D.material

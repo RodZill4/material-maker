@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/procedural_material/preview.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/panoramas/park.hdr" type="Texture" id=2]
@@ -73,10 +73,15 @@ normal_enabled = false
 rim_enabled = false
 clearcoat_enabled = false
 anisotropy_enabled = false
-ao_enabled = false
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
 depth_enabled = true
-depth_scale = 0.05
-depth_deep_parallax = false
+depth_scale = 0.5
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
 subsurf_scatter_enabled = false
 transmission_enabled = false
 refraction_enabled = false
@@ -91,7 +96,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Depth", "Metallic" ]
+_sections_unfolded = [ "Ambient Occlusion", "Depth" ]
 
 [sub_resource type="ArrayMesh" id=4]
 
@@ -110,15 +115,83 @@ surfaces/0 = {
 }
 _sections_unfolded = [ "surface_1" ]
 
-[sub_resource type="PanoramaSky" id=5]
+[sub_resource type="SphereMesh" id=5]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+radius = 1.5
+height = 3.0
+radial_segments = 64
+rings = 32
+is_hemisphere = false
+
+[sub_resource type="SpatialMaterial" id=6]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
+depth_enabled = true
+depth_scale = 0.5
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( -5, -5, 5 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Ambient Occlusion", "Depth", "UV1" ]
+
+[sub_resource type="PanoramaSky" id=7]
 
 radiance_size = 2
 panorama = ExtResource( 2 )
 
-[sub_resource type="Environment" id=6]
+[sub_resource type="Environment" id=8]
 
 background_mode = 2
-background_sky = SubResource( 5 )
+background_sky = SubResource( 7 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
 background_energy = 1.0
@@ -195,15 +268,15 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="Shader" id=7]
+[sub_resource type="Shader" id=9]
 
 code = "shader_type canvas_item;
 "
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id=10]
 
 render_priority = 0
-shader = SubResource( 7 )
+shader = SubResource( 9 )
 
 [node name="Preview" type="ViewportContainer"]
 
@@ -267,7 +340,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="MaterialPreview" index="0"]
 
-transform = Transform( -0.376032, 0, -0.926603, 0, 1, 0, 0.926603, 0, -0.376032, 0, 0, 0 )
+transform = Transform( -0.407451, 0, -0.913223, 0, 1, 0, 0.913223, 0, -0.407451, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects" index="0"]
@@ -303,6 +376,23 @@ skeleton = NodePath("..")
 material/0 = SubResource( 3 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
 
+[node name="Sphere" type="MeshInstance" parent="MaterialPreview/Objects" index="2"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 5 )
+skeleton = NodePath("..")
+material/0 = SubResource( 6 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
+
 [node name="OmniLight" type="OmniLight" parent="MaterialPreview" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04729, 1.80471, -2.51024 )
@@ -331,7 +421,7 @@ _sections_unfolded = [ "Shadow" ]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
 keep_aspect = 1
 cull_mask = 1048575
-environment = SubResource( 6 )
+environment = SubResource( 8 )
 h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
@@ -345,11 +435,10 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="MaterialPreview" index="3"]
 
-environment = SubResource( 6 )
+environment = SubResource( 8 )
 
 [node name="Config" type="HBoxContainer" parent="." index="2"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -387,7 +476,7 @@ group = null
 text = "Cube"
 flat = false
 align = 0
-items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null ]
+items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null, "Sphere", null, false, 2, null ]
 selected = 0
 _sections_unfolded = [ "Margin", "Rect" ]
 
@@ -422,7 +511,7 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="Preview2D" type="ColorRect" parent="." index="3"]
 
-material = SubResource( 8 )
+material = SubResource( 10 )
 anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0

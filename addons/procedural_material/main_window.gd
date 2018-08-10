@@ -88,25 +88,36 @@ func do_load_material(filename):
 	graph_edit.do_load_file(filename)
 
 func save_material():
-	$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().save_file()
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.save_file()
 	
 func save_material_as():
-	$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().save_file_as()
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.save_file_as()
 
 func close_material():
-	$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().queue_free()
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.queue_free()
+
+func export_material():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.export_textures(1024)
 
 func save_icons():
-	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graphedit != null and graphedit is GraphEdit:
-		for n in graphedit.get_children():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null and graph_edit is GraphEdit:
+		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
-				graphedit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
+				graph_edit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
 
 func add_to_user_library():
-	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graphedit != null and graphedit is GraphEdit:
-		for n in graphedit.get_children():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null and graph_edit is GraphEdit:
+		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
 				var dialog = preload("res://addons/procedural_material/widgets/line_dialog.tscn").instance()
 				add_child(dialog)
@@ -123,8 +134,8 @@ func do_add_to_user_library(name, node):
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
 	$VBoxContainer/HBoxContainer/VBoxContainer/Library.add_item(data, name)
-	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	graphedit.export_texture(node, "user://library/user/"+data.icon+".png", 64)
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	graph_edit.export_texture(node, "user://library/user/"+data.icon+".png", 64)
 
 func save_user_library():
 	print("Saving user library")
@@ -136,7 +147,9 @@ func quit():
 func _on_PopupMenu_id_pressed(id):
 	var node_type = null
 	if MENU[id].has("command"):
-		call(MENU[id].command)
+		var command = MENU[id].command
+		if has_method(command):
+			call(command)
 
 # Preview
 
@@ -147,18 +160,21 @@ func update_preview():
 	update_preview_2d()
 
 func update_preview_2d(node = null):
-	var graphedit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
 	if node == null:
-		for n in graphedit.get_children():
+		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
 				node = n
 				break
 	if node != null:
-		graphedit.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
+		graph_edit.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
 
 func _on_Projects_tab_changed(tab):
 	if tab != current_tab:
+		for c in get_incoming_connections():
+			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+				c.source.disconnect(c.signal_name, self, c.method_name)
 		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("graph_changed", self, "update_preview")
 		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("node_selected", self, "update_preview_2d")
 		current_tab = tab

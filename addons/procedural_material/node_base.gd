@@ -25,7 +25,9 @@ func _ready():
 func initialize_properties(object_list):
 	property_widgets = object_list
 	for o in object_list:
-		if o is LineEdit:
+		if o == null:
+			print("error in node "+name)
+		elif o is LineEdit:
 			set(o.name, float(o.text))
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
 		elif o is SpinBox:
