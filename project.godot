@@ -10,11 +10,12 @@ config_version=3
 
 [application]
 
-config/name="Material Maker"
+config/name="Material Lab"
 run/main_scene="res://addons/procedural_material/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 config/icon="res://icon.png"
+config/release="0.2"
 
 [display]
 

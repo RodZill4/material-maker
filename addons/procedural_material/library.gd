@@ -57,7 +57,11 @@ func add_item(item, item_name, item_parent = null):
 		if new_item == null:
 			new_item = create_item(item_parent)
 			new_item.set_text(0, item_name)
-		new_item.set_metadata(0, item)
+			new_item.collapsed = true
+		if item.has("type"):
+			new_item.set_metadata(0, item)
+		if item.has("collapsed"):
+			new_item.collapsed = item.collapsed
 		return new_item
 	else:
 		var prefix = item_name.left(slash_position)
@@ -71,6 +75,7 @@ func add_item(item, item_name, item_parent = null):
 			c = c.get_next()
 		if new_parent == null:
 			new_parent = create_item(item_parent)
+			new_parent.collapsed = true
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, new_parent)
 

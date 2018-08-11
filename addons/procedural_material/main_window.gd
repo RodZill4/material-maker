@@ -14,13 +14,15 @@ const MENU = [
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
-	{ menu="Tools", command="save_icons", description="Save icons for selected nodes" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
+	{ menu="Help", command="bug_report", description="Report a bug" },
+	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
 
 func _ready():
+	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	for m in $VBoxContainer/Menu.get_children():
 		create_menu(m.get_popup(), m.name)
 	new_material()
@@ -107,12 +109,9 @@ func export_material():
 	if graph_edit != null:
 		graph_edit.export_textures(1024)
 
-func save_icons():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graph_edit != null and graph_edit is GraphEdit:
-		for n in graph_edit.get_children():
-			if n is GraphNode and n.selected:
-				graph_edit.export_texture(n, "res://addons/procedural_material/library/icons/"+n.name+".png", 64)
+func quit():
+	get_tree().quit()
+	
 
 func add_to_user_library():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
@@ -141,8 +140,13 @@ func save_user_library():
 	print("Saving user library")
 	$VBoxContainer/HBoxContainer/VBoxContainer/Library.save_library("user://library/user.json")
 
-func quit():
-	get_tree().quit()
+func bug_report():
+	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
+
+func about():
+	var about_box = preload("res://addons/procedural_material/widgets/about.tscn").instance()
+	add_child(about_box)
+	about_box.popup_centered()
 	
 func _on_PopupMenu_id_pressed(id):
 	var node_type = null

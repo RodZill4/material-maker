@@ -1,8 +1,11 @@
 {"lib":[
 	{
-		"tree_item":"Generators/Uniform",
-		"type":"uniform",
-		"color":{"type":"Color", "r":1, "g":1, "b":1, "a":1}
+		"tree_item":"Generators",
+		"collapsed":false
+	},
+	{
+		"tree_item":"Filters",
+		"collapsed":false
 	},
 	{
 		"tree_item":"Generators/Image",
@@ -80,5 +83,44 @@
 		"tree_item":"Filters/Warp",
 		"type":"warp",
 		"amount":0.5
+	},
+    {
+      "tree_item": "Generators/Pattern/Checkerboard",
+      "type": "pattern",
+      "icon": "checkerboard",
+      "mix": 4,
+      "x_scale": 4,
+      "x_wave": 2,
+      "y_scale": 4,
+      "y_wave": 2
+    },
+    {
+      "tree_item": "Generators/Bricks/Tiles",
+      "type": "bricks",
+      "icon": "tiles",
+      "bevel": 0.05,
+      "columns": 4,
+      "mortar": 0.05,
+      "row_offset": 0,
+      "rows": 4
+    },
+    {
+      "tree_item": "Filters/Colorize/Invert",
+      "type": "colorize",
+      "icon": "invert",
+      "gradient": [
+        {
+          "b": 1,
+          "g": 1,
+          "pos": 0,
+          "r": 1
+        },
+        {
+          "b": 0,
+          "g": 0,
+          "pos": 1,
+          "r": 0
+        }
+      ]	
 	}
 ]}
