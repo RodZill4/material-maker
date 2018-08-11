@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/procedural_material/library.gd" type="Script" id=2]
 [ext_resource path="res://addons/procedural_material/preview.tscn" type="PackedScene" id=3]
 
-[node name="MainWindow" type="Panel"]
+[node name="MainWindow" type="Panel" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
