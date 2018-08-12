@@ -26,20 +26,25 @@ func get_drag_data(position):
 
 func _ready():
 	var root = create_item()
-	add_library("res://addons/procedural_material/library/base.json")
+	var lib_path = OS.get_executable_path()
+	lib_path = lib_path.left(max(lib_path.rfind("\\"), lib_path.rfind("/"))+1)+"library/base.json"
+	if !add_library(lib_path):
+		add_library("res://addons/procedural_material/library/base.json")
 	add_library("user://library/user.json")
 
 func add_library(filename):
 	var root = get_root()
 	var file = File.new()
 	if file.open(filename, File.READ) != OK:
-		return
+		return false
 	var lib = parse_json(file.get_as_text())
 	file.close()
 	if lib != null && lib.has("lib"):
 		for m in lib.lib:
 			m.library = filename
 			add_item(m, m.tree_item)
+		return true
+	return false
 
 func add_item(item, item_name, item_parent = null):
 	if item_parent == null:

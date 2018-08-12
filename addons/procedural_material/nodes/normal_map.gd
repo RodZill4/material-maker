@@ -23,6 +23,9 @@ func _ready():
 	initialize_properties([ $amount ])
 
 func _get_shader_code(uv):
+	var src = get_source()
+	if src == null:
+		return { defs="", code="" }
 	var convolution = CONVOLUTION
 	convolution.scale_before_normalize = amount
-	return get_shader_code_convolution(convolution, uv)
+	return get_shader_code_convolution(src, convolution, uv)

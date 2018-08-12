@@ -13,6 +13,10 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
+float wave_constant(float x) {
+	return 1.0;
+}
+
 float wave_sin(float x) {
 	return 0.5-0.5*cos(3.1415928*2.0*x);
 }

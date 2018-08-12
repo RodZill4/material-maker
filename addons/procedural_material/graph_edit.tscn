@@ -243,7 +243,7 @@ COLOR = vec4(colorize_3_0_rgb, 1.0);
 render_priority = 0
 shader = SubResource( 2 )
 
-[node name="GraphEdit" type="GraphEdit"]
+[node name="GraphEdit" type="GraphEdit" index="0"]
 
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.0
@@ -267,8 +267,6 @@ _sections_unfolded = [ "Material", "Mouse", "Visibility" ]
 
 [node name="Material" parent="." index="0" instance=ExtResource( 2 )]
 
-margin_right = 111.0
-margin_bottom = 118.0
 theme = SubResource( 1 )
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot", "slot/2", "slot/3", "slot/4", "slot/5" ]
 
@@ -331,9 +329,9 @@ wait_time = 0.1
 one_shot = true
 autostart = false
 
-[connection signal="connection_request" from="." to="." method="_on_GraphEdit_connection_request"]
+[connection signal="connection_request" from="." to="." method="connect_node"]
 
-[connection signal="disconnection_request" from="." to="." method="_on_GraphEdit_disconnection_request"]
+[connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
 

@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Pattern" type="GraphNode"]
+[node name="Pattern" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -181,7 +181,7 @@ group = null
 text = "Sine"
 flat = false
 align = 0
-items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null ]
+items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null, "Constant", null, false, 4, null ]
 selected = 0
 _sections_unfolded = [ "Rect" ]
 
@@ -276,7 +276,7 @@ group = null
 text = "Sine"
 flat = false
 align = 0
-items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null ]
+items = [ "Sine", null, false, 0, null, "Triangle", null, false, 1, null, "Square", null, false, 2, null, "Sawtooth", null, false, 3, null, "Constant", null, false, 4, null ]
 selected = 0
 _sections_unfolded = [ "Rect" ]
 

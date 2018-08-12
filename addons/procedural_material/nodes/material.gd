@@ -7,28 +7,38 @@ var roughness
 var emission_energy
 var normal_scale
 var ao_light_affect
-var depth_scale 
+var depth_scale
 
-var texture_albedo            = null
-var texture_metallic          = null
-var texture_roughness         = null
-var texture_emission          = null
-var texture_normal_map        = null
-var texture_ambient_occlusion = null
-var texture_depth_map         = null
+var current_material_list = []
+var generated_textures = {}
 
 const TEXTURE_LIST = [
-		{ port= 0, texture= "albedo" },
-		{ port= 1, texture= "metallic" },
-		{ port= 2, texture= "roughness" },
-		{ port= 3, texture= "emission" },
-		{ port= 4, texture= "normal_map" },
-		{ port= 5, texture= "ambient_occlusion" },
-		{ port= 6, texture= "depth_map" }
+	{ port=0, texture="albedo" },
+	{ port=1, texture="metallic" },
+	{ port=2, texture="roughness" },
+	{ port=3, texture="emission" },
+	{ port=4, texture="normal_map" },
+	{ port=5, texture="ambient_occlusion" },
+	{ port=6, texture="depth_map" }
 ]
 
 func _ready():
+	for t in TEXTURE_LIST:
+		generated_textures[t.texture] = { shader=null, source=null, texture=null}
 	initialize_properties([ $Albedo/albedo_color, $Metallic/metallic, $Roughness/roughness, $Emission/emission_energy, $NormalMap/normal_scale, $AmbientOcclusion/ao_light_affect, $DepthMap/depth_scale ])
+
+func _rerender():
+	var has_textures = false
+	for t in TEXTURE_LIST:
+		var shader = generated_textures[t.texture].shader
+		if shader != null:
+			var input_textures = null
+			if generated_textures[t.texture].source != null:
+				input_textures = generated_textures[t.texture].source.get_textures()
+			get_parent().precalculate_shader(shader, input_textures, 1024, generated_textures[t.texture].texture, self, "do_update_materials", [ current_material_list ])
+			has_textures = true
+	if !has_textures:
+		do_update_materials(current_material_list)
 
 func _get_shader_code(uv):
 	var rv = { defs="", code="", f="0.0" }
@@ -37,55 +47,53 @@ func _get_shader_code(uv):
 		rv = src.get_shader_code(uv)
 	return rv
 
-func _get_state_variables():
-	return [ ]
-
 func update_materials(material_list):
+	current_material_list = material_list
 	var has_textures = false
 	for t in TEXTURE_LIST:
 		var source = get_source(t.port)
 		if source == null:
-			set("texture_"+t.texture, null)
+			generated_textures[t.texture].shader = null
+			generated_textures[t.texture].source = null
+			if generated_textures[t.texture].texture != null:
+				generated_textures[t.texture].texture = null
 		else:
-			get_parent().precalculate_texture(source, 1024, self, "store_texture", [ t.texture, material_list ])
-			has_textures = true
-	if !has_textures:
-		do_update_materials(material_list)
-
-func store_texture(texture_name, material_list, texture):
-	set("texture_"+texture_name, texture)
-	do_update_materials(material_list)
+			generated_textures[t.texture].shader = source.generate_shader()
+			generated_textures[t.texture].source = source
+			if generated_textures[t.texture].texture == null:
+				generated_textures[t.texture].texture = ImageTexture.new()
+	_rerender()
 
 func do_update_materials(material_list):
 	for m in material_list:
 		if m is SpatialMaterial:
 			m.albedo_color = albedo_color
-			m.albedo_texture = texture_albedo
+			m.albedo_texture = generated_textures.albedo.texture
 			m.metallic = metallic
-			m.metallic_texture = texture_metallic
+			m.metallic_texture = generated_textures.metallic.texture
 			m.roughness = roughness
-			m.roughness_texture = texture_roughness
-			if texture_emission != null:
+			m.roughness_texture = generated_textures.roughness.texture
+			if generated_textures.emission.texture != null:
 				m.emission_enabled = true
 				m.emission_energy = emission_energy
-				m.emission_texture = texture_emission
+				m.emission_texture = generated_textures.emission.texture
 			else:
 				m.emission_enabled = false
-			if texture_normal_map != null:
+			if generated_textures.normal_map.texture != null:
 				m.normal_enabled = true
-				m.normal_texture = texture_normal_map
+				m.normal_texture = generated_textures.normal_map.texture
 			else:
 				m.normal_enabled = false
-			if texture_ambient_occlusion != null:
+			if generated_textures.ambient_occlusion.texture != null:
 				m.ao_enabled = true
 				m.ao_light_affect = ao_light_affect
-				m.ao_texture = texture_ambient_occlusion
+				m.ao_texture = generated_textures.ambient_occlusion.texture
 			else:
 				m.ao_enabled = false
-			if texture_depth_map != null:
+			if generated_textures.depth_map.texture != null:
 				m.depth_enabled = true
 				m.depth_scale = depth_scale
-				m.depth_texture = texture_depth_map
+				m.depth_texture = generated_textures.depth_map.texture
 			else:
 				m.depth_enabled = false
 

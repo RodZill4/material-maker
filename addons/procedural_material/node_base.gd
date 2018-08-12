@@ -1,6 +1,7 @@
 tool
 extends GraphNode
 
+# A class that provides the shader node interface for a node port
 class OutPort:
 	var node = null
 	var port = null
@@ -130,7 +131,7 @@ func get_shader_code(uv, slot = 0):
 
 func get_textures():
 	var list = {}
-	for i in range(5):
+	for i in range(get_connection_input_count()):
 		var source = get_source(i)
 		if source != null:
 			var source_list = source.get_textures()
@@ -149,17 +150,13 @@ func deserialize_element(e):
 			return Color(e.r, e.g, e.b, e.a)
 	return e
 
-func generate_shader(slot = 0):
+func do_generate_shader(src_code):
 	var code
-	code = "shader_type canvas_item;\n\n"
+	code = "shader_type canvas_item;\n"
 	var file = File.new()
 	file.open("res://addons/procedural_material/common.shader", File.READ)
 	code += file.get_as_text()
 	code += "\n"
-	for c in get_parent().get_children():
-		if c is GraphNode:
-			c.reset()
-	var src_code = get_shader_code("UV", slot)
 	var shader_code = src_code.defs
 	shader_code += "void fragment() {\n"
 	shader_code += src_code.code
@@ -168,6 +165,13 @@ func generate_shader(slot = 0):
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	return code
+	
+func generate_shader(slot = 0):
+	# Reset all nodes
+	for c in get_parent().get_children():
+		if c is GraphNode:
+			c.reset()
+	return do_generate_shader(get_shader_code("UV", slot))
 
 func serialize():
 	var type = get_script().resource_path
@@ -189,13 +193,22 @@ func deserialize(data):
 			set(variable, value)
 	update_property_widgets()
 
+# Render targets again for multipass filters
+
+func rerender_targets():
+	for c in get_parent().get_connection_list():
+		if c.from == name:
+			var node = get_parent().get_node(c.to)
+			if node != null and node is GraphNode:
+				node._rerender()
+
+func _rerender():
+	rerender_targets()
+
 # Generic code for convolution nodes
 
-func get_shader_code_convolution(convolution, uv):
+func get_shader_code_convolution(src, convolution, uv):
 	var rv = { defs="", code="" }
-	var src = get_source()
-	if src == null:
-		return rv
 	var variant_index = generated_variants.find(uv)
 	var need_defs = false
 	if generated_variants.empty():

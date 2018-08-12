@@ -8,9 +8,12 @@ const ENVIRONMENTS = [
 ]
 
 func _ready():
-	var m = $MaterialPreview/Objects/Cube.get_surface_material(0).duplicate()
+	var m
+	m = $MaterialPreview/Objects/Cube.get_surface_material(0).duplicate()
 	$MaterialPreview/Objects/Cube.set_surface_material(0, m)
 	$MaterialPreview/Objects/Cylinder.set_surface_material(0, m)
+	m = $MaterialPreview/Objects/Sphere.get_surface_material(0).duplicate()
+	$MaterialPreview/Objects/Sphere.set_surface_material(0, m)
 	$ObjectRotate.play("rotate")
 	$Preview2D.material = $Preview2D.material.duplicate(true)
 	_on_Environment_item_selected($Config/Environment.selected)

@@ -8,7 +8,7 @@ signal save_path_changed
 signal graph_changed
 
 func _ready():
-	pass
+	OS.low_processor_usage_mode = true
 
 func get_source(node, port):
 	for c in get_connection_list():
@@ -21,24 +21,35 @@ func add_node(node, global_position = null):
 		node.offset = (scroll_offset + global_position - rect_global_position) / zoom
 	node.connect("close_request", self, "remove_node", [ node ])
 
+func connect_node(from, from_slot, to, to_slot):
+	var source_list = [ from ]
+	while !source_list.empty():
+		var source = source_list.pop_front()
+		if source == to:
+			#print("cannot connect %s to %s (%s)" % [from, to, source])
+			return false
+		for c in get_connection_list():
+			if c.to == source and source_list.find(c.from) == -1:
+				source_list.append(c.from)
+	var disconnect = get_source(to, to_slot)
+	if disconnect != null:
+		.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
+	.connect_node(from, from_slot, to, to_slot)
+	send_changed_signal()
+	return true
+
+func disconnect_node(from, from_slot, to, to_slot):
+	.disconnect_node(from, from_slot, to, to_slot)
+	send_changed_signal();
+
 func remove_node(node):
 	var node_name = node.name
 	for c in get_connection_list():
 		if c.from == node_name or c.to == node_name:
 			disconnect_node(c.from, c.from_port, c.to, c.to_port)
+			send_changed_signal()
 	node.queue_free()
-	send_changed_signal()
 
-func _on_GraphEdit_connection_request(from, from_slot, to, to_slot):
-	var disconnect = get_source(to, to_slot)
-	if disconnect != null:
-		disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
-	connect_node(from, from_slot, to, to_slot)
-	send_changed_signal();
-
-func _on_GraphEdit_disconnection_request(from, from_slot, to, to_slot):
-	disconnect_node(from, from_slot, to, to_slot)
-	send_changed_signal();
 
 # Global operations on graph
 
@@ -96,7 +107,7 @@ func create_node(data, global_position = null):
 				i += 1
 		add_node(node, global_position)
 		node.deserialize(data)
-	send_changed_signal()
+		send_changed_signal()
 
 func load_file():
 	var dialog = FileDialog.new()
@@ -120,7 +131,6 @@ func do_load_file(filename):
 	for c in data.connections:
 		connect_node(c.from, c.from_port, c.to, c.to_port)
 	set_save_path(filename)
-	send_changed_signal()
 	set_need_save(false)
 
 func save_file():
@@ -164,6 +174,8 @@ func send_changed_signal():
 func do_send_changed_signal():
 	emit_signal("graph_changed")
 
+# Drag and drop
+
 func can_drop_data(position, data):
 	return typeof(data) == TYPE_DICTIONARY and data.has('type')
 
@@ -180,8 +192,8 @@ func setup_material(shader_material, textures, shader_code):
 
 var render_queue = []
 
-func render_to_viewport(node, size, method, args):
-	render_queue.append( { shader=node.generate_shader(), textures=node.get_textures(), size=size, method=method, args=args } )
+func render_shader_to_viewport(shader, textures, size, method, args):
+	render_queue.append( { shader=shader, textures=textures, size=size, method=method, args=args } )
 	if render_queue.size() == 1:
 		while !render_queue.empty():
 			var job = render_queue.front()
@@ -190,8 +202,9 @@ func render_to_viewport(node, size, method, args):
 			$SaveViewport/ColorRect.rect_size = Vector2(job.size, job.size)
 			var shader_material = $SaveViewport/ColorRect.material
 			shader_material.shader.code = job.shader
-			for k in job.textures.keys():
-				shader_material.set_shader_param(k+"_tex", job.textures[k])
+			if job.textures != null:
+				for k in job.textures.keys():
+					shader_material.set_shader_param(k+"_tex", job.textures[k])
 			$SaveViewport.render_target_update_mode = Viewport.UPDATE_ONCE
 			$SaveViewport.update_worlds()
 			yield(get_tree(), "idle_frame")
@@ -199,6 +212,9 @@ func render_to_viewport(node, size, method, args):
 			yield(get_tree(), "idle_frame")
 			callv(job.method, job.args)
 			render_queue.pop_front()
+
+func render_to_viewport(node, size, method, args):
+	render_shader_to_viewport(node.generate_shader(), node.get_textures(), size, method, args)
 
 func export_texture(node, filename, size = 256):
 	if node == null:
@@ -210,15 +226,16 @@ func do_export_texture(filename):
 	var viewport_image = viewport_texture.get_data()
 	viewport_image.save_png(filename)
 
-func precalculate_texture(node, size, object, method, args):
+func precalculate_node(node, size, target_texture, object, method, args):
 	if node == null:
 		return null
 	render_to_viewport(node, size, "do_precalculate_texture", [ object, method, args ])
 
-func do_precalculate_texture(object, method, args):
+func precalculate_shader(shader, textures, size, target_texture, object, method, args):
+	render_shader_to_viewport(shader, textures, size, "do_precalculate_texture", [ target_texture, object, method, args ])
+
+func do_precalculate_texture(target_texture, object, method, args):
 	var viewport_texture = $SaveViewport.get_texture()
-	var texture = ImageTexture.new()
-	texture.create_from_image(viewport_texture.get_data())
-	args.append(texture)
+	target_texture.create_from_image(viewport_texture.get_data())
 	object.callv(method, args)
 
