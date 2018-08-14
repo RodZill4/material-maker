@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Export" type="GraphNode"]
+[node name="Export" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -22,7 +22,7 @@ size_flags_vertical = 1
 theme = SubResource( 1 )
 title = "Export"
 offset = Vector2( 0, 0 )
-show_close = false
+show_close = true
 resizable = false
 selected = false
 comment = false
