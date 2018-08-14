@@ -1,4 +1,4 @@
-This is an addon for the Godot game engine that can be used to create texture procedurally.
+This is atool based on the Godot game engine that can be used to create textures procedurally. It can also be used as a Godot addon (but there's no good reason for not using it as a standalone tool).
 
 Its user interface is based on Godot's GraphEditor: textures are described as interconnected texture generators and operators.
 
@@ -8,16 +8,16 @@ Its user interface is based on Godot's GraphEditor: textures are described as in
 
 ### Image
 
-This operator reads a bitmap from disk
+This node reads a bitmap from disk
 
 ### Pattern
 
 This generator creates a greyscale image by mixing an horizontal and a vertical pattern.
-Patterns can either be based on a sine, triangle or square waveform (i.e. the color as function of the x or y coordinate).
-The frequency (number of waves per unit) be configure for both axes.
+Patterns can either be based on a sine, triangle, square, saw or "constant" waveform (i.e. the color as function of the x or y coordinate).
+The frequency (number of waves per unit) can be configure for both axes.
 Mix functions can also be configured.
 
-![Sine pattern](doc/sine.png)
+![Pattern](doc/pattern.png)
 
 ### Bricks
 
@@ -57,3 +57,42 @@ The Voronoi generator has 3 outputs:
 * The third output shows a different color for each cell.
 
 ![Voronoi Noise](doc/voronoi.png)
+
+## Filters
+
+### Colorize
+
+This filter accepts a greyscale image as input and is configured using a gradient. The output image is obtained by applying the gradient to the greyscale image (the example below shows a colorized perlin noise).
+
+![Colorize](doc/colorize.png)
+
+### Blend
+
+This filter accepts 2 inputs and an optional mask and blends the 2 images according to the selected blend algorithm.
+
+### Blur
+
+This node applies a Gaussian blur to the input image.
+
+### Combine
+
+This node accepts 3 greyscale images as inputs (one for each R, G and B channels) and combines them into a single image. It is useful to create textures that combine distinct features (for example Metallic and Roughness for Godot's Spatial materials).
+
+### Emboss
+
+This node creates a lighting effect from a greyscale image, with a configurable light direction.
+
+### Normal map
+
+This node creates a normal map from a greyscale height map.
+
+### Transform
+
+This node applies a transform (translation, rotation, and scale) to its input image. Whether the input image is clamped or repeated when downsizing is configurable.
+
+This can be combined with the pattern node to create a great variety of shapes.
+
+### Warp
+
+This node deforms an input image according to the gradient of another image (generally perlin noise).
+
