@@ -1,4 +1,4 @@
-This is atool based on the Godot game engine that can be used to create textures procedurally. It can also be used as a Godot addon (but there's no good reason for not using it as a standalone tool).
+This is a tool based on the Godot game engine that can be used to create textures procedurally. It can also be used as a Godot addon (but there's no good reason for not using it as a standalone tool).
 
 Its user interface is based on Godot's GraphEditor: textures are described as interconnected texture generators and operators.
 
@@ -98,3 +98,14 @@ This can be combined with the pattern node to create a great variety of shapes.
 
 This node deforms an input image according to the gradient of another image (generally perlin noise).
 
+![Warp](doc/warp.png)
+
+## Miscellaneous
+
+### Material
+
+This node defines the material shown in the 3d preview. It accepts textures for a subset of the PBR lighting model as implemented in the Godot engine. When exporting the material, each texture will be saved as a PNG file named after the project's name and a suffix for each material node input.
+
+### Export
+
+This node can be used to export extra PNG files (for example a combined PNG to be used with Godot materials).
