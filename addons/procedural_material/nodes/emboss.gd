@@ -1,7 +1,7 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
-var amount = 0.0
+var direction = 0
 
 var input_shader = ""
 var input_texture
@@ -11,30 +11,31 @@ const CONVOLUTION = {
 	x=1,
 	y=1,
 	kernel=[
-		Vector3(-1, -1, 0), Vector3(0, -2, 0), Vector3(1, -1, 0),
-		Vector3(-2, 0, 0),  0,                 Vector3(2, 0, 0),
-		Vector3(-1, 1, 0),  Vector3(0, 2, 0),  Vector3(1, 1, 0),
+		1, 2, 1,
+		0, 0, 0,
+		-1, -2, -1
 	],
 	epsilon=1.0/1024,
-	normalize=true,
-	translate_before_normalize=Vector3(0.0, 0.0, -1.0),
-	scale_before_normalize=0.5,
-	translate=Vector3(0.5, 0.5, 0.5),
-	scale=0.5
+	scale=0.5,
+	translate=Vector3(0.5, 0.5, 0.5)
 }
+
+const INDICES = [ 0, 1, 2, 5, 8, 7, 6, 3 ]
+const COEFS = [ 1, 2, 1, 0, -1, -2, -1, 0 ]
 
 func _ready():
 	input_texture = ImageTexture.new()
 	final_texture = ImageTexture.new()
-	initialize_properties([ $amount ])
+	initialize_properties([ $direction ])
 
 func _rerender():
 	get_parent().precalculate_shader(input_shader, get_source().get_textures(), 1024, input_texture, self, "pass_1", [])
 
 func pass_1():
 	var convolution = CONVOLUTION
-	convolution.scale_before_normalize = 8.0*amount
-	get_parent().precalculate_shader(get_convolution_shader(convolution), { input=input_texture}, 1024, final_texture, self, "rerender_targets", [])
+	for i in range(8):
+		convolution.kernel[INDICES[i]] = COEFS[(i+8-int(direction))%8]
+	get_parent().precalculate_shader(get_convolution_shader(convolution), {input=input_texture}, 1024, final_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}

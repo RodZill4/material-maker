@@ -207,6 +207,37 @@ func _rerender():
 
 # Generic code for convolution nodes
 
+func get_convolution_shader(convolution):
+	var shader_code
+	shader_code  = "shader_type canvas_item;\n"
+	shader_code += "uniform sampler2D input_tex;\n"
+	shader_code += "void fragment() {\n"
+	shader_code += "vec3 color = vec3(0.0);\n"
+	for dy in range(-convolution.y, convolution.y+1):
+		for dx in range(-convolution.x, convolution.x+1):
+			var i = (2*convolution.x+1)*(dy+convolution.y)+dx+convolution.x
+			var coef = convolution.kernel[i]
+			if typeof(coef) == TYPE_INT:
+				coef = float(coef)
+			if typeof(coef) == TYPE_REAL:
+				coef = Vector3(coef, coef, coef)
+			if typeof(coef) != TYPE_VECTOR3 or coef == Vector3(0, 0, 0):
+				continue
+			shader_code += "color += vec3(%.9f, %.9f, %.9f) * textureLod(input_tex, UV+vec2(%.9f, %.9f), %.9f).rgb;\n" % [ coef.x, coef.y, coef.z, dx*convolution.epsilon, dy*convolution.epsilon, convolution.epsilon ]
+	if convolution.has("scale_before_normalize"):
+		shader_code += "color *= %.9f;\n" % [ convolution.scale_before_normalize ]
+	if convolution.has("translate_before_normalize"):
+		shader_code += "color += vec3(%.9f, %.9f, %.9f);\n" % [ convolution.translate_before_normalize.x, convolution.translate_before_normalize.y, convolution.translate_before_normalize.z ]
+	if convolution.has("normalize") and convolution.normalize:
+		shader_code += "color = normalize(color);\n"
+	if convolution.has("scale"):
+		shader_code += "color *= %.9f;\n" % [ convolution.scale ]
+	if convolution.has("translate"):
+		shader_code += "color += vec3(%.9f, %.9f, %.9f);\n" % [ convolution.translate.x, convolution.translate.y, convolution.translate.z ]
+	shader_code += "COLOR = vec4(color, 1.0);\n"
+	shader_code += "}\n"
+	return shader_code;
+
 func get_shader_code_convolution(src, convolution, uv):
 	var rv = { defs="", code="" }
 	var variant_index = generated_variants.find(uv)
@@ -218,38 +249,6 @@ func get_shader_code_convolution(src, convolution, uv):
 		generated_variants.append(uv)
 		var inputs_code = ""
 		var code = "vec3 %s_%d_rgb = " % [ name, variant_index ]
-		if convolution.has("translate"):
-			code += "vec3(%.9f, %.9f, %.9f)+" % [ convolution.translate.x, convolution.translate.y, convolution.translate.z ]
-		if convolution.has("scale"):
-			code += "%.9f*" % [ convolution.scale ]
-		if convolution.has("normalize") and convolution.normalize:
-			code += "normalize"
-		code += "("
-		if convolution.has("translate_before_normalize"):
-			code += "vec3(%.9f, %.9f, %.9f)+" % [ convolution.translate_before_normalize.x, convolution.translate_before_normalize.y, convolution.translate_before_normalize.z ]
-		if convolution.has("scale_before_normalize"):
-			code += "%.9f*" % [ convolution.scale_before_normalize ]
-		code += "("
-		var first = true
-		for dy in range(-2, 3):
-			for dx in range(-2, 3):
-				var i = 5*(dy+2)+dx+2
-				var coef = convolution.kernel[i]
-				if typeof(coef) == TYPE_REAL:
-					coef = Vector3(coef, coef, coef)
-				if typeof(coef) != TYPE_VECTOR3 or coef == Vector3(0, 0, 0):
-					continue
-				var src_code = src.get_shader_code(uv+"+vec2(%.9f, %.9f)" % [ dx*convolution.epsilon, dy*convolution.epsilon ])
-				if need_defs:
-					rv.defs = src_code.defs
-					need_defs = false
-				inputs_code += src_code.code
-				if !first:
-					code += "+"
-				else:
-					first = false
-				code += "vec3(%.9f, %.9f, %.9f)*(%s)"% [ coef.x, coef.y, coef.z, src_code.rgb ]
-		code += "));"
 		rv.code += inputs_code + code
 	rv.rgb = name+"_"+str(variant_index)+"_rgb"
 	return rv

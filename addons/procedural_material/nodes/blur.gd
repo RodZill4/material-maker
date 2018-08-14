@@ -15,34 +15,31 @@ func _ready():
 	final_texture = ImageTexture.new()
 	initialize_properties([ $HBoxContainer1/epsilon, $HBoxContainer2/sigma ])
 
-func get_gaussian_blur_shader(v):
-	var shader_code
+func get_gaussian_blur_shader(horizontal):
+	var convolution = { x=0, y=0, kernel=[], epsilon=epsilon }
 	var kernel_size = 10
-	var kernel = []
-	kernel.resize(2*kernel_size+1)
-	shader_code = "shader_type canvas_item;\n"
-	shader_code += "uniform sampler2D input_tex;\n"
-	shader_code += "void fragment() {\n"
-	shader_code += "vec3 color = vec3(0.0);"
+	if horizontal:
+		convolution.x = kernel_size
+	else:
+		convolution.y = kernel_size
+	convolution.kernel.resize(2*kernel_size+1)
 	var sum = 0
 	for x in range(-kernel_size, kernel_size+1):
 		var coef = exp(-0.5*(pow((x)/sigma, 2.0))) / (2.0*PI*sigma*sigma)
-		kernel[x+kernel_size] = coef
+		convolution.kernel[x+kernel_size] = coef
 		sum += coef
 	for x in range(-kernel_size, kernel_size+1):
-		shader_code += "color += %.9f*textureLod(input_tex, UV+vec2(%.9f, %.9f), %.9f).rgb;\n" % [ kernel[x+kernel_size] / sum, x*v.x, x*v.y, epsilon ]
-	shader_code += "COLOR = vec4(color, 1.0);\n"
-	shader_code += "}\n"
-	return shader_code;
+		convolution.kernel[x+kernel_size] /= sum
+	return get_convolution_shader(convolution)
 
 func _rerender():
 	get_parent().precalculate_shader(input_shader, get_source().get_textures(), 4096, input_texture, self, "pass_1", [])
 
 func pass_1():
-	get_parent().precalculate_shader(get_gaussian_blur_shader(Vector2(epsilon, 0)), { input=input_texture}, 4096, mid_texture, self, "pass_2", [])
+	get_parent().precalculate_shader(get_gaussian_blur_shader(true), { input=input_texture}, 4096, mid_texture, self, "pass_2", [])
 
 func pass_2():
-	get_parent().precalculate_shader(get_gaussian_blur_shader(Vector2(0, epsilon)), { input=mid_texture}, 4096, final_texture, self, "rerender_targets", [])
+	get_parent().precalculate_shader(get_gaussian_blur_shader(false), { input=mid_texture}, 4096, final_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}
@@ -65,24 +62,3 @@ func _get_shader_code(uv):
 		rv.code = "vec3 "+name+"_"+str(variant_index)+"_rgb = texture("+name+"_tex, "+uv+").rgb;\n"
 	rv.rgb = name+"_"+str(variant_index)+"_rgb"
 	return rv
-
-func __get_shader_code(uv):
-	var convolution = {
-		kernel=[
-			0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0
-		],
-		epsilon=epsilon
-	}
-	var sum = 0
-	for x in range(-2, 3):
-		for y in range(-2, 3):
-			var coef = exp(-0.5*(pow((x-2)/sigma, 2.0) + pow((y-2)/sigma, 2.0))) / (2.0*PI*sigma*sigma)
-			convolution.kernel[x+2+5*(y+2)] = coef
-			sum += coef
-	for i in range(25):
-		convolution.kernel[i] /= sum
-	return get_shader_code_convolution(convolution, uv)

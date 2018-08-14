@@ -107,7 +107,7 @@ func close_material():
 func export_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
-		graph_edit.export_textures(1024)
+		graph_edit.export_textures(2048)
 
 func quit():
 	get_tree().quit()

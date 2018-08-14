@@ -165,7 +165,9 @@ func do_save_file(filename):
 func export_textures(size = 512):
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
-		$Material.export_textures(prefix)
+		for c in get_children():
+			if c is GraphNode && c.has_method("export_textures"):
+				c.export_textures(prefix)
 
 func send_changed_signal():
 	set_need_save(true)
