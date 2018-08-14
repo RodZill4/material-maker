@@ -82,6 +82,8 @@ This node accepts 3 greyscale images as inputs (one for each R, G and B channels
 
 This node creates a lighting effect from a greyscale image, with a configurable light direction.
 
+![Emboss](doc/emboss.png)
+
 ### Normal map
 
 This node creates a normal map from a greyscale height map.
