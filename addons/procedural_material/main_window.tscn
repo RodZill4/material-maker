@@ -72,7 +72,7 @@ group = null
 text = "File"
 flat = true
 align = 1
-items = [  ]
+items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 3, 268435539, null, "", false, "Save material as...", null, 0, false, false, 4, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 5, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 7, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 9, 0, null, "", false, "Quit", null, 0, false, false, 10, 268435537, null, "", false ]
 
 [node name="Edit" type="MenuButton" parent="VBoxContainer/Menu" index="1"]
 
@@ -122,7 +122,7 @@ group = null
 text = "Tools"
 flat = true
 align = 1
-items = [  ]
+items = [ "Add selected node to user library", null, 0, false, false, 11, 0, null, "", false, "Save user library", null, 0, false, false, 12, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu" index="3"]
 
@@ -147,7 +147,7 @@ group = null
 text = "Help"
 flat = true
 align = 1
-items = [  ]
+items = [ "Report a bug", null, 0, false, false, 13, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 15, 0, null, "", false ]
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer" index="1"]
 
@@ -245,5 +245,9 @@ _sections_unfolded = [ "Size Flags" ]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/Projects" to="." method="_on_Projects_tab_changed"]
 
 [connection signal="tab_selected" from="VBoxContainer/HBoxContainer/Projects" to="." method="_on_Projects_tab_changed"]
+
+[connection signal="connection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="connect_node"]
+
+[connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="disconnect_node"]
 
 

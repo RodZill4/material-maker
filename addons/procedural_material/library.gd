@@ -1,5 +1,5 @@
+tool
 extends Tree
-
 
 func get_drag_data(position):
 	var selected_item = get_selected()

@@ -1,3 +1,4 @@
+tool
 extends Panel
 
 var current_tab = -1
@@ -28,6 +29,7 @@ func _ready():
 	new_material()
 
 func create_menu(menu, menu_name):
+	menu.clear()
 	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
 	for i in MENU.size():
 		if MENU[i].menu != menu_name:
@@ -110,8 +112,11 @@ func export_material():
 		graph_edit.export_textures(2048)
 
 func quit():
-	get_tree().quit()
-	
+	if Engine.editor_hint:
+		get_parent().hide()
+		get_parent().queue_free()
+	else:
+		get_tree().quit()
 
 func add_to_user_library():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
