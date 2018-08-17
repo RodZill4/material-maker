@@ -12,6 +12,10 @@
 		"collapsed":false
 	},
 	{
+		"tree_item":"Generators/Uniform",
+		"type":"uniform"
+	},
+	{
 		"tree_item":"Generators/Image",
 		"type":"image",
 		"file_path":"res://addons/procedural_material/nodes/godot_logo.png"

@@ -80,7 +80,7 @@ group = null
 text = "Normal"
 flat = false
 align = 0
-items = [ "Normal", null, false, 0, null, "Dissolve", null, false, 1, null, "Multiply", null, false, 2, null, "Screen", null, false, 3, null, "Overlay", null, false, 4, null, "Hard Light", null, false, 5, null, "Soft Light", null, false, 6, null ]
+items = [ "Normal", null, false, 0, null, "Dissolve", null, false, 1, null, "Multiply", null, false, 2, null, "Screen", null, false, 3, null, "Overlay", null, false, 4, null, "Hard Light", null, false, 5, null, "Soft Light", null, false, 6, null, "Burn", null, false, 7, null, "Dodge", null, false, 8, null, "Lighten", null, false, 9, null, "Darken", null, false, 10, null ]
 selected = 0
 
 [node name="Label1" type="Label" parent="." index="1"]

@@ -18,7 +18,7 @@ float wave_constant(float x) {
 }
 
 float wave_sin(float x) {
-	return 0.5-0.5*cos(3.1415928*2.0*x);
+	return 0.5-0.5*cos(3.14159265359*2.0*x);
 }
 
 float wave_triangle(float x) {
@@ -122,6 +122,10 @@ vec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 	return opacity*min(c1, c2) + (1.0-opacity)*c2;
 }
 
+vec3 blend_difference(vec2 uv, vec3 c1, vec3 c2, float opacity) {
+	return opacity*clamp(c2-c1, vec3(0.0), vec3(1.0)) + (1.0-opacity)*c2;
+}
+
 vec2 transform(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	vec2 rv;
 	uv -= vec2(0.5);
@@ -165,18 +169,18 @@ float colored_bricks(vec2 uv, vec2 count, float offset) {
 }
 
 float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
-	uv += vec2(float(seed)*0.1234567);
+	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
     float rv = 0.0;
     float coef = 1.0;
     float acc = 0.0;
     for (int i = 0; i < iterations; ++i) {
     	vec2 step = vec2(1.0)/size;
-        float f0 = rand(floor(fract(uv)*size));
-        float f1 = rand(floor(fract(uv+vec2(step.x, 0.0))*size));
-        float f2 = rand(floor(fract(uv+vec2(0.0, step.y))*size));
-        float f3 = rand(floor(fract(uv+vec2(step.x, step.y))*size));
-        vec2 mixval = fract(uv*size);
-        mixval = 0.5*(1.0-cos(3.1415928*mixval));
+		vec2 xy = seed2+floor(fract(uv)*size);
+        float f0 = rand(xy);
+        float f1 = rand(xy+vec2(1.0, 0.0));
+        float f2 = rand(xy+vec2(0.0, 1.0));
+        float f3 = rand(xy+vec2(1.0, 1.0));
+        vec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));
         rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);
         acc += coef;
         size *= 2.0;
@@ -187,7 +191,7 @@ float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
 }
 
 vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
-	uv += vec2(float(seed)*0.1234567);
+	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
     uv *= size;
     float best_distance0 = 1.0;
     float best_distance1 = 1.0;
@@ -198,7 +202,7 @@ vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
     	for (int dy = -1; dy < 2; ++dy) {
             vec2 d = vec2(float(dx), float(dy));
             vec2 p = p0+d;
-            p += rand2(mod(p, size));
+            p += rand2(seed2+mod(p, size));
             float distance = length((uv - p) / size);
             if (best_distance0 > distance) {
             	best_distance1 = best_distance0;

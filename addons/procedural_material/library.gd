@@ -16,7 +16,8 @@ func get_drag_data(position):
 		elif data.has("type") and data.type == "uniform":
 			preview = ColorRect.new()
 			preview.rect_size = Vector2(32, 32)
-			preview.color = Color(data.color.r, data.color.g, data.color.b, data.color.a)
+			if data.has("color"):
+				preview.color = Color(data.color.r, data.color.g, data.color.b, data.color.a)
 		else:
 			preview = Label.new()
 			preview.text = data.tree_item

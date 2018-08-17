@@ -23,7 +23,7 @@ func _get_shader_code(uv, slot = 0):
 	elif slot == 1:
 		rv.f = name+"_"+str(variant_index)+"_xyzw.w"
 	else:
-		rv.rgb = "rand3("+name+"_"+str(variant_index)+"_xyzw.xy)"
+		rv.rgb = "rand3(fract("+name+"_"+str(variant_index)+"_xyzw.xy))"
 	return rv
 
 func _on_offset_changed():

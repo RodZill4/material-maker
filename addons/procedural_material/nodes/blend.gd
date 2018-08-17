@@ -15,7 +15,8 @@ const BLEND_TYPES = [
 	{ name="Burn", shortname="burn" },
 	{ name="Dodge", shortname="dodge" },
 	{ name="Lighten", shortname="lighten" },
-	{ name="Darken", shortname="darken" }
+	{ name="Darken", shortname="darken" },
+	{ name="Difference", shortname="difference" }
 ]
 
 func _ready():
