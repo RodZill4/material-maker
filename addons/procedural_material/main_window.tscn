@@ -97,7 +97,7 @@ group = null
 text = "Edit"
 flat = true
 align = 1
-items = [  ]
+items = [ "Cut", null, 0, false, false, 11, 268435544, null, "", false, "Copy", null, 0, false, false, 12, 268435523, null, "", false, "Paste", null, 0, false, false, 13, 268435542, null, "", false ]
 
 [node name="Tools" type="MenuButton" parent="VBoxContainer/Menu" index="2"]
 
@@ -122,7 +122,7 @@ group = null
 text = "Tools"
 flat = true
 align = 1
-items = [ "Add selected node to user library", null, 0, false, false, 11, 0, null, "", false, "Save user library", null, 0, false, false, 12, 0, null, "", false ]
+items = [ "Add selected node to user library", null, 0, false, false, 14, 0, null, "", false, "Save user library", null, 0, false, false, 15, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu" index="3"]
 
@@ -147,7 +147,7 @@ group = null
 text = "Help"
 flat = true
 align = 1
-items = [ "Report a bug", null, 0, false, false, 13, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 15, 0, null, "", false ]
+items = [ "Report a bug", null, 0, false, false, 16, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 18, 0, null, "", false ]
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer" index="1"]
 

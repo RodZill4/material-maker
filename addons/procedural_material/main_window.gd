@@ -15,6 +15,9 @@ const MENU = [
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
+	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
+	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
+	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
@@ -117,6 +120,21 @@ func quit():
 		get_parent().queue_free()
 	else:
 		get_tree().quit()
+
+func edit_cut():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.cut()
+
+func edit_copy():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.copy()
+
+func edit_paste():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null:
+		graph_edit.paste()
 
 func add_to_user_library():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()

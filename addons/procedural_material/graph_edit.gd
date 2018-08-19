@@ -8,6 +8,7 @@ signal save_path_changed
 signal graph_changed
 
 func _ready():
+	$SaveViewport/ColorRect.material = $SaveViewport/ColorRect.material.duplicate(true)
 	OS.low_processor_usage_mode = true
 
 func get_source(node, port):
@@ -23,6 +24,7 @@ func add_node(node, global_position = null):
 
 func connect_node(from, from_slot, to, to_slot):
 	var source_list = [ from ]
+	# Check if the new connection creates a cycle in the graph
 	while !source_list.empty():
 		var source = source_list.pop_front()
 		if source == to:
@@ -49,7 +51,6 @@ func remove_node(node):
 			disconnect_node(c.from, c.from_port, c.to, c.to_port)
 			send_changed_signal()
 	node.queue_free()
-
 
 # Global operations on graph
 
@@ -89,6 +90,14 @@ func new_material():
 	create_node({name="Material", type="material"})
 	set_save_path(null)
 
+func get_free_name(type):
+	var i = 0
+	while true:
+		var node_name = type+"_"+str(i)
+		if !has_node(node_name):
+			return node_name
+		i += 1
+
 func create_node(data, global_position = null):
 	if !data.has("type"):
 		return null
@@ -98,16 +107,11 @@ func create_node(data, global_position = null):
 		if data.has("name") && !has_node(data.name):
 			node.name = data.name
 		else:
-			var i = 0
-			while true:
-				var node_name = data.type+"_"+str(i)
-				if !has_node(node_name):
-					node.name = node_name
-					break
-				i += 1
+			node.name = get_free_name(data.type)
 		add_node(node, global_position)
 		node.deserialize(data)
 		send_changed_signal()
+		return node
 
 func load_file():
 	var dialog = FileDialog.new()
@@ -176,6 +180,44 @@ func send_changed_signal():
 func do_send_changed_signal():
 	emit_signal("graph_changed")
 
+func cut():
+	copy()
+	for c in get_children():
+		if c is GraphNode and c.selected:
+			remove_node(c)
+
+func copy():
+	var data = { nodes = [], connections = [] }
+	for c in get_children():
+		if c is GraphNode and c.selected:
+			data.nodes.append(c.serialize())
+	for c in get_connection_list():
+		var from = get_node(c.from)
+		var to = get_node(c.to)
+		if from != null and from.selected and to != null and to.selected:
+			data.connections.append(c)
+	OS.clipboard = to_json(data)
+
+func paste():
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = false
+	var data = parse_json(OS.clipboard)
+	if data == null or typeof(data) != TYPE_DICTIONARY:
+		return
+	if !data.has("nodes") or !data.has("connections"):
+		return
+	if typeof(data.nodes) != TYPE_ARRAY or typeof(data.connections) != TYPE_ARRAY:
+		return
+	var names = {}
+	for c in data.nodes:
+		var node = create_node(c)
+		if node != null:
+			names[c.name] = node.name
+			node.selected = true
+	for c in data.connections:
+		connect_node(names[c.from], c.from_port, names[c.to], c.to_port)
+
 # Drag and drop
 
 func can_drop_data(position, data):
@@ -209,7 +251,6 @@ func render_shader_to_viewport(shader, textures, size, method, args):
 					shader_material.set_shader_param(k+"_tex", job.textures[k])
 			$SaveViewport.render_target_update_mode = Viewport.UPDATE_ONCE
 			$SaveViewport.update_worlds()
-			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
 			callv(job.method, job.args)
