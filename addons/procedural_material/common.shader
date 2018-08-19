@@ -145,21 +145,99 @@ vec2 transform_norepeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	return clamp(transform(uv, translate, rotate, scale), vec2(0.0), vec2(1.0));
 }
 
-vec3 bricks(vec2 uv, vec2 count, float offset, float mortar, float bevel) {
+vec3 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float bevel) {
+	float color = 0.5;
+    vec2 c1 = (uv-bmin-vec2(mortar))/bevel;
+    vec2 c2 = (bmax-uv-vec2(mortar))/bevel;
+    vec2 c = min(c1, c2);
+    color = clamp(min(c.x, c.y), 0.0, 1.0);
+	return vec3(color, bmin);
+}
+
+vec3 bricks_rb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
+	count *= repeat;
 	mortar /= max(count.x, count.y);
 	bevel /= max(count.x, count.y);
-	float x = uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5));
-	float fract_x = fract(x);
-	float slope_x = 1.0/(bevel*count.x);
-	float off = 0.5*mortar/bevel;
-	float f1 = fract_x*slope_x-off;
-	float f2 = (1.0-fract_x)*slope_x-off;
-	float y = uv.y*count.y;
-	float fract_y = fract(uv.y*count.y);
-	float slope_y = 1.0/(bevel*count.y);
-	float f3 = fract_y*slope_y-off;
-	float f4 = (1.0-fract_y)*slope_y-off;
-	return vec3(max(0.0, min(1.0, min(min(f1, f2), min(f3, f4)))), floor(mod(x, count.x)), floor(mod(y, count.y)));
+    float x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));
+    vec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));
+    bmin.x += x_offset;
+    bmin /= count;
+	return brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);
+}
+
+vec3 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
+	count *= repeat;
+	mortar /= max(2.0*count.x, count.y);
+	bevel /= max(2.0*count.x, count.y);
+    float x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));
+    count.x = count.x*(1.0+step(0.5, fract(uv.y*count.y*0.5)));
+    vec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));
+    bmin.x += x_offset;
+    bmin /= count;
+	return brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);
+}
+
+vec3 bricks_hb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
+   	float pc = count.x+count.y;
+    float c = pc*repeat;
+	mortar /= c;
+	bevel /= c;
+    vec2 corner = floor(uv*c);
+    float cdiff = mod(corner.x-corner.y, pc);
+    if (cdiff < count.x) {
+		return brick(uv, (corner-vec2(cdiff, 0.0))/c, (corner-vec2(cdiff, 0.0)+vec2(count.x, 1.0))/c, mortar, bevel);
+    } else {
+		return brick(uv, (corner-vec2(0.0, pc-cdiff-1.0))/c, (corner-vec2(0.0, pc-cdiff-1.0)+vec2(1.0, count.y))/c, mortar, bevel);
+    }
+}
+
+vec3 bricks_bw(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
+   	vec2 c = 2.0*count*repeat;
+    float mc = max(c.x, c.y);
+	mortar /= mc;
+	bevel /= mc;
+    vec2 corner1 = floor(uv*c);
+    vec2 corner2 = count*floor(repeat*2.0*uv);
+    float cdiff = mod(dot(floor(repeat*2.0*uv), vec2(1.0)), 2.0);
+    vec2 corner;
+    vec2 size;
+    if (cdiff == 0.0) {
+        corner = vec2(corner1.x, corner2.y);
+        size = vec2(1.0, count.y);
+    } else {
+        corner = vec2(corner2.x, corner1.y);
+        size = vec2(count.x, 1.0);
+    }
+	return brick(uv, corner/c, (corner+size)/c, mortar, bevel);
+}
+
+vec3 bricks_sb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
+   	vec2 c = (count+vec2(1.0))*repeat;
+    float mc = max(c.x, c.y);
+	mortar /= mc;
+	bevel /= mc;
+    vec2 corner1 = floor(uv*c);
+    vec2 corner2 = (count+vec2(1.0))*floor(repeat*uv);
+    vec2 rcorner = corner1 - corner2;
+    vec2 corner;
+    vec2 size;
+    if (rcorner.x == 0.0 && rcorner.y < count.y) {
+        corner = corner2;
+        size = vec2(1.0, count.y);
+    } else if (rcorner.y == 0.0) {
+        corner = corner2+vec2(1.0, 0.0);
+        size = vec2(count.x, 1.0);
+    } else if (rcorner.x == count.x) {
+        corner = corner2+vec2(count.x, 1.0);
+        size = vec2(1.0, count.y);
+    } else if (rcorner.y == count.y) {
+        corner = corner2+vec2(0.0, count.y);
+        size = vec2(count.x, 1.0);
+    } else {
+        corner = corner2+vec2(1.0);
+        size = vec2(count.x-1.0, count.y-1.0);
+    }
+	return brick(uv, corner/c, (corner+size)/c, mortar, bevel);
 }
 
 float colored_bricks(vec2 uv, vec2 count, float offset) {
