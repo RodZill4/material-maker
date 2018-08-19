@@ -1,6 +1,5 @@
 shader_type canvas_item;
 
-uniform sampler2D self_tex;
 uniform sampler2D tex2view_tex;
 uniform sampler2D brush_texture : hint_white;
 uniform vec2      brush_pos       = vec2(0.5, 0.5);
@@ -23,5 +22,5 @@ void fragment() {
 	float a = 1.0-length(p-(b+x*bv));
 	a = brush(max(0.0, a))*brush_color.w*t2v.z;
 	vec4 color = brush_color*texture(brush_texture, 2.0*vec2(brush_size.y/brush_size.x, 1.0)*xy);
-	COLOR = vec4(mix(texture(self_tex, UV).xyz, color.xyz, a), 1.0);
+	COLOR = vec4(color.xyz, a);
 }

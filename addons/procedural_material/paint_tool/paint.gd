@@ -1,11 +1,15 @@
 tool
 extends ViewportContainer
 
-const MODE_FREE       = 0
-const MODE_LINE       = 1
-const MODE_LINE_STRIP = 2
+const MODE_BRUSH      = 0
+const MODE_TEXTURE    = 1
+const MODE_FIRST_TOOL = 2
+const MODE_FREE       = 2
+const MODE_LINE       = 3
+const MODE_LINE_STRIP = 4
 
-var mode = MODE_FREE
+var current_tool = MODE_FREE
+var mode         = MODE_FREE
 
 var brush_size     = 50.0
 var brush_strength = 0.5
@@ -18,14 +22,16 @@ var previous_position = null
 var painting = false
 var next_paint_to = null
 
+var key_rotate = Vector2(0.0, 0.0)
+
 var object_name = null
 
 onready var albedo_viewport = $AlbedoPaint/Viewport
 onready var mr_viewport = $MRPaint/Viewport
 onready var normal_viewport = $NormalPaint/Viewport
-onready var albedo_material = $AlbedoPaint/Viewport/ColorRect.get_material()
-onready var mr_material = $MRPaint/Viewport/ColorRect.get_material()
-onready var normal_material = $NormalPaint/Viewport/ColorRect.get_material()
+onready var albedo_material = $AlbedoPaint/Viewport/PaintRect.get_material()
+onready var mr_material = $MRPaint/Viewport/PaintRect.get_material()
+onready var normal_material = $NormalPaint/Viewport/PaintRect.get_material()
 
 onready var brush_material = $Brush.get_material()
 
@@ -37,21 +43,19 @@ func _ready():
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	$Texture2View/Viewport/PaintedMesh.get_surface_material(0).set_shader_param("view2texture", $View2Texture/Viewport.get_texture())
 	# Add Texture2View as input to all painted textures
-	$FixSeams/Viewport.get_texture().flags |= Texture.FLAG_FILTER
+	$FixSeams/Viewport.get_texture().flags |= Texture.FLAG_FILTER | Texture.FLAG_ANISOTROPIC_FILTER
 	albedo_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
 	mr_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
 	normal_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
 	# Add all painted textures as input to themselves
-	albedo_material.set_shader_param("self_tex", albedo_viewport.get_texture())
-	mr_material.set_shader_param("self_tex", mr_viewport.get_texture())
 	normal_material.set_shader_param("self_tex", normal_viewport.get_texture())
 	# Assign all textures to painted mesh
-	albedo_viewport.get_texture().flags |= Texture.FLAG_FILTER
+	albedo_viewport.get_texture().flags |= Texture.FLAG_FILTER | Texture.FLAG_ANISOTROPIC_FILTER
 	$Viewport/PaintedMesh.get_surface_material(0).albedo_texture = albedo_viewport.get_texture()
-	mr_viewport.get_texture().flags |= Texture.FLAG_FILTER
+	mr_viewport.get_texture().flags |= Texture.FLAG_FILTER | Texture.FLAG_ANISOTROPIC_FILTER
 	$Viewport/PaintedMesh.get_surface_material(0).metallic_texture = mr_viewport.get_texture()
 	$Viewport/PaintedMesh.get_surface_material(0).roughness_texture = mr_viewport.get_texture()
-	normal_viewport.get_texture().flags |= Texture.FLAG_FILTER
+	normal_viewport.get_texture().flags |= Texture.FLAG_FILTER | Texture.FLAG_ANISOTROPIC_FILTER
 	$Viewport/PaintedMesh.get_surface_material(0).normal_texture = normal_viewport.get_texture()
 	# Updated Texture2View wrt current camera position
 	update_tex2view()
@@ -78,12 +82,8 @@ func set_mesh(n, m):
 	$View2Texture/Viewport/PaintedMesh.mesh = m
 	$View2Texture/Viewport/PaintedMesh.set_surface_material(0, mat)
 	update_tex2view()
+	clear_textures()
 	save()
-
-func set_mode(m):
-	mode = m
-	for i in $Tools.get_child_count():
-		$Tools.get_child(i).pressed = (i == m)
 
 func set_texture_size(s):
 	$Texture2View/Viewport.size = Vector2(s, s)
@@ -94,21 +94,62 @@ func set_texture_size(s):
 	$FixSeams/Viewport/TextureRect4.rect_size = Vector2(s, s)
 	$FixSeams/Viewport/TextureRect5.rect_size = Vector2(s, s)
 	$AlbedoPaint/Viewport.size = Vector2(s, s)
-	$AlbedoPaint/Viewport/ColorRect.rect_size = Vector2(s, s)
+	$AlbedoPaint/Viewport/PaintRect.rect_size = Vector2(s, s)
+	$AlbedoPaint/Viewport/InitRect.rect_size = Vector2(s, s)
 	$MRPaint/Viewport.size = Vector2(s, s)
-	$MRPaint/Viewport/ColorRect.rect_size = Vector2(s, s)
+	$MRPaint/Viewport/PaintRect.rect_size = Vector2(s, s)
+	$MRPaint/Viewport/InitRect.rect_size = Vector2(s, s)
+	$NormalPaint/Viewport.size = Vector2(s, s)
+	$NormalPaint/Viewport/PaintRect.rect_size = Vector2(s, s)
+	$NormalPaint/Viewport/InitRect.rect_size = Vector2(s, s)
+
+func set_mode(m):
+	mode = m
+	if mode == MODE_TEXTURE:
+		$Texture.show()
+	else:
+		$Texture.hide()
+
+func set_current_tool(m):
+	current_tool = m
+	for i in $Tools.get_child_count():
+		$Tools.get_child(i).pressed = (i == m)
+	if mode >= MODE_FIRST_TOOL:
+		set_mode(current_tool)
+
+func _physics_process(delta):
+	$Viewport/CameraStand.rotate($Viewport/CameraStand/Camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
+	$Viewport/CameraStand.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
+	update_tex2view()
+
+func _input(ev):
+	if ev is InputEventKey:
+		if ev.scancode == KEY_SHIFT or ev.scancode == KEY_CONTROL:
+			if Input.is_key_pressed(KEY_SHIFT):
+				set_mode(MODE_BRUSH)
+			elif Input.is_key_pressed(KEY_CONTROL):
+				set_mode(MODE_TEXTURE)
+			else:
+				set_mode(current_tool)
+		elif ev.scancode == KEY_LEFT or ev.scancode == KEY_RIGHT or ev.scancode == KEY_UP or ev.scancode == KEY_DOWN:
+			key_rotate = Vector2(0.0, 0.0)
+			if Input.is_key_pressed(KEY_UP):
+				key_rotate.y -= 1.0
+			if Input.is_key_pressed(KEY_DOWN):
+				key_rotate.y += 1.0
+			if Input.is_key_pressed(KEY_LEFT):
+				key_rotate.x -= 1.0
+			if Input.is_key_pressed(KEY_RIGHT):
+				key_rotate.x += 1.0
+			set_physics_process(key_rotate != Vector2(0.0, 0.0))
+			print(key_rotate != Vector2(0.0, 0.0))
 
 func _on_Test_gui_input(ev):
-	if ev is InputEventWithModifiers:
-		if ev.control:
-			$Texture.show()
-		else:
-			$Texture.hide()
 	if ev is InputEventMouseMotion:
 		show_brush(ev.position, previous_position)
 		if ev.button_mask & BUTTON_MASK_RIGHT != 0:
-			$Viewport/CameraStand.rotate_y(-0.01*ev.relative.x)
-			$Viewport/CameraStand.rotate_x(-0.01*ev.relative.y)
+			$Viewport/CameraStand.rotate($Viewport/CameraStand/Camera.global_transform.basis.x.normalized(), -0.01*ev.relative.y)
+			$Viewport/CameraStand.rotate(Vector3(0, 1, 0), -0.01*ev.relative.x)
 		if ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.control:
 				previous_position = null
@@ -121,9 +162,9 @@ func _on_Test_gui_input(ev):
 				brush_strength += ev.relative.y*0.01
 				brush_strength = clamp(brush_strength, 0.0, 0.999)
 				update_brush_parameters()
-			elif mode == MODE_FREE:
+			elif current_tool == MODE_FREE:
 				paint(ev.position)
-		elif mode != MODE_LINE_STRIP:
+		elif current_tool != MODE_LINE_STRIP:
 			previous_position = null
 	elif ev is InputEventMouseButton and !ev.shift:
 		var pos = ev.position
@@ -138,7 +179,7 @@ func _on_Test_gui_input(ev):
 				$Viewport/CameraStand/Camera.translate(Vector3(0.0, 0.0, zoom))
 				update_tex2view()
 			elif ev.button_index == BUTTON_LEFT:
-				if mode == MODE_LINE_STRIP && previous_position != null:
+				if current_tool == MODE_LINE_STRIP && previous_position != null:
 					paint(pos)
 					if ev.doubleclick:
 						pos = null
@@ -147,7 +188,7 @@ func _on_Test_gui_input(ev):
 			if ev.button_index == BUTTON_RIGHT:
 				update_tex2view()
 			elif ev.button_index == BUTTON_LEFT:
-				if mode != MODE_LINE_STRIP:
+				if current_tool != MODE_LINE_STRIP:
 					paint(pos)
 					previous_position = null
 
@@ -173,6 +214,22 @@ func update_brush_parameters():
 	if normal_material != null:
 		normal_material.set_shader_param("brush_size", brush_size_vector)
 		normal_material.set_shader_param("brush_strength", brush_strength)
+
+func clear_textures():
+	$AlbedoPaint/Viewport/InitRect.show()
+	$MRPaint/Viewport/InitRect.show()
+	$NormalPaint/Viewport/InitRect.show()
+	albedo_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	albedo_viewport.update_worlds()
+	mr_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	mr_viewport.update_worlds()
+	normal_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	normal_viewport.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	$AlbedoPaint/Viewport/InitRect.hide()
+	$MRPaint/Viewport/InitRect.hide()
+	$NormalPaint/Viewport/InitRect.hide()
 
 func paint(p):
 	if painting:
@@ -218,7 +275,6 @@ func update_tex2view():
 	$View2Texture/Viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
 	var t2v_shader_material = $Texture2View/Viewport/PaintedMesh.get_surface_material(0)
 	t2v_shader_material.set_shader_param("model_transform", transform)
 	t2v_shader_material.set_shader_param("fovy_degrees", camera.fov)
@@ -229,11 +285,9 @@ func update_tex2view():
 	$Texture2View/Viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
 	$Texture2View/Viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 	$FixSeams/Viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 	$FixSeams/Viewport.update_worlds()
-	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	$FixSeams/Viewport.render_target_update_mode = Viewport.UPDATE_DISABLED

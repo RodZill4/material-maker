@@ -1,32 +1,28 @@
 [gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://addons/procedural_material/paint_tool/paint.gd" type="Script" id=1]
-[ext_resource path="res://addons/procedural_material/paint_tool/showbrush.shader" type="Shader" id=2]
-[ext_resource path="res://addons/procedural_material/paint_tool/view2texture.shader" type="Shader" id=3]
-[ext_resource path="res://addons/procedural_material/paint_tool/texture2view.shader" type="Shader" id=4]
-[ext_resource path="res://addons/procedural_material/paint_tool/paint.shader" type="Shader" id=5]
-[ext_resource path="res://addons/procedural_material/paint_tool/paint_nm.shader" type="Shader" id=6]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/paint.png" type="Texture" id=7]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/paint_s.png" type="Texture" id=8]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/line.png" type="Texture" id=9]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_s.png" type="Texture" id=10]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_strip.png" type="Texture" id=11]
-[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_strip_s.png" type="Texture" id=12]
+[ext_resource path="res://addons/procedural_material/panoramas/park.hdr" type="Texture" id=2]
+[ext_resource path="res://addons/procedural_material/paint_tool/showbrush.shader" type="Shader" id=3]
+[ext_resource path="res://addons/procedural_material/paint_tool/view2texture.shader" type="Shader" id=4]
+[ext_resource path="res://addons/procedural_material/paint_tool/texture2view.shader" type="Shader" id=5]
+[ext_resource path="res://addons/procedural_material/paint_tool/paint.shader" type="Shader" id=6]
+[ext_resource path="res://addons/procedural_material/paint_tool/paint_nm.shader" type="Shader" id=7]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/paint.png" type="Texture" id=8]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/paint_s.png" type="Texture" id=9]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/line.png" type="Texture" id=10]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_s.png" type="Texture" id=11]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_strip.png" type="Texture" id=12]
+[ext_resource path="res://addons/procedural_material/paint_tool/icons/line_strip_s.png" type="Texture" id=13]
 
-[sub_resource type="StreamTexture" id=1]
-
-flags = 4
-load_path = "res://.import/park.hdr-5bf7587b9d6b1215ad5e0650ef813289.stex"
-
-[sub_resource type="PanoramaSky" id=2]
+[sub_resource type="PanoramaSky" id=1]
 
 radiance_size = 4
-panorama = SubResource( 1 )
+panorama = ExtResource( 2 )
 
-[sub_resource type="Environment" id=3]
+[sub_resource type="Environment" id=2]
 
 background_mode = 2
-background_sky = SubResource( 2 )
+background_sky = SubResource( 1 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
 background_energy = 1.0
@@ -103,11 +99,11 @@ adjustment_contrast = 1.0
 adjustment_saturation = 1.0
 _sections_unfolded = [ "Background" ]
 
-[sub_resource type="World" id=4]
+[sub_resource type="World" id=3]
 
-environment = SubResource( 3 )
+environment = SubResource( 2 )
 
-[sub_resource type="CubeMesh" id=5]
+[sub_resource type="CubeMesh" id=4]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 1, 1, 1 )
@@ -115,25 +111,25 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
+[sub_resource type="ViewportTexture" id=5]
+
+resource_local_to_scene = true
+flags = 12
+viewport_path = NodePath("")
+
 [sub_resource type="ViewportTexture" id=6]
 
 resource_local_to_scene = true
-flags = 4
+flags = 12
 viewport_path = NodePath("")
 
 [sub_resource type="ViewportTexture" id=7]
 
 resource_local_to_scene = true
-flags = 4
+flags = 12
 viewport_path = NodePath("")
 
-[sub_resource type="ViewportTexture" id=8]
-
-resource_local_to_scene = true
-flags = 4
-viewport_path = NodePath("")
-
-[sub_resource type="SpatialMaterial" id=9]
+[sub_resource type="SpatialMaterial" id=8]
 
 render_priority = 0
 flags_transparent = false
@@ -157,18 +153,18 @@ params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
 albedo_color = Color( 1, 1, 1, 1 )
-albedo_texture = SubResource( 6 )
+albedo_texture = SubResource( 5 )
 metallic = 1.0
 metallic_specular = 0.5
-metallic_texture = SubResource( 7 )
+metallic_texture = SubResource( 6 )
 metallic_texture_channel = 0
 roughness = 1.0
-roughness_texture = SubResource( 7 )
+roughness_texture = SubResource( 6 )
 roughness_texture_channel = 1
 emission_enabled = false
 normal_enabled = true
 normal_scale = 1.0
-normal_texture = SubResource( 8 )
+normal_texture = SubResource( 7 )
 rim_enabled = false
 clearcoat_enabled = false
 anisotropy_enabled = false
@@ -189,94 +185,92 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=9]
 
 render_priority = 0
-shader = ExtResource( 2 )
-shader_param/brush_pos = Vector2( 0.162055, 0.449275 )
-shader_param/brush_ppos = Vector2( 0.162055, 0.449275 )
+shader = ExtResource( 3 )
+shader_param/brush_pos = Vector2( 0.931872, 0.0610264 )
+shader_param/brush_ppos = Vector2( 0.931872, 0.0610264 )
 shader_param/brush_size = Vector2( 0.0390625, 0.0694444 )
 shader_param/brush_strength = 0.5
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="Shader" id=10]
 
 code = ""
+
+[sub_resource type="ShaderMaterial" id=11]
+
+render_priority = 0
+shader = SubResource( 10 )
 
 [sub_resource type="ShaderMaterial" id=12]
 
 render_priority = 0
-shader = SubResource( 11 )
+shader = ExtResource( 4 )
 
-[sub_resource type="ShaderMaterial" id=13]
-
-render_priority = 0
-shader = ExtResource( 3 )
-
-[sub_resource type="ViewportTexture" id=14]
+[sub_resource type="ViewportTexture" id=13]
 
 resource_local_to_scene = true
 flags = 0
 viewport_path = NodePath("")
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id=14]
 
 render_priority = 0
-shader = ExtResource( 4 )
+shader = ExtResource( 5 )
 shader_param/model_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2 )
 shader_param/fovy_degrees = 70.0
 shader_param/z_near = 0.05
 shader_param/z_far = 25.0
 shader_param/aspect = 1.77778
-shader_param/view2texture = SubResource( 14 )
+shader_param/view2texture = SubResource( 13 )
 
-[sub_resource type="ViewportTexture" id=16]
+[sub_resource type="ViewportTexture" id=15]
 
 resource_local_to_scene = true
 flags = 0
 viewport_path = NodePath("Texture2View/Viewport")
 
-[sub_resource type="ViewportTexture" id=17]
+[sub_resource type="ViewportTexture" id=16]
 
 resource_local_to_scene = true
-flags = 4
+flags = 12
 viewport_path = NodePath("")
+
+[sub_resource type="ShaderMaterial" id=17]
+
+render_priority = 0
+shader = ExtResource( 6 )
+shader_param/brush_pos = Vector2( 0.161316, 0.239945 )
+shader_param/brush_ppos = Vector2( 0.161316, 0.239945 )
+shader_param/brush_size = Vector2( 0.0390625, 0.0694444 )
+shader_param/brush_strength = 0.5
+shader_param/brush_color = Color( 1, 1, 1, 1 )
+shader_param/tex2view_tex = SubResource( 16 )
+_sections_unfolded = [ "shader_param" ]
 
 [sub_resource type="ShaderMaterial" id=18]
 
 render_priority = 0
-shader = ExtResource( 5 )
-shader_param/brush_pos = Vector2( 0.402372, 0.762319 )
-shader_param/brush_ppos = Vector2( 0.402372, 0.762319 )
+shader = ExtResource( 6 )
+shader_param/brush_pos = Vector2( 0.161316, 0.239945 )
+shader_param/brush_ppos = Vector2( 0.161316, 0.239945 )
 shader_param/brush_size = Vector2( 0.0390625, 0.0694444 )
 shader_param/brush_strength = 0.5
-shader_param/brush_color = Color( 0.289063, 1, 0, 1 )
-shader_param/self_tex = SubResource( 6 )
-shader_param/tex2view_tex = SubResource( 17 )
+shader_param/brush_color = Color( 1, 1, 1, 1 )
+shader_param/tex2view_tex = SubResource( 16 )
 _sections_unfolded = [ "shader_param" ]
 
 [sub_resource type="ShaderMaterial" id=19]
 
 render_priority = 0
-shader = ExtResource( 5 )
-shader_param/brush_pos = Vector2( 0.402372, 0.762319 )
-shader_param/brush_ppos = Vector2( 0.402372, 0.762319 )
+shader = ExtResource( 7 )
+shader_param/brush_pos = Vector2( 0.161316, 0.239945 )
+shader_param/brush_ppos = Vector2( 0.161316, 0.239945 )
 shader_param/brush_size = Vector2( 0.0390625, 0.0694444 )
 shader_param/brush_strength = 0.5
-shader_param/brush_color = Color( 1, 1, 1, 1 )
 shader_param/self_tex = SubResource( 7 )
-shader_param/tex2view_tex = SubResource( 17 )
-_sections_unfolded = [ "shader_param" ]
-
-[sub_resource type="ShaderMaterial" id=20]
-
-render_priority = 0
-shader = ExtResource( 6 )
-shader_param/brush_pos = Vector2( 0.402372, 0.762319 )
-shader_param/brush_ppos = Vector2( 0.402372, 0.762319 )
-shader_param/brush_size = Vector2( 0.0390625, 0.0694444 )
-shader_param/brush_strength = 0.5
-shader_param/self_tex = SubResource( 8 )
-shader_param/tex2view_tex = SubResource( 17 )
+shader_param/tex2view_tex = SubResource( 16 )
 _sections_unfolded = [ "shader_param" ]
 
 [node name="PaintTool" type="ViewportContainer" index="0"]
@@ -301,7 +295,7 @@ _sections_unfolded = [ "Rect" ]
 arvr = false
 size = Vector2( 1280, 720 )
 own_world = false
-world = SubResource( 4 )
+world = SubResource( 3 )
 transparent_bg = false
 msaa = 0
 hdr = true
@@ -375,14 +369,14 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
-material/0 = SubResource( 9 )
+material/0 = SubResource( 8 )
 _sections_unfolded = [ "material" ]
 
 [node name="Brush" type="ColorRect" parent="." index="1"]
 
-material = SubResource( 10 )
+material = SubResource( 9 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -398,8 +392,9 @@ _sections_unfolded = [ "Material", "Mouse" ]
 
 [node name="Texture" type="ColorRect" parent="." index="2"]
 
+visible = false
 self_modulate = Color( 1, 1, 1, 0.502745 )
-material = SubResource( 12 )
+material = SubResource( 11 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -473,9 +468,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
-material/0 = SubResource( 13 )
+material/0 = SubResource( 12 )
 _sections_unfolded = [ "material" ]
 
 [node name="Texture2View" type="Node" parent="." index="4"]
@@ -497,7 +492,7 @@ usage = 2
 debug_draw = 1
 render_target_v_flip = false
 render_target_clear_mode = 0
-render_target_update_mode = 0
+render_target_update_mode = 3
 audio_listener_enable_2d = false
 audio_listener_enable_3d = false
 physics_object_picking = false
@@ -539,9 +534,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
-material/0 = SubResource( 15 )
+material/0 = SubResource( 14 )
 _sections_unfolded = [ "material" ]
 
 [node name="FixSeams" type="Node" parent="." index="5"]
@@ -562,7 +557,7 @@ usage = 0
 debug_draw = 0
 render_target_v_flip = true
 render_target_clear_mode = 1
-render_target_update_mode = 0
+render_target_update_mode = 3
 audio_listener_enable_2d = false
 audio_listener_enable_3d = false
 physics_object_picking = false
@@ -581,8 +576,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 4.0
-margin_right = 2052.0
+margin_left = 8.0
+margin_right = 2056.0
 margin_bottom = 2048.0
 rect_min_size = Vector2( 1024, 1024 )
 rect_pivot_offset = Vector2( 0, 0 )
@@ -591,7 +586,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 16 )
+texture = SubResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Material", "Rect" ]
 
@@ -601,8 +596,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = -4.0
-margin_right = 2044.0
+margin_left = -8.0
+margin_right = 2040.0
 margin_bottom = 2048.0
 rect_min_size = Vector2( 1024, 1024 )
 rect_pivot_offset = Vector2( 0, 0 )
@@ -611,7 +606,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 16 )
+texture = SubResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Material", "Rect" ]
 
@@ -621,9 +616,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 4.0
+margin_top = 8.0
 margin_right = 2048.0
-margin_bottom = 2052.0
+margin_bottom = 2056.0
 rect_min_size = Vector2( 1024, 1024 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -631,7 +626,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 16 )
+texture = SubResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Material", "Rect" ]
 
@@ -641,9 +636,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = -4.0
+margin_top = -8.0
 margin_right = 2048.0
-margin_bottom = 2044.0
+margin_bottom = 2040.0
 rect_min_size = Vector2( 1024, 1024 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -651,7 +646,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 16 )
+texture = SubResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Material", "Rect" ]
 
@@ -670,7 +665,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 16 )
+texture = SubResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Material", "Rect" ]
 
@@ -681,6 +676,7 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="Viewport" type="Viewport" parent="AlbedoPaint" index="0"]
 
+editor/display_folded = true
 arvr = false
 size = Vector2( 2048, 2048 )
 own_world = true
@@ -706,9 +702,27 @@ shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 _sections_unfolded = [ "Render Target", "Rendering" ]
 
-[node name="ColorRect" type="ColorRect" parent="AlbedoPaint/Viewport" index="0"]
+[node name="PaintRect" type="ColorRect" parent="AlbedoPaint/Viewport" index="0"]
 
-material = SubResource( 18 )
+material = SubResource( 17 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 2048.0
+margin_bottom = 2048.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Rect" ]
+
+[node name="InitRect" type="ColorRect" parent="AlbedoPaint/Viewport" index="1"]
+
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -731,6 +745,7 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="Viewport" type="Viewport" parent="MRPaint" index="0"]
 
+editor/display_folded = true
 arvr = false
 size = Vector2( 2048, 2048 )
 own_world = true
@@ -756,9 +771,9 @@ shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 _sections_unfolded = [ "Render Target", "Rendering" ]
 
-[node name="ColorRect" type="ColorRect" parent="MRPaint/Viewport" index="0"]
+[node name="PaintRect" type="ColorRect" parent="MRPaint/Viewport" index="0"]
 
-material = SubResource( 19 )
+material = SubResource( 18 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -775,15 +790,32 @@ size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
 _sections_unfolded = [ "Material", "Rect" ]
 
+[node name="InitRect" type="ColorRect" parent="MRPaint/Viewport" index="1"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 2048.0
+margin_bottom = 2048.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Rect" ]
+
 [node name="NormalPaint" type="Node" parent="." index="8"]
 
-editor/display_folded = true
 _sections_unfolded = [ "Rect" ]
 
 [node name="Viewport" type="Viewport" parent="NormalPaint" index="0"]
 
 arvr = false
-size = Vector2( 1024, 1024 )
+size = Vector2( 2048, 2048 )
 own_world = true
 world = null
 transparent_bg = true
@@ -807,15 +839,15 @@ shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 _sections_unfolded = [ "Render Target", "Rendering" ]
 
-[node name="ColorRect" type="ColorRect" parent="NormalPaint/Viewport" index="0"]
+[node name="PaintRect" type="ColorRect" parent="NormalPaint/Viewport" index="0"]
 
-material = SubResource( 20 )
+material = SubResource( 19 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 2048.0
+margin_bottom = 2048.0
 rect_min_size = Vector2( 1024, 1024 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -826,8 +858,27 @@ size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
 _sections_unfolded = [ "Material", "Rect" ]
 
+[node name="InitRect" type="ColorRect" parent="NormalPaint/Viewport" index="1"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 2048.0
+margin_bottom = 2048.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0.498039, 0.498039, 0, 1 )
+_sections_unfolded = [ "Material", "Rect" ]
+
 [node name="Tools" type="VBoxContainer" parent="." index="9"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -862,8 +913,8 @@ toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
 group = null
-texture_normal = ExtResource( 7 )
-texture_pressed = ExtResource( 8 )
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 9 )
 _sections_unfolded = [ "Textures" ]
 
 [node name="Line" type="TextureButton" parent="Tools" index="1"]
@@ -886,8 +937,8 @@ toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
 group = null
-texture_normal = ExtResource( 9 )
-texture_pressed = ExtResource( 10 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
 _sections_unfolded = [ "Textures" ]
 
 [node name="Strip" type="TextureButton" parent="Tools" index="2"]
@@ -910,8 +961,8 @@ toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
 group = null
-texture_normal = ExtResource( 11 )
-texture_pressed = ExtResource( 12 )
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 13 )
 _sections_unfolded = [ "Textures" ]
 
 [node name="Debug" type="Button" parent="Tools" index="3"]
@@ -966,6 +1017,7 @@ _sections_unfolded = [ "Rect" ]
 
 [node name="Material" type="VBoxContainer" parent="." index="10"]
 
+editor/display_folded = true
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -1065,11 +1117,11 @@ _sections_unfolded = [ "Rect" ]
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 
-[connection signal="pressed" from="Tools/Free" to="." method="set_mode" binds= [ 0 ]]
+[connection signal="pressed" from="Tools/Free" to="." method="set_current_tool" binds= [ 2 ]]
 
-[connection signal="pressed" from="Tools/Line" to="." method="set_mode" binds= [ 1 ]]
+[connection signal="pressed" from="Tools/Line" to="." method="set_current_tool" binds= [ 3 ]]
 
-[connection signal="pressed" from="Tools/Strip" to="." method="set_mode" binds= [ 2 ]]
+[connection signal="pressed" from="Tools/Strip" to="." method="set_current_tool" binds= [ 4 ]]
 
 [connection signal="pressed" from="Tools/Debug" to="." method="debug"]
 

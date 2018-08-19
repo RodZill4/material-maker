@@ -44,7 +44,7 @@ void vertex() {
 }
 
 vec2 fix_unshaded(vec2 xy) {
-	return 0.9999857*pow(xy, vec2(2.223058));
+	return pow(xy, vec2(2.22));
 }
 
 void fragment() {
