@@ -99,4 +99,4 @@ func do_update_materials(material_list):
 
 func export_textures(prefix):
 	for t in TEXTURE_LIST:
-		get_parent().export_texture(get_source(t.port), prefix+"_"+t.texture+".png", 1024)
+		get_parent().export_texture(get_source(t.port), "%s_%s.png" % [ prefix, t.texture ], 1024)

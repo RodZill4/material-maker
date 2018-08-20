@@ -24,12 +24,12 @@ func _get_shader_code(uv):
 		var src1_code3 = src1.get_shader_code(uv+"-vec2(0.0, 0.01)")
 		rv.defs = src1_code0.defs
 		rv.code = src1_code0.code+src1_code1.code+src1_code2.code+src1_code3.code
-		rv.code += "vec2 "+name+"_"+str(variant_index)+"_uv = "+uv+"+%.9f*vec2((%s)-(%s), (%s)-(%s));\n" % [ amount, src1_code0.f, src1_code1.f, src1_code2.f, src1_code3.f ]
-		var src0_code = src0.get_shader_code(name+"_"+str(variant_index)+"_uv")
+		rv.code += "vec2 %s_%d_uv = %s+%.9f*vec2((%s)-(%s), (%s)-(%s));\n" % [ name, variant_index, uv, amount, src1_code0.f, src1_code1.f, src1_code2.f, src1_code3.f ]
+		var src0_code = src0.get_shader_code("%s_%d_uv" % [ name, variant_index ])
 		rv.defs += src0_code.defs
 		rv.code += src0_code.code
-		rv.code += "vec3 "+name+"_"+str(variant_index)+"_rgb = "+get_source_rgb(src0_code)+";\n"
-		rv.code += "float "+name+"_"+str(variant_index)+"_f = "+get_source_f(src0_code)+";\n"
-	rv.rgb = name+"_"+str(variant_index)+"_rgb"
-	rv.f = name+"_"+str(variant_index)+"_f"
+		rv.code += "vec3 %s_%d_rgb = %s;\n" % [ name, variant_index, src0_code.rgb ]
+		rv.code += "float %s_%d_f = %s;\n" % [ name, variant_index, src0_code.f ]
+	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
+	rv.f = "%s_%d_f" % [ name, variant_index ]
 	return rv

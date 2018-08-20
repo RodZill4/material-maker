@@ -17,10 +17,10 @@ func _get_shader_code(uv):
 	var src = get_source()
 	if src == null:
 		return rv
-	rv.uv = name+"_uv("+uv+")"
+	rv.uv = "%s_uv(%s)" % [ name, uv ]
 	var src_code = src.get_shader_code(rv.uv)
 	if !generated:
-		rv.defs = src_code.defs+"vec2 "+name+"_uv(vec2 uv) { return %s(uv, vec2(%.9f, %.9f), %.9f, vec2(%.9f, %.9f)); }\n" % [ "transform_repeat" if repeat else "transform_norepeat", translate_x, translate_y, PI*rotate/180.0, scale_x, scale_y ]
+		rv.defs = src_code.defs+"vec2 %s_uv(vec2 uv) { return %s(uv, vec2(%.9f, %.9f), %.9f, vec2(%.9f, %.9f)); }\n" % [ name, "transform_repeat" if repeat else "transform_norepeat", translate_x, translate_y, PI*rotate/180.0, scale_x, scale_y ]
 		generated = true
 	rv.code = src_code.code;
 	if src_code.has("f"):

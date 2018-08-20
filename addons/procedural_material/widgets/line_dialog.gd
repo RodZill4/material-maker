@@ -1,3 +1,4 @@
+tool
 extends WindowDialog
 
 signal ok

@@ -1,19 +1,21 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
-var scale_x
-var scale_y
-var iterations
-var persistence
+var size = 4
+var density = 0.5
 
 func _ready():
-	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
-	initialize_properties([ $GridContainer/scale_x, $GridContainer/scale_y, $GridContainer/iterations, $GridContainer/persistence ])
+	$HBoxContainer1/size.clear()
+	for i in range(7):
+		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
+	$HBoxContainer1/size.selected = size
+	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/density ])
+	print(size)
 
 func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
-		rv.defs = "float %s_f(vec2 uv) { return perlin(uv, vec2(%f, %f), %d, %.9f, %d); }\n" % [ name, scale_x, scale_y, iterations, persistence, get_seed() ]
+		rv.defs = "float %s_f(vec2 uv) { return dots(uv, %.9f, %.9f, %d); }\n" % [ name, 1.0/pow(2.0, 5.0+size), density, get_seed() ]
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()

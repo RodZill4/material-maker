@@ -30,6 +30,16 @@
 		"y_scale":4,
 		"y_wave":0
 	},
+    {
+      "tree_item": "Generators/Pattern/Checkerboard",
+      "type": "pattern",
+      "icon": "checkerboard",
+      "mix": 4,
+      "x_scale": 4,
+      "x_wave": 2,
+      "y_scale": 4,
+      "y_wave": 2
+    },
 	{
 		"tree_item":"Generators/Bricks",
 		"type":"bricks",
@@ -39,6 +49,59 @@
 		"mortar":0.1,
 		"row_offset":0.5,
 		"rows":6
+	},
+    {
+      "tree_item": "Generators/Bricks/Tiles",
+      "type": "bricks",
+      "icon": "tiles",
+      "bevel": 0.05,
+      "columns": 4,
+      "mortar": 0.05,
+      "row_offset": 0,
+      "rows": 4
+    },
+    {
+      "tree_item": "Generators/Bricks/BasketWeave",
+      "type": "bricks",
+      "icon": "basketweave",
+      "bevel": 0.05,
+      "columns": 2,
+      "mortar": 0.05,
+      "pattern": 3,
+      "repeat": 2,
+      "row_offset": 0,
+      "rows": 2
+    },
+    {
+      "tree_item": "Generators/Bricks/HerringBone",
+      "type": "bricks",
+      "icon": "herringbone",
+      "bevel": 0.05,
+      "columns": 2,
+      "mortar": 0.05,
+      "pattern": 2,
+      "repeat": 2,
+      "row_offset": 0,
+      "rows": 2
+    },
+    {
+      "tree_item": "Generators/Bricks/SpanishBond",
+      "type": "bricks",
+      "icon": "spanishbond",
+      "bevel": 0.05,
+      "columns": 2,
+      "mortar": 0.05,
+      "pattern": 4,
+      "repeat": 2,
+      "row_offset": 0,
+      "rows": 2
+    },
+	{
+		"tree_item":"Generators/Noise",
+		"type":"noise",
+		"icon":"noise",
+		"size":4,
+		"density":0.5
 	},
 	{
 		"tree_item":"Generators/Perlin Noise",
@@ -101,26 +164,6 @@
 		"type":"warp",
 		"amount":0.5
 	},
-    {
-      "tree_item": "Generators/Pattern/Checkerboard",
-      "type": "pattern",
-      "icon": "checkerboard",
-      "mix": 4,
-      "x_scale": 4,
-      "x_wave": 2,
-      "y_scale": 4,
-      "y_wave": 2
-    },
-    {
-      "tree_item": "Generators/Bricks/Tiles",
-      "type": "bricks",
-      "icon": "tiles",
-      "bevel": 0.05,
-      "columns": 4,
-      "mortar": 0.05,
-      "row_offset": 0,
-      "rows": 4
-    },
     {
       "tree_item": "Filters/Colorize/Invert",
       "type": "colorize",

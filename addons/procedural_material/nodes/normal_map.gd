@@ -49,11 +49,11 @@ func _get_shader_code(uv):
 	input_shader = do_generate_shader(src.get_shader_code("UV"))
 	_rerender()
 	if generated_variants.empty():
-		rv.defs = "uniform sampler2D "+name+"_tex;\n"
+		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		rv.code = "vec3 "+name+"_"+str(variant_index)+"_rgb = texture("+name+"_tex, "+uv+").rgb;\n"
-	rv.rgb = name+"_"+str(variant_index)+"_rgb"
+		rv.code = "vec3 %s_%d_rgb = texture(%s_tex, %s).rgb;\n" % [ name, variant_index, name, uv ]
+	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
 	return rv

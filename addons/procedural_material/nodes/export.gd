@@ -14,7 +14,7 @@ func _get_shader_code(uv):
 func export_textures(prefix):
 	var suffix = $Suffix.text
 	if suffix != "":
-		get_parent().export_texture(get_source(), prefix+"_"+suffix+".png", 1024)
+		get_parent().export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], 1024)
 
 func serialize():
 	var data = .serialize()

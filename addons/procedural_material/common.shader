@@ -151,7 +151,7 @@ vec3 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float bevel) {
     vec2 c2 = (bmax-uv-vec2(mortar))/bevel;
     vec2 c = min(c1, c2);
     color = clamp(min(c.x, c.y), 0.0, 1.0);
-	return vec3(color, bmin);
+	return vec3(color, mod(bmin, vec2(1.0, 1.0)));
 }
 
 vec3 bricks_rb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {
@@ -244,6 +244,14 @@ float colored_bricks(vec2 uv, vec2 count, float offset) {
 	float x = floor(uv.x*count.x+offset*step(0.5, fract(uv.y*count.y*0.5)));
 	float y = floor(uv.y*count.y);
 	return fract(x/3.0+y/7.0);
+}
+
+float dots(vec2 uv, float size, float density, int seed) {
+	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
+	uv /= size;
+	vec2 point_pos = floor(uv)+vec2(0.5);
+	float color = step(rand(seed2+point_pos), density);
+    return color;
 }
 
 float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {

@@ -22,20 +22,21 @@ func get_textures():
 func _get_shader_code(uv):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
-		rv.defs = "uniform sampler2D "+name+"_tex;\n"
+		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		rv.code = "vec3 "+name+"_"+str(variant_index)+"_rgb = texture("+name+"_tex, "+uv+").rgb;\n"
-	rv.rgb = name+"_"+str(variant_index)+"_rgb"
+		rv.code = "vec3 %s_%d_rgb = texture(%s_tex, %s).rgb;\n" % [ name, variant_index, name, uv ]
+	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
 	return rv
 
 func _on_TextureButton_pressed():
-	var dialog = EditorFileDialog.new()
+	var dialog = FileDialog.new()
 	add_child(dialog)
-	dialog.access = EditorFileDialog.ACCESS_FILESYSTEM
-	dialog.mode = EditorFileDialog.MODE_OPEN_FILE
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.png;PNG image")
 	dialog.add_filter("*.jpg;JPG image")
 	dialog.connect("file_selected", self, "set_texture")

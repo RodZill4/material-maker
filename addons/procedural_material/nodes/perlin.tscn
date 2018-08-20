@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Perlin" type="GraphNode"]
+[node name="Perlin" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
