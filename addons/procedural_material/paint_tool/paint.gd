@@ -43,10 +43,12 @@ func _ready():
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	$Texture2View/Viewport/PaintedMesh.get_surface_material(0).set_shader_param("view2texture", $View2Texture/Viewport.get_texture())
 	# Add Texture2View as input to all painted textures
-	$FixSeams/Viewport.get_texture().flags |= Texture.FLAG_FILTER | Texture.FLAG_ANISOTROPIC_FILTER
-	albedo_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
-	mr_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
-	normal_material.set_shader_param("tex2view_tex", $FixSeams/Viewport.get_texture())
+	albedo_material.set_shader_param("tex2view_tex", $Texture2View/Viewport.get_texture())
+	mr_material.set_shader_param("tex2view_tex", $Texture2View/Viewport.get_texture())
+	normal_material.set_shader_param("tex2view_tex", $Texture2View/Viewport.get_texture())
+	albedo_material.set_shader_param("tex2viewlsb_tex", $Texture2ViewLsb/Viewport.get_texture())
+	mr_material.set_shader_param("tex2viewlsb_tex", $Texture2ViewLsb/Viewport.get_texture())
+	normal_material.set_shader_param("tex2viewlsb_tex", $Texture2ViewLsb/Viewport.get_texture())
 	# Add all painted textures as input to themselves
 	normal_material.set_shader_param("self_tex", normal_viewport.get_texture())
 	# Assign all textures to painted mesh
@@ -78,6 +80,9 @@ func set_mesh(n, m):
 	mat = $Texture2View/Viewport/PaintedMesh.get_surface_material(0)
 	$Texture2View/Viewport/PaintedMesh.mesh = m
 	$Texture2View/Viewport/PaintedMesh.set_surface_material(0, mat)
+	mat = $Texture2ViewLsb/Viewport/PaintedMesh.get_surface_material(0)
+	$Texture2ViewLsb/Viewport/PaintedMesh.mesh = m
+	$Texture2ViewLsb/Viewport/PaintedMesh.set_surface_material(0, mat)
 	mat = $View2Texture/Viewport/PaintedMesh.get_surface_material(0)
 	$View2Texture/Viewport/PaintedMesh.mesh = m
 	$View2Texture/Viewport/PaintedMesh.set_surface_material(0, mat)
@@ -87,6 +92,7 @@ func set_mesh(n, m):
 
 func set_texture_size(s):
 	$Texture2View/Viewport.size = Vector2(s, s)
+	$Texture2ViewLsb/Viewport.size = Vector2(s, s)
 	$FixSeams/Viewport.size = Vector2(s, s)
 	$FixSeams/Viewport/TextureRect1.rect_size = Vector2(s, s)
 	$FixSeams/Viewport/TextureRect2.rect_size = Vector2(s, s)
@@ -283,9 +289,18 @@ func update_tex2view():
 	t2v_shader_material.set_shader_param("aspect", rect_size.x/rect_size.y)
 	$Texture2View/Viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 	$Texture2View/Viewport.update_worlds()
+	t2v_shader_material = $Texture2ViewLsb/Viewport/PaintedMesh.get_surface_material(0)
+	t2v_shader_material.set_shader_param("model_transform", transform)
+	t2v_shader_material.set_shader_param("fovy_degrees", camera.fov)
+	t2v_shader_material.set_shader_param("z_near", camera.near)
+	t2v_shader_material.set_shader_param("z_far", camera.far)
+	t2v_shader_material.set_shader_param("aspect", rect_size.x/rect_size.y)
+	$Texture2ViewLsb/Viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
+	$Texture2ViewLsb/Viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	$Texture2View/Viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
+	$Texture2ViewLsb/Viewport.render_target_update_mode = Viewport.UPDATE_DISABLED
 	$FixSeams/Viewport.render_target_update_mode = Viewport.UPDATE_ALWAYS
 	$FixSeams/Viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
@@ -330,6 +345,7 @@ func dump_viewport(viewport, filename):
 func debug():
 	dump_viewport($View2Texture/Viewport, "view2texture.png")
 	dump_viewport($Texture2View/Viewport, "texture2view.png")
+	dump_viewport($Texture2ViewLsb/Viewport, "texture2viewlsb.png")
 	dump_viewport($FixSeams/Viewport, "seamsfixed.png")
 
 func save():

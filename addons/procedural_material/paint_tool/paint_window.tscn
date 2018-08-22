@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/procedural_material/paint_tool/paint_window.gd" type="Script" id=1]
 [ext_resource path="res://addons/procedural_material/paint_tool/paint.tscn" type="PackedScene" id=2]
 
-[node name="PaintWindow" type="WindowDialog" index="0"]
+[node name="PaintWindow" type="WindowDialog"]
 
 anchor_left = 0.0
 anchor_top = 0.0

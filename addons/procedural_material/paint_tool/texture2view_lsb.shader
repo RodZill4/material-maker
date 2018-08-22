@@ -51,12 +51,6 @@ void fragment() {
 	vec4 color = get_projection_matrix()*vec4(global_position.xyz, 1.0);
 	color.xyz /= color.w;
 	vec3 xyz = vec3(0.5-0.5*color.x, 0.5+0.5*color.y, -0.5*color.z);
-	vec4 v2t = textureLod(view2texture, xyz.xy, 0.0);
-	xyz.xy = floor(xyz.xy*255.0)/255.0;
-	vec2 delta = v2t.xy-UV.xy;
-	float visible = 0.0;
-	if (color.x > -1.0 && color.x < 1.0 && color.y > -1.0 && color.y < 1.0) {
-		visible = clamp(10.0*dot(normalize(normal), normalize(color.xyz)), 0.0, 1.0)*max(0.0, 1.0-4.0*pow(dot(delta, delta), 0.3));
-	}
-	ALBEDO = vec3(fix_unshaded(xyz.xy), visible);
+	xyz.xy = fract(xyz.xy*255.0);
+	ALBEDO = vec3(fix_unshaded(xyz.xy), 0.0);
 }

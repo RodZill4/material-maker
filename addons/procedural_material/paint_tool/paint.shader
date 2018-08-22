@@ -1,6 +1,7 @@
 shader_type canvas_item;
 
 uniform sampler2D tex2view_tex;
+uniform sampler2D tex2viewlsb_tex;
 uniform sampler2D brush_texture : hint_white;
 uniform vec2      brush_pos       = vec2(0.5, 0.5);
 uniform vec2      brush_ppos      = vec2(0.5, 0.5);
@@ -14,7 +15,8 @@ float brush(float v) {
 
 void fragment() {
 	vec4 t2v = texture(tex2view_tex, UV);
-	vec2 xy = t2v.xy;
+	vec4 t2vlsb = texture(tex2viewlsb_tex, UV);
+	vec2 xy = t2v.xy+t2vlsb.xy/256.0;
 	vec2 b = brush_pos/brush_size;
 	vec2 bv = (brush_ppos-brush_pos)/brush_size;
 	vec2 p = xy/brush_size;
