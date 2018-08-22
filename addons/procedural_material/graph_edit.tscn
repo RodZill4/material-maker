@@ -45,7 +45,7 @@ _sections_unfolded = [ "Material", "Mouse", "Visibility" ]
 [node name="Material" parent="." index="0" instance=ExtResource( 2 )]
 
 theme = SubResource( 1 )
-_sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot/2", "slot/3", "slot/4", "slot/5" ]
+_sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot", "slot/2", "slot/3", "slot/4", "slot/5" ]
 
 [node name="Timer" type="Timer" parent="." index="1"]
 

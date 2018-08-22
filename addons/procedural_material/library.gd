@@ -64,7 +64,7 @@ func add_item(item, item_name, item_parent = null):
 			new_item = create_item(item_parent)
 			new_item.set_text(0, item_name)
 			new_item.collapsed = true
-		if item.has("type"):
+		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
 		if item.has("collapsed"):
 			new_item.collapsed = item.collapsed

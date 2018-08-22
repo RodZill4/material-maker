@@ -139,25 +139,32 @@ func edit_paste():
 func add_to_user_library():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null and graph_edit is GraphEdit:
+		var selected_nodes = []
 		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
-				var dialog = preload("res://addons/procedural_material/widgets/line_dialog.tscn").instance()
-				add_child(dialog)
-				dialog.connect("ok", self, "do_add_to_user_library", [n])
-				dialog.popup_centered()
-				break
+				selected_nodes.append(n)
+		if !selected_nodes.empty():
+			var dialog = preload("res://addons/procedural_material/widgets/line_dialog.tscn").instance()
+			add_child(dialog)
+			dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
+			dialog.popup_centered()
 
-func do_add_to_user_library(name, node):
-	var data = node.serialize()
+func do_add_to_user_library(name, nodes):
+	var data
+	if nodes.size() == 1:
+		data = nodes[0].serialize()
+		data.erase("node_position")
+	else:
+		var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+		data = graph_edit.serialize_selection()
 	var dir = Directory.new()
 	dir.make_dir("user://library")
 	dir.make_dir("user://library/user")
-	data.erase("node_position")
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
 	$VBoxContainer/HBoxContainer/VBoxContainer/Library.add_item(data, name)
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	graph_edit.export_texture(node, "user://library/user/"+data.icon+".png", 64)
+	graph_edit.export_texture(nodes[0], "user://library/user/"+data.icon+".png", 64)
 
 func save_user_library():
 	print("Saving user library")

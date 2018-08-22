@@ -7,6 +7,7 @@
 ;   param=value ; assign values to parameters
 
 config_version=3
+
 [application]
 
 config/name="Material Maker"

@@ -45,8 +45,9 @@ func _set_state(s):
 	material_maker = s.material_maker
 
 func open_material_maker():
-	material_maker = load("res://addons/procedural_material/window_dialog.tscn").instance()
-	add_child(material_maker)
+	if material_maker == null:
+		material_maker = load("res://addons/procedural_material/window_dialog.tscn").instance()
+		add_child(material_maker)
 	material_maker.popup_centered()
 
 func handles(object):
@@ -65,7 +66,6 @@ func make_visible(b):
 		remove_control_from_container(CONTAINER_SPATIAL_EDITOR_MENU, pt_button)
 		pt_button.queue_free()
 		pt_button = null
-	print(pt_button)
 
 func paint():
 	paint_tool = preload("res://addons/procedural_material/paint_tool/paint_window.tscn").instance()
