@@ -196,7 +196,7 @@ func export_textures(size = 512):
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():
 			if c is GraphNode && c.has_method("export_textures"):
-				c.export_textures(prefix)
+				c.export_textures(prefix, size)
 
 # Cut / copy / paste
 

@@ -97,6 +97,6 @@ func do_update_materials(material_list):
 			else:
 				m.depth_enabled = false
 
-func export_textures(prefix):
+func export_textures(prefix, size = 1024):
 	for t in TEXTURE_LIST:
-		get_parent().export_texture(get_source(t.port), "%s_%s.png" % [ prefix, t.texture ], 1024)
+		get_parent().export_texture(get_source(t.port), "%s_%s.png" % [ prefix, t.texture ], size)
