@@ -1,7 +1,8 @@
 Perlin noise node
 ~~~~~~~~~~~~~~~~~
 
-The Perlin noise node outputs a Perlin noise texture.
+The Perlin noise node outputs a texture generated as a sum of Perlin noise functions
+with increasing frequencies and decreasing amplitudes.
 
 .. image:: images/node_perlin.png
 
@@ -26,8 +27,8 @@ The Perlin noise node accepts the following parameters:
 
 * *Iterations* is the number of iterations
 
-* *Persistance* is the weight ratio between 2 subsequent iterations. Lower values of persistance
-  generate smoother noise.
+* *Persistance* is the ratio between the amplitude of subsequent iterations. Lower values
+  of persistance generate smoother textures.
 
 Notes
 +++++
