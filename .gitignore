@@ -21,3 +21,4 @@ examples/input_image.png.import
 *.import
 *.import
 /addons/procedural_material/nodes/godot_logo.png.import
+_build
