@@ -12,10 +12,3 @@ Welcome to Material Maker's documentation!
    intro
    user_interface
    nodes
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
