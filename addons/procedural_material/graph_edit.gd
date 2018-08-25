@@ -271,6 +271,9 @@ func can_drop_data(position, data):
 	return typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
 func drop_data(position, data):
+	# The following mitigates the SpinBox problem (captures mouse while dragging)
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
 	return true
 
