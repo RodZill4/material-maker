@@ -1,20 +1,20 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/procedural_material/nodes/warp.gd" type="Script" id=1]
+[ext_resource path="res://addons/procedural_material/nodes/decompose.gd" type="Script" id=1]
 
 [sub_resource type="Theme" id=1]
 
 
-[node name="Warp" type="GraphNode" index="0"]
+[node name="Decompose" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 1.0
-margin_top = 1.0
-margin_right = 91.0
-margin_bottom = 84.0
+margin_left = 204.0
+margin_top = 72.0
+margin_right = 306.0
+margin_bottom = 145.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -22,7 +22,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 theme = SubResource( 1 )
-title = "Warp"
+title = "Decompose"
 offset = Vector2( 0, 0 )
 show_close = true
 resizable = false
@@ -31,26 +31,26 @@ comment = false
 overlay = 0
 slot/0/left_enabled = true
 slot/0/left_type = 0
-slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/left_color = Color( 0.498039, 0.498039, 1, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
-slot/1/left_enabled = true
+slot/0/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/1/left_enabled = false
 slot/1/left_type = 0
 slot/1/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
-slot/1/right_enabled = false
+slot/1/right_enabled = true
 slot/1/right_type = 0
-slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/2/left_enabled = false
 slot/2/left_type = 0
-slot/2/left_color = Color( 1, 1, 1, 1 )
-slot/2/right_enabled = false
+slot/2/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/2/right_enabled = true
 slot/2/right_type = 0
-slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/2/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme", "slot", "slot/1" ]
+_sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2" ]
 
-[node name="Label1" type="Label" parent="." index="0"]
+[node name="R" type="Label" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -58,7 +58,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 90.0
+margin_right = 106.0
 margin_bottom = 38.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -66,12 +66,13 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "Source"
+text = "R"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Label2" type="Label" parent="." index="1"]
+[node name="G" type="Label" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -79,7 +80,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 38.0
-margin_right = 90.0
+margin_right = 106.0
 margin_bottom = 52.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -87,12 +88,13 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "Displace"
+text = "G"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="amount" type="SpinBox" parent="." index="2"]
+[node name="B" type="Label" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -100,26 +102,18 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
 margin_top = 53.0
-margin_right = 90.0
-margin_bottom = 77.0
+margin_right = 106.0
+margin_bottom = 67.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
-size_flags_vertical = 1
-min_value = 0.0
-max_value = 1.0
-step = 0.05
-page = 0.0
-value = 0.5
-exp_edit = false
-rounded = false
-editable = true
-prefix = ""
-suffix = ""
-_sections_unfolded = [ "Caret", "Placeholder" ]
-
-[connection signal="close_request" from="." to="." method="queue_free"]
+size_flags_vertical = 4
+text = "B"
+align = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 

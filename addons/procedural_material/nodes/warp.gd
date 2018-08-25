@@ -18,10 +18,10 @@ func _get_shader_code(uv):
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		var src1_code0 = src1.get_shader_code(uv+"+vec2(0.01, 0.0)")
-		var src1_code1 = src1.get_shader_code(uv+"-vec2(0.01, 0.0)")
-		var src1_code2 = src1.get_shader_code(uv+"+vec2(0.0, 0.01)")
-		var src1_code3 = src1.get_shader_code(uv+"-vec2(0.0, 0.01)")
+		var src1_code0 = src1.get_shader_code("fract(%s+vec2(0.01, 0.0))" % uv)
+		var src1_code1 = src1.get_shader_code("fract(%s-vec2(0.01, 0.0))" % uv)
+		var src1_code2 = src1.get_shader_code("fract(%s+vec2(0.0, 0.01))" % uv)
+		var src1_code3 = src1.get_shader_code("fract(%s-vec2(0.0, 0.01))" % uv)
 		rv.defs = src1_code0.defs
 		rv.code = src1_code0.code+src1_code1.code+src1_code2.code+src1_code3.code
 		rv.code += "vec2 %s_%d_uv = %s+%.9f*vec2((%s)-(%s), (%s)-(%s));\n" % [ name, variant_index, uv, amount, src1_code0.f, src1_code1.f, src1_code2.f, src1_code3.f ]

@@ -31,10 +31,10 @@ comment = false
 overlay = 0
 slot/0/left_enabled = false
 slot/0/left_type = 0
-slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/1/left_enabled = false
 slot/1/left_type = 0
 slot/1/left_color = Color( 1, 1, 1, 1 )
@@ -42,7 +42,7 @@ slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme" ]
+_sections_unfolded = [ "Theme", "slot", "slot/0" ]
 
 [node name="HBoxContainer1" type="HBoxContainer" parent="." index="0"]
 
@@ -104,11 +104,11 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "1024"
+text = "512"
 flat = false
 align = 0
 items = [ "32", null, false, 0, null, "64", null, false, 1, null, "128", null, false, 2, null, "256", null, false, 3, null, "512", null, false, 4, null, "1024", null, false, 5, null, "2048", null, false, 6, null ]
-selected = 5
+selected = 4
 _sections_unfolded = [ "Caret", "Placeholder" ]
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." index="1"]

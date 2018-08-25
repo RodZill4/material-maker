@@ -8,7 +8,13 @@ The transform node applies a scale operation, a rotation and a translation to th
 Inputs
 ++++++
 
-The transform node accepts a single image as input.
+The transform node accepts a color image as input.
+
+It also accepts a greyscale input image for each transform parameter. In that case,
+instead of applying a uniform transform to the input image, the transform parameter
+will, for each pixel, be multiplied by a value from -1 to 1 that depends linearly
+on the corresponding greyscale input image (a black pixel will multiply the parameter
+by -1, a white pixel will not change the parameter, a grey50 pixel will set it to 0).
 
 Outputs
 +++++++

@@ -112,10 +112,11 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
+text = "1024"
 flat = false
 align = 0
-items = [  ]
-selected = -1
+items = [ "32", null, false, 0, null, "64", null, false, 1, null, "128", null, false, 2, null, "256", null, false, 3, null, "512", null, false, 4, null, "1024", null, false, 5, null, "2048", null, false, 6, null ]
+selected = 5
 _sections_unfolded = [ "Anchor", "Caret", "Placeholder", "Rect", "Size Flags" ]
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." index="1"]
@@ -180,11 +181,11 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Y"
+text = "Both"
 flat = false
 align = 0
-items = [  ]
-selected = 2
+items = [ "Both", null, false, -1, null, "X", null, false, -1, null, "Y", null, false, -1, null ]
+selected = 0
 _sections_unfolded = [ "Caret", "Placeholder", "Rect", "Size Flags" ]
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="." index="2"]

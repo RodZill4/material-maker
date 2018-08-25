@@ -20,6 +20,7 @@ const MENU = [
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
+	{ menu="Help", command="show_doc", description="User manual" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
@@ -169,6 +170,14 @@ func do_add_to_user_library(name, nodes):
 func save_user_library():
 	print("Saving user library")
 	$VBoxContainer/HBoxContainer/VBoxContainer/Library.save_library("user://library/user.json")
+
+func show_doc():
+	var doc_path = OS.get_executable_path()
+	doc_path = doc_path.replace("\\", "/")
+	doc_path = doc_path.left(doc_path.rfind("/")+1)+"doc/index.html"
+	var file = File.new()
+	if file.exists(doc_path):
+		OS.shell_open(doc_path)
 
 func bug_report():
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")

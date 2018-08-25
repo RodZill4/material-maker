@@ -5,7 +5,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Material" type="GraphNode"]
+[node name="Material" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -35,13 +35,13 @@ slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 slot/1/left_enabled = true
 slot/1/left_type = 0
-slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
 slot/2/left_enabled = true
 slot/2/left_type = 0
-slot/2/left_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/2/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/2/right_enabled = false
 slot/2/right_type = 0
 slot/2/right_color = Color( 0.498039, 0.498039, 1, 1 )
@@ -59,7 +59,7 @@ slot/4/right_type = 0
 slot/4/right_color = Color( 0.498039, 0.498039, 1, 1 )
 slot/5/left_enabled = true
 slot/5/left_type = 0
-slot/5/left_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/5/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/5/right_enabled = false
 slot/5/right_type = 0
 slot/5/right_color = Color( 0.498039, 0.498039, 1, 1 )
@@ -70,7 +70,7 @@ slot/6/right_enabled = false
 slot/6/right_type = 0
 slot/6/right_color = Color( 0.494118, 0.494118, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme", "slot" ]
+_sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/5" ]
 
 [node name="Albedo" type="HBoxContainer" parent="." index="0"]
 

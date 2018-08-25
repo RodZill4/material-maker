@@ -17,16 +17,26 @@ func _get_shader_code(uv):
 	var src = get_source()
 	if src == null:
 		return rv
-	rv.uv = "%s_uv(%s)" % [ name, uv ]
-	var src_code = src.get_shader_code(rv.uv)
-	if !generated:
-		rv.defs = src_code.defs+"vec2 %s_uv(vec2 uv) { return %s(uv, vec2(%.9f, %.9f), %.9f, vec2(%.9f, %.9f)); }\n" % [ name, "transform_repeat" if repeat else "transform_norepeat", translate_x, translate_y, PI*rotate/180.0, scale_x, scale_y ]
-		generated = true
-	rv.code = src_code.code;
-	if src_code.has("f"):
-		rv.f = src_code.f
-	if src_code.has("rgb"):
-		rv.rgb = src_code.rgb
+	var variant_index = generated_variants.find(uv)
+	if variant_index == -1:
+		variant_index = generated_variants.size()
+		generated_variants.append(uv)
+		var inputs = [ "", "", "", "", "" ]
+		for i in range(5):
+			var tsrc = get_source(i+1)
+			if tsrc != null:
+				var tsrc_code = tsrc.get_shader_code(uv)
+				if generated_variants.size() == 1:
+					rv.defs += tsrc_code.defs
+				rv.code += tsrc_code.code
+				inputs[i] = "*(2.0*(%s)-1.0)" % tsrc_code.f
+		rv.code += "vec2 %s_%d_uv = %s(%s, vec2(%.9f%s, %.9f%s), %.9f%s, vec2(%.9f%s, %.9f%s));\n" % [ name, variant_index, "transform_repeat" if repeat else "transform_norepeat", uv, translate_x, inputs[0], translate_y, inputs[1], PI*rotate/180.0, inputs[2], scale_x, inputs[3], scale_y, inputs[4] ]
+	var src_code = src.get_shader_code("%s_%d_uv" % [ name, variant_index ])
+	if rv.code != "":
+		if generated_variants.size() == 1:
+			rv.defs += src_code.defs
+		rv.code += src_code.code
+	rv.rgb = src_code.rgb
 	return rv
 
 func deserialize(data):

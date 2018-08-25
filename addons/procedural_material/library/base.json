@@ -141,6 +141,10 @@
 		"type":"combine"
 	},
 	{
+		"tree_item":"Filters/Decompose",
+		"type":"decompose"
+	},
+	{
 		"tree_item":"Filters/Emboss",
 		"type":"emboss",
 		"direction":0

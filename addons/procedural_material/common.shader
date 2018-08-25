@@ -261,11 +261,11 @@ float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
     float acc = 0.0;
     for (int i = 0; i < iterations; ++i) {
     	vec2 step = vec2(1.0)/size;
-		vec2 xy = seed2+floor(fract(uv)*size);
-        float f0 = rand(xy);
-        float f1 = rand(xy+vec2(1.0, 0.0));
-        float f2 = rand(xy+vec2(0.0, 1.0));
-        float f3 = rand(xy+vec2(1.0, 1.0));
+		vec2 xy = floor(uv*size);
+        float f0 = rand(seed2+mod(xy, size));
+        float f1 = rand(seed2+mod(xy+vec2(1.0, 0.0), size));
+        float f2 = rand(seed2+mod(xy+vec2(0.0, 1.0), size));
+        float f3 = rand(seed2+mod(xy+vec2(1.0, 1.0), size));
         vec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));
         rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);
         acc += coef;

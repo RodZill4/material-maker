@@ -33,7 +33,7 @@ slot/0/left_type = 0
 slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/1/left_enabled = false
 slot/1/left_type = 0
 slot/1/left_color = Color( 0.498039, 0.498039, 1, 1 )
@@ -95,10 +95,11 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
+text = "Running bond"
 flat = false
 align = 0
-items = [  ]
-selected = -1
+items = [ "Running bond", null, false, -1, null, "Running bond (2)", null, false, -1, null, "HerringBone", null, false, -1, null, "Basket weave", null, false, -1, null, "Spanish bond", null, false, -1, null ]
+selected = 0
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="." index="1"]
