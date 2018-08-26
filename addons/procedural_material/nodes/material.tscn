@@ -27,7 +27,7 @@ resizable = false
 selected = false
 comment = false
 overlay = 0
-slot/0/left_enabled = true
+slot/0/left_enabled = false
 slot/0/left_type = 0
 slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/0/right_enabled = false
@@ -35,7 +35,7 @@ slot/0/right_type = 0
 slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 slot/1/left_enabled = true
 slot/1/left_type = 0
-slot/1/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
@@ -44,10 +44,10 @@ slot/2/left_type = 0
 slot/2/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/2/right_enabled = false
 slot/2/right_type = 0
-slot/2/right_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/2/right_color = Color( 0.5, 0.5, 1, 1 )
 slot/3/left_enabled = true
 slot/3/left_type = 0
-slot/3/left_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/3/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/3/right_enabled = false
 slot/3/right_type = 0
 slot/3/right_color = Color( 0.498039, 0.498039, 1, 1 )
@@ -59,22 +59,27 @@ slot/4/right_type = 0
 slot/4/right_color = Color( 0.498039, 0.498039, 1, 1 )
 slot/5/left_enabled = true
 slot/5/left_type = 0
-slot/5/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/5/left_color = Color( 0.498039, 0.498039, 1, 1 )
 slot/5/right_enabled = false
 slot/5/right_type = 0
 slot/5/right_color = Color( 0.498039, 0.498039, 1, 1 )
 slot/6/left_enabled = true
 slot/6/left_type = 0
-slot/6/left_color = Color( 0.494118, 0.494118, 1, 1 )
+slot/6/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/6/right_enabled = false
 slot/6/right_type = 0
-slot/6/right_color = Color( 0.494118, 0.494118, 1, 1 )
+slot/6/right_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/7/left_enabled = true
+slot/7/left_type = 0
+slot/7/left_color = Color( 0.494118, 0.494118, 1, 1 )
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color( 0.494118, 0.494118, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/5" ]
 
-[node name="Albedo" type="HBoxContainer" parent="." index="0"]
+[node name="resolution" type="OptionButton" parent="." index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -83,6 +88,35 @@ margin_left = 16.0
 margin_top = 24.0
 margin_right = 214.0
 margin_bottom = 44.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "512x512"
+flat = false
+align = 0
+items = [ "256x256", null, false, 0, null, "512x512", null, false, 1, null, "1024x1024", null, false, 2, null, "2048x2048", null, false, -1, null ]
+selected = 1
+
+[node name="Albedo" type="HBoxContainer" parent="." index="1"]
+
+editor/display_folded = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 44.0
+margin_right = 214.0
+margin_bottom = 64.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -139,7 +173,7 @@ color = Color( 1, 1, 1, 1 )
 edit_alpha = true
 _sections_unfolded = [ "Rect", "Size Flags" ]
 
-[node name="Metallic" type="HBoxContainer" parent="." index="1"]
+[node name="Metallic" type="HBoxContainer" parent="." index="2"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -147,9 +181,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 44.0
+margin_top = 65.0
 margin_right = 214.0
-margin_bottom = 68.0
+margin_bottom = 89.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -206,7 +240,7 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
 
-[node name="Roughness" type="HBoxContainer" parent="." index="2"]
+[node name="Roughness" type="HBoxContainer" parent="." index="3"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -214,9 +248,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 69.0
+margin_top = 90.0
 margin_right = 214.0
-margin_bottom = 93.0
+margin_bottom = 114.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -273,7 +307,7 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
 
-[node name="Emission" type="HBoxContainer" parent="." index="3"]
+[node name="Emission" type="HBoxContainer" parent="." index="4"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -281,9 +315,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 94.0
+margin_top = 115.0
 margin_right = 214.0
-margin_bottom = 118.0
+margin_bottom = 139.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -340,7 +374,7 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
 
-[node name="NormalMap" type="HBoxContainer" parent="." index="4"]
+[node name="NormalMap" type="HBoxContainer" parent="." index="5"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -348,9 +382,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 119.0
+margin_top = 140.0
 margin_right = 214.0
-margin_bottom = 143.0
+margin_bottom = 164.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -407,7 +441,7 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
 
-[node name="AmbientOcclusion" type="HBoxContainer" parent="." index="5"]
+[node name="AmbientOcclusion" type="HBoxContainer" parent="." index="6"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -415,9 +449,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 144.0
+margin_top = 165.0
 margin_right = 214.0
-margin_bottom = 168.0
+margin_bottom = 189.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -474,7 +508,7 @@ prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
 
-[node name="DepthMap" type="HBoxContainer" parent="." index="6"]
+[node name="DepthMap" type="HBoxContainer" parent="." index="7"]
 
 editor/display_folded = true
 anchor_left = 0.0
@@ -482,9 +516,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_top = 169.0
+margin_top = 190.0
 margin_right = 214.0
-margin_bottom = 193.0
+margin_bottom = 214.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1

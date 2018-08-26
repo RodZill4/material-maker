@@ -113,7 +113,7 @@ func close_material():
 func export_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
-		graph_edit.export_textures(256)
+		graph_edit.export_textures()
 
 func quit():
 	if Engine.editor_hint:

@@ -191,7 +191,7 @@ func do_save_file(filename):
 	set_save_path(filename)
 	set_need_save(false)
 
-func export_textures(size = 512):
+func export_textures(size = null):
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():

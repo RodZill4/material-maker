@@ -1,8 +1,11 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
+var resolution = 1
+var suffix = "suffix"
+
 func _ready():
-	pass
+	initialize_properties([ $resolution ])
 
 func _get_shader_code(uv):
 	var rv = { defs="", code="", f="0.0" }
@@ -11,10 +14,12 @@ func _get_shader_code(uv):
 		rv = src.get_shader_code(uv)
 	return rv
 
-func export_textures(prefix):
+func export_textures(prefix, size = null):
 	var suffix = $Suffix.text
 	if suffix != "":
-		get_parent().export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], 1024)
+		if size == null:
+			size = int(pow(2, 8+resolution))
+		get_parent().export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], size)
 
 func serialize():
 	var data = .serialize()

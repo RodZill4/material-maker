@@ -147,7 +147,7 @@ group = null
 text = "Help"
 flat = true
 align = 1
-items = [ "Report a bug", null, 0, false, false, 16, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 18, 0, null, "", false ]
+items = [ "User manual", null, 0, false, false, 16, 0, null, "", false, "Report a bug", null, 0, false, false, 17, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 19, 0, null, "", false ]
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer" index="1"]
 

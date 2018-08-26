@@ -1,6 +1,7 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
+var resolution = 1
 var albedo_color
 var metallic
 var roughness
@@ -24,8 +25,8 @@ const TEXTURE_LIST = [
 
 func _ready():
 	for t in TEXTURE_LIST:
-		generated_textures[t.texture] = { shader=null, source=null, texture=null}
-	initialize_properties([ $Albedo/albedo_color, $Metallic/metallic, $Roughness/roughness, $Emission/emission_energy, $NormalMap/normal_scale, $AmbientOcclusion/ao_light_affect, $DepthMap/depth_scale ])
+		generated_textures[t.texture] = { shader=null, source=null, texture=null }
+	initialize_properties([ $resolution, $Albedo/albedo_color, $Metallic/metallic, $Roughness/roughness, $Emission/emission_energy, $NormalMap/normal_scale, $AmbientOcclusion/ao_light_affect, $DepthMap/depth_scale ])
 
 func _rerender():
 	var has_textures = false
@@ -97,6 +98,8 @@ func do_update_materials(material_list):
 			else:
 				m.depth_enabled = false
 
-func export_textures(prefix, size = 1024):
+func export_textures(prefix, size = null):
+	if size == null:
+		size = int(pow(2, 8+resolution))
 	for t in TEXTURE_LIST:
 		get_parent().export_texture(get_source(t.port), "%s_%s.png" % [ prefix, t.texture ], size)
