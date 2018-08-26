@@ -121,6 +121,13 @@
 		"scale_y":4
 	},
 	{
+		"tree_item":"Filters/AdjustHSV",
+		"type":"adjust_hsv",
+		"hue":0,
+		"saturation":1,
+		"value":1
+	},
+	{
 		"tree_item":"Filters/Colorize",
 		"type":"colorize",
 		"gradient":[{"b":0,"g":0,"pos":0,"r":0},{"b":1,"g":1,"pos":1,"r":1}]

@@ -34,6 +34,9 @@ func initialize_properties(object_list):
 		elif o is SpinBox:
 			set(o.name, o.value)
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is HSlider:
+			set(o.name, o.value)
+			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
 			set(o.name, o.selected)
 			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
@@ -52,6 +55,8 @@ func update_property_widgets():
 		if o is LineEdit:
 			o.text = str(get(o.name))
 		elif o is SpinBox:
+			o.value = get(o.name)
+		elif o is HSlider:
 			o.value = get(o.name)
 		elif o is OptionButton:
 			o.selected = get(o.name)
