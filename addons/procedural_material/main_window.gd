@@ -1,7 +1,7 @@
 tool
 extends Panel
 
-var current_tab = -1
+var current_tab = null
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
@@ -89,10 +89,15 @@ func load_material():
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural textures file")
-	dialog.connect("file_selected", self, "do_load_material")
+	#dialog.connect("file_selected", self, "do_load_material")
+	dialog.connect("files_selected", self, "do_load_materials")
 	dialog.popup_centered()
+
+func do_load_materials(filenames):
+	for f in filenames:
+		do_load_material(f)
 
 func do_load_material(filename):
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
@@ -120,9 +125,7 @@ func save_material_as():
 		graph_edit.save_file_as()
 
 func close_material():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graph_edit != null:
-		graph_edit.queue_free()
+	$VBoxContainer/HBoxContainer/Projects.close_tab()
 
 func export_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
@@ -245,11 +248,13 @@ func update_preview_2d(node = null):
 		graph_edit.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
 
 func _on_Projects_tab_changed(tab):
-	if tab != current_tab:
-		for c in get_incoming_connections():
-			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-				c.source.disconnect(c.signal_name, self, c.method_name)
-		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("graph_changed", self, "update_preview")
-		$VBoxContainer/HBoxContainer/Projects.get_current_tab_control().connect("node_selected", self, "update_preview_2d")
-		current_tab = tab
+	var new_tab = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if new_tab != current_tab:
+		if new_tab != null:
+			for c in get_incoming_connections():
+				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+					c.source.disconnect(c.signal_name, self, c.method_name)
+			new_tab.connect("graph_changed", self, "update_preview")
+			new_tab.connect("node_selected", self, "update_preview_2d")
+		current_tab = new_tab
 		update_preview()

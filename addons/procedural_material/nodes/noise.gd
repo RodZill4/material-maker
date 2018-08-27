@@ -10,7 +10,6 @@ func _ready():
 		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
 	$HBoxContainer1/size.selected = size
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/density ])
-	print(size)
 
 func _get_shader_code(uv):
 	var rv = { defs="", code="" }

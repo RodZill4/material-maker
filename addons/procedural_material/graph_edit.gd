@@ -66,6 +66,8 @@ func remove_node(node):
 # Global operations on graph
 
 func update_tab_title():
+	if !get_parent().has_method("set_tab_title"):
+		return
 	var title = "[unnamed]"
 	if save_path != null:
 		title = save_path.right(save_path.rfind("/")+1)
@@ -77,8 +79,7 @@ func update_tab_title():
 func set_need_save(ns):
 	if ns != need_save:
 		need_save = ns
-		if get_parent() is TabContainer:
-			update_tab_title()
+		update_tab_title()
 
 func set_save_path(path):
 	if path != save_path:
