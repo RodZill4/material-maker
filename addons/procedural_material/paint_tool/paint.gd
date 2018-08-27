@@ -62,7 +62,7 @@ func _ready():
 	# Updated Texture2View wrt current camera position
 	update_tex2view()
 	# Set size of painted textures
-	set_texture_size(2048)
+	set_texture_size(4096)
 	# update the material list
 	$Material/OptionButton.clear()
 	for m in MATERIAL_OPTIONS:
@@ -70,6 +70,8 @@ func _ready():
 	select_material(0)
 	# Initialize brush related parameters in paint shaders
 	update_brush_parameters()
+	# Disable physics process so we avoid useless updates of tex2view textures
+	set_physics_process(false)
 
 func set_mesh(n, m):
 	object_name = n
@@ -148,7 +150,6 @@ func _input(ev):
 			if Input.is_key_pressed(KEY_RIGHT):
 				key_rotate.x += 1.0
 			set_physics_process(key_rotate != Vector2(0.0, 0.0))
-			print(key_rotate != Vector2(0.0, 0.0))
 
 func _on_Test_gui_input(ev):
 	if ev is InputEventMouseMotion:
