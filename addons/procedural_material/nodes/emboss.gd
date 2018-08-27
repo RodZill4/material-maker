@@ -1,6 +1,7 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
+var size = 5
 var direction = 0
 
 var input_shader = ""
@@ -24,15 +25,20 @@ const INDICES = [ 0, 1, 2, 5, 8, 7, 6, 3 ]
 const COEFS = [ 1, 2, 1, 0, -1, -2, -1, 0 ]
 
 func _ready():
+	$HBoxContainer1/size.clear()
+	for i in range(7):
+		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
+	$HBoxContainer1/size.selected = size
 	input_texture = ImageTexture.new()
 	final_texture = ImageTexture.new()
-	initialize_properties([ $direction ])
+	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction ])
 
 func _rerender():
 	get_parent().precalculate_shader(input_shader, get_source().get_textures(), 1024, input_texture, self, "pass_1", [])
 
 func pass_1():
 	var convolution = CONVOLUTION
+	convolution.epsilon=1.0/pow(2, 5+size)
 	for i in range(8):
 		convolution.kernel[INDICES[i]] = COEFS[(i+8-int(direction))%8]
 	get_parent().precalculate_shader(get_convolution_shader(convolution), {input=input_texture}, 1024, final_texture, self, "rerender_targets", [])
