@@ -29,7 +29,9 @@ const MENU = [
 func _ready():
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	for m in $VBoxContainer/Menu.get_children():
-		create_menu(m.get_popup(), m.name)
+		var menu = m.get_popup()
+		create_menu(menu, m.name)
+		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
 
 func create_menu(menu, menu_name):
@@ -59,6 +61,18 @@ func create_menu(menu, menu_name):
 		else:
 			menu.add_separator()
 	return menu
+
+func menu_about_to_show(name, menu):
+	for i in MENU.size():
+		if MENU[i].menu != name:
+			continue
+		if MENU[i].has("submenu"):
+			pass
+		elif MENU[i].has("command"):
+			var command_name = MENU[i].command+"_is_disabled"
+			if has_method(command_name):
+				var is_disabled = call(command_name)
+				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
 
 func new_pane():
 	var graph_edit = preload("res://addons/procedural_material/graph_edit.tscn").instance()
@@ -112,8 +126,14 @@ func close_material():
 
 func export_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graph_edit != null:
+	if graph_edit != null :
 		graph_edit.export_textures()
+
+func export_material_is_disabled():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit == null or graph_edit.save_path == null:
+		return true
+	return false
 
 func quit():
 	if Engine.editor_hint:
@@ -127,15 +147,26 @@ func edit_cut():
 	if graph_edit != null:
 		graph_edit.cut()
 
+func edit_cut_is_disabled():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	return graph_edit == null or !graph_edit.can_copy()
+
 func edit_copy():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
 		graph_edit.copy()
 
+func edit_copy_is_disabled():
+	return edit_cut_is_disabled()
+
 func edit_paste():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
 		graph_edit.paste()
+
+func edit_paste_is_disabled():
+	var data = parse_json(OS.clipboard)
+	return data == null
 
 func add_to_user_library():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
