@@ -134,7 +134,7 @@ func create_nodes(data, position = null):
 					names[c.name] = node.name
 					node.selected = true
 			for c in data.connections:
-				connect_node(names[c.from], c.from_port, names[c.to], c.to_port)
+				connect_node(names[c.from], c.from_port, "Material" if c.to == "Material" else names[c.to], c.to_port)
 	return null
 
 func load_file():
@@ -202,14 +202,14 @@ func export_textures(size = null):
 
 func remove_selection():
 	for c in get_children():
-		if c is GraphNode and c.selected:
+		if c is GraphNode and c.selected && c.name != "Material":
 			remove_node(c)
 
 func serialize_selection():
 	var data = { nodes = [], connections = [] }
 	var nodes = []
 	for c in get_children():
-		if c is GraphNode and c.selected:
+		if c is GraphNode and c.selected && c.name != "Material":
 			nodes.append(c)
 	if nodes.empty():
 		return null
@@ -228,6 +228,12 @@ func serialize_selection():
 		if from != null and from.selected and to != null and to.selected:
 			data.connections.append(c)
 	return data
+
+func can_copy():
+	for c in get_children():
+		if c is GraphNode and c.selected && c.name != "Material":
+			return true
+	return false
 
 func cut():
 	copy()
