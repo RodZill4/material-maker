@@ -1,6 +1,7 @@
 tool
 extends "res://addons/procedural_material/node_base.gd"
 
+var size = 5
 var amount = 0.0
 
 var input_shader = ""
@@ -24,17 +25,23 @@ const CONVOLUTION = {
 }
 
 func _ready():
+	# init size widget
+	$HBoxContainer1/size.clear()
+	for i in range(7):
+		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
+	$HBoxContainer1/size.selected = size
 	input_texture = ImageTexture.new()
 	final_texture = ImageTexture.new()
-	initialize_properties([ $amount ])
+	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/amount ])
 
 func _rerender():
-	get_parent().precalculate_shader(input_shader, get_source().get_textures(), 1024, input_texture, self, "pass_1", [])
+	get_parent().precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), input_texture, self, "pass_1", [])
 
 func pass_1():
 	var convolution = CONVOLUTION
-	convolution.scale_before_normalize = 8.0*amount
-	get_parent().precalculate_shader(get_convolution_shader(convolution), { input=input_texture}, 1024, final_texture, self, "rerender_targets", [])
+	convolution.epsilon=1.0/pow(2, 5+size)
+	convolution.scale_before_normalize = pow(2, size-1)*amount
+	get_parent().precalculate_shader(get_convolution_shader(convolution), { input=input_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}
