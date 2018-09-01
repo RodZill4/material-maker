@@ -5,6 +5,7 @@ The generator nodes are nodes that do not accept any input and generate one or s
 
 .. toctree::
 
+	node_adjust_hsv
 	node_colorize
 	node_blend
 	node_blur

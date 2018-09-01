@@ -30,7 +30,7 @@ The Voronoi noise node accepts the following parameters:
 
 * *Scale X* and *Scale Y* define the number of feature points that define the noise
 
-* *Intersity* is a factor applied to the first output of the node.
+* *Intensity* is a factor applied to the first output of the node.
 
 Notes
 +++++
