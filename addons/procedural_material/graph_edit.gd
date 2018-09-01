@@ -74,8 +74,8 @@ func update_tab_title():
 		title = save_path.right(save_path.rfind("/")+1)
 	if need_save:
 		title += " *"
-	get_parent().set_tab_title(get_index(), title)
-	get_parent().update()
+	if get_parent().has_method("set_tab_title"):
+		get_parent().set_tab_title(get_index(), title)
 
 func set_need_save(ns):
 	if ns != need_save:
@@ -83,12 +83,11 @@ func set_need_save(ns):
 		update_tab_title()
 
 func set_save_path(path):
+	print("Setting save path to "+path+" (was "+str(save_path)+")")
 	if path != save_path:
 		save_path = path
-		if get_parent() is TabContainer:
-			update_tab_title()
-		else:
-			emit_signal("save_path_changed", self, path)
+		update_tab_title()
+		emit_signal("save_path_changed", self, path)
 
 func clear_material():
 	clear_connections()
