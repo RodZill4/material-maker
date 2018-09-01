@@ -56,7 +56,7 @@ void fragment() {
 	vec2 delta = v2t.xy-UV.xy;
 	float visible = 0.0;
 	if (color.x > -1.0 && color.x < 1.0 && color.y > -1.0 && color.y < 1.0) {
-		visible = clamp(10.0*dot(normalize(normal), normalize(color.xyz)), 0.0, 1.0)*max(0.0, 1.0-4.0*pow(dot(delta, delta), 0.3));
+		visible = clamp(100.0*dot(normalize(normal), normalize(color.xyz)), 0.0, 1.0)*max(0.0, 1.0-4.0*pow(dot(delta, delta), 2.0));
 	}
 	ALBEDO = vec3(fix_unshaded(xyz.xy), visible);
 }

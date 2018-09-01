@@ -62,7 +62,7 @@ func _ready():
 	# Updated Texture2View wrt current camera position
 	update_tex2view()
 	# Set size of painted textures
-	set_texture_size(4096)
+	set_texture_size(2048)
 	# update the material list
 	$Material/OptionButton.clear()
 	for m in MATERIAL_OPTIONS:

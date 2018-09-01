@@ -111,6 +111,8 @@ func get_free_name(type):
 		i += 1
 
 func create_nodes(data, position = null):
+	if data == null:
+		return
 	if data.has("type"):
 		var node_type = load("res://addons/procedural_material/nodes/"+data.type+".tscn")
 		if node_type != null:
