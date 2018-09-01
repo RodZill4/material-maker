@@ -15,14 +15,14 @@ The colorize node requires a greyscale input texture.
 Outputs
 +++++++
 
-The image node provides a single color texture.
+The colorize node provides a single color texture.
 
 .. image:: images/colorize.png
 
 Parameters
 ++++++++++
 
-The image node has a single parameter that defines the gradient to be applied to the input image.
+The colorize node has a single parameter that defines the gradient to be applied to the input image.
 
 Notes
 +++++

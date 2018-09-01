@@ -13,7 +13,7 @@ The Pattern node does not accept any input.
 Outputs
 +++++++
 
-The Pattern node provides a grayscale texture obtained by mixing a horizontal and a vertical pattern.
+The Pattern node provides a greyscale texture obtained by mixing a horizontal and a vertical pattern.
 
 Many different patterns can be created using this node, do not hesitate to experiment.
 
@@ -34,7 +34,7 @@ The Pattern node accepts the following parameters:
   
   * Square: the value follows a square waveform (stays constant at 0, then 1)
 
-  * Sawtooth: the value follows a sawtooth waveform (hanges linearly from 0 to 1, then jumps back to 0)
+  * Sawtooth: the value follows a sawtooth waveform (changes linearly from 0 to 1, then jumps back to 0)
 
   * constant: the value is 1
 
