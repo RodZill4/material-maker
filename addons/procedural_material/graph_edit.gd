@@ -83,7 +83,6 @@ func set_need_save(ns):
 		update_tab_title()
 
 func set_save_path(path):
-	print("Setting save path to "+path+" (was "+str(save_path)+")")
 	if path != save_path:
 		save_path = path
 		update_tab_title()
