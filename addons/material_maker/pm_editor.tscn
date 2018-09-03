@@ -1,0 +1,192 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://addons/material_maker/pm_editor.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/graph_edit.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/material_maker/preview.tscn" type="PackedScene" id=3]
+
+[sub_resource type="Shader" id=5]
+
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(1.0);
+}
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="ShaderMaterial" id=6]
+
+render_priority = 0
+shader = SubResource( 5 )
+
+[sub_resource type="Animation" id=3]
+
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 3, 251 ), Vector2( 2, 2 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 96, 96 ), Vector2( 346, 346 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MaterialPreview:render_target_update_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=4]
+
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2, 2 ), Vector2( 2, 252 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_size")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 346, 346 ), Vector2( 96, 96 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("MaterialPreview:render_target_update_mode")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 3 ]
+}
+
+[node name="ProceduralMaterialEditor" type="MarginContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -2.0
+rect_min_size = Vector2( 500, 300 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_constants/margin_left = 0
+script = ExtResource( 1 )
+_sections_unfolded = [ "Rect" ]
+
+[node name="GraphEdit" parent="." index="0" instance=ExtResource( 2 )]
+
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1280.0
+margin_bottom = 718.0
+
+[node name="Preview" type="Container" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1280.0
+margin_bottom = 718.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+_sections_unfolded = [ "Mouse" ]
+
+[node name="Preview" parent="Preview" index="0" instance=ExtResource( 3 )]
+
+[node name="SelectedPreview" type="ColorRect" parent="Preview/Preview" index="4"]
+
+visible = false
+material = SubResource( 6 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 348.0
+margin_bottom = 348.0
+rect_min_size = Vector2( 96, 96 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Mouse", "Rect" ]
+
+[node name="SelectedPreviewAnimation" type="AnimationPlayer" parent="Preview/Preview/SelectedPreview" index="0"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/maximize = SubResource( 3 )
+anims/minimize = SubResource( 4 )
+blend_times = [  ]
+
+[connection signal="graph_changed" from="GraphEdit" to="." method="generate_shader"]
+
+[connection signal="node_selected" from="GraphEdit" to="." method="_on_GraphEdit_node_selected"]
+
+[connection signal="popup_request" from="GraphEdit" to="." method="_on_GraphEdit_popup_request"]
+
+[connection signal="save_path_changed" from="GraphEdit" to="." method="set_save_path"]
+
+[connection signal="gui_input" from="Preview/Preview/SelectedPreview" to="." method="_on_SelectedPreview_gui_input"]
+
+

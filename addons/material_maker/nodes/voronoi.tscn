@@ -1,0 +1,254 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/material_maker/nodes/voronoi.gd" type="Script" id=1]
+
+[sub_resource type="Theme" id=1]
+
+
+[node name="Voronoi" type="GraphNode" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 1.0
+margin_top = 2.0
+margin_right = 172.0
+margin_bottom = 105.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+theme = SubResource( 1 )
+title = "Voronoi"
+offset = Vector2( 0, 0 )
+show_close = true
+resizable = false
+selected = false
+comment = false
+overlay = 0
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/1/right_enabled = true
+slot/1/right_type = 0
+slot/1/right_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/2/right_enabled = true
+slot/2/right_type = 0
+slot/2/right_color = Color( 0.498039, 0.498039, 1, 1 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2" ]
+
+[node name="HBoxContainer1" type="HBoxContainer" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 155.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+alignment = 0
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="Label1" type="Label" parent="HBoxContainer1" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
+margin_right = 61.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Scale X:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Size Flags" ]
+
+[node name="scale_x" type="SpinBox" parent="HBoxContainer1" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 65.0
+margin_right = 139.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 8
+size_flags_vertical = 1
+min_value = 0.0
+max_value = 32.0
+step = 1.0
+page = 0.0
+value = 4.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Anchor", "Caret", "Focus", "Grow Direction", "Hint", "Margin", "Mouse", "Placeholder", "Rect", "Size Flags" ]
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 48.0
+margin_right = 155.0
+margin_bottom = 72.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label2" type="Label" parent="HBoxContainer2" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
+margin_right = 61.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Scale Y:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="scale_y" type="SpinBox" parent="HBoxContainer2" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 65.0
+margin_right = 139.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 8
+size_flags_vertical = 1
+min_value = 0.0
+max_value = 32.0
+step = 1.0
+page = 0.0
+value = 4.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Caret", "Placeholder", "Size Flags" ]
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 73.0
+margin_right = 155.0
+margin_bottom = 97.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Label3" type="Label" parent="HBoxContainer3" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 5.0
+margin_right = 61.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "Intensity:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="intensity" type="SpinBox" parent="HBoxContainer3" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 65.0
+margin_right = 139.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 8
+size_flags_vertical = 1
+min_value = 0.0
+max_value = 3.0
+step = 0.05
+page = 0.0
+value = 1.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+_sections_unfolded = [ "Caret", "Placeholder", "Size Flags" ]
+
+[connection signal="offset_changed" from="." to="." method="_on_offset_changed"]
+
+

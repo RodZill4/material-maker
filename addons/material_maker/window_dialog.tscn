@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/material_maker/main_window.tscn" type="PackedScene" id=1]
+
+[node name="WindowDialog" type="WindowDialog" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1124.0
+margin_bottom = 619.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+popup_exclusive = true
+window_title = "Material Maker"
+resizable = true
+_sections_unfolded = [ "Popup" ]
+
+[node name="MainWindow" parent="." index="1" instance=ExtResource( 1 )]
+
+

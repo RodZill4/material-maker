@@ -4,5 +4,5 @@ Its user interface is based on Godot's GraphEditor: textures are described as in
 
 More details in the [user manual](https://rodzill4.github.io/godot-procedural-textures/doc/).
 
-![Screenshot](addons/procedural_material/doc/images/screenshot.png)
+![Screenshot](addons/material_maker/doc/images/screenshot.png)
 

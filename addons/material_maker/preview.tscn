@@ -1,0 +1,539 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://addons/material_maker/preview.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/panoramas/park.hdr" type="Texture" id=2]
+
+[sub_resource type="Animation" id=1]
+
+length = 1.0
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("MaterialPreview/Objects:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="ArrayMesh" id=2]
+
+blend_shape_mode = 1
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2.00001, 2, 2 ),
+"array_data": PoolByteArray( 0, 60, 0, 188, 255, 187, 0, 60, 0, 129, 0, 0, 126, 0, 0, 129, 252, 59, 251, 59, 0, 188, 0, 188, 255, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 4, 18, 60, 25, 0, 60, 0, 188, 0, 60, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 252, 59, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 0, 129, 0, 0, 127, 0, 0, 129, 4, 18, 251, 59, 0, 60, 0, 60, 255, 187, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 252, 59, 251, 59, 0, 188, 0, 60, 255, 59, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 4, 18, 60, 25, 255, 187, 0, 60, 0, 188, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 252, 59, 60, 25, 255, 59, 0, 60, 0, 60, 0, 60, 0, 127, 0, 0, 0, 0, 129, 129, 4, 18, 251, 59, 0, 60, 0, 188, 255, 187, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 252, 59, 251, 59, 255, 59, 0, 60, 0, 60, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 4, 18, 60, 25, 0, 60, 0, 60, 255, 187, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 252, 59, 60, 25, 0, 60, 0, 188, 0, 60, 0, 60, 127, 0, 0, 0, 0, 0, 129, 129, 4, 18, 251, 59, 0, 60, 0, 188, 0, 60, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 252, 59, 251, 59, 0, 188, 0, 60, 255, 59, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 4, 18, 60, 25, 255, 59, 0, 60, 0, 60, 0, 60, 0, 0, 127, 0, 127, 0, 0, 129, 252, 59, 60, 25, 0, 188, 0, 188, 255, 59, 0, 60, 0, 0, 127, 0, 126, 0, 0, 129, 4, 18, 251, 59, 0, 188, 0, 188, 255, 59, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 252, 59, 251, 59, 255, 187, 0, 60, 0, 188, 0, 60, 129, 0, 0, 0, 0, 0, 126, 129, 4, 18, 60, 25, 0, 188, 0, 60, 255, 59, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 252, 59, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 129, 0, 0, 0, 0, 0, 127, 129, 4, 18, 251, 59, 0, 60, 0, 60, 255, 187, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 4, 18, 60, 25, 255, 187, 0, 188, 0, 188, 0, 60, 0, 0, 129, 0, 130, 0, 0, 129, 252, 59, 251, 59, 0, 60, 0, 188, 255, 187, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 4, 18, 251, 59, 255, 187, 0, 60, 0, 188, 0, 60, 0, 0, 129, 0, 129, 0, 0, 129, 252, 59, 60, 25 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0, 4, 0, 5, 0, 6, 0, 4, 0, 7, 0, 5, 0, 8, 0, 9, 0, 10, 0, 8, 0, 11, 0, 9, 0, 12, 0, 13, 0, 14, 0, 12, 0, 15, 0, 13, 0, 16, 0, 17, 0, 18, 0, 16, 0, 19, 0, 17, 0, 20, 0, 21, 0, 22, 0, 20, 0, 23, 0, 21, 0 ),
+"blend_shape_data": [  ],
+"format": 98071,
+"index_count": 36,
+"name": "Material",
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 24
+}
+_sections_unfolded = [ "surface_1" ]
+
+[sub_resource type="SpatialMaterial" id=3]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
+depth_enabled = true
+depth_scale = 0.5
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Ambient Occlusion", "Depth" ]
+
+[sub_resource type="ArrayMesh" id=4]
+
+blend_shape_mode = 1
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+surfaces/0 = {
+"aabb": AABB( -1, -1, -1, 2, 2, 2 ),
+"array_data": PoolByteArray( 0, 0, 0, 188, 0, 188, 0, 60, 0, 172, 162, 0, 129, 0, 0, 129, 201, 58, 209, 59, 31, 54, 0, 60, 100, 187, 0, 60, 36, 84, 169, 0, 139, 0, 208, 129, 73, 57, 198, 37, 0, 0, 0, 60, 0, 188, 0, 60, 0, 84, 162, 0, 129, 0, 0, 129, 201, 58, 198, 37, 31, 54, 0, 188, 100, 187, 0, 60, 36, 172, 169, 0, 139, 0, 208, 129, 73, 57, 209, 59, 168, 57, 0, 60, 168, 185, 0, 60, 67, 84, 189, 0, 167, 0, 167, 129, 147, 55, 198, 37, 168, 57, 0, 188, 168, 185, 0, 60, 67, 172, 189, 0, 167, 0, 167, 129, 147, 55, 209, 59, 100, 59, 0, 60, 31, 182, 0, 60, 87, 84, 220, 0, 208, 0, 139, 129, 147, 52, 198, 37, 100, 59, 0, 188, 31, 182, 0, 60, 87, 172, 220, 0, 208, 0, 139, 129, 147, 52, 209, 59, 0, 60, 0, 60, 0, 0, 0, 60, 94, 84, 0, 0, 0, 0, 130, 129, 77, 46, 198, 37, 0, 60, 0, 188, 0, 0, 0, 60, 94, 172, 0, 0, 0, 0, 129, 129, 77, 46, 209, 59, 100, 59, 0, 60, 31, 54, 0, 60, 87, 84, 36, 0, 48, 0, 139, 129, 178, 173, 198, 37, 100, 59, 0, 188, 31, 54, 0, 60, 87, 172, 36, 0, 48, 0, 139, 129, 178, 173, 209, 59, 168, 57, 0, 60, 168, 57, 0, 60, 67, 84, 67, 0, 89, 0, 167, 129, 108, 180, 198, 37, 168, 57, 0, 188, 168, 57, 0, 60, 67, 172, 67, 0, 89, 0, 167, 129, 108, 180, 209, 59, 31, 54, 0, 60, 100, 59, 0, 60, 36, 84, 87, 0, 117, 0, 208, 129, 108, 183, 198, 37, 31, 54, 0, 188, 100, 59, 0, 60, 36, 172, 87, 0, 117, 0, 208, 129, 108, 183, 209, 59, 0, 0, 0, 60, 0, 60, 0, 60, 0, 84, 94, 0, 127, 0, 0, 129, 54, 185, 198, 37, 0, 0, 0, 188, 0, 60, 0, 60, 0, 172, 94, 0, 127, 0, 0, 129, 54, 185, 209, 59, 31, 182, 0, 60, 100, 59, 0, 60, 220, 84, 87, 0, 117, 0, 48, 129, 182, 186, 198, 37, 31, 182, 0, 188, 100, 59, 0, 60, 220, 172, 87, 0, 117, 0, 48, 129, 182, 186, 209, 59, 168, 185, 0, 60, 168, 57, 0, 60, 189, 84, 67, 0, 89, 0, 89, 129, 27, 188, 198, 37, 168, 185, 0, 188, 168, 57, 0, 60, 189, 172, 67, 0, 89, 0, 89, 129, 27, 188, 209, 59, 100, 187, 0, 60, 31, 54, 0, 60, 169, 84, 36, 0, 48, 0, 117, 129, 219, 188, 198, 37, 100, 187, 0, 188, 31, 54, 0, 60, 169, 172, 36, 0, 48, 0, 117, 129, 219, 188, 209, 59, 0, 188, 0, 60, 0, 0, 0, 60, 162, 84, 0, 0, 11, 12, 125, 129, 155, 189, 198, 37, 0, 188, 0, 188, 0, 0, 0, 60, 162, 172, 0, 0, 11, 244, 125, 129, 155, 189, 209, 59, 0, 188, 0, 188, 0, 0, 0, 60, 162, 172, 0, 0, 245, 12, 125, 129, 100, 62, 209, 59, 100, 187, 0, 60, 31, 182, 0, 60, 169, 84, 220, 0, 208, 0, 117, 129, 164, 61, 198, 37, 0, 188, 0, 60, 0, 0, 0, 60, 162, 84, 0, 0, 245, 244, 125, 129, 100, 62, 198, 37, 100, 187, 0, 188, 31, 182, 0, 60, 169, 172, 220, 0, 208, 0, 117, 129, 164, 61, 209, 59, 168, 185, 0, 60, 168, 185, 0, 60, 189, 84, 189, 0, 167, 0, 89, 129, 228, 60, 198, 37, 168, 185, 0, 188, 168, 185, 0, 60, 189, 172, 189, 0, 167, 0, 89, 129, 228, 60, 209, 59, 31, 54, 0, 60, 100, 187, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 81, 57, 138, 43, 31, 182, 0, 60, 100, 187, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 201, 52, 138, 43, 0, 0, 0, 60, 0, 188, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 181, 55, 198, 37, 168, 185, 0, 60, 168, 185, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 157, 48, 50, 49, 100, 187, 0, 60, 31, 182, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 56, 41, 19, 53, 0, 188, 0, 60, 0, 0, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 140, 28, 0, 56, 100, 187, 0, 60, 31, 54, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 56, 41, 118, 57, 168, 185, 0, 60, 168, 57, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 157, 48, 179, 58, 31, 182, 0, 60, 100, 59, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 201, 52, 135, 59, 0, 0, 0, 60, 0, 60, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 181, 55, 209, 59, 31, 54, 0, 60, 100, 59, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 81, 57, 135, 59, 168, 57, 0, 60, 168, 57, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 142, 58, 179, 58, 100, 59, 0, 60, 31, 54, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 98, 59, 118, 57, 0, 60, 0, 60, 0, 0, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 172, 59, 0, 56, 100, 59, 0, 60, 31, 182, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 98, 59, 19, 53, 168, 57, 0, 60, 168, 185, 0, 60, 0, 127, 0, 0, 127, 0, 0, 129, 142, 58, 50, 49, 31, 182, 0, 60, 100, 187, 0, 60, 220, 84, 169, 0, 139, 0, 48, 129, 36, 60, 198, 37, 31, 182, 0, 188, 100, 187, 0, 60, 220, 172, 169, 0, 139, 0, 48, 129, 36, 60, 209, 59, 0, 0, 0, 188, 0, 188, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 181, 55, 198, 37, 168, 57, 0, 188, 168, 185, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 142, 58, 50, 49, 31, 54, 0, 188, 100, 187, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 81, 57, 138, 43, 100, 59, 0, 188, 31, 182, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 98, 59, 19, 53, 0, 60, 0, 188, 0, 0, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 172, 59, 0, 56, 100, 59, 0, 188, 31, 54, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 98, 59, 118, 57, 168, 57, 0, 188, 168, 57, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 142, 58, 179, 58, 31, 54, 0, 188, 100, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 81, 57, 135, 59, 0, 0, 0, 188, 0, 60, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 181, 55, 209, 59, 31, 182, 0, 188, 100, 59, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 201, 52, 135, 59, 168, 185, 0, 188, 168, 57, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 157, 48, 179, 58, 100, 187, 0, 188, 31, 54, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 56, 41, 118, 57, 0, 188, 0, 188, 0, 0, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 140, 28, 0, 56, 100, 187, 0, 188, 31, 182, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 56, 41, 19, 53, 168, 185, 0, 188, 168, 185, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 157, 48, 50, 49, 31, 182, 0, 188, 100, 187, 0, 60, 0, 129, 0, 0, 127, 0, 0, 127, 201, 52, 138, 43 ),
+"array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 1, 0, 3, 0, 4, 0, 1, 0, 3, 0, 5, 0, 4, 0, 5, 0, 6, 0, 4, 0, 5, 0, 7, 0, 6, 0, 7, 0, 8, 0, 6, 0, 7, 0, 9, 0, 8, 0, 9, 0, 10, 0, 8, 0, 9, 0, 11, 0, 10, 0, 11, 0, 12, 0, 10, 0, 11, 0, 13, 0, 12, 0, 13, 0, 14, 0, 12, 0, 13, 0, 15, 0, 14, 0, 15, 0, 16, 0, 14, 0, 15, 0, 17, 0, 16, 0, 17, 0, 18, 0, 16, 0, 17, 0, 19, 0, 18, 0, 19, 0, 20, 0, 18, 0, 19, 0, 21, 0, 20, 0, 21, 0, 22, 0, 20, 0, 21, 0, 23, 0, 22, 0, 23, 0, 24, 0, 22, 0, 23, 0, 25, 0, 24, 0, 26, 0, 27, 0, 28, 0, 26, 0, 29, 0, 27, 0, 29, 0, 30, 0, 27, 0, 29, 0, 31, 0, 30, 0, 32, 0, 33, 0, 34, 0, 32, 0, 35, 0, 33, 0, 32, 0, 36, 0, 35, 0, 32, 0, 37, 0, 36, 0, 32, 0, 38, 0, 37, 0, 32, 0, 39, 0, 38, 0, 32, 0, 40, 0, 39, 0, 32, 0, 41, 0, 40, 0, 32, 0, 42, 0, 41, 0, 32, 0, 43, 0, 42, 0, 32, 0, 44, 0, 43, 0, 32, 0, 45, 0, 44, 0, 32, 0, 46, 0, 45, 0, 32, 0, 47, 0, 46, 0, 31, 0, 48, 0, 30, 0, 31, 0, 49, 0, 48, 0, 49, 0, 2, 0, 48, 0, 49, 0, 0, 0, 2, 0, 50, 0, 51, 0, 52, 0, 50, 0, 53, 0, 51, 0, 50, 0, 54, 0, 53, 0, 50, 0, 55, 0, 54, 0, 50, 0, 56, 0, 55, 0, 50, 0, 57, 0, 56, 0, 50, 0, 58, 0, 57, 0, 50, 0, 59, 0, 58, 0, 50, 0, 60, 0, 59, 0, 50, 0, 61, 0, 60, 0, 50, 0, 62, 0, 61, 0, 50, 0, 63, 0, 62, 0, 50, 0, 64, 0, 63, 0, 50, 0, 65, 0, 64, 0 ),
+"blend_shape_data": [  ],
+"format": 98071,
+"index_count": 180,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 66
+}
+_sections_unfolded = [ "surface_1" ]
+
+[sub_resource type="SphereMesh" id=5]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+radius = 1.5
+height = 3.0
+radial_segments = 64
+rings = 32
+is_hemisphere = false
+
+[sub_resource type="SpatialMaterial" id=6]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 1, 1, 1, 1 )
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
+depth_enabled = true
+depth_scale = 0.5
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( -5, -5, 5 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Ambient Occlusion", "Depth", "UV1" ]
+
+[sub_resource type="PanoramaSky" id=7]
+
+radiance_size = 2
+panorama = ExtResource( 2 )
+
+[sub_resource type="Environment" id=8]
+
+background_mode = 2
+background_sky = SubResource( 7 )
+background_sky_custom_fov = 0.0
+background_color = Color( 0, 0, 0, 1 )
+background_energy = 1.0
+background_canvas_max_layer = 0
+ambient_light_color = Color( 0, 0, 0, 1 )
+ambient_light_energy = 1.0
+ambient_light_sky_contribution = 1.0
+fog_enabled = false
+fog_color = Color( 0.5, 0.6, 0.7, 1 )
+fog_sun_color = Color( 1, 0.9, 0.7, 1 )
+fog_sun_amount = 0.0
+fog_depth_enabled = true
+fog_depth_begin = 10.0
+fog_depth_curve = 1.0
+fog_transmit_enabled = false
+fog_transmit_curve = 1.0
+fog_height_enabled = false
+fog_height_min = 0.0
+fog_height_max = 100.0
+fog_height_curve = 1.0
+tonemap_mode = 0
+tonemap_exposure = 1.0
+tonemap_white = 1.0
+auto_exposure_enabled = false
+auto_exposure_scale = 0.4
+auto_exposure_min_luma = 0.05
+auto_exposure_max_luma = 8.0
+auto_exposure_speed = 0.5
+ss_reflections_enabled = false
+ss_reflections_max_steps = 64
+ss_reflections_fade_in = 0.15
+ss_reflections_fade_out = 2.0
+ss_reflections_depth_tolerance = 0.2
+ss_reflections_roughness = true
+ssao_enabled = false
+ssao_radius = 1.0
+ssao_intensity = 1.0
+ssao_radius2 = 0.0
+ssao_intensity2 = 1.0
+ssao_bias = 0.01
+ssao_light_affect = 0.0
+ssao_color = Color( 0, 0, 0, 1 )
+ssao_quality = 0
+ssao_blur = 3
+ssao_edge_sharpness = 4.0
+dof_blur_far_enabled = false
+dof_blur_far_distance = 10.0
+dof_blur_far_transition = 5.0
+dof_blur_far_amount = 0.1
+dof_blur_far_quality = 1
+dof_blur_near_enabled = false
+dof_blur_near_distance = 2.0
+dof_blur_near_transition = 1.0
+dof_blur_near_amount = 0.1
+dof_blur_near_quality = 1
+glow_enabled = false
+glow_levels/1 = false
+glow_levels/2 = false
+glow_levels/3 = true
+glow_levels/4 = false
+glow_levels/5 = true
+glow_levels/6 = false
+glow_levels/7 = false
+glow_intensity = 0.8
+glow_strength = 1.0
+glow_bloom = 0.0
+glow_blend_mode = 2
+glow_hdr_threshold = 1.0
+glow_hdr_scale = 2.0
+glow_bicubic_upscale = false
+adjustment_enabled = false
+adjustment_brightness = 1.0
+adjustment_contrast = 1.0
+adjustment_saturation = 1.0
+_sections_unfolded = [ "Background" ]
+
+[sub_resource type="Shader" id=9]
+
+code = "shader_type canvas_item;
+"
+
+[sub_resource type="ShaderMaterial" id=10]
+
+render_priority = 0
+shader = SubResource( 9 )
+
+[node name="Preview" type="ViewportContainer"]
+
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = -398.0
+margin_top = 3.0
+margin_right = -3.0
+margin_bottom = 373.0
+rect_min_size = Vector2( 200, 200 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+stretch_shrink = 1
+script = ExtResource( 1 )
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Mouse", "Rect", "Size Flags" ]
+
+[node name="ObjectRotate" type="AnimationPlayer" parent="." index="0"]
+
+root_node = NodePath("..")
+autoplay = "rotate"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 0.1
+anims/rotate = SubResource( 1 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="MaterialPreview" type="Viewport" parent="." index="1"]
+
+arvr = false
+size = Vector2( 395, 370 )
+own_world = true
+world = null
+transparent_bg = false
+msaa = 0
+hdr = true
+disable_3d = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 1
+render_target_update_mode = 3
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = true
+shadow_atlas_size = 0
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+_sections_unfolded = [ "GUI", "Render Target" ]
+
+[node name="Objects" type="Spatial" parent="MaterialPreview" index="0"]
+
+transform = Transform( -0.407451, 0, -0.913223, 0, 1, 0, 0.913223, 0, -0.407451, 0, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects" index="0"]
+
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 2 )
+skeleton = NodePath("..")
+material/0 = SubResource( 3 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
+
+[node name="Cylinder" type="MeshInstance" parent="MaterialPreview/Objects" index="1"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 4 )
+skeleton = NodePath("..")
+material/0 = SubResource( 3 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
+
+[node name="Sphere" type="MeshInstance" parent="MaterialPreview/Objects" index="2"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 5 )
+skeleton = NodePath("..")
+material/0 = SubResource( 6 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
+
+[node name="OmniLight" type="OmniLight" parent="MaterialPreview" index="1"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04729, 1.80471, -2.51024 )
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = false
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.15
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+omni_range = 6.46518
+omni_attenuation = 1.0
+omni_shadow_mode = 1
+omni_shadow_detail = 1
+_sections_unfolded = [ "Shadow" ]
+
+[node name="Camera" type="Camera" parent="MaterialPreview" index="2"]
+
+transform = Transform( 1, 0, 0, 0, 0.766044, 0.642787, 0, -0.642787, 0.766044, 0, 1.83022, 2.2549 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = SubResource( 8 )
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+_sections_unfolded = [ "Transform" ]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="MaterialPreview" index="3"]
+
+environment = SubResource( 8 )
+
+[node name="Config" type="HBoxContainer" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Model" type="OptionButton" parent="Config" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 100.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Cube"
+flat = false
+align = 0
+items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null, "Sphere", null, false, 2, null ]
+selected = 0
+_sections_unfolded = [ "Margin", "Rect" ]
+
+[node name="Environment" type="OptionButton" parent="Config" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 104.0
+margin_right = 204.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 100, 0 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Park"
+flat = false
+align = 0
+items = [ "Experiment", null, false, 0, null, "Lobby", null, false, 1, null, "Night", null, false, 2, null, "Park", null, false, 3, null, "Schelde", null, false, 4, null ]
+selected = 3
+_sections_unfolded = [ "Rect" ]
+
+[node name="Preview2D" type="ColorRect" parent="." index="3"]
+
+material = SubResource( 10 )
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_top = -64.0
+margin_right = 64.0
+rect_min_size = Vector2( 64, 64 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Anchor", "Material", "Mouse", "Rect", "Size Flags" ]
+
+[connection signal="resized" from="." to="." method="_on_Preview_resized"]
+
+[connection signal="item_selected" from="Config/Model" to="." method="_on_Model_item_selected"]
+
+[connection signal="item_selected" from="Config/Environment" to="." method="_on_Environment_item_selected"]
+
+[connection signal="gui_input" from="Preview2D" to="." method="_on_Preview2D_gui_input"]
+
+
