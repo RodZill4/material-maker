@@ -19,7 +19,7 @@ func export_textures(prefix, size = null):
 	if suffix != "":
 		if size == null:
 			size = int(pow(2, 8+resolution))
-		get_parent().export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], size)
+		get_parent().renderer.export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], size)
 
 func serialize():
 	var data = .serialize()

@@ -34,14 +34,14 @@ func _ready():
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction ])
 
 func _rerender():
-	get_parent().precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), input_texture, self, "pass_1", [])
+	get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), input_texture, self, "pass_1", [])
 
 func pass_1():
 	var convolution = CONVOLUTION
 	convolution.epsilon=1.0/pow(2, 5+size)
 	for i in range(8):
 		convolution.kernel[INDICES[i]] = COEFS[(i+8-int(direction))%8]
-	get_parent().precalculate_shader(get_convolution_shader(convolution), {input=input_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
+	get_parent().renderer.precalculate_shader(get_convolution_shader(convolution), {input=input_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}
@@ -53,7 +53,7 @@ func _get_shader_code(uv):
 	var src = get_source()
 	if src == null:
 		return rv
-	input_shader = do_generate_shader(src.get_shader_code("UV"))
+	input_shader = get_parent().generate_shader(src.get_shader_code("UV"))
 	_rerender()
 	if generated_variants.empty():
 		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]

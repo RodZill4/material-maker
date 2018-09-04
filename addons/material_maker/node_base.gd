@@ -155,28 +155,12 @@ func deserialize_element(e):
 			return Color(e.r, e.g, e.b, e.a)
 	return e
 
-func do_generate_shader(src_code):
-	var code
-	code = "shader_type canvas_item;\n"
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
-	code += "\n"
-	var shader_code = src_code.defs
-	shader_code += "void fragment() {\n"
-	shader_code += src_code.code
-	shader_code += "COLOR = vec4("+src_code.rgb+", 1.0);\n"
-	shader_code += "}\n"
-	#print("GENERATED SHADER:\n"+shader_code)
-	code += shader_code
-	return code
-	
 func generate_shader(slot = 0):
 	# Reset all nodes
 	for c in get_parent().get_children():
 		if c is GraphNode:
 			c.reset()
-	return do_generate_shader(get_shader_code("UV", slot))
+	return get_parent().renderer.generate_shader(get_shader_code("UV", slot))
 
 func serialize():
 	var type = get_script().resource_path

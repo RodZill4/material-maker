@@ -6,9 +6,7 @@ var direction = 0
 var sigma = 1.0
 
 var input_shader = ""
-var input_texture
-var mid_texture
-var final_texture
+var saved_texture
 
 const DIRECTION_H = 1
 const DIRECTION_V = 2
@@ -30,9 +28,7 @@ func _ready():
 		$HBoxContainer2/direction.add_item(d.name)
 	$HBoxContainer2/direction.selected = direction
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction, $HBoxContainer3/sigma ])
-	input_texture = ImageTexture.new()
-	mid_texture = ImageTexture.new()
-	final_texture = ImageTexture.new()
+	saved_texture = ImageTexture.new()
 
 func get_gaussian_blur_shader(horizontal):
 	var convolution = { x=0, y=0, kernel=[], epsilon=1.0/pow(2, 5+size) }
@@ -53,23 +49,23 @@ func get_gaussian_blur_shader(horizontal):
 
 func _rerender():
 	if DIRECTIONS[direction].mask & DIRECTION_H != 0:
-		get_parent().precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), input_texture, self, "pass_1", [])
+		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), saved_texture, self, "pass_1", [])
 	else:
-		get_parent().precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), mid_texture, self, "pass_2", [])
+		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), saved_texture, self, "pass_2", [])
 
 func pass_1():
 	if DIRECTIONS[direction].mask & DIRECTION_V != 0:
-		get_parent().precalculate_shader(get_gaussian_blur_shader(true), { input=input_texture}, int(pow(2, 5+size)), mid_texture, self, "pass_2", [])
+		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "pass_2", [])
 	else:
-		get_parent().precalculate_shader(get_gaussian_blur_shader(true), { input=input_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
+		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "rerender_targets", [])
 	
 
 func pass_2():
-	get_parent().precalculate_shader(get_gaussian_blur_shader(false), { input=mid_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
+	get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(false), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}
-	list[name] = final_texture
+	list[name] = saved_texture
 	return list
 
 func _get_shader_code(uv):
@@ -77,7 +73,7 @@ func _get_shader_code(uv):
 	var src = get_source()
 	if src == null:
 		return rv
-	input_shader = do_generate_shader(src.get_shader_code("UV"))
+	input_shader = get_parent().renderer.generate_shader(src.get_shader_code("UV"))
 	_rerender()
 	if generated_variants.empty():
 		rv.defs = "uniform sampler2D "+name+"_tex;\n"

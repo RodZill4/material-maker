@@ -1,6 +1,7 @@
 tool
 extends Panel
 
+var editor_interface = null
 var current_tab = null
 
 const MENU = [
@@ -25,6 +26,8 @@ const MENU = [
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
+
+signal quit
 
 func _ready():
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
@@ -76,6 +79,8 @@ func menu_about_to_show(name, menu):
 
 func new_pane():
 	var graph_edit = preload("res://addons/material_maker/graph_edit.tscn").instance()
+	graph_edit.renderer = $Renderer
+	graph_edit.editor_interface = editor_interface
 	$VBoxContainer/HBoxContainer/Projects.add_child(graph_edit)
 	$VBoxContainer/HBoxContainer/Projects.current_tab = graph_edit.get_index()
 	return graph_edit 
@@ -140,8 +145,7 @@ func export_material_is_disabled():
 
 func quit():
 	if Engine.editor_hint:
-		get_parent().hide()
-		get_parent().queue_free()
+		emit_signal("quit")
 	else:
 		get_tree().quit()
 
@@ -245,7 +249,7 @@ func update_preview_2d(node = null):
 				node = n
 				break
 	if node != null:
-		graph_edit.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
+		graph_edit.renderer.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
 
 func _on_Projects_tab_changed(tab):
 	var new_tab = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
