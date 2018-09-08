@@ -6,6 +6,15 @@ signal ok
 func _ready():
 	pass
 
+func set_texts(title, label):
+	window_title = title
+	$VBoxContainer/Label.text = label
+	$VBoxContainer/LineEdit.grab_focus()
+	$VBoxContainer/LineEdit.grab_click_focus()
+
 func _on_OK_pressed():
-	emit_signal("ok", $VBoxContainer/LineEdit.text)
+	_on_LineEdit_text_entered($VBoxContainer/LineEdit.text)
+
+func _on_LineEdit_text_entered(new_text):
+	emit_signal("ok", new_text)
 	queue_free()

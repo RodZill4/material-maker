@@ -146,6 +146,8 @@ flat = false
 align = 1
 _sections_unfolded = [ "Rect" ]
 
+[connection signal="text_entered" from="VBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="queue_free"]

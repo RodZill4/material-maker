@@ -197,5 +197,9 @@
 	{
 		"tree_item":"Miscellaneous/Export",
 		"type":"export"
+	},
+	{
+		"tree_item":"Miscellaneous/Remote",
+		"type":"remote"
 	}
 ]}
