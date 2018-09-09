@@ -199,6 +199,10 @@
 		"type":"export"
 	},
 	{
+		"tree_item":"Miscellaneous/Switch",
+		"type":"switch"
+	},
+	{
 		"tree_item":"Miscellaneous/Remote",
 		"type":"remote"
 	}

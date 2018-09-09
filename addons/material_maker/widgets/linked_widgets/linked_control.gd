@@ -34,25 +34,34 @@ func mirror(to, from, type):
 	for a in WIDGETS[type].attrs:
 		to.set(a, from.get(a))
 
+func update_shaders():
+	var graph_edit = get_parent()
+	while !(graph_edit is GraphEdit):
+		graph_edit = graph_edit.get_parent()
+	graph_edit.send_changed_signal()
+
 func _on_value_changed(v):
 	for l in linked_widgets:
 		l.widget.value = v
 		l.node.set(l.widget.name, v)
-		
+	update_shaders()
+
 func _on_color_changed(c):
 	for l in linked_widgets:
 		l.widget.color = c
 		l.node.set(l.widget.name, c)
+	update_shaders()
 
 func _on_item_selected(i):
 	for l in linked_widgets:
 		l.widget.selected = i
 		l.node.set(l.widget.name, i)
-		
-func _on_gradient_updated(i):
+	update_shaders()
+
+func _on_gradient_updated(g):
 	for l in linked_widgets:
-		l.widget.value = i
-		l.node.set(l.widget.name, i)
+		l.widget.value = g
+	update_shaders()
 
 func serialize():
 	var data = .serialize()
