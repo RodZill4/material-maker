@@ -6,7 +6,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="Colorize" type="GraphNode" index="0"]
+[node name="Colorize" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -39,13 +39,13 @@ slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme", "slot", "slot/0" ]
 
-[node name="Control" parent="." index="0" instance=ExtResource( 2 )]
+[node name="gradient" parent="." index="0" instance=ExtResource( 2 )]
 
 margin_left = 16.0
 margin_top = 24.0
 margin_right = 136.0
 margin_bottom = 54.0
 
-[connection signal="updated" from="Control" to="." method="update_shaders"]
+[connection signal="updated" from="gradient" to="." method="_on_Control_updated"]
 
 

@@ -6,6 +6,8 @@ var configurations = {}
 var current = null
 onready var button = null
 
+const Types = preload("res://addons/material_maker/types/types.gd")
+
 func _ready():
 	update_options()
 
@@ -41,10 +43,16 @@ func update_options():
 func add_linked(node, widget):
 	linked_widgets.append({ node=node, widget=widget })
 
+func duplicate_value(value):
+	if typeof(value) == TYPE_OBJECT and value.has_method("duplicate"):
+		value = value.duplicate()
+	return value
+
 func apply_configuration(c):
 	for w in configurations[c]:
-		w.widget.set(WIDGETS[get_widget_type(w.widget)].value_attr , w.value)
-		w.node.set(w.widget.name, w.value)
+		var value = duplicate_value(w.value)
+		w.widget.set(WIDGETS[get_widget_type(w.widget)].value_attr, value)
+		w.node.set(w.widget.name, value)
 	var graph_node = get_parent()
 	while !(graph_node is GraphNode):
 		graph_node = graph_node.get_parent()
@@ -53,7 +61,7 @@ func apply_configuration(c):
 func do_update_configuration(name):
 	var configuration = []
 	for w in linked_widgets:
-		configuration.append({ node=w.node, widget=w.widget, value=w.node.get(w.widget.name) })
+		configuration.append({ node=w.node, widget=w.widget, value=duplicate_value(w.node.get(w.widget.name)) })
 	configurations[name] = configuration
 	current = name
 	update_options()
@@ -90,7 +98,7 @@ func serialize():
 		var c = configurations[k]
 		var data_configuration = []
 		for e in c:
-			data_configuration.append({ node=e.node.name, widget=e.widget.name, value=e.value })
+			data_configuration.append({ node=e.node.name, widget=e.widget.name, value=Types.serialize_value(e.value) })
 		data_configurations[k] = data_configuration
 	data.configurations = data_configurations
 	return data
@@ -113,7 +121,7 @@ func deserialize(data):
 				if w.name == e.widget:
 					widget = w
 					break
-			configuration.append({ node=node, widget=widget, value=e.value })
+			configuration.append({ node=node, widget=widget, value=Types.deserialize_value(e.value) })
 		configurations[k] = configuration
 	update_options()
 

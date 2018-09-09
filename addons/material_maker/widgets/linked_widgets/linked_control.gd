@@ -11,6 +11,9 @@ func add_linked(node, widget):
 		elif widget is ColorPickerButton:
 			new_widget = ColorPickerButton.new()
 			type = "ColorPickerButton"
+		elif widget is Control && widget.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+			new_widget = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
+			type = "GradientEditor"
 		elif widget is HSlider:
 			new_widget = HSlider.new()
 			type = "HSlider"
@@ -44,6 +47,11 @@ func _on_color_changed(c):
 func _on_item_selected(i):
 	for l in linked_widgets:
 		l.widget.selected = i
+		l.node.set(l.widget.name, i)
+		
+func _on_gradient_updated(i):
+	for l in linked_widgets:
+		l.widget.value = i
 		l.node.set(l.widget.name, i)
 
 func serialize():

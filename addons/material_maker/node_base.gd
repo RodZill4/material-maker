@@ -20,6 +20,8 @@ var generated_variants = []
 
 var property_widgets = []
 
+const Types = preload("res://addons/material_maker/types/types.gd")
+
 func _ready():
 	pass
 
@@ -46,6 +48,11 @@ func initialize_properties(object_list):
 		elif o is ColorPickerButton:
 			set(o.name, o.color)
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
+		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+			set(o.name, o.value)
+			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
+		else:
+			print("unsupported widget "+str(o))
 
 func get_seed():
 	return int(offset.x)*3+int(offset.y)*5
@@ -64,6 +71,10 @@ func update_property_widgets():
 			o.pressed = get(o.name)
 		elif o is ColorPickerButton:
 			o.color = get(o.name)
+		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+			o.value = get(o.name)
+		else:
+			print("Failed to update "+o.name)
 
 func update_shaders():
 	get_parent().send_changed_signal()
@@ -78,6 +89,10 @@ func _on_value_changed(new_value, variable):
 
 func _on_color_changed(new_color, variable):
 	set(variable, new_color)
+	update_shaders()
+
+func _on_gradient_changed(new_gradient, variable):
+	set(variable, new_gradient)
 	update_shaders()
 
 func get_source(index = 0):
@@ -153,6 +168,10 @@ func deserialize_element(e):
 	if typeof(e) == TYPE_DICTIONARY:
 		if e.has("type") and e.type == "Color":
 			return Color(e.r, e.g, e.b, e.a)
+	elif typeof(e) == TYPE_ARRAY:
+		var gradient = preload("res://addons/material_maker/types/gradient.gd").new()
+		gradient.deserialize(e)
+		return gradient
 	return e
 
 func generate_shader(slot = 0):
@@ -169,7 +188,7 @@ func serialize():
 	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y} }
 	for w in property_widgets:
 		var v = w.name
-		data[v] = serialize_element(get(v))
+		data[v] = Types.serialize_value(get(v)) # serialize_element(get(v))
 	return data
 
 func deserialize(data):
@@ -178,7 +197,7 @@ func deserialize(data):
 	for w in property_widgets:
 		var variable = w.name
 		if data.has(variable):
-			var value = deserialize_element(data[variable])
+			var value = Types.deserialize_value(data[variable]) #deserialize_element(data[variable])
 			set(variable, value)
 	update_property_widgets()
 

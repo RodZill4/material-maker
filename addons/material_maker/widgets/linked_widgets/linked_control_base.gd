@@ -13,7 +13,8 @@ const WIDGETS = {
 	SpinBox={ attrs=[ "min_value", "max_value", "step", "value" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
 	HSlider={ attrs=[ "min_value", "max_value", "step", "value" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
 	ColorPickerButton={ attrs=[ "edit_alpha", "color" ], value_attr="color", sig="color_changed", sig_handler="_on_color_changed" },
-	OptionButton={ attrs=[ "selected" ], value_attr="selected", sig="item_selected", sig_handler="_on_item_selected" }
+	OptionButton={ attrs=[ "selected" ], value_attr="selected", sig="item_selected", sig_handler="_on_item_selected" },
+	GradientEditor={ attrs=[ "value" ], value_attr="value", sig="updated", sig_handler="_on_gradient_updated" }
 }
 
 func get_widget_type(widget):
@@ -21,6 +22,10 @@ func get_widget_type(widget):
 		return "SpinBox"
 	elif widget is ColorPickerButton:
 		return "ColorPickerButton"
+	elif widget is Control && widget.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+		return "GradientEditor"
+	elif widget is HSlider:
+		return "HSlider"
 	elif widget is OptionButton:
 		return "OptionButton"
 	else:
