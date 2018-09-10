@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/material_maker/icons/link.png" type="Texture" id=2]
 [ext_resource path="res://addons/material_maker/icons/remove.png" type="Texture" id=3]
 
-[node name="Buttons" type="HBoxContainer"]
+[node name="Buttons" type="HBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -31,6 +31,7 @@ margin_right = 28.0
 margin_bottom = 22.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
+hint_tooltip = "Link new parameter"
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
@@ -43,6 +44,7 @@ group = null
 icon = ExtResource( 2 )
 flat = false
 align = 1
+_sections_unfolded = [ "Hint" ]
 
 [node name="Remove" type="Button" parent="." index="1"]
 
@@ -55,6 +57,7 @@ margin_right = 60.0
 margin_bottom = 22.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
+hint_tooltip = "Delete this control"
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
@@ -67,6 +70,7 @@ group = null
 icon = ExtResource( 3 )
 flat = false
 align = 1
+_sections_unfolded = [ "Hint" ]
 
 [connection signal="pressed" from="Link" to="." method="_on_Link_pressed"]
 

@@ -10,11 +10,11 @@ var links = null
 const Link = preload("res://addons/material_maker/widgets/linked_widgets/link.gd")
 
 const WIDGETS = {
-	SpinBox={ attrs=[ "min_value", "max_value", "step", "value" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
-	HSlider={ attrs=[ "min_value", "max_value", "step", "value" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
-	ColorPickerButton={ attrs=[ "edit_alpha", "color" ], value_attr="color", sig="color_changed", sig_handler="_on_color_changed" },
-	OptionButton={ attrs=[ "selected" ], value_attr="selected", sig="item_selected", sig_handler="_on_item_selected" },
-	GradientEditor={ attrs=[ "value" ], value_attr="value", sig="updated", sig_handler="_on_gradient_updated" }
+	SpinBox={ attrs=[ "min_value", "max_value", "step" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
+	HSlider={ attrs=[ "min_value", "max_value", "step" ], value_attr="value", sig="value_changed", sig_handler="_on_value_changed" },
+	ColorPickerButton={ attrs=[ "edit_alpha", ], value_attr="color", sig="color_changed", sig_handler="_on_color_changed" },
+	OptionButton={ attrs=[ ], value_attr="selected", sig="item_selected", sig_handler="_on_item_selected" },
+	GradientEditor={ attrs=[ ], value_attr="value", sig="updated", sig_handler="_on_gradient_updated" }
 }
 
 func get_widget_type(widget):
@@ -34,8 +34,11 @@ func get_widget_type(widget):
 func _ready():
 	set_process_input(false)
 
+func can_link_to(c):
+	return c != null
+
 func get_associated_controls():
-	label = Label.new()
+	label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text("Unnamed")
 	buttons = preload("res://addons/material_maker/widgets/linked_widgets/linked_control_buttons.tscn").instance()
 	buttons.control = self
@@ -90,7 +93,7 @@ func _input(event):
 	elif event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		link.end = event.global_position
-		link.target = control.widget if control != null else null
+		link.target = control.widget if control != null && can_link_to(control.widget) else null
 		link.update()
 	elif event is InputEventMouseButton:
 		if event.pressed:
@@ -120,12 +123,14 @@ func pick_linked():
 	pointed_control = null
 
 func serialize():
-	var data = { linked_widgets=[] }
+	var data = { label=label.text, linked_widgets=[] }
 	for w in linked_widgets:
 		data.linked_widgets.append( { node=w.node.name, widget=w.widget.name } )
 	return data
 
 func deserialize(data):
+	if data.has("label"):
+		label.text = data.label
 	if !data.has("linked_widgets"):
 		return
 	var graph_edit = get_parent()

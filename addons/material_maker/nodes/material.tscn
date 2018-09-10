@@ -108,7 +108,6 @@ selected = 1
 
 [node name="Albedo" type="HBoxContainer" parent="." index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -170,7 +169,7 @@ group = null
 flat = false
 align = 1
 color = Color( 1, 1, 1, 1 )
-edit_alpha = true
+edit_alpha = false
 _sections_unfolded = [ "Rect", "Size Flags" ]
 
 [node name="Metallic" type="HBoxContainer" parent="." index="2"]

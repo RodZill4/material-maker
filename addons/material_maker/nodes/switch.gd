@@ -12,7 +12,7 @@ func reset():
 
 func _get_shader_code(uv, index = 0):
 	var rv = { defs="", code="" }
-	var src = get_source(source+2*index)
+	var src = get_source(2*source+index)
 	var src_code = { defs="", code="", rgb="0.0" }
 	if src != null:
 		src_code = src.get_shader_code(uv)
