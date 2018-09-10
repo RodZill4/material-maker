@@ -52,10 +52,14 @@ func delete():
 
 func _on_mouse_entered():
 	_on_mouse_exited()
+	get_graph_edit()
+	if graph_edit == null:
+		return
 	links = []
 	var viewport = get_viewport()
 	for w in linked_widgets:
 		var link = Link.new()
+		link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
 		link.source = self
 		link.target = w.widget
 		viewport.add_child(link)
@@ -73,7 +77,10 @@ var link = null
 var graph_edit = null
 var pointed_control = null
 
-const Link = preload("res://addons/material_maker/widgets/linked_widgets/link.gd")
+func get_graph_edit():
+	graph_edit = get_parent()
+	while graph_edit != null && !(graph_edit is GraphEdit):
+		graph_edit = graph_edit.get_parent()
 
 func find_control(gp):
 	for c in graph_edit.get_children():
@@ -108,14 +115,13 @@ func _input(event):
 
 func pick_linked():
 	# Verify we are in a graph edit
-	graph_edit = get_parent()
-	while graph_edit != null && !(graph_edit is GraphEdit):
-		graph_edit = graph_edit.get_parent()
+	get_graph_edit()
 	if graph_edit == null:
 		return
 	# Create line that will be shown when looking for a target
 	var viewport = get_viewport()
 	link = Link.new()
+	link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
 	link.source = self
 	link.end = rect_global_position+0.5*rect_size*get_global_transform().get_scale()
 	viewport.add_child(link)
