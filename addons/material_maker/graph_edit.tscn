@@ -6,7 +6,7 @@
 [sub_resource type="Theme" id=1]
 
 
-[node name="GraphEdit" type="GraphEdit" index="0"]
+[node name="GraphEdit" type="GraphEdit"]
 
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.0

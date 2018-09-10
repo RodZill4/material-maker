@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/material_maker/nodes/comment.gd" type="Script" id=1]
+
+[node name="GraphNode" type="GraphNode" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 109.0
+margin_bottom = 81.0
+rect_min_size = Vector2( 100, 80 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+title = "Comment"
+offset = Vector2( 0, 0 )
+show_close = true
+resizable = true
+selected = false
+comment = true
+overlay = 0
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "custom_styles" ]
+
+[node name="Label" type="Label" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 92.0
+margin_bottom = 72.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Double-click to write a comment"
+autowrap = true
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Mouse" ]
+
+[connection signal="resize_request" from="." to="." method="_on_resize_request"]
+
+[connection signal="gui_input" from="Label" to="." method="_on_Label_gui_input"]
+
+

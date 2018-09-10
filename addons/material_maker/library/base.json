@@ -205,5 +205,9 @@
 	{
 		"tree_item":"Miscellaneous/Remote",
 		"type":"remote"
+	},
+	{
+		"tree_item":"Miscellaneous/Comment",
+		"type":"comment"
 	}
 ]}

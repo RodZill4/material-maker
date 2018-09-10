@@ -184,6 +184,7 @@ func add_to_user_library():
 				selected_nodes.append(n)
 		if !selected_nodes.empty():
 			var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+			dialog.set_texts("New library element", "Select a name for the new library element")
 			add_child(dialog)
 			dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
 			dialog.popup_centered()
