@@ -62,7 +62,7 @@ func _on_mouse_entered():
 		link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
 		link.source = self
 		link.target = w.widget
-		viewport.add_child(link)
+		graph_edit.add_child(link)
 		links.append(link)
 
 func _on_mouse_exited():
@@ -124,7 +124,7 @@ func pick_linked():
 	link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
 	link.source = self
 	link.end = rect_global_position+0.5*rect_size*get_global_transform().get_scale()
-	viewport.add_child(link)
+	graph_edit.add_child(link)
 	set_process_input(true)
 	pointed_control = null
 

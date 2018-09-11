@@ -11,7 +11,7 @@ func _ready():
 
 func clip(p, s):
 	clip_pos = p
-	rect_global_position = p
+	rect_global_position = Vector2(0, 0)
 	rect_size = s
 	rect_clip_content = true
 
