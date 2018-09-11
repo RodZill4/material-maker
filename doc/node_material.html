@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Material node &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Export node" href="node_export.html" />
+    <link rel="prev" title="Miscellaneous nodes" href="nodes_misc.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Available nodes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_generators.html">Generator nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filters.html">Filter nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_misc.html">Miscellaneous nodes</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Material node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="node_export.html">Export node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_switch.html">Switch node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_comment.html">Comment node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_remote.html">Remote node</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="nodes.html">Available nodes</a> &raquo;</li>
+        
+          <li><a href="nodes_misc.html">Miscellaneous nodes</a> &raquo;</li>
+        
+      <li>Material node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="material-node">
+<h1>Material node<a class="headerlink" href="#material-node" title="Permalink to this headline">¶</a></h1>
+<p>The Material node defines a material using its inputs.</p>
+<p>There is one and only one Material node for each Material Maker project,
+it is created for each new project and cannot be deleted or duplicated.
+When copied and pasted together with other nodes, the Material node will
+not be pasted, but connections will be copied if possible.</p>
+<p>When exporting a project to PNG files, all inputs are generated as PNG
+files whose name is generated using the project name and the name of the
+corresponding property in the material.</p>
+<p>When using Material Maker as a Godot addon, the metallic, roughness and
+ambient occlusion are automatically combined into a single texture, and
+a SpatialMaterial is generated automatically.</p>
+<img alt="_images/node_material.png" src="_images/node_material.png" />
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>The Material node has an input for each supported property (albedo, metallic,
+roughness, emissive, normal, ambient occlusion and depth maps) of the material.</p>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The Material node does not have any output.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The Material node has parameters:</p>
+<ul class="simple">
+<li>The size of the texture files to be generated.</li>
+<li>A color associated to the albedo property. The texture used for the albedo input is multiplied by this color.</li>
+<li>The value of the metallic property of the material. The texture used for the metallic input is multiplied by this value.</li>
+<li>The value of the roughness property of the material. The texture used for the roughness input is multiplied by this value.</li>
+<li>The energy of the emissive property of the material.</li>
+<li>The value of the normal map property of the material. It is used to strengthen or lighten the effect of the normal map.</li>
+<li>The value of the ambient occlusion property of the material. The texture used for the ambient occlusion input is multiplied by this value.</li>
+<li>The value of the depth property of the material. The input depth map is multiplied by this value.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="node_export.html" class="btn btn-neutral float-right" title="Export node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="nodes_misc.html" class="btn btn-neutral" title="Miscellaneous nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
