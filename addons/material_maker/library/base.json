@@ -195,6 +195,10 @@
       ]	
 	},
 	{
+		"tree_item":"Miscellaneous/Comment",
+		"type":"comment"
+	},
+	{
 		"tree_item":"Miscellaneous/Export",
 		"type":"export"
 	},
@@ -205,9 +209,5 @@
 	{
 		"tree_item":"Miscellaneous/Remote",
 		"type":"remote"
-	},
-	{
-		"tree_item":"Miscellaneous/Comment",
-		"type":"comment"
 	}
 ]}
