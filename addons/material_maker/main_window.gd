@@ -30,7 +30,8 @@ const MENU = [
 signal quit
 
 func _ready():
-	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+	if !Engine.editor_hint:
+		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	for m in $VBoxContainer/Menu.get_children():
 		var menu = m.get_popup()
 		create_menu(menu, m.name)

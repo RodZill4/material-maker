@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/about.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/icons/icon.png" type="Texture" id=2]
 [ext_resource path="res://addons/material_maker/widgets/icon.png" type="Texture" id=3]
 [ext_resource path="res://addons/material_maker/widgets/facebook.png" type="Texture" id=4]
 [ext_resource path="res://addons/material_maker/widgets/twitter.png" type="Texture" id=5]
@@ -48,8 +48,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 41.0
-margin_right = 110.0
+margin_left = 28.0
+margin_right = 123.0
 margin_bottom = 82.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -66,7 +66,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 69.0
+margin_right = 95.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -84,7 +84,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 68.0
-margin_right = 69.0
+margin_right = 95.0
 margin_bottom = 82.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -92,7 +92,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-text = "APP_NAME"
+text = "Material Maker"
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
