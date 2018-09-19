@@ -16,6 +16,10 @@
 		"type":"uniform"
 	},
 	{
+		"tree_item":"Generators/Shape",
+		"type":"shape"
+	},
+	{
 		"tree_item":"Generators/Image",
 		"type":"image",
 		"file_path":"res://addons/material_maker/nodes/godot_logo.png"
