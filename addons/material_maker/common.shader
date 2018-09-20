@@ -15,8 +15,9 @@ vec3 rand3(vec2 x) {
 
 float circle(vec2 uv, float sides, float radius, float edge) {
     uv = 2.0*uv-1.0;
+	edge = max(edge, 1.0e-8);
     float distance = length(uv);
-    return clamp(1.0-distance/(edge*radius), 0.0, 1.0);
+    return clamp((1.0-distance/radius)/edge, 0.0, 1.0);
 }
 
 float polygon(vec2 uv, float sides, float radius, float edge) {
@@ -27,6 +28,13 @@ float polygon(vec2 uv, float sides, float radius, float edge) {
 }
 
 float star(vec2 uv, float sides, float radius, float edge) {
+    uv = 2.0*uv-1.0;
+    float angle = atan(uv.x, uv.y);
+    float slice = 6.28318530718/sides;
+    return clamp((radius-cos(floor(1.5+angle/slice-2.0*step(0.5*slice, mod(angle, slice)))*slice-angle)*length(uv))/(edge*radius), 0.0, 1.0);
+}
+
+float curved_star(vec2 uv, float sides, float radius, float edge) {
     uv = 2.0*uv-1.0;
     float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);
     float slice = 6.28318530718/sides;

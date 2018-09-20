@@ -12,9 +12,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 1.0
-margin_top = 4.0
-margin_right = 98.0
-margin_bottom = 53.0
+margin_top = 1.0
+margin_right = 108.0
+margin_bottom = 101.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -81,7 +81,7 @@ group = null
 text = "Circle"
 flat = false
 align = 0
-items = [ "Circle", null, false, 0, null, "Polygon", null, false, 1, null, "Star", null, false, -1, null ]
+items = [ "Circle", null, false, 0, null, "Polygon", null, false, 1, null, "Star", null, false, 2, null, "Curved star", null, false, 3, null ]
 selected = 0
 
 [node name="sides" type="HSlider" parent="." index="1"]

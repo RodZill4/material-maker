@@ -6,7 +6,7 @@ var sides
 var radius
 var edge
 
-const SHAPES = [ "circle", "polygon", "star" ]
+const SHAPES = [ "circle", "polygon", "star", "curved_star" ]
 
 func _ready():
 	initialize_properties([ $shape, $sides, $radius, $edge ])
