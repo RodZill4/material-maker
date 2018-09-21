@@ -81,7 +81,7 @@ group = null
 text = "Circle"
 flat = false
 align = 0
-items = [ "Circle", null, false, 0, null, "Polygon", null, false, 1, null, "Star", null, false, 2, null, "Curved star", null, false, 3, null ]
+items = [ "Circle", null, false, 0, null, "Polygon", null, false, 1, null, "Star", null, false, 2, null, "Curved star", null, false, 3, null, "Rays", null, false, 4, null ]
 selected = 0
 
 [node name="sides" type="HSlider" parent="." index="1"]
@@ -102,7 +102,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 0
-min_value = 3.0
+min_value = 1.0
 max_value = 16.0
 step = 1.0
 page = 0.0
