@@ -1,7 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/material_maker/graph_edit.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/nodes/material.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/material_maker/nodes/material/material.tscn" type="PackedScene" id=2]
+
 
 [sub_resource type="Theme" id=1]
 
