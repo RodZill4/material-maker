@@ -116,9 +116,15 @@ func create_nodes(data, position = null):
 	if data == null:
 		return
 	if data.has("type"):
-		var node_type = load("res://addons/material_maker/nodes/"+data.type+"/"+data.type+".tscn")
-		if node_type != null:
-			var node = node_type.instance()
+		var node = null
+		if File.new().file_exists("res://addons/material_maker/nodes/"+data.type+".json"):
+			node = preload("res://addons/material_maker/nodes/node_generic.gd").new()
+			node.model = data.type
+		else:
+			var node_type = load("res://addons/material_maker/nodes/"+data.type+"/"+data.type+".tscn")
+			if node_type != null:
+				node = node_type.instance()
+		if node != null:
 			if data.has("name") && !has_node(data.name):
 				node.name = data.name
 			else:

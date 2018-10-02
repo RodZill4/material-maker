@@ -2,11 +2,10 @@
 
 [ext_resource path="res://addons/material_maker/nodes/noise/noise.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
-[node name="Dots" type="GraphNode" index="0"]
+[node name="Dots" type="GraphNode"]
 
 anchor_left = 0.0
 anchor_top = 0.0

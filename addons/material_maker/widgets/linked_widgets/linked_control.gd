@@ -68,24 +68,25 @@ func update_shaders():
 func _on_value_changed(v):
 	for l in linked_widgets:
 		l.widget.value = v
-		l.node.set(l.widget.name, v)
+		l.node.parameters[l.widget.name] = v
 	update_shaders()
 
 func _on_color_changed(c):
 	for l in linked_widgets:
 		l.widget.color = c
-		l.node.set(l.widget.name, c)
+		l.node.parameters[l.widget.name] = c
 	update_shaders()
 
 func _on_item_selected(i):
 	for l in linked_widgets:
 		l.widget.selected = i
-		l.node.set(l.widget.name, i)
+		l.node.parameters[l.widget.name] = i
 	update_shaders()
 
 func _on_gradient_updated(g):
 	for l in linked_widgets:
 		l.widget.value = g
+		l.node.parameters[l.widget.name] = g
 	update_shaders()
 
 func serialize():

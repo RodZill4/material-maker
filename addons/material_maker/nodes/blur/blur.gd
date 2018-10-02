@@ -1,10 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var size = 5
-var direction = 0
-var sigma = 1.0
-
 var input_shader = ""
 var saved_texture
 
@@ -21,17 +17,17 @@ func _ready():
 	$HBoxContainer1/size.clear()
 	for i in range(7):
 		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
-	$HBoxContainer1/size.selected = size
+	$HBoxContainer1/size.selected = 5
 	# init direction widget
 	$HBoxContainer2/direction.clear()
 	for d in DIRECTIONS:
 		$HBoxContainer2/direction.add_item(d.name)
-	$HBoxContainer2/direction.selected = direction
+	$HBoxContainer2/direction.selected = 0
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction, $HBoxContainer3/sigma ])
 	saved_texture = ImageTexture.new()
 
 func get_gaussian_blur_shader(horizontal):
-	var convolution = { x=0, y=0, kernel=[], epsilon=1.0/pow(2, 5+size) }
+	var convolution = { x=0, y=0, kernel=[], epsilon=1.0/pow(2, 5+parameters.size) }
 	var kernel_size = 50
 	if horizontal:
 		convolution.x = kernel_size
@@ -40,7 +36,7 @@ func get_gaussian_blur_shader(horizontal):
 	convolution.kernel.resize(2*kernel_size+1)
 	var sum = 0
 	for x in range(-kernel_size, kernel_size+1):
-		var coef = exp(-0.5*(pow((x)/sigma, 2.0))) / (2.0*PI*sigma*sigma)
+		var coef = exp(-0.5*(pow((x)/parameters.sigma, 2.0))) / (2.0*PI*parameters.sigma*parameters.sigma)
 		convolution.kernel[x+kernel_size] = coef
 		sum += coef
 	for x in range(-kernel_size, kernel_size+1):
@@ -48,20 +44,19 @@ func get_gaussian_blur_shader(horizontal):
 	return get_convolution_shader(convolution)
 
 func _rerender():
-	if DIRECTIONS[direction].mask & DIRECTION_H != 0:
-		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), saved_texture, self, "pass_1", [])
+	if DIRECTIONS[parameters.direction].mask & DIRECTION_H != 0:
+		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), saved_texture, self, "pass_1", [])
 	else:
-		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), saved_texture, self, "pass_2", [])
+		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), saved_texture, self, "pass_2", [])
 
 func pass_1():
-	if DIRECTIONS[direction].mask & DIRECTION_V != 0:
-		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "pass_2", [])
+	if DIRECTIONS[parameters.direction].mask & DIRECTION_V != 0:
+		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "pass_2", [])
 	else:
-		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "rerender_targets", [])
-	
+		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "rerender_targets", [])
 
 func pass_2():
-	get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(false), { input=saved_texture }, int(pow(2, 5+size)), saved_texture, self, "rerender_targets", [])
+	get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(false), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}

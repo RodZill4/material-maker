@@ -52,7 +52,7 @@ func apply_configuration(c):
 	for w in configurations[c]:
 		var value = duplicate_value(w.value)
 		w.widget.set(WIDGETS[get_widget_type(w.widget)].value_attr, value)
-		w.node.set(w.widget.name, value)
+		w.node.parameters[w.widget.name] = value
 	var graph_node = get_parent()
 	while !(graph_node is GraphNode):
 		graph_node = graph_node.get_parent()
@@ -61,7 +61,7 @@ func apply_configuration(c):
 func do_update_configuration(name):
 	var configuration = []
 	for w in linked_widgets:
-		configuration.append({ node=w.node, widget=w.widget, value=duplicate_value(w.node.get(w.widget.name)) })
+		configuration.append({ node=w.node, widget=w.widget, value=duplicate_value(w.node.parameters[w.widget.name]) })
 	configurations[name] = configuration
 	current = name
 	update_options()

@@ -241,7 +241,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 script = ExtResource( 4 )
-_sections_unfolded = [ "custom_styles" ]
 
 [node name="Tabs" type="Tabs" parent="VBoxContainer/HBoxContainer/Projects" index="1"]
 

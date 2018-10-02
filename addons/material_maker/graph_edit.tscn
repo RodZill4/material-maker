@@ -3,11 +3,10 @@
 [ext_resource path="res://addons/material_maker/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/nodes/material/material.tscn" type="PackedScene" id=2]
 
-
 [sub_resource type="Theme" id=1]
 
 
-[node name="GraphEdit" type="GraphEdit"]
+[node name="GraphEdit" type="GraphEdit" index="0"]
 
 self_modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.0
@@ -22,7 +21,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 right_disconnects = true
-scroll_offset = Vector2( -525, -250 )
+scroll_offset = Vector2( -458.75, -292.25 )
 snap_distance = 20
 use_snap = false
 zoom = 1.0
@@ -31,11 +30,12 @@ _sections_unfolded = [ "Material", "Mouse", "Visibility" ]
 
 [node name="Material" parent="." index="0" instance=ExtResource( 2 )]
 
-margin_left = 525.0
-margin_top = 250.0
-margin_right = 755.0
-margin_bottom = 470.0
+margin_left = 658.75
+margin_top = 292.25
+margin_right = 888.75
+margin_bottom = 512.25
 theme = SubResource( 1 )
+offset = Vector2( 200, 0 )
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/3", "slot/4", "slot/5" ]
 
 [node name="Timer" type="Timer" parent="." index="1"]

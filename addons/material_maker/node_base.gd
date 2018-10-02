@@ -18,6 +18,7 @@ class OutPort:
 var generated = false
 var generated_variants = []
 
+var parameters = {}
 var property_widgets = []
 
 const Types = preload("res://addons/material_maker/types/types.gd")
@@ -31,25 +32,25 @@ func initialize_properties(object_list):
 		if o == null:
 			print("error in node "+name)
 		elif o is LineEdit:
-			set(o.name, float(o.text))
+			parameters[o.name] = float(o.text)
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
 		elif o is SpinBox:
-			set(o.name, o.value)
+			parameters[o.name] = o.value
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is HSlider:
-			set(o.name, o.value)
+			parameters[o.name] = o.value
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
-			set(o.name, o.selected)
+			parameters[o.name] = o.selected
 			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
 		elif o is CheckBox:
-			set(o.name, o.pressed)
+			parameters[o.name] = o.pressed
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			set(o.name, o.color)
+			parameters[o.name] = o.color
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
-			set(o.name, o.value)
+			parameters[o.name] = o.value
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
@@ -59,40 +60,41 @@ func get_seed():
 
 func update_property_widgets():
 	for o in property_widgets:
-		if o is LineEdit:
-			o.text = str(get(o.name))
-		elif o is SpinBox:
-			o.value = get(o.name)
-		elif o is HSlider:
-			o.value = get(o.name)
-		elif o is OptionButton:
-			o.selected = get(o.name)
-		elif o is CheckBox:
-			o.pressed = get(o.name)
-		elif o is ColorPickerButton:
-			o.color = get(o.name)
-		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
-			o.value = get(o.name)
-		else:
-			print("Failed to update "+o.name)
+		if parameters.has(o.name) and parameters[o.name] != null:
+			if o is LineEdit:
+				o.text = str(parameters[o.name])
+			elif o is SpinBox:
+				o.value = parameters[o.name]
+			elif o is HSlider:
+				o.value = parameters[o.name]
+			elif o is OptionButton:
+				o.selected = parameters[o.name]
+			elif o is CheckBox:
+				o.pressed = parameters[o.name]
+			elif o is ColorPickerButton:
+				o.color = parameters[o.name]
+			elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+				o.value = parameters[o.name]
+			else:
+				print("Failed to update "+o.name)
 
 func update_shaders():
 	get_parent().send_changed_signal()
 
 func _on_text_changed(new_text, variable):
-	set(variable, float(new_text))
+	parameters[variable] = float(new_text)
 	update_shaders()
 
 func _on_value_changed(new_value, variable):
-	set(variable, new_value)
+	parameters[variable] = new_value
 	update_shaders()
 
 func _on_color_changed(new_color, variable):
-	set(variable, new_color)
+	parameters[variable] = new_color
 	update_shaders()
 
 func _on_gradient_changed(new_gradient, variable):
-	set(variable, new_gradient)
+	parameters[variable] = new_gradient
 	update_shaders()
 
 func get_source(index = 0):
@@ -187,8 +189,8 @@ func serialize():
 	type = type.left(type.find_last("."))
 	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y} }
 	for w in property_widgets:
-		var v = w.name
-		data[v] = Types.serialize_value(get(v)) # serialize_element(get(v))
+		var variable = w.name
+		data[variable] = Types.serialize_value(parameters[variable]) # serialize_element(get(v))
 	return data
 
 func deserialize(data):
@@ -198,7 +200,7 @@ func deserialize(data):
 		var variable = w.name
 		if data.has(variable):
 			var value = Types.deserialize_value(data[variable]) #deserialize_element(data[variable])
-			set(variable, value)
+			parameters[variable] = value
 	update_property_widgets()
 
 # Render targets again for multipass filters

@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/material_maker/nodes/adjust_hsv/adjust_hsv.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 

@@ -1,15 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var resolution = 1
-var albedo_color
-var metallic
-var roughness
-var emission_energy
-var normal_scale
-var ao_light_affect
-var depth_scale
-
 var texture_list
 
 var current_material_list = []
@@ -42,7 +33,7 @@ func _ready():
 	initialize_properties([ $resolution, $Albedo/albedo_color, $Metallic/metallic, $Roughness/roughness, $Emission/emission_energy, $NormalMap/normal_scale, $AmbientOcclusion/ao_light_affect, $DepthMap/depth_scale ])
 
 func _rerender():
-	var size = int(pow(2, 8+resolution))
+	var size = int(pow(2, 8+parameters.resolution))
 	var has_textures = false
 	for t in texture_list:
 		var shader = generated_textures[t.texture].shader
@@ -116,10 +107,10 @@ func get_generated_texture(slot, file_prefix = null):
 
 func update_spatial_material(m, file_prefix = null):
 	var texture
-	m.albedo_color = albedo_color
+	m.albedo_color = parameters.albedo_color
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
-	m.metallic = metallic
-	m.roughness = roughness
+	m.metallic = parameters.metallic
+	m.roughness = parameters.roughness
 	if Engine.editor_hint:
 		texture = get_generated_texture("mrao", file_prefix)
 		m.metallic_texture = texture 
@@ -132,7 +123,7 @@ func update_spatial_material(m, file_prefix = null):
 	texture = get_generated_texture("emission", file_prefix)
 	if texture != null:
 		m.emission_enabled = true
-		m.emission_energy = emission_energy
+		m.emission_energy = parameters.emission_energy
 		m.emission_texture = texture
 	else:
 		m.emission_enabled = false
@@ -145,7 +136,7 @@ func update_spatial_material(m, file_prefix = null):
 	if Engine.editor_hint:
 		if (generated_textures.mrao.mask & (1 << 2)) != 0:
 			m.ao_enabled = true
-			m.ao_light_affect = ao_light_affect
+			m.ao_light_affect = parameters.ao_light_affect
 			m.ao_texture = m.metallic_texture
 			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
 		else:
@@ -154,14 +145,14 @@ func update_spatial_material(m, file_prefix = null):
 		texture = get_generated_texture("ambient_occlusion", file_prefix)
 		if texture != null:
 			m.ao_enabled = true
-			m.ao_light_affect = ao_light_affect
+			m.ao_light_affect = parameters.ao_light_affect
 			m.ao_texture = texture
 		else:
 			m.ao_enabled = false
 	texture = get_generated_texture("depth_map", file_prefix)
 	if texture != null:
 		m.depth_enabled = true
-		m.depth_scale = depth_scale
+		m.depth_scale = parameters.depth_scale
 		m.depth_texture = texture
 	else:
 		m.depth_enabled = false
@@ -173,7 +164,7 @@ func do_update_materials(material_list):
 
 func export_textures(prefix, size = null):
 	if size == null:
-		size = int(pow(2, 8+resolution))
+		size = int(pow(2, 8+parameters.resolution))
 	for t in texture_list:
 		var texture = generated_textures[t.texture].texture
 		if texture != null:

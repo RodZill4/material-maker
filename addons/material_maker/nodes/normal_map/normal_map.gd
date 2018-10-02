@@ -1,9 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var size = 5
-var amount = 0.0
-
 var input_shader = ""
 var input_texture
 var final_texture
@@ -29,19 +26,20 @@ func _ready():
 	$HBoxContainer1/size.clear()
 	for i in range(7):
 		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
-	$HBoxContainer1/size.selected = size
+	parameters.size = 2
+	$HBoxContainer1/size.selected = parameters.size
 	input_texture = ImageTexture.new()
 	final_texture = ImageTexture.new()
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/amount ])
 
 func _rerender():
-	get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+size)), input_texture, self, "pass_1", [])
+	get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), input_texture, self, "pass_1", [])
 
 func pass_1():
 	var convolution = CONVOLUTION
-	convolution.epsilon=1.0/pow(2, 5+size)
-	convolution.scale_before_normalize = pow(2, size-1)*amount
-	get_parent().renderer.precalculate_shader(get_convolution_shader(convolution), { input=input_texture}, int(pow(2, 5+size)), final_texture, self, "rerender_targets", [])
+	convolution.epsilon=1.0/pow(2, 5+parameters.size)
+	convolution.scale_before_normalize = pow(2, parameters.size-1)*parameters.amount
+	get_parent().renderer.precalculate_shader(get_convolution_shader(convolution), { input=input_texture}, int(pow(2, 5+parameters.size)), final_texture, self, "rerender_targets", [])
 
 func get_textures():
 	var list = {}

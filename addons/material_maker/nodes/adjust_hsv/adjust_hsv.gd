@@ -1,10 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var hue
-var saturation
-var value
-
 func _ready():
 	initialize_properties([ $HBoxContainer1/hue, $HBoxContainer2/saturation, $HBoxContainer3/value ])
 
@@ -17,7 +13,7 @@ func _get_shader_code(uv, output = 0):
 	src_code = src.get_shader_code(uv)
 	if generated_variants.empty():
 		rv.defs = src_code.defs;
-		rv.defs += "vec3 %s_rgb(vec3 c) { vec3 hsv = rgb2hsv(c); return hsv2rgb(vec3(fract(hsv.x+%.9f), clamp(hsv.y*%.9f, 0.0, 1.0), clamp(hsv.z*%.9f, 0.0, 1.0))); }\n" % [ name, hue, saturation, value ]
+		rv.defs += "vec3 %s_rgb(vec3 c) { vec3 hsv = rgb2hsv(c); return hsv2rgb(vec3(fract(hsv.x+%.9f), clamp(hsv.y*%.9f, 0.0, 1.0), clamp(hsv.z*%.9f, 0.0, 1.0))); }\n" % [ name, parameters.hue, parameters.saturation, parameters.value ]
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()

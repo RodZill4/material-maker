@@ -1,9 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var blend_type = 0
-var amount = 0.0
-
 const BLEND_TYPES = [
 	{ name="Normal", shortname="normal" },
 	{ name="Dissolve", shortname="dissolve" },
@@ -35,7 +32,7 @@ func _get_shader_code(uv):
 	var src0_code = src0.get_shader_code(uv)
 	var src1_code = src1.get_shader_code(uv)
 	var src2_code = { defs="", code="" }
-	var amount_str = "%.9f" % amount
+	var amount_str = "%.9f" % parameters.amount
 	if src2 != null:
 		src2_code = src2.get_shader_code(uv)
 		amount_str = src2_code.f
@@ -46,7 +43,7 @@ func _get_shader_code(uv):
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
 		rv.code = src0_code.code+src1_code.code+src2_code.code
-		rv.code += "vec3 %s_%d_rgb = blend_%s(%s, %s, %s, %s);\n" % [ name, variant_index, BLEND_TYPES[blend_type].shortname, uv, src0_code.rgb, src1_code.rgb, amount_str ]
+		rv.code += "vec3 %s_%d_rgb = blend_%s(%s, %s, %s, %s);\n" % [ name, variant_index, BLEND_TYPES[parameters.blend_type].shortname, uv, src0_code.rgb, src1_code.rgb, amount_str ]
 	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
 	return rv
 

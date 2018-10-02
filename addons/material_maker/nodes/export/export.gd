@@ -1,7 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var resolution = 1
 var suffix = "suffix"
 
 func _ready():
@@ -18,7 +17,7 @@ func export_textures(prefix, size = null):
 	var suffix = $Suffix.text
 	if suffix != "":
 		if size == null:
-			size = int(pow(2, 8+resolution))
+			size = int(pow(2, 8+parameters.resolution))
 		get_parent().renderer.export_texture(get_source(), "%s_%s.png" % [ prefix, suffix ], size)
 
 func serialize():

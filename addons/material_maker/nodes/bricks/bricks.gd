@@ -1,14 +1,6 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-var pattern = 0
-var repeat
-var rows
-var columns
-var row_offset
-var mortar
-var bevel
-
 const BRICK_PATTERNS = [
 	{ name="Running bond",     suffix="rb",  has_offset=true,  has_repeat=false },
 	{ name="Running bond (2)", suffix="rb2", has_offset=true,  has_repeat=false },
@@ -26,7 +18,7 @@ func _ready():
 func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
-		rv.defs = "vec3 %s_xyz(vec2 uv) { return bricks_%s(uv, vec2(%d, %d), %.9f, %.9f, %.9f, %.9f); }\n" % [ name, BRICK_PATTERNS[pattern].suffix, columns, rows, repeat, row_offset, mortar, max(0.001, bevel) ]
+		rv.defs = "vec3 %s_xyz(vec2 uv) { return bricks_%s(uv, vec2(%d, %d), %.9f, %.9f, %.9f, %.9f); }\n" % [ name, BRICK_PATTERNS[parameters.pattern].suffix, parameters.columns, parameters.rows, parameters.repeat, parameters.row_offset, parameters.mortar, max(0.001, parameters.bevel) ]
 	var variant_index = generated_variants.find(uv)
 	if variant_index == -1:
 		variant_index = generated_variants.size()

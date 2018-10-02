@@ -1,0 +1,27 @@
+{
+	"name":"Noise",
+	"parameters":[
+		{ "name":"size",	"label":"Grid Size:", "type":"size",  "first":2,  "last":12, "default":8 },
+		{ "name":"density",	"label":"Density:",   "type":"float", "min":0.0, "max":1.0 }
+	],
+	"global":"
+		float rand(vec2 x) {
+			return fract(cos(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
+		}
+		vec2 rand2(vec2 x) {
+			return fract(cos(vec2(dot(x, vec2(13.9898, 8.141)),
+								  dot(x, vec2(3.4562, 17.398)))) * 43758.5453);
+		}
+		vec3 rand3(vec2 x) {
+			return fract(cos(vec3(dot(x, vec2(13.9898, 8.141)),
+								  dot(x, vec2(3.4562, 17.398)),
+								  dot(x, vec2(13.254, 5.867)))) * 43758.5453);
+		}",
+	"instance":"
+		float $(name)_f(vec2 uv) {
+			return dots(uv, 1.0/$(size), $(density), $(seed));
+		}",
+	"outputs":[
+		{ "f":"$(name)_f($(uv))" }
+	]
+}
