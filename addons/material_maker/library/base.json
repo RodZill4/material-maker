@@ -211,6 +211,10 @@
 		"type":"switch"
 	},
 	{
+		"tree_item":"Miscellaneous/Custom",
+		"type":"custom"
+	},
+	{
 		"tree_item":"Miscellaneous/Remote",
 		"type":"remote"
 	}

@@ -14,7 +14,7 @@ func set_model(m):
 		var file = File.new()
 		var file_name = m
 		if !file.file_exists(file_name):
-			file_name = "res://addons/material_maker/nodes/%s.json" % [ m ]
+			file_name = "res://addons/material_maker/nodes/%s.mmn" % [ m ]
 		if file.file_exists(file_name):
 			if file.open(file_name, File.READ) != OK:
 				return
@@ -33,6 +33,16 @@ func update_node(data):
 		return
 	if !data.has("name"):
 		return
+	# Clean node
+	parameters = {}
+	var custom_node_buttons = null
+	for c in get_children():
+		if c.name != "CustomNodeButtons":
+			remove_child(c)
+			c.queue_free()
+		else:
+			custom_node_buttons = c
+	# Rebuild node
 	title = data.name
 	model_data = data
 	uses_seed = false
@@ -99,6 +109,8 @@ func update_node(data):
 			set_slot(i, false, 0, color_right, enable_right, 0, color_right)
 	else:
 		model_data.outputs = []
+	if custom_node_buttons != null:
+		move_child(custom_node_buttons, get_child_count()-1)
 
 func subst(string, uv = ""):
 	string = string.replace("$(name)", name)

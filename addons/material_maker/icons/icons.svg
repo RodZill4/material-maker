@@ -48,9 +48,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="161.54776"
-     inkscape:cy="928.95264"
+     inkscape:zoom="1.1274425"
+     inkscape:cx="116.41955"
+     inkscape:cy="914.64295"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -204,6 +204,71 @@
          width="23.812498"
          id="rect874"
          style="opacity:1;fill:#afafaf;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+    </g>
+    <g
+       style="fill:#18ff09;fill-opacity:1"
+       transform="matrix(0.00708854,0.93703452,-0.93703452,-0.00708854,131.56263,7.7603075)"
+       id="g849"
+       inkscape:export-filename="plus.png"
+       inkscape:export-xdpi="16.531826"
+       inkscape:export-ydpi="16.531826">
+      <rect
+         ry="0"
+         y="8.604167"
+         x="10.583333"
+         height="26.458334"
+         width="5.2916665"
+         id="rect844"
+         style="opacity:1;fill:#18ff09;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+      <rect
+         ry="0"
+         y="19.1875"
+         x="0"
+         height="5.2916665"
+         width="26.458332"
+         id="rect847"
+         style="opacity:1;fill:#18ff09;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+    </g>
+    <g
+       inkscape:export-ydpi="16.531826"
+       inkscape:export-xdpi="16.531826"
+       inkscape:export-filename="minus.png"
+       id="g856"
+       transform="matrix(0.00708854,0.93703452,-0.93703452,-0.00708854,162.38808,7.2064523)"
+       style="fill:#ff0909;fill-opacity:1">
+      <rect
+         style="opacity:1;fill:#ff0909;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect851"
+         width="5.2916665"
+         height="26.458334"
+         x="10.583333"
+         y="8.604167"
+         ry="0" />
+    </g>
+    <g
+       id="g868"
+       inkscape:export-filename="load.png"
+       inkscape:export-xdpi="13.499794"
+       inkscape:export-ydpi="13.499794">
+      <path
+         id="rect849"
+         transform="scale(0.26458333)"
+         d="M 330 152.51953 L 330 262.51953 L 420 262.51953 L 420 169.94531 L 402.57227 152.51953 L 330 152.51953 z "
+         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952761;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stroke-linejoin:round" />
+      <path
+         id="path855"
+         transform="scale(0.26458333)"
+         d="M 403 152.94727 L 403 169.51953 L 419.57422 169.51953 L 403 152.94727 z "
+         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952761;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stroke-linejoin:round" />
+      <rect
+         transform="rotate(-90)"
+         ry="2.5431327e-006"
+         y="84.666664"
+         x="-57.552082"
+         height="29.104166"
+         width="5.2916665"
+         id="rect863"
+         style="opacity:0;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
     </g>
   </g>
 </svg>
