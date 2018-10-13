@@ -129,7 +129,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 254.0
-margin_right = 669.0
+margin_right = 801.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -146,7 +146,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 415.0
+margin_right = 547.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -297,14 +297,61 @@ editable = true
 prefix = ""
 suffix = ""
 
-[node name="SpinBox" type="CheckBox" parent="Types/T0" index="6"]
+[node name="LabelDefault" type="Label" parent="Types/T0" index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 336.0
-margin_right = 415.0
+margin_top = 5.0
+margin_right = 386.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Default:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Default" type="SpinBox" parent="Types/T0" index="7"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 390.0
+margin_right = 464.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+min_value = 0.0
+max_value = 65535.0
+step = 0.0
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+editable = true
+prefix = ""
+suffix = ""
+
+[node name="SpinBox" type="CheckBox" parent="Types/T0" index="8"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 468.0
+margin_right = 547.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -323,7 +370,6 @@ align = 0
 
 [node name="T1" type="HBoxContainer" parent="Types" index="1"]
 
-editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -339,7 +385,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
 
-[node name="LabelMin" type="Label" parent="Types/T1" index="0"]
+[node name="LabelFirst" type="Label" parent="Types/T1" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -359,7 +405,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Min" type="OptionButton" parent="Types/T1" index="1"]
+[node name="First" type="OptionButton" parent="Types/T1" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -385,7 +431,7 @@ align = 0
 items = [  ]
 selected = -1
 
-[node name="LabelMax" type="Label" parent="Types/T1" index="2"]
+[node name="LabelLast" type="Label" parent="Types/T1" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -406,7 +452,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Max" type="OptionButton" parent="Types/T1" index="3"]
+[node name="Last" type="OptionButton" parent="Types/T1" index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -414,6 +460,53 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 109.0
 margin_right = 148.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 0
+items = [  ]
+selected = -1
+
+[node name="LabelDefault" type="Label" parent="Types/T1" index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 551.0
+margin_top = 5.0
+margin_right = 581.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Default:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Default" type="OptionButton" parent="Types/T1" index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 585.0
+margin_right = 624.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -477,11 +570,13 @@ selected = -1
 
 [node name="T3" type="HBoxContainer" parent="Types" index="3"]
 
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
+margin_right = 74.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -491,8 +586,37 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
 
+[node name="Default" type="CheckBox" parent="Types/T3" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 74.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Default"
+flat = false
+align = 0
+
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 
 [connection signal="item_selected" from="Type" to="." method="_on_OptionButton_item_selected"]
+
+[connection signal="item_selected" from="Types/T1/First" to="." method="_on_First_item_selected"]
+
+[connection signal="item_selected" from="Types/T1/Last" to="." method="_on_Last_item_selected"]
+
+[connection signal="item_selected" from="Types/T1/Default" to="." method="_on_Default_item_selected"]
 
 

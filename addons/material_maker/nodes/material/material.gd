@@ -81,7 +81,7 @@ func update_materials(material_list):
 				var source_code = [ null, null, null ]
 				for i in range(3):
 					if source[i] != null:
-						source_code[i] = source[i].get_shader_code("UV")
+						source_code[i] = source[i].get_shader_code_with_globals("UV")
 					else:
 						source_code[i] = { defs="", code="", f=t.default_values[i] }
 				shader = get_parent().renderer.generate_combined_shader(source_code[0], source_code[1], source_code[2])

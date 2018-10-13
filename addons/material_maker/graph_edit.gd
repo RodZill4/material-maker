@@ -2,6 +2,7 @@ tool
 extends GraphEdit
 
 var editor_interface = null
+var node_factory = null
 var renderer = null
 
 var save_path = null
@@ -116,14 +117,7 @@ func create_nodes(data, position = null):
 	if data == null:
 		return
 	if data.has("type"):
-		var node = null
-		if File.new().file_exists("res://addons/material_maker/nodes/"+data.type+".mmn"):
-			node = preload("res://addons/material_maker/nodes/node_generic.gd").new()
-			node.model = data.type
-		else:
-			var node_type = load("res://addons/material_maker/nodes/"+data.type+"/"+data.type+".tscn")
-			if node_type != null:
-				node = node_type.instance()
+		var node = node_factory.create_node(data.type)
 		if node != null:
 			if data.has("name") && !has_node(data.name):
 				node.name = data.name

@@ -15,7 +15,7 @@ run/main_scene="res://addons/material_maker/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 config/icon="res://icon.png"
-config/release="0.5"
+config/release="0.6"
 
 [display]
 

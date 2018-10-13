@@ -15,6 +15,9 @@ static func generate_shader(src_code):
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
 	code += "\n"
+	if src_code.has("globals"):
+		for g in src_code.globals:
+			code += g
 	var shader_code = src_code.defs
 	shader_code += "void fragment() {\n"
 	shader_code += src_code.code
@@ -31,6 +34,15 @@ static func generate_combined_shader(red_code, green_code, blue_code):
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
 	code += "\n"
+	if red_code.has("globals"):
+		for g in red_code.globals:
+			code += g
+	if green_code.has("globals"):
+		for g in green_code.globals:
+			code += g
+	if blue_code.has("globals"):
+		for g in blue_code.globals:
+			code += g
 	var shader_code = ""
 	shader_code += red_code.defs
 	shader_code += green_code.defs
@@ -72,7 +84,7 @@ func render_shader_to_viewport(shader, textures, render_size, method, args):
 			render_queue.pop_front()
 
 func render_to_viewport(node, render_size, method, args):
-	render_shader_to_viewport(node.generate_shader(), node.get_textures(), render_size, method, args)
+	render_shader_to_viewport(node.generate_shader_with_globals(), node.get_textures(), render_size, method, args)
 
 func export_texture(node, filename, render_size = 256):
 	if node == null:

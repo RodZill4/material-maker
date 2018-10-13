@@ -50,7 +50,7 @@ func _get_shader_code(uv):
 	var src = get_source()
 	if src == null:
 		return rv
-	input_shader = get_parent().generate_shader(src.get_shader_code("UV"))
+	input_shader = get_parent().generate_shader(src.get_shader_code_get_globals("UV"))
 	_rerender()
 	if generated_variants.empty():
 		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]

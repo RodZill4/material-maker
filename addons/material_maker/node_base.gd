@@ -11,7 +11,10 @@ class OutPort:
 
 	func generate_shader():
 		return node.generate_shader(port)
-		
+
+	func get_globals():
+		return node.get_globals()
+
 	func get_textures():
 		return node.get_textures()
 
@@ -111,10 +114,10 @@ func get_source(index = 0):
 
 func get_source_f(source):
 	var rv
-	if source.has("rgb"):
-		rv = "dot("+source.rgb+", vec3(1.0))/3.0"
-	elif source.has("f"):
+	if source.has("f"):
 		rv = source.f
+	elif source.has("rgb"):
+		rv = "dot("+source.rgb+", vec3(1.0))/3.0"
 	else:
 		rv = "***error***"
 	return rv
@@ -151,6 +154,22 @@ func get_shader_code(uv, slot = 0):
 			rv.f = "vec3(0.0)"
 	return rv
 
+func get_shader_code_with_globals(uv, slot = 0):
+	var code = get_shader_code(uv, slot)
+	code.globals = get_globals()
+	return code
+
+func get_globals():
+	var list = []
+	for i in range(get_connection_input_count()):
+		var source = get_source(i)
+		if source != null:
+			var source_list = source.get_globals()
+			for g in source_list:
+				if list.find(g) == -1:
+					list.append(g)
+	return list
+	
 func get_textures():
 	var list = {}
 	for i in range(get_connection_input_count()):
@@ -181,7 +200,7 @@ func generate_shader(slot = 0):
 	for c in get_parent().get_children():
 		if c is GraphNode:
 			c.reset()
-	return get_parent().renderer.generate_shader(get_shader_code("UV", slot))
+	return get_parent().renderer.generate_shader(get_shader_code_with_globals("UV", slot))
 
 func serialize():
 	var type = get_script().resource_path

@@ -35,20 +35,17 @@ func move_active_tab_to(idx_to):
 	set_current_tab(idx_to)
 
 func set_current_tab(t):
-	if t == current_tab:
+	if t == current_tab or t < 0 or t >= $Tabs.get_tab_count():
 		return
 	var node
 	if current_tab >= 0 && current_tab < $Tabs.get_tab_count():
 		node = get_child(current_tab)
 		node.visible = false
 	current_tab = t
-	if current_tab >= 0 && current_tab < $Tabs.get_tab_count():
-		node = get_child(current_tab)
-		node.visible = true
-		node.rect_position = Vector2(0, $Tabs.rect_size.y)
-		node.rect_size = rect_size - node.rect_position
-	else:
-		print("Incorrect current tab "+str(current_tab))
+	node = get_child(current_tab)
+	node.visible = true
+	node.rect_position = Vector2(0, $Tabs.rect_size.y)
+	node.rect_size = rect_size - node.rect_position
 	$Tabs.current_tab = current_tab
 	emit_signal("tab_changed", current_tab)
 

@@ -27,6 +27,8 @@ func set_model(m):
 			data = parse_json(data)
 			model = m
 			update_node(data)
+	else:
+		print("set_model error "+str(m))
 
 func update_node(data):
 	if typeof(data) != TYPE_DICTIONARY:
@@ -66,10 +68,10 @@ func update_node(data):
 				parameters[p.name] = 0.5*(p.min+p.max)
 			elif p.type == "size":
 				control = OptionButton.new()
-				for i in range(p.first, p.last):
+				for i in range(p.first, p.last+1):
 					var s = pow(2, i)
 					control.add_item("%dx%d" % [ s, s ])
-					control.selected = 0 if !p.has("default") else p.default
+					control.selected = 0 if !p.has("default") else p.default-p.first
 			elif p.type == "enum":
 				control = OptionButton.new()
 				for i in p.values.size():
@@ -133,24 +135,31 @@ func subst(string, uv = ""):
 	return string
 
 func _get_shader_code(uv, slot = 0):
-	var rv = { defs="", code="", f="0.0" }
+	var rv = { defs="", code="" }
+	var variant_string = uv+","+str(slot)
 	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
 		var output = model_data.outputs[slot]
 		if model_data.has("instance") && generated_variants.empty():
 			rv.defs = subst(model_data.instance)
-		var variant_index = generated_variants.find(uv)
+		var variant_index = generated_variants.find(variant_string)
 		if variant_index == -1:
 			variant_index = generated_variants.size()
-			generated_variants.append(uv)
+			generated_variants.append(variant_string)
 			if output.has("rgb"):
-				rv.code += "vec3 %s_%d_rgb = %s;\n" % [ name, variant_index, subst(output.rgb, uv) ]
+				rv.code += "vec3 %s_%d_%d_rgb = %s;\n" % [ name, slot, variant_index, subst(output.rgb, uv) ]
 			if output.has("f"):
-				rv.code += "float %s_%d_f = %s;\n" % [ name, variant_index, subst(output.f, uv) ]
+				rv.code += "float %s_%d_%d_f = %s;\n" % [ name, slot, variant_index, subst(output.f, uv) ]
 		if output.has("rgb"):
-			rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
+			rv.rgb = "%s_%d_%d_rgb" % [ name, slot, variant_index ]
 		if output.has("f"):
-			rv.f = "%s_%d_f" % [ name, variant_index ]
+			rv.f = "%s_%d_%d_f" % [ name, slot, variant_index ]
 	return rv
+
+func get_globals():
+	var list = .get_globals()
+	if model_data.has("global") and list.find(model_data.global) == -1:
+		list.append(model_data.global)
+	return list
 
 func _on_offset_changed():
 	update_shaders()

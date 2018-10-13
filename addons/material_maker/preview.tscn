@@ -340,7 +340,7 @@ _sections_unfolded = [ "GUI", "Render Target" ]
 
 [node name="Objects" type="Spatial" parent="MaterialPreview" index="0"]
 
-transform = Transform( -0.407451, 0, -0.913223, 0, 1, 0, 0.913223, 0, -0.407451, 0, 0, 0 )
+transform = Transform( 0.999464, 0, 0.0326148, 0, 1, 0, -0.0326148, 0, 0.999464, 0, 0, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects" index="0"]

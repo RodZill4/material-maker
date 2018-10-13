@@ -80,6 +80,7 @@ func menu_about_to_show(name, menu):
 
 func new_pane():
 	var graph_edit = preload("res://addons/material_maker/graph_edit.tscn").instance()
+	graph_edit.node_factory = $NodeFactory
 	graph_edit.renderer = $Renderer
 	graph_edit.editor_interface = editor_interface
 	$VBoxContainer/HBoxContainer/Projects.add_child(graph_edit)
