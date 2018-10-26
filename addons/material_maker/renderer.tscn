@@ -16,13 +16,13 @@ void fragment() {
 render_priority = 0
 shader = SubResource( 1 )
 
-[node name="Renderer" type="Viewport"]
+[node name="Renderer" type="Viewport" index="0"]
 
 arvr = false
 size = Vector2( 0, 0 )
 own_world = true
 world = null
-transparent_bg = false
+transparent_bg = true
 msaa = 2
 hdr = false
 disable_3d = false

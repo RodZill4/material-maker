@@ -1,12 +1,12 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-const OUTPUTS = [ "r", "g", "b" ]
+const OUTPUTS = [ "r", "g", "b", "a" ]
 
 func _get_shader_code(uv, output = 0):
 	var rv = { defs="", code="" }
 	var src = get_source()
-	var src_code = { defs="", code="", f="0.0" }
+	var src_code = { defs="", code="", rgba="vec4(0.0)" }
 	if src != null:
 		src_code = src.get_shader_code(uv)
 	if generated_variants.empty():
@@ -16,6 +16,6 @@ func _get_shader_code(uv, output = 0):
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
 		rv.code = src_code.code
-		rv.code += "vec3 %s_%d_rgb = %s;\n" % [ name, variant_index, src_code.rgb ]
-	rv.f = "%s_%d_rgb.%s" % [ name, variant_index, OUTPUTS[output] ]
+		rv.code += "vec4 %s_%d_rgba = %s;\n" % [ name, variant_index, src_code.rgba ]
+	rv.f = "%s_%d_rgba.%s" % [ name, variant_index, OUTPUTS[output] ]
 	return rv

@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/minus.png" type="Texture" id=2]
 
-[node name="Parameter" type="HBoxContainer" index="0"]
+[node name="Parameter" type="HBoxContainer"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -370,6 +370,7 @@ align = 0
 
 [node name="T1" type="HBoxContainer" parent="Types" index="1"]
 
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -527,7 +528,6 @@ selected = -1
 
 [node name="T2" type="HBoxContainer" parent="Types" index="2"]
 
-editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -543,7 +543,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
 
-[node name="OptionButton" type="OptionButton" parent="Types/T2" index="0"]
+[node name="EnumValues" type="OptionButton" parent="Types/T2" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -611,12 +611,14 @@ align = 0
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 
-[connection signal="item_selected" from="Type" to="." method="_on_OptionButton_item_selected"]
+[connection signal="item_selected" from="Type" to="." method="_on_Type_item_selected"]
 
 [connection signal="item_selected" from="Types/T1/First" to="." method="_on_First_item_selected"]
 
 [connection signal="item_selected" from="Types/T1/Last" to="." method="_on_Last_item_selected"]
 
 [connection signal="item_selected" from="Types/T1/Default" to="." method="_on_Default_item_selected"]
+
+[connection signal="item_selected" from="Types/T2/EnumValues" to="." method="_on_EnumValues_item_selected"]
 
 

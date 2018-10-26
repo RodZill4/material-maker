@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/material_maker/widgets/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/plus.png" type="Texture" id=2]
 
-[node name="NodeEditor" type="WindowDialog" index="0"]
+[node name="NodeEditor" type="WindowDialog"]
 
 anchor_left = 0.0
 anchor_top = 0.0

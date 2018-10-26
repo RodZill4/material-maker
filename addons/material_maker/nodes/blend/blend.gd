@@ -43,8 +43,8 @@ func _get_shader_code(uv):
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
 		rv.code = src0_code.code+src1_code.code+src2_code.code
-		rv.code += "vec3 %s_%d_rgb = blend_%s(%s, %s, %s, %s);\n" % [ name, variant_index, BLEND_TYPES[parameters.blend_type].shortname, uv, src0_code.rgb, src1_code.rgb, amount_str ]
-	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
+		rv.code += "vec4 %s_%d_rgba = vec4(blend_%s(%s, %s, %s, %s * %s.a), min(1.0, %s.a + %s * %s.a));\n" % [ name, variant_index, BLEND_TYPES[parameters.blend_type].shortname, uv, src0_code.rgb, src1_code.rgb, amount_str, src0_code.rgba, src1_code.rgba, amount_str, src0_code.rgba ]
+	rv.rgba = "%s_%d_rgba" % [ name, variant_index ]
 	return rv
 
 func _get_state_variables():

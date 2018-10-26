@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/material_maker/nodes/combine/combine.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
@@ -35,7 +34,7 @@ slot/0/left_type = 0
 slot/0/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0.414353, 1, 0.388902, 0.353608 )
 slot/1/left_enabled = true
 slot/1/left_type = 0
 slot/1/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
@@ -48,8 +47,14 @@ slot/2/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/2/right_enabled = false
 slot/2/right_type = 0
 slot/2/right_color = Color( 0.498039, 0.498039, 1, 1 )
+slot/3/left_enabled = true
+slot/3/left_type = 0
+slot/3/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2" ]
+_sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/3" ]
 
 [node name="R" type="Label" parent="." index="0"]
 
@@ -110,6 +115,27 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 text = "B"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="A" type="Label" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 16.0
+margin_top = 68.0
+margin_right = 86.0
+margin_bottom = 82.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "A"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1

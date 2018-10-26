@@ -116,18 +116,30 @@ func get_source_f(source):
 	var rv
 	if source.has("f"):
 		rv = source.f
-	elif source.has("rgb"):
+	elif source.has("rgb") or source.has("rgba"):
 		rv = "dot("+source.rgb+", vec3(1.0))/3.0"
 	else:
 		rv = "***error***"
 	return rv
-	
+
 func get_source_rgb(source):
 	var rv
-	if source.has("rgb"):
+	if source.has("rgb") or source.has("rgba"):
 		rv = source.rgb
 	elif source.has("f"):
 		rv = "vec3("+source.f+")"
+	else:
+		rv = "***error***"
+	return rv
+
+func get_source_rgba(source):
+	var rv
+	if source.has("rgba"):
+		rv = source.rgba
+	elif source.has("rgb"):
+		rv = "vec4("+source.rgb+", 1.0)"
+	elif source.has("f"):
+		rv = "vec4(vec3("+source.f+"), 1.0)"
 	else:
 		rv = "***error***"
 	return rv
@@ -145,13 +157,17 @@ func get_shader_code(uv, slot = 0):
 	if !rv.has("f"):
 		if rv.has("rgb"):
 			rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
+		elif rv.has("rgba"):
+			rv.f = "(dot("+rv.rgba+".rgb, vec3(1.0))/3.0)"
 		else:
 			rv.f = "0.0"
 	if !rv.has("rgb"):
-		if rv.has("f"):
-			rv.rgb = "vec3("+rv.f+")"
+		if rv.has("rgba"):
+			rv.rgb = rv.rgba+".rgb"
 		else:
-			rv.f = "vec3(0.0)"
+			rv.rgb = "vec3("+rv.f+")"
+	if !rv.has("rgba"):
+		rv.rgba = "vec4("+rv.rgb+", 1.0)"
 	return rv
 
 func get_shader_code_with_globals(uv, slot = 0):

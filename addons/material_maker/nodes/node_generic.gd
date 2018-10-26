@@ -157,7 +157,7 @@ func _get_shader_code(uv, slot = 0):
 
 func get_globals():
 	var list = .get_globals()
-	if model_data.has("global") and list.find(model_data.global) == -1:
+	if typeof(model_data) == TYPE_DICTIONARY and model_data.has("global") and list.find(model_data.global) == -1:
 		list.append(model_data.global)
 	return list
 
