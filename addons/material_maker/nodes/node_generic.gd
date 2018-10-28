@@ -78,6 +78,8 @@ func update_node(data):
 					var value = p.values[i]
 					control.add_item(value.name)
 					control.selected = 0 if !p.has("default") else p.default
+			elif p.type == "boolean":
+				control = CheckBox.new()
 			if control != null:
 				var label = p.name
 				control.name = label

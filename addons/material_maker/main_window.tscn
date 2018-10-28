@@ -7,7 +7,7 @@
 [ext_resource path="res://addons/material_maker/renderer.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=6]
 
-[node name="MainWindow" type="Panel"]
+[node name="MainWindow" type="Panel" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
