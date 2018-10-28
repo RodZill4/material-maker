@@ -9,6 +9,7 @@ func get_model_data():
 	data.min = $Min.value
 	data.max = $Max.value
 	data.step = $Step.value
+	data.default = $Default.value
 	if $SpinBox.pressed:
 		data.widget = "spinbox"
 	return data
@@ -20,4 +21,6 @@ func set_model_data(data):
 		$Max.value = data.max
 	if data.has("step"):
 		$Step.value = data.step
+	if data.has("default"):
+		$Default.value = data.default
 	$SpinBox.pressed = ( data.has("widget") && data.widget == "spinbox" )

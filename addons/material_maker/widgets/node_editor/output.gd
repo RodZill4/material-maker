@@ -7,16 +7,21 @@ func _ready():
 func set_model_data(data):
 	if data.has("rgb"):
 		$Type.selected = 1
-		$Default.text = data.rgb
+		$Value.text = data.rgb
+	elif data.has("rgba"):
+		$Type.selected = 2
+		$Value.text = data.rgba
 	elif data.has("f"):
 		$Type.selected = 0
-		$Default.text = data.f
+		$Value.text = data.f
 
 func get_model_data():
 	if $Type.selected == 1:
-		return { rgb=$Default.text }
+		return { rgb=$Value.text }
+	elif $Type.selected == 2:
+		return { rgba=$Value.text }
 	else:
-		return { f=$Default.text }
+		return { f=$Value.text }
 
 func _on_Delete_pressed():
 	queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/minus.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_size.tscn" type="PackedScene" id=4]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_enum.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_boolean.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_color.tscn" type="PackedScene" id=7]
 
 [node name="Parameter" type="HBoxContainer" index="0"]
 
@@ -106,7 +107,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 180.0
-margin_right = 250.0
+margin_right = 247.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -120,10 +121,10 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Float"
+text = "float"
 flat = false
 align = 0
-items = [  ]
+items = [ "float", null, false, -1, null, "size", null, false, -1, null, "enum", null, false, -1, null, "boolean", null, false, -1, null ]
 selected = 0
 
 [node name="Types" type="HBoxContainer" parent="." index="4"]
@@ -132,8 +133,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 254.0
-margin_right = 254.0
+margin_left = 251.0
+margin_right = 251.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -163,6 +164,12 @@ margin_right = 839.0
 
 margin_left = 843.0
 margin_right = 917.0
+
+[node name="color" parent="Types" index="4" instance=ExtResource( 7 )]
+
+visible = false
+margin_left = 551.0
+margin_right = 563.0
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 

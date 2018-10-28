@@ -80,6 +80,8 @@ func update_node(data):
 					control.selected = 0 if !p.has("default") else p.default
 			elif p.type == "boolean":
 				control = CheckBox.new()
+			elif p.type == "color":
+				control = ColorPickerButton.new()
 			if control != null:
 				var label = p.name
 				control.name = label
@@ -108,6 +110,9 @@ func update_node(data):
 				if output.has("rgb"):
 					enable_right = true
 					color_right = Color(0.5, 0.5, 1.0)
+				elif output.has("rgba"):
+					enable_right = true
+					color_right = Color(0.0, 0.5, 0.0, 0.5)
 				elif output.has("f"):
 					enable_right = true
 			set_slot(i, false, 0, color_right, enable_right, 0, color_right)
@@ -132,6 +137,8 @@ func subst(string, uv = ""):
 				value_string = "%.9f" % pow(2, value+p.first)
 			elif p.type == "enum":
 				value_string = p.values[value].value
+			elif p.type == "color":
+				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			if value_string != null:
 				string = string.replace("$(%s)" % p.name, value_string)
 	return string
@@ -147,10 +154,14 @@ func _get_shader_code(uv, slot = 0):
 		if variant_index == -1:
 			variant_index = generated_variants.size()
 			generated_variants.append(variant_string)
+			if output.has("rgba"):
+				rv.code += "vec4 %s_%d_%d_rgba = %s;\n" % [ name, slot, variant_index, subst(output.rgba, uv) ]
 			if output.has("rgb"):
 				rv.code += "vec3 %s_%d_%d_rgb = %s;\n" % [ name, slot, variant_index, subst(output.rgb, uv) ]
 			if output.has("f"):
 				rv.code += "float %s_%d_%d_f = %s;\n" % [ name, slot, variant_index, subst(output.f, uv) ]
+		if output.has("rgba"):
+			rv.rgba = "%s_%d_%d_rgba" % [ name, slot, variant_index ]
 		if output.has("rgb"):
 			rv.rgb = "%s_%d_%d_rgb" % [ name, slot, variant_index ]
 		if output.has("f"):

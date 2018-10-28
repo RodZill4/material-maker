@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/material_maker/widgets/node_editor/output.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/minus.png" type="Texture" id=2]
 
-[node name="Output" type="HBoxContainer"]
+[node name="Output" type="HBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -70,11 +70,11 @@ group = null
 text = "GreyScale"
 flat = false
 align = 0
-items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null ]
+items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, -1, null ]
 selected = 0
 _sections_unfolded = [ "Focus", "Hint", "Rect" ]
 
-[node name="Default" type="LineEdit" parent="." index="2"]
+[node name="Value" type="LineEdit" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0

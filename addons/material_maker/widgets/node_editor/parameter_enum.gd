@@ -16,10 +16,12 @@ func _ready():
 func get_model_data():
 	var data = {}
 	data.values = enum_values
+	data.default = enum_current
 	return data
 
 func set_model_data(data):
 	enum_values = data.values.duplicate()
+	enum_current = data.default
 	update_enum_list()
 
 func update_enum_list():

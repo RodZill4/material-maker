@@ -6,7 +6,9 @@ func _ready():
 
 func get_model_data():
 	var data = {}
+	data.default = $Default.pressed
 	return data
 
 func set_model_data(data):
-	pass
+	if data.has("default"):
+		$Default.pressed = data.default
