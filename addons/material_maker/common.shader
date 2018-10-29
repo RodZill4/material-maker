@@ -13,45 +13,6 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
-float circle(vec2 uv, float sides, float size, float edge) {
-    uv = 2.0*uv-1.0;
-	edge = max(edge, 1.0e-8);
-    float distance = length(uv);
-    return clamp((1.0-distance/size)/edge, 0.0, 1.0);
-}
-
-float polygon(vec2 uv, float sides, float size, float edge) {
-    uv = 2.0*uv-1.0;
-	edge = max(edge, 1.0e-8);
-    float angle = atan(uv.x, uv.y)+3.14159265359;
-    float slice = 6.28318530718/sides;
-    return clamp((size-cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);
-}
-
-float star(vec2 uv, float sides, float size, float edge) {
-    uv = 2.0*uv-1.0;
-	edge = max(edge, 1.0e-8);
-    float angle = atan(uv.x, uv.y);
-    float slice = 6.28318530718/sides;
-    return clamp((size-cos(floor(1.5+angle/slice-2.0*step(0.5*slice, mod(angle, slice)))*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);
-}
-
-float curved_star(vec2 uv, float sides, float size, float edge) {
-    uv = 2.0*uv-1.0;
-	edge = max(edge, 1.0e-8);
-    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);
-    float slice = 6.28318530718/sides;
-    return clamp((size-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);
-}
-
-float rays(vec2 uv, float sides, float size, float edge) {
-    uv = 2.0*uv-1.0;
-	edge = 0.5*max(edge, 1.0e-8)*size;
-	float slice = 6.28318530718/sides;
-    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;
-    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);
-}
-
 float wave_constant(float x) {
 	return 1.0;
 }
@@ -182,36 +143,6 @@ vec2 transform_repeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 
 vec2 transform_norepeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	return clamp(transform(uv, translate, rotate, scale), vec2(0.0), vec2(1.0));
-}
-
-float dots(vec2 uv, float size, float density, int seed) {
-	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
-	uv /= size;
-	vec2 point_pos = floor(uv)+vec2(0.5);
-	float color = step(rand(seed2+point_pos), density);
-    return color;
-}
-
-float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
-	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
-    float rv = 0.0;
-    float coef = 1.0;
-    float acc = 0.0;
-    for (int i = 0; i < iterations; ++i) {
-    	vec2 step = vec2(1.0)/size;
-		vec2 xy = floor(uv*size);
-        float f0 = rand(seed2+mod(xy, size));
-        float f1 = rand(seed2+mod(xy+vec2(1.0, 0.0), size));
-        float f2 = rand(seed2+mod(xy+vec2(0.0, 1.0), size));
-        float f3 = rand(seed2+mod(xy+vec2(1.0, 1.0), size));
-        vec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));
-        rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);
-        acc += coef;
-        size *= 2.0;
-        coef *= persistence;
-    }
-    
-    return rv / acc;
 }
 
 vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
