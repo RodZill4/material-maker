@@ -13,51 +13,6 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
-float wave_constant(float x) {
-	return 1.0;
-}
-
-float wave_sin(float x) {
-	return 0.5-0.5*cos(3.14159265359*2.0*x);
-}
-
-float wave_triangle(float x) {
-	x = fract(x);
-	return min(2.0*x, 2.0-2.0*x);
-}
-
-float wave_square(float x) {
-	return (fract(x) < 0.5) ? 0.0 : 1.0;
-}
-
-float mix_multiply(float x, float y) {
-	return x*y;
-}
-
-float mix_add(float x, float y) {
-	return min(x+y, 1.0);
-}
-
-float mix_max(float x, float y) {
-	return max(x, y);
-}
-
-float mix_min(float x, float y) {
-	return min(x, y);
-}
-
-float mix_min(float x, float y) {
-	return min(x, y);
-}
-
-float mix_xor(float x, float y) {
-	return min(x+y, 2.0-x-y);
-}
-
-float mix_pow(float x, float y) {
-	return pow(x, y);
-}
-
 vec3 blend_normal(vec2 uv, vec3 c1, vec3 c2, float opacity) {
 	return opacity*c1 + (1.0-opacity)*c2;
 }
@@ -143,36 +98,6 @@ vec2 transform_repeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 
 vec2 transform_norepeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	return clamp(transform(uv, translate, rotate, scale), vec2(0.0), vec2(1.0));
-}
-
-vec4 voronoi(vec2 uv, vec2 size, float intensity, int seed) {
-	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
-    uv *= size;
-    float best_distance0 = 1.0;
-    float best_distance1 = 1.0;
-    vec2 point0;
-    vec2 point1;
-    vec2 p0 = floor(uv);
-    for (int dx = -1; dx < 2; ++dx) {
-    	for (int dy = -1; dy < 2; ++dy) {
-            vec2 d = vec2(float(dx), float(dy));
-            vec2 p = p0+d;
-            p += rand2(seed2+mod(p, size));
-            float distance = length((uv - p) / size);
-            if (best_distance0 > distance) {
-            	best_distance1 = best_distance0;
-            	best_distance0 = distance;
-                point1 = point0;
-                point0 = p;
-            } else if (best_distance1 > distance) {
-            	best_distance1 = distance;
-                point1 = p;
-            }
-        }
-    }
-    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));
-    
-    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);
 }
 
 // From http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl

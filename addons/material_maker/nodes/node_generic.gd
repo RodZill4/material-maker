@@ -52,6 +52,7 @@ func update_node(data):
 		uses_seed = true
 	if model_data.has("parameters") and typeof(model_data.parameters) == TYPE_ARRAY:
 		var control_list = []
+		var sizer = null
 		for p in model_data.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -64,6 +65,8 @@ func update_node(data):
 				control.min_value = p.min
 				control.max_value = p.max
 				control.step = 0 if !p.has("step") else p.step
+				if p.has("default"):
+					control.value = p.default
 				control.rect_min_size.x = 80
 				parameters[p.name] = 0.5*(p.min+p.max)
 			elif p.type == "size":
@@ -86,18 +89,19 @@ func update_node(data):
 				var label = p.name
 				control.name = label
 				control_list.append(control)
-				var sizer = HBoxContainer.new()
-				sizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if p.has("label"):
 					label = p.label
-				if label != "":
+				if sizer == null or label != "nonewline":
+					sizer = HBoxContainer.new()
+					sizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+					add_child(sizer)
+				if label != "" && label != "nonewline":
 					var label_widget = Label.new()
 					label_widget.text = label
 					label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 					sizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				sizer.add_child(control)
-				add_child(sizer)
 		initialize_properties(control_list)
 	else:
 		model_data.parameters = []
