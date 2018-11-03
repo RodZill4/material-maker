@@ -222,10 +222,10 @@ func serialize():
 	var type = get_script().resource_path
 	type = type.right(type.find_last("/")+1)
 	type = type.left(type.find_last("."))
-	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y} }
+	var data = { name=name, type=type, node_position={x=offset.x, y=offset.y}, parameters={} }
 	for w in property_widgets:
 		var variable = w.name
-		data[variable] = Types.serialize_value(parameters[variable]) # serialize_element(get(v))
+		data.parameters[variable] = Types.serialize_value(parameters[variable])
 	return data
 
 func deserialize(data):
@@ -233,8 +233,11 @@ func deserialize(data):
 		offset = Vector2(data.node_position.x, data.node_position.y)
 	for w in property_widgets:
 		var variable = w.name
-		if data.has(variable):
-			var value = Types.deserialize_value(data[variable]) #deserialize_element(data[variable])
+		if data.has("parameters") and data.parameters.has(variable):
+			var value = Types.deserialize_value(data.parameters[variable])
+			parameters[variable] = value
+		elif data.has(variable):
+			var value = Types.deserialize_value(data[variable])
 			parameters[variable] = value
 	update_property_widgets()
 
