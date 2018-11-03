@@ -29,7 +29,7 @@ func _get_shader_code(uv):
 		if generated_variants.size() == 1:
 			rv.defs += src_code.defs
 		rv.code += src_code.code
-	rv.rgb = src_code.rgb
+	rv.rgba = src_code.rgba
 	return rv
 
 func deserialize(data):

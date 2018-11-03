@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/material_maker/nodes/transform/transform.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
@@ -32,10 +31,10 @@ comment = false
 overlay = 0
 slot/0/left_enabled = true
 slot/0/left_type = 0
-slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/left_color = Color( 0, 1, 0, 0.502784 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0, 1, 0, 0.501961 )
 slot/1/left_enabled = true
 slot/1/left_type = 0
 slot/1/left_color = Color( 0.760784, 0.760784, 0.760784, 1 )

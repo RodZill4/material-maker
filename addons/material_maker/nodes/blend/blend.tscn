@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/material_maker/nodes/blend/blend.gd" type="Script" id=1]
 
-
 [sub_resource type="Theme" id=1]
 
 
@@ -31,30 +30,30 @@ comment = false
 overlay = 0
 slot/0/left_enabled = false
 slot/0/left_type = 0
-slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/left_color = Color( 1, 1, 1, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0, 1, 0, 0.501961 )
 slot/1/left_enabled = true
 slot/1/left_type = 0
-slot/1/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_color = Color( 0, 1, 0, 0.501961 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
-slot/1/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/right_color = Color( 1, 1, 1, 1 )
 slot/2/left_enabled = true
 slot/2/left_type = 0
-slot/2/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/2/left_color = Color( 0, 1, 0, 0.501961 )
 slot/2/right_enabled = false
 slot/2/right_type = 0
-slot/2/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/2/right_color = Color( 1, 1, 1, 1 )
 slot/3/left_enabled = true
 slot/3/left_type = 0
 slot/3/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/3/right_enabled = false
 slot/3/right_type = 0
-slot/3/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/3/right_color = Color( 1, 1, 1, 0.501961 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Mouse", "Theme", "slot", "slot/1", "slot/3" ]
+_sections_unfolded = [ "Mouse", "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/3" ]
 
 [node name="blend_type" type="OptionButton" parent="." index="0"]
 
