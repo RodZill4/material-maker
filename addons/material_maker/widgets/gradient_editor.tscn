@@ -1,26 +1,42 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/gradient_editor.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=3]
+
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(vec3(2.0*fract(0.5*(floor(10.0*UV.x)+floor(2.0*UV.y)))), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+
+render_priority = 0
+shader = SubResource( 3 )
 
 [sub_resource type="Shader" id=1]
 
 code = "shader_type canvas_item;
-vec3 gradient(float x) {
+vec4 gradient(float x) {
   if (x < 0.000000000) {
-    return vec3(0.000000000,0.000000000,0.000000000);
+    return vec4(0.000000000,0.000000000,0.000000000,0.000000000);
   } else if (x < 1.000000000) {
-    return vec3(0.000000000,0.000000000,0.000000000)+x*vec3(1.000000000,1.000000000,1.000000000);
+    return vec4(0.000000000,0.000000000,0.000000000,0.000000000)+x*vec4(1.000000000,1.000000000,1.000000000,1.000000000);
   }
-  return vec3(1.000000000,1.000000000,1.000000000);
+  return vec4(1.000000000,1.000000000,1.000000000,1.000000000);
 }
-void fragment() { COLOR = vec4(gradient((UV.x-0.041666667)*1.090909091), 1.0); }"
+void fragment() { COLOR = gradient(UV.x); }"
 
 [sub_resource type="ShaderMaterial" id=2]
 
 render_priority = 0
 shader = SubResource( 1 )
 
-[node name="Control" type="Control" index="0"]
+[sub_resource type="Theme" id=5]
+
+
+[node name="Control" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -38,9 +54,9 @@ size_flags_vertical = 1
 script = ExtResource( 1 )
 _sections_unfolded = [ "Rect" ]
 
-[node name="Gradient" type="ColorRect" parent="." index="0"]
+[node name="Background" type="ColorRect" parent="." index="0"]
 
-material = SubResource( 2 )
+material = SubResource( 4 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -56,6 +72,26 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
 _sections_unfolded = [ "Material", "Rect" ]
+
+[node name="Gradient" type="ColorRect" parent="." index="1"]
+
+material = SubResource( 2 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 120.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 120, 20 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+theme = SubResource( 5 )
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Material", "Theme" ]
 
 [node name="Popup" type="Popup" parent="Gradient" index="0"]
 
@@ -95,7 +131,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
 color = Color( 1, 1, 1, 1 )
-edit_alpha = false
+edit_alpha = true
 raw_mode = false
 _sections_unfolded = [ "Rect" ]
 

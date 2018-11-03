@@ -9,7 +9,7 @@ class GradientCursor:
 	func _ready():
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
-
+	
 	func _gui_input(ev):
 		if ev is InputEventMouseButton:
 			if ev.button_index == BUTTON_LEFT && ev.doubleclick:
@@ -30,11 +30,16 @@ class GradientCursor:
 	func set_color(c):
 		color = c
 		get_parent().update_value()
-
+	
 	static func sort(a, b):
 		if a.get_position() < b.get_position():
 			return true
 		return false
+	
+	func _draw():
+		var c = color
+		c.a = 1.0
+		draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), c, false)
 
 var value = null setget set_value
 
@@ -49,7 +54,7 @@ func _ready():
 func set_value(v):
 	value = v
 	for c in get_children():
-		if c != $Gradient:
+		if c != $Gradient && c != $Background:
 			remove_child(c)
 			c.free()
 	for p in value.points:
@@ -59,7 +64,7 @@ func set_value(v):
 func update_value():
 	value.clear()
 	for p in get_children():
-		if p != $Gradient:
+		if p != $Gradient && p != $Background:
 			value.add_point(p.rect_position.x/(rect_size.x-GradientCursor.WIDTH), p.color)
 	update_shader()
 
@@ -94,6 +99,7 @@ func _on_Popup_popup_hide():
 func get_sorted_cursors():
 	var array = get_children()
 	array.erase($Gradient)
+	array.erase($Background)
 	array.sort_custom(GradientCursor, "sort")
 	return array
 
@@ -104,6 +110,6 @@ func update_shader():
 	var shader
 	shader  = "shader_type canvas_item;\n"
 	shader += value.get_shader("gradient")
-	shader += "void fragment() { COLOR = vec4(gradient(UV.x), 1.0); }"
+	shader += "void fragment() { COLOR = gradient(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
 	emit_signal("updated", value)

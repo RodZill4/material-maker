@@ -3,11 +3,10 @@
 [ext_resource path="res://addons/material_maker/nodes/colorize/colorize.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/widgets/gradient_editor.tscn" type="PackedScene" id=2]
 
-
 [sub_resource type="Theme" id=1]
 
 
-[node name="Colorize" type="GraphNode"]
+[node name="Colorize" type="GraphNode" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -36,7 +35,7 @@ slot/0/left_type = 0
 slot/0/left_color = Color( 0.756863, 0.756863, 0.756863, 1 )
 slot/0/right_enabled = true
 slot/0/right_type = 0
-slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_color = Color( 0, 1, 0, 0.502745 )
 script = ExtResource( 1 )
 _sections_unfolded = [ "Theme", "slot", "slot/0" ]
 

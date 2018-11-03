@@ -16,8 +16,8 @@ func _get_shader_code(uv):
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		rv.code = src_code.code+"vec3 %s_%d_rgb = %s_gradient(%s);\n" % [ name, variant_index, name, src_code.f ]
-	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
+		rv.code = src_code.code+"vec4 %s_%d_rgba = %s_gradient(%s);\n" % [ name, variant_index, name, src_code.f ]
+	rv.rgba = "%s_%d_rgba" % [ name, variant_index ]
 	return rv
 
 func _on_Control_updated(v):

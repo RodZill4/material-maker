@@ -4,7 +4,7 @@ class CustomSorter:
 	static func compare(a, b):
 		return a.v < b.v
 
-var points = [ { v=0.0, c=Color(0.0, 0.0, 0.0) }, { v=1.0, c=Color(1.0, 1.0, 1.0) } ]
+var points = [ { v=0.0, c=Color(0.0, 0.0, 0.0, 0.0) }, { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
 var sorted = true
 
 func _ready():
@@ -46,12 +46,12 @@ func get_color(x):
 
 # get_color_in_shader
 func gcis(color):
-	return "vec3(%.9f,%.9f,%.9f)" % [color.r, color.g, color.b]
+	return "vec4(%.9f,%.9f,%.9f,%.9f)" % [color.r, color.g, color.b, color.a]
 
 func get_shader(name):
 	sort()
 	var shader
-	shader  = "vec3 "+name+"(float x) {\n"
+	shader  = "vec4 "+name+"(float x) {\n"
 	shader += "  if (x < %.9f) {\n" % points[0].v
 	shader += "    return "+gcis(points[0].c)+";\n"
 	var s = points.size()-1
@@ -72,7 +72,7 @@ func serialize():
 	sort()
 	var rv = []
 	for p in points:
-		rv.append({ pos=p.v, r=p.c.r, g=p.c.g, b=p.c.b })
+		rv.append({ pos=p.v, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
 	rv = { type="Gradient", points=rv }
 	return rv
 
@@ -80,7 +80,9 @@ func deserialize(v):
 	clear()
 	if typeof(v) == TYPE_ARRAY:
 		for i in v:
-			add_point(i.pos, Color(i.r, i.g, i.b))
+			if !i.has("a"): i.a = 1.0
+			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
 	elif typeof(v) == TYPE_DICTIONARY && v.has("type") && v.type == "Gradient":
 		for i in v.points:
-			add_point(i.pos, Color(i.r, i.g, i.b))
+			if !i.has("a"): i.a = 1.0
+			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
