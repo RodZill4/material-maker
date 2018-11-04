@@ -20,7 +20,6 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect", "Size Flags", "custom_constants" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." index="0"]
 
@@ -35,7 +34,6 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 0
-_sections_unfolded = [ "Anchor", "Margin", "Size Flags" ]
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer" index="0"]
 
@@ -170,7 +168,6 @@ size_flags_vertical = 3
 split_offset = 0
 collapsed = false
 dragger_visibility = 0
-_sections_unfolded = [ "Size Flags" ]
 
 [node name="VBoxContainer" type="VSplitContainer" parent="VBoxContainer/HBoxContainer" index="0"]
 
@@ -189,7 +186,6 @@ size_flags_vertical = 3
 split_offset = 0
 collapsed = false
 dragger_visibility = 0
-_sections_unfolded = [ "Size Flags" ]
 
 [node name="Library" type="Tree" parent="VBoxContainer/HBoxContainer/VBoxContainer" index="0"]
 

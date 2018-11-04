@@ -48,7 +48,7 @@ func _rerender():
 	if !has_textures:
 		do_update_materials(current_material_list)
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="", f="0.0" }
 	var src = get_source()
 	if src != null:

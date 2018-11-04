@@ -5,7 +5,7 @@ func _ready():
 	set_slot(0, true, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 	initialize_properties([ $HBoxContainer1/translate_x, $HBoxContainer2/translate_y, $HBoxContainer3/rotate, $HBoxContainer4/scale_x, $HBoxContainer5/scale_y, $repeat ])
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

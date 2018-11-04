@@ -22,7 +22,7 @@ func _ready():
 		$blend_type.add_item(BLEND_TYPES[i].name, i)
 	initialize_properties([ $blend_type, $HBoxContainer/amount ])
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src0 = get_source(0)
 	var src1 = get_source(1)

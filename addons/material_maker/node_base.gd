@@ -148,6 +148,9 @@ func reset():
 	generated = false
 	generated_variants = []
 
+func _get_shader_code(uv, slot = 0):
+	pass
+
 func get_shader_code(uv, slot = 0):
 	var rv
 	if slot == 0:

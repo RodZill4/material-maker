@@ -46,7 +46,7 @@ func get_textures():
 	list[name] = final_texture
 	return list
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

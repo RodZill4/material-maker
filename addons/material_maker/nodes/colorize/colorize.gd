@@ -4,7 +4,7 @@ extends "res://addons/material_maker/node_base.gd"
 func _ready():
 	initialize_properties([ $gradient ])
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

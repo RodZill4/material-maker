@@ -6,7 +6,7 @@ var suffix = "suffix"
 func _ready():
 	initialize_properties([ $resolution ])
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="", f="0.0" }
 	var src = get_source()
 	if src != null:

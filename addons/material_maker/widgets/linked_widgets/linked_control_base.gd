@@ -34,6 +34,9 @@ func get_widget_type(widget):
 func _ready():
 	set_process_input(false)
 
+func add_linked(node, widget):
+	pass
+
 func can_link_to(c):
 	return c != null
 

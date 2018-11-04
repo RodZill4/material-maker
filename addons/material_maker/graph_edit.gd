@@ -101,7 +101,7 @@ func clear_material():
 
 func new_material():
 	clear_material()
-	create_node({name="Material", type="material"})
+	create_nodes({name="Material", type="material"})
 	set_save_path(null)
 	center_view()
 

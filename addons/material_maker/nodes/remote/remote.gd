@@ -7,7 +7,7 @@ const ConfigControl = preload("res://addons/material_maker/widgets/linked_widget
 func _ready():
 	pass
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	rv.rgb = "vec3(1.0)"
 	return rv

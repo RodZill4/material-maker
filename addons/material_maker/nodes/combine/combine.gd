@@ -1,7 +1,7 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src0 = get_source(0)
 	var src1 = get_source(1)

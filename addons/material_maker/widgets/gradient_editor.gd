@@ -77,7 +77,7 @@ func add_cursor(x, color):
 func _gui_input(ev):
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick && ev.position.y > 15:
 		var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
-		add_cursor(p, get_color(p))
+		add_cursor(p, get_gradient_color(p))
 		update_value()
 
 # Showing a color picker popup to change a cursor's color
@@ -103,7 +103,7 @@ func get_sorted_cursors():
 	array.sort_custom(GradientCursor, "sort")
 	return array
 
-func get_color(x):
+func get_gradient_color(x):
 	return value.get_color(x / (rect_size.x - GradientCursor.WIDTH))
 
 func update_shader():

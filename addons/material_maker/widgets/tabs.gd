@@ -9,8 +9,8 @@ signal no_more_tabs
 func _ready():
 	pass
 
-func add_child(control):
-	.add_child(control)
+func add_child(control, legible_unique_name = false):
+	.add_child(control, legible_unique_name)
 	if !(control is Tabs):
 		$Tabs.add_tab(control.name)
 		move_child(control, $Tabs.get_tab_count()-1)
