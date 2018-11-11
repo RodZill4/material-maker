@@ -77,7 +77,7 @@ func update_node(data):
 					control.selected = 0 if !p.has("default") else p.default-p.first
 			elif p.type == "enum":
 				control = OptionButton.new()
-				for i in p.values.size():
+				for i in range(p.values.size()):
 					var value = p.values[i]
 					control.add_item(value.name)
 					control.selected = 0 if !p.has("default") else p.default
@@ -105,8 +105,25 @@ func update_node(data):
 		initialize_properties(control_list)
 	else:
 		model_data.parameters = []
+	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
+		for i in range(model_data.inputs.size()):
+			var input = model_data.inputs[i]
+			var enable_left = false
+			var color_left = Color(0.5, 0.5, 0.5)
+			if typeof(input) == TYPE_DICTIONARY:
+				if input.type == "rgb":
+					enable_left = true
+					color_left = Color(0.5, 0.5, 1.0)
+				elif input.type == "rgba":
+					enable_left = true
+					color_left = Color(0.0, 0.5, 0.0, 0.5)
+				else:
+					enable_left = true
+			set_slot(i, enable_left, 0, color_left, false, 0, Color())
+	else:
+		model_data.inputs = []
 	if model_data.has("outputs") and typeof(model_data.outputs) == TYPE_ARRAY:
-		for i in model_data.outputs.size():
+		for i in range(model_data.outputs.size()):
 			var output = model_data.outputs[i]
 			var enable_right = false
 			var color_right = Color(0.5, 0.5, 0.5)
@@ -119,16 +136,54 @@ func update_node(data):
 					color_right = Color(0.0, 0.5, 0.0, 0.5)
 				elif output.has("f"):
 					enable_right = true
-			set_slot(i, false, 0, color_right, enable_right, 0, color_right)
+			set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
 	else:
 		model_data.outputs = []
 	if custom_node_buttons != null:
 		move_child(custom_node_buttons, get_child_count()-1)
 
-func subst(string, uv = ""):
-	string = string.replace("$(name)", name)
-	string = string.replace("$(seed)", str(get_seed()))
-	string = string.replace("$(uv)", uv)
+func replace_input(string, input, type, src, context = null):
+	var required_defs = ""
+	var required_code = ""
+	var keyword = "$%s(" % input
+	while true:
+		var position = string.find(keyword)
+		if position == -1:
+			break
+		var parenthesis_level = 0
+		var parameter_begin = position+keyword.length()
+		var parameter_end = -1
+		for i in range(parameter_begin, string.length()):
+			if string[i] == '(':
+				parenthesis_level += 1
+			elif string[i] == ')':
+				if parenthesis_level == 0:
+					parameter_end = i
+					break
+				else:
+					parenthesis_level -= 1
+		if parameter_end != -1:
+			var uv = string.substr(parameter_begin, parameter_end-parameter_begin)
+			var src_code = src.get_shader_code(uv)
+			required_defs += src_code.defs
+			required_code += src_code.code
+			string = string.replace(string.substr(position, parameter_end-position+1), src_code[type])
+		else:
+			print("syntax error")
+			break
+	return { string=string, defs=required_defs, code=required_code }
+
+func replace_variable(string, variable, value):
+	string = string.replace("$(%s)" % variable, value)
+	return string
+
+func subst(string, uv = "", context = null):
+	var required_defs = ""
+	var required_code = ""
+	string = replace_variable(string, "name", name)
+	string = replace_variable(string, "seed", str(get_seed()))
+	if uv != "":
+		string = replace_variable(string, "uv", uv)
 	if model_data.has("parameters") and typeof(model_data.parameters) == TYPE_ARRAY:
 		for p in model_data.parameters:
 			if !p.has("name") or !p.has("type"):
@@ -144,32 +199,41 @@ func subst(string, uv = ""):
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			if value_string != null:
-				string = string.replace("$(%s)" % p.name, value_string)
-	return string
+				string = replace_variable(string, p.name, value_string)
+	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
+		for i in range(model_data.inputs.size()):
+			var input = model_data.inputs[i]
+			var source = get_source(i)
+			if source == null:
+				string = replace_variable(string, input.name, input.default)
+			else:
+				var result = replace_input(string, input.name, input.type, source, context)
+				string = result.string
+				required_defs += result.defs
+				required_code += result.code
+	return { string=string, defs=required_defs, code=required_code }
 
 func _get_shader_code(uv, slot = 0):
+	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { defs="", code="" }
 	var variant_string = uv+","+str(slot)
 	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
 		var output = model_data.outputs[slot]
 		if model_data.has("instance") && generated_variants.empty():
-			rv.defs = subst(model_data.instance)
+			rv.defs = subst(model_data.instance).string
 		var variant_index = generated_variants.find(variant_string)
 		if variant_index == -1:
 			variant_index = generated_variants.size()
 			generated_variants.append(variant_string)
-			if output.has("rgba"):
-				rv.code += "vec4 %s_%d_%d_rgba = %s;\n" % [ name, slot, variant_index, subst(output.rgba, uv) ]
-			if output.has("rgb"):
-				rv.code += "vec3 %s_%d_%d_rgb = %s;\n" % [ name, slot, variant_index, subst(output.rgb, uv) ]
-			if output.has("f"):
-				rv.code += "float %s_%d_%d_f = %s;\n" % [ name, slot, variant_index, subst(output.f, uv) ]
-		if output.has("rgba"):
-			rv.rgba = "%s_%d_%d_rgba" % [ name, slot, variant_index ]
-		if output.has("rgb"):
-			rv.rgb = "%s_%d_%d_rgb" % [ name, slot, variant_index ]
-		if output.has("f"):
-			rv.f = "%s_%d_%d_f" % [ name, slot, variant_index ]
+			for t in output_info:
+				if output.has(t.field):
+					var subst_output = subst(output[t.field], uv, rv)
+					rv.defs += subst_output.defs
+					rv.code += subst_output.code
+					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, slot, variant_index, t.field, subst_output.string ]
+		for t in output_info:
+			if output.has(t.field):
+				rv[t.field] = "%s_%d_%d_%s" % [ name, slot, variant_index, t.field ]
 	return rv
 
 func get_globals():

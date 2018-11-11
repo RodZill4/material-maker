@@ -21,9 +21,12 @@ func set_model_data(data):
 	if data.has("parameters"):
 		for p in data.parameters:
 			add_item($Sizer/Tabs/General/Parameters/Sizer, ParameterEditor).set_model_data(p)
+	if data.has("inputs"):
+		for i in data.inputs:
+			add_item($Sizer/Tabs/General/Inputs/Sizer, InputEditor).set_model_data(i)
 	if data.has("outputs"):
 		for o in data.outputs:
-			add_item($Sizer/Tabs/General/Outputs/Sizer, OutputEditor).set_model_data(o)
+			add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor).set_model_data(o)
 	if data.has("global"):
 		$Sizer/Tabs/Global.text = data.global
 	if data.has("instance"):
@@ -39,8 +42,12 @@ func get_model_data():
 	for p in $Sizer/Tabs/General/Parameters/Sizer.get_children():
 		if p.has_method("get_model_data"):
 			data.parameters.append(p.get_model_data())
+	data.inputs = []
+	for i in $Sizer/Tabs/General/Inputs/Sizer.get_children():
+		if i.has_method("get_model_data"):
+			data.inputs.append(i.get_model_data())
 	data.outputs = []
-	for o in $Sizer/Tabs/General/Outputs/Sizer.get_children():
+	for o in $Sizer/Tabs/Outputs/Outputs/Sizer.get_children():
 		if o.has_method("get_model_data"):
 			data.outputs.append(o.get_model_data())
 	return data
@@ -52,7 +59,7 @@ func _on_AddInput_pressed():
 	add_item($Sizer/Tabs/General/Inputs/Sizer, InputEditor)
 
 func _on_AddOutput_pressed():
-	add_item($Sizer/Tabs/General/Outputs/Sizer, OutputEditor)
+	add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor)
 
 func _on_OK_pressed():
 	emit_signal("node_changed", get_model_data())
