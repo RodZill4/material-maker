@@ -143,7 +143,7 @@ hint_tooltip = "Default value"
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 1
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "0.0"
 focus_mode = 2
@@ -152,7 +152,7 @@ placeholder_alpha = 0.6
 caret_blink = false
 caret_blink_speed = 0.65
 caret_position = 0
-_sections_unfolded = [ "Hint", "Rect" ]
+_sections_unfolded = [ "Hint", "Rect", "Size Flags" ]
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 
