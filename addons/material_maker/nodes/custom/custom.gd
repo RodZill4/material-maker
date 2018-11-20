@@ -3,7 +3,7 @@ extends "res://addons/material_maker/nodes/node_generic.gd"
 
 func _on_Edit_pressed():
 	var edit_window = load("res://addons/material_maker/widgets/node_editor/node_editor.tscn").instance()
-	add_child(edit_window)
+	get_parent().add_child(edit_window)
 	if model_data != null:
 		edit_window.set_model_data(model_data)
 	edit_window.connect("node_changed", self, "update_node")

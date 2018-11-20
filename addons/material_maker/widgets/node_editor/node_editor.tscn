@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/material_maker/widgets/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/plus.png" type="Texture" id=2]
 
-[node name="NodeEditor" type="WindowDialog"]
+[node name="NodeEditor" type="WindowDialog" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -482,9 +482,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 344.0
+margin_left = 307.0
 margin_top = 378.0
-margin_right = 488.0
+margin_right = 525.0
 margin_bottom = 398.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -495,7 +495,7 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Size Flags" ]
 
-[node name="OK" type="Button" parent="Sizer/HBoxContainer" index="0"]
+[node name="Apply" type="Button" parent="Sizer/HBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -515,11 +515,11 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "OK"
+text = "Apply"
 flat = false
 align = 1
 
-[node name="Cancel" type="Button" parent="Sizer/HBoxContainer" index="1"]
+[node name="OK" type="Button" parent="Sizer/HBoxContainer" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -527,6 +527,31 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 74.0
 margin_right = 144.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 70, 0 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "OK"
+flat = false
+align = 1
+
+[node name="Cancel" type="Button" parent="Sizer/HBoxContainer" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 148.0
+margin_right = 218.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 rect_pivot_offset = Vector2( 0, 0 )
@@ -549,6 +574,8 @@ align = 1
 [connection signal="pressed" from="Sizer/Tabs/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
 
 [connection signal="pressed" from="Sizer/Tabs/Outputs/Outputs/Sizer/AddOutput" to="." method="_on_AddOutput_pressed"]
+
+[connection signal="pressed" from="Sizer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 
 [connection signal="pressed" from="Sizer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 

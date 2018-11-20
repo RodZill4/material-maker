@@ -61,6 +61,9 @@ func _on_AddInput_pressed():
 func _on_AddOutput_pressed():
 	add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor)
 
+func _on_Apply_pressed():
+	emit_signal("node_changed", get_model_data())
+
 func _on_OK_pressed():
 	emit_signal("node_changed", get_model_data())
 	queue_free()
