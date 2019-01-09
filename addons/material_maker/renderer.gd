@@ -84,7 +84,7 @@ func render_shader_to_viewport(shader, textures, render_size, method, args):
 			render_queue.pop_front()
 
 func render_to_viewport(node, render_size, method, args):
-	render_shader_to_viewport(node.generate_shader_with_globals(), node.get_textures(), render_size, method, args)
+	render_shader_to_viewport(node.generate_shader(), node.get_textures(), render_size, method, args)
 
 func export_texture(node, filename, render_size = 256):
 	if node == null:
