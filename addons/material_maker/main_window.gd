@@ -1,12 +1,16 @@
 tool
 extends Panel
 
+var recent_files = []
+var recent_files_submenu = null
+
 var editor_interface = null
 var current_tab = null
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
 	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
+	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
 	{ menu="File", command="save_material", shortcut="Control+S", description="Save material" },
 	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
@@ -32,6 +36,7 @@ signal quit
 func _ready():
 	if !Engine.editor_hint:
 		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+	load_recents()
 	for m in $VBoxContainer/Menu.get_children():
 		var menu = m.get_popup()
 		create_menu(menu, m.name)
@@ -42,11 +47,17 @@ func create_menu(menu, menu_name):
 	menu.clear()
 	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
 	for i in MENU.size():
+		if MENU[i].has("standalone_only") and MENU[i].standalone_only and Engine.editor_hint:
+			continue
 		if MENU[i].menu != menu_name:
 			continue
 		if MENU[i].has("submenu"):
 			var submenu = PopupMenu.new()
-			create_menu(submenu, MENU[i].submenu)
+			var submenu_function = "create_menu_"+MENU[i].submenu
+			if has_method(submenu_function):
+				call(submenu_function, submenu)
+			else:
+				create_menu(submenu, MENU[i].submenu)
 			menu.add_child(submenu)
 			menu.add_submenu_item(MENU[i].description, submenu.get_name())
 		elif MENU[i].has("description"):
@@ -65,6 +76,37 @@ func create_menu(menu, menu_name):
 		else:
 			menu.add_separator()
 	return menu
+
+func update_recents_menu():
+	if recent_files_submenu != null:
+		recent_files_submenu.clear()
+		for i in recent_files.size():
+			recent_files_submenu.add_item(recent_files[i], i)
+
+func create_menu_load_recent(menu):
+	menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
+	recent_files_submenu = menu
+	update_recents_menu()
+
+func load_recents():
+	var f = File.new()
+	if f.open("user://recent_files.bin", File.READ) == OK:
+		recent_files = parse_json(f.get_as_text())
+		f.close()
+
+func add_recent(path):
+	while true:
+		var index = recent_files.find(path)
+		if index >= 0:
+			recent_files.remove(index)
+		else:
+			break
+	recent_files.push_front(path)
+	update_recents_menu()
+	var f = File.new()
+	f.open("user://recent_files.bin", File.WRITE)
+	f.store_string(to_json(recent_files))
+	f.close()
 
 func menu_about_to_show(name, menu):
 	for i in MENU.size():
@@ -120,6 +162,7 @@ func do_load_material(filename):
 	if node_count > 1:
 		graph_edit = new_pane()
 	graph_edit.do_load_file(filename)
+	add_recent(filename)
 
 func save_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
@@ -234,6 +277,9 @@ func _on_PopupMenu_id_pressed(id):
 		var command = MENU[id].command
 		if has_method(command):
 			call(command)
+			
+func _on_LoadRecent_id_pressed(id):
+	do_load_material(recent_files[id])
 
 # Preview
 
