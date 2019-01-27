@@ -19,7 +19,7 @@ func get_textures():
 	list[name] = $TextureButton.texture_normal
 	return list
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	if generated_variants.empty():
 		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]

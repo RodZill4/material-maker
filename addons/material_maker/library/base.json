@@ -22,7 +22,7 @@
 	{
 		"tree_item":"Generators/Image",
 		"type":"image",
-		"file_path":"res://addons/material_maker/nodes/godot_logo.png"
+		"file_path":"res://addons/material_maker/nodes/image/godot_logo.png"
 	},
 	{
 		"tree_item":"Generators/Pattern",

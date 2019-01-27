@@ -45,12 +45,12 @@ func get_textures():
 	list[name] = final_texture
 	return list
 
-func _get_shader_code(uv):
+func _get_shader_code(uv, slot = 0):
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:
 		return rv
-	input_shader = get_parent().generate_shader(src.get_shader_code_get_globals("UV"))
+	input_shader = get_parent().renderer.generate_shader(src.get_shader_code_with_globals("UV"))
 	_rerender()
 	if generated_variants.empty():
 		rv.defs = "uniform sampler2D %s_tex;\n" % [ name ]
