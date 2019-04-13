@@ -27,8 +27,8 @@ func _get_shader_code(uv, slot = 0):
 	if variant_index == -1:
 		variant_index = generated_variants.size()
 		generated_variants.append(uv)
-		rv.code = "vec3 %s_%d_rgb = texture(%s_tex, %s).rgb;\n" % [ name, variant_index, name, uv ]
-	rv.rgb = "%s_%d_rgb" % [ name, variant_index ]
+		rv.code = "vec4 %s_%d_rgba = texture(%s_tex, %s);\n" % [ name, variant_index, name, uv ]
+	rv.rgba = "%s_%d_rgba" % [ name, variant_index ]
 	return rv
 
 func _on_TextureButton_pressed():

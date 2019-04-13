@@ -6,7 +6,12 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=3
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
 
 [application]
 
@@ -17,6 +22,13 @@ config/custom_user_dir_name="material_maker"
 config/icon="res://icon.png"
 config/release="0.6"
 
+[debug]
+
+gdscript/warnings/unsafe_property_access=true
+gdscript/warnings/unsafe_method_access=true
+gdscript/warnings/unsafe_cast=true
+gdscript/warnings/unsafe_call_argument=true
+
 [display]
 
 window/size/width=1280
@@ -25,6 +37,10 @@ window/size/height=720
 [editor_plugins]
 
 enabled=PoolStringArray( "material_maker" )
+
+[logging]
+
+file_logging/enable_file_logging=true
 
 [rendering]
 

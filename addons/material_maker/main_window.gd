@@ -277,7 +277,7 @@ func _on_PopupMenu_id_pressed(id):
 		var command = MENU[id].command
 		if has_method(command):
 			call(command)
-			
+
 func _on_LoadRecent_id_pressed(id):
 	do_load_material(recent_files[id])
 

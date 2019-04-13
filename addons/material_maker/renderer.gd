@@ -1,7 +1,11 @@
 tool
 extends Viewport
 
+export(String) var debug_path = null
+var debug_file_index = 0
+
 var render_queue = []
+
 
 func _ready():
 	$ColorRect.material = $ColorRect.material.duplicate(true)
@@ -11,6 +15,7 @@ func _ready():
 static func generate_shader(src_code):
 	var code
 	code = "shader_type canvas_item;\n"
+	code += "render_mode blend_disabled;\n"
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
@@ -30,6 +35,7 @@ static func generate_shader(src_code):
 static func generate_combined_shader(red_code, green_code, blue_code):
 	var code
 	code = "shader_type canvas_item;\n"
+	code += "render_mode blend_disabled;\n"
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
@@ -63,6 +69,12 @@ func setup_material(shader_material, textures, shader_code):
 	shader_material.shader.code = shader_code
 
 func render_shader_to_viewport(shader, textures, render_size, method, args):
+	if debug_path != null and debug_path != "":
+		var f = File.new()
+		f.open(debug_path+str(debug_file_index)+".shader", File.WRITE)
+		f.store_string(shader)
+		f.close()
+		debug_file_index += 1
 	render_queue.append( { shader=shader, textures=textures, size=render_size, method=method, args=args } )
 	if render_queue.size() == 1:
 		while !render_queue.empty():
@@ -93,7 +105,13 @@ func export_texture(node, filename, render_size = 256):
 
 func do_export_texture(filename):
 	var viewport_texture = get_texture()
-	var viewport_image = viewport_texture.get_data()
+	var x = ImageTexture.new()
+	x.create_from_image(viewport_texture.get_data())
+	var viewport_image = x.get_data()
+	var f = File.new()
+	f.open(filename+".raw", File.WRITE)
+	f.store_buffer(viewport_image.get_data())
+	f.close()
 	viewport_image.save_png(filename)
 
 func precalculate_node(node, render_size, target_texture, object, method, args):
