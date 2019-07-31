@@ -1,0 +1,2 @@
+extends MMGenBase
+class_name MMGenGraph

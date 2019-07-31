@@ -8,9 +8,50 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "MMGenBase",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_base.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenBuffer",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_buffer.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenConvolution",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_convolution.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenGraph",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_graph.gd"
+}, {
+"base": "Object",
+"class": "MMGenLoader",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/loader.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenMaterial",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_material.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenShader",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_shader.gd"
+} ]
 _global_script_class_icons={
-
+"MMGenBase": "",
+"MMGenBuffer": "",
+"MMGenConvolution": "",
+"MMGenGraph": "",
+"MMGenLoader": "",
+"MMGenMaterial": "",
+"MMGenShader": ""
 }
 
 [application]

@@ -3,9 +3,12 @@ extends EditorPlugin
 
 var mm_button = null
 var material_maker = null
+var importer = null
 
 func _enter_tree():
 	add_tool_menu_item("Material Maker", self, "open_material_maker")
+	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
+	add_import_plugin(importer)
 
 func _exit_tree():
 	remove_tool_menu_item("Material Maker")
@@ -13,6 +16,9 @@ func _exit_tree():
 		material_maker.hide()
 		material_maker.queue_free()
 		material_maker = null
+	if importer != null:
+		remove_import_plugin(importer)
+		importer = null
 
 func _get_state():
 	var s = { mm_button=mm_button, material_maker=material_maker }
@@ -36,3 +42,9 @@ func close_material_maker():
 		material_maker.hide()
 		material_maker.queue_free()
 		material_maker = null
+
+func generate_material(ptex_filename: String) -> Material:
+	var loader = MMGenLoader.new()
+	var generator = loader.load_gen(ptex_filename)
+	add_child(generator)
+	return generator.get_node("Material").generate_material()
