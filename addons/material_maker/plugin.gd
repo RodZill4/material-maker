@@ -47,4 +47,5 @@ func generate_material(ptex_filename: String) -> Material:
 	var loader = MMGenLoader.new()
 	var generator = loader.load_gen(ptex_filename)
 	add_child(generator)
-	return generator.get_node("Material").generate_material()
+	var material = generator.get_node("Material")
+	return material.generate_material()
