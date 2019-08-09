@@ -1,4 +1,5 @@
 extends Object
+class_name MMGradient
 
 class CustomSorter:
 	static func compare(a, b):
@@ -9,6 +10,12 @@ var sorted = true
 
 func _ready():
 	pass
+
+func to_string():
+	var rv = PoolStringArray()
+	for p in points:
+		rv.append("("+str(p.v)+","+str(p.c)+")")
+	return rv.join(",")
 
 func duplicate():
 	var copy = get_script().new()

@@ -3,6 +3,7 @@ extends MMGenBase
 class_name MMGenShader
 
 var model_data = null
+var parameters = {}
 var generated_variants = []
 
 func set_model_data(data: Dictionary):
@@ -94,6 +95,8 @@ func subst(string, uv = ""):
 				value_string = p.values[value].value
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
+			elif p.type == "gradient":
+				value_string = p.name+"_gradient_fct"
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
 	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
@@ -112,8 +115,16 @@ func _get_shader_code(uv, slot = 0):
 	var variant_string = uv+","+str(slot)
 	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
 		var output = model_data.outputs[slot]
+		rv.defs = ""
 		if model_data.has("instance") && generated_variants.empty():
-			rv.defs = subst(model_data.instance).string
+			rv.defs += subst(model_data.instance).string
+		for p in model_data.parameters:
+			if p.type == "gradient":
+				var g = parameters[p.name]
+				if !(g is MMGradient):
+					g = MMGradient.new()
+					g.deserialize(parameters[p.name])
+				rv.defs += g.get_shader(p.name+"_gradient_fct")
 		var variant_index = generated_variants.find(variant_string)
 		if variant_index == -1:
 			variant_index = generated_variants.size()

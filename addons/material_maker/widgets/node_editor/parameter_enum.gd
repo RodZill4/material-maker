@@ -21,7 +21,10 @@ func get_model_data():
 
 func set_model_data(data):
 	enum_values = data.values.duplicate()
-	enum_current = data.default
+	if data.has("default"):
+		enum_current = data.default
+	else:
+		enum_current = 0
 	update_enum_list()
 
 func update_enum_list():

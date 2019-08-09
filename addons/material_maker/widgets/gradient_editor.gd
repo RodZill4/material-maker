@@ -43,13 +43,11 @@ class GradientCursor:
 
 var value = null setget set_value
 
-const Gradient = preload("res://addons/material_maker/types/gradient.gd")
-
-signal updated
+signal updated(value)
 
 func _ready():
 	$Gradient.material = $Gradient.material.duplicate(true)
-	set_value(Gradient.new())
+	set_value(MMGradient.new())
 
 func set_value(v):
 	value = v
@@ -58,6 +56,7 @@ func set_value(v):
 			remove_child(c)
 			c.free()
 	for p in value.points:
+		print(p)
 		add_cursor(p.v*(rect_size.x-GradientCursor.WIDTH), p.c)
 	update_shader()
 

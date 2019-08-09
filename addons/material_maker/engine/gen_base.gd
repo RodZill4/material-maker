@@ -13,10 +13,14 @@ class OutputPort:
 	func get_shader():
 		return generator.get_shader(output_index)
 	
+	func get_shader_code(uv):
+		return generator.get_shader_code(uv, output_index)
+	
 	func get_globals():
 		return generator.get_globals()
-
-var parameters = null
+	
+	func to_str():
+		return generator.name+"("+str(output_index)+")"
 
 func get_seed():
 	return 0

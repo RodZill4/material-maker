@@ -42,7 +42,9 @@ func get_visible_name():
 	return "Material Maker Importer"
 
 func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> int:
-	var material = SpatialMaterial.new()
 	var filename = save_path + "." + get_save_extension()
-	ResourceSaver.save(filename, plugin.generate_material(source_file))
+	var material = plugin.generate_material(source_file)
+	while material is GDScriptFunctionState:
+		material = yield(material, "completed")
+	ResourceSaver.save(filename, material)
 	return OK

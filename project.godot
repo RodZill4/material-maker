@@ -39,10 +39,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_material.gd"
 }, {
+"base": "Viewport",
+"class": "MMGenRenderer",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/renderer.gd"
+}, {
 "base": "MMGenBase",
 "class": "MMGenShader",
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_shader.gd"
+}, {
+"base": "Object",
+"class": "MMGradient",
+"language": "GDScript",
+"path": "res://addons/material_maker/types/gradient.gd"
 } ]
 _global_script_class_icons={
 "MMGenBase": "",
@@ -51,7 +61,9 @@ _global_script_class_icons={
 "MMGenGraph": "",
 "MMGenLoader": "",
 "MMGenMaterial": "",
-"MMGenShader": ""
+"MMGenRenderer": "",
+"MMGenShader": "",
+"MMGradient": ""
 }
 
 [application]

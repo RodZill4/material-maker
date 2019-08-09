@@ -31,6 +31,7 @@ func set_model(m):
 		print("set_model error "+str(m))
 
 func update_node(data):
+	print("node_generic.update_node")
 	if typeof(data) != TYPE_DICTIONARY:
 		return
 	if !data.has("name"):
@@ -85,6 +86,8 @@ func update_node(data):
 				control = CheckBox.new()
 			elif p.type == "color":
 				control = ColorPickerButton.new()
+			elif p.type == "gradient":
+				control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
 			if control != null:
 				var label = p.name
 				control.name = label
@@ -222,6 +225,8 @@ func subst(string, uv = ""):
 				value_string = p.values[value].value
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
+			elif p.type == "gradient":
+				value_string = p.name+"_gradient_fct"
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
 	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
@@ -240,8 +245,12 @@ func _get_shader_code(uv, slot = 0):
 	var variant_string = uv+","+str(slot)
 	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
 		var output = model_data.outputs[slot]
+		rv.defs = ""
 		if model_data.has("instance") && generated_variants.empty():
-			rv.defs = subst(model_data.instance).string
+			rv.defs += subst(model_data.instance).string
+		for p in model_data.parameters:
+			if p.type == "gradient":
+				rv.defs += parameters[p.name].get_shader(p.name+"_gradient_fct")
 		var variant_index = generated_variants.find(variant_string)
 		if variant_index == -1:
 			variant_index = generated_variants.size()

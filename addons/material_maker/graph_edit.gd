@@ -159,7 +159,7 @@ func do_load_file(filename):
 	file.close()
 	clear_material()
 	for n in data.nodes:
-		var node = create_nodes(n)
+		create_nodes(n)
 	for c in data.connections:
 		connect_node(c.from, c.from_port, c.to, c.to_port)
 	set_save_path(filename)

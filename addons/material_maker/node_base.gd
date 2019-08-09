@@ -77,6 +77,7 @@ func update_property_widgets():
 			elif o is ColorPickerButton:
 				o.color = parameters[o.name]
 			elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+				print("Updating "+o.name+" = "+str(parameters[o.name].to_string()))
 				o.value = parameters[o.name]
 			else:
 				print("Failed to update "+o.name)

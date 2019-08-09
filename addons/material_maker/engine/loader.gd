@@ -24,15 +24,18 @@ func create_gen(data) -> MMGenBase:
 		else:
 			generator = MMGenShader.new()
 			if data.type == "custom":
-				pass
+				generator.set_model_data(data.model_data)
 			else:
 				var file = File.new()
 				if file.open("res://addons/material_maker/nodes/"+data.type+".mmn", File.READ) == OK:
 					var model_data = parse_json(file.get_as_text())
 					print("loaded description "+data.type+".mmn")
 					generator.set_model_data(model_data)
+					file.close()
 				else:
 					print("Cannot find description for "+data.type)
+	else:
+		print(data)
 	if generator != null and data.has("parameters"):
 		generator.initialize(data)
 	return generator

@@ -2,9 +2,11 @@ tool
 extends MMGenBase
 class_name MMGenMaterial
 
+var parameters = {}
+
 var texture_list
 
-var material
+var material : SpatialMaterial
 var generated_textures = {}
 
 const TEXTURE_LIST = [
@@ -33,9 +35,15 @@ func _ready():
 		generated_textures[t.texture] = { shader=null, source=null, texture=null }
 	material = SpatialMaterial.new()
 
-func generate_material():
-	print("Generating material")
-	print(get_source(0).get_shader())
+func generate_material(renderer : MMGenRenderer):
+	var source = get_source(0)
+	if source != null:
+		var shader : String = renderer.generate_shader(source)
+		var status = renderer.render_shader(shader, {}, 512)
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		renderer.get_texture().get_data().save_png("res://test.png")
+		material.albedo_texture = load("res://test.png")
 	return material
 
 func initialize(data: Dictionary):
