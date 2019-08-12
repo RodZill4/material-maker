@@ -2,8 +2,6 @@ tool
 extends MMGenBase
 class_name MMGenMaterial
 
-var parameters = {}
-
 var texture_list
 
 var material : SpatialMaterial
@@ -26,6 +24,9 @@ const ADDON_TEXTURE_LIST = [
 	{ ports=[1, 2, 5], default_values=["0.0", "1.0", "1.0"], texture="mrao" },
 	{ port=6, texture="depth_map" }
 ]
+
+func get_type():
+	return "material"
 
 func _ready():
 	texture_list = TEXTURE_LIST

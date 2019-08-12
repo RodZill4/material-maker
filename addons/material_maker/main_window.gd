@@ -7,6 +7,8 @@ var recent_files_submenu = null
 var editor_interface = null
 var current_tab = null
 
+onready var renderer = $Renderer
+
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
 	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
@@ -140,7 +142,6 @@ func load_material():
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural textures file")
-	#dialog.connect("file_selected", self, "do_load_material")
 	dialog.connect("files_selected", self, "do_load_materials")
 	dialog.popup_centered()
 
@@ -150,10 +151,8 @@ func do_load_materials(filenames):
 
 func do_load_material(filename):
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	var node_count = 0
-	if graph_edit == null:
-		node_count = 123 # So test below succeeds...
-	else:
+	var node_count = 2 # So test below succeeds if graph_edit is null...
+	if graph_edit != null:
 		for c in graph_edit.get_children():
 			if c is GraphNode:
 				node_count += 1
@@ -161,18 +160,28 @@ func do_load_material(filename):
 					break
 	if node_count > 1:
 		graph_edit = new_pane()
-	graph_edit.do_load_file(filename)
+	graph_edit.load_file(filename)
 	add_recent(filename)
 
 func save_material():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
-		graph_edit.save_file()
-	
+		if graph_edit.save_path != null:
+			graph_edit.save_file(graph_edit.save_path)
+		else:
+			save_material_as()
+
 func save_material_as():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null:
-		graph_edit.save_file_as()
+		var dialog = FileDialog.new()
+		add_child(dialog)
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_SAVE_FILE
+		dialog.add_filter("*.ptex;Procedural textures file")
+		dialog.connect("file_selected", graph_edit, "save_file")
+		dialog.popup_centered()
 
 func close_material():
 	$VBoxContainer/HBoxContainer/Projects.close_tab()
@@ -298,7 +307,17 @@ func update_preview_2d(node = null):
 				node = n
 				break
 	if node != null:
-		graph_edit.renderer.setup_material(preview.get_2d_material(), node.get_textures(), node.generate_shader())
+		print(node.name)
+		var source = node.generator.get_shader(0)
+		if source != null:
+			var shader : String = renderer.generate_shader(source)
+			var status = renderer.render_shader(shader, {}, 1024)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			var image = renderer.get_texture().get_data()
+			var tex = ImageTexture.new()
+			tex.create_from_image(image)
+			preview.set_2d(tex)
 
 func _on_Projects_tab_changed(tab):
 	var new_tab = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()

@@ -1,12 +1,10 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://addons/material_maker/nodes/material/material.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/nodes/material.gd" type="Script" id=1]
 
 [sub_resource type="Theme" id=1]
 
-
 [node name="Material" type="GraphNode" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -79,7 +77,6 @@ script = ExtResource( 1 )
 _sections_unfolded = [ "Theme", "slot", "slot/0", "slot/1", "slot/2", "slot/5", "slot/7" ]
 
 [node name="resolution" type="OptionButton" parent="." index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -107,7 +104,6 @@ items = [ "256x256", null, false, 0, null, "512x512", null, false, 1, null, "102
 selected = 1
 
 [node name="Albedo" type="HBoxContainer" parent="." index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -125,7 +121,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="Albedo" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -146,7 +141,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="albedo_color" type="ColorPickerButton" parent="Albedo" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -173,7 +167,6 @@ edit_alpha = false
 _sections_unfolded = [ "Rect", "Size Flags" ]
 
 [node name="Metallic" type="HBoxContainer" parent="." index="2"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -192,7 +185,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="Metallic" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -213,7 +205,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="metallic" type="SpinBox" parent="Metallic" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -240,7 +231,6 @@ suffix = ""
 _sections_unfolded = [ "Rect" ]
 
 [node name="Roughness" type="HBoxContainer" parent="." index="3"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -259,7 +249,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="Roughness" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -280,7 +269,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="roughness" type="SpinBox" parent="Roughness" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -307,7 +295,6 @@ suffix = ""
 _sections_unfolded = [ "Rect" ]
 
 [node name="Emission" type="HBoxContainer" parent="." index="4"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -326,7 +313,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="Emission" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -347,7 +333,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="emission_energy" type="SpinBox" parent="Emission" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -374,7 +359,6 @@ suffix = ""
 _sections_unfolded = [ "Rect" ]
 
 [node name="NormalMap" type="HBoxContainer" parent="." index="5"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -393,7 +377,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="NormalMap" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -414,7 +397,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="normal_scale" type="SpinBox" parent="NormalMap" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -441,7 +423,6 @@ suffix = ""
 _sections_unfolded = [ "Rect" ]
 
 [node name="AmbientOcclusion" type="HBoxContainer" parent="." index="6"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -460,7 +441,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="AmbientOcclusion" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -481,7 +461,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="ao_light_affect" type="SpinBox" parent="AmbientOcclusion" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -508,7 +487,6 @@ suffix = ""
 _sections_unfolded = [ "Rect" ]
 
 [node name="DepthMap" type="HBoxContainer" parent="." index="7"]
-
 editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
@@ -527,7 +505,6 @@ size_flags_vertical = 1
 alignment = 0
 
 [node name="Label" type="Label" parent="DepthMap" index="0"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -548,7 +525,6 @@ max_lines_visible = -1
 _sections_unfolded = [ "Size Flags" ]
 
 [node name="depth_scale" type="SpinBox" parent="DepthMap" index="1"]
-
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -573,5 +549,3 @@ editable = true
 prefix = ""
 suffix = ""
 _sections_unfolded = [ "Rect" ]
-
-

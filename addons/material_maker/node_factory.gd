@@ -12,7 +12,7 @@ func create_node(type):
 		node = preload("res://addons/material_maker/nodes/node_generic.gd").new()
 		node.model = type
 	else:
-		var node_type = load("res://addons/material_maker/nodes/"+type+"/"+type+".tscn")
+		var node_type = load("res://addons/material_maker/nodes/"+type+".tscn")
 		if node_type != null:
 			node = node_type.instance()
 	return node

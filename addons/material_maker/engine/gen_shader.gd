@@ -3,7 +3,6 @@ extends MMGenBase
 class_name MMGenShader
 
 var model_data = null
-var parameters = {}
 var generated_variants = []
 
 func set_model_data(data: Dictionary):
@@ -32,7 +31,7 @@ func find_keyword_call(string, keyword):
 			parenthesis_level -= 1
 	return ""
 
-func replace_input(string, input, type, src, default):
+func replace_input(string, context, input, type, src, default):
 	var required_defs = ""
 	var required_code = ""
 	while true:
@@ -74,7 +73,7 @@ func replace_variable(string, variable, value):
 		string = string.right(keyword_size)
 	return new_string
 
-func subst(string, uv = ""):
+func subst(string, context, uv = ""):
 	var required_defs = ""
 	var required_code = ""
 	string = replace_variable(string, "name", name)
@@ -103,21 +102,23 @@ func subst(string, uv = ""):
 		for i in range(model_data.inputs.size()):
 			var input = model_data.inputs[i]
 			var source = get_source(i)
-			var result = replace_input(string, input.name, input.type, source, input.default)
+			var result = replace_input(string, context, input.name, input.type, source, input.default)
 			string = result.string
 			required_defs += result.defs
 			required_code += result.code
 	return { string=string, defs=required_defs, code=required_code }
 
-func _get_shader_code(uv, slot = 0):
+func _get_shader_code(uv, slot = 0, context = MMGenContext.new()):
+	if context == null:
+		context = {}
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { defs="", code="" }
 	var variant_string = uv+","+str(slot)
 	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
 		var output = model_data.outputs[slot]
 		rv.defs = ""
-		if model_data.has("instance") && generated_variants.empty():
-			rv.defs += subst(model_data.instance).string
+		if model_data.has("instance") && !context.has_variant(self):
+			rv.defs += subst(model_data.instance, context).string
 		for p in model_data.parameters:
 			if p.type == "gradient":
 				var g = parameters[p.name]
@@ -125,13 +126,13 @@ func _get_shader_code(uv, slot = 0):
 					g = MMGradient.new()
 					g.deserialize(parameters[p.name])
 				rv.defs += g.get_shader(p.name+"_gradient_fct")
-		var variant_index = generated_variants.find(variant_string)
+		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
-			variant_index = generated_variants.size()
+			variant_index = context.get_variant(self, variant_string)
 			generated_variants.append(variant_string)
 			for t in output_info:
 				if output.has(t.field):
-					var subst_output = subst(output[t.field], uv)
+					var subst_output = subst(output[t.field], context, uv)
 					rv.defs += subst_output.defs
 					rv.code += subst_output.code
 					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, slot, variant_index, t.field, subst_output.string ]

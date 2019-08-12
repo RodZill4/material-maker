@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://addons/material_maker/nodes/custom/custom.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/nodes/custom.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/edit.png" type="Texture" id=2]
 [ext_resource path="res://addons/material_maker/icons/load.png" type="Texture" id=3]
 [ext_resource path="res://addons/material_maker/icons/save.png" type="Texture" id=4]

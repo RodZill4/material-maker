@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/material_maker/library.gd" type="Script" id=2]
 [ext_resource path="res://addons/material_maker/preview.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=4]
-[ext_resource path="res://addons/material_maker/renderer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://addons/material_maker/engine/renderer.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=6]
 
 [node name="MainWindow" type="Panel"]
@@ -96,12 +96,6 @@ tab_align = 0
 tab_close_display_policy = 1
 
 [node name="Renderer" parent="." instance=ExtResource( 5 )]
-handle_input_locally = false
-msaa = 0
-hdr = true
-disable_3d = true
-usage = 0
-debug_path = "D:/Dev/mmdebug_"
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 6 )

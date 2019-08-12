@@ -29,9 +29,9 @@ func _on_Model_item_selected(id):
 
 func get_materials():
 	return [ $MaterialPreview/Objects/Cube.get_surface_material(0), $MaterialPreview/Objects/Sphere.get_surface_material(0) ]
-	
-func get_2d_material():
-	return $Preview2D.material
+
+func set_2d(tex: Texture):
+	$Preview2D.material.set_shader_param("tex", tex)
 
 func _on_Preview_resized():
 	if preview_maximized:

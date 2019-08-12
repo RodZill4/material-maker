@@ -1,6 +1,8 @@
 tool
 extends "res://addons/material_maker/node_base.gd"
 
+var generator = null
+
 var texture_list
 
 var current_material_list = []

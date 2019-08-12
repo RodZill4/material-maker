@@ -5,8 +5,10 @@ var editor_interface = null
 var node_factory = null
 var renderer = null
 
-var save_path = null
+var save_path = null setget set_save_path
 var need_save = false
+
+var generator = null
 
 signal save_path_changed
 signal graph_changed
@@ -141,48 +143,28 @@ func create_nodes(data, position = null):
 				connect_node(names[c.from], c.from_port, "Material" if c.to == "Material" else names[c.to], c.to_port)
 	return null
 
-func load_file():
-	var dialog = FileDialog.new()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.ptex;Procedural textures file")
-	dialog.connect("file_selected", self, "do_load_file")
-	dialog.popup_centered()
-
-func do_load_file(filename):
-	var file = File.new()
-	if file.open(filename, File.READ) != OK:
-		return
-	var data = parse_json(file.get_as_text())
-	file.close()
+func load_file(filename):
 	clear_material()
-	for n in data.nodes:
-		create_nodes(n)
-	for c in data.connections:
-		connect_node(c.from, c.from_port, c.to, c.to_port)
-	set_save_path(filename)
-	set_need_save(false)
-	center_view()
+	var loader = MMGenLoader.new()
+	generator = loader.load_gen(filename)
+	if generator != null:
+		add_child(generator)
+		for g in generator.get_children():
+			print(g.get_type())
+			var node = node_factory.create_node(g.get_type())
+			if node != null:
+				node.name = "node_"+g.name
+				add_node(node)
+				node.generator = g
+			node.offset = g.position
+		if generator.get("connections") != null:
+			for c in generator.connections:
+				.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		set_save_path(filename)
+		set_need_save(false)
+		center_view()
 
-func save_file():
-	if save_path != null:
-		do_save_file(save_path)
-	else:
-		save_file_as()
-	
-func save_file_as():
-	var dialog = FileDialog.new()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.ptex;Procedural textures file")
-	dialog.connect("file_selected", self, "do_save_file")
-	dialog.popup_centered()
-
-func do_save_file(filename):
+func save_file(filename):
 	var data = { nodes = [] }
 	for c in get_children():
 		if c is GraphNode:
@@ -270,7 +252,7 @@ func center_view():
 
 func send_changed_signal():
 	set_need_save(true)
-	$Timer.start()
+	#$Timer.start()
 
 func do_send_changed_signal():
 	emit_signal("graph_changed")
