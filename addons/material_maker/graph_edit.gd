@@ -29,7 +29,7 @@ func _gui_input(event):
 
 func get_source(node, port):
 	for c in get_connection_list():
-		if c.to == node && c.to_port == port:
+		if c.to == node and c.to_port == port:
 			return { node=c.from, slot=c.from_port }
 
 func offset_from_global_position(global_position):
@@ -40,6 +40,13 @@ func add_node(node):
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
+	print("Connecting "+str(from)+"("+str(from_slot)+") to "+str(to)+"("+str(to_slot)+")")
+	if generator.connect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+		var disconnect = get_source(to, to_slot)
+		if disconnect != null:
+			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
+		.connect_node(from, from_slot, to, to_slot)
+		send_changed_signal()
 	var source_list = [ from ]
 	# Check if the new connection creates a cycle in the graph
 	while !source_list.empty():
@@ -50,10 +57,6 @@ func connect_node(from, from_slot, to, to_slot):
 		for c in get_connection_list():
 			if c.to == source and source_list.find(c.from) == -1:
 				source_list.append(c.from)
-	var disconnect = get_source(to, to_slot)
-	if disconnect != null:
-		.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
-	.connect_node(from, from_slot, to, to_slot)
 	send_changed_signal()
 	return true
 
@@ -121,7 +124,7 @@ func create_nodes(data, position = null):
 	if data.has("type"):
 		var node = node_factory.create_node(data.type)
 		if node != null:
-			if data.has("name") && !has_node(data.name):
+			if data.has("name") and !has_node(data.name):
 				node.name = data.name
 			else:
 				node.name = get_free_name(data.type)
@@ -181,21 +184,21 @@ func export_textures(size = null):
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():
-			if c is GraphNode && c.has_method("export_textures"):
+			if c is GraphNode and c.has_method("export_textures"):
 				c.export_textures(prefix, size)
 
 # Cut / copy / paste
 
 func remove_selection():
 	for c in get_children():
-		if c is GraphNode and c.selected && c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material":
 			remove_node(c)
 
 func serialize_selection():
 	var data = { nodes = [], connections = [] }
 	var nodes = []
 	for c in get_children():
-		if c is GraphNode and c.selected && c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material":
 			nodes.append(c)
 	if nodes.empty():
 		return null
@@ -217,7 +220,7 @@ func serialize_selection():
 
 func can_copy():
 	for c in get_children():
-		if c is GraphNode and c.selected && c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material":
 			return true
 	return false
 
@@ -252,7 +255,7 @@ func center_view():
 
 func send_changed_signal():
 	set_need_save(true)
-	#$Timer.start()
+	$Timer.start()
 
 func do_send_changed_signal():
 	emit_signal("graph_changed")

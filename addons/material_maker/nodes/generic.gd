@@ -2,6 +2,8 @@ extends GraphNode
 
 var generator = null setget set_generator
 
+var controls = []
+
 var uses_seed : bool = false
 
 var parameters = {}
@@ -15,8 +17,54 @@ func set_generator(g):
 	generator = g
 	update_node(g.model_data)
 
-func initialize_properties(p):
-	pass
+func initialize_properties():
+	for o in controls:
+		if o == null:
+			print("error in node "+name)
+		elif o is LineEdit:
+			o.text = str(generator.parameters[o.name])
+			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
+		elif o is SpinBox:
+			o.value = generator.parameters[o.name]
+			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is HSlider:
+			o.value = generator.parameters[o.name]
+			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is OptionButton:
+			o.selected = generator.parameters[o.name]
+			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
+		elif o is CheckBox:
+			o.pressed = generator.parameters[o.name]
+			o.connect("toggled", self, "_on_value_changed", [ o.name ])
+		elif o is ColorPickerButton:
+			o.color = generator.parameters[o.name]
+			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
+		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+			var gradient : MMGradient = MMGradient.new()
+			gradient.deserialize(generator.parameters[o.name])
+			o.value = gradient
+			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
+		else:
+			print("unsupported widget "+str(o))
+
+func update_shaders():
+	get_parent().send_changed_signal()
+
+func _on_text_changed(new_text, variable):
+	generator.parameters[variable] = float(new_text)
+	update_shaders()
+
+func _on_value_changed(new_value, variable):
+	generator.parameters[variable] = new_value
+	update_shaders()
+
+func _on_color_changed(new_color, variable):
+	generator.parameters[variable] = new_color
+	update_shaders()
+
+func _on_gradient_changed(new_gradient, variable):
+	generator.parameters[variable] = new_gradient
+	update_shaders()
 
 func update_node(data):
 	print("node_generic.update_node")
@@ -40,7 +88,7 @@ func update_node(data):
 	if model_data.has("instance") and model_data.instance.find("$(seed)"):
 		uses_seed = true
 	if model_data.has("parameters") and typeof(model_data.parameters) == TYPE_ARRAY:
-		var control_list = []
+		controls = []
 		var sizer = null
 		for p in model_data.parameters:
 			if !p.has("name") or !p.has("type"):
@@ -79,7 +127,7 @@ func update_node(data):
 			if control != null:
 				var label = p.name
 				control.name = label
-				control_list.append(control)
+				controls.append(control)
 				if p.has("label"):
 					label = p.label
 				if sizer == null or label != "nonewline":
@@ -93,7 +141,7 @@ func update_node(data):
 					sizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				sizer.add_child(control)
-		initialize_properties(control_list)
+		initialize_properties()
 	else:
 		model_data.parameters = []
 	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
