@@ -133,6 +133,7 @@ func new_pane():
 
 func new_material():
 	var graph_edit = new_pane()
+	graph_edit.new_material()
 	graph_edit.update_tab_title()
 
 func load_material():
@@ -153,11 +154,14 @@ func do_load_material(filename):
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
+		node_count = 0
 		for c in graph_edit.get_children():
 			if c is GraphNode:
+				print(c.name)
 				node_count += 1
 				if node_count > 1:
 					break
+	print(node_count)
 	if node_count > 1:
 		graph_edit = new_pane()
 	graph_edit.load_file(filename)

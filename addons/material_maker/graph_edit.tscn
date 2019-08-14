@@ -1,9 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://addons/material_maker/graph_edit.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/nodes/material.tscn" type="PackedScene" id=2]
-
-[sub_resource type="Theme" id=1]
 
 [node name="GraphEdit" type="GraphEdit"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -13,14 +10,6 @@ right_disconnects = true
 scroll_offset = Vector2( -325, -250 )
 use_snap = false
 script = ExtResource( 1 )
-
-[node name="Material" parent="." instance=ExtResource( 2 )]
-margin_left = 525.0
-margin_top = 250.0
-margin_right = 755.0
-margin_bottom = 470.0
-theme = SubResource( 1 )
-offset = Vector2( 200, 0 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2

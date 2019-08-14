@@ -54,12 +54,13 @@ func disconnect_node(from, from_slot, to, to_slot):
 		send_changed_signal();
 
 func remove_node(node):
+	generator.remove_node(node.generator)
 	var node_name = node.name
 	for c in get_connection_list():
 		if c.from == node_name or c.to == node_name:
 			disconnect_node(c.from, c.from_port, c.to, c.to_port)
-			send_changed_signal()
 	node.queue_free()
+	send_changed_signal()
 
 # Global operations on graph
 
@@ -91,13 +92,33 @@ func clear_material():
 		if c is GraphNode:
 			remove_child(c)
 			c.free()
+	if generator != null:
+		remove_child(generator)
+		generator.free()
+		generator = null
 	send_changed_signal()
 
 func new_material():
+	print("New material")
 	clear_material()
-	create_nodes({name="Material", type="material"})
-	set_save_path(null)
-	center_view()
+	var loader = MMGenLoader.new()
+	generator = loader.create_gen({nodes=[{name="Material", type="material"}], connections=[]})
+	if generator != null:
+		print("Not null !")
+		add_child(generator)
+		for g in generator.get_children():
+			var node = node_factory.create_node(g.get_type())
+			if node != null:
+				node.name = "node_"+g.name
+				add_node(node)
+				node.generator = g
+			node.offset = g.position
+		if generator.get("connections") != null:
+			for c in generator.connections:
+				.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		set_save_path(filename)
+		set_need_save(false)
+		center_view()
 
 func get_free_name(type):
 	var i = 0
@@ -142,7 +163,6 @@ func load_file(filename):
 	if generator != null:
 		add_child(generator)
 		for g in generator.get_children():
-			print(g.get_type())
 			var node = node_factory.create_node(g.get_type())
 			if node != null:
 				node.name = "node_"+g.name
