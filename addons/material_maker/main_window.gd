@@ -307,7 +307,6 @@ func update_preview_2d(node = null):
 				node = n
 				break
 	if node != null:
-		print(node.name)
 		var source = node.generator.get_shader(0)
 		if source != null:
 			var shader : String = renderer.generate_shader(source)

@@ -47,22 +47,11 @@ func connect_node(from, from_slot, to, to_slot):
 			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
 		.connect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
-	var source_list = [ from ]
-	# Check if the new connection creates a cycle in the graph
-	while !source_list.empty():
-		var source = source_list.pop_front()
-		if source == to:
-			#print("cannot connect %s to %s (%s)" % [from, to, source])
-			return false
-		for c in get_connection_list():
-			if c.to == source and source_list.find(c.from) == -1:
-				source_list.append(c.from)
-	send_changed_signal()
-	return true
 
 func disconnect_node(from, from_slot, to, to_slot):
-	.disconnect_node(from, from_slot, to, to_slot)
-	send_changed_signal();
+	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+		.disconnect_node(from, from_slot, to, to_slot)
+		send_changed_signal();
 
 func remove_node(node):
 	var node_name = node.name

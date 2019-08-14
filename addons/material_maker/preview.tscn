@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/material_maker/preview.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/panoramas/park.hdr" type="Texture" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
 
 [sub_resource type="Animation" id=1]
 loop = true
@@ -100,7 +99,6 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=10]
 shader = SubResource( 9 )
-shader_param/tex = ExtResource( 3 )
 
 [node name="Preview" type="ViewportContainer"]
 anchor_left = 1.0
@@ -129,7 +127,7 @@ render_target_clear_mode = 1
 render_target_update_mode = 3
 
 [node name="Objects" type="Spatial" parent="MaterialPreview"]
-transform = Transform( -0.956327, 0, -0.292284, 0, 1, 0, 0.292284, 0, -0.956327, 0, 0, 0 )
+transform = Transform( 0.979431, 0, -0.201756, 0, 1, 0, 0.201756, 0, 0.979431, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects"]
 mesh = SubResource( 2 )
