@@ -2,7 +2,7 @@ tool
 extends MMGenBase
 class_name MMGenGraph
 
-var connections = null
+var connections = []
 
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 	for c in connections:

@@ -21,7 +21,10 @@ func initialize_properties():
 	for o in controls:
 		if o == null:
 			print("error in node "+name)
-		elif o is LineEdit:
+			continue
+		if !generator.parameters.has(o.name):
+			continue
+		if o is LineEdit:
 			o.text = str(generator.parameters[o.name])
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
 		elif o is SpinBox:
@@ -37,7 +40,7 @@ func initialize_properties():
 			o.pressed = generator.parameters[o.name]
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			o.color = generator.parameters[o.name]
+			o.color = MMType.deserialize_value(generator.parameters[o.name])
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
 			var gradient : MMGradient = MMGradient.new()

@@ -1,4 +1,5 @@
 extends Node
+class_name MMType
 
 const Gradient = preload("res://addons/material_maker/types/gradient.gd")
 
@@ -18,6 +19,8 @@ static func deserialize_value(data):
 				var gradient = Gradient.new()
 				gradient.deserialize(data)
 				return gradient
+		elif data.has("r") and data.has("g") and data.has("b") and data.has("a"):
+			return Color(data.r, data.g, data.b, data.a)
 	# in previous releases, Gradients were serialized as arrays
 	elif typeof(data) == TYPE_ARRAY:
 		var gradient = Gradient.new()

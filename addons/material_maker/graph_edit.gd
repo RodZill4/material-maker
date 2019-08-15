@@ -98,24 +98,24 @@ func clear_material():
 		generator = null
 	send_changed_signal()
 
+func update_graph(generators, connections):
+	for g in generators:
+		var node = node_factory.create_node(g.get_type())
+		if node != null:
+			node.name = "node_"+g.name
+			add_node(node)
+			node.generator = g
+		node.offset = g.position
+	for c in connections:
+		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+
 func new_material():
-	print("New material")
 	clear_material()
 	var loader = MMGenLoader.new()
 	generator = loader.create_gen({nodes=[{name="Material", type="material"}], connections=[]})
 	if generator != null:
-		print("Not null !")
 		add_child(generator)
-		for g in generator.get_children():
-			var node = node_factory.create_node(g.get_type())
-			if node != null:
-				node.name = "node_"+g.name
-				add_node(node)
-				node.generator = g
-			node.offset = g.position
-		if generator.get("connections") != null:
-			for c in generator.connections:
-				.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		update_graph(generator.get_children(), generator.connections)
 		set_save_path(filename)
 		set_need_save(false)
 		center_view()
@@ -132,29 +132,11 @@ func create_nodes(data, position = null):
 	if data == null:
 		return
 	if data.has("type"):
-		var node = node_factory.create_node(data.type)
-		if node != null:
-			if data.has("name") and !has_node(data.name):
-				node.name = data.name
-			else:
-				node.name = get_free_name(data.type)
-			add_node(node)
-			node.deserialize(data)
-			if position != null:
-				node.offset += position
-			send_changed_signal()
-			return node
-	else:
-		if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
-			var names = {}
-			for c in data.nodes:
-				var node = create_nodes(c, position)
-				if node != null:
-					names[c.name] = node.name
-					node.selected = true
-			for c in data.connections:
-				connect_node(names[c.from], c.from_port, "Material" if c.to == "Material" else names[c.to], c.to_port)
-	return null
+		data = { nodes=[data], connections=[] }
+	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
+		var loader = MMGenLoader.new()
+		var new_stuff = loader.add_to_gen_graph(generator, data.nodes, data.connections)
+		update_graph(new_stuff.generators, new_stuff.connections)
 
 func load_file(filename):
 	clear_material()
@@ -162,16 +144,7 @@ func load_file(filename):
 	generator = loader.load_gen(filename)
 	if generator != null:
 		add_child(generator)
-		for g in generator.get_children():
-			var node = node_factory.create_node(g.get_type())
-			if node != null:
-				node.name = "node_"+g.name
-				add_node(node)
-				node.generator = g
-			node.offset = g.position
-		if generator.get("connections") != null:
-			for c in generator.connections:
-				.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		update_graph(generator.get_children(), generator.connections)
 		set_save_path(filename)
 		set_need_save(false)
 		center_view()

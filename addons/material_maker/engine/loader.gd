@@ -9,15 +9,29 @@ func load_gen(filename: String) -> MMGenBase:
 		return create_gen(data)
 	return null
 
+func add_to_gen_graph(gen_graph, generators, connections):
+	var rv = { generators=[], connections=[] }
+	for n in generators:
+		var g = create_gen(n)
+		if g != null:
+			var name = g.name
+			var index = 1
+			while gen_graph.has_node(name):
+				index += 1
+				name = g.name + "_" + str(index)
+			g.name = name
+			gen_graph.add_child(g)
+			rv.generators.append(g)
+	for c in connections:
+		gen_graph.connections.append(c)
+		rv.connections.append(c)
+	return rv
+
 func create_gen(data) -> MMGenBase:
 	var generator = null
 	if data.has("connections") and data.has("nodes"):
 		generator = MMGenGraph.new()
-		for n in data.nodes:
-			var g = create_gen(n)
-			if g != null:
-				generator.add_child(g)
-		generator.connections = data.connections
+		add_to_gen_graph(generator, data.nodes, data.connections)
 	elif data.has("model_data"):
 		generator = MMGenShader.new()
 		generator.set_model_data(data.model_data)
@@ -39,9 +53,12 @@ func create_gen(data) -> MMGenBase:
 				file.close()
 			else:
 				print("Cannot find description for "+data.type)
+		generator.name = data.type
 	else:
 		print(data)
 	if generator != null:
+		if data.has("name"):
+			generator.name = data.name
 		if data.has("node_position"):
 			generator.position.x = data.node_position.x
 			generator.position.y = data.node_position.y

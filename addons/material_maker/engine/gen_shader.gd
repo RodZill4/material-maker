@@ -7,12 +7,16 @@ var generated_variants = []
 
 func set_model_data(data: Dictionary):
 	model_data = data
+	for p in model_data.parameters:
+		if !parameters.has(p.name) and  p.has("default"):
+			parameters[p.name] = MMType.deserialize_value(p.default)
 
 func initialize(data: Dictionary):
 	if data.has("name"):
 		name = data.name
 	if data.has("parameters"):
-		parameters = data.parameters
+		for p in data.parameters.keys():
+			parameters[p] = data.parameters[p]
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
