@@ -28,124 +28,156 @@
 		"tree_item":"Generators/Pattern",
 		"icon":"pattern",
 		"type":"pattern",
-		"mix":0,
-		"x_scale":4,
-		"x_wave":0,
-		"y_scale":4,
-		"y_wave":0
+		"parameters":{
+			"mix":0,
+			"x_scale":4,
+			"x_wave":0,
+			"y_scale":4,
+			"y_wave":0
+		}
 	},
     {
-      "tree_item": "Generators/Pattern/Checkerboard",
-      "type": "pattern",
-      "icon": "checkerboard",
-      "mix": 4,
-      "x_scale": 4,
-      "x_wave": 2,
-      "y_scale": 4,
-      "y_wave": 2
+		"tree_item": "Generators/Pattern/Checkerboard",
+		"type": "pattern",
+		"icon": "checkerboard",
+		"parameters":{
+			"mix": 4,
+			"x_scale": 4,
+			"x_wave": 2,
+			"y_scale": 4,
+			"y_wave": 2
+		}
     },
 	{
 		"tree_item":"Generators/Bricks",
 		"type":"bricks",
 		"icon":"bricks",
-		"bevel":0.1,
-		"columns":3,
-		"mortar":0.1,
-		"row_offset":0.5,
-		"rows":6
+		"parameters":{
+			"bevel":0.1,
+			"columns":3,
+			"mortar":0.1,
+			"row_offset":0.5,
+			"rows":6
+		}
 	},
     {
-      "tree_item": "Generators/Bricks/Tiles",
-      "type": "bricks",
-      "icon": "tiles",
-      "bevel": 0.05,
-      "columns": 4,
-      "mortar": 0.05,
-      "row_offset": 0,
-      "rows": 4
+		"tree_item": "Generators/Bricks/Tiles",
+		"type": "bricks",
+		"icon": "tiles",
+		"parameters":{
+			"bevel": 0.05,
+			"columns": 4,
+			"mortar": 0.05,
+			"row_offset": 0,
+			"rows": 4
+		}
+	},
+    {
+		"tree_item": "Generators/Bricks/BasketWeave",
+		"type": "bricks",
+		"icon": "basketweave",
+		"parameters":{
+			"bevel": 0.05,
+			"columns": 2,
+			"mortar": 0.05,
+			"pattern": 3,
+			"repeat": 2,
+			"row_offset": 0,
+			"rows": 2
+		}
     },
     {
-      "tree_item": "Generators/Bricks/BasketWeave",
-      "type": "bricks",
-      "icon": "basketweave",
-      "bevel": 0.05,
-      "columns": 2,
-      "mortar": 0.05,
-      "pattern": 3,
-      "repeat": 2,
-      "row_offset": 0,
-      "rows": 2
+		"tree_item": "Generators/Bricks/HerringBone",
+		"type": "bricks",
+		"icon": "herringbone",
+		"parameters":{
+			"bevel": 0.05,
+			"columns": 2,
+			"mortar": 0.05,
+			"pattern": 2,
+			"repeat": 2,
+			"row_offset": 0,
+			"rows": 2
+		}
     },
     {
-      "tree_item": "Generators/Bricks/HerringBone",
-      "type": "bricks",
-      "icon": "herringbone",
-      "bevel": 0.05,
-      "columns": 2,
-      "mortar": 0.05,
-      "pattern": 2,
-      "repeat": 2,
-      "row_offset": 0,
-      "rows": 2
-    },
-    {
-      "tree_item": "Generators/Bricks/SpanishBond",
-      "type": "bricks",
-      "icon": "spanishbond",
-      "bevel": 0.05,
-      "columns": 2,
-      "mortar": 0.05,
-      "pattern": 4,
-      "repeat": 2,
-      "row_offset": 0,
-      "rows": 2
+		"tree_item": "Generators/Bricks/SpanishBond",
+		"type": "bricks",
+		"icon": "spanishbond",
+		"parameters":{
+			"bevel": 0.05,
+			"columns": 2,
+			"mortar": 0.05,
+			"pattern": 4,
+			"repeat": 2,
+			"row_offset": 0,
+			"rows": 2
+		}
     },
 	{
 		"tree_item":"Generators/Noise",
 		"type":"noise",
 		"icon":"noise",
-		"size":4,
-		"density":0.5
+		"parameters":{
+			"size":4,
+			"density":0.5
+		}
 	},
 	{
 		"tree_item":"Generators/Perlin Noise",
 		"type":"perlin",
 		"icon":"perlin",
-		"iterations":3,
-		"persistence":0.5,
-		"scale_x":4,
-		"scale_y":4
+		"parameters":{
+			"iterations":3,
+			"persistence":0.5,
+			"scale_x":4,
+			"scale_y":4
+		}
 	},
 	{
 		"tree_item":"Generators/Voronoi Noise",
 		"type":"voronoi",
 		"icon":"voronoi",
-		"intensity":1,
-		"scale_x":4,
-		"scale_y":4
+		"parameters":{
+			"intensity":1,
+			"scale_x":4,
+			"scale_y":4
+		}
+	},
+	{
+		"tree_item":"Filters/Buffer",
+		"type":"buffer"
 	},
 	{
 		"tree_item":"Filters/AdjustHSV",
 		"type":"adjust_hsv",
-		"hue":0,
-		"saturation":1,
-		"value":1
+		"parameters":{
+			"hue":0,
+			"saturation":1,
+			"value":1
+		}
 	},
 	{
 		"tree_item":"Filters/Colorize",
 		"type":"colorize",
-		"gradient":[{"b":0,"g":0,"pos":0,"r":0},{"b":1,"g":1,"pos":1,"r":1}]
+		"parameters":{
+			"gradient":[{"b":0,"g":0,"pos":0,"r":0},{"b":1,"g":1,"pos":1,"r":1}]
+		}
 	},
 	{
 		"tree_item":"Filters/Blend",
 		"type":"blend",
-		"amount":0.5,
-		"blend_type":0
+		"parameters":{
+			"amount":0.5,
+			"blend_type":0
+		}
 	},
 	{
 		"tree_item":"Filters/Blur",
 		"type":"blur",
-		"sigma":1.0
+		"parameters":{
+			"sigma":1.0
+		}
 	},
 	{
 		"tree_item":"Filters/Combine",
@@ -158,45 +190,55 @@
 	{
 		"tree_item":"Filters/Emboss",
 		"type":"emboss",
-		"direction":0
+		"parameters":{
+			"direction":0
+		}
 	},
 	{
 		"tree_item":"Filters/Normal map",
 		"type":"normal_map",
-		"amount":0.5
+		"parameters":{
+			"amount":0.5
+		}
 	},
 	{
 		"tree_item":"Filters/Transform",
 		"type":"transform",
-		"rotate":0,
-		"scale_x":1,
-		"scale_y":1,
-		"translate_x":0,
-		"translate_y":0
+		"parameters":{
+			"rotate":0,
+			"scale_x":1,
+			"scale_y":1,
+			"translate_x":0,
+			"translate_y":0
+		}
 	},
 	{
 		"tree_item":"Filters/Warp",
 		"type":"warp",
-		"amount":0.5
+		"parameters":{
+			"amount":0.5
+		}
 	},
     {
-      "tree_item": "Filters/Colorize/Invert",
-      "type": "colorize",
-      "icon": "invert",
-      "gradient": [
-        {
-          "b": 1,
-          "g": 1,
-          "pos": 0,
-          "r": 1
-        },
-        {
-          "b": 0,
-          "g": 0,
-          "pos": 1,
-          "r": 0
-        }
-      ]	
+		"tree_item": "Filters/Colorize/Invert",
+		"type": "colorize",
+		"icon": "invert",
+		"parameters":{
+			"gradient": [
+				{
+					"b": 1,
+					"g": 1,
+					"pos": 0,
+					"r": 1
+				},
+				{
+					"b": 0,
+					"g": 0,
+					"pos": 1,
+					"r": 0
+				}
+			]	
+		}
 	},
 	{
 		"tree_item":"Miscellaneous/Comment",

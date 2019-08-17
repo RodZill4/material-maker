@@ -1,2 +1,3 @@
+tool
 extends MMGenBase
 class_name MMGenConvolution

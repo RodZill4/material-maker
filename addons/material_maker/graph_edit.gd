@@ -128,7 +128,7 @@ func get_free_name(type):
 			return node_name
 		i += 1
 
-func create_nodes(data, position = null):
+func create_nodes(data, position : Vector2 = Vector2(0, 0)):
 	if data == null:
 		return
 	if data.has("type"):
@@ -136,6 +136,8 @@ func create_nodes(data, position = null):
 	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
 		var loader = MMGenLoader.new()
 		var new_stuff = loader.add_to_gen_graph(generator, data.nodes, data.connections)
+		for g in new_stuff.generators:
+			g.position += position
 		update_graph(new_stuff.generators, new_stuff.connections)
 
 func load_file(filename):

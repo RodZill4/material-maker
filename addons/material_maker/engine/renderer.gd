@@ -68,6 +68,7 @@ func setup_material(shader_material, textures, shader_code):
 
 func render_shader(shader, textures, render_size):
 	if rendering:
+		print("Already rendering...")
 		return false
 	rendering = true
 	if debug_path != null and debug_path != "":

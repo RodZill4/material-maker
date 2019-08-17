@@ -1,7 +1,12 @@
+tool
 extends Object
 class_name MMGenContext
 
+var renderer : MMGenRenderer
 var variants : Dictionary = {}
+
+func _init(r : MMGenRenderer):
+	renderer = r
 
 func has_variant(generator):
 	return variants.has(generator)

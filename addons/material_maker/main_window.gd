@@ -311,12 +311,10 @@ func update_preview_2d(node = null):
 				node = n
 				break
 	if node != null:
-		var source = node.generator.get_shader(0)
-		if source != null:
-			var shader : String = renderer.generate_shader(source)
-			var status = renderer.render_shader(shader, {}, 1024)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+		var status = node.generator.render(0, renderer, 1024)
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		if status:
 			var image = renderer.get_texture().get_data()
 			var tex = ImageTexture.new()
 			tex.create_from_image(image)

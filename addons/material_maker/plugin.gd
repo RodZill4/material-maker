@@ -51,4 +51,7 @@ func generate_material(ptex_filename: String) -> Material:
 	var generator = loader.load_gen(ptex_filename)
 	add_child(generator)
 	var material = generator.get_node("Material")
-	return material.generate_material(renderer)
+	var return_value = material.generate_material(renderer)
+	while return_value is GDScriptFunctionState:
+		return_value = yield(return_value, "completed")
+	return return_value

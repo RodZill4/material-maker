@@ -4,10 +4,15 @@ class_name MMGenGraph
 
 var connections = []
 
+func get_type():
+	return "graph"
+
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 	for c in connections:
 		if c.to == gen_name and c.to_port == input_index:
-			return OutputPort.new(get_node(c.from), c.from_port)
+			var src_gen = get_node(c.from)
+			if src_gen != null:
+				return OutputPort.new(get_node(c.from), c.from_port)
 	return null
 
 func connect_children(from, from_port : int, to, to_port : int):

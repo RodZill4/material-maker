@@ -43,6 +43,7 @@ func generate_material(renderer : MMGenRenderer):
 		var status = renderer.render_shader(shader, {}, 512)
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
+		print("Render status: "+str(status))
 		renderer.get_texture().get_data().save_png("res://test.png")
 		material.albedo_texture = load("res://test.png")
 	return material

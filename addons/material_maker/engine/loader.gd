@@ -32,28 +32,29 @@ func create_gen(data) -> MMGenBase:
 	if data.has("connections") and data.has("nodes"):
 		generator = MMGenGraph.new()
 		add_to_gen_graph(generator, data.nodes, data.connections)
-	elif data.has("model_data"):
+	elif data.has("shader_model"):
 		generator = MMGenShader.new()
-		generator.set_model_data(data.model_data)
+		generator.set_shader_model(data.shader_model)
 	elif data.has("type"):
 		if data.type == "material":
 			generator = MMGenMaterial.new()
+		elif data.type == "buffer":
+			generator = MMGenBuffer.new()
 		else:
 			var file = File.new()
 			if file.open("res://addons/material_maker/library/"+data.type+".mml", File.READ) == OK:
-				var model_data = parse_json(file.get_as_text())
 				print("loaded description "+data.type+".mml")
-				generator = create_gen(model_data)
+				generator = create_gen(parse_json(file.get_as_text()))
 				file.close()
 			elif file.open("res://addons/material_maker/nodes/"+data.type+".mmn", File.READ) == OK:
 				generator = MMGenShader.new()
-				var model_data = parse_json(file.get_as_text())
 				print("loaded description "+data.type+".mmn")
-				generator.set_model_data(model_data)
+				generator.set_shader_model(parse_json(file.get_as_text()))
 				file.close()
 			else:
 				print("Cannot find description for "+data.type)
-		generator.name = data.type
+		if generator != null:
+			generator.name = data.type
 	else:
 		print(data)
 	if generator != null:
@@ -63,5 +64,6 @@ func create_gen(data) -> MMGenBase:
 			generator.position.x = data.node_position.x
 			generator.position.y = data.node_position.y
 		if data.has("parameters"):
-			generator.initialize(data)
+			for p in data.parameters.keys():
+				generator.parameters[p] = data.parameters[p]
 	return generator

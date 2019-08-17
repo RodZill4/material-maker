@@ -2,21 +2,26 @@ tool
 extends MMGenBase
 class_name MMGenShader
 
-var model_data = null
+var shader_model : Dictionary = {}
 var generated_variants = []
 
-func set_model_data(data: Dictionary):
-	model_data = data
-	for p in model_data.parameters:
-		if !parameters.has(p.name) and  p.has("default"):
-			parameters[p.name] = MMType.deserialize_value(p.default)
+func get_type():
+	return "shader"
 
-func initialize(data: Dictionary):
-	if data.has("name"):
-		name = data.name
-	if data.has("parameters"):
-		for p in data.parameters.keys():
-			parameters[p] = data.parameters[p]
+func get_type_name():
+	if shader_model.has("name"): 
+		return shader_model.name
+	return .get_type_name()
+
+func get_parameter_defs():
+	if shader_model == null or !shader_model.has("parameters"):
+		return []
+	else:
+		return shader_model.parameters
+
+func set_shader_model(data: Dictionary):
+	shader_model = data
+	init_parameters()
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
@@ -49,7 +54,8 @@ func replace_input(string, context, input, type, src, default):
 		if src == null:
 			src_code = subst(default, "(%s)" % uv)
 		else:
-			src_code = src.get_shader_code(uv)
+			print(src.to_str())
+			src_code = src.generator.get_shader_code(uv, src.output_index, context)
 			src_code.string = src_code[type]
 		required_defs += src_code.defs
 		required_code += src_code.code
@@ -84,8 +90,8 @@ func subst(string, context, uv = ""):
 	string = replace_variable(string, "seed", str(get_seed()))
 	if uv != "":
 		string = replace_variable(string, "uv", "("+uv+")")
-	if model_data.has("parameters") and typeof(model_data.parameters) == TYPE_ARRAY:
-		for p in model_data.parameters:
+	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
+		for p in shader_model.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
 			var value = parameters[p.name]
@@ -102,9 +108,9 @@ func subst(string, context, uv = ""):
 				value_string = p.name+"_gradient_fct"
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
-	if model_data.has("inputs") and typeof(model_data.inputs) == TYPE_ARRAY:
-		for i in range(model_data.inputs.size()):
-			var input = model_data.inputs[i]
+	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
+		for i in range(shader_model.inputs.size()):
+			var input = shader_model.inputs[i]
 			var source = get_source(i)
 			var result = replace_input(string, context, input.name, input.type, source, input.default)
 			string = result.string
@@ -112,18 +118,16 @@ func subst(string, context, uv = ""):
 			required_code += result.code
 	return { string=string, defs=required_defs, code=required_code }
 
-func _get_shader_code(uv, slot = 0, context = MMGenContext.new()):
-	if context == null:
-		context = {}
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { defs="", code="" }
-	var variant_string = uv+","+str(slot)
-	if model_data != null and model_data.has("outputs") and model_data.outputs.size() > slot:
-		var output = model_data.outputs[slot]
+	var variant_string = uv+","+str(output_index)
+	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
+		var output = shader_model.outputs[output_index]
 		rv.defs = ""
-		if model_data.has("instance") && !context.has_variant(self):
-			rv.defs += subst(model_data.instance, context).string
-		for p in model_data.parameters:
+		if shader_model.has("instance") && !context.has_variant(self):
+			rv.defs += subst(shader_model.instance, context).string
+		for p in shader_model.parameters:
 			if p.type == "gradient":
 				var g = parameters[p.name]
 				if !(g is MMGradient):
@@ -139,14 +143,14 @@ func _get_shader_code(uv, slot = 0, context = MMGenContext.new()):
 					var subst_output = subst(output[t.field], context, uv)
 					rv.defs += subst_output.defs
 					rv.code += subst_output.code
-					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, slot, variant_index, t.field, subst_output.string ]
+					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, output_index, variant_index, t.field, subst_output.string ]
 		for t in output_info:
 			if output.has(t.field):
-				rv[t.field] = "%s_%d_%d_%s" % [ name, slot, variant_index, t.field ]
+				rv[t.field] = "%s_%d_%d_%s" % [ name, output_index, variant_index, t.field ]
 	return rv
 
 func get_globals():
 	var list = .get_globals()
-	if typeof(model_data) == TYPE_DICTIONARY and model_data.has("global") and list.find(model_data.global) == -1:
-		list.append(model_data.global)
+	if typeof(shader_model) == TYPE_DICTIONARY and shader_model.has("global") and list.find(shader_model.global) == -1:
+		list.append(shader_model.global)
 	return list

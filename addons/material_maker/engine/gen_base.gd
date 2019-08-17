@@ -9,7 +9,7 @@ class OutputPort:
 	func _init(g : MMGenBase, o : int):
 		generator = g
 		output_index = o
-	
+	"""
 	func get_shader():
 		return generator.get_shader(output_index)
 	
@@ -18,18 +18,42 @@ class OutputPort:
 	
 	func get_globals():
 		return generator.get_globals()
-	
+	"""
 	func to_str():
 		return generator.name+"("+str(output_index)+")"
 
 var position : Vector2 = Vector2(0, 0)
 var parameters = {}
 
+func _ready():
+	init_parameters()
+
+func init_parameters():
+	for p in get_parameter_defs():
+		print(p)
+		if !parameters.has(p.name):
+			if p.has("default"):
+				parameters[p.name] = MMType.deserialize_value(p.default)
+			else:
+				print("No default value for parameter "+p.name)
+
 func get_seed():
 	return 0
 
 func get_type():
 	return "generic"
+
+func get_type_name():
+	return "Unnamed"
+
+func get_parameter_defs():
+	return []
+
+func get_input_defs():
+	return []
+
+func get_output_defs():
+	return []
 
 func get_source(input_index : int):
 	return get_parent().get_port_source(name, input_index)
@@ -39,7 +63,7 @@ func get_input_shader(input_index : int):
 	if source != null:
 		return source.get_shader()
 
-func get_shader(output_index : int, context = MMGenContext.new()):
+func get_shader(output_index : int, context):
 	return get_shader_code("UV", output_index, context);
 
 # this will need an output index for switch
@@ -48,14 +72,25 @@ func get_globals():
 	for i in range(10):
 		var source = get_source(i)
 		if source != null:
-			var source_list = source.get_globals()
+			var source_list = source.generator.get_globals()
 			for g in source_list:
 				if list.find(g) == -1:
 					list.append(g)
 	return list
 
-func get_shader_code(uv, slot = 0, context = MMGenContext.new()):
-	var rv = _get_shader_code(uv, slot, context)
+func render(output_index : int, renderer : MMGenRenderer, size : int):
+	var context : MMGenContext = MMGenContext.new(renderer)
+	var source = get_shader_code("UV", output_index, context)
+	if source == null:
+		return false
+	var shader : String = renderer.generate_shader(source)
+	var status = renderer.render_shader(shader, {}, 1024)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	return status
+
+func get_shader_code(uv : String, output_index : int, context : MMGenContext):
+	var rv = _get_shader_code(uv, output_index, context)
 	if rv != null:
 		if !rv.has("f"):
 			if rv.has("rgb"):
@@ -74,5 +109,5 @@ func get_shader_code(uv, slot = 0, context = MMGenContext.new()):
 		rv.globals = get_globals()
 	return rv
 
-func _get_shader_code(uv : String, output_index : int, context = MMGenContext.new()):
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	return null
