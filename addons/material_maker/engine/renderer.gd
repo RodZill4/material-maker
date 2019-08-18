@@ -18,6 +18,9 @@ static func generate_shader(src_code):
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
 	code += "\n"
+	if src_code.has("textures"):
+		for t in src_code.textures.keys():
+			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
@@ -84,7 +87,7 @@ func render_shader(shader, textures, render_size):
 	shader_material.shader.code = shader
 	if textures != null:
 		for k in textures.keys():
-			shader_material.set_shader_param(k+"_tex", textures[k])
+			shader_material.set_shader_param(k, textures[k])
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")

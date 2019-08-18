@@ -9,16 +9,7 @@ class OutputPort:
 	func _init(g : MMGenBase, o : int):
 		generator = g
 		output_index = o
-	"""
-	func get_shader():
-		return generator.get_shader(output_index)
 	
-	func get_shader_code(uv):
-		return generator.get_shader_code(uv, output_index)
-	
-	func get_globals():
-		return generator.get_globals()
-	"""
 	func to_str():
 		return generator.name+"("+str(output_index)+")"
 
@@ -81,16 +72,20 @@ func get_globals():
 func render(output_index : int, renderer : MMGenRenderer, size : int):
 	var context : MMGenContext = MMGenContext.new(renderer)
 	var source = get_shader_code("UV", output_index, context)
+	while source is GDScriptFunctionState:
+		source = yield(source, "completed")
 	if source == null:
 		return false
 	var shader : String = renderer.generate_shader(source)
-	var status = renderer.render_shader(shader, {}, 1024)
+	var status = renderer.render_shader(shader, source.textures, size)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	return status
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var rv = _get_shader_code(uv, output_index, context)
+	while rv is GDScriptFunctionState:
+		rv = yield(rv, "completed")
 	if rv != null:
 		if !rv.has("f"):
 			if rv.has("rgb"):

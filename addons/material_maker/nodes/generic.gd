@@ -86,13 +86,11 @@ func update_node(data):
 	if data.has("instance") and data.instance.find("$(seed)"):
 		uses_seed = true
 	# Parameters
-	print("Parameters")
 	controls = []
 	var sizer = null
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
-		print(p.name)
 		var control = null
 		if p.type == "float":
 			if p.has("widget") and p.widget == "spinbox":
@@ -141,35 +139,39 @@ func update_node(data):
 			control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 			sizer.add_child(control)
 	initialize_properties()
-	if data.has("inputs") and typeof(data.inputs) == TYPE_ARRAY:
-		for i in range(data.inputs.size()):
-			var input = data.inputs[i]
-			var enable_left = false
-			var color_left = Color(0.5, 0.5, 0.5)
-			if typeof(input) == TYPE_DICTIONARY:
-				if input.type == "rgb":
-					enable_left = true
-					color_left = Color(0.5, 0.5, 1.0)
-				elif input.type == "rgba":
-					enable_left = true
-					color_left = Color(0.0, 0.5, 0.0, 0.5)
-				else:
-					enable_left = true
-			set_slot(i, enable_left, 0, color_left, false, 0, Color())
-	if data.has("outputs") and typeof(data.outputs) == TYPE_ARRAY:
-		for i in range(data.outputs.size()):
-			var output = data.outputs[i]
-			var enable_right = false
-			var color_right = Color(0.5, 0.5, 0.5)
-			if typeof(output) == TYPE_DICTIONARY:
-				if output.has("rgb"):
-					enable_right = true
-					color_right = Color(0.5, 0.5, 1.0)
-				elif output.has("rgba"):
-					enable_right = true
-					color_right = Color(0.0, 0.5, 0.0, 0.5)
-				elif output.has("f"):
-					enable_right = true
-			set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
+	# Inputs
+	var inputs = generator.get_input_defs()
+	for i in range(inputs.size()):
+		var input = inputs[i]
+		print(input)
+		var enable_left = false
+		var color_left = Color(0.5, 0.5, 0.5)
+		if typeof(input) == TYPE_DICTIONARY:
+			if input.type == "rgb":
+				enable_left = true
+				color_left = Color(0.5, 0.5, 1.0)
+			elif input.type == "rgba":
+				enable_left = true
+				color_left = Color(0.0, 0.5, 0.0, 0.5)
+			else:
+				enable_left = true
+		set_slot(i, enable_left, 0, color_left, false, 0, Color())
+	# Outputs
+	var outputs = generator.get_output_defs()
+	for i in range(outputs.size()):
+		var output = outputs[i]
+		print(output)
+		var enable_right = false
+		var color_right = Color(0.5, 0.5, 0.5)
+		if typeof(output) == TYPE_DICTIONARY:
+			if output.has("rgb"):
+				enable_right = true
+				color_right = Color(0.5, 0.5, 1.0)
+			elif output.has("rgba"):
+				enable_right = true
+				color_right = Color(0.0, 0.5, 0.0, 0.5)
+			elif output.has("f"):
+				enable_right = true
+		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
 	if custom_node_buttons != null:
 		move_child(custom_node_buttons, get_child_count()-1)

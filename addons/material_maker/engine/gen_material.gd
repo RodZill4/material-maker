@@ -39,8 +39,7 @@ func _ready():
 func generate_material(renderer : MMGenRenderer):
 	var source = get_source(0)
 	if source != null:
-		var shader : String = renderer.generate_shader(source)
-		var status = renderer.render_shader(shader, {}, 512)
+		var status = source.generator.render(source.output_index, renderer, 512)
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 		print("Render status: "+str(status))

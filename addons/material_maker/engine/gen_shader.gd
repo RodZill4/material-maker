@@ -3,7 +3,6 @@ extends MMGenBase
 class_name MMGenShader
 
 var shader_model : Dictionary = {}
-var generated_variants = []
 
 func get_type():
 	return "shader"
@@ -18,6 +17,18 @@ func get_parameter_defs():
 		return []
 	else:
 		return shader_model.parameters
+
+func get_input_defs():
+	if shader_model == null or !shader_model.has("inputs"):
+		return []
+	else:
+		return shader_model.inputs
+
+func get_output_defs():
+	if shader_model == null or !shader_model.has("outputs"):
+		return []
+	else:
+		return shader_model.outputs
 
 func set_shader_model(data: Dictionary):
 	shader_model = data
@@ -43,6 +54,7 @@ func find_keyword_call(string, keyword):
 func replace_input(string, context, input, type, src, default):
 	var required_defs = ""
 	var required_code = ""
+	var required_textures = {}
 	while true:
 		var uv = find_keyword_call(string, input)
 		if uv == null:
@@ -52,15 +64,17 @@ func replace_input(string, context, input, type, src, default):
 			break
 		var src_code
 		if src == null:
-			src_code = subst(default, "(%s)" % uv)
+			src_code = subst(default, context, "(%s)" % uv)
 		else:
-			print(src.to_str())
 			src_code = src.generator.get_shader_code(uv, src.output_index, context)
+			while src_code is GDScriptFunctionState:
+				src_code = yield(src_code, "completed")
 			src_code.string = src_code[type]
 		required_defs += src_code.defs
 		required_code += src_code.code
+		required_textures = src_code.textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, defs=required_defs, code=required_code }
+	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
 
 func is_word_letter(l):
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -86,6 +100,7 @@ func replace_variable(string, variable, value):
 func subst(string, context, uv = ""):
 	var required_defs = ""
 	var required_code = ""
+	var required_textures = {}
 	string = replace_variable(string, "name", name)
 	string = replace_variable(string, "seed", str(get_seed()))
 	if uv != "":
@@ -113,20 +128,29 @@ func subst(string, context, uv = ""):
 			var input = shader_model.inputs[i]
 			var source = get_source(i)
 			var result = replace_input(string, context, input.name, input.type, source, input.default)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
 			string = result.string
 			required_defs += result.defs
 			required_code += result.code
-	return { string=string, defs=required_defs, code=required_code }
+			for t in result.textures.keys():
+				required_textures[t] = result.textures[t]
+	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
-	var rv = { defs="", code="" }
+	var rv = { defs="", code="", textures={} }
 	var variant_string = uv+","+str(output_index)
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
 		rv.defs = ""
 		if shader_model.has("instance") && !context.has_variant(self):
-			rv.defs += subst(shader_model.instance, context).string
+			var subst_output = subst(shader_model.instance, context, uv)
+			while subst_output is GDScriptFunctionState:
+				subst_output = yield(subst_output, "completed")
+			rv.defs += subst_output.string
+			for t in subst_output.textures.keys():
+				rv.textures[t] = subst_output.textures[t]
 		for p in shader_model.parameters:
 			if p.type == "gradient":
 				var g = parameters[p.name]
@@ -137,13 +161,16 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
 			variant_index = context.get_variant(self, variant_string)
-			generated_variants.append(variant_string)
 			for t in output_info:
 				if output.has(t.field):
 					var subst_output = subst(output[t.field], context, uv)
+					while subst_output is GDScriptFunctionState:
+						subst_output = yield(subst_output, "completed")
 					rv.defs += subst_output.defs
 					rv.code += subst_output.code
 					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, output_index, variant_index, t.field, subst_output.string ]
+					for t in subst_output.textures.keys():
+						rv.textures[t] = subst_output.textures[t]
 		for t in output_info:
 			if output.has(t.field):
 				rv[t.field] = "%s_%d_%d_%s" % [ name, output_index, variant_index, t.field ]
