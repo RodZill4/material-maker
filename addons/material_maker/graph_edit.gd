@@ -54,7 +54,7 @@ func disconnect_node(from, from_slot, to, to_slot):
 		send_changed_signal();
 
 func remove_node(node):
-	generator.remove_node(node.generator)
+	generator.remove_generator(node.generator)
 	var node_name = node.name
 	for c in get_connection_list():
 		if c.from == node_name or c.to == node_name:

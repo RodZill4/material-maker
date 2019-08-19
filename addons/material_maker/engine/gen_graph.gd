@@ -15,6 +15,13 @@ func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 				return OutputPort.new(get_node(c.from), c.from_port)
 	return null
 
+func remove_generator(generator : MMGenBase):
+	var new_connections = []
+	for c in connections:
+		if c.from != generator.name and c.to != generator.name:
+			new_connections.append(c)
+	connections = new_connections
+
 func connect_children(from, from_port : int, to, to_port : int):
 	# disconnect target
 	while true:
