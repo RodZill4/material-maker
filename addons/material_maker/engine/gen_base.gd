@@ -2,6 +2,10 @@ tool
 extends Node
 class_name MMGenBase
 
+"""
+Base class for texture generators, that defines their API
+"""
+
 class OutputPort:
 	var generator : MMGenBase = null
 	var output_index : int = 0
@@ -21,7 +25,6 @@ func _ready():
 
 func init_parameters():
 	for p in get_parameter_defs():
-		print(p)
 		if !parameters.has(p.name):
 			if p.has("default"):
 				parameters[p.name] = MMType.deserialize_value(p.default)
@@ -39,6 +42,9 @@ func get_type_name():
 
 func get_parameter_defs():
 	return []
+
+func set_parameter(n : String, v):
+	parameters[n] = v
 
 func get_input_defs():
 	return []

@@ -1,8 +1,11 @@
 tool
-extends MMGenBase
+extends MMGenTexture
 class_name MMGenBuffer
 
-var texture : ImageTexture = ImageTexture.new()
+"""
+Texture generator buffers, that render their input in a specific resolution and provide the result as output.
+This is useful when using generators that sample their inputs several times (such as convolutions) 
+"""
 
 func _ready():
 	if !parameters.has("size"):
@@ -20,9 +23,6 @@ func get_parameter_defs():
 func get_input_defs():
 	return [ { name="in", type="rgba" } ]
 
-func get_output_defs():
-	return [ { rgba="" } ]
-
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)
 	if source != null:
@@ -34,12 +34,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			var image : Image = context.renderer.get_texture().get_data()
 			texture.create_from_image(image)
 			texture.flags = 0
-	var rv = { defs="" }
-	var variant_index = context.get_variant(self, uv)
-	if variant_index == -1:
-		variant_index = context.get_variant(self, uv)
-	var texture_name = name+"_tex"
-	rv.code = "vec4 %s_%d = texture(%s, %s);\n" % [ name, variant_index, texture_name, uv ]
-	rv.rgba = "%s_%d" % [ name, variant_index ]
-	rv.textures = { texture_name:texture }
+	var rv = ._get_shader_code(uv, output_index, context)
+	while rv is GDScriptFunctionState:
+		rv = yield(rv, "completed")
 	return rv

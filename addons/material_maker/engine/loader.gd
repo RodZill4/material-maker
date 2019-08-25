@@ -40,6 +40,8 @@ func create_gen(data) -> MMGenBase:
 			generator = MMGenMaterial.new()
 		elif data.type == "buffer":
 			generator = MMGenBuffer.new()
+		elif data.type == "image":
+			generator = MMGenImage.new()
 		else:
 			var file = File.new()
 			if file.open("res://addons/material_maker/library/"+data.type+".mml", File.READ) == OK:

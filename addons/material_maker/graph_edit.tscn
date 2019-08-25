@@ -7,7 +7,6 @@ self_modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 right_disconnects = true
-scroll_offset = Vector2( -325, -250 )
 use_snap = false
 script = ExtResource( 1 )
 

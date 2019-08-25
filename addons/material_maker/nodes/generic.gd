@@ -4,18 +4,13 @@ var generator = null setget set_generator
 
 var controls = []
 
-var uses_seed : bool = false
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 func set_generator(g):
 	generator = g
-	if g.get("shader_model") != null:
-		update_node(g.shader_model)
-	else:
-		update_node({})
+	update_node()
 
 func initialize_properties():
 	for o in controls:
@@ -69,9 +64,7 @@ func _on_gradient_changed(new_gradient, variable):
 	generator.parameters[variable] = new_gradient
 	update_shaders()
 
-func update_node(data):
-	if typeof(data) != TYPE_DICTIONARY:
-		return
+func update_node():
 	# Clean node
 	var custom_node_buttons = null
 	for c in get_children():
@@ -82,9 +75,6 @@ func update_node(data):
 			custom_node_buttons = c
 	# Rebuild node
 	title = generator.get_type_name()
-	uses_seed = false
-	if data.has("instance") and data.instance.find("$(seed)"):
-		uses_seed = true
 	# Parameters
 	controls = []
 	var sizer = null
