@@ -21,6 +21,14 @@ func remove_generator(generator : MMGenBase):
 		if c.from != generator.name and c.to != generator.name:
 			new_connections.append(c)
 	connections = new_connections
+	generator.queue_free()
+	
+func replace_generator(old : MMGenBase, new : MMGenBase):
+	new.name = old.name
+	new.position = old.position
+	remove_child(old)
+	old.free()
+	add_child(new)
 
 func connect_children(from, from_port : int, to, to_port : int):
 	# disconnect target
@@ -48,3 +56,10 @@ func disconnect_children(from, from_port : int, to, to_port : int):
 			break
 		connections.remove(remove)
 	return true
+
+func _serialize(data):
+	data.nodes = []
+	for c in get_children():
+		data.nodes.append(c.serialize())
+	data.connections = connections
+	return data

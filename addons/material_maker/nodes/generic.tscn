@@ -3,8 +3,10 @@
 [ext_resource path="res://addons/material_maker/nodes/generic.gd" type="Script" id=1]
 
 [node name="Generic" type="GraphNode"]
-margin_right = 82.0
+margin_right = 95.0
 margin_bottom = 29.0
 title = "Generic"
 show_close = true
 script = ExtResource( 1 )
+[connection signal="close_request" from="." to="." method="on_close_request"]
+[connection signal="offset_changed" from="." to="." method="on_offset_changed"]

@@ -25,6 +25,7 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="Tools", command="make_selected_nodes_editable", description="Make selected nodes editable" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
 	{ menu="Help", command="show_doc", description="User manual" },
@@ -233,19 +234,33 @@ func edit_paste_is_disabled():
 	var data = parse_json(OS.clipboard)
 	return data == null
 
-func add_to_user_library():
+func get_selected_nodes():
 	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	if graph_edit != null and graph_edit is GraphEdit:
 		var selected_nodes = []
 		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
 				selected_nodes.append(n)
-		if !selected_nodes.empty():
-			var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
-			dialog.set_texts("New library element", "Select a name for the new library element")
-			add_child(dialog)
-			dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
-			dialog.popup_centered()
+		return selected_nodes
+	else:
+		return []
+
+func make_selected_nodes_editable():
+	var selected_nodes = get_selected_nodes()
+	if !selected_nodes.empty():
+		for n in selected_nodes:
+			print(n.name)
+			n.generator.model = null
+			n.update_node()
+
+func add_to_user_library():
+	var selected_nodes = get_selected_nodes()
+	if !selected_nodes.empty():
+		var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+		dialog.set_texts("New library element", "Select a name for the new library element")
+		add_child(dialog)
+		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
+		dialog.popup_centered()
 
 func do_add_to_user_library(name, nodes):
 	var data

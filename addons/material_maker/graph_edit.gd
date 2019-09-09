@@ -134,16 +134,14 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)):
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
-		var loader = MMGenLoader.new()
-		var new_stuff = loader.add_to_gen_graph(generator, data.nodes, data.connections)
+		var new_stuff = MMGenLoader.add_to_gen_graph(generator, data.nodes, data.connections)
 		for g in new_stuff.generators:
 			g.position += position
 		update_graph(new_stuff.generators, new_stuff.connections)
 
 func load_file(filename):
 	clear_material()
-	var loader = MMGenLoader.new()
-	generator = loader.load_gen(filename)
+	generator = MMGenLoader.load_gen(filename)
 	if generator != null:
 		add_child(generator)
 		update_graph(generator.get_children(), generator.connections)
@@ -152,11 +150,7 @@ func load_file(filename):
 		center_view()
 
 func save_file(filename):
-	var data = { nodes = [] }
-	for c in get_children():
-		if c is GraphNode:
-			data.nodes.append(c.serialize())
-	data.connections = get_connection_list()
+	var data = generator.serialize()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(to_json(data))
@@ -191,7 +185,7 @@ func serialize_selection():
 		center += n.offset+0.5*n.rect_size
 	center /= nodes.size()
 	for n in nodes:
-		var s = n.serialize()
+		var s = n.generator.serialize()
 		var p = n.offset-center
 		s.node_position = { x=p.x, y=p.y }
 		data.nodes.append(s)

@@ -129,3 +129,7 @@ func export_textures(prefix, size = null):
 		update_spatial_material(new_material, prefix)
 		ResourceSaver.save("%s.tres" % [ prefix ], new_material)
 		resource_filesystem.scan()
+
+func _serialize(data):
+	data.type = "material"
+	return data

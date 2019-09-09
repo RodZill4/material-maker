@@ -120,7 +120,7 @@ func subst(string, context, uv = ""):
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			elif p.type == "gradient":
-				value_string = p.name+"_gradient_fct"
+				value_string = name+"__"+p.name+"_gradient_fct"
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
@@ -157,7 +157,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 				if !(g is MMGradient):
 					g = MMGradient.new()
 					g.deserialize(parameters[p.name])
-				rv.defs += g.get_shader(p.name+"_gradient_fct")
+				rv.defs += g.get_shader(name+"__"+p.name+"_gradient_fct")
 		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
 			variant_index = context.get_variant(self, variant_string)
@@ -181,3 +181,7 @@ func get_globals():
 	if typeof(shader_model) == TYPE_DICTIONARY and shader_model.has("global") and list.find(shader_model.global) == -1:
 		list.append(shader_model.global)
 	return list
+
+func _serialize(data):
+	data.shader_model = shader_model
+	return data

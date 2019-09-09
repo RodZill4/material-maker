@@ -38,3 +38,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
 	return rv
+
+func _serialize(data):
+	data.type = "buffer"
+	return data

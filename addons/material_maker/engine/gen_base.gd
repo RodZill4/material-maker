@@ -18,6 +18,7 @@ class OutputPort:
 		return generator.name+"("+str(output_index)+")"
 
 var position : Vector2 = Vector2(0, 0)
+var model = null
 var parameters = {}
 
 func _ready():
@@ -112,3 +113,18 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	return null
+
+func _serialize(data):
+	print("cannot save "+name)
+	return data
+
+func serialize():
+	var rv = { name=name, parameters={}, node_position={ x=position.x, y=position.y } }
+	for p in parameters.keys():
+		rv.parameters[p] = MMType.serialize_value(parameters[p])
+	if model != null:
+		rv.type = model
+	else:
+		rv = _serialize(rv)
+		
+	return rv

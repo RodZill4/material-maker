@@ -36,7 +36,7 @@ func sort():
 
 func get_color(x):
 	sort()
-	if points.size() >0:
+	if points.size() > 0:
 		if x < points[0].v:
 			return points[0].c
 		var s = points.size()-1
@@ -96,3 +96,7 @@ func deserialize(v):
 		for i in v.points:
 			if !i.has("a"): i.a = 1.0
 			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
+	elif typeof(v) == TYPE_OBJECT and v.get_script() == get_script():
+		clear()
+		for p in v.points:
+			add_point(p.v, p.c)

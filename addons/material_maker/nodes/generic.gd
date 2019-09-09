@@ -12,6 +12,13 @@ func set_generator(g):
 	generator = g
 	update_node()
 
+func on_close_request():
+	print("close")
+	generator.get_parent().remove_generator(generator)
+
+func on_offset_changed():
+	generator.position = offset
+
 func initialize_properties():
 	for o in controls:
 		if o == null:
@@ -73,6 +80,7 @@ func update_node():
 			c.queue_free()
 		else:
 			custom_node_buttons = c
+	rect_size = Vector2(0, 0)
 	# Rebuild node
 	title = generator.get_type_name()
 	# Parameters
@@ -133,7 +141,6 @@ func update_node():
 	var inputs = generator.get_input_defs()
 	for i in range(inputs.size()):
 		var input = inputs[i]
-		print(input)
 		var enable_left = false
 		var color_left = Color(0.5, 0.5, 0.5)
 		if typeof(input) == TYPE_DICTIONARY:
@@ -146,11 +153,14 @@ func update_node():
 			else:
 				enable_left = true
 		set_slot(i, enable_left, 0, color_left, false, 0, Color())
+		if i >= get_child_count():
+			var control = Control.new()
+			control.rect_min_size = Vector2(0, 16)
+			add_child(control)
 	# Outputs
 	var outputs = generator.get_output_defs()
 	for i in range(outputs.size()):
 		var output = outputs[i]
-		print(output)
 		var enable_right = false
 		var color_right = Color(0.5, 0.5, 0.5)
 		if typeof(output) == TYPE_DICTIONARY:
@@ -163,5 +173,69 @@ func update_node():
 			elif output.has("f"):
 				enable_right = true
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
-	if custom_node_buttons != null:
-		move_child(custom_node_buttons, get_child_count()-1)
+		if i >= get_child_count():
+			var control = Control.new()
+			control.rect_min_size = Vector2(0, 16)
+			add_child(control)
+	if generator.model == null:
+		var edit_buttons = preload("res://addons/material_maker/nodes/edit_buttons.tscn").instance()
+		add_child(edit_buttons)
+		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
+
+func edit_generator():
+	var edit_window = load("res://addons/material_maker/widgets/node_editor/node_editor.tscn").instance()
+	get_parent().add_child(edit_window)
+	if generator.shader_model != null:
+		edit_window.set_model_data(generator.shader_model)
+	edit_window.connect("node_changed", self, "update_generator")
+	edit_window.popup_centered()
+
+func update_generator(shader_model):
+	generator.shader_model = shader_model
+	update_node()
+
+func load_generator():
+	var dialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.add_filter("*.mmg,*.mmn;Material Maker Generator")
+	dialog.connect("file_selected", self, "do_load_generator")
+	dialog.popup_centered()
+
+func do_load_generator(file_name : String):
+	print(file_name)
+	var new_generator = null
+	if file_name.ends_with(".mmn"):
+		var file = File.new()
+		if file.open(file_name, File.READ) == OK:
+			new_generator = MMGenShader.new()
+			new_generator.set_shader_model(parse_json(file.get_as_text()))
+			file.close()
+	else:
+		new_generator = MMGenLoader.load_gen(file_name)
+	if new_generator != null:
+		var parent_generator = generator.get_parent()
+		print("before: "+generator.name)
+		parent_generator.replace_generator(generator, new_generator)
+		generator = new_generator
+		print("after: "+generator.name)
+		update_node()
+
+func save_generator():
+	var dialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.mmg;Material Maker Generator")
+	dialog.connect("file_selected", self, "do_save_generator")
+	dialog.popup_centered()
+
+func do_save_generator(file_name : String):
+	var data = generator.serialize()
+	var file = File.new()
+	if file.open(file_name, File.WRITE) == OK:
+		file.store_string(to_json(data))
+		file.close()

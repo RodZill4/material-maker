@@ -254,7 +254,8 @@
 	},
 	{
 		"tree_item":"Miscellaneous/Custom",
-		"type":"custom"
+		"type":"custom",
+		"shader_model":{}
 	},
 	{
 		"tree_item":"Miscellaneous/Remote",
