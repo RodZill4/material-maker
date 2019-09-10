@@ -83,9 +83,40 @@ func update_node():
 	rect_size = Vector2(0, 0)
 	# Rebuild node
 	title = generator.get_type_name()
+	# Inputs
+	var inputs = generator.get_input_defs()
+	for i in range(inputs.size()):
+		var input = inputs[i]
+		var enable_left = false
+		var color_left = Color(0.5, 0.5, 0.5)
+		if typeof(input) == TYPE_DICTIONARY:
+			if input.type == "rgb":
+				enable_left = true
+				color_left = Color(0.5, 0.5, 1.0)
+			elif input.type == "rgba":
+				enable_left = true
+				color_left = Color(0.0, 0.5, 0.0, 0.5)
+			else:
+				enable_left = true
+		set_slot(i, enable_left, 0, color_left, false, 0, Color())
+		var hsizer : HBoxContainer = HBoxContainer.new()
+		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+		var label : Label = Label.new()
+		label.text = input.label if input.has("label") else ""
+		hsizer.add_child(label)
+		add_child(hsizer)
+	var input_names_width : int = 0
+	for c in get_children():
+		var width = c.get_child(0).rect_size.x
+		if width > input_names_width:
+			input_names_width = width
+	if input_names_width > 0:
+		input_names_width += 3
+	for c in get_children():
+		c.get_child(0).rect_min_size.x = input_names_width
 	# Parameters
 	controls = []
-	var sizer = null
+	var index = -1
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
@@ -125,38 +156,26 @@ func update_node():
 			controls.append(control)
 			if p.has("label"):
 				label = p.label
-			if sizer == null or label != "nonewline":
-				sizer = HBoxContainer.new()
-				sizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-				add_child(sizer)
-			if label != "" && label != "nonewline":
+			if index == -1 or label != "nonewline":
+				index += 1
+			var hsizer : HBoxContainer
+			if index >= get_child_count():
+				hsizer = HBoxContainer.new()
+				hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+				var empty_control : Control = Control.new()
+				empty_control.rect_min_size.x = input_names_width
+				hsizer.add_child(empty_control)
+				add_child(hsizer)
+			else:
+				hsizer = get_child(index)
+			if label != "" and label != "nonewline":
 				var label_widget = Label.new()
 				label_widget.text = label
 				label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-				sizer.add_child(label_widget)
+				hsizer.add_child(label_widget)
 			control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			sizer.add_child(control)
+			hsizer.add_child(control)
 	initialize_properties()
-	# Inputs
-	var inputs = generator.get_input_defs()
-	for i in range(inputs.size()):
-		var input = inputs[i]
-		var enable_left = false
-		var color_left = Color(0.5, 0.5, 0.5)
-		if typeof(input) == TYPE_DICTIONARY:
-			if input.type == "rgb":
-				enable_left = true
-				color_left = Color(0.5, 0.5, 1.0)
-			elif input.type == "rgba":
-				enable_left = true
-				color_left = Color(0.0, 0.5, 0.0, 0.5)
-			else:
-				enable_left = true
-		set_slot(i, enable_left, 0, color_left, false, 0, Color())
-		if i >= get_child_count():
-			var control = Control.new()
-			control.rect_min_size = Vector2(0, 16)
-			add_child(control)
 	# Outputs
 	var outputs = generator.get_output_defs()
 	for i in range(outputs.size()):
@@ -231,9 +250,10 @@ func save_generator():
 	dialog.popup_centered()
 
 func do_save_generator(file_name : String):
-	var data = generator.serialize()
-	data.node_position = { x=0, y=0 }
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
+		var data = generator.serialize()
+		data.name = file_name.get_file().get_basename()
+		data.node_position = { x=0, y=0 }
 		file.store_string(to_json(data))
 		file.close()
