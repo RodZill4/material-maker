@@ -1,3 +1,4 @@
+tool
 extends GraphNode
 
 var generator = null setget set_generator

@@ -26,7 +26,6 @@ func get_input_defs():
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)
 	if source != null:
-		print(parameters.size)
 		var status = source.generator.render(source.output_index, context.renderer, pow(2, 4+parameters.size))
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")

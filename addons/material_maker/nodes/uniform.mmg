@@ -1,0 +1,1 @@
+{"name":"uniform","node_position":{"x":0,"y":0},"parameters":{"color":{"a":1,"b":1,"g":1,"r":1,"type":"Color"}},"shader_model":{"global":"","instance":"","name":"Uniform","outputs":[{"rgba":"$(color)"}],"parameters":[{"default":{"a":1,"b":1,"g":1,"r":1},"label":"","name":"color","type":"color"}]}}
