@@ -42,14 +42,14 @@ margin_left = 79.0
 margin_right = 125.0
 margin_bottom = 20.0
 text = "Tools"
-items = [ "Add selected node to user library", null, 0, false, false, 15, 0, null, "", false, "Save user library", null, 0, false, false, 16, 0, null, "", false ]
+items = [ "Make selected nodes editable", null, 0, false, false, 15, 0, null, "", false, "Add selected node to user library", null, 0, false, false, 16, 0, null, "", false, "Save user library", null, 0, false, false, 17, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 129.0
 margin_right = 171.0
 margin_bottom = 20.0
 text = "Help"
-items = [ "User manual", null, 0, false, false, 17, 0, null, "", false, "Report a bug", null, 0, false, false, 18, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 20, 0, null, "", false ]
+items = [ "User manual", null, 0, false, false, 18, 0, null, "", false, "Report a bug", null, 0, false, false, 19, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 21, 0, null, "", false ]
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer"]
 margin_top = 24.0

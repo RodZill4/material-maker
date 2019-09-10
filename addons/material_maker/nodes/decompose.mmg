@@ -1,0 +1,1 @@
+{"name":"decompose","node_position":{"x":0,"y":0},"parameters":{},"shader_model":{"global":"","inputs":[{"default":"vec4(1.0)","label":"","name":"i","type":"rgba"}],"instance":"","name":"Decompose","outputs":[{"f":"$i($uv).r"},{"f":"$i($uv).g"},{"f":"$i($uv).b"},{"f":"$i($uv).a"}],"parameters":[]}}

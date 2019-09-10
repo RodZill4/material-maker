@@ -40,7 +40,6 @@ func add_node(node):
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
-	print("Connecting "+str(from)+"("+str(from_slot)+") to "+str(to)+"("+str(to_slot)+")")
 	if generator.connect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
 		var disconnect = get_source(to, to_slot)
 		if disconnect != null:

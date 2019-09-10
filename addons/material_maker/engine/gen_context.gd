@@ -16,7 +16,7 @@ func get_variant(generator, uv):
 	if variants.has(generator):
 		rv = variants[generator].find(uv)
 		if rv == -1:
-			variants[generator].push(uv)
+			variants[generator].push_back(uv)
 	else:
 		variants[generator] = [uv]
 	return rv

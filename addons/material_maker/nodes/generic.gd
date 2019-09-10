@@ -13,7 +13,6 @@ func set_generator(g):
 	update_node()
 
 func on_close_request():
-	print("close")
 	generator.get_parent().remove_generator(generator)
 
 func on_offset_changed():
@@ -205,7 +204,6 @@ func load_generator():
 	dialog.popup_centered()
 
 func do_load_generator(file_name : String):
-	print(file_name)
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
 		var file = File.new()
@@ -217,10 +215,8 @@ func do_load_generator(file_name : String):
 		new_generator = MMGenLoader.load_gen(file_name)
 	if new_generator != null:
 		var parent_generator = generator.get_parent()
-		print("before: "+generator.name)
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator
-		print("after: "+generator.name)
 		update_node()
 
 func save_generator():
@@ -235,6 +231,7 @@ func save_generator():
 
 func do_save_generator(file_name : String):
 	var data = generator.serialize()
+	data.node_position = { x=0, y=0 }
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		file.store_string(to_json(data))
