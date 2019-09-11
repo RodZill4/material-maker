@@ -22,6 +22,9 @@ func get_parameter_defs():
 
 func get_input_defs():
 	return [ { name="in", type="rgba" } ]
+	
+func get_output_defs():
+	return [ { type="rgba" } ]
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)

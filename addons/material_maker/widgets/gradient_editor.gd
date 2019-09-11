@@ -56,7 +56,6 @@ func set_value(v):
 			remove_child(c)
 			c.free()
 	for p in value.points:
-		print(p)
 		add_cursor(p.v*(rect_size.x-GradientCursor.WIDTH), p.c)
 	update_shader()
 

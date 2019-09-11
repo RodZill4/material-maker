@@ -33,6 +33,15 @@ func get_output_defs():
 func set_shader_model(data: Dictionary):
 	shader_model = data
 	init_parameters()
+	if shader_model.has("outputs"):
+		for i in range(shader_model.outputs.size()):
+			var output = shader_model.outputs[i]
+			if output.has("rgba"):
+				shader_model.outputs[i].type = "rgba"
+			elif output.has("rgb"):
+				shader_model.outputs[i].type = "rgb"
+			else:
+				shader_model.outputs[i].type = "f"
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword

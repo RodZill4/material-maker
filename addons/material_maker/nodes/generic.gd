@@ -180,17 +180,14 @@ func update_node():
 	var outputs = generator.get_output_defs()
 	for i in range(outputs.size()):
 		var output = outputs[i]
-		var enable_right = false
+		var enable_right = true
 		var color_right = Color(0.5, 0.5, 0.5)
-		if typeof(output) == TYPE_DICTIONARY:
-			if output.has("rgb"):
-				enable_right = true
-				color_right = Color(0.5, 0.5, 1.0)
-			elif output.has("rgba"):
-				enable_right = true
-				color_right = Color(0.0, 0.5, 0.0, 0.5)
-			elif output.has("f"):
-				enable_right = true
+		assert(typeof(output) == TYPE_DICTIONARY)
+		assert(output.has("type"))
+		enable_right = true
+		match output.type:
+			"rgb": color_right = Color(0.5, 0.5, 1.0)
+			"rgba": color_right = Color(0.0, 0.5, 0.0, 0.5)
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
 		if i >= get_child_count():
 			var control = Control.new()

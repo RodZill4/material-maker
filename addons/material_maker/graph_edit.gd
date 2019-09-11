@@ -64,7 +64,9 @@ func remove_node(node):
 # Global operations on graph
 
 func update_tab_title():
+	print("update_tab_title")
 	if !get_parent().has_method("set_tab_title"):
+		print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
 	if save_path != null:
@@ -115,7 +117,7 @@ func new_material():
 	if generator != null:
 		add_child(generator)
 		update_graph(generator.get_children(), generator.connections)
-		set_save_path(filename)
+		set_save_path(null)
 		set_need_save(false)
 		center_view()
 
