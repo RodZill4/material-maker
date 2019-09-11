@@ -127,7 +127,7 @@ render_target_clear_mode = 1
 render_target_update_mode = 3
 
 [node name="Objects" type="Spatial" parent="MaterialPreview"]
-transform = Transform( 0.979431, 0, -0.201756, 0, 1, 0, 0.201756, 0, 0.979431, 0, 0, 0 )
+transform = Transform( -0.482492, 0, 0.875895, 0, 1, 0, -0.875895, 0, -0.482492, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="MaterialPreview/Objects"]
 mesh = SubResource( 2 )

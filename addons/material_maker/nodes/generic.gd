@@ -117,6 +117,8 @@ func update_node():
 	# Parameters
 	controls = []
 	var index = -1
+	var regex = RegEx.new()
+	regex.compile("^(\\d+):(.*)")
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
@@ -156,19 +158,22 @@ func update_node():
 			controls.append(control)
 			if p.has("label"):
 				label = p.label
-			if index == -1 or label != "nonewline":
+			var result = regex.search(label)
+			if result:
+				index = result.get_string(1).to_int()-1
+				label = result.get_string(2)
+			else:
 				index += 1
 			var hsizer : HBoxContainer
-			if index >= get_child_count():
+			while index >= get_child_count():
 				hsizer = HBoxContainer.new()
 				hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				var empty_control : Control = Control.new()
 				empty_control.rect_min_size.x = input_names_width
 				hsizer.add_child(empty_control)
 				add_child(hsizer)
-			else:
-				hsizer = get_child(index)
-			if label != "" and label != "nonewline":
+			hsizer = get_child(index)
+			if label != "":
 				var label_widget = Label.new()
 				label_widget.text = label
 				label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -207,7 +212,7 @@ func edit_generator():
 	edit_window.popup_centered()
 
 func update_generator(shader_model):
-	generator.shader_model = shader_model
+	generator.set_shader_model(shader_model)
 	update_node()
 
 func load_generator():
