@@ -13,25 +13,6 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
-vec2 transform(vec2 uv, vec2 translate, float rotate, vec2 scale) {
-	vec2 rv;
-	uv -= vec2(0.5);
-	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
-	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
-	rv /= scale;
-	rv += vec2(0.5);
-	rv -= translate;
-	return rv;
-}
-
-vec2 transform_repeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
-	return fract(transform(uv, translate, rotate, scale));
-}
-
-vec2 transform_norepeat(vec2 uv, vec2 translate, float rotate, vec2 scale) {
-	return clamp(transform(uv, translate, rotate, scale), vec2(0.0), vec2(1.0));
-}
-
 // From http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl
 vec3 rgb2hsv(vec3 c) {
 	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);

@@ -64,12 +64,16 @@ func replace_input(string, context, input, type, src, default):
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
+	var new_pass_required = false
 	while true:
 		var uv = find_keyword_call(string, input)
 		if uv == null:
 			break
 		elif uv == "":
 			print("syntax error")
+			break
+		elif uv.find("$") != -1:
+			new_pass_required = true
 			break
 		var src_code
 		if src == null:
@@ -83,7 +87,7 @@ func replace_input(string, context, input, type, src, default):
 		required_code += src_code.code
 		required_textures = src_code.textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
+	return { string=string, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
 
 func is_word_letter(l):
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -130,20 +134,33 @@ func subst(string, context, uv = ""):
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			elif p.type == "gradient":
 				value_string = name+"__"+p.name+"_gradient_fct"
+			elif p.type == "boolean":
+				value_string = "true" if value else "false"
+			else:
+				print("Cannot replace parameter of type "+p.type)
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
-		for i in range(shader_model.inputs.size()):
-			var input = shader_model.inputs[i]
-			var source = get_source(i)
-			var result = replace_input(string, context, input.name, input.type, source, input.default)
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
-			string = result.string
-			required_defs += result.defs
-			required_code += result.code
-			for t in result.textures.keys():
-				required_textures[t] = result.textures[t]
+		var cont = true
+		while cont:
+			var changed = false
+			var new_pass_required = false
+			for i in range(shader_model.inputs.size()):
+				var input = shader_model.inputs[i]
+				var source = get_source(i)
+				var result = replace_input(string, context, input.name, input.type, source, input.default)
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
+				if string != result.string:
+					changed = true
+				if result.new_pass_required:
+					new_pass_required = true
+				string = result.string
+				required_defs += result.defs
+				required_code += result.code
+				for t in result.textures.keys():
+					required_textures[t] = result.textures[t]
+			cont = changed and new_pass_required
 	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):

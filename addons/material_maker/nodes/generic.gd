@@ -130,7 +130,9 @@ func update_node():
 				control = HSlider.new()
 			control.min_value = p.min
 			control.max_value = p.max
-			control.step = 0 if !p.has("step") else p.step
+			control.step = 0.005 if !p.has("step") else p.step
+			control.allow_greater = true
+			control.allow_lesser = true
 			if p.has("default"):
 				control.value = p.default
 			control.rect_min_size.x = 80
