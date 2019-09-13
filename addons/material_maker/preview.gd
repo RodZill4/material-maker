@@ -43,7 +43,7 @@ func _on_Preview_resized():
 		$Preview2D.rect_size = Vector2(64, 64)
 
 func _on_Preview2D_gui_input(ev : InputEvent):
-	if ev is InputEventMouseButton && ev.button_index == 1 && ev.pressed:
+	if ev is InputEventMouseButton and ev.button_index == 1 and ev.pressed:
 		preview_maximized = !preview_maximized
 		_on_Preview_resized()
 

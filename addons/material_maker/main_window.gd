@@ -312,9 +312,12 @@ func _on_LoadRecent_id_pressed(id):
 # Preview
 
 func update_preview():
-	var material_node = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control().get_node("Material")
+	var material_node = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control().get_node("node_Material")
 	if material_node != null:
-		material_node.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
+		var status = material_node.generator.render_textures(renderer)
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		material_node.generator.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
 	update_preview_2d()
 
 func update_preview_2d(node = null):

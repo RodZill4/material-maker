@@ -1,8 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/nodes/transform/transform.gd" type="Script" id=1]
 
-[sub_resource type="Theme" id=1]
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
 
 [node name="Transform" type="GraphNode"]
 margin_left = 1.0
@@ -10,7 +16,10 @@ margin_top = 1.0
 margin_right = 185.0
 margin_bottom = 179.0
 mouse_filter = 1
-theme = SubResource( 1 )
+custom_styles/position = SubResource( 1 )
+custom_styles/defaultfocus = SubResource( 2 )
+custom_styles/breakpoint = SubResource( 3 )
+custom_styles/defaultframe = SubResource( 4 )
 title = "Transform"
 show_close = true
 slot/0/left_enabled = true
