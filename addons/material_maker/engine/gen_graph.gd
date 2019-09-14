@@ -12,7 +12,15 @@ func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 		if c.to == gen_name and c.to_port == input_index:
 			var src_gen = get_node(c.from)
 			if src_gen != null:
-				return OutputPort.new(get_node(c.from), c.from_port)
+				return OutputPort.new(src_gen, c.from_port)
+	return null
+
+func get_port_target(gen_name: String, input_index: int) -> InputPort:
+	for c in connections:
+		if c.from == gen_name and c.from_port == input_index:
+			var tgt_gen = get_node(c.to)
+			if tgt_gen != null:
+				return InputPort.new(tgt_gen, c.to_port)
 	return null
 
 func remove_generator(generator : MMGenBase):

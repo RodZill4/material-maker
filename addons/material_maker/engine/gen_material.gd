@@ -28,6 +28,22 @@ const ADDON_TEXTURE_LIST = [
 func get_type():
 	return "material"
 
+func get_parameter_defs():
+	return [
+		{ name="albedo_color", label="Albedo", type="color", default={ r=1.0, g=1.0, b=1.0, a=1.0} },
+		{ name="metallic", label="Metallic", type="float", min=0.0, max=1.0, default=1.0 },
+		{ name="roughness", label="Roughness", type="float", min=0.0, max=1.0, default=1.0 },
+		{ name="emission_energy", label="Emission", type="float", min=0.0, max=8.0, default=1.0 }
+	]
+
+func get_input_defs():
+	return [
+		{ name="albedo_texture", label="", type="rgb" },
+		{ name="metallic_texture", label="", type="f" },
+		{ name="roughness_texture", label="", type="f" },
+		{ name="emission_texture", label="", type="rgb" }
+	]
+
 func _ready():
 	texture_list = TEXTURE_LIST
 	if Engine.editor_hint:
@@ -35,6 +51,7 @@ func _ready():
 	for t in texture_list:
 		generated_textures[t.texture] = null
 	material = SpatialMaterial.new()
+	model = material
 
 func generate_material(renderer : MMGenRenderer):
 	var source = get_source(0)
@@ -74,10 +91,10 @@ func get_generated_texture(slot, file_prefix = null):
 
 func update_spatial_material(m, file_prefix = null):
 	var texture
-	m.albedo_color = Color(1, 1, 1)#parameters.albedo_color
+	m.albedo_color = parameters.albedo_color
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
-	m.metallic = 1#parameters.metallic
-	m.roughness = 1#parameters.roughness
+	m.metallic = parameters.metallic
+	m.roughness = parameters.roughness
 	if Engine.editor_hint:
 		texture = get_generated_texture("mrao", file_prefix)
 		m.metallic_texture = texture 
@@ -90,7 +107,7 @@ func update_spatial_material(m, file_prefix = null):
 	texture = get_generated_texture("emission", file_prefix)
 	if texture != null:
 		m.emission_enabled = true
-		#m.emission_energy = parameters.emission_energy
+		m.emission_energy = parameters.emission_energy
 		m.emission_texture = texture
 	else:
 		m.emission_enabled = false

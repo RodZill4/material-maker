@@ -6,6 +6,17 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
+class InputPort:
+	var generator : MMGenBase = null
+	var input_index : int = 0
+	
+	func _init(g : MMGenBase, i : int):
+		generator = g
+		input_index = i
+	
+	func to_str():
+		return generator.name+".in("+str(input_index)+")"
+
 class OutputPort:
 	var generator : MMGenBase = null
 	var output_index : int = 0
@@ -15,7 +26,7 @@ class OutputPort:
 		output_index = o
 	
 	func to_str():
-		return generator.name+"("+str(output_index)+")"
+		return generator.name+".out("+str(output_index)+")"
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
@@ -46,6 +57,13 @@ func get_parameter_defs():
 
 func set_parameter(n : String, v):
 	parameters[n] = v
+	source_changed(0)
+
+func source_changed(input_index : int):
+	for i in range(get_output_defs().size()):
+		var target = get_target(i)
+		if target != null:
+			target.generator.source_changed(target.input_index)
 
 func get_input_defs():
 	return []
@@ -55,6 +73,9 @@ func get_output_defs():
 
 func get_source(input_index : int):
 	return get_parent().get_port_source(name, input_index)
+	
+func get_target(output_index : int):
+	return get_parent().get_port_target(name, output_index)
 
 func get_input_shader(input_index : int):
 	var source = get_source(input_index)

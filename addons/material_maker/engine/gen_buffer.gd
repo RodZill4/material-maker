@@ -7,6 +7,8 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times (such as convolutions) 
 """
 
+var updated : bool = false
+
 func _ready():
 	if !parameters.has("size"):
 		parameters.size = 4
@@ -26,9 +28,12 @@ func get_input_defs():
 func get_output_defs():
 	return [ { type="rgba" } ]
 
+func source_changed(input_port_index):
+	updated = false
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)
-	if source != null:
+	if source != null and !updated:
 		var status = source.generator.render(source.output_index, context.renderer, pow(2, 4+parameters.size))
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
@@ -36,6 +41,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			var image : Image = context.renderer.get_texture().get_data()
 			texture.create_from_image(image)
 			texture.flags = 0
+			updated = true
 	var rv = ._get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")

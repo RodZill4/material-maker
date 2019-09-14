@@ -56,19 +56,19 @@ func update_shaders():
 	get_parent().send_changed_signal()
 
 func _on_text_changed(new_text, variable):
-	generator.parameters[variable] = float(new_text)
+	generator.set_parameter(variable, float(new_text))
 	update_shaders()
 
 func _on_value_changed(new_value, variable):
-	generator.parameters[variable] = new_value
+	generator.set_parameter(variable, new_value)
 	update_shaders()
 
 func _on_color_changed(new_color, variable):
-	generator.parameters[variable] = new_color
+	generator.set_parameter(variable, new_color)
 	update_shaders()
 
 func _on_gradient_changed(new_gradient, variable):
-	generator.parameters[variable] = new_gradient
+	generator.set_parameter(variable, new_gradient)
 	update_shaders()
 
 func update_node():
