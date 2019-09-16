@@ -12,21 +12,24 @@ const TEXTURE_LIST = [
 	{ port=1, texture="metallic" },
 	{ port=2, texture="roughness" },
 	{ port=3, texture="emission" },
-	{ port=4, texture="normal_map" },
+	{ port=4, texture="normal_texture" },
 	{ port=5, texture="ambient_occlusion" },
-	{ port=6, texture="depth_map" }
+	{ port=6, texture="depth_texture" }
 ]
 
 const ADDON_TEXTURE_LIST = [
 	{ port=0, texture="albedo" },
 	{ port=3, texture="emission" },
-	{ port=4, texture="normal_map" },
+	{ port=4, texture="normal_texture" },
 	{ ports=[1, 2, 5], default_values=["0.0", "1.0", "1.0"], texture="mrao" },
-	{ port=6, texture="depth_map" }
+	{ port=6, texture="depth_texture" }
 ]
 
 func get_type():
 	return "material"
+
+func get_type_name():
+	return "Material"
 
 func get_parameter_defs():
 	return [
@@ -41,7 +44,9 @@ func get_input_defs():
 		{ name="albedo_texture", label="", type="rgb" },
 		{ name="metallic_texture", label="", type="f" },
 		{ name="roughness_texture", label="", type="f" },
-		{ name="emission_texture", label="", type="rgb" }
+		{ name="emission_texture", label="", type="rgb" },
+		{ name="normal_texture", label="", type="rgb" },
+		{ name="depth_texture", label="", type="f" }
 	]
 
 func _ready():
@@ -51,7 +56,6 @@ func _ready():
 	for t in texture_list:
 		generated_textures[t.texture] = null
 	material = SpatialMaterial.new()
-	model = material
 
 func generate_material(renderer : MMGenRenderer):
 	var source = get_source(0)
@@ -111,7 +115,7 @@ func update_spatial_material(m, file_prefix = null):
 		m.emission_texture = texture
 	else:
 		m.emission_enabled = false
-	texture = get_generated_texture("normal_map", file_prefix)
+	texture = get_generated_texture("normal_texture", file_prefix)
 	if texture != null:
 		m.normal_enabled = true
 		m.normal_texture = texture
@@ -133,7 +137,7 @@ func update_spatial_material(m, file_prefix = null):
 			m.ao_texture = texture
 		else:
 			m.ao_enabled = false
-	texture = get_generated_texture("depth_map", file_prefix)
+	texture = get_generated_texture("depth_texture", file_prefix)
 	if texture != null:
 		m.depth_enabled = true
 		#m.depth_scale = parameters.depth_scale
@@ -159,5 +163,4 @@ func export_textures(prefix, size = null):
 		resource_filesystem.scan()
 
 func _serialize(data):
-	data.type = "material"
 	return data

@@ -111,10 +111,11 @@ func replace_variable(string, variable, value):
 	return new_string
 
 func subst(string, context, uv = ""):
+	var genname = "o"+str(get_instance_id())
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
-	string = replace_variable(string, "name", name)
+	string = replace_variable(string, "name", genname)
 	string = replace_variable(string, "seed", str(get_seed()))
 	if uv != "":
 		string = replace_variable(string, "uv", "("+uv+")")
@@ -133,7 +134,7 @@ func subst(string, context, uv = ""):
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			elif p.type == "gradient":
-				value_string = name+"__"+p.name+"_gradient_fct"
+				value_string = genname+"__"+p.name+"_gradient_fct"
 			elif p.type == "boolean":
 				value_string = "true" if value else "false"
 			else:
@@ -164,6 +165,7 @@ func subst(string, context, uv = ""):
 	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { defs="", code="", textures={} }
 	var variant_string = uv+","+str(output_index)
@@ -183,7 +185,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 				if !(g is MMGradient):
 					g = MMGradient.new()
 					g.deserialize(parameters[p.name])
-				rv.defs += g.get_shader(name+"__"+p.name+"_gradient_fct")
+				rv.defs += g.get_shader(genname+"__"+p.name+"_gradient_fct")
 		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
 			variant_index = context.get_variant(self, variant_string)
@@ -194,12 +196,12 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 						subst_output = yield(subst_output, "completed")
 					rv.defs += subst_output.defs
 					rv.code += subst_output.code
-					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, name, output_index, variant_index, t.field, subst_output.string ]
+					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, genname, output_index, variant_index, t.field, subst_output.string ]
 					for t in subst_output.textures.keys():
 						rv.textures[t] = subst_output.textures[t]
 		for t in output_info:
 			if output.has(t.field):
-				rv[t.field] = "%s_%d_%d_%s" % [ name, output_index, variant_index, t.field ]
+				rv[t.field] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, t.field ]
 	return rv
 
 func get_globals():

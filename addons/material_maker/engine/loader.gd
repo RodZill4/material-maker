@@ -35,6 +35,9 @@ static func create_gen(data) -> MMGenBase:
 	elif data.has("shader_model"):
 		generator = MMGenShader.new()
 		generator.set_shader_model(data.shader_model)
+	elif data.has("convolution_params"):
+		generator = MMGenConvolution.new()
+		generator.set_convolution_params(data.convolution_params)
 	elif data.has("model_data"):
 		generator = MMGenShader.new()
 		generator.set_shader_model(data.model_data)

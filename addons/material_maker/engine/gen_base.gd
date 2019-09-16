@@ -140,12 +140,11 @@ func _serialize(data):
 	return data
 
 func serialize():
-	var rv = { name=name, parameters={}, node_position={ x=position.x, y=position.y } }
+	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
 	for p in parameters.keys():
 		rv.parameters[p] = MMType.serialize_value(parameters[p])
 	if model != null:
 		rv.type = model
 	else:
 		rv = _serialize(rv)
-		
 	return rv

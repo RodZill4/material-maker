@@ -104,6 +104,8 @@ script = ExtResource( 6 )
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/Projects" to="." method="_on_Projects_tab_changed"]
 [connection signal="connection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="connect_node"]
 [connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="disconnect_node"]
+[connection signal="close_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" method="on_close_request"]
+[connection signal="offset_changed" from="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" method="on_offset_changed"]
 [connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="close_tab"]
