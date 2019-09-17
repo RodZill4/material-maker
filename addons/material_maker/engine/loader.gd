@@ -11,9 +11,11 @@ static func load_gen(filename: String) -> MMGenBase:
 
 static func add_to_gen_graph(gen_graph, generators, connections):
 	var rv = { generators=[], connections=[] }
+	var gennames = {}
 	for n in generators:
 		var g = create_gen(n)
 		if g != null:
+			var orig_name = g.name
 			var name = g.name
 			var index = 1
 			while gen_graph.has_node(name):
@@ -22,15 +24,21 @@ static func add_to_gen_graph(gen_graph, generators, connections):
 			g.name = name
 			gen_graph.add_child(g)
 			rv.generators.append(g)
+			gennames[orig_name] = name
 	for c in connections:
-		gen_graph.connections.append(c)
-		rv.connections.append(c)
+		if gennames.has(c.from) and gennames.has(c.to):
+			c.from = gennames[c.from]
+			c.to = gennames[c.to]
+			gen_graph.connections.append(c)
+			rv.connections.append(c)
 	return rv
 
 static func create_gen(data) -> MMGenBase:
 	var generator = null
 	if data.has("connections") and data.has("nodes"):
 		generator = MMGenGraph.new()
+		if data.has("label"):
+			generator.label = data.label
 		add_to_gen_graph(generator, data.nodes, data.connections)
 	elif data.has("shader_model"):
 		generator = MMGenShader.new()
@@ -48,6 +56,9 @@ static func create_gen(data) -> MMGenBase:
 			generator = MMGenBuffer.new()
 		elif data.type == "image":
 			generator = MMGenImage.new()
+		elif data.type == "ios":
+			generator = MMGenIOs.new()
+			generator.ports = data.ports
 		else:
 			var file = File.new()
 			if file.open("res://addons/material_maker/nodes/"+data.type+".mmg", File.READ) == OK:

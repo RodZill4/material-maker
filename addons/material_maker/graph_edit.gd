@@ -99,6 +99,7 @@ func clear_material():
 	send_changed_signal()
 
 func update_graph(generators, connections):
+	var rv = []
 	for g in generators:
 		var node = node_factory.create_node(g.get_type())
 		if node != null:
@@ -106,8 +107,10 @@ func update_graph(generators, connections):
 			add_node(node)
 			node.generator = g
 		node.offset = g.position
+		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+	return rv
 
 func new_material():
 	clear_material()
@@ -137,7 +140,8 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)):
 		var new_stuff = MMGenLoader.add_to_gen_graph(generator, data.nodes, data.connections)
 		for g in new_stuff.generators:
 			g.position += position
-		update_graph(new_stuff.generators, new_stuff.connections)
+		return update_graph(new_stuff.generators, new_stuff.connections)
+	return []
 
 func load_file(filename):
 	clear_material()
@@ -172,6 +176,7 @@ func remove_selection():
 		if c is GraphNode and c.selected and c.name != "Material":
 			remove_node(c)
 
+# Maybe move this to gen_graph...
 func serialize_selection():
 	var data = { nodes = [], connections = [] }
 	var nodes = []
@@ -193,7 +198,10 @@ func serialize_selection():
 		var from = get_node(c.from)
 		var to = get_node(c.to)
 		if from != null and from.selected and to != null and to.selected:
-			data.connections.append(c)
+			var connection = c.duplicate(true)
+			connection.from = from.generator.name
+			connection.to = to.generator.name
+			data.connections.append(connection)
 	return data
 
 func can_copy():
@@ -214,7 +222,8 @@ func paste(pos = Vector2(0, 0)):
 		if c is GraphNode:
 			c.selected = false
 	var data = parse_json(OS.clipboard)
-	create_nodes(data, scroll_offset+0.5*rect_size)
+	for c in create_nodes(data, scroll_offset+0.5*rect_size):
+		c.selected = true
 
 # Center view
 

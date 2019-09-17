@@ -2,22 +2,48 @@ tool
 extends MMGenBase
 class_name MMGenGraph
 
+var label : String = "Graph"
 var connections = []
 
 func get_type():
 	return "graph"
 
+func get_type_name():
+	return label
+
+func get_parameter_defs():
+	return []
+
+func get_input_defs():
+	var inputs = get_node("gen_inputs")
+	if inputs != null:
+		return inputs.get_input_defs()
+	return []
+
+func get_output_defs():
+	var outputs = get_node("gen_outputs")
+	if outputs != null:
+		return outputs.get_output_defs()
+	return []
+
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
-	for c in connections:
-		if c.to == gen_name and c.to_port == input_index:
-			var src_gen = get_node(c.from)
-			if src_gen != null:
-				return OutputPort.new(src_gen, c.from_port)
+	if gen_name == "gen_inputs":
+		var parent = get_parent()
+		if parent != null and parent.get_type() == "graph":
+			return parent.get_port_source(name, input_index)
+	else:
+		for c in connections:
+			if c.to == gen_name and c.to_port == input_index:
+				var src_gen = get_node(c.from)
+				if src_gen != null:
+					if src_gen.get_type() == "graph":
+						return src_gen.get_port_source("gen_outputs", c.from_port)
+					return OutputPort.new(src_gen, c.from_port)
 	return null
 
-func get_port_target(gen_name: String, input_index: int) -> InputPort:
+func get_port_target(gen_name: String, output_index: int) -> InputPort:
 	for c in connections:
-		if c.from == gen_name and c.from_port == input_index:
+		if c.from == gen_name and c.from_port == output_index:
 			var tgt_gen = get_node(c.to)
 			if tgt_gen != null:
 				return InputPort.new(tgt_gen, c.to_port)
@@ -65,7 +91,15 @@ func disconnect_children(from, from_port : int, to, to_port : int):
 		connections.remove(remove)
 	return true
 
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+	print("Getting shader code from graph")
+	var outputs = get_node("gen_outputs")
+	if outputs != null:
+		outputs._get_shader_code(uv, output_index, context)
+	return { defs="", code="", textures={} }
+
 func _serialize(data):
+	data.label = label
 	data.nodes = []
 	for c in get_children():
 		data.nodes.append(c.serialize())
