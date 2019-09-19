@@ -206,12 +206,8 @@ func update_node():
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
 
 func edit_generator():
-	var edit_window = load("res://addons/material_maker/widgets/node_editor/node_editor.tscn").instance()
-	get_parent().add_child(edit_window)
-	if generator.shader_model != null:
-		edit_window.set_model_data(generator.shader_model)
-	edit_window.connect("node_changed", self, "update_generator")
-	edit_window.popup_centered()
+	if generator.has_method("edit"):
+		generator.edit(self)
 
 func update_generator(shader_model):
 	generator.set_shader_model(shader_model)

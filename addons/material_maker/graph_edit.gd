@@ -8,6 +8,7 @@ var renderer = null
 var save_path = null setget set_save_path
 var need_save = false
 
+var top_generator = null
 var generator = null
 
 signal save_path_changed
@@ -86,15 +87,24 @@ func set_save_path(path):
 		update_tab_title()
 		emit_signal("save_path_changed", self, path)
 
-func clear_material():
+func clear_view():
 	clear_connections()
 	for c in get_children():
 		if c is GraphNode:
 			remove_child(c)
 			c.free()
-	if generator != null:
-		remove_child(generator)
-		generator.free()
+
+func update_view(g):
+	clear_view()
+	generator = g
+	update_graph(generator.get_children(), generator.connections)
+	$ButtonUp.visible = generator != top_generator
+
+func clear_material():
+	if top_generator != null:
+		remove_child(top_generator)
+		top_generator.free()
+		top_generator = null
 		generator = null
 	send_changed_signal()
 
@@ -115,10 +125,10 @@ func update_graph(generators, connections):
 func new_material():
 	clear_material()
 	var loader = MMGenLoader.new()
-	generator = loader.create_gen({nodes=[{name="Material", type="material"}], connections=[]})
-	if generator != null:
-		add_child(generator)
-		update_graph(generator.get_children(), generator.connections)
+	top_generator = loader.create_gen({nodes=[{name="Material", type="material"}], connections=[]})
+	if top_generator != null:
+		add_child(top_generator)
+		update_view(top_generator)
 		set_save_path(null)
 		set_need_save(false)
 		center_view()
@@ -145,16 +155,16 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)):
 
 func load_file(filename):
 	clear_material()
-	generator = MMGenLoader.load_gen(filename)
-	if generator != null:
-		add_child(generator)
-		update_graph(generator.get_children(), generator.connections)
+	top_generator = MMGenLoader.load_gen(filename)
+	if top_generator != null:
+		add_child(top_generator)
+		update_view(top_generator)
 		set_save_path(filename)
 		set_need_save(false)
 		center_view()
 
 func save_file(filename):
-	var data = generator.serialize()
+	var data = top_generator.serialize()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(to_json(data))
@@ -258,3 +268,7 @@ func drop_data(position, data):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
 	return true
+
+func on_ButtonUp_pressed():
+	if generator != top_generator && generator.get_parent() is MMGenGraph:
+		call_deferred("update_view", generator.get_parent())

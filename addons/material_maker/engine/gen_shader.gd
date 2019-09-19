@@ -213,3 +213,11 @@ func get_globals():
 func _serialize(data):
 	data.shader_model = shader_model
 	return data
+
+func edit(node):
+	if shader_model != null:
+		var edit_window = load("res://addons/material_maker/widgets/node_editor/node_editor.tscn").instance()
+		node.get_parent().add_child(edit_window)
+		edit_window.set_model_data(shader_model)
+		edit_window.connect("node_changed", node, "update_generator")
+		edit_window.popup_centered()

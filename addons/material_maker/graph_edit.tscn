@@ -13,6 +13,16 @@ script = ExtResource( 1 )
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
+
+[node name="ButtonUp" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -44.0
+margin_top = 4.0
+margin_right = -14.0
+margin_bottom = 24.0
+text = "Up"
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
+[connection signal="pressed" from="ButtonUp" to="." method="on_ButtonUp_pressed"]

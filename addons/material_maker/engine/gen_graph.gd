@@ -105,3 +105,6 @@ func _serialize(data):
 		data.nodes.append(c.serialize())
 	data.connections = connections
 	return data
+
+func edit(node):
+	node.get_parent().call_deferred("update_view", self)
