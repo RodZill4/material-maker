@@ -38,7 +38,6 @@ func get_output_defs():
 	return rv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
-	print("Getting shader code from ios")
 	if mask != 2:
 		var source = get_source(output_index)
 		if source != null:

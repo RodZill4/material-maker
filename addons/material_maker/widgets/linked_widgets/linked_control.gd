@@ -68,7 +68,10 @@ func update_shaders():
 func _on_value_changed(v):
 	for l in linked_widgets:
 		l.widget.value = v
-		l.node.parameters[l.widget.name] = v
+		var parent = l.widget.get_parent()
+		while !(parent is GraphNode):
+			parent = parent.get_parent()
+		parent.generator.set_parameter(l.widget.name, v)
 	update_shaders()
 
 func _on_color_changed(c):

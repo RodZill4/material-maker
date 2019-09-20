@@ -49,6 +49,9 @@ static func create_gen(data) -> MMGenBase:
 	elif data.has("model_data"):
 		generator = MMGenShader.new()
 		generator.set_shader_model(data.model_data)
+	elif data.has("widgets"):
+		generator = MMGenRemote.new()
+		generator.set_widgets(data.widgets)
 	elif data.has("type"):
 		if data.type == "material":
 			generator = MMGenMaterial.new()

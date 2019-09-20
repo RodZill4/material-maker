@@ -115,9 +115,10 @@ func deserialize(data):
 		var c = data.configurations[k]
 		var configuration = []
 		for e in c:
-			var node = graph_edit.get_node(e.node)
+			var node = graph_edit.get_node("node_"+e.node)
+			print(e.widget)
 			var widget = null
-			for w in node.property_widgets:
+			for w in node.controls:
 				if w.name == e.widget:
 					widget = w
 					break

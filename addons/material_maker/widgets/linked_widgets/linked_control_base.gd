@@ -88,8 +88,8 @@ func get_graph_edit():
 func find_control(gp):
 	for c in graph_edit.get_children():
 		if c is GraphNode:
-			if c.get("property_widgets") != null:
-				for w in c.property_widgets:
+			if c.get("controls") != null:
+				for w in c.controls:
 					if Rect2(w.rect_global_position, w.rect_size*w.get_global_transform().get_scale()).has_point(gp):
 						return { node=c, widget=w }
 	return null

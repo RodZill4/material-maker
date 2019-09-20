@@ -4,20 +4,30 @@ extends "res://addons/material_maker/node_base.gd"
 const LinkedControl = preload("res://addons/material_maker/widgets/linked_widgets/linked_control.tscn")
 const ConfigControl = preload("res://addons/material_maker/widgets/linked_widgets/config_control.tscn")
 
-func _ready():
-	pass
+var generator = null setget set_generator
 
-func _get_shader_code(uv, slot = 0):
-	var rv = { defs="", code="" }
-	rv.rgb = "vec3(1.0)"
-	return rv
+func set_generator(g):
+	generator = g
+	call_deferred("update_node")
+
+
+func update_node():
+	for w in generator.widgets:
+		var widget
+		if w.type == "linked_control":
+			widget = LinkedControl.instance()
+		elif w.type == "config_control":
+			widget = ConfigControl.instance()
+		else:
+			continue
+		add_control(widget)
+		widget.deserialize(w)
 
 func add_control(widget):
 	var controls = widget.get_associated_controls()
 	$Controls.add_child(controls.label)
 	$Controls.add_child(widget)
 	$Controls.add_child(controls.buttons)
-
 
 func _on_AddLink_pressed():
 	var widget = LinkedControl.instance()
@@ -42,22 +52,3 @@ func serialize():
 		widgets.append($Controls.get_child(i).serialize())
 	var data = { type="remote", node_position={x=offset.x,y=offset.y}, editable=true, widgets=widgets }
 	return data 
-
-func deserialize(data):
-	if data.has("node_position"):
-		offset.x = data.node_position.x
-		offset.y = data.node_position.y
-	call_deferred("do_deserialize", data)
-
-func do_deserialize(data):
-	if data.has("widgets"):
-		for w in data.widgets:
-			var widget
-			if w.type == "linked_control":
-				widget = LinkedControl.instance()
-			elif w.type == "config_control":
-				widget = ConfigControl.instance()
-			else:
-				continue
-			add_control(widget)
-			widget.deserialize(w)
