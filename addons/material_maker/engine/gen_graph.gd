@@ -26,6 +26,11 @@ func get_output_defs():
 		return outputs.get_output_defs()
 	return []
 
+func source_changed(input_index : int):
+	var generator = get_node("gen_inputs")
+	if generator != null:
+		generator.source_changed(input_index)
+
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 	if gen_name == "gen_inputs":
 		var parent = get_parent()
@@ -41,13 +46,14 @@ func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 					return OutputPort.new(src_gen, c.from_port)
 	return null
 
-func get_port_target(gen_name: String, output_index: int) -> InputPort:
+func get_port_targets(gen_name: String, output_index: int) -> InputPort:
+	var rv = []
 	for c in connections:
 		if c.from == gen_name and c.from_port == output_index:
 			var tgt_gen = get_node(c.to)
 			if tgt_gen != null:
-				return InputPort.new(tgt_gen, c.to_port)
-	return null
+				rv.push_back(InputPort.new(tgt_gen, c.to_port))
+	return rv
 
 func remove_generator(generator : MMGenBase):
 	var new_connections = []
@@ -95,7 +101,11 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	print("Getting shader code from graph")
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
-		outputs._get_shader_code(uv, output_index, context)
+		print("found!")
+		var rv = outputs._get_shader_code(uv, output_index, context)
+		while rv is GDScriptFunctionState:
+			rv = yield(rv, "completed")
+		return rv
 	return { defs="", code="", textures={} }
 
 func _serialize(data):

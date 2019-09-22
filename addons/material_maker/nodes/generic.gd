@@ -3,10 +3,11 @@ extends GraphNode
 
 var generator = null setget set_generator
 
-var controls = []
+var controls = {}
 
 func set_generator(g):
 	generator = g
+	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
 
 func on_close_request():
@@ -15,35 +16,49 @@ func on_close_request():
 func on_offset_changed():
 	generator.position = offset
 
+func on_parameter_changed(p, v):
+	var o = controls[p]
+	if o is LineEdit:
+		o.text = str(v)
+	elif o is SpinBox:
+		o.value = v
+	elif o is HSlider:
+		o.value = v
+	elif o is OptionButton:
+		o.selected = v
+	elif o is CheckBox:
+		o.pressed = v
+	elif o is ColorPickerButton:
+		o.color = MMType.deserialize_value(v)
+	elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+		var gradient : MMGradient = MMGradient.new()
+		gradient.deserialize(v)
+		o.value = gradient
+	else:
+		print("unsupported widget "+str(o))
+
 func initialize_properties():
-	for o in controls:
-		if o == null:
-			print("error in node "+name)
+	var parameter_names = []
+	for p in generator.get_parameter_defs():
+		parameter_names.push_back(p.name)
+	for c in controls:
+		if parameter_names.find(c) == -1:
 			continue
-		if !generator.parameters.has(o.name):
-			continue
+		var o = controls[c]
+		on_parameter_changed(c, generator.parameters[c])
 		if o is LineEdit:
-			o.text = str(generator.parameters[o.name])
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
 		elif o is SpinBox:
-			o.value = generator.parameters[o.name]
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is HSlider:
-			o.value = generator.parameters[o.name]
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
-			o.selected = generator.parameters[o.name]
 			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
 		elif o is CheckBox:
-			o.pressed = generator.parameters[o.name]
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			o.color = MMType.deserialize_value(generator.parameters[o.name])
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
-			var gradient : MMGradient = MMGradient.new()
-			gradient.deserialize(generator.parameters[o.name])
-			o.value = gradient
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
@@ -111,7 +126,7 @@ func update_node():
 	for c in get_children():
 		c.get_child(0).rect_min_size.x = input_names_width
 	# Parameters
-	controls = []
+	controls = {}
 	var index = -1
 	var regex = RegEx.new()
 	regex.compile("^(\\d+):(.*)")
@@ -153,7 +168,7 @@ func update_node():
 		if control != null:
 			var label = p.name
 			control.name = label
-			controls.append(control)
+			controls[control.name] = control
 			if p.has("label"):
 				label = p.label
 			var result = regex.search(label)

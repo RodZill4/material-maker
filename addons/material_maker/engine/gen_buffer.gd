@@ -28,8 +28,9 @@ func get_input_defs():
 func get_output_defs():
 	return [ { type="rgba" } ]
 
-func source_changed(input_port_index):
+func source_changed(input_port_index : int):
 	updated = false
+	.source_changed(input_port_index)
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)
