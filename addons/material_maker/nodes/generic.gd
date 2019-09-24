@@ -1,14 +1,16 @@
 tool
 extends GraphNode
+class_name MMGraphNodeGeneric
 
 var generator = null setget set_generator
 
 var controls = {}
+var ignore_parameter_change = false
 
 func set_generator(g):
 	generator = g
 	generator.connect("parameter_changed", self, "on_parameter_changed")
-	update_node()
+	call_deferred("update_node")
 
 func on_close_request():
 	generator.get_parent().remove_generator(generator)
@@ -17,6 +19,8 @@ func on_offset_changed():
 	generator.position = offset
 
 func on_parameter_changed(p, v):
+	if ignore_parameter_change:
+		return
 	var o = controls[p]
 	if o is LineEdit:
 		o.text = str(v)
@@ -36,6 +40,7 @@ func on_parameter_changed(p, v):
 		o.value = gradient
 	else:
 		print("unsupported widget "+str(o))
+	update_shaders()
 
 func initialize_properties():
 	var parameter_names = []
@@ -67,20 +72,63 @@ func update_shaders():
 	get_parent().send_changed_signal()
 
 func _on_text_changed(new_text, variable):
+	ignore_parameter_change = true
 	generator.set_parameter(variable, float(new_text))
+	ignore_parameter_change = false
 	update_shaders()
 
 func _on_value_changed(new_value, variable):
+	ignore_parameter_change = true
 	generator.set_parameter(variable, new_value)
+	ignore_parameter_change = false
 	update_shaders()
 
 func _on_color_changed(new_color, variable):
+	ignore_parameter_change = true
 	generator.set_parameter(variable, new_color)
+	ignore_parameter_change = false
 	update_shaders()
 
 func _on_gradient_changed(new_gradient, variable):
+	ignore_parameter_change = true
 	generator.set_parameter(variable, new_gradient)
+	ignore_parameter_change = false
 	update_shaders()
+
+func create_parameter_control(p : Dictionary):
+	var control = null
+	if p.type == "float":
+		if p.has("widget") and p.widget == "spinbox":
+			control = SpinBox.new()
+		else:
+			control = HSlider.new()
+		control.min_value = p.min
+		control.max_value = p.max
+		control.step = 0.005 if !p.has("step") else p.step
+		control.allow_greater = true
+		control.allow_lesser = true
+		if p.has("default"):
+			control.value = p.default
+		control.rect_min_size.x = 80
+	elif p.type == "size":
+		control = OptionButton.new()
+		for i in range(p.first, p.last+1):
+			var s = pow(2, i)
+			control.add_item("%dx%d" % [ s, s ])
+			control.selected = 0 if !p.has("default") else p.default-p.first
+	elif p.type == "enum":
+		control = OptionButton.new()
+		for i in range(p.values.size()):
+			var value = p.values[i]
+			control.add_item(value.name)
+			control.selected = 0 if !p.has("default") else p.default
+	elif p.type == "boolean":
+		control = CheckBox.new()
+	elif p.type == "color":
+		control = ColorPickerButton.new()
+	elif p.type == "gradient":
+		control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
+	return control
 
 func update_node():
 	# Clean node
@@ -133,38 +181,7 @@ func update_node():
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
-		var control = null
-		if p.type == "float":
-			if p.has("widget") and p.widget == "spinbox":
-				control = SpinBox.new()
-			else:
-				control = HSlider.new()
-			control.min_value = p.min
-			control.max_value = p.max
-			control.step = 0.005 if !p.has("step") else p.step
-			control.allow_greater = true
-			control.allow_lesser = true
-			if p.has("default"):
-				control.value = p.default
-			control.rect_min_size.x = 80
-		elif p.type == "size":
-			control = OptionButton.new()
-			for i in range(p.first, p.last+1):
-				var s = pow(2, i)
-				control.add_item("%dx%d" % [ s, s ])
-				control.selected = 0 if !p.has("default") else p.default-p.first
-		elif p.type == "enum":
-			control = OptionButton.new()
-			for i in range(p.values.size()):
-				var value = p.values[i]
-				control.add_item(value.name)
-				control.selected = 0 if !p.has("default") else p.default
-		elif p.type == "boolean":
-			control = CheckBox.new()
-		elif p.type == "color":
-			control = ColorPickerButton.new()
-		elif p.type == "gradient":
-			control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
+		var control = create_parameter_control(p)
 		if control != null:
 			var label = p.name
 			control.name = label

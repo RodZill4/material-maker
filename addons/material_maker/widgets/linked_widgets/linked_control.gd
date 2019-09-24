@@ -77,19 +77,28 @@ func _on_value_changed(v):
 func _on_color_changed(c):
 	for l in linked_widgets:
 		l.widget.color = c
-		l.node.parameters[l.widget.name] = c
+		var parent = l.widget.get_parent()
+		while !(parent is GraphNode):
+			parent = parent.get_parent()
+		parent.generator.set_parameter(l.widget.name, c)
 	update_shaders()
 
 func _on_item_selected(i):
 	for l in linked_widgets:
 		l.widget.selected = i
-		l.node.parameters[l.widget.name] = i
+		var parent = l.widget.get_parent()
+		while !(parent is GraphNode):
+			parent = parent.get_parent()
+		parent.generator.set_parameter(l.widget.name, i)
 	update_shaders()
 
 func _on_gradient_updated(g):
 	for l in linked_widgets:
 		l.widget.value = g
-		l.node.parameters[l.widget.name] = g
+		var parent = l.widget.get_parent()
+		while !(parent is GraphNode):
+			parent = parent.get_parent()
+		parent.generator.set_parameter(l.widget.name, g)
 	update_shaders()
 
 func serialize():

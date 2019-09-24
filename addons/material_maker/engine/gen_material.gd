@@ -13,7 +13,7 @@ const TEXTURE_LIST = [
 	{ port=2, texture="roughness" },
 	{ port=3, texture="emission" },
 	{ port=4, texture="normal_texture" },
-	{ port=5, texture="ambient_occlusion" },
+	{ port=5, texture="ao_texture" },
 	{ port=6, texture="depth_texture" }
 ]
 
@@ -34,9 +34,12 @@ func get_type_name():
 func get_parameter_defs():
 	return [
 		{ name="albedo_color", label="Albedo", type="color", default={ r=1.0, g=1.0, b=1.0, a=1.0} },
-		{ name="metallic", label="Metallic", type="float", min=0.0, max=1.0, default=1.0 },
-		{ name="roughness", label="Roughness", type="float", min=0.0, max=1.0, default=1.0 },
-		{ name="emission_energy", label="Emission", type="float", min=0.0, max=8.0, default=1.0 }
+		{ name="metallic", label="Metallic", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
+		{ name="roughness", label="Roughness", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
+		{ name="emission_energy", label="Emission", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
+		{ name="normal_scale", label="Normal", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
+		{ name="ao_light_affect", label="Ambient occlusion", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
+		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 }
 	]
 
 func get_input_defs():
@@ -46,6 +49,7 @@ func get_input_defs():
 		{ name="roughness_texture", label="", type="f" },
 		{ name="emission_texture", label="", type="rgb" },
 		{ name="normal_texture", label="", type="rgb" },
+		{ name="ao_texture", label="", type="f" },
 		{ name="depth_texture", label="", type="f" }
 	]
 
@@ -124,23 +128,24 @@ func update_spatial_material(m, file_prefix = null):
 	if Engine.editor_hint:
 		if (generated_textures.mrao.mask & (1 << 2)) != 0:
 			m.ao_enabled = true
-			#m.ao_light_affect = parameters.ao_light_affect
+			m.ao_light_affect = parameters.ao_light_affect
 			m.ao_texture = m.metallic_texture
 			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
 		else:
 			m.ao_enabled = false
 	else:
-		texture = get_generated_texture("ambient_occlusion", file_prefix)
+		texture = get_generated_texture("ao_texture", file_prefix)
 		if texture != null:
 			m.ao_enabled = true
-			#m.ao_light_affect = parameters.ao_light_affect
+			m.ao_light_affect = parameters.ao_light_affect
 			m.ao_texture = texture
 		else:
 			m.ao_enabled = false
 	texture = get_generated_texture("depth_texture", file_prefix)
 	if texture != null:
 		m.depth_enabled = true
-		#m.depth_scale = parameters.depth_scale
+		m.depth_deep_parallax = true
+		m.depth_scale = parameters.depth_scale
 		m.depth_texture = texture
 	else:
 		m.depth_enabled = false

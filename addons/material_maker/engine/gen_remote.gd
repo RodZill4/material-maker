@@ -18,7 +18,7 @@ func set_widgets(w):
 		i += 1
 
 func get_type():
-	return "remot"
+	return "remote"
 
 func get_type_name():
 	return "Remote"
@@ -68,3 +68,30 @@ func _serialize(data):
 	data.type = "remote"
 	data.widgets = widgets
 	return data
+
+func create_linked_control(label):
+	var index = widgets.size()
+	widgets.push_back({ label=label, type="linked_control", linked_widgets=[] })
+	return index
+
+func create_config_control(label):
+	var index = widgets.size()
+	widgets.push_back({ label=label, type="config_control", linked_widgets=[], configurations=[] })
+	return index
+
+func can_link_parameter(index, generator, param):
+	return true
+	
+func link_parameter(index, generator, param):
+	if !can_link_parameter(index, generator, param):
+		return
+	widgets[index].linked_widgets.push_back({ node=generator.name, widget=param })
+	if widgets[index].linked_widgets.size() == 1:
+		parameters["param"+str(index)] = generator.parameters[param]
+	emit_signal("parameter_changed", "", null)
+
+func remove_parameter(index):
+	for i in range(index, widgets.size()-2):
+		parameters["param"+str(i)] = parameters["param"+str(i+1)]
+	widgets.remove(index)
+	emit_signal("parameter_changed", "", null)

@@ -1,14 +1,14 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/material_maker/nodes/remote.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/icons/link.png" type="Texture" id=2]
-[ext_resource path="res://addons/material_maker/icons/config.png" type="Texture" id=3]
+[ext_resource path="res://addons/material_maker/icons/add_link.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/icons/add_config.png" type="Texture" id=3]
 
 [sub_resource type="Theme" id=1]
 
 [node name="Remote" type="GraphNode"]
 margin_right = 95.0
-margin_bottom = 55.0
+margin_bottom = 52.0
 mouse_filter = 1
 theme = SubResource( 1 )
 title = "Remote"
@@ -32,7 +32,7 @@ margin_left = 16.0
 margin_top = 24.0
 margin_right = 79.0
 margin_bottom = 24.0
-columns = 3
+columns = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 16.0

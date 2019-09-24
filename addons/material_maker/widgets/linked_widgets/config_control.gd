@@ -48,15 +48,8 @@ func duplicate_value(value):
 		value = value.duplicate()
 	return value
 
-func apply_configuration(c):
-	for w in configurations[c]:
-		var value = duplicate_value(w.value)
-		w.widget.set(WIDGETS[get_widget_type(w.widget)].value_attr, value)
-		w.node.generator.set_parameter(w.widget.name, value)
-	var graph_node = get_parent()
-	while !(graph_node is GraphNode):
-		graph_node = graph_node.get_parent()
-	graph_node.update_shaders()
+func apply_configuration(i):
+	get_parent().get_parent().generator.set_parameter("param"+str(get_index()%4-1), i)
 
 func do_update_configuration(name):
 	var configuration = []
@@ -78,7 +71,7 @@ func _on_item_selected(ID):
 	if ID >= 0 && ID < count:
 		current = button.get_item_text(ID)
 		update_options()
-		apply_configuration(current)
+		apply_configuration(ID)
 	elif ID == count+1:
 		button.selected = 0
 		update_configuration()
@@ -116,10 +109,9 @@ func deserialize(data):
 		var configuration = []
 		for e in c:
 			var node = graph_edit.get_node("node_"+e.node)
-			print(e.widget)
 			var widget = null
 			for w in node.controls:
-				if w.name == e.widget:
+				if w == e.widget:
 					widget = w
 					break
 			configuration.append({ node=node, widget=widget, value=Types.deserialize_value(e.value) })

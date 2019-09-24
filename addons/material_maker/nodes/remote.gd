@@ -1,43 +1,56 @@
 tool
-extends "res://addons/material_maker/node_base.gd"
+extends MMGraphNodeGeneric
+class_name MMGraphNodeRemote
 
 const LinkedControl = preload("res://addons/material_maker/widgets/linked_widgets/linked_control.tscn")
 const ConfigControl = preload("res://addons/material_maker/widgets/linked_widgets/config_control.tscn")
 
-var generator = null setget set_generator
-
-func set_generator(g):
-	generator = g
-	call_deferred("update_node")
-
+func add_control(text, control):
+	var index = $Controls.get_child_count() / 4
+	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
+	label.set_text(text)
+	$Controls.add_child(label)
+	$Controls.add_child(control)
+	var button = Button.new()
+	button.icon = preload("res://addons/material_maker/icons/link.png")
+	$Controls.add_child(button)
+	button.connect("pressed", self, "_on_Link_pressed", [ index ])
+	button = Button.new()
+	button.icon = preload("res://addons/material_maker/icons/remove.png")
+	$Controls.add_child(button)
+	button.connect("pressed", generator, "remove_parameter", [ index ])
 
 func update_node():
-	for w in generator.widgets:
-		var widget
-		if w.type == "linked_control":
-			widget = LinkedControl.instance()
-		elif w.type == "config_control":
-			widget = ConfigControl.instance()
-		else:
-			continue
-		add_control(widget)
-		widget.deserialize(w)
-
-func add_control(widget):
-	var controls = widget.get_associated_controls()
-	$Controls.add_child(controls.label)
-	$Controls.add_child(widget)
-	$Controls.add_child(controls.buttons)
+	var i : int = 0
+	for c in $Controls.get_children():
+		c.queue_free()
+	yield(get_tree(), "idle_frame")
+	controls = {}
+	for p in generator.get_parameter_defs():
+		var control = create_parameter_control(p)
+		if control != null:
+			control.name = p.name
+			controls[control.name] = control
+			add_control(generator.widgets[i].label, control)
+		i += 1
+	rect_size = Vector2(0, 0)
+	initialize_properties()
 
 func _on_AddLink_pressed():
-	var widget = LinkedControl.instance()
-	add_control(widget)
-	widget.pick_linked()
+	var widget = Control.new()
+	add_control("Unnamed", widget)
+	var link = MMNodeLink.new(get_parent())
+	link.pick(widget, generator, generator.create_linked_control("Unnamed"), true)
 
 func _on_AddConfig_pressed():
-	var widget = ConfigControl.instance()
-	add_control(widget)
-	widget.pick_linked()
+	var widget = Control.new()
+	add_control("Unnamed", widget)
+	var link = MMNodeLink.new(get_parent())
+	link.pick(widget, generator, generator.create_config_control("Unnamed"), true)
+
+func _on_Link_pressed(index):
+	var link = MMNodeLink.new(get_parent())
+	link.pick($Controls.get_child(index*4+1), generator, index)
 
 func _on_Remote_resize_request(new_minsize):
 	print("_on_Remote_resize_request")
@@ -46,9 +59,8 @@ func _on_Remote_resize_request(new_minsize):
 func _on_HBoxContainer_minimum_size_changed():
 	print("_on_HBoxContainer_minimum_size_changed "+str($HBoxContainer.rect_min_size))
 
-func serialize():
-	var widgets = []
-	for i in range(1, $Controls.get_child_count(), 3):
-		widgets.append($Controls.get_child(i).serialize())
-	var data = { type="remote", node_position={x=offset.x,y=offset.y}, editable=true, widgets=widgets }
-	return data 
+func on_parameter_changed(p, v):
+	if p == "":
+		update_node()
+	else:
+		.on_parameter_changed(p, v)

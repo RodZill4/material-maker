@@ -61,11 +61,9 @@ func _on_mouse_entered():
 	links = []
 	var viewport = get_viewport()
 	for w in linked_widgets:
-		var link = Link.new()
-		link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
+		var link = Link.new(graph_edit)
 		link.source = self
 		link.target = w.widget
-		graph_edit.add_child(link)
 		links.append(link)
 
 func _on_mouse_exited():
@@ -90,8 +88,9 @@ func find_control(gp):
 		if c is GraphNode:
 			if c.get("controls") != null:
 				for w in c.controls:
-					if Rect2(w.rect_global_position, w.rect_size*w.get_global_transform().get_scale()).has_point(gp):
-						return { node=c, widget=w }
+					var widget = c.controls[w]
+					if Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
+						return { node=c, widget=widget }
 	return null
 
 func _input(event):
@@ -123,11 +122,9 @@ func pick_linked():
 		return
 	# Create line that will be shown when looking for a target
 	var viewport = get_viewport()
-	link = Link.new()
-	link.clip(graph_edit.rect_global_position, graph_edit.rect_size)
+	link = Link.new(graph_edit)
 	link.source = self
 	link.end = rect_global_position+0.5*rect_size*get_global_transform().get_scale()
-	graph_edit.add_child(link)
 	set_process_input(true)
 	pointed_control = null
 

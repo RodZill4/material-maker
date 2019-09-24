@@ -6,6 +6,7 @@ export(String) var debug_path = null
 var debug_file_index : int = 0
 
 var rendering : bool = false
+signal done
 
 func _ready():
 	$ColorRect.material = $ColorRect.material.duplicate(true)
@@ -70,9 +71,8 @@ func setup_material(shader_material, textures, shader_code):
 	shader_material.shader.code = shader_code
 
 func render_shader(shader, textures, render_size):
-	if rendering:
-		print("Already rendering...")
-		return false
+	while rendering:
+		yield(self, "done")
 	rendering = true
 	if debug_path != null and debug_path != "":
 		var f = File.new()
@@ -91,6 +91,7 @@ func render_shader(shader, textures, render_size):
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	#yield(get_tree(), "idle_frame")
 	rendering = false
 	return true
+	emit_signal("done")

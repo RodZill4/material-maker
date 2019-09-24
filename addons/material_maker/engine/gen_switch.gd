@@ -31,7 +31,7 @@ func get_output_defs():
 	return rv
 
 func source_changed(input_index : int):
-	notify_output_change(input_index % parameters.outputs)
+	notify_output_change(input_index % int(parameters.outputs))
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(output_index+parameters.source*parameters.outputs)

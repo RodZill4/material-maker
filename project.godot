@@ -84,6 +84,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/types/gradient.gd"
 }, {
+"base": "GraphNode",
+"class": "MMGraphNodeGeneric",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/generic.gd"
+}, {
+"base": "MMGraphNodeGeneric",
+"class": "MMGraphNodeRemote",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/remote.gd"
+}, {
+"base": "Control",
+"class": "MMNodeLink",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/linked_widgets/link.gd"
+}, {
 "base": "Node",
 "class": "MMType",
 "language": "GDScript",
@@ -105,6 +120,9 @@ _global_script_class_icons={
 "MMGenSwitch": "",
 "MMGenTexture": "",
 "MMGradient": "",
+"MMGraphNodeGeneric": "",
+"MMGraphNodeRemote": "",
+"MMNodeLink": "",
 "MMType": ""
 }
 
