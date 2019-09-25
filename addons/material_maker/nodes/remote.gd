@@ -47,11 +47,36 @@ func update_node():
 func _on_value_changed(new_value, variable):
 	var param_index = variable.trim_prefix("param").to_int()
 	var widget = generator.widgets[param_index]
-	if widget.type == "config_control" and new_value >= widget.configurations.size():
-		var command = new_value - widget.configurations.size()
-		print(command)
+	if widget.type == "config_control":
+		var configuration_count = widget.configurations.size()
+		var control = $Controls.get_child(param_index*4+1)
+		if new_value < configuration_count:
+			._on_value_changed(new_value, variable)
+			var current = control.get_item_text(new_value)
+			control.set_item_text(configuration_count+3, "<update "+current+">")
+			control.set_item_text(configuration_count+4, "<remove "+current+">")
+		else:
+			var current = control.get_item_text(generator.parameters[variable])
+			var command = new_value - widget.configurations.size()
+			match command:
+				1:
+					var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+					add_child(dialog)
+					dialog.set_texts("Configuration", "Enter a name for the new configuration")
+					dialog.connect("ok", self, "do_add_configuration", [ param_index ])
+					dialog.popup_centered()
+				3:
+					generator.update_configuration(param_index, current)
+				4:
+					generator.parameters[variable] = 0
+					generator.remove_configuration(param_index, current)
+				_:
+					print(command)
 	else:
 		._on_value_changed(new_value, variable)
+
+func do_add_configuration(config_name, param_index):
+	generator.add_configuration(param_index, config_name)
 
 func _on_AddLink_pressed():
 	var widget = Control.new()

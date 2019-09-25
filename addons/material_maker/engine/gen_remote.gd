@@ -30,7 +30,9 @@ func get_parameter_defs():
 		match w.type:
 			"config_control":
 				var p = { name="param"+str(i), label=w.label, type="enum", values=[] }
-				for c in w.configurations:
+				var configurations = w.configurations.keys()
+				configurations.sort()
+				for c in configurations:
 					p.values.push_back({ name=c, value=c })
 				rv.append(p)
 				i += 1
@@ -61,7 +63,9 @@ func set_parameter(p, v):
 				parent.get_node(w.node).set_parameter(w.widget, v)
 		"config_control":
 			if v < widget.configurations.size():
-				for w in widget.configurations[widget.configurations.keys()[v]]:
+				var configurations = widget.configurations.keys()
+				configurations.sort()
+				for w in widget.configurations[configurations[v]]:
 					parent.get_node(w.node).set_parameter(w.widget, w.value)
 			else:
 				# incorrect configuration index
@@ -81,7 +85,7 @@ func create_linked_control(label):
 
 func create_config_control(label):
 	var index = widgets.size()
-	widgets.push_back({ label=label, type="config_control", linked_widgets=[], configurations=[] })
+	widgets.push_back({ label=label, type="config_control", linked_widgets=[], configurations={} })
 	return index
 
 func can_link_parameter(index, generator, param):
@@ -90,9 +94,14 @@ func can_link_parameter(index, generator, param):
 func link_parameter(index, generator, param):
 	if !can_link_parameter(index, generator, param):
 		return
-	widgets[index].linked_widgets.push_back({ node=generator.name, widget=param })
-	if widgets[index].linked_widgets.size() == 1:
-		parameters["param"+str(index)] = generator.parameters[param]
+	var widget = widgets[index]
+	widget.linked_widgets.push_back({ node=generator.name, widget=param })
+	if widget.linked_widgets.size() == 1:
+		match widget.type:
+			"linked_control":
+				parameters["param"+str(index)] = generator.parameters[param]
+			"config_control":
+				parameters["param"+str(index)] = 0
 	emit_signal("parameter_changed", "", null)
 
 func remove_parameter(index):
@@ -100,3 +109,32 @@ func remove_parameter(index):
 		parameters["param"+str(i)] = parameters["param"+str(i+1)]
 	widgets.remove(index)
 	emit_signal("parameter_changed", "", null)
+
+func add_configuration(index, config_name):
+	var widget = widgets[index]
+	if widget.type == "config_control":
+		widget.configurations[config_name] = []
+		var configurations = widget.configurations.keys()
+		configurations.sort()
+		parameters["param"+str(index)] =configurations.find(config_name)
+		update_configuration(index, config_name)
+
+func update_configuration(index, config_name):
+	var widget = widgets[index]
+	if widget.type == "config_control":
+		var c = []
+		var parent = get_parent()
+		for w in widget.linked_widgets:
+			var g = parent.get_node(w.node)
+			var value = g.parameters[w.widget]
+			if typeof(value) ==  TYPE_ARRAY or typeof(value) ==  TYPE_DICTIONARY:
+				value = value.duplicate()
+			c.push_back({ node=w.node, widget=w.widget, value=value })
+		widget.configurations[config_name] = c
+		emit_signal("parameter_changed", "", null)
+
+func remove_configuration(index, config_name):
+	var widget = widgets[index]
+	if widget.type == "config_control":
+		widget.configurations.erase(config_name)
+		emit_signal("parameter_changed", "", null)
