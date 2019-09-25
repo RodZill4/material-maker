@@ -8,13 +8,9 @@ func _ready():
 
 func create_node(type):
 	var node = null
-	if File.new().file_exists("res://addons/material_maker/nodes/"+type+".mmn"):
-		node = preload("res://addons/material_maker/nodes/node_generic.gd").new()
-		node.model = type
+	var node_type = load("res://addons/material_maker/nodes/"+type+".tscn")
+	if node_type != null:
+		node = node_type.instance()
 	else:
-		var node_type = load("res://addons/material_maker/nodes/"+type+".tscn")
-		if node_type != null:
-			node = node_type.instance()
-		else:
-			node = preload("res://addons/material_maker/nodes/generic.tscn").instance()
+		node = preload("res://addons/material_maker/nodes/generic.tscn").instance()
 	return node

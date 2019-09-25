@@ -2,9 +2,6 @@ tool
 extends MMGraphNodeGeneric
 class_name MMGraphNodeRemote
 
-const LinkedControl = preload("res://addons/material_maker/widgets/linked_widgets/linked_control.tscn")
-const ConfigControl = preload("res://addons/material_maker/widgets/linked_widgets/config_control.tscn")
-
 func add_control(text, control):
 	var index = $Controls.get_child_count() / 4
 	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
@@ -32,9 +29,29 @@ func update_node():
 			control.name = p.name
 			controls[control.name] = control
 			add_control(generator.widgets[i].label, control)
+			if generator.widgets[i].type == "config_control":
+				var current = null
+				if control.get_item_count() > 0:
+					control.selected = generator.parameters["param"+str(i)]
+					current = control.get_item_text(control.selected)
+				control.add_separator()
+				control.add_item("<add configuration>")
+				if current != null:
+					control.add_separator()
+					control.add_item("<update "+current+">")
+					control.add_item("<remove "+current+">")
 		i += 1
 	rect_size = Vector2(0, 0)
 	initialize_properties()
+
+func _on_value_changed(new_value, variable):
+	var param_index = variable.trim_prefix("param").to_int()
+	var widget = generator.widgets[param_index]
+	if widget.type == "config_control" and new_value >= widget.configurations.size():
+		var command = new_value - widget.configurations.size()
+		print(command)
+	else:
+		._on_value_changed(new_value, variable)
 
 func _on_AddLink_pressed():
 	var widget = Control.new()

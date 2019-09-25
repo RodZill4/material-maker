@@ -68,7 +68,12 @@ static func create_gen(data) -> MMGenBase:
 			generator = MMGenSwitch.new()
 		else:
 			var file = File.new()
-			if file.open("res://addons/material_maker/nodes/"+data.type+".mmg", File.READ) == OK:
+			var gen_path = OS.get_executable_path().get_base_dir()+"/generators"
+			if file.open(gen_path+"/"+data.type+".mmg", File.READ) == OK:
+				generator = create_gen(parse_json(file.get_as_text()))
+				generator.model = data.type
+				file.close()
+			elif file.open("res://addons/material_maker/nodes/"+data.type+".mmg", File.READ) == OK:
 				generator = create_gen(parse_json(file.get_as_text()))
 				generator.model = data.type
 				file.close()

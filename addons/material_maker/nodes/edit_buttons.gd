@@ -1,3 +1,4 @@
+tool
 extends HBoxContainer
 
 func connect_buttons(object, edit_fct, load_fct, save_fct):

@@ -91,7 +91,7 @@ func render_shader(shader, textures, render_size):
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
-	#yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	rendering = false
 	return true
 	emit_signal("done")

@@ -21,7 +21,7 @@ const ADDON_TEXTURE_LIST = [
 	{ port=0, texture="albedo" },
 	{ port=3, texture="emission" },
 	{ port=4, texture="normal_texture" },
-	{ ports=[1, 2, 5], default_values=["0.0", "1.0", "1.0"], texture="mrao" },
+	{ ports=[5, 1, 2], default_values=["1.0", "0.0", "1.0"], texture="orm" },
 	{ port=6, texture="depth_texture" }
 ]
 
@@ -73,15 +73,16 @@ func generate_material(renderer : MMGenRenderer):
 
 func render_textures(renderer : MMGenRenderer):
 	for t in texture_list:
-		var source = get_source(t.port)
-		var texture = null
-		if source != null:
-			var status = source.generator.render(source.output_index, renderer, 512)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
-			texture = ImageTexture.new()
-			texture.create_from_image(renderer.get_texture().get_data())
-		generated_textures[t.texture] = texture
+		if t.has("port"):
+			var source = get_source(t.port)
+			var texture = null
+			if source != null:
+				var status = source.generator.render(source.output_index, renderer, 512)
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
+				texture = ImageTexture.new()
+				texture.create_from_image(renderer.get_texture().get_data())
+			generated_textures[t.texture] = texture
 
 func update_materials(material_list):
 	for m in material_list:

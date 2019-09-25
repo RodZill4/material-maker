@@ -96,7 +96,6 @@ tab_align = 0
 tab_close_display_policy = 1
 
 [node name="Renderer" parent="." instance=ExtResource( 5 )]
-debug_path = ""
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 6 )

@@ -52,7 +52,6 @@ func get_parameter_defs():
 	return rv
 
 func set_parameter(p, v):
-	.set_parameter(p, v)
 	var parent = get_parent()
 	var param_index = p.trim_prefix("param").to_int()
 	var widget = widgets[param_index]
@@ -61,8 +60,14 @@ func set_parameter(p, v):
 			for w in widget.linked_widgets:
 				parent.get_node(w.node).set_parameter(w.widget, v)
 		"config_control":
-			for w in widget.configurations[widget.configurations.keys()[v]]:
-				parent.get_node(w.node).set_parameter(w.widget, w.value)
+			if v < widget.configurations.size():
+				for w in widget.configurations[widget.configurations.keys()[v]]:
+					parent.get_node(w.node).set_parameter(w.widget, w.value)
+			else:
+				# incorrect configuration index
+				print("error: incorrect config control parameter value")
+				return
+	.set_parameter(p, v)
 
 func _serialize(data):
 	data.type = "remote"

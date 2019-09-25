@@ -27,8 +27,7 @@ func get_drag_data(position):
 
 func _ready():
 	var root = create_item()
-	var lib_path = OS.get_executable_path()
-	lib_path = lib_path.left(max(lib_path.rfind("\\"), lib_path.rfind("/"))+1)+"library/base.json"
+	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
 	if !add_library(lib_path):
 		add_library("res://addons/material_maker/library/base.json")
 	add_library("user://library/user.json")
