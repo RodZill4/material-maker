@@ -66,7 +66,11 @@ func set_parameter(p, v):
 				var configurations = widget.configurations.keys()
 				configurations.sort()
 				for w in widget.configurations[configurations[v]]:
-					parent.get_node(w.node).set_parameter(w.widget, w.value)
+					var node = parent.get_node(w.node)
+					if node != null:
+						print(w.value)
+						print(MMType.deserialize_value(w.value))
+						node.set_parameter(w.widget, MMType.deserialize_value(w.value))
 			else:
 				# incorrect configuration index
 				print("error: incorrect config control parameter value")
@@ -126,10 +130,11 @@ func update_configuration(index, config_name):
 		var parent = get_parent()
 		for w in widget.linked_widgets:
 			var g = parent.get_node(w.node)
-			var value = g.parameters[w.widget]
-			if typeof(value) ==  TYPE_ARRAY or typeof(value) ==  TYPE_DICTIONARY:
-				value = value.duplicate()
-			c.push_back({ node=w.node, widget=w.widget, value=value })
+			if g != null:
+				print(g.parameters[w.widget])
+				var value = MMType.serialize_value(g.parameters[w.widget])
+				print(value)
+				c.push_back({ node=w.node, widget=w.widget, value=value })
 		widget.configurations[config_name] = c
 		emit_signal("parameter_changed", "", null)
 

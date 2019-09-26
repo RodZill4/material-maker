@@ -46,8 +46,8 @@ func find_control(gp):
 	return null
 
 func _draw():
-	draw_rect(Rect2(rect_position, rect_size), Color(1.0, 0.0, 0.0, 0.2))
-	draw_rect(Rect2(rect_position, rect_size), Color(1.0, 1.0, 0.0), false)
+	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 0.0, 0.0, 0.2))
+	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 1.0, 0.0), false)
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect

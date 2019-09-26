@@ -100,3 +100,5 @@ func deserialize(v):
 		clear()
 		for p in v.points:
 			add_point(p.v, p.c)
+	else:
+		print("Cannot deserialize gradient")

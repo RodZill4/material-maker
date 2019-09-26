@@ -2,24 +2,30 @@ tool
 extends MMGraphNodeGeneric
 class_name MMGraphNodeRemote
 
+var links = {}
+
+onready var grid = $Controls
+
 func add_control(text, control):
-	var index = $Controls.get_child_count() / 4
+	var index = grid.get_child_count() / 4
 	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
-	$Controls.add_child(label)
-	$Controls.add_child(control)
+	grid.add_child(label)
+	grid.add_child(control)
+	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
+	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
 	var button = Button.new()
 	button.icon = preload("res://addons/material_maker/icons/link.png")
-	$Controls.add_child(button)
+	grid.add_child(button)
 	button.connect("pressed", self, "_on_Link_pressed", [ index ])
 	button = Button.new()
 	button.icon = preload("res://addons/material_maker/icons/remove.png")
-	$Controls.add_child(button)
+	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ index ])
 
 func update_node():
 	var i : int = 0
-	for c in $Controls.get_children():
+	for c in grid.get_children():
 		c.queue_free()
 	yield(get_tree(), "idle_frame")
 	controls = {}
@@ -49,7 +55,7 @@ func _on_value_changed(new_value, variable):
 	var widget = generator.widgets[param_index]
 	if widget.type == "config_control":
 		var configuration_count = widget.configurations.size()
-		var control = $Controls.get_child(param_index*4+1)
+		var control = grid.get_child(param_index*4+1)
 		if new_value < configuration_count:
 			._on_value_changed(new_value, variable)
 			var current = control.get_item_text(new_value)
@@ -92,7 +98,7 @@ func _on_AddConfig_pressed():
 
 func _on_Link_pressed(index):
 	var link = MMNodeLink.new(get_parent())
-	link.pick($Controls.get_child(index*4+1), generator, index)
+	link.pick(grid.get_child(index*4+1), generator, index)
 
 func _on_Remote_resize_request(new_minsize):
 	print("_on_Remote_resize_request")
@@ -102,7 +108,32 @@ func _on_HBoxContainer_minimum_size_changed():
 	print("_on_HBoxContainer_minimum_size_changed "+str($HBoxContainer.rect_min_size))
 
 func on_parameter_changed(p, v):
+	print("remote.parameter_changed "+str(p)+" "+str(v))
 	if p == "":
 		update_node()
 	else:
 		.on_parameter_changed(p, v)
+
+func on_enter_widget(widget):
+	print("enter_widget "+widget.name)
+	var param_index = widget.name.trim_prefix("param").to_int()
+	var w = generator.widgets[param_index]
+	var new_links = []
+	for l in w.linked_widgets:
+		var graph_node = get_parent().get_node("node_"+l.node)
+		if graph_node != null:
+			var control = graph_node.controls[l.widget]
+			if control != null:
+				var link = MMNodeLink.new(get_parent())
+				link.show_link(widget, control)
+				new_links.push_back(link)
+	# free existing links if any
+	on_exit_widget(widget)
+	# store new links
+	links[widget] = new_links
+
+func on_exit_widget(widget):
+	if links.has(widget):
+		for l in links[widget]:
+			l.queue_free()
+		links.erase(widget)

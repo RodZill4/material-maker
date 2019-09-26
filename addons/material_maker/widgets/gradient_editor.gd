@@ -1,5 +1,6 @@
 tool
 extends Control
+class_name MMGradientEditor
 
 class GradientCursor:
 	extends ColorRect
@@ -50,9 +51,10 @@ func _ready():
 	set_value(MMGradient.new())
 
 func set_value(v):
+	print("GradientEditor.set_value")
 	value = v
 	for c in get_children():
-		if c != $Gradient && c != $Background:
+		if c != $Gradient and c != $Background:
 			remove_child(c)
 			c.free()
 	for p in value.points:

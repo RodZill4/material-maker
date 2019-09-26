@@ -259,6 +259,7 @@
 	},
 	{
 		"tree_item":"Miscellaneous/Remote",
-		"type":"remote"
+		"type":"remote",
+		"widgets":[]
 	}
 ]}

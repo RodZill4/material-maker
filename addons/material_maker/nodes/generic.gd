@@ -5,7 +5,7 @@ class_name MMGraphNodeGeneric
 var generator = null setget set_generator
 
 var controls = {}
-var ignore_parameter_change = false
+var ignore_parameter_change = ""
 
 func set_generator(g):
 	generator = g
@@ -19,7 +19,7 @@ func on_offset_changed():
 	generator.position = offset
 
 func on_parameter_changed(p, v):
-	if ignore_parameter_change:
+	if ignore_parameter_change == p:
 		return
 	var o = controls[p]
 	if o is LineEdit:
@@ -34,7 +34,7 @@ func on_parameter_changed(p, v):
 		o.pressed = v
 	elif o is ColorPickerButton:
 		o.color = MMType.deserialize_value(v)
-	elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+	elif o is MMGradientEditor:
 		var gradient : MMGradient = MMGradient.new()
 		gradient.deserialize(v)
 		o.value = gradient
@@ -72,27 +72,27 @@ func update_shaders():
 	get_parent().send_changed_signal()
 
 func _on_text_changed(new_text, variable):
-	ignore_parameter_change = true
+	ignore_parameter_change = variable
 	generator.set_parameter(variable, float(new_text))
-	ignore_parameter_change = false
+	ignore_parameter_change = ""
 	update_shaders()
 
 func _on_value_changed(new_value, variable):
-	ignore_parameter_change = true
+	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
-	ignore_parameter_change = false
+	ignore_parameter_change = ""
 	update_shaders()
 
 func _on_color_changed(new_color, variable):
-	ignore_parameter_change = true
+	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
-	ignore_parameter_change = false
+	ignore_parameter_change = ""
 	update_shaders()
 
 func _on_gradient_changed(new_gradient, variable):
-	ignore_parameter_change = true
-	generator.set_parameter(variable, new_gradient)
-	ignore_parameter_change = false
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
+	ignore_parameter_change = ""
 	update_shaders()
 
 func create_parameter_control(p : Dictionary):
@@ -240,6 +240,7 @@ func edit_generator():
 func update_generator(shader_model):
 	generator.set_shader_model(shader_model)
 	update_node()
+	update_shaders()
 
 func load_generator():
 	var dialog = FileDialog.new()
