@@ -10,9 +10,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -48,20 +48,27 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1274425"
-     inkscape:cx="116.41955"
-     inkscape:cy="914.64295"
-     inkscape:document-units="mm"
+     inkscape:zoom="14.304427"
+     inkscape:cx="46.907045"
+     inkscape:cy="41.347265"
+     inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="true"
+     units="px"
+     scale-x="2.1"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false">
     <inkscape:grid
        type="xygrid"
-       id="grid815" />
+       id="grid815"
+       spacingx="4.2333332"
+       spacingy="4.2333332" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -71,25 +78,18 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
-     id="layer1">
-    <rect
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-       id="rect4533"
-       width="238.125"
-       height="174.625"
-       x="-10.583333"
-       y="-3.3020833"
-       ry="0.82414269" />
+     id="layer1"
+     transform="translate(0,-280.06665)">
     <g
        id="g4582"
-       transform="matrix(1.2003144,0.26398218,-0.26389538,1.2007092,-4.1100858,-17.15364)"
+       transform="matrix(0.63156765,0.13889911,-0.13885344,0.63177538,-0.50529,268.1154)"
        inkscape:export-filename="link.png"
        inkscape:export-xdpi="15.926786"
        inkscape:export-ydpi="15.926786">
@@ -109,7 +109,7 @@
        inkscape:export-xdpi="16.531826"
        inkscape:export-filename="remove.png"
        id="g4564"
-       transform="matrix(0.82426401,0.81188676,-0.82426401,0.81188676,84.358228,-6.2929802)"
+       transform="matrix(0.43370177,0.42718925,-0.43370177,0.42718925,43.791013,273.09803)"
        style="fill:#ff0909;fill-opacity:1">
       <rect
          style="opacity:1;fill:#ff0909;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
@@ -133,7 +133,7 @@
        inkscape:export-filename="config.png"
        inkscape:export-xdpi="16.559999"
        inkscape:export-ydpi="16.559999"
-       transform="matrix(1.0254261,0,0,1.0022479,-9.1237225,-33.22013)">
+       transform="matrix(0.53954693,0,0,0.52735129,-2.0235322,258.7025)">
       <path
          inkscape:connector-curvature="0"
          id="path4598"
@@ -142,7 +142,7 @@
     </g>
     <g
        id="g855"
-       transform="matrix(0.48976049,-0.48711566,0.48711566,0.48976049,-26.645494,39.257287)"
+       transform="matrix(0.25769655,-0.25630492,0.25630492,0.25769655,4.0104312,296.39647)"
        inkscape:export-filename="edit.png"
        inkscape:export-xdpi="14.942099"
        inkscape:export-ydpi="14.942099">
@@ -185,17 +185,20 @@
        id="g879"
        inkscape:export-filename="save.png"
        inkscape:export-xdpi="14"
-       inkscape:export-ydpi="14">
+       inkscape:export-ydpi="14"
+       transform="matrix(0.52616852,0,0,0.52616852,14.395212,275.18126)">
       <path
          id="rect859"
          transform="scale(0.26458333)"
-         d="M 130 152.51953 L 130 262.51953 L 240 262.51953 L 240 163.23047 L 229.28906 152.51953 L 130 152.51953 z "
-         style="opacity:1;fill:#14008d;fill-opacity:1;stroke:none;stroke-width:3.77952766;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+         d="m 130,152.51953 v 110 h 110 v -99.28906 l -10.71094,-10.71094 z"
+         style="opacity:1;fill:#14008d;fill-opacity:1;stroke:none;stroke-width:3.77952766;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         inkscape:connector-curvature="0" />
       <path
          id="rect861"
          transform="scale(0.26458333)"
-         d="M 155 152.51953 L 155 192.51953 L 215 192.51953 L 215 152.51953 L 155 152.51953 z M 195 162.51953 L 205 162.51953 L 205 182.51953 L 195 182.51953 L 195 162.51953 z "
-         style="opacity:1;fill:#afafaf;fill-opacity:1;stroke:none;stroke-width:4.04048538;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+         d="m 155,152.51953 v 40 h 60 v -40 z m 40,10 h 10 v 20 h -10 z"
+         style="opacity:1;fill:#afafaf;fill-opacity:1;stroke:none;stroke-width:4.04048538;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         inkscape:connector-curvature="0" />
       <rect
          ry="2.6458347"
          y="53.583332"
@@ -207,34 +210,23 @@
     </g>
     <g
        style="fill:#18ff09;fill-opacity:1"
-       transform="matrix(0.00708854,0.93703452,-0.93703452,-0.00708854,131.56263,7.7603075)"
+       transform="matrix(0.00372977,0.49303806,-0.49303806,-0.00372977,83.199877,280.80247)"
        id="g849"
        inkscape:export-filename="plus.png"
        inkscape:export-xdpi="16.531826"
        inkscape:export-ydpi="16.531826">
-      <rect
-         ry="0"
-         y="8.604167"
-         x="10.583333"
-         height="26.458334"
-         width="5.2916665"
+      <path
+         style="opacity:1;fill:#18ff09;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         d="m 1.7704433,57.914123 10.5809277,8.16e-4 8.46e-4,10.584889 5.292445,4.22e-4 -8.47e-4,-10.58489 10.58489,8.46e-4 -4.24e-4,-5.292444 -10.580925,-8.16e-4 -8.47e-4,-10.58489 -5.292414,0.0035 8.14e-4,10.580928 -10.5848882,-8.47e-4 z"
          id="rect844"
-         style="opacity:1;fill:#18ff09;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
-      <rect
-         ry="0"
-         y="19.1875"
-         x="0"
-         height="5.2916665"
-         width="26.458332"
-         id="rect847"
-         style="opacity:1;fill:#18ff09;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+         inkscape:connector-curvature="0" />
     </g>
     <g
        inkscape:export-ydpi="16.531826"
        inkscape:export-xdpi="16.531826"
        inkscape:export-filename="minus.png"
        id="g856"
-       transform="matrix(0.00708854,0.93703452,-0.93703452,-0.00708854,162.38808,7.2064523)"
+       transform="matrix(0.00372977,0.49303806,-0.49303806,-0.00372977,18.535206,297.77843)"
        style="fill:#ff0909;fill-opacity:1">
       <rect
          style="opacity:1;fill:#ff0909;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
@@ -249,17 +241,20 @@
        id="g868"
        inkscape:export-filename="load.png"
        inkscape:export-xdpi="13.499794"
-       inkscape:export-ydpi="13.499794">
+       inkscape:export-ydpi="13.499794"
+       transform="matrix(0.51223521,0,0,0.51223521,5.2214853,275.80647)">
       <path
          id="rect849"
          transform="scale(0.26458333)"
-         d="M 330 152.51953 L 330 262.51953 L 420 262.51953 L 420 169.94531 L 402.57227 152.51953 L 330 152.51953 z "
-         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952761;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stroke-linejoin:round" />
+         d="m 330,152.51953 v 110 h 90 v -92.57422 l -17.42773,-17.42578 z"
+         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952766;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         inkscape:connector-curvature="0" />
       <path
          id="path855"
          transform="scale(0.26458333)"
-         d="M 403 152.94727 L 403 169.51953 L 419.57422 169.51953 L 403 152.94727 z "
-         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952761;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke;stroke-linejoin:round" />
+         d="m 403,152.94727 v 16.57226 h 16.57422 z"
+         style="opacity:1;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:3.77952766;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         inkscape:connector-curvature="0" />
       <rect
          transform="rotate(-90)"
          ry="2.5431327e-006"

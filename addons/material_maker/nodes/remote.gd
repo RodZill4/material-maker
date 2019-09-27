@@ -108,14 +108,12 @@ func _on_HBoxContainer_minimum_size_changed():
 	print("_on_HBoxContainer_minimum_size_changed "+str($HBoxContainer.rect_min_size))
 
 func on_parameter_changed(p, v):
-	print("remote.parameter_changed "+str(p)+" "+str(v))
 	if p == "":
 		update_node()
 	else:
 		.on_parameter_changed(p, v)
 
 func on_enter_widget(widget):
-	print("enter_widget "+widget.name)
 	var param_index = widget.name.trim_prefix("param").to_int()
 	var w = generator.widgets[param_index]
 	var new_links = []

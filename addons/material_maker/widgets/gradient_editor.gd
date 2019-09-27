@@ -51,7 +51,6 @@ func _ready():
 	set_value(MMGradient.new())
 
 func set_value(v):
-	print("GradientEditor.set_value")
 	value = v
 	for c in get_children():
 		if c != $Gradient and c != $Background:

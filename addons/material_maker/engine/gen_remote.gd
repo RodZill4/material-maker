@@ -76,6 +76,8 @@ func set_parameter(p, v):
 				print("error: incorrect config control parameter value")
 				return
 	.set_parameter(p, v)
+	if name == "gen_parameters":
+		get_parent().parameters[p] = v
 
 func _serialize(data):
 	data.type = "remote"

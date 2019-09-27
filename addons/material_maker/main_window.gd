@@ -25,6 +25,7 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="Tools", command="create_subgraph", description="Create subgraph" },
 	{ menu="Tools", command="make_selected_nodes_editable", description="Make selected nodes editable" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
@@ -45,6 +46,12 @@ func _ready():
 		create_menu(menu, m.name)
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
+
+func get_current_graph_edit():
+	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	if graph_edit != null and graph_edit is GraphEdit:
+		return graph_edit
+	return null
 
 func create_menu(menu, menu_name):
 	menu.clear()
@@ -152,7 +159,7 @@ func do_load_materials(filenames):
 		do_load_material(f)
 
 func do_load_material(filename):
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
 		node_count = 0
@@ -169,7 +176,7 @@ func do_load_material(filename):
 	add_recent(filename)
 
 func save_material():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
 			graph_edit.save_file(graph_edit.save_path)
@@ -177,7 +184,7 @@ func save_material():
 			save_material_as()
 
 func save_material_as():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		var dialog = FileDialog.new()
 		add_child(dialog)
@@ -192,12 +199,12 @@ func close_material():
 	$VBoxContainer/HBoxContainer/Projects.close_tab()
 
 func export_material():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null :
 		graph_edit.export_textures()
 
 func export_material_is_disabled():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit == null or graph_edit.save_path == null:
 		return true
 	return false
@@ -209,16 +216,16 @@ func quit():
 		get_tree().quit()
 
 func edit_cut():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.cut()
 
 func edit_cut_is_disabled():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	return graph_edit == null or !graph_edit.can_copy()
 
 func edit_copy():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.copy()
 
@@ -226,7 +233,7 @@ func edit_copy_is_disabled():
 	return edit_cut_is_disabled()
 
 func edit_paste():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.paste()
 
@@ -235,8 +242,8 @@ func edit_paste_is_disabled():
 	return data == null
 
 func get_selected_nodes():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	if graph_edit != null and graph_edit is GraphEdit:
+	var graph_edit = get_current_graph_edit()
+	if graph_edit != null:
 		var selected_nodes = []
 		for n in graph_edit.get_children():
 			if n is GraphNode and n.selected:
@@ -244,6 +251,14 @@ func get_selected_nodes():
 		return selected_nodes
 	else:
 		return []
+
+func create_subgraph():
+	var graph_edit = get_current_graph_edit()
+	var selected_nodes = get_selected_nodes()
+	if !selected_nodes.empty():
+		for n in selected_nodes:
+			print(n.name)
+			# TODO !
 
 func make_selected_nodes_editable():
 	var selected_nodes = get_selected_nodes()
@@ -263,12 +278,12 @@ func add_to_user_library():
 		dialog.popup_centered()
 
 func do_add_to_user_library(name, nodes):
+	var graph_edit = get_current_graph_edit()
 	var data
 	if nodes.size() == 1:
 		data = nodes[0].serialize()
 		data.erase("node_position")
-	else:
-		var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	var dir = Directory.new()
 	dir.make_dir("user://library")
@@ -276,7 +291,6 @@ func do_add_to_user_library(name, nodes):
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
 	$VBoxContainer/HBoxContainer/VBoxContainer/Library.add_item(data, name)
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
 	graph_edit.export_texture(nodes[0], "user://library/user/"+data.icon+".png", 64)
 
 func save_user_library():

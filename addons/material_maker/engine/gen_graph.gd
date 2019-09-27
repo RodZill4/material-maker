@@ -12,7 +12,15 @@ func get_type_name():
 	return label
 
 func get_parameter_defs():
+	var params = get_node("gen_parameters")
+	if params != null:
+		return params.get_parameter_defs()
 	return []
+
+func set_parameter(p, v):
+	var params = get_node("gen_parameters")
+	if params != null:
+		return params.set_parameter(p, v)
 
 func get_input_defs():
 	var inputs = get_node("gen_inputs")
@@ -98,10 +106,8 @@ func disconnect_children(from, from_port : int, to, to_port : int):
 	return true
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
-	print("Getting shader code from graph")
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
-		print("found!")
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")
