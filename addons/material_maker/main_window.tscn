@@ -80,16 +80,38 @@ margin_top = 354.0
 margin_right = 314.0
 margin_bottom = 696.0
 
-[node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer"]
+[node name="ProjectsPane" type="Control" parent="VBoxContainer/HBoxContainer"]
 margin_left = 326.0
 margin_right = 1280.0
 margin_bottom = 696.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
+
+[node name="BackgroundPreview" type="ViewportContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch = true
+
+[node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview"]
+size = Vector2( 954, 696 )
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport"]
+transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 2.24976, 2.68116 )
+current = true
+
+[node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 4 )
 
-[node name="Tabs" type="Tabs" parent="VBoxContainer/HBoxContainer/Projects"]
+[node name="Tabs" type="Tabs" parent="VBoxContainer/HBoxContainer/ProjectsPane/Projects"]
 margin_right = 954.0
 margin_bottom = 24.0
 tab_align = 0
@@ -101,13 +123,14 @@ debug_path = null
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 6 )
 [connection signal="need_update" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview" to="." method="update_preview_3d"]
-[connection signal="no_more_tabs" from="VBoxContainer/HBoxContainer/Projects" to="." method="new_material"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/Projects" to="VBoxContainer/HBoxContainer/Projects" method="_on_Projects_resized"]
-[connection signal="tab_changed" from="VBoxContainer/HBoxContainer/Projects" to="." method="_on_Projects_tab_changed"]
-[connection signal="connection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="connect_node"]
-[connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/Projects/GraphEdit" method="disconnect_node"]
-[connection signal="close_request" from="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" method="on_close_request"]
-[connection signal="offset_changed" from="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/Projects/GraphEdit/node_Material" method="on_offset_changed"]
-[connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="move_active_tab_to"]
-[connection signal="tab_changed" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="set_current_tab"]
-[connection signal="tab_close" from="VBoxContainer/HBoxContainer/Projects/Tabs" to="VBoxContainer/HBoxContainer/Projects" method="close_tab"]
+[connection signal="show_background_preview" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview" to="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview" method="set_visible"]
+[connection signal="no_more_tabs" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="new_material"]
+[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="_on_Projects_resized"]
+[connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="_on_Projects_tab_changed"]
+[connection signal="connection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="connect_node"]
+[connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="disconnect_node"]
+[connection signal="close_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_close_request"]
+[connection signal="offset_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_offset_changed"]
+[connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="move_active_tab_to"]
+[connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="set_current_tab"]
+[connection signal="tab_close" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="close_tab"]

@@ -8,7 +8,7 @@ var editor_interface = null
 var current_tab = null
 
 onready var renderer = $Renderer
-onready var projects = $VBoxContainer/HBoxContainer/Projects
+onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
