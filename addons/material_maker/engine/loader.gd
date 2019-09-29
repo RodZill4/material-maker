@@ -16,15 +16,9 @@ static func add_to_gen_graph(gen_graph, generators, connections):
 		var g = create_gen(n)
 		if g != null:
 			var orig_name = g.name
-			var name = g.name
-			var index = 1
-			while gen_graph.has_node(name):
-				index += 1
-				name = g.name + "_" + str(index)
-			g.name = name
-			gen_graph.add_child(g)
+			gen_graph.add_generator(g)
 			rv.generators.append(g)
-			gennames[orig_name] = name
+			gennames[orig_name] = g.name
 	for c in connections:
 		if gennames.has(c.from) and gennames.has(c.to):
 			c.from = gennames[c.from]

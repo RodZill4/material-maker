@@ -8,6 +8,7 @@ var editor_interface = null
 var current_tab = null
 
 onready var renderer = $Renderer
+onready var projects = $VBoxContainer/HBoxContainer/Projects
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
@@ -25,8 +26,8 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
-	{ menu="Tools", command="create_subgraph", description="Create subgraph" },
-	{ menu="Tools", command="make_selected_nodes_editable", description="Make selected nodes editable" },
+	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create subgraph" },
+	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
 	{ menu="Help", command="show_doc", description="User manual" },
@@ -48,7 +49,7 @@ func _ready():
 	new_material()
 
 func get_current_graph_edit():
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var graph_edit = projects.get_current_tab_control()
 	if graph_edit != null and graph_edit is GraphEdit:
 		return graph_edit
 	return null
@@ -135,8 +136,8 @@ func new_pane():
 	graph_edit.node_factory = $NodeFactory
 	graph_edit.renderer = $Renderer
 	graph_edit.editor_interface = editor_interface
-	$VBoxContainer/HBoxContainer/Projects.add_child(graph_edit)
-	$VBoxContainer/HBoxContainer/Projects.current_tab = graph_edit.get_index()
+	projects.add_child(graph_edit)
+	projects.current_tab = graph_edit.get_index()
 	return graph_edit 
 
 func new_material():
@@ -196,7 +197,7 @@ func save_material_as():
 		dialog.popup_centered()
 
 func close_material():
-	$VBoxContainer/HBoxContainer/Projects.close_tab()
+	projects.close_tab()
 
 func export_material():
 	var graph_edit = get_current_graph_edit()
@@ -214,6 +215,7 @@ func quit():
 		emit_signal("quit")
 	else:
 		get_tree().quit()
+
 
 func edit_cut():
 	var graph_edit = get_current_graph_edit()
@@ -244,21 +246,14 @@ func edit_paste_is_disabled():
 func get_selected_nodes():
 	var graph_edit = get_current_graph_edit()
 	if graph_edit != null:
-		var selected_nodes = []
-		for n in graph_edit.get_children():
-			if n is GraphNode and n.selected:
-				selected_nodes.append(n)
-		return selected_nodes
+		return graph_edit.get_selected_nodes()
 	else:
 		return []
 
 func create_subgraph():
 	var graph_edit = get_current_graph_edit()
-	var selected_nodes = get_selected_nodes()
-	if !selected_nodes.empty():
-		for n in selected_nodes:
-			print(n.name)
-			# TODO !
+	if graph_edit != null:
+		graph_edit.create_subgraph()
 
 func make_selected_nodes_editable():
 	var selected_nodes = get_selected_nodes()
@@ -326,34 +321,39 @@ func _on_LoadRecent_id_pressed(id):
 # Preview
 
 func update_preview():
-	var material_node = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control().get_node("node_Material")
-	if material_node != null:
-		var status = material_node.generator.render_textures(renderer)
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-		material_node.generator.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
 	update_preview_2d()
+	update_preview_3d()
 
 func update_preview_2d(node = null):
-	var graph_edit = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
-	var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
-	if node == null:
-		for n in graph_edit.get_children():
-			if n is GraphNode and n.selected:
-				node = n
-				break
-	if node != null:
-		var status = node.generator.render(0, renderer, 1024)
+	var graph_edit = get_current_graph_edit()
+	if graph_edit != null:
+		var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
+		if node == null:
+			for n in graph_edit.get_children():
+				if n is GraphNode and n.selected:
+					node = n
+					break
+		if node != null:
+			var status = node.generator.render(0, renderer, 1024)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status:
+				var image = renderer.get_texture().get_data()
+				var tex = ImageTexture.new()
+				tex.create_from_image(image)
+				preview.set_2d(tex)
+
+func update_preview_3d():
+	var graph_edit = get_current_graph_edit()
+	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
+		var gen_material = graph_edit.top_generator.get_node("Material")
+		var status = gen_material.render_textures(renderer)
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		if status:
-			var image = renderer.get_texture().get_data()
-			var tex = ImageTexture.new()
-			tex.create_from_image(image)
-			preview.set_2d(tex)
+		gen_material.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
 
 func _on_Projects_tab_changed(tab):
-	var new_tab = $VBoxContainer/HBoxContainer/Projects.get_current_tab_control()
+	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
 		if new_tab != null:
 			for c in get_incoming_connections():

@@ -13,7 +13,7 @@ func get_output_defs():
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var genname = "o"+str(get_instance_id())
-	var rv = { defs="", code="" }
+	var rv = { globals=[], defs="", code="" }
 	var texture_name = genname+"_tex"
 	var variant_index = context.get_variant(self, uv)
 	if variant_index == -1:

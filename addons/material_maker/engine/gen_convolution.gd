@@ -28,7 +28,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var genname = "o"+str(get_instance_id())
 	var epsilon = 1.0/pow(2, 4+parameters.size)
 	var types = { "rgba": { type="vec4", init="vec4(0.0)" }, "rgb": { type="vec3", init="vec3(0.0)" }, "f": { type="float", init="0.0" } }
-	var rv = { defs="", code="", textures={} }
+	var rv = { globals=[], defs="", code="", textures={} }
 	var source = get_source(0)
 	if source == null:
 		return rv

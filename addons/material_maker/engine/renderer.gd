@@ -26,7 +26,7 @@ static func generate_shader(src_code):
 		for g in src_code.globals:
 			code += g
 	var shader_code = src_code.defs
-	shader_code += "void fragment() {\n"
+	shader_code += "\nvoid fragment() {\n"
 	shader_code += src_code.code
 	shader_code += "COLOR = "+src_code.rgba+";\n"
 	shader_code += "}\n"

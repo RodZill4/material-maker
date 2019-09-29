@@ -50,7 +50,8 @@ func initialize_properties():
 		if parameter_names.find(c) == -1:
 			continue
 		var o = controls[c]
-		on_parameter_changed(c, generator.parameters[c])
+		if generator.parameters.has(c):
+			on_parameter_changed(c, generator.parameters[c])
 		if o is LineEdit:
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
 		elif o is SpinBox:
@@ -134,11 +135,8 @@ func update_node():
 	# Clean node
 	var custom_node_buttons = null
 	for c in get_children():
-		if c.name != "CustomNodeButtons":
-			remove_child(c)
-			c.queue_free()
-		else:
-			custom_node_buttons = c
+		c.queue_free()
+	yield(get_tree(), "idle_frame")
 	rect_size = Vector2(0, 0)
 	# Rebuild node
 	title = generator.get_type_name()

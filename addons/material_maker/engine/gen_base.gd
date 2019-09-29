@@ -91,18 +91,6 @@ func get_input_shader(input_index : int):
 func get_shader(output_index : int, context):
 	return get_shader_code("UV", output_index, context);
 
-# this will need an output index for switch
-func get_globals():
-	var list = []
-	for i in range(10):
-		var source = get_source(i)
-		if source != null:
-			var source_list = source.generator.get_globals()
-			for g in source_list:
-				if list.find(g) == -1:
-					list.append(g)
-	return list
-
 func render(output_index : int, renderer : MMGenRenderer, size : int):
 	var context : MMGenContext = MMGenContext.new(renderer)
 	var source = get_shader_code("UV", output_index, context)
@@ -135,7 +123,6 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 				rv.rgb = "vec3("+rv.f+")"
 		if !rv.has("rgba"):
 			rv.rgba = "vec4("+rv.rgb+", 1.0)"
-		rv.globals = get_globals()
 	return rv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):

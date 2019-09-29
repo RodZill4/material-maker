@@ -17,9 +17,9 @@ func get_type():
 	return "buffer"
 
 func get_type_name():
-	match mask:
-		1: return "Inputs"
-		2: return "Output"
+	match name:
+		"gen_inputs": return "Inputs"
+		"gen_outputs": return "Outputs"
 		_: return "IOs"
 	return "Buffer"
 

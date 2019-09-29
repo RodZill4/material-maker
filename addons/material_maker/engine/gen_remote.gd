@@ -14,14 +14,14 @@ func set_widgets(w):
 	for w in widgets:
 		var param_name = "param"+str(i)
 		if !parameters.has(param_name):
-			parameters["param"+str(i)] = 0
+			parameters[param_name] = 0
 		i += 1
 
 func get_type():
 	return "remote"
 
 func get_type_name():
-	return "Remote"
+	return "Parameters" if name == "gen_parameters" else "Remote"
 
 func get_parameter_defs():
 	var rv = []
@@ -68,8 +68,6 @@ func set_parameter(p, v):
 				for w in widget.configurations[configurations[v]]:
 					var node = parent.get_node(w.node)
 					if node != null:
-						print(w.value)
-						print(MMType.deserialize_value(w.value))
 						node.set_parameter(w.widget, MMType.deserialize_value(w.value))
 			else:
 				# incorrect configuration index
@@ -133,9 +131,7 @@ func update_configuration(index, config_name):
 		for w in widget.linked_widgets:
 			var g = parent.get_node(w.node)
 			if g != null:
-				print(g.parameters[w.widget])
 				var value = MMType.serialize_value(g.parameters[w.widget])
-				print(value)
 				c.push_back({ node=w.node, widget=w.widget, value=value })
 		widget.configurations[config_name] = c
 		emit_signal("parameter_changed", "", null)

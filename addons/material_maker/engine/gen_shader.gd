@@ -61,6 +61,7 @@ func find_keyword_call(string, keyword):
 	return ""
 
 func replace_input(string, context, input, type, src, default):
+	var required_globals = []
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
@@ -83,11 +84,17 @@ func replace_input(string, context, input, type, src, default):
 			while src_code is GDScriptFunctionState:
 				src_code = yield(src_code, "completed")
 			src_code.string = src_code[type]
+		# Add global definitions
+		for d in src_code.globals:
+			if required_globals.find(d) == -1:
+				required_globals.push_back(d)
+		# Add generated definitions
 		required_defs += src_code.defs
+		# Add generated code
 		required_code += src_code.code
 		required_textures = src_code.textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
 
 func is_word_letter(l):
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -112,6 +119,7 @@ func replace_variable(string, variable, value):
 
 func subst(string, context, uv = ""):
 	var genname = "o"+str(get_instance_id())
+	var required_globals = []
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
@@ -157,17 +165,23 @@ func subst(string, context, uv = ""):
 				if result.new_pass_required:
 					new_pass_required = true
 				string = result.string
+				# Add global definitions
+				for d in result.globals:
+					if required_globals.find(d) == -1:
+						required_globals.push_back(d)
+				# Add generated definitions
 				required_defs += result.defs
+				# Add generated code
 				required_code += result.code
 				for t in result.textures.keys():
 					required_textures[t] = result.textures[t]
 			cont = changed and new_pass_required
-	return { string=string, defs=required_defs, code=required_code, textures=required_textures }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
-	var rv = { defs="", code="", textures={} }
+	var rv = { globals=[], defs="", code="", textures={} }
 	var variant_string = uv+","+str(output_index)
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
@@ -194,7 +208,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 					var subst_output = subst(output[t.field], context, uv)
 					while subst_output is GDScriptFunctionState:
 						subst_output = yield(subst_output, "completed")
+					# Add global definitions
+					for d in subst_output.globals:
+						if rv.globals.find(d) == -1:
+							rv.globals.push_back(d)
+					# Add generated definitions
 					rv.defs += subst_output.defs
+					# Add generated code
 					rv.code += subst_output.code
 					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ t.type, genname, output_index, variant_index, t.field, subst_output.string ]
 					for t in subst_output.textures.keys():
@@ -202,13 +222,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 		for t in output_info:
 			if output.has(t.field):
 				rv[t.field] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, t.field ]
+		if shader_model.has("global") && rv.globals.find(shader_model.global) == -1:
+			rv.globals.push_back(shader_model.global)
 	return rv
-
-func get_globals():
-	var list = .get_globals()
-	if typeof(shader_model) == TYPE_DICTIONARY and shader_model.has("global") and list.find(shader_model.global) == -1:
-		list.append(shader_model.global)
-	return list
 
 func _serialize(data):
 	data.shader_model = shader_model

@@ -94,11 +94,25 @@ func clear_view():
 			remove_child(c)
 			c.free()
 
+# Center view
+
+func center_view():
+	var center = Vector2(0, 0)
+	var node_count = 0
+	for c in get_children():
+		if c is GraphNode:
+			center += c.offset + 0.5*c.rect_size
+			node_count += 1
+	if node_count > 0:
+		center /= node_count
+		scroll_offset = center - 0.5*rect_size
+
 func update_view(g):
 	clear_view()
 	generator = g
 	update_graph(generator.get_children(), generator.connections)
 	$ButtonUp.visible = generator != top_generator
+	center_view()
 
 func clear_material():
 	if top_generator != null:
@@ -176,10 +190,17 @@ func export_textures(size = null):
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():
-			if c is GraphNode and c.has_method("export_textures"):
-				c.export_textures(prefix, size)
+			if c is GraphNode and c.generator.has_method("export_textures"):
+				c.generator.export_textures(prefix, size)
 
 # Cut / copy / paste
+
+func get_selected_nodes():
+	var selected_nodes = []
+	for n in get_children():
+		if n is GraphNode and n.selected:
+			selected_nodes.append(n)
+	return selected_nodes
 
 func remove_selection():
 	for c in get_children():
@@ -235,19 +256,6 @@ func paste(pos = Vector2(0, 0)):
 	for c in create_nodes(data, scroll_offset+0.5*rect_size):
 		c.selected = true
 
-# Center view
-
-func center_view():
-	var center = Vector2(0, 0)
-	var node_count = 0
-	for c in get_children():
-		if c is GraphNode:
-			center += c.offset + 0.5*c.rect_size
-			node_count += 1
-	if node_count > 0:
-		center /= node_count
-		scroll_offset = center - 0.5*rect_size
-
 # Delay after graph update
 
 func send_changed_signal():
@@ -272,3 +280,12 @@ func drop_data(position, data):
 func on_ButtonUp_pressed():
 	if generator != top_generator && generator.get_parent() is MMGenGraph:
 		call_deferred("update_view", generator.get_parent())
+
+# Create subgraph
+
+func create_subgraph():
+	var generators = []
+	for n in get_selected_nodes():
+		generators.push_back(n.generator)
+	generator.create_subgraph(generators)
+	update_view(generator)

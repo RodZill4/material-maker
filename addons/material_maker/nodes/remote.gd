@@ -28,6 +28,7 @@ func update_node():
 	for c in grid.get_children():
 		c.queue_free()
 	yield(get_tree(), "idle_frame")
+	title = generator.get_type_name()
 	controls = {}
 	for p in generator.get_parameter_defs():
 		var control = create_parameter_control(p)
@@ -101,7 +102,6 @@ func _on_Link_pressed(index):
 	link.pick(grid.get_child(index*4+1), generator, index)
 
 func _on_Remote_resize_request(new_minsize):
-	print("_on_Remote_resize_request")
 	rect_size = new_minsize
 
 func _on_HBoxContainer_minimum_size_changed():

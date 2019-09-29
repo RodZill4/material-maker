@@ -1,0 +1,65 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=1]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 3, 2, 1 )
+
+[sub_resource type="CylinderMesh" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 2, 2, 2 )
+
+[sub_resource type="SphereMesh" id=5]
+radius = 1.5
+height = 3.0
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 2, 2, 2 )
+uv1_offset = Vector3( 0, 0.5, 0 )
+
+[sub_resource type="PlaneMesh" id=7]
+size = Vector2( 3, 3 )
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="PlaneMesh" id=9]
+size = Vector2( 12, 12 )
+
+[sub_resource type="SpatialMaterial" id=10]
+albedo_texture = ExtResource( 1 )
+uv1_scale = Vector3( 4, 4, 4 )
+
+[node name="Objects" type="Spatial"]
+transform = Transform( -0.685898, 0, 0.727691, 0, 1, 0, -0.727691, 0, -0.685898, 0, 0, 0 )
+
+[node name="Cube" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="Cylinder" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="Sphere" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 5 )
+material/0 = SubResource( 6 )
+
+[node name="Quad" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 7 )
+material/0 = SubResource( 8 )
+
+[node name="Plane" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 9 )
+material/0 = SubResource( 10 )

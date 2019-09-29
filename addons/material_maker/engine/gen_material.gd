@@ -146,7 +146,7 @@ func update_spatial_material(m, file_prefix = null):
 	if texture != null:
 		m.depth_enabled = true
 		m.depth_deep_parallax = true
-		m.depth_scale = parameters.depth_scale
+		m.depth_scale = parameters.depth_scale * 0.2
 		m.depth_texture = texture
 	else:
 		m.depth_enabled = false
@@ -155,7 +155,7 @@ func export_textures(prefix, size = null):
 	if size == null:
 		size = int(pow(2, 8+parameters.resolution))
 	for t in texture_list:
-		var texture = generated_textures[t.texture].texture
+		var texture = generated_textures[t.texture]
 		if texture != null:
 			var image = texture.get_data()
 			image.save_png("%s_%s.png" % [ prefix, t.texture ])
