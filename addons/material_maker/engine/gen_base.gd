@@ -7,6 +7,7 @@ Base class for texture generators, that defines their API
 """
 
 signal parameter_changed
+signal update_textures
 
 class InputPort:
 	var generator : MMGenBase = null

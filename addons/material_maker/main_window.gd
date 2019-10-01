@@ -363,3 +363,9 @@ func _on_Projects_tab_changed(tab):
 			new_tab.connect("node_selected", self, "update_preview_2d")
 		current_tab = new_tab
 		update_preview()
+
+func _on_Preview_show_background_preview(v):
+	var pv = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/MaterialPreview
+	var bgpv = $VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport
+	bgpv.world = pv.find_world()
+	$VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview.visible = v

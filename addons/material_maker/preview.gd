@@ -7,7 +7,7 @@ const ENVIRONMENTS = [
 	"experiment", "lobby", "night", "park", "schelde"
 ]
 
-onready var objects = $MaterialPreview/Objects
+onready var objects = $MaterialPreview/Preview3d/Objects
 onready var current_object = objects.get_child(0)
 
 signal need_update
@@ -20,14 +20,14 @@ func _ready():
 		var m = o.get_surface_material(0)
 		o.set_surface_material(0, m.duplicate())
 		$Config/Model.add_item(o.name)
-	$ObjectRotate.play("rotate")
+	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	$Preview2D.material = $Preview2D.material.duplicate(true)
 	_on_Environment_item_selected($Config/Environment.selected)
 	_on_Preview_resized()
-	$MaterialPreview/CameraPivot/Camera/RemoteTransform.set_remote_node("../../../../../../ProjectsPane/BackgroundPreview/Viewport/Camera")
+	$MaterialPreview/Preview3d/CameraPivot/Camera/RemoteTransform.set_remote_node("../../../../../../../ProjectsPane/BackgroundPreview/Viewport/Camera")
 
 func _on_Environment_item_selected(id):
-	$MaterialPreview/WorldEnvironment.environment.background_sky.panorama = load("res://addons/material_maker/panoramas/"+ENVIRONMENTS[id]+".hdr")
+	$MaterialPreview/Preview3d/WorldEnvironment.environment.background_sky.panorama = load("res://addons/material_maker/panoramas/"+ENVIRONMENTS[id]+".hdr")
 
 func _on_Model_item_selected(id):
 	current_object.visible = false
@@ -60,8 +60,8 @@ func _on_Button_toggled(button_pressed):
 
 func on_gui_input(event):
 	if event is InputEventMouseButton:
-		$ObjectRotate.stop()
+		$MaterialPreview/Preview3d/ObjectRotate.stop()
 	elif event is InputEventMouseMotion:
 		if event.button_mask != 0:
-			$MaterialPreview/Objects.rotation.y += 0.01*event.relative.x
-			$MaterialPreview/CameraPivot.rotation.x -= 0.01*event.relative.y
+			$MaterialPreview/Preview3d/Objects.rotation.y += 0.01*event.relative.x
+			$MaterialPreview/Preview3d/CameraPivot.rotation.x -= 0.01*event.relative.y

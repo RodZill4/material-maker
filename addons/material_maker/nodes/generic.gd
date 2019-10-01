@@ -102,7 +102,7 @@ func create_parameter_control(p : Dictionary):
 		if p.has("widget") and p.widget == "spinbox":
 			control = SpinBox.new()
 		else:
-			control = HSlider.new()
+			control = preload("res://addons/material_maker/widgets/hslider.tscn").instance()
 		control.min_value = p.min
 		control.max_value = p.max
 		control.step = 0.005 if !p.has("step") else p.step

@@ -25,6 +25,12 @@ const ADDON_TEXTURE_LIST = [
 	{ port=6, texture="depth_texture" }
 ]
 
+func _ready():
+	texture_list = TEXTURE_LIST
+	for t in texture_list:
+		generated_textures[t.texture] = null
+	material = SpatialMaterial.new()
+
 func get_type():
 	return "material"
 
@@ -53,23 +59,8 @@ func get_input_defs():
 		{ name="depth_texture", label="", type="f" }
 	]
 
-func _ready():
-	texture_list = TEXTURE_LIST
-	if Engine.editor_hint:
-		texture_list = ADDON_TEXTURE_LIST
-	for t in texture_list:
-		generated_textures[t.texture] = null
-	material = SpatialMaterial.new()
-
-func generate_material(renderer : MMGenRenderer):
-	var source = get_source(0)
-	if source != null:
-		var status = source.generator.render(source.output_index, renderer, 512)
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-		renderer.get_texture().get_data().save_png("res://test.png")
-		material.albedo_texture = load("res://test.png")
-	return material
+func source_changed(input_index : int):
+	emit_signal("update_textures")
 
 func render_textures(renderer : MMGenRenderer):
 	for t in texture_list:
@@ -77,7 +68,7 @@ func render_textures(renderer : MMGenRenderer):
 			var source = get_source(t.port)
 			var texture = null
 			if source != null:
-				var status = source.generator.render(source.output_index, renderer, 512)
+				var status = source.generator.render(source.output_index, renderer, 1024)
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 				texture = ImageTexture.new()
@@ -104,7 +95,7 @@ func update_spatial_material(m, file_prefix = null):
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
 	m.metallic = parameters.metallic
 	m.roughness = parameters.roughness
-	if Engine.editor_hint:
+	if false:
 		texture = get_generated_texture("mrao", file_prefix)
 		m.metallic_texture = texture 
 		m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
@@ -126,7 +117,7 @@ func update_spatial_material(m, file_prefix = null):
 		m.normal_texture = texture
 	else:
 		m.normal_enabled = false
-	if Engine.editor_hint:
+	if false:
 		if (generated_textures.mrao.mask & (1 << 2)) != 0:
 			m.ao_enabled = true
 			m.ao_light_affect = parameters.ao_light_affect
@@ -151,22 +142,21 @@ func update_spatial_material(m, file_prefix = null):
 	else:
 		m.depth_enabled = false
 
-func export_textures(prefix, size = null):
-	if size == null:
-		size = int(pow(2, 8+parameters.resolution))
+func export_textures(prefix, editor_interface = null):
 	for t in texture_list:
 		var texture = generated_textures[t.texture]
 		if texture != null:
 			var image = texture.get_data()
 			image.save_png("%s_%s.png" % [ prefix, t.texture ])
 	if Engine.editor_hint:
-		var resource_filesystem = get_parent().editor_interface.get_resource_filesystem()
+		var resource_filesystem = editor_interface.get_resource_filesystem()
 		resource_filesystem.scan()
 		yield(resource_filesystem, "filesystem_changed")
 		var new_material = SpatialMaterial.new()
 		update_spatial_material(new_material, prefix)
 		ResourceSaver.save("%s.tres" % [ prefix ], new_material)
 		resource_filesystem.scan()
+		return new_material
 
 func _serialize(data):
 	return data

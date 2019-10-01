@@ -49,8 +49,12 @@ func close_material_maker():
 func generate_material(ptex_filename: String) -> Material:
 	var generator = MMGenLoader.load_gen(ptex_filename)
 	add_child(generator)
-	var material = generator.get_node("Material")
-	var return_value = material.generate_material(renderer)
-	while return_value is GDScriptFunctionState:
-		return_value = yield(return_value, "completed")
-	return return_value
+	if generator.has_node("Material"):
+		var gen_material = generator.get_node("Material")
+		print(renderer)
+		var return_value = gen_material.render_textures(renderer)
+		while return_value is GDScriptFunctionState:
+			return_value = yield(return_value, "completed")
+		var prefix = ptex_filename.left(ptex_filename.rfind("."))
+		return gen_material.export_textures(prefix, get_editor_interface())
+	return null
