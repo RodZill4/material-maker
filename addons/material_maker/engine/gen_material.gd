@@ -9,19 +9,9 @@ var generated_textures = {}
 
 const TEXTURE_LIST = [
 	{ port=0, texture="albedo" },
-	{ port=1, texture="metallic" },
-	{ port=2, texture="roughness" },
 	{ port=3, texture="emission" },
 	{ port=4, texture="normal_texture" },
-	{ port=5, texture="ao_texture" },
-	{ port=6, texture="depth_texture" }
-]
-
-const ADDON_TEXTURE_LIST = [
-	{ port=0, texture="albedo" },
-	{ port=3, texture="emission" },
-	{ port=4, texture="normal_texture" },
-	{ ports=[5, 1, 2], default_values=["1.0", "0.0", "1.0"], texture="orm" },
+	{ ports=[5, 2, 1], default_values=["1.0", "1.0", "1.0"], texture="orm" },
 	{ port=6, texture="depth_texture" }
 ]
 
@@ -64,16 +54,37 @@ func source_changed(input_index : int):
 
 func render_textures(renderer : MMGenRenderer):
 	for t in texture_list:
+		var texture = null
 		if t.has("port"):
 			var source = get_source(t.port)
-			var texture = null
 			if source != null:
 				var status = source.generator.render(source.output_index, renderer, 1024)
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 				texture = ImageTexture.new()
 				texture.create_from_image(renderer.get_texture().get_data())
-			generated_textures[t.texture] = texture
+		elif t.has("ports"):
+			var context : MMGenContext = MMGenContext.new(renderer)
+			var code = []
+			var shader_textures = {}
+			for i in range(t.ports.size()):
+				var source = get_source(t.ports[i])
+				if source != null:
+					var status = source.generator.get_shader_code("UV", source.output_index, context)
+					while status is GDScriptFunctionState:
+						status = yield(status, "completed")
+					code.push_back(status)
+					for t in status.textures.keys():
+						shader_textures[t] = code.textures[t]
+				else:
+					code.push_back({ defs="", code="", f=t.default_values[i] })
+			var shader : String = renderer.generate_combined_shader(code[0], code[1], code[2])
+			var status = renderer.render_shader(shader, shader_textures, 1024)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			texture = ImageTexture.new()
+			texture.create_from_image(renderer.get_texture().get_data())
+		generated_textures[t.texture] = texture
 
 func update_materials(material_list):
 	for m in material_list:
@@ -95,15 +106,14 @@ func update_spatial_material(m, file_prefix = null):
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
 	m.metallic = parameters.metallic
 	m.roughness = parameters.roughness
-	if false:
-		texture = get_generated_texture("mrao", file_prefix)
-		m.metallic_texture = texture 
-		m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
-		m.roughness_texture = texture
-		m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
-	else:
-		m.metallic_texture = get_generated_texture("metallic", file_prefix)
-		m.roughness_texture = get_generated_texture("roughness", file_prefix)
+	# Metallic
+	texture = get_generated_texture("orm", file_prefix)
+	m.metallic_texture = texture 
+	m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
+	# Roughness
+	m.roughness_texture = texture
+	m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
+	# Emission
 	texture = get_generated_texture("emission", file_prefix)
 	if texture != null:
 		m.emission_enabled = true
@@ -111,28 +121,22 @@ func update_spatial_material(m, file_prefix = null):
 		m.emission_texture = texture
 	else:
 		m.emission_enabled = false
+	# Normal map
 	texture = get_generated_texture("normal_texture", file_prefix)
 	if texture != null:
 		m.normal_enabled = true
 		m.normal_texture = texture
 	else:
 		m.normal_enabled = false
-	if false:
-		if (generated_textures.mrao.mask & (1 << 2)) != 0:
-			m.ao_enabled = true
-			m.ao_light_affect = parameters.ao_light_affect
-			m.ao_texture = m.metallic_texture
-			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
-		else:
-			m.ao_enabled = false
+	# Ambient occlusion
+	if get_source(5) != null:
+		m.ao_enabled = true
+		m.ao_light_affect = parameters.ao_light_affect
+		m.ao_texture = m.metallic_texture
+		m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	else:
-		texture = get_generated_texture("ao_texture", file_prefix)
-		if texture != null:
-			m.ao_enabled = true
-			m.ao_light_affect = parameters.ao_light_affect
-			m.ao_texture = texture
-		else:
-			m.ao_enabled = false
+		m.ao_enabled = false
+	# Depth
 	texture = get_generated_texture("depth_texture", file_prefix)
 	if texture != null:
 		m.depth_enabled = true

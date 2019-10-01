@@ -11,10 +11,10 @@ ticks_on_borders = true
 script = ExtResource( 1 )
 
 [node name="Label" type="Label" parent="."]
-self_modulate = Color( 1, 1, 1, 0.501961 )
+self_modulate = Color( 0.752941, 0.752941, 1, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "100"
+text = "0"
 align = 1
 valign = 1
 __meta__ = {

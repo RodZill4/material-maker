@@ -118,6 +118,7 @@ tab_align = 0
 tab_close_display_policy = 1
 
 [node name="Renderer" parent="." instance=ExtResource( 5 )]
+size = Vector2( 1024, 1024 )
 debug_path = null
 
 [node name="NodeFactory" type="Node" parent="."]
@@ -131,6 +132,12 @@ script = ExtResource( 6 )
 [connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="disconnect_node"]
 [connection signal="close_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_close_request"]
 [connection signal="offset_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_offset_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="update_label"]
 [connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="close_tab"]

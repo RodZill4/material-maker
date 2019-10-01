@@ -1,3 +1,4 @@
+tool
 extends EditorImportPlugin
 
 var plugin = null

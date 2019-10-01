@@ -9,4 +9,4 @@ func set_value(v):
 	update_label(v)
 
 func update_label(v):
-	$Label.text = "%f" % v
+	$Label.text = str(v)

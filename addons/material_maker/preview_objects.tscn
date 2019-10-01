@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://rodz_labs_logo.png" type="Texture" id=1]
 
@@ -20,19 +20,22 @@ height = 3.0
 
 [sub_resource type="SpatialMaterial" id=6]
 albedo_texture = ExtResource( 1 )
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 2, 2, 2 )
 uv1_offset = Vector3( 0, 0.5, 0 )
 
-[sub_resource type="PlaneMesh" id=7]
+[sub_resource type="PlaneMesh" id=8]
 size = Vector2( 3, 3 )
 
-[sub_resource type="SpatialMaterial" id=8]
+[sub_resource type="SpatialMaterial" id=9]
 albedo_texture = ExtResource( 1 )
 
-[sub_resource type="PlaneMesh" id=9]
+[sub_resource type="PlaneMesh" id=10]
 size = Vector2( 12, 12 )
 
-[sub_resource type="SpatialMaterial" id=10]
+[sub_resource type="SpatialMaterial" id=11]
 albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 4, 4, 4 )
 
@@ -50,16 +53,20 @@ mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
-visible = false
 mesh = SubResource( 5 )
 material/0 = SubResource( 6 )
 
+[node name="Sphere2" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 5 )
+material/0 = SubResource( 7 )
+
 [node name="Quad" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 7 )
-material/0 = SubResource( 8 )
+mesh = SubResource( 8 )
+material/0 = SubResource( 9 )
 
 [node name="Plane" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 9 )
-material/0 = SubResource( 10 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
