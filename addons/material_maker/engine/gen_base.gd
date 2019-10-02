@@ -7,7 +7,6 @@ Base class for texture generators, that defines their API
 """
 
 signal parameter_changed
-signal update_textures
 
 class InputPort:
 	var generator : MMGenBase = null
@@ -46,8 +45,8 @@ func init_parameters():
 			else:
 				print("No default value for parameter "+p.name)
 
-func get_seed():
-	return 0
+func set_position(p):
+	position = p
 
 func get_type():
 	return "generic"

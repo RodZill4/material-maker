@@ -53,6 +53,7 @@ mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
+visible = false
 mesh = SubResource( 5 )
 material/0 = SubResource( 6 )
 

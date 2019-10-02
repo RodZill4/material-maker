@@ -9,10 +9,6 @@ IOs just forward their inputs to their outputs and are used to specify graph int
 var mask : int = 3
 var ports : Array = []
 
-func _ready():
-	if !parameters.has("size"):
-		parameters.size = 4
-
 func get_type():
 	return "buffer"
 
@@ -23,19 +19,18 @@ func get_type_name():
 		_: return "IOs"
 	return "Buffer"
 
+func get_io_defs():
+	var rv : Array = []
+	if mask != 2:
+		for p in ports:
+			rv.push_back({ name=p.name, type="rgba" })
+	return rv
+
 func get_input_defs():
-	var rv : Array = []
-	if mask != 2:
-		for p in ports:
-			rv.push_back({ name=p.name, type="rgba" })
-	return rv
-	
+	return [] if name == "gen_inputs" else get_io_defs()
+
 func get_output_defs():
-	var rv : Array = []
-	if mask != 2:
-		for p in ports:
-			rv.push_back({ name=p.name, type="rgba" })
-	return rv
+	return [] if name == "gen_outputs" else get_io_defs()
 
 func source_changed(input_index : int):
 	if name == "gen_outputs":

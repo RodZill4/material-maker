@@ -260,7 +260,7 @@ func paste(pos = Vector2(0, 0)):
 
 func send_changed_signal():
 	set_need_save(true)
-	$Timer.start()
+	$Timer.start(0.1)
 
 func do_send_changed_signal():
 	emit_signal("graph_changed")

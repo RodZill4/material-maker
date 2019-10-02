@@ -22,12 +22,12 @@ func set_parameter(p, v):
 
 func get_input_defs():
 	if has_node("gen_inputs"):
-		return get_node("gen_inputs").get_input_defs()
+		return get_node("gen_inputs").get_output_defs()
 	return []
 
 func get_output_defs():
 	if has_node("gen_outputs"):
-		return get_node("gen_outputs").get_output_defs()
+		return get_node("gen_outputs").get_input_defs()
 	return []
 
 func source_changed(input_index : int):
@@ -155,7 +155,14 @@ func create_subgraph(generators):
 			my_new_connections.push_back( { from=new_graph.name, from_port=port_index, to=c.to, to_port=c.to_port } )
 			new_graph_connections.push_back( { from=c.from, from_port=c.from_port, to="gen_outputs", to_port=port_index } )
 		elif names.find(c.to) != -1:
-			print("3: "+str(c))
+			if inputs == null:
+				inputs = MMGenIOs.new()
+				inputs.name = "gen_inputs"
+				new_graph.add_generator(inputs)
+			var port_index = inputs.ports.size()
+			inputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
+			my_new_connections.push_back( { from=c.from, from_port=c.from_port, to=new_graph.name, to_port=port_index } )
+			new_graph_connections.push_back( { from="gen_inputs", from_port=port_index, to=c.to, to_port=c.to_port } )
 		else:
 			my_new_connections.push_back(c)
 	connections = my_new_connections

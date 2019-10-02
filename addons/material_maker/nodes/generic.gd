@@ -16,7 +16,7 @@ func on_close_request():
 	generator.get_parent().remove_generator(generator)
 
 func on_offset_changed():
-	generator.position = offset
+	generator.set_position(offset)
 
 func on_parameter_changed(p, v):
 	if ignore_parameter_change == p:

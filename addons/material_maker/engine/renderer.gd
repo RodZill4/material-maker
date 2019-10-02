@@ -93,5 +93,6 @@ func render_shader(shader, textures, render_size):
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	rendering = false
-	return true
 	emit_signal("done")
+	return true
+

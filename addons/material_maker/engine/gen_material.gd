@@ -49,8 +49,19 @@ func get_input_defs():
 		{ name="depth_texture", label="", type="f" }
 	]
 
+func update_preview():
+	var graph_edit = self
+	while graph_edit is MMGenBase:
+		graph_edit = graph_edit.get_parent()
+	if graph_edit.has_method("send_changed_signal"):
+		graph_edit.send_changed_signal()
+
+func set_parameter(p, v):
+	.set_parameter(p, v)
+	update_preview()
+
 func source_changed(input_index : int):
-	emit_signal("update_textures")
+	update_preview()
 
 func render_textures(renderer : MMGenRenderer):
 	for t in texture_list:

@@ -3,6 +3,7 @@ extends MMGenBase
 class_name MMGenShader
 
 var shader_model : Dictionary = {}
+var uses_seed = false
 
 func get_type():
 	return "shader"
@@ -42,6 +43,15 @@ func set_shader_model(data: Dictionary):
 				shader_model.outputs[i].type = "rgb"
 			else:
 				shader_model.outputs[i].type = "f"
+
+func set_position(p):
+	.set_position(p)
+	if uses_seed:
+		source_changed(0)
+
+func get_seed():
+	var s = ((int(position.x) * 0x1f1f1f1f) ^ int(position.y)) % 65536
+	return s
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
@@ -124,7 +134,10 @@ func subst(string, context, uv = ""):
 	var required_code = ""
 	var required_textures = {}
 	string = replace_variable(string, "name", genname)
-	string = replace_variable(string, "seed", str(get_seed()))
+	var tmp_string = replace_variable(string, "seed", str(get_seed()))
+	if tmp_string != string:
+		string = tmp_string
+		uses_seed = true
 	if uv != "":
 		string = replace_variable(string, "uv", "("+uv+")")
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
@@ -179,6 +192,7 @@ func subst(string, context, uv = ""):
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+	uses_seed = false
 	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { globals=[], defs="", code="", textures={} }

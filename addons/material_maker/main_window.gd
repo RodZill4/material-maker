@@ -166,11 +166,9 @@ func do_load_material(filename):
 		node_count = 0
 		for c in graph_edit.get_children():
 			if c is GraphNode:
-				print(c.name)
 				node_count += 1
 				if node_count > 1:
 					break
-	print(node_count)
 	if node_count > 1:
 		graph_edit = new_pane()
 	graph_edit.load_file(filename)
@@ -259,7 +257,6 @@ func make_selected_nodes_editable():
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		for n in selected_nodes:
-			print(n.name)
 			n.generator.model = null
 			n.update_node()
 
