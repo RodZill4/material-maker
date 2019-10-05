@@ -14,7 +14,7 @@ background_sky = SubResource( 1 )
 [sub_resource type="Animation" id=3]
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("MaterialPreview/Spatial/Objects:rotation_degrees")
+tracks/0/path = NodePath("Objects:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -28,7 +28,7 @@ tracks/0/keys = {
 
 [node name="Preview3d" type="Spatial"]
 
-[node name="Objects" type="Spatial" parent="." instance=ExtResource( 1 )]
+[node name="Objects" parent="." instance=ExtResource( 1 )]
 transform = Transform( -0.799512, 0, 0.60065, 0, 1, 0, -0.60065, 0, -0.799512, 0, 0, 0 )
 
 [node name="OmniLight" type="OmniLight" parent="."]

@@ -67,7 +67,7 @@ func notify_output_change(output_index : int):
 	for target in targets:
 		target.generator.source_changed(target.input_index)
 
-func source_changed(input_index : int):
+func source_changed(__):
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
@@ -97,12 +97,12 @@ func render(output_index : int, renderer : MMGenRenderer, size : int):
 	while source is GDScriptFunctionState:
 		source = yield(source, "completed")
 	if source == null:
-		return false
+		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
 	var shader : String = renderer.generate_shader(source)
-	var status = renderer.render_shader(shader, source.textures, size)
-	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
-	return status
+	var result = renderer.render_shader(shader, source.textures, size)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	return result
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var rv = _get_shader_code(uv, output_index, context)
@@ -125,7 +125,7 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			rv.rgba = "vec4("+rv.rgb+", 1.0)"
 	return rv
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+func _get_shader_code(__, __, __):
 	return null
 
 func _serialize(data):

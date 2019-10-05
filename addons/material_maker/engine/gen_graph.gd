@@ -129,10 +129,28 @@ func _serialize(data):
 func edit(node):
 	node.get_parent().call_deferred("update_view", self)
 
-func create_subgraph(generators):
+func create_subgraph(gens):
+	# Remove material, gen_inputs and gen_outputs nodes
+	var generators = []
+	var center = Vector2(0, 0)
+	var left_bound = 65535
+	var right_bound = -65536
+	var count = 0
+	for g in gens:
+		if g.name != "Material" and g.name != "gen_inputs" and g.name != "gen_outputs":
+			generators.push_back(g)
+			var p = g.position
+			center += p
+			count += 1
+			if left_bound > p.x: left_bound = p.x
+			if right_bound < p.x: right_bound = p.x
+	if count == 0:
+		return
+	center /= count
 	var new_graph = get_script().new()
 	new_graph.name = "graph"
-	add_child(new_graph)
+	add_generator(new_graph)
+	new_graph.position = center
 	var names : Array = []
 	for g in generators:
 		names.push_back(g.name)
@@ -140,27 +158,39 @@ func create_subgraph(generators):
 		new_graph.add_generator(g)
 	var new_graph_connections = []
 	var my_new_connections = []
-	var inputs = null
-	var outputs = null
+	var gen_inputs = null
+	var gen_outputs = null
+	var inputs = []
+	var outputs = []
 	for c in connections:
+		var src_name = c.from+"."+str(c.from_port)
 		if names.find(c.from) != -1 and names.find(c.to) != -1:
 			new_graph_connections.push_back(c)
 		elif names.find(c.from) != -1:
-			if outputs == null:
-				outputs = MMGenIOs.new()
-				outputs.name = "gen_outputs"
-				new_graph.add_generator(outputs)
-			var port_index = outputs.ports.size()
-			outputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
+			var port_index = outputs.find(src_name)
+			if port_index == -1:
+				port_index = outputs.size()
+				outputs.push_back(src_name)
+				if gen_outputs == null:
+					gen_outputs = MMGenIOs.new()
+					gen_outputs.name = "gen_outputs"
+					gen_outputs.position = Vector2(right_bound+300, center.y)
+					new_graph.add_generator(gen_outputs)
+				gen_outputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
+				print(gen_outputs.ports)
 			my_new_connections.push_back( { from=new_graph.name, from_port=port_index, to=c.to, to_port=c.to_port } )
 			new_graph_connections.push_back( { from=c.from, from_port=c.from_port, to="gen_outputs", to_port=port_index } )
 		elif names.find(c.to) != -1:
-			if inputs == null:
-				inputs = MMGenIOs.new()
-				inputs.name = "gen_inputs"
-				new_graph.add_generator(inputs)
-			var port_index = inputs.ports.size()
-			inputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
+			var port_index = inputs.find(src_name)
+			if port_index == -1:
+				port_index = inputs.size()
+				inputs.push_back(src_name)
+				if gen_inputs == null:
+					gen_inputs = MMGenIOs.new()
+					gen_inputs.name = "gen_inputs"
+					gen_inputs.position = Vector2(left_bound-300, center.y)
+					new_graph.add_generator(gen_inputs)
+				gen_inputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
 			my_new_connections.push_back( { from=c.from, from_port=c.from_port, to=new_graph.name, to_port=port_index } )
 			new_graph_connections.push_back( { from="gen_inputs", from_port=port_index, to=c.to, to_port=c.to_port } )
 		else:

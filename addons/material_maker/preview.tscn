@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/material_maker/preview.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/preview_3d.tscn" type="PackedScene" id=2]
 
-[sub_resource type="World" id=4]
+[sub_resource type="World" id=1]
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -33,7 +33,7 @@ script = ExtResource( 1 )
 [node name="MaterialPreview" type="Viewport" parent="."]
 size = Vector2( 395, 370 )
 own_world = true
-world = SubResource( 4 )
+world = SubResource( 1 )
 handle_input_locally = false
 render_target_clear_mode = 1
 render_target_update_mode = 3
@@ -50,7 +50,7 @@ margin_right = 100.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 100, 0 )
 text = "Cube"
-items = [ "Cube", null, false, -1, null, "Cylinder", null, false, -1, null, "Sphere", null, false, -1, null, "Quad", null, false, -1, null, "Plane", null, false, -1, null ]
+items = [ "Cube", null, false, -1, null, "Cylinder", null, false, -1, null, "Sphere", null, false, -1, null, "Sphere2", null, false, -1, null, "Quad", null, false, -1, null, "Plane", null, false, -1, null ]
 selected = 0
 
 [node name="Environment" type="OptionButton" parent="Config"]

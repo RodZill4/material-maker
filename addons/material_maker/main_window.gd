@@ -26,7 +26,7 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
-	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create subgraph" },
+	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
@@ -331,14 +331,13 @@ func update_preview_2d(node = null):
 					node = n
 					break
 		if node != null:
-			var status = node.generator.render(0, renderer, 1024)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
-			if status:
-				var image = renderer.get_texture().get_data()
-				var tex = ImageTexture.new()
-				tex.create_from_image(image)
-				preview.set_2d(tex)
+			var result = node.generator.render(0, renderer, 1024)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			var tex = ImageTexture.new()
+			result.copy_to_texture(tex)
+			result.release()
+			preview.set_2d(tex)
 
 func update_preview_3d():
 	var graph_edit = get_current_graph_edit()

@@ -6,6 +6,13 @@ var generator = null setget set_generator
 
 var controls = {}
 var ignore_parameter_change = ""
+var output_count = 0
+
+var preview : TextureRect
+var preview_index : int = -1
+var preview_position : int
+var preview_size : int
+var preview_timer : Timer
 
 func set_generator(g):
 	generator = g
@@ -71,6 +78,7 @@ func initialize_properties():
 
 func update_shaders():
 	get_parent().send_changed_signal()
+	update_preview()
 
 func _on_text_changed(new_text, variable):
 	ignore_parameter_change = variable
@@ -158,9 +166,15 @@ func update_node():
 		set_slot(i, enable_left, 0, color_left, false, 0, Color())
 		var hsizer : HBoxContainer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-		var label : Label = Label.new()
-		label.text = input.label if input.has("label") else ""
-		hsizer.add_child(label)
+		if input.has("label") and input.label != "":
+			var label : Label = Label.new()
+			label.text = input.label
+			hsizer.add_child(label)
+		else:
+			var control : Control = Control.new()
+			control.rect_min_size.y = 16
+			hsizer.add_child(control)
+			
 		add_child(hsizer)
 	var input_names_width : int = 0
 	for c in get_children():
@@ -211,7 +225,9 @@ func update_node():
 	initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
-	for i in range(outputs.size()):
+	var button_width = 0
+	output_count = outputs.size()
+	for i in range(output_count):
 		var output = outputs[i]
 		var enable_right = true
 		var color_right = Color(0.5, 0.5, 0.5)
@@ -222,14 +238,49 @@ func update_node():
 			"rgb": color_right = Color(0.5, 0.5, 1.0)
 			"rgba": color_right = Color(0.0, 0.5, 0.0, 0.5)
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
-		if i >= get_child_count():
-			var control = Control.new()
-			control.rect_min_size = Vector2(0, 16)
-			add_child(control)
+		var hsizer : HBoxContainer
+		while i >= get_child_count():
+			hsizer = HBoxContainer.new()
+			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			add_child(hsizer)
+		hsizer = get_child(i)
+		var has_filler = false
+		for c in hsizer.get_children():
+			if c.size_flags_horizontal & SIZE_EXPAND != 0:
+				has_filler = true
+				break
+		if !has_filler:
+			var empty_control : Control = Control.new()
+			empty_control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			hsizer.add_child(empty_control)
+		var button = preload("res://addons/material_maker/widgets/preview_button.tscn").instance()
+		button.size_flags_horizontal = SIZE_SHRINK_END
+		button.size_flags_vertical = SIZE_SHRINK_CENTER
+		hsizer.add_child(button)
+		button.connect("toggled", self, "on_preview_button", [ i ])
+		button_width = button.rect_size.x
+	if !outputs.empty():
+		for i in range(output_count, get_child_count()):
+			var hsizer : HBoxContainer = get_child(i)
+			var empty_control : Control = Control.new()
+			empty_control.rect_min_size.x = button_width
+			hsizer.add_child(empty_control)
+	# Preview
+	if preview == null:
+		preview = TextureRect.new()
+	preview.visible = false
+	preview_position = get_child_count()
+	# Edit buttons
 	if generator.model == null:
 		var edit_buttons = preload("res://addons/material_maker/nodes/edit_buttons.tscn").instance()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
+	# Preview timer
+	preview_timer = Timer.new()
+	preview_timer.one_shot = true
+	preview_timer.connect("timeout", self, "do_update_preview")
+	add_child(preview_timer)
+
 
 func edit_generator():
 	if generator.has_method("edit"):
@@ -284,3 +335,48 @@ func do_save_generator(file_name : String):
 		data.node_position = { x=0, y=0 }
 		file.store_string(to_json(data))
 		file.close()
+
+func on_preview_button(pressed : bool, index : int):
+	if pressed:
+		preview_index = index
+		var width
+		if preview.visible:
+			for i in range(output_count):
+				if i != index:
+					var line = get_child(i)
+					line.get_child(line.get_child_count()-1).pressed = false
+			update_preview()
+		else:
+			var status = update_preview(get_child(0).rect_size.x)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+	else:
+		preview_index = -1
+		preview.visible = false
+		remove_child(preview)
+		rect_size = Vector2(0, 0)
+
+func update_preview(size : int = 0):
+	if preview_index == -1:
+		return
+	if size != 0:
+		preview_size = size
+	preview_timer.start(0.2)
+
+func do_update_preview():
+	var renderer = get_parent().renderer
+	var result = generator.render(preview_index, renderer, preview_size)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if preview.texture == null:
+		preview.texture = ImageTexture.new()
+	result.copy_to_texture(preview.texture)
+	result.release()
+	if !preview.visible:
+		add_child(preview)
+		move_child(preview, preview_position)
+		preview.visible = true
+
+
+
+

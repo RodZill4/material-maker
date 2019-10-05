@@ -49,8 +49,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="14.304427"
-     inkscape:cx="46.907045"
-     inkscape:cy="41.347265"
+     inkscape:cx="33.274902"
+     inkscape:cy="30.161917"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -67,8 +67,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid815"
-       spacingx="4.2333332"
-       spacingy="4.2333332" />
+       spacingx="16"
+       spacingy="16" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -265,5 +265,24 @@
          id="rect863"
          style="opacity:0;fill:#ffed46;fill-opacity:1;stroke:#c7b115;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
     </g>
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.96038949;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 14.281124,319.9133 c -3.380125,5.56722 -9.3711249,5.74887 -12.9027613,0 2.6589695,-5.76337 10.0526323,-5.46131 12.9027613,0 z"
+       id="path5159"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <ellipse
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="path5162"
+       cx="7.8297439"
+       cy="319.77344"
+       rx="1.0486264"
+       ry="0.87385535" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path5166"
+       d="m 30.429971,319.84339 c -3.380125,5.56722 -9.371125,5.74887 -12.902762,0"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:1.96038949;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
   </g>
 </svg>

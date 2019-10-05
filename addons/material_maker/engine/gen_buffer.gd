@@ -35,14 +35,13 @@ func source_changed(input_port_index : int):
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var source = get_source(0)
 	if source != null and !updated:
-		var status = source.generator.render(source.output_index, context.renderer, pow(2, 4+parameters.size))
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-		if status:
-			var image : Image = context.renderer.get_texture().get_data()
-			texture.create_from_image(image)
-			texture.flags = 0
-			updated = true
+		var result = source.generator.render(source.output_index, context.renderer, pow(2, 4+parameters.size))
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		result.copy_to_texture(texture)
+		result.release()
+		texture.flags = 0
+		updated = true
 	var rv = ._get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")

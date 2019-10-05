@@ -69,11 +69,12 @@ func render_textures(renderer : MMGenRenderer):
 		if t.has("port"):
 			var source = get_source(t.port)
 			if source != null:
-				var status = source.generator.render(source.output_index, renderer, 1024)
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
+				var result = source.generator.render(source.output_index, renderer, 1024)
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
 				texture = ImageTexture.new()
-				texture.create_from_image(renderer.get_texture().get_data())
+				result.copy_to_texture(texture)
+				result.release()
 		elif t.has("ports"):
 			var context : MMGenContext = MMGenContext.new(renderer)
 			var code = []
@@ -90,11 +91,12 @@ func render_textures(renderer : MMGenRenderer):
 				else:
 					code.push_back({ defs="", code="", f=t.default_values[i] })
 			var shader : String = renderer.generate_combined_shader(code[0], code[1], code[2])
-			var status = renderer.render_shader(shader, shader_textures, 1024)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+			var result = renderer.render_shader(shader, shader_textures, 1024)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
 			texture = ImageTexture.new()
-			texture.create_from_image(renderer.get_texture().get_data())
+			result.copy_to_texture(texture)
+			result.release()
 		generated_textures[t.texture] = texture
 
 func update_materials(material_list):

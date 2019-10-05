@@ -92,7 +92,14 @@ func render_shader(shader, textures, render_size):
 	update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	return self
+
+func copy_to_texture(t : ImageTexture):
+	get_texture().get_data().lock()
+	t.create_from_image(get_texture().get_data())
+	get_texture().get_data().unlock()
+
+func release():
 	rendering = false
 	emit_signal("done")
-	return true
 

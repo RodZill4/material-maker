@@ -55,8 +55,6 @@ static func create_gen(data) -> MMGenBase:
 			generator = MMGenImage.new()
 		elif data.type == "ios":
 			generator = MMGenIOs.new()
-			if data.has("mask"):
-				generator.mask = int(data.mask)
 			generator.ports = data.ports
 		elif data.type == "switch":
 			generator = MMGenSwitch.new()
