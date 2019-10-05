@@ -147,8 +147,8 @@ func update_node():
 		preview_timer.stop()
 		remove_child(preview_timer)
 	for c in get_children():
-		c.queue_free()
-	yield(get_tree(), "idle_frame")
+		remove_child(c)
+		c.free()
 	rect_size = Vector2(0, 0)
 	# Rebuild node
 	title = generator.get_type_name()
