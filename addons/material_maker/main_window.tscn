@@ -42,7 +42,7 @@ margin_left = 79.0
 margin_right = 125.0
 margin_bottom = 20.0
 text = "Tools"
-items = [ "Create subgraph", null, 0, false, false, 15, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 16, 268435526, null, "", false, "Add selected node to user library", null, 0, false, false, 17, 0, null, "", false, "Save user library", null, 0, false, false, 18, 0, null, "", false ]
+items = [ "Create group", null, 0, false, false, 15, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 16, 268435526, null, "", false, "Add selected node to user library", null, 0, false, false, 17, 0, null, "", false, "Save user library", null, 0, false, false, 18, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 129.0

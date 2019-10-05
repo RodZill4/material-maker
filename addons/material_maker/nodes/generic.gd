@@ -12,7 +12,7 @@ var preview : TextureRect
 var preview_index : int = -1
 var preview_position : int
 var preview_size : int
-var preview_timer : Timer
+var preview_timer : Timer = null
 
 func set_generator(g):
 	generator = g
@@ -142,6 +142,10 @@ func create_parameter_control(p : Dictionary):
 func update_node():
 	# Clean node
 	var custom_node_buttons = null
+	remove_child(preview)
+	if preview_timer != null:
+		preview_timer.stop()
+		remove_child(preview_timer)
 	for c in get_children():
 		c.queue_free()
 	yield(get_tree(), "idle_frame")
@@ -256,6 +260,8 @@ func update_node():
 		var button = preload("res://addons/material_maker/widgets/preview_button.tscn").instance()
 		button.size_flags_horizontal = SIZE_SHRINK_END
 		button.size_flags_vertical = SIZE_SHRINK_CENTER
+		if i == preview_index:
+			button.pressed = true
 		hsizer.add_child(button)
 		button.connect("toggled", self, "on_preview_button", [ i ])
 		button_width = button.rect_size.x
@@ -276,9 +282,10 @@ func update_node():
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
 	# Preview timer
-	preview_timer = Timer.new()
-	preview_timer.one_shot = true
-	preview_timer.connect("timeout", self, "do_update_preview")
+	if preview_timer == null:
+		preview_timer = Timer.new()
+		preview_timer.one_shot = true
+		preview_timer.connect("timeout", self, "do_update_preview")
 	add_child(preview_timer)
 
 
