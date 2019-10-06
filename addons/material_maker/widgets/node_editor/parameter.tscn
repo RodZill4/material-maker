@@ -1,13 +1,18 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/icons/minus.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_float.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_size.tscn" type="PackedScene" id=4]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_enum.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_boolean.tscn" type="PackedScene" id=6]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_color.tscn" type="PackedScene" id=7]
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_gradient.tscn" type="PackedScene" id=8]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 16, 16, 16 )
 
 [node name="Parameter" type="HBoxContainer"]
 margin_right = 201.0
@@ -16,39 +21,38 @@ script = ExtResource( 1 )
 
 [node name="Delete" type="Button" parent="."]
 margin_right = 28.0
-margin_bottom = 30.0
-icon = ExtResource( 2 )
+margin_bottom = 24.0
+icon = SubResource( 1 )
 flat = true
 
 [node name="Name" type="LineEdit" parent="."]
 margin_left = 32.0
 margin_right = 102.0
-margin_bottom = 30.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 70, 0 )
 text = "name"
 
 [node name="Label" type="LineEdit" parent="."]
 margin_left = 106.0
 margin_right = 176.0
-margin_bottom = 30.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 70, 0 )
 text = "Label"
 
 [node name="Type" type="OptionButton" parent="."]
 margin_left = 180.0
 margin_right = 249.0
-margin_bottom = 30.0
+margin_bottom = 24.0
 text = "float"
-items = [ "float", null, false, -1, null, "size", null, false, -1, null, "enum", null, false, -1, null, "boolean", null, false, -1, null, "color", null, false, -1, null ]
+items = [ "float", null, false, -1, null, "size", null, false, -1, null, "enum", null, false, -1, null, "boolean", null, false, -1, null, "color", null, false, -1, null, "gradient", null, false, -1, null ]
 selected = 0
 
 [node name="Types" type="HBoxContainer" parent="."]
 margin_left = 253.0
 margin_right = 800.0
-margin_bottom = 30.0
+margin_bottom = 24.0
 
 [node name="float" parent="Types" instance=ExtResource( 3 )]
-margin_bottom = 30.0
 
 [node name="size" parent="Types" instance=ExtResource( 4 )]
 visible = false

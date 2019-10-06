@@ -15,11 +15,11 @@ func add_control(text, control):
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
 	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
 	var button = Button.new()
-	button.icon = preload("res://addons/material_maker/icons/link.png")
+	button.icon = preload("res://addons/material_maker/icons/link.tres")
 	grid.add_child(button)
 	button.connect("pressed", self, "_on_Link_pressed", [ index ])
 	button = Button.new()
-	button.icon = preload("res://addons/material_maker/icons/remove.png")
+	button.icon = preload("res://addons/material_maker/icons/remove.tres")
 	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ index ])
 

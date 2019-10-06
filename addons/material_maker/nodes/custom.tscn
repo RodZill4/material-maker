@@ -1,9 +1,22 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/nodes/custom.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/icons/edit.png" type="Texture" id=2]
-[ext_resource path="res://addons/material_maker/icons/load.png" type="Texture" id=3]
-[ext_resource path="res://addons/material_maker/icons/save.png" type="Texture" id=4]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 16, 16, 15, 17 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 48, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 32, 16, 16, 16 )
 
 [node name="Custom" type="GraphNode"]
 margin_left = 1.0
@@ -25,27 +38,27 @@ model = null
 [node name="CustomNodeButtons" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 107.0
-margin_bottom = 46.0
+margin_right = 92.0
+margin_bottom = 47.0
 
 [node name="Edit" type="Button" parent="CustomNodeButtons"]
 margin_right = 27.0
-margin_bottom = 22.0
-icon = ExtResource( 2 )
+margin_bottom = 23.0
+icon = SubResource( 1 )
 flat = true
 
 [node name="Load" type="Button" parent="CustomNodeButtons"]
 margin_left = 31.0
 margin_right = 59.0
-margin_bottom = 22.0
-icon = ExtResource( 3 )
+margin_bottom = 23.0
+icon = SubResource( 2 )
 flat = true
 
 [node name="Save" type="Button" parent="CustomNodeButtons"]
 margin_left = 63.0
-margin_right = 91.0
-margin_bottom = 22.0
-icon = ExtResource( 4 )
+margin_right = 76.0
+margin_bottom = 23.0
+icon = SubResource( 3 )
 flat = true
 [connection signal="pressed" from="CustomNodeButtons/Edit" to="." method="_on_Edit_pressed"]
 [connection signal="pressed" from="CustomNodeButtons/Load" to="." method="_on_Load_pressed"]
