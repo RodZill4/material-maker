@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/material_maker/widgets/gradient_popup.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/widgets/gradient_editor.tscn" type="PackedScene" id=2]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0.25098, 0.752941 )
+
+[node name="GradientPopup" type="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -648.0
+margin_bottom = -671.0
+script = ExtResource( 1 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Control" parent="Panel" instance=ExtResource( 2 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+embedded = false
+[connection signal="popup_hide" from="." to="." method="_on_GradientPopup_popup_hide"]
+[connection signal="updated" from="Panel/Control" to="." method="_on_Control_updated"]

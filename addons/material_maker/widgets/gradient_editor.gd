@@ -2,6 +2,7 @@ tool
 extends Control
 class_name MMGradientEditor
 
+
 class GradientCursor:
 	extends ColorRect
 	
@@ -43,6 +44,7 @@ class GradientCursor:
 		draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), c, false)
 
 var value = null setget set_value
+export var embedded : bool = true
 
 signal updated(value)
 
@@ -53,7 +55,7 @@ func _ready():
 func set_value(v):
 	value = v
 	for c in get_children():
-		if c != $Gradient and c != $Background:
+		if c is GradientCursor:
 			remove_child(c)
 			c.free()
 	for p in value.points:
@@ -74,10 +76,19 @@ func add_cursor(x, color):
 	cursor.color = color
 
 func _gui_input(ev):
-	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick && ev.position.y > 15:
-		var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
-		add_cursor(p, get_gradient_color(p))
-		update_value()
+	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
+		if ev.position.y > 15:
+			var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
+			add_cursor(p, get_gradient_color(p))
+			update_value()
+		elif embedded:
+			var popup = load("res://addons/material_maker/widgets/gradient_popup.tscn").instance()
+			add_child(popup)
+			var popup_size = popup.rect_size
+			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
+			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
+			popup.init(value)
+			popup.connect("updated", self, "set_value")
 
 # Showing a color picker popup to change a cursor's color
 

@@ -6,7 +6,7 @@
 code = "shader_type canvas_item;
 
 void fragment() {
-	COLOR = vec4(vec3(2.0*fract(0.5*(floor(10.0*UV.x)+floor(2.0*UV.y)))), 1.0);
+	COLOR = vec4(vec3(2.0*fract(0.5*(floor(0.12*FRAGCOORD.x)+floor(0.125*FRAGCOORD.y)))), 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -37,15 +37,13 @@ script = ExtResource( 1 )
 
 [node name="Background" type="ColorRect" parent="."]
 material = SubResource( 2 )
-margin_right = 120.0
-margin_bottom = 20.0
+anchor_right = 1.0
 rect_min_size = Vector2( 120, 20 )
 mouse_filter = 2
 
 [node name="Gradient" type="ColorRect" parent="."]
 material = SubResource( 4 )
-margin_right = 120.0
-margin_bottom = 20.0
+anchor_right = 1.0
 rect_min_size = Vector2( 120, 20 )
 mouse_filter = 2
 theme = SubResource( 5 )
