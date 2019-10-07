@@ -142,7 +142,8 @@ func create_parameter_control(p : Dictionary):
 func update_node():
 	# Clean node
 	var custom_node_buttons = null
-	remove_child(preview)
+	if preview != null:
+		remove_child(preview)
 	if preview_timer != null:
 		preview_timer.stop()
 		remove_child(preview_timer)
@@ -319,10 +320,13 @@ func do_load_generator(file_name : String):
 	else:
 		new_generator = MMGenLoader.load_gen(file_name)
 	if new_generator != null:
+		var gen_name = MMGenLoader.generator_from_path(file_name)
+		if gen_name != "":
+			new_generator.type = gen_name
 		var parent_generator = generator.get_parent()
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator
-		update_node()
+		call_deferred("update_node")
 
 func save_generator():
 	var dialog = FileDialog.new()

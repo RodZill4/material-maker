@@ -95,11 +95,17 @@ func render_shader(shader, textures, render_size):
 	return self
 
 func copy_to_texture(t : ImageTexture):
-	get_texture().get_data().lock()
+	var image : Image = get_texture().get_data()
+	image.lock()
 	t.create_from_image(get_texture().get_data())
-	get_texture().get_data().unlock()
+	image.unlock()
+
+func save_to_file(fn : String):
+	var image : Image = get_texture().get_data()
+	image.lock()
+	image.save_png(fn)
+	image.unlock()
 
 func release():
 	rendering = false
 	emit_signal("done")
-

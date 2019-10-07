@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
@@ -7,6 +7,13 @@
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="DynamicFontData" id=2]
+font_path = "res://addons/material_maker/fonts/hack.ttf"
+
+[sub_resource type="DynamicFont" id=3]
+size = 12
+font_data = SubResource( 2 )
 
 [node name="NodeEditor" type="WindowDialog"]
 margin_right = 833.0
@@ -148,6 +155,10 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 mouse_default_cursor_shape = 0
+custom_fonts/font = SubResource( 3 )
+custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
+syntax_highlighting = true
+show_line_numbers = true
 
 [node name="Instance" type="TextEdit" parent="Sizer/Tabs"]
 visible = false
@@ -158,6 +169,8 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 mouse_default_cursor_shape = 0
+syntax_highlighting = true
+show_line_numbers = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
 margin_left = 307.0

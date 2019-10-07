@@ -2,13 +2,13 @@ tool
 extends Panel
 
 var recent_files = []
-var recent_files_submenu = null
 
 var editor_interface = null
 var current_tab = null
 
 onready var renderer = $Renderer
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
+onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
@@ -26,8 +26,10 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
+	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
 	{ menu="Help", command="show_doc", description="User manual" },
@@ -48,7 +50,7 @@ func _ready():
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
 
-func get_current_graph_edit():
+func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
 	if graph_edit != null and graph_edit is GraphEdit:
 		return graph_edit
@@ -66,7 +68,7 @@ func create_menu(menu, menu_name):
 			var submenu = PopupMenu.new()
 			var submenu_function = "create_menu_"+MENU[i].submenu
 			if has_method(submenu_function):
-				call(submenu_function, submenu)
+				submenu.connect("about_to_show", self, submenu_function, [ submenu ]);
 			else:
 				create_menu(submenu, MENU[i].submenu)
 			menu.add_child(submenu)
@@ -88,16 +90,15 @@ func create_menu(menu, menu_name):
 			menu.add_separator()
 	return menu
 
-func update_recents_menu():
-	if recent_files_submenu != null:
-		recent_files_submenu.clear()
-		for i in recent_files.size():
-			recent_files_submenu.add_item(recent_files[i], i)
-
 func create_menu_load_recent(menu):
-	menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
-	recent_files_submenu = menu
-	update_recents_menu()
+	menu.clear()
+	for i in recent_files.size():
+		menu.add_item(recent_files[i], i)
+	if !menu.is_connected("id_pressed", self, "_on_LoadRecent_id_pressed"):
+		menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
+
+func _on_LoadRecent_id_pressed(id):
+	do_load_material(recent_files[id])
 
 func load_recents():
 	var f = File.new()
@@ -113,11 +114,24 @@ func add_recent(path):
 		else:
 			break
 	recent_files.push_front(path)
-	update_recents_menu()
 	var f = File.new()
 	f.open("user://recent_files.bin", File.WRITE)
 	f.store_string(to_json(recent_files))
 	f.close()
+
+func create_menu_create(menu):
+	var gens = MMGenLoader.get_generator_list()
+	menu.clear()
+	for i in gens.size():
+		menu.add_item(gens[i], i)
+	if !menu.is_connected("id_pressed", self, "_on_Create_id_pressed"):
+		menu.connect("id_pressed", self, "_on_Create_id_pressed")
+
+func _on_Create_id_pressed(id):
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		var gens = MMGenLoader.get_generator_list()
+		graph_edit.create_gen_from_type(gens[id])
 
 func menu_about_to_show(name, menu):
 	for i in MENU.size():
@@ -160,7 +174,7 @@ func do_load_materials(filenames):
 		do_load_material(f)
 
 func do_load_material(filename):
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
 		node_count = 0
@@ -175,7 +189,7 @@ func do_load_material(filename):
 	add_recent(filename)
 
 func save_material():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
 			graph_edit.save_file(graph_edit.save_path)
@@ -183,7 +197,7 @@ func save_material():
 			save_material_as()
 
 func save_material_as():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var dialog = FileDialog.new()
 		add_child(dialog)
@@ -198,12 +212,12 @@ func close_material():
 	projects.close_tab()
 
 func export_material():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null :
 		graph_edit.export_textures()
 
 func export_material_is_disabled():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit == null or graph_edit.save_path == null:
 		return true
 	return false
@@ -216,16 +230,16 @@ func quit():
 
 
 func edit_cut():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.cut()
 
 func edit_cut_is_disabled():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	return graph_edit == null or !graph_edit.can_copy()
 
 func edit_copy():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.copy()
 
@@ -233,7 +247,7 @@ func edit_copy_is_disabled():
 	return edit_cut_is_disabled()
 
 func edit_paste():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.paste()
 
@@ -242,14 +256,14 @@ func edit_paste_is_disabled():
 	return data == null
 
 func get_selected_nodes():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		return graph_edit.get_selected_nodes()
 	else:
 		return []
 
 func create_subgraph():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.create_subgraph()
 
@@ -270,10 +284,10 @@ func add_to_user_library():
 		dialog.popup_centered()
 
 func do_add_to_user_library(name, nodes):
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
 	if nodes.size() == 1:
-		data = nodes[0].serialize()
+		data = nodes[0].generator.serialize()
 		data.erase("node_position")
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
@@ -282,12 +296,16 @@ func do_add_to_user_library(name, nodes):
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
-	$VBoxContainer/HBoxContainer/VBoxContainer/Library.add_item(data, name)
-	graph_edit.export_texture(nodes[0], "user://library/user/"+data.icon+".png", 64)
+	library.add_item(data, name)
+	var result = nodes[0].generator.render(0, renderer, 64)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	result.save_to_file("user://library/user/"+data.icon+".png")
+	result.release()
 
 func save_user_library():
 	print("Saving user library")
-	$VBoxContainer/HBoxContainer/VBoxContainer/Library.save_library("user://library/user.json")
+	library.save_library("user://library/user.json")
 
 func show_doc():
 	var doc_path = OS.get_executable_path()
@@ -312,9 +330,6 @@ func _on_PopupMenu_id_pressed(id):
 		if has_method(command):
 			call(command)
 
-func _on_LoadRecent_id_pressed(id):
-	do_load_material(recent_files[id])
-
 # Preview
 
 func update_preview():
@@ -322,7 +337,7 @@ func update_preview():
 	update_preview_3d()
 
 func update_preview_2d(node = null):
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
 		if node == null:
@@ -340,7 +355,7 @@ func update_preview_2d(node = null):
 			preview.set_2d(tex)
 
 func update_preview_3d():
-	var graph_edit = get_current_graph_edit()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
 		var status = gen_material.render_textures(renderer)

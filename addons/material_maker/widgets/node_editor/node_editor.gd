@@ -3,11 +3,17 @@ extends WindowDialog
 
 var model_data = null
 
+onready var global_editor : TextEdit = $Sizer/Tabs/Global
+
 const ParameterEditor = preload("res://addons/material_maker/widgets/node_editor/parameter.tscn")
 const InputEditor = preload("res://addons/material_maker/widgets/node_editor/input.tscn")
 const OutputEditor = preload("res://addons/material_maker/widgets/node_editor/output.tscn")
 
 signal node_changed
+
+func _ready():
+	global_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+
 
 func add_item(parent, scene):
 	var object = scene.instance()
