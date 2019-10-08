@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/material_maker/main_window.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/library.gd" type="Script" id=2]
+[ext_resource path="res://addons/material_maker/library.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/material_maker/preview.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=4]
 [ext_resource path="res://addons/material_maker/engine/renderer.tscn" type="PackedScene" id=5]
@@ -63,20 +63,17 @@ margin_bottom = 696.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Library" type="Tree" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Library" parent="VBoxContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 2 )]
 margin_right = 314.0
-margin_bottom = 342.0
-rect_min_size = Vector2( 100, 100 )
-size_flags_horizontal = 3
+margin_bottom = 411.0
 size_flags_vertical = 3
-hide_root = true
-script = ExtResource( 2 )
+size_flags_stretch_ratio = 1.5
 
 [node name="Preview" parent="VBoxContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 margin_left = 0.0
-margin_top = 354.0
+margin_top = 423.0
 margin_right = 314.0
 margin_bottom = 696.0
 

@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/material_maker/library.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/library_tree.gd" type="Script" id=2]
+
+[node name="Library" type="VBoxContainer"]
+margin_right = 352.0
+margin_bottom = 423.0
+script = ExtResource( 1 )
+
+[node name="Tree" type="Tree" parent="."]
+margin_right = 352.0
+margin_bottom = 395.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+hide_root = true
+select_mode = 1
+script = ExtResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 399.0
+margin_right = 352.0
+margin_bottom = 423.0
+size_flags_horizontal = 3
+
+[node name="FilterLabel" type="Label" parent="HBoxContainer"]
+margin_top = 5.0
+margin_right = 37.0
+margin_bottom = 19.0
+text = "Filter:"
+
+[node name="Filter" type="LineEdit" parent="HBoxContainer"]
+margin_left = 41.0
+margin_right = 352.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+[connection signal="text_changed" from="HBoxContainer/Filter" to="." method="_on_Filter_text_changed"]

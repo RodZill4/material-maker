@@ -89,6 +89,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/widgets/gradient_editor.gd"
 }, {
+"base": "GraphEdit",
+"class": "MMGraphEdit",
+"language": "GDScript",
+"path": "res://addons/material_maker/graph_edit.gd"
+}, {
 "base": "GraphNode",
 "class": "MMGraphNodeGeneric",
 "language": "GDScript",
@@ -126,6 +131,7 @@ _global_script_class_icons={
 "MMGenTexture": "",
 "MMGradient": "",
 "MMGradientEditor": "",
+"MMGraphEdit": "",
 "MMGraphNodeGeneric": "",
 "MMGraphNodeRemote": "",
 "MMNodeLink": "",
@@ -155,10 +161,6 @@ gdscript/warnings/unsafe_call_argument=true
 
 window/size/width=1280
 window/size/height=720
-
-[editor_plugins]
-
-enabled=PoolStringArray( "material_maker" )
 
 [logging]
 
