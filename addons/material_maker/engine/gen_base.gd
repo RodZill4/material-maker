@@ -68,6 +68,7 @@ func notify_output_change(output_index : int):
 		target.generator.source_changed(target.input_index)
 
 func source_changed(__):
+	emit_signal("parameter_changed", "__input_changed__", 0)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 

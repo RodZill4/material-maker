@@ -16,35 +16,34 @@ size = 12
 font_data = SubResource( 2 )
 
 [node name="Output" type="HBoxContainer"]
-margin_right = 201.0
-margin_bottom = 24.0
+margin_right = 251.0
+margin_bottom = 22.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 
 [node name="Delete" type="Button" parent="."]
 margin_right = 28.0
-margin_bottom = 24.0
+margin_bottom = 25.0
 icon = SubResource( 1 )
 flat = true
 
 [node name="Type" type="OptionButton" parent="."]
 margin_left = 32.0
 margin_right = 136.0
-margin_bottom = 24.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "GreyScale"
 items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, -1, null ]
 selected = 0
 
-[node name="Value" type="TextEdit" parent="."]
+[node name="Value" type="LineEdit" parent="."]
 margin_left = 140.0
-margin_right = 201.0
-margin_bottom = 24.0
+margin_right = 251.0
+margin_bottom = 25.0
 hint_tooltip = "Default value"
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 3 )
 text = "0.0"
-syntax_highlighting = true
 context_menu_enabled = false
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]

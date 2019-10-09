@@ -3,14 +3,14 @@
 [ext_resource path="res://addons/material_maker/nodes/remote.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
 
-[sub_resource type="Theme" id=3]
+[sub_resource type="Theme" id=1]
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 48, 32, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 32, 32, 16, 16 )
@@ -19,7 +19,7 @@ region = Rect2( 32, 32, 16, 16 )
 margin_right = 95.0
 margin_bottom = 52.0
 mouse_filter = 1
-theme = SubResource( 3 )
+theme = SubResource( 1 )
 title = "Remote"
 show_close = true
 slot/0/left_enabled = false
@@ -61,7 +61,7 @@ margin_left = 32.0
 margin_right = 60.0
 margin_bottom = 22.0
 hint_tooltip = "Add configurations"
-icon = SubResource( 4 )
+icon = SubResource( 3 )
 [connection signal="close_request" from="." to="." method="on_close_request"]
 [connection signal="offset_changed" from="." to="." method="on_offset_changed"]
 [connection signal="pressed" from="HBoxContainer/AddLink" to="." method="_on_AddLink_pressed"]

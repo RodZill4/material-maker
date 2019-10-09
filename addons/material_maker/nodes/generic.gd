@@ -28,25 +28,26 @@ func on_offset_changed():
 func on_parameter_changed(p, v):
 	if ignore_parameter_change == p:
 		return
-	var o = controls[p]
-	if o is LineEdit:
-		o.text = str(v)
-	elif o is SpinBox:
-		o.value = v
-	elif o is HSlider:
-		o.value = v
-	elif o is OptionButton:
-		o.selected = v
-	elif o is CheckBox:
-		o.pressed = v
-	elif o is ColorPickerButton:
-		o.color = MMType.deserialize_value(v)
-	elif o is MMGradientEditor:
-		var gradient : MMGradient = MMGradient.new()
-		gradient.deserialize(v)
-		o.value = gradient
-	else:
-		print("unsupported widget "+str(o))
+	if controls.has(p):
+		var o = controls[p]
+		if o is LineEdit:
+			o.text = str(v)
+		elif o is SpinBox:
+			o.value = v
+		elif o is HSlider:
+			o.value = v
+		elif o is OptionButton:
+			o.selected = v
+		elif o is CheckBox:
+			o.pressed = v
+		elif o is ColorPickerButton:
+			o.color = MMType.deserialize_value(v)
+		elif o is MMGradientEditor:
+			var gradient : MMGradient = MMGradient.new()
+			gradient.deserialize(v)
+			o.value = gradient
+		else:
+			print("unsupported widget "+str(o))
 	update_shaders()
 
 func initialize_properties():
