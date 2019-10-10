@@ -155,6 +155,7 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 mouse_default_cursor_shape = 0
+custom_fonts/font = SubResource( 3 )
 syntax_highlighting = true
 show_line_numbers = true
 
@@ -167,6 +168,7 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 mouse_default_cursor_shape = 0
+custom_fonts/font = SubResource( 3 )
 syntax_highlighting = true
 show_line_numbers = true
 

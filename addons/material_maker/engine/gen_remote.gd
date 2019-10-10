@@ -92,6 +92,9 @@ func create_config_control(label):
 	widgets.push_back({ label=label, type="config_control", linked_widgets=[], configurations={} })
 	return index
 
+func set_label(index, new_label):
+	widgets[index].label = new_label
+
 func can_link_parameter(index, generator, param):
 	return true
 	

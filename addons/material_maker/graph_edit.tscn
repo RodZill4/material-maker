@@ -14,15 +14,25 @@ script = ExtResource( 1 )
 wait_time = 0.2
 one_shot = true
 
-[node name="ButtonUp" type="Button" parent="."]
+[node name="SubGraphUI" type="HBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -44.0
-margin_top = 4.0
-margin_right = -14.0
+margin_left = -197.0
+margin_right = -13.0
+margin_bottom = 24.0
+
+[node name="Label" type="LineEdit" parent="SubGraphUI"]
+margin_right = 150.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 150, 0 )
+
+[node name="ButtonUp" type="Button" parent="SubGraphUI"]
+margin_left = 154.0
+margin_right = 184.0
 margin_bottom = 24.0
 text = "Up"
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
-[connection signal="pressed" from="ButtonUp" to="." method="on_ButtonUp_pressed"]
+[connection signal="text_changed" from="SubGraphUI/Label" to="." method="_on_Label_text_changed"]
+[connection signal="pressed" from="SubGraphUI/ButtonUp" to="." method="on_ButtonUp_pressed"]

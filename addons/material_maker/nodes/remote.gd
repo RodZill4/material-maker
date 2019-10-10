@@ -10,6 +10,7 @@ func add_control(text, control):
 	var index = grid.get_child_count() / 4
 	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
+	label.connect("label_changed", self, "on_label_changed", [ index ])
 	grid.add_child(label)
 	grid.add_child(control)
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
@@ -84,6 +85,9 @@ func _on_value_changed(new_value, variable):
 
 func do_add_configuration(config_name, param_index):
 	generator.add_configuration(param_index, config_name)
+
+func on_label_changed(new_name, index):
+	generator.set_label(index, new_name)
 
 func _on_AddLink_pressed():
 	var widget = Control.new()

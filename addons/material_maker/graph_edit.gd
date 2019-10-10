@@ -112,7 +112,8 @@ func update_view(g):
 	clear_view()
 	generator = g
 	update_graph(generator.get_children(), generator.connections)
-	$ButtonUp.visible = generator != top_generator
+	$SubGraphUI.visible = generator != top_generator
+	$SubGraphUI/Label.text = generator.label
 	center_view()
 
 func clear_material():
@@ -285,6 +286,9 @@ func on_ButtonUp_pressed():
 	if generator != top_generator && generator.get_parent() is MMGenGraph:
 		call_deferred("update_view", generator.get_parent())
 
+func _on_Label_text_changed(new_text):
+	generator.label = new_text
+
 # Create subgraph
 
 func create_subgraph():
@@ -293,3 +297,5 @@ func create_subgraph():
 		generators.push_back(n.generator)
 	generator.create_subgraph(generators)
 	update_view(generator)
+
+
