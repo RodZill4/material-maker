@@ -11,12 +11,12 @@ func _init(r : MMGenRenderer):
 func has_variant(generator):
 	return variants.has(generator)
 
-func get_variant(generator, uv):
+func get_variant(generator, variant):
 	var rv = -1
 	if variants.has(generator):
-		rv = variants[generator].find(uv)
+		rv = variants[generator].find(variant)
 		if rv == -1:
-			variants[generator].push_back(uv)
+			variants[generator].push_back(variant)
 	else:
-		variants[generator] = [uv]
+		variants[generator] = [variant]
 	return rv

@@ -134,6 +134,9 @@ func subst(string, context, uv = ""):
 	var required_code = ""
 	var required_textures = {}
 	string = replace_variable(string, "name", genname)
+	if uv != "":
+		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
+		string = replace_variable(string, "name_uv", genname_uv)
 	var tmp_string = replace_variable(string, "seed", str(get_seed()))
 	if tmp_string != string:
 		string = tmp_string
@@ -196,12 +199,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { globals=[], defs="", code="", textures={} }
-	var variant_string = uv+","+str(output_index)
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
-		rv.defs = ""
 		if shader_model.has("instance") && !context.has_variant(self):
-			var subst_output = subst(shader_model.instance, context, uv)
+			var subst_output = subst(shader_model.instance, context, "")
 			while subst_output is GDScriptFunctionState:
 				subst_output = yield(subst_output, "completed")
 			rv.defs += subst_output.string
@@ -214,6 +215,25 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 					g = MMGradient.new()
 					g.deserialize(parameters[p.name])
 				rv.defs += g.get_shader(genname+"__"+p.name+"_gradient_fct")
+		# Add inline code
+		if shader_model.has("code"):
+			var variant_index = context.get_variant(self, uv)
+			if variant_index == -1:
+				variant_index = context.get_variant(self, uv)
+				var subst_code = subst(shader_model.code, context, uv)
+				while subst_code is GDScriptFunctionState:
+					subst_code = yield(subst_code, "completed")
+				# Add global definitions
+				for d in subst_code.globals:
+					if rv.globals.find(d) == -1:
+						rv.globals.push_back(d)
+				# Add generated definitions
+				rv.defs += subst_code.defs
+				# Add generated code
+				rv.code += subst_code.code
+				rv.code += subst_code.string
+		# Add output_code
+		var variant_string = uv+","+str(output_index)
 		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
 			variant_index = context.get_variant(self, variant_string)

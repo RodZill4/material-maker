@@ -3,7 +3,9 @@ extends WindowDialog
 
 var model_data = null
 
-onready var global_editor : TextEdit = $Sizer/Tabs/Global
+onready var main_code_editor : TextEdit = $"Sizer/Tabs/Main Code"
+onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functions"
+onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions"
 
 const ParameterEditor = preload("res://addons/material_maker/widgets/node_editor/parameter.tscn")
 const InputEditor = preload("res://addons/material_maker/widgets/node_editor/input.tscn")
@@ -12,8 +14,9 @@ const OutputEditor = preload("res://addons/material_maker/widgets/node_editor/ou
 signal node_changed
 
 func _ready():
-	global_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-
+	main_code_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+	instance_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+	global_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
 
 func add_item(parent, scene):
 	var object = scene.instance()
@@ -34,15 +37,18 @@ func set_model_data(data):
 		for o in data.outputs:
 			add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor).set_model_data(o)
 	if data.has("global"):
-		$Sizer/Tabs/Global.text = data.global
+		global_functions_editor.text = data.global
 	if data.has("instance"):
-		$Sizer/Tabs/Instance.text = data.instance
+		instance_functions_editor.text = data.instance
+	if data.has("code"):
+		main_code_editor.text = data.code
 
 func get_model_data():
 	var data = {
 		name=$Sizer/Tabs/General/Name/Name.text,
-		global=$Sizer/Tabs/Global.text,
-		instance=$Sizer/Tabs/Instance.text,
+		global=global_functions_editor.text,
+		instance=instance_functions_editor.text,
+		code=main_code_editor.text
 	}
 	data.parameters = []
 	for p in $Sizer/Tabs/General/Parameters/Sizer.get_children():

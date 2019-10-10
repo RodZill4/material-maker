@@ -146,7 +146,31 @@ size_flags_horizontal = 0
 icon = SubResource( 1 )
 flat = true
 
-[node name="Global" type="TextEdit" parent="Sizer/Tabs"]
+[node name="Main Code" type="TextEdit" parent="Sizer/Tabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+mouse_default_cursor_shape = 0
+syntax_highlighting = true
+show_line_numbers = true
+
+[node name="Instance Functions" type="TextEdit" parent="Sizer/Tabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+mouse_default_cursor_shape = 0
+syntax_highlighting = true
+show_line_numbers = true
+
+[node name="Global Functions" type="TextEdit" parent="Sizer/Tabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -157,18 +181,6 @@ margin_bottom = -4.0
 mouse_default_cursor_shape = 0
 custom_fonts/font = SubResource( 3 )
 custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
-syntax_highlighting = true
-show_line_numbers = true
-
-[node name="Instance" type="TextEdit" parent="Sizer/Tabs"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-mouse_default_cursor_shape = 0
 syntax_highlighting = true
 show_line_numbers = true
 
