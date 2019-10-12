@@ -73,6 +73,12 @@ static func create_gen(data) -> MMGenBase:
 			generator = MMGenMaterial.new()
 		elif data.type == "buffer":
 			generator = MMGenBuffer.new()
+		elif data.type == "comment":
+			generator = MMGenComment.new()
+			if data.has("text"):
+				generator.text = data.text
+			if data.has("size"):
+				generator.size = Vector2(data.size.x, data.size.y)
 		elif data.type == "image":
 			generator = MMGenImage.new()
 		elif data.type == "ios":
