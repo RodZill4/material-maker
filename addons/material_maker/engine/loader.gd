@@ -4,6 +4,12 @@ class_name MMGenLoader
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
+static func generator_name_from_path(path : String) -> String:
+	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
+		print(p)
+	print(path.get_base_dir())
+	return path.get_basename().get_file()
+
 static func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
@@ -104,6 +110,10 @@ static func create_gen(data) -> MMGenBase:
 		if data.has("parameters"):
 			for p in data.parameters.keys():
 				generator.parameters[p] = MMType.deserialize_value(data.parameters[p])
+		else:
+			for p in generator.get_parameter_defs():
+				if data.has(p.name):
+					generator.parameters[p.name] = MMType.deserialize_value(data[p.name])
 	return generator
 
 static func get_generator_list() -> Array:

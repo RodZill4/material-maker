@@ -38,16 +38,18 @@ func get_parameter_defs():
 				i += 1
 			"linked_control":
 				var linked = w.linked_widgets[0]
-				var gen = get_parent().get_node(linked.node)
-				if gen != null:
-					var gen_params = gen.get_parameter_defs()
-					for pd in gen_params:
-						if pd.name == linked.widget:
-							var p = pd.duplicate(true)
-							p.name = "param"+str(i)
-							p.label = w.label
-							rv.append(p)
-							break
+				var p = {}
+				if linked != null && is_inside_tree():
+					var gen = get_parent().get_node(linked.node)
+					if gen != null:
+						var gen_params = gen.get_parameter_defs()
+						for pd in gen_params:
+							if pd.name == linked.widget:
+								p = pd.duplicate(true)
+								break
+				p.name = "param"+str(i)
+				p.label = w.label
+				rv.append(p)
 				i += 1
 			_:
 				print(w.type)

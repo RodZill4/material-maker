@@ -321,9 +321,9 @@ func do_load_generator(file_name : String):
 	else:
 		new_generator = MMGenLoader.load_gen(file_name)
 	if new_generator != null:
-		var gen_name = MMGenLoader.generator_from_path(file_name)
+		var gen_name = MMGenLoader.generator_name_from_path(file_name)
 		if gen_name != "":
-			new_generator.type = gen_name
+			new_generator.model = gen_name
 		var parent_generator = generator.get_parent()
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator

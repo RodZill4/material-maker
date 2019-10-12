@@ -13,6 +13,6 @@ func create_node(type):
 		var node_type = load(file_name)
 		if node_type != null:
 			node = node_type.instance()
-	else:
+	if node == null:
 		node = preload("res://addons/material_maker/nodes/generic.tscn").instance()
 	return node
