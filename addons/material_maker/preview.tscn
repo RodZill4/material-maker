@@ -55,12 +55,12 @@ selected = 0
 
 [node name="Environment" type="OptionButton" parent="Config"]
 margin_left = 104.0
-margin_right = 204.0
+margin_right = 231.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 100, 0 )
-text = "Park"
-items = [ "Experiment", null, false, 0, null, "Lobby", null, false, 1, null, "Night", null, false, 2, null, "Park", null, false, 3, null, "Schelde", null, false, 4, null ]
-selected = 3
+text = "Epping Forest"
+items = [ "Epping Forest", null, false, -1, null, "Moonless Golf", null, false, -1, null ]
+selected = 0
 
 [node name="Button" type="Button" parent="Config"]
 margin_left = 372.0

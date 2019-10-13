@@ -43,7 +43,6 @@ uv1_scale = Vector3( 4, 4, 4 )
 transform = Transform( -0.685898, 0, 0.727691, 0, 1, 0, -0.727691, 0, -0.685898, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="."]
-visible = false
 mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
 
