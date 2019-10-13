@@ -170,7 +170,7 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)):
 	return []
 
 func create_gen_from_type(gen_name):
-	create_nodes({ type=gen_name }, scroll_offset+0.5*rect_size)
+	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
 
 func load_file(filename):
 	clear_material()

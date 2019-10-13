@@ -3,7 +3,7 @@ extends VBoxContainer
 
 var libraries = []
 
-onready var tree = $Tree
+onready var tree : Tree = $Tree
 
 func _ready():
 	tree.set_column_expand(0, true)
@@ -14,6 +14,17 @@ func _ready():
 		add_library("res://addons/material_maker/library/base.json")
 	add_library("user://library/user.json")
 	update_tree()
+
+func get_selected_item_name():
+	var tree_item : TreeItem = tree.get_selected()
+	var rv = ""
+	while tree_item != null and tree_item != tree.get_root():
+		if rv == "":
+			rv = tree_item.get_text(0)
+		else:
+			rv = tree_item.get_text(0)+"/"+rv
+		tree_item = tree_item.get_parent()
+	return rv
 
 func add_library(file_name : String, filter : String = ""):
 	var root = tree.get_root()

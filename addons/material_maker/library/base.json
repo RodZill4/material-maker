@@ -1,31 +1,73 @@
 {"lib":[
 	{
-		"tree_item":"Generators",
+		"tree_item":"Simple",
 		"collapsed":false
 	},
 	{
-		"tree_item":"Filters",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Miscellaneous",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Generators/Uniform",
+		"tree_item":"Simple/Uniform",
 		"type":"uniform"
 	},
 	{
-		"tree_item":"Generators/Shape",
+		"icon": "polygon",
+		"name": "shape",
+		"parameters": {
+			"edge": 0.051546,
+			"radius": 0.845361,
+			"shape": 1,
+			"sides": 6
+		},
+		"tree_item":"Simple/Shape",
 		"type":"shape"
 	},
 	{
-		"tree_item":"Generators/Image",
-		"type":"image",
-		"file_path":"res://addons/material_maker/nodes/image/godot_logo.png"
+		"icon": "star",
+		"name": "shape",
+		"parameters": {
+			"edge": 0.2,
+			"radius": 0.34375,
+			"shape": 2,
+			"sides": 5
+		},
+		"tree_item": "Simple/Shape/Star",
+		"type": "shape"
 	},
 	{
-		"tree_item":"Generators/Pattern",
+		"icon": "curved_star",
+		"name": "shape",
+		"parameters": {
+			"edge": 0.628866,
+			"radius": 0.546392,
+			"shape": 3,
+			"sides": 6
+		},
+		"tree_item": "Simple/Shape/Curved Star",
+		"type": "shape"
+	},
+	{
+		"icon": "rays",
+		"name": "shape",
+		"parameters": {
+			"edge": 0.628866,
+			"radius": 0.546392,
+			"shape": 4,
+			"sides": 9
+		},
+		"tree_item": "Simple/Shape/Rays",
+		"type": "shape"
+	},
+	{
+		"tree_item":"Simple/Image",
+		"type":"image",
+		"parameters": {
+			"file_path":"res://addons/material_maker/nodes/image/godot_logo.png"
+		}
+	},
+	{
+		"tree_item":"Pattern",
+		"collapsed":false
+	},
+	{
+		"tree_item":"Pattern/Generic",
 		"icon":"pattern",
 		"type":"pattern",
 		"parameters":{
@@ -37,7 +79,7 @@
 		}
 	},
     {
-		"tree_item": "Generators/Pattern/Checkerboard",
+		"tree_item": "Pattern/Generic/Checkerboard",
 		"type": "pattern",
 		"icon": "checkerboard",
 		"parameters":{
@@ -49,7 +91,7 @@
 		}
     },
 	{
-		"tree_item":"Generators/Bricks",
+		"tree_item":"Pattern/Bricks",
 		"type":"bricks",
 		"icon":"bricks",
 		"parameters":{
@@ -61,7 +103,7 @@
 		}
 	},
     {
-		"tree_item": "Generators/Bricks/Tiles",
+		"tree_item": "Pattern/Bricks/Tiles",
 		"type": "bricks",
 		"icon": "tiles",
 		"parameters":{
@@ -73,7 +115,7 @@
 		}
 	},
     {
-		"tree_item": "Generators/Bricks/BasketWeave",
+		"tree_item": "Pattern/Bricks/BasketWeave",
 		"type": "bricks",
 		"icon": "basketweave",
 		"parameters":{
@@ -87,7 +129,7 @@
 		}
     },
     {
-		"tree_item": "Generators/Bricks/HerringBone",
+		"tree_item": "Pattern/Bricks/HerringBone",
 		"type": "bricks",
 		"icon": "herringbone",
 		"parameters":{
@@ -101,7 +143,7 @@
 		}
     },
     {
-		"tree_item": "Generators/Bricks/SpanishBond",
+		"tree_item": "Pattern/Bricks/SpanishBond",
 		"type": "bricks",
 		"icon": "spanishbond",
 		"parameters":{
@@ -115,16 +157,61 @@
 		}
     },
 	{
-		"tree_item":"Generators/Noise",
+		"icon": "weave",
+		"name": "weave",
+		"parameters": {
+			"columns": 4,
+			"rows": 4
+		},
+		"tree_item": "Pattern/Weave",
+		"type": "weave"
+	},
+	{
+		"icon": "truchet",
+		"name": "truchet",
+		"parameters": {
+			"Size": 4,
+			"shape": 0,
+			"size": 4,
+			"type": 1
+		},
+		"tree_item": "Pattern/Truchet",
+		"type": "truchet"
+	},
+	{
+		"icon": "runes",
+		"name": "runes",
+		"parameters": {
+			"columns": 4,
+			"rows": 4
+		},
+		"tree_item": "Pattern/Runes",
+		"type": "runes"
+	},
+	{
+		"tree_item":"Noise",
 		"type":"noise",
 		"icon":"noise",
+		"collapsed":false,
 		"parameters":{
 			"size":4,
 			"density":0.5
 		}
 	},
 	{
-		"tree_item":"Generators/Perlin Noise",
+		"tree_item":"Filter",
+		"collapsed":false
+	},
+	{
+		"tree_item":"Transform",
+		"collapsed":false
+	},
+	{
+		"tree_item":"Miscellaneous",
+		"collapsed":false
+	},
+	{
+		"tree_item":"Noise/Perlin",
 		"type":"perlin",
 		"icon":"perlin",
 		"parameters":{
@@ -135,7 +222,7 @@
 		}
 	},
 	{
-		"tree_item":"Generators/Voronoi Noise",
+		"tree_item":"Noise/Voronoi",
 		"type":"voronoi",
 		"icon":"voronoi",
 		"parameters":{
@@ -145,11 +232,7 @@
 		}
 	},
 	{
-		"tree_item":"Filters/Buffer",
-		"type":"buffer"
-	},
-	{
-		"tree_item":"Filters/AdjustHSV",
+		"tree_item":"Filter/AdjustHSV",
 		"type":"adjust_hsv",
 		"parameters":{
 			"hue":0,
@@ -158,69 +241,15 @@
 		}
 	},
 	{
-		"tree_item":"Filters/Colorize",
+		"icon": "colorize",
+		"tree_item":"Filter/Colorize",
 		"type":"colorize",
 		"parameters":{
 			"gradient":[{"b":0,"g":0,"pos":0,"r":0},{"b":1,"g":1,"pos":1,"r":1}]
 		}
 	},
-	{
-		"tree_item":"Filters/Blend",
-		"type":"blend",
-		"parameters":{
-			"amount":0.5,
-			"blend_type":0
-		}
-	},
-	{
-		"tree_item":"Filters/Blur",
-		"type":"blur",
-		"parameters":{
-			"sigma":1.0
-		}
-	},
-	{
-		"tree_item":"Filters/Combine",
-		"type":"combine"
-	},
-	{
-		"tree_item":"Filters/Decompose",
-		"type":"decompose"
-	},
-	{
-		"tree_item":"Filters/Emboss",
-		"type":"emboss",
-		"parameters":{
-			"direction":0
-		}
-	},
-	{
-		"tree_item":"Filters/Normal map",
-		"type":"normal_map",
-		"parameters":{
-			"amount":0.5
-		}
-	},
-	{
-		"tree_item":"Filters/Transform",
-		"type":"transform",
-		"parameters":{
-			"rotate":0,
-			"scale_x":1,
-			"scale_y":1,
-			"translate_x":0,
-			"translate_y":0
-		}
-	},
-	{
-		"tree_item":"Filters/Warp",
-		"type":"warp",
-		"parameters":{
-			"amount":0.5
-		}
-	},
     {
-		"tree_item": "Filters/Colorize/Invert",
+		"tree_item": "Filter/Colorize/Invert",
 		"type": "colorize",
 		"icon": "invert",
 		"parameters":{
@@ -241,25 +270,139 @@
 		}
 	},
 	{
-		"tree_item":"Miscellaneous/Comment",
-		"type":"comment"
+		"icon": "rainbow",
+		"name": "colorize",
+		"parameters": {
+			"gradient": {
+				"points": [
+					{
+						"a": 1,
+						"b": 0,
+						"g": 0,
+						"pos": 0,
+						"r": 1
+					},
+					{
+						"a": 1,
+						"b": 0,
+						"g": 0.96875,
+						"pos": 0.254545,
+						"r": 1
+					},
+					{
+						"a": 1,
+						"b": 0.125,
+						"g": 1,
+						"pos": 0.527273,
+						"r": 0
+					},
+					{
+						"a": 1,
+						"b": 1,
+						"g": 0.0625,
+						"pos": 0.772727,
+						"r": 0
+					},
+					{
+						"a": 1,
+						"b": 1,
+						"g": 0,
+						"pos": 1,
+						"r": 0.84375
+					}
+				],
+				"type": "Gradient"
+			}
+		},
+		"tree_item": "Filter/Colorize/Rainbow",
+		"type": "colorize"
 	},
 	{
-		"tree_item":"Miscellaneous/Export",
-		"type":"export"
+		"icon": "blend",
+		"tree_item":"Filter/Blend",
+		"type":"blend",
+		"parameters":{
+			"amount":0.5,
+			"blend_type":0
+		}
+	},
+	{
+		"tree_item":"Filter/Combine",
+		"type":"combine"
+	},
+	{
+		"tree_item":"Filter/Decompose",
+		"type":"decompose"
+	},
+	{
+		"icon": "normal_map",
+		"tree_item":"Filter/Normal map",
+		"type":"normal_map",
+		"parameters":{
+			"amount":0.5
+		}
+	},
+	{
+		"icon": "transform",
+		"tree_item":"Transform",
+		"type":"transform",
+		"parameters":{
+			"rotate":0,
+			"scale_x":1,
+			"scale_y":1,
+			"translate_x":0,
+			"translate_y":0
+		}
+	},
+	{
+		"icon": "mirror",
+		"name": "mirror",
+		"parameters": {
+			"direction": 0,
+			"offset": 0
+		},
+		"tree_item": "Transform/Mirror",
+		"type": "mirror"
+	},
+	{
+		"icon": "kaleidoscope",
+		"name": "kaleidoscope",
+		"parameters": {
+			"count": 5,
+			"direction": 0,
+			"offset": 0
+		},
+		"tree_item": "Transform/Kaleidoscope",
+		"type": "kaleidoscope"
+	},
+	{
+		"icon": "warp",
+		"tree_item":"Transform/Warp",
+		"type":"warp",
+		"parameters":{
+			"amount":0.5
+		}
+	},
+	{
+		"tree_item":"Miscellaneous/Buffer",
+		"type":"buffer"
+	},
+	{
+		"tree_item":"Miscellaneous/Custom Shader",
+		"type":"custom",
+		"shader_model":{}
 	},
 	{
 		"tree_item":"Miscellaneous/Switch",
 		"type":"switch"
 	},
 	{
-		"tree_item":"Miscellaneous/Custom",
-		"type":"custom",
-		"shader_model":{}
-	},
-	{
 		"tree_item":"Miscellaneous/Remote",
 		"type":"remote",
 		"widgets":[]
+	},
+	{
+		"tree_item":"Miscellaneous/Comment",
+		"type":"comment"
 	}
 ]}

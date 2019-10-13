@@ -278,6 +278,7 @@ func add_to_user_library():
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+		dialog.set_value(library.get_selected_item_name())
 		dialog.set_texts("New library element", "Select a name for the new library element")
 		add_child(dialog)
 		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
@@ -296,12 +297,12 @@ func do_add_to_user_library(name, nodes):
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
-	library.add_item(data, name)
 	var result = nodes[0].generator.render(0, renderer, 64)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	result.save_to_file("user://library/user/"+data.icon+".png")
 	result.release()
+	library.add_item(data, name, library.get_preview_texture(data))
 
 func save_user_library():
 	print("Saving user library")

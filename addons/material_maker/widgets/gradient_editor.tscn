@@ -32,7 +32,7 @@ shader = SubResource( 3 )
 [node name="Control" type="Control"]
 margin_right = 120.0
 margin_bottom = 30.0
-rect_min_size = Vector2( 120, 30 )
+rect_min_size = Vector2( 120, 32 )
 script = ExtResource( 1 )
 
 [node name="Background" type="ColorRect" parent="."]

@@ -3,8 +3,8 @@ extends WindowDialog
 
 signal ok
 
-func _ready():
-	pass
+func set_value(v):
+	$VBoxContainer/LineEdit.text = v
 
 func set_texts(title, label):
 	window_title = title
