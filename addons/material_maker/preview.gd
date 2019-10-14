@@ -13,6 +13,9 @@ onready var current_object = objects.get_child(0)
 onready var environments = $MaterialPreview/Preview3d/Environments
 onready var current_environment = environments.get_child(0)
 
+onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
+onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
+
 signal need_update
 signal show_background_preview
 
@@ -72,10 +75,23 @@ func _on_Button_toggled(button_pressed):
 func on_gui_input(event):
 	if event is InputEventMouseButton:
 		$MaterialPreview/Preview3d/ObjectRotate.stop()
+		match event.button_index:
+			BUTTON_WHEEL_UP:
+				camera.translation.z *= 1.01 if event.shift else 1.1
+			BUTTON_WHEEL_DOWN:
+				camera.translation.z /= 1.01 if event.shift else 1.1
 	elif event is InputEventMouseMotion:
-		if event.button_mask & BUTTON_MASK_LEFT:
-			$MaterialPreview/Preview3d/Objects.rotation.y += 0.01*event.relative.x
-			$MaterialPreview/Preview3d/Objects.rotation.x += 0.01*event.relative.y
-		elif event.button_mask & BUTTON_MASK_RIGHT:
-			$MaterialPreview/Preview3d/CameraPivot.rotation.y += 0.01*event.relative.x
-			$MaterialPreview/Preview3d/CameraPivot.rotation.x -= 0.01*event.relative.y
+		var motion = 0.01*event.relative
+		var camera_basis = camera.global_transform.basis
+		if event.shift:
+			if event.button_mask & BUTTON_MASK_LEFT:
+				objects.rotate(camera_basis.x.normalized(), motion.y)
+				objects.rotate(camera_basis.y.normalized(), motion.x)
+			elif event.button_mask & BUTTON_MASK_RIGHT:
+				objects.rotate(camera_basis.z.normalized(), motion.x)
+		else:
+			if event.button_mask & BUTTON_MASK_LEFT:
+				camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
+				camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
+			elif event.button_mask & BUTTON_MASK_RIGHT:
+				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)

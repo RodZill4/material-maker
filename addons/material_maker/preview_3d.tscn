@@ -1,19 +1,20 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/material_maker/preview_objects.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/material_maker/environment.gd" type="Script" id=2]
 [ext_resource path="res://addons/material_maker/panoramas/epping_forest_01.hdr" type="Texture" id=3]
-[ext_resource path="res://addons/material_maker/panoramas/moonless_golf.hdr" type="Texture" id=4]
+[ext_resource path="res://addons/material_maker/preview_light.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/material_maker/panoramas/moonless_golf.hdr" type="Texture" id=5]
 
-[sub_resource type="PanoramaSky" id=1]
+[sub_resource type="PanoramaSky" id=3]
 
-[sub_resource type="Environment" id=2]
+[sub_resource type="Environment" id=4]
 background_mode = 2
-background_sky = SubResource( 1 )
+background_sky = SubResource( 3 )
 ambient_light_color = Color( 0.992157, 1, 0.709804, 1 )
 ambient_light_energy = 0.3
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=5]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Objects:rotation_degrees")
@@ -28,25 +29,17 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[sub_resource type="PanoramaSky" id=4]
+[sub_resource type="PanoramaSky" id=6]
 resource_local_to_scene = true
 panorama = ExtResource( 3 )
 
-[sub_resource type="Environment" id=5]
+[sub_resource type="Environment" id=7]
 background_mode = 2
-background_sky = SubResource( 4 )
-
-[sub_resource type="SpatialMaterial" id=6]
-flags_unshaded = true
-
-[sub_resource type="SphereMesh" id=7]
-material = SubResource( 6 )
-radius = 0.25
-height = 0.5
+background_sky = SubResource( 6 )
 
 [sub_resource type="PanoramaSky" id=8]
 resource_local_to_scene = true
-panorama = ExtResource( 4 )
+panorama = ExtResource( 5 )
 
 [sub_resource type="Environment" id=9]
 resource_local_to_scene = true
@@ -63,7 +56,7 @@ transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0
 
 [node name="Camera" type="Camera" parent="CameraPivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5 )
-environment = SubResource( 2 )
+environment = SubResource( 4 )
 current = true
 
 [node name="RemoteTransform" type="RemoteTransform" parent="CameraPivot/Camera"]
@@ -72,48 +65,24 @@ remote_path = NodePath("../../../../../../ProjectsPane/BackgroundPreview/Viewpor
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"
 playback_speed = 0.1
-anims/rotate = SubResource( 3 )
+anims/rotate = SubResource( 5 )
 
 [node name="Environments" type="Spatial" parent="."]
 
 [node name="Epping Forest" type="Spatial" parent="Environments"]
+visible = false
 script = ExtResource( 2 )
-environment = SubResource( 5 )
+environment = SubResource( 7 )
 
-[node name="Light" type="OmniLight" parent="Environments/Epping Forest"]
-transform = Transform( 0.999755, 0.0162074, -0.0150931, 0, 0.681502, 0.731816, 0.0221468, -0.731637, 0.681335, -0.0821358, 3.98251, -2.64581 )
-light_energy = 4.9
-omni_range = 12.9508
-
-[node name="Mesh" type="MeshInstance" parent="Environments/Epping Forest/Light"]
-transform = Transform( 1, 1.11759e-008, -1.30385e-008, -1.86265e-009, 1, -4.17233e-007, 0, 0, 1, 0, 0, 0 )
-cast_shadow = 0
-mesh = SubResource( 7 )
-material/0 = null
+[node name="Light" parent="Environments/Epping Forest" instance=ExtResource( 4 )]
+transform = Transform( 0.999755, 0.0162074, -0.0150931, 0, 0.681502, 0.731816, 0.0221468, -0.731637, 0.681335, 0.0511079, 4.03913, -2.64581 )
 
 [node name="Moonless Golf" type="Spatial" parent="Environments"]
 visible = false
 script = ExtResource( 2 )
 environment = SubResource( 9 )
 
-[node name="Light1" type="OmniLight" parent="Environments/Moonless Golf"]
-transform = Transform( 0.999755, 0.0162074, -0.0150931, 0, 0.681502, 0.731816, 0.0221468, -0.731637, 0.681335, -2.22238, 3.98251, -2.64581 )
-light_energy = 4.9
-omni_range = 12.9508
+[node name="Light1" parent="Environments/Moonless Golf" instance=ExtResource( 4 )]
 
-[node name="Mesh" type="MeshInstance" parent="Environments/Moonless Golf/Light1"]
-transform = Transform( 1, 1.11759e-008, -1.39698e-008, -1.86265e-009, 1, -4.17233e-007, 0, 0, 1, 0, 0, 0 )
-cast_shadow = 0
-mesh = SubResource( 7 )
-material/0 = null
-
-[node name="Light2" type="OmniLight" parent="Environments/Moonless Golf"]
-transform = Transform( 0.999755, 0.0162074, -0.0150931, 0, 0.681502, 0.731816, 0.0221468, -0.731637, 0.681335, 2.34329, 3.98251, -2.64581 )
-light_energy = 4.9
-omni_range = 12.9508
-
-[node name="Mesh" type="MeshInstance" parent="Environments/Moonless Golf/Light2"]
-transform = Transform( 1, 1.11759e-008, -1.39698e-008, -1.86265e-009, 1, -4.17233e-007, 0, 0, 1, 0, 0, 0 )
-cast_shadow = 0
-mesh = SubResource( 7 )
-material/0 = null
+[node name="Light2" parent="Environments/Moonless Golf" instance=ExtResource( 4 )]
+transform = Transform( 0.999755, 0.0162074, -0.0150931, 0, 0.681502, 0.731816, 0.0221468, -0.731637, 0.681335, 2.3608, 3.98251, -2.64581 )

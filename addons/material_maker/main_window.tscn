@@ -1,11 +1,20 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/library.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/material_maker/preview.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=4]
-[ext_resource path="res://addons/material_maker/engine/renderer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=6]
+[ext_resource path="res://addons/material_maker/panoramas/epping_forest_01.hdr" type="Texture" id=4]
+[ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=5]
+[ext_resource path="res://addons/material_maker/engine/renderer.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=7]
+
+[sub_resource type="PanoramaSky" id=6]
+resource_local_to_scene = true
+panorama = ExtResource( 4 )
+
+[sub_resource type="Environment" id=7]
+background_mode = 2
+background_sky = SubResource( 6 )
 
 [node name="MainWindow" type="Panel"]
 anchor_right = 1.0
@@ -98,6 +107,7 @@ render_target_update_mode = 0
 
 [node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport"]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 2.24976, 2.68115 )
+environment = SubResource( 7 )
 current = true
 
 [node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
@@ -106,7 +116,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 
 [node name="Tabs" type="Tabs" parent="VBoxContainer/HBoxContainer/ProjectsPane/Projects"]
 margin_right = 954.0
@@ -114,12 +124,12 @@ margin_bottom = 24.0
 tab_align = 0
 tab_close_display_policy = 1
 
-[node name="Renderer" parent="." instance=ExtResource( 5 )]
-size = Vector2( 1024, 1024 )
+[node name="Renderer" parent="." instance=ExtResource( 6 )]
+size = Vector2( 512, 512 )
 debug_path = null
 
 [node name="NodeFactory" type="Node" parent="."]
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 [connection signal="need_update" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview" to="." method="update_preview_3d"]
 [connection signal="show_background_preview" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview" to="." method="_on_Preview_show_background_preview"]
 [connection signal="no_more_tabs" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="new_material"]

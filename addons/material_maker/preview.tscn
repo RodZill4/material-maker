@@ -25,6 +25,7 @@ margin_top = 3.0
 margin_right = -3.0
 margin_bottom = 373.0
 rect_min_size = Vector2( 200, 200 )
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
@@ -37,6 +38,7 @@ world = SubResource( 1 )
 handle_input_locally = false
 render_target_clear_mode = 1
 render_target_update_mode = 3
+physics_object_picking = true
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
 

@@ -35,7 +35,8 @@ func get_parameter_defs():
 		{ name="emission_energy", label="Emission", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
 		{ name="normal_scale", label="Normal", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
 		{ name="ao_light_affect", label="Ambient occlusion", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 }
+		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
+		{ name="size", label="Size", type="size", first=7, last=11, default=9 }
 	]
 
 func get_input_defs():
@@ -48,6 +49,14 @@ func get_input_defs():
 		{ name="ao_texture", label="", type="f" },
 		{ name="depth_texture", label="", type="f" }
 	]
+
+func get_image_size():
+	var rv : int
+	if parameters.has("size"):
+		rv = int(pow(2, parameters.size+7))
+	else:
+		rv = 512
+	return rv
 
 func update_preview():
 	var graph_edit = self
@@ -69,7 +78,7 @@ func render_textures(renderer : MMGenRenderer):
 		if t.has("port"):
 			var source = get_source(t.port)
 			if source != null:
-				var result = source.generator.render(source.output_index, renderer, 1024)
+				var result = source.generator.render(source.output_index, renderer, get_image_size())
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				texture = ImageTexture.new()
@@ -91,7 +100,7 @@ func render_textures(renderer : MMGenRenderer):
 				else:
 					code.push_back({ defs="", code="", f=t.default_values[i] })
 			var shader : String = renderer.generate_combined_shader(code[0], code[1], code[2])
-			var result = renderer.render_shader(shader, shader_textures, 1024)
+			var result = renderer.render_shader(shader, shader_textures, get_image_size())
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			texture = ImageTexture.new()
