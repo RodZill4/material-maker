@@ -69,12 +69,12 @@ func _on_Preview2D_gui_input(ev : InputEvent):
 		preview_maximized = !preview_maximized
 		_on_Preview_resized()
 
-func _on_Button_toggled(button_pressed):
+func _on_Background_toggled(button_pressed):
 	emit_signal("show_background_preview", button_pressed)
 
 func on_gui_input(event):
 	if event is InputEventMouseButton:
-		$MaterialPreview/Preview3d/ObjectRotate.stop()
+		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		match event.button_index:
 			BUTTON_WHEEL_UP:
 				camera.translation.z *= 1.01 if event.shift else 1.1
@@ -95,3 +95,10 @@ func on_gui_input(event):
 				camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
 			elif event.button_mask & BUTTON_MASK_RIGHT:
 				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
+
+
+func _on_Rotate_pressed():
+	if $MaterialPreview/Preview3d/ObjectRotate.is_playing():
+		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+	else:
+		$MaterialPreview/Preview3d/ObjectRotate.play("rotate")

@@ -64,12 +64,24 @@ text = "Epping Forest"
 items = [ "Epping Forest", null, false, -1, null, "Moonless Golf", null, false, -1, null ]
 selected = 0
 
-[node name="Button" type="Button" parent="Config"]
+[node name="Rotate" type="Button" parent="Config"]
+margin_left = 348.0
+margin_right = 368.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( -4, 7 )
+hint_tooltip = "Show in main view"
+size_flags_horizontal = 10
+text = "R"
+
+[node name="Background" type="Button" parent="Config"]
 margin_left = 372.0
 margin_right = 395.0
 margin_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( -4, 7 )
 hint_tooltip = "Show in main view"
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 toggle_mode = true
 text = "O"
 
@@ -87,5 +99,6 @@ size_flags_vertical = 8
 [connection signal="resized" from="." to="." method="_on_Preview_resized"]
 [connection signal="item_selected" from="Config/Model" to="." method="_on_Model_item_selected"]
 [connection signal="item_selected" from="Config/Environment" to="." method="_on_Environment_item_selected"]
-[connection signal="toggled" from="Config/Button" to="." method="_on_Button_toggled"]
+[connection signal="pressed" from="Config/Rotate" to="." method="_on_Rotate_pressed"]
+[connection signal="toggled" from="Config/Background" to="." method="_on_Background_toggled"]
 [connection signal="gui_input" from="Preview2D" to="." method="_on_Preview2D_gui_input"]
