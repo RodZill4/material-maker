@@ -191,12 +191,12 @@ func save_file(filename):
 	set_save_path(filename)
 	set_need_save(false)
 
-func export_textures(size = null):
+func export_textures():
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():
 			if c is GraphNode and c.generator.has_method("export_textures"):
-				c.generator.export_textures(prefix, size)
+				c.generator.export_textures(prefix, editor_interface)
 
 # Cut / copy / paste
 

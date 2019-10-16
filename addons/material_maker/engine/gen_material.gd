@@ -174,7 +174,7 @@ func export_textures(prefix, editor_interface = null):
 		if texture != null:
 			var image = texture.get_data()
 			image.save_png("%s_%s.png" % [ prefix, t.texture ])
-	if Engine.editor_hint:
+	if Engine.editor_hint and editor_interface != null:
 		var resource_filesystem = editor_interface.get_resource_filesystem()
 		resource_filesystem.scan()
 		yield(resource_filesystem, "filesystem_changed")

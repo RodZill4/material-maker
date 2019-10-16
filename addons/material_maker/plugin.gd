@@ -8,10 +8,14 @@ var renderer = null
 
 func _enter_tree():
 	add_tool_menu_item("Material Maker", self, "open_material_maker")
-	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
-	add_import_plugin(importer)
+	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
 	renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
 	add_child(renderer)
+
+func register_material_maker_import(__):
+	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
+	add_import_plugin(importer)
+	remove_tool_menu_item("Register Material Maker Import")
 
 func _exit_tree():
 	remove_tool_menu_item("Material Maker")
@@ -31,7 +35,7 @@ func _set_state(s):
 	mm_button = s.mm_button
 	material_maker = s.material_maker
 
-func open_material_maker(foo = null):
+func open_material_maker(__):
 	if material_maker == null:
 		material_maker = preload("res://addons/material_maker/window_dialog.tscn").instance()
 		var panel = material_maker.get_node("MainWindow")
@@ -51,10 +55,10 @@ func generate_material(ptex_filename: String) -> Material:
 	add_child(generator)
 	if generator.has_node("Material"):
 		var gen_material = generator.get_node("Material")
-		print(renderer)
-		var return_value = gen_material.render_textures(renderer)
-		while return_value is GDScriptFunctionState:
-			return_value = yield(return_value, "completed")
-		var prefix = ptex_filename.left(ptex_filename.rfind("."))
-		return gen_material.export_textures(prefix, get_editor_interface())
+		if gen_material != null:
+			var return_value = gen_material.render_textures(renderer)
+			while return_value is GDScriptFunctionState:
+				return_value = yield(return_value, "completed")
+			var prefix = ptex_filename.left(ptex_filename.rfind("."))
+			return gen_material.export_textures(prefix, get_editor_interface())
 	return null

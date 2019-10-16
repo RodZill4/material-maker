@@ -47,5 +47,6 @@ func import(source_file: String, save_path: String, options: Dictionary, platfor
 	var material = plugin.generate_material(source_file)
 	while material is GDScriptFunctionState:
 		material = yield(material, "completed")
-	ResourceSaver.save(filename, material)
+	if material != null:
+		ResourceSaver.save(filename, material)
 	return OK

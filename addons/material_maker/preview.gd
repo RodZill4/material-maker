@@ -38,7 +38,6 @@ func _ready():
 func _on_Environment_item_selected(id):
 	current_environment.visible = false
 	current_environment = environments.get_child(id)
-	print(current_environment.environment)
 	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
 	get_node("../../ProjectsPane/BackgroundPreview/Viewport/Camera").set_environment(current_environment.environment)
 	current_environment.visible = true
@@ -75,6 +74,7 @@ func _on_Background_toggled(button_pressed):
 func on_gui_input(event):
 	if event is InputEventMouseButton:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		$Config/Rotate.pressed = false
 		match event.button_index:
 			BUTTON_WHEEL_UP:
 				camera.translation.z *= 1.01 if event.shift else 1.1
@@ -96,9 +96,8 @@ func on_gui_input(event):
 			elif event.button_mask & BUTTON_MASK_RIGHT:
 				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
-
-func _on_Rotate_pressed():
-	if $MaterialPreview/Preview3d/ObjectRotate.is_playing():
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-	else:
+func _on_Rotate_toggled(button_pressed):
+	if button_pressed:
 		$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
+	else:
+		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
