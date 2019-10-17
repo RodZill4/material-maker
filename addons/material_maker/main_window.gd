@@ -40,7 +40,11 @@ const MENU = [
 
 signal quit
 
+var is_mac = false
+
 func _ready():
+	if OS.get_name() == "OSX":
+		is_mac = true
 	if !Engine.editor_hint:
 		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	load_recents()
@@ -80,7 +84,7 @@ func create_menu(menu, menu_name):
 					if s == "Alt":
 						shortcut |= KEY_MASK_ALT
 					elif s == "Control":
-						shortcut |= KEY_MASK_CTRL
+						shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
 					elif s == "Shift":
 						shortcut |= KEY_MASK_SHIFT
 					else:
