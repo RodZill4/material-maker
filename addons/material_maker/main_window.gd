@@ -46,6 +46,10 @@ func _ready():
 	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
 		get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), 2)
 
+  # Set a minimum window size to prevent UI elements from collapsing on each other.
+	# This property is only available in 3.2alpha or later, so use `set()` to fail gracefully if it doesn't exist.
+	OS.set("min_window_size", Vector2(1024, 600))
+
 	if !Engine.editor_hint:
 		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	load_recents()
