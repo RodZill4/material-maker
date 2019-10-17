@@ -41,6 +41,10 @@ const MENU = [
 signal quit
 
 func _ready():
+	# Set a minimum window size to prevent UI elements from collapsing on each other.
+	# This property is only available in 3.2alpha or later, so use `set()` to fail gracefully if it doesn't exist.
+	OS.set("min_window_size", Vector2(1024, 600))
+
 	if !Engine.editor_hint:
 		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	load_recents()
