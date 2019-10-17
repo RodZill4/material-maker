@@ -26,6 +26,8 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="View", command="view_center", shortcut="C", description="Center view" },
+	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
@@ -40,8 +42,13 @@ const MENU = [
 
 signal quit
 
+var is_mac = false
+
 func _ready():
-	# Upscale everything if the display requires it (crude hiDPI support).
+	if OS.get_name() == "OSX":
+		is_mac = true
+
+  # Upscale everything if the display requires it (crude hiDPI support).
 	# This prevents UI elements from being too small on hiDPI displays.
 	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
 		get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), 2)
@@ -89,7 +96,7 @@ func create_menu(menu, menu_name):
 					if s == "Alt":
 						shortcut |= KEY_MASK_ALT
 					elif s == "Control":
-						shortcut |= KEY_MASK_CTRL
+						shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
 					elif s == "Shift":
 						shortcut |= KEY_MASK_SHIFT
 					else:
@@ -237,7 +244,6 @@ func quit():
 	else:
 		get_tree().quit()
 
-
 func edit_cut():
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -263,6 +269,15 @@ func edit_paste():
 func edit_paste_is_disabled():
 	var data = parse_json(OS.clipboard)
 	return data == null
+	
+func view_center():
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.center_view()
+	
+func view_reset_zoom():
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.zoom = 1
+	
 
 func get_selected_nodes():
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
