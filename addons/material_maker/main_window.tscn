@@ -103,6 +103,7 @@ stretch = true
 [node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview"]
 size = Vector2( 954, 696 )
 handle_input_locally = false
+msaa = 2
 render_target_update_mode = 0
 
 [node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport"]
