@@ -36,6 +36,7 @@ size = Vector2( 395, 370 )
 own_world = true
 world = SubResource( 1 )
 handle_input_locally = false
+msaa = 2
 render_target_clear_mode = 1
 render_target_update_mode = 3
 physics_object_picking = true
