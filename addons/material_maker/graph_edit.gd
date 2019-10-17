@@ -22,9 +22,7 @@ func _ready():
 func _gui_input(event):
 	if event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_C:
-			center_view()
-		elif scancode_with_modifiers == KEY_DELETE || scancode_with_modifiers == KEY_BACKSPACE:
+		if scancode_with_modifiers == KEY_DELETE || scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
 
 # Misc. useful functions

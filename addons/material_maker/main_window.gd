@@ -26,6 +26,8 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="View", command="view_center", shortcut="C", description="Center view" },
+	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
@@ -232,7 +234,6 @@ func quit():
 	else:
 		get_tree().quit()
 
-
 func edit_cut():
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -258,6 +259,15 @@ func edit_paste():
 func edit_paste_is_disabled():
 	var data = parse_json(OS.clipboard)
 	return data == null
+	
+func view_center():
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.center_view()
+	
+func view_reset_zoom():
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.zoom = 1
+	
 
 func get_selected_nodes():
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
