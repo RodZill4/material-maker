@@ -3,32 +3,35 @@ extends EditorImportPlugin
 
 var plugin = null
 
+const PRESET_NAMES = [ "Skip", "Import with Material Maker" ]
+const PRESET_OPTIONS = [
+	[{ name="skip", default_value=true }],
+	[{ name="skip", default_value=false }]
+]
+
 func _init(p):
 	plugin = p
 
-func _ready():
-	pass # Replace with function body.
-
 func get_import_options(preset : int):
-	return []
+	return PRESET_OPTIONS[preset]
 
 func get_import_order():
 	return 1
 
 func get_importer_name():
-	return "MaterialMakerImporter"
+	return "material_maker.import"
 
 func get_option_visibility(option: String, options: Dictionary):
-	return false
+	return true
 
 func get_preset_count():
-	return 1
+	return 2
 
 func get_preset_name(preset: int) -> String:
-	return "Default"
+	return PRESET_NAMES[preset]
 
 func get_priority():
-	return 1
+	return 0.1
 
 func get_recognized_extensions():
 	return [ "ptex" ]
@@ -43,10 +46,11 @@ func get_visible_name():
 	return "Material Maker Importer"
 
 func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> int:
-	var filename = save_path + "." + get_save_extension()
-	var material = plugin.generate_material(source_file)
-	while material is GDScriptFunctionState:
-		material = yield(material, "completed")
-	if material != null:
-		ResourceSaver.save(filename, material)
+	if !options.skip:
+		var filename = save_path + "." + get_save_extension()
+		var material = plugin.generate_material(source_file)
+		while material is GDScriptFunctionState:
+			material = yield(material, "completed")
+		if material != null:
+			ResourceSaver.save(filename, material)
 	return OK

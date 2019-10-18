@@ -16,6 +16,13 @@ func register_material_maker_import(__):
 	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
 	add_import_plugin(importer)
 	remove_tool_menu_item("Register Material Maker Import")
+	add_tool_menu_item("Unregister Material Maker Import", self, "unregister_material_maker_import")
+
+func unregister_material_maker_import(__):
+	remove_import_plugin(importer)
+	importer = null
+	remove_tool_menu_item("Unregister Material Maker Import")
+	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
 
 func _exit_tree():
 	remove_tool_menu_item("Material Maker")
