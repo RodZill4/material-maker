@@ -4,6 +4,7 @@ extends VBoxContainer
 var libraries = []
 
 onready var tree : Tree = $Tree
+onready var filter_line_edit : LineEdit = $HBoxContainer/Filter
 
 func _ready():
 	tree.set_column_expand(0, true)
@@ -14,6 +15,10 @@ func _ready():
 		add_library("res://addons/material_maker/library/base.json")
 	add_library("user://library/user.json")
 	update_tree()
+
+func _unhandled_input(event : InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.command and event.scancode == KEY_F:
+		filter_line_edit.grab_focus()
 
 func get_selected_item_name():
 	var tree_item : TreeItem = tree.get_selected()
