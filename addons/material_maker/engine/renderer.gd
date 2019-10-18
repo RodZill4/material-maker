@@ -2,7 +2,7 @@ tool
 extends Viewport
 class_name MMGenRenderer
 
-export(String) var debug_path = null
+export(String) var debug_path = ""
 var debug_file_index : int = 0
 
 var rendering : bool = false
@@ -42,15 +42,14 @@ static func generate_combined_shader(red_code, green_code, blue_code):
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
 	code += "\n"
-	if red_code.has("globals"):
-		for g in red_code.globals:
-			code += g
-	if green_code.has("globals"):
-		for g in green_code.globals:
-			code += g
-	if blue_code.has("globals"):
-		for g in blue_code.globals:
-			code += g
+	var globals = []
+	for c in [ red_code, green_code, blue_code ]:
+		if c.has("globals"):
+			for g in c.globals:
+				if globals.find(g) == -1:
+					globals.push_back(g)
+	for g in globals:
+		code += g
 	var shader_code = ""
 	shader_code += red_code.defs
 	shader_code += green_code.defs
@@ -71,15 +70,17 @@ func setup_material(shader_material, textures, shader_code):
 	shader_material.shader.code = shader_code
 
 func render_shader(shader, textures, render_size):
-	while rendering:
-		yield(self, "done")
-	rendering = true
 	if debug_path != null and debug_path != "":
+		var file_name = debug_path+str(debug_file_index)+".shader"
 		var f = File.new()
 		f.open(debug_path+str(debug_file_index)+".shader", File.WRITE)
 		f.store_string(shader)
 		f.close()
 		debug_file_index += 1
+		print("shader saved as "+file_name)
+	while rendering:
+		yield(self, "done")
+	rendering = true
 	size = Vector2(render_size, render_size)
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size

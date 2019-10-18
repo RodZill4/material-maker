@@ -208,13 +208,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			rv.defs += subst_output.string
 			for t in subst_output.textures.keys():
 				rv.textures[t] = subst_output.textures[t]
-		for p in shader_model.parameters:
-			if p.type == "gradient":
-				var g = parameters[p.name]
-				if !(g is MMGradient):
-					g = MMGradient.new()
-					g.deserialize(parameters[p.name])
-				rv.defs += g.get_shader(genname+"__"+p.name+"_gradient_fct")
+			for p in shader_model.parameters:
+				if p.type == "gradient":
+					var g = parameters[p.name]
+					if !(g is MMGradient):
+						g = MMGradient.new()
+						g.deserialize(parameters[p.name])
+					rv.defs += g.get_shader(genname+"__"+p.name+"_gradient_fct")
 		# Add inline code
 		if shader_model.has("code"):
 			var variant_index = context.get_variant(self, uv)
