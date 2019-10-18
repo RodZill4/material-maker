@@ -2,7 +2,7 @@ tool
 extends GraphNode
 class_name MMGraphNodeGeneric
 
-var generator = null setget set_generator
+var generator : MMGenBase = null setget set_generator
 
 var controls = {}
 var ignore_parameter_change = ""
@@ -152,6 +152,8 @@ func update_node():
 		remove_child(c)
 		c.free()
 	rect_size = Vector2(0, 0)
+	# Show or hide the close button
+	show_close = generator.can_be_deleted()
 	# Rebuild node
 	title = generator.get_type_name()
 	# Inputs

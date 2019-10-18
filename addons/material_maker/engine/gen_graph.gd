@@ -49,7 +49,7 @@ func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 					return OutputPort.new(src_gen, c.from_port)
 	return null
 
-func get_port_targets(gen_name: String, output_index: int) -> InputPort:
+func get_port_targets(gen_name: String, output_index: int) -> Array:
 	var rv = []
 	for c in connections:
 		if c.from == gen_name and c.from_port == output_index:
@@ -83,6 +83,15 @@ func replace_generator(old : MMGenBase, new : MMGenBase):
 	add_child(new)
 
 func connect_children(from, from_port : int, to, to_port : int):
+	# check the new connection does not create a loop
+	var spreadlist = [ InputPort.new(to, to_port) ]
+	while !spreadlist.empty():
+		var input : InputPort = spreadlist.pop_front()
+		for o in input.generator.follow_input(input.input_index):
+			if o.generator == from and o.output_index == from_port:
+				return false
+			for t in o.generator.get_parent().get_port_targets(o.generator.name, o.output_index):
+				spreadlist.push_back(t)
 	# disconnect target
 	while true:
 		var remove = -1
@@ -198,6 +207,6 @@ func create_subgraph(gens):
 	connections = my_new_connections
 	new_graph.connections = new_graph_connections
 	for g in generators:
-		if g is MMGenRemote:
+		if g.get_script() == load("res://addons/material_maker/engine/gen_remote.gd"):
 			g.name = "gen_parameters"
 			break

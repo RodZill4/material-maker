@@ -37,6 +37,9 @@ var parameters = {}
 func _ready():
 	init_parameters()
 
+func can_be_deleted() -> bool:
+	return true
+
 func init_parameters():
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):
@@ -85,6 +88,13 @@ func get_source(input_index : int):
 	
 func get_targets(output_index : int):
 	return get_parent().get_port_targets(name, output_index)
+
+# get the list of outputs that depend on the input whose index is passed as parameter
+func follow_input(input_index : int) -> Array:
+	var rv = []
+	for i in range(get_output_defs().size()):
+		rv.push_back(OutputPort.new(self, i))
+	return rv
 
 func get_input_shader(input_index : int):
 	var source = get_source(input_index)

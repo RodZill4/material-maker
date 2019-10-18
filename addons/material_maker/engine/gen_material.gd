@@ -21,6 +21,9 @@ func _ready():
 		generated_textures[t.texture] = null
 	material = SpatialMaterial.new()
 
+func can_be_deleted() -> bool:
+	return false
+
 func get_type():
 	return "material"
 

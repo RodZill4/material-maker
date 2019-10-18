@@ -31,8 +31,8 @@ static func add_to_gen_graph(gen_graph, generators, connections):
 		if gennames.has(c.from) and gennames.has(c.to):
 			c.from = gennames[c.from]
 			c.to = gennames[c.to]
-			gen_graph.connections.append(c)
-			rv.connections.append(c)
+			if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+				rv.connections.append(c)
 	return rv
 
 static func create_gen(data) -> MMGenBase:
