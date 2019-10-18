@@ -7,6 +7,9 @@ const ENVIRONMENTS = [
 	"experiment", "lobby", "night", "park", "schelde"
 ]
 
+const CAMERA_DISTANCE_MIN = 1.0
+const CAMERA_DISTANCE_MAX = 10.0
+
 onready var objects = $MaterialPreview/Preview3d/Objects
 onready var current_object = objects.get_child(0)
 
@@ -77,9 +80,17 @@ func on_gui_input(event):
 		$Config/Rotate.pressed = false
 		match event.button_index:
 			BUTTON_WHEEL_UP:
-				camera.translation.z *= 1.01 if event.shift else 1.1
+				camera.translation.z = clamp(
+					camera.translation.z / (1.01 if event.shift else 1.1),
+					CAMERA_DISTANCE_MIN,
+					CAMERA_DISTANCE_MAX
+				)
 			BUTTON_WHEEL_DOWN:
-				camera.translation.z /= 1.01 if event.shift else 1.1
+				camera.translation.z = clamp(
+					camera.translation.z * (1.01 if event.shift else 1.1),
+					CAMERA_DISTANCE_MIN,
+					CAMERA_DISTANCE_MAX
+				)
 	elif event is InputEventMouseMotion:
 		var motion = 0.01*event.relative
 		var camera_basis = camera.global_transform.basis
