@@ -333,12 +333,26 @@ func save_user_library():
 	library.save_library("user://library/user.json")
 
 func show_doc():
-	var doc_path = OS.get_executable_path()
-	doc_path = doc_path.replace("\\", "/")
-	doc_path = doc_path.left(doc_path.rfind("/")+1)+"doc/index.html"
+	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
+
+	# In release builds, documentation is expected to be located in
+	# a subdirectory of the program directory
+	var release_doc_path = base_dir.plus_file("doc/index.html")
+
+	# In development, documentation is part of the project files.
+	# We can use a globalized `res://` path here as the project isn't exported.
+	var devel_doc_path = ProjectSettings.globalize_path("res://addons/material_maker/doc/_build/html/index.html")
+
 	var file = File.new()
-	if file.exists(doc_path):
-		OS.shell_open(doc_path)
+	if file.file_exists(release_doc_path):
+		# Open local prebuilt documentation (used in release builds)
+		OS.shell_open(release_doc_path)
+	elif file.file_exists(devel_doc_path):
+		# Open local documentation built from source (used during development)
+		OS.shell_open(devel_doc_path)
+	else:
+		# Open online documentation
+		OS.shell_open("https://rodzill4.github.io/godot-procedural-textures/doc/")
 
 func bug_report():
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
