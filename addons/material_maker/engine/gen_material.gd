@@ -87,6 +87,8 @@ func render_textures(renderer : MMGenRenderer):
 				texture = ImageTexture.new()
 				result.copy_to_texture(texture)
 				result.release()
+				# To work, this must be set after calling `copy_to_texture()`
+				texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
 		elif t.has("ports"):
 			var context : MMGenContext = MMGenContext.new(renderer)
 			var code = []
@@ -109,6 +111,9 @@ func render_textures(renderer : MMGenRenderer):
 			texture = ImageTexture.new()
 			result.copy_to_texture(texture)
 			result.release()
+			# To work, this must be set after calling `copy_to_texture()`
+			texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
+
 		generated_textures[t.texture] = texture
 
 func update_materials(material_list):
