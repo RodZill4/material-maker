@@ -19,6 +19,7 @@ func _ready():
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.command and event.scancode == KEY_F:
 		filter_line_edit.grab_focus()
+		filter_line_edit.select_all()
 
 func get_selected_item_name():
 	var tree_item : TreeItem = tree.get_selected()
