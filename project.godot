@@ -154,7 +154,7 @@ boot_splash/image="res://rodz_labs_logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
-config/release="0.6"
+config/release="0.7a1"
 
 [debug]
 
@@ -168,6 +168,10 @@ gdscript/warnings/unsafe_call_argument=true
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
+
+[editor_plugins]
+
+enabled=PoolStringArray( "material_maker" )
 
 [logging]
 

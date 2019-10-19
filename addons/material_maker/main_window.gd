@@ -47,7 +47,20 @@ var is_mac = false
 func _ready():
 	if OS.get_name() == "OSX":
 		is_mac = true
-
+	
+	# In HTML5 export, copy all examples to the filesystem
+	if OS.get_name() == "HTML5":
+		var dir : Directory = Directory.new()
+		dir.make_dir("/examples")
+		dir.open("res://addons/material_maker/examples/")
+		dir.list_dir_begin(true)
+		while true:
+			var f = dir.get_next()
+			if f == "":
+				break
+			if f.ends_with(".ptex"):
+				dir.copy("res://addons/material_maker/examples/"+f, "/examples/"+f)
+	
 	# Upscale everything if the display requires it (crude hiDPI support).
 	# This prevents UI elements from being too small on hiDPI displays.
 	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
