@@ -5,6 +5,17 @@ class_name MMGenShader
 var shader_model : Dictionary = {}
 var uses_seed = false
 
+var editable = false
+
+func toggle_editable():
+	editable = !editable
+	if editable:
+		model = null
+	return true
+	
+func is_editable():
+	return editable
+
 func get_type():
 	return "shader"
 

@@ -28,7 +28,9 @@ func on_offset_changed():
 func on_parameter_changed(p, v):
 	if ignore_parameter_change == p:
 		return
-	if controls.has(p):
+	if p == "__update_all__":
+		call_deferred("update_node")
+	elif controls.has(p):
 		var o = controls[p]
 		if o is LineEdit:
 			o.text = str(v)
@@ -140,14 +142,33 @@ func create_parameter_control(p : Dictionary):
 		control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
 	return control
 
-func update_node():
-	# Clean node
-	var custom_node_buttons = null
+func save_preview_widget():
 	if preview != null:
 		remove_child(preview)
 	if preview_timer != null:
 		preview_timer.stop()
 		remove_child(preview_timer)
+
+func restore_preview_widget():
+	if preview == null:
+		preview = TextureRect.new()
+		preview.visible = false
+	preview_position = get_child_count()
+	if preview.visible:
+		add_child(preview)
+		update_preview()
+	set_slot(preview_position, false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
+	# Preview timer
+	if preview_timer == null:
+		preview_timer = Timer.new()
+		preview_timer.one_shot = true
+		preview_timer.connect("timeout", self, "do_update_preview")
+	add_child(preview_timer)
+
+func update_node():
+	# Clean node
+	var custom_node_buttons = null
+	save_preview_widget()
 	for c in get_children():
 		remove_child(c)
 		c.free()
@@ -275,23 +296,14 @@ func update_node():
 			var empty_control : Control = Control.new()
 			empty_control.rect_min_size.x = button_width
 			hsizer.add_child(empty_control)
-	# Preview
-	if preview == null:
-		preview = TextureRect.new()
-	preview.visible = false
-	preview_position = get_child_count()
 	# Edit buttons
-	if generator.model == null:
+	if generator.is_editable():
 		var edit_buttons = preload("res://addons/material_maker/nodes/edit_buttons.tscn").instance()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-	# Preview timer
-	if preview_timer == null:
-		preview_timer = Timer.new()
-		preview_timer.one_shot = true
-		preview_timer.connect("timeout", self, "do_update_preview")
-	add_child(preview_timer)
-
+		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
+	# Preview
+	restore_preview_widget()
 
 func edit_generator():
 	if generator.has_method("edit"):
@@ -350,15 +362,18 @@ func do_save_generator(file_name : String):
 		file.store_string(to_json(data))
 		file.close()
 
+func update_preview_buttons(index : int):
+	for i in range(output_count):
+		if i != index:
+			var line = get_child(i)
+			line.get_child(line.get_child_count()-1).pressed = false
+
 func on_preview_button(pressed : bool, index : int):
 	if pressed:
 		preview_index = index
 		var width
 		if preview.visible:
-			for i in range(output_count):
-				if i != index:
-					var line = get_child(i)
-					line.get_child(line.get_child_count()-1).pressed = false
+			update_preview_buttons(index)
 			update_preview()
 		else:
 			var status = update_preview(get_child(0).rect_size.x)

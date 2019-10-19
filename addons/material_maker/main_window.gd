@@ -30,7 +30,7 @@ const MENU = [
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
-	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+F", description="Make selected nodes editable" },
+	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+E", description="Make selected nodes editable" },
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="save_user_library", description="Save user library" },
@@ -308,8 +308,8 @@ func make_selected_nodes_editable():
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		for n in selected_nodes:
-			n.generator.model = null
-			n.update_node()
+			if n.generator.toggle_editable():
+				n.update_node()
 
 func add_to_user_library():
 	var selected_nodes = get_selected_nodes()

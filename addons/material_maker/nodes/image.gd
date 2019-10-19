@@ -1,5 +1,5 @@
 tool
-extends "res://addons/material_maker/node_base.gd"
+extends GraphNode
 
 var generator = null
 

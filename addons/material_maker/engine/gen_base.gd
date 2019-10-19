@@ -40,6 +40,12 @@ func _ready():
 func can_be_deleted() -> bool:
 	return true
 
+func toggle_editable():
+	return false
+	
+func is_editable():
+	return false
+
 func init_parameters():
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):

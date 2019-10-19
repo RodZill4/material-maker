@@ -5,11 +5,25 @@ class_name MMGenGraph
 var label : String = "Graph"
 var connections = []
 
+var editable = false
+
+
 func get_type():
 	return "graph"
 
 func get_type_name():
 	return label
+
+
+func toggle_editable():
+	editable = !editable
+	if editable:
+		model = null
+	return true
+
+func is_editable():
+	return editable
+
 
 func get_parameter_defs():
 	if has_node("gen_parameters"):
