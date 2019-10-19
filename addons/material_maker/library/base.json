@@ -385,7 +385,8 @@
 	},
 	{
 		"tree_item":"Miscellaneous/Buffer",
-		"type":"buffer"
+		"type":"buffer",
+		"icon":"buffer"
 	},
 	{
 		"tree_item":"Miscellaneous/Custom Shader",
@@ -394,7 +395,8 @@
 	},
 	{
 		"tree_item":"Miscellaneous/Switch",
-		"type":"switch"
+		"type":"switch",
+		"icon":"switch"
 	},
 	{
 		"tree_item":"Miscellaneous/Remote",
