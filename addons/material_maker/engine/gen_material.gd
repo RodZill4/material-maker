@@ -132,6 +132,10 @@ func get_generated_texture(slot, file_prefix = null):
 
 func update_spatial_material(m, file_prefix = null):
 	var texture
+
+	# Make the material double-sided for better visiblity in the preview
+	m.params_cull_mode = SpatialMaterial.CULL_DISABLED
+
 	m.albedo_color = parameters.albedo_color
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
 	m.metallic = parameters.metallic
