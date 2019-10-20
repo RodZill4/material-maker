@@ -22,7 +22,7 @@ onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 signal need_update
 signal show_background_preview
 
-func _ready():
+func _ready() -> void:
 	$Config/Model.clear()
 	for o in objects.get_children():
 		var m = o.get_surface_material(0)
@@ -38,26 +38,26 @@ func _ready():
 	_on_Preview_resized()
 	$MaterialPreview/Preview3d/CameraPivot/Camera/RemoteTransform.set_remote_node("../../../../../../../ProjectsPane/BackgroundPreview/Viewport/Camera")
 
-func _on_Environment_item_selected(id):
+func _on_Environment_item_selected(id) -> void:
 	current_environment.visible = false
 	current_environment = environments.get_child(id)
 	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
 	get_node("../../ProjectsPane/BackgroundPreview/Viewport/Camera").set_environment(current_environment.environment)
 	current_environment.visible = true
 
-func _on_Model_item_selected(id):
+func _on_Model_item_selected(id) -> void:
 	current_object.visible = false
 	current_object = objects.get_child(id)
 	current_object.visible = true
 	emit_signal("need_update")
 
-func get_materials():
+func get_materials() -> Array:
 	return [ current_object.get_surface_material(0) ]
 
-func set_2d(tex: Texture):
+func set_2d(tex: Texture) -> void:
 	$Preview2D.material.set_shader_param("tex", tex)
 
-func _on_Preview_resized():
+func _on_Preview_resized() -> void:
 	if preview_maximized:
 		var size = min(rect_size.x, rect_size.y)
 		$Preview2D.rect_position = 0.5*Vector2(rect_size.x-size, rect_size.y-size)
@@ -66,15 +66,15 @@ func _on_Preview_resized():
 		$Preview2D.rect_position = Vector2(0, rect_size.y-64)
 		$Preview2D.rect_size = Vector2(64, 64)
 
-func _on_Preview2D_gui_input(ev : InputEvent):
+func _on_Preview2D_gui_input(ev : InputEvent) -> void:
 	if ev is InputEventMouseButton and ev.button_index == 1 and ev.pressed:
 		preview_maximized = !preview_maximized
 		_on_Preview_resized()
 
-func _on_Background_toggled(button_pressed):
+func _on_Background_toggled(button_pressed) -> void:
 	emit_signal("show_background_preview", button_pressed)
 
-func on_gui_input(event):
+func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		$Config/Rotate.pressed = false
@@ -107,7 +107,7 @@ func on_gui_input(event):
 			elif event.button_mask & BUTTON_MASK_RIGHT:
 				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
-func _on_Rotate_toggled(button_pressed):
+func _on_Rotate_toggled(button_pressed) -> void:
 	if button_pressed:
 		$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	else:

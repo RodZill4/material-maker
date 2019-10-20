@@ -8,7 +8,7 @@ Remote can be used to control parameters from several generators in the same gra
 
 var widgets = null
 
-func set_widgets(w):
+func set_widgets(w) -> void:
 	widgets = w
 	var i = 0
 	for w in widgets:
@@ -17,13 +17,13 @@ func set_widgets(w):
 			parameters[param_name] = 0
 		i += 1
 
-func get_type():
+func get_type() -> String:
 	return "remote"
 
-func get_type_name():
+func get_type_name() -> String:
 	return "Parameters" if name == "gen_parameters" else "Remote"
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	var rv = []
 	var i = 0
 	for w in widgets:
@@ -55,7 +55,7 @@ func get_parameter_defs():
 				print(w.type)
 	return rv
 
-func set_parameter(p, v):
+func set_parameter(p, v) -> void:
 	var parent = get_parent()
 	var param_index = p.trim_prefix("param").to_int()
 	var widget = widgets[param_index]
@@ -79,28 +79,28 @@ func set_parameter(p, v):
 	if name == "gen_parameters":
 		get_parent().parameters[p] = v
 
-func _serialize(data):
+func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "remote"
 	data.widgets = widgets
 	return data
 
-func create_linked_control(label):
+func create_linked_control(label) -> int:
 	var index = widgets.size()
 	widgets.push_back({ label=label, type="linked_control", linked_widgets=[] })
 	return index
 
-func create_config_control(label):
+func create_config_control(label) -> int:
 	var index = widgets.size()
 	widgets.push_back({ label=label, type="config_control", linked_widgets=[], configurations={} })
 	return index
 
-func set_label(index, new_label):
+func set_label(index, new_label) -> void:
 	widgets[index].label = new_label
 
-func can_link_parameter(index, generator, param):
+func can_link_parameter(index, generator, param) -> bool:
 	return true
-	
-func link_parameter(index, generator, param):
+
+func link_parameter(index, generator, param) -> void:
 	if !can_link_parameter(index, generator, param):
 		return
 	var widget = widgets[index]
@@ -113,13 +113,13 @@ func link_parameter(index, generator, param):
 				parameters["param"+str(index)] = 0
 	emit_signal("parameter_changed", "", null)
 
-func remove_parameter(index):
+func remove_parameter(index) -> void:
 	for i in range(index, widgets.size()-2):
 		parameters["param"+str(i)] = parameters["param"+str(i+1)]
 	widgets.remove(index)
 	emit_signal("parameter_changed", "", null)
 
-func add_configuration(index, config_name):
+func add_configuration(index, config_name) -> void:
 	var widget = widgets[index]
 	if widget.type == "config_control":
 		widget.configurations[config_name] = []
@@ -128,7 +128,7 @@ func add_configuration(index, config_name):
 		parameters["param"+str(index)] =configurations.find(config_name)
 		update_configuration(index, config_name)
 
-func update_configuration(index, config_name):
+func update_configuration(index, config_name) -> void:
 	var widget = widgets[index]
 	if widget.type == "config_control":
 		var c = []
@@ -141,7 +141,7 @@ func update_configuration(index, config_name):
 		widget.configurations[config_name] = c
 		emit_signal("parameter_changed", "", null)
 
-func remove_configuration(index, config_name):
+func remove_configuration(index, config_name) -> void:
 	var widget = widgets[index]
 	if widget.type == "config_control":
 		widget.configurations.erase(config_name)

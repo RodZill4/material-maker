@@ -15,7 +15,7 @@ const TEXTURE_LIST = [
 	{ port=6, texture="depth_texture" }
 ]
 
-func _ready():
+func _ready() -> void:
 	texture_list = TEXTURE_LIST
 	for t in texture_list:
 		generated_textures[t.texture] = null
@@ -24,13 +24,13 @@ func _ready():
 func can_be_deleted() -> bool:
 	return false
 
-func get_type():
+func get_type() -> String:
 	return "material"
 
-func get_type_name():
+func get_type_name() -> String:
 	return "Material"
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	return [
 		{ name="albedo_color", label="Albedo", type="color", default={ r=1.0, g=1.0, b=1.0, a=1.0} },
 		{ name="metallic", label="Metallic", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
@@ -42,7 +42,7 @@ func get_parameter_defs():
 		{ name="size", label="Size", type="size", first=7, last=11, default=9 }
 	]
 
-func get_input_defs():
+func get_input_defs() -> Array:
 	return [
 		{ name="albedo_texture", label="", type="rgb" },
 		{ name="metallic_texture", label="", type="f" },
@@ -53,7 +53,7 @@ func get_input_defs():
 		{ name="depth_texture", label="", type="f" }
 	]
 
-func get_image_size():
+func get_image_size() -> int:
 	var rv : int
 	if parameters.has("size"):
 		rv = int(pow(2, parameters.size+7))
@@ -61,21 +61,21 @@ func get_image_size():
 		rv = 512
 	return rv
 
-func update_preview():
+func update_preview() -> void:
 	var graph_edit = self
 	while graph_edit is MMGenBase:
 		graph_edit = graph_edit.get_parent()
 	if graph_edit.has_method("send_changed_signal"):
 		graph_edit.send_changed_signal()
 
-func set_parameter(p, v):
+func set_parameter(p, v) -> void:
 	.set_parameter(p, v)
 	update_preview()
 
-func source_changed(input_index : int):
+func source_changed(input_index : int) -> void:
 	update_preview()
 
-func render_textures(renderer : MMGenRenderer):
+func render_textures(renderer : MMGenRenderer) -> void:
 	for t in texture_list:
 		var texture = null
 		if t.has("port"):
@@ -116,21 +116,21 @@ func render_textures(renderer : MMGenRenderer):
 
 		generated_textures[t.texture] = texture
 
-func update_materials(material_list):
+func update_materials(material_list) -> void:
 	for m in material_list:
 		update_spatial_material(m)
 
-func get_generated_texture(slot, file_prefix = null):
+func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 	if file_prefix != null:
 		var file_name = "%s_%s.png" % [ file_prefix, slot ]
 		if File.new().file_exists(file_name):
-			return load(file_name)
+			return load(file_name) as ImageTexture
 		else:
 			return null
 	else:
 		return generated_textures[slot]
 
-func update_spatial_material(m, file_prefix = null):
+func update_spatial_material(m, file_prefix = null) -> void:
 	var texture
 	m.albedo_color = parameters.albedo_color
 	m.albedo_texture = get_generated_texture("albedo", file_prefix)
@@ -138,7 +138,7 @@ func update_spatial_material(m, file_prefix = null):
 	m.roughness = parameters.roughness
 	# Metallic
 	texture = get_generated_texture("orm", file_prefix)
-	m.metallic_texture = texture 
+	m.metallic_texture = texture
 	m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
 	# Roughness
 	m.roughness_texture = texture
@@ -176,7 +176,7 @@ func update_spatial_material(m, file_prefix = null):
 	else:
 		m.depth_enabled = false
 
-func export_textures(prefix, editor_interface = null):
+func export_textures(prefix, editor_interface = null) -> SpatialMaterial:
 	for t in texture_list:
 		var texture = generated_textures[t.texture]
 		if texture != null:
@@ -192,5 +192,7 @@ func export_textures(prefix, editor_interface = null):
 		resource_filesystem.scan()
 		return new_material
 
-func _serialize(data):
+	return null
+
+func _serialize(data: Dictionary) -> Dictionary:
 	return data

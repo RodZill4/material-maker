@@ -8,24 +8,24 @@ var connections = []
 var editable = false
 
 
-func get_type():
+func get_type() -> String:
 	return "graph"
 
-func get_type_name():
+func get_type_name() -> String:
 	return label
 
 
-func toggle_editable():
+func toggle_editable() -> bool:
 	editable = !editable
 	if editable:
 		model = null
 	return true
 
-func is_editable():
+func is_editable() -> bool:
 	return editable
 
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	if has_node("gen_parameters"):
 		return get_node("gen_parameters").get_parameter_defs()
 	return []
@@ -34,12 +34,12 @@ func set_parameter(p, v):
 	if has_node("gen_parameters"):
 		return get_node("gen_parameters").set_parameter(p, v)
 
-func get_input_defs():
+func get_input_defs() -> Array:
 	if has_node("gen_inputs"):
 		return get_node("gen_inputs").get_output_defs()
 	return []
 
-func get_output_defs():
+func get_output_defs() -> Array:
 	if has_node("gen_outputs"):
 		return get_node("gen_outputs").get_input_defs()
 	return []
@@ -72,7 +72,7 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 				rv.push_back(InputPort.new(tgt_gen, c.to_port))
 	return rv
 
-func add_generator(generator : MMGenBase):
+func add_generator(generator : MMGenBase) -> void:
 	var name = generator.name
 	var index = 1
 	while has_node(name):
@@ -81,22 +81,22 @@ func add_generator(generator : MMGenBase):
 	generator.name = name
 	add_child(generator)
 
-func remove_generator(generator : MMGenBase):
+func remove_generator(generator : MMGenBase) -> void:
 	var new_connections = []
 	for c in connections:
 		if c.from != generator.name and c.to != generator.name:
 			new_connections.append(c)
 	connections = new_connections
 	generator.queue_free()
-	
-func replace_generator(old : MMGenBase, new : MMGenBase):
+
+func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	new.name = old.name
 	new.position = old.position
 	remove_child(old)
 	old.free()
 	add_child(new)
 
-func connect_children(from, from_port : int, to, to_port : int):
+func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	# check the new connection does not create a loop
 	var spreadlist = [ InputPort.new(to, to_port) ]
 	while !spreadlist.empty():
@@ -120,7 +120,7 @@ func connect_children(from, from_port : int, to, to_port : int):
 	connections.append({from=from.name, from_port=from_port, to=to.name, to_port=to_port})
 	return true
 
-func disconnect_children(from, from_port : int, to, to_port : int):
+func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
 	while true:
 		var remove = -1
 		for i in connections.size():
@@ -132,7 +132,7 @@ func disconnect_children(from, from_port : int, to, to_port : int):
 		connections.remove(remove)
 	return true
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
@@ -141,7 +141,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 		return rv
 	return { globals=[], defs="", code="", textures={} }
 
-func _serialize(data):
+func _serialize(data: Dictionary) -> Dictionary:
 	data.label = label
 	data.nodes = []
 	for c in get_children():
@@ -149,10 +149,10 @@ func _serialize(data):
 	data.connections = connections
 	return data
 
-func edit(node):
+func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
 
-func create_subgraph(gens):
+func create_subgraph(gens) -> void:
 	# Remove material, gen_inputs and gen_outputs nodes
 	var generators = []
 	var center = Vector2(0, 0)

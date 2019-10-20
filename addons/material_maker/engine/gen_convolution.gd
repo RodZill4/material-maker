@@ -4,27 +4,27 @@ class_name MMGenConvolution
 
 var convolution_params : Dictionary = {}
 
-func get_type():
+func get_type() -> String:
 	return "shader"
 
-func get_type_name():
-	if convolution_params.has("name"): 
+func get_type_name() -> String:
+	if convolution_params.has("name"):
 		return convolution_params.name
 	return .get_type_name()
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	return [ { name="size", type="size", first=4, last=11, default=4 } ]
 
-func get_input_defs():
+func get_input_defs() -> Array:
 	return [ { name="in", type=convolution_params.input_type } ]
 
-func get_output_defs():
+func get_output_defs() -> Array:
 	return [ { type=convolution_params.output_type } ]
 
-func set_convolution_params(data: Dictionary):
+func set_convolution_params(data: Dictionary) -> void:
 	convolution_params = data
-	
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var epsilon = 1.0/pow(2, 4+parameters.size)
 	var types = { "rgba": { type="vec4", init="vec4(0.0)" }, "rgb": { type="vec3", init="vec3(0.0)" }, "f": { type="float", init="0.0" } }
@@ -58,6 +58,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 		rv.rgb = "%s_%d" % [ genname, variant_index ]
 	return rv
 
-func _serialize(data):
+func _serialize(data: Dictionary) -> Dictionary:
 	data.convolution_params = convolution_params
 	return data

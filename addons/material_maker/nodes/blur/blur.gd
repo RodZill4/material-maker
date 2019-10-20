@@ -12,7 +12,7 @@ const DIRECTIONS = [
 	{ name="Y", mask=DIRECTION_V }
 ]
 
-func _ready():
+func _ready() -> void:
 	# init size widget
 	$HBoxContainer1/size.clear()
 	for i in range(7):
@@ -26,7 +26,7 @@ func _ready():
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction, $HBoxContainer3/sigma ])
 	saved_texture = ImageTexture.new()
 
-func get_gaussian_blur_shader(horizontal):
+func get_gaussian_blur_shader(horizontal) -> String:
 	var convolution = { x=0, y=0, kernel=[], epsilon=1.0/pow(2, 5+parameters.size) }
 	var kernel_size = 50
 	if horizontal:
@@ -43,27 +43,27 @@ func get_gaussian_blur_shader(horizontal):
 		convolution.kernel[x+kernel_size] /= sum
 	return get_convolution_shader(convolution)
 
-func _rerender():
+func _rerender() -> void:
 	if DIRECTIONS[parameters.direction].mask & DIRECTION_H != 0:
 		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), saved_texture, self, "pass_1", [])
 	else:
 		get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), saved_texture, self, "pass_2", [])
 
-func pass_1():
+func pass_1() -> void:
 	if DIRECTIONS[parameters.direction].mask & DIRECTION_V != 0:
 		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "pass_2", [])
 	else:
 		get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(true), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "rerender_targets", [])
 
-func pass_2():
+func pass_2() -> void:
 	get_parent().renderer.precalculate_shader(get_gaussian_blur_shader(false), { input=saved_texture }, int(pow(2, 5+parameters.size)), saved_texture, self, "rerender_targets", [])
 
-func get_textures():
+func get_textures() -> Dictionary:
 	var list = {}
 	list[name] = saved_texture
 	return list
 
-func _get_shader_code(uv, slot = 0):
+func _get_shader_code(uv, slot = 0) -> Dictionary:
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

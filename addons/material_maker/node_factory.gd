@@ -3,10 +3,7 @@ extends Node
 
 var includes
 
-func _ready():
-	pass
-
-func create_node(type):
+func create_node(type) -> Node:
 	var node = null
 	var file_name = "res://addons/material_maker/nodes/"+type+".tscn"
 	if ResourceLoader.exists(file_name):

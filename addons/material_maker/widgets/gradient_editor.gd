@@ -4,14 +4,14 @@ class_name MMGradientEditor
 
 class GradientCursor:
 	extends ColorRect
-	
+
 	const WIDTH = 10
-	
-	func _ready():
+
+	func _ready() -> void:
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
-	
-	func _gui_input(ev):
+
+	func _gui_input(ev) -> void:
 		if ev is InputEventMouseButton:
 			if ev.button_index == BUTTON_LEFT && ev.doubleclick:
 				get_parent().select_color(self, ev.global_position)
@@ -24,20 +24,18 @@ class GradientCursor:
 			rect_position.x += ev.relative.x
 			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
 			get_parent().update_value()
-	
-	func get_position():
+
+	func get_position() -> Vector2:
 		return rect_position.x / (get_parent().rect_size.x - WIDTH)
-	
-	func set_color(c):
+
+	func set_color(c) -> void:
 		color = c
 		get_parent().update_value()
-	
-	static func sort(a, b):
-		if a.get_position() < b.get_position():
-			return true
-		return false
-	
-	func _draw():
+
+	static func sort(a, b) -> bool:
+		return a.get_position() < b.get_position()
+
+	func _draw() -> void:
 		var c = color
 		c.a = 1.0
 		draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), c, false)
@@ -47,11 +45,11 @@ export var embedded : bool = true
 
 signal updated(value)
 
-func _ready():
+func _ready() -> void:
 	$Gradient.material = $Gradient.material.duplicate(true)
 	set_value(MMGradient.new())
 
-func set_value(v):
+func set_value(v) -> void:
 	value = v
 	for c in get_children():
 		if c is GradientCursor:
@@ -61,20 +59,20 @@ func set_value(v):
 		add_cursor(p.v*(rect_size.x-GradientCursor.WIDTH), p.c)
 	update_shader()
 
-func update_value():
+func update_value() -> void:
 	value.clear()
 	for p in get_children():
 		if p != $Gradient && p != $Background:
 			value.add_point(p.rect_position.x/(rect_size.x-GradientCursor.WIDTH), p.color)
 	update_shader()
 
-func add_cursor(x, color):
+func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
 	add_child(cursor)
 	cursor.rect_position.x = x
 	cursor.color = color
 
-func _gui_input(ev):
+func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
 		if ev.position.y > 15:
 			var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
@@ -93,29 +91,29 @@ func _gui_input(ev):
 
 var active_cursor
 
-func select_color(cursor, position):
+func select_color(cursor, position) -> void:
 	active_cursor = cursor
 	$Gradient/Popup/ColorPicker.color = cursor.color
 	$Gradient/Popup/ColorPicker.connect("color_changed", cursor, "set_color")
 	$Gradient/Popup.rect_position = position
 	$Gradient/Popup.popup()
 
-func _on_Popup_popup_hide():
+func _on_Popup_popup_hide() -> void:
 	$Gradient/Popup/ColorPicker.disconnect("color_changed", active_cursor, "set_color")
 
 # Calculating a color from the gradient and generating the shader
 
-func get_sorted_cursors():
+func get_sorted_cursors() -> Array:
 	var array = get_children()
 	array.erase($Gradient)
 	array.erase($Background)
 	array.sort_custom(GradientCursor, "sort")
 	return array
 
-func get_gradient_color(x):
+func get_gradient_color(x) -> Color:
 	return value.get_color(x / (rect_size.x - GradientCursor.WIDTH))
 
-func update_shader():
+func update_shader() -> void:
 	var shader
 	shader  = "shader_type canvas_item;\n"
 	shader += value.get_shader("gradient")

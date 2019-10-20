@@ -44,10 +44,10 @@ signal quit
 
 var is_mac = false
 
-func _ready():
+func _ready() -> void:
 	if OS.get_name() == "OSX":
 		is_mac = true
-	
+
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
 		print("Copying samples")
@@ -63,6 +63,7 @@ func _ready():
 				print(f)
 				dir.copy("res://addons/material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
+
 	# Upscale everything if the display requires it (crude hiDPI support).
 	# This prevents UI elements from being too small on hiDPI displays.
 	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
@@ -87,7 +88,7 @@ func get_current_graph_edit() -> MMGraphEdit:
 		return graph_edit
 	return null
 
-func create_menu(menu, menu_name):
+func create_menu(menu, menu_name) -> PopupMenu:
 	menu.clear()
 	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
 	for i in MENU.size():
@@ -121,23 +122,23 @@ func create_menu(menu, menu_name):
 			menu.add_separator()
 	return menu
 
-func create_menu_load_recent(menu):
+func create_menu_load_recent(menu) -> void:
 	menu.clear()
 	for i in recent_files.size():
 		menu.add_item(recent_files[i], i)
 	if !menu.is_connected("id_pressed", self, "_on_LoadRecent_id_pressed"):
 		menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
-func _on_LoadRecent_id_pressed(id):
+func _on_LoadRecent_id_pressed(id) -> void:
 	do_load_material(recent_files[id])
 
-func load_recents():
+func load_recents() -> void:
 	var f = File.new()
 	if f.open("user://recent_files.bin", File.READ) == OK:
 		recent_files = parse_json(f.get_as_text())
 		f.close()
 
-func add_recent(path):
+func add_recent(path) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
@@ -150,7 +151,7 @@ func add_recent(path):
 	f.store_string(to_json(recent_files))
 	f.close()
 
-func create_menu_create(menu):
+func create_menu_create(menu) -> void:
 	var gens = MMGenLoader.get_generator_list()
 	menu.clear()
 	for i in gens.size():
@@ -158,13 +159,13 @@ func create_menu_create(menu):
 	if !menu.is_connected("id_pressed", self, "_on_Create_id_pressed"):
 		menu.connect("id_pressed", self, "_on_Create_id_pressed")
 
-func _on_Create_id_pressed(id):
+func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var gens = MMGenLoader.get_generator_list()
 		graph_edit.create_gen_from_type(gens[id])
 
-func menu_about_to_show(name, menu):
+func menu_about_to_show(name, menu) -> void:
 	for i in MENU.size():
 		if MENU[i].menu != name:
 			continue
@@ -176,21 +177,21 @@ func menu_about_to_show(name, menu):
 				var is_disabled = call(command_name)
 				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
 
-func new_pane():
+func new_pane() -> GraphEdit:
 	var graph_edit = preload("res://addons/material_maker/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
 	graph_edit.renderer = $Renderer
 	graph_edit.editor_interface = editor_interface
 	projects.add_child(graph_edit)
 	projects.current_tab = graph_edit.get_index()
-	return graph_edit 
+	return graph_edit
 
-func new_material():
+func new_material() -> void:
 	var graph_edit = new_pane()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
 
-func load_material():
+func load_material() -> void:
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -200,11 +201,11 @@ func load_material():
 	dialog.connect("files_selected", self, "do_load_materials")
 	dialog.popup_centered()
 
-func do_load_materials(filenames):
+func do_load_materials(filenames) -> void:
 	for f in filenames:
 		do_load_material(f)
 
-func do_load_material(filename):
+func do_load_material(filename) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -219,7 +220,7 @@ func do_load_material(filename):
 	graph_edit.load_file(filename)
 	add_recent(filename)
 
-func save_material():
+func save_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
@@ -227,7 +228,7 @@ func save_material():
 		else:
 			save_material_as()
 
-func save_material_as():
+func save_material_as() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var dialog = FileDialog.new()
@@ -239,81 +240,79 @@ func save_material_as():
 		dialog.connect("file_selected", graph_edit, "save_file")
 		dialog.popup_centered()
 
-func close_material():
+func close_material() -> void:
 	projects.close_tab()
 
-func export_material():
+func export_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null :
 		graph_edit.export_textures()
 
-func export_material_is_disabled():
+func export_material_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null or graph_edit.save_path == null:
-		return true
-	return false
+	return graph_edit == null or graph_edit.save_path == null
 
-func quit():
+func quit() -> void:
 	if Engine.editor_hint:
 		emit_signal("quit")
 	else:
 		get_tree().quit()
 
-func edit_cut():
+func edit_cut() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.cut()
 
-func edit_cut_is_disabled():
+func edit_cut_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	return graph_edit == null or !graph_edit.can_copy()
 
-func edit_copy():
+func edit_copy() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.copy()
 
-func edit_copy_is_disabled():
+func edit_copy_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
-func edit_paste():
+func edit_paste() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.paste()
 
-func edit_paste_is_disabled():
+func edit_paste_is_disabled() -> bool:
 	var data = parse_json(OS.clipboard)
 	return data == null
-	
-func view_center():
+
+func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.center_view()
-	
-func view_reset_zoom():
+
+func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
-	
 
-func get_selected_nodes():
+
+func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		return graph_edit.get_selected_nodes()
 	else:
 		return []
 
-func create_subgraph():
+func create_subgraph() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.create_subgraph()
 
-func make_selected_nodes_editable():
+func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		for n in selected_nodes:
 			if n.generator.toggle_editable():
 				n.update_node()
 
-func add_to_user_library():
+func add_to_user_library() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
@@ -323,7 +322,7 @@ func add_to_user_library():
 		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
 		dialog.popup_centered()
 
-func do_add_to_user_library(name, nodes):
+func do_add_to_user_library(name, nodes) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
 	if nodes.size() == 1:
@@ -343,11 +342,11 @@ func do_add_to_user_library(name, nodes):
 	result.release()
 	library.add_item(data, name, library.get_preview_texture(data))
 
-func save_user_library():
+func save_user_library() -> void:
 	print("Saving user library")
 	library.save_library("user://library/user.json")
 
-func show_doc():
+func show_doc() -> void:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
 
 	# In release builds, documentation is expected to be located in
@@ -369,15 +368,15 @@ func show_doc():
 		# Open online documentation
 		OS.shell_open("https://rodzill4.github.io/godot-procedural-textures/doc/")
 
-func bug_report():
+func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
 
-func about():
+func about() -> void:
 	var about_box = preload("res://addons/material_maker/widgets/about/about.tscn").instance()
 	add_child(about_box)
 	about_box.popup_centered()
-	
-func _on_PopupMenu_id_pressed(id):
+
+func _on_PopupMenu_id_pressed(id) -> void:
 	var node_type = null
 	if MENU[id].has("command"):
 		var command = MENU[id].command
@@ -386,11 +385,11 @@ func _on_PopupMenu_id_pressed(id):
 
 # Preview
 
-func update_preview():
+func update_preview() -> void:
 	update_preview_2d()
 	update_preview_3d()
 
-func update_preview_2d(node = null):
+func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
@@ -408,7 +407,7 @@ func update_preview_2d(node = null):
 			result.release()
 			preview.set_2d(tex)
 
-func update_preview_3d():
+func update_preview_3d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
@@ -417,7 +416,7 @@ func update_preview_3d():
 			status = yield(status, "completed")
 		gen_material.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
 
-func _on_Projects_tab_changed(tab):
+func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
 		if new_tab != null:
@@ -429,7 +428,7 @@ func _on_Projects_tab_changed(tab):
 		current_tab = new_tab
 		update_preview()
 
-func _on_Preview_show_background_preview(v):
+func _on_Preview_show_background_preview(v) -> void:
 	var pv = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/MaterialPreview
 	var bgpv = $VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport
 	bgpv.world = pv.find_world()

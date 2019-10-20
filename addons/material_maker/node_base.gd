@@ -5,17 +5,17 @@ extends GraphNode
 class OutPort:
 	var node = null
 	var port = null
-	
-	func get_shader_code(uv):
+
+	func get_shader_code(uv) -> String:
 		return node.get_shader_code(uv, port)
 
-	func generate_shader():
+	func generate_shader() -> String:
 		return node.generate_shader(port)
 
-	func get_globals():
+	func get_globals() -> String:
 		return node.get_globals()
 
-	func get_textures():
+	func get_textures() -> Dictionary:
 		return node.get_textures()
 
 var generated = false
@@ -113,7 +113,7 @@ func get_source(index = 0):
 				return out_port
 	return null
 
-func get_source_f(source):
+func get_source_f(source) -> String:
 	var rv
 	if source.has("f"):
 		rv = source.f
@@ -123,7 +123,7 @@ func get_source_f(source):
 		rv = "***error***"
 	return rv
 
-func get_source_rgb(source):
+func get_source_rgb(source) -> String:
 	var rv
 	if source.has("rgb") or source.has("rgba"):
 		rv = source.rgb
@@ -133,7 +133,7 @@ func get_source_rgb(source):
 		rv = "***error***"
 	return rv
 
-func get_source_rgba(source):
+func get_source_rgba(source) -> String:
 	var rv
 	if source.has("rgba"):
 		rv = source.rgba
@@ -145,14 +145,14 @@ func get_source_rgba(source):
 		rv = "***error***"
 	return rv
 
-func reset():
+func reset() -> void:
 	generated = false
 	generated_variants = []
 
-func _get_shader_code(uv, slot = 0):
-	pass
+func _get_shader_code(uv, slot = 0) -> Dictionary:
+	return {}
 
-func get_shader_code(uv, slot = 0):
+func get_shader_code(uv, slot = 0) -> String:
 	var rv
 	if slot == 0:
 		rv = _get_shader_code(uv)
@@ -174,12 +174,12 @@ func get_shader_code(uv, slot = 0):
 		rv.rgba = "vec4("+rv.rgb+", 1.0)"
 	return rv
 
-func get_shader_code_with_globals(uv, slot = 0):
+func get_shader_code_with_globals(uv, slot = 0) -> String:
 	var code = get_shader_code(uv, slot)
 	code.globals = get_globals()
 	return code
 
-func get_globals():
+func get_globals() -> Array:
 	var list = []
 	for i in range(get_connection_input_count()):
 		var source = get_source(i)
@@ -189,8 +189,8 @@ func get_globals():
 				if list.find(g) == -1:
 					list.append(g)
 	return list
-	
-func get_textures():
+
+func get_textures() -> Dictionary:
 	var list = {}
 	for i in range(get_connection_input_count()):
 		var source = get_source(i)
@@ -204,7 +204,7 @@ func serialize_element(e):
 	if typeof(e) == TYPE_COLOR:
 		return { type= "Color", r=e.r, g=e.g, b=e.b, a=e.a }
 	return e
-	
+
 func deserialize_element(e):
 	if typeof(e) == TYPE_DICTIONARY:
 		if e.has("type") and e.type == "Color":
@@ -215,7 +215,7 @@ func deserialize_element(e):
 		return gradient
 	return e
 
-func generate_shader(slot = 0):
+func generate_shader(slot = 0) -> String:
 	# Reset all nodes
 	for c in get_parent().get_children():
 		if c is GraphNode:
@@ -247,19 +247,19 @@ func deserialize(data):
 
 # Render targets again for multipass filters
 
-func rerender_targets():
+func rerender_targets() -> void:
 	for c in get_parent().get_connection_list():
 		if c.from == name:
 			var node = get_parent().get_node(c.to)
 			if node != null and node is GraphNode:
 				node._rerender()
 
-func _rerender():
+func _rerender() -> void:
 	rerender_targets()
 
 # Generic code for convolution nodes
 
-func get_convolution_shader(convolution):
+func get_convolution_shader(convolution) -> String:
 	var shader_code
 	shader_code  = "shader_type canvas_item;\n"
 	shader_code += "uniform sampler2D input_tex;\n"
@@ -288,9 +288,9 @@ func get_convolution_shader(convolution):
 		shader_code += "color += vec3(%.9f, %.9f, %.9f);\n" % [ convolution.translate.x, convolution.translate.y, convolution.translate.z ]
 	shader_code += "COLOR = vec4(color, 1.0);\n"
 	shader_code += "}\n"
-	return shader_code;
+	return shader_code
 
-func get_shader_code_convolution(src, convolution, uv):
+func get_shader_code_convolution(src, convolution, uv) -> String:
 	var rv = { defs="", code="" }
 	var variant_index = generated_variants.find(uv)
 	var need_defs = false

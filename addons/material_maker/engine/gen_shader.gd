@@ -7,30 +7,30 @@ var uses_seed = false
 
 var editable = false
 
-func toggle_editable():
+func toggle_editable() -> bool:
 	editable = !editable
 	if editable:
 		model = null
 	return true
-	
-func is_editable():
+
+func is_editable() -> bool:
 	return editable
 
-func get_type():
+func get_type() -> String:
 	return "shader"
 
-func get_type_name():
-	if shader_model.has("name"): 
+func get_type_name() -> String:
+	if shader_model.has("name"):
 		return shader_model.name
 	return .get_type_name()
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	if shader_model == null or !shader_model.has("parameters"):
 		return []
 	else:
 		return shader_model.parameters
 
-func get_input_defs():
+func get_input_defs() -> Array:
 	if shader_model == null or !shader_model.has("inputs"):
 		return []
 	else:
@@ -55,12 +55,12 @@ func set_shader_model(data: Dictionary):
 			else:
 				shader_model.outputs[i].type = "f"
 
-func set_position(p):
+func set_position(p) -> void:
 	.set_position(p)
 	if uses_seed:
 		source_changed(0)
 
-func get_seed():
+func get_seed() -> int:
 	var s = ((int(position.x) * 0x1f1f1f1f) ^ int(position.y)) % 65536
 	return s
 
@@ -81,7 +81,7 @@ func find_keyword_call(string, keyword):
 			parenthesis_level -= 1
 	return ""
 
-func replace_input(string, context, input, type, src, default):
+func replace_input(string, context, input, type, src, default) -> Dictionary:
 	var required_globals = []
 	var required_defs = ""
 	var required_code = ""
@@ -117,10 +117,10 @@ func replace_input(string, context, input, type, src, default):
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
 
-func is_word_letter(l):
+func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
 
-func replace_variable(string, variable, value):
+func replace_variable(string, variable, value) -> String:
 	string = string.replace("$(%s)" % variable, value)
 	var keyword_size = variable.length()+1
 	var new_string = ""
@@ -138,7 +138,7 @@ func replace_variable(string, variable, value):
 		string = string.right(keyword_size)
 	return new_string
 
-func subst(string, context, uv = ""):
+func subst(string, context, uv = "") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var required_globals = []
 	var required_defs = ""
@@ -205,7 +205,7 @@ func subst(string, context, uv = ""):
 			cont = changed and new_pass_required
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	uses_seed = false
 	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
@@ -271,11 +271,11 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			rv.globals.push_back(shader_model.global)
 	return rv
 
-func _serialize(data):
+func _serialize(data: Dictionary) -> Dictionary:
 	data.shader_model = shader_model
 	return data
 
-func edit(node):
+func edit(node) -> void:
 	if shader_model != null:
 		var edit_window = load("res://addons/material_maker/widgets/node_editor/node_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)

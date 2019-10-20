@@ -14,18 +14,18 @@ var preview_position : int
 var preview_size : int
 var preview_timer : Timer = null
 
-func set_generator(g):
+func set_generator(g) -> void:
 	generator = g
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	call_deferred("update_node")
 
-func on_close_request():
+func on_close_request() -> void:
 	generator.get_parent().remove_generator(generator)
 
-func on_offset_changed():
+func on_offset_changed() -> void:
 	generator.set_position(offset)
 
-func on_parameter_changed(p, v):
+func on_parameter_changed(p, v) -> void:
 	if ignore_parameter_change == p:
 		return
 	if p == "__update_all__":
@@ -52,7 +52,7 @@ func on_parameter_changed(p, v):
 			print("unsupported widget "+str(o))
 	update_shaders()
 
-func initialize_properties():
+func initialize_properties() -> void:
 	var parameter_names = []
 	for p in generator.get_parameter_defs():
 		parameter_names.push_back(p.name)
@@ -79,35 +79,35 @@ func initialize_properties():
 		else:
 			print("unsupported widget "+str(o))
 
-func update_shaders():
+func update_shaders() -> void:
 	get_parent().send_changed_signal()
 	update_preview()
 
-func _on_text_changed(new_text, variable):
+func _on_text_changed(new_text, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, float(new_text))
 	ignore_parameter_change = ""
 	update_shaders()
 
-func _on_value_changed(new_value, variable):
+func _on_value_changed(new_value, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 	update_shaders()
 
-func _on_color_changed(new_color, variable):
+func _on_color_changed(new_color, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""
 	update_shaders()
 
-func _on_gradient_changed(new_gradient, variable):
+func _on_gradient_changed(new_gradient, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
 	ignore_parameter_change = ""
 	update_shaders()
 
-func create_parameter_control(p : Dictionary):
+func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
 	if p.type == "float":
 		if p.has("widget") and p.widget == "spinbox":
@@ -142,14 +142,14 @@ func create_parameter_control(p : Dictionary):
 		control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
 	return control
 
-func save_preview_widget():
+func save_preview_widget() -> void:
 	if preview != null:
 		remove_child(preview)
 	if preview_timer != null:
 		preview_timer.stop()
 		remove_child(preview_timer)
 
-func restore_preview_widget():
+func restore_preview_widget() -> void:
 	if preview == null:
 		preview = TextureRect.new()
 		preview.visible = false
@@ -165,7 +165,7 @@ func restore_preview_widget():
 		preview_timer.connect("timeout", self, "do_update_preview")
 	add_child(preview_timer)
 
-func update_node():
+func update_node() -> void:
 	# Clean node
 	var custom_node_buttons = null
 	save_preview_widget()
@@ -203,7 +203,7 @@ func update_node():
 			var control : Control = Control.new()
 			control.rect_min_size.y = 16
 			hsizer.add_child(control)
-			
+
 		add_child(hsizer)
 	var input_names_width : int = 0
 	for c in get_children():
@@ -305,16 +305,16 @@ func update_node():
 	# Preview
 	restore_preview_widget()
 
-func edit_generator():
+func edit_generator() -> void:
 	if generator.has_method("edit"):
 		generator.edit(self)
 
-func update_generator(shader_model):
+func update_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
 	update_node()
 	update_shaders()
 
-func load_generator():
+func load_generator() -> void:
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -324,7 +324,7 @@ func load_generator():
 	dialog.connect("file_selected", self, "do_load_generator")
 	dialog.popup_centered()
 
-func do_load_generator(file_name : String):
+func do_load_generator(file_name : String) -> void:
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
 		var file = File.new()
@@ -343,7 +343,7 @@ func do_load_generator(file_name : String):
 		generator = new_generator
 		call_deferred("update_node")
 
-func save_generator():
+func save_generator() -> void:
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -353,7 +353,7 @@ func save_generator():
 	dialog.connect("file_selected", self, "do_save_generator")
 	dialog.popup_centered()
 
-func do_save_generator(file_name : String):
+func do_save_generator(file_name : String) -> void:
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		var data = generator.serialize()
@@ -362,13 +362,13 @@ func do_save_generator(file_name : String):
 		file.store_string(to_json(data))
 		file.close()
 
-func update_preview_buttons(index : int):
+func update_preview_buttons(index : int) -> void:
 	for i in range(output_count):
 		if i != index:
 			var line = get_child(i)
 			line.get_child(line.get_child_count()-1).pressed = false
 
-func on_preview_button(pressed : bool, index : int):
+func on_preview_button(pressed : bool, index : int) -> void:
 	if pressed:
 		preview_index = index
 		var width
@@ -385,14 +385,14 @@ func on_preview_button(pressed : bool, index : int):
 		remove_child(preview)
 		rect_size = Vector2(0, 0)
 
-func update_preview(size : int = 0):
+func update_preview(size : int = 0) -> void:
 	if preview_index == -1:
 		return
 	if size != 0:
 		preview_size = size
 	preview_timer.start(0.2)
 
-func do_update_preview():
+func do_update_preview() -> void:
 	var renderer = get_parent().renderer
 	var result = generator.render(preview_index, renderer, preview_size)
 	while result is GDScriptFunctionState:

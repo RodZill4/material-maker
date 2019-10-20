@@ -10,14 +10,14 @@ var generator = null
 var param_index = 0
 var creating = false
 
-func _init(parent):
+func _init(parent) -> void:
 	size_flags_horizontal = SIZE_EXPAND_FILL
 	size_flags_vertical = SIZE_EXPAND_FILL
 	rect_size = parent.rect_size
 	rect_clip_content = true
 	parent.add_child(self)
 
-func pick(s, g, i, c = false):
+func pick(s, g, i, c = false) -> void:
 	source = s
 	end = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	generator = g
@@ -25,14 +25,14 @@ func pick(s, g, i, c = false):
 	creating = c
 	set_process_input(true)
 
-func show_link(s, t):
+func show_link(s, t) -> void:
 	set_process_input(false)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	source = s
 	target = t
 	update()
 
-func closest(rect, point):
+func closest(rect, point) -> Vector2:
 	return Vector2(max(rect.position.x, min(rect.end.x, point.x)), max(rect.position.y, min(rect.end.y, point.y)))
 
 func find_control(gp):
@@ -45,7 +45,7 @@ func find_control(gp):
 						return { node=c, widget=widget }
 	return null
 
-func _draw():
+func _draw() -> void:
 	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 0.0, 0.0, 0.2))
 	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 1.0, 0.0), false)
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
@@ -61,7 +61,7 @@ func _draw():
 	start = closest(rect, end)
 	draw_line(start, end, color, 1, true)
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.scancode == KEY_ESCAPE:
 			set_process_input(false)

@@ -8,10 +8,10 @@ var debug_file_index : int = 0
 var rendering : bool = false
 signal done
 
-func _ready():
+func _ready() -> void:
 	$ColorRect.material = $ColorRect.material.duplicate(true)
 
-static func generate_shader(src_code):
+static func generate_shader(src_code) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -34,7 +34,7 @@ static func generate_shader(src_code):
 	code += shader_code
 	return code
 
-static func generate_combined_shader(red_code, green_code, blue_code):
+static func generate_combined_shader(red_code, green_code, blue_code) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -64,12 +64,12 @@ static func generate_combined_shader(red_code, green_code, blue_code):
 	code += shader_code
 	return code
 
-func setup_material(shader_material, textures, shader_code):
+func setup_material(shader_material, textures, shader_code) -> void:
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
-func render_shader(shader, textures, render_size):
+func render_shader(shader, textures, render_size) -> Object:
 	if debug_path != null and debug_path != "":
 		var file_name = debug_path+str(debug_file_index)+".shader"
 		var f = File.new()
@@ -95,19 +95,19 @@ func render_shader(shader, textures, render_size):
 	yield(get_tree(), "idle_frame")
 	return self
 
-func copy_to_texture(t : ImageTexture):
+func copy_to_texture(t : ImageTexture) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:
 		image.lock()
 		t.create_from_image(get_texture().get_data())
 		image.unlock()
 
-func save_to_file(fn : String):
+func save_to_file(fn : String) -> void:
 	var image : Image = get_texture().get_data()
 	image.lock()
 	image.save_png(fn)
 	image.unlock()
 
-func release():
+func release() -> void:
 	rendering = false
 	emit_signal("done")

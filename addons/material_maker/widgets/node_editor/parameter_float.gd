@@ -1,20 +1,20 @@
 tool
 extends HBoxContainer
 
-func _ready():
-	pass
+func get_model_data() -> Dictionary:
+	var data = {
+		min = $Min.value,
+		max = $Max.value,
+		step = $Step.value,
+		default = $Default.value,
+	}
 
-func get_model_data():
-	var data = {}
-	data.min = $Min.value
-	data.max = $Max.value
-	data.step = $Step.value
-	data.default = $Default.value
 	if $SpinBox.pressed:
 		data.widget = "spinbox"
+
 	return data
 
-func set_model_data(data):
+func set_model_data(data) -> void:
 	if data.has("min"):
 		$Min.value = data.min
 	if data.has("max"):

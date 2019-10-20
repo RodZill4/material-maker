@@ -21,5 +21,5 @@ func get_drag_data(position):
 			preview = Label.new()
 			preview.text = data.tree_item
 		set_drag_preview(preview)
-		return data 
+		return data
 	return null

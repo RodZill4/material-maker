@@ -17,7 +17,7 @@ static func load_gen(filename: String) -> MMGenBase:
 		return create_gen(data)
 	return null
 
-static func add_to_gen_graph(gen_graph, generators, connections):
+static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
