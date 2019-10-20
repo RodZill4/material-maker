@@ -89,6 +89,11 @@ func render_textures(renderer : MMGenRenderer):
 				result.release()
 				# To work, this must be set after calling `copy_to_texture()`
 				texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
+
+				# Disable filtering for small textures, as they're considered to be used
+				# for a pixel art style
+				if texture.get_size().x <= 128:
+					texture.flags ^= ImageTexture.FLAG_FILTER
 		elif t.has("ports"):
 			var context : MMGenContext = MMGenContext.new(renderer)
 			var code = []
@@ -113,6 +118,11 @@ func render_textures(renderer : MMGenRenderer):
 			result.release()
 			# To work, this must be set after calling `copy_to_texture()`
 			texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
+
+			# Disable filtering for small textures, as they're considered to be used
+			# for a pixel art style
+			if texture.get_size().x <= 128:
+				texture.flags ^= ImageTexture.FLAG_FILTER
 
 		generated_textures[t.texture] = texture
 
