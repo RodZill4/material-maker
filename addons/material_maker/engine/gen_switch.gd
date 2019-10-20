@@ -48,6 +48,12 @@ func set_parameter(p, v):
 	.set_parameter(p, v)
 	emit_signal("parameter_changed", "__update_all__", null)
 
+
+# get the list of outputs that depend on the input whose index is passed as parameter
+func follow_input(input_index : int) -> Array:
+	return [ OutputPort.new(self, input_index % int(parameters.outputs)) ]
+
+
 func source_changed(input_index : int):
 	notify_output_change(input_index % int(parameters.outputs))
 
