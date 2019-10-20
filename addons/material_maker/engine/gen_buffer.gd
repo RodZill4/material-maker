@@ -20,7 +20,7 @@ func get_type_name() -> String:
 	return "Buffer"
 
 func get_parameter_defs() -> Array:
-	return [ { name="size", type="size", first=4, last=11, default=4 } ]
+	return [ { name="size", type="size", first=4, last=12, default=4 } ]
 
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
