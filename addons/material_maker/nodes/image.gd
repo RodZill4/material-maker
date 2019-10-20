@@ -24,7 +24,11 @@ func _on_TextureButton_pressed():
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.png;PNG image")
-	dialog.add_filter("*.jpg;JPG image")
+	dialog.add_filter("*.bmp;BMP Image")
+	dialog.add_filter("*.hdr;Radiance HDR Image")
+	dialog.add_filter("*.jpg,*.jpeg;JPEG Image")
+	dialog.add_filter("*.png;PNG Image")
+	dialog.add_filter("*.tga;TGA Image")
+	dialog.add_filter("*.webp;WebP Image")
 	dialog.connect("file_selected", self, "set_texture")
 	dialog.popup_centered()
