@@ -196,7 +196,7 @@ func load_material():
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
-	dialog.add_filter("*.ptex;Procedural textures file")
+	dialog.add_filter("*.ptex;Procedural Textures File")
 	dialog.connect("files_selected", self, "do_load_materials")
 	dialog.popup_centered()
 
@@ -235,7 +235,7 @@ func save_material_as():
 		dialog.rect_min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.mode = FileDialog.MODE_SAVE_FILE
-		dialog.add_filter("*.ptex;Procedural textures file")
+		dialog.add_filter("*.ptex;Procedural Textures File")
 		dialog.connect("file_selected", graph_edit, "save_file")
 		dialog.popup_centered()
 
