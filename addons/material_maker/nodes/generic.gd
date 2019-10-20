@@ -126,7 +126,7 @@ func create_parameter_control(p : Dictionary):
 		control = OptionButton.new()
 		for i in range(p.first, p.last+1):
 			var s = pow(2, i)
-			control.add_item("%dx%d" % [ s, s ])
+			control.add_item("%d×%d" % [ s, s ])
 			control.selected = 0 if !p.has("default") else p.default-p.first
 	elif p.type == "enum":
 		control = OptionButton.new()
