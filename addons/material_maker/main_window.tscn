@@ -8,13 +8,13 @@
 [ext_resource path="res://addons/material_maker/engine/renderer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=7]
 
-[sub_resource type="PanoramaSky" id=4]
+[sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
 panorama = ExtResource( 4 )
 
-[sub_resource type="Environment" id=5]
+[sub_resource type="Environment" id=2]
 background_mode = 2
-background_sky = SubResource( 4 )
+background_sky = SubResource( 1 )
 background_energy = 1.5
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 0.32
@@ -124,7 +124,7 @@ render_target_update_mode = 0
 
 [node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport"]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 2.24976, 2.68115 )
-environment = SubResource( 5 )
+environment = SubResource( 2 )
 current = true
 
 [node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer/ProjectsPane"]

@@ -12,6 +12,10 @@ var need_save = false
 var top_generator = null
 var generator = null
 
+onready var timer : Timer = $Timer
+
+onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
+
 signal save_path_changed
 signal graph_changed
 
@@ -110,8 +114,8 @@ func update_view(g):
 	clear_view()
 	generator = g
 	update_graph(generator.get_children(), generator.connections)
-	$SubGraphUI.visible = generator != top_generator
-	$SubGraphUI/Label.text = generator.label
+	subgraph_ui.visible = generator != top_generator
+	subgraph_ui.get_node("Label").text = generator.label
 	center_view()
 
 func clear_material():
@@ -263,7 +267,7 @@ func paste(pos = Vector2(0, 0)):
 
 func send_changed_signal():
 	set_need_save(true)
-	$Timer.start(0.1)
+	timer.start(0.1)
 
 func do_send_changed_signal():
 	emit_signal("graph_changed")
@@ -296,4 +300,9 @@ func create_subgraph():
 	generator.create_subgraph(generators)
 	update_view(generator)
 
-
+func _on_ButtonShowTree_pressed():
+	var graph_tree : Popup = preload("res://addons/material_maker/widgets/graph_tree/graph_tree.tscn").instance()
+	graph_tree.init("Top", top_generator)
+	add_child(graph_tree)
+	graph_tree.connect("item_double_clicked", self, "update_view")
+	graph_tree.popup_centered()
