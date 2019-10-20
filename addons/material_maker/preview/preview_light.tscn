@@ -1,6 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://addons/material_maker/preview_light.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/preview/preview_light.gd" type="Script" id=1]
+
 
 [sub_resource type="SphereShape" id=3]
 radius = 0.332384

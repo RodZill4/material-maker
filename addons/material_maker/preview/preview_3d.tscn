@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://addons/material_maker/preview/preview_objects.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/material_maker/preview/panoramas/moonless_golf.hdr" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/environment.gd" type="Script" id=3]
+[ext_resource path="res://addons/material_maker/preview/panoramas/epping_forest_01.hdr" type="Texture" id=4]
+
+[sub_resource type="PanoramaSky" id=1]
+resource_local_to_scene = true
+panorama = ExtResource( 2 )
+
+[sub_resource type="Environment" id=2]
+resource_local_to_scene = true
+background_mode = 2
+background_sky = SubResource( 1 )
+
+[sub_resource type="Animation" id=3]
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Objects:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="PanoramaSky" id=4]
+resource_local_to_scene = true
+panorama = ExtResource( 4 )
+
+[sub_resource type="Environment" id=5]
+background_mode = 2
+background_sky = SubResource( 4 )
+background_energy = 1.5
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.32
+tonemap_mode = 2
+tonemap_white = 16.0
+
+[sub_resource type="CylinderMesh" id=6]
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.5
+
+[sub_resource type="SpatialMaterial" id=7]
+
+[node name="Preview3d" type="Spatial"]
+
+[node name="Objects" parent="." instance=ExtResource( 1 )]
+transform = Transform( -0.799512, 0, 0.60065, 0, 1, 0, -0.60065, 0, -0.799512, 0, 0, 0 )
+
+[node name="CameraPivot" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="CameraPivot"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5 )
+environment = SubResource( 2 )
+current = true
+
+[node name="RemoteTransform" type="RemoteTransform" parent="CameraPivot/Camera"]
+remote_path = NodePath("../../../../../../ProjectsPane/BackgroundPreview/Viewport/Camera")
+
+[node name="ObjectRotate" type="AnimationPlayer" parent="."]
+autoplay = "rotate"
+playback_speed = 0.1
+anims/rotate = SubResource( 3 )
+
+[node name="Environments" type="Spatial" parent="."]
+
+[node name="Epping Forest" type="Spatial" parent="Environments"]
+visible = false
+script = ExtResource( 3 )
+environment = SubResource( 5 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Environments/Epping Forest"]
+transform = Transform( 0.976272, -0.0494319, -0.21083, 0.216548, 0.222856, 0.950496, -8.69534e-009, -0.973597, 0.228272, -5.08826, 21.6274, 5.3744 )
+light_energy = 0.5
+shadow_enabled = true
+
+[node name="MeshInstance" type="MeshInstance" parent="Environments/Epping Forest"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3343, 0 )
+visible = false
+mesh = SubResource( 6 )
+material/0 = SubResource( 7 )
+
+[node name="Moonless Golf" type="Spatial" parent="Environments"]
+visible = false
+script = ExtResource( 3 )
+environment = SubResource( 2 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Environments/Moonless Golf"]
+transform = Transform( 0.569388, 0.170928, 0.804103, 0.171359, -0.981336, 0.087263, 0.804011, 0.088104, -0.588051, 91.9658, 9.62053, -85.1176 )
+light_energy = 0.2
+shadow_enabled = true
