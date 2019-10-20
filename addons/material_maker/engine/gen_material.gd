@@ -15,6 +15,15 @@ const TEXTURE_LIST = [
 	{ port=6, texture="depth_texture" }
 ]
 
+# The minimum allowed texture size as a power-of-two exponent
+const TEXTURE_SIZE_MIN = 4  # 16x16
+
+# The maximum allowed texture size as a power-of-two exponent
+const TEXTURE_SIZE_MAX = 12  # 4096x4096
+
+# The default texture size as a power-of-two exponent
+const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
+
 func _ready():
 	texture_list = TEXTURE_LIST
 	for t in texture_list:
@@ -39,7 +48,7 @@ func get_parameter_defs():
 		{ name="normal_scale", label="Normal", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
 		{ name="ao_light_affect", label="Ambient occlusion", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
 		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="size", label="Size", type="size", first=7, last=11, default=9 }
+		{ name="size", label="Size", type="size", first=TEXTURE_SIZE_MIN, last=TEXTURE_SIZE_MAX, default=TEXTURE_SIZE_DEFAULT }
 	]
 
 func get_input_defs():
@@ -56,9 +65,9 @@ func get_input_defs():
 func get_image_size():
 	var rv : int
 	if parameters.has("size"):
-		rv = int(pow(2, parameters.size+7))
+		rv = int(pow(2, parameters.size+TEXTURE_SIZE_MIN))
 	else:
-		rv = 512
+		rv = int(pow(2, TEXTURE_SIZE_DEFAULT))
 	return rv
 
 func update_preview():

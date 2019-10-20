@@ -3,7 +3,7 @@ extends HBoxContainer
 
 var size_first = 0
 var size_last = 12
-var size_default = 8
+var size_default = 10
 
 func _ready():
 	update_size_configuration()
