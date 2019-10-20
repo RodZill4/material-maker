@@ -50,6 +50,7 @@ func _ready():
 	
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
+		print("Copying samples")
 		var dir : Directory = Directory.new()
 		dir.make_dir("/examples")
 		dir.open("res://addons/material_maker/examples/")
@@ -59,8 +60,9 @@ func _ready():
 			if f == "":
 				break
 			if f.ends_with(".ptex"):
+				print(f)
 				dir.copy("res://addons/material_maker/examples/"+f, "/examples/"+f)
-	
+		print("Done")
 	# Upscale everything if the display requires it (crude hiDPI support).
 	# This prevents UI elements from being too small on hiDPI displays.
 	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
@@ -371,7 +373,7 @@ func bug_report():
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
 
 func about():
-	var about_box = preload("res://addons/material_maker/widgets/about.tscn").instance()
+	var about_box = preload("res://addons/material_maker/widgets/about/about.tscn").instance()
 	add_child(about_box)
 	about_box.popup_centered()
 	
