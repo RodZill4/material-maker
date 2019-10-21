@@ -8,10 +8,10 @@ Base class for texture generators that provide a texture as output
 
 var texture : ImageTexture = ImageTexture.new()
 
-func get_output_defs():
+func get_output_defs() -> Array:
 	return [ { rgba="" } ]
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext):
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var rv = { globals=[], defs="", code="" }
 	var texture_name = genname+"_tex"

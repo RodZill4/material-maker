@@ -6,7 +6,7 @@ var libraries = []
 onready var tree : Tree = $Tree
 onready var filter_line_edit : LineEdit = $HBoxContainer/Filter
 
-func _ready():
+func _ready() -> void:
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 32)
@@ -21,7 +21,7 @@ func _unhandled_input(event : InputEvent) -> void:
 		filter_line_edit.grab_focus()
 		filter_line_edit.select_all()
 
-func get_selected_item_name():
+func get_selected_item_name() -> String:
 	var tree_item : TreeItem = tree.get_selected()
 	var rv = ""
 	while tree_item != null and tree_item != tree.get_root():
@@ -32,7 +32,7 @@ func get_selected_item_name():
 		tree_item = tree_item.get_parent()
 	return rv
 
-func add_library(file_name : String, filter : String = ""):
+func add_library(file_name : String, filter : String = "") -> bool:
 	var root = tree.get_root()
 	var file = File.new()
 	if file.open(file_name, File.READ) != OK:
@@ -46,7 +46,7 @@ func add_library(file_name : String, filter : String = ""):
 		return true
 	return false
 
-func update_tree(filter : String = ""):
+func update_tree(filter : String = "") -> void:
 	filter = filter.to_lower()
 	tree.clear()
 	var root = tree.create_item()
@@ -55,12 +55,12 @@ func update_tree(filter : String = ""):
 			if filter == "" or m.tree_item.to_lower().find(filter) != -1:
 				add_item(m, m.tree_item, get_preview_texture(m), null, filter != "")
 
-func get_preview_texture(data : Dictionary):
+func get_preview_texture(data : Dictionary) -> ImageTexture:
 	if data.has("icon") and data.has("library"):
 		var image_path = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
 		var t : ImageTexture
 		if image_path.left(6) == "res://":
-			return load(image_path)
+			return load(image_path) as ImageTexture
 		else:
 			t = ImageTexture.new()
 			var image : Image = Image.new()
@@ -69,7 +69,7 @@ func get_preview_texture(data : Dictionary):
 		return t
 	return null
 
-func add_item(item, item_name, item_icon = null, item_parent = null, force_expand = false):
+func add_item(item, item_name, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
 		item.tree_item = item_name
 		item_parent = tree.get_root()
@@ -110,7 +110,7 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
-func serialize_library(array, library_name = null, item = null):
+func serialize_library(array, library_name = null, item = null) -> void:
 	if item == null:
 		item = tree.get_root()
 	item = item.get_children()
@@ -121,7 +121,7 @@ func serialize_library(array, library_name = null, item = null):
 		serialize_library(array, library_name, item)
 		item = item.get_next()
 
-func save_library(library_name, item = null):
+func save_library(library_name, item = null) -> void:
 	var array = []
 	serialize_library(array, library_name)
 	var file = File.new()
@@ -129,5 +129,5 @@ func save_library(library_name, item = null):
 		file.store_string(to_json({lib=array}))
 		file.close()
 
-func _on_Filter_text_changed(filter):
+func _on_Filter_text_changed(filter) -> void:
 	update_tree(filter)

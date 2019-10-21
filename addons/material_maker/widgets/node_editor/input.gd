@@ -1,10 +1,7 @@
 tool
 extends HBoxContainer
 
-func _ready():
-	pass
-
-func set_model_data(data):
+func set_model_data(data) -> void:
 	$Name.text = data.name
 	$Label.text = data.label
 	if data.type == "rgb":
@@ -15,7 +12,7 @@ func set_model_data(data):
 		$Type.selected = 0
 	$Default.text = data.default
 
-func get_model_data():
+func get_model_data() -> Dictionary:
 	var data = { name=$Name.text, label=$Label.text, default=$Default.text }
 	if $Type.selected == 1:
 		data.type = "rgb"
@@ -25,5 +22,5 @@ func get_model_data():
 		data.type = "f"
 	return data
 
-func _on_Delete_pressed():
+func _on_Delete_pressed() -> void:
 	queue_free()

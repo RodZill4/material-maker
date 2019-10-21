@@ -2,39 +2,39 @@ extends Object
 class_name MMGradient
 
 class CustomSorter:
-	static func compare(a, b):
+	static func compare(a, b) -> bool:
 		return a.v < b.v
 
 var points = [ { v=0.0, c=Color(0.0, 0.0, 0.0, 0.0) }, { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
 var sorted = true
 
-func to_string():
+func to_string() -> String:
 	var rv = PoolStringArray()
 	for p in points:
 		rv.append("("+str(p.v)+","+str(p.c)+")")
 	return rv.join(",")
 
-func duplicate():
+func duplicate() -> Object:
 	var copy = get_script().new()
 	copy.clear()
 	for p in points:
 		copy.add_point(p.v, p.c)
 	return copy
 
-func clear():
+func clear() -> void:
 	points.clear()
 	sorted = true
 
-func add_point(v, c):
+func add_point(v, c) -> void:
 	points.append({ v=v, c=c })
 	sorted = false
 
-func sort():
+func sort() -> void:
 	if !sorted:
 		points.sort_custom(CustomSorter, "compare")
 		sorted = true
 
-func get_color(x):
+func get_color(x) -> Color:
 	sort()
 	if points.size() > 0:
 		if x < points[0].v:
@@ -52,10 +52,10 @@ func get_color(x):
 		return Color(0.0, 0.0, 0.0, 1.0)
 
 # get_color_in_shader
-func gcis(color):
+func gcis(color) -> String:
 	return "vec4(%.9f,%.9f,%.9f,%.9f)" % [color.r, color.g, color.b, color.a]
 
-func get_shader(name):
+func get_shader(name) -> String:
 	sort()
 	var shader
 	shader  = "vec4 "+name+"(float x) {\n"
@@ -78,7 +78,7 @@ func get_shader(name):
 	shader += "}\n"
 	return shader
 
-func serialize():
+func serialize() -> Dictionary:
 	sort()
 	var rv = []
 	for p in points:
@@ -86,7 +86,7 @@ func serialize():
 	rv = { type="Gradient", points=rv }
 	return rv
 
-func deserialize(v):
+func deserialize(v) -> void:
 	clear()
 	if typeof(v) == TYPE_ARRAY:
 		for i in v:

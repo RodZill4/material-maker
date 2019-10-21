@@ -6,7 +6,7 @@ var links = {}
 
 onready var grid = $Controls
 
-func add_control(text, control):
+func add_control(text, control) -> void:
 	var index = grid.get_child_count() / 4
 	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
@@ -24,7 +24,7 @@ func add_control(text, control):
 	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ index ])
 
-func update_node():
+func update_node() -> void:
 	var i : int = 0
 	for c in grid.get_children():
 		c.queue_free()
@@ -52,7 +52,7 @@ func update_node():
 	rect_size = Vector2(0, 0)
 	initialize_properties()
 
-func _on_value_changed(new_value, variable):
+func _on_value_changed(new_value, variable) -> void:
 	var param_index = variable.trim_prefix("param").to_int()
 	var widget = generator.widgets[param_index]
 	if widget.type == "config_control":
@@ -83,41 +83,41 @@ func _on_value_changed(new_value, variable):
 	else:
 		._on_value_changed(new_value, variable)
 
-func do_add_configuration(config_name, param_index):
+func do_add_configuration(config_name, param_index) -> void:
 	generator.add_configuration(param_index, config_name)
 
-func on_label_changed(new_name, index):
+func on_label_changed(new_name, index) -> void:
 	generator.set_label(index, new_name)
 
-func _on_AddLink_pressed():
+func _on_AddLink_pressed() -> void:
 	var widget = Control.new()
 	add_control("Unnamed", widget)
 	var link = MMNodeLink.new(get_parent())
 	link.pick(widget, generator, generator.create_linked_control("Unnamed"), true)
 
-func _on_AddConfig_pressed():
+func _on_AddConfig_pressed() -> void:
 	var widget = Control.new()
 	add_control("Unnamed", widget)
 	var link = MMNodeLink.new(get_parent())
 	link.pick(widget, generator, generator.create_config_control("Unnamed"), true)
 
-func _on_Link_pressed(index):
+func _on_Link_pressed(index) -> void:
 	var link = MMNodeLink.new(get_parent())
 	link.pick(grid.get_child(index*4+1), generator, index)
 
-func _on_Remote_resize_request(new_minsize):
+func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize
 
-func _on_HBoxContainer_minimum_size_changed():
+func _on_HBoxContainer_minimum_size_changed() -> void:
 	print("_on_HBoxContainer_minimum_size_changed "+str($HBoxContainer.rect_min_size))
 
-func on_parameter_changed(p, v):
+func on_parameter_changed(p, v) -> void:
 	if p == "":
 		update_node()
 	else:
 		.on_parameter_changed(p, v)
 
-func on_enter_widget(widget):
+func on_enter_widget(widget) -> void:
 	var param_index = widget.name.trim_prefix("param").to_int()
 	var w = generator.widgets[param_index]
 	var new_links = []
@@ -134,7 +134,7 @@ func on_enter_widget(widget):
 	# store new links
 	links[widget] = new_links
 
-func on_exit_widget(widget):
+func on_exit_widget(widget) -> void:
 	if links.has(widget):
 		for l in links[widget]:
 			l.queue_free()

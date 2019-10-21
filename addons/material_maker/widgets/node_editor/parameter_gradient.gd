@@ -3,15 +3,12 @@ extends HBoxContainer
 
 onready var default = $Default
 
-func _ready():
-	pass
+func get_model_data() -> Dictionary:
+	return {
+		default = default.value.serialize(),
+	}
 
-func get_model_data():
-	var data = {}
-	data.default = default.value.serialize()
-	return data
-
-func set_model_data(data):
+func set_model_data(data) -> void:
 	if data.has("default"):
 		var v = MMGradient.new()
 		v.deserialize(data.default)

@@ -9,40 +9,40 @@ const PRESET_OPTIONS = [
 	[{ name="skip", default_value=false }]
 ]
 
-func _init(p):
+func _init(p) -> void:
 	plugin = p
 
-func get_import_options(preset : int):
+func get_import_options(preset : int) -> Array:
 	return PRESET_OPTIONS[preset]
 
-func get_import_order():
+func get_import_order() -> int:
 	return 1
 
-func get_importer_name():
+func get_importer_name() -> String:
 	return "material_maker.import"
 
-func get_option_visibility(option: String, options: Dictionary):
+func get_option_visibility(option: String, options: Dictionary) -> bool:
 	return true
 
-func get_preset_count():
+func get_preset_count() -> int:
 	return 2
 
 func get_preset_name(preset: int) -> String:
 	return PRESET_NAMES[preset]
 
-func get_priority():
+func get_priority() -> float:
 	return 0.1
 
-func get_recognized_extensions():
+func get_recognized_extensions() -> Array:
 	return [ "ptex" ]
 
-func get_resource_type():
+func get_resource_type() -> String:
 	return "Material"
 
-func get_save_extension():
+func get_save_extension() -> String:
 	return "tres"
 
-func get_visible_name():
+func get_visible_name() -> String:
 	return "Material Maker Importer"
 
 func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> int:

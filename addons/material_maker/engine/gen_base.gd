@@ -11,42 +11,42 @@ signal parameter_changed
 class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
-	
-	func _init(g : MMGenBase, i : int):
+
+	func _init(g : MMGenBase, i : int) -> void:
 		generator = g
 		input_index = i
-	
-	func to_str():
+
+	func to_str() -> String:
 		return generator.name+".in("+str(input_index)+")"
 
 class OutputPort:
 	var generator : MMGenBase = null
 	var output_index : int = 0
-	
-	func _init(g : MMGenBase, o : int):
+
+	func _init(g : MMGenBase, o : int) -> void:
 		generator = g
 		output_index = o
-	
-	func to_str():
+
+	func to_str() -> String:
 		return generator.name+".out("+str(output_index)+")"
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
 var parameters = {}
 
-func _ready():
+func _ready() -> void:
 	init_parameters()
 
 func can_be_deleted() -> bool:
 	return true
 
-func toggle_editable():
-	return false
-	
-func is_editable():
+func toggle_editable() -> bool:
 	return false
 
-func init_parameters():
+func is_editable() -> bool:
+	return false
+
+func init_parameters() -> void:
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):
 			if p.has("default"):
@@ -56,16 +56,16 @@ func init_parameters():
 			else:
 				print("No default value for parameter "+p.name)
 
-func set_position(p):
+func set_position(p) -> void:
 	position = p
 
-func get_type():
+func get_type() -> String:
 	return "generic"
 
-func get_type_name():
+func get_type_name() -> String:
 	return "Unnamed"
 
-func get_parameter_defs():
+func get_parameter_defs() -> Array:
 	return []
 
 func set_parameter(n : String, v):
@@ -83,16 +83,16 @@ func source_changed(__):
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
-func get_input_defs():
+func get_input_defs() -> Array:
 	return []
 
-func get_output_defs():
+func get_output_defs() -> Array:
 	return []
 
-func get_source(input_index : int):
+func get_source(input_index : int) -> OutputPort:
 	return get_parent().get_port_source(name, input_index)
-	
-func get_targets(output_index : int):
+
+func get_targets(output_index : int) -> Array:
 	return get_parent().get_port_targets(name, output_index)
 
 # get the list of outputs that depend on the input whose index is passed as parameter
@@ -107,15 +107,15 @@ func get_input_shader(input_index : int):
 	if source != null:
 		return source.get_shader()
 
-func get_shader(output_index : int, context):
-	return get_shader_code("UV", output_index, context);
+func get_shader(output_index : int, context) -> Dictionary:
+	return get_shader_code("UV", output_index, context)
 
 func render(output_index : int, renderer : MMGenRenderer, size : int):
 	var context : MMGenContext = MMGenContext.new(renderer)
 	var source = get_shader_code("UV", output_index, context)
 	while source is GDScriptFunctionState:
 		source = yield(source, "completed")
-	if source == null:
+	if source.empty():
 		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
 	var shader : String = renderer.generate_shader(source)
 	var result = renderer.render_shader(shader, source.textures, size)
@@ -123,11 +123,11 @@ func render(output_index : int, renderer : MMGenRenderer, size : int):
 		result = yield(result, "completed")
 	return result
 
-func get_shader_code(uv : String, output_index : int, context : MMGenContext):
+func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
-	if rv != null:
+	if !rv.empty():
 		if !rv.has("f"):
 			if rv.has("rgb"):
 				rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
@@ -144,10 +144,10 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext):
 			rv.rgba = "vec4("+rv.rgb+", 1.0)"
 	return rv
 
-func _get_shader_code(__, __, __):
-	return null
+func _get_shader_code(__, __, __) -> Dictionary:
+	return {}
 
-func _serialize(data):
+func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+name)
 	return data
 

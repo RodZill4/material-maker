@@ -13,18 +13,18 @@ const OutputEditor = preload("res://addons/material_maker/widgets/node_editor/ou
 
 signal node_changed
 
-func _ready():
+func _ready() -> void:
 	main_code_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
 	instance_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
 	global_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
 
-func add_item(parent, scene):
+func add_item(parent, scene) -> Node:
 	var object = scene.instance()
 	parent.add_child(object)
 	parent.move_child(object, parent.get_child_count()-2)
 	return object
 
-func set_model_data(data):
+func set_model_data(data) -> void:
 	if data.has("name"):
 		$Sizer/Tabs/General/Name/Name.text = data.name
 	if data.has("parameters"):
@@ -43,7 +43,7 @@ func set_model_data(data):
 	if data.has("code"):
 		main_code_editor.text = data.code
 
-func get_model_data():
+func get_model_data() -> Dictionary:
 	var data = {
 		name=$Sizer/Tabs/General/Name/Name.text,
 		global=global_functions_editor.text,
@@ -64,21 +64,21 @@ func get_model_data():
 			data.outputs.append(o.get_model_data())
 	return data
 
-func _on_AddParameter_pressed():
+func _on_AddParameter_pressed() -> void:
 	add_item($Sizer/Tabs/General/Parameters/Sizer, ParameterEditor)
 
-func _on_AddInput_pressed():
+func _on_AddInput_pressed() -> void:
 	add_item($Sizer/Tabs/General/Inputs/Sizer, InputEditor)
 
-func _on_AddOutput_pressed():
+func _on_AddOutput_pressed() -> void:
 	add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor)
 
-func _on_Apply_pressed():
+func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
 
-func _on_OK_pressed():
+func _on_OK_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
 	queue_free()
 
-func _on_Cancel_pressed():
+func _on_Cancel_pressed() -> void:
 	queue_free()

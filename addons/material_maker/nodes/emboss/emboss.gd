@@ -21,7 +21,7 @@ const CONVOLUTION = {
 const INDICES = [ 0, 1, 2, 5, 8, 7, 6, 3 ]
 const COEFS = [ 1, 2, 1, 0, -1, -2, -1, 0 ]
 
-func _ready():
+func _ready() -> void:
 	$HBoxContainer1/size.clear()
 	for i in range(7):
 		$HBoxContainer1/size.add_item(str(int(pow(2, 5+i))), i)
@@ -30,22 +30,22 @@ func _ready():
 	final_texture = ImageTexture.new()
 	initialize_properties([ $HBoxContainer1/size, $HBoxContainer2/direction ])
 
-func _rerender():
+func _rerender() -> void:
 	get_parent().renderer.precalculate_shader(input_shader, get_source().get_textures(), int(pow(2, 5+parameters.size)), input_texture, self, "pass_1", [])
 
-func pass_1():
+func pass_1() -> void:
 	var convolution = CONVOLUTION
 	convolution.epsilon=1.0/pow(2, 5+parameters.size)
 	for i in range(8):
 		convolution.kernel[INDICES[i]] = COEFS[(i+8-int(parameters.direction))%8]
 	get_parent().renderer.precalculate_shader(get_convolution_shader(convolution), {input=input_texture}, int(pow(2, 5+parameters.size)), final_texture, self, "rerender_targets", [])
 
-func get_textures():
+func get_textures() -> Dictionary:
 	var list = {}
 	list[name] = final_texture
 	return list
 
-func _get_shader_code(uv, slot = 0):
+func _get_shader_code(uv, slot = 0) -> Dictionary:
 	var rv = { defs="", code="" }
 	var src = get_source()
 	if src == null:

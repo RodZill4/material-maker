@@ -3,16 +3,16 @@ extends MMGraphNodeGeneric
 
 var fixed_lines : int = 0
 
-func _ready():
+func _ready() -> void:
 	update_node()
 
-func update_preview_buttons(index : int):
+func update_preview_buttons(index : int) -> void:
 	for i in range(generator.parameters.outputs):
 		if i != index:
 			var line = get_child(i)
 			line.get_child(2).pressed = false
 
-func update_node():
+func update_node() -> void:
 	print("update_node")
 	if generator == null or !generator.parameters.has("outputs") or !generator.parameters.has("choices"):
 		return

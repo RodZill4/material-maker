@@ -5,13 +5,13 @@ class_name MMGenContext
 var renderer : MMGenRenderer
 var variants : Dictionary = {}
 
-func _init(r : MMGenRenderer):
+func _init(r : MMGenRenderer) -> void:
 	renderer = r
 
-func has_variant(generator):
+func has_variant(generator) -> bool:
 	return variants.has(generator)
 
-func get_variant(generator, variant):
+func get_variant(generator, variant) -> int:
 	var rv = -1
 	if variants.has(generator):
 		rv = variants[generator].find(variant)
