@@ -123,10 +123,15 @@ func create_menu(menu, menu_name):
 
 func create_menu_load_recent(menu):
 	menu.clear()
-	for i in recent_files.size():
-		menu.add_item(recent_files[i], i)
-	if !menu.is_connected("id_pressed", self, "_on_LoadRecent_id_pressed"):
-		menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
+
+	if recent_files.empty():
+		menu.add_item("No items found", 0)
+		menu.set_item_disabled(0, true)
+	else:
+		for i in recent_files.size():
+			menu.add_item(recent_files[i], i)
+		if !menu.is_connected("id_pressed", self, "_on_LoadRecent_id_pressed"):
+			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id):
 	do_load_material(recent_files[id])
