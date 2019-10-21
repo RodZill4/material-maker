@@ -8,5 +8,3 @@ margin_bottom = 29.0
 title = "Generic"
 show_close = true
 script = ExtResource( 1 )
-[connection signal="close_request" from="." to="." method="on_close_request"]
-[connection signal="offset_changed" from="." to="." method="on_offset_changed"]

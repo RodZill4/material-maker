@@ -1,7 +1,5 @@
 tool
-extends GraphNode
-
-var generator = null
+extends MMGraphNodeBase
 
 func _ready() -> void:
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))

@@ -13,7 +13,6 @@ func update_preview_buttons(index : int) -> void:
 			line.get_child(2).pressed = false
 
 func update_node() -> void:
-	print("update_node")
 	if generator == null or !generator.parameters.has("outputs") or !generator.parameters.has("choices"):
 		return
 	save_preview_widget()
@@ -84,4 +83,3 @@ func update_node() -> void:
 		set_slot(i, has_input, 0, Color(0.0, 0.5, 0.0, 0.5), has_output, 0, Color(0.0, 0.5, 0.0, 0.5))
 	# Preview
 	restore_preview_widget()
-	print("update_node end")

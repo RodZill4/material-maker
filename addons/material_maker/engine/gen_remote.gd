@@ -55,9 +55,17 @@ func get_parameter_defs() -> Array:
 				print(w.type)
 	return rv
 
-func set_parameter(p, v) -> void:
+func set_parameter(p : String, v) -> void:
 	var parent = get_parent()
-	var param_index = p.trim_prefix("param").to_int()
+	if parent == null:
+		return
+	var param_index_str : String = p.trim_prefix("param")
+	if !param_index_str.is_valid_integer():
+		return
+	var param_index : int = param_index_str.to_int()
+	if param_index >= widgets.size():
+		return
+	print("Setting "+p+" to "+str(v))
 	var widget = widgets[param_index]
 	match widget.type:
 		"linked_control":

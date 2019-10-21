@@ -30,32 +30,34 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -592.0
 margin_right = -16.0
-margin_bottom = 40.0
+margin_bottom = 24.0
 alignment = 2
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
 margin_left = 362.0
 margin_right = 544.0
-margin_bottom = 40.0
+margin_bottom = 24.0
 size_flags_horizontal = 9
 
 [node name="Label" type="LineEdit" parent="GraphUI/SubGraphUI"]
 margin_right = 150.0
-margin_bottom = 40.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 9
 
 [node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
 margin_left = 154.0
 margin_right = 182.0
-margin_bottom = 40.0
+margin_bottom = 24.0
+hint_tooltip = "Back to parent"
 size_flags_horizontal = 9
 icon = SubResource( 1 )
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
 margin_left = 548.0
 margin_right = 576.0
-margin_bottom = 40.0
+margin_bottom = 24.0
+hint_tooltip = "Show hierarchy"
 icon = SubResource( 2 )
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]

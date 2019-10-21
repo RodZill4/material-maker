@@ -163,7 +163,7 @@ func subst(string, context, uv = "") -> Dictionary:
 			if p.type == "float":
 				value_string = "%.9f" % value
 			elif p.type == "size":
-				value_string = "%.9f" % pow(2, value+p.first)
+				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
 				value_string = p.values[value].value
 			elif p.type == "color":

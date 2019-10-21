@@ -115,11 +115,11 @@ static func create_gen(data) -> MMGenBase:
 			generator.position.y = data.node_position.y
 		if data.has("parameters"):
 			for p in data.parameters.keys():
-				generator.parameters[p] = MMType.deserialize_value(data.parameters[p])
+				generator.set_parameter(p, MMType.deserialize_value(data.parameters[p]))
 		else:
 			for p in generator.get_parameter_defs():
 				if data.has(p.name):
-					generator.parameters[p.name] = MMType.deserialize_value(data[p.name])
+					generator.set_parameter(p.name, MMType.deserialize_value(data[p.name]))
 	return generator
 
 static func get_generator_list() -> Array:

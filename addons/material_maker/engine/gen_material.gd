@@ -65,7 +65,7 @@ func get_input_defs() -> Array:
 func get_image_size() -> int:
 	var rv : int
 	if parameters.has("size"):
-		rv = int(pow(2, parameters.size+TEXTURE_SIZE_MIN))
+		rv = int(pow(2, parameters.size))
 	else:
 		rv = int(pow(2, TEXTURE_SIZE_DEFAULT))
 	return rv
@@ -74,7 +74,7 @@ func update_preview() -> void:
 	var graph_edit = self
 	while graph_edit is MMGenBase:
 		graph_edit = graph_edit.get_parent()
-	if graph_edit.has_method("send_changed_signal"):
+	if graph_edit != null and graph_edit.has_method("send_changed_signal"):
 		graph_edit.send_changed_signal()
 
 func set_parameter(p, v) -> void:

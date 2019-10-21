@@ -93,7 +93,10 @@ func get_source(input_index : int) -> OutputPort:
 	return get_parent().get_port_source(name, input_index)
 
 func get_targets(output_index : int) -> Array:
-	return get_parent().get_port_targets(name, output_index)
+	var parent = get_parent()
+	if parent != null:
+		return get_parent().get_port_targets(name, output_index)
+	return []
 
 # get the list of outputs that depend on the input whose index is passed as parameter
 func follow_input(input_index : int) -> Array:

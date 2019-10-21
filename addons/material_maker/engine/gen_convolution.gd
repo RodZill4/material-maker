@@ -13,7 +13,7 @@ func get_type_name() -> String:
 	return .get_type_name()
 
 func get_parameter_defs() -> Array:
-	var rv : Array = [ { name="size", type="size", first=4, last=11, default=4 } ]
+	var rv : Array = [ { name="size", type="size", first=4, last=11, default=7 } ]
 	if convolution_params.has("parameters"):
 		for p in convolution_params.parameters:
 			rv.push_back(p)
@@ -30,7 +30,7 @@ func set_convolution_params(data: Dictionary) -> void:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var epsilon = 1.0/pow(2, 4+parameters.size)
+	var epsilon = 1.0/pow(2, parameters.size)
 	var types = { "rgba": { type="vec4", init="vec4(0.0)" }, "rgb": { type="vec3", init="vec3(0.0)" }, "f": { type="float", init="0.0" } }
 	var rv = { globals=[], defs="", code="", textures={} }
 	var source = get_source(0)
@@ -50,7 +50,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		if convolution_params.has("matrix_function"):
 			expr = Expression.new()
 			expr_variables = PoolStringArray(["size"])
-			expr_values = [ pow(2, 4+parameters.size) ]
+			expr_values = [ pow(2, parameters.size) ]
 			if convolution_params.has("parameters"):
 				for p in convolution_params.parameters:
 					expr_variables.push_back(p.name)

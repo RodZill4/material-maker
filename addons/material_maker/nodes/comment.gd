@@ -1,7 +1,5 @@
 tool
-extends "res://addons/material_maker/node_base.gd"
-
-var generator = null setget set_generator
+extends MMGraphNodeBase
 
 onready var label = $VBox/Label
 onready var editor = $VBox/TextEdit
@@ -29,3 +27,4 @@ func _on_TextEdit_focus_exited() -> void:
 	generator.text = editor.text
 	label.visible = true
 	editor.visible = false
+

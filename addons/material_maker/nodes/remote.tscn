@@ -62,7 +62,5 @@ margin_right = 60.0
 margin_bottom = 22.0
 hint_tooltip = "Add configurations"
 icon = SubResource( 3 )
-[connection signal="close_request" from="." to="." method="on_close_request"]
-[connection signal="offset_changed" from="." to="." method="on_offset_changed"]
 [connection signal="pressed" from="HBoxContainer/AddLink" to="." method="_on_AddLink_pressed"]
 [connection signal="pressed" from="HBoxContainer/AddConfig" to="." method="_on_AddConfig_pressed"]

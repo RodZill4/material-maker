@@ -11,7 +11,7 @@ var updated : bool = false
 
 func _ready() -> void:
 	if !parameters.has("size"):
-		parameters.size = 4
+		parameters.size = 9
 
 func get_type() -> String:
 	return "buffer"
@@ -35,7 +35,7 @@ func source_changed(input_port_index : int):
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(0)
 	if source != null and !updated:
-		var result = source.generator.render(source.output_index, context.renderer, pow(2, 4+parameters.size))
+		var result = source.generator.render(source.output_index, context.renderer, pow(2, parameters.size))
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		result.copy_to_texture(texture)

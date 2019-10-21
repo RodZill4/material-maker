@@ -1,8 +1,6 @@
 tool
-extends GraphNode
+extends MMGraphNodeBase
 class_name MMGraphNodeGeneric
-
-var generator : MMGenBase = null setget set_generator
 
 var controls = {}
 var ignore_parameter_change = ""
@@ -15,15 +13,9 @@ var preview_size : int
 var preview_timer : Timer = null
 
 func set_generator(g) -> void:
-	generator = g
+	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	call_deferred("update_node")
-
-func on_close_request() -> void:
-	generator.get_parent().remove_generator(generator)
-
-func on_offset_changed() -> void:
-	generator.set_position(offset)
 
 func on_parameter_changed(p, v) -> void:
 	if ignore_parameter_change == p:
@@ -38,6 +30,8 @@ func on_parameter_changed(p, v) -> void:
 			o.value = v
 		elif o is HSlider:
 			o.value = v
+		elif o is SizeOptionButton:
+			o.size_value = v
 		elif o is OptionButton:
 			o.selected = v
 		elif o is CheckBox:
@@ -68,6 +62,8 @@ func initialize_properties() -> void:
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is HSlider:
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is SizeOptionButton:
+			o.connect("size_value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
 			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
 		elif o is CheckBox:
@@ -123,11 +119,10 @@ func create_parameter_control(p : Dictionary) -> Control:
 			control.value = p.default
 		control.rect_min_size.x = 80
 	elif p.type == "size":
-		control = OptionButton.new()
-		for i in range(p.first, p.last+1):
-			var s = pow(2, i)
-			control.add_item("%d×%d" % [ s, s ])
-			control.selected = 0 if !p.has("default") else p.default-p.first
+		control = SizeOptionButton.new()
+		control.min_size = p.first
+		control.max_size = p.last
+		control.size_value = p.first if !p.has("default") else p.default
 	elif p.type == "enum":
 		control = OptionButton.new()
 		for i in range(p.values.size()):

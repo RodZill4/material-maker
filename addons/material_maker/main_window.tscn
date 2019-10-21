@@ -144,7 +144,7 @@ tab_align = 0
 tab_close_display_policy = 1
 
 [node name="Renderer" parent="." instance=ExtResource( 6 )]
-size = Vector2( 512, 512 )
+size = Vector2( 64, 64 )
 debug_path = null
 
 [node name="NodeFactory" type="Node" parent="."]
@@ -156,8 +156,6 @@ script = ExtResource( 7 )
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="_on_Projects_tab_changed"]
 [connection signal="connection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="connect_node"]
 [connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="disconnect_node"]
-[connection signal="close_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_close_request"]
-[connection signal="offset_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material" method="on_offset_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="update_label"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="update_label"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="update_label"]

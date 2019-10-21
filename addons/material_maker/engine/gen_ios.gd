@@ -31,7 +31,8 @@ func get_output_defs() -> Array:
 
 func source_changed(input_index : int) -> void:
 	if name == "gen_outputs":
-		get_parent().notify_output_change(input_index)
+		if get_parent() != null:
+			get_parent().notify_output_change(input_index)
 	else:
 		notify_output_change(input_index)
 

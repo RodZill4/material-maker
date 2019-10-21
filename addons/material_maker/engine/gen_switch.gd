@@ -53,7 +53,8 @@ func follow_input(input_index : int) -> Array:
 	return [ OutputPort.new(self, input_index % int(parameters.outputs)) ]
 
 func source_changed(input_index : int) -> void:
-	notify_output_change(input_index % int(parameters.outputs))
+	if parameters.has("outputs"):
+		notify_output_change(input_index % int(parameters.outputs))
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(output_index+parameters.source*parameters.outputs)

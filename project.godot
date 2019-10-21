@@ -100,6 +100,11 @@ _global_script_classes=[ {
 "path": "res://addons/material_maker/graph_edit.gd"
 }, {
 "base": "GraphNode",
+"class": "MMGraphNodeBase",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/base.gd"
+}, {
+"base": "MMGraphNodeBase",
 "class": "MMGraphNodeGeneric",
 "language": "GDScript",
 "path": "res://addons/material_maker/nodes/generic.gd"
@@ -118,6 +123,11 @@ _global_script_classes=[ {
 "class": "MMType",
 "language": "GDScript",
 "path": "res://addons/material_maker/types/types.gd"
+}, {
+"base": "OptionButton",
+"class": "SizeOptionButton",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/size_option_button.gd"
 } ]
 _global_script_class_icons={
 "MMGenBase": "",
@@ -138,10 +148,12 @@ _global_script_class_icons={
 "MMGradient": "",
 "MMGradientEditor": "",
 "MMGraphEdit": "",
+"MMGraphNodeBase": "",
 "MMGraphNodeGeneric": "",
 "MMGraphNodeRemote": "",
 "MMNodeLink": "",
-"MMType": ""
+"MMType": "",
+"SizeOptionButton": ""
 }
 
 [application]
