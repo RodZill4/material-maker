@@ -3,13 +3,21 @@ extends Control
 class_name MMGradientEditor
 
 class GradientCursor:
-	extends ColorRect
+	extends Control
+	
+	var color : Color
 
-	const WIDTH = 10
+	const WIDTH : int = 10
 
 	func _ready() -> void:
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
+	
+	func _draw():
+		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15)])
+		var c = color
+		c.a = 1.0
+		draw_colored_polygon(polygon, c)
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseButton:
@@ -35,11 +43,6 @@ class GradientCursor:
 	static func sort(a, b) -> bool:
 		return a.get_position() < b.get_position()
 
-	func _draw() -> void:
-		var c = color
-		c.a = 1.0
-		draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), c, false)
-
 var value = null setget set_value
 export var embedded : bool = true
 
@@ -62,7 +65,7 @@ func set_value(v) -> void:
 func update_value() -> void:
 	value.clear()
 	for p in get_children():
-		if p != $Gradient && p != $Background:
+		if p != $Gradient and p != $Background:
 			value.add_point(p.rect_position.x/(rect_size.x-GradientCursor.WIDTH), p.color)
 	update_shader()
 
@@ -75,7 +78,7 @@ func add_cursor(x, color) -> void:
 func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
 		if ev.position.y > 15:
-			var p = max(0, min(ev.position.x, rect_size.x-GradientCursor.WIDTH))
+			var p = clamp(ev.position.x, 0, rect_size.x-GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))
 			update_value()
 		elif embedded:
