@@ -303,5 +303,10 @@ func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://addons/material_maker/widgets/graph_tree/graph_tree.tscn").instance()
 	graph_tree.init("Top", top_generator)
 	add_child(graph_tree)
-	graph_tree.connect("item_double_clicked", self, "update_view")
+	graph_tree.connect("item_double_clicked", self, "edit_subgraph")
 	graph_tree.popup_centered()
+
+func edit_subgraph(g : MMGenGraph) -> void:
+	if !g.is_editable():
+		g.toggle_editable()
+	update_view(g)
