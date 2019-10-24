@@ -7,8 +7,8 @@ var source = null
 var target = null
 
 var generator = null
-var param_index = 0
-var creating = false
+var param_name : String = ""
+var creating : bool = false
 
 func _init(parent) -> void:
 	size_flags_horizontal = SIZE_EXPAND_FILL
@@ -17,11 +17,11 @@ func _init(parent) -> void:
 	rect_clip_content = true
 	parent.add_child(self)
 
-func pick(s, g, i, c = false) -> void:
+func pick(s, g, n : String, c : bool = false) -> void:
 	source = s
 	end = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	generator = g
-	param_index = i
+	param_name = n
 	creating = c
 	set_process_input(true)
 
@@ -69,16 +69,16 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)
-		target = control.widget if control != null and generator.can_link_parameter(param_index, control.node.generator, control.widget.name) else null
+		target = control.widget if control != null and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		update()
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
 				var control = find_control(event.global_position)
 				if control != null:
-					generator.link_parameter(param_index, control.node.generator, control.widget.name)
+					generator.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
-					generator.remove_parameter(param_index)
+					generator.remove_parameter(param_name)
 			set_process_input(false)
 			queue_free()
 	get_tree().set_input_as_handled()

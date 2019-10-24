@@ -37,6 +37,9 @@ var parameters = {}
 func _ready() -> void:
 	init_parameters()
 
+func _post_load() -> void:
+	pass
+
 func can_be_deleted() -> bool:
 	return true
 
@@ -67,6 +70,13 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return []
+
+func get_parameter_def(param_name : String) -> Dictionary:
+	var parameter_defs = get_parameter_defs()
+	for p in parameter_defs:
+		if p.name == param_name:
+			return p
+	return {}
 
 func set_parameter(n : String, v):
 	parameters[n] = v

@@ -7,6 +7,13 @@ var connections = []
 
 var editable = false
 
+func fix_remotes() -> void:
+	for c in get_children():
+		if c is MMGenRemote:
+			c.fix()
+
+func _post_load() -> void:
+	fix_remotes()
 
 func get_type() -> String:
 	return "graph"
@@ -87,6 +94,9 @@ func remove_generator(generator : MMGenBase) -> void:
 		if c.from != generator.name and c.to != generator.name:
 			new_connections.append(c)
 	connections = new_connections
+	remove_child(generator)
+	fix_remotes()
+	add_child(generator)
 	generator.queue_free()
 
 func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
@@ -152,13 +162,15 @@ func _serialize(data: Dictionary) -> Dictionary:
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
 
-func create_subgraph(gens) -> void:
+func create_subgraph(gens : Array) -> void:
 	# Remove material, gen_inputs and gen_outputs nodes
 	var generators = []
 	var center = Vector2(0, 0)
 	var left_bound = 65535
 	var right_bound = -65536
+	var upper_bound = 65536
 	var count = 0
+	# Filter group nodes and calculate boundin box
 	for g in gens:
 		if g.name != "Material" and g.name != "gen_inputs" and g.name != "gen_outputs":
 			generators.push_back(g)
@@ -167,22 +179,33 @@ func create_subgraph(gens) -> void:
 			count += 1
 			if left_bound > p.x: left_bound = p.x
 			if right_bound < p.x: right_bound = p.x
+			if upper_bound > p.y: upper_bound = p.y
 	if count == 0:
 		return
 	center /= count
+	# Create a new graph and add it to the current one
 	var new_graph = get_script().new()
 	new_graph.name = "graph"
 	add_generator(new_graph)
 	new_graph.position = center
+	# Add grouped generators and keep their names
 	var names : Array = []
 	for g in generators:
 		names.push_back(g.name)
 		remove_child(g)
 		new_graph.add_generator(g)
+	# Create inputs and outputs generators
+	var gen_inputs = MMGenIOs.new()
+	gen_inputs.name = "gen_inputs"
+	gen_inputs.position = Vector2(left_bound-300, center.y)
+	new_graph.add_generator(gen_inputs)
+	var gen_outputs = MMGenIOs.new()
+	gen_outputs.name = "gen_outputs"
+	gen_outputs.position = Vector2(right_bound+300, center.y)
+	new_graph.add_generator(gen_outputs)
+	# Process connections
 	var new_graph_connections = []
 	var my_new_connections = []
-	var gen_inputs = null
-	var gen_outputs = null
 	var inputs = []
 	var outputs = []
 	for c in connections:
@@ -194,11 +217,6 @@ func create_subgraph(gens) -> void:
 			if port_index == -1:
 				port_index = outputs.size()
 				outputs.push_back(src_name)
-				if gen_outputs == null:
-					gen_outputs = MMGenIOs.new()
-					gen_outputs.name = "gen_outputs"
-					gen_outputs.position = Vector2(right_bound+300, center.y)
-					new_graph.add_generator(gen_outputs)
 				gen_outputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
 				print(gen_outputs.ports)
 			my_new_connections.push_back( { from=new_graph.name, from_port=port_index, to=c.to, to_port=c.to_port } )
@@ -208,11 +226,6 @@ func create_subgraph(gens) -> void:
 			if port_index == -1:
 				port_index = inputs.size()
 				inputs.push_back(src_name)
-				if gen_inputs == null:
-					gen_inputs = MMGenIOs.new()
-					gen_inputs.name = "gen_inputs"
-					gen_inputs.position = Vector2(left_bound-300, center.y)
-					new_graph.add_generator(gen_inputs)
 				gen_inputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
 			my_new_connections.push_back( { from=c.from, from_port=c.from_port, to=new_graph.name, to_port=port_index } )
 			new_graph_connections.push_back( { from="gen_inputs", from_port=port_index, to=c.to, to_port=c.to_port } )
@@ -220,7 +233,18 @@ func create_subgraph(gens) -> void:
 			my_new_connections.push_back(c)
 	connections = my_new_connections
 	new_graph.connections = new_graph_connections
+	var found_remote = false
+	var remote_script = load("res://addons/material_maker/engine/gen_remote.gd")
 	for g in generators:
-		if g.get_script() == load("res://addons/material_maker/engine/gen_remote.gd"):
+		if g.get_script() == remote_script:
 			g.name = "gen_parameters"
+			found_remote = true
+			new_graph.parameters = g.parameters.duplicate(true)
 			break
+	if !found_remote:
+		var gen_parameters = remote_script.new()
+		gen_parameters.name = "gen_parameters"
+		gen_parameters.position = Vector2(center.x - 200, upper_bound-300)
+		new_graph.add_child(gen_parameters)
+	fix_remotes()
+	new_graph.fix_remotes()

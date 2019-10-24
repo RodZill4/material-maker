@@ -198,7 +198,6 @@ func update_node() -> void:
 			var control : Control = Control.new()
 			control.rect_min_size.y = 16
 			hsizer.add_child(control)
-
 		add_child(hsizer)
 	var input_names_width : int = 0
 	for c in get_children():

@@ -10,7 +10,7 @@ func add_control(text, control) -> void:
 	var index = grid.get_child_count() / 4
 	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
-	label.connect("label_changed", self, "on_label_changed", [ index ])
+	label.connect("label_changed", self, "on_label_changed", [ control.name ])
 	grid.add_child(label)
 	grid.add_child(control)
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
@@ -18,13 +18,16 @@ func add_control(text, control) -> void:
 	var button = Button.new()
 	button.icon = preload("res://addons/material_maker/icons/link.tres")
 	grid.add_child(button)
-	button.connect("pressed", self, "_on_Link_pressed", [ index ])
+	button.connect("pressed", self, "_on_Link_pressed", [ control.name ])
 	button = Button.new()
 	button.icon = preload("res://addons/material_maker/icons/remove.tres")
 	grid.add_child(button)
-	button.connect("pressed", generator, "remove_parameter", [ index ])
+	button.connect("pressed", generator, "remove_parameter", [ control.name ])
 
 func update_node() -> void:
+	# Show or hide the close button
+	show_close = generator.can_be_deleted()
+	# Delete the contents and wait until it's done
 	var i : int = 0
 	for c in grid.get_children():
 		c.queue_free()
@@ -36,11 +39,11 @@ func update_node() -> void:
 		if control != null:
 			control.name = p.name
 			controls[control.name] = control
-			add_control(generator.widgets[i].label, control)
+			add_control(generator.get_widget(p.name).label, control)
 			if generator.widgets[i].type == "config_control":
 				var current = null
 				if control.get_item_count() > 0:
-					control.selected = generator.parameters["param"+str(i)]
+					control.selected = generator.parameters[p.name]
 					current = control.get_item_text(control.selected)
 				control.add_separator()
 				control.add_item("<add configuration>")
@@ -52,12 +55,11 @@ func update_node() -> void:
 	rect_size = Vector2(0, 0)
 	initialize_properties()
 
-func _on_value_changed(new_value, variable) -> void:
-	var param_index = variable.trim_prefix("param").to_int()
-	var widget = generator.widgets[param_index]
+func _on_value_changed(new_value, variable : String) -> void:
+	var widget = generator.get_widget(variable)
 	if widget.type == "config_control":
 		var configuration_count = widget.configurations.size()
-		var control = grid.get_child(param_index*4+1)
+		var control = controls[variable]
 		if new_value < configuration_count:
 			._on_value_changed(new_value, variable)
 			var current = control.get_item_text(new_value)
@@ -71,39 +73,43 @@ func _on_value_changed(new_value, variable) -> void:
 					var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
 					add_child(dialog)
 					dialog.set_texts("Configuration", "Enter a name for the new configuration")
-					dialog.connect("ok", self, "do_add_configuration", [ param_index ])
+					dialog.connect("ok", self, "do_add_configuration", [ variable ])
 					dialog.popup_centered()
 				3:
-					generator.update_configuration(param_index, current)
+					generator.update_configuration(variable, current)
 				4:
 					generator.parameters[variable] = 0
-					generator.remove_configuration(param_index, current)
+					generator.remove_configuration(variable, current)
 				_:
 					print(command)
 	else:
 		._on_value_changed(new_value, variable)
 
-func do_add_configuration(config_name, param_index) -> void:
-	generator.add_configuration(param_index, config_name)
+func do_add_configuration(config_name : String, param_name : String) -> void:
+	generator.add_configuration(param_name, config_name)
 
-func on_label_changed(new_name, index) -> void:
-	generator.set_label(index, new_name)
+func on_label_changed(new_label, param_name) -> void:
+	generator.set_label(param_name, new_label)
 
 func _on_AddLink_pressed() -> void:
+	var control = generator.create_linked_control("Unnamed")
 	var widget = Control.new()
+	widget.name = control
 	add_control("Unnamed", widget)
 	var link = MMNodeLink.new(get_parent())
-	link.pick(widget, generator, generator.create_linked_control("Unnamed"), true)
+	link.pick(widget, generator, control, true)
 
 func _on_AddConfig_pressed() -> void:
+	var control = generator.create_config_control("Unnamed")
 	var widget = Control.new()
+	widget.name = control
 	add_control("Unnamed", widget)
 	var link = MMNodeLink.new(get_parent())
-	link.pick(widget, generator, generator.create_config_control("Unnamed"), true)
+	link.pick(widget, generator, control, true)
 
-func _on_Link_pressed(index) -> void:
+func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
-	link.pick(grid.get_child(index*4+1), generator, index)
+	link.pick(controls[param_name], generator, param_name)
 
 func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize
@@ -118,8 +124,7 @@ func on_parameter_changed(p, v) -> void:
 		.on_parameter_changed(p, v)
 
 func on_enter_widget(widget) -> void:
-	var param_index = widget.name.trim_prefix("param").to_int()
-	var w = generator.widgets[param_index]
+	var w = generator.get_widget(widget.name)
 	var new_links = []
 	for l in w.linked_widgets:
 		var graph_node = get_parent().get_node("node_"+l.node)

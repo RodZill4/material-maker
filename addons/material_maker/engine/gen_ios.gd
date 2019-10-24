@@ -8,6 +8,9 @@ IOs just forward their inputs to their outputs and are used to specify graph int
 
 var ports : Array = []
 
+func can_be_deleted() -> bool:
+	return name != "gen_inputs" and name != "gen_outputs"
+
 func get_type() -> String:
 	return "ios"
 

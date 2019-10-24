@@ -143,7 +143,7 @@ func update_graph(generators, connections) -> Array:
 func new_material() -> void:
 	clear_material()
 	var loader = MMGenLoader.new()
-	top_generator = loader.create_gen({nodes=[{name="Material", type="material"}], connections=[]})
+	top_generator = loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
 	if top_generator != null:
 		add_child(top_generator)
 		update_view(top_generator)

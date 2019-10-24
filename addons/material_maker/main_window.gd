@@ -23,17 +23,20 @@ const MENU = [
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
+	
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
+	
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+E", description="Make selected nodes editable" },
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
-	{ menu="Tools", command="save_user_library", description="Save user library" },
+	
 	{ menu="Help", command="show_doc", description="User manual" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
 	{ menu="Help" },
@@ -346,9 +349,6 @@ func do_add_to_user_library(name, nodes) -> void:
 	result.save_to_file("user://library/user/"+data.icon+".png")
 	result.release()
 	library.add_item(data, name, library.get_preview_texture(data))
-
-func save_user_library() -> void:
-	print("Saving user library")
 	library.save_library("user://library/user.json")
 
 func show_doc() -> void:

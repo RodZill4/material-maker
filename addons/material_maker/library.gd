@@ -59,8 +59,8 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 	if data.has("icon") and data.has("library"):
 		var image_path = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
 		var t : ImageTexture
-		if image_path.left(6) == "res://":
-			return load(image_path) as ImageTexture
+		if false && image_path.left(6) == "res://":
+			t = load(image_path) as ImageTexture
 		else:
 			t = ImageTexture.new()
 			var image : Image = Image.new()
@@ -110,19 +110,22 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
-func serialize_library(array, library_name = null, item = null) -> void:
+func serialize_library(array : Array, library_name : String = "", item : TreeItem = null) -> void:
 	if item == null:
 		item = tree.get_root()
 	item = item.get_children()
 	while item != null:
-		var m = item.get_metadata(0)
-		if m != null and (library_name == null or (m.has("library") and m.library == library_name)):
-			array.append(m)
+		if item.get_metadata(0) != null:
+			var m : Dictionary = item.get_metadata(0)
+			if library_name == "" or (m.has("library") and m.library == library_name):
+				var copy : Dictionary = m.duplicate()
+				copy.erase("library")
+				array.append(copy)
 		serialize_library(array, library_name, item)
 		item = item.get_next()
 
-func save_library(library_name, item = null) -> void:
-	var array = []
+func save_library(library_name : String, item : TreeItem = null) -> void:
+	var array : Array = []
 	serialize_library(array, library_name)
 	var file = File.new()
 	if file.open(library_name, File.WRITE) == OK:

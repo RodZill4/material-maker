@@ -120,6 +120,7 @@ static func create_gen(data) -> MMGenBase:
 			for p in generator.get_parameter_defs():
 				if data.has(p.name):
 					generator.set_parameter(p.name, MMType.deserialize_value(data[p.name]))
+		generator._post_load()
 	return generator
 
 static func get_generator_list() -> Array:
