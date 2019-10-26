@@ -1,11 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/node_editor.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/widgets/node_editor/node_editor_item_list.gd" type="Script" id=2]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 2 )
+atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 16 )
 
 [sub_resource type="DynamicFontData" id=2]
@@ -16,7 +17,7 @@ size = 12
 font_data = SubResource( 2 )
 
 [node name="NodeEditor" type="WindowDialog"]
-margin_right = 833.0
+margin_right = 896.0
 margin_bottom = 398.0
 popup_exclusive = true
 window_title = "Node Editor"
@@ -29,7 +30,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Tabs" type="TabContainer" parent="Sizer"]
-margin_right = 833.0
+margin_right = 896.0
 margin_bottom = 374.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -44,7 +45,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Name" type="HBoxContainer" parent="Sizer/Tabs/General"]
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -56,28 +57,29 @@ text = "Name:"
 
 [node name="Name" type="LineEdit" parent="Sizer/Tabs/General/Name"]
 margin_left = 46.0
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="LabelParameters" type="Label" parent="Sizer/Tabs/General"]
 margin_top = 28.0
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 42.0
 text = "Parameters:"
 
 [node name="Parameters" type="ScrollContainer" parent="Sizer/Tabs/General"]
 margin_top = 46.0
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 181.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Parameters"]
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
+script = ExtResource( 2 )
 
 [node name="AddParameter" type="Button" parent="Sizer/Tabs/General/Parameters/Sizer"]
 margin_right = 28.0
@@ -88,22 +90,23 @@ flat = true
 
 [node name="LabelInputs" type="Label" parent="Sizer/Tabs/General"]
 margin_top = 185.0
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 199.0
 text = "Inputs:"
 
 [node name="Inputs" type="ScrollContainer" parent="Sizer/Tabs/General"]
 margin_top = 203.0
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 338.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Inputs"]
-margin_right = 825.0
+margin_right = 888.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
+script = ExtResource( 2 )
 
 [node name="AddInput" type="Button" parent="Sizer/Tabs/General/Inputs/Sizer"]
 margin_right = 28.0
@@ -138,6 +141,7 @@ scroll_horizontal_enabled = false
 margin_right = 825.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
+script = ExtResource( 2 )
 
 [node name="AddOutput" type="Button" parent="Sizer/Tabs/Outputs/Outputs/Sizer"]
 margin_right = 28.0
@@ -187,9 +191,9 @@ syntax_highlighting = true
 show_line_numbers = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
-margin_left = 307.0
+margin_left = 339.0
 margin_top = 378.0
-margin_right = 525.0
+margin_right = 557.0
 margin_bottom = 398.0
 size_flags_horizontal = 4
 

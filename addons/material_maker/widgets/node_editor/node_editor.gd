@@ -3,6 +3,10 @@ extends WindowDialog
 
 var model_data = null
 
+onready var parameter_list : VBoxContainer = $Sizer/Tabs/General/Parameters/Sizer
+onready var input_list : VBoxContainer = $Sizer/Tabs/General/Inputs/Sizer
+onready var output_list : VBoxContainer = $Sizer/Tabs/Outputs/Outputs/Sizer
+
 onready var main_code_editor : TextEdit = $"Sizer/Tabs/Main Code"
 onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functions"
 onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions"
@@ -29,13 +33,16 @@ func set_model_data(data) -> void:
 		$Sizer/Tabs/General/Name/Name.text = data.name
 	if data.has("parameters"):
 		for p in data.parameters:
-			add_item($Sizer/Tabs/General/Parameters/Sizer, ParameterEditor).set_model_data(p)
+			add_item(parameter_list, ParameterEditor).set_model_data(p)
+		parameter_list.update_up_down_buttons()
 	if data.has("inputs"):
 		for i in data.inputs:
-			add_item($Sizer/Tabs/General/Inputs/Sizer, InputEditor).set_model_data(i)
+			add_item(input_list, InputEditor).set_model_data(i)
+		input_list.update_up_down_buttons()
 	if data.has("outputs"):
 		for o in data.outputs:
-			add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor).set_model_data(o)
+			add_item(output_list, OutputEditor).set_model_data(o)
+		output_list.update_up_down_buttons()
 	if data.has("global"):
 		global_functions_editor.text = data.global
 	if data.has("instance"):
@@ -51,27 +58,30 @@ func get_model_data() -> Dictionary:
 		code=main_code_editor.text
 	}
 	data.parameters = []
-	for p in $Sizer/Tabs/General/Parameters/Sizer.get_children():
+	for p in parameter_list.get_children():
 		if p.has_method("get_model_data"):
 			data.parameters.append(p.get_model_data())
 	data.inputs = []
-	for i in $Sizer/Tabs/General/Inputs/Sizer.get_children():
+	for i in input_list.get_children():
 		if i.has_method("get_model_data"):
 			data.inputs.append(i.get_model_data())
 	data.outputs = []
-	for o in $Sizer/Tabs/Outputs/Outputs/Sizer.get_children():
+	for o in output_list.get_children():
 		if o.has_method("get_model_data"):
 			data.outputs.append(o.get_model_data())
 	return data
 
 func _on_AddParameter_pressed() -> void:
-	add_item($Sizer/Tabs/General/Parameters/Sizer, ParameterEditor)
+	add_item(parameter_list, ParameterEditor)
+	parameter_list.update_up_down_buttons()
 
 func _on_AddInput_pressed() -> void:
-	add_item($Sizer/Tabs/General/Inputs/Sizer, InputEditor)
+	add_item(input_list, InputEditor)
+	input_list.update_up_down_buttons()
 
 func _on_AddOutput_pressed() -> void:
-	add_item($Sizer/Tabs/Outputs/Outputs/Sizer, OutputEditor)
+	add_item(output_list, OutputEditor)
+	output_list.update_up_down_buttons()
 
 func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/input.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
@@ -7,6 +7,16 @@
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 18, 48, 12, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 34, 48, 12, 16 )
 
 [node name="Parameter" type="HBoxContainer"]
 margin_right = 201.0
@@ -19,25 +29,39 @@ margin_bottom = 24.0
 icon = SubResource( 1 )
 flat = true
 
-[node name="Name" type="LineEdit" parent="."]
+[node name="Up" type="Button" parent="."]
 margin_left = 32.0
-margin_right = 102.0
+margin_right = 56.0
+margin_bottom = 24.0
+icon = SubResource( 2 )
+flat = true
+
+[node name="Down" type="Button" parent="."]
+margin_left = 60.0
+margin_right = 84.0
+margin_bottom = 24.0
+icon = SubResource( 3 )
+flat = true
+
+[node name="Name" type="LineEdit" parent="."]
+margin_left = 88.0
+margin_right = 158.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 70, 0 )
 hint_tooltip = "Input name"
 text = "name"
 
 [node name="Label" type="LineEdit" parent="."]
-margin_left = 106.0
-margin_right = 176.0
+margin_left = 162.0
+margin_right = 232.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 70, 0 )
 hint_tooltip = "Input Label"
 text = "Label"
 
 [node name="Type" type="OptionButton" parent="."]
-margin_left = 180.0
-margin_right = 284.0
+margin_left = 236.0
+margin_right = 340.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
@@ -46,11 +70,13 @@ items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGB
 selected = 0
 
 [node name="Default" type="LineEdit" parent="."]
-margin_left = 288.0
-margin_right = 358.0
+margin_left = 344.0
+margin_right = 414.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 70, 0 )
 hint_tooltip = "Default value"
 size_flags_horizontal = 3
 text = "0.0"
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
+[connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
+[connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]
