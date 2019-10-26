@@ -67,14 +67,14 @@ margin_left = 125.0
 margin_right = 171.0
 margin_bottom = 20.0
 text = "Tools"
-items = [ "Create", null, 0, false, false, -1, 0, null, "PopupMenu", false, "Create group", null, 0, false, false, 18, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 19, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Add selected node to user library", null, 0, false, false, 21, 0, null, "", false, "Save user library", null, 0, false, false, 22, 0, null, "", false ]
+items = [ "Create", null, 0, false, false, -1, 0, null, "PopupMenu", false, "Create group", null, 0, false, false, 18, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 19, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Add selected node to user library", null, 0, false, false, 21, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 175.0
 margin_right = 217.0
 margin_bottom = 20.0
 text = "Help"
-items = [ "User manual", null, 0, false, false, 23, 0, null, "", false, "Report a bug", null, 0, false, false, 24, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 26, 0, null, "", false ]
+items = [ "User manual", null, 0, false, false, 22, 0, null, "", false, "Report a bug", null, 0, false, false, 23, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 25, 0, null, "", false ]
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer"]
 margin_top = 24.0
@@ -144,7 +144,7 @@ tab_align = 0
 tab_close_display_policy = 1
 
 [node name="Renderer" parent="." instance=ExtResource( 6 )]
-size = Vector2( 64, 64 )
+size = Vector2( 2048, 2048 )
 debug_path = null
 
 [node name="NodeFactory" type="Node" parent="."]
@@ -162,6 +162,7 @@ script = ExtResource( 7 )
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="update_label"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="update_label"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="update_label"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="update_label"]
 [connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="close_tab"]

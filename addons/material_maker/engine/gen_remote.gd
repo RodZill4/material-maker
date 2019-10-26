@@ -111,22 +111,25 @@ func set_parameter(p : String, v) -> void:
 	if parent == null:
 		return
 	var widget = get_widget(p)
-	match widget.type:
-		"linked_control":
-			for w in widget.linked_widgets:
-				parent.get_node(w.node).set_parameter(w.widget, v)
-		"config_control":
-			if v < widget.configurations.size():
-				var configurations = widget.configurations.keys()
-				configurations.sort()
-				for w in widget.configurations[configurations[v]]:
+	if !widget.empty():
+		match widget.type:
+			"linked_control":
+				for w in widget.linked_widgets:
 					var node = parent.get_node(w.node)
 					if node != null:
-						node.set_parameter(w.widget, MMType.deserialize_value(w.value))
-			else:
-				# incorrect configuration index
-				print("error: incorrect config control parameter value")
-				return
+						node.set_parameter(w.widget, v)
+			"config_control":
+				if v < widget.configurations.size():
+					var configurations = widget.configurations.keys()
+					configurations.sort()
+					for w in widget.configurations[configurations[v]]:
+						var node = parent.get_node(w.node)
+						if node != null:
+							node.set_parameter(w.widget, MMType.deserialize_value(w.value))
+				else:
+					# incorrect configuration index
+					print("error: incorrect config control parameter value")
+					return
 	.set_parameter(p, v)
 	if name == "gen_parameters":
 		get_parent().parameters[p] = v
