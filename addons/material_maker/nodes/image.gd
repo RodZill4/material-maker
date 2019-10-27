@@ -4,6 +4,11 @@ extends MMGraphNodeBase
 func _ready() -> void:
 	set_slot(0, false, 0, Color(0.5, 0.5, 1), true, 0, Color(0.5, 0.5, 1))
 
+func set_generator(g) -> void:
+	.set_generator(g)
+	generator.connect("parameter_changed", self, "on_parameter_changed")
+	$TextureButton.texture_normal = generator.texture
+
 func set_texture(path) -> void:
 	if path == null:
 		return
@@ -15,6 +20,9 @@ func get_textures() -> Dictionary:
 	var list = {}
 	list[name] = $TextureButton.texture_normal
 	return list
+
+func on_parameter_changed(p, v) -> void:
+	$TextureButton.texture_normal = generator.texture
 
 func _on_TextureButton_pressed() -> void:
 	var dialog = FileDialog.new()
