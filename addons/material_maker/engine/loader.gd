@@ -118,7 +118,7 @@ static func create_gen(data) -> MMGenBase:
 				generator.set_parameter(p, MMType.deserialize_value(data.parameters[p]))
 		else:
 			for p in generator.get_parameter_defs():
-				if data.has(p.name):
+				if data.has(p.name) and p.name != "type":
 					generator.set_parameter(p.name, MMType.deserialize_value(data[p.name]))
 		generator._post_load()
 	return generator

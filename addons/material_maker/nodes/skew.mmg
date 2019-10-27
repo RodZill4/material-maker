@@ -1,1 +1,60 @@
-{"name":"skew","node_position":{"x":0,"y":0},"parameters":{"amount":-0.175,"amout":0,"direction":0,"offset":0.730769},"shader_model":{"global":"vec2 uvskew_h(vec2 uv, float amount) {\n\treturn vec2(uv.x+amount*(uv.y-0.5), uv.y);\n}\nvec2 uvskew_v(vec2 uv, float amount) {\n\treturn vec2(uv.x, uv.y+amount*(uv.x-0.5));\n}","inputs":[{"default":"vec4($uv, 0, 1)","label":"","name":"i","type":"rgba"}],"instance":"","name":"Skew","outputs":[{"rgba":"$i(uvskew_$direction($uv, $amount))","type":"rgba"}],"parameters":[{"default":0,"label":"","name":"direction","type":"enum","values":[{"name":"Horizontal","value":"h"},{"name":"Vertical","value":"v"}]},{"default":0,"label":"","max":3,"min":-3,"name":"amount","step":0.005,"type":"float","widget":"spinbox"}]}}
+{
+	"name": "skew",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": -0.175,
+		"amout": 0,
+		"direction": 0,
+		"offset": 0.730769
+	},
+	"shader_model": {
+		"global": "vec2 uvskew_h(vec2 uv, float amount) {\n\treturn vec2(uv.x+amount*(uv.y-0.5), uv.y);\n}\nvec2 uvskew_v(vec2 uv, float amount) {\n\treturn vec2(uv.x, uv.y+amount*(uv.x-0.5));\n}",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0, 1)",
+				"label": "",
+				"name": "i",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Skew",
+		"outputs": [
+			{
+				"rgba": "$i(uvskew_$direction($uv, $amount))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "direction",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Horizontal",
+						"value": "h"
+					},
+					{
+						"name": "Vertical",
+						"value": "v"
+					}
+				]
+			},
+			{
+				"default": 0,
+				"label": "",
+				"max": 3,
+				"min": -3,
+				"name": "amount",
+				"step": 0.005,
+				"type": "float",
+				"widget": "spinbox"
+			}
+		]
+	}
+}

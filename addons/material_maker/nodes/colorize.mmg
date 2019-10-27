@@ -1,1 +1,72 @@
-{"name":"colorize","node_position":{"x":0,"y":0},"parameters":{"gradient":{"points":[{"a":1,"b":0,"g":0,"pos":0,"r":0},{"a":1,"b":1,"g":1,"pos":1,"r":1}],"type":"Gradient"}},"shader_model":{"global":"","inputs":[{"default":"$uv.x","label":"","name":"input","type":"f"}],"instance":"","name":"Colorize","outputs":[{"rgba":"$gradient($input($uv))"}],"parameters":[{"default":{"points":[{"a":1,"b":0,"g":0,"pos":0,"r":0},{"a":1,"b":1,"g":1,"pos":1,"r":1}],"type":"Gradient"},"label":"","name":"gradient","type":"gradient"}]}}
+{
+	"name": "colorize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"gradient": {
+			"points": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"pos": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"pos": 1,
+					"r": 1
+				}
+			],
+			"type": "Gradient"
+		}
+	},
+	"shader_model": {
+		"global": "",
+		"inputs": [
+			{
+				"default": "$uv.x",
+				"label": "",
+				"name": "input",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Colorize",
+		"outputs": [
+			{
+				"rgba": "$gradient($input($uv))"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"label": "",
+				"name": "gradient",
+				"type": "gradient"
+			}
+		]
+	}
+}

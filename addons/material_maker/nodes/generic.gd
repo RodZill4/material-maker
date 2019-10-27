@@ -353,7 +353,7 @@ func do_save_generator(file_name : String) -> void:
 		var data = generator.serialize()
 		data.name = file_name.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
-		file.store_string(to_json(data))
+		file.store_string(JSON.print(data, "\t", true))
 		file.close()
 
 func update_preview_buttons(index : int) -> void:
@@ -399,7 +399,3 @@ func do_update_preview() -> void:
 		add_child(preview)
 		move_child(preview, preview_position)
 		preview.visible = true
-
-
-
-

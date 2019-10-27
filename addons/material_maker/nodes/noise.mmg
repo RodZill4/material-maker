@@ -1,1 +1,40 @@
-{"name":"noise","node_position":{"x":0,"y":0},"parameters":{"density":0.5,"size":8},"shader_model":{"global":"float dots(vec2 uv, float size, float density, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = step(rand(seed2+point_pos), density);\n    return color;\n}","instance":"\n\t\tfloat $(name)_f(vec2 uv) {\n\t\t\treturn dots(uv, 1.0/$(size), $(density), $(seed));\n\t\t}","name":"Noise","outputs":[{"f":"$(name)_f($(uv))"}],"parameters":[{"default":8,"first":2,"label":"Grid Size:","last":8,"name":"size","type":"size"},{"default":0.5,"label":"Density:","max":1,"min":0,"name":"density","step":0,"type":"float"}]}}
+{
+	"name": "noise",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"density": 0.5,
+		"size": 8
+	},
+	"shader_model": {
+		"global": "float dots(vec2 uv, float size, float density, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = step(rand(seed2+point_pos), density);\n    return color;\n}",
+		"instance": "\n\t\tfloat $(name)_f(vec2 uv) {\n\t\t\treturn dots(uv, 1.0/$(size), $(density), $(seed));\n\t\t}",
+		"name": "Noise",
+		"outputs": [
+			{
+				"f": "$(name)_f($(uv))"
+			}
+		],
+		"parameters": [
+			{
+				"default": 8,
+				"first": 2,
+				"label": "Grid Size:",
+				"last": 8,
+				"name": "size",
+				"type": "size"
+			},
+			{
+				"default": 0.5,
+				"label": "Density:",
+				"max": 1,
+				"min": 0,
+				"name": "density",
+				"step": 0,
+				"type": "float"
+			}
+		]
+	}
+}

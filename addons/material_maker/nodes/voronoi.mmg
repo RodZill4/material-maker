@@ -1,1 +1,75 @@
-{"name":"voronoi","node_position":{"x":0,"y":0},"parameters":{"intensity":0.4,"randomness":1,"scale_x":16,"scale_y":16},"shader_model":{"code":"","global":"vec4 voronoi(vec2 uv, vec2 size, float intensity, float randomness, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n    uv *= size;\n    float best_distance0 = 1.0;\n    float best_distance1 = 1.0;\n    vec2 point0;\n    vec2 point1;\n    vec2 p0 = floor(uv);\n    for (int dx = -1; dx < 2; ++dx) {\n    \tfor (int dy = -1; dy < 2; ++dy) {\n            vec2 d = vec2(float(dx), float(dy));\n            vec2 p = p0+d;\n            p += randomness*rand2(seed2+mod(p, size));\n            float distance = length((uv - p) / size);\n            if (best_distance0 > distance) {\n            \tbest_distance1 = best_distance0;\n            \tbest_distance0 = distance;\n                point1 = point0;\n                point0 = p;\n            } else if (best_distance1 > distance) {\n            \tbest_distance1 = distance;\n                point1 = p;\n            }\n        }\n    }\n    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));\n    \n    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);\n}\n","inputs":[],"instance":"","name":"Voronoi","outputs":[{"f":"voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).z","type":"f"},{"f":"voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).w","type":"f"},{"rgb":"rand3(fract(voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).xy))","type":"rgb"}],"parameters":[{"default":4,"label":"Scale X","max":32,"min":1,"name":"scale_x","step":1,"type":"float"},{"default":4,"label":"Scale Y","max":32,"min":1,"name":"scale_y","step":1,"type":"float"},{"default":0.5,"label":"Intensity","max":1,"min":0,"name":"intensity","step":0.05,"type":"float"},{"default":1,"label":"Randomness","max":1,"min":0,"name":"randomness","step":0.01,"type":"float"}]},"type":"shader"}
+{
+	"name": "voronoi",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"intensity": 0.4,
+		"randomness": 1,
+		"scale_x": 16,
+		"scale_y": 16
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec4 voronoi(vec2 uv, vec2 size, float intensity, float randomness, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n    uv *= size;\n    float best_distance0 = 1.0;\n    float best_distance1 = 1.0;\n    vec2 point0;\n    vec2 point1;\n    vec2 p0 = floor(uv);\n    for (int dx = -1; dx < 2; ++dx) {\n    \tfor (int dy = -1; dy < 2; ++dy) {\n            vec2 d = vec2(float(dx), float(dy));\n            vec2 p = p0+d;\n            p += randomness*rand2(seed2+mod(p, size));\n            float distance = length((uv - p) / size);\n            if (best_distance0 > distance) {\n            \tbest_distance1 = best_distance0;\n            \tbest_distance0 = distance;\n                point1 = point0;\n                point0 = p;\n            } else if (best_distance1 > distance) {\n            \tbest_distance1 = distance;\n                point1 = p;\n            }\n        }\n    }\n    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));\n    \n    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Voronoi",
+		"outputs": [
+			{
+				"f": "voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).z",
+				"type": "f"
+			},
+			{
+				"f": "voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).w",
+				"type": "f"
+			},
+			{
+				"rgb": "rand3(fract(voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).xy))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 4,
+				"label": "Scale X",
+				"max": 32,
+				"min": 1,
+				"name": "scale_x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 4,
+				"label": "Scale Y",
+				"max": 32,
+				"min": 1,
+				"name": "scale_y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Intensity",
+				"max": 1,
+				"min": 0,
+				"name": "intensity",
+				"step": 0.05,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "Randomness",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

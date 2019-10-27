@@ -1,1 +1,58 @@
-{"name":"mirror","node_position":{"x":0,"y":0},"parameters":{"direction":0,"offset":0.605},"shader_model":{"global":"vec2 uvmirror_h(vec2 uv, float offset) {\n\treturn vec2(max(0, abs(uv.x-0.5)-0.5*offset)+0.5, uv.y);\n}\nvec2 uvmirror_v(vec2 uv, float offset) {\n\treturn vec2(uv.x, max(0, abs(uv.y-0.5)-0.5*offset)+0.5);\n}","inputs":[{"default":"vec4($uv, 0, 1)","label":"","name":"i","type":"rgba"}],"instance":"","name":"Mirror","outputs":[{"rgba":"$i(uvmirror_$direction($uv, $offset))","type":"rgba"}],"parameters":[{"default":0,"label":"","name":"direction","type":"enum","values":[{"name":"Horizontal","value":"h"},{"name":"Vertical","value":"v"}]},{"default":0,"label":"","max":1,"min":0,"name":"offset","step":0.005,"type":"float","widget":"spinbox"}]}}
+{
+	"name": "mirror",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"direction": 0,
+		"offset": 0.605
+	},
+	"shader_model": {
+		"global": "vec2 uvmirror_h(vec2 uv, float offset) {\n\treturn vec2(max(0, abs(uv.x-0.5)-0.5*offset)+0.5, uv.y);\n}\nvec2 uvmirror_v(vec2 uv, float offset) {\n\treturn vec2(uv.x, max(0, abs(uv.y-0.5)-0.5*offset)+0.5);\n}",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0, 1)",
+				"label": "",
+				"name": "i",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Mirror",
+		"outputs": [
+			{
+				"rgba": "$i(uvmirror_$direction($uv, $offset))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "direction",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Horizontal",
+						"value": "h"
+					},
+					{
+						"name": "Vertical",
+						"value": "v"
+					}
+				]
+			},
+			{
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "offset",
+				"step": 0.005,
+				"type": "float",
+				"widget": "spinbox"
+			}
+		]
+	}
+}

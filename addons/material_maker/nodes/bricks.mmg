@@ -1,1 +1,123 @@
-{"name":"bricks","node_position":{"x":0,"y":0},"parameters":{"bevel":0.1,"columns":3,"mortar":0.1,"pattern":0,"repeat":1,"row_offset":0.5,"rows":6},"shader_model":{"code":"vec3 $(name_uv) = $(name)_xyz($(uv));\n","global":"vec3 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float bevel) {\n\tfloat color = 0.5;\n\tvec2 c1 = (uv-bmin-vec2(mortar))/bevel;\n\tvec2 c2 = (bmax-uv-vec2(mortar))/bevel;\n\tvec2 c = min(c1, c2);\n\tcolor = clamp(min(c.x, c.y), 0.0, 1.0);\n\treturn vec3(color, mod(bmin, vec2(1.0, 1.0)));\n}\n\nvec3 bricks_rb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(count.x, count.y);\n\tbevel /= max(count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec3 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(2.0*count.x, count.y);\n\tbevel /= max(2.0*count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tcount.x = count.x*(1.0+step(0.5, fract(uv.y*count.y*0.5)));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec3 bricks_hb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tfloat pc = count.x+count.y;\n\tfloat c = pc*repeat;\n\tmortar /= c;\n\tbevel /= c;\n\tvec2 corner = floor(uv*c);\n\tfloat cdiff = mod(corner.x-corner.y, pc);\n\tif (cdiff < count.x) {\n\t\treturn brick(uv, (corner-vec2(cdiff, 0.0))/c, (corner-vec2(cdiff, 0.0)+vec2(count.x, 1.0))/c, mortar, bevel);\n\t} else {\n\t\treturn brick(uv, (corner-vec2(0.0, pc-cdiff-1.0))/c, (corner-vec2(0.0, pc-cdiff-1.0)+vec2(1.0, count.y))/c, mortar, bevel);\n\t}\n}\n\nvec3 bricks_bw(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = 2.0*count*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = count*floor(repeat*2.0*uv);\n\tfloat cdiff = mod(dot(floor(repeat*2.0*uv), vec2(1.0)), 2.0);\n\tvec2 corner;\n\tvec2 size;\n\tif (cdiff == 0.0) {\n\t\tcorner = vec2(corner1.x, corner2.y);\n\t\tsize = vec2(1.0, count.y);\n\t} else {\n\t\tcorner = vec2(corner2.x, corner1.y);\n\t\tsize = vec2(count.x, 1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}\n\nvec3 bricks_sb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = (count+vec2(1.0))*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = (count+vec2(1.0))*floor(repeat*uv);\n\tvec2 rcorner = corner1 - corner2;\n\tvec2 corner;\n\tvec2 size;\n\tif (rcorner.x == 0.0 && rcorner.y < count.y) {\n\t\tcorner = corner2;\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == 0.0) {\n\t\tcorner = corner2+vec2(1.0, 0.0);\n\t\tsize = vec2(count.x, 1.0);\n\t} else if (rcorner.x == count.x) {\n\t\tcorner = corner2+vec2(count.x, 1.0);\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == count.y) {\n\t\tcorner = corner2+vec2(0.0, count.y);\n\t\tsize = vec2(count.x, 1.0);\n\t} else {\n\t\tcorner = corner2+vec2(1.0);\n\t\tsize = vec2(count.x-1.0, count.y-1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}","inputs":[],"instance":"vec3 $(name)_xyz(vec2 uv) {\n    return bricks_$(pattern)(uv, vec2($(columns), $(rows)), $(repeat), $(row_offset), $(mortar), max(0.001, $(bevel)));\n}","name":"Bricks","outputs":[{"f":"$(name_uv).x","type":"f"},{"rgb":"rand3($(name_uv).yz+vec2($(seed)))","type":"rgb"}],"parameters":[{"default":0,"label":"","name":"pattern","type":"enum","values":[{"name":"Running bond","value":"rb"},{"name":"Running bond (2)","value":"rb2"},{"name":"HerringBone","value":"hb"},{"name":"Basket weave","value":"bw"},{"name":"Spanish bond","value":"sb"}]},{"default":1,"label":"Repeat:","max":8,"min":1,"name":"repeat","step":1,"type":"float","widget":"spinbox"},{"default":6,"label":"Rows:","max":64,"min":1,"name":"rows","step":1,"type":"float","widget":"spinbox"},{"default":3,"label":"Columns:","max":64,"min":1,"name":"columns","step":1,"type":"float","widget":"spinbox"},{"default":0.5,"label":"Offset:","max":1,"min":0,"name":"row_offset","step":0,"type":"float"},{"default":0.1,"label":"Mortar:","max":0.5,"min":0,"name":"mortar","step":0,"type":"float"},{"default":0.1,"label":"Bevel:","max":0.5,"min":0,"name":"bevel","step":0,"type":"float"}]},"type":"shader"}
+{
+	"name": "bricks",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.1,
+		"columns": 3,
+		"mortar": 0.1,
+		"pattern": 0,
+		"repeat": 1,
+		"row_offset": 0.5,
+		"rows": 6
+	},
+	"shader_model": {
+		"code": "vec3 $(name_uv) = $(name)_xyz($(uv));\n",
+		"global": "vec3 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float bevel) {\n\tfloat color = 0.5;\n\tvec2 c1 = (uv-bmin-vec2(mortar))/bevel;\n\tvec2 c2 = (bmax-uv-vec2(mortar))/bevel;\n\tvec2 c = min(c1, c2);\n\tcolor = clamp(min(c.x, c.y), 0.0, 1.0);\n\treturn vec3(color, mod(bmin, vec2(1.0, 1.0)));\n}\n\nvec3 bricks_rb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(count.x, count.y);\n\tbevel /= max(count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec3 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(2.0*count.x, count.y);\n\tbevel /= max(2.0*count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tcount.x = count.x*(1.0+step(0.5, fract(uv.y*count.y*0.5)));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec3 bricks_hb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tfloat pc = count.x+count.y;\n\tfloat c = pc*repeat;\n\tmortar /= c;\n\tbevel /= c;\n\tvec2 corner = floor(uv*c);\n\tfloat cdiff = mod(corner.x-corner.y, pc);\n\tif (cdiff < count.x) {\n\t\treturn brick(uv, (corner-vec2(cdiff, 0.0))/c, (corner-vec2(cdiff, 0.0)+vec2(count.x, 1.0))/c, mortar, bevel);\n\t} else {\n\t\treturn brick(uv, (corner-vec2(0.0, pc-cdiff-1.0))/c, (corner-vec2(0.0, pc-cdiff-1.0)+vec2(1.0, count.y))/c, mortar, bevel);\n\t}\n}\n\nvec3 bricks_bw(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = 2.0*count*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = count*floor(repeat*2.0*uv);\n\tfloat cdiff = mod(dot(floor(repeat*2.0*uv), vec2(1.0)), 2.0);\n\tvec2 corner;\n\tvec2 size;\n\tif (cdiff == 0.0) {\n\t\tcorner = vec2(corner1.x, corner2.y);\n\t\tsize = vec2(1.0, count.y);\n\t} else {\n\t\tcorner = vec2(corner2.x, corner1.y);\n\t\tsize = vec2(count.x, 1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}\n\nvec3 bricks_sb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = (count+vec2(1.0))*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = (count+vec2(1.0))*floor(repeat*uv);\n\tvec2 rcorner = corner1 - corner2;\n\tvec2 corner;\n\tvec2 size;\n\tif (rcorner.x == 0.0 && rcorner.y < count.y) {\n\t\tcorner = corner2;\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == 0.0) {\n\t\tcorner = corner2+vec2(1.0, 0.0);\n\t\tsize = vec2(count.x, 1.0);\n\t} else if (rcorner.x == count.x) {\n\t\tcorner = corner2+vec2(count.x, 1.0);\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == count.y) {\n\t\tcorner = corner2+vec2(0.0, count.y);\n\t\tsize = vec2(count.x, 1.0);\n\t} else {\n\t\tcorner = corner2+vec2(1.0);\n\t\tsize = vec2(count.x-1.0, count.y-1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}",
+		"inputs": [
+
+		],
+		"instance": "vec3 $(name)_xyz(vec2 uv) {\n    return bricks_$(pattern)(uv, vec2($(columns), $(rows)), $(repeat), $(row_offset), $(mortar), max(0.001, $(bevel)));\n}",
+		"name": "Bricks",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"type": "f"
+			},
+			{
+				"rgb": "rand3($(name_uv).yz+vec2($(seed)))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "pattern",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Running bond",
+						"value": "rb"
+					},
+					{
+						"name": "Running bond (2)",
+						"value": "rb2"
+					},
+					{
+						"name": "HerringBone",
+						"value": "hb"
+					},
+					{
+						"name": "Basket weave",
+						"value": "bw"
+					},
+					{
+						"name": "Spanish bond",
+						"value": "sb"
+					}
+				]
+			},
+			{
+				"default": 1,
+				"label": "Repeat:",
+				"max": 8,
+				"min": 1,
+				"name": "repeat",
+				"step": 1,
+				"type": "float",
+				"widget": "spinbox"
+			},
+			{
+				"default": 6,
+				"label": "Rows:",
+				"max": 64,
+				"min": 1,
+				"name": "rows",
+				"step": 1,
+				"type": "float",
+				"widget": "spinbox"
+			},
+			{
+				"default": 3,
+				"label": "Columns:",
+				"max": 64,
+				"min": 1,
+				"name": "columns",
+				"step": 1,
+				"type": "float",
+				"widget": "spinbox"
+			},
+			{
+				"default": 0.5,
+				"label": "Offset:",
+				"max": 1,
+				"min": 0,
+				"name": "row_offset",
+				"step": 0,
+				"type": "float"
+			},
+			{
+				"default": 0.1,
+				"label": "Mortar:",
+				"max": 0.5,
+				"min": 0,
+				"name": "mortar",
+				"step": 0,
+				"type": "float"
+			},
+			{
+				"default": 0.1,
+				"label": "Bevel:",
+				"max": 0.5,
+				"min": 0,
+				"name": "bevel",
+				"step": 0,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

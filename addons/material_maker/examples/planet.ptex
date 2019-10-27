@@ -1,1 +1,328 @@
-{"connections":[{"from":"colorize_2","from_port":0,"to":"colorize","to_port":0},{"from":"colorize_2","from_port":0,"to":"colorize_3","to_port":0},{"from":"colorize_3","from_port":0,"to":"Material","to_port":6},{"from":"colorize_2","from_port":0,"to":"Material","to_port":2},{"from":"colorize","from_port":0,"to":"Material","to_port":0},{"from":"colorize_2","from_port":0,"to":"normal_map","to_port":0},{"from":"normal_map","from_port":0,"to":"Material","to_port":4},{"from":"pattern","from_port":0,"to":"colorize_4","to_port":0},{"from":"colorize_4","from_port":0,"to":"blend","to_port":0},{"from":"perlin","from_port":0,"to":"blend","to_port":1},{"from":"blend","from_port":0,"to":"colorize_2","to_port":0}],"label":"Graph","name":"39","node_position":{"x":0,"y":0},"nodes":[{"name":"Material","node_position":{"x":653,"y":157},"parameters":{"albedo_color":{"a":1,"b":1,"g":1,"r":1,"type":"Color"},"ao_light_affect":1,"depth_scale":0.6,"emission_energy":1,"metallic":0.05,"normal_scale":1,"roughness":0.75,"size":11},"type":"material"},{"name":"perlin","node_position":{"x":-334.5,"y":-300.5},"parameters":{"iterations":6,"persistence":0.5,"scale_x":8,"scale_y":8},"type":"perlin"},{"name":"colorize","node_position":{"x":-315.5,"y":-87.5},"parameters":{"gradient":{"points":[{"a":1,"b":1,"g":0.1875,"pos":0.081818,"r":0},{"a":1,"b":0.447917,"g":0.827474,"pos":0.109091,"r":1},{"a":1,"b":0,"g":0.489583,"pos":0.227273,"r":0.107096},{"a":1,"b":0,"g":0.19043,"pos":0.554545,"r":0.338542},{"a":1,"b":0,"g":0.172852,"pos":0.927273,"r":0.307292},{"a":1,"b":1,"g":1,"pos":1,"r":1}],"type":"Gradient"}},"type":"colorize"},{"name":"colorize_2","node_position":{"x":-314.5,"y":-156.5},"parameters":{"gradient":{"points":[{"a":1,"b":0,"g":0,"pos":0.5,"r":0},{"a":1,"b":1,"g":1,"pos":0.836364,"r":1}],"type":"Gradient"}},"type":"colorize"},{"name":"colorize_3","node_position":{"x":-316.5,"y":-21.5},"parameters":{"gradient":{"points":[{"a":1,"b":1,"g":1,"pos":0,"r":1},{"a":1,"b":0,"g":0,"pos":1,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"normal_map","node_position":{"x":-20.5,"y":273.5},"parameters":{"amount":0.5,"param0":11,"param1":0.99,"size":4},"type":"normal_map"},{"name":"pattern","node_position":{"x":-343.5,"y":-582.25},"parameters":{"mix":0,"x_scale":4,"x_wave":4,"y_scale":1,"y_wave":0},"type":"pattern"},{"name":"colorize_4","node_position":{"x":-300.5,"y":-473.25},"parameters":{"gradient":{"points":[{"a":1,"b":1,"g":1,"pos":0,"r":1},{"a":1,"b":0.75,"g":0.75,"pos":0.045455,"r":0.75},{"a":1,"b":0,"g":0,"pos":0.363636,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"blend","node_position":{"x":-300.5,"y":-399.25},"parameters":{"amount":0.819444,"blend_type":3},"type":"blend"},{"name":"comment","node_position":{"x":-544.5,"y":-395.194458},"parameters":{"size":4},"size":{"x":190,"y":67},"text":"Best viewed on Sphere mesh","type":"comment"}],"parameters":{},"type":"graph"}
+{
+	"connections": [
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "normal_map",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "pattern",
+			"from_port": 0,
+			"to": "colorize_4",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_4",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"name": "39",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 653,
+				"y": 157
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 0.6,
+				"emission_energy": 1,
+				"metallic": 0.05,
+				"normal_scale": 1,
+				"roughness": 0.75,
+				"size": 11
+			},
+			"type": "material"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": -334.5,
+				"y": -300.5
+			},
+			"parameters": {
+				"iterations": 6,
+				"persistence": 0.5,
+				"scale_x": 8,
+				"scale_y": 8
+			},
+			"type": "perlin"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -315.5,
+				"y": -87.5
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 0.1875,
+							"pos": 0.081818,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0.447917,
+							"g": 0.827474,
+							"pos": 0.109091,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.489583,
+							"pos": 0.227273,
+							"r": 0.107096
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.19043,
+							"pos": 0.554545,
+							"r": 0.338542
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.172852,
+							"pos": 0.927273,
+							"r": 0.307292
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -314.5,
+				"y": -156.5
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.5,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.836364,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": -316.5,
+				"y": -21.5
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "normal_map",
+			"node_position": {
+				"x": -20.5,
+				"y": 273.5
+			},
+			"parameters": {
+				"amount": 0.5,
+				"param0": 11,
+				"param1": 0.99,
+				"size": 4
+			},
+			"type": "normal_map"
+		},
+		{
+			"name": "pattern",
+			"node_position": {
+				"x": -343.5,
+				"y": -582.25
+			},
+			"parameters": {
+				"mix": 0,
+				"x_scale": 4,
+				"x_wave": 4,
+				"y_scale": 1,
+				"y_wave": 0
+			},
+			"type": "pattern"
+		},
+		{
+			"name": "colorize_4",
+			"node_position": {
+				"x": -300.5,
+				"y": -473.25
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0.75,
+							"g": 0.75,
+							"pos": 0.045455,
+							"r": 0.75
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.363636,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": -300.5,
+				"y": -399.25
+			},
+			"parameters": {
+				"amount": 0.819444,
+				"blend_type": 3
+			},
+			"type": "blend"
+		},
+		{
+			"name": "comment",
+			"node_position": {
+				"x": -544.5,
+				"y": -395.194458
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 190,
+				"y": 67
+			},
+			"text": "Best viewed on Sphere mesh",
+			"type": "comment"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

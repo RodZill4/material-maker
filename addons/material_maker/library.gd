@@ -128,7 +128,7 @@ func save_library(library_name : String, item : TreeItem = null) -> void:
 	serialize_library(array, library_name)
 	var file = File.new()
 	if file.open(library_name, File.WRITE) == OK:
-		file.store_string(to_json({lib=array}))
+		file.store_string(JSON.print({lib=array}, "\t", true))
 		file.close()
 
 func _on_Filter_text_changed(filter) -> void:

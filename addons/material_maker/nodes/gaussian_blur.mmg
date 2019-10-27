@@ -1,1 +1,312 @@
-{"connections":[{"from":"buffer","from_port":0,"to":"blurx_convolution","to_port":0},{"from":"buffer_2","from_port":0,"to":"blurx_convolution_2","to_port":0},{"from":"switch","from_port":0,"to":"buffer_2","to_port":0},{"from":"gen_inputs","from_port":0,"to":"buffer","to_port":0},{"from":"gen_inputs","from_port":0,"to":"switch","to_port":1},{"from":"blurx_convolution","from_port":0,"to":"switch","to_port":0},{"from":"switch_2","from_port":0,"to":"gen_outputs","to_port":0},{"from":"blurx_convolution_2","from_port":0,"to":"switch_2","to_port":0},{"from":"switch","from_port":0,"to":"switch_2","to_port":1}],"label":"Gaussian Blur","name":"gaussian_blur","node_position":{"x":0,"y":0},"nodes":[{"convolution_params":{"input_type":"rgba","matrix_function":"exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)","normalized":true,"output_type":"rgba","parameters":[{"max":50,"min":0.05,"name":"sigma","type":"float"}],"x":50,"y":0},"name":"blurx_convolution","node_position":{"x":-407.5,"y":-217.5},"parameters":{"sigma":10.175,"size":5},"type":"convolution"},{"name":"buffer_2","node_position":{"x":-408.875,"y":-90.625},"parameters":{"size":5},"type":"buffer"},{"convolution_params":{"input_type":"rgba","matrix_function":"exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)","normalized":true,"output_type":"rgba","parameters":[{"max":50,"min":0.05,"name":"sigma","type":"float"}],"x":0,"y":50},"name":"blurx_convolution_2","node_position":{"x":-407.125,"y":-44.375},"parameters":{"sigma":10.175,"size":5},"type":"convolution"},{"name":"switch","node_position":{"x":-437.452393,"y":-147.166656},"parameters":{"choices":2,"outputs":1,"source":0},"type":"switch"},{"name":"switch_2","node_position":{"x":-323.452393,"y":-173.666656},"parameters":{"choices":2,"outputs":1,"source":0},"type":"switch"},{"name":"buffer","node_position":{"x":-408.25,"y":-265.75},"parameters":{"size":5},"type":"buffer"},{"name":"gen_parameters","node_position":{"x":-438.666626,"y":-391.666656},"parameters":{"param0":5,"param1":10.175,"param2":0},"type":"remote","widgets":[{"label":"Grid size:","linked_widgets":[{"node":"buffer","widget":"size"},{"node":"blurx_convolution","widget":"size"},{"node":"buffer_2","widget":"size"},{"node":"blurx_convolution_2","widget":"size"}],"type":"linked_control"},{"label":"Sigma:","linked_widgets":[{"node":"blurx_convolution","widget":"sigma"},{"node":"blurx_convolution_2","widget":"sigma"}],"type":"linked_control"},{"configurations":{"Both":[{"node":"switch","value":0,"widget":"source"},{"node":"switch_2","value":0,"widget":"source"}],"X":[{"node":"switch","value":0,"widget":"source"},{"node":"switch_2","value":1,"widget":"source"}],"Y":[{"node":"switch","value":1,"widget":"source"},{"node":"switch_2","value":0,"widget":"source"}]},"label":"Direction:","linked_widgets":[{"node":"switch","widget":"source"},{"node":"switch_2","widget":"source"}],"type":"config_control"}]},{"name":"gen_inputs","node_position":{"x":-738.666626,"y":-190.392853},"parameters":{},"ports":[{"name":"port0","type":"rgba"}],"type":"ios"},{"name":"gen_outputs","node_position":{"x":-23.452393,"y":-190.392853},"parameters":{},"ports":[{"name":"port0","type":"rgba"}],"type":"ios"}],"parameters":{"param0":5,"param2":0},"type":"graph"}
+{
+	"connections": [
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "blurx_convolution",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "blurx_convolution_2",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "blurx_convolution",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "switch_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "blurx_convolution_2",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 1
+		}
+	],
+	"label": "Gaussian Blur",
+	"name": "gaussian_blur",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"convolution_params": {
+				"input_type": "rgba",
+				"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
+				"normalized": true,
+				"output_type": "rgba",
+				"parameters": [
+					{
+						"max": 50,
+						"min": 0.05,
+						"name": "sigma",
+						"type": "float"
+					}
+				],
+				"x": 50,
+				"y": 0
+			},
+			"name": "blurx_convolution",
+			"node_position": {
+				"x": -407.5,
+				"y": -217.5
+			},
+			"parameters": {
+				"sigma": 10.175,
+				"size": 5
+			},
+			"type": "convolution"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -408.875,
+				"y": -90.625
+			},
+			"parameters": {
+				"size": 5
+			},
+			"type": "buffer"
+		},
+		{
+			"convolution_params": {
+				"input_type": "rgba",
+				"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
+				"normalized": true,
+				"output_type": "rgba",
+				"parameters": [
+					{
+						"max": 50,
+						"min": 0.05,
+						"name": "sigma",
+						"type": "float"
+					}
+				],
+				"x": 0,
+				"y": 50
+			},
+			"name": "blurx_convolution_2",
+			"node_position": {
+				"x": -407.125,
+				"y": -44.375
+			},
+			"parameters": {
+				"sigma": 10.175,
+				"size": 5
+			},
+			"type": "convolution"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -437.452393,
+				"y": -147.166656
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 0
+			},
+			"type": "switch"
+		},
+		{
+			"name": "switch_2",
+			"node_position": {
+				"x": -323.452393,
+				"y": -173.666656
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 0
+			},
+			"type": "switch"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -408.25,
+				"y": -265.75
+			},
+			"parameters": {
+				"size": 5
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -438.666626,
+				"y": -391.666656
+			},
+			"parameters": {
+				"param0": 5,
+				"param1": 10.175,
+				"param2": 0
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Grid size:",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "blurx_convolution",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "blurx_convolution_2",
+							"widget": "size"
+						}
+					],
+					"type": "linked_control"
+				},
+				{
+					"label": "Sigma:",
+					"linked_widgets": [
+						{
+							"node": "blurx_convolution",
+							"widget": "sigma"
+						},
+						{
+							"node": "blurx_convolution_2",
+							"widget": "sigma"
+						}
+					],
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"Both": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"X": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 1,
+								"widget": "source"
+							}
+						],
+						"Y": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 0,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Direction:",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						},
+						{
+							"node": "switch_2",
+							"widget": "source"
+						}
+					],
+					"type": "config_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -738.666626,
+				"y": -190.392853
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -23.452393,
+				"y": -190.392853
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		}
+	],
+	"parameters": {
+		"param0": 5,
+		"param2": 0
+	},
+	"type": "graph"
+}

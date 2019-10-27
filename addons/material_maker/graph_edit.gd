@@ -57,7 +57,6 @@ func disconnect_node(from, from_slot, to, to_slot) -> void:
 		send_changed_signal()
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
-	print("connections_changed")
 	for c in removed_connections:
 		.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	for c in added_connections:
@@ -199,7 +198,7 @@ func save_file(filename) -> void:
 	var data = top_generator.serialize()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
-		file.store_string(to_json(data))
+		file.store_string(JSON.print(data, "\t", true))
 		file.close()
 	set_save_path(filename)
 	set_need_save(false)
