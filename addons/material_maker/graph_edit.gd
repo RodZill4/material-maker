@@ -199,7 +199,8 @@ func save_file(filename) -> void:
 	var data = top_generator.serialize()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
-		file.store_string(to_json(data))
+		# Pretty-print the saved JSON for better diffs in version control
+		file.store_string(JSON.print(data, "\t", true))
 		file.close()
 	set_save_path(filename)
 	set_need_save(false)
