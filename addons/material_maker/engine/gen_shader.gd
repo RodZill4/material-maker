@@ -106,14 +106,19 @@ func replace_input(string, context, input, type, src, default) -> Dictionary:
 				src_code = yield(src_code, "completed")
 			src_code.string = src_code[type]
 		# Add global definitions
-		for d in src_code.globals:
-			if required_globals.find(d) == -1:
-				required_globals.push_back(d)
+		if src_code.has("globals"):
+			for d in src_code.globals:
+				if required_globals.find(d) == -1:
+					required_globals.push_back(d)
 		# Add generated definitions
-		required_defs += src_code.defs
+		if src_code.has("defs"):
+			required_defs += src_code.defs
 		# Add generated code
-		required_code += src_code.code
-		required_textures = src_code.textures
+		if src_code.has("code"):
+			required_code += src_code.code
+		# Add textures
+		if src_code.has("textures"):
+			required_textures = src_code.textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
 
@@ -165,6 +170,8 @@ func subst(string, context, uv = "") -> Dictionary:
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
+				if value >= p.values.size():
+					value = 0
 				value_string = p.values[value].value
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]

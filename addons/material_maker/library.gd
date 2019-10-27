@@ -59,13 +59,12 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 	if data.has("icon") and data.has("library"):
 		var image_path = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
 		var t : ImageTexture
-		if false && image_path.left(6) == "res://":
-			t = load(image_path) as ImageTexture
-		else:
-			t = ImageTexture.new()
-			var image : Image = Image.new()
-			image.load(image_path)
-			t.create_from_image(image)
+		if image_path.left(6) == "res://":
+			image_path = ProjectSettings.globalize_path(image_path)
+		t = ImageTexture.new()
+		var image : Image = Image.new()
+		image.load(image_path)
+		t.create_from_image(image)
 		return t
 	return null
 

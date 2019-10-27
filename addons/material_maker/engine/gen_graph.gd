@@ -7,6 +7,8 @@ var connections = []
 
 var editable = false
 
+signal connections_changed(removed_connections, added_connections)
+
 func fix_remotes() -> void:
 	for c in get_children():
 		if c is MMGenRemote:
@@ -79,7 +81,7 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 				rv.push_back(InputPort.new(tgt_gen, c.to_port))
 	return rv
 
-func add_generator(generator : MMGenBase) -> void:
+func add_generator(generator : MMGenBase) -> bool:
 	var name = generator.name
 	var index = 1
 	while has_node(name):
@@ -87,8 +89,11 @@ func add_generator(generator : MMGenBase) -> void:
 		name = generator.name + "_" + str(index)
 	generator.name = name
 	add_child(generator)
+	return true
 
-func remove_generator(generator : MMGenBase) -> void:
+func remove_generator(generator : MMGenBase) -> bool:
+	if !generator.can_be_deleted():
+		return false
 	var new_connections = []
 	for c in connections:
 		if c.from != generator.name and c.to != generator.name:
@@ -96,8 +101,8 @@ func remove_generator(generator : MMGenBase) -> void:
 	connections = new_connections
 	remove_child(generator)
 	fix_remotes()
-	add_child(generator)
 	generator.queue_free()
+	return true
 
 func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	new.name = old.name
@@ -105,6 +110,20 @@ func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	remove_child(old)
 	old.free()
 	add_child(new)
+
+func get_connected_inputs(generator) -> Array:
+	var rv : Array = []
+	for c in connections:
+		if c.to == generator.name:
+			rv.push_back(c.to_port)
+	return rv
+
+func get_connected_outputs(generator) -> Array:
+	var rv : Array = []
+	for c in connections:
+		if c.from == generator.name:
+			rv.push_back(c.from_port)
+	return rv
 
 func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	# check the new connection does not create a loop
@@ -128,18 +147,51 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 		connections.remove(remove)
 	# create new connection
 	connections.append({from=from.name, from_port=from_port, to=to.name, to_port=to_port})
+	to.source_changed(to_port)
 	return true
 
 func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
-	while true:
-		var remove = -1
-		for i in connections.size():
-			if connections[i].from == from.name and connections[i].from_port == from_port and connections[i].to == to.name and connections[i].to_port == to_port:
-				remove = i
-				break
-		if remove == -1:
-			break
-		connections.remove(remove)
+	var new_connections : Array = []
+	for c in connections:
+		if c.from != from.name or c.from_port != from_port or c.to != to.name or c.to_port != to_port:
+			new_connections.push_back(c)
+		else:
+			to.source_changed(to_port)
+	connections = new_connections
+	return true
+
+func reconnect_inputs(generator, reconnects : Dictionary) -> bool:
+	var new_connections : Array = []
+	var added_connections : Array = []
+	var removed_connections : Array = []
+	for c in connections:
+		if c.to == generator.name and reconnects.has(c.to_port):
+			removed_connections.push_back(c.duplicate(true))
+			if reconnects[c.to_port] < 0:
+				continue
+			c.to_port = reconnects[c.to_port]
+			added_connections.push_back(c.duplicate(true))
+		new_connections.push_back(c)
+	connections = new_connections
+	if !removed_connections.empty():
+		emit_signal("connections_changed", removed_connections, added_connections)
+	return true
+
+func reconnect_outputs(generator, reconnects : Dictionary) -> bool:
+	var new_connections : Array = []
+	var added_connections : Array = []
+	var removed_connections : Array = []
+	for c in connections:
+		if c.from == generator.name and reconnects.has(c.from_port):
+			removed_connections.push_back(c.duplicate(true))
+			if reconnects[c.from_port] < 0:
+				continue
+			c.from_port = reconnects[c.from_port]
+			added_connections.push_back(c.duplicate(true))
+		new_connections.push_back(c)
+	connections = new_connections
+	if !removed_connections.empty():
+		emit_signal("connections_changed", removed_connections, added_connections)
 	return true
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:

@@ -54,16 +54,23 @@ func connect_node(from, from_slot, to, to_slot):
 func disconnect_node(from, from_slot, to, to_slot) -> void:
 	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
-		send_changed_signal();
+		send_changed_signal()
+
+func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
+	print("connections_changed")
+	for c in removed_connections:
+		.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+	for c in added_connections:
+		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 
 func remove_node(node) -> void:
-	generator.remove_generator(node.generator)
-	var node_name = node.name
-	for c in get_connection_list():
-		if c.from == node_name or c.to == node_name:
-			disconnect_node(c.from, c.from_port, c.to, c.to_port)
-	node.queue_free()
-	send_changed_signal()
+	if generator.remove_generator(node.generator):
+		var node_name = node.name
+		for c in get_connection_list():
+			if c.from == node_name or c.to == node_name:
+				disconnect_node(c.from, c.from_port, c.to, c.to_port)
+		node.queue_free()
+		send_changed_signal()
 
 # Global operations on graph
 
@@ -111,8 +118,12 @@ func center_view() -> void:
 		scroll_offset = center - 0.5*rect_size
 
 func update_view(g) -> void:
+	if generator != null:
+		generator.disconnect("connections_changed", self, "on_connections_changed")
 	clear_view()
 	generator = g
+	if generator != null:
+		generator.connect("connections_changed", self, "on_connections_changed")
 	update_graph(generator.get_children(), generator.connections)
 	subgraph_ui.visible = generator != top_generator
 	subgraph_ui.get_node("Label").text = generator.label
