@@ -26,6 +26,7 @@ func _on_TextureButton_pressed() -> void:
 	dialog.add_filter("*.hdr;Radiance HDR Image")
 	dialog.add_filter("*.jpg,*.jpeg;JPEG Image")
 	dialog.add_filter("*.png;PNG Image")
+	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
 	dialog.connect("file_selected", self, "set_texture")
