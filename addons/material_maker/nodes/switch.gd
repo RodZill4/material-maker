@@ -26,9 +26,9 @@ func update_node() -> void:
 			remove.free()
 		var lines_list = []
 		if generator.editable:
-			lines_list.push_back( { name="outputs", min=1, max=5 } )
-			lines_list.push_back( { name="choices", min=2, max=5 } )
-		lines_list.push_back( { name="source", min=0, max=generator.parameters.choices-1 } )
+			lines_list.push_back( { name="outputs", tooltip="Outputs count", min=1, max=5 } )
+			lines_list.push_back( { name="choices", tooltip="Choices count", min=2, max=5 } )
+		lines_list.push_back( { name="source", tooltip="Current choice", min=0, max=generator.parameters.choices-1 } )
 		for l in lines_list:
 			var sizer = HBoxContainer.new()
 			var input_label = Label.new()
@@ -40,6 +40,8 @@ func update_node() -> void:
 			control.max_value = l.max
 			control.step = 1
 			control.rect_min_size.x = 75
+			if l.has("tooltip"):
+				control.hint_tooltip = l.tooltip
 			sizer.add_child(control)
 			control.connect("value_changed", self, "_on_value_changed", [ l.name ])
 			controls[l.name] = control

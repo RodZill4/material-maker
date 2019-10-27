@@ -45,6 +45,32 @@ func get_output_defs() -> Array:
 	return rv
 
 func set_parameter(p, v) -> void:
+	if p == "outputs" or p == "choices":
+		var parent = get_parent()
+		if parent != null:
+			var connected_inputs : Array = parent.get_connected_inputs(self)
+			var connected_outputs : Array = parent.get_connected_outputs(self)
+			var inputs_changes : Dictionary = {}
+			var outputs_changes : Dictionary = {}
+			if p == "outputs":
+				for i in connected_inputs:
+					var input = int(i) % int(parameters.outputs)
+					var choice = int(i) / int(parameters.outputs)
+					if input >= v:
+						inputs_changes[i] = -1
+					else:
+						inputs_changes[i] = input + v * choice
+				for i in connected_outputs:
+					if i >= v:
+						outputs_changes[i] = -1
+			else:
+				for i in connected_inputs:
+					var input = int(i) % int(parameters.outputs)
+					var choice = int(i) / int(parameters.outputs)
+					if choice >= v:
+						inputs_changes[i] = -1
+			parent.reconnect_inputs(self, inputs_changes)
+			parent.reconnect_outputs(self, outputs_changes)
 	.set_parameter(p, v)
 	emit_signal("parameter_changed", "__update_all__", null)
 
