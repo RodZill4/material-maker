@@ -39,6 +39,7 @@ class GradientCursor:
 	func set_color(c) -> void:
 		color = c
 		get_parent().update_value()
+		update()
 
 	static func sort(a, b) -> bool:
 		return a.get_position() < b.get_position()
