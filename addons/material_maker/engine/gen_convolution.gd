@@ -141,7 +141,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				var line = matrix[dy+convolution_params.y]
 				for dx in range(-convolution_params.x, convolution_params.x+1):
 					var coef = line[dx+convolution_params.x]
-					var uv_str = "fract((%s)+vec2(%.9f,%.9f))" % [ uv, dx*epsilon, dy*epsilon ]
+					var uv_str = "(%s)+vec2(%.9f,%.9f)" % [ uv, dx*epsilon, dy*epsilon ]
 					var src_code = source.generator.get_shader_code(uv_str, source.output_index, context)
 					while src_code is GDScriptFunctionState:
 						src_code = yield(src_code, "completed")
