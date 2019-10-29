@@ -20,13 +20,16 @@ func get_type_name() -> String:
 	return "Buffer"
 
 func get_parameter_defs() -> Array:
-	return [ { name="size", type="size", first=4, last=12, default=4 } ]
+	return [
+			{ name="size", type="size", first=4, last=12, default=4 },
+			{ name="lod", type="float", min=0, max=10.0, step=0.01, default=0 }
+		]
 
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
 func get_output_defs() -> Array:
-	return [ { type="rgba" } ]
+	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(input_port_index : int):
 	updated = false
@@ -40,9 +43,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			result = yield(result, "completed")
 		result.copy_to_texture(texture)
 		result.release()
-		texture.flags = 0
+		texture.flags = Texture.FLAG_MIPMAPS
 		updated = true
-	var rv = ._get_shader_code(uv, output_index, context)
+	var rv = ._get_shader_code_lod(uv, output_index, context, 0 if output_index == 0 else parameters.lod)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
 	return rv
