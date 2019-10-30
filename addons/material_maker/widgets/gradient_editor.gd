@@ -53,6 +53,32 @@ func _ready() -> void:
 	$Gradient.material = $Gradient.material.duplicate(true)
 	set_value(MMGradient.new())
 
+func get_gradient_from_data(data):
+	if typeof(data) == TYPE_ARRAY:
+		return data
+	elif typeof(data) == TYPE_DICTIONARY:
+		if data.has("parameters") and data.parameters.has("gradient"):
+			return data.parameters.gradient
+		if data.has("type") and data.type == "Gradient":
+			return data
+	return null
+
+func get_drag_data(position : Vector2):
+	var data = MMType.serialize_value(value)
+	var preview = ColorRect.new()
+	preview.rect_size = Vector2(64, 24)
+	preview.material = $Gradient.material
+	set_drag_preview(preview)
+	return data
+
+func can_drop_data(position : Vector2, data) -> bool:
+	return get_gradient_from_data(data) != null
+
+func drop_data(position : Vector2, data) -> void:
+	var gradient = get_gradient_from_data(data)
+	if gradient != null:
+		set_value(MMType.deserialize_value(gradient))
+
 func set_value(v) -> void:
 	value = v
 	for c in get_children():
