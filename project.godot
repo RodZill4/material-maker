@@ -185,6 +185,10 @@ window/dpi/allow_hidpi=true
 
 enabled=PoolStringArray( "material_maker" )
 
+[gui]
+
+timers/tooltip_delay_sec=0.1
+
 [logging]
 
 file_logging/enable_file_logging=true
