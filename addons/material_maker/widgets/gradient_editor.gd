@@ -61,13 +61,14 @@ func set_value(v) -> void:
 			c.free()
 	for p in value.points:
 		add_cursor(p.v*(rect_size.x-GradientCursor.WIDTH), p.c)
+	$Interpolation.selected = value.interpolation
 	update_shader()
 
 func update_value() -> void:
 	value.clear()
-	for p in get_children():
-		if p != $Gradient and p != $Background:
-			value.add_point(p.rect_position.x/(rect_size.x-GradientCursor.WIDTH), p.color)
+	for c in get_children():
+		if c is GradientCursor:
+			value.add_point(c.rect_position.x/(rect_size.x-GradientCursor.WIDTH), c.color)
 	update_shader()
 
 func add_cursor(x, color) -> void:
@@ -108,9 +109,10 @@ func _on_Popup_popup_hide() -> void:
 # Calculating a color from the gradient and generating the shader
 
 func get_sorted_cursors() -> Array:
-	var array = get_children()
-	array.erase($Gradient)
-	array.erase($Background)
+	var array = []
+	for c in get_children():
+		if c is GradientCursor:
+			array.append(c)
 	array.sort_custom(GradientCursor, "sort")
 	return array
 
@@ -124,3 +126,7 @@ func update_shader() -> void:
 	shader += "void fragment() { COLOR = gradient(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
 	emit_signal("updated", value)
+
+func _on_Interpolation_item_selected(ID):
+	value.interpolation = ID
+	update_shader()
