@@ -62,7 +62,8 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						expr_values.push_back(0)
 						errors += 1
 						print("No value for "+p.name)
-				expr_variables_x_index = expr_variables.size()
+					print(p.name+" = "+str(expr_values[expr_values.size()-1]))
+				expr_variables_x_index = expr_values.size()
 				expr_variables.push_back("x")
 				expr_values.push_back(0)
 				expr_variables.push_back("y")
@@ -70,19 +71,22 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			var error = expr.parse(convolution_params.matrix_function, expr_variables)
 			if error != OK:
 				print("Error in expression: "+expr.get_error_text())
-				return
+				return rv
 		for dy in range(-convolution_params.y, convolution_params.y+1):
 			var line = []
 			for dx in range(-convolution_params.x, convolution_params.x+1):
 				var coef = 0.0
-				if convolution_params.has("matrix"):
+				if convolution_params.has("matrix") and dy+convolution_params.y < convolution_params.matrix.size() and dx+convolution_params.x < convolution_params.matrix[dy+convolution_params.y].size() and convolution_params.matrix[dy+convolution_params.y][dx+convolution_params.x] != null:
 					coef = convolution_params.matrix[dy+convolution_params.y][dx+convolution_params.x]
+				elif convolution_params.has("matrix_sparse") and convolution_params.matrix_sparse.has(str(dy)) and convolution_params.matrix_sparse[str(dy)].has(str(dx)):
+					coef = convolution_params.matrix_sparse[str(dy)][str(dx)]
 				elif expr != null:
 					expr_values[expr_variables_x_index] = dx
 					expr_values[expr_variables_x_index+1] = dy
 					coef = expr.execute(expr_values)
 				if typeof(coef) == TYPE_INT:
 					coef = float(coef)
+				print(str(dx)+", "+str(dy)+" = "+str(coef))
 				match convolution_params.output_type:
 					"f":
 						if typeof(coef) == TYPE_REAL or convolution_params.input_type == "f":
@@ -134,7 +138,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		else:
 			if convolution_params.has("normalized") and convolution_params.normalized:
 				for i in range(sum.size()):
-					sum[i] = 1.0/sum[i]
+					if sum[i] != 0:
+						sum[i] = 1.0/sum[i]
+					else:
+						sum[i] = 1.0
 			else:
 				sum = [ 1.0, 1.0, 1.0, 1.0 ]
 			for dy in range(-convolution_params.y, convolution_params.y+1):
@@ -146,17 +153,20 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					while src_code is GDScriptFunctionState:
 						src_code = yield(src_code, "completed")
 					# Add global definitions
-					for d in src_code.globals:
-						if rv.globals.find(d) == -1:
-							rv.globals.push_back(d)
+					if src_code.has("globals"):
+						for d in src_code.globals:
+							if rv.globals.find(d) == -1:
+								rv.globals.push_back(d)
 					# Add generated definitions
-					rv.defs += src_code.defs
+					if src_code.has("defs"):
+						rv.defs += src_code.defs
 					# Add generated code
-					rv.code += src_code.code
+					if src_code.has("code"):
+						rv.code += src_code.code
 					var coef_str : String
 					match convolution_params.output_type:
 						"f":
-							coef_str = "%.9f" % [ coef[0] * sum[0] ]
+							coef_str = "%.9f" % [ coef * sum[0] ]
 						"rgb":
 							coef_str = "vec3(%.9f, %.9f, %.9f)" % [ coef[0] * sum[0], coef[1] * sum[1], coef[2] * sum[2] ]
 						"rgba":
