@@ -62,7 +62,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						expr_values.push_back(0)
 						errors += 1
 						print("No value for "+p.name)
-					print(p.name+" = "+str(expr_values[expr_values.size()-1]))
 				expr_variables_x_index = expr_values.size()
 				expr_variables.push_back("x")
 				expr_values.push_back(0)
@@ -86,7 +85,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					coef = expr.execute(expr_values)
 				if typeof(coef) == TYPE_INT:
 					coef = float(coef)
-				print(str(dx)+", "+str(dy)+" = "+str(coef))
 				match convolution_params.output_type:
 					"f":
 						if typeof(coef) == TYPE_REAL or convolution_params.input_type == "f":
