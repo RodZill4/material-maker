@@ -1,22 +1,25 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
+[sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 48, 16, 16 )
 
 [node name="GraphEdit" type="GraphEdit"]
-self_modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_styles/bg = SubResource( 1 )
 right_disconnects = true
 use_snap = false
 script = ExtResource( 1 )
@@ -51,14 +54,14 @@ margin_right = 182.0
 margin_bottom = 24.0
 hint_tooltip = "Back to parent"
 size_flags_horizontal = 9
-icon = SubResource( 1 )
+icon = SubResource( 2 )
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
 margin_left = 548.0
 margin_right = 576.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
-icon = SubResource( 2 )
+icon = SubResource( 3 )
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
