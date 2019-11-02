@@ -6,15 +6,20 @@
 	},
 	"parameters": {
 		"density": 0.5,
-		"size": 8
+		"size": 9
 	},
 	"shader_model": {
+		"code": "",
 		"global": "float dots(vec2 uv, float size, float density, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = step(rand(seed2+point_pos), density);\n    return color;\n}",
+		"inputs": [
+
+		],
 		"instance": "\n\t\tfloat $(name)_f(vec2 uv) {\n\t\t\treturn dots(uv, 1.0/$(size), $(density), $(seed));\n\t\t}",
 		"name": "Noise",
 		"outputs": [
 			{
-				"f": "$(name)_f($(uv))"
+				"f": "$(name)_f($(uv))",
+				"type": "f"
 			}
 		],
 		"parameters": [
@@ -22,7 +27,7 @@
 				"default": 8,
 				"first": 2,
 				"label": "Grid Size:",
-				"last": 8,
+				"last": 12,
 				"name": "size",
 				"type": "size"
 			},
@@ -36,5 +41,6 @@
 				"type": "float"
 			}
 		]
-	}
+	},
+	"type": "shader"
 }
