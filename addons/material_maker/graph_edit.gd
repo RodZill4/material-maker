@@ -207,8 +207,11 @@ func export_textures() -> void:
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
 		for c in get_children():
-			if c is GraphNode and c.generator.has_method("export_textures"):
-				c.generator.export_textures(prefix, editor_interface)
+			if c is GraphNode:
+				if c.generator.has_method("render_textures"):
+					c.generator.render_textures(renderer)
+					if c.generator.has_method("export_textures"):
+						c.generator.export_textures(prefix, editor_interface)
 
 # Cut / copy / paste
 
@@ -270,8 +273,10 @@ func paste(pos = Vector2(0, 0)) -> void:
 		if c is GraphNode:
 			c.selected = false
 	var data = parse_json(OS.clipboard)
-	for c in create_nodes(data, scroll_offset+0.5*rect_size):
-		c.selected = true
+	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
+	if new_nodes != null:
+		for c in new_nodes:
+			c.selected = true
 
 # Delay after graph update
 

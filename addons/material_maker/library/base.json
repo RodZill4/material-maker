@@ -406,5 +406,15 @@
 	{
 		"tree_item":"Miscellaneous/Comment",
 		"type":"comment"
+	},
+	{
+		"tree_item":"Miscellaneous/Export",
+		"type":"export",
+		"parameters":{"size":10}
+	},
+	{
+		"tree_item":"Miscellaneous/Debug",
+		"icon":"debug",
+		"type":"debug"
 	}
 ]}

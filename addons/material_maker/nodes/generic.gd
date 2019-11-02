@@ -25,7 +25,7 @@ func on_parameter_changed(p, v) -> void:
 	elif controls.has(p):
 		var o = controls[p]
 		if o is LineEdit:
-			o.text = str(v)
+			o.text = v
 		elif o is SpinBox:
 			o.value = v
 		elif o is HSlider:
@@ -81,7 +81,7 @@ func update_shaders() -> void:
 
 func _on_text_changed(new_text, variable) -> void:
 	ignore_parameter_change = variable
-	generator.set_parameter(variable, float(new_text))
+	generator.set_parameter(variable, new_text)
 	ignore_parameter_change = ""
 	update_shaders()
 
@@ -135,6 +135,8 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control = ColorPickerButton.new()
 	elif p.type == "gradient":
 		control = preload("res://addons/material_maker/widgets/gradient_editor.tscn").instance()
+	elif p.type == "string":
+		control = LineEdit.new()
 	return control
 
 func save_preview_widget() -> void:

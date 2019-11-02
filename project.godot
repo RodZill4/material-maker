@@ -35,6 +35,16 @@ _global_script_classes=[ {
 "path": "res://addons/material_maker/engine/gen_convolution.gd"
 }, {
 "base": "MMGenBase",
+"class": "MMGenDebug",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_debug.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenExport",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_export.gd"
+}, {
+"base": "MMGenBase",
 "class": "MMGenGraph",
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_graph.gd"
@@ -135,6 +145,8 @@ _global_script_class_icons={
 "MMGenComment": "",
 "MMGenContext": "",
 "MMGenConvolution": "",
+"MMGenDebug": "",
+"MMGenExport": "",
 "MMGenGraph": "",
 "MMGenIOs": "",
 "MMGenImage": "",

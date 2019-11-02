@@ -48,7 +48,9 @@ static func create_gen(data) -> MMGenBase:
 		material = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
-		switch = MMGenSwitch
+		switch = MMGenSwitch,
+		export = MMGenExport,
+		debug = MMGenDebug
 	}
 	var generator = null
 	if data.has("connections") and data.has("nodes"):
@@ -69,23 +71,17 @@ static func create_gen(data) -> MMGenBase:
 		generator = MMGenRemote.new()
 		generator.set_widgets(data.widgets.duplicate(true))
 	elif data.has("type"):
-		if data.type == "material":
-			generator = MMGenMaterial.new()
-		elif data.type == "buffer":
-			generator = MMGenBuffer.new()
+		if types.has(data.type):
+			generator = types[data.type].new()
 		elif data.type == "comment":
 			generator = MMGenComment.new()
 			if data.has("text"):
 				generator.text = data.text
 			if data.has("size"):
 				generator.size = Vector2(data.size.x, data.size.y)
-		elif data.type == "image":
-			generator = MMGenImage.new()
 		elif data.type == "ios":
 			generator = MMGenIOs.new()
 			generator.ports = data.ports
-		elif data.type == "switch":
-			generator = MMGenSwitch.new()
 		else:
 			var file = File.new()
 			var gen_paths = [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]

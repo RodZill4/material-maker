@@ -176,7 +176,7 @@ func subst(string, context, uv = "") -> Dictionary:
 			elif p.type == "color":
 				value_string = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
 			elif p.type == "gradient":
-				value_string = genname+"__"+p.name+"_gradient_fct"
+				value_string = genname+"_p_"+p.name+"_gradient_fct"
 			elif p.type == "boolean":
 				value_string = "true" if value else "false"
 			else:
@@ -232,7 +232,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					if !(g is MMGradient):
 						g = MMGradient.new()
 						g.deserialize(parameters[p.name])
-					rv.defs += g.get_shader(genname+"__"+p.name+"_gradient_fct")
+					rv.defs += g.get_shader(genname+"_p_"+p.name+"_gradient_fct")
 		# Add inline code
 		if shader_model.has("code"):
 			var variant_index = context.get_variant(self, uv)
