@@ -2,8 +2,6 @@ tool
 extends MMGenBase
 class_name MMGenMaterial
 
-var texture_list
-
 var material : SpatialMaterial
 var generated_textures = {}
 
@@ -25,8 +23,7 @@ const TEXTURE_SIZE_MAX = 12  # 4096x4096
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
 func _ready() -> void:
-	texture_list = TEXTURE_LIST
-	for t in texture_list:
+	for t in TEXTURE_LIST:
 		generated_textures[t.texture] = null
 	material = SpatialMaterial.new()
 
@@ -82,12 +79,19 @@ func set_parameter(p, v) -> void:
 	update_preview()
 
 func source_changed(input_index : int) -> void:
+	for t in TEXTURE_LIST:
+		if t.has("port") and t.port == input_index:
+			generated_textures[t.texture] = null
+		elif t.has("ports") and t.ports.has(input_index):
+			generated_textures[t.texture] = null
 	update_preview()
 
 func render_textures(renderer : MMGenRenderer) -> void:
-	for t in texture_list:
+	for t in TEXTURE_LIST:
 		var texture = null
 		if t.has("port"):
+			if generated_textures[t.texture] != null:
+				continue
 			var source = get_source(t.port)
 			if source != null:
 				var result = source.generator.render(source.output_index, renderer, get_image_size())
@@ -152,55 +156,71 @@ func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 func update_spatial_material(m, file_prefix = null) -> void:
 	var texture
 
-	# Make the material double-sided for better visiblity in the preview
-	m.params_cull_mode = SpatialMaterial.CULL_DISABLED
-
-	m.albedo_color = parameters.albedo_color
-	m.albedo_texture = get_generated_texture("albedo", file_prefix)
-	m.metallic = parameters.metallic
-	m.roughness = parameters.roughness
-	# Metallic
-	texture = get_generated_texture("orm", file_prefix)
-	m.metallic_texture = texture
-	m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
-	# Roughness
-	m.roughness_texture = texture
-	m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
-	# Emission
-	texture = get_generated_texture("emission", file_prefix)
-	if texture != null:
-		m.emission_enabled = true
-		m.emission_energy = parameters.emission_energy
-		m.emission_texture = texture
+	if m is SpatialMaterial:
+		# Make the material double-sided for better visiblity in the preview
+		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
+	
+		m.albedo_color = parameters.albedo_color
+		m.albedo_texture = get_generated_texture("albedo", file_prefix)
+		m.metallic = parameters.metallic
+		m.roughness = parameters.roughness
+		# Metallic
+		texture = get_generated_texture("orm", file_prefix)
+		m.metallic_texture = texture
+		m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
+		# Roughness
+		m.roughness_texture = texture
+		m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
+		# Emission
+		texture = get_generated_texture("emission", file_prefix)
+		if texture != null:
+			m.emission_enabled = true
+			m.emission_energy = parameters.emission_energy
+			m.emission_texture = texture
+		else:
+			m.emission_enabled = false
+		# Normal map
+		texture = get_generated_texture("normal_texture", file_prefix)
+		if texture != null:
+			m.normal_enabled = true
+			m.normal_texture = texture
+		else:
+			m.normal_enabled = false
+		# Ambient occlusion
+		if get_source(5) != null:
+			m.ao_enabled = true
+			m.ao_light_affect = parameters.ao_light_affect
+			m.ao_texture = m.metallic_texture
+			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
+		else:
+			m.ao_enabled = false
+		# Depth
+		texture = get_generated_texture("depth_texture", file_prefix)
+		if texture != null:
+			m.depth_enabled = true
+			m.depth_deep_parallax = true
+			m.depth_scale = parameters.depth_scale * 0.2
+			m.depth_texture = texture
+		else:
+			m.depth_enabled = false
 	else:
-		m.emission_enabled = false
-	# Normal map
-	texture = get_generated_texture("normal_texture", file_prefix)
-	if texture != null:
-		m.normal_enabled = true
-		m.normal_texture = texture
-	else:
-		m.normal_enabled = false
-	# Ambient occlusion
-	if get_source(5) != null:
-		m.ao_enabled = true
-		m.ao_light_affect = parameters.ao_light_affect
-		m.ao_texture = m.metallic_texture
-		m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
-	else:
-		m.ao_enabled = false
-	# Depth
-	texture = get_generated_texture("depth_texture", file_prefix)
-	if texture != null:
-		m.depth_enabled = true
-		m.depth_deep_parallax = true
-		m.depth_scale = parameters.depth_scale * 0.2
-		m.depth_texture = texture
-	else:
-		m.depth_enabled = false
+		m.set_shader_param("albedo", parameters.albedo_color)
+		m.set_shader_param("texture_albedo", get_generated_texture("albedo", file_prefix))
+		m.set_shader_param("metallic", parameters.metallic)
+		m.set_shader_param("roughness", parameters.roughness)
+		m.set_shader_param("texture_metallic", get_generated_texture("orm", file_prefix))
+		m.set_shader_param("metallic_texture_channel", PoolRealArray([0.0, 0.0, 1.0, 0.0]))
+		m.set_shader_param("texture_roughness", get_generated_texture("orm", file_prefix))
+		m.set_shader_param("roughness_texture_channel", PoolRealArray([0.0, 1.0, 0.0, 0.0]))
+		m.set_shader_param("emission_energy", parameters.emission_energy)
+		m.set_shader_param("texture_emission", get_generated_texture("emission", file_prefix))
+		m.set_shader_param("normal_scale", parameters.normal_scale)
+		m.set_shader_param("texture_normal", get_generated_texture("normal_texture", file_prefix))
+		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
+		m.set_shader_param("texture_depth", get_generated_texture("depth_texture", file_prefix))
 
 func export_textures(prefix, editor_interface = null) -> SpatialMaterial:
-	for t in texture_list:
+	for t in TEXTURE_LIST:
 		var texture = generated_textures[t.texture]
 		if texture != null:
 			var image = texture.get_data()
