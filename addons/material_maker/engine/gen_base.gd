@@ -49,6 +49,9 @@ func toggle_editable() -> bool:
 func is_editable() -> bool:
 	return false
 
+func has_randomness():
+	return false
+
 func init_parameters() -> void:
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):
