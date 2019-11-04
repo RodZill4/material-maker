@@ -5,9 +5,12 @@ class_name MMGenGraph
 var label : String = "Graph"
 var connections = []
 
-var editable = false
+var editable : bool = false
+
+var transmits_seed : bool = true
 
 signal connections_changed(removed_connections, added_connections)
+
 
 func fix_remotes() -> void:
 	for c in get_children():
@@ -16,6 +19,11 @@ func fix_remotes() -> void:
 
 func _post_load() -> void:
 	fix_remotes()
+
+
+func has_randomness():
+	return transmits_seed
+
 
 func get_type() -> String:
 	return "graph"
@@ -203,13 +211,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		return rv
 	return { globals=[], defs="", code="", textures={} }
 
-func _serialize(data: Dictionary) -> Dictionary:
-	data.label = label
-	data.nodes = []
-	for c in get_children():
-		data.nodes.append(c.serialize())
-	data.connections = connections
-	return data
 
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
@@ -300,3 +301,19 @@ func create_subgraph(gens : Array) -> void:
 		new_graph.add_child(gen_parameters)
 	fix_remotes()
 	new_graph.fix_remotes()
+
+
+func _serialize(data: Dictionary) -> Dictionary:
+	data.label = label
+	data.nodes = []
+	for c in get_children():
+		data.nodes.append(c.serialize())
+	data.connections = connections
+	return data
+
+func _deserialize(data : Dictionary) -> void:
+	if data.has("label"):
+		label = data.label
+	var nodes = data.nodes if data.has("nodes") else []
+	var connections = data.connections if data.has("connections") else []
+	load("res://addons/material_maker/engine/loader.gd").add_to_gen_graph(self, nodes, connections)

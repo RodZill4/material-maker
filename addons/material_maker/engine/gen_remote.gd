@@ -134,11 +134,6 @@ func set_parameter(p : String, v) -> void:
 	if name == "gen_parameters":
 		get_parent().parameters[p] = v
 
-func _serialize(data: Dictionary) -> Dictionary:
-	data.type = "remote"
-	data.widgets = widgets
-	return data
-
 func create_linked_control(label : String) -> String:
 	var n = get_next_widget_name()
 	widgets.push_back({ name=n, label=label, type="linked_control", linked_widgets=[] })
@@ -219,3 +214,12 @@ func remove_configuration(widget_name : String, config_name : String) -> void:
 	if widget.type == "config_control":
 		widget.configurations.erase(config_name)
 		emit_signal("parameter_changed", "__update_all__", null)
+
+
+func _serialize(data: Dictionary) -> Dictionary:
+	data.type = "remote"
+	data.widgets = widgets
+	return data
+
+func _deserialize(data : Dictionary) -> void:
+	set_widgets(data.widgets.duplicate(true))

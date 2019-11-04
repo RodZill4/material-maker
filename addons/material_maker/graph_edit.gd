@@ -15,6 +15,7 @@ var generator = null
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
+onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
 signal save_path_changed
 signal graph_changed
@@ -127,6 +128,12 @@ func update_view(g) -> void:
 	subgraph_ui.visible = generator != top_generator
 	subgraph_ui.get_node("Label").text = generator.label
 	center_view()
+	if generator.get_parent() is MMGenGraph:
+		button_transmits_seed.visible = true
+		button_transmits_seed.pressed = generator.transmits_seed
+	else:
+		button_transmits_seed.visible = false
+
 
 func clear_material() -> void:
 	if top_generator != null:
@@ -325,3 +332,8 @@ func edit_subgraph(g : MMGenGraph) -> void:
 	if !g.is_editable():
 		g.toggle_editable()
 	update_view(g)
+
+
+func _on_ButtonTransmitsSeed_toggled(button_pressed):
+	if button_pressed != generator.transmits_seed:
+		generator.transmits_seed = button_pressed

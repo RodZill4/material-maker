@@ -40,6 +40,7 @@ static func create_gen(data) -> MMGenBase:
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="shader_model", type=MMGenShader },
+		{ keyword="convolution_params", type=MMGenConvolution },
 		{ keyword="model_data", type=MMGenShader },
 		{ keyword="convolution_params", type=MMGenConvolution },
 		{ keyword="widgets", type=MMGenRemote }
@@ -48,40 +49,20 @@ static func create_gen(data) -> MMGenBase:
 		material = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
+		ios = MMGenIOs,
 		switch = MMGenSwitch,
 		export = MMGenExport,
+		comment = MMGenComment,
 		debug = MMGenDebug
 	}
 	var generator = null
-	if data.has("connections") and data.has("nodes"):
-		generator = MMGenGraph.new()
-		if data.has("label"):
-			generator.label = data.label
-		add_to_gen_graph(generator, data.nodes, data.connections)
-	elif data.has("shader_model"):
-		generator = MMGenShader.new()
-		generator.set_shader_model(data.shader_model)
-	elif data.has("convolution_params"):
-		generator = MMGenConvolution.new()
-		generator.set_convolution_params(data.convolution_params)
-	elif data.has("model_data"):
-		generator = MMGenShader.new()
-		generator.set_shader_model(data.model_data)
-	elif data.has("widgets"):
-		generator = MMGenRemote.new()
-		generator.set_widgets(data.widgets.duplicate(true))
-	elif data.has("type"):
+	for g in guess:
+		if data.has(g.keyword):
+			generator = g.type.new()
+			break
+	if generator == null and data.has("type"):
 		if types.has(data.type):
 			generator = types[data.type].new()
-		elif data.type == "comment":
-			generator = MMGenComment.new()
-			if data.has("text"):
-				generator.text = data.text
-			if data.has("size"):
-				generator.size = Vector2(data.size.x, data.size.y)
-		elif data.type == "ios":
-			generator = MMGenIOs.new()
-			generator.ports = data.ports
 		else:
 			var file = File.new()
 			var gen_paths = [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]
@@ -101,22 +82,10 @@ static func create_gen(data) -> MMGenBase:
 				print("Cannot find description for "+data.type)
 		if generator != null:
 			generator.name = data.type
-	else:
+	if generator == null:
 		print("LOADER: data not supported:"+str(data))
 	if generator != null:
-		if data.has("name"):
-			generator.name = data.name
-		if data.has("node_position"):
-			generator.position.x = data.node_position.x
-			generator.position.y = data.node_position.y
-		if data.has("parameters"):
-			for p in data.parameters.keys():
-				generator.set_parameter(p, MMType.deserialize_value(data.parameters[p]))
-		else:
-			for p in generator.get_parameter_defs():
-				if data.has(p.name) and p.name != "type":
-					generator.set_parameter(p.name, MMType.deserialize_value(data[p.name]))
-		generator._post_load()
+		generator.deserialize(data)
 	return generator
 
 static func get_generator_list() -> Array:

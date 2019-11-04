@@ -175,6 +175,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			rv[convolution_params.output_type] = "%s_%d" % [ genname, variant_index ]
 	return rv
 
+
 func _serialize(data: Dictionary) -> Dictionary:
 	data.convolution_params = convolution_params
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	set_convolution_params(data.convolution_params)

@@ -97,3 +97,6 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "ios"
 	data.ports = ports
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	ports = data.ports

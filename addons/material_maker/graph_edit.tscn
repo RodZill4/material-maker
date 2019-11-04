@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/material_maker/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
@@ -9,9 +9,14 @@ bg_color = Color( 0.6, 0.6, 0.6, 0 )
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
+region = Rect2( 64, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
+
+[sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 48, 16, 16 )
@@ -37,7 +42,7 @@ margin_bottom = 24.0
 alignment = 2
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
-margin_left = 362.0
+margin_left = 330.0
 margin_right = 544.0
 margin_bottom = 24.0
 size_flags_horizontal = 9
@@ -48,23 +53,33 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 9
 
-[node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
+[node name="ButtonTransmitsSeed" type="Button" parent="GraphUI/SubGraphUI"]
 margin_left = 154.0
 margin_right = 182.0
 margin_bottom = 24.0
+hint_tooltip = "Affect children seeds"
+size_flags_horizontal = 9
+toggle_mode = true
+icon = SubResource( 2 )
+
+[node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
+margin_left = 186.0
+margin_right = 214.0
+margin_bottom = 24.0
 hint_tooltip = "Back to parent"
 size_flags_horizontal = 9
-icon = SubResource( 2 )
+icon = SubResource( 3 )
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
 margin_left = 548.0
 margin_right = 576.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
-icon = SubResource( 3 )
+icon = SubResource( 4 )
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
 [connection signal="text_changed" from="GraphUI/SubGraphUI/Label" to="." method="_on_Label_text_changed"]
+[connection signal="toggled" from="GraphUI/SubGraphUI/ButtonTransmitsSeed" to="." method="_on_ButtonTransmitsSeed_toggled"]
 [connection signal="pressed" from="GraphUI/SubGraphUI/ButtonUp" to="." method="on_ButtonUp_pressed"]
 [connection signal="pressed" from="GraphUI/ButtonShowTree" to="." method="_on_ButtonShowTree_pressed"]

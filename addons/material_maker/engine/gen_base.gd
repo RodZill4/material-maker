@@ -34,6 +34,9 @@ var position : Vector2 = Vector2(0, 0)
 var model = null
 var parameters = {}
 
+var seed_locked : bool = false
+var seed_value : int = 0
+
 func _ready() -> void:
 	init_parameters()
 
@@ -49,8 +52,27 @@ func toggle_editable() -> bool:
 func is_editable() -> bool:
 	return false
 
+
 func has_randomness():
 	return false
+
+func get_seed() -> int:
+	if !seed_locked:
+		var s : int = ((int(position.x) * 0x1f1f1f1f) ^ int(position.y)) % 65536
+		if get_parent().get("transmits_seed") != null and get_parent().transmits_seed:
+			s += get_parent().get_seed()
+		return s
+	else:
+		return seed_value
+
+func toggle_lock_seed():
+	if !seed_locked:
+		seed_value = get_seed()
+	seed_locked = !seed_locked
+	return seed_locked
+
+func is_seed_locked():
+	return seed_locked
 
 func init_parameters() -> void:
 	for p in get_parameter_defs():
@@ -64,6 +86,9 @@ func init_parameters() -> void:
 
 func set_position(p) -> void:
 	position = p
+	if has_randomness() and !is_seed_locked():
+		for i in range(get_output_defs().size()):
+			notify_output_change(i)
 
 func get_type() -> String:
 	return "generic"
@@ -163,6 +188,7 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 func _get_shader_code(__, __, __) -> Dictionary:
 	return {}
 
+
 func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+name)
 	return data
@@ -171,8 +197,35 @@ func serialize():
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
 	for p in parameters.keys():
 		rv.parameters[p] = MMType.serialize_value(parameters[p])
+	if seed_locked:
+		rv.seed_value = seed_value
 	if model != null:
 		rv.type = model
 	else:
 		rv = _serialize(rv)
 	return rv
+
+func _deserialize(data : Dictionary) -> void:
+	pass
+
+func deserialize(data : Dictionary) -> void:
+	_deserialize(data)
+	if data.has("name"):
+		name = data.name
+	if data.has("node_position"):
+		position.x = data.node_position.x
+		position.y = data.node_position.y
+	if data.has("parameters"):
+		for p in data.parameters.keys():
+			set_parameter(p, MMType.deserialize_value(data.parameters[p]))
+	else:
+		for p in get_parameter_defs():
+			if data.has(p.name) and p.name != "type":
+				set_parameter(p.name, MMType.deserialize_value(data[p.name]))
+	if data.has("seed_value"):
+		seed_locked = true
+		seed_value = data.seed_value
+	else:
+		seed_locked = false
+	_post_load()
+

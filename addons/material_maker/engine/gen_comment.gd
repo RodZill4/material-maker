@@ -33,3 +33,9 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.text = text
 	data.size = { x=size.x, y=size.y }
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	if data.has("text"):
+		text = data.text
+	if data.has("size"):
+		size = Vector2(data.size.x, data.size.y)

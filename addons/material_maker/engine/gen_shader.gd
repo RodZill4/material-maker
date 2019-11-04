@@ -16,6 +16,9 @@ func toggle_editable() -> bool:
 func is_editable() -> bool:
 	return editable
 
+func has_randomness():
+	return uses_seed
+
 func get_type() -> String:
 	return "shader"
 
@@ -45,24 +48,30 @@ func get_output_defs():
 func set_shader_model(data: Dictionary):
 	shader_model = data
 	init_parameters()
+	uses_seed = false
 	if shader_model.has("outputs"):
 		for i in range(shader_model.outputs.size()):
 			var output = shader_model.outputs[i]
+			var output_code = ""
 			if output.has("rgba"):
 				shader_model.outputs[i].type = "rgba"
+				output_code = output.rgba
 			elif output.has("rgb"):
 				shader_model.outputs[i].type = "rgb"
-			else:
+				output_code = output.rgb
+			elif output.has("f"):
 				shader_model.outputs[i].type = "f"
-
-func set_position(p) -> void:
-	.set_position(p)
-	if uses_seed:
-		source_changed(0)
-
-func get_seed() -> int:
-	var s = ((int(position.x) * 0x1f1f1f1f) ^ int(position.y)) % 65536
-	return s
+				output_code = output.f
+			else:
+				print("Unsupported output type")
+			if output_code.find("$seed") != -1 or output_code.find("$(seed)") != -1:
+				uses_seed = true
+	if shader_model.has("code"):
+		if shader_model.code.find("$seed") != -1 or shader_model.code.find("$(seed)") != -1:
+			uses_seed = true
+	if shader_model.has("instance"):
+		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
+			uses_seed = true
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
@@ -156,7 +165,6 @@ func subst(string, context, uv = "") -> Dictionary:
 	var tmp_string = replace_variable(string, "seed", str(get_seed()))
 	if tmp_string != string:
 		string = tmp_string
-		uses_seed = true
 	if uv != "":
 		string = replace_variable(string, "uv", "("+uv+")")
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
@@ -213,7 +221,6 @@ func subst(string, context, uv = "") -> Dictionary:
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	uses_seed = false
 	var genname = "o"+str(get_instance_id())
 	var output_info = [ { field="rgba", type="vec4" }, { field="rgb", type="vec3" }, { field="f", type="float" } ]
 	var rv = { globals=[], defs="", code="", textures={} }
@@ -278,9 +285,17 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			rv.globals.push_back(shader_model.global)
 	return rv
 
+
 func _serialize(data: Dictionary) -> Dictionary:
 	data.shader_model = shader_model
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	if data.has("shader_model"):
+		set_shader_model(data.shader_model)
+	elif data.has("model_data"):
+		set_shader_model(data.model_data)
+
 
 func edit(node) -> void:
 	if shader_model != null:
