@@ -24,12 +24,10 @@ func on_parameter_changed(p, v) -> void:
 		call_deferred("update_node")
 	elif controls.has(p):
 		var o = controls[p]
-		if o is LineEdit:
+		if o is MMFloatEdit:
+			o.value = v
+		elif o is LineEdit:
 			o.text = v
-		elif o is SpinBox:
-			o.value = v
-		elif o is HSlider:
-			o.value = v
 		elif o is SizeOptionButton:
 			o.size_value = v
 		elif o is OptionButton:
@@ -56,12 +54,10 @@ func initialize_properties() -> void:
 		var o = controls[c]
 		if generator.parameters.has(c):
 			on_parameter_changed(c, generator.parameters[c])
-		if o is LineEdit:
+		if o is MMFloatEdit:
+			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+		elif o is LineEdit:
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
-		elif o is SpinBox:
-			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
-		elif o is HSlider:
-			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is SizeOptionButton:
 			o.connect("size_value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
@@ -106,15 +102,10 @@ func _on_gradient_changed(new_gradient, variable) -> void:
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
 	if p.type == "float":
-		if p.has("widget") and p.widget == "spinbox":
-			control = SpinBox.new()
-		else:
-			control = preload("res://addons/material_maker/widgets/hslider.tscn").instance()
+		control = preload("res://addons/material_maker/widgets/float_edit.tscn").instance()
 		control.min_value = p.min
 		control.max_value = p.max
 		control.step = 0.005 if !p.has("step") else p.step
-		control.allow_greater = true
-		control.allow_lesser = true
 		if p.has("default"):
 			control.value = p.default
 		control.rect_min_size.x = 80
