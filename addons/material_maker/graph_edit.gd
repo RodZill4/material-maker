@@ -289,7 +289,8 @@ func paste(pos = Vector2(0, 0)) -> void:
 
 func send_changed_signal() -> void:
 	set_need_save(true)
-	timer.start(0.1)
+	timer.stop()
+	timer.start(0.2)
 
 func do_send_changed_signal() -> void:
 	emit_signal("graph_changed")

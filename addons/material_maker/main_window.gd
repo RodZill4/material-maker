@@ -6,6 +6,9 @@ var recent_files = []
 var editor_interface = null
 var current_tab = null
 
+var updating : bool = false
+var need_update : bool = false
+
 onready var renderer = $Renderer
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
@@ -405,8 +408,20 @@ func _on_PopupMenu_id_pressed(id) -> void:
 # Preview
 
 func update_preview() -> void:
-	update_preview_2d()
-	update_preview_3d()
+	var status
+	need_update = true
+	if updating:
+		return
+	updating = true
+	while need_update:
+		need_update = false
+		status = update_preview_2d()
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		status = update_preview_3d()
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+	updating = false
 
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
