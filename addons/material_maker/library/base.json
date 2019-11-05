@@ -1,420 +1,1811 @@
-{"lib":[
-	{
-		"tree_item":"Simple",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Simple/Uniform",
-		"type":"uniform"
-	},
-	{
-		"icon": "polygon",
-		"name": "shape",
-		"parameters": {
-			"edge": 0.051546,
-			"radius": 0.845361,
-			"shape": 1,
-			"sides": 6
+{
+	"lib": [
+		{
+			"collapsed": false,
+			"tree_item": "Simple"
 		},
-		"tree_item":"Simple/Shape",
-		"type":"shape"
-	},
-	{
-		"icon": "star",
-		"name": "shape",
-		"parameters": {
-			"edge": 0.2,
-			"radius": 0.34375,
-			"shape": 2,
-			"sides": 5
-		},
-		"tree_item": "Simple/Shape/Star",
-		"type": "shape"
-	},
-	{
-		"icon": "curved_star",
-		"name": "shape",
-		"parameters": {
-			"edge": 0.628866,
-			"radius": 0.546392,
-			"shape": 3,
-			"sides": 6
-		},
-		"tree_item": "Simple/Shape/Curved Star",
-		"type": "shape"
-	},
-	{
-		"icon": "rays",
-		"name": "shape",
-		"parameters": {
-			"edge": 0.628866,
-			"radius": 0.546392,
-			"shape": 4,
-			"sides": 9
-		},
-		"tree_item": "Simple/Shape/Rays",
-		"type": "shape"
-	},
-	{
-		"tree_item":"Simple/Image",
-		"type":"image",
-		"parameters": {
-			"file_path":"res://addons/material_maker/nodes/image/godot_logo.png"
-		}
-	},
-	{
-		"tree_item":"Pattern",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Pattern/Generic",
-		"icon":"pattern",
-		"type":"pattern",
-		"parameters":{
-			"mix":0,
-			"x_scale":4,
-			"x_wave":0,
-			"y_scale":4,
-			"y_wave":0
-		}
-	},
-    {
-		"tree_item": "Pattern/Generic/Checkerboard",
-		"type": "pattern",
-		"icon": "checkerboard",
-		"parameters":{
-			"mix": 4,
-			"x_scale": 4,
-			"x_wave": 2,
-			"y_scale": 4,
-			"y_wave": 2
-		}
-    },
-	{
-		"tree_item":"Pattern/Bricks",
-		"type":"bricks",
-		"icon":"bricks",
-		"parameters":{
-			"bevel":0.1,
-			"columns":3,
-			"mortar":0.1,
-			"row_offset":0.5,
-			"rows":6
-		}
-	},
-    {
-		"tree_item": "Pattern/Bricks/Tiles",
-		"type": "bricks",
-		"icon": "tiles",
-		"parameters":{
-			"bevel": 0.05,
-			"columns": 4,
-			"mortar": 0.05,
-			"row_offset": 0,
-			"rows": 4
-		}
-	},
-    {
-		"tree_item": "Pattern/Bricks/BasketWeave",
-		"type": "bricks",
-		"icon": "basketweave",
-		"parameters":{
-			"bevel": 0.05,
-			"columns": 2,
-			"mortar": 0.05,
-			"pattern": 3,
-			"repeat": 2,
-			"row_offset": 0,
-			"rows": 2
-		}
-    },
-    {
-		"tree_item": "Pattern/Bricks/HerringBone",
-		"type": "bricks",
-		"icon": "herringbone",
-		"parameters":{
-			"bevel": 0.05,
-			"columns": 2,
-			"mortar": 0.05,
-			"pattern": 2,
-			"repeat": 2,
-			"row_offset": 0,
-			"rows": 2
-		}
-    },
-    {
-		"tree_item": "Pattern/Bricks/SpanishBond",
-		"type": "bricks",
-		"icon": "spanishbond",
-		"parameters":{
-			"bevel": 0.05,
-			"columns": 2,
-			"mortar": 0.05,
-			"pattern": 4,
-			"repeat": 2,
-			"row_offset": 0,
-			"rows": 2
-		}
-    },
-	{
-		"icon": "weave",
-		"name": "weave",
-		"parameters": {
-			"columns": 4,
-			"rows": 4
-		},
-		"tree_item": "Pattern/Weave",
-		"type": "weave"
-	},
-	{
-		"icon": "truchet",
-		"name": "truchet",
-		"parameters": {
-			"Size": 4,
-			"shape": 0,
-			"size": 4,
-			"type": 1
-		},
-		"tree_item": "Pattern/Truchet",
-		"type": "truchet"
-	},
-	{
-		"icon": "runes",
-		"name": "runes",
-		"parameters": {
-			"columns": 4,
-			"rows": 4
-		},
-		"tree_item": "Pattern/Runes",
-		"type": "runes"
-	},
-	{
-		"tree_item":"Noise",
-		"type":"noise",
-		"icon":"noise",
-		"collapsed":false,
-		"parameters":{
-			"size":4,
-			"density":0.5
-		}
-	},
-	{
-		"tree_item":"Filter",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Transform",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Miscellaneous",
-		"collapsed":false
-	},
-	{
-		"tree_item":"Noise/Perlin",
-		"type":"perlin",
-		"icon":"perlin",
-		"parameters":{
-			"iterations":3,
-			"persistence":0.5,
-			"scale_x":4,
-			"scale_y":4
-		}
-	},
-	{
-		"tree_item":"Noise/Voronoi",
-		"type":"voronoi",
-		"icon":"voronoi",
-		"parameters":{
-			"intensity":1,
-			"scale_x":4,
-			"scale_y":4
-		}
-	},
-	{
-		"tree_item":"Filter/AdjustHSV",
-		"type":"adjust_hsv",
-		"parameters":{
-			"hue":0,
-			"saturation":1,
-			"value":1
-		}
-	},
-	{
-		"icon": "colorize",
-		"tree_item":"Filter/Colorize",
-		"type":"colorize",
-		"parameters":{
-			"gradient":[{"b":0,"g":0,"pos":0,"r":0},{"b":1,"g":1,"pos":1,"r":1}]
-		}
-	},
-    {
-		"tree_item": "Filter/Colorize/Invert",
-		"type": "colorize",
-		"icon": "invert",
-		"parameters":{
-			"gradient": [
-				{
+		{
+			"collapsed": true,
+			"icon": "uniform",
+			"name": "uniform",
+			"parameters": {
+				"color": {
+					"a": 1,
 					"b": 1,
-					"g": 1,
-					"pos": 0,
-					"r": 1
+					"g": 0.415686,
+					"r": 0,
+					"type": "Color"
+				}
+			},
+			"tree_item": "Simple/Uniform",
+			"type": "uniform"
+		},
+		{
+			"collapsed": true,
+			"icon": "polygon",
+			"name": "shape",
+			"parameters": {
+				"edge": 0.051546,
+				"radius": 0.845361,
+				"shape": 1,
+				"sides": 6
+			},
+			"tree_item": "Simple/Shape",
+			"type": "shape"
+		},
+		{
+			"collapsed": true,
+			"icon": "star",
+			"name": "shape",
+			"parameters": {
+				"edge": 0.2,
+				"radius": 0.34375,
+				"shape": 2,
+				"sides": 5
+			},
+			"tree_item": "Simple/Shape/Star",
+			"type": "shape"
+		},
+		{
+			"collapsed": true,
+			"icon": "curved_star",
+			"name": "shape",
+			"parameters": {
+				"edge": 0.628866,
+				"radius": 0.546392,
+				"shape": 3,
+				"sides": 6
+			},
+			"tree_item": "Simple/Shape/Curved Star",
+			"type": "shape"
+		},
+		{
+			"collapsed": true,
+			"icon": "rays",
+			"name": "shape",
+			"parameters": {
+				"edge": 0.628866,
+				"radius": 0.546392,
+				"shape": 4,
+				"sides": 9
+			},
+			"tree_item": "Simple/Shape/Rays",
+			"type": "shape"
+		},
+		{
+			"collapsed": true,
+			"icon": "circle",
+			"name": "shape",
+			"parameters": {
+				"edge": 0.2,
+				"radius": 0.906667,
+				"shape": 0,
+				"sides": 2
+			},
+			"tree_item": "Simple/Shape/Circle",
+			"type": "shape"
+		},
+		{
+			"collapsed": true,
+			"icon": "image",
+			"name": "image",
+			"parameters": {
+				"file_path": "res://addons/material_maker/nodes/image/godot_logo.png",
+				"image": "D:/Dev/Godot/godot-procedural-textures/addons/material_maker/icons/icon.png"
+			},
+			"tree_item": "Simple/Image",
+			"type": "image"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "pattern",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
 				},
 				{
-					"b": 0,
-					"g": 0,
-					"pos": 1,
-					"r": 0
+					"from": "transform",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
 				}
-			]	
-		}
-	},
-	{
-		"icon": "rainbow",
-		"name": "colorize",
-		"parameters": {
-			"gradient": {
-				"points": [
+			],
+			"icon": "gradient",
+			"label": "Gradient",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "pattern",
+					"node_position": {
+						"x": -389.625,
+						"y": -359.458374
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 1,
+						"x_wave": 3,
+						"y_scale": 1,
+						"y_wave": 4
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -371.125,
+						"y": -262.458374
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0,
+						"translate_y": 0
+					},
+					"type": "transform"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -352.125,
+						"y": -69.458374
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -406.125,
+						"y": -498.858337
+					},
+					"parameters": {
+						"param0": 1,
+						"param1": 0,
+						"param2": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Repeat",
+							"linked_widgets": [
+								{
+									"node": "pattern",
+									"widget": "x_scale"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rotate",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "rotate"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Gradient",
+							"linked_widgets": [
+								{
+									"node": "colorize",
+									"widget": "gradient"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -706.125,
+						"y": -297.55835
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -52.125,
+						"y": -297.55835
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 1,
+				"param1": 0,
+				"param2": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"tree_item": "Simple/Gradient",
+			"type": "graph"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "pattern",
+					"from_port": 0,
+					"to": "circle_map",
+					"to_port": 0
+				},
+				{
+					"from": "circle_map",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				}
+			],
+			"icon": "radial",
+			"label": "Radial Gradient",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "pattern",
+					"node_position": {
+						"x": -251.5,
+						"y": -71
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 1,
+						"x_wave": 4,
+						"y_scale": 1,
+						"y_wave": 3
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -208.5,
+						"y": 66
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -264.18396,
+						"y": -183.44751
+					},
+					"parameters": {
+						"param0": 1,
+						"param1": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Repeat",
+							"linked_widgets": [
+								{
+									"node": "pattern",
+									"widget": "y_scale"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Gradient",
+							"linked_widgets": [
+								{
+									"node": "colorize",
+									"widget": "gradient"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "circle_map",
+					"node_position": {
+						"x": -171.776794,
+						"y": 23.850616
+					},
+					"parameters": {
+
+					},
+					"type": "circle_map"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -564.18396,
+						"y": -41.149223
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 128.223206,
+						"y": -41.149223
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 1,
+				"param1": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"tree_item": "Simple/Gradient/Radial",
+			"type": "graph"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "circle_map",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "pattern",
+					"from_port": 0,
+					"to": "circle_map",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"icon": "circular",
+			"label": "Circular Gradient",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "pattern",
+					"node_position": {
+						"x": -280.5,
+						"y": -180
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 1,
+						"x_wave": 3,
+						"y_scale": 1,
+						"y_wave": 4
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -256.5,
+						"y": -17
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "circle_map",
+					"node_position": {
+						"x": -229.5,
+						"y": -84.5
+					},
+					"parameters": {
+
+					},
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4($uv, 0.0, 1.0)",
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": "",
+						"name": "CircleMap",
+						"outputs": [
+							{
+								"rgba": "$in(vec2(fract(atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), 2.0*length($uv-vec2(0.5))))",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -297.5,
+						"y": -290
+					},
+					"parameters": {
+						"param0": 1,
+						"param1": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Repeat",
+							"linked_widgets": [
+								{
+									"node": "pattern",
+									"widget": "x_scale"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Gradient",
+							"linked_widgets": [
+								{
+									"node": "colorize",
+									"widget": "gradient"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -480.5,
+						"y": -134.875
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 60.5,
+						"y": -147.875
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 1,
+				"param1": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"tree_item": "Simple/Gradient/Circular",
+			"type": "graph"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "Pattern"
+		},
+		{
+			"collapsed": true,
+			"icon": "pattern",
+			"parameters": {
+				"mix": 0,
+				"x_scale": 4,
+				"x_wave": 0,
+				"y_scale": 4,
+				"y_wave": 0
+			},
+			"tree_item": "Pattern/Generic",
+			"type": "pattern"
+		},
+		{
+			"collapsed": true,
+			"icon": "checkerboard",
+			"name": "pattern",
+			"parameters": {
+				"mix": 4,
+				"x_scale": 4,
+				"x_wave": 2,
+				"y_scale": 4,
+				"y_wave": 2
+			},
+			"tree_item": "Pattern/Generic/Checkerboard",
+			"type": "pattern"
+		},
+		{
+			"collapsed": true,
+			"icon": "bricks",
+			"parameters": {
+				"bevel": 0.1,
+				"columns": 3,
+				"mortar": 0.1,
+				"row_offset": 0.5,
+				"rows": 6
+			},
+			"tree_item": "Pattern/Bricks",
+			"type": "bricks"
+		},
+		{
+			"collapsed": true,
+			"icon": "tiles",
+			"parameters": {
+				"bevel": 0.05,
+				"columns": 4,
+				"mortar": 0.05,
+				"row_offset": 0,
+				"rows": 4
+			},
+			"tree_item": "Pattern/Bricks/Tiles",
+			"type": "bricks"
+		},
+		{
+			"collapsed": true,
+			"icon": "basketweave",
+			"parameters": {
+				"bevel": 0.05,
+				"columns": 2,
+				"mortar": 0.05,
+				"pattern": 3,
+				"repeat": 2,
+				"row_offset": 0,
+				"rows": 2
+			},
+			"tree_item": "Pattern/Bricks/BasketWeave",
+			"type": "bricks"
+		},
+		{
+			"collapsed": true,
+			"icon": "herringbone",
+			"parameters": {
+				"bevel": 0.05,
+				"columns": 2,
+				"mortar": 0.05,
+				"pattern": 2,
+				"repeat": 2,
+				"row_offset": 0,
+				"rows": 2
+			},
+			"tree_item": "Pattern/Bricks/HerringBone",
+			"type": "bricks"
+		},
+		{
+			"collapsed": true,
+			"icon": "spanishbond",
+			"parameters": {
+				"bevel": 0.05,
+				"columns": 2,
+				"mortar": 0.05,
+				"pattern": 4,
+				"repeat": 2,
+				"row_offset": 0,
+				"rows": 2
+			},
+			"tree_item": "Pattern/Bricks/SpanishBond",
+			"type": "bricks"
+		},
+		{
+			"collapsed": true,
+			"icon": "weave",
+			"name": "weave",
+			"parameters": {
+				"columns": 4,
+				"rows": 4
+			},
+			"tree_item": "Pattern/Weave",
+			"type": "weave"
+		},
+		{
+			"collapsed": true,
+			"icon": "truchet",
+			"name": "truchet",
+			"parameters": {
+				"Size": 4,
+				"shape": 0,
+				"size": 4,
+				"type": 1
+			},
+			"tree_item": "Pattern/Truchet",
+			"type": "truchet"
+		},
+		{
+			"collapsed": true,
+			"icon": "runes",
+			"name": "runes",
+			"parameters": {
+				"columns": 4,
+				"rows": 4
+			},
+			"tree_item": "Pattern/Runes",
+			"type": "runes"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "pattern",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "pattern_2",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "bricks",
+					"from_port": 1,
+					"to": "transform",
+					"to_port": 1
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"icon": "fibers",
+			"label": "Fibers",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -422.795074,
+						"y": 104.5
+					},
+					"parameters": {
+						"repeat": true,
+						"rotate": 45,
+						"scale_x": 0.5,
+						"scale_y": 1,
+						"translate_x": 0.975,
+						"translate_y": 0
+					},
+					"type": "transform"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -396.795074,
+						"y": 44.5
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0.4375,
+									"g": 0.4375,
+									"pos": 0,
+									"r": 0.4375
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "bricks",
+					"node_position": {
+						"x": -674.752563,
+						"y": 17.5
+					},
+					"parameters": {
+						"bevel": 0.1,
+						"columns": 4,
+						"mortar": 0.1,
+						"pattern": 0,
+						"repeat": 1,
+						"row_offset": 0.5,
+						"rows": 1
+					},
+					"type": "bricks"
+				},
+				{
+					"name": "pattern_2",
+					"node_position": {
+						"x": -435.795074,
+						"y": -53.5
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 4,
+						"x_wave": 0,
+						"y_scale": 4,
+						"y_wave": 4
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "blend",
+					"node_position": {
+						"x": -142.795074,
+						"y": 11.5
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 2
+					},
+					"type": "blend"
+				},
+				{
+					"name": "pattern",
+					"node_position": {
+						"x": -435.795074,
+						"y": -154.5
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 4,
+						"x_wave": 0,
+						"y_scale": 4,
+						"y_wave": 4
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -433.557495,
+						"y": -236.5
+					},
+					"parameters": {
+						"param0": 4
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Repeat",
+							"linked_widgets": [
+								{
+									"node": "pattern",
+									"widget": "x_scale"
+								},
+								{
+									"node": "bricks",
+									"widget": "columns"
+								},
+								{
+									"node": "pattern_2",
+									"widget": "x_scale"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -974.752563,
+						"y": -38.07143
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 157.204926,
+						"y": -38.07143
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 4
+			},
+			"tree_item": "Pattern/Fibers",
+			"type": "graph"
+		},
+		{
+			"collapsed": true,
+			"icon": "scratches",
+			"name": "scratches",
+			"parameters": {
+				"Randomness": 0.5,
+				"angle": -1,
+				"layers": 5,
+				"length": 0.25,
+				"randomness": 0.44,
+				"waviness": 0.51,
+				"width": 0.4
+			},
+			"tree_item": "Pattern/Scratches",
+			"type": "scratches"
+		},
+		{
+			"collapsed": false,
+			"icon": "noise",
+			"name": "noise",
+			"parameters": {
+				"density": 0.5,
+				"size": 4
+			},
+			"tree_item": "Noise",
+			"type": "noise"
+		},
+		{
+			"collapsed": true,
+			"icon": "perlin",
+			"parameters": {
+				"iterations": 3,
+				"persistence": 0.5,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"tree_item": "Noise/Perlin",
+			"type": "perlin"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 1
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"icon": "warp1",
+			"label": "Warp1",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -259.25,
+						"y": -658
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.5,
+						"translate_y": 0.5
+					},
+					"type": "transform"
+				},
+				{
+					"name": "perlin",
+					"node_position": {
+						"x": -502.25,
+						"y": -653
+					},
+					"parameters": {
+						"iterations": 3,
+						"persistence": 0.5,
+						"scale_x": 4,
+						"scale_y": 4
+					},
+					"type": "perlin"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -670.25,
+						"y": -647.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 18.75,
+						"y": -657.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -315.75,
+						"y": -893
+					},
+					"parameters": {
+						"param0": 4,
+						"param1": 4,
+						"param2": 3,
+						"param3": 0.5,
+						"param4": 0.5,
+						"param5": 0.5
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Scale X",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_x"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Scale Y",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_y"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Iterations",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "iterations"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Persistance",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "persistence"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp X",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_x"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp Y",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_y"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
+				}
+			],
+			"parameters": {
+				"param0": 4,
+				"param1": 4,
+				"param2": 3,
+				"param3": 0.5,
+				"param4": 0.5,
+				"param5": 0.5
+			},
+			"tree_item": "Noise/Perlin/Warp1",
+			"type": "graph"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 1
+				},
+				{
+					"from": "transform_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 1
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				}
+			],
+			"icon": "warp2",
+			"label": "Warp2",
+			"name": "graph",
+			"nodes": [
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -292.25,
+						"y": -629
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.5,
+						"translate_y": 0.5
+					},
+					"type": "transform"
+				},
+				{
+					"name": "perlin",
+					"node_position": {
+						"x": -558.25,
+						"y": -720
+					},
+					"parameters": {
+						"iterations": 3,
+						"persistence": 0.5,
+						"scale_x": 4,
+						"scale_y": 4
+					},
+					"type": "perlin"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -802.25,
+						"y": -655.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 268.75,
+						"y": -656.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -315.75,
+						"y": -905
+					},
+					"parameters": {
+						"param0": 4,
+						"param1": 4,
+						"param2": 3,
+						"param3": 0.5,
+						"param4": 0.5,
+						"param5": 0.5
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Scale X",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_x"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Scale Y",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_y"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Iterations",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "iterations"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Persistance",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "persistence"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp X",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_x"
+								},
+								{
+									"node": "transform_2",
+									"widget": "translate_x"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp Y",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_y"
+								},
+								{
+									"node": "transform_2",
+									"widget": "translate_y"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "transform_2",
+					"node_position": {
+						"x": -32.462402,
+						"y": -714.099976
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.5,
+						"translate_y": 0.5
+					},
+					"type": "transform"
+				}
+			],
+			"parameters": {
+				"param0": 4,
+				"param2": 3,
+				"param4": 0.5,
+				"param5": 0.5
+			},
+			"tree_item": "Noise/Perlin/Warp2",
+			"type": "graph"
+		},
+		{
+			"collapsed": true,
+			"icon": "voronoi",
+			"parameters": {
+				"intensity": 1,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"tree_item": "Noise/Voronoi",
+			"type": "voronoi"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "Filter"
+		},
+		{
+			"collapsed": true,
+			"parameters": {
+				"hue": 0,
+				"saturation": 1,
+				"value": 1
+			},
+			"tree_item": "Filter/AdjustHSV",
+			"type": "adjust_hsv"
+		},
+		{
+			"collapsed": true,
+			"icon": "colorize",
+			"parameters": {
+				"gradient": [
 					{
-						"a": 1,
 						"b": 0,
 						"g": 0,
+						"pos": 0,
+						"r": 0
+					},
+					{
+						"b": 1,
+						"g": 1,
+						"pos": 1,
+						"r": 1
+					}
+				]
+			},
+			"tree_item": "Filter/Colorize",
+			"type": "colorize"
+		},
+		{
+			"collapsed": true,
+			"icon": "invert",
+			"parameters": {
+				"gradient": [
+					{
+						"b": 1,
+						"g": 1,
 						"pos": 0,
 						"r": 1
 					},
 					{
-						"a": 1,
 						"b": 0,
-						"g": 0.96875,
-						"pos": 0.254545,
-						"r": 1
-					},
-					{
-						"a": 1,
-						"b": 0.125,
-						"g": 1,
-						"pos": 0.527273,
-						"r": 0
-					},
-					{
-						"a": 1,
-						"b": 1,
-						"g": 0.0625,
-						"pos": 0.772727,
-						"r": 0
-					},
-					{
-						"a": 1,
-						"b": 1,
 						"g": 0,
 						"pos": 1,
-						"r": 0.84375
+						"r": 0
 					}
-				],
-				"type": "Gradient"
-			}
+				]
+			},
+			"tree_item": "Filter/Colorize/Invert",
+			"type": "colorize"
 		},
-		"tree_item": "Filter/Colorize/Rainbow",
-		"type": "colorize"
-	},
-	{
-		"icon": "blend",
-		"tree_item":"Filter/Blend",
-		"type":"blend",
-		"parameters":{
-			"amount":0.5,
-			"blend_type":0
-		}
-	},
-	{
-		"tree_item":"Filter/Combine",
-		"type":"combine"
-	},
-	{
-		"tree_item":"Filter/Decompose",
-		"type":"decompose"
-	},
-	{
-		"icon": "normal_map",
-		"tree_item":"Filter/Normal map",
-		"type":"normal_map",
-		"parameters":{
-			"amount":0.5
-		}
-	},
-	{
-		"icon": "transform",
-		"tree_item":"Transform",
-		"type":"transform",
-		"parameters":{
-			"rotate":0,
-			"scale_x":1,
-			"scale_y":1,
-			"translate_x":0,
-			"translate_y":0
-		}
-	},
-	{
-		"icon": "mirror",
-		"name": "mirror",
-		"parameters": {
-			"direction": 0,
-			"offset": 0
+		{
+			"collapsed": true,
+			"icon": "rainbow",
+			"name": "colorize",
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.96875,
+							"pos": 0.254545,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0.125,
+							"g": 1,
+							"pos": 0.527273,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 0.0625,
+							"pos": 0.772727,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 0,
+							"pos": 1,
+							"r": 0.84375
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"tree_item": "Filter/Colorize/Rainbow",
+			"type": "colorize"
 		},
-		"tree_item": "Transform/Mirror",
-		"type": "mirror"
-	},
-	{
-		"icon": "kaleidoscope",
-		"name": "kaleidoscope",
-		"parameters": {
-			"count": 5,
-			"direction": 0,
-			"offset": 0
+		{
+			"collapsed": true,
+			"icon": "blend",
+			"parameters": {
+				"amount": 0.5,
+				"blend_type": 0
+			},
+			"tree_item": "Filter/Blend",
+			"type": "blend"
 		},
-		"tree_item": "Transform/Kaleidoscope",
-		"type": "kaleidoscope"
-	},
-	{
-		"icon": "warp",
-		"tree_item":"Transform/Warp",
-		"type":"warp",
-		"parameters":{
-			"amount":0.5
+		{
+			"collapsed": true,
+			"tree_item": "Filter/Combine",
+			"type": "combine"
+		},
+		{
+			"collapsed": true,
+			"tree_item": "Filter/Decompose",
+			"type": "decompose"
+		},
+		{
+			"collapsed": true,
+			"icon": "normal_map",
+			"parameters": {
+				"amount": 0.5
+			},
+			"tree_item": "Filter/Normal map",
+			"type": "normal_map"
+		},
+		{
+			"collapsed": true,
+			"icon": "blur",
+			"name": "gaussian_blur",
+			"parameters": {
+				"param0": 9,
+				"param1": 50,
+				"param2": 0
+			},
+			"tree_item": "Filter/Blur",
+			"type": "gaussian_blur"
+		},
+		{
+			"collapsed": true,
+			"icon": "directional",
+			"name": "directional_blur",
+			"parameters": {
+				"param0": 9,
+				"param1": 50,
+				"param2": 45
+			},
+			"tree_item": "Filter/Blur/Directional",
+			"type": "directional_blur"
+		},
+		{
+			"collapsed": true,
+			"icon": "emboss",
+			"name": "emboss_2",
+			"parameters": {
+				"param0": 9,
+				"param1": 0,
+				"param2": 5
+			},
+			"tree_item": "Filter/Emboss",
+			"type": "emboss"
+		},
+		{
+			"collapsed": false,
+			"icon": "transform",
+			"parameters": {
+				"rotate": 0,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": 0,
+				"translate_y": 0
+			},
+			"tree_item": "Transform",
+			"type": "transform"
+		},
+		{
+			"collapsed": true,
+			"icon": "mirror",
+			"name": "mirror",
+			"parameters": {
+				"direction": 0,
+				"offset": 0
+			},
+			"tree_item": "Transform/Mirror",
+			"type": "mirror"
+		},
+		{
+			"collapsed": true,
+			"icon": "kaleidoscope",
+			"name": "kaleidoscope",
+			"parameters": {
+				"count": 5,
+				"direction": 0,
+				"offset": 0
+			},
+			"tree_item": "Transform/Kaleidoscope",
+			"type": "kaleidoscope"
+		},
+		{
+			"collapsed": true,
+			"icon": "warp",
+			"name": "warp",
+			"parameters": {
+				"amount": 0.1,
+				"eps": 0.1,
+				"epsilon": 0
+			},
+			"tree_item": "Transform/Warp",
+			"type": "warp"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "Miscellaneous"
+		},
+		{
+			"collapsed": true,
+			"icon": "buffer",
+			"tree_item": "Miscellaneous/Buffer",
+			"type": "buffer"
+		},
+		{
+			"collapsed": true,
+			"shader_model": {
+
+			},
+			"tree_item": "Miscellaneous/Custom Shader",
+			"type": "custom"
+		},
+		{
+			"collapsed": true,
+			"icon": "switch",
+			"tree_item": "Miscellaneous/Switch",
+			"type": "switch"
+		},
+		{
+			"collapsed": true,
+			"tree_item": "Miscellaneous/Remote",
+			"type": "remote",
+			"widgets": [
+
+			]
+		},
+		{
+			"collapsed": true,
+			"tree_item": "Miscellaneous/Comment",
+			"type": "comment"
+		},
+		{
+			"collapsed": true,
+			"parameters": {
+				"size": 10
+			},
+			"tree_item": "Miscellaneous/Export",
+			"type": "export"
+		},
+		{
+			"collapsed": true,
+			"icon": "debug",
+			"tree_item": "Miscellaneous/Debug",
+			"type": "debug"
 		}
-	},
-	{
-		"tree_item":"Miscellaneous/Buffer",
-		"type":"buffer",
-		"icon":"buffer"
-	},
-	{
-		"tree_item":"Miscellaneous/Custom Shader",
-		"type":"custom",
-		"shader_model":{}
-	},
-	{
-		"tree_item":"Miscellaneous/Switch",
-		"type":"switch",
-		"icon":"switch"
-	},
-	{
-		"tree_item":"Miscellaneous/Remote",
-		"type":"remote",
-		"widgets":[]
-	},
-	{
-		"tree_item":"Miscellaneous/Comment",
-		"type":"comment"
-	},
-	{
-		"tree_item":"Miscellaneous/Export",
-		"type":"export",
-		"parameters":{"size":10}
-	},
-	{
-		"tree_item":"Miscellaneous/Debug",
-		"icon":"debug",
-		"type":"debug"
-	}
-]}
+	]
+}

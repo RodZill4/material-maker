@@ -36,6 +36,7 @@ const MENU = [
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+E", description="Make selected nodes editable" },
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
+	{ menu="Tools", command="export_library", description="Export the nodes library" },
 	
 	{ menu="Help", command="show_doc", description="User manual" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
@@ -350,6 +351,19 @@ func do_add_to_user_library(name, nodes) -> void:
 	result.release()
 	library.add_item(data, name, library.get_preview_texture(data))
 	library.save_library("user://library/user.json")
+
+func export_library() -> void:
+	var dialog : FileDialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.json;JSON files")
+	dialog.connect("file_selected", self, "do_export_library")
+	dialog.popup_centered()
+
+func do_export_library(path : String) -> void:
+	library.export_libraries(path)
 
 func show_doc() -> void:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()

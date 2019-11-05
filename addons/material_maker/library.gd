@@ -109,17 +109,27 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
-func serialize_library(array : Array, library_name : String = "", item : TreeItem = null) -> void:
+func serialize_library(array : Array, library_name : String = "", item : TreeItem = null, icon_path : String = "") -> void:
 	if item == null:
 		item = tree.get_root()
 	item = item.get_children()
 	while item != null:
 		if item.get_metadata(0) != null:
 			var m : Dictionary = item.get_metadata(0)
+			if icon_path != "":
+				pass
 			if library_name == "" or (m.has("library") and m.library == library_name):
 				var copy : Dictionary = m.duplicate()
 				copy.erase("library")
+				copy.collapsed = item.collapsed
 				array.append(copy)
+		elif !item.collapsed:
+			var item_path = item.get_text(0)
+			var item_parent = item.get_parent()
+			while item_parent != tree.get_root():
+				item_path = item_parent.get_text(0)+"/"+item_path
+				item_parent = item_parent.get_parent()
+			array.append({ tree_item=item_path, collapsed=false })
 		serialize_library(array, library_name, item)
 		item = item.get_next()
 
@@ -131,5 +141,16 @@ func save_library(library_name : String, item : TreeItem = null) -> void:
 		file.store_string(JSON.print({lib=array}, "\t", true))
 		file.close()
 
-func _on_Filter_text_changed(filter) -> void:
+func _on_Filter_text_changed(filter : String) -> void:
 	update_tree(filter)
+
+func export_libraries(path : String) -> void:
+	var dir : Directory = Directory.new()
+	var icon_path = path.get_basename()
+	dir.make_dir(icon_path)
+	var array = []
+	serialize_library(array, "", null, icon_path)
+	var file = File.new()
+	if file.open(path, File.WRITE) == OK:
+		file.store_string(JSON.print({lib=array}, "\t", true))
+		file.close()
