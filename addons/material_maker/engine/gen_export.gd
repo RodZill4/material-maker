@@ -34,11 +34,10 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
-func render_textures(renderer : MMGenRenderer) -> void:
-	print("rendering texture...")
+func render_textures() -> void:
 	var source = get_source(0)
 	if source != null:
-		var result = source.generator.render(source.output_index, renderer, get_image_size())
+		var result = source.generator.render(source.output_index, get_image_size())
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		texture = ImageTexture.new()
@@ -48,7 +47,6 @@ func render_textures(renderer : MMGenRenderer) -> void:
 		texture = null
 
 func export_textures(prefix, __ = null) -> void:
-	print("exporting texture")
 	if texture != null:
 		var image = texture.get_data()
 		image.save_png("%s_%s.png" % [ prefix, parameters.suffix])

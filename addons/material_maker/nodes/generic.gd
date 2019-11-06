@@ -380,8 +380,7 @@ func update_preview(size : int = 0) -> void:
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	var renderer = get_parent().renderer
-	var result = generator.render(preview_index, renderer, preview_size)
+	var result = generator.render(preview_index, preview_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if preview.texture == null:

@@ -4,13 +4,10 @@ extends EditorPlugin
 var mm_button = null
 var material_maker = null
 var importer = null
-var renderer = null
 
 func _enter_tree() -> void:
 	add_tool_menu_item("Material Maker", self, "open_material_maker")
 	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
-	renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
-	add_child(renderer)
 
 func register_material_maker_import(__) -> void:
 	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
@@ -62,7 +59,7 @@ func generate_material(ptex_filename: String) -> Material:
 	if generator.has_node("Material"):
 		var gen_material = generator.get_node("Material")
 		if gen_material != null:
-			var return_value = gen_material.render_textures(renderer)
+			var return_value = gen_material.render_textures(mm_renderer)
 			while return_value is GDScriptFunctionState:
 				return_value = yield(return_value, "completed")
 			var prefix = ptex_filename.left(ptex_filename.rfind("."))

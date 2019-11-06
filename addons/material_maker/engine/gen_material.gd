@@ -8,9 +8,10 @@ var generated_textures = {}
 const TEXTURE_LIST = [
 	{ port=0, texture="albedo" },
 	{ port=3, texture="emission" },
-	{ port=4, texture="normal_texture" },
+	{ port=4, texture="normal" },
 	{ ports=[5, 2, 1], default_values=["1.0", "1.0", "1.0"], texture="orm" },
-	{ port=6, texture="depth_texture" }
+	{ port=6, texture="depth" },
+	{ port=7, texture="subsurf_scatter" }
 ]
 
 # The minimum allowed texture size as a power-of-two exponent
@@ -45,6 +46,7 @@ func get_parameter_defs() -> Array:
 		{ name="normal_scale", label="Normal", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
 		{ name="ao_light_affect", label="Ambient occlusion", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
 		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
+		{ name="subsurf_scatter_strength", label="Subsurf. Scatter.", type="float", min=0.0, max=1.0, step=0.05, default=0.0 },
 		{ name="size", label="Size", type="size", first=TEXTURE_SIZE_MIN, last=TEXTURE_SIZE_MAX, default=TEXTURE_SIZE_DEFAULT }
 	]
 
@@ -56,7 +58,8 @@ func get_input_defs() -> Array:
 		{ name="emission_texture", label="", type="rgb" },
 		{ name="normal_texture", label="", type="rgb" },
 		{ name="ao_texture", label="", type="f" },
-		{ name="depth_texture", label="", type="f" }
+		{ name="depth_texture", label="", type="f" },
+		{ name="subsurf_scatter_texture", label="", type="f" }
 	]
 
 func get_image_size() -> int:
@@ -86,7 +89,7 @@ func source_changed(input_index : int) -> void:
 			generated_textures[t.texture] = null
 	update_preview()
 
-func render_textures(renderer : MMGenRenderer) -> void:
+func render_textures() -> void:
 	for t in TEXTURE_LIST:
 		var texture = null
 		if t.has("port"):
@@ -94,7 +97,7 @@ func render_textures(renderer : MMGenRenderer) -> void:
 				continue
 			var source = get_source(t.port)
 			if source != null:
-				var result = source.generator.render(source.output_index, renderer, get_image_size())
+				var result = source.generator.render(source.output_index, get_image_size())
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				texture = ImageTexture.new()
@@ -108,7 +111,7 @@ func render_textures(renderer : MMGenRenderer) -> void:
 				if texture.get_size().x <= 128:
 					texture.flags ^= ImageTexture.FLAG_FILTER
 		elif t.has("ports"):
-			var context : MMGenContext = MMGenContext.new(renderer)
+			var context : MMGenContext = MMGenContext.new()
 			var code = []
 			var shader_textures = {}
 			for i in range(t.ports.size()):
@@ -119,11 +122,11 @@ func render_textures(renderer : MMGenRenderer) -> void:
 						status = yield(status, "completed")
 					code.push_back(status)
 					for t in status.textures.keys():
-						shader_textures[t] = code.textures[t]
+						shader_textures[t] = status.textures[t]
 				else:
 					code.push_back({ defs="", code="", f=t.default_values[i] })
-			var shader : String = renderer.generate_combined_shader(code[0], code[1], code[2])
-			var result = renderer.render_shader(shader, shader_textures, get_image_size())
+			var shader : String = mm_renderer.generate_combined_shader(code[0], code[1], code[2])
+			var result = mm_renderer.render_shader(shader, shader_textures, get_image_size())
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			texture = ImageTexture.new()
@@ -180,7 +183,7 @@ func update_spatial_material(m, file_prefix = null) -> void:
 		else:
 			m.emission_enabled = false
 		# Normal map
-		texture = get_generated_texture("normal_texture", file_prefix)
+		texture = get_generated_texture("normal", file_prefix)
 		if texture != null:
 			m.normal_enabled = true
 			m.normal_texture = texture
@@ -195,7 +198,7 @@ func update_spatial_material(m, file_prefix = null) -> void:
 		else:
 			m.ao_enabled = false
 		# Depth
-		texture = get_generated_texture("depth_texture", file_prefix)
+		texture = get_generated_texture("depth", file_prefix)
 		if texture != null:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
@@ -203,6 +206,14 @@ func update_spatial_material(m, file_prefix = null) -> void:
 			m.depth_texture = texture
 		else:
 			m.depth_enabled = false
+		# Subsurface scattering
+		texture = get_generated_texture("subsurf_scatter", file_prefix)
+		if texture != null:
+			m.subsurf_scatter_enabled = true
+			m.subsurf_scatter_strength = parameters.subsurf_scatter_strength
+			m.subsurf_scatter_texture = texture
+		else:
+			m.subsurf_scatter_enabled = false
 	else:
 		m.set_shader_param("albedo", parameters.albedo_color)
 		m.set_shader_param("texture_albedo", get_generated_texture("albedo", file_prefix))
@@ -215,9 +226,9 @@ func update_spatial_material(m, file_prefix = null) -> void:
 		m.set_shader_param("emission_energy", parameters.emission_energy)
 		m.set_shader_param("texture_emission", get_generated_texture("emission", file_prefix))
 		m.set_shader_param("normal_scale", parameters.normal_scale)
-		m.set_shader_param("texture_normal", get_generated_texture("normal_texture", file_prefix))
+		m.set_shader_param("texture_normal", get_generated_texture("normal", file_prefix))
 		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
-		m.set_shader_param("texture_depth", get_generated_texture("depth_texture", file_prefix))
+		m.set_shader_param("texture_depth", get_generated_texture("depth", file_prefix))
 
 func export_textures(prefix, editor_interface = null) -> SpatialMaterial:
 	for t in TEXTURE_LIST:

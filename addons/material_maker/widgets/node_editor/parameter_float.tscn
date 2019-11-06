@@ -4,7 +4,7 @@
 [ext_resource path="res://addons/material_maker/widgets/float_edit.tscn" type="PackedScene" id=2]
 
 [node name="float" type="HBoxContainer"]
-margin_right = 547.0
+margin_right = 400.0
 margin_bottom = 24.0
 script = ExtResource( 1 )
 

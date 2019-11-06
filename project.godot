@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "LineEdit",
+"class": "MMFloatEdit",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/float_edit.gd"
+}, {
 "base": "Node",
 "class": "MMGenBase",
 "language": "GDScript",
@@ -140,6 +145,7 @@ _global_script_classes=[ {
 "path": "res://addons/material_maker/widgets/size_option_button.gd"
 } ]
 _global_script_class_icons={
+"MMFloatEdit": "",
 "MMGenBase": "",
 "MMGenBuffer": "",
 "MMGenComment": "",
@@ -179,6 +185,10 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/release="0.7a1"
+
+[autoload]
+
+mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 
 [debug]
 

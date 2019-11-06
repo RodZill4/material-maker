@@ -11,7 +11,6 @@
 [ext_resource path="res://addons/material_maker/widgets/about/itchio.png" type="Texture" id=9]
 
 [node name="About" type="WindowDialog"]
-visible = true
 margin_right = 200.0
 margin_bottom = 289.0
 window_title = "About..."
@@ -140,7 +139,7 @@ margin_left = 112.0
 margin_right = 136.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
-hint_tooltip = "Github"
+hint_tooltip = "ItchIO"
 texture_normal = ExtResource( 9 )
 expand = true
 stretch_mode = 4

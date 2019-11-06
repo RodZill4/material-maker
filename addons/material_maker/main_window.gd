@@ -9,7 +9,6 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-onready var renderer = $Renderer
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 
@@ -192,7 +191,6 @@ func menu_about_to_show(name, menu) -> void:
 func new_pane() -> GraphEdit:
 	var graph_edit = preload("res://addons/material_maker/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
-	graph_edit.renderer = $Renderer
 	graph_edit.editor_interface = editor_interface
 	projects.add_child(graph_edit)
 	projects.current_tab = graph_edit.get_index()
@@ -347,7 +345,7 @@ func do_add_to_user_library(name, nodes) -> void:
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
 	data.icon = name.right(name.rfind("/")+1).to_lower()
-	var result = nodes[0].generator.render(0, renderer, 64)
+	var result = nodes[0].generator.render(0, 64)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	result.save_to_file("user://library/user/"+data.icon+".png")
@@ -433,7 +431,7 @@ func update_preview_2d(node = null) -> void:
 					node = n
 					break
 		if node != null:
-			var result = node.generator.render(0, renderer, 1024)
+			var result = node.generator.render(0, 1024)
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			var tex = ImageTexture.new()
@@ -445,7 +443,7 @@ func update_preview_3d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.render_textures(renderer)
+		var status = gen_material.render_textures()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 		gen_material.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())

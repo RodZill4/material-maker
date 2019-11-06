@@ -2,11 +2,9 @@ tool
 extends Object
 class_name MMGenContext
 
-var renderer : MMGenRenderer
+
 var variants : Dictionary = {}
 
-func _init(r : MMGenRenderer) -> void:
-	renderer = r
 
 func has_variant(generator) -> bool:
 	return variants.has(generator)

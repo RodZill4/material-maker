@@ -67,11 +67,7 @@ func get_shader(name) -> String:
 				shader += "    return "+gcis(points[0].c)+";\n"
 				var s = points.size()-1
 				for i in range(s):
-					var p0 = points[i].v
-					var c0 = points[i].c
-					var p1mp0 = points[i+1].v-p0
-					var c1mc0 = points[i+1].c-c0
-					if p1mp0 > 0:
+					if points[i+1].v-points[i].v > 0:
 						shader += "  } else if (x < %.9f) {\n" % (0.5*(points[i].v + points[i+1].v))
 						shader += "    return "+gcis(points[i].c)+";\n"
 				shader += "  }\n"

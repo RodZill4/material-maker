@@ -4,7 +4,6 @@ class_name MMGraphEdit
 
 var editor_interface = null
 var node_factory = null
-var renderer = null
 
 var save_path = null setget set_save_path
 var need_save = false
@@ -216,7 +215,7 @@ func export_textures() -> void:
 		for c in get_children():
 			if c is GraphNode:
 				if c.generator.has_method("render_textures"):
-					c.generator.render_textures(renderer)
+					c.generator.render_textures()
 					if c.generator.has_method("export_textures"):
 						c.generator.export_textures(prefix, editor_interface)
 

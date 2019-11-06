@@ -151,15 +151,15 @@ func get_input_shader(input_index : int):
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func render(output_index : int, renderer : MMGenRenderer, size : int):
-	var context : MMGenContext = MMGenContext.new(renderer)
+func render(output_index : int, size : int):
+	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("UV", output_index, context)
 	while source is GDScriptFunctionState:
 		source = yield(source, "completed")
 	if source.empty():
 		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
-	var shader : String = renderer.generate_shader(source)
-	var result = renderer.render_shader(shader, source.textures, size)
+	var shader : String = mm_renderer.generate_shader(source)
+	var result = mm_renderer.render_shader(shader, source.textures, size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	return result

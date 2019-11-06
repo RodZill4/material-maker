@@ -38,7 +38,7 @@ func source_changed(input_port_index : int):
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(0)
 	if source != null and !updated:
-		var result = source.generator.render(source.output_index, context.renderer, pow(2, parameters.size))
+		var result = source.generator.render(source.output_index, pow(2, parameters.size))
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		result.copy_to_texture(texture)
