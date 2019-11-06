@@ -1,0 +1,68 @@
+{
+	"name": "sdbox",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"h": 0.2,
+		"r": 0.3,
+		"w": 0.3
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float sdBox(in vec2 p, in vec2 b) {\n    vec2 d = abs(p)-b;\n    return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "sdBox",
+		"outputs": [
+			{
+				"f": "sdBox($uv-0.5*vec2($cx+1.0, $cy+1.0), vec2($w, $h))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "Width",
+				"max": 1,
+				"min": 0,
+				"name": "w",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "Height",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Center X",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Center Y",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
