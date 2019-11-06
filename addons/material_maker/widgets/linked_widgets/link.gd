@@ -35,7 +35,7 @@ func show_link(s, t) -> void:
 func closest(rect, point) -> Vector2:
 	return Vector2(max(rect.position.x, min(rect.end.x, point.x)), max(rect.position.y, min(rect.end.y, point.y)))
 
-func find_control(gp):
+func find_control(gp) -> Dictionary:
 	for c in get_parent().get_children():
 		if c is GraphNode:
 			if c.get("controls") != null:
@@ -43,11 +43,9 @@ func find_control(gp):
 					var widget = c.controls[w]
 					if Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
 						return { node=c, widget=widget }
-	return null
+	return {}
 
 func _draw() -> void:
-	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 0.0, 0.0, 0.2))
-	#draw_rect(Rect2(rect_position, rect_size), Color(1.0, 1.0, 0.0), false)
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect
@@ -69,13 +67,13 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)
-		target = control.widget if control != null and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
+		target = control.widget if !control.empty() and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		update()
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
 				var control = find_control(event.global_position)
-				if control != null:
+				if !control.empty():
 					generator.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
 					generator.remove_parameter(param_name)

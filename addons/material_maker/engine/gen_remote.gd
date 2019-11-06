@@ -21,7 +21,7 @@ func get_widget(n : String) -> Dictionary:
 			return w
 	return {}
 
-func get_next_widget_name():
+func get_next_widget_name() -> String:
 	var i = 0
 	while true:
 		var param_name = "param"+str(i)
@@ -33,6 +33,7 @@ func get_next_widget_name():
 		if !used:
 			return param_name
 		i += 1
+	return ""
 
 func fix() -> void:
 	# Make sure all widgets have a name
@@ -40,7 +41,6 @@ func fix() -> void:
 	for w in widgets:
 		if !w.has("name"):
 			w.name = get_next_widget_name()
-			print("Named "+w.name)
 	var parent = get_parent()
 	if parent == null:
 		return
@@ -155,16 +155,17 @@ func can_link_parameter(widget_name : String, generator : MMGenBase, param : Str
 			if lw.node == generator.name and lw.widget == param:
 				return false
 		# Check the parameter type
-		var linked : Dictionary = widget.linked_widgets[0]
-		var linked_generator : MMGenBase = get_parent().get_node(linked.node)
-		var linked_parameter : Dictionary = linked_generator.get_parameter_def(linked.widget)
-		var parameter : Dictionary = generator.get_parameter_def(param)
-		if parameter.type != linked_parameter.type:
-			return false
-		match parameter.type:
-			"enum":
-				if to_json(linked_parameter.values) != to_json(parameter.values):
-					return false
+		if widget.type == "linked_control":
+			var linked : Dictionary = widget.linked_widgets[0]
+			var linked_generator : MMGenBase = get_parent().get_node(linked.node)
+			var linked_parameter : Dictionary = linked_generator.get_parameter_def(linked.widget)
+			var parameter : Dictionary = generator.get_parameter_def(param)
+			if parameter.type != linked_parameter.type:
+				return false
+			match parameter.type:
+				"enum":
+					if to_json(linked_parameter.values) != to_json(parameter.values):
+						return false
 	return true
 
 func link_parameter(widget_name : String, generator : MMGenBase, param : String) -> void:

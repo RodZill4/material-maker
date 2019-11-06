@@ -31,7 +31,7 @@ func get_input_defs() -> Array:
 func get_output_defs() -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
-func source_changed(input_port_index : int):
+func source_changed(input_port_index : int) -> void:
 	updated = false
 	.source_changed(input_port_index)
 

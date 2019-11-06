@@ -31,10 +31,11 @@ func _gui_input(event) -> void:
 
 # Misc. useful functions
 
-func get_source(node, port):
+func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
 		if c.to == node and c.to_port == port:
 			return { node=c.from, slot=c.from_port }
+	return {}
 
 func offset_from_global_position(global_position) -> Vector2:
 	return (scroll_offset + global_position - rect_global_position) / zoom
@@ -167,17 +168,18 @@ func new_material() -> void:
 		set_need_save(false)
 		center_view()
 
-func get_free_name(type):
+func get_free_name(type) -> String:
 	var i = 0
 	while true:
 		var node_name = type+"_"+str(i)
 		if !has_node(node_name):
 			return node_name
 		i += 1
+	return ""
 
-func create_nodes(data, position : Vector2 = Vector2(0, 0)):
+func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if data == null:
-		return
+		return []
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
@@ -334,6 +336,6 @@ func edit_subgraph(g : MMGenGraph) -> void:
 	update_view(g)
 
 
-func _on_ButtonTransmitsSeed_toggled(button_pressed):
+func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
 		generator.transmits_seed = button_pressed

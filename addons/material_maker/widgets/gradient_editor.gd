@@ -13,7 +13,7 @@ class GradientCursor:
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
 	
-	func _draw():
+	func _draw() -> void:
 		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15)])
 		var c = color
 		c.a = 1.0
@@ -153,6 +153,6 @@ func update_shader() -> void:
 	$Gradient.material.shader.set_code(shader)
 	emit_signal("updated", value)
 
-func _on_Interpolation_item_selected(ID):
+func _on_Interpolation_item_selected(ID) -> void:
 	value.interpolation = ID
 	update_shader()

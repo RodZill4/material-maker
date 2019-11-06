@@ -53,7 +53,7 @@ func is_editable() -> bool:
 	return false
 
 
-func has_randomness():
+func has_randomness() -> bool:
 	return false
 
 func get_seed() -> int:
@@ -65,13 +65,13 @@ func get_seed() -> int:
 	else:
 		return seed_value
 
-func toggle_lock_seed():
+func toggle_lock_seed() -> bool:
 	if !seed_locked:
 		seed_value = get_seed()
 	seed_locked = !seed_locked
 	return seed_locked
 
-func is_seed_locked():
+func is_seed_locked() -> bool:
 	return seed_locked
 
 func init_parameters() -> void:
@@ -106,17 +106,17 @@ func get_parameter_def(param_name : String) -> Dictionary:
 			return p
 	return {}
 
-func set_parameter(n : String, v):
+func set_parameter(n : String, v) -> void:
 	parameters[n] = v
 	source_changed(0)
 	emit_signal("parameter_changed", n, v)
 
-func notify_output_change(output_index : int):
+func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
 	for target in targets:
 		target.generator.source_changed(target.input_index)
 
-func source_changed(__):
+func source_changed(__) -> void:
 	emit_signal("parameter_changed", "__input_changed__", 0)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
@@ -143,10 +143,11 @@ func follow_input(input_index : int) -> Array:
 		rv.push_back(OutputPort.new(self, i))
 	return rv
 
-func get_input_shader(input_index : int):
+func get_input_shader(input_index : int) -> Dictionary:
 	var source = get_source(input_index)
 	if source != null:
 		return source.get_shader()
+	return {}
 
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
@@ -193,7 +194,7 @@ func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+name)
 	return data
 
-func serialize():
+func serialize() -> Dictionary:
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
 	for p in parameters.keys():
 		rv.parameters[p] = MMType.serialize_value(parameters[p])

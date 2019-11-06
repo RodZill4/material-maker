@@ -16,7 +16,7 @@ func toggle_editable() -> bool:
 func is_editable() -> bool:
 	return editable
 
-func has_randomness():
+func has_randomness() -> bool:
 	return uses_seed
 
 func get_type() -> String:
@@ -39,13 +39,13 @@ func get_input_defs() -> Array:
 	else:
 		return shader_model.inputs
 
-func get_output_defs():
+func get_output_defs() -> Array:
 	if shader_model == null or !shader_model.has("outputs"):
 		return []
 	else:
 		return shader_model.outputs
 
-func set_shader_model(data: Dictionary):
+func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
 	init_parameters()
 	uses_seed = false

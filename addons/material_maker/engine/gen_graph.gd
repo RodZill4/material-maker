@@ -21,7 +21,7 @@ func _post_load() -> void:
 	fix_remotes()
 
 
-func has_randomness():
+func has_randomness() -> bool:
 	return transmits_seed
 
 
@@ -47,9 +47,9 @@ func get_parameter_defs() -> Array:
 		return get_node("gen_parameters").get_parameter_defs()
 	return []
 
-func set_parameter(p, v):
+func set_parameter(p, v) -> void:
 	if has_node("gen_parameters"):
-		return get_node("gen_parameters").set_parameter(p, v)
+		get_node("gen_parameters").set_parameter(p, v)
 
 func get_input_defs() -> Array:
 	if has_node("gen_inputs"):
@@ -61,9 +61,9 @@ func get_output_defs() -> Array:
 		return get_node("gen_outputs").get_input_defs()
 	return []
 
-func source_changed(input_index : int):
+func source_changed(input_index : int) -> void:
 	if has_node("gen_inputs"):
-		return get_node("gen_inputs").source_changed(input_index)
+		get_node("gen_inputs").source_changed(input_index)
 
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 	if gen_name == "gen_inputs":

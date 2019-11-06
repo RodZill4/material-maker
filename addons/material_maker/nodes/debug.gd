@@ -22,10 +22,10 @@ static func generate_shader(src_code) -> String:
 	code += shader_code
 	return code
 
-func _on_Button_pressed():
+func _on_Button_pressed() -> void:
 	var src = generator.get_source(0)
 	if src != null:
-		var context : MMGenContext = MMGenContext.new(null)
+		var context : MMGenContext = MMGenContext.new()
 		var source = src.generator.get_shader_code("UV", src.output_index, context)
 		var popup = preload("res://addons/material_maker/nodes/debug/debug_popup.tscn").instance()
 		get_parent().add_child(popup)
