@@ -7,6 +7,7 @@ export var min_value : float = 0.0 setget set_min_value
 export var max_value : float = 1.0 setget set_max_value
 export var step : float = 0.0 setget set_step
 
+var sliding : bool = false
 var start_position : float
 var start_value : float
 
@@ -45,9 +46,12 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 		if event.is_pressed():
 			start_position = event.position.x
 			start_value = value
-	elif event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
+			sliding = true
+		else:
+			sliding = false
+	elif sliding and event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var delta : float = event.position.x-start_position
-		var v : float = clamp(start_value+sign(delta)*pow(abs(delta)*0.005, 2)*abs(max_value - min_value), min_value, max_value)
+		var v : float = start_value+sign(delta)*pow(abs(delta)*0.005, 2)*abs(max_value - min_value)
 		if step != 0:
 			v = min_value+floor((v - min_value)/step)*step
 		set_value(v)
