@@ -22,7 +22,12 @@ func _post_load() -> void:
 
 
 func has_randomness() -> bool:
-	return transmits_seed
+	if !transmits_seed:
+		return false
+	for c in get_children():
+		if c.has_randomness() and !c.is_seed_locked():
+			return true
+	return false
 
 
 func get_type() -> String:
