@@ -1,1 +1,260 @@
-{"connections":[{"from":"normal_map_0","from_port":0,"to":"Material","to_port":4},{"from":"pattern_1","from_port":0,"to":"colorize_1","to_port":0},{"from":"colorize_0","from_port":0,"to":"blend_0","to_port":1},{"from":"colorize_1","from_port":0,"to":"blend_0","to_port":0},{"from":"blend_0","from_port":0,"to":"normal_map_0","to_port":0},{"from":"uniform_0","from_port":0,"to":"Material","to_port":0},{"from":"uniform_1","from_port":0,"to":"Material","to_port":1},{"from":"uniform_2","from_port":0,"to":"Material","to_port":2},{"from":"pattern_0","from_port":0,"to":"colorize_0","to_port":0}],"nodes":[{"name":"colorize_1","node_position":{"x":119,"y":186},"parameters":{"gradient":{"points":[{"a":1,"b":0,"g":0,"pos":0.236364,"r":0},{"a":1,"b":1,"g":1,"pos":0.254545,"r":1}],"type":"Gradient"}},"type":"colorize"},{"name":"Material","node_position":{"x":669,"y":81},"parameters":{"albedo_color":{"a":1,"b":1,"g":1,"r":1,"type":"Color"},"ao_light_affect":1,"depth_scale":1,"emission_energy":1,"metallic":1,"normal_scale":1,"resolution":1,"roughness":1},"type":"material"},{"name":"normal_map_0","node_position":{"x":522,"y":205},"parameters":{"amount":0.5,"size":2},"type":"normal_map"},{"name":"uniform_0","node_position":{"x":507,"y":21},"parameters":{"color":{"a":1,"b":0.855469,"g":0.736813,"r":0.51796,"type":"Color"}},"type":"uniform"},{"name":"uniform_1","node_position":{"x":510,"y":73},"parameters":{"color":{"a":1,"b":1,"g":1,"r":1,"type":"Color"}},"type":"uniform"},{"name":"uniform_2","node_position":{"x":513,"y":126},"parameters":{"color":{"a":1,"b":0.632813,"g":0.632813,"r":0.632813,"type":"Color"}},"type":"uniform"},{"name":"pattern_1","node_position":{"x":-258,"y":189},"parameters":{"mix":3,"x_scale":1,"x_wave":1,"y_scale":1,"y_wave":1},"type":"pattern"},{"name":"pattern_0","node_position":{"x":-259,"y":314},"parameters":{"mix":0,"x_scale":16,"x_wave":0,"y_scale":16,"y_wave":0},"type":"pattern"},{"name":"blend_0","node_position":{"x":331,"y":210},"parameters":{"amount":1,"blend_type":9},"type":"blend"},{"name":"colorize_0","node_position":{"x":124,"y":298},"parameters":{"gradient":{"points":[{"a":1,"b":0.546875,"g":0.546875,"pos":0.845455,"r":0.546875},{"a":1,"b":0,"g":0,"pos":1,"r":0}],"type":"Gradient"}},"type":"colorize"}]}
+{
+	"connections": [
+		{
+			"from": "normal_map_0",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "pattern_1",
+			"from_port": 0,
+			"to": "colorize_1",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_0",
+			"from_port": 0,
+			"to": "blend_0",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_1",
+			"from_port": 0,
+			"to": "blend_0",
+			"to_port": 0
+		},
+		{
+			"from": "blend_0",
+			"from_port": 0,
+			"to": "normal_map_0",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_0",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_1",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "uniform_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "pattern_0",
+			"from_port": 0,
+			"to": "colorize_0",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"name": "342",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "colorize_1",
+			"node_position": {
+				"x": -16,
+				"y": 97
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.236364,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.254545,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 508,
+				"y": 116
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"resolution": 1,
+				"roughness": 1,
+				"size": 11
+			},
+			"type": "material"
+		},
+		{
+			"name": "normal_map_0",
+			"node_position": {
+				"x": 257,
+				"y": 286
+			},
+			"parameters": {
+				"amount": 0.5,
+				"param0": 11,
+				"param1": 0.99,
+				"size": 2
+			},
+			"type": "normal_map"
+		},
+		{
+			"name": "uniform_0",
+			"node_position": {
+				"x": 330,
+				"y": 33
+			},
+			"parameters": {
+				"color": {
+					"a": 1,
+					"b": 0.855469,
+					"g": 0.736813,
+					"r": 0.51796,
+					"type": "Color"
+				}
+			},
+			"type": "uniform"
+		},
+		{
+			"name": "uniform_1",
+			"node_position": {
+				"x": 333,
+				"y": 85
+			},
+			"parameters": {
+				"color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"type": "uniform"
+		},
+		{
+			"name": "uniform_2",
+			"node_position": {
+				"x": 336,
+				"y": 138
+			},
+			"parameters": {
+				"color": {
+					"a": 1,
+					"b": 0.632813,
+					"g": 0.632813,
+					"r": 0.632813,
+					"type": "Color"
+				}
+			},
+			"type": "uniform"
+		},
+		{
+			"name": "pattern_1",
+			"node_position": {
+				"x": -46,
+				"y": -2
+			},
+			"parameters": {
+				"mix": 3,
+				"x_scale": 1,
+				"x_wave": 1,
+				"y_scale": 1,
+				"y_wave": 1
+			},
+			"type": "pattern"
+		},
+		{
+			"name": "pattern_0",
+			"node_position": {
+				"x": -32,
+				"y": 191
+			},
+			"parameters": {
+				"mix": 0,
+				"x_scale": 16,
+				"x_wave": 0,
+				"y_scale": 16,
+				"y_wave": 0
+			},
+			"type": "pattern"
+		},
+		{
+			"name": "blend_0",
+			"node_position": {
+				"x": 254,
+				"y": 196
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 9
+			},
+			"type": "blend"
+		},
+		{
+			"name": "colorize_0",
+			"node_position": {
+				"x": -15,
+				"y": 289
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0.546875,
+							"g": 0.546875,
+							"pos": 0.845455,
+							"r": 0.546875
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

@@ -1,0 +1,57 @@
+{
+	"name": "sdcircle",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"r": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float sdCircle(vec2 p, float r) {\n  return length(p) - r;\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "sdCircle",
+		"outputs": [
+			{
+				"f": "sdCircle($uv-0.5*vec2($cx+1.0, $cy+1.0), $r)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Center X",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Center Y",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

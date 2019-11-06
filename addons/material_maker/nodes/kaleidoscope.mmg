@@ -1,0 +1,55 @@
+{
+	"name": "kaleidoscope",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"count": 7,
+		"direction": 0,
+		"offset": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec2 kal_rotate(vec2 uv, float count, float offset) {\n\tfloat pi = 3.14159265359;\n\toffset *= pi/180.0;\n\toffset += pi*(1.0/count+0.5);\n\tuv -= vec2(0.5);\n\tfloat l = length(uv);\n\tfloat a = mod(atan(uv.y, uv.x)+offset, 2.0*pi/count)-offset;\n\treturn vec2(0.5)+l*vec2(cos(a), sin(a));\n}",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0, 1)",
+				"label": "",
+				"name": "i",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Kaleidoscope",
+		"outputs": [
+			{
+				"rgba": "$i(kal_rotate($uv, $count, $offset))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"max": 10,
+				"min": 2,
+				"name": "count",
+				"step": 1,
+				"type": "float",
+				"widget": "spinbox"
+			},
+			{
+				"default": 0,
+				"label": "",
+				"max": 180,
+				"min": -180,
+				"name": "offset",
+				"step": 0.1,
+				"type": "float",
+				"widget": "spinbox"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -8,9 +8,170 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "LineEdit",
+"class": "MMFloatEdit",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/float_edit.gd"
+}, {
+"base": "Node",
+"class": "MMGenBase",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_base.gd"
+}, {
+"base": "MMGenTexture",
+"class": "MMGenBuffer",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_buffer.gd"
+}, {
+"base": "MMGenTexture",
+"class": "MMGenComment",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_comment.gd"
+}, {
+"base": "Object",
+"class": "MMGenContext",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_context.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenConvolution",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_convolution.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenDebug",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_debug.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenExport",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_export.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenGraph",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_graph.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenIOs",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_ios.gd"
+}, {
+"base": "MMGenTexture",
+"class": "MMGenImage",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_image.gd"
+}, {
+"base": "Object",
+"class": "MMGenLoader",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/loader.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenMaterial",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_material.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenRemote",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_remote.gd"
+}, {
+"base": "Viewport",
+"class": "MMGenRenderer",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/renderer.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenShader",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_shader.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenSwitch",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_switch.gd"
+}, {
+"base": "MMGenBase",
+"class": "MMGenTexture",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_texture.gd"
+}, {
+"base": "Object",
+"class": "MMGradient",
+"language": "GDScript",
+"path": "res://addons/material_maker/types/gradient.gd"
+}, {
+"base": "Control",
+"class": "MMGradientEditor",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/gradient_editor.gd"
+}, {
+"base": "GraphEdit",
+"class": "MMGraphEdit",
+"language": "GDScript",
+"path": "res://addons/material_maker/graph_edit.gd"
+}, {
+"base": "GraphNode",
+"class": "MMGraphNodeBase",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/base.gd"
+}, {
+"base": "MMGraphNodeBase",
+"class": "MMGraphNodeGeneric",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/generic.gd"
+}, {
+"base": "MMGraphNodeGeneric",
+"class": "MMGraphNodeRemote",
+"language": "GDScript",
+"path": "res://addons/material_maker/nodes/remote.gd"
+}, {
+"base": "Control",
+"class": "MMNodeLink",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/linked_widgets/link.gd"
+}, {
+"base": "Node",
+"class": "MMType",
+"language": "GDScript",
+"path": "res://addons/material_maker/types/types.gd"
+}, {
+"base": "OptionButton",
+"class": "SizeOptionButton",
+"language": "GDScript",
+"path": "res://addons/material_maker/widgets/size_option_button.gd"
+} ]
 _global_script_class_icons={
-
+"MMFloatEdit": "",
+"MMGenBase": "",
+"MMGenBuffer": "",
+"MMGenComment": "",
+"MMGenContext": "",
+"MMGenConvolution": "",
+"MMGenDebug": "",
+"MMGenExport": "",
+"MMGenGraph": "",
+"MMGenIOs": "",
+"MMGenImage": "",
+"MMGenLoader": "",
+"MMGenMaterial": "",
+"MMGenRemote": "",
+"MMGenRenderer": "",
+"MMGenShader": "",
+"MMGenSwitch": "",
+"MMGenTexture": "",
+"MMGradient": "",
+"MMGradientEditor": "",
+"MMGraphEdit": "",
+"MMGraphNodeBase": "",
+"MMGraphNodeGeneric": "",
+"MMGraphNodeRemote": "",
+"MMNodeLink": "",
+"MMType": "",
+"SizeOptionButton": ""
 }
 
 [application]
@@ -19,8 +180,15 @@ config/name="Material Maker"
 run/main_scene="res://addons/material_maker/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
+boot_splash/image="res://rodz_labs_logo.png"
+boot_splash/fullsize=false
+boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
-config/release="0.6"
+config/release="0.7a1"
+
+[autoload]
+
+mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 
 [debug]
 
@@ -33,10 +201,15 @@ gdscript/warnings/unsafe_call_argument=true
 
 window/size/width=1280
 window/size/height=720
+window/dpi/allow_hidpi=true
 
 [editor_plugins]
 
 enabled=PoolStringArray( "material_maker" )
+
+[gui]
+
+timers/tooltip_delay_sec=0.1
 
 [logging]
 

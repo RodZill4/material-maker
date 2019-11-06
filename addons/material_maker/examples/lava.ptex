@@ -1,1 +1,348 @@
-{"connections":[{"from":"perlin_0","from_port":0,"to":"blend_0","to_port":0},{"from":"blend_0","from_port":0,"to":"colorize_0","to_port":0},{"from":"colorize_0","from_port":0,"to":"Material","to_port":0},{"from":"perlin_0","from_port":0,"to":"warp_0","to_port":1},{"from":"voronoi_0","from_port":0,"to":"warp_0","to_port":0},{"from":"warp_0","from_port":0,"to":"blend_0","to_port":1},{"from":"warp_0","from_port":0,"to":"colorize_1","to_port":0},{"from":"warp_0","from_port":0,"to":"colorize_2","to_port":0},{"from":"colorize_2","from_port":0,"to":"Material","to_port":2},{"from":"warp_0","from_port":0,"to":"normal_map_0","to_port":0},{"from":"normal_map_0","from_port":0,"to":"Material","to_port":4},{"from":"colorize_1","from_port":0,"to":"Material","to_port":3},{"from":"colorize_2","from_port":0,"to":"Material","to_port":1},{"from":"colorize_3","from_port":0,"to":"Material","to_port":5},{"from":"warp_0","from_port":0,"to":"colorize_3","to_port":0}],"nodes":[{"name":"Material","node_position":{"x":956,"y":271},"parameters":{"albedo_color":{"a":1,"b":1,"g":1,"r":1,"type":"Color"},"ao_light_affect":1,"depth_scale":1,"emission_energy":2,"metallic":1,"normal_scale":1,"resolution":1,"roughness":1},"type":"material"},{"name":"colorize_0","node_position":{"x":666,"y":27},"parameters":{"gradient":{"points":[{"a":1,"b":0.032597,"g":0.032597,"pos":0.045455,"r":0.032597},{"a":1,"b":0.111979,"g":0.111979,"pos":0.3,"r":0.111979},{"a":1,"b":0.029781,"g":0.029781,"pos":0.518182,"r":0.029781},{"a":1,"b":0.069093,"g":0.069093,"pos":0.818182,"r":0.069093},{"a":1,"b":0,"g":0,"pos":1,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"colorize_2","node_position":{"x":653,"y":140.5},"parameters":{"gradient":{"points":[{"a":1,"b":1,"g":1,"pos":0.263636,"r":1},{"a":1,"b":0,"g":0,"pos":0.8,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"colorize_1","node_position":{"x":646,"y":223},"parameters":{"gradient":{"points":[{"a":1,"b":0,"g":0.765625,"pos":0,"r":1},{"a":1,"b":0,"g":0,"pos":0.154545,"r":1},{"a":1,"b":0,"g":0,"pos":0.245455,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"normal_map_0","node_position":{"x":658,"y":309.5},"parameters":{"amount":0.9,"size":2},"type":"normal_map"},{"name":"colorize_3","node_position":{"x":658,"y":404.25},"parameters":{"gradient":{"points":[{"a":1,"b":0.345455,"g":0.345455,"pos":0,"r":0.345455},{"a":1,"b":0,"g":0,"pos":1,"r":0}],"type":"Gradient"}},"type":"colorize"},{"name":"blend_0","node_position":{"x":475,"y":-30},"parameters":{"amount":0.45,"blend_type":1},"type":"blend"},{"name":"warp_0","node_position":{"x":338,"y":196},"parameters":{"amount":0.3},"type":"warp"},{"name":"voronoi_0","node_position":{"x":130,"y":299},"parameters":{"intensity":0.55,"scale_x":6,"scale_y":6},"type":"voronoi"},{"name":"perlin_0","node_position":{"x":190,"y":-14},"parameters":{"iterations":8,"persistence":0.75,"scale_x":4,"scale_y":4},"type":"perlin"}]}
+{
+	"connections": [
+		{
+			"from": "perlin_0",
+			"from_port": 0,
+			"to": "blend_0",
+			"to_port": 0
+		},
+		{
+			"from": "blend_0",
+			"from_port": 0,
+			"to": "colorize_0",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_0",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "perlin_0",
+			"from_port": 0,
+			"to": "warp_0",
+			"to_port": 1
+		},
+		{
+			"from": "voronoi_0",
+			"from_port": 0,
+			"to": "warp_0",
+			"to_port": 0
+		},
+		{
+			"from": "warp_0",
+			"from_port": 0,
+			"to": "blend_0",
+			"to_port": 1
+		},
+		{
+			"from": "warp_0",
+			"from_port": 0,
+			"to": "colorize_1",
+			"to_port": 0
+		},
+		{
+			"from": "warp_0",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "warp_0",
+			"from_port": 0,
+			"to": "normal_map_0",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_0",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "colorize_1",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 3
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "warp_0",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		}
+	],
+	"label": "Graph",
+	"name": "408",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 956,
+				"y": 271
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 0.45,
+				"emission_energy": 2,
+				"metallic": 1,
+				"normal_scale": 1,
+				"resolution": 1,
+				"roughness": 1,
+				"size": 11
+			},
+			"type": "material"
+		},
+		{
+			"name": "colorize_0",
+			"node_position": {
+				"x": 666,
+				"y": 27
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0.479167,
+							"g": 0.479167,
+							"pos": 0.045455,
+							"r": 0.479167
+						},
+						{
+							"a": 1,
+							"b": 0.875,
+							"g": 0.875,
+							"pos": 0.3,
+							"r": 0.875
+						},
+						{
+							"a": 1,
+							"b": 0.442708,
+							"g": 0.442708,
+							"pos": 0.518182,
+							"r": 0.442708
+						},
+						{
+							"a": 1,
+							"b": 0.069093,
+							"g": 0.069093,
+							"pos": 0.818182,
+							"r": 0.069093
+						},
+						{
+							"a": 1,
+							"b": 0.40625,
+							"g": 0.40625,
+							"pos": 1,
+							"r": 0.40625
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": 653,
+				"y": 140.5
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.272727,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.563636,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize_1",
+			"node_position": {
+				"x": 646,
+				"y": 223
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.765625,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.154545,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.245455,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "normal_map_0",
+			"node_position": {
+				"x": 658,
+				"y": 309.5
+			},
+			"parameters": {
+				"amount": 0.9,
+				"param0": 11,
+				"param1": 0.99,
+				"size": 2
+			},
+			"type": "normal_map"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": 658,
+				"y": 404.25
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0.345455,
+							"g": 0.345455,
+							"pos": 0,
+							"r": 0.345455
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "blend_0",
+			"node_position": {
+				"x": 475,
+				"y": -30
+			},
+			"parameters": {
+				"amount": 0.83125,
+				"blend_type": 0
+			},
+			"type": "blend"
+		},
+		{
+			"name": "warp_0",
+			"node_position": {
+				"x": 338,
+				"y": 196
+			},
+			"parameters": {
+				"amount": 0.3,
+				"eps": 0.045,
+				"epsilon": 0
+			},
+			"type": "warp"
+		},
+		{
+			"name": "voronoi_0",
+			"node_position": {
+				"x": 130,
+				"y": 299
+			},
+			"parameters": {
+				"intensity": 0.55,
+				"randomness": 1,
+				"scale_x": 6,
+				"scale_y": 6
+			},
+			"type": "voronoi"
+		},
+		{
+			"name": "perlin_0",
+			"node_position": {
+				"x": 190,
+				"y": -14
+			},
+			"parameters": {
+				"iterations": 8,
+				"persistence": 0.75,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"type": "perlin"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

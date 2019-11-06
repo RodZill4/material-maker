@@ -1,234 +1,86 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_float.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/widgets/float_edit.tscn" type="PackedScene" id=2]
 
 [node name="float" type="HBoxContainer"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 547.0
+margin_right = 400.0
 margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Visibility" ]
 
-[node name="LabelMin" type="Label" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="LabelMin" type="Label" parent="."]
 margin_top = 5.0
 margin_right = 28.0
 margin_bottom = 19.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Min:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="Min" type="SpinBox" parent="." index="1"]
-
+[node name="Min" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 32.0
-margin_right = 106.0
+margin_right = 90.0
 margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-min_value = -65536.0
-max_value = 65535.0
-step = 0.0
-page = 0.0
+text = "0"
 value = 0.0
-exp_edit = false
-rounded = false
-editable = true
-prefix = ""
-suffix = ""
+min_value = -65536.0
+max_value = 65536.0
+step = 0.005
 
-[node name="LabelMax" type="Label" parent="." index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 110.0
+[node name="LabelMax" type="Label" parent="."]
+margin_left = 94.0
 margin_top = 5.0
-margin_right = 140.0
+margin_right = 124.0
 margin_bottom = 19.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Max:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="Max" type="SpinBox" parent="." index="3"]
-
+[node name="Max" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 144.0
-margin_right = 218.0
+margin_left = 128.0
+margin_right = 186.0
 margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+text = "1"
+value = 1.0
 min_value = -65536.0
-max_value = 65535.0
-step = 0.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-editable = true
-prefix = ""
-suffix = ""
+max_value = 65536.0
+step = 0.005
 
-[node name="LabelStep" type="Label" parent="." index="4"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 222.0
+[node name="LabelStep" type="Label" parent="."]
+margin_left = 190.0
 margin_top = 5.0
-margin_right = 254.0
+margin_right = 222.0
 margin_bottom = 19.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Step:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="Step" type="SpinBox" parent="." index="5"]
-
+[node name="Step" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 258.0
-margin_right = 332.0
+margin_left = 226.0
+margin_right = 284.0
 margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-min_value = 0.0
-max_value = 65535.0
-step = 0.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-editable = true
-prefix = ""
-suffix = ""
+text = "0.1"
+value = 0.1
+max_value = 10.0
+step = 0.005
 
-[node name="LabelDefault" type="Label" parent="." index="6"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 336.0
+[node name="LabelDefault" type="Label" parent="."]
+margin_left = 288.0
 margin_top = 5.0
-margin_right = 386.0
+margin_right = 338.0
 margin_bottom = 19.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Default:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="Default" type="SpinBox" parent="." index="7"]
-
+[node name="Default" parent="." instance=ExtResource( 2 )]
 anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 390.0
-margin_right = 464.0
+margin_left = 342.0
+margin_right = 400.0
 margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-min_value = 0.0
-max_value = 65535.0
-step = 0.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-editable = true
-prefix = ""
-suffix = ""
-
-[node name="SpinBox" type="CheckBox" parent="." index="8"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 468.0
-margin_right = 547.0
-margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = true
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "SpinBox"
-flat = false
-align = 0
-
-
+step = 0.1
+[connection signal="value_changed" from="Min" to="." method="_on_Min_value_changed"]
+[connection signal="value_changed" from="Max" to="." method="_on_Max_value_changed"]
+[connection signal="value_changed" from="Step" to="." method="_on_Step_value_changed"]

@@ -1,0 +1,75 @@
+{
+	"name": "sdsmoothboolean",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"k": 0.1,
+		"op": 0,
+		"r": 0.3,
+		"w": 0.28
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float sdSmoothUnion( float d1, float d2, float k ) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h); }\n\nfloat sdSmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );\n    return mix( d2, -d1, h ) + k*h*(1.0-h); }\n\nfloat sdSmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) + k*h*(1.0-h); }\n",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in1",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in2",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "sdSmoothBoolean",
+		"outputs": [
+			{
+				"f": "sdSmooth$op($in1($uv), $in2($uv), $k)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "op",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Union",
+						"value": "Union"
+					},
+					{
+						"name": "Subtraction",
+						"value": "Subtraction"
+					},
+					{
+						"name": "Intersection",
+						"value": "Intersection"
+					}
+				]
+			},
+			{
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "k",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

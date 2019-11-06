@@ -1,0 +1,129 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/material_maker/nodes/switch.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/widgets/preview_button.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Theme" id=1]
+
+[node name="Switch" type="GraphNode"]
+margin_left = -1.0
+margin_top = -1.0
+margin_right = 150.0
+margin_bottom = 78.0
+mouse_filter = 1
+size_flags_stretch_ratio = 0.13
+theme = SubResource( 1 )
+title = "Switch"
+show_close = true
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+
+[node name="HBox1" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 135.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="HBox1"]
+margin_top = 1.0
+margin_right = 20.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 20, 0 )
+text = "A0"
+
+[node name="outputs" type="HSlider" parent="HBox1"]
+margin_left = 24.0
+margin_right = 99.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 75, 0 )
+hint_tooltip = "Output count"
+min_value = 1.0
+max_value = 5.0
+value = 2.0
+
+[node name="PreviewButton" parent="HBox1" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 103.0
+margin_right = 119.0
+margin_bottom = 16.0
+
+[node name="HBox2" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 40.0
+margin_right = 135.0
+margin_bottom = 56.0
+
+[node name="Label" type="Label" parent="HBox2"]
+margin_top = 1.0
+margin_right = 20.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 20, 0 )
+text = "A0"
+
+[node name="choices" type="HSlider" parent="HBox2"]
+margin_left = 24.0
+margin_right = 99.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 75, 0 )
+hint_tooltip = "Choice count"
+min_value = 2.0
+max_value = 5.0
+value = 2.0
+
+[node name="PreviewButton" parent="HBox2" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 103.0
+margin_right = 119.0
+margin_bottom = 16.0
+
+[node name="HBox3" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 57.0
+margin_right = 135.0
+margin_bottom = 73.0
+
+[node name="Label" type="Label" parent="HBox3"]
+margin_top = 1.0
+margin_right = 20.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 20, 0 )
+text = "A0"
+
+[node name="source" type="HSlider" parent="HBox3"]
+margin_left = 24.0
+margin_right = 99.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 75, 0 )
+hint_tooltip = "Choice"
+max_value = 4.0
+value = 1.0
+ticks_on_borders = true
+
+[node name="PreviewButton" parent="HBox3" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 103.0
+margin_right = 119.0
+margin_bottom = 16.0
+[connection signal="value_changed" from="HBox1/outputs" to="." method="_on_value_changed" binds= [ "outputs" ]]
+[connection signal="value_changed" from="HBox2/choices" to="." method="_on_value_changed" binds= [ "choices" ]]
+[connection signal="value_changed" from="HBox3/source" to="." method="_on_value_changed" binds= [ "source" ]]

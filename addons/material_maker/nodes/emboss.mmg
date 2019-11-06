@@ -1,0 +1,193 @@
+{
+	"connections": [
+		{
+			"from": "_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "emboss_convolution_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "emboss_convolution_2_2",
+			"from_port": 0,
+			"to": "_2",
+			"to_port": 0
+		}
+	],
+	"label": "Emboss",
+	"name": "emboss",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"convolution_params": {
+				"input_type": "f",
+				"matrix_function": "cos(atan2(y, x)-angle*3.14159265359/180.0)",
+				"matrix_sparse": {
+					"0": {
+						"0": 0
+					}
+				},
+				"normalized": false,
+				"output_type": "f",
+				"parameters": [
+					{
+						"max": 180,
+						"min": -180,
+						"name": "angle",
+						"type": "float"
+					}
+				],
+				"x": 1,
+				"y": 1
+			},
+			"name": "emboss_convolution_2_2",
+			"node_position": {
+				"x": -341.916626,
+				"y": -251.958313
+			},
+			"parameters": {
+				"angle": 0,
+				"size": 9
+			},
+			"type": "convolution"
+		},
+		{
+			"name": "_2",
+			"node_position": {
+				"x": -337.833313,
+				"y": -174.166656
+			},
+			"parameters": {
+				"amount": 5
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "conv",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "Emboss postprocess",
+				"outputs": [
+					{
+						"f": "$amount*($conv($uv))+0.5",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0,
+						"label": "Label",
+						"max": 10,
+						"min": 0,
+						"name": "amount",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -461.916626,
+				"y": -199.062485
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -103.833313,
+				"y": -222.062485
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -376.875,
+				"y": -385.958313
+			},
+			"parameters": {
+				"param0": 9,
+				"param1": 0,
+				"param2": 5
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "emboss_convolution_2_2",
+							"widget": "size"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				},
+				{
+					"label": "Angle",
+					"linked_widgets": [
+						{
+							"node": "emboss_convolution_2_2",
+							"widget": "angle"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				},
+				{
+					"label": "Amount",
+					"linked_widgets": [
+						{
+							"node": "_2",
+							"widget": "amount"
+						}
+					],
+					"name": "param2",
+					"type": "linked_control"
+				}
+			]
+		}
+	],
+	"parameters": {
+		"param0": 9,
+		"param1": 0,
+		"param2": 5
+	},
+	"type": "graph"
+}

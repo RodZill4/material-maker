@@ -3,26 +3,42 @@ extends EditorPlugin
 
 var mm_button = null
 var material_maker = null
+var importer = null
 
-func _enter_tree():
+func _enter_tree() -> void:
 	add_tool_menu_item("Material Maker", self, "open_material_maker")
+	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
 
-func _exit_tree():
+func register_material_maker_import(__) -> void:
+	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
+	add_import_plugin(importer)
+	remove_tool_menu_item("Register Material Maker Import")
+	add_tool_menu_item("Unregister Material Maker Import", self, "unregister_material_maker_import")
+
+func unregister_material_maker_import(__) -> void:
+	remove_import_plugin(importer)
+	importer = null
+	remove_tool_menu_item("Unregister Material Maker Import")
+	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
+
+func _exit_tree() -> void:
 	remove_tool_menu_item("Material Maker")
 	if material_maker != null:
 		material_maker.hide()
 		material_maker.queue_free()
 		material_maker = null
+	if importer != null:
+		remove_import_plugin(importer)
+		importer = null
 
-func _get_state():
-	var s = { mm_button=mm_button, material_maker=material_maker }
-	return s
+func _get_state() -> Dictionary:
+	return { mm_button=mm_button, material_maker=material_maker }
 
-func _set_state(s):
+func _set_state(s) -> void:
 	mm_button = s.mm_button
 	material_maker = s.material_maker
 
-func open_material_maker(foo = null):
+func open_material_maker(__) -> void:
 	if material_maker == null:
 		material_maker = preload("res://addons/material_maker/window_dialog.tscn").instance()
 		var panel = material_maker.get_node("MainWindow")
@@ -31,8 +47,21 @@ func open_material_maker(foo = null):
 		add_child(material_maker)
 	material_maker.popup_centered()
 
-func close_material_maker():
+func close_material_maker() -> void:
 	if material_maker != null:
 		material_maker.hide()
 		material_maker.queue_free()
 		material_maker = null
+
+func generate_material(ptex_filename: String) -> Material:
+	var generator = MMGenLoader.load_gen(ptex_filename)
+	add_child(generator)
+	if generator.has_node("Material"):
+		var gen_material = generator.get_node("Material")
+		if gen_material != null:
+			var return_value = gen_material.render_textures(mm_renderer)
+			while return_value is GDScriptFunctionState:
+				return_value = yield(return_value, "completed")
+			var prefix = ptex_filename.left(ptex_filename.rfind("."))
+			return gen_material.export_textures(prefix, get_editor_interface())
+	return null

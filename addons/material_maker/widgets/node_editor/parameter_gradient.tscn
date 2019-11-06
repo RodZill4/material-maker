@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/material_maker/widgets/node_editor/parameter_gradient.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/widgets/gradient_editor.tscn" type="PackedScene" id=2]
+
+[node name="gradient" type="HBoxContainer"]
+margin_right = 148.0
+margin_bottom = 24.0
+script = ExtResource( 1 )
+
+[node name="LabelDefault" type="Label" parent="."]
+margin_top = 8.0
+margin_right = 50.0
+margin_bottom = 22.0
+text = "Default:"
+
+[node name="Default" parent="." instance=ExtResource( 2 )]
+margin_left = 54.0
+margin_right = 174.0

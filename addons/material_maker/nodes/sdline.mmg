@@ -1,0 +1,72 @@
+{
+	"name": "sdline",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"ax": 0.2,
+		"ay": 0.2,
+		"bx": 0.8,
+		"by": 0.8,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.2,
+		"r": 0.3,
+		"w": 0.3
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float sdLine( in vec2 p, in vec2 a, in vec2 b ) {\n    vec2 pa = p-a, ba = b-a;\n    float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );\n    return length( pa - ba*h );\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "sdLine",
+		"outputs": [
+			{
+				"f": "sdLine($uv, vec2($ax, $ay), vec2($bx, $by))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "A X",
+				"max": 1,
+				"min": 0,
+				"name": "ax",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "A Y",
+				"max": 1,
+				"min": 0,
+				"name": "ay",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "B X",
+				"max": 1,
+				"min": 0,
+				"name": "bx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "B Y",
+				"max": 1,
+				"min": 0,
+				"name": "by",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

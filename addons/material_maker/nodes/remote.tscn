@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/material_maker/nodes/remote.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
+
+[sub_resource type="Theme" id=1]
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 48, 32, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 32, 32, 16, 16 )
+
+[node name="Remote" type="GraphNode"]
+margin_right = 95.0
+margin_bottom = 52.0
+mouse_filter = 1
+theme = SubResource( 1 )
+title = "Remote"
+show_close = true
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 0.5, 0.5, 1, 1 )
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color( 0.5, 0.5, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+
+[node name="Controls" type="GridContainer" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 79.0
+margin_bottom = 24.0
+columns = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 79.0
+margin_bottom = 46.0
+
+[node name="AddLink" type="Button" parent="HBoxContainer"]
+margin_right = 28.0
+margin_bottom = 22.0
+hint_tooltip = "Add linked control"
+size_flags_horizontal = 0
+icon = SubResource( 2 )
+
+[node name="AddConfig" type="Button" parent="HBoxContainer"]
+margin_left = 32.0
+margin_right = 60.0
+margin_bottom = 22.0
+hint_tooltip = "Add configurations"
+icon = SubResource( 3 )
+[connection signal="pressed" from="HBoxContainer/AddLink" to="." method="_on_AddLink_pressed"]
+[connection signal="pressed" from="HBoxContainer/AddConfig" to="." method="_on_AddConfig_pressed"]

@@ -1,0 +1,536 @@
+{
+	"connections": [
+		{
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "colorize_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "graph",
+			"from_port": 0,
+			"to": "blend_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2_2",
+			"from_port": 0,
+			"to": "blend_2_2",
+			"to_port": 1
+		},
+		{
+			"from": "blend_2_2",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 3
+		}
+	],
+	"label": "Graph",
+	"name": "39",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 193,
+				"y": -49
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"r": 0,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"roughness": 1,
+				"size": 11
+			},
+			"type": "material"
+		},
+		{
+			"name": "shape_2",
+			"node_position": {
+				"x": -533.992065,
+				"y": -0.5
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.25,
+				"shape": 2,
+				"sides": 5
+			},
+			"type": "shape"
+		},
+		{
+			"name": "colorize_2_2",
+			"node_position": {
+				"x": -363.992096,
+				"y": -7
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.027273,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.118182,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.143066,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "blend_2_2",
+			"node_position": {
+				"x": -38.492065,
+				"y": 139
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 9
+			},
+			"type": "blend"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": 106.007935,
+				"y": -288.5
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"connections": [
+				{
+					"from": "_2",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "_3",
+					"to_port": 0
+				},
+				{
+					"from": "shape",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "_3",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "shape",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Runes circle",
+			"name": "graph",
+			"node_position": {
+				"x": -271.03067,
+				"y": -132
+			},
+			"nodes": [
+				{
+					"name": "_2",
+					"node_position": {
+						"x": -400.5,
+						"y": -278.5
+					},
+					"parameters": {
+						"columns": 64,
+						"rows": 8,
+						"thickness": 0.1
+					},
+					"shader_model": {
+						"global": "// Based on Otavio Good's https://www.shadertoy.com/view/MsXSRn\n\nfloat ThickLine(vec2 uv, vec2 posA, vec2 posB, float radiusInv)\n{\n\tvec2 dir = posA - posB;\n\tfloat dirLen = length(dir);\n\tvec2 dirN = normalize(dir);\n\tfloat dotTemp = clamp(dot(uv - posB, dirN), 0.0, dirLen);\n\tvec2 proj = dotTemp * dirN + posB;\n\tfloat d1 = length(uv - proj);\n\tfloat finalGray = clamp(1.0 - d1 * radiusInv, 0.0, 1.0);\n\treturn finalGray;\n}\n\n// makes a rune in the 0..1 uv space. Seed is which rune to draw.\n// passes back gray in x and derivates for lighting in yz\nfloat Rune(vec2 uv, float thickness) {\n\tfloat finalLine = 0.0;\n\tvec2 seed = floor(uv)-0.41;\n\tuv = fract(uv);\n\tfor (int i = 0; i < 4; i++)\t// number of strokes\n\t{\n\t\tvec2 posA = rand2(floor(seed+0.5));\n\t\tvec2 posB = rand2(floor(seed+1.5));\n\t\tseed += 2.0;\n\t\t// expand the range and mod it to get a nicely distributed random number - hopefully. :)\n\t\tposA = fract(posA * 128.0);\n\t\tposB = fract(posB * 128.0);\n\t\t// each rune touches the edge of its box on all 4 sides\n\t\tif (i == 0) posA.y = 0.0;\n\t\tif (i == 1) posA.x = 0.999;\n\t\tif (i == 2) posA.x = 0.0;\n\t\tif (i == 3) posA.y = 0.999;\n\t\t// snap the random line endpoints to a grid 2x3\n\t\tvec2 snaps = vec2(2.0, 3.0);\n\t\tposA = (floor(posA * snaps) + 0.5) / snaps;\t// + 0.5 to center it in a grid cell\n\t\tposB = (floor(posB * snaps) + 0.5) / snaps;\n\t\t//if (distance(posA, posB) < 0.0001) continue;\t// eliminate dots.\n\t\t// Dots (degenerate lines) are not cross-GPU safe without adding 0.001 - divide by 0 error.\n\t\tfinalLine = max(finalLine, ThickLine(uv, posA, posB + 0.001, 1.0/max(0.01, thickness)));\n\t}\n\treturn finalLine;\n}\n\n\n",
+						"inputs": [
+
+						],
+						"instance": "",
+						"name": "Runes",
+						"outputs": [
+							{
+								"f": "Rune(vec2($columns, $rows)*$uv, $thickness)",
+								"type": "f"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0,
+								"label": "",
+								"max": 32,
+								"min": 2,
+								"name": "columns",
+								"step": 1,
+								"type": "float",
+								"widget": "spinbox"
+							},
+							{
+								"default": 0,
+								"label": "",
+								"max": 32,
+								"min": 2,
+								"name": "rows",
+								"step": 1,
+								"type": "float",
+								"widget": "spinbox"
+							},
+							{
+								"default": 0.1,
+								"label": "",
+								"max": 0.3,
+								"min": 0,
+								"name": "thickness",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -437.5,
+						"y": -153.5
+					},
+					"parameters": {
+						"repeat": true,
+						"rotate": 0,
+						"scale_x": 8,
+						"scale_y": 1,
+						"translate_x": 0,
+						"translate_y": -0.04
+					},
+					"type": "transform"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -156.068481,
+						"y": -262.5
+					},
+					"parameters": {
+						"edge": 0.299221,
+						"radius": 1,
+						"shape": 0,
+						"sides": 3
+					},
+					"type": "shape"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -174.853485,
+						"y": -165.5
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.1,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.154545,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.545455,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.618182,
+									"r": 0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "blend",
+					"node_position": {
+						"x": -195.853485,
+						"y": -107.5
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 2
+					},
+					"type": "blend"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -167.853485,
+						"y": -26.5
+					},
+					"parameters": {
+						"gradient": {
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.018182,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.081819,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.115793,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.570339,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.633975,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.663637,
+									"r": 0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "_3",
+					"node_position": {
+						"x": -390.5,
+						"y": 41.5
+					},
+					"parameters": {
+
+					},
+					"shader_model": {
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": "",
+						"name": "DiscMap",
+						"outputs": [
+							{
+								"rgba": "$in(vec2(atan($uv.y-0.5, $uv.x-0.5), 2.0*length($uv-vec2(0.5))))",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "blend_2",
+					"node_position": {
+						"x": -197.116241,
+						"y": 32.5
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 9
+					},
+					"type": "blend"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 143.931519,
+						"y": -115
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+
+			},
+			"type": "graph"
+		},
+		{
+			"name": "shape",
+			"node_position": {
+				"x": -525.749817,
+				"y": 117.666656
+			},
+			"parameters": {
+				"edge": 0.2,
+				"radius": 0.75,
+				"shape": 0,
+				"sides": 2
+			},
+			"type": "shape"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -536.749817,
+				"y": 233.55304
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

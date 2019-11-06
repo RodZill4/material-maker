@@ -1,0 +1,56 @@
+{
+	"name": "combine",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"color": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		},
+		"name": 0
+	},
+	"shader_model": {
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "R",
+				"name": "r",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "G",
+				"name": "g",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "B",
+				"name": "b",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "A",
+				"name": "a",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Combine",
+		"outputs": [
+			{
+				"rgba": "vec4($r($uv), $g($uv), $b($uv), $a($uv))"
+			}
+		],
+		"parameters": [
+
+		]
+	}
+}

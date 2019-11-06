@@ -10,21 +10,24 @@ const ENUM_REMOVE = -3
 const ENUM_UP = -4
 const ENUM_DOWN = -5
 
-func _ready():
+func _ready() -> void:
 	update_enum_list()
 
-func get_model_data():
-	var data = {}
-	data.values = enum_values
-	data.default = enum_current
-	return data
+func get_model_data() -> Dictionary:
+	return {
+		values = enum_values,
+		default = enum_current,
+	}
 
-func set_model_data(data):
+func set_model_data(data) -> void:
 	enum_values = data.values.duplicate()
-	enum_current = data.default
+	if data.has("default"):
+		enum_current = data.default
+	else:
+		enum_current = 0
 	update_enum_list()
 
-func update_enum_list():
+func update_enum_list() -> void:
 	var options = $EnumValues
 	options.clear()
 	if !enum_values.empty():
@@ -43,7 +46,7 @@ func update_enum_list():
 	options.selected = enum_current
 	options.add_item("Add value", ENUM_ADD)
 
-func _on_EnumValues_item_selected(id):
+func _on_EnumValues_item_selected(id) -> void:
 	id = $EnumValues.get_item_id(id)
 	if id >= 0 and id < enum_values.size():
 		enum_current = id
@@ -74,7 +77,7 @@ func _on_EnumValues_item_selected(id):
 		enum_current += 1
 	update_enum_list()
 
-func update_enum_value(n, v, i):
+func update_enum_value(n, v, i) -> void:
 	if i == -1:
 		enum_values.append({ name=n, value=v })
 		enum_current = enum_values.size()-1

@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/material_maker/widgets/hslider.gd" type="Script" id=1]
+
+[node name="MMHSlider" type="HSlider"]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 134.0
+margin_bottom = 17.0
+ticks_on_borders = true
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+self_modulate = Color( 0.752941, 0.752941, 1, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true
+}
+[connection signal="value_changed" from="." to="." method="update_label"]

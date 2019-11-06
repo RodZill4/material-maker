@@ -3,16 +3,13 @@ extends Node
 
 var includes
 
-func _ready():
-	pass
-
-func create_node(type):
+func create_node(type) -> Node:
 	var node = null
-	if File.new().file_exists("res://addons/material_maker/nodes/"+type+".mmn"):
-		node = preload("res://addons/material_maker/nodes/node_generic.gd").new()
-		node.model = type
-	else:
-		var node_type = load("res://addons/material_maker/nodes/"+type+"/"+type+".tscn")
+	var file_name = "res://addons/material_maker/nodes/"+type+".tscn"
+	if ResourceLoader.exists(file_name):
+		var node_type = load(file_name)
 		if node_type != null:
 			node = node_type.instance()
+	if node == null:
+		node = preload("res://addons/material_maker/nodes/generic.tscn").instance()
 	return node

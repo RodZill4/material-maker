@@ -2,26 +2,24 @@
 
 [ext_resource path="res://addons/material_maker/widgets/linked_widgets/editable_label.gd" type="Script" id=1]
 
-[node name="Label" type="Label"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="EditableLabel" type="HBoxContainer"]
 margin_right = 40.0
-margin_bottom = 14.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+margin_bottom = 40.0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Mouse" ]
 
-[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[node name="Label" type="Label" parent="."]
+margin_top = 13.0
+margin_right = 62.0
+margin_bottom = 27.0
+mouse_filter = 0
+size_flags_horizontal = 3
 
-
+[node name="Editor" type="LineEdit" parent="."]
+visible = false
+margin_left = 4.0
+margin_right = 62.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+[connection signal="gui_input" from="Label" to="." method="_on_gui_input"]
+[connection signal="focus_exited" from="Editor" to="." method="_on_Editor_focus_exited"]
+[connection signal="text_entered" from="Editor" to="." method="_on_Editor_text_entered"]

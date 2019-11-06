@@ -1,48 +1,52 @@
 tool
 extends HBoxContainer
 
-var size_first = 0
-var size_last = 12
-var size_default = 8
+var size_first : int = 0
+var size_last : int = 12
+var size_default : int = 10
 
-func _ready():
+func _ready() -> void:
 	update_size_configuration()
 
-func get_model_data():
-	var data = {}
-	data.first = size_first
-	data.last = size_last
-	data.default = size_default
-	return data
+func get_model_data() -> Dictionary:
+	return {
+		first = size_first,
+		last = size_last,
+		default = size_default,
+	}
 
-func set_model_data(data):
+func set_model_data(data) -> void:
 	if data.has("first"):
 		size_first = data.first
 	if data.has("last"):
 		size_last = data.last
 	if data.has("default"):
-		size_last = data.default
+		size_default = data.default
 	update_size_configuration()
 
-func update_size_option_button(button, first, last, current):
-	button.clear()
-	for i in range(first, last+1):
-		var s = pow(2, i)
-		button.add_item("%dx%d" % [ s, s ])
-	button.selected = current - first
+func update_size_configuration() -> void:
+	if size_first > size_last:
+		var tmp : int = size_first
+		size_first = size_last
+		size_last = tmp
+	size_default = int(clamp(size_default, size_first, size_last))
+	$First.min_size = 0
+	$First.max_size = size_last
+	$First.size_value = size_first
+	$Last.min_size = size_first
+	$Last.max_size = 12
+	$Last.size_value = size_last
+	$Default.min_size = size_first
+	$Default.max_size = size_last
+	$Default.size_value = size_default
 
-func update_size_configuration():
-	update_size_option_button($First, 0, size_last, size_first)
-	update_size_option_button($Last, size_first, 12, size_last)
-	update_size_option_button($Default, size_first, size_last, size_default)
-
-func _on_First_item_selected(ID):
+func _on_First_item_selected(ID) -> void:
 	size_first = ID
 	update_size_configuration()
 
-func _on_Last_item_selected(ID):
-	size_last = size_first + ID
+func _on_Last_item_selected(ID) -> void:
+	size_last = ID
 	update_size_configuration()
 
-func _on_Default_item_selected(ID):
-	size_default = size_first + ID
+func _on_Default_item_selected(ID) -> void:
+	size_default = ID

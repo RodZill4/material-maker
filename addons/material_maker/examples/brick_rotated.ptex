@@ -1,0 +1,331 @@
+{
+	"connections": [
+		{
+			"from": "bricks",
+			"from_port": 2,
+			"to": "transform",
+			"to_port": 1
+		},
+		{
+			"from": "bricks",
+			"from_port": 3,
+			"to": "transform",
+			"to_port": 2
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "transform",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "pattern",
+			"from_port": 0,
+			"to": "transform",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 1,
+			"to": "transform",
+			"to_port": 3
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "normal_map",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		}
+	],
+	"label": "Graph",
+	"name": "47",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 70,
+				"y": 113
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"roughness": 1,
+				"size": 11
+			},
+			"type": "material"
+		},
+		{
+			"name": "bricks",
+			"node_position": {
+				"x": -549.5,
+				"y": -120.5
+			},
+			"parameters": {
+				"bevel": 0.1,
+				"columns": 3,
+				"mortar": 0.1,
+				"pattern": 0,
+				"repeat": 1,
+				"row_offset": 0.5,
+				"rows": 6
+			},
+			"shader_model": {
+				"code": "vec4 $(name_uv) = $(name)_xyzw($(uv));\n",
+				"global": "vec4 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float bevel) {\n\tfloat color;\n\tvec2 c1 = (uv-bmin-vec2(mortar))/bevel;\n\tvec2 c2 = (bmax-uv-vec2(mortar))/bevel;\n\tvec2 c = min(c1, c2);\n\tcolor = clamp(min(c.x, c.y), 0.0, 1.0);\n\tvec2 tiled_brick_pos = mod(bmin, vec2(1.0, 1.0));\n\treturn vec4(color, 0.5*(bmin+bmax), tiled_brick_pos.x+7.0*tiled_brick_pos.y);\n}\n\nvec4 bricks_rb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(count.x, count.y);\n\tbevel /= max(count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec4 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tcount *= repeat;\n\tmortar /= max(2.0*count.x, count.y);\n\tbevel /= max(2.0*count.x, count.y);\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tcount.x = count.x*(1.0+step(0.5, fract(uv.y*count.y*0.5)));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn brick(uv, bmin, bmin+vec2(1.0)/count, mortar, bevel);\n}\n\nvec4 bricks_hb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tfloat pc = count.x+count.y;\n\tfloat c = pc*repeat;\n\tmortar /= c;\n\tbevel /= c;\n\tvec2 corner = floor(uv*c);\n\tfloat cdiff = mod(corner.x-corner.y, pc);\n\tif (cdiff < count.x) {\n\t\treturn brick(uv, (corner-vec2(cdiff, 0.0))/c, (corner-vec2(cdiff, 0.0)+vec2(count.x, 1.0))/c, mortar, bevel);\n\t} else {\n\t\treturn brick(uv, (corner-vec2(0.0, pc-cdiff-1.0))/c, (corner-vec2(0.0, pc-cdiff-1.0)+vec2(1.0, count.y))/c, mortar, bevel);\n\t}\n}\n\nvec4 bricks_bw(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = 2.0*count*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = count*floor(repeat*2.0*uv);\n\tfloat cdiff = mod(dot(floor(repeat*2.0*uv), vec2(1.0)), 2.0);\n\tvec2 corner;\n\tvec2 size;\n\tif (cdiff == 0.0) {\n\t\tcorner = vec2(corner1.x, corner2.y);\n\t\tsize = vec2(1.0, count.y);\n\t} else {\n\t\tcorner = vec2(corner2.x, corner1.y);\n\t\tsize = vec2(count.x, 1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}\n\nvec4 bricks_sb(vec2 uv, vec2 count, float repeat, float offset, float mortar, float bevel) {\n\tvec2 c = (count+vec2(1.0))*repeat;\n\tfloat mc = max(c.x, c.y);\n\tmortar /= mc;\n\tbevel /= mc;\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = (count+vec2(1.0))*floor(repeat*uv);\n\tvec2 rcorner = corner1 - corner2;\n\tvec2 corner;\n\tvec2 size;\n\tif (rcorner.x == 0.0 && rcorner.y < count.y) {\n\t\tcorner = corner2;\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == 0.0) {\n\t\tcorner = corner2+vec2(1.0, 0.0);\n\t\tsize = vec2(count.x, 1.0);\n\t} else if (rcorner.x == count.x) {\n\t\tcorner = corner2+vec2(count.x, 1.0);\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == count.y) {\n\t\tcorner = corner2+vec2(0.0, count.y);\n\t\tsize = vec2(count.x, 1.0);\n\t} else {\n\t\tcorner = corner2+vec2(1.0);\n\t\tsize = vec2(count.x-1.0, count.y-1.0);\n\t}\n\treturn brick(uv, corner/c, (corner+size)/c, mortar, bevel);\n}",
+				"inputs": [
+
+				],
+				"instance": "vec4 $(name)_xyzw(vec2 uv) {\n    return bricks_$(pattern)(uv, vec2($(columns), $(rows)), $(repeat), $(row_offset), $(mortar), max(0.001, $(bevel)));\n}",
+				"name": "Bricks",
+				"outputs": [
+					{
+						"f": "$(name_uv).x",
+						"type": "f"
+					},
+					{
+						"rgb": "rand3(vec2($(name_uv).w, $(seed)))",
+						"type": "rgb"
+					},
+					{
+						"f": "$(name_uv).y",
+						"type": "f"
+					},
+					{
+						"f": "$(name_uv).z",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0,
+						"label": "",
+						"name": "pattern",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Running bond",
+								"value": "rb"
+							},
+							{
+								"name": "Running bond (2)",
+								"value": "rb2"
+							},
+							{
+								"name": "HerringBone",
+								"value": "hb"
+							},
+							{
+								"name": "Basket weave",
+								"value": "bw"
+							},
+							{
+								"name": "Spanish bond",
+								"value": "sb"
+							}
+						]
+					},
+					{
+						"default": 1,
+						"label": "Repeat:",
+						"max": 8,
+						"min": 1,
+						"name": "repeat",
+						"step": 1,
+						"type": "float",
+						"widget": "spinbox"
+					},
+					{
+						"default": 6,
+						"label": "Rows:",
+						"max": 64,
+						"min": 1,
+						"name": "rows",
+						"step": 1,
+						"type": "float",
+						"widget": "spinbox"
+					},
+					{
+						"default": 3,
+						"label": "Columns:",
+						"max": 64,
+						"min": 1,
+						"name": "columns",
+						"step": 1,
+						"type": "float",
+						"widget": "spinbox"
+					},
+					{
+						"default": 0.5,
+						"label": "Offset:",
+						"max": 1,
+						"min": 0,
+						"name": "row_offset",
+						"step": 0,
+						"type": "float"
+					},
+					{
+						"default": 0.1,
+						"label": "Mortar:",
+						"max": 0.5,
+						"min": 0,
+						"name": "mortar",
+						"step": 0,
+						"type": "float"
+					},
+					{
+						"default": 0.1,
+						"label": "Bevel:",
+						"max": 0.5,
+						"min": 0,
+						"name": "bevel",
+						"step": 0,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": -286.5,
+				"y": 14.5
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 2
+			},
+			"type": "blend"
+		},
+		{
+			"name": "pattern",
+			"node_position": {
+				"x": -547.5,
+				"y": -227.068176
+			},
+			"parameters": {
+				"mix": 0,
+				"x_scale": 1,
+				"x_wave": 3,
+				"y_scale": 0,
+				"y_wave": 4
+			},
+			"type": "pattern"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -10.209106,
+				"y": -146.068176
+			},
+			"parameters": {
+				"gradient": {
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "transform",
+			"node_position": {
+				"x": -258.5,
+				"y": -196.5
+			},
+			"parameters": {
+				"repeat": false,
+				"rotate": 360,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": 0.5,
+				"translate_y": 0.5
+			},
+			"type": "transform"
+		},
+		{
+			"name": "comment",
+			"node_position": {
+				"x": -391.274048,
+				"y": 165.542206
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 280,
+				"y": 85
+			},
+			"text": "This example shows how to use the 3rd and 4th outputs of the bricks node to get the center of each brick.",
+			"type": "comment"
+		},
+		{
+			"name": "normal_map",
+			"node_position": {
+				"x": 14.29071,
+				"y": -40.645294
+			},
+			"parameters": {
+				"param0": 11,
+				"param1": 0.995
+			},
+			"type": "normal_map"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

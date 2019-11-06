@@ -1,105 +1,75 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/node_editor/output.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/icons/minus.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=2]
 
-[node name="Output" type="HBoxContainer" index="0"]
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 16, 16, 16 )
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 201.0
-margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 18, 48, 12, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 34, 48, 12, 16 )
+
+[sub_resource type="DynamicFontData" id=4]
+font_path = "res://addons/material_maker/fonts/hack.ttf"
+
+[sub_resource type="DynamicFont" id=5]
+size = 12
+font_data = SubResource( 4 )
+
+[node name="Output" type="HBoxContainer"]
+margin_right = 251.0
+margin_bottom = 22.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
-alignment = 0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Size Flags" ]
 
-[node name="Delete" type="Button" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="Delete" type="Button" parent="."]
 margin_right = 28.0
-margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-icon = ExtResource( 2 )
+margin_bottom = 25.0
+icon = SubResource( 1 )
 flat = true
-align = 1
 
-[node name="Type" type="OptionButton" parent="." index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="Up" type="Button" parent="."]
 margin_left = 32.0
-margin_right = 134.0
-margin_bottom = 24.0
+margin_right = 56.0
+margin_bottom = 25.0
+icon = SubResource( 2 )
+flat = true
+
+[node name="Down" type="Button" parent="."]
+margin_left = 60.0
+margin_right = 84.0
+margin_bottom = 25.0
+icon = SubResource( 3 )
+flat = true
+
+[node name="Type" type="OptionButton" parent="."]
+margin_left = 88.0
+margin_right = 192.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 102, 0 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
 hint_tooltip = "Input flag"
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 2
-shortcut = null
-group = null
 text = "GreyScale"
-flat = false
-align = 0
 items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, -1, null ]
 selected = 0
-_sections_unfolded = [ "Focus", "Hint", "Rect" ]
 
-[node name="Value" type="LineEdit" parent="." index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 138.0
-margin_right = 201.0
-margin_bottom = 24.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
+[node name="Value" type="LineEdit" parent="."]
+margin_left = 196.0
+margin_right = 290.0
+margin_bottom = 25.0
 hint_tooltip = "Default value"
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 1
 size_flags_horizontal = 3
-size_flags_vertical = 1
+custom_fonts/font = SubResource( 5 )
 text = "0.0"
-focus_mode = 2
-context_menu_enabled = true
-placeholder_alpha = 0.6
-caret_blink = false
-caret_blink_speed = 0.65
-caret_position = 0
-_sections_unfolded = [ "Hint", "Rect", "Size Flags" ]
-
+context_menu_enabled = false
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
-
-
+[connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
+[connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]

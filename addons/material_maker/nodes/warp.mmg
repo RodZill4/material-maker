@@ -1,0 +1,59 @@
+{
+	"name": "warp",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 0.2,
+		"eps": 0.045,
+		"epsilon": 0
+	},
+	"shader_model": {
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(sin($uv.x*20.0)*0.5+0.5, sin($uv.y*20.0)*0.5+0.5, 0, 1)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "d",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Warp",
+		"outputs": [
+			{
+				"rgba": "$in($uv+$amount*vec2($d(fract($uv+vec2($eps, 0.0)))-$d(fract($uv-vec2($eps, 0.0))), $d(fract($uv+vec2(0.0, $eps)))-$d(fract($uv-vec2(0.0, $eps)))))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "amount",
+				"step": 0.005,
+				"type": "float",
+				"widget": "spinbox"
+			},
+			{
+				"default": 0,
+				"label": "",
+				"max": 0.2,
+				"min": 0.005,
+				"name": "eps",
+				"step": 0.005,
+				"type": "float",
+				"widget": "spinbox"
+			}
+		]
+	}
+}
