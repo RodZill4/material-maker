@@ -109,28 +109,40 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
-func serialize_library(array : Array, library_name : String = "", item : TreeItem = null, icon_path : String = "") -> void:
+func get_item_path(item : TreeItem) -> String:
+	var item_path = item.get_text(0)
+	var item_parent = item.get_parent()
+	while item_parent != tree.get_root():
+		item_path = item_parent.get_text(0)+"/"+item_path
+		item_parent = item_parent.get_parent()
+	return item_path
+
+func get_icon_name(item_name : String) -> String:
+	return item_name.to_lower().replace("/", "_").replace(" ", "_")
+
+func serialize_library(array : Array, library_name : String = "", item : TreeItem = null, icon_dir : String = "") -> void:
 	if item == null:
 		item = tree.get_root()
 	item = item.get_children()
 	while item != null:
 		if item.get_metadata(0) != null:
 			var m : Dictionary = item.get_metadata(0)
-			if icon_path != "":
-				pass
 			if library_name == "" or (m.has("library") and m.library == library_name):
 				var copy : Dictionary = m.duplicate()
 				copy.erase("library")
 				copy.collapsed = item.collapsed
+				if icon_dir != "" and m.has("icon"):
+					var src_path = m.library.get_basename()+"/"+m.icon+".png"
+					var icon_name : String = get_icon_name(get_item_path(item))
+					var icon_path = icon_dir+"/"+icon_name+".png"
+					var dir : Directory = Directory.new()
+					dir.copy(src_path, icon_path)
+					copy.icon = icon_name
 				array.append(copy)
 		elif !item.collapsed:
-			var item_path = item.get_text(0)
-			var item_parent = item.get_parent()
-			while item_parent != tree.get_root():
-				item_path = item_parent.get_text(0)+"/"+item_path
-				item_parent = item_parent.get_parent()
+			var item_path = get_item_path(item)
 			array.append({ tree_item=item_path, collapsed=false })
-		serialize_library(array, library_name, item)
+		serialize_library(array, library_name, item, icon_dir)
 		item = item.get_next()
 
 func save_library(library_name : String, item : TreeItem = null) -> void:

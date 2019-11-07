@@ -6,7 +6,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "uniform",
+			"icon": "simple_uniform",
 			"name": "uniform",
 			"parameters": {
 				"color": {
@@ -22,7 +22,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "polygon",
+			"icon": "simple_shape",
 			"name": "shape",
 			"parameters": {
 				"edge": 0.051546,
@@ -35,7 +35,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "star",
+			"icon": "simple_shape_star",
 			"name": "shape",
 			"parameters": {
 				"edge": 0.2,
@@ -48,7 +48,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "curved_star",
+			"icon": "simple_shape_curved_star",
 			"name": "shape",
 			"parameters": {
 				"edge": 0.628866,
@@ -61,7 +61,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "rays",
+			"icon": "simple_shape_rays",
 			"name": "shape",
 			"parameters": {
 				"edge": 0.628866,
@@ -74,7 +74,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "circle",
+			"icon": "simple_shape_circle",
 			"name": "shape",
 			"parameters": {
 				"edge": 0.2,
@@ -87,7 +87,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "image",
+			"icon": "simple_image",
 			"name": "image",
 			"parameters": {
 				"file_path": "res://addons/material_maker/nodes/image/godot_logo.png",
@@ -118,7 +118,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "gradient",
+			"icon": "simple_gradient",
 			"label": "Gradient",
 			"name": "graph",
 			"nodes": [
@@ -328,7 +328,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "radial",
+			"icon": "simple_gradient_radial",
 			"label": "Radial Gradient",
 			"name": "graph",
 			"nodes": [
@@ -520,7 +520,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "circular",
+			"icon": "simple_gradient_circular",
 			"label": "Circular Gradient",
 			"name": "graph",
 			"nodes": [
@@ -714,12 +714,240 @@
 			"type": "graph"
 		},
 		{
+			"collapsed": true,
+			"icon": "simple_sdf_shapes_sdcircle",
+			"name": "sdcircle",
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"r": 0.25
+			},
+			"tree_item": "Simple/SDF/Shapes/sdCircle",
+			"type": "sdcircle"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_shapes_sdbox",
+			"name": "sdbox",
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"h": 0.2,
+				"r": 0.3,
+				"w": 0.3
+			},
+			"tree_item": "Simple/SDF/Shapes/sdBox",
+			"type": "sdbox"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_shapes_sdline",
+			"name": "sdline",
+			"parameters": {
+				"ax": 0.2,
+				"ay": 0.2,
+				"bx": 0.8,
+				"by": 0.8,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.2,
+				"r": 0.3,
+				"w": 0.3
+			},
+			"tree_item": "Simple/SDF/Shapes/sdLine",
+			"type": "sdline"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_shapes_sdrhombus",
+			"name": "sdrhombus",
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"h": 0.2,
+				"r": 0.3,
+				"w": 0.3
+			},
+			"tree_item": "Simple/SDF/Shapes/sdRhombus",
+			"type": "sdrhombus"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdboolean",
+			"name": "sdboolean",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "Simple/SDF/Operators/sdBoolean",
+			"type": "sdboolean"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdsmoothboolean",
+			"name": "sdsmoothboolean",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"k": 0.15,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"shader_model": {
+				"code": "",
+				"global": "float sdSmoothUnion( float d1, float d2, float k ) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h); }\n\nfloat sdSmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );\n    return mix( d2, -d1, h ) + k*h*(1.0-h); }\n\nfloat sdSmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) + k*h*(1.0-h); }\n",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in1",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in2",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "sdSmoothBoolean",
+				"outputs": [
+					{
+						"f": "sdSmooth$op($in1($uv), $in2($uv), $k)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0,
+						"label": "",
+						"name": "op",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Union",
+								"value": "Union"
+							},
+							{
+								"name": "Subtraction",
+								"value": "Subtraction"
+							},
+							{
+								"name": "Intersection",
+								"value": "Intersection"
+							}
+						]
+					},
+					{
+						"default": 0,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "k",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Simple/SDF/Operators/sdSmoothBoolean",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdroundedshape",
+			"name": "sdroundedshape",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"k": 0.15,
+				"op": 0,
+				"r": 0.1,
+				"w": 0.28
+			},
+			"tree_item": "Simple/SDF/Operators/sdRoundedShape",
+			"type": "sdroundedshape"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdannularshape",
+			"name": "sdannularshape",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"k": 0.15,
+				"op": 0,
+				"r": 0.05,
+				"w": 0.28
+			},
+			"tree_item": "Simple/SDF/Operators/sdAnnularShape",
+			"type": "sdannularshape"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdshow",
+			"name": "sdshow",
+			"parameters": {
+				"bevel": 0.1,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "sdShow",
+				"outputs": [
+					{
+						"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0,
+						"label": "Bevel",
+						"max": 1,
+						"min": 0,
+						"name": "bevel",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Simple/SDF/Operators/sdShow",
+			"type": "shader"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Pattern"
 		},
 		{
 			"collapsed": true,
-			"icon": "pattern",
+			"icon": "pattern_generic",
 			"parameters": {
 				"mix": 0,
 				"x_scale": 4,
@@ -732,7 +960,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "checkerboard",
+			"icon": "pattern_generic_checkerboard",
 			"name": "pattern",
 			"parameters": {
 				"mix": 4,
@@ -746,7 +974,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "bricks",
+			"icon": "pattern_bricks",
 			"parameters": {
 				"bevel": 0.1,
 				"columns": 3,
@@ -759,7 +987,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "tiles",
+			"icon": "pattern_bricks_tiles",
 			"parameters": {
 				"bevel": 0.05,
 				"columns": 4,
@@ -772,7 +1000,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "basketweave",
+			"icon": "pattern_bricks_basketweave",
 			"parameters": {
 				"bevel": 0.05,
 				"columns": 2,
@@ -787,7 +1015,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "herringbone",
+			"icon": "pattern_bricks_herringbone",
 			"parameters": {
 				"bevel": 0.05,
 				"columns": 2,
@@ -802,7 +1030,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "spanishbond",
+			"icon": "pattern_bricks_spanishbond",
 			"parameters": {
 				"bevel": 0.05,
 				"columns": 2,
@@ -817,7 +1045,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "weave",
+			"icon": "pattern_weave",
 			"name": "weave",
 			"parameters": {
 				"columns": 4,
@@ -828,7 +1056,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "truchet",
+			"icon": "pattern_truchet",
 			"name": "truchet",
 			"parameters": {
 				"Size": 4,
@@ -841,7 +1069,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "runes",
+			"icon": "pattern_runes",
 			"name": "runes",
 			"parameters": {
 				"columns": 4,
@@ -890,7 +1118,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "fibers",
+			"icon": "pattern_fibers",
 			"label": "Fibers",
 			"name": "graph",
 			"nodes": [
@@ -1070,7 +1298,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "scratches",
+			"icon": "pattern_scratches",
 			"name": "scratches",
 			"parameters": {
 				"Randomness": 0.5,
@@ -1097,7 +1325,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "perlin",
+			"icon": "noise_perlin",
 			"parameters": {
 				"iterations": 3,
 				"persistence": 0.5,
@@ -1135,7 +1363,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "warp1",
+			"icon": "noise_perlin_warp1",
 			"label": "Warp1",
 			"name": "graph",
 			"nodes": [
@@ -1342,7 +1570,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "warp2",
+			"icon": "noise_perlin_warp2",
 			"label": "Warp2",
 			"name": "graph",
 			"nodes": [
@@ -1527,7 +1755,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "voronoi",
+			"icon": "noise_voronoi",
 			"parameters": {
 				"intensity": 1,
 				"scale_x": 4,
@@ -1552,7 +1780,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "colorize",
+			"icon": "filter_colorize",
 			"parameters": {
 				"gradient": [
 					{
@@ -1574,7 +1802,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "invert",
+			"icon": "filter_colorize_invert",
 			"parameters": {
 				"gradient": [
 					{
@@ -1596,7 +1824,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "rainbow",
+			"icon": "filter_colorize_rainbow",
 			"name": "colorize",
 			"parameters": {
 				"gradient": {
@@ -1645,7 +1873,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "blend",
+			"icon": "filter_blend",
 			"parameters": {
 				"amount": 0.5,
 				"blend_type": 0
@@ -1665,7 +1893,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "normal_map",
+			"icon": "filter_normal_map",
 			"parameters": {
 				"amount": 0.5
 			},
@@ -1674,7 +1902,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "blur",
+			"icon": "filter_blur",
 			"name": "gaussian_blur",
 			"parameters": {
 				"param0": 9,
@@ -1686,7 +1914,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "directional",
+			"icon": "filter_blur_directional",
 			"name": "directional_blur",
 			"parameters": {
 				"param0": 9,
@@ -1698,7 +1926,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "emboss",
+			"icon": "filter_emboss",
 			"name": "emboss_2",
 			"parameters": {
 				"param0": 9,
@@ -1723,7 +1951,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "mirror",
+			"icon": "transform_mirror",
 			"name": "mirror",
 			"parameters": {
 				"direction": 0,
@@ -1734,7 +1962,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "kaleidoscope",
+			"icon": "transform_kaleidoscope",
 			"name": "kaleidoscope",
 			"parameters": {
 				"count": 5,
@@ -1746,7 +1974,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "warp",
+			"icon": "transform_warp",
 			"name": "warp",
 			"parameters": {
 				"amount": 0.1,
@@ -1762,7 +1990,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "buffer",
+			"icon": "miscellaneous_buffer",
 			"tree_item": "Miscellaneous/Buffer",
 			"type": "buffer"
 		},
@@ -1776,7 +2004,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "switch",
+			"icon": "miscellaneous_switch",
 			"tree_item": "Miscellaneous/Switch",
 			"type": "switch"
 		},
@@ -1803,7 +2031,7 @@
 		},
 		{
 			"collapsed": true,
-			"icon": "debug",
+			"icon": "miscellaneous_debug",
 			"tree_item": "Miscellaneous/Debug",
 			"type": "debug"
 		}
