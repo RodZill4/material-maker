@@ -347,11 +347,11 @@ func do_add_to_user_library(name, nodes) -> void:
 	dir.make_dir("user://library")
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
-	data.icon = name.right(name.rfind("/")+1).to_lower()
+	data.icon = library.get_icon_name(name)
 	var result = nodes[0].generator.render(0, 64)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	result.save_to_file("user://library/user/"+library.get_icon_name(name)+".png")
+	result.save_to_file("user://library/user/"+data.icon+".png")
 	result.release()
 	library.add_item(data, name, library.get_preview_texture(data))
 	library.save_library("user://library/user.json")
