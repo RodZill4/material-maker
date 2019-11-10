@@ -2010,6 +2010,7 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "miscellaneous_remote",
 			"tree_item": "Miscellaneous/Remote",
 			"type": "remote",
 			"widgets": [
