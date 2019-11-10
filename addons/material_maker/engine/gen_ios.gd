@@ -76,7 +76,7 @@ func swap_ports(i1 : int, i2 : int) -> void:
 	input_gen.get_parent().reconnect_inputs(input_gen, port_reconnects)
 	output_gen.get_parent().reconnect_outputs(output_gen, port_reconnects)
 	emit_signal("parameter_changed", "__update_all__", null)
-	
+
 func source_changed(input_index : int) -> void:
 	if name == "gen_outputs":
 		if get_parent() != null:

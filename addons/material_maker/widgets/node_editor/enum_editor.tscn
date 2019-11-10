@@ -216,5 +216,3 @@ _sections_unfolded = [ "Rect" ]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="queue_free"]
-
-

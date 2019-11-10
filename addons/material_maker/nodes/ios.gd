@@ -38,4 +38,4 @@ func update_node() -> void:
 		add_button.connect("pressed", generator, "add_port")
 		set_slot(get_child_count()-1, false, 0, color, false, 0, color)
 		update_up_down_buttons()
-	
+
