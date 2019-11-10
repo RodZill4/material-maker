@@ -56,4 +56,3 @@ func _on_Type_item_selected(ID) -> void:
 		t.visible = true
 	else:
 		print(ID)
-

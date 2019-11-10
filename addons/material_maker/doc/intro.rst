@@ -20,4 +20,3 @@ as the image generator and convolution filters (blur, emboss, normal map generat
 the resolution of their output.
 
 .. image:: images/screenshot.png
-

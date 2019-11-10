@@ -50,4 +50,3 @@ The Material node provides the following parameters:
 * The value of the ambient occlusion property of the material. The texture used for the ambient occlusion input is multiplied by this value.
 
 * The value of the depth property of the material. The input depth map is multiplied by this value.
-

@@ -44,5 +44,3 @@ align = 1
 color = Color( 1, 1, 1, 1 )
 edit_alpha = true
 _sections_unfolded = [ "Rect" ]
-
-

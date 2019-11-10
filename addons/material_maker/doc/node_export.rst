@@ -21,4 +21,3 @@ Parameters
 
 The Export node has a single parameter that defines the suffix PNG file
 that will be created.
-

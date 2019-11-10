@@ -229,4 +229,3 @@ func deserialize(data : Dictionary) -> void:
 	else:
 		seed_locked = false
 	_post_load()
-
