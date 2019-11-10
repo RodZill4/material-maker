@@ -39,8 +39,9 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
-
-	{ menu="Help", command="show_doc", description="User manual" },
+	
+	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
+	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
@@ -99,6 +100,8 @@ func create_menu(menu, menu_name) -> PopupMenu:
 	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
 	for i in MENU.size():
 		if MENU[i].has("standalone_only") and MENU[i].standalone_only and Engine.editor_hint:
+			continue
+		if MENU[i].has("editor_only") and MENU[i].editor_only and !Engine.editor_hint:
 			continue
 		if MENU[i].menu != menu_name:
 			continue
@@ -344,11 +347,11 @@ func do_add_to_user_library(name, nodes) -> void:
 	dir.make_dir("user://library")
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
-	data.icon = name.right(name.rfind("/")+1).to_lower()
+	data.icon = library.get_icon_name(name)
 	var result = nodes[0].generator.render(0, 64)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	result.save_to_file("user://library/user/"+library.get_icon_name(name)+".png")
+	result.save_to_file("user://library/user/"+data.icon+".png")
 	result.release()
 	library.add_item(data, name, library.get_preview_texture(data))
 	library.save_library("user://library/user.json")
@@ -366,27 +369,38 @@ func export_library() -> void:
 func do_export_library(path : String) -> void:
 	library.export_libraries(path)
 
-func show_doc() -> void:
+func get_doc_dir() -> String:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
-
 	# In release builds, documentation is expected to be located in
 	# a subdirectory of the program directory
-	var release_doc_path = base_dir.plus_file("doc/index.html")
-
+	var release_doc_path = base_dir.plus_file("doc")
 	# In development, documentation is part of the project files.
 	# We can use a globalized `res://` path here as the project isn't exported.
-	var devel_doc_path = ProjectSettings.globalize_path("res://addons/material_maker/doc/_build/html/index.html")
+	var devel_doc_path = ProjectSettings.globalize_path("res://addons/material_maker/doc/_build/html")
+	for p in [ release_doc_path, devel_doc_path ]:
+		var file = File.new()
+		if file.file_exists(p+"/index.html"):
+			return p
+	return ""
 
-	var file = File.new()
-	if file.file_exists(release_doc_path):
-		# Open local prebuilt documentation (used in release builds)
-		OS.shell_open(release_doc_path)
-	elif file.file_exists(devel_doc_path):
-		# Open local documentation built from source (used during development)
-		OS.shell_open(devel_doc_path)
-	else:
-		# Open online documentation
-		OS.shell_open("https://rodzill4.github.io/godot-procedural-textures/doc/")
+func show_doc() -> void:
+	var doc_dir = get_doc_dir()
+	if doc_dir != "":
+		OS.shell_open(doc_dir+"/index.html")
+
+func show_doc_is_disabled() -> bool:
+	return get_doc_dir() == ""
+
+func show_library_item_doc() -> void:
+	var doc_dir : String = get_doc_dir()
+	if doc_dir != "":
+		var doc_name = library.get_selected_item_doc_name()
+		if doc_name != "":
+			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
+			OS.shell_open(doc_path)
+
+func show_library_item_doc_is_disabled() -> bool:
+	return get_doc_dir() == "" or library.get_selected_item_doc_name() == ""
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")

@@ -22,15 +22,16 @@ func _unhandled_input(event : InputEvent) -> void:
 		filter_line_edit.select_all()
 
 func get_selected_item_name() -> String:
-	var tree_item : TreeItem = tree.get_selected()
-	var rv = ""
-	while tree_item != null and tree_item != tree.get_root():
-		if rv == "":
-			rv = tree_item.get_text(0)
-		else:
-			rv = tree_item.get_text(0)+"/"+rv
-		tree_item = tree_item.get_parent()
-	return rv
+	return get_item_path(tree.get_selected())
+
+func get_selected_item_doc_name() -> String:
+	var item : TreeItem = tree.get_selected()
+	if item == null:
+		return ""
+	var m : Dictionary = item.get_metadata(0)
+	if m == null or !m.has("icon"):
+		return ""
+	return m.icon
 
 func add_library(file_name : String, filter : String = "") -> bool:
 	var root = tree.get_root()
@@ -110,6 +111,8 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
 func get_item_path(item : TreeItem) -> String:
+	if item == null:
+		return ""
 	var item_path = item.get_text(0)
 	var item_parent = item.get_parent()
 	while item_parent != tree.get_root():
