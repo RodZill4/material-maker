@@ -45,5 +45,3 @@ items = [  ]
 selected = -1
 
 [connection signal="item_selected" from="EnumValues" to="." method="_on_EnumValues_item_selected"]
-
-

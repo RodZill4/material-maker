@@ -66,7 +66,7 @@ File menu
   a material file is selected, it will be open in a new tab in the right pane. If the current
   tab contains an empty material (about material that only consists of a Material node), the
   material will be loaded into this tab.
- 
+
 * *Save material* saves the current material. If it was not previously saved, a file dialog
   will be displayed to select a location and file name.
 
@@ -111,5 +111,3 @@ Help menu
   do not hesitate to use it to suggest improvements for Material Maker.
 
 * *About* Shows the about dialog.
-
-

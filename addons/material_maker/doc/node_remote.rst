@@ -49,4 +49,3 @@ name for this configuration, and it will be added to the list.
 
 The drop-down list can be used to select a configuration, create new ones and
 update or delete the current configuration.
-

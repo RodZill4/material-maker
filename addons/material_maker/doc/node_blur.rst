@@ -20,7 +20,7 @@ Parameters
 
 The blur node has three parameters:
 
-* The grid size defines the size of the output image. 
+* The grid size defines the size of the output image.
 
 * The direction specifies if the blur algorithm is applied horizontally, vertically or both.
 

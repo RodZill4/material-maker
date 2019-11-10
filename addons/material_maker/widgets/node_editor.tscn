@@ -183,5 +183,3 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 _sections_unfolded = [ "Size Flags" ]
-
-

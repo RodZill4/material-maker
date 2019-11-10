@@ -4,7 +4,7 @@ class_name MMGradientEditor
 
 class GradientCursor:
 	extends Control
-	
+
 	var color : Color
 
 	const WIDTH : int = 10
@@ -12,7 +12,7 @@ class GradientCursor:
 	func _ready() -> void:
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
-	
+
 	func _draw() -> void:
 		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15)])
 		var c = color

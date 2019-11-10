@@ -27,4 +27,3 @@ func _on_TextEdit_focus_exited() -> void:
 	generator.text = editor.text
 	label.visible = true
 	editor.visible = false
-
