@@ -10,6 +10,8 @@ export var step : float = 0.0 setget set_step
 var sliding : bool = false
 var start_position : float
 var start_value : float
+var from_lower_bound : bool = false
+var from_upper_bound : bool = false
 
 onready var slider = $Slider
 onready var cursor = $Slider/Cursor
@@ -47,6 +49,8 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 			start_position = event.position.x
 			start_value = value
 			sliding = true
+			from_lower_bound = value <= min_value
+			from_upper_bound = value >= max_value
 		else:
 			sliding = false
 	elif sliding and event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
@@ -54,6 +58,10 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 		var v : float = start_value+sign(delta)*pow(abs(delta)*0.005, 2)*abs(max_value - min_value)
 		if step != 0:
 			v = min_value+floor((v - min_value)/step)*step
+		if !from_lower_bound and v < min_value:
+			v = min_value
+		if !from_upper_bound and v > max_value:
+			v = max_value
 		set_value(v)
 		select(0, 0)
 		emit_signal("value_changed", value)
