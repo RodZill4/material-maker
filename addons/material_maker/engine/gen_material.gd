@@ -150,7 +150,8 @@ func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 	if file_prefix != null:
 		var file_name = "%s_%s.png" % [ file_prefix, slot ]
 		if File.new().file_exists(file_name):
-			return load(file_name) as ImageTexture
+			var texture = load(file_name)
+			return texture
 		else:
 			return null
 	else:
@@ -162,7 +163,6 @@ func update_spatial_material(m, file_prefix = null) -> void:
 	if m is SpatialMaterial:
 		# Make the material double-sided for better visiblity in the preview
 		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
-	
 		m.albedo_color = parameters.albedo_color
 		m.albedo_texture = get_generated_texture("albedo", file_prefix)
 		m.metallic = parameters.metallic
@@ -239,11 +239,13 @@ func export_textures(prefix, editor_interface = null) -> SpatialMaterial:
 	if Engine.editor_hint and editor_interface != null:
 		var resource_filesystem = editor_interface.get_resource_filesystem()
 		resource_filesystem.scan()
-		yield(resource_filesystem, "filesystem_changed")
+		yield(resource_filesystem, "resources_reimported")
+		print("resources_reimported")
 		var new_material = SpatialMaterial.new()
 		update_spatial_material(new_material, prefix)
-		ResourceSaver.save("%s.tres" % [ prefix ], new_material)
-		resource_filesystem.scan()
+		var file_name : String = "%s.tres" % [ prefix ]
+		ResourceSaver.save(file_name, new_material)
+		resource_filesystem.update_file(file_name)
 		return new_material
 
 	return null

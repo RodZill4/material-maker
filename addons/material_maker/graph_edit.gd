@@ -47,7 +47,7 @@ func add_node(node) -> void:
 func connect_node(from, from_slot, to, to_slot):
 	if generator.connect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
 		var disconnect = get_source(to, to_slot)
-		if disconnect != null:
+		if !disconnect.empty():
 			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
 		.connect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
@@ -214,12 +214,11 @@ func save_file(filename) -> void:
 func export_textures() -> void:
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))
-		for c in get_children():
-			if c is GraphNode:
-				if c.generator.has_method("render_textures"):
-					c.generator.render_textures()
-					if c.generator.has_method("export_textures"):
-						c.generator.export_textures(prefix, editor_interface)
+		for g in top_generator.get_children():
+			if g.has_method("render_textures"):
+				g.render_textures()
+				if g.has_method("export_textures"):
+					g.export_textures(prefix, editor_interface)
 
 # Cut / copy / paste
 

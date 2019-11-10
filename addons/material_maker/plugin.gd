@@ -7,19 +7,8 @@ var importer = null
 
 func _enter_tree() -> void:
 	add_tool_menu_item("Material Maker", self, "open_material_maker")
-	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
-
-func register_material_maker_import(__) -> void:
 	importer = preload("res://addons/material_maker/import_plugin/ptex_import.gd").new(self)
 	add_import_plugin(importer)
-	remove_tool_menu_item("Register Material Maker Import")
-	add_tool_menu_item("Unregister Material Maker Import", self, "unregister_material_maker_import")
-
-func unregister_material_maker_import(__) -> void:
-	remove_import_plugin(importer)
-	importer = null
-	remove_tool_menu_item("Unregister Material Maker Import")
-	add_tool_menu_item("Register Material Maker Import", self, "register_material_maker_import")
 
 func _exit_tree() -> void:
 	remove_tool_menu_item("Material Maker")
@@ -59,7 +48,7 @@ func generate_material(ptex_filename: String) -> Material:
 	if generator.has_node("Material"):
 		var gen_material = generator.get_node("Material")
 		if gen_material != null:
-			var return_value = gen_material.render_textures(mm_renderer)
+			var return_value = gen_material.render_textures()
 			while return_value is GDScriptFunctionState:
 				return_value = yield(return_value, "completed")
 			var prefix = ptex_filename.left(ptex_filename.rfind("."))
