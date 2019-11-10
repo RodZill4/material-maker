@@ -9,8 +9,9 @@ When copied and pasted together with other nodes, the Material node will
 not be pasted, but connections will be copied if possible.
 
 When exporting a project to PNG files, all inputs are generated as PNG
-files whose name is generated using the project name and the name of the
-corresponding property in the material.
+files whose names are generated using the project name and the name of the
+corresponding property in the material. The ambient occlusion, roughness
+and metallic textures are combined into a single file whose suffix is "orm".
 
 When using Material Maker as a Godot addon, the metallic, roughness and
 ambient occlusion are automatically combined into a single texture, and
@@ -32,7 +33,7 @@ The Material node does not have any output.
 Parameters
 ++++++++++
 
-The Material node has parameters:
+The Material node provides the following parameters:
 
 * The size of the texture files to be generated.
 
