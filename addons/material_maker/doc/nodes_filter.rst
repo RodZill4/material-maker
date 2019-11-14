@@ -4,6 +4,7 @@ Filter nodes
 The filter nodes accept one or several inputs and generate one or several images.
 
 .. toctree::
+	:maxdepth: 1
 
 	node_filter_blend
 	node_filter_blur

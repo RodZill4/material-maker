@@ -5,6 +5,7 @@ The noise nodes are nodes that do not accept any input and generate one or sever
 made from random patterns.
 
 .. toctree::
+	:maxdepth: 1
 
 	node_noise
 	node_noise_perlin

@@ -185,14 +185,15 @@ File menu
 
 * *Save material as* prompts for a location and file name and saves the current material.
 
-* *Save all materials* saves all currently open materials. Materials that were not already
-  saved ae ignored.
+* *Save all materials* saves all currently open materials. Materials that were already
+  saved are ignored.
 
 * *Export material* generates PNG image files for all elements of the material. File names are
-  defined using the path of the material and their role (albedo, emission...) in the material.
-  The Ambient occlusion, roughness and metallic textures are merged into a single file whose
+  defined using the path of the **.ptex** material file and their role (albedo, emission...)
+  in the material.
+  The Ambient occlusion, roughness and metallic textures are saved into a single file whose
   suffix is **orm**.
-  If the material contains export nodes, their textures will be exported as well.
+  If the material contains **export** nodes, their textures will be exported as well.
 
 * *Close material* closes the current material.
 
@@ -210,18 +211,31 @@ Edit menu
   Pasting also unselects all previously selected nodes and selects all newly created nodes,
   so they can easily be moved around.
 
+View menu
+^^^^^^^^^
+
+* *Center view* Centers the current material graph view
+
+* *Reset zoom* Resets the zoom level of the current material graph view
+
 Tools menu
 ^^^^^^^^^^
 
+* The *Create* submenu can be used to create any of the node templates
+
+* *Create group* Creates a subgraph node with the currently selected nodes
+
 * *Add selected node to user library* first prompts for an item name. If a name is entered and
   confirmed, the selected nodes in the current material will be added to the user library under
-  that name. Don't forget to use the *Save user library* item, otherwise the newly created library
-  not be available anymore when the software is restarted.
-
-* *Save user library* saves the user library.
+  that name. The user library is saved automatically.
 
 Help menu
 ^^^^^^^^^
+
+* *User manual* opens an external web browser to show this manual
+
+* *Show selected library item documentation* opens an external web browser to show
+  documentation from the User Manual for the current library item
 
 * *Report a bug* opens a web browser on the Issues page of Material Maker's GitHub project. Please
   do not hesitate to use it to suggest improvements for Material Maker.

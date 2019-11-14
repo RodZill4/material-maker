@@ -1,13 +1,14 @@
-Available nodes
-===============
+Nodes overview
+==============
 
-This section describes all nodes that can be used in a procedural material.
+Material Maker provides different node types to describe materials. Nodes may
+have parameters, inputs and outputs.
 
 .. toctree::
+   :maxdepth: 2
 
-	nodes_simple
-	nodes_pattern
-	nodes_noise
-	nodes_filter
-	nodes_transform
-	nodes_miscellaneous
+   nodes_common
+   shader_nodes
+   texture_nodes
+   remote_nodes
+   subgraph_nodes

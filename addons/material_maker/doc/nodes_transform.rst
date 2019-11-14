@@ -1,9 +1,10 @@
-Filter nodes
+Transform nodes
 ------------
 
-The generator nodes are nodes that do not accept any input and generate one or several images.
+The transform nodes are nodes that affect the geometry of their input.
 
 .. toctree::
+	:maxdepth: 1
 
 	node_transform
 	node_transform_kaleidoscope

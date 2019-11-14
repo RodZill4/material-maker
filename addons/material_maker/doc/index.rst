@@ -12,3 +12,4 @@ Welcome to Material Maker's documentation!
    intro
    user_interface
    nodes
+   base_library

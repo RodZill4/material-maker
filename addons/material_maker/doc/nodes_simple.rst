@@ -4,6 +4,7 @@ Simple nodes
 The simple nodes are nodes that do not accept any input and generate one or several simple shapes.
 
 .. toctree::
+	:maxdepth: 1
 
 	node_simple_gradient
 	node_simple_gradient_circular
