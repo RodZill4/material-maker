@@ -40,8 +40,11 @@ func set_step(v : float) -> void:
 func do_update(update_text : bool = true) -> void:
 	if update_text:
 		text = str(value)
-	if cursor != null:
-		cursor.rect_position.x = (clamp(value, min_value, max_value)-min_value)*(slider.rect_size.x-cursor.rect_size.x)/(max_value-min_value)
+		if cursor != null:
+			if max_value != min_value:
+				cursor.rect_position.x = (clamp(value, min_value, max_value)-min_value)*(slider.rect_size.x-cursor.rect_size.x)/(max_value-min_value)
+			else:
+				cursor.rect_position.x = 0
 
 func _on_LineEdit_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
