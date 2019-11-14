@@ -92,28 +92,20 @@ func source_changed(input_index : int) -> void:
 func render_textures() -> void:
 	for t in TEXTURE_LIST:
 		var texture = null
+		var result
 		if t.has("port"):
 			if generated_textures[t.texture] != null:
 				continue
 			var source = get_source(t.port)
-			if source != null:
-				var result = source.generator.render(source.output_index, get_image_size())
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
-				texture = ImageTexture.new()
-				result.copy_to_texture(texture)
-				result.release()
-				# To work, this must be set after calling `copy_to_texture()`
-				texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
-
-				# Disable filtering for small textures, as they're considered to be used
-				# for a pixel art style
-				if texture.get_size().x <= 128:
-					texture.flags ^= ImageTexture.FLAG_FILTER
+			if source == null:
+				generated_textures[t.texture] = null
+				continue
+			result = source.generator.render(source.output_index, get_image_size())
 		elif t.has("ports"):
 			var context : MMGenContext = MMGenContext.new()
 			var code = []
 			var shader_textures = {}
+			var sources = 0
 			for i in range(t.ports.size()):
 				var source = get_source(t.ports[i])
 				if source != null:
@@ -123,22 +115,30 @@ func render_textures() -> void:
 					code.push_back(status)
 					for t in status.textures.keys():
 						shader_textures[t] = status.textures[t]
+					sources += 1
 				else:
 					code.push_back({ defs="", code="", f=t.default_values[i] })
+			if sources == 0:
+				generated_textures[t.texture] = null
+				continue
 			var shader : String = mm_renderer.generate_combined_shader(code[0], code[1], code[2])
-			var result = mm_renderer.render_shader(shader, shader_textures, get_image_size())
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
-			texture = ImageTexture.new()
-			result.copy_to_texture(texture)
-			result.release()
-			# To work, this must be set after calling `copy_to_texture()`
-			texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
+			result = mm_renderer.render_shader(shader, shader_textures, get_image_size())
+		else:
+			generated_textures[t.texture] = null
+			continue
 
-			# Disable filtering for small textures, as they're considered to be used
-			# for a pixel art style
-			if texture.get_size().x <= 128:
-				texture.flags ^= ImageTexture.FLAG_FILTER
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		texture = ImageTexture.new()
+		result.copy_to_texture(texture)
+		result.release()
+		# To work, this must be set after calling `copy_to_texture()`
+		texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
+
+		# Disable filtering for small textures, as they're considered to be used
+		# for a pixel art style
+		if texture.get_size().x <= 128:
+			texture.flags ^= ImageTexture.FLAG_FILTER
 
 		generated_textures[t.texture] = texture
 

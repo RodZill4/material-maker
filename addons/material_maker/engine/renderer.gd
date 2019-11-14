@@ -43,11 +43,17 @@ static func generate_combined_shader(red_code, green_code, blue_code) -> String:
 	code += file.get_as_text()
 	code += "\n"
 	var globals = []
+	var textures = {}
 	for c in [ red_code, green_code, blue_code ]:
+		if c.has("textures"):
+			for t in c.textures.keys():
+				textures[t] = c.textures[t]
 		if c.has("globals"):
 			for g in c.globals:
 				if globals.find(g) == -1:
 					globals.push_back(g)
+	for t in textures.keys():
+		code += "uniform sampler2D "+t+";\n"
 	for g in globals:
 		code += g
 	var shader_code = ""

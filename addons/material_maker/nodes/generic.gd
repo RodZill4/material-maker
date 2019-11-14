@@ -26,6 +26,8 @@ func on_parameter_changed(p, v) -> void:
 		var o = controls[p]
 		if o is MMFloatEdit:
 			o.value = v
+		elif o is HSlider:
+			o.value = v
 		elif o is LineEdit:
 			o.text = v
 		elif o is SizeOptionButton:
