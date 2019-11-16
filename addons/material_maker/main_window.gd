@@ -89,6 +89,10 @@ func _ready() -> void:
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
+
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
 	if graph_edit != null and graph_edit is GraphEdit:
