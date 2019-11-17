@@ -3,6 +3,8 @@ extends Panel
 
 var recent_files = []
 
+var config_cache : ConfigFile = ConfigFile.new()
+
 var editor_interface = null
 var current_tab = null
 
@@ -42,7 +44,7 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	
+
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
@@ -55,6 +57,20 @@ signal quit
 var is_mac = false
 
 func _ready() -> void:
+	# Restore the window position/size if values are present in the configuration cache
+	config_cache.load("user://cache.ini")
+
+	if config_cache.has_section_key("window", "screen"):
+		OS.current_screen = config_cache.get_value("window", "screen")
+	if config_cache.has_section_key("window", "maximized"):
+		OS.window_maximized = config_cache.get_value("window", "maximized")
+
+	if !OS.window_maximized:
+		if config_cache.has_section_key("window", "position"):
+			OS.window_position = config_cache.get_value("window", "position")
+		if config_cache.has_section_key("window", "size"):
+			OS.window_size = config_cache.get_value("window", "size")
+
 	if OS.get_name() == "OSX":
 		is_mac = true
 
@@ -496,3 +512,11 @@ func _on_Preview_show_background_preview(v) -> void:
 	var bgpv = $VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport
 	bgpv.world = pv.find_world()
 	$VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview.visible = v
+
+func _exit_tree() -> void:
+	# Save the window position and size to remember it when restarting the application
+	config_cache.set_value("window", "screen", OS.current_screen)
+	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
+	config_cache.set_value("window", "position", OS.window_position)
+	config_cache.set_value("window", "size", OS.window_size)
+	config_cache.save("user://cache.ini")
