@@ -221,13 +221,24 @@ View menu
 Tools menu
 ^^^^^^^^^^
 
-* The *Create* submenu can be used to create any of the node templates
+* The *Create* submenu can be used to create any of the node templates.
 
-* *Create group* Creates a subgraph node with the currently selected nodes
+* *Create group* creates a subgraph node with the currently selected nodes,
+  and shows the contents of the newly created group in the current graph
+  view.
+
+* the *Make selected nodes editable* menu item will toggle edit mode for
+  all selected nodes that support it. Shader and graph nodes will show
+  3 buttons to edit, load and save the node, switches will show controls to
+  modify the number of choices and outputs, and input/output modes will
+  become editable.
 
 * *Add selected node to user library* first prompts for an item name. If a name is entered and
   confirmed, the selected nodes in the current material will be added to the user library under
   that name. The user library is saved automatically.
+
+* *Export the nodes library* will prompt for a location on the disk and
+  save the whole node library.
 
 Help menu
 ^^^^^^^^^

@@ -1,21 +1,23 @@
-Uniform node
-~~~~~~~~~~~~
+Uniform nodes
+~~~~~~~~~~~~~
 
-The uniform node outputs a single uniform image whose color is configurable.
+The **Uniform** and **Uniform/Greyscale** node output a single uniform image
+whose color is configurable.
 
 .. image:: images/node_uniform.png
 
 Inputs
 ++++++
 
-The uniform node does not accept any input.
+The uniform nodes do not accept any input.
 
 Outputs
 +++++++
 
-The uniform node provides an output that generates a uniform color image.
+The uniform nodes provide an output that generates a uniform color image.
 
 Parameters
 ++++++++++
 
-The uniform node has a single *color* parameter that defines the color of the output image.
+The **Uniform** node has a single *color* parameter that defines the color of
+the output image. The **Uniform/Greyscale** node has a single *float* parameter.
