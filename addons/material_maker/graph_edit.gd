@@ -220,7 +220,7 @@ func export_textures() -> void:
 				if g.has_method("export_textures"):
 					g.export_textures(prefix, editor_interface)
 
-# Cut / copy / paste
+# Cut / copy / paste / duplicate
 
 func get_selected_nodes() -> Array:
 	var selected_nodes = []
@@ -285,6 +285,16 @@ func paste(pos = Vector2(0, 0)) -> void:
 		for c in new_nodes:
 			c.selected = true
 
+func duplicate_selected() -> void:
+	var data = serialize_selection()
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = false
+	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
+	if new_nodes != null:
+		for c in new_nodes:
+			c.selected = true
+
 # Delay after graph update
 
 func send_changed_signal() -> void:
@@ -319,8 +329,9 @@ func create_subgraph() -> void:
 	var generators = []
 	for n in get_selected_nodes():
 		generators.push_back(n.generator)
-	generator.create_subgraph(generators)
-	update_view(generator)
+	var subgraph = generator.create_subgraph(generators)
+	if subgraph != null:
+		update_view(subgraph)
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://addons/material_maker/widgets/graph_tree/graph_tree.tscn").instance()

@@ -87,8 +87,7 @@ func init_parameters() -> void:
 func set_position(p) -> void:
 	position = p
 	if has_randomness() and !is_seed_locked():
-		for i in range(get_output_defs().size()):
-			notify_output_change(i)
+		source_changed(0)
 
 func get_type() -> String:
 	return "generic"

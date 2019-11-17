@@ -220,7 +220,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
 
-func create_subgraph(gens : Array) -> void:
+func create_subgraph(gens : Array) -> MMGenGraph:
 	# Remove material, gen_inputs and gen_outputs nodes
 	var generators = []
 	var center = Vector2(0, 0)
@@ -239,7 +239,7 @@ func create_subgraph(gens : Array) -> void:
 			if right_bound < p.x: right_bound = p.x
 			if upper_bound > p.y: upper_bound = p.y
 	if count == 0:
-		return
+		return null
 	center /= count
 	# Create a new graph and add it to the current one
 	var new_graph = get_script().new()
@@ -306,6 +306,7 @@ func create_subgraph(gens : Array) -> void:
 		new_graph.add_child(gen_parameters)
 	fix_remotes()
 	new_graph.fix_remotes()
+	return new_graph
 
 
 func _serialize(data: Dictionary) -> Dictionary:

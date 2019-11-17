@@ -12,6 +12,8 @@ var need_update : bool = false
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 
+const RECENT_FILES_COUNT = 15
+
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
 	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
@@ -29,13 +31,14 @@ const MENU = [
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
+	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
-	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+E", description="Make selected nodes editable" },
+	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
@@ -160,6 +163,8 @@ func add_recent(path) -> void:
 		else:
 			break
 	recent_files.push_front(path)
+	while recent_files.size() > RECENT_FILES_COUNT:
+		recent_files.pop_back()
 	var f = File.new()
 	f.open("user://recent_files.bin", File.WRITE)
 	f.store_string(to_json(recent_files))
@@ -296,6 +301,14 @@ func edit_paste() -> void:
 func edit_paste_is_disabled() -> bool:
 	var data = parse_json(OS.clipboard)
 	return data == null
+
+func edit_duplicate() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.duplicate_selected()
+
+func edit_duplicate_is_disabled() -> bool:
+	return edit_cut_is_disabled()
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
