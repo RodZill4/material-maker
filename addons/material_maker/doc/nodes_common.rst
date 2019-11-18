@@ -75,7 +75,7 @@ Modifying nodes
 
 Most nodes in Material Maker can be modified, but they first have to be made editable.
 To do this, select a node, and use the **Tools -> Make the selected nodes editable**
-menu item or the **Control+E** keyboard shortcut.
+menu item or the **Control+W** keyboard shortcut.
 
 .. image:: images/editable_node.png
 	:align: center

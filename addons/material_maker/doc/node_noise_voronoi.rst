@@ -1,19 +1,19 @@
 Voronoi noise node
 ~~~~~~~~~~~~~~~~~~
 
-The Voronoi noise node outputs Voronoi noise textures.
+The **Voronoi** noise node outputs Voronoi noise textures.
 
 .. image:: images/node_voronoi.png
 
 Inputs
 ++++++
 
-The Voronoi noise node does not accept any input.
+The **Voronoi** noise node does not accept any input.
 
 Outputs
 +++++++
 
-The Voronoi noise node provides three outputs:
+The **Voronoi** noise node provides three outputs:
 
 * a greyscale Voronoi noise texture that shows the distance to the feature points.
 
@@ -21,12 +21,10 @@ The Voronoi noise node provides three outputs:
 
 * a color Voronoi partition.
 
-.. image:: images/voronoi.png
-
 Parameters
 ++++++++++
 
-The Voronoi noise node accepts the following parameters:
+The **Voronoi** noise node accepts the following parameters:
 
 * *Scale X* and *Scale Y* define the number of feature points that define the noise
 
@@ -38,3 +36,9 @@ Notes
 As with all random nodes, the seed is held by the node's position, so moving the node in the graph
 will modify the texture, and the outputs will remain the same if its position and parameters
 are not changed.
+
+Example images
+++++++++++++++
+
+.. image:: images/node_voronoi_samples.png
+	:align: center

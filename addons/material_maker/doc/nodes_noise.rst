@@ -8,5 +8,6 @@ made from random patterns.
 	:maxdepth: 1
 
 	node_noise
+	node_noise_color
 	node_noise_perlin
 	node_noise_voronoi

@@ -1,24 +1,24 @@
-Noise node
-~~~~~~~~~~
+Color Noise node
+~~~~~~~~~~~~~~~~
 
-The **Noise** node outputs a randomly generated black and white texture.
+The **Color Noise** node outputs a randomly generated black and white texture.
 
-.. image:: images/node_noise.png
+.. image:: images/node_color_noise.png
 
 Inputs
 ++++++
 
-The **Noise** node does not accept any input.
+The **Color Noise** node does not accept any input.
 
 Outputs
 +++++++
 
-The **Noise** node provides a black and white noise texture.
+The **Color Noise** node provides a black and white noise texture.
 
 Parameters
 ++++++++++
 
-The **Noise** node accepts the following parameters:
+The **Color Noise** node accepts the following parameters:
 
 * *Grid size* is the number of rows and columns in the texture.
 
@@ -36,5 +36,5 @@ Although this node has a grid size, it generates a resolution independant textur
 Example images
 ++++++++++++++
 
-.. image:: images/node_noise_samples.png
+.. image:: images/node_color_noise_samples.png
 	:align: center

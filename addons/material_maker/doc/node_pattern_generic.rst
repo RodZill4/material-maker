@@ -1,23 +1,22 @@
 Pattern node
 ~~~~~~~~~~~~
 
-The Pattern node outputs a pattern texture generated from common waveform shapes.
+The **Pattern** node outputs a pattern texture generated from common waveform shapes.
 
 .. image:: images/node_pattern.png
 
 Inputs
 ++++++
 
-The Pattern node does not accept any input.
+The **Pattern** node does not accept any input.
 
 Outputs
 +++++++
 
-The Pattern node provides a greyscale texture obtained by mixing a horizontal and a vertical pattern.
+The **Pattern** node provides a greyscale texture obtained by mixing a horizontal and
+a vertical pattern.
 
 Many different patterns can be created using this node, do not hesitate to experiment.
-
-.. image:: images/pattern.png
 
 Parameters
 ++++++++++
@@ -36,7 +35,15 @@ The Pattern node accepts the following parameters:
 
   * Sawtooth: the value follows a sawtooth waveform (changes linearly from 0 to 1, then jumps back to 0)
 
-  * constant: the value is 1
+  * Constant: the value is 1
+
+  * Bounce: the value follows a half-circle waveform
 
 * the *Combiner* parameter is the function used to combine the *X* and *Y* patterns. The available
   functions are *multiply*, *add*, *max*, *min*, *xor* and *pow*
+
+Example images
+++++++++++++++
+
+.. image:: images/node_pattern_samples.png
+	:align: center
