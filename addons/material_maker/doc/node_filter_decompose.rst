@@ -1,16 +1,16 @@
 Decompose node
 ~~~~~~~~~~~~~~
 
-The decompose node decomposes a color input into three greyscale outputs.
+The **Decompose** node decomposes anRGBA input into four greyscale outputs.
 
 .. image:: images/node_decompose.png
 
 Inputs
 ++++++
 
-The decompose node has a single color input.
+The **Decompose** node has a single color input.
 
 Outputs
 +++++++
 
-The decompose node outputs 3 greyscale images, one for each (red, green and blue) channel.
+The **Decompose** node outputs 4 greyscale images, one for each (red, green, blue and alpha) channel.

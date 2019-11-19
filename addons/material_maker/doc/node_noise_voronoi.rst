@@ -1,7 +1,8 @@
 Voronoi noise node
 ~~~~~~~~~~~~~~~~~~
 
-The **Voronoi** noise node outputs Voronoi noise textures.
+The **Voronoi** noise node outputs Voronoi noise textures that can be used for irregular
+tiles, animal skin or scales, cracks...
 
 .. image:: images/node_voronoi.png
 
@@ -26,9 +27,13 @@ Parameters
 
 The **Voronoi** noise node accepts the following parameters:
 
-* *Scale X* and *Scale Y* define the number of feature points that define the noise
+* *Scale X* and *Scale Y* define the number of feature points that define the noise.
+
+* *Stretch X* and *Stretch Y* are applied to the distance functions.
 
 * *Intensity* is a factor applied to the first output of the node.
+
+* *Randomness* defines the location of feature points.
 
 Notes
 +++++

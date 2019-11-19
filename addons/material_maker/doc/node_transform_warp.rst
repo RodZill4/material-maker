@@ -1,14 +1,14 @@
 Warp node
 ~~~~~~~~~
 
-The warp node deforms an input image according to the derivative of the second input image.
+The **Warp** node deforms an input image according to the derivative of the second input image.
 
 .. image:: images/node_warp.png
 
 Inputs
 ++++++
 
-The warp node accepts two inputs:
+The **Warp** node accepts two inputs:
 
 * The *Source* inputs is the image to be deformed.
 
@@ -17,9 +17,19 @@ The warp node accepts two inputs:
 Outputs
 +++++++
 
-The warp node outputs the deformed image.
+The **Warp** node outputs the deformed image.
 
 Parameters
 ++++++++++
 
-The warp node has the a single parameter that will be used to scale the warp effect.
+The **Warp** node has two parameters:
+
+* *strength* to scale the warp effect.
+
+* *epsilon* is used to evaluate the second input's derivative
+
+Example images
+++++++++++++++
+
+.. image:: images/node_warp_samples.png
+	:align: center

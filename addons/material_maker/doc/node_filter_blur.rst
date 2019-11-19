@@ -1,32 +1,38 @@
 Blur node
 ~~~~~~~~~
 
-The blur node applies a Gaussian blur algorithm to its inputs.
+The **Blur** node applies a Gaussian blur algorithm to its input.
 
 .. image:: images/node_blur.png
 
 Inputs
 ++++++
 
-The blur node has a single input.
+The **Blur** node has a single input.
 
 Outputs
 +++++++
 
-The blur node outputs the result of the blur operation.
+The **Blur** node outputs the result of the blur operation.
 
 Parameters
 ++++++++++
 
-The blur node has three parameters:
+The **Blur** node has three parameters:
 
-* The grid size defines the size of the output image.
+* The *grid size* defines the size of the output image.
 
-* The direction specifies if the blur algorithm is applied horizontally, vertically or both.
+* The *direction* specifies if the blur algorithm is applied horizontally, vertically or both.
 
-* The sigma parameter defines how smooth the output will be.
+* The *sigma* parameter defines how smooth the output will be.
 
 Notes
 +++++
 
 This node outputs an image that has a fixed size.
+
+Example images
+++++++++++++++
+
+.. image:: images/node_blur_samples.png
+	:align: center

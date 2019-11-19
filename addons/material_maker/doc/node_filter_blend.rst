@@ -1,7 +1,7 @@
 Blend node
 ~~~~~~~~~~
 
-The blend node blends two inputs using an optional opacity. It performs a blend operation
+The **Blend** node blends two inputs using an optional opacity. It performs a blend operation
 defined by the blend mode between both inputs, and mixes the result with the bottom input
 using the opacity (defines by the *opacity* parameter, or the optional greyscale input).
 
@@ -10,7 +10,7 @@ using the opacity (defines by the *opacity* parameter, or the optional greyscale
 Inputs
 ++++++
 
-The blend node accepts three inputs:
+The **Blend** node accepts three inputs:
 
 * The first input is the top layer.
 
@@ -21,20 +21,27 @@ The blend node accepts three inputs:
 Outputs
 +++++++
 
-The blend node outputs the result of the blend operation.
+The **Blend** node outputs the result of the blend operation.
 
 Parameters
 ++++++++++
 
-The blend node has two parameters:
+The **Blend** node has two parameters:
 
-* The blend mode, that can be one of the following: Normal, Dissolve, Multiply, Screen,
-  Overlay, Hard Light, Soft Light, Burn, Dodge, Lighten, Darken, Difference.
+* The *blend mode*, that can be one of the following: *Normal*, *Dissolve*, *Multiply*, *Screen*,
+  *Overlay*, *Hard Light*, *Soft Light*, *Burn*, *Dodge*, *Lighten*, *Darken*, *Difference*.
 
-* The opacity used when mixing the result of the blend operation with the bottom input
-  when the corresponding input is not connected.
+* The *opacity* used when mixing the result of the blend operation with the bottom input
+  when the corresponding input is not connected. When connected, the opacity channel is
+  multiplied with that parameter.
 
 Notes
 +++++
 
 The *opacity* input will be considered (and implicitly converted to) greyscale if it is a color texture.
+
+Example images
+++++++++++++++
+
+.. image:: images/node_blend_samples.png
+	:align: center

@@ -1,14 +1,14 @@
 Transform node
 ~~~~~~~~~~~~~~
 
-The transform node applies a scale operation, a rotation and a translation to the input image.
+The **Transform** node applies a scale operation, a rotation and a translation to the input image.
 
 .. image:: images/node_transform.png
 
 Inputs
 ++++++
 
-The transform node accepts a color image as input.
+The **Transform** node accepts a color image as input.
 
 It also accepts a greyscale input image for each transform parameter. In that case,
 instead of applying a uniform transform to the input image, the transform parameter
@@ -19,7 +19,7 @@ by -1, a white pixel will not change the parameter, a grey50 pixel will set it t
 Outputs
 +++++++
 
-The transform node outputs the transformed image.
+The **Transform** node outputs the transformed image.
 
 The input image is first rotated around its center, then the scale operation is applied and
 finally the translation.
@@ -30,7 +30,7 @@ input does not rely on resolution dependant nodes.
 Parameters
 ++++++++++
 
-The transform node has the following parameters:
+The **Transform** node has the following parameters:
 
 * *Translate X* and *Translate Y* define the translation.
 
@@ -39,3 +39,9 @@ The transform node has the following parameters:
 * *Scale X* and *Scale Y* define the scale operations along the X and Y axes.
 
 * If *Repeat* is checked, zooming out will repeat the image, otherwise it will be clamped.
+
+Example images
+++++++++++++++
+
+.. image:: images/node_transform_samples.png
+	:align: center

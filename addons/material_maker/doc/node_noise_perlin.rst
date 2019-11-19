@@ -1,27 +1,26 @@
 Perlin noise node
 ~~~~~~~~~~~~~~~~~
 
-The Perlin noise node outputs a texture generated as a sum of Perlin noise functions
-with increasing frequencies and decreasing amplitudes.
+The **Perlin** noise node outputs a texture generated as a sum of Perlin noise functions
+with increasing frequencies and decreasing amplitudes. Perlin noise has a wide range of
+applications, such as stains, wood, dust...
 
 .. image:: images/node_perlin.png
 
 Inputs
 ++++++
 
-The Perlin noise node does not accept any input.
+The **Perlin** noise node does not accept any input.
 
 Outputs
 +++++++
 
-The Perlin noise node provides a greyscale Perlin noise texture.
-
-.. image:: images/perlin.png
+The **Perlin** noise node provides a greyscale Perlin noise texture.
 
 Parameters
 ++++++++++
 
-The Perlin noise node accepts the following parameters:
+The **Perlin** noise node accepts the following parameters:
 
 * *Scale X* and *Scale Y* are the subdivisions of the first iteration
 
@@ -36,3 +35,9 @@ Notes
 As with all random nodes, the seed is held by the node's position, so moving the node in the graph
 will modify the texture, and the outputs will remain the same if its position and parameters
 are not changed.
+
+Example images
+++++++++++++++
+
+.. image:: images/node_perlin_samples.png
+	:align: center
