@@ -151,7 +151,7 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func render(output_index : int, size : int):
+func render(output_index : int, size : int) -> Object:
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("UV", output_index, context)
 	while source is GDScriptFunctionState:
