@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2018-2019 Rodolphe Suescun and contributors -->
+<component type="desktop">
+  <id>io.github.RodZill4.Material-Maker.desktop</id>
+  <name>Material Maker</name>
+  <summary>Procedural texture generation tool</summary>
+  <description>
+    <p>
+      Material Maker is a tool that can be used to create textures procedurally.
+    </p>
+  </description>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer_name>Rodolphe Suescun and contributors</developer_name>
+  <url type="homepage">https://github.com/RodZill4/godot-procedural-textures</url>
+  <url type="help">https://rodzill4.github.io/godot-procedural-textures/doc/</url>
+  <url type="bugtracker">https://github.com/RodZill4/godot-procedural-textures/issues</url>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/RodZill4/godot-procedural-textures/master/addons/material_maker/doc/images/screenshot.png</image>
+      <caption>Editing a procedurally generated texture</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.6" date="2019-10-13"/>
+  </releases>
+  <update_contact>hugo.locurcio@hugo.pro</update_contact>
+</component>
