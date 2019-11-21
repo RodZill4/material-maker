@@ -24,7 +24,7 @@ copyright = '2018, Rodz Labs'
 author = 'Rodz Labs'
 
 # The short X.Y version
-version = ''
+version = '0.7'
 # The full version, including alpha/beta/rc tags
 release = ''
 
@@ -87,7 +87,7 @@ html_theme = "sphinx_rtd_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -103,7 +103,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MaterialMakerdoc'
+htmlhelp_basename = 'MaterialMakerDoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------

@@ -4,6 +4,7 @@ Blur node
 The **Blur** node applies a Gaussian blur algorithm to its input.
 
 .. image:: images/node_blur.png
+	:align: center
 
 Inputs
 ++++++

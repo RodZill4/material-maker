@@ -129,7 +129,7 @@ The filter field above the library tree can be used to quickly find a specific n
 The tree will be updated whenever the filter string is modified. It is possible to
 give focus to the search field using the **Control+F** keyboard shortcut.
 
-.. image:: images/library_filter.png
+.. image:: images/library_filter.gif
   :align: center
 
 Preview pane

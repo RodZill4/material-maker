@@ -6,6 +6,7 @@ defined by the blend mode between both inputs, and mixes the result with the bot
 using the opacity (defines by the *opacity* parameter, or the optional greyscale input).
 
 .. image:: images/node_blend.png
+	:align: center
 
 Inputs
 ++++++

@@ -9,6 +9,9 @@ To create a subgraph, first select the nodes that must be grouped and use the
 This will replace all selected nodes with a single subgraph node, without
 modifying the overall material description.
 
+When the subgraph is created, it is shown in the graph editor, and can be
+renamed using the top right text field.
+
 The subgraph node is not editable by default, but using the **Control+W**
 shortcut will make it possible to edit its contents using the pencil button.
 

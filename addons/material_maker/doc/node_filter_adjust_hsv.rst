@@ -4,6 +4,7 @@ AdjustHSV node
 The **AdjustHSV** node adjusts the hue, saturation and value of the input image.
 
 .. image:: images/node_adjust_hsv.png
+	:align: center
 
 Inputs
 ++++++

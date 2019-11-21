@@ -4,6 +4,7 @@ Occlusion node
 The **Occlusion** node generates an ambient occlusion texture from its input.
 
 .. image:: images/node_occlusion.png
+	:align: center
 
 Inputs
 ++++++

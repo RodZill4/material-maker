@@ -6,6 +6,7 @@ will be colored with the leftmost color of the gradient and white pixels will ta
 the rightmost color.
 
 .. image:: images/node_colorize.png
+	:align: center
 
 Inputs
 ++++++

@@ -1,5 +1,5 @@
-Available nodes in base library
-===============================
+Nodes library
+=============
 
 This section describes all nodes that can are provided in the base library
 to describe procedural materials.

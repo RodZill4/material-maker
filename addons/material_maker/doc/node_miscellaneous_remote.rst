@@ -1,10 +1,11 @@
 Remote node
 ~~~~~~~~~~~
 
-The Remote node has no direct effect on the material and can be used to control
-key parameters of the material to configure it easily.
+The **Remote** node has no direct effect on the material but can be used to
+control key parameters of the material to configure it easily.
 
 .. image:: images/node_remote.png
+	:align: center
 
 When started, the Remote node only shows 2 buttons.
 
@@ -44,7 +45,7 @@ When hovering on the Linked control, Material Maker will show the parameters
 it controls.
 
 To create a configuration, set all associated parameters to the desired values,
-and select the "<add configuration>" entry in the drop-down list. Then enter a
+and select the **<add configuration>** entry in the drop-down list. Then enter a
 name for this configuration, and it will be added to the list.
 
 The drop-down list can be used to select a configuration, create new ones and

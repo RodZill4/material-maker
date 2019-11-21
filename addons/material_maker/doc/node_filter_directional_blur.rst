@@ -4,6 +4,7 @@ Directional Blur node
 The **Directional Blur** node applies a Gaussian blur algorithm to its input in a given direction.
 
 .. image:: images/node_directional_blur.png
+	:align: center
 
 Inputs
 ++++++
