@@ -166,6 +166,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -208,7 +209,8 @@
 				"normal_scale": 1,
 				"resolution": 1,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -244,6 +246,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -308,6 +311,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -337,6 +341,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -366,6 +371,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -395,6 +401,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -503,271 +510,12 @@
 				"y": -350.036743
 			},
 			"parameters": {
-				"param0": 0,
 				"param1": 0,
 				"param2": 0,
 				"param3": 0
 			},
 			"type": "remote",
 			"widgets": [
-				{
-					"configurations": {
-						"Basket weave": [
-							{
-								"node": "Bricks",
-								"value": 3,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 0,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						],
-						"Herring bone": [
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 0,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						],
-						"Running bond 1": [
-							{
-								"node": "Bricks",
-								"value": 0,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 1,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 8,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 4,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 0,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						],
-						"Running bond 2": [
-							{
-								"node": "Bricks",
-								"value": 1,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 1,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 8,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 4,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 0,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						],
-						"Spanish bond": [
-							{
-								"node": "Bricks",
-								"value": 4,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 3,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 0,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						],
-						"Uneven": [
-							{
-								"node": "Bricks",
-								"value": 3,
-								"widget": "pattern"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "repeat"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "rows"
-							},
-							{
-								"node": "Bricks",
-								"value": 2,
-								"widget": "columns"
-							},
-							{
-								"node": "switch_0",
-								"value": 1,
-								"widget": "source"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_x"
-							},
-							{
-								"node": "voronoi_0",
-								"value": 8,
-								"widget": "scale_y"
-							}
-						]
-					},
-					"label": "Pattern",
-					"linked_widgets": [
-						{
-							"node": "Bricks",
-							"widget": "pattern"
-						},
-						{
-							"node": "Bricks",
-							"widget": "repeat"
-						},
-						{
-							"node": "Bricks",
-							"widget": "rows"
-						},
-						{
-							"node": "Bricks",
-							"widget": "columns"
-						},
-						{
-							"node": "switch_0",
-							"widget": "source"
-						},
-						{
-							"node": "voronoi_0",
-							"widget": "scale_x"
-						},
-						{
-							"node": "voronoi_0",
-							"widget": "scale_y"
-						}
-					],
-					"type": "config_control"
-				},
 				{
 					"label": "Hue",
 					"linked_widgets": [
@@ -776,6 +524,7 @@
 							"widget": "hue"
 						}
 					],
+					"name": "param1",
 					"type": "linked_control"
 				},
 				{
@@ -786,6 +535,7 @@
 							"widget": "saturation"
 						}
 					],
+					"name": "param2",
 					"type": "linked_control"
 				},
 				{
@@ -796,6 +546,7 @@
 							"widget": "value"
 						}
 					],
+					"name": "param3",
 					"type": "linked_control"
 				}
 			]
@@ -860,6 +611,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -932,10 +684,7 @@
 						"y": -317.657043
 					},
 					"parameters": {
-						"param0": 0,
-						"param1": 0,
-						"param2": 0,
-						"param3": 0
+						"param0": 0
 					},
 					"type": "remote",
 					"widgets": [
@@ -1195,37 +944,8 @@
 									"widget": "scale_y"
 								}
 							],
+							"name": "param0",
 							"type": "config_control"
-						},
-						{
-							"label": "Hue",
-							"linked_widgets": [
-								{
-									"node": "adjust_hsv_0",
-									"widget": "hue"
-								}
-							],
-							"type": "linked_control"
-						},
-						{
-							"label": "Saturation",
-							"linked_widgets": [
-								{
-									"node": "adjust_hsv_0",
-									"widget": "saturation"
-								}
-							],
-							"type": "linked_control"
-						},
-						{
-							"label": "Value",
-							"linked_widgets": [
-								{
-									"node": "adjust_hsv_0",
-									"widget": "value"
-								}
-							],
-							"type": "linked_control"
 						}
 					]
 				},
@@ -1297,6 +1017,7 @@
 						"y": 125.60614
 					},
 					"parameters": {
+						"lod": 0,
 						"size": 11
 					},
 					"type": "buffer"
@@ -1446,6 +1167,7 @@
 									"widget": "size"
 								}
 							],
+							"name": "param0",
 							"type": "linked_control"
 						},
 						{
@@ -1456,6 +1178,7 @@
 									"widget": "amount"
 								}
 							],
+							"name": "param1",
 							"type": "linked_control"
 						}
 					]
