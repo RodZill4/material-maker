@@ -1996,9 +1996,8 @@
 		},
 		{
 			"collapsed": true,
-			"shader_model": {
-
-			},
+			"icon": "miscellaneous_custom_shader",
+			"shader_model": {},
 			"tree_item": "Miscellaneous/Custom Shader",
 			"type": "custom"
 		},
@@ -2019,11 +2018,13 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "miscellaneous_comment",
 			"tree_item": "Miscellaneous/Comment",
 			"type": "comment"
 		},
 		{
 			"collapsed": true,
+			"icon": "miscellaneous_export",
 			"parameters": {
 				"size": 10
 			},
