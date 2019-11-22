@@ -1,5 +1,5 @@
 {
-	"name": "perlin_rgb",
+	"name": "perlin_color",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -17,7 +17,7 @@
 
 		],
 		"instance": "",
-		"name": "PerlinRGB",
+		"name": "Color Perlin",
 		"outputs": [
 			{
 				"rgb": "perlin_color($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), $(seed))",

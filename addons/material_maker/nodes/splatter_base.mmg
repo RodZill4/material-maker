@@ -9,7 +9,7 @@
 		"offx": 0,
 		"offy": 0,
 		"repeat": 8,
-		"scale": 1.78,
+		"scale": 1.64,
 		"size": 1
 	},
 	"shader_model": {
@@ -23,7 +23,7 @@
 				"type": "f"
 			},
 			{
-				"default": "0.0",
+				"default": "1.0",
 				"label": "",
 				"name": "mask",
 				"type": "f"

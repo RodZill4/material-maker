@@ -5,14 +5,14 @@
 		"y": 0
 	},
 	"parameters": {
-		"steps": 6
+		"steps": 4
 	},
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec4(2.0*vec3(length($uv-vec2(0.5))), 1.0)",
 				"label": "",
 				"name": "in",
 				"type": "rgba"
@@ -28,7 +28,7 @@
 		],
 		"parameters": [
 			{
-				"default": 8,
+				"default": 4,
 				"label": "",
 				"max": 32,
 				"min": 2,
