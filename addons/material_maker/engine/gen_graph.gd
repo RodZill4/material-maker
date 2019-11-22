@@ -96,6 +96,15 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 
 func add_generator(generator : MMGenBase) -> bool:
 	var name = generator.name
+	if generator.name == "Material":
+		if has_node("Material"):
+			# Cannot create a material if it exists already
+			return false
+		else:
+			var parent = get_parent()
+			if parent != null and parent is Object and parent.get_script() == get_script():
+				# Material is always in top level graph
+				return false
 	var index = 1
 	while has_node(name):
 		index += 1

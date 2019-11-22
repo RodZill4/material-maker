@@ -24,8 +24,8 @@ static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 		var g = create_gen(n)
 		if g != null:
 			var orig_name = g.name
-			gen_graph.add_generator(g)
-			rv.generators.append(g)
+			if gen_graph.add_generator(g):
+				rv.generators.append(g)
 			gennames[orig_name] = g.name
 	for c in connections:
 		if gennames.has(c.from) and gennames.has(c.to):
