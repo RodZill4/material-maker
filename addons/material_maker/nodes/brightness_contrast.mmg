@@ -1,0 +1,53 @@
+{
+	"name": "brightness_contrast",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"brightness": 0,
+		"contrast": 1,
+		"steps": 6
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Brightness/Contrast",
+		"outputs": [
+			{
+				"rgba": "vec4(clamp($in($uv).rgb*$contrast+vec3($brightness)+0.5-$contrast*0.5, vec3(0.0), vec3(1.0)), $in($uv).a)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "Brightness",
+				"max": 1,
+				"min": -1,
+				"name": "brightness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "Contrast",
+				"max": 2,
+				"min": 0,
+				"name": "contrast",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

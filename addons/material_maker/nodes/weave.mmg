@@ -5,11 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
-		"columns": 8,
-		"rows": 8,
+		"columns": 4,
+		"rows": 4,
 		"width": 0.85
 	},
 	"shader_model": {
+		"code": "",
 		"global": "float weave(vec2 uv, vec2 count, float width) {\n    uv *= count;\n\tfloat c = (sin(3.1415926*(uv.x+floor(uv.y)))*0.5+0.5)*step(abs(fract(uv.y)-0.5), width*0.5);\n\tc = max(c, (sin(3.1415926*(1.0+uv.y+floor(uv.x)))*0.5+0.5)*step(abs(fract(uv.x)-0.5), width*0.5));\n\treturn c;\n}",
 		"inputs": [
 
@@ -25,27 +26,25 @@
 		"parameters": [
 			{
 				"default": 4,
-				"label": "",
+				"label": "Size X",
 				"max": 32,
 				"min": 2,
 				"name": "columns",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
 				"default": 4,
-				"label": "",
+				"label": "Size Y",
 				"max": 32,
 				"min": 2,
 				"name": "rows",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
 				"default": 0.8,
-				"label": "",
+				"label": "Width",
 				"max": 1,
 				"min": 0,
 				"name": "width",

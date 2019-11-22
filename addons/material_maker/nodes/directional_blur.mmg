@@ -32,7 +32,7 @@
 		}
 	],
 	"label": "Directional Blur",
-	"name": "blur_directional",
+	"name": "directional_blur",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -62,7 +62,7 @@
 			},
 			"parameters": {
 				"sigma": 50,
-				"size": 8
+				"size": 9
 			},
 			"type": "convolution"
 		},
@@ -73,7 +73,8 @@
 				"y": -271.75
 			},
 			"parameters": {
-				"size": 8
+				"lod": 0,
+				"size": 9
 			},
 			"type": "buffer"
 		},
@@ -84,7 +85,7 @@
 				"y": -413.666656
 			},
 			"parameters": {
-				"param0": 8,
+				"param0": 9,
 				"param1": 50,
 				"param2": 45
 			},
@@ -117,7 +118,7 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Unnamed",
+					"label": "Angle:",
 					"linked_widgets": [
 						{
 							"node": "transform_3",
@@ -170,8 +171,8 @@
 		{
 			"name": "transform_3",
 			"node_position": {
-				"x": -405.653931,
-				"y": -214.871338
+				"x": -409.653931,
+				"y": -193.871338
 			},
 			"parameters": {
 				"repeat": true,
@@ -307,7 +308,7 @@
 		}
 	],
 	"parameters": {
-		"param0": 8,
+		"param0": 9,
 		"param1": 50,
 		"param2": 45
 	},

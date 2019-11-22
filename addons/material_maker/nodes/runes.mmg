@@ -5,10 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-		"columns": 8,
-		"rows": 8
+		"columns": 4,
+		"rows": 4
 	},
 	"shader_model": {
+		"code": "",
 		"global": "float ThickLine(vec2 uv, vec2 posA, vec2 posB, float radiusInv)\n{\n\tvec2 dir = posA - posB;\n\tfloat dirLen = length(dir);\n\tvec2 dirN = normalize(dir);\n\tfloat dotTemp = clamp(dot(uv - posB, dirN), 0.0, dirLen);\n\tvec2 proj = dotTemp * dirN + posB;\n\tfloat d1 = length(uv - proj);\n\tfloat finalGray = clamp(1.0 - d1 * radiusInv, 0.0, 1.0);\n\treturn finalGray;\n}\n\n// makes a rune in the 0..1 uv space. Seed is which rune to draw.\n// passes back gray in x and derivates for lighting in yz\nfloat Rune(vec2 uv) {\n\tfloat finalLine = 0.0;\n\tvec2 seed = floor(uv)-0.41;\n\tuv = fract(uv);\n\tfor (int i = 0; i < 4; i++)\t// number of strokes\n\t{\n\t\tvec2 posA = rand2(floor(seed+0.5));\n\t\tvec2 posB = rand2(floor(seed+1.5));\n\t\tseed += 2.0;\n\t\t// expand the range and mod it to get a nicely distributed random number - hopefully. :)\n\t\tposA = fract(posA * 128.0);\n\t\tposB = fract(posB * 128.0);\n\t\t// each rune touches the edge of its box on all 4 sides\n\t\tif (i == 0) posA.y = 0.0;\n\t\tif (i == 1) posA.x = 0.999;\n\t\tif (i == 2) posA.x = 0.0;\n\t\tif (i == 3) posA.y = 0.999;\n\t\t// snap the random line endpoints to a grid 2x3\n\t\tvec2 snaps = vec2(2.0, 3.0);\n\t\tposA = (floor(posA * snaps) + 0.5) / snaps;\t// + 0.5 to center it in a grid cell\n\t\tposB = (floor(posB * snaps) + 0.5) / snaps;\n\t\t//if (distance(posA, posB) < 0.0001) continue;\t// eliminate dots.\n\t\t// Dots (degenerate lines) are not cross-GPU safe without adding 0.001 - divide by 0 error.\n\t\tfinalLine = max(finalLine, ThickLine(uv, posA, posB + 0.001, 20.0));\n\t}\n\treturn finalLine;\n}\n\n\n",
 		"inputs": [
 
@@ -24,23 +25,21 @@
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Size X",
 				"max": 32,
 				"min": 2,
 				"name": "columns",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
 				"default": 0,
-				"label": "",
+				"label": "Size Y",
 				"max": 32,
 				"min": 2,
 				"name": "rows",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			}
 		]
 	},

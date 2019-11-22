@@ -1,0 +1,42 @@
+{
+	"name": "quantize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"steps": 6
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Quantize",
+		"outputs": [
+			{
+				"rgba": "vec4(floor($in($uv).rgb*$steps)/$steps, $in($uv).a)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 8,
+				"label": "",
+				"max": 32,
+				"min": 2,
+				"name": "steps",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

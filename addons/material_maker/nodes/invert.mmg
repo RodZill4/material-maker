@@ -1,0 +1,34 @@
+{
+	"name": "invert",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"steps": 6
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Invert",
+		"outputs": [
+			{
+				"rgba": "vec4(vec3(1.0)-$in($uv).rgb, $in($uv).a)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

@@ -1,0 +1,50 @@
+{
+	"name": "optional",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"d": {
+			"a": 0,
+			"b": 0,
+			"g": 0,
+			"r": 0,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$d",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Optional",
+		"outputs": [
+			{
+				"rgba": "$in($uv)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 0,
+					"b": 0,
+					"g": 0,
+					"r": 0
+				},
+				"label": "",
+				"name": "d",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -5,14 +5,16 @@
 		"y": 0
 	},
 	"parameters": {
-		"intensity": 0.4,
-		"randomness": 1,
-		"scale_x": 16,
-		"scale_y": 16
+		"intensity": 1,
+		"randomness": 0.75,
+		"scale_x": 4,
+		"scale_y": 4,
+		"stretch_x": 1,
+		"stretch_y": 1
 	},
 	"shader_model": {
-		"code": "",
-		"global": "vec4 voronoi(vec2 uv, vec2 size, float intensity, float randomness, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n    uv *= size;\n    float best_distance0 = 1.0;\n    float best_distance1 = 1.0;\n    vec2 point0;\n    vec2 point1;\n    vec2 p0 = floor(uv);\n    for (int dx = -1; dx < 2; ++dx) {\n    \tfor (int dy = -1; dy < 2; ++dy) {\n            vec2 d = vec2(float(dx), float(dy));\n            vec2 p = p0+d;\n            p += randomness*rand2(seed2+mod(p, size));\n            float distance = length((uv - p) / size);\n            if (best_distance0 > distance) {\n            \tbest_distance1 = best_distance0;\n            \tbest_distance0 = distance;\n                point1 = point0;\n                point0 = p;\n            } else if (best_distance1 > distance) {\n            \tbest_distance1 = distance;\n                point1 = p;\n            }\n        }\n    }\n    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));\n    \n    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);\n}\n",
+		"code": "vec4 $(name_uv)_xyzw = voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y, $stretch_x), $intensity, $randomness, $seed);",
+		"global": "vec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n    uv *= size;\n    float best_distance0 = 1.0;\n    float best_distance1 = 1.0;\n    vec2 point0;\n    vec2 point1;\n    vec2 p0 = floor(uv);\n    for (int dx = -1; dx < 2; ++dx) {\n    \tfor (int dy = -1; dy < 2; ++dy) {\n            vec2 d = vec2(float(dx), float(dy));\n            vec2 p = p0+d;\n            p += randomness*rand2(seed2+mod(p, size));\n            float distance = length(stretch*(uv - p) / size);\n            if (best_distance0 > distance) {\n            \tbest_distance1 = best_distance0;\n            \tbest_distance0 = distance;\n                point1 = point0;\n                point0 = p;\n            } else if (best_distance1 > distance) {\n            \tbest_distance1 = distance;\n                point1 = p;\n            }\n        }\n    }\n    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));\n    \n    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);\n}\n",
 		"inputs": [
 
 		],
@@ -20,15 +22,15 @@
 		"name": "Voronoi",
 		"outputs": [
 			{
-				"f": "voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).z",
+				"f": "$(name_uv)_xyzw.z",
 				"type": "f"
 			},
 			{
-				"f": "voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).w",
+				"f": "$(name_uv)_xyzw.w",
 				"type": "f"
 			},
 			{
-				"rgb": "rand3(fract(voronoi($uv, vec2($scale_x, $scale_y), $intensity, $randomness, $seed).xy))",
+				"rgb": "rand3(fract($(name_uv)_xyzw.xy))",
 				"type": "rgb"
 			}
 		],
@@ -52,12 +54,30 @@
 				"type": "float"
 			},
 			{
-				"default": 0.5,
+				"default": 1,
+				"label": "Stretch X",
+				"max": 1,
+				"min": 0.01,
+				"name": "stretch_x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 1,
+				"label": "Stretch Y",
+				"max": 1,
+				"min": 0.01,
+				"name": "stretch_y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.75,
 				"label": "Intensity",
 				"max": 1,
 				"min": 0,
 				"name": "intensity",
-				"step": 0.05,
+				"step": 0.01,
 				"type": "float"
 			},
 			{

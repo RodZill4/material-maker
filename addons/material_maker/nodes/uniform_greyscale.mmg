@@ -1,0 +1,37 @@
+{
+	"name": "uniform_greyscale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"color": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Greyscale Uniform",
+		"outputs": [
+			{
+				"f": "$(color)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "color",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
