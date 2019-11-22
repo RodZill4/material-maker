@@ -1,6 +1,55 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/material_maker/widgets/graph_tree/graph_tree.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.109804, 0.109804, 0.188235, 1 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.196078, 0.215686, 0.643137, 1 )
+
+[sub_resource type="Theme" id=2]
+Tree/colors/cursor_color = Color( 0, 0, 0, 1 )
+Tree/colors/custom_button_font_highlight = Color( 0.941176, 0.941176, 0.941176, 1 )
+Tree/colors/drop_position_color = Color( 1, 0.3, 0.2, 1 )
+Tree/colors/font_color = Color( 0.690196, 0.690196, 0.690196, 1 )
+Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
+Tree/colors/guide_color = Color( 0, 0, 0, 0.1 )
+Tree/colors/relationship_line_color = Color( 0.27451, 0.27451, 0.27451, 1 )
+Tree/colors/selection_color = Color( 0.1, 0.1, 1, 0.8 )
+Tree/colors/title_button_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+Tree/constants/button_margin = 4
+Tree/constants/draw_guides = 1
+Tree/constants/draw_relationship_lines = 0
+Tree/constants/guide_width = 2
+Tree/constants/hseparation = 4
+Tree/constants/item_margin = 12
+Tree/constants/scroll_border = 4
+Tree/constants/scroll_speed = 12
+Tree/constants/vseparation = 4
+Tree/fonts/font = null
+Tree/fonts/title_button_font = null
+Tree/icons/arrow = null
+Tree/icons/arrow_collapsed = null
+Tree/icons/checked = null
+Tree/icons/select_arrow = null
+Tree/icons/unchecked = null
+Tree/icons/updown = null
+Tree/styles/bg = SubResource( 1 )
+Tree/styles/bg_focus = null
+Tree/styles/button_pressed = null
+Tree/styles/cursor = null
+Tree/styles/cursor_unfocused = null
+Tree/styles/custom_button = null
+Tree/styles/custom_button_hover = null
+Tree/styles/custom_button_pressed = null
+Tree/styles/selected = null
+Tree/styles/selected_focus = null
+Tree/styles/title_button_hover = null
+Tree/styles/title_button_normal = null
+Tree/styles/title_button_pressed = null
 
 [node name="GraphTree" type="Popup"]
 margin_right = 335.0
@@ -10,5 +59,6 @@ script = ExtResource( 1 )
 [node name="Tree" type="Tree" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = SubResource( 2 )
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_double_clicked"]
 [connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

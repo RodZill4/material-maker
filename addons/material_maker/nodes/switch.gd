@@ -33,6 +33,10 @@ func update_node() -> void:
 			var sizer = HBoxContainer.new()
 			var input_label = Label.new()
 			sizer.add_child(input_label)
+			if generator.editable:
+				var param_label = Label.new()
+				param_label.text = l.tooltip
+				sizer.add_child(param_label)
 			var control : HSlider = HSlider.new()
 			control.name = l.name
 			control.value = generator.parameters[l.name]
@@ -74,8 +78,8 @@ func update_node() -> void:
 		var has_output = false
 		if i < 5:
 			has_output = i < output_count
-			sizer.get_child(2).visible = has_output
-			sizer.get_child(2).connect("toggled", self, "on_preview_button", [ i ])
+			sizer.get_child(sizer.get_child_count()-1).visible = has_output
+			sizer.get_child(sizer.get_child_count()-1).connect("toggled", self, "on_preview_button", [ i ])
 		if i >= input_count:
 			sizer.get_child(0).text = ""
 			has_input = false
