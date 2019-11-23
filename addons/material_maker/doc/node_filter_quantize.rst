@@ -1,5 +1,5 @@
 Quantize node
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 The **Quantize** node approximates the colors of the input image.
 
