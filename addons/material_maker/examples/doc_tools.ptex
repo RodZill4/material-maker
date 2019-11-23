@@ -1,0 +1,1456 @@
+{
+	"connections": [
+		{
+			"from": "graph_5",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 3
+		},
+		{
+			"from": "graph_4",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 2
+		},
+		{
+			"from": "perlin_color_2",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 1
+		},
+		{
+			"from": "perlin_color",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 0
+		},
+		{
+			"from": "graph",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "warp",
+			"to_port": 0
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "warp",
+			"to_port": 1
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 0
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 1
+		},
+		{
+			"from": "bricks",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "warp",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "graph_3",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 2
+		}
+	],
+	"label": "Graph",
+	"name": "49",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 576.544006,
+				"y": 29.080002
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"roughness": 1,
+				"size": 9,
+				"subsurf_scatter_strength": 0
+			},
+			"type": "material"
+		},
+		{
+			"connections": [
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "blend_3",
+					"to_port": 0
+				},
+				{
+					"from": "transform_2",
+					"from_port": 0,
+					"to": "blend_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend_3",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "transform_3",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "transform_4",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "shape_5",
+					"from_port": 0,
+					"to": "blend_4",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 3,
+					"to": "blend_4",
+					"to_port": 0
+				},
+				{
+					"from": "blend_4",
+					"from_port": 0,
+					"to": "transform_4",
+					"to_port": 0
+				},
+				{
+					"from": "shape_5",
+					"from_port": 0,
+					"to": "blend_4_2",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 2,
+					"to": "blend_4_2",
+					"to_port": 0
+				},
+				{
+					"from": "shape_5",
+					"from_port": 0,
+					"to": "blend_4_3",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 1,
+					"to": "blend_4_3",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "blend_4_4",
+					"to_port": 0
+				},
+				{
+					"from": "shape_5",
+					"from_port": 0,
+					"to": "blend_4_4",
+					"to_port": 1
+				},
+				{
+					"from": "blend_4_4",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "blend_4_3",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend_4_2",
+					"from_port": 0,
+					"to": "transform_3",
+					"to_port": 0
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Tile Inputs",
+			"name": "graph",
+			"node_position": {
+				"x": 228.541992,
+				"y": -110.733459
+			},
+			"nodes": [
+				{
+					"name": "transform_4",
+					"node_position": {
+						"x": -144.5,
+						"y": 193
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 0.5,
+						"scale_y": 0.5,
+						"translate_x": 0.25,
+						"translate_y": 0.25
+					},
+					"type": "transform"
+				},
+				{
+					"name": "transform_3",
+					"node_position": {
+						"x": -141.5,
+						"y": -2
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 0.5,
+						"scale_y": 0.5,
+						"translate_x": -0.25,
+						"translate_y": 0.25
+					},
+					"type": "transform"
+				},
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -136.5,
+						"y": -418
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 0.5,
+						"scale_y": 0.5,
+						"translate_x": -0.25,
+						"translate_y": -0.25
+					},
+					"type": "transform"
+				},
+				{
+					"name": "transform_2",
+					"node_position": {
+						"x": -135.5,
+						"y": -224
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 0.5,
+						"scale_y": 0.5,
+						"translate_x": 0.25,
+						"translate_y": -0.25
+					},
+					"type": "transform"
+				},
+				{
+					"name": "blend_2",
+					"node_position": {
+						"x": 113.5,
+						"y": -10
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 9
+					},
+					"type": "blend"
+				},
+				{
+					"name": "blend_3",
+					"node_position": {
+						"x": 114.5,
+						"y": -95
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 9
+					},
+					"type": "blend"
+				},
+				{
+					"name": "shape_5",
+					"node_position": {
+						"x": -392.29126,
+						"y": 349
+					},
+					"parameters": {
+						"edge": 0,
+						"radius": 0.99,
+						"shape": 1,
+						"sides": 4
+					},
+					"type": "shape"
+				},
+				{
+					"name": "blend_4",
+					"node_position": {
+						"x": -405.29126,
+						"y": 184.25
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 10
+					},
+					"type": "blend"
+				},
+				{
+					"name": "blend_4_2",
+					"node_position": {
+						"x": -404.79126,
+						"y": 12.25
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 10
+					},
+					"type": "blend"
+				},
+				{
+					"name": "blend_4_3",
+					"node_position": {
+						"x": -399.79126,
+						"y": -141.75
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 10
+					},
+					"type": "blend"
+				},
+				{
+					"name": "blend_4_4",
+					"node_position": {
+						"x": -393.79126,
+						"y": -293
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 10
+					},
+					"type": "blend"
+				},
+				{
+					"name": "blend",
+					"node_position": {
+						"x": 358.220001,
+						"y": -53.728001
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 9
+					},
+					"type": "blend"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -705.29126,
+						"y": -41.581501
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port3",
+							"type": "rgba"
+						},
+						{
+							"name": "port2",
+							"type": "rgba"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						},
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 658.219971,
+						"y": -41.581501
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -363.978027,
+						"y": -718
+					},
+					"parameters": {
+
+					},
+					"type": "remote",
+					"widgets": [
+
+					]
+				}
+			],
+			"parameters": {
+
+			},
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "sdbox_3",
+					"from_port": 0,
+					"to": "sdboolean_3",
+					"to_port": 1
+				},
+				{
+					"from": "sdboolean_3",
+					"from_port": 0,
+					"to": "sdshow_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdboolean_3_2",
+					"from_port": 0,
+					"to": "sdboolean_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdrhombus_2",
+					"from_port": 0,
+					"to": "sdboolean_3_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdbox_3_2",
+					"from_port": 0,
+					"to": "sdboolean_3_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow_2",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Arrow",
+			"name": "graph_2",
+			"node_position": {
+				"x": 206.827515,
+				"y": 280.753479
+			},
+			"nodes": [
+				{
+					"name": "sdbox_3",
+					"node_position": {
+						"x": 368.648682,
+						"y": 387.121552
+					},
+					"parameters": {
+						"cx": -0.09,
+						"cy": 0,
+						"h": 0.04,
+						"r": 0.3,
+						"w": 0.07
+					},
+					"type": "sdbox"
+				},
+				{
+					"name": "sdrhombus_2",
+					"node_position": {
+						"x": 235.398682,
+						"y": 251.121552
+					},
+					"parameters": {
+						"cx": -0.1,
+						"cy": 0,
+						"h": 0.12,
+						"r": 0.3,
+						"w": 0.15
+					},
+					"type": "sdrhombus"
+				},
+				{
+					"name": "sdbox_3_2",
+					"node_position": {
+						"x": 238.086548,
+						"y": 121.972382
+					},
+					"parameters": {
+						"cx": -0.41,
+						"cy": 0,
+						"h": 0.35,
+						"r": 0.3,
+						"w": 0.21
+					},
+					"type": "sdbox"
+				},
+				{
+					"name": "sdboolean_3_2",
+					"node_position": {
+						"x": 454.586548,
+						"y": 205.972443
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdboolean"
+				},
+				{
+					"name": "sdboolean_3",
+					"node_position": {
+						"x": 614.648682,
+						"y": 282.510315
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdboolean"
+				},
+				{
+					"name": "sdshow_2",
+					"node_position": {
+						"x": 602.836609,
+						"y": 376.603577
+					},
+					"parameters": {
+						"bevel": 0.01,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in",
+								"type": "f"
+							}
+						],
+						"instance": "",
+						"name": "sdShow",
+						"outputs": [
+							{
+								"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+								"type": "f"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0,
+								"label": "Bevel",
+								"max": 1,
+								"min": 0,
+								"name": "bevel",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": 858.58667,
+						"y": 374.972534
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -64.601318,
+						"y": 285.753479
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1158.58667,
+						"y": 285.753479
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": 281.827484,
+						"y": -178.027618
+					},
+					"parameters": {
+
+					},
+					"type": "remote",
+					"widgets": [
+
+					]
+				}
+			],
+			"parameters": {
+
+			},
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "pattern",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Gradient",
+			"name": "graph_3",
+			"node_position": {
+				"x": -228.787903,
+				"y": 631.143799
+			},
+			"nodes": [
+				{
+					"name": "pattern",
+					"node_position": {
+						"x": -389.625,
+						"y": -359.458374
+					},
+					"parameters": {
+						"mix": 0,
+						"x_scale": 1,
+						"x_wave": 3,
+						"y_scale": 1,
+						"y_wave": 4
+					},
+					"type": "pattern"
+				},
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -371.125,
+						"y": -262.458374
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 180,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0,
+						"translate_y": 0
+					},
+					"type": "transform"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -352.125,
+						"y": -69.458374
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -406.125,
+						"y": -498.858337
+					},
+					"parameters": {
+						"param0": 1,
+						"param1": 180,
+						"param2": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Repeat",
+							"linked_widgets": [
+								{
+									"node": "pattern",
+									"widget": "x_scale"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rotate",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "rotate"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Gradient",
+							"linked_widgets": [
+								{
+									"node": "colorize",
+									"widget": "gradient"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -706.125,
+						"y": -297.55835
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -52.125,
+						"y": -297.55835
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 1,
+				"param1": 180,
+				"param2": {
+					"interpolation": 0,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "graph"
+		},
+		{
+			"name": "perlin_color",
+			"node_position": {
+				"x": -220.835205,
+				"y": -401.150269
+			},
+			"parameters": {
+				"iterations": 3,
+				"persistence": 0.5,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"type": "perlin_color"
+		},
+		{
+			"name": "perlin_color_2",
+			"node_position": {
+				"x": -216.835205,
+				"y": -273.150269
+			},
+			"parameters": {
+				"iterations": 6,
+				"persistence": 0.9,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"type": "perlin_color"
+		},
+		{
+			"connections": [
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 1
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Warp1",
+			"name": "graph_4",
+			"node_position": {
+				"x": -214.835205,
+				"y": -147.150269
+			},
+			"nodes": [
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -259.25,
+						"y": -658
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.5,
+						"translate_y": 0.5
+					},
+					"type": "transform"
+				},
+				{
+					"name": "perlin",
+					"node_position": {
+						"x": -502.25,
+						"y": -653
+					},
+					"parameters": {
+						"iterations": 3,
+						"persistence": 0.5,
+						"scale_x": 4,
+						"scale_y": 4
+					},
+					"type": "perlin"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -670.25,
+						"y": -647.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 18.75,
+						"y": -657.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -315.75,
+						"y": -893
+					},
+					"parameters": {
+						"param0": 4,
+						"param1": 4,
+						"param2": 3,
+						"param3": 0.5,
+						"param4": 0.5,
+						"param5": 0.5
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Scale X",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_x"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Scale Y",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_y"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Iterations",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "iterations"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Persistance",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "persistence"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp X",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_x"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp Y",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_y"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
+				}
+			],
+			"parameters": {
+				"param0": 4,
+				"param1": 4,
+				"param2": 3,
+				"param3": 0.5,
+				"param4": 0.5,
+				"param5": 0.5
+			},
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 1
+				},
+				{
+					"from": "transform_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 0
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 1
+				},
+				{
+					"from": "transform",
+					"from_port": 0,
+					"to": "transform_2",
+					"to_port": 2
+				},
+				{
+					"from": "perlin",
+					"from_port": 0,
+					"to": "transform",
+					"to_port": 0
+				}
+			],
+			"label": "Warp2",
+			"name": "graph_5",
+			"node_position": {
+				"x": -214.835205,
+				"y": 28.599731
+			},
+			"nodes": [
+				{
+					"name": "transform",
+					"node_position": {
+						"x": -292.25,
+						"y": -629
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.82,
+						"translate_y": 0.425
+					},
+					"type": "transform"
+				},
+				{
+					"name": "perlin",
+					"node_position": {
+						"x": -558.25,
+						"y": -720
+					},
+					"parameters": {
+						"iterations": 5,
+						"persistence": 0.5,
+						"scale_x": 4,
+						"scale_y": 4
+					},
+					"type": "perlin"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -802.25,
+						"y": -655.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 268.75,
+						"y": -656.5
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -315.75,
+						"y": -905
+					},
+					"parameters": {
+						"param0": 4,
+						"param1": 0,
+						"param2": 5,
+						"param3": 0,
+						"param4": 0.82,
+						"param5": 0.425
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Scale X",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_x"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Scale Y",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "scale_y"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Iterations",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "iterations"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Persistance",
+							"linked_widgets": [
+								{
+									"node": "perlin",
+									"widget": "persistence"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp X",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_x"
+								},
+								{
+									"node": "transform_2",
+									"widget": "translate_x"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Warp Y",
+							"linked_widgets": [
+								{
+									"node": "transform",
+									"widget": "translate_y"
+								},
+								{
+									"node": "transform_2",
+									"widget": "translate_y"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "transform_2",
+					"node_position": {
+						"x": -32.462402,
+						"y": -714.099976
+					},
+					"parameters": {
+						"repeat": false,
+						"rotate": 0,
+						"scale_x": 1,
+						"scale_y": 1,
+						"translate_x": 0.82,
+						"translate_y": 0.425
+					},
+					"type": "transform"
+				}
+			],
+			"parameters": {
+				"param0": 4,
+				"param1": 4,
+				"param2": 5,
+				"param3": 0.5,
+				"param4": 0.82,
+				"param5": 0.425
+			},
+			"type": "graph"
+		},
+		{
+			"name": "bricks",
+			"node_position": {
+				"x": -209.473175,
+				"y": 327.099731
+			},
+			"parameters": {
+				"bevel": 0.1,
+				"columns": 3,
+				"mortar": 0.1,
+				"pattern": 0,
+				"repeat": 1,
+				"row_offset": 0.5,
+				"rows": 6
+			},
+			"type": "bricks"
+		},
+		{
+			"name": "warp",
+			"node_position": {
+				"x": -185.473175,
+				"y": 528.099731
+			},
+			"parameters": {
+				"amount": 0.1,
+				"eps": 0.1,
+				"epsilon": 0
+			},
+			"type": "warp"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": -431.473175,
+				"y": 305.099731
+			},
+			"parameters": {
+				"iterations": 3,
+				"persistence": 0.5,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"type": "perlin"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": 138.235168,
+				"y": 415.099731
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"type": "blend"
+		},
+		{
+			"name": "blend_2",
+			"node_position": {
+				"x": 142.235168,
+				"y": 326.099731
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"type": "blend"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

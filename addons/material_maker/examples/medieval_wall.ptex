@@ -2515,8 +2515,8 @@
 		{
 			"name": "_3",
 			"node_position": {
-				"x": -1490.123413,
-				"y": 453.010773
+				"x": -1489.123413,
+				"y": 470.010742
 			},
 			"parameters": {
 
@@ -3931,6 +3931,102 @@
 
 			},
 			"type": "graph"
+		},
+		{
+			"name": "comment",
+			"node_position": {
+				"x": -2427.006836,
+				"y": 554.200073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 270,
+				"y": 124
+			},
+			"text": "This example first defines shapes (with heigth and material rotation information) then associated them a material and finally merges the result into a single material.",
+			"type": "comment"
+		},
+		{
+			"name": "comment_2",
+			"node_position": {
+				"x": -1648.280762,
+				"y": 291.200073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 125,
+				"y": 50
+			},
+			"text": "Wood shapes",
+			"type": "comment"
+		},
+		{
+			"name": "comment_2_2",
+			"node_position": {
+				"x": -1502.780762,
+				"y": 375.700073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 144,
+				"y": 73
+			},
+			"text": "Wood shapes with material applied",
+			"type": "comment"
+		},
+		{
+			"name": "comment_2_2_2",
+			"node_position": {
+				"x": -1481.280762,
+				"y": 663.200073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 96,
+				"y": 44
+			},
+			"text": "Bricks",
+			"type": "comment"
+		},
+		{
+			"name": "comment_2_2_2_2",
+			"node_position": {
+				"x": -1342.280762,
+				"y": 344.700073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 146,
+				"y": 128
+			},
+			"text": "Wood shapes blended with bricks based on height information",
+			"type": "comment"
+		},
+		{
+			"name": "comment_2_2_2_2_2",
+			"node_position": {
+				"x": -1175.626587,
+				"y": 397.700073
+			},
+			"parameters": {
+				"size": 4
+			},
+			"size": {
+				"x": 211,
+				"y": 72
+			},
+			"text": "This node converts material+shapes data into what Material expects",
+			"type": "comment"
 		}
 	],
 	"parameters": {

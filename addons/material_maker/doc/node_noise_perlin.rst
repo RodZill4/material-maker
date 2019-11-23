@@ -41,3 +41,13 @@ Example images
 
 .. image:: images/node_perlin_samples.png
 	:align: center
+
+Variations
+++++++++++
+
+* The **Color Perlin** node generates an RGB image made of 3 greyscale Perlin Noise images.
+
+* The **Perlin Warp1** and **Perlin Warp2** nodes generate Perlin noise with domain warping.
+
+.. image:: images/node_perlin_variations.png
+	:align: center
