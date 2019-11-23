@@ -9,7 +9,7 @@ The **Combine** node combines four greyscale inputs into an RGBA output texture.
 Inputs
 ++++++
 
-The combi**Combine**ne node has 3 inputs, one for each (red, green and blue) channel.
+The **Combine** node has 3 inputs, one for each (red, green and blue) channel.
 
 Outputs
 +++++++
