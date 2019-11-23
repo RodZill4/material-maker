@@ -22,6 +22,16 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "simple_uniform_greyscale",
+			"name": "uniform_greyscale",
+			"parameters": {
+				"color": 0.5
+			},
+			"tree_item": "Simple/Uniform/Greyscale",
+			"type": "uniform_greyscale"
+		},
+		{
+			"collapsed": true,
 			"icon": "simple_shape",
 			"name": "shape",
 			"parameters": {
@@ -1337,6 +1347,19 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "noise_perlin_color",
+			"name": "perlin_color",
+			"parameters": {
+				"iterations": 3,
+				"persistence": 0.5,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"tree_item": "Noise/Perlin/Color",
+			"type": "perlin_color"
+		},
+		{
+			"collapsed": true,
 			"connections": [
 				{
 					"from": "perlin",
@@ -1765,8 +1788,41 @@
 			"type": "voronoi"
 		},
 		{
+			"collapsed": true,
+			"icon": "noise_color",
+			"name": "color_noise",
+			"parameters": {
+				"density": 0.5,
+				"size": 9
+			},
+			"tree_item": "Noise/Color",
+			"type": "color_noise"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Filter"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_invert",
+			"name": "invert",
+			"parameters": {
+				"steps": 6
+			},
+			"tree_item": "Filter/Invert",
+			"type": "invert"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_brightnesscontrast",
+			"name": "brightness_contrast",
+			"parameters": {
+				"brightness": 0,
+				"contrast": 1,
+				"steps": 6
+			},
+			"tree_item": "Filter/BrightnessContrast",
+			"type": "brightness_contrast"
 		},
 		{
 			"collapsed": true,
@@ -1937,6 +1993,28 @@
 			"type": "emboss"
 		},
 		{
+			"collapsed": true,
+			"icon": "filter_occlusion",
+			"name": "occlusion",
+			"parameters": {
+				"param0": 8,
+				"param1": 50,
+				"param2": 1.5
+			},
+			"tree_item": "Filter/Occlusion",
+			"type": "occlusion"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_quantize",
+			"name": "quantize",
+			"parameters": {
+				"steps": 4
+			},
+			"tree_item": "Filter/Quantize",
+			"type": "quantize"
+		},
+		{
 			"collapsed": false,
 			"icon": "transform",
 			"parameters": {
@@ -1985,6 +2063,16 @@
 			"type": "warp"
 		},
 		{
+			"collapsed": true,
+			"icon": "transform_circlemap",
+			"name": "circle_map",
+			"parameters": {
+
+			},
+			"tree_item": "Transform/CircleMap",
+			"type": "circle_map"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Miscellaneous"
 		},
@@ -1997,7 +2085,9 @@
 		{
 			"collapsed": true,
 			"icon": "miscellaneous_custom_shader",
-			"shader_model": {},
+			"shader_model": {
+
+			},
 			"tree_item": "Miscellaneous/Custom Shader",
 			"type": "custom"
 		},
