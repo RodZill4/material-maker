@@ -184,7 +184,7 @@ boot_splash/image="res://rodz_labs_logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
-config/release="0.7a1"
+config/release="0.7"
 
 [autoload]
 
