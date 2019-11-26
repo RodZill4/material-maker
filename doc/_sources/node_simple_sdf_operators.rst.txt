@@ -1,0 +1,11 @@
+Operators
++++++++++
+
+.. toctree::
+	:maxdepth: 
+
+	node_simple_sdf_operators_sdboolean
+	node_simple_sdf_operators_sdsmoothboolean
+	node_simple_sdf_operators_sdroundedshape
+	node_simple_sdf_operators_sdannularshape
+	node_simple_sdf_operators_sdshow

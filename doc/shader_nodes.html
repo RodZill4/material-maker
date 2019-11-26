@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Shader nodes &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Texture nodes" href="texture_nodes.html" />
+    <link rel="prev" title="Common properties of nodes" href="nodes_common.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Nodes overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html">Common properties of nodes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Shader nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defining-a-shader-node-interface">Defining a shader node interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-the-actual-glsl-code">Adding the actual GLSL code</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-functions">Global functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instance-functions">Instance functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#main-code">Main code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="texture_nodes.html">Texture nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="nodes.html">Nodes overview</a> &raquo;</li>
+        
+      <li>Shader nodes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="shader-nodes">
+<h1>Shader nodes<a class="headerlink" href="#shader-nodes" title="Permalink to this headline">¶</a></h1>
+<p>Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
+but as shader programs that calculates the color of a pixel from its coordinates.
+When shader nodes are connected, Material Maker will combine their shader programs.
+As a consequence, shader nodes are resolution independant.</p>
+<p>Editing a shader node will show the <strong>Node Editor</strong> window.</p>
+<div class="section" id="defining-a-shader-node-interface">
+<h2>Defining a shader node interface<a class="headerlink" href="#defining-a-shader-node-interface" title="Permalink to this headline">¶</a></h2>
+<p>A shader node will always have outputs that will be connected to the inputs of other
+nodes. It may also (and will probably) have parameters that can be modified in the
+user interface, and inputs to receive data from other nodes.</p>
+<img alt="_images/node_editor_general.png" class="align-center" src="_images/node_editor_general.png" />
+<p>Inputs and parameters can be added in the <strong>General</strong> tab, but first, you may want to
+choose a nice name for your new node.</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>To add a parameter, just click on the green “+” button in the Parameters section.
+A new parameter line will be created with a red “-” button on its left to delete
+the new parameter. On this line:</p>
+<ul class="simple">
+<li><p>the first text field is the name of the parameter, that will be used in the shader code</p></li>
+<li><p>the second text field is an optional label that will be displayed in the user interface.
+There are a few tricks with this label that can help tweaking the UI.</p></li>
+<li><p>the option button can be used to select a type for the parameter. The available types
+are <strong>float</strong>, <strong>size</strong>, <strong>enum</strong>, <strong>boolean</strong>, <strong>color</strong> and <strong>gradient</strong></p></li>
+<li><p>on the right of the type selector, controls can be used to define a default value and
+constraints for the parameter</p></li>
+</ul>
+<p>To use a parameter in your shader code it is necessary to prefix it with a dollar sign.
+So a <strong>foo</strong> parameter can be refered to by <strong>$foo</strong> or <strong>$(foo)</strong> in the shader code.
+Gradient parameters need to be used as functions with a single float parameter.
+So <strong>mygradient</strong> should be refered to as <strong>$mygradient($uv.x)</strong> if you want to spread
+the gradient on the x axis (<strong>$uv</strong> is an implicit variable used by Material Maker for
+UV coordinates).</p>
+</div>
+<div class="section" id="inputs">
+<h3>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h3>
+<p>Inputs can be added and removed, have a name and a label (but no label trick) just
+like parameters. they also have a type that can be <strong>Greyscale</strong>, <strong>Color</strong> or
+<strong>RGBA</strong>.
+Please note that Material Maker will convert automatically if you connect an input
+to an output of a different type.</p>
+<p>On the right of the input type, you must define a default value that will be used
+if the input is not connected. The default value is a GLSL expression that must
+evaluate to a <strong>float</strong> for <strong>Greyscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a <strong>vec4</strong>
+for <strong>RGBA</strong>. Inputs default values can use the <strong>$uv</strong> implicit variable. You may
+want to define interesting default inputs for your nodes, so it is possible
+to see their effect without connecting the inputs (the screenshot above is the
+Blend filter and has a vertical and an horizontal gradient as default inputs).</p>
+<p>In shader code, inputs are used as functions that take a single <strong>vec2</strong> parameter. For
+example <strong>$myinput(2.0*$uv+vec2(0.2, 0.3))</strong> refers to <strong>myinput</strong>, scaled and translated.</p>
+</div>
+<div class="section" id="outputs">
+<h3>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h3>
+<p>Outputs are defined in the <strong>Outputs</strong> tab and are very similar to inputs, but instead
+of a default value, the generated value of the output should be specified as a
+GLSL expression (<strong>float</strong> for <strong>Greyscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a
+<strong>vec4</strong> for <strong>RGBA</strong>). This expression can use everything in the node (parameters,
+inputs, main code, instance functions and global functions) except other outputs.
+And generally, complex nodes mean complex output expressions. You may thus want to
+write simple expressions in the <strong>Outputs</strong> tab and keep complex code in the 3
+remaining tabs.</p>
+<img alt="_images/node_editor_outputs.png" class="align-center" src="_images/node_editor_outputs.png" />
+</div>
+</div>
+<div class="section" id="adding-the-actual-glsl-code">
+<h2>Adding the actual GLSL code<a class="headerlink" href="#adding-the-actual-glsl-code" title="Permalink to this headline">¶</a></h2>
+<p>Now the parameters, inputs and outputs are defined, the code that will actually
+generate the texture will be in the 3 remaining tabs.</p>
+<div class="section" id="global-functions">
+<h3>Global functions<a class="headerlink" href="#global-functions" title="Permalink to this headline">¶</a></h3>
+<p>The Global functions tab is used to define the functions that are necessary to
+implement the texture generator. Those functions will be included only once (when
+the node is used of course) and cannot use parameters or inputs. This is
+typically where you will paste the code you prepared in Shadertoy.</p>
+<img alt="_images/node_editor_global.png" class="align-center" src="_images/node_editor_global.png" />
+</div>
+<div class="section" id="instance-functions">
+<h3>Instance functions<a class="headerlink" href="#instance-functions" title="Permalink to this headline">¶</a></h3>
+<p>Instance functions are functions that are unique to an instance of the node.
+They will typically depend on parameters, and those could either be used as
+parameters when calling global functions, or to form global function names (as
+shown in the screenshot below: the blend_type parameter is an enum whose value
+is the suffix of one of the blend functions defined in the Global Functions pane).</p>
+<p>Instance functions must also have a unique name, and the name implicit variable
+can be used to do this: whenever $name or $(name) is used, it will be replaced
+with a unique name that depends on the node instance.</p>
+<img alt="_images/node_editor_instance.png" class="align-center" src="_images/node_editor_instance.png" />
+</div>
+<div class="section" id="main-code">
+<h3>Main code<a class="headerlink" href="#main-code" title="Permalink to this headline">¶</a></h3>
+<p>This tab contains code that will be inserted into the main combined shader and
+can be used to define variables that will be used in the outputs expressions.
+This can be useful either to simplify the outputs or to define variables that
+will be used by several outputs (hence optimizing the shader code).</p>
+<p>Main code can use the node’s parameters and inputs as well as instance and
+global functions.</p>
+<p>Since a node can be sampled for several different UV expressions in the same
+combined shader, it is necessary for all variables declared in the main code section
+to have a unique name for each (node instance, UV expression) pair. Material
+Maker provides the name_uv implicit variable for this.</p>
+<img alt="_images/node_editor_main.png" class="align-center" src="_images/node_editor_main.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="texture_nodes.html" class="btn btn-neutral float-right" title="Texture nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="nodes_common.html" class="btn btn-neutral" title="Common properties of nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

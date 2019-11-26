@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Warp node" href="node_warp.html" />
-    <link rel="prev" title="Normal map node" href="node_normal_map.html" /> 
+    <link rel="next" title="Kaleidoscope node" href="node_transform_kaleidoscope.html" />
+    <link rel="prev" title="Transform nodes" href="nodes_transform.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -57,6 +57,10 @@
           
             
             
+              <div class="version">
+                0.7
+              </div>
+            
           
 
           
@@ -81,26 +85,26 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Available nodes</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="nodes_generators.html">Generator nodes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="nodes_filters.html">Filter nodes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="node_adjust_hsv.html">AdjustHSV node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_colorize.html">Colorize node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blend.html">Blend node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blur.html">Blur node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_combine.html">Combine node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_decompose.html">Decompose node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_emboss.html">Emboss node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_normal_map.html">Normal map node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Transform node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="node_warp.html">Warp node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_warp.html">Warp node</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
 </ul>
@@ -148,9 +152,9 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="nodes.html">Available nodes</a> &raquo;</li>
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
         
-          <li><a href="nodes_filters.html">Filter nodes</a> &raquo;</li>
+          <li><a href="nodes_transform.html">Transform nodes</a> &raquo;</li>
         
       <li>Transform node</li>
     
@@ -171,11 +175,11 @@
             
   <div class="section" id="transform-node">
 <h1>Transform node<a class="headerlink" href="#transform-node" title="Permalink to this headline">¶</a></h1>
-<p>The transform node applies a scale operation, a rotation and a translation to the input image.</p>
+<p>The <strong>Transform</strong> node applies a scale operation, a rotation and a translation to the input image.</p>
 <img alt="_images/node_transform.png" src="_images/node_transform.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The transform node accepts a color image as input.</p>
+<p>The <strong>Transform</strong> node accepts a color image as input.</p>
 <p>It also accepts a greyscale input image for each transform parameter. In that case,
 instead of applying a uniform transform to the input image, the transform parameter
 will, for each pixel, be multiplied by a value from -1 to 1 that depends linearly
@@ -184,7 +188,7 @@ by -1, a white pixel will not change the parameter, a grey50 pixel will set it t
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The transform node outputs the transformed image.</p>
+<p>The <strong>Transform</strong> node outputs the transformed image.</p>
 <p>The input image is first rotated around its center, then the scale operation is applied and
 finally the translation.</p>
 <p>Using the scale operation to zoom on a detail of the input image is only recommended if the
@@ -192,13 +196,17 @@ input does not rely on resolution dependant nodes.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The transform node has the following parameters:</p>
+<p>The <strong>Transform</strong> node has the following parameters:</p>
 <ul class="simple">
-<li><em>Translate X</em> and <em>Translate Y</em> define the translation.</li>
-<li><em>Rotate</em> define the rotation expressed in degrees.</li>
-<li><em>Scale X</em> and <em>Scale Y</em> define the scale operations along the X and Y axes.</li>
-<li>If <em>Repeat</em> is checked, zooming out will repeat the image, otherwise it will be clamped.</li>
+<li><p><em>Translate X</em> and <em>Translate Y</em> define the translation.</p></li>
+<li><p><em>Rotate</em> define the rotation expressed in degrees.</p></li>
+<li><p><em>Scale X</em> and <em>Scale Y</em> define the scale operations along the X and Y axes.</p></li>
+<li><p>If <em>Repeat</em> is checked, zooming out will repeat the image, otherwise it will be clamped.</p></li>
 </ul>
+</div>
+<div class="section" id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/node_transform_samples.png" class="align-center" src="_images/node_transform_samples.png" />
 </div>
 </div>
 
@@ -210,10 +218,10 @@ input does not rely on resolution dependant nodes.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_warp.html" class="btn btn-neutral float-right" title="Warp node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_transform_kaleidoscope.html" class="btn btn-neutral float-right" title="Kaleidoscope node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_normal_map.html" class="btn btn-neutral" title="Normal map node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="nodes_transform.html" class="btn btn-neutral" title="Transform nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -255,6 +263,7 @@ input does not rely on resolution dependant nodes.</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 

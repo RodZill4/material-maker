@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Perlin noise node" href="node_perlin.html" />
-    <link rel="prev" title="Bricks node" href="node_bricks.html" /> 
+    <link rel="next" title="Color Noise node" href="node_noise_color.html" />
+    <link rel="prev" title="Noise nodes" href="nodes_noise.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -57,6 +57,10 @@
           
             
             
+              <div class="version">
+                0.7
+              </div>
+            
           
 
           
@@ -81,24 +85,27 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Available nodes</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="nodes_generators.html">Generator nodes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="node_uniform.html">Uniform node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_image.html">Image node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_pattern.html">Pattern node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_bricks.html">Bricks node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_noise.html">Noise nodes</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Noise node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="node_perlin.html">Perlin noise node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_voronoi.html">Voronoi noise node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_noise_color.html">Color Noise node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_noise_perlin.html">Perlin noise node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_noise_voronoi.html">Voronoi noise node</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="nodes_filters.html">Filter nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
 </ul>
@@ -146,9 +153,9 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="nodes.html">Available nodes</a> &raquo;</li>
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
         
-          <li><a href="nodes_generators.html">Generator nodes</a> &raquo;</li>
+          <li><a href="nodes_noise.html">Noise nodes</a> &raquo;</li>
         
       <li>Noise node</li>
     
@@ -169,23 +176,22 @@
             
   <div class="section" id="noise-node">
 <h1>Noise node<a class="headerlink" href="#noise-node" title="Permalink to this headline">¶</a></h1>
-<p>The Noise node outputs a randomly generated black and white texture.</p>
+<p>The <strong>Noise</strong> node outputs a randomly generated black and white texture.</p>
 <img alt="_images/node_noise.png" src="_images/node_noise.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The Noise node does not accept any input.</p>
+<p>The <strong>Noise</strong> node does not accept any input.</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The Noise node provides a black and white noise texture.</p>
-<img alt="_images/noise.png" src="_images/noise.png" />
+<p>The <strong>Noise</strong> node provides a black and white noise texture.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The Noise node accepts the following parameters:</p>
+<p>The <strong>Noise</strong> node accepts the following parameters:</p>
 <ul class="simple">
-<li><em>Grid size</em> is the number of rows and columns in the texture.</li>
-<li><em>Density</em> is the likelihood for each cell to be white.</li>
+<li><p><em>Grid size</em> is the number of rows and columns in the texture.</p></li>
+<li><p><em>Density</em> is the likelihood for each cell to be white.</p></li>
 </ul>
 </div>
 <div class="section" id="notes">
@@ -194,6 +200,10 @@
 will modify the texture, and the outputs will remain the same if its position and parameters
 are not changed.</p>
 <p>Although this node has a grid size, it generates a resolution independant texture.</p>
+</div>
+<div class="section" id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/node_noise_samples.png" class="align-center" src="_images/node_noise_samples.png" />
 </div>
 </div>
 
@@ -205,10 +215,10 @@ are not changed.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_perlin.html" class="btn btn-neutral float-right" title="Perlin noise node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_noise_color.html" class="btn btn-neutral float-right" title="Color Noise node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_bricks.html" class="btn btn-neutral" title="Bricks node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="nodes_noise.html" class="btn btn-neutral" title="Noise nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -250,6 +260,7 @@ are not changed.</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 

@@ -23,4 +23,3 @@ Parameters
 The Switch node has a single parameter whose value can be 1 or 2.
 When the parameter is set to 1, A forwards A1 and B forwards B1.
 When the parameter is set to 2, A forwards A2 and B forwards B2.
-

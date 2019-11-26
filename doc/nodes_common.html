@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Common properties of nodes &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Shader nodes" href="shader_nodes.html" />
+    <link rel="prev" title="Nodes overview" href="nodes.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Nodes overview</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Common properties of nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#randomness">Randomness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modifying-nodes">Modifying nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shader_nodes.html">Shader nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="texture_nodes.html">Texture nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="nodes.html">Nodes overview</a> &raquo;</li>
+        
+      <li>Common properties of nodes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="common-properties-of-nodes">
+<h1>Common properties of nodes<a class="headerlink" href="#common-properties-of-nodes" title="Permalink to this headline">¶</a></h1>
+<p>The nodes will always have outputs that will be connected to the inputs of other
+nodes. They may also (and will probably) have parameters that can be modified
+in the user interface, and inputs to receive data from other nodes.</p>
+<img alt="_images/node_example.png" class="align-center" src="_images/node_example.png" />
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>Nodes can have several outputs that represent the images they provide. Each node output can be
+connected to several node inputs. Each node output can be either <strong>greyscale</strong>, <strong>color</strong> or
+<strong>RGBA</strong>. Greyscale ports are drawn in grey, color in blue and RGBA in semi-transparent green.</p>
+<p>Next to the output, an (open or closed) eye icon indicates that a preview is available. Clicking
+on it will show the preview at the bottom of the node. When a node has several outputs, only
+one of them can be previewed at a time.</p>
+</div>
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>Inputs are images the node will transform (if any). An input is always connected to at most
+an output. Inputs generally have a default image that is used when it is not connected.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>Parameters are used to configure nodes. The following types are supported:</p>
+<ul>
+<li><p><strong>float</strong> parameters are used whenever a real number is needed. Float parameters have
+bounds, but it is possible to ignore them (at your own risk). To modify a float parameter,
+click in the text field and enter a new value, or click and drag left or right to decrease
+or decrease its value. When the lower or upper bound is reach, the value wil stick to it,
+but dragging again from there makes it possible to go beyond the limit.</p></li>
+<li><p><strong>size</strong> parameters are power of two values for the image size. They are used when
+actually storing data in a texture, or when performing resolution dependent calculations
+such as convolutions. They are shown as drop down list boxes.</p></li>
+<li><p><strong>enumerated</strong> parameters are used when nodes have different named options and shown as
+drop down list boxes.</p></li>
+<li><p><strong>boolean</strong> parameters are shown as check boxes.</p></li>
+<li><p><strong>color</strong> parameters are shown as Color selectors.</p></li>
+<li><p><strong>gradient</strong> parameters are edited in dedicated editor widgets. Cursors can be added by
+double-clicking in the lower part of the widget, dragged left and right using the left
+mouse button, and removed using the right mouse button.</p>
+<p>The drop down list box can be used to select one of the 4 interpolation options.
+Double clicking in the upper part of the gradient editor will open a larger version of the
+widget to move cursors mode precisely.</p>
+<p>Finally, it is possible to drag and drop from the upper part of a gradient editor widget to
+another to duplicate the gradient parameter, or from any <strong>Colorize</strong> node variant in the
+library to a gradient editor widget.</p>
+</li>
+</ul>
+<img alt="_images/gradient_editor.png" class="align-center" src="_images/gradient_editor.png" />
+</div>
+<div class="section" id="randomness">
+<h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this headline">¶</a></h2>
+<p>Nodes that provide random patterns have an implicit <strong>seed</strong> parameter. It is not possible
+to edit it directly, but moving the node in the graph will change its value. It is possible
+to freeze the seed value using the small dice button in the node’s title bar in the graph.</p>
+<img alt="_images/random_node.png" class="align-center" src="_images/random_node.png" />
+<p>Subgraphs also have their seed and transmit it to their children unless not configured to
+do so, or the children’s seeds are frozen.</p>
+</div>
+<div class="section" id="modifying-nodes">
+<h2>Modifying nodes<a class="headerlink" href="#modifying-nodes" title="Permalink to this headline">¶</a></h2>
+<p>Most nodes in Material Maker can be modified, but they first have to be made editable.
+To do this, select a node, and use the <strong>Tools -&gt; Make the selected nodes editable</strong>
+menu item or the <strong>Control+W</strong> keyboard shortcut.</p>
+<img alt="_images/editable_node.png" class="align-center" src="_images/editable_node.png" />
+<p>When made editable, 3 buttons are shown at the bottom of the node:</p>
+<ul class="simple">
+<li><p>A pencil-shaped button to edit the node (the precise behavior of this button depends
+on the node type)</p></li>
+<li><p>A folder-like button to load an existing node template</p></li>
+<li><p>A floppy disk button to save the node as a template</p></li>
+</ul>
+<p>To be reusable directly, templates must be saved in the <strong>generators</strong> directory in
+the install dir (or the <strong>addon/material_maker/nodes</strong> directory when using Material
+Maker as a Godot addon). All nodes templates saved in this directory are shown in
+the <strong>Tools -&gt; Create</strong> menu.</p>
+<p>It is absolutely not necessary to save newly created nodes as templates, but this
+makes them a lot easier to access and results in smaller material files (only
+references to the templates are saved and not the whole node description).
+Consequently, modifying a template without ensuring compatibility with the old
+version (i.e. removing or renaming parameters, removing or swapping inputs or
+outputs).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="shader_nodes.html" class="btn btn-neutral float-right" title="Shader nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="nodes.html" class="btn btn-neutral" title="Nodes overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

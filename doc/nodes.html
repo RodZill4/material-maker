@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Available nodes &mdash; Material Maker  documentation</title>
+  <title>Nodes overview &mdash; Material Maker  documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Generator nodes" href="nodes_generators.html" />
+    <link rel="next" title="Common properties of nodes" href="nodes_common.html" />
     <link rel="prev" title="User interface" href="user_interface.html" /> 
 
   
@@ -57,6 +57,10 @@
           
             
             
+              <div class="version">
+                0.7
+              </div>
+            
           
 
           
@@ -81,12 +85,15 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Available nodes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="nodes_generators.html">Generator nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nodes_filters.html">Filter nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="nodes_misc.html">Miscellaneous nodes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Nodes overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html">Common properties of nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shader_nodes.html">Shader nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="texture_nodes.html">Texture nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
 </ul>
 
             
@@ -132,7 +139,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Available nodes</li>
+      <li>Nodes overview</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,153 +156,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="available-nodes">
-<h1>Available nodes<a class="headerlink" href="#available-nodes" title="Permalink to this headline">¶</a></h1>
-<p>This section describes all nodes that can be used in a procedural material.</p>
+  <div class="section" id="nodes-overview">
+<h1>Nodes overview<a class="headerlink" href="#nodes-overview" title="Permalink to this headline">¶</a></h1>
+<p>Material Maker provides different node types to describe materials. Nodes may
+have parameters, inputs and outputs.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="nodes_generators.html">Generator nodes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="node_uniform.html">Uniform node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_uniform.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_uniform.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_uniform.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes_common.html">Common properties of nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html#outputs">Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html#inputs">Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html#randomness">Randomness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html#modifying-nodes">Modifying nodes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="node_image.html">Image node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_image.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_image.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_image.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shader_nodes.html">Shader nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shader_nodes.html#defining-a-shader-node-interface">Defining a shader node interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shader_nodes.html#adding-the-actual-glsl-code">Adding the actual GLSL code</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="node_pattern.html">Pattern node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_pattern.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_pattern.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_pattern.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="texture_nodes.html">Texture nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="texture_nodes.html#image-node">Image node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="texture_nodes.html#buffer-node">Buffer node</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="node_bricks.html">Bricks node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_bricks.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_bricks.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_bricks.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_bricks.html#notes">Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="remote_nodes.html">Remote nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html#creating-a-remote-node">Creating a remote node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html#configuring-a-remote-node">Configuring a remote node</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="node_noise.html">Noise node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_noise.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_noise.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_noise.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_noise.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_perlin.html">Perlin noise node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_perlin.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_perlin.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_perlin.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_perlin.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_voronoi.html">Voronoi noise node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_voronoi.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_voronoi.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_voronoi.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_voronoi.html#notes">Notes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="nodes_filters.html">Filter nodes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="node_adjust_hsv.html">AdjustHSV node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_adjust_hsv.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_adjust_hsv.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_adjust_hsv.html#parameters">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_colorize.html">Colorize node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_colorize.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_colorize.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_colorize.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_colorize.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_blend.html">Blend node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_blend.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blend.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blend.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blend.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_blur.html">Blur node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_blur.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blur.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blur.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_blur.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_combine.html">Combine node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_combine.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_combine.html#outputs">Outputs</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_decompose.html">Decompose node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_decompose.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_decompose.html#outputs">Outputs</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_emboss.html">Emboss node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_emboss.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_emboss.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_emboss.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_emboss.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_normal_map.html">Normal map node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_normal_map.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_normal_map.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_normal_map.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_normal_map.html#notes">Notes</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_transform.html">Transform node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_transform.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_transform.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_transform.html#parameters">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_warp.html">Warp node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_warp.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_warp.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_warp.html#parameters">Parameters</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="nodes_misc.html">Miscellaneous nodes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="node_material.html">Material node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_material.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_material.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_material.html#parameters">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_export.html">Export node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_export.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_export.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_export.html#parameters">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_switch.html">Switch node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_switch.html#inputs">Inputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_switch.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_switch.html#parameters">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="node_comment.html">Comment node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_remote.html">Remote node</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="node_remote.html#linked-control">Linked control</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_remote.html#configuration-control">Configuration control</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 </ul>
 </div>
 </div>
@@ -308,7 +198,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="nodes_generators.html" class="btn btn-neutral float-right" title="Generator nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="nodes_common.html" class="btn btn-neutral float-right" title="Common properties of nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="user_interface.html" class="btn btn-neutral" title="User interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -353,6 +243,7 @@
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
 
   
 

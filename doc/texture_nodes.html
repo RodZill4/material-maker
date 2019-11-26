@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Texture nodes &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Remote nodes" href="remote_nodes.html" />
+    <link rel="prev" title="Shader nodes" href="shader_nodes.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.7
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nodes.html">Nodes overview</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_common.html">Common properties of nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shader_nodes.html">Shader nodes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Texture nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#image-node">Image node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#buffer-node">Buffer node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="nodes.html">Nodes overview</a> &raquo;</li>
+        
+      <li>Texture nodes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="texture-nodes">
+<h1>Texture nodes<a class="headerlink" href="#texture-nodes" title="Permalink to this headline">¶</a></h1>
+<p>Texture nodes are nodes that actually hold and output an image (and as a consequence,
+they are resolution dependant). There are two kinds of texture nodes: the image and
+the buffer.</p>
+<div class="section" id="image-node">
+<h2>Image node<a class="headerlink" href="#image-node" title="Permalink to this headline">¶</a></h2>
+<p>The image node outputs a single image from a file. Its unique parameter is
+the path of the image file.</p>
+</div>
+<div class="section" id="buffer-node">
+<h2>Buffer node<a class="headerlink" href="#buffer-node" title="Permalink to this headline">¶</a></h2>
+<p>The buffer node has a single input and two outputs. It renders its input into a buffer,
+and its outputs will read from that buffer. The first output emits the buffer in full
+resolution, and the second output will generate a given level of detail.</p>
+<p>The buffer node has two parameters:</p>
+<ul class="simple">
+<li><p>the size of the buffer</p></li>
+<li><p>the detail level of the second output</p></li>
+</ul>
+<p>Buffer nodes are generally used as input of shader nodes that sample their inputs multiple
+times (such as convolution nodes).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="remote_nodes.html" class="btn btn-neutral float-right" title="Remote nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="shader_nodes.html" class="btn btn-neutral" title="Shader nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
