@@ -3,3 +3,5 @@
 
 # Compiled documentation
 _build/
+addons/material_maker/examples/*.ptex.import
+addons/material_maker/library/base/*.png.import
