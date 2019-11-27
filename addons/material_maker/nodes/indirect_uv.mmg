@@ -1,0 +1,40 @@
+{
+	"name": "indirect_uv",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "Input",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "UV",
+				"name": "map",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "Indirect UV",
+		"outputs": [
+			{
+				"rgba": "$in($map($uv).xy)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}
