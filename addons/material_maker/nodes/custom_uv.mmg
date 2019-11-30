@@ -1,5 +1,5 @@
 {
-	"name": "indirect_uv",
+	"name": "custom_uv",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -12,7 +12,7 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec4(1.0)",
 				"label": "Input",
 				"name": "in",
 				"type": "rgba"
@@ -25,7 +25,7 @@
 			}
 		],
 		"instance": "",
-		"name": "Indirect UV",
+		"name": "Custom UV",
 		"outputs": [
 			{
 				"rgba": "$in($map($uv).xy)",

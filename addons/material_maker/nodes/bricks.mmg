@@ -5,15 +5,15 @@
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0.05,
-		"columns": 2,
+		"bevel": 0.1,
+		"columns": 3,
 		"corner": 0,
-		"mortar": 0.05,
-		"pattern": 4,
+		"mortar": 0.1,
+		"pattern": 0,
 		"repeat": 1,
 		"round": 0,
 		"row_offset": 0.5,
-		"rows": 2
+		"rows": 6
 	},
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rect = bricks_$pattern($uv, vec2($columns, $rows), $repeat, $row_offset);\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar, $round, max(0.001, $bevel));\n",
