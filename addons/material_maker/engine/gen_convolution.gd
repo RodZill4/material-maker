@@ -181,4 +181,5 @@ func _serialize(data: Dictionary) -> Dictionary:
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	set_convolution_params(data.convolution_params)
+	if data.has("convolution_params"):
+		set_convolution_params(data.convolution_params)

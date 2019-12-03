@@ -1,0 +1,1 @@
+{"convolution_params":{"name":"Edge detect 2","input_type":"rgb","matrix":[[0,-1,0],[-1,4,-1],[0,-1,0]],"output_type":"rgb","x":1,"y":1},"name":"edge_detect","node_position":{"x":0,"y":0},"parameters":{"size":10},"type":"convolution"}
