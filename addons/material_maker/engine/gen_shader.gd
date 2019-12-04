@@ -165,8 +165,6 @@ func subst(string, context, uv = "") -> Dictionary:
 	var tmp_string = replace_variable(string, "seed", str(get_seed()))
 	if tmp_string != string:
 		string = tmp_string
-	if uv != "":
-		string = replace_variable(string, "uv", "("+uv+")")
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
 		for p in shader_model.parameters:
 			if !p.has("name") or !p.has("type"):
@@ -191,6 +189,8 @@ func subst(string, context, uv = "") -> Dictionary:
 				print("Cannot replace parameter of type "+p.type)
 			if value_string != null:
 				string = replace_variable(string, p.name, value_string)
+	if uv != "":
+		string = replace_variable(string, "uv", "("+uv+")")
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true
 		while cont:

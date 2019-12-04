@@ -4,11 +4,11 @@ extends HBoxContainer
 var enum_values = [ {name="Foo", value="foo"} ]
 var enum_current = 0
 
-const ENUM_ADD = -1
-const ENUM_EDIT = -2
-const ENUM_REMOVE = -3
-const ENUM_UP = -4
-const ENUM_DOWN = -5
+const ENUM_ADD = 10000
+const ENUM_EDIT = 10001
+const ENUM_REMOVE = 10002
+const ENUM_UP = 10003
+const ENUM_DOWN = 10004
 
 func _ready() -> void:
 	update_enum_list()

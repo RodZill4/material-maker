@@ -27,7 +27,7 @@ func update_node() -> void:
 		var lines_list = []
 		if generator.editable:
 			lines_list.push_back( { name="outputs", tooltip="Outputs count", min=1, max=5 } )
-			lines_list.push_back( { name="choices", tooltip="Choices count", min=2, max=5 } )
+			lines_list.push_back( { name="choices", tooltip="Choices count", min=2, max=10 } )
 		lines_list.push_back( { name="source", tooltip="Current choice", min=0, max=generator.parameters.choices-1 } )
 		for l in lines_list:
 			var sizer = HBoxContainer.new()

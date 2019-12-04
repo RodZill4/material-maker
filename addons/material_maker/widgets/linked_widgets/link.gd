@@ -41,7 +41,7 @@ func find_control(gp) -> Dictionary:
 			if c.get("controls") != null:
 				for w in c.controls:
 					var widget = c.controls[w]
-					if Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
+					if widget != null and Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
 						return { node=c, widget=widget }
 	return {}
 
@@ -67,7 +67,7 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)
-		target = control.widget if !control.empty() and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
+		target = control.widget if control != null and !control.empty() and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		update()
 	elif event is InputEventMouseButton:
 		if event.pressed:
