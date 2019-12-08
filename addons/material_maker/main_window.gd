@@ -14,6 +14,9 @@ var need_update : bool = false
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 
+onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
+onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
+
 const RECENT_FILES_COUNT = 15
 
 const MENU = [
@@ -473,7 +476,6 @@ func update_preview() -> void:
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
 		if node == null:
 			for n in graph_edit.get_children():
 				if n is GraphNode and n.selected:
@@ -486,7 +488,7 @@ func update_preview_2d(node = null) -> void:
 			var tex = ImageTexture.new()
 			result.copy_to_texture(tex)
 			result.release()
-			preview.set_2d(tex)
+			preview_2d.set_preview_texture(tex)
 
 func update_preview_3d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -495,7 +497,7 @@ func update_preview_3d() -> void:
 		var status = gen_material.render_textures()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		gen_material.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
+		gen_material.update_materials(preview_3d.get_materials())
 
 func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()
@@ -510,7 +512,7 @@ func _on_Projects_tab_changed(tab) -> void:
 		update_preview()
 
 func _on_Preview_show_background_preview(v) -> void:
-	var pv = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/MaterialPreview
+	var pv = preview_3d.get_node("MaterialPreview")
 	var bgpv = $VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport
 	bgpv.world = pv.find_world()
 	$VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview.visible = v
