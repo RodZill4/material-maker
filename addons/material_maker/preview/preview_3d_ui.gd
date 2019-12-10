@@ -1,10 +1,8 @@
-tool
 extends HBoxContainer
 
 signal model_selected(id)
 signal environment_selected(id)
 signal rotate_toggled(b)
-signal background_toggled(b)
 
 func set_models(model_list : Array) -> void:
 	$Model.clear()
@@ -29,6 +27,3 @@ func _on_Environment_item_selected(ID) -> void:
 
 func _on_Rotate_toggled(button_pressed) -> void:
 	emit_signal("rotate_toggled", button_pressed)
-
-func _on_Background_toggled(button_pressed) -> void:
-	emit_signal("background_toggled", button_pressed)

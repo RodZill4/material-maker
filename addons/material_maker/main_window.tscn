@@ -1,12 +1,13 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/library.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/material_maker/preview/preview_2d.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/material_maker/preview/preview_3d.tscn" type="PackedScene" id=4]
-[ext_resource path="res://addons/material_maker/preview/panoramas/epping_forest_01.hdr" type="Texture" id=5]
+[ext_resource path="res://addons/material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=6]
-[ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=7]
+[ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=7]
+[ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=8]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -20,18 +21,15 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 
-[sub_resource type="PanoramaSky" id=3]
-resource_local_to_scene = true
-panorama = ExtResource( 5 )
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 96, 32, 32, 32 )
 
-[sub_resource type="Environment" id=4]
-background_mode = 2
-background_sky = SubResource( 3 )
-background_energy = 1.5
-ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 0.32
-tonemap_mode = 2
-tonemap_white = 16.0
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 96, 64, 32, 32 )
 
 [node name="MainWindow" type="Panel"]
 anchor_right = 1.0
@@ -119,6 +117,8 @@ rect_min_size = Vector2( 250, 250 )
 [node name="Preview3D" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview" instance=ExtResource( 4 )]
 rect_min_size = Vector2( 250, 250 )
 
+[node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" instance=ExtResource( 5 )]
+
 [node name="ProjectsPane" type="Control" parent="VBoxContainer/HBoxContainer"]
 margin_left = 323.0
 margin_right = 1268.0
@@ -127,22 +127,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="BackgroundPreview" type="ViewportContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-stretch = true
-
-[node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview"]
-size = Vector2( 945, 684 )
-handle_input_locally = false
-msaa = 2
-render_target_update_mode = 0
-
-[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport"]
-transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 2.24976, 2.68115 )
-environment = SubResource( 4 )
-current = true
+[node name="Preview3D" parent="VBoxContainer/HBoxContainer/ProjectsPane" instance=ExtResource( 4 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
+ui_path = "../HBoxContainer/HBoxContainer/Preview3DUI"
 
 [node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -160,51 +150,59 @@ margin_bottom = 24.0
 tab_align = 0
 tab_close_display_policy = 1
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = -45.0
+margin_right = 331.0
+margin_bottom = -13.0
+custom_constants/separation = 7
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
+margin_right = 44.0
+margin_bottom = 38.0
+hint_tooltip = "Show 3D preview"
+toggle_mode = true
+icon = SubResource( 3 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
+visible = false
+margin_left = 51.0
+margin_right = 354.0
+margin_bottom = 38.0
+custom_constants/separation = 8
+
+[node name="ControlView" type="TextureRect" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer"]
+margin_top = 3.0
+margin_right = 32.0
+margin_bottom = 35.0
+size_flags_vertical = 4
+texture = SubResource( 4 )
+
+[node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer" instance=ExtResource( 5 )]
+anchor_right = 0.0
+margin_left = 40.0
+margin_top = 8.0
+margin_right = 303.0
+margin_bottom = 30.0
+size_flags_vertical = 4
+
 [node name="NodeFactory" type="Node" parent="."]
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 [connection signal="need_update" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" to="." method="update_preview_3d"]
-[connection signal="show_background_preview" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" to="." method="_on_Preview_show_background_preview"]
+[connection signal="environment_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Environment_item_selected"]
+[connection signal="model_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Model_item_selected"]
+[connection signal="rotate_toggled" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Rotate_toggled"]
+[connection signal="need_update" from="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" to="." method="update_preview_3d"]
 [connection signal="no_more_tabs" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="new_material"]
 [connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="_on_Projects_resized"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects" to="." method="_on_Projects_tab_changed"]
-[connection signal="connection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="connect_node"]
-[connection signal="disconnection_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="disconnect_node"]
-[connection signal="duplicate_nodes_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit" method="duplicate_selected"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer2/metallic" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer3/roughness" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer4/emission_energy" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer5/normal_scale" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer6/ao_light_affect" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer7/depth_scale" method="_on_LineEdit_text_entered"]
-[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="_on_LineEdit_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="do_update"]
-[connection signal="text_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects/GraphEdit/node_Material/HBoxContainer8/subsurf_scatter_strength" method="_on_LineEdit_text_entered"]
 [connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="close_tab"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/Button" to="." method="show_background_preview"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/ControlView" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="on_gui_input"]
+[connection signal="environment_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Environment_item_selected"]
+[connection signal="model_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Model_item_selected"]
+[connection signal="rotate_toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Rotate_toggled"]

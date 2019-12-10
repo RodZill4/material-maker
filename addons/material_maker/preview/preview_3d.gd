@@ -1,4 +1,3 @@
-tool
 extends ViewportContainer
 
 const ENVIRONMENTS = [
@@ -7,6 +6,8 @@ const ENVIRONMENTS = [
 
 const CAMERA_DISTANCE_MIN = 1.0
 const CAMERA_DISTANCE_MAX = 10.0
+
+export var ui_path : String = "Preview3DUI"
 
 onready var objects = $MaterialPreview/Preview3d/Objects
 onready var current_object = objects.get_child(0)
@@ -17,8 +18,9 @@ onready var current_environment = environments.get_child(0)
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 
-signal need_update
-signal show_background_preview
+onready var ui = get_node(ui_path)
+
+signal need_update(me)
 
 func _ready() -> void:
 	var model_list : Array = []
@@ -26,25 +28,23 @@ func _ready() -> void:
 		var m = o.get_surface_material(0)
 		o.set_surface_material(0, m.duplicate())
 		model_list.push_back(o.name)
-	$Preview3DUI.set_models(model_list)
+	ui.set_models(model_list)
 	var environment_list : Array = []
 	for e in environments.get_children():
 		environment_list.push_back(e.name)
-	$Preview3DUI.set_environments(environment_list)
+	ui.set_environments(environment_list)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
-	$MaterialPreview/Preview3d/CameraPivot/Camera/RemoteTransform.set_remote_node("../../../../../../../../ProjectsPane/BackgroundPreview/Viewport/Camera")
 
 func _on_Model_item_selected(id) -> void:
 	current_object.visible = false
 	current_object = objects.get_child(id)
 	current_object.visible = true
-	emit_signal("need_update")
+	emit_signal("need_update", [ self ])
 
 func _on_Environment_item_selected(id) -> void:
 	current_environment.visible = false
 	current_environment = environments.get_child(id)
 	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
-	get_node("../../../ProjectsPane/BackgroundPreview/Viewport/Camera").set_environment(current_environment.environment)
 	current_environment.visible = true
 
 func _on_Rotate_toggled(button_pressed) -> void:
@@ -53,16 +53,13 @@ func _on_Rotate_toggled(button_pressed) -> void:
 	else:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 
-func _on_Background_toggled(button_pressed) -> void:
-	emit_signal("show_background_preview", button_pressed)
-
 func get_materials() -> Array:
 	return [ current_object.get_surface_material(0) ]
 
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-		$Preview3DUI.rotation_cancelled()
+		ui.rotation_cancelled()
 		match event.button_index:
 			BUTTON_WHEEL_UP:
 				camera.translation.z = clamp(
