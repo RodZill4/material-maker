@@ -6,24 +6,30 @@
 code = "shader_type canvas_item;
 
 uniform sampler2D tex;
+uniform vec2 size;
 
 void fragment() {
-	COLOR = texture(tex, UV);
+	float ms = max(size.x, size.y);
+	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
+	vec2 m2 = min(fract(uv), 1.0-fract(uv));
+	COLOR = mix(texture(tex, uv), vec4(0.0, 1.0, 0.0, 1.0), step(min(m2.x, m2.y), 1.0/min(size.x, size.y)));
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+shader_param/size = Vector2( 371, 198 )
 
 [node name="Preview2D" type="ColorRect"]
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+margin_left = 17.0
+margin_top = 17.0
+margin_right = -892.0
+margin_bottom = -505.0
 rect_min_size = Vector2( 64, 64 )
 mouse_filter = 1
 size_flags_horizontal = 0
 size_flags_vertical = 8
 script = ExtResource( 1 )
+[connection signal="resized" from="." to="." method="on_resized"]

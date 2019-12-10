@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/library.tscn" type="PackedScene" id=2]
@@ -8,18 +8,6 @@
 [ext_resource path="res://addons/material_maker/widgets/tabs.gd" type="Script" id=6]
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=7]
 [ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=8]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform sampler2D tex;
-
-void fragment() {
-	COLOR = texture(tex, UV);
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
@@ -111,7 +99,10 @@ margin_bottom = 684.0
 tab_align = 0
 
 [node name="Preview2D" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview" instance=ExtResource( 3 )]
-material = SubResource( 2 )
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 rect_min_size = Vector2( 250, 250 )
 
 [node name="Preview3D" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview" instance=ExtResource( 4 )]
