@@ -9,12 +9,12 @@
 [ext_resource path="res://addons/material_maker/icons/icons.svg" type="Texture" id=7]
 [ext_resource path="res://addons/material_maker/node_factory.gd" type="Script" id=8]
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 96, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 7 )
 region = Rect2( 96, 64, 32, 32 )
@@ -155,7 +155,7 @@ margin_right = 44.0
 margin_bottom = 38.0
 hint_tooltip = "Show 3D preview"
 toggle_mode = true
-icon = SubResource( 3 )
+icon = SubResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
 visible = false
@@ -169,7 +169,7 @@ margin_top = 3.0
 margin_right = 32.0
 margin_bottom = 35.0
 size_flags_vertical = 4
-texture = SubResource( 4 )
+texture = SubResource( 2 )
 
 [node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0

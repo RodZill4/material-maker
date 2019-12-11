@@ -1,4 +1,3 @@
-tool
 extends MMGraphNodeBase
 class_name MMGraphNodeGeneric
 

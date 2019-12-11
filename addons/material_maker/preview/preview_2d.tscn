@@ -17,16 +17,14 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
-shader_param/size = Vector2( 371, 198 )
+shader_param/size = Vector2( 64, 64 )
 
 [node name="Preview2D" type="ColorRect"]
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 17.0
-margin_top = 17.0
-margin_right = -892.0
-margin_bottom = -505.0
+margin_right = -1216.0
+margin_bottom = -656.0
 rect_min_size = Vector2( 64, 64 )
 mouse_filter = 1
 size_flags_horizontal = 0
