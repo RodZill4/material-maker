@@ -15,6 +15,12 @@ func set_model_data(data) -> void:
 	elif data.has("rgba"):
 		$Type.selected = 2
 		$Value.text = data.rgba
+	elif data.has("sdf2d"):
+		$Type.selected = 3
+		$Value.text = data.sdf2d
+	elif data.has("sdf3d"):
+		$Type.selected = 4
+		$Value.text = data.sdf3d
 	elif data.has("f"):
 		$Type.selected = 0
 		$Value.text = data.f
@@ -24,6 +30,10 @@ func get_model_data() -> Dictionary:
 		return { rgb=$Value.text }
 	elif $Type.selected == 2:
 		return { rgba=$Value.text }
+	elif $Type.selected == 3:
+		return { sdf2d=$Value.text }
+	elif $Type.selected == 4:
+		return { sdf3d=$Value.text }
 	else:
 		return { f=$Value.text }
 

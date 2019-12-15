@@ -2,17 +2,12 @@ tool
 extends MMGenBase
 class_name MMGenShader
 
+
 var shader_model : Dictionary = {}
 var uses_seed = false
 
 var editable = false
 
-const PORT_TYPES : Dictionary = {
-	rgba = { type="vec4" },
-	rgb  = { type="vec3" },
-	f    = { type="float" }
-}
-const GENERATE_FUNCTIONS : bool = false
 
 func toggle_editable() -> bool:
 	editable = !editable
@@ -60,16 +55,12 @@ func set_shader_model(data: Dictionary) -> void:
 		for i in range(shader_model.outputs.size()):
 			var output = shader_model.outputs[i]
 			var output_code = ""
-			if output.has("rgba"):
-				shader_model.outputs[i].type = "rgba"
-				output_code = output.rgba
-			elif output.has("rgb"):
-				shader_model.outputs[i].type = "rgb"
-				output_code = output.rgb
-			elif output.has("f"):
-				shader_model.outputs[i].type = "f"
-				output_code = output.f
-			else:
+			for f in PORT_TYPES.keys():
+				if output.has(f):
+					shader_model.outputs[i].type = f
+					output_code = output[f]
+					break
+			if output_code == "":
 				print("Unsupported output type")
 			if output_code.find("$seed") != -1 or output_code.find("$(seed)") != -1:
 				uses_seed = true
@@ -132,7 +123,10 @@ func replace_input(string : String, context, input : String, type : String, src 
 			src_code = src.generator.get_shader_code(uv, src.output_index, context)
 			while src_code is GDScriptFunctionState:
 				src_code = yield(src_code, "completed")
-			src_code.string = src_code[type]
+			if src_code.has(type):
+				src_code.string = src_code[type]
+			else:
+				src_code.string = "*error*"
 		# Add global definitions
 		if src_code.has("globals"):
 			for d in src_code.globals:
@@ -218,7 +212,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			for i in range(shader_model.inputs.size()):
 				var input = shader_model.inputs[i]
 				var source = get_source(i)
-				if GENERATE_FUNCTIONS:
+				if input.has("function") and input.function:
 					string = replace_input_with_function_call(string, input.name)
 				else:
 					var result = replace_input(string, context, input.name, input.type, source, input.default)
@@ -251,14 +245,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var rv = { globals=[], defs="", code="", textures={} }
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
-		if shader_model.has("instance") && !context.has_variant(self):
-			var subst_output = subst(shader_model.instance, context, "")
-			while subst_output is GDScriptFunctionState:
-				subst_output = yield(subst_output, "completed")
-			rv.defs += subst_output.string
-			# process textures
-			for t in subst_output.textures.keys():
-				rv.textures[t] = subst_output.textures[t]
+		if !context.has_variant(self):
 			# Generate functions for gradients
 			for p in shader_model.parameters:
 				if p.type == "gradient":
@@ -270,10 +257,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			# Generate functions for inputs
 			if shader_model.has("inputs"):
 				for i in range(shader_model.inputs.size()):
-					if GENERATE_FUNCTIONS:
-						var input = shader_model.inputs[i]
+					var input = shader_model.inputs[i]
+					if input.has("function") and input.function:
 						var source = get_source(i)
-						var string = "$%s(uv)" % input.name
+						var string = "$%s(%s)" % [ input.name, PORT_TYPES[input.type].params ]
 						var local_context = MMGenContext.new(context)
 						var result = replace_input(string, local_context, input.name, input.type, source, input.default)
 						while result is GDScriptFunctionState:
@@ -287,9 +274,17 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						# Add textures
 						for t in result.textures.keys():
 							rv.textures[t] = result.textures[t]
-						rv.defs += "%s %s_input_%s(vec2 uv) {\n" % [ PORT_TYPES[input.type].type, genname, input.name ]
+						rv.defs += "%s %s_input_%s(%s) {\n" % [ PORT_TYPES[input.type].type, genname, input.name, PORT_TYPES[input.type].paramdefs ]
 						rv.defs += "%s\n" % result.code
 						rv.defs += "return %s;\n}\n" % result.string
+			if shader_model.has("instance"):
+				var subst_output = subst(shader_model.instance, context, "")
+				while subst_output is GDScriptFunctionState:
+					subst_output = yield(subst_output, "completed")
+				rv.defs += subst_output.string
+				# process textures
+				for t in subst_output.textures.keys():
+					rv.textures[t] = subst_output.textures[t]
 		# Add inline code
 		if shader_model.has("code"):
 			var variant_index = context.get_variant(self, uv)

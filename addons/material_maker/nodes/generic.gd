@@ -175,14 +175,12 @@ func update_node() -> void:
 		var enable_left = false
 		var color_left = Color(0.5, 0.5, 0.5)
 		if typeof(input) == TYPE_DICTIONARY:
-			if input.type == "rgb":
-				enable_left = true
-				color_left = Color(0.5, 0.5, 1.0)
-			elif input.type == "rgba":
-				enable_left = true
-				color_left = Color(0.0, 0.5, 0.0, 0.5)
-			else:
-				enable_left = true
+			enable_left = true
+			match input.type:
+				"rgb": color_left = Color(0.5, 0.5, 1.0)
+				"rgba": color_left = Color(0.0, 0.5, 0.0, 0.5)
+				"sdf2d": color_left = Color(1.0, 0.5, 0.0, 1.0)
+				"sdf3d": color_left = Color(1.0, 0.0, 0.0, 1.0)
 		set_slot(i, enable_left, 0, color_left, false, 0, Color())
 		var hsizer : HBoxContainer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -240,7 +238,8 @@ func update_node() -> void:
 				label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				hsizer.add_child(label_widget)
 			control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.add_child(control)
+			if hsizer != null:
+				hsizer.add_child(control)
 	initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
@@ -256,6 +255,8 @@ func update_node() -> void:
 		match output.type:
 			"rgb": color_right = Color(0.5, 0.5, 1.0)
 			"rgba": color_right = Color(0.0, 0.5, 0.0, 0.5)
+			"sdf2d": color_right = Color(1.0, 0.5, 0.0, 1.0)
+			"sdf3d": color_right = Color(1.0, 0.0, 0.0, 1.0)
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
 		var hsizer : HBoxContainer
 		while i >= get_child_count():
@@ -383,7 +384,7 @@ func update_preview(size : int = 0) -> void:
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	var result = generator.render(preview_index, preview_size)
+	var result = generator.render(preview_index, preview_size, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if preview.texture == null:

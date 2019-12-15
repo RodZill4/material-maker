@@ -66,7 +66,7 @@ margin_left = 125.0
 margin_right = 171.0
 margin_bottom = 20.0
 text = "Tools"
-items = [ "Create", null, 0, false, false, -1, 0, null, "PopupMenu", false, "Create group", null, 0, false, false, 19, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 20, 268435543, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Add selected node to user library", null, 0, false, false, 22, 0, null, "", false, "Export the nodes library", null, 0, false, false, 23, 0, null, "", false ]
+items = [ "Create", null, 0, false, false, 0, 0, null, "PopupMenu", false, "Create group", null, 0, false, false, 19, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 20, 268435543, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Add selected node to user library", null, 0, false, false, 22, 0, null, "", false, "Export the nodes library", null, 0, false, false, 23, 0, null, "", false ]
 
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 175.0

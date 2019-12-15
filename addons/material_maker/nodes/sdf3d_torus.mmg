@@ -1,0 +1,50 @@
+{
+	"name": "sdf3d_torus",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"R": 0.25,
+		"r": 0.1,
+		"sx": 0.1,
+		"sy": 0.1,
+		"sz": 0.02
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_q = vec2(length($uv.xy)-$R,$uv.z);\n",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Torus",
+		"outputs": [
+			{
+				"sdf3d": "length($(name_uv)_q)-$r",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "R",
+				"max": 1,
+				"min": 0,
+				"name": "R",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.1,
+				"label": "r",
+				"max": 0.5,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

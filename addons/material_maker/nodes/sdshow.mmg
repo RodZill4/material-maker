@@ -1,17 +1,15 @@
 {
-	"name": "sdroundedshape",
+	"name": "sdshow",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0,
+		"bevel": 0.1,
 		"cx": 0,
 		"cy": 0,
 		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
-		"r": 0.1,
+		"r": 0.3,
 		"w": 0.28
 	},
 	"shader_model": {
@@ -26,20 +24,20 @@
 			}
 		],
 		"instance": "",
-		"name": "sdRoundedShape",
+		"name": "sdShow",
 		"outputs": [
 			{
-				"sdf2d": "$in($uv)-$r",
-				"type": "sdf2d"
+				"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+				"type": "f"
 			}
 		],
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Bevel",
 				"max": 1,
 				"min": 0,
-				"name": "r",
+				"name": "bevel",
 				"step": 0.01,
 				"type": "float"
 			}

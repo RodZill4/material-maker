@@ -58,7 +58,7 @@ margin_bottom = 25.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "GreyScale"
-items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, -1, null ]
+items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null ]
 selected = 0
 
 [node name="Value" type="LineEdit" parent="."]

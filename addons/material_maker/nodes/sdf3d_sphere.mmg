@@ -1,41 +1,29 @@
 {
-	"name": "sdroundedshape",
+	"name": "sdf3d_sphere",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0,
-		"cx": 0,
-		"cy": 0,
-		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
-		"r": 0.1,
-		"w": 0.28
+		"r": 0.5
 	},
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
-			{
-				"default": "0.0",
-				"label": "",
-				"name": "in",
-				"type": "sdf2d"
-			}
+
 		],
 		"instance": "",
-		"name": "sdRoundedShape",
+		"name": "Sphere",
 		"outputs": [
 			{
-				"sdf2d": "$in($uv)-$r",
-				"type": "sdf2d"
+				"sdf3d": "length($uv)-$r",
+				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": 0.5,
 				"label": "",
 				"max": 1,
 				"min": 0,
