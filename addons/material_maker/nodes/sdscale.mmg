@@ -1,0 +1,46 @@
+{
+	"name": "sdscale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 0,
+		"s": 1,
+		"x": 0.35,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"name": "Scale",
+		"outputs": [
+			{
+				"sdf3d": "$in(($uv)/$s)*$s",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"max": 5,
+				"min": 0,
+				"name": "s",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

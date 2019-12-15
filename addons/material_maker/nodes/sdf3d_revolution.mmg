@@ -1,0 +1,47 @@
+{
+	"name": "sdf3d_revolution",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 0,
+		"d": 0.25,
+		"s": 1,
+		"x": 0.35,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_q = vec2(length($uv.xy)-$d+0.5, $uv.z+0.5);\n",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "Revolution",
+		"outputs": [
+			{
+				"sdf3d": "$in($(name_uv)_q)",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.25,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "d",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
