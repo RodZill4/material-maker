@@ -1,0 +1,50 @@
+{
+	"name": "sdf3d_cylinder",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"l": 0.25,
+		"r": 0.1,
+		"sx": 0.25,
+		"sy": 0.25,
+		"sz": 0.5
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_d = abs(vec2(length($uv.xz),$uv.y)) - vec2($r,$l);\n",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Cylinder",
+		"outputs": [
+			{
+				"sdf3d": "min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0) + length(max($(name_uv)_d,0.0))",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "Length",
+				"max": 1,
+				"min": 0,
+				"name": "l",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.2,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
