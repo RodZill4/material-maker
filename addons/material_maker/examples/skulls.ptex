@@ -13,108 +13,6 @@
 			"to_port": 2
 		},
 		{
-			"from": "sdf3d_box",
-			"from_port": 0,
-			"to": "sdf3d_smoothboolean",
-			"to_port": 1
-		},
-		{
-			"from": "sdf3d_smoothboolean",
-			"from_port": 0,
-			"to": "sdf3d_smoothboolean_2",
-			"to_port": 1
-		},
-		{
-			"from": "sdf3d_smoothboolean_2",
-			"from_port": 0,
-			"to": "_3",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_torus",
-			"from_port": 0,
-			"to": "sdf3d_translate",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_translate",
-			"from_port": 0,
-			"to": "sdf3d_smoothboolean_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_sphere",
-			"from_port": 0,
-			"to": "sdf3d_translate_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_translate_2",
-			"from_port": 0,
-			"to": "sdf3d_boolean",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_sphere",
-			"from_port": 0,
-			"to": "sdf3d_translate_2_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_translate_2_2",
-			"from_port": 0,
-			"to": "sdf3d_boolean",
-			"to_port": 1
-		},
-		{
-			"from": "sdf3d_boolean",
-			"from_port": 0,
-			"to": "sdf3d_translate_3",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_translate_3",
-			"from_port": 0,
-			"to": "sdf3d_smoothboolean",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_smoothboolean_2",
-			"from_port": 0,
-			"to": "sdscale",
-			"to_port": 0
-		},
-		{
-			"from": "sdbox",
-			"from_port": 0,
-			"to": "sdboolean",
-			"to_port": 1
-		},
-		{
-			"from": "sdrhombus_2",
-			"from_port": 0,
-			"to": "sdboolean",
-			"to_port": 0
-		},
-		{
-			"from": "sdboolean",
-			"from_port": 0,
-			"to": "_4_2_3",
-			"to_port": 0
-		},
-		{
-			"from": "_4_2_3",
-			"from_port": 0,
-			"to": "sdf3d_revolution",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_revolution",
-			"from_port": 0,
-			"to": "sdrotate",
-			"to_port": 0
-		},
-		{
 			"from": "perlin",
 			"from_port": 0,
 			"to": "colorize_2",
@@ -352,45 +250,6 @@
 			"type": "material"
 		},
 		{
-			"name": "_3",
-			"node_position": {
-				"x": -563.5,
-				"y": -507
-			},
-			"parameters": {
-
-			},
-			"shader_model": {
-				"code": "float $(name_uv)_d = raymarch_$name($uv);\n",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "sdf",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "float input_$name(vec3 p) {\n\treturn min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO=0.;\n    \n    for (int i=0; i < 50; i++) {\n    \tvec3 p = ro + rd*dO;\n        float dS = input_$name(p);\n        dO += dS;\n        if (dO > 0.001 && dS < 0.0001) break;\n    }\n    \n    return dO;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = input_$name(p);\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        input_$name(p-vec3(e, 0.0, 0.0)),\n        input_$name(p-vec3(0.0, e, 0.0)),\n        input_$name(p-vec3(0.0, 0.0, e)));\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
-				"name": "Raymarching",
-				"outputs": [
-					{
-						"f": "1.0-$(name_uv)_d",
-						"type": "f"
-					},
-					{
-						"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d))",
-						"type": "rgb"
-					}
-				],
-				"parameters": [
-
-				]
-			},
-			"type": "shader"
-		},
-		{
 			"name": "perlin",
 			"node_position": {
 				"x": -385.399658,
@@ -435,524 +294,6 @@
 			"type": "colorize"
 		},
 		{
-			"name": "sdf3d_boolean",
-			"node_position": {
-				"x": -985.049805,
-				"y": -699.10498
-			},
-			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"op": 0,
-				"r": 0.3,
-				"w": 0.28
-			},
-			"type": "sdf3d_boolean"
-		},
-		{
-			"name": "sdf3d_box",
-			"node_position": {
-				"x": -1189.376221,
-				"y": -426.60495
-			},
-			"parameters": {
-				"r": 0.26,
-				"sx": 0.1,
-				"sy": 0.1,
-				"sz": 0.02
-			},
-			"shader_model": {
-				"code": "vec3 $(name_uv)_q = abs($uv) - vec3($sx, $sy, $sz);\n",
-				"global": "",
-				"inputs": [
-
-				],
-				"instance": "",
-				"name": "Box",
-				"outputs": [
-					{
-						"sdf3d": "length(max($(name_uv)_q,0.0))+min(max($(name_uv)_q.x,max($(name_uv)_q.y,$(name_uv)_q.z)),0.0)-$r",
-						"type": "sdf3d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0.5,
-						"label": "Size X",
-						"max": 1,
-						"min": 0,
-						"name": "sx",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.5,
-						"label": "Size Y",
-						"max": 1,
-						"min": 0,
-						"name": "sy",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.5,
-						"label": "Size Z",
-						"max": 1,
-						"min": 0,
-						"name": "sz",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.5,
-						"label": "Radius",
-						"max": 1,
-						"min": 0,
-						"name": "r",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdf3d_torus",
-			"node_position": {
-				"x": -981.376282,
-				"y": -453.60495
-			},
-			"parameters": {
-				"R": 0.38,
-				"a1": 0.5,
-				"a2": 0.865,
-				"r": 0.03,
-				"sx": 0.1,
-				"sy": 0.1,
-				"sz": 0.02
-			},
-			"shader_model": {
-				"code": "\n",
-				"global": "float sdf3CappedTorus(vec3 p, float R, float r, vec2 sc) {\n\tp.x = abs(p.x);\n\tfloat k = (sc.y*p.x>sc.x*p.y)?dot(p.xy,sc):length(p.xy);\n\treturn sqrt(dot(p,p)+R*R-2.0*R*k)-r;\n}\n",
-				"inputs": [
-
-				],
-				"instance": "",
-				"name": "Capped Torus",
-				"outputs": [
-					{
-						"sdf3d": "sdf3CappedTorus($uv, $R, $r, vec2($a1, $a2))",
-						"type": "sdf3d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0.5,
-						"label": "R",
-						"max": 1,
-						"min": 0,
-						"name": "R",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.1,
-						"label": "r",
-						"max": 0.5,
-						"min": 0,
-						"name": "r",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.5,
-						"label": "A1",
-						"max": 1,
-						"min": 0,
-						"name": "a1",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0.5,
-						"label": "A2",
-						"max": 1,
-						"min": 0,
-						"name": "a2",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdf3d_smoothboolean",
-			"node_position": {
-				"x": -986.049805,
-				"y": -523.10498
-			},
-			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"k": 0.02,
-				"op": 1,
-				"r": 0.3,
-				"w": 0.28
-			},
-			"type": "sdf3d_smoothboolean"
-		},
-		{
-			"name": "sdf3d_smoothboolean_2",
-			"node_position": {
-				"x": -758.569458,
-				"y": -341.337097
-			},
-			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"k": 0.04,
-				"op": 1,
-				"r": 0.3,
-				"w": 0.28
-			},
-			"type": "sdf3d_smoothboolean"
-		},
-		{
-			"name": "sdf3d_sphere",
-			"node_position": {
-				"x": -1164.049805,
-				"y": -693.10498
-			},
-			"parameters": {
-				"r": 0.07
-			},
-			"type": "sdf3d_sphere"
-		},
-		{
-			"name": "sdf3d_translate",
-			"node_position": {
-				"x": -977.057617,
-				"y": -329.090332
-			},
-			"parameters": {
-				"x": 0,
-				"y": -0.19,
-				"z": 0.23
-			},
-			"type": "sdf3d_translate"
-		},
-		{
-			"name": "sdf3d_translate_2",
-			"node_position": {
-				"x": -1172.057617,
-				"y": -640.590332
-			},
-			"parameters": {
-				"x": 0.17,
-				"y": 0,
-				"z": 0
-			},
-			"type": "sdf3d_translate"
-		},
-		{
-			"name": "sdf3d_translate_2_2",
-			"node_position": {
-				"x": -1171.057617,
-				"y": -537.090332
-			},
-			"parameters": {
-				"x": -0.17,
-				"y": 0,
-				"z": 0
-			},
-			"type": "sdf3d_translate"
-		},
-		{
-			"name": "sdf3d_translate_3",
-			"node_position": {
-				"x": -983.057617,
-				"y": -640.340332
-			},
-			"parameters": {
-				"x": 0,
-				"y": -0.12,
-				"z": 0.23
-			},
-			"type": "sdf3d_translate"
-		},
-		{
-			"name": "sdscale",
-			"node_position": {
-				"x": -972.057617,
-				"y": -229.090332
-			},
-			"parameters": {
-				"a": 0,
-				"s": 1,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "",
-				"name": "Scale",
-				"outputs": [
-					{
-						"sdf3d": "$in(($uv)/$s)*$s",
-						"type": "sdf3d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 1,
-						"label": "",
-						"max": 5,
-						"min": 0,
-						"name": "s",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdrotate",
-			"node_position": {
-				"x": -722.057617,
-				"y": 347.909668
-			},
-			"parameters": {
-				"a": 0,
-				"ax": 18,
-				"ay": -28,
-				"az": -29,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "",
-				"name": "Rotate",
-				"outputs": [
-					{
-						"sdf3d": "$in(rotate3d($uv, -vec3($ax, $ay, $az)*0.01745329251))",
-						"type": "sdf3d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0,
-						"label": "X",
-						"max": 180,
-						"min": -180,
-						"name": "ax",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Y",
-						"max": 180,
-						"min": -180,
-						"name": "ay",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Z",
-						"max": 180,
-						"min": -180,
-						"name": "az",
-						"step": 1,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdrhombus_2",
-			"node_position": {
-				"x": -1116.057617,
-				"y": 261.159668
-			},
-			"parameters": {
-				"cx": 0,
-				"cy": 0,
-				"h": 0.29,
-				"r": 0.3,
-				"w": 0.3
-			},
-			"type": "sdrhombus"
-		},
-		{
-			"name": "sdbox",
-			"node_position": {
-				"x": -1119.057617,
-				"y": 401.159668
-			},
-			"parameters": {
-				"cx": 0,
-				"cy": 0,
-				"h": 0.2,
-				"r": 0.3,
-				"w": 0.2
-			},
-			"shader_model": {
-				"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
-				"global": "",
-				"inputs": [
-
-				],
-				"instance": "",
-				"name": "sdBox",
-				"outputs": [
-					{
-						"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
-						"type": "sdf2d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0.5,
-						"label": "Width",
-						"max": 1,
-						"min": 0,
-						"name": "w",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 1,
-						"label": "Height",
-						"max": 1,
-						"min": 0,
-						"name": "h",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Center X",
-						"max": 1,
-						"min": -1,
-						"name": "cx",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Center Y",
-						"max": 1,
-						"min": -1,
-						"name": "cy",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdboolean",
-			"node_position": {
-				"x": -894.057617,
-				"y": 297.159668
-			},
-			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"op": 0,
-				"r": 0.3,
-				"w": 0.28
-			},
-			"type": "sdboolean"
-		},
-		{
-			"name": "_4_2_3",
-			"node_position": {
-				"x": -903.047241,
-				"y": 363.697357
-			},
-			"parameters": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf2d"
-					}
-				],
-				"instance": "",
-				"name": "Translate",
-				"outputs": [
-					{
-						"sdf2d": "$in($uv-vec2($x, $y))",
-						"type": "sdf2d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0,
-						"label": "X",
-						"max": 1,
-						"min": -1,
-						"name": "x",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Y",
-						"max": 1,
-						"min": -1,
-						"name": "y",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
 			"name": "_3_2",
 			"node_position": {
 				"x": -378.336426,
@@ -987,53 +328,6 @@
 				],
 				"parameters": [
 
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdf3d_revolution",
-			"node_position": {
-				"x": -714.403931,
-				"y": 295.330994
-			},
-			"parameters": {
-				"a": 0,
-				"d": 0.43,
-				"s": 1,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "vec2 $(name_uv)_w = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);\n",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf2d"
-					}
-				],
-				"instance": "",
-				"name": "Extrusion",
-				"outputs": [
-					{
-						"sdf3d": "min(max($(name_uv)_w.x,$(name_uv)_w.y),0.0)+length(max($(name_uv)_w,0.0))",
-						"type": "sdf3d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0.25,
-						"label": "",
-						"max": 1,
-						"min": 0,
-						"name": "d",
-						"step": 0.01,
-						"type": "float"
-					}
 				]
 			},
 			"type": "shader"
@@ -1212,8 +506,8 @@
 			"label": "Skull",
 			"name": "graph",
 			"node_position": {
-				"x": -972.86731,
-				"y": 1204.615234
+				"x": -976.147278,
+				"y": 1205.431274
 			},
 			"nodes": [
 				{
@@ -1995,8 +1289,8 @@
 		{
 			"name": "sdf3d_repeat_2",
 			"node_position": {
-				"x": -928.880676,
-				"y": 1590.431152
+				"x": -931.880676,
+				"y": 1576.431152
 			},
 			"parameters": {
 				"a": 0,
@@ -2076,8 +1370,8 @@
 			"label": "Bone",
 			"name": "graph_2",
 			"node_position": {
-				"x": -978.480713,
-				"y": 1472.556274
+				"x": -1109.480713,
+				"y": 1577.556274
 			},
 			"nodes": [
 				{
@@ -2306,8 +1600,8 @@
 		{
 			"name": "sdf3d_scale_3",
 			"node_position": {
-				"x": -923.764893,
-				"y": 1534.628418
+				"x": -1130.764893,
+				"y": 1621.628418
 			},
 			"parameters": {
 				"a": 0,
@@ -2351,8 +1645,8 @@
 		{
 			"name": "sdf3d_repeat_2_2",
 			"node_position": {
-				"x": -933.362671,
-				"y": 1695.529785
+				"x": -936.362671,
+				"y": 1681.529785
 			},
 			"parameters": {
 				"a": 0,
@@ -2369,7 +1663,7 @@
 		{
 			"name": "sdf3d_translate_4_2_2",
 			"node_position": {
-				"x": -758.32666,
+				"x": -753.32666,
 				"y": 1681.727051
 			},
 			"parameters": {
@@ -2382,8 +1676,8 @@
 		{
 			"name": "sdf3d_boolean_2_2_2",
 			"node_position": {
-				"x": -550.344666,
-				"y": 1585.128418
+				"x": -546.344666,
+				"y": 1580.128418
 			},
 			"parameters": {
 				"bevel": 0,
