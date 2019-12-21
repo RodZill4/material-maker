@@ -730,7 +730,7 @@
 			"parameters": {
 				"cx": 0,
 				"cy": 0,
-				"r": 0.25
+				"r": 0.4
 			},
 			"tree_item": "Simple/SDF/Shapes/sdCircle",
 			"type": "sdcircle"
@@ -746,8 +746,61 @@
 				"r": 0.3,
 				"w": 0.3
 			},
+			"shader_model": {
+				"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
+				"global": "",
+				"inputs": [
+
+				],
+				"instance": "",
+				"name": "sdBox",
+				"outputs": [
+					{
+						"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
+						"type": "sdf2d"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0.5,
+						"label": "Width",
+						"max": 1,
+						"min": 0,
+						"name": "w",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 1,
+						"label": "Height",
+						"max": 1,
+						"min": 0,
+						"name": "h",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Center X",
+						"max": 1,
+						"min": -1,
+						"name": "cx",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Center Y",
+						"max": 1,
+						"min": -1,
+						"name": "cy",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
 			"tree_item": "Simple/SDF/Shapes/sdBox",
-			"type": "sdbox"
+			"type": "shader"
 		},
 		{
 			"collapsed": true,
@@ -819,21 +872,21 @@
 						"default": "0.0",
 						"label": "",
 						"name": "in1",
-						"type": "f"
+						"type": "sdf2d"
 					},
 					{
 						"default": "0.0",
 						"label": "",
 						"name": "in2",
-						"type": "f"
+						"type": "sdf2d"
 					}
 				],
 				"instance": "",
 				"name": "sdSmoothBoolean",
 				"outputs": [
 					{
-						"f": "sdSmooth$op($in1($uv), $in2($uv), $k)",
-						"type": "f"
+						"sdf2d": "sdSmooth$op($in1($uv), $in2($uv), $k)",
+						"type": "sdf2d"
 					}
 				],
 				"parameters": [
@@ -882,7 +935,7 @@
 				"h": 0.08,
 				"k": 0.15,
 				"op": 0,
-				"r": 0.1,
+				"r": 0.2,
 				"w": 0.28
 			},
 			"tree_item": "Simple/SDF/Operators/sdRoundedShape",
@@ -899,7 +952,7 @@
 				"h": 0.08,
 				"k": 0.15,
 				"op": 0,
-				"r": 0.05,
+				"r": 0.1,
 				"w": 0.28
 			},
 			"tree_item": "Simple/SDF/Operators/sdAnnularShape",
@@ -908,7 +961,7 @@
 		{
 			"collapsed": true,
 			"icon": "simple_sdf_operators_sdshow",
-			"name": "sdshow",
+			"name": "sdshow_2",
 			"parameters": {
 				"bevel": 0.1,
 				"cx": 0,
@@ -917,39 +970,274 @@
 				"r": 0.3,
 				"w": 0.28
 			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "sdShow",
-				"outputs": [
-					{
-						"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0,
-						"label": "Bevel",
-						"max": 1,
-						"min": 0,
-						"name": "bevel",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
 			"tree_item": "Simple/SDF/Operators/sdShow",
-			"type": "shader"
+			"type": "sdshow"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "Simple/SDF/Transforms"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_transforms_translate",
+			"name": "sdtranslate",
+			"parameters": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "Simple/SDF/Transforms/Translate",
+			"type": "sdtranslate"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "3D"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_sphere",
+			"name": "sdf3d_sphere",
+			"parameters": {
+				"r": 0.4
+			},
+			"tree_item": "3D/SDF/Shapes/Sphere",
+			"type": "sdf3d_sphere"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_box",
+			"name": "sdf3d_box",
+			"parameters": {
+				"r": 0.01,
+				"sx": 0.3,
+				"sy": 0.25,
+				"sz": 0.25
+			},
+			"tree_item": "3D/SDF/Shapes/Box",
+			"type": "sdf3d_box"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_cylinder",
+			"name": "sdf3d_cylinder",
+			"parameters": {
+				"l": 0.25,
+				"r": 0.25,
+				"sx": 0.25,
+				"sy": 0.25,
+				"sz": 0.5
+			},
+			"tree_item": "3D/SDF/Shapes/Cylinder",
+			"type": "sdf3d_cylinder"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_capsule",
+			"name": "sdf3d_capsule",
+			"parameters": {
+				"l": 0.3,
+				"r": 0.2,
+				"sx": 0.25,
+				"sy": 0.25,
+				"sz": 0.5
+			},
+			"tree_item": "3D/SDF/Shapes/Capsule",
+			"type": "sdf3d_capsule"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_cone",
+			"name": "sdf3d_cone",
+			"parameters": {
+				"a": 30,
+				"r": 0,
+				"sx": 0.01,
+				"sy": 0.01,
+				"sz": 0.015
+			},
+			"tree_item": "3D/SDF/Shapes/Cone",
+			"type": "sdf3d_cone"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_shapes_torus",
+			"name": "sdf3d_torus",
+			"parameters": {
+				"R": 0.3,
+				"r": 0.15,
+				"sx": 0.1,
+				"sy": 0.1,
+				"sz": 0.02
+			},
+			"tree_item": "3D/SDF/Shapes/Torus",
+			"type": "sdf3d_torus"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_boolean",
+			"name": "sdf3d_boolean",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "3D/SDF/Operators/Boolean",
+			"type": "sdf3d_boolean"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_smoothboolean",
+			"name": "sdf3d_smoothboolean",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"k": 0.15,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "3D/SDF/Operators/SmoothBoolean",
+			"type": "sdf3d_smoothboolean"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_rounded",
+			"name": "sdf3d_rounded",
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"k": 0.15,
+				"op": 0,
+				"r": 0.15,
+				"w": 0.28
+			},
+			"tree_item": "3D/SDF/Operators/Rounded",
+			"type": "sdf3d_rounded"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_repeat",
+			"name": "sdf3d_repeat",
+			"parameters": {
+				"a": 0,
+				"r": 0.3,
+				"rx": 3,
+				"ry": 3,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Operators/Repeat",
+			"type": "sdf3d_repeat"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_circlerepeat",
+			"name": "sdf3d_circle_repeat",
+			"parameters": {
+				"a": 0,
+				"c": 5,
+				"r": 0.24,
+				"rx": 4,
+				"ry": 4,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Operators/CircleRepeat",
+			"type": "sdf3d_circle_repeat"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_extrusion",
+			"name": "sdf3d_extrusion",
+			"parameters": {
+				"a": 0,
+				"d": 0.3,
+				"s": 1,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Operators/Extrusion",
+			"type": "sdf3d_extrusion"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_revolution",
+			"name": "sdf3d_revolution",
+			"parameters": {
+				"a": 0,
+				"d": 0.25,
+				"s": 1,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Operators/Revolution",
+			"type": "sdf3d_revolution"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_transforms_translate",
+			"name": "sdf3d_translate_3_2",
+			"parameters": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Transforms/Translate",
+			"type": "sdf3d_translate"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_transforms_scale",
+			"name": "sdf3d_scale_2",
+			"parameters": {
+				"a": 0,
+				"s": 1,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Transforms/Scale",
+			"type": "sdf3d_scale"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_transforms_rotate",
+			"name": "sdf3d_rotate_2",
+			"parameters": {
+				"a": 0,
+				"ax": 0,
+				"ay": 0,
+				"az": 0,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Transforms/Rotate",
+			"type": "sdf3d_rotate"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_render",
+			"name": "raymarching",
+			"parameters": {
+
+			},
+			"tree_item": "3D/SDF/Render",
+			"type": "raymarching"
 		},
 		{
 			"collapsed": false,
@@ -1130,7 +1418,7 @@
 			],
 			"icon": "pattern_fibers",
 			"label": "Fibers",
-			"name": "graph",
+			"name": "graph_4",
 			"nodes": [
 				{
 					"name": "transform",
@@ -1140,7 +1428,7 @@
 					},
 					"parameters": {
 						"repeat": true,
-						"rotate": 45,
+						"rotate": 30.125,
 						"scale_x": 0.5,
 						"scale_y": 1,
 						"translate_x": 0.975,
@@ -1156,6 +1444,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -1186,9 +1475,11 @@
 					"parameters": {
 						"bevel": 0.1,
 						"columns": 4,
+						"corner": 0,
 						"mortar": 0.1,
 						"pattern": 0,
 						"repeat": 1,
+						"round": 0,
 						"row_offset": 0.5,
 						"rows": 1
 					},
@@ -1239,8 +1530,8 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -433.557495,
-						"y": -236.5
+						"x": -429.557495,
+						"y": -266.5
 					},
 					"parameters": {
 						"param0": 4
@@ -1321,6 +1612,17 @@
 			},
 			"tree_item": "Pattern/Scratches",
 			"type": "scratches"
+		},
+		{
+			"collapsed": true,
+			"icon": "pattern_beehive",
+			"name": "beehive",
+			"parameters": {
+				"sx": 4,
+				"sy": 4
+			},
+			"tree_item": "Pattern/Beehive",
+			"type": "beehive"
 		},
 		{
 			"collapsed": false,

@@ -42,6 +42,7 @@ static func generate_preview_shader(src_code) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
+	code += "uniform float preview_size = 64;\n"
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	code += file.get_as_text()
@@ -64,8 +65,8 @@ static func generate_preview_shader(src_code) -> String:
 		shader_code += "vec2 uv = UV;\n"
 		shader_code += src_code.code
 		shader_code += "float d = "+src_code.sdf2d+";\n"
-		shader_code += "vec3 col = vec3(cos(d*62.8318530718*5.0));\n"
-		shader_code += "col *= clamp(1.0-4.0*abs(d), 0.0, 1.0);\n"
+		shader_code += "vec3 col = vec3(cos(d*min(256, preview_size)));\n"
+		shader_code += "col *= clamp(1.0-d*d, 0.0, 1.0);\n"
 		shader_code += "col *= vec3(1.0, vec2(step(-0.015, d)));\n"
 		shader_code += "col *= vec3(vec2(step(d, 0.015)), 1.0);\n"
 		shader_code += "COLOR = vec4(col, 1.0);\n"
@@ -167,6 +168,7 @@ func render_shader(shader, textures, render_size) -> Object:
 	if textures != null:
 		for k in textures.keys():
 			shader_material.set_shader_param(k, textures[k])
+	shader_material.set_shader_param("preview_size", render_size)
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
