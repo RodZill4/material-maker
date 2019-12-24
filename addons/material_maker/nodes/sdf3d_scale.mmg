@@ -13,7 +13,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"global": "vec2 rotate(vec2 uv, float a) {\n\tvec2 rv;\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\tuv -= vec2(0.5);\n\trv.x = uv.x*c+uv.y*s;\n\trv.y = -uv.x*s+uv.y*c;\n\treturn rv+vec2(0.5);\n}\n",
+		"global": "",
 		"inputs": [
 			{
 				"default": "0.0",

@@ -1,5 +1,5 @@
-Signed distance function geometry nodes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2D Signed distance function geometry nodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The signed distance function nodes can be used to define complex geometry using simple
 shapes.
@@ -7,7 +7,7 @@ shapes.
 They are based on a very small set of basic shapes, that can be combined using operators,
 and finally output as a greyscale image using the **sdShow** node.
 
-All output samples shown in this sections are images generated through the **sdView** node.
+All output samples shown in this sections are images generated through the **sdShow** node.
 
 All Signed Distance Functions nodes are based on code written by Inigo Quilez that can be found
 `on this page`__.

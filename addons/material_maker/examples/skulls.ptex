@@ -7,12 +7,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "colorize",
-			"from_port": 0,
-			"to": "Material",
-			"to_port": 2
-		},
-		{
 			"from": "perlin",
 			"from_port": 0,
 			"to": "colorize_2",
@@ -29,18 +23,6 @@
 			"from_port": 0,
 			"to": "Material",
 			"to_port": 6
-		},
-		{
-			"from": "_3_2",
-			"from_port": 0,
-			"to": "colorize_3",
-			"to_port": 0
-		},
-		{
-			"from": "_3_2",
-			"from_port": 0,
-			"to": "occlusion",
-			"to_port": 0
 		},
 		{
 			"from": "occlusion",
@@ -85,22 +67,10 @@
 			"to_port": 0
 		},
 		{
-			"from": "_3_2",
-			"from_port": 0,
-			"to": "colorize_5",
-			"to_port": 0
-		},
-		{
 			"from": "colorize_2",
 			"from_port": 0,
 			"to": "blend",
 			"to_port": 0
-		},
-		{
-			"from": "colorize_5",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 2
 		},
 		{
 			"from": "colorize_4",
@@ -205,16 +175,64 @@
 			"to_port": 2
 		},
 		{
+			"from": "graph_3",
+			"from_port": 0,
+			"to": "sdf3d_scale",
+			"to_port": 0
+		},
+		{
 			"from": "_3_2",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "colorize_5",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
 			"from_port": 0,
 			"to": "colorize_5_2",
 			"to_port": 0
 		},
 		{
-			"from": "graph_3",
+			"from": "buffer",
 			"from_port": 0,
-			"to": "sdf3d_scale",
+			"to": "occlusion",
 			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 0
+		},
+		{
+			"from": "blend_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "colorize_5",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_5_2",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 2
 		}
 	],
 	"label": "Graph",
@@ -227,8 +245,8 @@
 		{
 			"name": "Material",
 			"node_position": {
-				"x": 463,
-				"y": 1358
+				"x": 390,
+				"y": 1354
 			},
 			"parameters": {
 				"albedo_color": {
@@ -256,18 +274,18 @@
 				"y": 1196.349854
 			},
 			"parameters": {
-				"iterations": 7,
-				"persistence": 0.75,
-				"scale_x": 4,
-				"scale_y": 4
+				"iterations": 5,
+				"persistence": 0.7,
+				"scale_x": 32,
+				"scale_y": 32
 			},
 			"type": "perlin"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": -367.399658,
-				"y": 1344.349976
+				"x": -347.399658,
+				"y": 1342.349976
 			},
 			"parameters": {
 				"gradient": {
@@ -275,16 +293,16 @@
 					"points": [
 						{
 							"a": 1,
-							"b": 0.171875,
-							"g": 0.171875,
-							"pos": 0.1,
-							"r": 0.171875
+							"b": 0,
+							"g": 0,
+							"pos": 0.118182,
+							"r": 0
 						},
 						{
 							"a": 1,
 							"b": 1,
 							"g": 1,
-							"pos": 1,
+							"pos": 0.909091,
 							"r": 1
 						}
 					],
@@ -365,11 +383,11 @@
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": 114.446899,
-				"y": 1316.272949
+				"x": 138.446899,
+				"y": 1239.272949
 			},
 			"parameters": {
-				"color": 0
+				"color": 0.31
 			},
 			"type": "uniform_greyscale"
 		},
@@ -411,7 +429,7 @@
 			},
 			"parameters": {
 				"a": 0,
-				"s": 0.33,
+				"s": 0.3,
 				"x": 0.35,
 				"y": 0,
 				"z": 0
@@ -426,7 +444,7 @@
 			},
 			"parameters": {
 				"a": 0,
-				"r": 0.35,
+				"r": 0.25,
 				"rx": 4,
 				"ry": 4,
 				"s": 0.3,
@@ -505,7 +523,7 @@
 				"y": 1400.797363
 			},
 			"parameters": {
-				"x": 0.35,
+				"x": 0.4,
 				"y": 0.35,
 				"z": 0
 			},
@@ -536,7 +554,7 @@
 			},
 			"parameters": {
 				"a": 0,
-				"r": 0.35,
+				"r": 0.25,
 				"rx": 4,
 				"ry": 4,
 				"s": 0.3,
@@ -579,26 +597,26 @@
 		{
 			"name": "colorize_5",
 			"node_position": {
-				"x": -131.127869,
-				"y": 1320.013184
+				"x": -147.127869,
+				"y": 1324.013184
 			},
 			"parameters": {
 				"gradient": {
-					"interpolation": 1,
+					"interpolation": 0,
 					"points": [
-						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
-						},
 						{
 							"a": 1,
 							"b": 1,
 							"g": 1,
-							"pos": 0.063636,
+							"pos": 0,
 							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0.520833,
+							"g": 0.520833,
+							"pos": 0.036364,
+							"r": 0.520833
 						}
 					],
 					"type": "Gradient"
@@ -609,8 +627,8 @@
 		{
 			"name": "blend",
 			"node_position": {
-				"x": 78.872131,
-				"y": 1216.013184
+				"x": 126.872131,
+				"y": 1141.013184
 			},
 			"parameters": {
 				"amount": 0.5,
@@ -1030,7 +1048,7 @@
 			},
 			"parameters": {
 				"amount": 0.5,
-				"param0": 10,
+				"param0": 11,
 				"param1": 1.02,
 				"param2": 0,
 				"size": 4
@@ -1145,12 +1163,6 @@
 					"from": "sdf3d_translate_4_3_2",
 					"from_port": 0,
 					"to": "sdf3d_smoothboolean_3_2_3",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_translate_4_3_3",
-					"from_port": 0,
-					"to": "gen_outputs",
 					"to_port": 0
 				},
 				{
@@ -1284,6 +1296,12 @@
 					"from_port": 0,
 					"to": "sdf3d_boolean",
 					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4_3_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
 				}
 			],
 			"label": "Skull",
@@ -1304,7 +1322,7 @@
 						"cx": 0,
 						"cy": 0,
 						"h": 0.08,
-						"k": 0.1,
+						"k": 0.04,
 						"op": 0,
 						"r": 0.3,
 						"w": 0.28
@@ -1423,7 +1441,7 @@
 					},
 					"parameters": {
 						"a": 0,
-						"ax": -32,
+						"ax": -30,
 						"ay": 45,
 						"az": 0,
 						"x": 0.35,
@@ -1441,7 +1459,7 @@
 					"parameters": {
 						"x": 0,
 						"y": 0.11,
-						"z": 0.21
+						"z": 0.19
 					},
 					"type": "sdf3d_translate"
 				},
@@ -1593,8 +1611,8 @@
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -238.318359,
-						"y": 1764.935181
+						"x": -194.318359,
+						"y": 1767.935181
 					},
 					"parameters": {
 
@@ -1908,6 +1926,30 @@
 
 			},
 			"type": "graph"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -353.830994,
+				"y": 1560.222534
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 11
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "blend_3",
+			"node_position": {
+				"x": 84.334427,
+				"y": 1296.834595
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 3
+			},
+			"type": "blend"
 		}
 	],
 	"parameters": {
