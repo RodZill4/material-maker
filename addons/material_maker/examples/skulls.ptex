@@ -576,17 +576,17 @@
 					"points": [
 						{
 							"a": 1,
-							"b": 0.027452,
-							"g": 0.047034,
+							"b": 0,
+							"g": 0.300774,
 							"pos": 0,
-							"r": 0.057292
+							"r": 0.458333
 						},
 						{
 							"a": 1,
-							"b": 0.003581,
-							"g": 0.076426,
+							"b": 0,
+							"g": 0.046875,
 							"pos": 1,
-							"r": 0.114583
+							"r": 0.1875
 						}
 					],
 					"type": "Gradient"
@@ -798,8 +798,8 @@
 				{
 					"name": "sdf3d_smoothboolean_3_2",
 					"node_position": {
-						"x": -757.380676,
-						"y": 1593.931152
+						"x": -744.380676,
+						"y": 1604.931152
 					},
 					"parameters": {
 						"bevel": 0,
@@ -816,8 +816,8 @@
 				{
 					"name": "sdf3d_smoothboolean_3",
 					"node_position": {
-						"x": -752.880676,
-						"y": 1509.931152
+						"x": -744.880676,
+						"y": 1527.931152
 					},
 					"parameters": {
 						"bevel": 0,
@@ -829,7 +829,64 @@
 						"r": 0.3,
 						"w": 0.28
 					},
-					"type": "sdf3d_smoothboolean"
+					"shader_model": {
+						"code": "",
+						"global": "float sdf3SmoothUnion(float d1, float d2, float k) {\n    float h = clamp(0.5+0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)-k*h*(1.0-h);\n}\n\nfloat sdf3SmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2+d1)/k, 0.0, 1.0);\n    return mix( d2, -d1, h )+k*h*(1.0-h);\n}\n\nfloat sdf3SmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)+k*h*(1.0-h);\n}\n",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in1",
+								"type": "sdf3d"
+							},
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in2",
+								"type": "sdf3d"
+							}
+						],
+						"instance": "",
+						"name": "sdSmoothBoolean",
+						"outputs": [
+							{
+								"sdf3d": "sdf3Smooth$op($in1($uv), $in2($uv), $k)",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0,
+								"label": "",
+								"name": "op",
+								"type": "enum",
+								"values": [
+									{
+										"name": "Union",
+										"value": "Union"
+									},
+									{
+										"name": "Subtraction",
+										"value": "Subtraction"
+									},
+									{
+										"name": "Intersection",
+										"value": "Intersection"
+									}
+								]
+							},
+							{
+								"default": 0,
+								"label": "",
+								"max": 1,
+								"min": 0,
+								"name": "k",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
 				},
 				{
 					"name": "sdf3d_sphere_2_2",
@@ -922,7 +979,7 @@
 					"ports": [
 						{
 							"name": "port0",
-							"type": "rgba"
+							"type": "sdf3d"
 						}
 					],
 					"type": "ios"
@@ -1307,8 +1364,8 @@
 			"label": "Skull",
 			"name": "graph_3",
 			"node_position": {
-				"x": -977.932495,
-				"y": 1205.712646
+				"x": -960.932495,
+				"y": 1204.712646
 			},
 			"nodes": [
 				{
@@ -1620,7 +1677,7 @@
 					"ports": [
 						{
 							"name": "port0",
-							"type": "rgba"
+							"type": "sdf3d"
 						}
 					],
 					"type": "ios"
