@@ -63,8 +63,10 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 			image_path = ProjectSettings.globalize_path(image_path)
 		t = ImageTexture.new()
 		var image : Image = Image.new()
-		image.load(image_path)
-		t.create_from_image(image)
+		if image.load(image_path) == OK:
+			t.create_from_image(image)
+		else:
+			print("Cannot load image "+image_path)
 		return t
 	return null
 

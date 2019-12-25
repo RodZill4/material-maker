@@ -22,21 +22,21 @@
 				"default": "0.0",
 				"label": "",
 				"name": "in1",
-				"type": "f"
+				"type": "sdf2d"
 			},
 			{
 				"default": "0.0",
 				"label": "",
 				"name": "in2",
-				"type": "f"
+				"type": "sdf2d"
 			}
 		],
 		"instance": "",
 		"name": "sdSmoothBoolean",
 		"outputs": [
 			{
-				"f": "sdSmooth$op($in1($uv), $in2($uv), $k)",
-				"type": "f"
+				"sdf2d": "sdSmooth$op($in1($uv), $in2($uv), $k)",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [

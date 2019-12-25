@@ -21,6 +21,9 @@ signal graph_changed
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
+	for t in range(5):
+		add_valid_connection_type(t, 42)
+		add_valid_connection_type(42, t)
 
 func _gui_input(event) -> void:
 	if event is InputEventKey and event.pressed:

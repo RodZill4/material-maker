@@ -34,14 +34,14 @@ func get_input_defs() -> Array:
 	for c in range(parameters.choices):
 		for o in range(parameters.outputs):
 			var n = PoolByteArray([65+o]).get_string_from_ascii()+str(c)
-			rv.push_back({ name=n, label=n, type="rgba" })
+			rv.push_back({ name=n, label=n, type="any" })
 	return rv
 
 func get_output_defs() -> Array:
 	var rv : Array = []
 	for o in range(parameters.outputs):
 		var n = PoolByteArray([65+o]).get_string_from_ascii()
-		rv.push_back({ name=n, type="rgba" })
+		rv.push_back({ name=n, type="any" })
 	return rv
 
 func set_parameter(p, v) -> void:

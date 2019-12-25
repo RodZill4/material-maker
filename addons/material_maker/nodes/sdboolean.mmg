@@ -9,53 +9,53 @@
 		"cx": 0,
 		"cy": 0,
 		"h": 0.08,
-		"op": 0,
+		"op": 1,
 		"r": 0.3,
 		"w": 0.28
 	},
 	"shader_model": {
 		"code": "",
-		"global": "float sdUnion( float d1, float d2 ) { return min(d1,d2); }\nfloat sdSubtraction( float d1, float d2 ) { return max(-d1,d2); }\nfloat sdIntersection( float d1, float d2 ) { return max(d1,d2); }\n",
+		"global": "",
 		"inputs": [
 			{
 				"default": "0.0",
 				"label": "",
 				"name": "in1",
-				"type": "f"
+				"type": "sdf2d"
 			},
 			{
 				"default": "0.0",
 				"label": "",
 				"name": "in2",
-				"type": "f"
+				"type": "sdf2d"
 			}
 		],
 		"instance": "",
 		"name": "sdBoolean",
 		"outputs": [
 			{
-				"f": "sd$op($in1($uv), $in2($uv))",
-				"type": "f"
+				"sdf2d": "$op $in1($uv), $in2($uv))",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": 2,
 				"label": "",
 				"name": "op",
 				"type": "enum",
 				"values": [
 					{
 						"name": "Union",
-						"value": "Union"
+						"value": "min("
 					},
 					{
 						"name": "Subtraction",
-						"value": "Subtraction"
+						"value": "max(-"
 					},
 					{
 						"name": "Intersection",
-						"value": "Intersection"
+						"value": "max("
 					}
 				]
 			}

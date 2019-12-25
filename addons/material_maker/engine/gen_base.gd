@@ -37,6 +37,17 @@ var parameters = {}
 var seed_locked : bool = false
 var seed_value : int = 0
 
+const PORT_TYPE_NAMES : Array = [ "f", "rgb", "rgba", "sdf2d", "sdf3d" ]
+
+const PORT_TYPES : Dictionary = {
+	f     = { type="float", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 0.5) },
+	rgb   = { type="vec3", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 1.0) },
+	rgba  = { type="vec4", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.0, 0.5, 0.0, 0.5) },
+	sdf2d = { type="float", paramdefs="vec2 uv", params="uv", slot_type=1, color=Color(1.0, 0.5, 0.0) },
+	sdf3d = { type="float", paramdefs="vec3 p", params="p", slot_type=2, color=Color(1.0, 0.0, 0.0) },
+	any = { slot_type=42, color=Color(1.0, 1.0, 1.0) }
+}
+
 func _ready() -> void:
 	init_parameters()
 
@@ -151,14 +162,18 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func render(output_index : int, size : int) -> Object:
+func render(output_index : int, size : int, preview : bool = false) -> Object:
 	var context : MMGenContext = MMGenContext.new()
-	var source = get_shader_code("UV", output_index, context)
+	var source = get_shader_code("uv", output_index, context)
 	while source is GDScriptFunctionState:
 		source = yield(source, "completed")
 	if source.empty():
 		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
-	var shader : String = mm_renderer.generate_shader(source)
+	var shader : String
+	if preview:
+		shader = mm_renderer.generate_preview_shader(source)
+	else:
+		shader = mm_renderer.generate_shader(source)
 	var result = mm_renderer.render_shader(shader, source.textures, size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
@@ -174,15 +189,14 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 				rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
 			elif rv.has("rgba"):
 				rv.f = "(dot("+rv.rgba+".rgb, vec3(1.0))/3.0)"
-			else:
-				rv.f = "0.0"
 		if !rv.has("rgb"):
 			if rv.has("rgba"):
 				rv.rgb = rv.rgba+".rgb"
-			else:
+			elif rv.has("f"):
 				rv.rgb = "vec3("+rv.f+")"
 		if !rv.has("rgba"):
-			rv.rgba = "vec4("+rv.rgb+", 1.0)"
+			if rv.has("rgb"):
+				rv.rgba = "vec4("+rv.rgb+", 1.0)"
 	return rv
 
 func _get_shader_code(__, __, __) -> Dictionary:

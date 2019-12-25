@@ -1,0 +1,65 @@
+{
+	"name": "sdf3d_boolean",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"op": 0,
+		"r": 0.3,
+		"w": 0.28
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in1",
+				"type": "sdf3d"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in2",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"name": "Boolean",
+		"outputs": [
+			{
+				"sdf3d": "$op $in1($uv), $in2($uv))",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"name": "op",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Union",
+						"value": "min("
+					},
+					{
+						"name": "Subtraction",
+						"value": "max(-"
+					},
+					{
+						"name": "Intersection",
+						"value": "max("
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}

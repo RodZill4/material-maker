@@ -284,8 +284,8 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 			if port_index == -1:
 				port_index = outputs.size()
 				outputs.push_back(src_name)
-				gen_outputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
-				print(gen_outputs.ports)
+				var type = new_graph.get_node(c.from).get_output_defs()[c.from_port].type
+				gen_outputs.ports.push_back( { name="port"+str(port_index), type=type } )
 			my_new_connections.push_back( { from=new_graph.name, from_port=port_index, to=c.to, to_port=c.to_port } )
 			new_graph_connections.push_back( { from=c.from, from_port=c.from_port, to="gen_outputs", to_port=port_index } )
 		elif names.find(c.to) != -1:
@@ -293,7 +293,8 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 			if port_index == -1:
 				port_index = inputs.size()
 				inputs.push_back(src_name)
-				gen_inputs.ports.push_back( { name="port"+str(port_index), type="rgba" } )
+				var type = get_node(c.from).get_output_defs()[c.from_port].type
+				gen_inputs.ports.push_back( { name="port"+str(port_index), type=type } )
 			my_new_connections.push_back( { from=c.from, from_port=c.from_port, to=new_graph.name, to_port=port_index } )
 			new_graph_connections.push_back( { from="gen_inputs", from_port=port_index, to=c.to, to_port=c.to_port } )
 		else:
