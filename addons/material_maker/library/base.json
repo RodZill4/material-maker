@@ -778,6 +778,22 @@
 			"type": "sdrhombus"
 		},
 		{
+			"collapsed": true,
+			"icon": "simple_sdf_shapes_sdarc",
+			"name": "sdarc",
+			"parameters": {
+				"a1": 0,
+				"a2": 0,
+				"cx": 0,
+				"cy": 0,
+				"r": 0.4,
+				"r1": 0.3,
+				"r2": 0.1
+			},
+			"tree_item": "Simple/SDF/Shapes/sdArc",
+			"type": "sdarc"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Simple/SDF/Operators"
 		},
@@ -1544,7 +1560,7 @@
 			"name": "noise",
 			"parameters": {
 				"density": 0.5,
-				"size": 6
+				"size": 4
 			},
 			"tree_item": "Noise",
 			"type": "noise"
@@ -2009,7 +2025,7 @@
 			"name": "color_noise",
 			"parameters": {
 				"density": 0.5,
-				"size": 6
+				"size": 9
 			},
 			"tree_item": "Noise/Color",
 			"type": "color_noise"
@@ -2342,140 +2358,6 @@
 			"icon": "miscellaneous_debug",
 			"tree_item": "Miscellaneous/Debug",
 			"type": "debug"
-		},
-		{
-			"collapsed": true,
-			"connections": [
-				{
-					"from": "pattern_0",
-					"from_port": 0,
-					"to": "colorize_0",
-					"to_port": 0
-				},
-				{
-					"from": "colorize_0",
-					"from_port": 0,
-					"to": "blend_0",
-					"to_port": 0
-				},
-				{
-					"from": "transform_0",
-					"from_port": 0,
-					"to": "blend_0",
-					"to_port": 1
-				},
-				{
-					"from": "colorize_0",
-					"from_port": 0,
-					"to": "transform_0",
-					"to_port": 0
-				},
-				{
-					"from": "blend_0",
-					"from_port": 0,
-					"to": "transform_1",
-					"to_port": 0
-				},
-				{
-					"from": "transform_1",
-					"from_port": 0,
-					"to": "blend_1",
-					"to_port": 1
-				},
-				{
-					"from": "blend_0",
-					"from_port": 0,
-					"to": "blend_1",
-					"to_port": 0
-				}
-			],
-			"icon": "test",
-			"nodes": [
-				{
-					"name": "transform_1",
-					"node_position": {
-						"x": 6.333313,
-						"y": 30.75
-					},
-					"repeat": true,
-					"rotate": 90,
-					"scale_x": 1,
-					"scale_y": 1,
-					"translate_x": 0.06,
-					"translate_y": 0,
-					"type": "transform"
-				},
-				{
-					"amount": 1,
-					"blend_type": 2,
-					"name": "blend_0",
-					"node_position": {
-						"x": 20.333313,
-						"y": -73.25
-					},
-					"type": "blend"
-				},
-				{
-					"amount": 1,
-					"blend_type": 2,
-					"name": "blend_1",
-					"node_position": {
-						"x": 21.333313,
-						"y": -177.25
-					},
-					"type": "blend"
-				},
-				{
-					"gradient": [
-						{
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
-						},
-						{
-							"b": 1,
-							"g": 1,
-							"pos": 0.045455,
-							"r": 1
-						}
-					],
-					"name": "colorize_0",
-					"node_position": {
-						"x": -174.666687,
-						"y": -36.25
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "transform_0",
-					"node_position": {
-						"x": -190.666687,
-						"y": 24.75
-					},
-					"repeat": true,
-					"rotate": 0,
-					"scale_x": 1,
-					"scale_y": 1,
-					"translate_x": 0.06,
-					"translate_y": 0.06,
-					"type": "transform"
-				},
-				{
-					"mix": 5,
-					"name": "pattern_0",
-					"node_position": {
-						"x": -205.666687,
-						"y": -134.25
-					},
-					"type": "pattern",
-					"x_scale": 8,
-					"x_wave": 0,
-					"y_scale": 8,
-					"y_wave": 0
-				}
-			],
-			"tree_item": "test"
 		}
 	]
 }
