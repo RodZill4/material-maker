@@ -587,30 +587,7 @@
 					"parameters": {
 
 					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec4($uv, 0.0, 1.0)",
-								"label": "",
-								"name": "in",
-								"type": "rgba"
-							}
-						],
-						"instance": "",
-						"name": "CircleMap",
-						"outputs": [
-							{
-								"rgba": "$in(vec2(fract(atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), 2.0*length($uv-vec2(0.5))))",
-								"type": "rgba"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
+					"type": "circle_map"
 				},
 				{
 					"name": "gen_parameters",
@@ -725,6 +702,25 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "simple_sdf_sdshow",
+			"name": "sdshow",
+			"parameters": {
+				"bevel": 0.1,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "Simple/SDF/sdShow",
+			"type": "sdshow"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "Simple/SDF/Shapes"
+		},
+		{
+			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdcircle",
 			"name": "sdcircle",
 			"parameters": {
@@ -746,61 +742,8 @@
 				"r": 0.3,
 				"w": 0.3
 			},
-			"shader_model": {
-				"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
-				"global": "",
-				"inputs": [
-
-				],
-				"instance": "",
-				"name": "sdBox",
-				"outputs": [
-					{
-						"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
-						"type": "sdf2d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0.5,
-						"label": "Width",
-						"max": 1,
-						"min": 0,
-						"name": "w",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 1,
-						"label": "Height",
-						"max": 1,
-						"min": 0,
-						"name": "h",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Center X",
-						"max": 1,
-						"min": -1,
-						"name": "cx",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"default": 0,
-						"label": "Center Y",
-						"max": 1,
-						"min": -1,
-						"name": "cy",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
 			"tree_item": "Simple/SDF/Shapes/sdBox",
-			"type": "shader"
+			"type": "sdbox"
 		},
 		{
 			"collapsed": true,
@@ -835,6 +778,10 @@
 			"type": "sdrhombus"
 		},
 		{
+			"collapsed": false,
+			"tree_item": "Simple/SDF/Operators"
+		},
+		{
 			"collapsed": true,
 			"icon": "simple_sdf_operators_sdboolean",
 			"name": "sdboolean",
@@ -864,65 +811,8 @@
 				"r": 0.3,
 				"w": 0.28
 			},
-			"shader_model": {
-				"code": "",
-				"global": "float sdSmoothUnion( float d1, float d2, float k ) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h); }\n\nfloat sdSmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );\n    return mix( d2, -d1, h ) + k*h*(1.0-h); }\n\nfloat sdSmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) + k*h*(1.0-h); }\n",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in1",
-						"type": "sdf2d"
-					},
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in2",
-						"type": "sdf2d"
-					}
-				],
-				"instance": "",
-				"name": "sdSmoothBoolean",
-				"outputs": [
-					{
-						"sdf2d": "sdSmooth$op($in1($uv), $in2($uv), $k)",
-						"type": "sdf2d"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0,
-						"label": "",
-						"name": "op",
-						"type": "enum",
-						"values": [
-							{
-								"name": "Union",
-								"value": "Union"
-							},
-							{
-								"name": "Subtraction",
-								"value": "Subtraction"
-							},
-							{
-								"name": "Intersection",
-								"value": "Intersection"
-							}
-						]
-					},
-					{
-						"default": 0,
-						"label": "",
-						"max": 1,
-						"min": 0,
-						"name": "k",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
 			"tree_item": "Simple/SDF/Operators/sdSmoothBoolean",
-			"type": "shader"
+			"type": "sdsmoothboolean"
 		},
 		{
 			"collapsed": true,
@@ -959,21 +849,6 @@
 			"type": "sdannularshape"
 		},
 		{
-			"collapsed": true,
-			"icon": "simple_sdf_operators_sdshow",
-			"name": "sdshow_2",
-			"parameters": {
-				"bevel": 0.1,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"r": 0.3,
-				"w": 0.28
-			},
-			"tree_item": "Simple/SDF/Operators/sdShow",
-			"type": "sdshow"
-		},
-		{
 			"collapsed": false,
 			"tree_item": "Simple/SDF/Transforms"
 		},
@@ -990,8 +865,49 @@
 			"type": "sdtranslate"
 		},
 		{
+			"collapsed": true,
+			"icon": "simple_sdf_transforms_rotate",
+			"name": "sdrotate",
+			"parameters": {
+				"a": 0,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "Simple/SDF/Transforms/Rotate",
+			"type": "sdrotate"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_transforms_scale",
+			"name": "sdscale_2",
+			"parameters": {
+				"a": 0,
+				"s": 1,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "Simple/SDF/Transforms/Scale",
+			"type": "sdscale"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "3D"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_render",
+			"name": "raymarching",
+			"parameters": {
+
+			},
+			"tree_item": "3D/SDF/Render",
+			"type": "raymarching"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "3D/SDF/Shapes"
 		},
 		{
 			"collapsed": true,
@@ -1071,6 +987,10 @@
 			},
 			"tree_item": "3D/SDF/Shapes/Torus",
 			"type": "sdf3d_torus"
+		},
+		{
+			"collapsed": false,
+			"tree_item": "3D/SDF/Operators"
 		},
 		{
 			"collapsed": true,
@@ -1188,6 +1108,10 @@
 			"type": "sdf3d_revolution"
 		},
 		{
+			"collapsed": false,
+			"tree_item": "3D/SDF/Transforms"
+		},
+		{
 			"collapsed": true,
 			"icon": "3d_sdf_transforms_translate",
 			"name": "sdf3d_translate_3_2",
@@ -1228,16 +1152,6 @@
 			},
 			"tree_item": "3D/SDF/Transforms/Rotate",
 			"type": "sdf3d_rotate"
-		},
-		{
-			"collapsed": true,
-			"icon": "3d_sdf_render",
-			"name": "raymarching",
-			"parameters": {
-
-			},
-			"tree_item": "3D/SDF/Render",
-			"type": "raymarching"
 		},
 		{
 			"collapsed": false,
@@ -1630,7 +1544,7 @@
 			"name": "noise",
 			"parameters": {
 				"density": 0.5,
-				"size": 4
+				"size": 6
 			},
 			"tree_item": "Noise",
 			"type": "noise"
@@ -2095,7 +2009,7 @@
 			"name": "color_noise",
 			"parameters": {
 				"density": 0.5,
-				"size": 9
+				"size": 6
 			},
 			"tree_item": "Noise/Color",
 			"type": "color_noise"
@@ -2428,6 +2342,140 @@
 			"icon": "miscellaneous_debug",
 			"tree_item": "Miscellaneous/Debug",
 			"type": "debug"
+		},
+		{
+			"collapsed": true,
+			"connections": [
+				{
+					"from": "pattern_0",
+					"from_port": 0,
+					"to": "colorize_0",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_0",
+					"from_port": 0,
+					"to": "blend_0",
+					"to_port": 0
+				},
+				{
+					"from": "transform_0",
+					"from_port": 0,
+					"to": "blend_0",
+					"to_port": 1
+				},
+				{
+					"from": "colorize_0",
+					"from_port": 0,
+					"to": "transform_0",
+					"to_port": 0
+				},
+				{
+					"from": "blend_0",
+					"from_port": 0,
+					"to": "transform_1",
+					"to_port": 0
+				},
+				{
+					"from": "transform_1",
+					"from_port": 0,
+					"to": "blend_1",
+					"to_port": 1
+				},
+				{
+					"from": "blend_0",
+					"from_port": 0,
+					"to": "blend_1",
+					"to_port": 0
+				}
+			],
+			"icon": "test",
+			"nodes": [
+				{
+					"name": "transform_1",
+					"node_position": {
+						"x": 6.333313,
+						"y": 30.75
+					},
+					"repeat": true,
+					"rotate": 90,
+					"scale_x": 1,
+					"scale_y": 1,
+					"translate_x": 0.06,
+					"translate_y": 0,
+					"type": "transform"
+				},
+				{
+					"amount": 1,
+					"blend_type": 2,
+					"name": "blend_0",
+					"node_position": {
+						"x": 20.333313,
+						"y": -73.25
+					},
+					"type": "blend"
+				},
+				{
+					"amount": 1,
+					"blend_type": 2,
+					"name": "blend_1",
+					"node_position": {
+						"x": 21.333313,
+						"y": -177.25
+					},
+					"type": "blend"
+				},
+				{
+					"gradient": [
+						{
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"b": 1,
+							"g": 1,
+							"pos": 0.045455,
+							"r": 1
+						}
+					],
+					"name": "colorize_0",
+					"node_position": {
+						"x": -174.666687,
+						"y": -36.25
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "transform_0",
+					"node_position": {
+						"x": -190.666687,
+						"y": 24.75
+					},
+					"repeat": true,
+					"rotate": 0,
+					"scale_x": 1,
+					"scale_y": 1,
+					"translate_x": 0.06,
+					"translate_y": 0.06,
+					"type": "transform"
+				},
+				{
+					"mix": 5,
+					"name": "pattern_0",
+					"node_position": {
+						"x": -205.666687,
+						"y": -134.25
+					},
+					"type": "pattern",
+					"x_scale": 8,
+					"x_wave": 0,
+					"y_scale": 8,
+					"y_wave": 0
+				}
+			],
+			"tree_item": "test"
 		}
 	]
 }
