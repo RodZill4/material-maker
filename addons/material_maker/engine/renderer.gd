@@ -117,6 +117,7 @@ static func generate_combined_shader(red_code, green_code, blue_code) -> String:
 	code += "\n"
 	var globals = []
 	var textures = {}
+	var output = []
 	for c in [ red_code, green_code, blue_code ]:
 		if c.has("textures"):
 			for t in c.textures.keys():
@@ -125,6 +126,10 @@ static func generate_combined_shader(red_code, green_code, blue_code) -> String:
 			for g in c.globals:
 				if globals.find(g) == -1:
 					globals.push_back(g)
+		if c.has("f"):
+			output.push_back(c.f)
+		else:
+			output.push_back("1.0")
 	for t in textures.keys():
 		code += "uniform sampler2D "+t+";\n"
 	for g in globals:
@@ -137,7 +142,7 @@ static func generate_combined_shader(red_code, green_code, blue_code) -> String:
 	shader_code += red_code.code
 	shader_code += green_code.code
 	shader_code += blue_code.code
-	shader_code += "COLOR = vec4("+red_code.f+", "+green_code.f+", "+blue_code.f+", 1.0);\n"
+	shader_code += "COLOR = vec4("+output[0]+", "+output[1]+", "+output[2]+", 1.0);\n"
 	shader_code += "}\n"
 	#print("GENERATED COMBINED SHADER:\n"+shader_code)
 	code += shader_code

@@ -69,7 +69,9 @@ func update_node() -> void:
 			var space = Control.new()
 			space.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 			sizer.add_child(space)
-			sizer.add_child(preload("res://addons/material_maker/widgets/preview_button.tscn").instance())
+			var button = preload("res://addons/material_maker/widgets/preview_button.tscn").instance()
+			sizer.add_child(button)
+			button.connect("toggled", self, "on_preview_button", [ get_child_count()-1 ])
 		add_child(sizer)
 	rect_size = Vector2(0, 0)
 	for i in range(get_child_count()):
@@ -79,13 +81,12 @@ func update_node() -> void:
 		if i < 5:
 			has_output = i < output_count
 			sizer.get_child(sizer.get_child_count()-1).visible = has_output
-			sizer.get_child(sizer.get_child_count()-1).connect("toggled", self, "on_preview_button", [ i ])
 		if i >= input_count:
 			sizer.get_child(0).text = ""
 			has_input = false
 		else:
 			sizer.get_child(0).text = PoolByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+i/int(output_count))
 			sizer.get_child(0).add_color_override("font_color", Color(1.0, 1.0, 1.0) if i/int(output_count) == generator.parameters.source else Color(0.5, 0.5, 0.5))
-		set_slot(i, has_input, 0, Color(0.0, 0.5, 0.0, 0.5), has_output, 0, Color(0.0, 0.5, 0.0, 0.5))
+		set_slot(i, has_input, 42, Color(1.0, 1.0, 1.0, 1.0), has_output, 42, Color(1.0, 1.0, 1.0, 1.0))
 	# Preview
 	restore_preview_widget()

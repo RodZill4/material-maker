@@ -44,7 +44,8 @@ const PORT_TYPES : Dictionary = {
 	rgb   = { type="vec3", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 1.0) },
 	rgba  = { type="vec4", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.0, 0.5, 0.0, 0.5) },
 	sdf2d = { type="float", paramdefs="vec2 uv", params="uv", slot_type=1, color=Color(1.0, 0.5, 0.0) },
-	sdf3d = { type="float", paramdefs="vec3 p", params="p", slot_type=2, color=Color(1.0, 0.0, 0.0) }
+	sdf3d = { type="float", paramdefs="vec3 p", params="p", slot_type=2, color=Color(1.0, 0.0, 0.0) },
+	any = { slot_type=42, color=Color(1.0, 1.0, 1.0) }
 }
 
 func _ready() -> void:

@@ -134,7 +134,7 @@ func create_parameter_control(p : Dictionary) -> Control:
 	return control
 
 func save_preview_widget() -> void:
-	if preview != null:
+	if preview != null and preview.get_parent() == self:
 		remove_child(preview)
 	if preview_timer != null:
 		preview_timer.stop()
