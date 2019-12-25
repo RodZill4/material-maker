@@ -1,0 +1,67 @@
+{
+	"name": "sdf3d_box",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"r": 0.01,
+		"sx": 0.25,
+		"sy": 0.25,
+		"sz": 0.5
+	},
+	"shader_model": {
+		"code": "vec3 $(name_uv)_q = abs($uv) - vec3($sx, $sy, $sz);\n",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Box",
+		"outputs": [
+			{
+				"sdf3d": "length(max($(name_uv)_q,0.0))+min(max($(name_uv)_q.x,max($(name_uv)_q.y,$(name_uv)_q.z)),0.0)-$r",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "Size X",
+				"max": 1,
+				"min": 0,
+				"name": "sx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Size Y",
+				"max": 1,
+				"min": 0,
+				"name": "sy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Size Z",
+				"max": 1,
+				"min": 0,
+				"name": "sz",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

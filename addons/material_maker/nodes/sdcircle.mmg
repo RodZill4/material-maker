@@ -7,11 +7,11 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
-		"r": 0.5
+		"r": 0.25
 	},
 	"shader_model": {
 		"code": "",
-		"global": "float sdCircle(vec2 p, float r) {\n  return length(p) - r;\n}\n",
+		"global": "",
 		"inputs": [
 
 		],
@@ -19,8 +19,8 @@
 		"name": "sdCircle",
 		"outputs": [
 			{
-				"f": "sdCircle($uv-0.5*vec2($cx+1.0, $cy+1.0), $r)",
-				"type": "f"
+				"sdf2d": "length($uv-0.5*vec2($cx+1.0, $cy+1.0))-$r",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [

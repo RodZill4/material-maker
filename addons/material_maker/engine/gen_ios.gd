@@ -27,7 +27,7 @@ func get_type_name() -> String:
 func get_io_defs() -> Array:
 	var rv : Array = []
 	for p in ports:
-		rv.push_back({ name=p.name, type="rgba" })
+		rv.push_back({ name=p.name, type=p.type })
 	return rv
 
 func get_input_defs() -> Array:
@@ -53,6 +53,11 @@ func add_port() -> void:
 
 func set_port_name(i : int, n : String) -> void:
 	ports[i].name = n
+
+func set_port_type(i : int, t : String) -> void:
+	print(t)
+	ports[i].type = t
+	emit_signal("parameter_changed", "__update_all__", null)
 
 func delete_port(i : int) -> void:
 	ports.remove(i)

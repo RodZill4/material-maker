@@ -22,15 +22,15 @@
 				"default": "0.0",
 				"label": "",
 				"name": "in",
-				"type": "f"
+				"type": "sdf2d"
 			}
 		],
 		"instance": "",
 		"name": "sdAnnularShape",
 		"outputs": [
 			{
-				"f": "abs($in($uv)) - $r",
-				"type": "f"
+				"sdf2d": "abs($in($uv))-$r",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [

@@ -12,8 +12,8 @@
 		"w": 0.3
 	},
 	"shader_model": {
-		"code": "",
-		"global": "float sdBox(in vec2 p, in vec2 b) {\n    vec2 d = abs(p)-b;\n    return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);\n}\n",
+		"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
+		"global": "",
 		"inputs": [
 
 		],
@@ -21,8 +21,8 @@
 		"name": "sdBox",
 		"outputs": [
 			{
-				"f": "sdBox($uv-0.5*vec2($cx+1.0, $cy+1.0), vec2($w, $h))",
-				"type": "f"
+				"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [
