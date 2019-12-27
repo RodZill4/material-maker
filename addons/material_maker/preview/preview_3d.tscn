@@ -32,4 +32,3 @@ physics_object_picking = true
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
 [connection signal="gui_input" from="." to="." method="on_gui_input"]
-[connection signal="resized" from="." to="." method="_on_Preview_resized"]

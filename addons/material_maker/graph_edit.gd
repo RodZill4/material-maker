@@ -10,6 +10,8 @@ var need_save = false
 var top_generator = null
 var generator = null
 
+var last_selected = null
+
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -354,3 +356,16 @@ func edit_subgraph(g : MMGenGraph) -> void:
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
 		generator.transmits_seed = button_pressed
+
+func _on_GraphEdit_node_selected(node) -> void:
+	last_selected = node
+
+func _on_GraphEdit_gui_input(event) -> void:
+	if event is InputEventMouseButton:
+		call_deferred("check_last_selected")
+
+func check_last_selected() -> void:
+	if last_selected != null and !(is_instance_valid(last_selected) && last_selected.selected):
+		print("Unselected")
+		last_selected = null
+		emit_signal("node_selected", null)

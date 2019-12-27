@@ -488,6 +488,8 @@ func update_preview_2d(node = null) -> void:
 			result.copy_to_texture(tex)
 			result.release()
 			preview_2d.set_preview_texture(tex)
+		else:
+			preview_2d.set_preview_texture(null)
 
 func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -499,6 +501,10 @@ func update_preview_3d(previews : Array) -> void:
 		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
+func on_selected_node_change(node) -> void:
+	preview_2d.setup_controls(node.generator if node != null else null)
+	update_preview_2d(node)
+
 func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
@@ -507,7 +513,7 @@ func _on_Projects_tab_changed(tab) -> void:
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
 			new_tab.connect("graph_changed", self, "update_preview")
-			new_tab.connect("node_selected", self, "update_preview_2d")
+			new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
 

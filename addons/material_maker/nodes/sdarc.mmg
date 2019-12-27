@@ -6,12 +6,12 @@
 	},
 	"parameters": {
 		"a1": 0,
-		"a2": 0,
+		"a2": -50,
 		"cx": 0,
 		"cy": 0,
 		"r": 0.4,
-		"r1": 0.3,
-		"r2": 0.1
+		"r1": 0.29021,
+		"r2": 0.075098
 	},
 	"shader_model": {
 		"code": "",
@@ -29,6 +29,7 @@
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Angle 1",
 				"max": 180,
@@ -38,6 +39,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Angle 2",
 				"max": 180,
@@ -47,6 +49,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Radius1.x",
 				"default": 0.5,
 				"label": "Radius 1",
 				"max": 1,
@@ -56,6 +59,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Radius11.x",
 				"default": 0.1,
 				"label": "Radius 2",
 				"max": 1,
