@@ -383,7 +383,7 @@ func do_add_to_user_library(name, nodes) -> void:
 	dir.make_dir("user://library/user")
 	data.library = "user://library/user.json"
 	data.icon = library.get_icon_name(name)
-	var result = nodes[0].generator.render(0, 64)
+	var result = nodes[0].generator.render(0, 64, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	result.save_to_file("user://library/user/"+data.icon+".png")
@@ -480,7 +480,7 @@ func update_preview_2d(node = null) -> void:
 					node = n
 					break
 		if node != null:
-			var result = node.generator.render(0, 1024)
+			var result = node.generator.render(0, 1024, true)
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			var tex = ImageTexture.new()

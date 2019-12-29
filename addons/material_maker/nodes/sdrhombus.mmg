@@ -9,7 +9,7 @@
 		"cy": 0,
 		"h": 0.2,
 		"r": 0.3,
-		"w": 0.3
+		"w": 0.5
 	},
 	"shader_model": {
 		"code": "",
@@ -21,8 +21,8 @@
 		"name": "sdRhombus",
 		"outputs": [
 			{
-				"f": "sdRhombus($uv-0.5*vec2($cx+1.0, $cy+1.0), vec2($w, $h))",
-				"type": "f"
+				"sdf2d": "sdRhombus($uv-0.5*vec2($cx+1.0, $cy+1.0), vec2($w, $h))",
+				"type": "sdf2d"
 			}
 		],
 		"parameters": [

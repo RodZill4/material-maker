@@ -1,0 +1,37 @@
+{
+	"name": "sdf3d_sphere",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"r": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Sphere",
+		"outputs": [
+			{
+				"sdf3d": "length($uv)-$r",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

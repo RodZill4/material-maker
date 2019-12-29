@@ -1,0 +1,39 @@
+{
+	"name": "raymarching",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "float $(name_uv)_d = raymarch_$name($uv);\n",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"name": "sdf",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "float input_$name(vec3 p) {\n\tif (p.z > 0.0) {\n\t\treturn $sdf(p);\n\t} else {\n\t\treturn p.z;\n\t}\n}\n\nfloat raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO=0.;\n    \n    for (int i=0; i < 25; i++) {\n    \tvec3 p = ro + rd*dO;\n        float dS = input_$name(p);\n        dO += dS;\n        if (dO > 1.0 || dS < 0.0001) break;\n    }\n    \n    return dO;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = input_$name(p);\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        input_$name(p-vec3(e, 0.0, 0.0)),\n        input_$name(p-vec3(0.0, e, 0.0)),\n        input_$name(p-vec3(0.0, 0.0, e)));\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
+		"name": "Raymarching",
+		"outputs": [
+			{
+				"f": "1.0-$(name_uv)_d",
+				"type": "f"
+			},
+			{
+				"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

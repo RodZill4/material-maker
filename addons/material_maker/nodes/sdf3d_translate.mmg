@@ -1,0 +1,62 @@
+{
+	"name": "sdf3d_translate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"x": 0,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"name": "Translate",
+		"outputs": [
+			{
+				"sdf3d": "$in($uv-vec3($x, $y, $z))",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "X",
+				"max": 1,
+				"min": -1,
+				"name": "x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Y",
+				"max": 1,
+				"min": -1,
+				"name": "y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Z",
+				"max": 1,
+				"min": -1,
+				"name": "z",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -1,0 +1,53 @@
+{
+	"name": "sdtranslate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"x": 0,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "Translate",
+		"outputs": [
+			{
+				"sdf2d": "$in($uv-vec2($x, $y))",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "X",
+				"max": 1,
+				"min": -1,
+				"name": "x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Y",
+				"max": 1,
+				"min": -1,
+				"name": "y",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

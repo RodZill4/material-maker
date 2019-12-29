@@ -134,7 +134,7 @@ func create_parameter_control(p : Dictionary) -> Control:
 	return control
 
 func save_preview_widget() -> void:
-	if preview != null:
+	if preview != null and preview.get_parent() == self:
 		remove_child(preview)
 	if preview_timer != null:
 		preview_timer.stop()
@@ -174,16 +174,12 @@ func update_node() -> void:
 		var input = inputs[i]
 		var enable_left = false
 		var color_left = Color(0.5, 0.5, 0.5)
+		var type_left = 0
 		if typeof(input) == TYPE_DICTIONARY:
-			if input.type == "rgb":
-				enable_left = true
-				color_left = Color(0.5, 0.5, 1.0)
-			elif input.type == "rgba":
-				enable_left = true
-				color_left = Color(0.0, 0.5, 0.0, 0.5)
-			else:
-				enable_left = true
-		set_slot(i, enable_left, 0, color_left, false, 0, Color())
+			enable_left = true
+			color_left = MMGenBase.PORT_TYPES[input.type].color
+			type_left = MMGenBase.PORT_TYPES[input.type].slot_type
+		set_slot(i, enable_left, type_left, color_left, false, 0, Color())
 		var hsizer : HBoxContainer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		if input.has("label") and input.label != "":
@@ -240,7 +236,8 @@ func update_node() -> void:
 				label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				hsizer.add_child(label_widget)
 			control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.add_child(control)
+			if hsizer != null:
+				hsizer.add_child(control)
 	initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
@@ -248,15 +245,15 @@ func update_node() -> void:
 	output_count = outputs.size()
 	for i in range(output_count):
 		var output = outputs[i]
-		var enable_right = true
-		var color_right = Color(0.5, 0.5, 0.5)
+		var enable_right : bool = true
+		var color_right : Color = Color(0.5, 0.5, 0.5)
+		var type_right : int = 0
 		assert(typeof(output) == TYPE_DICTIONARY)
 		assert(output.has("type"))
 		enable_right = true
-		match output.type:
-			"rgb": color_right = Color(0.5, 0.5, 1.0)
-			"rgba": color_right = Color(0.0, 0.5, 0.0, 0.5)
-		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, 0, color_right)
+		color_right = MMGenBase.PORT_TYPES[output.type].color
+		type_right = MMGenBase.PORT_TYPES[output.type].slot_type
+		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, type_right, color_right)
 		var hsizer : HBoxContainer
 		while i >= get_child_count():
 			hsizer = HBoxContainer.new()
@@ -383,7 +380,7 @@ func update_preview(size : int = 0) -> void:
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	var result = generator.render(preview_index, preview_size)
+	var result = generator.render(preview_index, preview_size, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if preview.texture == null:

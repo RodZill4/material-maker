@@ -1,0 +1,41 @@
+{
+	"name": "sdf3d_cone",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 30,
+		"r": 0,
+		"sx": 0.01,
+		"sy": 0.01,
+		"sz": 0.015
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Cone",
+		"outputs": [
+			{
+				"sdf3d": "dot(vec2(cos($a*0.01745329251),sin($a*0.01745329251)),vec2(length($uv.xz),$uv.y))",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 30,
+				"label": "Angle",
+				"max": 90,
+				"min": 0,
+				"name": "a",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

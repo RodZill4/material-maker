@@ -1,0 +1,45 @@
+{
+	"name": "sdrotate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 0,
+		"x": 0.35,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec2 sdf2d_rotate(vec2 uv, float a) {\n\tvec2 rv;\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\tuv -= vec2(0.5);\n\trv.x = uv.x*c+uv.y*s;\n\trv.y = -uv.x*s+uv.y*c;\n\treturn rv+vec2(0.5);\n}\n",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "Rotate",
+		"outputs": [
+			{
+				"sdf2d": "$in(sdf2d_rotate($uv, $a*0.01745329251))",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"max": 180,
+				"min": -180,
+				"name": "a",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

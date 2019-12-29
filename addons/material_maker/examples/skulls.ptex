@@ -1,0 +1,2016 @@
+{
+	"connections": [
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "occlusion",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "sdf3d_scale",
+			"from_port": 0,
+			"to": "sdf3d_scale_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_scale_2",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_translate_4",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2",
+			"to_port": 1
+		},
+		{
+			"from": "sdf3d_scale",
+			"from_port": 0,
+			"to": "sdf3d_repeat",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_repeat",
+			"from_port": 0,
+			"to": "sdf3d_translate_4",
+			"to_port": 0
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "colorize_4",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_4",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "sdf3d_scale_3",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_scale_3",
+			"from_port": 0,
+			"to": "sdf3d_repeat_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_boolean_2",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_repeat_2",
+			"from_port": 0,
+			"to": "sdf3d_translate_4_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_translate_4_2",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2_2",
+			"to_port": 1
+		},
+		{
+			"from": "sdf3d_repeat_2_2",
+			"from_port": 0,
+			"to": "sdf3d_translate_4_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_scale_3",
+			"from_port": 0,
+			"to": "sdf3d_repeat_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_boolean_2_2",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_translate_4_2_2",
+			"from_port": 0,
+			"to": "sdf3d_boolean_2_2_2",
+			"to_port": 1
+		},
+		{
+			"from": "sdf3d_boolean_2_2_2",
+			"from_port": 0,
+			"to": "_3_2",
+			"to_port": 0
+		},
+		{
+			"from": "blend_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "normal_map",
+			"to_port": 0
+		},
+		{
+			"from": "_3_2",
+			"from_port": 1,
+			"to": "blend_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_5_2",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 2
+		},
+		{
+			"from": "graph_3",
+			"from_port": 0,
+			"to": "sdf3d_scale",
+			"to_port": 0
+		},
+		{
+			"from": "_3_2",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "colorize_5",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "colorize_5_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "occlusion",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 0
+		},
+		{
+			"from": "blend_3",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "colorize_5",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_5_2",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 2
+		}
+	],
+	"label": "Graph",
+	"name": "49",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 390,
+				"y": 1354
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"roughness": 1,
+				"size": 11,
+				"subsurf_scatter_strength": 0
+			},
+			"type": "material"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": -385.399658,
+				"y": 1196.349854
+			},
+			"parameters": {
+				"iterations": 5,
+				"persistence": 0.7,
+				"scale_x": 32,
+				"scale_y": 32
+			},
+			"type": "perlin"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -347.399658,
+				"y": 1342.349976
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.118182,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.909091,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "_3_2",
+			"node_position": {
+				"x": -378.336426,
+				"y": 1476.947388
+			},
+			"parameters": {
+
+			},
+			"shader_model": {
+				"code": "float $(name_uv)_d = raymarch_$name($uv);\n",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "sdf",
+						"type": "sdf3d"
+					}
+				],
+				"instance": "float input_$name(vec3 p) {\n\treturn min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO=0.;\n    \n    for (int i=0; i < 50; i++) {\n    \tvec3 p = ro + rd*dO;\n        float dS = input_$name(p);\n        dO += dS;\n        if (dO > 0.001 && dS < 0.0001) break;\n    }\n    \n    return dO;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = input_$name(p);\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        input_$name(p-vec3(e, 0.0, 0.0)),\n        input_$name(p-vec3(0.0, e, 0.0)),\n        input_$name(p-vec3(0.0, 0.0, e)));\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
+				"name": "Raymarching",
+				"outputs": [
+					{
+						"f": "1.0-$(name_uv)_d",
+						"type": "f"
+					},
+					{
+						"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -126.553131,
+				"y": 1179.272949
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.994792,
+							"g": 0.999512,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0.885417,
+							"g": 0.989258,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": 138.446899,
+				"y": 1239.272949
+			},
+			"parameters": {
+				"color": 0.31
+			},
+			"type": "uniform_greyscale"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": 38.446899,
+				"y": 1686.272949
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.663637,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "sdf3d_scale",
+			"node_position": {
+				"x": -994.911377,
+				"y": 1248.772949
+			},
+			"parameters": {
+				"a": 0,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_scale"
+		},
+		{
+			"name": "sdf3d_scale_2",
+			"node_position": {
+				"x": -811.183411,
+				"y": 1198.851807
+			},
+			"parameters": {
+				"a": 0,
+				"r": 0.25,
+				"rx": 4,
+				"ry": 4,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"shader_model": {
+				"code": "",
+				"global": "vec3 repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 a = (rand3(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "sdf3d"
+					}
+				],
+				"instance": "",
+				"name": "Repeat",
+				"outputs": [
+					{
+						"sdf3d": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
+						"type": "sdf3d"
+					}
+				],
+				"parameters": [
+					{
+						"default": 4,
+						"label": "X",
+						"max": 32,
+						"min": 1,
+						"name": "rx",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 4,
+						"label": "Y",
+						"max": 32,
+						"min": 1,
+						"name": "ry",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0.5,
+						"label": "R",
+						"max": 1,
+						"min": 0,
+						"name": "r",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "occlusion",
+			"node_position": {
+				"x": 12.088623,
+				"y": 1608.272949
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 50,
+				"param2": 15
+			},
+			"type": "occlusion"
+		},
+		{
+			"name": "sdf3d_translate_4",
+			"node_position": {
+				"x": -813.195313,
+				"y": 1400.797363
+			},
+			"parameters": {
+				"x": 0.4,
+				"y": 0.35,
+				"z": 0
+			},
+			"type": "sdf3d_translate"
+		},
+		{
+			"name": "sdf3d_boolean_2",
+			"node_position": {
+				"x": -622.79303,
+				"y": 1304.297363
+			},
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"type": "sdf3d_boolean"
+		},
+		{
+			"name": "sdf3d_repeat",
+			"node_position": {
+				"x": -812.79303,
+				"y": 1300.297363
+			},
+			"parameters": {
+				"a": 0,
+				"r": 0.25,
+				"rx": 4,
+				"ry": 4,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_repeat"
+		},
+		{
+			"name": "colorize_4",
+			"node_position": {
+				"x": -128.79303,
+				"y": 1246.013184
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.300774,
+							"pos": 0,
+							"r": 0.458333
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.046875,
+							"pos": 1,
+							"r": 0.1875
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize_5",
+			"node_position": {
+				"x": -147.127869,
+				"y": 1324.013184
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 0,
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0.520833,
+							"g": 0.520833,
+							"pos": 0.036364,
+							"r": 0.520833
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": 126.872131,
+				"y": 1141.013184
+			},
+			"parameters": {
+				"amount": 0.5,
+				"blend_type": 0
+			},
+			"type": "blend"
+		},
+		{
+			"name": "sdf3d_repeat_2",
+			"node_position": {
+				"x": -931.880676,
+				"y": 1576.431152
+			},
+			"parameters": {
+				"a": 0,
+				"r": 0.46,
+				"rx": 4,
+				"ry": 4,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_repeat"
+		},
+		{
+			"connections": [
+				{
+					"from": "sdf3d_sphere_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_sphere_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_2_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_smoothboolean_3",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_sphere_2_2_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_sphere_2_2_3",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_2_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2",
+					"from_port": 0,
+					"to": "sdf3d_boolean_2_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4_2_3",
+					"from_port": 0,
+					"to": "sdf3d_boolean_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_boolean_2_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Bone",
+			"name": "graph_2",
+			"node_position": {
+				"x": -1109.480713,
+				"y": 1577.556274
+			},
+			"nodes": [
+				{
+					"name": "sdf3d_translate_4_2_2",
+					"node_position": {
+						"x": -935.880676,
+						"y": 1383.431152
+					},
+					"parameters": {
+						"x": -0.03,
+						"y": -0.22,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_sphere_2",
+					"node_position": {
+						"x": -930.880676,
+						"y": 1327.931152
+					},
+					"parameters": {
+						"r": 0.03
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_sphere_2_2_2",
+					"node_position": {
+						"x": -937.880676,
+						"y": 1638.431152
+					},
+					"parameters": {
+						"h": 0.4,
+						"r": 0.025
+					},
+					"shader_model": {
+						"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.y -= clamp($(name_uv)_p.y, -0.5*$h, 0.5*$h);\n",
+						"global": "",
+						"inputs": [
+
+						],
+						"instance": "",
+						"name": "Sphere",
+						"outputs": [
+							{
+								"sdf3d": "length($(name_uv)_p)-$r",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0.5,
+								"label": "H",
+								"max": 1,
+								"min": 0,
+								"name": "h",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"default": 0.1,
+								"label": "R",
+								"max": 0.5,
+								"min": 0,
+								"name": "r",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2",
+					"node_position": {
+						"x": -744.380676,
+						"y": 1604.931152
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.02,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3",
+					"node_position": {
+						"x": -744.880676,
+						"y": 1527.931152
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.01,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"shader_model": {
+						"code": "",
+						"global": "float sdf3SmoothUnion(float d1, float d2, float k) {\n    float h = clamp(0.5+0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)-k*h*(1.0-h);\n}\n\nfloat sdf3SmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2+d1)/k, 0.0, 1.0);\n    return mix( d2, -d1, h )+k*h*(1.0-h);\n}\n\nfloat sdf3SmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)+k*h*(1.0-h);\n}\n",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in1",
+								"type": "sdf3d"
+							},
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in2",
+								"type": "sdf3d"
+							}
+						],
+						"instance": "",
+						"name": "sdSmoothBoolean",
+						"outputs": [
+							{
+								"sdf3d": "sdf3Smooth$op($in1($uv), $in2($uv), $k)",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0,
+								"label": "",
+								"name": "op",
+								"type": "enum",
+								"values": [
+									{
+										"name": "Union",
+										"value": "Union"
+									},
+									{
+										"name": "Subtraction",
+										"value": "Subtraction"
+									},
+									{
+										"name": "Intersection",
+										"value": "Intersection"
+									}
+								]
+							},
+							{
+								"default": 0,
+								"label": "",
+								"max": 1,
+								"min": 0,
+								"name": "k",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "sdf3d_sphere_2_2",
+					"node_position": {
+						"x": -929.880676,
+						"y": 1483.431152
+					},
+					"parameters": {
+						"r": 0.04
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_translate_4_2",
+					"node_position": {
+						"x": -934.880676,
+						"y": 1534.431152
+					},
+					"parameters": {
+						"x": 0.02,
+						"y": -0.25,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_translate_4_2_3",
+					"node_position": {
+						"x": -936.380676,
+						"y": 1792.181152
+					},
+					"parameters": {
+						"x": -0.04,
+						"y": 0.21,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_sphere_2_2_3",
+					"node_position": {
+						"x": -931.380676,
+						"y": 1741.181152
+					},
+					"parameters": {
+						"r": 0.06
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_boolean_2_2",
+					"node_position": {
+						"x": -747.380676,
+						"y": 1680.681152
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_boolean"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1237.880615,
+						"y": 1568.556274
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -447.380676,
+						"y": 1568.556274
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "sdf3d"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -1079.480713,
+						"y": 1027.931152
+					},
+					"parameters": {
+
+					},
+					"type": "remote",
+					"widgets": [
+
+					]
+				}
+			],
+			"parameters": {
+
+			},
+			"type": "graph"
+		},
+		{
+			"name": "sdf3d_scale_3",
+			"node_position": {
+				"x": -1130.764893,
+				"y": 1621.628418
+			},
+			"parameters": {
+				"a": 0,
+				"s": 0.4,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_scale"
+		},
+		{
+			"name": "sdf3d_boolean_2_2",
+			"node_position": {
+				"x": -546.264893,
+				"y": 1515.128418
+			},
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"type": "sdf3d_boolean"
+		},
+		{
+			"name": "sdf3d_translate_4_2",
+			"node_position": {
+				"x": -753.844666,
+				"y": 1576.628418
+			},
+			"parameters": {
+				"x": 0.35,
+				"y": 0.52,
+				"z": 0.02
+			},
+			"type": "sdf3d_translate"
+		},
+		{
+			"name": "sdf3d_repeat_2_2",
+			"node_position": {
+				"x": -936.362671,
+				"y": 1681.529785
+			},
+			"parameters": {
+				"a": 0,
+				"r": 0.5,
+				"rx": 4,
+				"ry": 4,
+				"s": 0.3,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_repeat"
+		},
+		{
+			"name": "sdf3d_translate_4_2_2",
+			"node_position": {
+				"x": -753.32666,
+				"y": 1681.727051
+			},
+			"parameters": {
+				"x": 0.51,
+				"y": 0.38,
+				"z": 0.02
+			},
+			"type": "sdf3d_translate"
+		},
+		{
+			"name": "sdf3d_boolean_2_2_2",
+			"node_position": {
+				"x": -546.344666,
+				"y": 1580.128418
+			},
+			"parameters": {
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"type": "sdf3d_boolean"
+		},
+		{
+			"name": "normal_map",
+			"node_position": {
+				"x": 52.85556,
+				"y": 1392.238892
+			},
+			"parameters": {
+				"amount": 0.5,
+				"param0": 11,
+				"param1": 1.02,
+				"param2": 0,
+				"size": 4
+			},
+			"type": "normal_map"
+		},
+		{
+			"name": "blend_2",
+			"node_position": {
+				"x": 23.85556,
+				"y": 1485.238892
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"type": "blend"
+		},
+		{
+			"name": "colorize_5_2",
+			"node_position": {
+				"x": -190.144485,
+				"y": 1443.488892
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 0,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.027272,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"connections": [
+				{
+					"from": "sdf3d_sphere_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_scale",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4_2_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_sphere_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_3",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_sphere_2_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4_3_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2_3",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_box_2",
+					"from_port": 0,
+					"to": "sdf3d_rotate_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_rotate_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_3_2_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_3_2_2_2",
+					"from_port": 0,
+					"to": "sdf3d_repeat",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_rotate_2_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_2_2_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_cylinder",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_cylinder",
+					"from_port": 0,
+					"to": "sdf3d_scale",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_3",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_sphere_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_3",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box_2_2",
+					"from_port": 0,
+					"to": "sdf3d_rotate_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_box_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_2_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2_3_2",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_smoothboolean_3_2_3_2_2",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_sphere_2_3",
+					"from_port": 0,
+					"to": "sdf3d_translate_4_3_2_2_2_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_3_2_2_2_3",
+					"from_port": 0,
+					"to": "sdf3d_boolean",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_boolean",
+					"from_port": 0,
+					"to": "sdf3d_rotate_2_2_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_translate_4_3_2_2_2_2",
+					"from_port": 0,
+					"to": "sdroundedshape",
+					"to_port": 0
+				},
+				{
+					"from": "sdroundedshape",
+					"from_port": 0,
+					"to": "sdf3d_smoothboolean_3_2_3_2_2",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_repeat",
+					"from_port": 0,
+					"to": "sdf3d_rotate_2_2_3",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_rotate_2_2_3",
+					"from_port": 0,
+					"to": "sdf3d_boolean",
+					"to_port": 1
+				},
+				{
+					"from": "sdf3d_translate_4_3_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Skull",
+			"name": "graph_3",
+			"node_position": {
+				"x": -960.932495,
+				"y": 1204.712646
+			},
+			"nodes": [
+				{
+					"name": "sdf3d_smoothboolean_3",
+					"node_position": {
+						"x": -841.989258,
+						"y": 938.422729
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.04,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_translate_4",
+					"node_position": {
+						"x": -1309.989258,
+						"y": 736.422729
+					},
+					"parameters": {
+						"x": 0.52,
+						"y": -0.22,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2",
+					"node_position": {
+						"x": -629.489258,
+						"y": 873.422729
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.17,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_sphere_2_2",
+					"node_position": {
+						"x": -830.318359,
+						"y": 1023.672852
+					},
+					"parameters": {
+						"r": 0.07
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_translate_4_3",
+					"node_position": {
+						"x": -834.318359,
+						"y": 1078.672852
+					},
+					"parameters": {
+						"x": 0.13,
+						"y": -0.04,
+						"z": 0.18
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_sphere_2_2_2",
+					"node_position": {
+						"x": -831.318359,
+						"y": 1179.672852
+					},
+					"parameters": {
+						"r": 0.08
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_sphere_2",
+					"node_position": {
+						"x": -1297.989258,
+						"y": 844.922729
+					},
+					"parameters": {
+						"r": 0.28
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_box_2",
+					"node_position": {
+						"x": -855.193726,
+						"y": 1338.172852
+					},
+					"parameters": {
+						"r": 0,
+						"sx": 0.05,
+						"sy": 0.05,
+						"sz": 0.05
+					},
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "sdf3d_translate_4_3_2",
+					"node_position": {
+						"x": -834.318359,
+						"y": 1232.672852
+					},
+					"parameters": {
+						"x": 0.12,
+						"y": -0.03,
+						"z": 0.18
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_rotate_2",
+					"node_position": {
+						"x": -839.193726,
+						"y": 1471.172852
+					},
+					"parameters": {
+						"a": 0,
+						"ax": -30,
+						"ay": 45,
+						"az": 0,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"type": "sdf3d_rotate"
+				},
+				{
+					"name": "sdf3d_translate_4_3_2_2",
+					"node_position": {
+						"x": -835.193726,
+						"y": 1573.172852
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.11,
+						"z": 0.19
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2_3",
+					"node_position": {
+						"x": -623.818359,
+						"y": 1236.172852
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.09,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2_2",
+					"node_position": {
+						"x": -622.818359,
+						"y": 1073.172852
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.15,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_translate_4_2_2",
+					"node_position": {
+						"x": -832.989258,
+						"y": 826.922729
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.24,
+						"z": 0.01
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_scale",
+					"node_position": {
+						"x": -823.989258,
+						"y": 776.422729
+					},
+					"parameters": {
+						"a": 0,
+						"s": 0.48,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"type": "sdf3d_scale"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2_3_2",
+					"node_position": {
+						"x": -602.693726,
+						"y": 1454.672852
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.03,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_translate_4_2",
+					"node_position": {
+						"x": -1141.989258,
+						"y": 1070.922729
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.21,
+						"z": 0.08
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_translate_4_3_3",
+					"node_position": {
+						"x": -363.318359,
+						"y": 1762.672852
+					},
+					"parameters": {
+						"x": 0.15,
+						"y": 0,
+						"z": 0.18
+					},
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in",
+								"type": "sdf3d"
+							}
+						],
+						"instance": "",
+						"name": "Mirror",
+						"outputs": [
+							{
+								"sdf3d": "$in(vec3(abs($uv.x), $uv.y, $uv.z))",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1375.989258,
+						"y": 1121.935181
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -194.318359,
+						"y": 1767.935181
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "sdf3d"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -1028.995361,
+						"y": 476.422729
+					},
+					"parameters": {
+
+					},
+					"type": "remote",
+					"widgets": [
+
+					]
+				},
+				{
+					"name": "sdf3d_translate_4_3_2_2_2",
+					"node_position": {
+						"x": -1172.482544,
+						"y": 1931.119385
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.14,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_rotate_2_2",
+					"node_position": {
+						"x": -1172.482544,
+						"y": 1829.119385
+					},
+					"parameters": {
+						"a": 0,
+						"ax": 0,
+						"ay": 0,
+						"az": 45,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"type": "sdf3d_rotate"
+				},
+				{
+					"name": "sdf3d_repeat",
+					"node_position": {
+						"x": -1166.482544,
+						"y": 2035.119385
+					},
+					"parameters": {
+						"a": 0,
+						"c": 15,
+						"r": 0.24,
+						"rx": 4,
+						"ry": 4,
+						"s": 0.3,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"shader_model": {
+						"code": "",
+						"global": "vec3 circle_repeat_transform(vec3 p, float count) {\n\tfloat r = 6.28/count;\n\tfloat pa = atan(p.x, p.y);\n\tfloat a = mod(pa+0.5*r, r)-0.5*r;\n\tvec3 rv;\n\tfloat c = cos(a-pa);\n\tfloat s = sin(a-pa);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in",
+								"type": "sdf3d"
+							}
+						],
+						"instance": "",
+						"name": "Circle Repeat",
+						"outputs": [
+							{
+								"sdf3d": "$in(circle_repeat_transform($uv, $c))",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+							{
+								"default": 4,
+								"label": "",
+								"max": 32,
+								"min": 1,
+								"name": "c",
+								"step": 1,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "sdf3d_rotate_2_2_2",
+					"node_position": {
+						"x": -791.235718,
+						"y": 1859.869385
+					},
+					"parameters": {
+						"a": 0,
+						"ax": -90,
+						"ay": 0,
+						"az": 0,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"type": "sdf3d_rotate"
+				},
+				{
+					"name": "sdf3d_translate_4_3_2_2_2_2",
+					"node_position": {
+						"x": -788.235718,
+						"y": 1967.869385
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.315,
+						"z": 0.08
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_cylinder",
+					"node_position": {
+						"x": -1161,
+						"y": 994.5
+					},
+					"parameters": {
+						"l": 0.06,
+						"r": 0.15,
+						"sx": 0.25,
+						"sy": 0.25,
+						"sz": 0.5
+					},
+					"type": "sdf3d_cylinder"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_3",
+					"node_position": {
+						"x": -1104.305908,
+						"y": 815.75
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.1,
+						"op": 1,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_box_2_2",
+					"node_position": {
+						"x": -1190.880981,
+						"y": 1701
+					},
+					"parameters": {
+						"r": 0,
+						"sx": 0.01,
+						"sy": 0.01,
+						"sz": 0.015
+					},
+					"type": "sdf3d_box"
+				},
+				{
+					"name": "sdf3d_smoothboolean_3_2_3_2_2",
+					"node_position": {
+						"x": -562.468933,
+						"y": 1761.75
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.05,
+						"op": 0,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_smoothboolean"
+				},
+				{
+					"name": "sdf3d_sphere_2_3",
+					"node_position": {
+						"x": -1165.397095,
+						"y": 2204.25
+					},
+					"parameters": {
+						"r": 0.28
+					},
+					"type": "sdf3d_sphere"
+				},
+				{
+					"name": "sdf3d_translate_4_3_2_2_2_3",
+					"node_position": {
+						"x": -1175.397095,
+						"y": 2261.5
+					},
+					"parameters": {
+						"x": 0,
+						"y": 0.28,
+						"z": 0
+					},
+					"type": "sdf3d_translate"
+				},
+				{
+					"name": "sdf3d_boolean",
+					"node_position": {
+						"x": -990.397095,
+						"y": 2076
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"op": 2,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdf3d_boolean"
+				},
+				{
+					"name": "sdroundedshape",
+					"node_position": {
+						"x": -794.225342,
+						"y": 2070.75
+					},
+					"parameters": {
+						"bevel": 0,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"k": 0.15,
+						"op": 0,
+						"r": 0.01,
+						"w": 0.28
+					},
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"label": "",
+								"name": "in",
+								"type": "sdf3d"
+							}
+						],
+						"instance": "",
+						"name": "Rounded",
+						"outputs": [
+							{
+								"sdf3d": "$in($uv)-$r",
+								"type": "sdf3d"
+							}
+						],
+						"parameters": [
+							{
+								"default": 0,
+								"label": "",
+								"max": 1,
+								"min": 0,
+								"name": "r",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "sdf3d_rotate_2_2_3",
+					"node_position": {
+						"x": -1172.268311,
+						"y": 2085.75
+					},
+					"parameters": {
+						"a": 0,
+						"ax": 0,
+						"ay": 0,
+						"az": 11,
+						"x": 0.35,
+						"y": 0,
+						"z": 0
+					},
+					"type": "sdf3d_rotate"
+				}
+			],
+			"parameters": {
+
+			},
+			"type": "graph"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -353.830994,
+				"y": 1560.222534
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 11
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "blend_3",
+			"node_position": {
+				"x": 84.334427,
+				"y": 1296.834595
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 3
+			},
+			"type": "blend"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

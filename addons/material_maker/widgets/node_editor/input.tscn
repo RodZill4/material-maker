@@ -66,7 +66,7 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "GreyScale"
-items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, -1, null ]
+items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null ]
 selected = 0
 
 [node name="Default" type="LineEdit" parent="."]
@@ -77,6 +77,12 @@ rect_min_size = Vector2( 70, 0 )
 hint_tooltip = "Default value"
 size_flags_horizontal = 3
 text = "0.0"
+
+[node name="Function" type="CheckBox" parent="."]
+margin_left = 418.0
+margin_right = 501.0
+margin_bottom = 24.0
+text = "Function"
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]

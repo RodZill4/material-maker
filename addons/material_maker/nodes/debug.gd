@@ -16,7 +16,10 @@ static func generate_shader(src_code) -> String:
 	var shader_code = src_code.defs
 	shader_code += "\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\nvec2 UV = fragCoord/iResolution.xy;\n"
 	shader_code += src_code.code
-	shader_code += "fragColor = "+src_code.rgba+";\n"
+	if src_code.has("rgba"):
+		shader_code += "fragColor = "+src_code.rgba+";\n"
+	else:
+		shader_code += "fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
 	shader_code += "}\n"
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code

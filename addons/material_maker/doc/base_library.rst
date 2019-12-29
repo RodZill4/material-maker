@@ -8,6 +8,7 @@ to describe procedural materials.
 	:maxdepth: 2
 
 	nodes_simple
+	nodes_3d
 	nodes_pattern
 	nodes_noise
 	nodes_filter

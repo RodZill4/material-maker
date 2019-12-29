@@ -21,11 +21,12 @@ shortcut will make it possible to edit its contents using the pencil button.
 The newly created subgraph contains:
 
 * all nodes that have been grouped
-* an **Input** and an **Output** node that rep^resent the inputs and the outputs
+* an **Input** and an **Output** node that represent the inputs and the outputs
   of the subgraph. Selecting them and using the **Control+W** shortcut makes them
-  editable so the subgraph inputs and outputs can be added, removed reordered or
-  renamed. Please note that all those operations will (when possible) keep
-  connectivity inside and outside the subgraph.
+  editable so the subgraph inputs and outputs can be added, removed, reordered,
+  renamed or have their types modified.
+  Please note that all those operations will (when possible) keep connectivity
+  inside and outside the subgraph.
 * A **Parameters** node that is a **remote** can be edited to expose selected
   parameters to the parent graph. When grouping nodes with a **remote**, the
   remote will automatically be used as **Parameters** node in the nealy created
