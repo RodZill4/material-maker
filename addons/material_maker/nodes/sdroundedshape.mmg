@@ -11,7 +11,7 @@
 		"h": 0.08,
 		"k": 0.15,
 		"op": 0,
-		"r": 0.1,
+		"r": 0.15,
 		"w": 0.28
 	},
 	"shader_model": {
@@ -35,6 +35,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Radius1.x",
 				"default": 0,
 				"label": "",
 				"max": 1,

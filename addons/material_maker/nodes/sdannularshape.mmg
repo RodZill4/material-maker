@@ -35,6 +35,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Radius1.x",
 				"default": 0,
 				"label": "",
 				"max": 1,

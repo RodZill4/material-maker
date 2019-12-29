@@ -1,4 +1,3 @@
-tool
 extends GraphEdit
 class_name MMGraphEdit
 
@@ -10,6 +9,8 @@ var need_save = false
 
 var top_generator = null
 var generator = null
+
+var last_selected = null
 
 onready var timer : Timer = $Timer
 
@@ -45,6 +46,7 @@ func offset_from_global_position(global_position) -> Vector2:
 
 func add_node(node) -> void:
 	add_child(node)
+	move_child(node, 0)
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
@@ -166,10 +168,11 @@ func new_material() -> void:
 	top_generator = loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
 	if top_generator != null:
 		add_child(top_generator)
+		move_child(top_generator, 0)
 		update_view(top_generator)
+		center_view()
 		set_save_path(null)
 		set_need_save(false)
-		center_view()
 
 func get_free_name(type) -> String:
 	var i = 0
@@ -200,10 +203,11 @@ func load_file(filename) -> void:
 	top_generator = MMGenLoader.load_gen(filename)
 	if top_generator != null:
 		add_child(top_generator)
+		move_child(top_generator, 0)
 		update_view(top_generator)
+		center_view()
 		set_save_path(filename)
 		set_need_save(false)
-		center_view()
 
 func save_file(filename) -> void:
 	var data = top_generator.serialize()
@@ -352,3 +356,16 @@ func edit_subgraph(g : MMGenGraph) -> void:
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
 		generator.transmits_seed = button_pressed
+
+func _on_GraphEdit_node_selected(node) -> void:
+	last_selected = node
+
+func _on_GraphEdit_gui_input(event) -> void:
+	if event is InputEventMouseButton:
+		call_deferred("check_last_selected")
+
+func check_last_selected() -> void:
+	if last_selected != null and !(is_instance_valid(last_selected) && last_selected.selected):
+		print("Unselected")
+		last_selected = null
+		emit_signal("node_selected", null)

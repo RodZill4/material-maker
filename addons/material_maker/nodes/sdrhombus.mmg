@@ -5,11 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0,
-		"cy": 0,
-		"h": 0.2,
+		"cx": -0.19353,
+		"cy": -0.224011,
+		"h": 0.187815,
 		"r": 0.3,
-		"w": 0.5
+		"w": 0.393785
 	},
 	"shader_model": {
 		"code": "",
@@ -21,12 +21,13 @@
 		"name": "sdRhombus",
 		"outputs": [
 			{
-				"sdf2d": "sdRhombus($uv-0.5*vec2($cx+1.0, $cy+1.0), vec2($w, $h))",
+				"sdf2d": "sdRhombus($uv-vec2($cx+0.5, $cy+0.5), vec2($w, $h))",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
+				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
 				"max": 1,
@@ -36,6 +37,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Rect1.y",
 				"default": 1,
 				"label": "Height",
 				"max": 1,
@@ -45,6 +47,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
 				"max": 1,
@@ -54,6 +57,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
 				"max": 1,

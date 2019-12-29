@@ -7,6 +7,9 @@ var generator : MMGenBase = null setget set_generator
 func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")
 
+func _exit_tree() -> void:
+	get_parent().call_deferred("check_last_selected")
+
 func _draw() -> void:
 	if generator != null and generator.has_randomness():
 		var icon = preload("res://addons/material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://addons/material_maker/icons/randomness_unlocked.tres")

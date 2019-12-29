@@ -1,4 +1,3 @@
-tool
 extends Panel
 
 var recent_files = []
@@ -13,6 +12,9 @@ var need_update : bool = false
 
 onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
 onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
+
+onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
+onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
 
 const RECENT_FILES_COUNT = 15
 
@@ -465,7 +467,7 @@ func update_preview() -> void:
 		status = update_preview_2d()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		status = update_preview_3d()
+		status = update_preview_3d([ $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D, $VBoxContainer/HBoxContainer/ProjectsPane/Preview3D])
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 	updating = false
@@ -473,7 +475,6 @@ func update_preview() -> void:
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		var preview = $VBoxContainer/HBoxContainer/VBoxContainer/Preview
 		if node == null:
 			for n in graph_edit.get_children():
 				if n is GraphNode and n.selected:
@@ -486,16 +487,23 @@ func update_preview_2d(node = null) -> void:
 			var tex = ImageTexture.new()
 			result.copy_to_texture(tex)
 			result.release()
-			preview.set_2d(tex)
+			preview_2d.set_preview_texture(tex)
+		else:
+			preview_2d.set_preview_texture(null)
 
-func update_preview_3d() -> void:
+func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
 		var status = gen_material.render_textures()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		gen_material.update_materials($VBoxContainer/HBoxContainer/VBoxContainer/Preview.get_materials())
+		for p in previews:
+			gen_material.update_materials(p.get_materials())
+
+func on_selected_node_change(node) -> void:
+	preview_2d.setup_controls(node.generator if node != null else null)
+	update_preview_2d(node)
 
 func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()
@@ -505,15 +513,9 @@ func _on_Projects_tab_changed(tab) -> void:
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
 			new_tab.connect("graph_changed", self, "update_preview")
-			new_tab.connect("node_selected", self, "update_preview_2d")
+			new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
-
-func _on_Preview_show_background_preview(v) -> void:
-	var pv = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/MaterialPreview
-	var bgpv = $VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview/Viewport
-	bgpv.world = pv.find_world()
-	$VBoxContainer/HBoxContainer/ProjectsPane/BackgroundPreview.visible = v
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -523,3 +525,7 @@ func _exit_tree() -> void:
 		config_cache.set_value("window", "position", OS.window_position)
 		config_cache.set_value("window", "size", OS.window_size)
 		config_cache.save("user://cache.ini")
+
+func show_background_preview(button_pressed):
+	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
+	$VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer.visible = button_pressed
