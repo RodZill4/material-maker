@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"R": 0.25,
+		"R": 0.3,
 		"r": 0.1,
 		"sx": 0.1,
 		"sy": 0.1,
@@ -27,6 +27,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "R",
 				"max": 1,
@@ -36,6 +37,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Radius11.r",
 				"default": 0.1,
 				"label": "r",
 				"max": 0.5,

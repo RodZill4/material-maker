@@ -29,7 +29,7 @@ region = Rect2( 64, 48, 32, 32 )
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 3 )
-region = Rect2( 0, 64, 16, 16 )
+region = Rect2( 16, 64, 16, 16 )
 
 [node name="Preview2D" type="ColorRect"]
 material = SubResource( 2 )
@@ -92,4 +92,24 @@ mouse_default_cursor_shape = 10
 texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 3
+
+[node name="Angle1" parent="." instance=ExtResource( 2 )]
+visible = false
+self_modulate = Color( 1, 0.631373, 0, 1 )
+margin_right = 16.0
+margin_bottom = 16.0
+mouse_default_cursor_shape = 10
+texture = SubResource( 4 )
+parent_control = "P1"
+control_type = 2
+
+[node name="Angle2" parent="." instance=ExtResource( 2 )]
+visible = false
+self_modulate = Color( 1, 0.631373, 0, 1 )
+margin_right = 16.0
+margin_bottom = 16.0
+mouse_default_cursor_shape = 10
+texture = SubResource( 4 )
+parent_control = "P1"
+control_type = 2
 [connection signal="resized" from="." to="." method="on_resized"]

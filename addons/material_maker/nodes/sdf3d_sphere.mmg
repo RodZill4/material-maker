@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"r": 0.5
+		"r": 0.4
 	},
 	"shader_model": {
 		"code": "",
@@ -23,6 +23,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "",
 				"max": 1,

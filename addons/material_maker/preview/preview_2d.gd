@@ -22,10 +22,10 @@ func setup_controls(g : MMGenBase) -> void:
 			c.setup_control(generator, [])
 
 func value_to_pos(value : Vector2) -> Vector2:
-	return rect_size*0.5+(value-Vector2(0.5, 0.5))*min(rect_size.x, rect_size.y)/1.2
+	return rect_size*0.5+value*min(rect_size.x, rect_size.y)/1.2
 
 func value_to_offset(value : Vector2) -> Vector2:
 	return value*min(rect_size.x, rect_size.y)/1.2
 
 func pos_to_value(pos : Vector2) -> Vector2:
-	return (pos - rect_size*0.5)*1.2/min(rect_size.x, rect_size.y)+Vector2(0.5, 0.5)
+	return (pos - rect_size*0.5)*1.2/min(rect_size.x, rect_size.y)

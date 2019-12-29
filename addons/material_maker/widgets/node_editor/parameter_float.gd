@@ -1,6 +1,13 @@
 tool
 extends HBoxContainer
 
+const CONTROLS = [ "None", "P1.x", "P1.y", "P1.a", "P1.r", "P2.x", "P2.y", "P2.a", "P2.r", "Rect1.x", "Rect1.y", "Radius1.r", "Radius1.a", "Radius11.r", "Radius11.a", "Scale1.x", "Scale1.y", "Angle1.a", "Angle2.a" ]
+
+func _ready() -> void:
+	$Control.clear()
+	for c in CONTROLS:
+		$Control.add_item(c)
+
 func get_model_data() -> Dictionary:
 	var data = {
 		min = $Min.value,

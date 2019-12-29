@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"r": 0.01,
-		"sx": 0.25,
+		"r": 0.05,
+		"sx": 0.3,
 		"sy": 0.25,
-		"sz": 0.5
+		"sz": 0.25
 	},
 	"shader_model": {
 		"code": "vec3 $(name_uv)_q = abs($uv) - vec3($sx, $sy, $sz);\n",
@@ -26,6 +26,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Size X",
 				"max": 1,
@@ -35,6 +36,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Size Y",
 				"max": 1,
@@ -44,6 +46,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Size Z",
 				"max": 1,
@@ -53,6 +56,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Radius",
 				"max": 1,

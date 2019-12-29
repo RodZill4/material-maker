@@ -94,7 +94,6 @@ margin_left = 458.0
 margin_right = 533.0
 margin_bottom = 24.0
 text = "None"
-items = [ "None", null, false, 0, null, "P1.x", null, false, 1, null, "P1.y", null, false, 2, null, "P2.x", null, false, 3, null, "P2.y", null, false, 4, null, "Rect1.x", null, false, 5, null, "Rect1.y", null, false, 6, null, "Radius1.x", null, false, 7, null, "Radius11.x", null, false, 8, null, "Scale1.x", null, false, 9, null ]
 selected = 0
 [connection signal="value_changed" from="Min" to="." method="_on_Min_value_changed"]
 [connection signal="value_changed" from="Max" to="." method="_on_Max_value_changed"]
