@@ -30,6 +30,7 @@
 		],
 		"parameters": [
 			{
+				"control": "P1.x",
 				"default": 0,
 				"label": "X",
 				"max": 1,
@@ -39,6 +40,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.y",
 				"default": 0,
 				"label": "Y",
 				"max": 1,
@@ -48,6 +50,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Z",
 				"max": 1,

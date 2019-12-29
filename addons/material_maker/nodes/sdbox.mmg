@@ -12,7 +12,7 @@
 		"w": 0.3
 	},
 	"shader_model": {
-		"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
+		"code": "vec2 $(name_uv)_d = abs($uv-vec2($cx+0.5, $cy+0.5))-vec2($w, $h);\n",
 		"global": "",
 		"inputs": [
 
@@ -27,6 +27,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
 				"max": 1,
@@ -36,6 +37,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Rect1.y",
 				"default": 1,
 				"label": "Height",
 				"max": 1,
@@ -45,6 +47,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
 				"max": 1,
@@ -54,6 +57,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
 				"max": 1,

@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"l": 0.25,
-		"r": 0.1,
+		"l": 0.4,
+		"r": 0.2,
 		"sx": 0.25,
 		"sy": 0.25,
 		"sz": 0.5
@@ -27,6 +27,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Length",
 				"max": 1,
@@ -36,6 +37,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Rect1.x",
 				"default": 0.2,
 				"label": "Radius",
 				"max": 1,

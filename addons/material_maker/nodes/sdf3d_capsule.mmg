@@ -5,14 +5,14 @@
 		"y": 0
 	},
 	"parameters": {
-		"l": 0.25,
-		"r": 0.1,
+		"l": 0.3,
+		"r": 0.15,
 		"sx": 0.25,
 		"sy": 0.25,
 		"sz": 0.5
 	},
 	"shader_model": {
-		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.y -= clamp($(name_uv)_p.y, -0.5*$l, 0.5*$l);\n",
+		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.y -= clamp($(name_uv)_p.y, -$l, $l);\n",
 		"global": "",
 		"inputs": [
 
@@ -27,7 +27,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0.5,
+				"control": "Rect1.y",
+				"default": 0.25,
 				"label": "Length",
 				"max": 1,
 				"min": 0,
@@ -36,6 +37,7 @@
 				"type": "float"
 			},
 			{
+				"control": "Rect1.x",
 				"default": 0.2,
 				"label": "Radius",
 				"max": 1,

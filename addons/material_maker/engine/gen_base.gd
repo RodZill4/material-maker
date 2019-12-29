@@ -116,6 +116,9 @@ func get_parameter_def(param_name : String) -> Dictionary:
 			return p
 	return {}
 
+func get_parameter(n : String):
+	return parameters[n]
+
 func set_parameter(n : String, v) -> void:
 	parameters[n] = v
 	source_changed(0)

@@ -7,7 +7,7 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
-		"r": 0.25
+		"r": 0.4
 	},
 	"shader_model": {
 		"code": "",
@@ -19,12 +19,13 @@
 		"name": "sdCircle",
 		"outputs": [
 			{
-				"sdf2d": "length($uv-0.5*vec2($cx+1.0, $cy+1.0))-$r",
+				"sdf2d": "length($uv-vec2($cx+0.5, $cy+0.5))-$r",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
+				"control": "Radius1.x",
 				"default": 0.5,
 				"label": "Radius",
 				"max": 1,
@@ -34,6 +35,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
 				"max": 1,
@@ -43,6 +45,7 @@
 				"type": "float"
 			},
 			{
+				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
 				"max": 1,

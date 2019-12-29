@@ -1,4 +1,3 @@
-tool
 extends Panel
 
 var current_tab = -1 setget set_current_tab

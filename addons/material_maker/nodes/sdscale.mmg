@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"a": 0,
-		"s": 2.21,
+		"s": 1,
 		"x": 0.35,
 		"y": 0,
 		"z": 0
@@ -32,6 +32,7 @@
 		],
 		"parameters": [
 			{
+				"control": "Scale1.x",
 				"default": 1,
 				"label": "",
 				"max": 5,

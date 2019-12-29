@@ -1,4 +1,3 @@
-tool
 extends VBoxContainer
 
 var libraries = []

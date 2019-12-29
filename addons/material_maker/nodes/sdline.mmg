@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"ax": 0.2,
-		"ay": 0.2,
-		"bx": 0.8,
-		"by": 0.8,
+		"ax": 0.224,
+		"ay": 0.2672,
+		"bx": -0.272,
+		"by": -0.2344,
 		"cx": 0,
 		"cy": 0,
 		"h": 0.2,
@@ -25,43 +25,47 @@
 		"name": "sdLine",
 		"outputs": [
 			{
-				"sdf2d": "sdLine($uv, vec2($ax, $ay), vec2($bx, $by))",
+				"sdf2d": "sdLine($uv, vec2($ax+0.5, $ay+0.5), vec2($bx+0.5, $by+0.5))",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
+				"control": "P1.x",
 				"default": 0,
 				"label": "A X",
 				"max": 1,
-				"min": 0,
+				"min": -1,
 				"name": "ax",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "P1.y",
 				"default": 0,
 				"label": "A Y",
 				"max": 1,
-				"min": 0,
+				"min": -1,
 				"name": "ay",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "P2.x",
 				"default": 1,
 				"label": "B X",
 				"max": 1,
-				"min": 0,
+				"min": -1,
 				"name": "bx",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "P2.y",
 				"default": 1,
 				"label": "B Y",
 				"max": 1,
-				"min": 0,
+				"min": -1,
 				"name": "by",
 				"step": 0.01,
 				"type": "float"

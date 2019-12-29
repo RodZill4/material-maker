@@ -739,7 +739,6 @@
 				"cx": 0,
 				"cy": 0,
 				"h": 0.2,
-				"r": 0.3,
 				"w": 0.3
 			},
 			"tree_item": "Simple/SDF/Shapes/sdBox",
@@ -750,15 +749,10 @@
 			"icon": "simple_sdf_shapes_sdline",
 			"name": "sdline",
 			"parameters": {
-				"ax": 0.2,
-				"ay": 0.2,
-				"bx": 0.8,
-				"by": 0.8,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.2,
-				"r": 0.3,
-				"w": 0.3
+				"ax": -0.3,
+				"ay": -0.3,
+				"bx": 0.3,
+				"by": 0.3
 			},
 			"tree_item": "Simple/SDF/Shapes/sdLine",
 			"type": "sdline"
@@ -771,7 +765,6 @@
 				"cx": 0,
 				"cy": 0,
 				"h": 0.2,
-				"r": 0.3,
 				"w": 0.3
 			},
 			"tree_item": "Simple/SDF/Shapes/sdRhombus",
