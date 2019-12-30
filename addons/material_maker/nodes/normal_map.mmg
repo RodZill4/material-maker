@@ -21,6 +21,18 @@
 		{
 			"from": "buffer",
 			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
 			"to": "nm_convolution",
 			"to_port": 0
 		}
@@ -36,9 +48,10 @@
 			"name": "buffer",
 			"node_position": {
 				"x": -687.663818,
-				"y": 125.60614
+				"y": 39.60614
 			},
 			"parameters": {
+				"lod": 0,
 				"size": 10
 			},
 			"type": "buffer"
@@ -101,8 +114,8 @@
 			},
 			"name": "nm_convolution",
 			"node_position": {
-				"x": -690.25,
-				"y": 174.25
+				"x": -695.25,
+				"y": 175.25
 			},
 			"parameters": {
 				"size": 10
@@ -112,7 +125,7 @@
 		{
 			"name": "nm_postprocess",
 			"node_position": {
-				"x": -690.25,
+				"x": -693.25,
 				"y": 222.25
 			},
 			"parameters": {
@@ -185,14 +198,16 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -729.910156,
-				"y": -5.916687
+				"x": -718.910156,
+				"y": -118.916687
 			},
 			"parameters": {
 				"amount": 0.5,
 				"param0": 10,
 				"param1": 1.02,
 				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "remote",
@@ -237,21 +252,48 @@
 					],
 					"name": "param1",
 					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"name": "param4",
+					"type": "config_control"
 				}
 			]
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -407.663818,
-				"y": 151.047363
+				"x": -416.663818,
+				"y": 228.047363
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"name": "port0",
+					"name": "Normal",
 					"type": "rgba"
 				}
 			],
@@ -260,19 +302,32 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -870.910156,
-				"y": 157.047363
+				"x": -868.910156,
+				"y": 71.047363
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"name": "port0",
+					"name": "Bump",
 					"type": "rgba"
 				}
 			],
 			"type": "ios"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -673.5,
+				"y": 113.297363
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 1
+			},
+			"type": "switch"
 		}
 	],
 	"parameters": {
@@ -280,6 +335,8 @@
 		"param0": 10,
 		"param1": 1.02,
 		"param2": 0,
+		"param3": 0,
+		"param4": 1,
 		"size": 4
 	},
 	"type": "graph"
