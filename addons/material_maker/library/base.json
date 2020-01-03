@@ -1622,7 +1622,7 @@
 						"y": -658
 					},
 					"parameters": {
-						"repeat": false,
+						"repeat": true,
 						"rotate": 0,
 						"scale_x": 1,
 						"scale_y": 1,
@@ -1829,7 +1829,7 @@
 						"y": -629
 					},
 					"parameters": {
-						"repeat": false,
+						"repeat": true,
 						"rotate": 0,
 						"scale_x": 1,
 						"scale_y": 1,
@@ -1982,7 +1982,7 @@
 						"y": -714.099976
 					},
 					"parameters": {
-						"repeat": false,
+						"repeat": true,
 						"rotate": 0,
 						"scale_x": 1,
 						"scale_y": 1,
