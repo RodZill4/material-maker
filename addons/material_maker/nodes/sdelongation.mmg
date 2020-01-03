@@ -1,0 +1,62 @@
+{
+	"name": "sdelongation",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"k": 0.15,
+		"op": 0,
+		"r": 0.08,
+		"w": 0.28,
+		"x": 0,
+		"y": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "sdElongation",
+		"outputs": [
+			{
+				"sdf2d": "$in($uv-clamp($uv-vec2(0.5), -vec2($x, $y), vec2($x, $y)))",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0,
+				"label": "X",
+				"max": 1,
+				"min": 0,
+				"name": "x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0,
+				"label": "Y",
+				"max": 1,
+				"min": 0,
+				"name": "y",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
