@@ -14,13 +14,13 @@ var preview_timer : Timer = null
 func set_generator(g) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
-	call_deferred("update_node")
+	update_node()
 
 func on_parameter_changed(p, v) -> void:
 	if ignore_parameter_change == p:
 		return
 	if p == "__update_all__":
-		call_deferred("update_node")
+		update_node()
 	elif controls.has(p):
 		var o = controls[p]
 		if o is MMFloatEdit:
@@ -158,6 +158,7 @@ func restore_preview_widget() -> void:
 func update_node() -> void:
 	# Clean node
 	var custom_node_buttons = null
+	clear_all_slots()
 	save_preview_widget()
 	for c in get_children():
 		remove_child(c)
@@ -327,7 +328,7 @@ func do_load_generator(file_name : String) -> void:
 		var parent_generator = generator.get_parent()
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator
-		call_deferred("update_node")
+		update_node()
 
 func save_generator() -> void:
 	var dialog = FileDialog.new()

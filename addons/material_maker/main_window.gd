@@ -513,7 +513,8 @@ func _on_Projects_tab_changed(tab) -> void:
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
 			new_tab.connect("graph_changed", self, "update_preview")
-			new_tab.connect("node_selected", self, "on_selected_node_change")
+			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
+				new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
 

@@ -1,4 +1,3 @@
-tool
 extends ColorRect
 
 var generator = null

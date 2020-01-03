@@ -42,7 +42,7 @@ func update_node() -> void:
 			add_control(generator.get_widget(p.name).label, control)
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
-				if control.get_item_count() > 0:
+				if control.get_item_count() > 0 and generator.parameters.has(p.name):
 					control.selected = generator.parameters[p.name]
 					current = control.get_item_text(control.selected)
 				control.add_separator()
@@ -110,7 +110,8 @@ func _on_AddConfig_pressed() -> void:
 
 func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
-	link.pick(controls[param_name], generator, param_name)
+	if controls.has(param_name):
+		link.pick(controls[param_name], generator, param_name)
 
 func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize

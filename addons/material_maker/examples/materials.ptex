@@ -1,82 +1,148 @@
 {
 	"connections": [
 		{
-			"from": "normal_map",
+			"from": "graph_6",
 			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "graph_6",
+			"from_port": 1,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "graph_6",
+			"from_port": 2,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "graph_6",
+			"from_port": 4,
 			"to": "Material",
 			"to_port": 4
 		},
 		{
-			"from": "graph_3",
-			"from_port": 3,
-			"to": "switch",
-			"to_port": 7
-		},
-		{
-			"from": "graph_3",
-			"from_port": 2,
-			"to": "switch",
-			"to_port": 6
-		},
-		{
-			"from": "graph_3",
-			"from_port": 1,
-			"to": "switch",
+			"from": "graph_6",
+			"from_port": 5,
+			"to": "Material",
 			"to_port": 5
 		},
 		{
-			"from": "graph_3",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 4
+			"from": "graph_6",
+			"from_port": 6,
+			"to": "Material",
+			"to_port": 6
 		},
 		{
-			"from": "graph_2",
+			"from": "graph_6",
+			"from_port": 3,
+			"to": "Material",
+			"to_port": 3
+		},
+		{
+			"from": "graph_2_2",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "graph_2_2",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "graph_2_2",
+			"from_port": 2,
+			"to": "switch",
+			"to_port": 2
+		},
+		{
+			"from": "graph_2_2",
 			"from_port": 3,
 			"to": "switch",
 			"to_port": 3
 		},
 		{
-			"from": "graph_2",
-			"from_port": 2,
-			"to": "switch",
-			"to_port": 2
-		},
-		{
-			"from": "graph_2",
-			"from_port": 1,
-			"to": "switch",
+			"from": "switch",
+			"from_port": 0,
+			"to": "graph_6",
 			"to_port": 1
 		},
 		{
-			"from": "graph_2",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 0
+			"from": "switch",
+			"from_port": 1,
+			"to": "graph_6",
+			"to_port": 2
+		},
+		{
+			"from": "switch",
+			"from_port": 2,
+			"to": "graph_6",
+			"to_port": 3
 		},
 		{
 			"from": "switch",
 			"from_port": 3,
-			"to": "normal_map",
-			"to_port": 0
+			"to": "graph_6",
+			"to_port": 4
 		},
 		{
-			"from": "switch",
-			"from_port": 2,
-			"to": "Material",
-			"to_port": 2
-		},
-		{
-			"from": "switch",
-			"from_port": 1,
-			"to": "Material",
-			"to_port": 1
-		},
-		{
-			"from": "switch",
+			"from": "graph_3_3_2",
 			"from_port": 0,
-			"to": "Material",
+			"to": "switch",
+			"to_port": 4
+		},
+		{
+			"from": "graph_3_3_2",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 5
+		},
+		{
+			"from": "graph_3_3_2",
+			"from_port": 2,
+			"to": "switch",
+			"to_port": 6
+		},
+		{
+			"from": "graph_3_3_2",
+			"from_port": 3,
+			"to": "switch",
+			"to_port": 7
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "graph_6",
 			"to_port": 0
+		},
+		{
+			"from": "graph_2",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 8
+		},
+		{
+			"from": "graph_2",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 9
+		},
+		{
+			"from": "graph_2",
+			"from_port": 2,
+			"to": "switch",
+			"to_port": 10
+		},
+		{
+			"from": "graph_2",
+			"from_port": 3,
+			"to": "switch",
+			"to_port": 11
 		}
 	],
 	"label": "Graph",
@@ -89,8 +155,8 @@
 		{
 			"name": "Material",
 			"node_position": {
-				"x": 76,
-				"y": -254
+				"x": 12,
+				"y": -391
 			},
 			"parameters": {
 				"albedo_color": {
@@ -114,309 +180,10 @@
 		{
 			"connections": [
 				{
-					"from": "nm_convolution",
-					"from_port": 0,
-					"to": "nm_postprocess",
-					"to_port": 0
-				},
-				{
-					"from": "nm_postprocess",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "buffer",
-					"to_port": 0
-				},
-				{
-					"from": "buffer",
-					"from_port": 0,
-					"to": "nm_convolution",
-					"to_port": 0
-				}
-			],
-			"label": "Normal Map",
-			"name": "normal_map",
-			"node_position": {
-				"x": -171.5,
-				"y": -122
-			},
-			"nodes": [
-				{
-					"name": "buffer",
-					"node_position": {
-						"x": -687.663818,
-						"y": 125.60614
-					},
-					"parameters": {
-						"lod": 0,
-						"size": 11
-					},
-					"type": "buffer"
-				},
-				{
-					"convolution_params": {
-						"input_type": "f",
-						"matrix": [
-							[
-								[
-									-1,
-									-1,
-									0
-								],
-								[
-									0,
-									-2,
-									0
-								],
-								[
-									1,
-									-1,
-									0
-								]
-							],
-							[
-								[
-									-2,
-									0,
-									0
-								],
-								0,
-								[
-									2,
-									0,
-									0
-								]
-							],
-							[
-								[
-									-1,
-									1,
-									0
-								],
-								[
-									0,
-									2,
-									0
-								],
-								[
-									1,
-									1,
-									0
-								]
-							]
-						],
-						"output_type": "rgb",
-						"x": 1,
-						"y": 1
-					},
-					"name": "nm_convolution",
-					"node_position": {
-						"x": -690.25,
-						"y": 174.25
-					},
-					"parameters": {
-						"size": 11
-					},
-					"type": "convolution"
-				},
-				{
-					"name": "nm_postprocess",
-					"node_position": {
-						"x": -690.25,
-						"y": 222.25
-					},
-					"parameters": {
-						"amount": 0.025,
-						"format": 0,
-						"size": 11,
-						"type": 0
-					},
-					"shader_model": {
-						"code": "",
-						"global": "vec3 process_normal_default(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, -1.0))+vec3(0.5);\n}\n\nvec3 process_normal_opengl(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n\nvec3 process_normal_directx(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*vec3(1.0, -1.0, 1.0)*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n",
-						"inputs": [
-							{
-								"default": "vec3(0.0)",
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							}
-						],
-						"instance": "",
-						"name": "NormalMapPostProcess",
-						"outputs": [
-							{
-								"rgb": "process_normal_$format($in($uv).xyz, $amount*$size/128.0)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"default": 0,
-								"label": "",
-								"name": "format",
-								"type": "enum",
-								"values": [
-									{
-										"name": "Default",
-										"value": "default"
-									},
-									{
-										"name": "OpenGL",
-										"value": "opengl"
-									},
-									{
-										"name": "DirectX",
-										"value": "directx"
-									}
-								]
-							},
-							{
-								"default": 9,
-								"first": 4,
-								"label": "",
-								"last": 11,
-								"name": "size",
-								"type": "size"
-							},
-							{
-								"default": 1,
-								"label": "",
-								"max": 2,
-								"min": 0,
-								"name": "amount",
-								"step": 0.005,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -729.910156,
-						"y": -5.916687
-					},
-					"parameters": {
-						"amount": 0.5,
-						"param0": 11,
-						"param1": 0.025,
-						"param2": 0,
-						"size": 4
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "nm_postprocess",
-									"widget": "format"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "buffer",
-									"widget": "size"
-								},
-								{
-									"node": "nm_convolution",
-									"widget": "size"
-								},
-								{
-									"node": "nm_postprocess",
-									"widget": "size"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "nm_postprocess",
-									"widget": "amount"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": -407.663818,
-						"y": 151.047363
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -870.910156,
-						"y": 157.047363
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				}
-			],
-			"parameters": {
-				"amount": 0.5,
-				"param0": 11,
-				"param1": 0.025,
-				"param2": 0,
-				"size": 4
-			},
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
 					"from": "scratches",
 					"from_port": 0,
 					"to": "colorize",
 					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale_3",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_3_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 2
 				},
 				{
 					"from": "colorize_2",
@@ -521,7 +288,37 @@
 					"to_port": 1
 				},
 				{
+					"from": "uniform_greyscale_3",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_greyscale_3_2",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "uniform",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
 					"from": "blend",
+					"from_port": 0,
+					"to": "normal_map",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map",
 					"from_port": 0,
 					"to": "gen_outputs",
 					"to_port": 3
@@ -530,8 +327,8 @@
 			"label": "Wood simple",
 			"name": "graph_2",
 			"node_position": {
-				"x": -807.345703,
-				"y": -266.932098
+				"x": -1260.345703,
+				"y": -185.932098
 			},
 			"nodes": [
 				{
@@ -595,8 +392,8 @@
 				{
 					"name": "colorize",
 					"node_position": {
-						"x": -608.5,
-						"y": 133
+						"x": -605.5,
+						"y": 130
 					},
 					"parameters": {
 						"gradient": {
@@ -634,17 +431,17 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0,
-									"g": 0.117188,
+									"b": 0.476183,
+									"g": 0.62638,
 									"pos": 0,
-									"r": 0.208333
+									"r": 0.697917
 								},
 								{
 									"a": 1,
-									"b": 0.089111,
-									"g": 0.289241,
+									"b": 0.719754,
+									"g": 0.830067,
 									"pos": 1,
-									"r": 0.380208
+									"r": 0.880208
 								}
 							],
 							"type": "Gradient"
@@ -696,8 +493,8 @@
 				{
 					"name": "uniform_greyscale_3",
 					"node_position": {
-						"x": -312.030396,
-						"y": -117.502716
+						"x": -304.030396,
+						"y": -69.502716
 					},
 					"parameters": {
 						"color": 0.3
@@ -707,8 +504,8 @@
 				{
 					"name": "uniform_greyscale_3_2",
 					"node_position": {
-						"x": -311.030396,
-						"y": -65.502716
+						"x": -305.030396,
+						"y": -124.502716
 					},
 					"parameters": {
 						"color": 0.8
@@ -722,7 +519,7 @@
 						"y": -378.799133
 					},
 					"parameters": {
-						"amount": 0.1664,
+						"amount": 0.207725,
 						"blend_type": 0
 					},
 					"type": "blend"
@@ -755,8 +552,8 @@
 				{
 					"name": "scratches",
 					"node_position": {
-						"x": -635.5,
-						"y": -44
+						"x": -634.5,
+						"y": -49
 					},
 					"parameters": {
 						"Randomness": 0.5,
@@ -772,11 +569,11 @@
 				{
 					"name": "blend",
 					"node_position": {
-						"x": -331.280884,
-						"y": -7.549149
+						"x": -375.280884,
+						"y": 4.450851
 					},
 					"parameters": {
-						"amount": 0.072975,
+						"amount": 0.322625,
 						"blend_type": 0
 					},
 					"type": "blend"
@@ -793,23 +590,23 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0,
-									"g": 0.117188,
+									"b": 0.476183,
+									"g": 0.62638,
 									"pos": 0,
-									"r": 0.208333
+									"r": 0.697917
 								},
 								{
 									"a": 1,
-									"b": 0.089111,
-									"g": 0.289241,
+									"b": 0.719754,
+									"g": 0.830067,
 									"pos": 1,
-									"r": 0.380208
+									"r": 0.880208
 								}
 							],
 							"type": "Gradient"
 						},
-						"param1": 0.1664,
-						"param2": 0.072975
+						"param1": 0.207725,
+						"param2": 0.322625
 					},
 					"type": "remote",
 					"widgets": [
@@ -865,8 +662,8 @@
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -0.030396,
-						"y": -144.650482
+						"x": 192.969604,
+						"y": -125.650482
 					},
 					"parameters": {
 
@@ -874,19 +671,19 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgba"
+							"type": "rgb"
 						},
 						{
-							"name": "Metallic",
-							"type": "rgba"
+							"name": "ORM",
+							"type": "rgb"
 						},
 						{
-							"name": "Roughness",
-							"type": "rgba"
+							"name": "Emission",
+							"type": "rgb"
 						},
 						{
-							"name": "Bump",
-							"type": "rgba"
+							"name": "Normal",
+							"type": "rgb"
 						}
 					],
 					"type": "ios"
@@ -954,8 +751,8 @@
 				{
 					"name": "voronoi",
 					"node_position": {
-						"x": -1162.120483,
-						"y": -809.473999
+						"x": -1137.120483,
+						"y": -855.473999
 					},
 					"parameters": {
 						"intensity": 1,
@@ -1091,6 +888,58 @@
 						}
 					},
 					"type": "colorize"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -102.834259,
+						"y": -117.463135
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"r": 1,
+							"type": "Color"
+						},
+						"name": 0
+					},
+					"type": "combine"
+				},
+				{
+					"name": "uniform",
+					"node_position": {
+						"x": 28.165741,
+						"y": -71.463135
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"r": 0,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				},
+				{
+					"name": "normal_map",
+					"node_position": {
+						"x": -71.142059,
+						"y": 4.536865
+					},
+					"parameters": {
+						"amount": 0.5,
+						"param0": 10,
+						"param1": 1,
+						"param2": 0,
+						"param3": 0,
+						"param4": 0,
+						"size": 4
+					},
+					"type": "normal_map"
 				}
 			],
 			"parameters": {
@@ -1099,25 +948,1278 @@
 					"points": [
 						{
 							"a": 1,
-							"b": 0,
-							"g": 0.117188,
+							"b": 0.476183,
+							"g": 0.62638,
 							"pos": 0,
-							"r": 0.208333
+							"r": 0.697917
 						},
 						{
 							"a": 1,
-							"b": 0.089111,
-							"g": 0.289241,
+							"b": 0.719754,
+							"g": 0.830067,
 							"pos": 1,
-							"r": 0.380208
+							"r": 0.880208
 						}
 					],
 					"type": "Gradient"
 				},
-				"param1": 0.1664,
-				"param2": 0.072975
+				"param1": 0.207725,
+				"param2": 0.322625
 			},
 			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 6
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "colorize_3",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "gaussian_blur",
+					"to_port": 0
+				},
+				{
+					"from": "gaussian_blur",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 5
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 2,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "normal_map",
+					"to_port": 0
+				},
+				{
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 4
+				},
+				{
+					"from": "normal_map",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 3,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 4,
+					"to": "blend_2",
+					"to_port": 0
+				}
+			],
+			"label": "MWF Output",
+			"name": "graph_6",
+			"node_position": {
+				"x": -277.408173,
+				"y": -384.583069
+			},
+			"nodes": [
+				{
+					"connections": [
+						{
+							"from": "nm_convolution",
+							"from_port": 0,
+							"to": "nm_postprocess",
+							"to_port": 0
+						},
+						{
+							"from": "nm_postprocess",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						},
+						{
+							"from": "gen_inputs",
+							"from_port": 0,
+							"to": "buffer",
+							"to_port": 0
+						},
+						{
+							"from": "buffer",
+							"from_port": 0,
+							"to": "nm_convolution",
+							"to_port": 0
+						}
+					],
+					"label": "Normal Map",
+					"name": "normal_map",
+					"node_position": {
+						"x": -1208.637451,
+						"y": 541.842468
+					},
+					"nodes": [
+						{
+							"name": "buffer",
+							"node_position": {
+								"x": -691.663818,
+								"y": 98.60614
+							},
+							"parameters": {
+								"lod": 0,
+								"size": 11
+							},
+							"type": "buffer"
+						},
+						{
+							"convolution_params": {
+								"input_type": "f",
+								"matrix": [
+									[
+										[
+											-1,
+											-1,
+											0
+										],
+										[
+											0,
+											-2,
+											0
+										],
+										[
+											1,
+											-1,
+											0
+										]
+									],
+									[
+										[
+											-2,
+											0,
+											0
+										],
+										0,
+										[
+											2,
+											0,
+											0
+										]
+									],
+									[
+										[
+											-1,
+											1,
+											0
+										],
+										[
+											0,
+											2,
+											0
+										],
+										[
+											1,
+											1,
+											0
+										]
+									]
+								],
+								"output_type": "rgb",
+								"x": 1,
+								"y": 1
+							},
+							"name": "nm_convolution",
+							"node_position": {
+								"x": -689.25,
+								"y": 175.25
+							},
+							"parameters": {
+								"size": 11
+							},
+							"type": "convolution"
+						},
+						{
+							"name": "nm_postprocess",
+							"node_position": {
+								"x": -689.25,
+								"y": 228.25
+							},
+							"parameters": {
+								"amount": 1,
+								"format": 0,
+								"size": 11,
+								"type": 0
+							},
+							"shader_model": {
+								"code": "",
+								"global": "vec3 process_normal_default(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, -1.0))+vec3(0.5);\n}\n\nvec3 process_normal_opengl(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n\nvec3 process_normal_directx(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*vec3(1.0, -1.0, 1.0)*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n",
+								"inputs": [
+									{
+										"default": "vec3(0.0)",
+										"label": "",
+										"name": "in",
+										"type": "rgb"
+									}
+								],
+								"instance": "",
+								"name": "NormalMapPostProcess",
+								"outputs": [
+									{
+										"rgb": "process_normal_$format($in($uv).xyz, $amount*$size/128.0)",
+										"type": "rgb"
+									}
+								],
+								"parameters": [
+									{
+										"default": 0,
+										"label": "",
+										"name": "format",
+										"type": "enum",
+										"values": [
+											{
+												"name": "Default",
+												"value": "default"
+											},
+											{
+												"name": "OpenGL",
+												"value": "opengl"
+											},
+											{
+												"name": "DirectX",
+												"value": "directx"
+											}
+										]
+									},
+									{
+										"default": 9,
+										"first": 4,
+										"label": "",
+										"last": 11,
+										"name": "size",
+										"type": "size"
+									},
+									{
+										"default": 1,
+										"label": "",
+										"max": 2,
+										"min": 0,
+										"name": "amount",
+										"step": 0.005,
+										"type": "float"
+									}
+								]
+							},
+							"type": "shader"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": -696.910156,
+								"y": -29.916687
+							},
+							"parameters": {
+								"amount": 0.5,
+								"param0": 11,
+								"param1": 1,
+								"param2": 0,
+								"param3": 1,
+								"size": 4
+							},
+							"type": "remote",
+							"widgets": [
+								{
+									"label": "",
+									"linked_widgets": [
+										{
+											"node": "nm_postprocess",
+											"widget": "format"
+										}
+									],
+									"name": "param2",
+									"type": "linked_control"
+								},
+								{
+									"label": "",
+									"linked_widgets": [
+										{
+											"node": "buffer",
+											"widget": "size"
+										},
+										{
+											"node": "nm_convolution",
+											"widget": "size"
+										},
+										{
+											"node": "nm_postprocess",
+											"widget": "size"
+										}
+									],
+									"name": "param0",
+									"type": "linked_control"
+								},
+								{
+									"label": "",
+									"linked_widgets": [
+										{
+											"node": "nm_postprocess",
+											"widget": "amount"
+										}
+									],
+									"name": "param1",
+									"type": "linked_control"
+								}
+							]
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": -425.663818,
+								"y": 163.047363
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"type": "ios"
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -843.910156,
+								"y": 178.047363
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"type": "ios"
+						}
+					],
+					"parameters": {
+						"amount": 0.5,
+						"param0": 11,
+						"param1": 1,
+						"param2": 0,
+						"param3": 1,
+						"size": 4
+					},
+					"type": "graph"
+				},
+				{
+					"name": "colorize_3",
+					"node_position": {
+						"x": -939.637451,
+						"y": 871.842407
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 1,
+									"r": 0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"connections": [
+						{
+							"from": "buffer",
+							"from_port": 0,
+							"to": "blurx_convolution",
+							"to_port": 0
+						},
+						{
+							"from": "buffer_2",
+							"from_port": 0,
+							"to": "blurx_convolution_2",
+							"to_port": 0
+						},
+						{
+							"from": "gen_inputs",
+							"from_port": 0,
+							"to": "buffer",
+							"to_port": 0
+						},
+						{
+							"from": "blend",
+							"from_port": 0,
+							"to": "colorize",
+							"to_port": 0
+						},
+						{
+							"from": "blurx_convolution",
+							"from_port": 0,
+							"to": "buffer_2",
+							"to_port": 0
+						},
+						{
+							"from": "blurx_convolution_2",
+							"from_port": 0,
+							"to": "blend",
+							"to_port": 1
+						},
+						{
+							"from": "buffer",
+							"from_port": 0,
+							"to": "blend",
+							"to_port": 0
+						},
+						{
+							"from": "colorize",
+							"from_port": 0,
+							"to": "_2",
+							"to_port": 0
+						},
+						{
+							"from": "_2",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						}
+					],
+					"label": "Occlusion",
+					"name": "gaussian_blur",
+					"node_position": {
+						"x": -994.845825,
+						"y": 786.968262
+					},
+					"nodes": [
+						{
+							"convolution_params": {
+								"input_type": "rgba",
+								"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
+								"normalized": true,
+								"output_type": "rgba",
+								"parameters": [
+									{
+										"max": 50,
+										"min": 0.05,
+										"name": "sigma",
+										"type": "float"
+									}
+								],
+								"x": 50,
+								"y": 0
+							},
+							"name": "blurx_convolution",
+							"node_position": {
+								"x": -407.5,
+								"y": -192.5
+							},
+							"parameters": {
+								"sigma": 50,
+								"size": 10
+							},
+							"type": "convolution"
+						},
+						{
+							"name": "buffer_2",
+							"node_position": {
+								"x": -404.875,
+								"y": -116.625
+							},
+							"parameters": {
+								"lod": 0,
+								"size": 10
+							},
+							"type": "buffer"
+						},
+						{
+							"convolution_params": {
+								"input_type": "rgba",
+								"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
+								"normalized": true,
+								"output_type": "rgba",
+								"parameters": [
+									{
+										"max": 50,
+										"min": 0.05,
+										"name": "sigma",
+										"type": "float"
+									}
+								],
+								"x": 0,
+								"y": 50
+							},
+							"name": "blurx_convolution_2",
+							"node_position": {
+								"x": -407.125,
+								"y": -44.375
+							},
+							"parameters": {
+								"sigma": 50,
+								"size": 10
+							},
+							"type": "convolution"
+						},
+						{
+							"name": "buffer",
+							"node_position": {
+								"x": -408.25,
+								"y": -265.75
+							},
+							"parameters": {
+								"lod": 0,
+								"size": 10
+							},
+							"type": "buffer"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": -447.666626,
+								"y": -370.666656
+							},
+							"parameters": {
+								"param0": 10,
+								"param1": 50,
+								"param2": 1
+							},
+							"type": "remote",
+							"widgets": [
+								{
+									"label": "Grid size:",
+									"linked_widgets": [
+										{
+											"node": "buffer",
+											"widget": "size"
+										},
+										{
+											"node": "blurx_convolution",
+											"widget": "size"
+										},
+										{
+											"node": "buffer_2",
+											"widget": "size"
+										},
+										{
+											"node": "blurx_convolution_2",
+											"widget": "size"
+										}
+									],
+									"name": "param0",
+									"type": "linked_control"
+								},
+								{
+									"label": "Strength",
+									"linked_widgets": [
+										{
+											"node": "_2",
+											"widget": "g"
+										}
+									],
+									"name": "param2",
+									"type": "linked_control"
+								}
+							]
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -585.666626,
+								"y": -112.392853
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"type": "ios"
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": 55.547607,
+								"y": -133.392853
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"type": "ios"
+						},
+						{
+							"name": "blend",
+							"node_position": {
+								"x": -420.79895,
+								"y": 27.16272
+							},
+							"parameters": {
+								"amount": 1,
+								"blend_type": 11
+							},
+							"type": "blend"
+						},
+						{
+							"name": "colorize",
+							"node_position": {
+								"x": -167.79895,
+								"y": -178.83728
+							},
+							"parameters": {
+								"gradient": {
+									"interpolation": 1,
+									"points": [
+										{
+											"a": 1,
+											"b": 1,
+											"g": 1,
+											"pos": 0,
+											"r": 1
+										},
+										{
+											"a": 1,
+											"b": 0,
+											"g": 0,
+											"pos": 1,
+											"r": 0
+										}
+									],
+									"type": "Gradient"
+								}
+							},
+							"type": "colorize"
+						},
+						{
+							"name": "_2",
+							"node_position": {
+								"x": -134.403687,
+								"y": -110.29187
+							},
+							"parameters": {
+								"g": 1
+							},
+							"shader_model": {
+								"code": "",
+								"global": "",
+								"inputs": [
+									{
+										"default": "0.0",
+										"label": "",
+										"name": "in",
+										"type": "f"
+									}
+								],
+								"instance": "",
+								"name": "",
+								"outputs": [
+									{
+										"f": "pow($in($uv), $g)",
+										"type": "f"
+									}
+								],
+								"parameters": [
+									{
+										"default": 1,
+										"label": "",
+										"max": 2,
+										"min": 0,
+										"name": "g",
+										"step": 0.1,
+										"type": "float"
+									}
+								]
+							},
+							"type": "shader"
+						}
+					],
+					"parameters": {
+						"param0": 10,
+						"param1": 50,
+						"param2": 1
+					},
+					"type": "graph"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -907.371338,
+						"y": 443.25
+					},
+					"parameters": {
+
+					},
+					"type": "decompose"
+				},
+				{
+					"name": "blend_2",
+					"node_position": {
+						"x": -920.305542,
+						"y": 691.328491
+					},
+					"parameters": {
+						"amount": 0.25,
+						"blend_type": 4
+					},
+					"type": "blend"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1458.805542,
+						"y": 606.758606
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "Height",
+							"type": "f"
+						},
+						{
+							"name": "Albedo",
+							"type": "rgb"
+						},
+						{
+							"name": "ORM",
+							"type": "rgb"
+						},
+						{
+							"name": "Emission",
+							"type": "rgb"
+						},
+						{
+							"name": "Normal",
+							"type": "rgb"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -563.305542,
+						"y": 627.758606
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "Albedo",
+							"type": "rgb"
+						},
+						{
+							"name": "Metallic",
+							"type": "f"
+						},
+						{
+							"name": "Roughness",
+							"type": "f"
+						},
+						{
+							"name": "Emission",
+							"type": "rgb"
+						},
+						{
+							"name": "Normal",
+							"type": "rgb"
+						},
+						{
+							"name": "Occlusion",
+							"type": "f"
+						},
+						{
+							"name": "Depth",
+							"type": "f"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -925.881836,
+						"y": 309.25
+					},
+					"parameters": {
+						"param0": 0.25,
+						"param1": 10,
+						"param2": 1
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Occlusion",
+							"linked_widgets": [
+								{
+									"node": "gaussian_blur",
+									"widget": "param2"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Mat Normal",
+							"linked_widgets": [
+								{
+									"node": "blend_2",
+									"widget": "amount"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						}
+					]
+				}
+			],
+			"parameters": {
+				"param0": 0.25,
+				"param1": 10,
+				"param2": 1
+			},
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "uniform_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "uniform_greyscale_3_2",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale_3",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "uniform_greyscale_4",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "uniform",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 2
+				}
+			],
+			"label": "Metal",
+			"name": "graph_2_2",
+			"node_position": {
+				"x": -1257.244629,
+				"y": -432.490662
+			},
+			"nodes": [
+				{
+					"name": "uniform_greyscale_3_2",
+					"node_position": {
+						"x": -712.322693,
+						"y": -216.48642
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_4",
+					"node_position": {
+						"x": -712.322693,
+						"y": -114.48642
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_3",
+					"node_position": {
+						"x": -712.322693,
+						"y": -165.48642
+					},
+					"parameters": {
+						"color": 0.1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_2",
+					"node_position": {
+						"x": -674.908142,
+						"y": -0.333069
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0,
+							"g": 0.501961,
+							"r": 0.501961,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				},
+				{
+					"name": "uniform_3",
+					"node_position": {
+						"x": -676.322693,
+						"y": -271.48642
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0.554,
+							"g": 0.556,
+							"r": 0.55,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -514.322693,
+						"y": -176.48642
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"r": 1,
+							"type": "Color"
+						},
+						"name": 0
+					},
+					"type": "combine"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -847.322693,
+						"y": -143.585464
+					},
+					"parameters": {
+
+					},
+					"ports": [
+
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -206.322693,
+						"y": -144.585464
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "Albedo",
+							"type": "rgb"
+						},
+						{
+							"name": "ORM",
+							"type": "rgb"
+						},
+						{
+							"name": "Emission",
+							"type": "rgb"
+						},
+						{
+							"name": "Normal",
+							"type": "rgb"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -739.30249,
+						"y": -408.925568
+					},
+					"parameters": {
+						"param0": 1,
+						"param1": 0.1
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"configurations": {
+								"Aluminum": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.925,
+											"g": 0.921,
+											"r": 0.913,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Chromium": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.554,
+											"g": 0.556,
+											"r": 0.55,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Cobalt": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.634,
+											"g": 0.655,
+											"r": 0.662,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Copper": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.538,
+											"g": 0.637,
+											"r": 0.955,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Gold": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.336,
+											"g": 0.766,
+											"r": 1,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Iron": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.58,
+											"g": 0.57,
+											"r": 0.56,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Nickel": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.526,
+											"g": 0.609,
+											"r": 0.66,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Platinum": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.585,
+											"g": 0.637,
+											"r": 0.672,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Silver": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.915,
+											"g": 0.96,
+											"r": 0.972,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								],
+								"Titanium": [
+									{
+										"node": "uniform_3",
+										"value": {
+											"a": 1,
+											"b": 0.449,
+											"g": 0.497,
+											"r": 0.542,
+											"type": "Color"
+										},
+										"widget": "color"
+									}
+								]
+							},
+							"label": "Metal",
+							"linked_widgets": [
+								{
+									"node": "uniform_3",
+									"widget": "color"
+								}
+							],
+							"name": "param0",
+							"type": "config_control"
+						},
+						{
+							"label": "Roughness",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_3",
+									"widget": "color"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "uniform",
+					"node_position": {
+						"x": -673.80249,
+						"y": -56.425568
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"r": 0,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				}
+			],
+			"parameters": {
+				"param0": 1,
+				"param1": 0.1
+			},
+			"type": "graph"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -670.527832,
+				"y": -352.071716
+			},
+			"parameters": {
+				"choices": 3,
+				"outputs": 4,
+				"source": 0
+			},
+			"type": "switch"
 		},
 		{
 			"connections": [
@@ -1126,30 +2228,6 @@
 					"from_port": 0,
 					"to": "colorize",
 					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 1
-				},
-				{
-					"from": "colorize_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 3
-				},
-				{
-					"from": "perlin",
-					"from_port": 0,
-					"to": "colorize_2",
-					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 2
 				},
 				{
 					"from": "colorize",
@@ -1162,75 +2240,91 @@
 					"from_port": 0,
 					"to": "gen_outputs",
 					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "uniform_greyscale_3",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 3
+				},
+				{
+					"from": "uniform",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "normal_map",
+					"to_port": 0
+				},
+				{
+					"from": "noise",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "scratches",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
 				}
 			],
 			"label": "Marble",
-			"name": "graph_3",
+			"name": "graph_3_3_2",
 			"node_position": {
-				"x": -771.182129,
-				"y": -126.352631
+				"x": -1255.027832,
+				"y": -300.571716
 			},
 			"nodes": [
 				{
-					"name": "perlin",
-					"node_position": {
-						"x": -586.5,
-						"y": 111
-					},
-					"parameters": {
-						"iterations": 8,
-						"persistence": 1,
-						"scale_x": 4,
-						"scale_y": 4
-					},
-					"type": "perlin"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -353.5,
-						"y": 171
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.989583,
-									"g": 0.989583,
-									"pos": 0.472727,
-									"r": 0.989583
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0.563636,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
 					"name": "uniform_greyscale_2",
 					"node_position": {
-						"x": -342.5,
-						"y": 108.5
+						"x": -325.5,
+						"y": 82.5
 					},
 					"parameters": {
-						"color": 0.07
+						"color": 0.15
 					},
 					"type": "uniform_greyscale"
 				},
 				{
 					"name": "uniform_greyscale",
 					"node_position": {
-						"x": -342.5,
-						"y": 47
+						"x": -325.5,
+						"y": 133
 					},
 					"parameters": {
 						"color": 0
@@ -1267,8 +2361,8 @@
 					"label": "Warp1",
 					"name": "graph",
 					"node_position": {
-						"x": -594.5,
-						"y": -88
+						"x": -618.5,
+						"y": -89
 					},
 					"nodes": [
 						{
@@ -1430,8 +2524,8 @@
 				{
 					"name": "_2",
 					"node_position": {
-						"x": -332.611084,
-						"y": -34.388885
+						"x": -327.611084,
+						"y": -48.388885
 					},
 					"parameters": {
 						"c1": {
@@ -1443,9 +2537,9 @@
 						},
 						"c2": {
 							"a": 1,
-							"b": 0.078431,
-							"g": 0.035294,
-							"r": 0.035294,
+							"b": 0,
+							"g": 0,
+							"r": 0,
 							"type": "Color"
 						}
 					},
@@ -1562,11 +2656,12 @@
 						},
 						"param1": {
 							"a": 1,
-							"b": 0.078431,
-							"g": 0.035294,
-							"r": 0.035294,
+							"b": 0,
+							"g": 0,
+							"r": 0,
 							"type": "Color"
-						}
+						},
+						"param2": 2
 					},
 					"type": "remote",
 					"widgets": [
@@ -1591,6 +2686,17 @@
 							],
 							"name": "param1",
 							"type": "linked_control"
+						},
+						{
+							"label": "Scratches",
+							"linked_widgets": [
+								{
+									"node": "normal_map",
+									"widget": "param1"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
 						}
 					]
 				},
@@ -1611,8 +2717,8 @@
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -32.611084,
-						"y": -0.352623
+						"x": 218.388916,
+						"y": 18.647377
 					},
 					"parameters": {
 
@@ -1620,22 +2726,156 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgba"
+							"type": "rgb"
 						},
 						{
-							"name": "Metallic",
-							"type": "rgba"
+							"name": "ORM",
+							"type": "rgb"
 						},
 						{
-							"name": "Roughness",
-							"type": "rgba"
+							"name": "Emission",
+							"type": "rgb"
 						},
 						{
-							"name": "Bump",
-							"type": "rgba"
+							"name": "Normal",
+							"type": "rgb"
 						}
 					],
 					"type": "ios"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -87.22229,
+						"y": 39.197388
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"r": 1,
+							"type": "Color"
+						},
+						"name": 0
+					},
+					"type": "combine"
+				},
+				{
+					"name": "uniform_greyscale_3",
+					"node_position": {
+						"x": -325.100708,
+						"y": 31.197388
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "normal_map",
+					"node_position": {
+						"x": -85.707123,
+						"y": 186.780701
+					},
+					"parameters": {
+						"amount": 0.5,
+						"param0": 11,
+						"param1": 2,
+						"param2": 0,
+						"param3": 0,
+						"param4": 0,
+						"size": 4
+					},
+					"type": "normal_map"
+				},
+				{
+					"name": "uniform",
+					"node_position": {
+						"x": 52.203369,
+						"y": 83.780701
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"r": 0,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				},
+				{
+					"name": "scratches",
+					"node_position": {
+						"x": -751.885315,
+						"y": 149.637848
+					},
+					"parameters": {
+						"Randomness": 0.5,
+						"angle": -1,
+						"layers": 10,
+						"length": 0.05,
+						"randomness": 1,
+						"waviness": 0.29,
+						"width": 0.002
+					},
+					"type": "scratches"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -322.733154,
+						"y": 194.637848
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0.015625,
+									"g": 0.015625,
+									"pos": 1,
+									"r": 0.015625
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "noise",
+					"node_position": {
+						"x": -742.733154,
+						"y": 335.637848
+					},
+					"parameters": {
+						"density": 0.5,
+						"size": 10
+					},
+					"type": "noise"
+				},
+				{
+					"name": "blend",
+					"node_position": {
+						"x": -461.733154,
+						"y": 255.887848
+					},
+					"parameters": {
+						"amount": 0.99,
+						"blend_type": 0
+					},
+					"type": "blend"
 				}
 			],
 			"parameters": {
@@ -1648,26 +2888,25 @@
 				},
 				"param1": {
 					"a": 1,
-					"b": 0.078431,
-					"g": 0.035294,
-					"r": 0.035294,
+					"b": 0,
+					"g": 0,
+					"r": 0,
 					"type": "Color"
-				}
+				},
+				"param2": 2
 			},
 			"type": "graph"
 		},
 		{
-			"name": "switch",
+			"name": "uniform_greyscale",
 			"node_position": {
-				"x": -413.506958,
-				"y": -191.071167
+				"x": -486.94574,
+				"y": -385.608154
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 4,
-				"source": 0
+				"color": 1
 			},
-			"type": "switch"
+			"type": "uniform_greyscale"
 		}
 	],
 	"parameters": {
