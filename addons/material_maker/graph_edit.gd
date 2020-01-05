@@ -77,7 +77,7 @@ func remove_node(node) -> void:
 		if node == last_selected:
 			set_last_selected(null)
 		remove_child(node)
-		node.free()
+		node.queue_free()
 		send_changed_signal()
 
 # Global operations on graph

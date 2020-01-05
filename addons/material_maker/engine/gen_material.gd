@@ -200,7 +200,7 @@ func update_spatial_material(m, file_prefix = null) -> void:
 			m.ao_enabled = false
 		# Depth
 		texture = get_generated_texture("depth", file_prefix)
-		if texture != null:
+		if texture != null and parameters.depth_scale > 0:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
 			m.depth_scale = parameters.depth_scale * 0.2
