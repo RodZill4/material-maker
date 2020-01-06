@@ -2224,12 +2224,6 @@
 		{
 			"connections": [
 				{
-					"from": "graph",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
 					"from": "colorize",
 					"from_port": 0,
 					"to": "_2",
@@ -2300,13 +2294,19 @@
 					"from_port": 0,
 					"to": "colorize_2",
 					"to_port": 0
+				},
+				{
+					"from": "graph_2",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
 				}
 			],
 			"label": "Marble",
 			"name": "graph_3_3_2",
 			"node_position": {
-				"x": -1255.027832,
-				"y": -300.571716
+				"x": -1254.027832,
+				"y": -320.571716
 			},
 			"nodes": [
 				{
@@ -2330,196 +2330,6 @@
 						"color": 0
 					},
 					"type": "uniform_greyscale"
-				},
-				{
-					"connections": [
-						{
-							"from": "perlin",
-							"from_port": 0,
-							"to": "transform",
-							"to_port": 1
-						},
-						{
-							"from": "perlin",
-							"from_port": 0,
-							"to": "transform",
-							"to_port": 2
-						},
-						{
-							"from": "perlin",
-							"from_port": 0,
-							"to": "transform",
-							"to_port": 0
-						},
-						{
-							"from": "transform",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						}
-					],
-					"label": "Warp1",
-					"name": "graph",
-					"node_position": {
-						"x": -618.5,
-						"y": -89
-					},
-					"nodes": [
-						{
-							"name": "transform",
-							"node_position": {
-								"x": -259.25,
-								"y": -658
-							},
-							"parameters": {
-								"repeat": false,
-								"rotate": 0,
-								"scale_x": 1,
-								"scale_y": 1,
-								"translate_x": 0.5,
-								"translate_y": 0.5
-							},
-							"type": "transform"
-						},
-						{
-							"name": "perlin",
-							"node_position": {
-								"x": -571.25,
-								"y": -630
-							},
-							"parameters": {
-								"iterations": 8,
-								"persistence": 0.5,
-								"scale_x": 8,
-								"scale_y": 8
-							},
-							"type": "perlin"
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -670.25,
-								"y": -647.5
-							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": 18.75,
-								"y": -657.5
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"name": "port0",
-									"type": "rgba"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -357.75,
-								"y": -887
-							},
-							"parameters": {
-								"param0": 8,
-								"param1": 8,
-								"param2": 8,
-								"param3": 0.5,
-								"param4": 0.5,
-								"param5": 0.5
-							},
-							"type": "remote",
-							"widgets": [
-								{
-									"label": "Scale X",
-									"linked_widgets": [
-										{
-											"node": "perlin",
-											"widget": "scale_x"
-										}
-									],
-									"name": "param0",
-									"type": "linked_control"
-								},
-								{
-									"label": "Scale Y",
-									"linked_widgets": [
-										{
-											"node": "perlin",
-											"widget": "scale_y"
-										}
-									],
-									"name": "param1",
-									"type": "linked_control"
-								},
-								{
-									"label": "Iterations",
-									"linked_widgets": [
-										{
-											"node": "perlin",
-											"widget": "iterations"
-										}
-									],
-									"name": "param2",
-									"type": "linked_control"
-								},
-								{
-									"label": "Persistance",
-									"linked_widgets": [
-										{
-											"node": "perlin",
-											"widget": "persistence"
-										}
-									],
-									"name": "param3",
-									"type": "linked_control"
-								},
-								{
-									"label": "Warp X",
-									"linked_widgets": [
-										{
-											"node": "transform",
-											"widget": "translate_x"
-										}
-									],
-									"name": "param4",
-									"type": "linked_control"
-								},
-								{
-									"label": "Warp Y",
-									"linked_widgets": [
-										{
-											"node": "transform",
-											"widget": "translate_y"
-										}
-									],
-									"name": "param5",
-									"type": "linked_control"
-								}
-							]
-						}
-					],
-					"parameters": {
-						"param0": 8,
-						"param1": 8,
-						"param2": 8,
-						"param3": 0.5,
-						"param4": 0.5,
-						"param5": 0.5
-					},
-					"type": "graph"
 				},
 				{
 					"name": "_2",
@@ -2876,6 +2686,196 @@
 						"blend_type": 0
 					},
 					"type": "blend"
+				},
+				{
+					"connections": [
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 1
+						},
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 2
+						},
+						{
+							"from": "perlin",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 0
+						},
+						{
+							"from": "transform",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						}
+					],
+					"label": "Warp1",
+					"name": "graph_2",
+					"node_position": {
+						"x": -685.717468,
+						"y": -63.5793
+					},
+					"nodes": [
+						{
+							"name": "transform",
+							"node_position": {
+								"x": -259.25,
+								"y": -658
+							},
+							"parameters": {
+								"repeat": true,
+								"rotate": 0,
+								"scale_x": 1,
+								"scale_y": 1,
+								"translate_x": 0.5,
+								"translate_y": 0.5
+							},
+							"type": "transform"
+						},
+						{
+							"name": "perlin",
+							"node_position": {
+								"x": -502.25,
+								"y": -653
+							},
+							"parameters": {
+								"iterations": 8,
+								"persistence": 0.5,
+								"scale_x": 8,
+								"scale_y": 8
+							},
+							"type": "perlin"
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -670.25,
+								"y": -647.5
+							},
+							"parameters": {
+
+							},
+							"ports": [
+
+							],
+							"type": "ios"
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": 18.75,
+								"y": -657.5
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"type": "ios"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": -315.75,
+								"y": -893
+							},
+							"parameters": {
+								"param0": 8,
+								"param1": 8,
+								"param2": 8,
+								"param3": 0.5,
+								"param4": 0.5,
+								"param5": 0.5
+							},
+							"type": "remote",
+							"widgets": [
+								{
+									"label": "Scale X",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "scale_x"
+										}
+									],
+									"name": "param0",
+									"type": "linked_control"
+								},
+								{
+									"label": "Scale Y",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "scale_y"
+										}
+									],
+									"name": "param1",
+									"type": "linked_control"
+								},
+								{
+									"label": "Iterations",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "iterations"
+										}
+									],
+									"name": "param2",
+									"type": "linked_control"
+								},
+								{
+									"label": "Persistance",
+									"linked_widgets": [
+										{
+											"node": "perlin",
+											"widget": "persistence"
+										}
+									],
+									"name": "param3",
+									"type": "linked_control"
+								},
+								{
+									"label": "Warp X",
+									"linked_widgets": [
+										{
+											"node": "transform",
+											"widget": "translate_x"
+										}
+									],
+									"name": "param4",
+									"type": "linked_control"
+								},
+								{
+									"label": "Warp Y",
+									"linked_widgets": [
+										{
+											"node": "transform",
+											"widget": "translate_y"
+										}
+									],
+									"name": "param5",
+									"type": "linked_control"
+								}
+							]
+						}
+					],
+					"parameters": {
+						"param0": 8,
+						"param1": 8,
+						"param2": 8,
+						"param3": 0.5,
+						"param4": 0.5,
+						"param5": 0.5
+					},
+					"type": "graph"
 				}
 			],
 			"parameters": {
