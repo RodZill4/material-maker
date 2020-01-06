@@ -110,7 +110,7 @@ func clear_view() -> void:
 	for c in get_children():
 		if c is GraphNode:
 			if c == last_selected:
-				set_last_selected(c)
+				set_last_selected(null)
 			remove_child(c)
 			c.free()
 
@@ -376,6 +376,6 @@ func _on_GraphEdit_gui_input(event) -> void:
 		call_deferred("check_last_selected")
 
 func check_last_selected() -> void:
-	if last_selected != null and !(is_instance_valid(last_selected) && last_selected.selected):
+	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
 		last_selected = null
 		emit_signal("node_selected", null)
