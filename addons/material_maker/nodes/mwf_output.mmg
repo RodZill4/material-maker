@@ -85,7 +85,7 @@
 			"to_port": 0
 		}
 	],
-	"label": "Map Output",
+	"label": "Output",
 	"name": "mwf_output",
 	"node_position": {
 		"x": 0,

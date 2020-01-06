@@ -73,7 +73,7 @@
 			}
 		],
 		"instance": "",
-		"name": "MWF Mix",
+		"name": "Mix",
 		"outputs": [
 			{
 				"f": "max($h1($uv), $h2($uv))",
