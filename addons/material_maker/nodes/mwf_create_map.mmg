@@ -13,9 +13,15 @@
 		"global": "",
 		"inputs": [
 			{
+				"default": "1.0",
+				"label": "",
+				"name": "h",
+				"type": "f"
+			},
+			{
 				"default": "0.0",
 				"label": "",
-				"name": "in",
+				"name": "o",
 				"type": "f"
 			}
 		],
@@ -23,7 +29,7 @@
 		"name": "Create Map",
 		"outputs": [
 			{
-				"rgb": "vec3($height*$in($uv), $angle*0.00277777777+0.5, rand(vec2($seed)))",
+				"rgb": "vec3($height*$h($uv), $angle*0.00277777777+0.5, rand(vec2(float($seed)+$o($uv))))",
 				"type": "rgb"
 			}
 		],

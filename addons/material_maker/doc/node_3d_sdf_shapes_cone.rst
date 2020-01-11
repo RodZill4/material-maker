@@ -1,28 +1,28 @@
-Capsule node
+Cone node
 ............
 
-The **Capsule** node generates a 3d signed distance function for a capsule.
+The **Cone** node generates a 3d signed distance function for an infinite cone.
 
-.. image:: images/node_sdf3d_capsule.png
+.. image:: images/node_sdf3d_cone.png
 	:align: center
 
 Inputs
 ::::::
 
-The **Capsule** node does not accept any input.
+The **Cone** node does not accept any input.
 
 Outputs
 :::::::
 
-The **Capsule** node generates a signed distance function for a capsule.
+The **Cone** node generates a signed distance function for a cone.
 
 Parameters
 ::::::::::
 
-The **Capsule** node accepts as parameters the length of the capsule and its radius.
+The **Cone** node accepts as parameters the *angle* of the cone.
 
 Example images
 ::::::::::::::
 
-.. image:: images/node_sdf3d_capsule_sample.png
+.. image:: images/node_sdf3d_cone_sample.png
 	:align: center

@@ -2337,7 +2337,7 @@
 			"icon": "workflow_createmap",
 			"name": "mwf_create_map",
 			"parameters": {
-				"angle": -73,
+				"angle": 0,
 				"height": 1
 			},
 			"tree_item": "Workflow/CreateMap",
