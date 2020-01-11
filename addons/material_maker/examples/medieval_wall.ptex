@@ -217,18 +217,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "mwf_create_map_2_2_2_2",
-			"from_port": 0,
-			"to": "mwf_map",
-			"to_port": 0
-		},
-		{
-			"from": "graph_5",
-			"from_port": 0,
-			"to": "mwf_create_map_2_2_2_2",
-			"to_port": 0
-		},
-		{
 			"from": "colorize_6",
 			"from_port": 0,
 			"to": "mwf_map",
@@ -287,6 +275,30 @@
 			"from_port": 0,
 			"to": "mwf_mix_maps",
 			"to_port": 3
+		},
+		{
+			"from": "graph_5",
+			"from_port": 0,
+			"to": "mwf_create_map_3",
+			"to_port": 0
+		},
+		{
+			"from": "graph_5",
+			"from_port": 1,
+			"to": "mwf_create_map_3",
+			"to_port": 1
+		},
+		{
+			"from": "mwf_create_map_3",
+			"from_port": 0,
+			"to": "mwf_map",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map",
+			"from_port": 0,
+			"to": "brightness_contrast",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -2217,6 +2229,12 @@
 					"from_port": 0,
 					"to": "colorize_4",
 					"to_port": 0
+				},
+				{
+					"from": "bricks_2",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
 				}
 			],
 			"label": "Bricks",
@@ -2229,8 +2247,8 @@
 				{
 					"name": "bricks_2",
 					"node_position": {
-						"x": 611.874512,
-						"y": -790.245544
+						"x": 640.874512,
+						"y": -780.245544
 					},
 					"parameters": {
 						"bevel": 0.04,
@@ -2248,8 +2266,8 @@
 				{
 					"name": "colorize_4",
 					"node_position": {
-						"x": 881.814941,
-						"y": -686.245544
+						"x": 924.814941,
+						"y": -802.245544
 					},
 					"parameters": {
 						"gradient": {
@@ -2285,8 +2303,8 @@
 				{
 					"name": "blend",
 					"node_position": {
-						"x": 846.98291,
-						"y": -783.245544
+						"x": 899.98291,
+						"y": -893.245544
 					},
 					"parameters": {
 						"amount": 1,
@@ -2311,8 +2329,8 @@
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": 1167.814941,
-						"y": -768.578857
+						"x": 1132.814941,
+						"y": -778.578857
 					},
 					"parameters": {
 
@@ -2320,7 +2338,11 @@
 					"ports": [
 						{
 							"name": "port0",
-							"type": "rgba"
+							"type": "f"
+						},
+						{
+							"name": "unnamed",
+							"type": "f"
 						}
 					],
 					"type": "ios"
@@ -2328,8 +2350,8 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": 767.557434,
-						"y": -896.245605
+						"x": 976.557434,
+						"y": -981.245605
 					},
 					"parameters": {
 
@@ -2540,7 +2562,7 @@
 				"y": 478.266724
 			},
 			"parameters": {
-				"param0": 0.3,
+				"param0": 0.5,
 				"param1": 10,
 				"param2": 2
 			},
@@ -2608,23 +2630,11 @@
 			"name": "mwf_create_map_2_2_2",
 			"node_position": {
 				"x": -1893.537354,
-				"y": 484.516724
+				"y": 481.516724
 			},
 			"parameters": {
 				"angle": 45,
 				"height": 0.8
-			},
-			"type": "mwf_create_map"
-		},
-		{
-			"name": "mwf_create_map_2_2_2_2",
-			"node_position": {
-				"x": -1796.537354,
-				"y": 589.266724
-			},
-			"parameters": {
-				"angle": 0,
-				"height": 1
 			},
 			"type": "mwf_create_map"
 		},
@@ -2637,7 +2647,7 @@
 			"parameters": {
 				"amount": 0.5,
 				"param0": 10,
-				"param1": 1.02,
+				"param1": 0.78,
 				"param2": 0,
 				"param3": 0,
 				"param4": 1,
@@ -2673,6 +2683,31 @@
 				"height": 0.8
 			},
 			"type": "mwf_mix_maps"
+		},
+		{
+			"name": "mwf_create_map_3",
+			"node_position": {
+				"x": -1823.445557,
+				"y": 586.679321
+			},
+			"parameters": {
+				"angle": 0,
+				"height": 1
+			},
+			"type": "mwf_create_map"
+		},
+		{
+			"name": "brightness_contrast",
+			"node_position": {
+				"x": -1468.755005,
+				"y": 754.429321
+			},
+			"parameters": {
+				"brightness": 0,
+				"contrast": 1,
+				"steps": 6
+			},
+			"type": "brightness_contrast"
 		}
 	],
 	"parameters": {
