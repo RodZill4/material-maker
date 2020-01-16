@@ -23,6 +23,12 @@ The **Bricks** node provides the following textures:
 * The 3rd and 4th textures are greyscale images of the X and Y position of the center of
   each brick.
 
+* The 5th texture is an UV map texture for each brick (and can be used with the **CustomUV**
+  node to apply a texture on each brick)
+
+* the 6th texture is an UV map for each corner of each brick (and can be used with the
+  **CustomUV** node to apply a texture on each corner)
+
 Those images can be used together to create complex materials that show for example bricks
 of different colors.
 
@@ -46,6 +52,10 @@ The **Bricks** node accepts the following parameters:
 * the *Mortar* parameter defines the relative thickness of mortar in patterns.
 
 * the *Bevel* parameter defines the relative thickness of brick bevel in patterns.
+
+* the *Round* parameter defines the radius of each round corner.
+
+* the *Corner* parameter defines the size of each corner (for the 6th output texture).
 
 Notes
 +++++

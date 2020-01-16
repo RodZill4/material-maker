@@ -1,0 +1,60 @@
+{
+	"name": "mwf_create_map",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"angle": 0,
+		"height": 1
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "",
+				"name": "h",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "o",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Create Map",
+		"outputs": [
+			{
+				"rgb": "vec3($height*$h($uv), $angle*0.00277777777+0.5, rand(vec2(float($seed)+$o($uv))))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Height",
+				"max": 1,
+				"min": 0,
+				"name": "height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Angle",
+				"max": 180,
+				"min": -180,
+				"name": "angle",
+				"step": 0.1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

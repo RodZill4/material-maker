@@ -13,4 +13,5 @@ to describe procedural materials.
 	nodes_noise
 	nodes_filter
 	nodes_transform
+	nodes_workflow
 	nodes_miscellaneous

@@ -1,0 +1,57 @@
+{
+	"name": "sphere",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0.5,
+		"cy": 0.5,
+		"r": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float sphere(vec2 uv, vec2 c, float r) {\n\tuv -= c;\n\tuv /= r;\n\treturn 2.0*r*sqrt(max(0.0, 1.0-dot(uv, uv)));\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Sphere",
+		"outputs": [
+			{
+				"f": "sphere($uv, vec2($cx, $cy), $r)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.5,
+				"label": "Center X",
+				"max": 1,
+				"min": 0,
+				"name": "cx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Center Y",
+				"max": 1,
+				"min": 0,
+				"name": "cy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

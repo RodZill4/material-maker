@@ -1,0 +1,104 @@
+{
+	"name": "mwf_mix",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "float $(name_uv)_a1 = step($h1($uv), $h2($uv));",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "Height 1",
+				"name": "h1",
+				"type": "f"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "Color 1",
+				"name": "c1",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "ORM 1",
+				"name": "orm1",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "Emission 1",
+				"name": "em1",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.5, 0.5, 1.0)",
+				"label": "Normal 1",
+				"name": "nm1",
+				"type": "rgb"
+			},
+			{
+				"default": "0.0",
+				"label": "Height 2",
+				"name": "h2",
+				"type": "f"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "Color 2",
+				"name": "c2",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "ORM 2",
+				"name": "orm2",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "Emission 2",
+				"name": "em2",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.5, 0.5, 1.0)",
+				"label": "Normal 2",
+				"name": "nm2",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "Mix",
+		"outputs": [
+			{
+				"f": "max($h1($uv), $h2($uv))",
+				"type": "f"
+			},
+			{
+				"rgb": "mix($c1($uv), $c2($uv), $(name_uv)_a1)",
+				"type": "rgb"
+			},
+			{
+				"rgb": "mix($orm1($uv), $orm2($uv), $(name_uv)_a1)",
+				"type": "rgb"
+			},
+			{
+				"rgb": "mix($em1($uv), $em2($uv), $(name_uv)_a1)",
+				"type": "rgb"
+			},
+			{
+				"rgb": "mix($nm1($uv), $nm2($uv), $(name_uv)_a1)",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

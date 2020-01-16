@@ -1,0 +1,55 @@
+{
+	"name": "beehive",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"sx": 4,
+		"sy": 4
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_uv = $uv*vec2($sx, $sy*1.73205080757);\nvec4 $(name_uv)_center = beehive_center($(name_uv)_uv);",
+		"global": "float beehive_dist(vec2 p){\n\tvec2 s = vec2(1.0, 1.73205080757);\n    p = abs(p);\n    return max(dot(p, s*.5), p.x);\n}\n\nvec4 beehive_center(vec2 p) {\n\tvec2 s = vec2(1.0, 1.73205080757);\n    vec4 hC = floor(vec4(p, p - vec2(.5, 1))/vec4(s,s)) + .5;\n    vec4 h = vec4(p - hC.xy*s, p - (hC.zw + .5)*s);\n    return dot(h.xy, h.xy)<dot(h.zw, h.zw) ? vec4(h.xy, hC.xy) : vec4(h.zw, hC.zw + 9.73);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Beehive",
+		"outputs": [
+			{
+				"f": "1.0-2.0*beehive_dist($(name_uv)_center.xy)",
+				"type": "f"
+			},
+			{
+				"rgb": "rand3(fract($(name_uv)_center.zw/vec2($sx, $sy))+vec2($seed))",
+				"type": "rgb"
+			},
+			{
+				"rgb": "vec3(vec2(0.5)+$(name_uv)_center.xy, 0.0)",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 2,
+				"label": "Size X",
+				"max": 64,
+				"min": 1,
+				"name": "sx",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 2,
+				"label": "Size Y",
+				"max": 64,
+				"min": 1,
+				"name": "sy",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

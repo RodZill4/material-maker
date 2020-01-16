@@ -16,6 +16,11 @@ All Signed Distance Functions nodes are based on code written by Inigo Quilez th
 
 __ sdf2dpage_
 
+.. toctree::
+	:maxdepth: 1
+
+	node_simple_sdf_operators_sdshow
+
 Shapes
 ++++++
 
@@ -37,7 +42,7 @@ Operators
 	node_simple_sdf_operators_sdsmoothboolean
 	node_simple_sdf_operators_sdroundedshape
 	node_simple_sdf_operators_sdannularshape
-	node_simple_sdf_operators_sdshow
+	node_simple_sdf_operators_sdmorph
 
 Example images
 ++++++++++++++

@@ -1,0 +1,64 @@
+{
+	"name": "greyscale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"brightness": 0,
+		"contrast": 1,
+		"mode": 2,
+		"steps": 6
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float gs_min(vec3 c) {\n\treturn min(c.r, min(c.g, c.b));\n}\nfloat gs_max(vec3 c) {\n\treturn max(c.r, max(c.g, c.b));\n}\nfloat gs_lightness(vec3 c) {\n\treturn 0.5*(max(c.r, max(c.g, c.b)) + min(c.r, min(c.g, c.b)));\n}\nfloat gs_average(vec3 c) {\n\treturn 0.333333333333*(c.r + c.g + c.b);\n}\nfloat gs_luminosity(vec3 c) {\n\treturn 0.21 * c.r + 0.72 * c.g + 0.07 * c.b;\n}\n",
+		"inputs": [
+			{
+				"default": "vec3(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "Greyscale",
+		"outputs": [
+			{
+				"f": "gs_$mode($in($uv))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 4,
+				"label": "",
+				"name": "mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Lightness",
+						"value": "lightness"
+					},
+					{
+						"name": "Average",
+						"value": "average"
+					},
+					{
+						"name": "Luminosity",
+						"value": "luminosity"
+					},
+					{
+						"name": "Min",
+						"value": "min"
+					},
+					{
+						"name": "Max",
+						"value": "max"
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}

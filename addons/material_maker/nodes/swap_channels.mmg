@@ -1,0 +1,228 @@
+{
+	"name": "swap_channels",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"out_a": 8,
+		"out_b": 6,
+		"out_g": 4,
+		"out_r": 2
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Swap channels",
+		"outputs": [
+			{
+				"rgba": "vec4($out_r,$out_g,$out_b,$out_a)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 2,
+				"label": "R",
+				"name": "out_r",
+				"type": "enum",
+				"values": [
+					{
+						"name": "0",
+						"value": "0.0"
+					},
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "R",
+						"value": "$in($uv).r"
+					},
+					{
+						"name": "-R",
+						"value": "1.0-$in($uv).r"
+					},
+					{
+						"name": "G",
+						"value": "$in($uv).g"
+					},
+					{
+						"name": "-G",
+						"value": "1.0-$in($uv).g"
+					},
+					{
+						"name": "B",
+						"value": "$in($uv).b"
+					},
+					{
+						"name": "-B",
+						"value": "1.0-$in($uv).b"
+					},
+					{
+						"name": "A",
+						"value": "$in($uv).a"
+					},
+					{
+						"name": "-A",
+						"value": "1.0-$in($uv).a"
+					}
+				]
+			},
+			{
+				"default": 4,
+				"label": "G",
+				"name": "out_g",
+				"type": "enum",
+				"values": [
+					{
+						"name": "0",
+						"value": "0.0"
+					},
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "R",
+						"value": "$in($uv).r"
+					},
+					{
+						"name": "-R",
+						"value": "1.0-$in($uv).r"
+					},
+					{
+						"name": "G",
+						"value": "$in($uv).g"
+					},
+					{
+						"name": "-G",
+						"value": "1.0-$in($uv).g"
+					},
+					{
+						"name": "B",
+						"value": "$in($uv).b"
+					},
+					{
+						"name": "-B",
+						"value": "1.0-$in($uv).b"
+					},
+					{
+						"name": "A",
+						"value": "$in($uv).a"
+					},
+					{
+						"name": "-A",
+						"value": "1.0-$in($uv).a"
+					}
+				]
+			},
+			{
+				"default": 6,
+				"label": "B",
+				"name": "out_b",
+				"type": "enum",
+				"values": [
+					{
+						"name": "0",
+						"value": "0.0"
+					},
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "R",
+						"value": "$in($uv).r"
+					},
+					{
+						"name": "-R",
+						"value": "1.0-$in($uv).r"
+					},
+					{
+						"name": "G",
+						"value": "$in($uv).g"
+					},
+					{
+						"name": "-G",
+						"value": "1.0-$in($uv).g"
+					},
+					{
+						"name": "B",
+						"value": "$in($uv).b"
+					},
+					{
+						"name": "-B",
+						"value": "1.0-$in($uv).b"
+					},
+					{
+						"name": "A",
+						"value": "$in($uv).a"
+					},
+					{
+						"name": "-A",
+						"value": "1.0-$in($uv).a"
+					}
+				]
+			},
+			{
+				"default": 8,
+				"label": "A",
+				"name": "out_a",
+				"type": "enum",
+				"values": [
+					{
+						"name": "0",
+						"value": "0.0"
+					},
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "R",
+						"value": "$in($uv).r"
+					},
+					{
+						"name": "-R",
+						"value": "1.0-$in($uv).r"
+					},
+					{
+						"name": "G",
+						"value": "$in($uv).g"
+					},
+					{
+						"name": "-G",
+						"value": "1.0-$in($uv).g"
+					},
+					{
+						"name": "B",
+						"value": "$in($uv).b"
+					},
+					{
+						"name": "-B",
+						"value": "1.0-$in($uv).b"
+					},
+					{
+						"name": "A",
+						"value": "$in($uv).a"
+					},
+					{
+						"name": "-A",
+						"value": "1.0-$in($uv).a"
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}

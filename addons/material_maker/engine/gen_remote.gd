@@ -80,11 +80,15 @@ func get_parameter_defs() -> Array:
 	for w in widgets:
 		match w.type:
 			"config_control":
-				var p : Dictionary = { name=w.name, label=w.label, type="enum", values=[] }
+				var p : Dictionary = { name=w.name, label=w.label, type="enum" }
 				var configurations = w.configurations.keys()
 				configurations.sort()
-				for c in configurations:
-					p.values.push_back({ name=c, value=c })
+				if configurations == [ "False", "True" ]:
+					p.type = "boolean"
+				else:
+					p.values=[]
+					for c in configurations:
+						p.values.push_back({ name=c, value=c })
 				rv.append(p)
 				i += 1
 			"linked_control":
@@ -119,6 +123,8 @@ func set_parameter(p : String, v) -> void:
 					if node != null:
 						node.set_parameter(w.widget, v)
 			"config_control":
+				if v is bool:
+					v = 1 if v else 0
 				if v < widget.configurations.size():
 					var configurations = widget.configurations.keys()
 					configurations.sort()

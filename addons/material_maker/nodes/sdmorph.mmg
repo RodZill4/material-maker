@@ -1,0 +1,56 @@
+{
+	"name": "sdmorph",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 0.5,
+		"bevel": 0,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"op": 0,
+		"r": 0.3,
+		"w": 0.28
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in1",
+				"type": "sdf2d"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in2",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "sdMorph",
+		"outputs": [
+			{
+				"sdf2d": "mix($in1($uv), $in2($uv), $amount)",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "amount",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

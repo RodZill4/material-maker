@@ -14,7 +14,8 @@ void fragment() {
 	float ms = max(size.x, size.y);
 	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
 	vec2 m2 = min(fract(uv), 1.0-fract(uv));
-	COLOR = mix(texture(tex, uv), vec4(0.0, 1.0, 0.0, 1.0), step(min(m2.x, m2.y), 1.0/min(size.x, size.y)));
+	float color = 0.5*(cos(5.0*TIME+100.0*(UV.x+UV.y))+1.0);
+	COLOR = mix(texture(tex, uv), vec4(vec3(color), 1.0), step(min(m2.x, m2.y), 1.0/min(size.x, size.y)));
 }"
 
 [sub_resource type="ShaderMaterial" id=2]

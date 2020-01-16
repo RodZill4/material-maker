@@ -40,9 +40,9 @@ func update_node() -> void:
 			control.name = p.name
 			controls[control.name] = control
 			add_control(generator.get_widget(p.name).label, control)
-			if generator.widgets[i].type == "config_control":
+			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
-				if control.get_item_count() > 0:
+				if control.get_item_count() > 0 and generator.parameters.has(p.name):
 					control.selected = generator.parameters[p.name]
 					current = control.get_item_text(control.selected)
 				control.add_separator()
@@ -60,30 +60,31 @@ func _on_value_changed(new_value, variable : String) -> void:
 	if widget.type == "config_control":
 		var configuration_count = widget.configurations.size()
 		var control = controls[variable]
-		if new_value < configuration_count:
-			._on_value_changed(new_value, variable)
-			var current = control.get_item_text(new_value)
-			control.set_item_text(configuration_count+3, "<update "+current+">")
-			control.set_item_text(configuration_count+4, "<remove "+current+">")
-		else:
-			var current = control.get_item_text(generator.parameters[variable])
-			var command = new_value - widget.configurations.size()
-			match command:
-				1:
-					var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
-					add_child(dialog)
-					dialog.set_texts("Configuration", "Enter a name for the new configuration")
-					dialog.connect("ok", self, "do_add_configuration", [ variable ])
-					dialog.popup_centered()
-				3:
-					generator.update_configuration(variable, current)
-				4:
-					generator.parameters[variable] = 0
-					generator.remove_configuration(variable, current)
-				_:
-					print(command)
-	else:
-		._on_value_changed(new_value, variable)
+		if control is OptionButton:
+			if new_value < configuration_count:
+				._on_value_changed(new_value, variable)
+				var current = control.get_item_text(new_value)
+				control.set_item_text(configuration_count+3, "<update "+current+">")
+				control.set_item_text(configuration_count+4, "<remove "+current+">")
+			else:
+				var current = control.get_item_text(generator.parameters[variable])
+				var command = new_value - widget.configurations.size()
+				match command:
+					1:
+						var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+						add_child(dialog)
+						dialog.set_texts("Configuration", "Enter a name for the new configuration")
+						dialog.connect("ok", self, "do_add_configuration", [ variable ])
+						dialog.popup_centered()
+					3:
+						generator.update_configuration(variable, current)
+					4:
+						generator.parameters[variable] = 0
+						generator.remove_configuration(variable, current)
+					_:
+						print(command)
+			return
+	._on_value_changed(new_value, variable)
 
 func do_add_configuration(config_name : String, param_name : String) -> void:
 	generator.add_configuration(param_name, config_name)
@@ -109,7 +110,8 @@ func _on_AddConfig_pressed() -> void:
 
 func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
-	link.pick(controls[param_name], generator, param_name)
+	if controls.has(param_name):
+		link.pick(controls[param_name], generator, param_name)
 
 func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize

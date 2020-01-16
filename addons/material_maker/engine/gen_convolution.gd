@@ -169,7 +169,8 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 							coef_str = "vec3(%.9f, %.9f, %.9f)" % [ coef[0] * sum[0], coef[1] * sum[1], coef[2] * sum[2] ]
 						"rgba":
 							coef_str = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ coef[0] * sum[0], coef[1] * sum[1], coef[2] * sum[2], coef[3] * sum[3] ]
-					rv.code += "%s_%d += %s*%s;\n" % [ genname, variant_index, coef_str, src_code[convolution_params.input_type] ]
+					if src_code.has(convolution_params.input_type):
+						rv.code += "%s_%d += %s*%s;\n" % [ genname, variant_index, coef_str, src_code[convolution_params.input_type] ]
 					for t in src_code.textures.keys():
 						rv.textures[t] = src_code.textures[t]
 			rv[convolution_params.output_type] = "%s_%d" % [ genname, variant_index ]
@@ -181,4 +182,5 @@ func _serialize(data: Dictionary) -> Dictionary:
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	set_convolution_params(data.convolution_params)
+	if data.has("convolution_params"):
+		set_convolution_params(data.convolution_params)

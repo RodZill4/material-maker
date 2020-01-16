@@ -74,6 +74,9 @@ func remove_node(node) -> void:
 		for c in get_connection_list():
 			if c.from == node_name or c.to == node_name:
 				disconnect_node(c.from, c.from_port, c.to, c.to_port)
+		if node == last_selected:
+			set_last_selected(null)
+		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
 
@@ -106,6 +109,8 @@ func clear_view() -> void:
 	clear_connections()
 	for c in get_children():
 		if c is GraphNode:
+			if c == last_selected:
+				set_last_selected(null)
 			remove_child(c)
 			c.free()
 
@@ -358,14 +363,19 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 		generator.transmits_seed = button_pressed
 
 func _on_GraphEdit_node_selected(node) -> void:
-	last_selected = node
+	set_last_selected(node)
+
+func set_last_selected(node) -> void:
+	if node is GraphNode:
+		last_selected = node
+	else:
+		last_selected = null
 
 func _on_GraphEdit_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
 
 func check_last_selected() -> void:
-	if last_selected != null and !(is_instance_valid(last_selected) && last_selected.selected):
-		print("Unselected")
+	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
 		last_selected = null
 		emit_signal("node_selected", null)

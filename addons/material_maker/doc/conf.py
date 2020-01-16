@@ -20,11 +20,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Material Maker'
-copyright = '2018, Rodz Labs'
+copyright = '2018-2020, Rodz Labs'
 author = 'Rodz Labs'
 
 # The short X.Y version
-version = '0.7'
+version = '0.8'
 # The full version, including alpha/beta/rc tags
 release = ''
 
