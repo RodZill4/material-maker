@@ -1,18 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "bricks",
-			"from_port": 0,
-			"to": "warp",
-			"to_port": 0
-		},
-		{
-			"from": "perlin",
-			"from_port": 0,
-			"to": "warp",
-			"to_port": 1
-		},
-		{
 			"from": "graph_2",
 			"from_port": 0,
 			"to": "blend_2",
@@ -25,34 +13,22 @@
 			"to_port": 1
 		},
 		{
-			"from": "bricks",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 0
-		},
-		{
-			"from": "warp",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 1
-		},
-		{
 			"from": "graph_3",
 			"from_port": 0,
 			"to": "blend",
 			"to_port": 2
 		},
 		{
-			"from": "raymarching_2",
+			"from": "sdf3d_cylinder",
 			"from_port": 0,
-			"to": "graph",
+			"to": "raymarching",
 			"to_port": 0
 		},
 		{
 			"from": "raymarching_2",
-			"from_port": 1,
+			"from_port": 0,
 			"to": "graph",
-			"to_port": 1
+			"to_port": 0
 		},
 		{
 			"from": "raymarching_2_2",
@@ -61,25 +37,61 @@
 			"to_port": 2
 		},
 		{
-			"from": "raymarching_2_2",
-			"from_port": 1,
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 1
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
 			"to": "graph",
 			"to_port": 3
 		},
 		{
-			"from": "graph_3_2",
+			"from": "sdf3d_sphere",
+			"from_port": 0,
+			"to": "sdf3d_morph",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_box",
+			"from_port": 0,
+			"to": "sdf3d_morph",
+			"to_port": 1
+		},
+		{
+			"from": "sdf3d_sphere",
 			"from_port": 0,
 			"to": "raymarching_2",
 			"to_port": 0
 		},
 		{
-			"from": "graph_4",
+			"from": "sdf3d_box",
 			"from_port": 0,
-			"to": "sdf3d_rotate_2",
+			"to": "raymarching_2_2",
 			"to_port": 0
 		},
 		{
-			"from": "sdf3d_rotate_2",
+			"from": "graph",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching_2_2_2",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "sdf3d_scale_2",
+			"from_port": 0,
+			"to": "raymarching_2_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_morph",
 			"from_port": 0,
 			"to": "sdf3d_translate_3_2",
 			"to_port": 0
@@ -87,19 +99,13 @@
 		{
 			"from": "sdf3d_translate_3_2",
 			"from_port": 0,
-			"to": "raymarching_2_2",
+			"to": "sdf3d_scale_2",
 			"to_port": 0
 		},
 		{
-			"from": "sphere",
+			"from": "blend_2",
 			"from_port": 0,
 			"to": "Material",
-			"to_port": 0
-		},
-		{
-			"from": "graph_3_2",
-			"from_port": 0,
-			"to": "raymarching",
 			"to_port": 0
 		}
 	],
@@ -113,8 +119,8 @@
 		{
 			"name": "Material",
 			"node_position": {
-				"x": 576.544006,
-				"y": 29.080002
+				"x": 501.544006,
+				"y": 288.080017
 			},
 			"parameters": {
 				"albedo_color": {
@@ -130,7 +136,7 @@
 				"metallic": 1,
 				"normal_scale": 1,
 				"roughness": 1,
-				"size": 8,
+				"size": 9,
 				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
@@ -255,8 +261,8 @@
 			"label": "Tile Inputs",
 			"name": "graph",
 			"node_position": {
-				"x": 237.541992,
-				"y": 78.266541
+				"x": -73.458008,
+				"y": 146.266541
 			},
 			"nodes": [
 				{
@@ -496,12 +502,6 @@
 					"to_port": 1
 				},
 				{
-					"from": "sdboolean_3",
-					"from_port": 0,
-					"to": "sdshow_2",
-					"to_port": 0
-				},
-				{
 					"from": "sdboolean_3_2",
 					"from_port": 0,
 					"to": "sdboolean_3",
@@ -520,23 +520,29 @@
 					"to_port": 0
 				},
 				{
-					"from": "sdshow_2",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
 					"from": "colorize",
 					"from_port": 0,
 					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "sdboolean_3",
+					"from_port": 0,
+					"to": "sdshow",
+					"to_port": 0
+				},
+				{
+					"from": "sdshow",
+					"from_port": 0,
+					"to": "colorize",
 					"to_port": 0
 				}
 			],
 			"label": "Arrow",
 			"name": "graph_2",
 			"node_position": {
-				"x": 206.827515,
-				"y": 279.753479
+				"x": 196.827515,
+				"y": 248.753479
 			},
 			"nodes": [
 				{
@@ -546,11 +552,11 @@
 						"y": 387.121552
 					},
 					"parameters": {
-						"cx": -0.09,
+						"cx": -0.07,
 						"cy": 0,
 						"h": 0.04,
 						"r": 0.3,
-						"w": 0.07
+						"w": 0.08
 					},
 					"type": "sdbox"
 				},
@@ -558,10 +564,10 @@
 					"name": "sdrhombus_2",
 					"node_position": {
 						"x": 235.398682,
-						"y": 251.121552
+						"y": 252.121552
 					},
 					"parameters": {
-						"cx": -0.1,
+						"cx": -0.02,
 						"cy": 0,
 						"h": 0.12,
 						"r": 0.3,
@@ -572,11 +578,11 @@
 				{
 					"name": "sdbox_3_2",
 					"node_position": {
-						"x": 238.086548,
-						"y": 121.972382
+						"x": 220.086548,
+						"y": 108.972382
 					},
 					"parameters": {
-						"cx": -0.41,
+						"cx": -0.23,
 						"cy": 0,
 						"h": 0.35,
 						"r": 0.3,
@@ -617,53 +623,6 @@
 						"w": 0.28
 					},
 					"type": "sdboolean"
-				},
-				{
-					"name": "sdshow_2",
-					"node_position": {
-						"x": 602.836609,
-						"y": 376.603577
-					},
-					"parameters": {
-						"bevel": 0.01,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"r": 0.3,
-						"w": 0.28
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "in",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "sdShow",
-						"outputs": [
-							{
-								"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
-								"type": "f"
-							}
-						],
-						"parameters": [
-							{
-								"default": 0,
-								"label": "Bevel",
-								"max": 1,
-								"min": 0,
-								"name": "bevel",
-								"step": 0.01,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
 				},
 				{
 					"name": "colorize",
@@ -739,6 +698,22 @@
 					"widgets": [
 
 					]
+				},
+				{
+					"name": "sdshow",
+					"node_position": {
+						"x": 631.060425,
+						"y": 365.52536
+					},
+					"parameters": {
+						"bevel": 0.01,
+						"cx": 0,
+						"cy": 0,
+						"h": 0.08,
+						"r": 0.3,
+						"w": 0.28
+					},
+					"type": "sdshow"
 				}
 			],
 			"parameters": {
@@ -770,8 +745,8 @@
 			"label": "Gradient",
 			"name": "graph_3",
 			"node_position": {
-				"x": -228.787903,
-				"y": 631.143799
+				"x": -226.787903,
+				"y": 711.143799
 			},
 			"nodes": [
 				{
@@ -961,52 +936,6 @@
 			"type": "graph"
 		},
 		{
-			"name": "bricks",
-			"node_position": {
-				"x": -209.473175,
-				"y": 327.099731
-			},
-			"parameters": {
-				"bevel": 0.1,
-				"columns": 3,
-				"corner": 0,
-				"mortar": 0.1,
-				"pattern": 0,
-				"repeat": 1,
-				"round": 0,
-				"row_offset": 0.5,
-				"rows": 6
-			},
-			"type": "bricks"
-		},
-		{
-			"name": "warp",
-			"node_position": {
-				"x": -185.473175,
-				"y": 528.099731
-			},
-			"parameters": {
-				"amount": 0.1,
-				"eps": 0.1,
-				"epsilon": 0
-			},
-			"type": "warp"
-		},
-		{
-			"name": "perlin",
-			"node_position": {
-				"x": -436.473175,
-				"y": 324.099731
-			},
-			"parameters": {
-				"iterations": 3,
-				"persistence": 0.5,
-				"scale_x": 4,
-				"scale_y": 4
-			},
-			"type": "perlin"
-		},
-		{
 			"name": "blend",
 			"node_position": {
 				"x": 138.235168,
@@ -1033,8 +962,8 @@
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": 172.468536,
-				"y": -196.854492
+				"x": 380.468536,
+				"y": 2.145508
 			},
 			"parameters": {
 
@@ -1064,28 +993,6 @@
 				]
 			},
 			"type": "shader"
-		},
-		{
-			"name": "raymarching_2",
-			"node_position": {
-				"x": 24.010315,
-				"y": 37.457581
-			},
-			"parameters": {
-
-			},
-			"type": "raymarching"
-		},
-		{
-			"name": "raymarching_2_2",
-			"node_position": {
-				"x": 26.265625,
-				"y": 127.457581
-			},
-			"parameters": {
-
-			},
-			"type": "raymarching"
 		},
 		{
 			"connections": [
@@ -2163,240 +2070,6 @@
 			"type": "graph"
 		},
 		{
-			"connections": [
-				{
-					"from": "sdf3d_box",
-					"from_port": 0,
-					"to": "sdf3d_boolean",
-					"to_port": 1
-				},
-				{
-					"from": "sdf3d_box_2",
-					"from_port": 0,
-					"to": "sdf3d_translate_3_2",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_translate_3_2",
-					"from_port": 0,
-					"to": "sdf3d_boolean",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_translate_3_2_2",
-					"from_port": 0,
-					"to": "sdf3d_boolean_2",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_boolean",
-					"from_port": 0,
-					"to": "sdf3d_boolean_2",
-					"to_port": 1
-				},
-				{
-					"from": "sdf3d_box_2",
-					"from_port": 0,
-					"to": "sdf3d_translate_3_2_2",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_boolean_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
-			"label": "Brick",
-			"name": "graph_4",
-			"node_position": {
-				"x": -209.947205,
-				"y": 122.904633
-			},
-			"nodes": [
-				{
-					"name": "sdf3d_box",
-					"node_position": {
-						"x": -564.5,
-						"y": -63
-					},
-					"parameters": {
-						"r": 0.01,
-						"sx": 0.26,
-						"sy": 0.15,
-						"sz": 0.1
-					},
-					"type": "sdf3d_box"
-				},
-				{
-					"name": "sdf3d_translate_3_2",
-					"node_position": {
-						"x": -554.5,
-						"y": -166
-					},
-					"parameters": {
-						"x": 0,
-						"y": 0,
-						"z": 0.45
-					},
-					"type": "sdf3d_translate"
-				},
-				{
-					"name": "sdf3d_box_2",
-					"node_position": {
-						"x": -570.5,
-						"y": -294.5
-					},
-					"parameters": {
-						"r": 0,
-						"sx": 0.21,
-						"sy": 0.1,
-						"sz": 0.36
-					},
-					"type": "sdf3d_box"
-				},
-				{
-					"name": "sdf3d_boolean",
-					"node_position": {
-						"x": -358.5,
-						"y": -118
-					},
-					"parameters": {
-						"bevel": 0,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"op": 1,
-						"r": 0.3,
-						"w": 0.28
-					},
-					"type": "sdf3d_boolean"
-				},
-				{
-					"name": "sdf3d_translate_3_2_2",
-					"node_position": {
-						"x": -343.333344,
-						"y": -224.333344
-					},
-					"parameters": {
-						"x": 0,
-						"y": 0,
-						"z": -0.45
-					},
-					"type": "sdf3d_translate"
-				},
-				{
-					"name": "sdf3d_boolean_2",
-					"node_position": {
-						"x": -147.333344,
-						"y": -168.333344
-					},
-					"parameters": {
-						"bevel": 0,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"op": 1,
-						"r": 0.3,
-						"w": 0.28
-					},
-					"type": "sdf3d_boolean"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -748.5,
-						"y": -159.361115
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 60.666656,
-						"y": -165.361115
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "sdf3d"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -488.111115,
-						"y": -466.5
-					},
-					"parameters": {
-
-					},
-					"type": "remote",
-					"widgets": [
-
-					]
-				}
-			],
-			"parameters": {
-
-			},
-			"type": "graph"
-		},
-		{
-			"name": "sdf3d_rotate_2",
-			"node_position": {
-				"x": -241.447205,
-				"y": 169.404633
-			},
-			"parameters": {
-				"a": 0,
-				"ax": 25,
-				"ay": 23,
-				"az": -8,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"type": "sdf3d_rotate"
-		},
-		{
-			"name": "sdf3d_translate_3_2",
-			"node_position": {
-				"x": -233.447205,
-				"y": 270.404633
-			},
-			"parameters": {
-				"x": 0,
-				"y": 0,
-				"z": 0.25
-			},
-			"type": "sdf3d_translate"
-		},
-		{
-			"name": "sphere",
-			"node_position": {
-				"x": 226.260986,
-				"y": -38.970337
-			},
-			"parameters": {
-				"cx": 0.5,
-				"cy": 0.5,
-				"r": 0.5
-			},
-			"type": "sphere"
-		},
-		{
 			"name": "sdf3d_extrusion",
 			"node_position": {
 				"x": -69.41095,
@@ -2411,6 +2084,209 @@
 				"z": 0
 			},
 			"type": "sdf3d_extrusion"
+		},
+		{
+			"name": "sdf3d_cylinder",
+			"node_position": {
+				"x": 115.056458,
+				"y": -125.498108
+			},
+			"parameters": {
+				"l": 0.25,
+				"r": 0.25,
+				"sx": 0.25,
+				"sy": 0.25,
+				"sz": 0.5
+			},
+			"type": "sdf3d_cylinder"
+		},
+		{
+			"name": "sdf3d_sphere",
+			"node_position": {
+				"x": -405.972748,
+				"y": 257.444763
+			},
+			"parameters": {
+				"r": 0.4
+			},
+			"type": "sdf3d_sphere"
+		},
+		{
+			"name": "sdf3d_box",
+			"node_position": {
+				"x": -446.972748,
+				"y": 316.444763
+			},
+			"parameters": {
+				"r": 0.01,
+				"sx": 0.3,
+				"sy": 0.25,
+				"sz": 0.25
+			},
+			"type": "sdf3d_box"
+		},
+		{
+			"name": "raymarching_2",
+			"node_position": {
+				"x": -233.972748,
+				"y": 263.944763
+			},
+			"parameters": {
+
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "sdf",
+						"type": "sdf3d"
+					}
+				],
+				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
+				"name": "Render3d",
+				"outputs": [
+					{
+						"rgb": "render_$name($uv-vec2(0.5))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "raymarching_2_2",
+			"node_position": {
+				"x": -233.972748,
+				"y": 320.944763
+			},
+			"parameters": {
+
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "sdf",
+						"type": "sdf3d"
+					}
+				],
+				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
+				"name": "Render3d",
+				"outputs": [
+					{
+						"rgb": "render_$name($uv-vec2(0.5))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": -343.972748,
+				"y": 181.944778
+			},
+			"parameters": {
+				"color": 0.5
+			},
+			"type": "uniform_greyscale"
+		},
+		{
+			"name": "sdf3d_morph",
+			"node_position": {
+				"x": -239.972748,
+				"y": 388.694763
+			},
+			"parameters": {
+				"Amount": 0.5,
+				"amount": 0.5,
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"type": "sdf3d_morph"
+		},
+		{
+			"name": "raymarching_2_2_2",
+			"node_position": {
+				"x": -229.972748,
+				"y": 604.694763
+			},
+			"parameters": {
+
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "sdf",
+						"type": "sdf3d"
+					}
+				],
+				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
+				"name": "Render3d",
+				"outputs": [
+					{
+						"rgb": "render_$name($uv-vec2(0.5))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "sdf3d_scale_2",
+			"node_position": {
+				"x": -242.972748,
+				"y": 556.694763
+			},
+			"parameters": {
+				"a": 0,
+				"s": 0.5,
+				"x": 0.35,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_scale"
+		},
+		{
+			"name": "sdf3d_translate_3_2",
+			"node_position": {
+				"x": -246.972748,
+				"y": 455.694763
+			},
+			"parameters": {
+				"x": 0.5,
+				"y": 0,
+				"z": 0
+			},
+			"type": "sdf3d_translate"
 		}
 	],
 	"parameters": {

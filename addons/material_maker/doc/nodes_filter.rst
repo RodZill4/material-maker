@@ -9,6 +9,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_invert
 	node_filter_brightness_contrast
 	node_filter_adjust_hsv
+	node_filter_greyscale
 	node_filter_colorize
 	node_filter_combine
 	node_filter_decompose
