@@ -858,6 +858,23 @@
 			"type": "sdannularshape"
 		},
 		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdmorph",
+			"name": "sdmorph",
+			"parameters": {
+				"amount": 0.5,
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "Simple/SDF/Operators/sdMorph",
+			"type": "sdmorph"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Simple/SDF/Transforms"
 		},
@@ -1146,6 +1163,24 @@
 			},
 			"tree_item": "3D/SDF/Operators/Revolution",
 			"type": "sdf3d_revolution"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_morph",
+			"name": "sdf3d_morph",
+			"parameters": {
+				"Amount": 0.5,
+				"amount": 0.5,
+				"bevel": 0,
+				"cx": 0,
+				"cy": 0,
+				"h": 0.08,
+				"op": 0,
+				"r": 0.3,
+				"w": 0.28
+			},
+			"tree_item": "3D/SDF/Operators/Morph",
+			"type": "sdf3d_morph"
 		},
 		{
 			"collapsed": false,
@@ -2092,6 +2127,19 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_greyscale",
+			"name": "greyscale",
+			"parameters": {
+				"brightness": 0,
+				"contrast": 1,
+				"mode": 2,
+				"steps": 6
+			},
+			"tree_item": "Filter/Greyscale",
+			"type": "greyscale"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_colorize",
 			"parameters": {
 				"gradient": [
@@ -2327,6 +2375,16 @@
 			},
 			"tree_item": "Transform/CircleMap",
 			"type": "circle_map"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_customuv",
+			"name": "custom_uv",
+			"parameters": {
+
+			},
+			"tree_item": "Transform/CustomUV",
+			"type": "custom_uv"
 		},
 		{
 			"collapsed": false,

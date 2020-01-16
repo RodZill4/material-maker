@@ -47,6 +47,10 @@
 			{
 				"rgb": "brick_corner_uv($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar, $corner)",
 				"type": "rgb"
+			},
+			{
+				"f": "0.5*(sign($(name_uv)_rect.z-$(name_uv)_rect.x-$(name_uv)_rect.w+$(name_uv)_rect.y)+1.0)",
+				"type": "f"
 			}
 		],
 		"parameters": [
@@ -79,6 +83,7 @@
 				]
 			},
 			{
+				"control": "None",
 				"default": 1,
 				"label": "Repeat:",
 				"max": 8,
@@ -88,6 +93,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 6,
 				"label": "Rows:",
 				"max": 64,
@@ -97,6 +103,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 3,
 				"label": "Columns:",
 				"max": 64,
@@ -106,6 +113,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Offset:",
 				"max": 1,
@@ -115,6 +123,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.1,
 				"label": "Mortar:",
 				"max": 0.5,
@@ -124,6 +133,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.1,
 				"label": "Bevel:",
 				"max": 0.5,
@@ -133,6 +143,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Round:",
 				"max": 0.5,
@@ -142,6 +153,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.1,
 				"label": "Corner:",
 				"max": 0.5,
