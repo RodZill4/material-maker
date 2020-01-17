@@ -298,6 +298,7 @@ func quit() -> void:
 	if Engine.editor_hint:
 		emit_signal("quit")
 	else:
+		dim_window()
 		get_tree().quit()
 
 func edit_cut() -> void:
@@ -526,6 +527,16 @@ func _exit_tree() -> void:
 		config_cache.set_value("window", "position", OS.window_position)
 		config_cache.set_value("window", "size", OS.window_size)
 		config_cache.save("user://cache.ini")
+
+func _notification(what : int) -> void:
+	if !Engine.editor_hint:
+		if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+			dim_window()
+
+func dim_window() -> void:
+	# Darken the UI to denote that the application is currently exiting
+	# (it won't respond to user input in this state).
+	modulate = Color(0.5, 0.5, 0.5)
 
 func show_background_preview(button_pressed):
 	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
