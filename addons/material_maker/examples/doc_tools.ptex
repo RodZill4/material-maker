@@ -25,88 +25,52 @@
 			"to_port": 0
 		},
 		{
-			"from": "raymarching_2",
-			"from_port": 0,
-			"to": "graph",
-			"to_port": 0
-		},
-		{
-			"from": "raymarching_2_2",
-			"from_port": 0,
-			"to": "graph",
-			"to_port": 2
-		},
-		{
-			"from": "uniform_greyscale",
-			"from_port": 0,
-			"to": "graph",
-			"to_port": 1
-		},
-		{
-			"from": "uniform_greyscale",
-			"from_port": 0,
-			"to": "graph",
-			"to_port": 3
-		},
-		{
-			"from": "sdf3d_sphere",
-			"from_port": 0,
-			"to": "sdf3d_morph",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_box",
-			"from_port": 0,
-			"to": "sdf3d_morph",
-			"to_port": 1
-		},
-		{
-			"from": "sdf3d_sphere",
-			"from_port": 0,
-			"to": "raymarching_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_box",
-			"from_port": 0,
-			"to": "raymarching_2_2",
-			"to_port": 0
-		},
-		{
-			"from": "graph",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 0
-		},
-		{
-			"from": "raymarching_2_2_2",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 1
-		},
-		{
-			"from": "sdf3d_scale_2",
-			"from_port": 0,
-			"to": "raymarching_2_2_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_morph",
-			"from_port": 0,
-			"to": "sdf3d_translate_3_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_translate_3_2",
-			"from_port": 0,
-			"to": "sdf3d_scale_2",
-			"to_port": 0
-		},
-		{
 			"from": "blend_2",
 			"from_port": 0,
 			"to": "Material",
 			"to_port": 0
+		},
+		{
+			"from": "shape",
+			"from_port": 0,
+			"to": "quantize",
+			"to_port": 0
+		},
+		{
+			"from": "quantize",
+			"from_port": 0,
+			"to": "edge_detect_1",
+			"to_port": 0
+		},
+		{
+			"from": "quantize",
+			"from_port": 0,
+			"to": "edge_detect_2",
+			"to_port": 0
+		},
+		{
+			"from": "quantize",
+			"from_port": 0,
+			"to": "edge_detect_3",
+			"to_port": 0
+		},
+		{
+			"from": "quantize",
+			"from_port": 0,
+			"to": "sharpen",
+			"to_port": 0
+		},
+		{
+			"from": "quantize",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_1",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
 		}
 	],
 	"label": "Graph",
@@ -261,8 +225,8 @@
 			"label": "Tile Inputs",
 			"name": "graph",
 			"node_position": {
-				"x": -73.458008,
-				"y": 146.266541
+				"x": 197.541992,
+				"y": 137.266541
 			},
 			"nodes": [
 				{
@@ -2101,192 +2065,73 @@
 			"type": "sdf3d_cylinder"
 		},
 		{
-			"name": "sdf3d_sphere",
+			"name": "edge_detect_1",
 			"node_position": {
-				"x": -405.972748,
-				"y": 257.444763
+				"x": -275.198914,
+				"y": 265.017395
 			},
 			"parameters": {
-				"r": 0.4
+				"size": 7
 			},
-			"type": "sdf3d_sphere"
+			"type": "edge_detect_1"
 		},
 		{
-			"name": "sdf3d_box",
+			"name": "shape",
 			"node_position": {
-				"x": -446.972748,
-				"y": 316.444763
+				"x": -651.198914,
+				"y": 310.517395
 			},
 			"parameters": {
-				"r": 0.01,
-				"sx": 0.3,
-				"sy": 0.25,
-				"sz": 0.25
+				"edge": 0.754975,
+				"radius": 1,
+				"shape": 1,
+				"sides": 7
 			},
-			"type": "sdf3d_box"
+			"type": "shape"
 		},
 		{
-			"name": "raymarching_2",
+			"name": "edge_detect_2",
 			"node_position": {
-				"x": -233.972748,
-				"y": 263.944763
+				"x": -275.198914,
+				"y": 318.017395
 			},
 			"parameters": {
-
+				"size": 6
 			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "sdf",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
-				"name": "Render3d",
-				"outputs": [
-					{
-						"rgb": "render_$name($uv-vec2(0.5))",
-						"type": "rgb"
-					}
-				],
-				"parameters": [
-
-				]
-			},
-			"type": "shader"
+			"type": "edge_detect_2"
 		},
 		{
-			"name": "raymarching_2_2",
+			"name": "edge_detect_3",
 			"node_position": {
-				"x": -233.972748,
-				"y": 320.944763
+				"x": -276.198914,
+				"y": 371.017395
 			},
 			"parameters": {
-
+				"size": 6
 			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "sdf",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
-				"name": "Render3d",
-				"outputs": [
-					{
-						"rgb": "render_$name($uv-vec2(0.5))",
-						"type": "rgb"
-					}
-				],
-				"parameters": [
-
-				]
-			},
-			"type": "shader"
+			"type": "edge_detect_3"
 		},
 		{
-			"name": "uniform_greyscale",
+			"name": "sharpen",
 			"node_position": {
-				"x": -343.972748,
-				"y": 181.944778
+				"x": -288.198914,
+				"y": 505.017395
 			},
 			"parameters": {
-				"color": 0.5
+				"size": 6
 			},
-			"type": "uniform_greyscale"
+			"type": "sharpen"
 		},
 		{
-			"name": "sdf3d_morph",
+			"name": "quantize",
 			"node_position": {
-				"x": -239.972748,
-				"y": 388.694763
+				"x": -497.198914,
+				"y": 378.517395
 			},
 			"parameters": {
-				"Amount": 0.5,
-				"amount": 0.5,
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"op": 0,
-				"r": 0.3,
-				"w": 0.28
+				"steps": 4
 			},
-			"type": "sdf3d_morph"
-		},
-		{
-			"name": "raymarching_2_2_2",
-			"node_position": {
-				"x": -229.972748,
-				"y": 604.694763
-			},
-			"parameters": {
-
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "sdf",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
-				"name": "Render3d",
-				"outputs": [
-					{
-						"rgb": "render_$name($uv-vec2(0.5))",
-						"type": "rgb"
-					}
-				],
-				"parameters": [
-
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "sdf3d_scale_2",
-			"node_position": {
-				"x": -242.972748,
-				"y": 556.694763
-			},
-			"parameters": {
-				"a": 0,
-				"s": 0.5,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"type": "sdf3d_scale"
-		},
-		{
-			"name": "sdf3d_translate_3_2",
-			"node_position": {
-				"x": -246.972748,
-				"y": 455.694763
-			},
-			"parameters": {
-				"x": 0.5,
-				"y": 0,
-				"z": 0
-			},
-			"type": "sdf3d_translate"
+			"type": "quantize"
 		}
 	],
 	"parameters": {

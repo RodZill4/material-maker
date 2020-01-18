@@ -16,6 +16,8 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_blend
 	node_filter_blur
 	node_filter_directional_blur
+	node_filter_edge_detect
+	node_filter_sharpen
 	node_filter_emboss
 	node_filter_normal_map
 	node_filter_occlusion

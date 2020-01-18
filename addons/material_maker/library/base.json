@@ -2286,6 +2286,46 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_edge_detect",
+			"name": "edge_detect_1",
+			"parameters": {
+				"size": 6
+			},
+			"tree_item": "Filter/Edge detect",
+			"type": "edge_detect_1"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_edge_detect_axis_aligned",
+			"name": "edge_detect_2",
+			"parameters": {
+				"size": 6
+			},
+			"tree_item": "Filter/Edge detect/Axis aligned",
+			"type": "edge_detect_2"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_edge_detect_diagonal",
+			"name": "edge_detect_3",
+			"parameters": {
+				"size": 6
+			},
+			"tree_item": "Filter/Edge detect/Diagonal",
+			"type": "edge_detect_3"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_sharpen",
+			"name": "sharpen",
+			"parameters": {
+				"size": 6
+			},
+			"tree_item": "Filter/Sharpen",
+			"type": "sharpen"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_emboss",
 			"name": "emboss_2",
 			"parameters": {
