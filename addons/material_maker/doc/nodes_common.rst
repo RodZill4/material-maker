@@ -12,8 +12,26 @@ Outputs
 ^^^^^^^
 
 Nodes can have several outputs that represent the images they provide. Each node output can be
-connected to several node inputs. Each node output can be either **greyscale**, **color** or
-**RGBA**. Greyscale ports are drawn in grey, color in blue and RGBA in semi-transparent green.
+connected to several node inputs. Each node output (and input) can be:
+
+* a **greyscale image** (shown in grey) 
+
+* a **color image** (shown in blue)
+
+* an **RGBA image** (shown in semi-transparent green)
+
+* a **2D signed distance function** (shown in orange)
+
+* a **3D signed distance function** (shown in red)
+
+Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
+converted when required.
+
+2D signed distance functions have a specific preview that shows the associated signed distance
+field. They can be converted into greyscale images using the `sdShow node`.
+
+3D signed distance functions have a specific preview that shows the lit 3Dscene. They can be
+converted into a greyscale height map and a color normal map using the `Render node`.
 
 Next to the output, an (open or closed) eye icon indicates that a preview is available. Clicking
 on it will show the preview at the bottom of the node. When a node has several outputs, only
@@ -23,7 +41,7 @@ Inputs
 ^^^^^^
 
 Inputs are images the node will transform (if any). An input is always connected to at most
-an output. Inputs generally have a default image that is used when it is not connected.
+an output. Inputs generally have a default value that is used when it is not connected.
 
 Parameters
 ^^^^^^^^^^
