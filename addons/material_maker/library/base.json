@@ -2253,6 +2253,19 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_swapchannels",
+			"name": "swap_channels",
+			"parameters": {
+				"out_a": 8,
+				"out_b": 6,
+				"out_g": 4,
+				"out_r": 2
+			},
+			"tree_item": "Filter/SwapChannels",
+			"type": "swap_channels"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_normal_map",
 			"parameters": {
 				"amount": 0.5
