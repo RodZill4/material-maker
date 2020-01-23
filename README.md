@@ -17,7 +17,7 @@ as interconnected texture generators and operators.
 
 ## License
 
-Copyright (c) 2018-2019 Rodz Labs and contributors
+Copyright (c) 2018-2020 Rodz Labs and contributors
 
 Unless otherwise specified, files in this repository are licensed under the
 MIT license. See [LICENSE.md](LICENSE.md) for more information.
