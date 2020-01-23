@@ -177,6 +177,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Material Maker"
+config/description="An open source, extensible procedural material generation tool"
 run/main_scene="res://addons/material_maker/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
