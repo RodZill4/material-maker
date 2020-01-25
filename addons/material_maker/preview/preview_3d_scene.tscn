@@ -8,7 +8,6 @@
 
 [sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
-radiance_size = 5
 panorama = ExtResource( 2 )
 
 [sub_resource type="Environment" id=2]
@@ -33,7 +32,6 @@ tracks/0/keys = {
 
 [sub_resource type="PanoramaSky" id=4]
 resource_local_to_scene = true
-radiance_size = 5
 panorama = ExtResource( 4 )
 
 [sub_resource type="Environment" id=5]
