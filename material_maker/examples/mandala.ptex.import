@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/mandala.ptex-0963e6f90da0804792c0a2756af5f5dd.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/mandala.ptex"
+dest_files=[ "res://.import/mandala.ptex-0963e6f90da0804792c0a2756af5f5dd.tres" ]
+
+[params]
+
+render=false

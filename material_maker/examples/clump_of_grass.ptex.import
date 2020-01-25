@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/clump_of_grass.ptex-f0fa2e6dda8708b9aa2491696fc29cde.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/clump_of_grass.ptex"
+dest_files=[ "res://.import/clump_of_grass.ptex-f0fa2e6dda8708b9aa2491696fc29cde.tres" ]
+
+[params]
+
+render=false

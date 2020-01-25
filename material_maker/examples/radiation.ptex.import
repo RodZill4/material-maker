@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/radiation.ptex-5339c3a3e4abda484ef198d06cc51d03.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/radiation.ptex"
+dest_files=[ "res://.import/radiation.ptex-5339c3a3e4abda484ef198d06cc51d03.tres" ]
+
+[params]
+
+render=false

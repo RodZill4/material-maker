@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/improved_brick.ptex-79c07253474a6fefb8e704efc87ba6c5.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/improved_brick.ptex"
+dest_files=[ "res://.import/improved_brick.ptex-79c07253474a6fefb8e704efc87ba6c5.tres" ]
+
+[params]
+
+render=false

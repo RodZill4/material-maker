@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/lava.ptex-414f52da7b363c5ce34fb86dba1c326e.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/lava.ptex"
+dest_files=[ "res://.import/lava.ptex-414f52da7b363c5ce34fb86dba1c326e.tres" ]
+
+[params]
+
+render=false

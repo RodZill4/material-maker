@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/marble.ptex-0b7e8ced36657d462bfe938e53d1f73b.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/marble.ptex"
+dest_files=[ "res://.import/marble.ptex-0b7e8ced36657d462bfe938e53d1f73b.tres" ]
+
+[params]
+
+render=false

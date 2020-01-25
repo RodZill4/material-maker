@@ -1,0 +1,15 @@
+[remap]
+
+importer=""
+type="SpatialMaterial"
+path="res://.import/skulls.ptex-a7a3a956ab3a92097a30ab2e5a72ebbb.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/skulls.ptex"
+dest_files=[ "res://.import/skulls.ptex-a7a3a956ab3a92097a30ab2e5a72ebbb.tres" ]
+
+[params]
+
+render=false
+scale=3.0

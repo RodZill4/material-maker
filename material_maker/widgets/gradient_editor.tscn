@@ -1,0 +1,102 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://material_maker/widgets/gradient_editor.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(vec3(2.0*fract(0.5*(floor(0.12*FRAGCOORD.x)+floor(0.125*FRAGCOORD.y)))), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+vec4 gradient(float x) {
+  if (x < 0.000000000) {
+    return vec4(0.000000000,0.000000000,0.000000000,0.000000000);
+  } else if (x < 1.000000000) {
+    return (mix(vec4(0.000000000,0.000000000,0.000000000,0.000000000), vec4(1.000000000,1.000000000,1.000000000,1.000000000), (x-0.000000000)/1.000000000));
+  }
+  return vec4(1.000000000,1.000000000,1.000000000,1.000000000);
+}
+void fragment() { COLOR = gradient(UV.x); }"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+
+[sub_resource type="Theme" id=5]
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 64, 16, 32, 16 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 96, 16, 32, 16 )
+
+[node name="Control" type="Control"]
+margin_right = 120.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 120, 32 )
+script = ExtResource( 1 )
+
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+margin_left = 4.0
+margin_right = -4.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 112, 17 )
+mouse_filter = 2
+
+[node name="Gradient" type="ColorRect" parent="."]
+material = SubResource( 4 )
+anchor_right = 1.0
+margin_left = 4.0
+margin_right = -4.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 112, 17 )
+mouse_filter = 2
+theme = SubResource( 5 )
+
+[node name="Popup" type="Popup" parent="Gradient"]
+margin_left = 47.0
+margin_top = 33.0
+margin_right = 353.0
+margin_bottom = 475.0
+
+[node name="ColorPicker" type="ColorPicker" parent="Gradient/Popup"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 4.0
+margin_bottom = 4.0
+rect_scale = Vector2( 0.75, 0.75 )
+
+[node name="Interpolation" type="OptionButton" parent="."]
+margin_left = 0.418457
+margin_top = -2.90374
+margin_right = 73.4185
+margin_bottom = 19.0963
+rect_scale = Vector2( 0.5, 0.5 )
+icon = SubResource( 6 )
+items = [ "", SubResource( 7 ), false, 0, null, "", SubResource( 6 ), false, 1, null, "", SubResource( 8 ), false, 2, null, "", SubResource( 9 ), false, 3, null ]
+selected = 1
+[connection signal="popup_hide" from="Gradient/Popup" to="." method="_on_Popup_popup_hide"]
+[connection signal="item_selected" from="Interpolation" to="." method="_on_Interpolation_item_selected"]

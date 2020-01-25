@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/wood_with_blood.ptex-9f2bb1b75f00c94dc21c9e25c9a4c345.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/wood_with_blood.ptex"
+dest_files=[ "res://.import/wood_with_blood.ptex-9f2bb1b75f00c94dc21c9e25c9a4c345.tres" ]
+
+[params]
+
+render=false

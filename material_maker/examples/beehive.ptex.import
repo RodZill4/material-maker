@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/beehive.ptex-51715262d81c1a144e9a7e141a45db7f.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/beehive.ptex"
+dest_files=[ "res://.import/beehive.ptex-51715262d81c1a144e9a7e141a45db7f.tres" ]
+
+[params]
+
+render=false

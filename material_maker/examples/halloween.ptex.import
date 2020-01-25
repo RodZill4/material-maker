@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/halloween.ptex-bfac36287c4edfbe37d836f896e886e8.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/halloween.ptex"
+dest_files=[ "res://.import/halloween.ptex-bfac36287c4edfbe37d836f896e886e8.tres" ]
+
+[params]
+
+render=false

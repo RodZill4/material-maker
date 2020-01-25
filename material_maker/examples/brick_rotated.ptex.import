@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/brick_rotated.ptex-523d59c690c5371f32f259e6a1da3fd9.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/brick_rotated.ptex"
+dest_files=[ "res://.import/brick_rotated.ptex-523d59c690c5371f32f259e6a1da3fd9.tres" ]
+
+[params]
+
+render=false

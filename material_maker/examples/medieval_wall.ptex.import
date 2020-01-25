@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/medieval_wall.ptex-28369316aeb5d9dfca15a3cfe9753817.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/medieval_wall.ptex"
+dest_files=[ "res://.import/medieval_wall.ptex-28369316aeb5d9dfca15a3cfe9753817.tres" ]
+
+[params]
+
+render=false

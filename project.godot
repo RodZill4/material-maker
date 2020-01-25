@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "LineEdit",
 "class": "MMFloatEdit",
 "language": "GDScript",
-"path": "res://addons/material_maker/widgets/float_edit.gd"
+"path": "res://material_maker/widgets/float_edit.gd"
 }, {
 "base": "Node",
 "class": "MMGenBase",
@@ -107,32 +107,32 @@ _global_script_classes=[ {
 "base": "Control",
 "class": "MMGradientEditor",
 "language": "GDScript",
-"path": "res://addons/material_maker/widgets/gradient_editor.gd"
+"path": "res://material_maker/widgets/gradient_editor.gd"
 }, {
 "base": "GraphEdit",
 "class": "MMGraphEdit",
 "language": "GDScript",
-"path": "res://addons/material_maker/graph_edit.gd"
+"path": "res://material_maker/graph_edit.gd"
 }, {
 "base": "GraphNode",
 "class": "MMGraphNodeBase",
 "language": "GDScript",
-"path": "res://addons/material_maker/nodes/base.gd"
+"path": "res://material_maker/nodes/base.gd"
 }, {
 "base": "MMGraphNodeBase",
 "class": "MMGraphNodeGeneric",
 "language": "GDScript",
-"path": "res://addons/material_maker/nodes/generic.gd"
+"path": "res://material_maker/nodes/generic.gd"
 }, {
 "base": "MMGraphNodeGeneric",
 "class": "MMGraphNodeRemote",
 "language": "GDScript",
-"path": "res://addons/material_maker/nodes/remote.gd"
+"path": "res://material_maker/nodes/remote.gd"
 }, {
 "base": "Control",
 "class": "MMNodeLink",
 "language": "GDScript",
-"path": "res://addons/material_maker/widgets/linked_widgets/link.gd"
+"path": "res://material_maker/widgets/linked_widgets/link.gd"
 }, {
 "base": "Node",
 "class": "MMType",
@@ -142,7 +142,7 @@ _global_script_classes=[ {
 "base": "OptionButton",
 "class": "SizeOptionButton",
 "language": "GDScript",
-"path": "res://addons/material_maker/widgets/size_option_button.gd"
+"path": "res://material_maker/widgets/size_option_button.gd"
 } ]
 _global_script_class_icons={
 "MMFloatEdit": "",
@@ -178,7 +178,7 @@ _global_script_class_icons={
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material generation tool"
-run/main_scene="res://addons/material_maker/main_window.tscn"
+run/main_scene="res://material_maker/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 boot_splash/image="res://rodz_labs_logo.png"
@@ -227,5 +227,4 @@ file_logging/enable_file_logging=true
 
 [rendering]
 
-vram_compression/import_etc2=false
 environment/default_environment="res://default_env.tres"

@@ -1,0 +1,14 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/doc_tools.ptex-4ba87d8fd8f50f46518c89bbb13c85fd.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/doc_tools.ptex"
+dest_files=[ "res://.import/doc_tools.ptex-4ba87d8fd8f50f46518c89bbb13c85fd.tres" ]
+
+[params]
+
+render=false

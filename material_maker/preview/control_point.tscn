@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/preview/control_point.gd" type="Script" id=1]
+
+
+[node name="Point" type="TextureRect"]
+mouse_filter = 0
+mouse_default_cursor_shape = 13
+script = ExtResource( 1 )
+[connection signal="gui_input" from="." to="." method="_on_Point_gui_input"]
