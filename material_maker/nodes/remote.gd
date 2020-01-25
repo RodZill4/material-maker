@@ -8,7 +8,7 @@ onready var grid = $Controls
 
 func add_control(text, control) -> void:
 	var index = grid.get_child_count() / 4
-	var label = preload("res://addons/material_maker/widgets/linked_widgets/editable_label.tscn").instance()
+	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
 	label.connect("label_changed", self, "on_label_changed", [ control.name ])
 	grid.add_child(label)
@@ -16,11 +16,11 @@ func add_control(text, control) -> void:
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
 	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
 	var button = Button.new()
-	button.icon = preload("res://addons/material_maker/icons/link.tres")
+	button.icon = preload("res://material_maker/icons/link.tres")
 	grid.add_child(button)
 	button.connect("pressed", self, "_on_Link_pressed", [ control.name ])
 	button = Button.new()
-	button.icon = preload("res://addons/material_maker/icons/remove.tres")
+	button.icon = preload("res://material_maker/icons/remove.tres")
 	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ control.name ])
 
@@ -71,7 +71,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 				var command = new_value - widget.configurations.size()
 				match command:
 					1:
-						var dialog = preload("res://addons/material_maker/widgets/line_dialog.tscn").instance()
+						var dialog = preload("res://material_maker/widgets/line_dialog.tscn").instance()
 						add_child(dialog)
 						dialog.set_texts("Configuration", "Enter a name for the new configuration")
 						dialog.connect("ok", self, "do_add_configuration", [ variable ])

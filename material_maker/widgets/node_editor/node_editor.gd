@@ -11,9 +11,9 @@ onready var main_code_editor : TextEdit = $"Sizer/Tabs/Main Code"
 onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functions"
 onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions"
 
-const ParameterEditor = preload("res://addons/material_maker/widgets/node_editor/parameter.tscn")
-const InputEditor = preload("res://addons/material_maker/widgets/node_editor/input.tscn")
-const OutputEditor = preload("res://addons/material_maker/widgets/node_editor/output.tscn")
+const ParameterEditor = preload("res://material_maker/widgets/node_editor/parameter.tscn")
+const InputEditor = preload("res://material_maker/widgets/node_editor/input.tscn")
+const OutputEditor = preload("res://material_maker/widgets/node_editor/output.tscn")
 
 signal node_changed
 

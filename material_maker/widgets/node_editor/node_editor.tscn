@@ -12,7 +12,7 @@ atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 16 )
 
 [sub_resource type="DynamicFontData" id=2]
-font_path = "res://addons/material_maker/fonts/hack.ttf"
+font_path = "res://material_maker/fonts/hack.ttf"
 
 [sub_resource type="DynamicFont" id=3]
 size = 12

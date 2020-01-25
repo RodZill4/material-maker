@@ -30,6 +30,6 @@ func _on_Button_pressed() -> void:
 	if src != null:
 		var context : MMGenContext = MMGenContext.new()
 		var source = src.generator.get_shader_code("UV", src.output_index, context)
-		var popup = preload("res://addons/material_maker/nodes/debug/debug_popup.tscn").instance()
+		var popup = preload("res://material_maker/nodes/debug/debug_popup.tscn").instance()
 		get_parent().add_child(popup)
 		popup.show_code(generate_shader(source))

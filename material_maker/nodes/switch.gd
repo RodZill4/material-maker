@@ -49,7 +49,7 @@ func update_node() -> void:
 			sizer.add_child(control)
 			control.connect("value_changed", self, "_on_value_changed", [ l.name ])
 			controls[l.name] = control
-			sizer.add_child(preload("res://addons/material_maker/widgets/preview_button.tscn").instance())
+			sizer.add_child(preload("res://material_maker/widgets/preview_button.tscn").instance())
 			add_child(sizer)
 	else:
 		# Keep lines with controls
@@ -69,7 +69,7 @@ func update_node() -> void:
 			var space = Control.new()
 			space.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 			sizer.add_child(space)
-			var button = preload("res://addons/material_maker/widgets/preview_button.tscn").instance()
+			var button = preload("res://material_maker/widgets/preview_button.tscn").instance()
 			sizer.add_child(button)
 			button.connect("toggled", self, "on_preview_button", [ get_child_count()-1 ])
 		add_child(sizer)
