@@ -12,3 +12,4 @@ dest_files=[ "res://.import/rock.ptex-790cf04ee0b49be08c43969cd33f57be.tres" ]
 [params]
 
 render=false
+scale=1.0

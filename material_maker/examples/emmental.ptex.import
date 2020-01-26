@@ -12,3 +12,4 @@ dest_files=[ "res://.import/emmental.ptex-c0863356db9414878f0cd8b90b863568.tres"
 [params]
 
 render=false
+scale=1.0

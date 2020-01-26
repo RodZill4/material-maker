@@ -12,3 +12,4 @@ dest_files=[ "res://.import/paper.ptex-9bf458e14ff2684526a7ca610ab6e0ce.tres" ]
 [params]
 
 render=false
+scale=3.0

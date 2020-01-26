@@ -12,3 +12,4 @@ dest_files=[ "res://.import/clump_of_grass.ptex-f0fa2e6dda8708b9aa2491696fc29cde
 [params]
 
 render=false
+scale=1.0

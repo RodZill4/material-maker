@@ -12,3 +12,4 @@ dest_files=[ "res://.import/wood.ptex-9103d7621dd6a30936fcbd644ea5b97c.tres" ]
 [params]
 
 render=false
+scale=1.0

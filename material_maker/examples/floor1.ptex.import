@@ -12,3 +12,4 @@ dest_files=[ "res://.import/floor1.ptex-fb54baf7242d73ad5e0d97d70fc2ffe8.tres" ]
 [params]
 
 render=false
+scale=1.0

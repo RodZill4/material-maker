@@ -12,3 +12,4 @@ dest_files=[ "res://.import/improved_brick.ptex-79c07253474a6fefb8e704efc87ba6c5
 [params]
 
 render=false
+scale=1.0

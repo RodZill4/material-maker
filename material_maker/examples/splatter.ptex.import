@@ -12,3 +12,4 @@ dest_files=[ "res://.import/splatter.ptex-f748997def40cd9d42946f8f2d6fa745.tres"
 [params]
 
 render=false
+scale=1.0

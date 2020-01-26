@@ -12,3 +12,4 @@ dest_files=[ "res://.import/materials.ptex-53d72a7b67477f2082dc05ffe4d8bcb4.tres
 [params]
 
 render=false
+scale=1.0

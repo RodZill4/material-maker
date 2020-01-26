@@ -12,3 +12,4 @@ dest_files=[ "res://.import/beehive.ptex-51715262d81c1a144e9a7e141a45db7f.tres" 
 [params]
 
 render=false
+scale=1.0

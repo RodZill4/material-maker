@@ -12,3 +12,4 @@ dest_files=[ "res://.import/planet.ptex-6fec3bea6b82b2a8aad4cadc105ed701.tres" ]
 [params]
 
 render=false
+scale=1.0

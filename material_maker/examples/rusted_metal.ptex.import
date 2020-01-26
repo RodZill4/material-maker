@@ -12,3 +12,4 @@ dest_files=[ "res://.import/rusted_metal.ptex-67dbbbc635e49a12125db6eef7e9fe27.t
 [params]
 
 render=false
+scale=1.0

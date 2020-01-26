@@ -12,3 +12,4 @@ dest_files=[ "res://.import/raymarching.ptex-2478648d0e15bf392f6c3b9155c8b1d6.tr
 [params]
 
 render=false
+scale=1.0

@@ -48,7 +48,7 @@ size = Vector2( 12, 12 )
 albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 4, 4, 4 )
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id=14]
 shader = ExtResource( 2 )
 shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/specular = 0.5
@@ -107,4 +107,4 @@ material/0 = SubResource( 13 )
 [node name="SphereTess" type="MeshInstance" parent="."]
 visible = false
 mesh = SubResource( 5 )
-material/0 = SubResource( 15 )
+material/0 = SubResource( 14 )

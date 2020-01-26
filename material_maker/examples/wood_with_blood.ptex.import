@@ -12,3 +12,4 @@ dest_files=[ "res://.import/wood_with_blood.ptex-9f2bb1b75f00c94dc21c9e25c9a4c34
 [params]
 
 render=false
+scale=1.0

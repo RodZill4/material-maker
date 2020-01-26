@@ -12,3 +12,4 @@ dest_files=[ "res://.import/grass_with_flowers.ptex-c14125150522387de6157f5cba8b
 [params]
 
 render=false
+scale=1.0

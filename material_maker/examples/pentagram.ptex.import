@@ -12,3 +12,4 @@ dest_files=[ "res://.import/pentagram.ptex-7721d9a35a97fa5e212e6e7db0ace1f0.tres
 [params]
 
 render=false
+scale=1.0

@@ -6,10 +6,9 @@
 [ext_resource path="res://material_maker/preview/panoramas/epping_forest_01.hdr" type="Texture" id=4]
 [ext_resource path="res://material_maker/preview/panoramas/studio_sky.tres" type="Environment" id=5]
 
-
-
 [sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
+radiance_size = 4
 panorama = ExtResource( 2 )
 
 [sub_resource type="Environment" id=2]
@@ -34,6 +33,7 @@ tracks/0/keys = {
 
 [sub_resource type="PanoramaSky" id=4]
 resource_local_to_scene = true
+radiance_size = 4
 panorama = ExtResource( 4 )
 
 [sub_resource type="Environment" id=5]
@@ -78,13 +78,12 @@ anims/rotate = SubResource( 3 )
 [node name="Environments" type="Spatial" parent="."]
 
 [node name="Epping Forest" type="Spatial" parent="Environments"]
-editor/display_folded = true
 visible = false
 script = ExtResource( 3 )
 environment = SubResource( 5 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Environments/Epping Forest"]
-transform = Transform( 0.976272, -0.0494319, -0.21083, 0.216548, 0.222856, 0.950496, -8.69534e-009, -0.973597, 0.228272, -5.08826, 21.6274, 5.3744 )
+transform = Transform( 0.976272, -0.0494319, -0.21083, 0.216548, 0.222856, 0.950496, -8.69534e-09, -0.973597, 0.228272, -5.08826, 21.6274, 5.3744 )
 light_energy = 0.5
 shadow_enabled = true
 
@@ -95,7 +94,6 @@ mesh = SubResource( 6 )
 material/0 = SubResource( 7 )
 
 [node name="Moonless Golf" type="Spatial" parent="Environments"]
-editor/display_folded = true
 visible = false
 script = ExtResource( 3 )
 environment = SubResource( 2 )

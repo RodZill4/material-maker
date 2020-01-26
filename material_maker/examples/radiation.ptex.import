@@ -12,3 +12,4 @@ dest_files=[ "res://.import/radiation.ptex-5339c3a3e4abda484ef198d06cc51d03.tres
 [params]
 
 render=false
+scale=1.0

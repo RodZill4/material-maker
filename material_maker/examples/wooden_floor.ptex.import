@@ -12,3 +12,4 @@ dest_files=[ "res://.import/wooden_floor.ptex-6a889ddc1c5f6eeeffb8ed3c8a6c223f.t
 [params]
 
 render=false
+scale=1.0

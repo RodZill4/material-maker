@@ -12,3 +12,4 @@ dest_files=[ "res://.import/brick_rotated.ptex-523d59c690c5371f32f259e6a1da3fd9.
 [params]
 
 render=false
+scale=1.0

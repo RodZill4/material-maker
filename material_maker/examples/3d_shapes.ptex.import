@@ -12,3 +12,4 @@ dest_files=[ "res://.import/3d_shapes.ptex-fdbdf93744127700e5f17a837ca716e7.tres
 [params]
 
 render=false
+scale=1.0

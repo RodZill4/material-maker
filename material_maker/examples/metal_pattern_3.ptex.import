@@ -12,3 +12,4 @@ dest_files=[ "res://.import/metal_pattern_3.ptex-63819f6ac26d3e33f84ee3007313bc4
 [params]
 
 render=false
+scale=1.0

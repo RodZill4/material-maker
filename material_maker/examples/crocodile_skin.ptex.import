@@ -12,3 +12,4 @@ dest_files=[ "res://.import/crocodile_skin.ptex-398dcbc43eaacec55b210f3f06b38a36
 [params]
 
 render=false
+scale=1.0

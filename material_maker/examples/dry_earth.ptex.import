@@ -12,3 +12,4 @@ dest_files=[ "res://.import/dry_earth.ptex-13acfd0cdc239e8962445ff516cb0a67.tres
 [params]
 
 render=false
+scale=1.0

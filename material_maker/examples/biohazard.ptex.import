@@ -12,3 +12,4 @@ dest_files=[ "res://.import/biohazard.ptex-7f147a6da8459c3f121e4ff97781005f.tres
 [params]
 
 render=false
+scale=1.0

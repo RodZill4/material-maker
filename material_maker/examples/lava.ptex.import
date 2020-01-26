@@ -12,3 +12,4 @@ dest_files=[ "res://.import/lava.ptex-414f52da7b363c5ce34fb86dba1c326e.tres" ]
 [params]
 
 render=false
+scale=1.0

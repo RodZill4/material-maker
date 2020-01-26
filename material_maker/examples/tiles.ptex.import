@@ -12,3 +12,4 @@ dest_files=[ "res://.import/tiles.ptex-bb40bd3764e59f94a21d6514626ca2f3.tres" ]
 [params]
 
 render=false
+scale=1.0

@@ -12,3 +12,4 @@ dest_files=[ "res://.import/medieval_wall.ptex-28369316aeb5d9dfca15a3cfe9753817.
 [params]
 
 render=false
+scale=1.0

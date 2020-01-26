@@ -12,3 +12,4 @@ dest_files=[ "res://.import/stone_wall.ptex-05814a2113c8a1efcba6aa5a44180dd6.tre
 [params]
 
 render=false
+scale=1.0

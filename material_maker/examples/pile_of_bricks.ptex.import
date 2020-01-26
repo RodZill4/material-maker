@@ -12,3 +12,4 @@ dest_files=[ "res://.import/pile_of_bricks.ptex-e452e231879d20f4c0b968f5aeb5cce8
 [params]
 
 render=false
+scale=1.0

@@ -1,8 +1,52 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/examples/skulls.ptex" type="Material" id=1]
+[ext_resource path="res://material_maker/preview/panoramas/studio_sky.tres" type="Environment" id=2]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="SphereMesh" id=1]
+
+[sub_resource type="Animation" id=2]
+resource_name = "rotate"
+length = 10.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("CamPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_unshaded = true
+flags_do_not_receive_shadows = true
+
+[sub_resource type="SphereMesh" id=5]
+material = SubResource( 4 )
+radius = 0.1
+height = 0.2
+
+[sub_resource type="Animation" id=3]
+resource_name = "rotate"
+length = 5.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("LightPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
+}
 
 [node name="Spatial" type="Spatial"]
 
@@ -10,10 +54,30 @@
 mesh = SubResource( 1 )
 material/0 = ExtResource( 1 )
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="CamPivot" type="Spatial" parent="."]
+transform = Transform( 0.982287, 0, 0.187381, 0, 1, 0, -0.187381, 0, 0.982287, 0, 0, 0 )
 
-[node name="Camera" type="Camera" parent="Spatial"]
-transform = Transform( 1, 0, 0, 0, 0.896973, 0.442085, 0, -0.442085, 0.896973, 0, 1.78914, 4.2882 )
+[node name="Camera" type="Camera" parent="CamPivot"]
+transform = Transform( 0.999487, 0.0319038, 0.00268748, -0.0319038, 0.985399, 0.167245, 0.00268751, -0.167245, 0.985912, 0.28563, 0.826821, 2.79088 )
 
-[node name="OmniLight" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.21974, 3.39093, 0 )
+[node name="CamRotate" type="AnimationPlayer" parent="."]
+autoplay = "rotate"
+anims/rotate = SubResource( 2 )
+
+[node name="LightPivot" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.929776, -0.368125, 0, 0.368125, 0.929776, 0, 0, 0 )
+
+[node name="OmniLight" type="OmniLight" parent="LightPivot"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0746527, 1.74306, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="LightPivot/OmniLight"]
+cast_shadow = 0
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="LightRotate" type="AnimationPlayer" parent="."]
+autoplay = "rotate"
+anims/rotate = SubResource( 3 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 2 )

@@ -12,3 +12,4 @@ dest_files=[ "res://.import/mandelbrot.ptex-ecf3c69e20a7f4e53370f6dbdf8d3840.tre
 [params]
 
 render=false
+scale=1.0

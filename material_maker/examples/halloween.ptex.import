@@ -12,3 +12,4 @@ dest_files=[ "res://.import/halloween.ptex-bfac36287c4edfbe37d836f896e886e8.tres
 [params]
 
 render=false
+scale=1.0

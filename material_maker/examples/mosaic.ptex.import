@@ -12,3 +12,4 @@ dest_files=[ "res://.import/mosaic.ptex-54dc20f1bcb9e75989bd7edbf0eefb3f.tres" ]
 [params]
 
 render=false
+scale=1.0
