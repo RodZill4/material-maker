@@ -26,7 +26,7 @@ func update_node() -> void:
 		set_slot(get_child_count(), generator.name != "gen_inputs", 0, color, generator.name != "gen_outputs", 0, color)
 		var port : Control
 		if generator.is_editable():
-			port = preload("res://addons/material_maker/nodes/ios/port.tscn").instance()
+			port = preload("res://material_maker/nodes/ios/port.tscn").instance()
 			if p.has("name"):
 				port.set_label(p.name)
 			port.set_type(p.type)
@@ -35,7 +35,7 @@ func update_node() -> void:
 			port.text = p.name
 		add_child(port)
 	if generator.is_editable():
-		var add_button : Button = preload("res://addons/material_maker/nodes/ios/add.tscn").instance()
+		var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instance()
 		add_child(add_button)
 		add_button.connect("pressed", generator, "add_port")
 		set_slot(get_child_count()-1, false, 0, color, false, 0, color)

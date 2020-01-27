@@ -67,7 +67,7 @@ func initialize_properties() -> void:
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
-		elif o is Control and o.filename == "res://addons/material_maker/widgets/gradient_editor.tscn":
+		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor.tscn":
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))

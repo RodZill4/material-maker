@@ -83,7 +83,7 @@ func _ready() -> void:
 		print("Copying samples")
 		var dir : Directory = Directory.new()
 		dir.make_dir("/examples")
-		dir.open("res://addons/material_maker/examples/")
+		dir.open("res://material_maker/examples/")
 		dir.list_dir_begin(true)
 		while true:
 			var f = dir.get_next()
@@ -91,7 +91,7 @@ func _ready() -> void:
 				break
 			if f.ends_with(".ptex"):
 				print(f)
-				dir.copy("res://addons/material_maker/examples/"+f, "/examples/"+f)
+				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
 
 	# Upscale everything if the display requires it (crude hiDPI support).
@@ -414,7 +414,7 @@ func get_doc_dir() -> String:
 	var release_doc_path = base_dir.plus_file("doc")
 	# In development, documentation is part of the project files.
 	# We can use a globalized `res://` path here as the project isn't exported.
-	var devel_doc_path = ProjectSettings.globalize_path("res://addons/material_maker/doc/_build/html")
+	var devel_doc_path = ProjectSettings.globalize_path("res://material_maker/doc/_build/html")
 	for p in [ release_doc_path, devel_doc_path ]:
 		var file = File.new()
 		if file.file_exists(p+"/index.html"):
