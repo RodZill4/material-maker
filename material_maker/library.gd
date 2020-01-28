@@ -11,7 +11,7 @@ func _ready() -> void:
 	tree.set_column_min_width(1, 32)
 	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
 	if !add_library(lib_path):
-		add_library("res://addons/material_maker/library/base.json")
+		add_library("res://material_maker/library/base.json")
 	add_library("user://library/user.json")
 	update_tree()
 

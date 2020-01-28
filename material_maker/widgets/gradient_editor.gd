@@ -110,7 +110,7 @@ func _gui_input(ev) -> void:
 			add_cursor(p, get_gradient_color(p))
 			update_value()
 		elif embedded:
-			var popup = load("res://addons/material_maker/widgets/gradient_popup.tscn").instance()
+			var popup = load("res://material_maker/widgets/gradient_popup.tscn").instance()
 			add_child(popup)
 			var popup_size = popup.rect_size
 			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
