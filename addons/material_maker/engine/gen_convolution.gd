@@ -174,6 +174,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					for t in src_code.textures.keys():
 						rv.textures[t] = src_code.textures[t]
 			rv[convolution_params.output_type] = "%s_%d" % [ genname, variant_index ]
+		rv.type = convolution_params.output_type
 	return rv
 
 

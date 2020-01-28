@@ -28,6 +28,9 @@ custom_styles/bg = SubResource( 1 )
 right_disconnects = true
 use_snap = false
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2

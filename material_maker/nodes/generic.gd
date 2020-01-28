@@ -177,8 +177,8 @@ func update_node() -> void:
 		var type_left = 0
 		if typeof(input) == TYPE_DICTIONARY:
 			enable_left = true
-			color_left = MMGenBase.PORT_TYPES[input.type].color
-			type_left = MMGenBase.PORT_TYPES[input.type].slot_type
+			color_left = mm_io_types.types[input.type].color
+			type_left = mm_io_types.types[input.type].slot_type
 		set_slot(i, enable_left, type_left, color_left, false, 0, Color())
 		var hsizer : HBoxContainer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -251,8 +251,8 @@ func update_node() -> void:
 		assert(typeof(output) == TYPE_DICTIONARY)
 		assert(output.has("type"))
 		enable_right = true
-		color_right = MMGenBase.PORT_TYPES[output.type].color
-		type_right = MMGenBase.PORT_TYPES[output.type].slot_type
+		color_right = mm_io_types.types[output.type].color
+		type_right = mm_io_types.types[output.type].slot_type
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, type_right, color_right)
 		var hsizer : HBoxContainer
 		while i >= get_child_count():

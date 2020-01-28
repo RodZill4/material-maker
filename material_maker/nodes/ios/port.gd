@@ -4,7 +4,7 @@ func set_label(l : String) -> void:
 	$Name.set_text(l)
 
 func set_type(t : String) -> void:
-	$Type.selected = MMGenBase.PORT_TYPE_NAMES.find(t)
+	$Type.selected = mm_io_types.type_names.find(t)
 
 func update_up_down_button() -> void:
 	var parent = get_parent()
@@ -17,7 +17,7 @@ func _on_Name_label_changed(new_label) -> void:
 	get_parent().generator.set_port_name(get_index(), new_label)
 
 func _on_Type_item_selected(ID) -> void:
-	get_parent().generator.set_port_type(get_index(), MMGenBase.PORT_TYPE_NAMES[ID])
+	get_parent().generator.set_port_type(get_index(), mm_io_types.type_names[ID])
 
 func _on_Delete_pressed() -> void:
 	get_parent().generator.delete_port(get_index())

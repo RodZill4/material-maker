@@ -1,0 +1,79 @@
+[
+    {
+        "name":"f",
+        "label":"Greyscale",
+        "type":"float",
+        "paramdefs":"vec2 uv",
+        "params":"uv",
+        "slot_type":0,
+		"convert":[
+			{ "type":"rgb", "expr":"vec3($(value))" },
+			{ "type":"rgba", "expr":"vec4(vec3($(value)), 1.0)" }
+		],
+        "color":{ "r":0.5, "g":0.5, "b":0.5, "a":1.0 }
+    },
+    {
+        "name":"rgb",
+        "label":"Color",
+        "type":"vec3",
+        "paramdefs":"vec2 uv",
+        "params":"uv",
+        "slot_type":0,
+		"convert":[
+			{ "type":"f", "expr":"(dot($(value), vec3(1.0))/3.0)" },
+			{ "type":"rgba", "expr":"vec4($(value), 1.0)" }
+		],
+        "color":{ "r":0.5, "g":0.5, "b":1.0, "a":1.0 }
+    },
+    {
+        "name":"rgba",
+        "label":"RGBA",
+        "type":"vec4",
+        "paramdefs":"vec2 uv",
+        "params":"uv",
+        "slot_type":0,
+		"convert":[
+			{ "type":"f", "expr":"(dot(($(value)).rgb, vec3(1.0))/3.0)" },
+			{ "type":"rgb ", "expr":"(($(value)).rgb)" }
+		],
+        "color":{ "r":0.0, "g":0.5, "b":0.0, "a":0.5 }
+    },
+    {
+        "name":"sdf2d",
+        "label":"SDF2D",
+        "type":"float",
+        "paramdefs":"vec2 uv",
+        "params":"uv",
+        "slot_type":1,
+        "color":{ "r":1.0, "g":0.5, "b":0.0, "a":1.0 }
+    },
+    {
+        "name":"sdf3d",
+        "label":"SDF3D",
+        "type":"float",
+        "paramdefs":"vec3 p",
+        "params":"p",
+        "slot_type":2,
+		"convert":[
+			{ "type":"sdf3dc", "expr":"vec2($(value)).rgb, 0.0)" }
+		],
+        "color":{ "r":0.5, "g":0.0, "b":0.0, "a":1.0 }
+    },
+    {
+        "name":"sdf3dc",
+        "label":"SDF3D-C",
+        "type":"vec2",
+        "paramdefs":"vec3 p",
+        "params":"p",
+        "slot_type":2,
+		"convert":[
+			{ "type":"sdf3d", "expr":"($(value)).x" }
+		],
+        "color":{ "r":1.0, "g":0.0, "b":0.0, "a":1.0 }
+    },
+    {
+        "name":"any",
+        "slot_type":42,
+        "color":{ "r":1.0, "g":1.0, "b":1.0, "a":1.0 }
+    }
+]

@@ -22,7 +22,7 @@ func update_node() -> void:
 	title = generator.get_type_name()
 	var color = Color(0.0, 0.5, 0.0, 0.5)
 	for p in generator.get_io_defs():
-		color = MMGenBase.PORT_TYPES[p.type].color
+		color = mm_io_types.types[p.type].color
 		set_slot(get_child_count(), generator.name != "gen_inputs", 0, color, generator.name != "gen_outputs", 0, color)
 		var port : Control
 		if generator.is_editable():

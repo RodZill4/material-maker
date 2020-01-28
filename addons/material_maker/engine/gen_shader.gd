@@ -55,7 +55,7 @@ func set_shader_model(data: Dictionary) -> void:
 		for i in range(shader_model.outputs.size()):
 			var output = shader_model.outputs[i]
 			var output_code = ""
-			for f in PORT_TYPES.keys():
+			for f in mm_io_types.types.keys():
 				if output.has(f):
 					shader_model.outputs[i].type = f
 					output_code = output[f]
@@ -260,7 +260,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					var input = shader_model.inputs[i]
 					if input.has("function") and input.function:
 						var source = get_source(i)
-						var string = "$%s(%s)" % [ input.name, PORT_TYPES[input.type].params ]
+						var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
 						var local_context = MMGenContext.new(context)
 						var result = replace_input(string, local_context, input.name, input.type, source, input.default)
 						while result is GDScriptFunctionState:
@@ -274,7 +274,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						# Add textures
 						for t in result.textures.keys():
 							rv.textures[t] = result.textures[t]
-						rv.defs += "%s %s_input_%s(%s) {\n" % [ PORT_TYPES[input.type].type, genname, input.name, PORT_TYPES[input.type].paramdefs ]
+						rv.defs += "%s %s_input_%s(%s) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 						rv.defs += "%s\n" % result.code
 						rv.defs += "return %s;\n}\n" % result.string
 			if shader_model.has("instance"):
@@ -307,7 +307,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		var variant_index = context.get_variant(self, variant_string)
 		if variant_index == -1:
 			variant_index = context.get_variant(self, variant_string)
-			for f in PORT_TYPES.keys():
+			for f in mm_io_types.types.keys():
 				if output.has(f):
 					var subst_output = subst(output[f], context, uv)
 					while subst_output is GDScriptFunctionState:
@@ -320,12 +320,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					rv.defs += subst_output.defs
 					# Add generated code
 					rv.code += subst_output.code
-					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ PORT_TYPES[f].type, genname, output_index, variant_index, f, subst_output.string ]
+					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
 					for t in subst_output.textures.keys():
 						rv.textures[t] = subst_output.textures[t]
-		for f in PORT_TYPES.keys():
+		for f in mm_io_types.types.keys():
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+		rv.type = output.type
 		if shader_model.has("global") && rv.globals.find(shader_model.global) == -1:
 			rv.globals.push_back(shader_model.global)
 	return rv

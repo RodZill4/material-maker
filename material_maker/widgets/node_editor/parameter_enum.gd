@@ -51,14 +51,14 @@ func _on_EnumValues_item_selected(id) -> void:
 	if id >= 0 and id < enum_values.size():
 		enum_current = id
 	elif id == ENUM_EDIT:
-		var dialog = load("res://addons/material_maker/widgets/node_editor/enum_editor.tscn").instance()
+		var dialog = load("res://material_maker/widgets/node_editor/enum_editor.tscn").instance()
 		var v = enum_values[enum_current]
 		add_child(dialog)
 		dialog.set_value(v.name, v.value)
 		dialog.connect("ok", self, "update_enum_value", [ enum_current ])
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
-		var dialog = load("res://addons/material_maker/widgets/node_editor/enum_editor.tscn").instance()
+		var dialog = load("res://material_maker/widgets/node_editor/enum_editor.tscn").instance()
 		add_child(dialog)
 		dialog.connect("ok", self, "update_enum_value", [ -1 ])
 		dialog.popup_centered()

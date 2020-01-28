@@ -183,6 +183,7 @@ config/release="0.8"
 
 [autoload]
 
+mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 

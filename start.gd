@@ -1,7 +1,6 @@
 extends Control
 
 func _ready():
-	print("Loading...")
 	call_deferred("change_scene")
 
 func change_scene():

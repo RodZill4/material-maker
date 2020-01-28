@@ -1,6 +1,12 @@
 tool
 extends HBoxContainer
 
+func _ready():
+	$Type.clear()
+	for tn in mm_io_types.type_names:
+		var t = mm_io_types.types[tn]
+		$Type.add_item(t.label)
+
 func update_up_down_button() -> void:
 	var parent = get_parent()
 	if parent == null:
@@ -11,31 +17,13 @@ func update_up_down_button() -> void:
 func set_model_data(data) -> void:
 	$Name.text = data.name
 	$Label.text = data.label
-	if data.type == "rgb":
-		$Type.selected = 1
-	elif data.type == "rgba":
-		$Type.selected = 2
-	elif data.type == "sdf2d":
-		$Type.selected = 3
-	elif data.type == "sdf3d":
-		$Type.selected = 4
-	else:
-		$Type.selected = 0
+	$Type.selected = mm_io_types.type_names.find(data.type)
 	$Default.text = data.default
 	$Function.pressed = data.has("function") and data.function
 
 func get_model_data() -> Dictionary:
 	var data = { name=$Name.text, label=$Label.text, default=$Default.text }
-	if $Type.selected == 1:
-		data.type = "rgb"
-	elif $Type.selected == 2:
-		data.type = "rgba"
-	elif $Type.selected == 3:
-		data.type = "sdf2d"
-	elif $Type.selected == 4:
-		data.type = "sdf3d"
-	else:
-		data.type = "f"
+	data.type = mm_io_types.type_names[$Type.selected]
 	if $Function.pressed:
 		data.function = true
 	return data

@@ -37,17 +37,6 @@ var parameters = {}
 var seed_locked : bool = false
 var seed_value : int = 0
 
-const PORT_TYPE_NAMES : Array = [ "f", "rgb", "rgba", "sdf2d", "sdf3d" ]
-
-const PORT_TYPES : Dictionary = {
-	f     = { label="Greyscale", type="float", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 0.5) },
-	rgb   = { label="Color", type="vec3", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 1.0) },
-	rgba  = { label="RGBA", type="vec4", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.0, 0.5, 0.0, 0.5) },
-	sdf2d = { label="SDF2D", type="float", paramdefs="vec2 uv", params="uv", slot_type=1, color=Color(1.0, 0.5, 0.0) },
-	sdf3d = { label="SDF3D", type="float", paramdefs="vec3 p", params="p", slot_type=2, color=Color(1.0, 0.0, 0.0) },
-	any = { slot_type=42, color=Color(1.0, 1.0, 1.0) }
-}
-
 func _ready() -> void:
 	init_parameters()
 
@@ -165,7 +154,7 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func generate_preview_shader(src_code) -> String:
+func generate_preview_shader(src_code, type) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -181,55 +170,11 @@ func generate_preview_shader(src_code) -> String:
 		for g in src_code.globals:
 			code += g
 	var shader_code = src_code.defs
-	if src_code.has("rgba"):
-		shader_code += "\nvoid fragment() {\n"
-		shader_code += "vec2 uv = UV;\n"
-		shader_code += src_code.code
-		shader_code += "COLOR = "+src_code.rgba+";\n"
-		shader_code += "}\n"
-	elif src_code.has("sdf2d"):
-		shader_code += "\nvoid fragment() {\n"
-		shader_code += "vec2 uv = UV;\n"
-		shader_code += src_code.code
-		shader_code += "float d = "+src_code.sdf2d+";\n"
-		shader_code += "vec3 col = vec3(cos(d*min(256, preview_size)));\n"
-		shader_code += "col *= clamp(1.0-d*d, 0.0, 1.0);\n"
-		shader_code += "col *= vec3(1.0, vec2(step(-0.015, d)));\n"
-		shader_code += "col *= vec3(vec2(step(d, 0.015)), 1.0);\n"
-		shader_code += "COLOR = vec4(col, 1.0);\n"
-		shader_code += "}\n"
-	elif src_code.has("sdf3d"):
-		shader_code += "\nfloat calcdist(vec3 uv) {\n"
-		shader_code += src_code.code
-		shader_code += "return min("+src_code.sdf3d+", uv.z);\n"
-		shader_code += "}\n"
-		shader_code += "float raymarch(vec3 ro, vec3 rd) {\n"
-		shader_code += "float d=0.0;\n"
-		shader_code += "for (int i = 0; i < 50; i++) {\n"
-		shader_code += "vec3 p = ro + rd*d;\n"
-		shader_code += "float dstep = calcdist(p);\n"
-		shader_code += "d += dstep;\n"
-		shader_code += "if (dstep < 0.0001) break;\n"
-		shader_code += "}\n"
-		shader_code += "return d;\n"
-		shader_code += "}\n"
-		shader_code += "vec3 normal(vec3 p) {\n"
-		shader_code += "	float d = calcdist(p);\n"
-		shader_code += "    float e = .0001;\n"
-		shader_code += "    vec3 n = d - vec3(calcdist(p-vec3(e, 0.0, 0.0)), calcdist(p-vec3(0.0, e, 0.0)), calcdist(p-vec3(0.0, 0.0, e)));\n"
-		shader_code += "    return normalize(n);\n"
-		shader_code += "}\n"
-		shader_code += "\nvoid fragment() {\n"
-		shader_code += "vec2 uv = UV-vec2(0.5);\n"
-		shader_code += "vec3 p = vec3(uv, 2.0-raymarch(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n"
-		shader_code += "vec3 n = normal(p);\n"
-		shader_code += "vec3 l = vec3(5.0, 5.0, 10.0);\n"
-		shader_code += "vec3 ld = normalize(l-p);\n"
-		shader_code += "float o = step(p.z, 0.001);\n"
-		shader_code += "float shadow = 1.0-0.75*step(raymarch(l, -ld), length(l-p)-0.01);\n"
-		shader_code += "float light = 0.3+0.7*dot(n, ld)*shadow;\n"
-		shader_code += "COLOR = vec4(vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light, 1.0);\n"
-		shader_code += "}\n"
+	if src_code.has(type):
+		var preview_code : String = mm_io_types.types[type].preview
+		preview_code = preview_code.replace("$(code)", src_code.code)
+		preview_code = preview_code.replace("$(value)", src_code[type])
+		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	return code
@@ -243,11 +188,11 @@ func render(output_index : int, size : int, preview : bool = false) -> Object:
 		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
 	var shader : String
 	if preview:
+		var output_type = "rgba"
 		var outputs = get_output_defs()
 		if outputs.size() > output_index:
-			var output = outputs[output_index]
-			print(output)
-		shader = generate_preview_shader(source)
+			output_type = outputs[output_index].type
+		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
 	var result = mm_renderer.render_shader(shader, source.textures, size)
@@ -259,20 +204,15 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 	var rv = _get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
-	if !rv.empty():
-		if !rv.has("f"):
-			if rv.has("rgb"):
-				rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
-			elif rv.has("rgba"):
-				rv.f = "(dot("+rv.rgba+".rgb, vec3(1.0))/3.0)"
-		if !rv.has("rgb"):
-			if rv.has("rgba"):
-				rv.rgb = rv.rgba+".rgb"
-			elif rv.has("f"):
-				rv.rgb = "vec3("+rv.f+")"
-		if !rv.has("rgba"):
-			if rv.has("rgb"):
-				rv.rgba = "vec4("+rv.rgb+", 1.0)"
+	if rv.has("type"):
+		if mm_io_types.types[rv.type].has("convert"):
+			for c in mm_io_types.types[rv.type].convert:
+				if !rv.has(c.type):
+					var expr = c.expr.replace("$(value)", rv[rv.type])
+					rv[c.type] = expr
+	else:
+		print("Missing type for node ")
+		print(rv)
 	return rv
 
 func _get_shader_code(__, __, __) -> Dictionary:

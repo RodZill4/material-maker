@@ -3,9 +3,6 @@ extends Node
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
-func _ready():
-	print("loader ready!")
-
 func generator_name_from_path(path : String) -> String:
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
 		print(p)
