@@ -169,8 +169,7 @@ func update_graph(generators, connections) -> Array:
 
 func new_material() -> void:
 	clear_material()
-	var loader = MMGenLoader.new()
-	top_generator = loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
+	top_generator = mm_loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -194,7 +193,7 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = MMGenLoader.add_to_gen_graph(generator, data.nodes, data.connections)
+		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
 		for g in new_stuff.generators:
 			g.position += position
 		return update_graph(new_stuff.generators, new_stuff.connections)
@@ -205,7 +204,7 @@ func create_gen_from_type(gen_name) -> void:
 
 func load_file(filename) -> void:
 	clear_material()
-	top_generator = MMGenLoader.load_gen(filename)
+	top_generator = mm_loader.load_gen(filename)
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)

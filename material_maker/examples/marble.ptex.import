@@ -12,4 +12,4 @@ dest_files=[ "res://.import/marble.ptex-0b7e8ced36657d462bfe938e53d1f73b.tres" ]
 [params]
 
 render=false
-scale=1.0
+scale=3.0

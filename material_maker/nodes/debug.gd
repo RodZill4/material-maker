@@ -1,6 +1,6 @@
 extends MMGraphNodeBase
 
-static func generate_shader(src_code) -> String:
+static func generate_debug_shader(src_code) -> String:
 	var code
 	code = ""
 	var file = File.new()
@@ -32,4 +32,4 @@ func _on_Button_pressed() -> void:
 		var source = src.generator.get_shader_code("UV", src.output_index, context)
 		var popup = preload("res://material_maker/nodes/debug/debug_popup.tscn").instance()
 		get_parent().add_child(popup)
-		popup.show_code(generate_shader(source))
+		popup.show_code(generate_debug_shader(source))

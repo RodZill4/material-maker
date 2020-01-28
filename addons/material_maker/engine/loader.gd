@@ -1,23 +1,25 @@
 tool
-extends Object
-class_name MMGenLoader
+extends Node
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
-static func generator_name_from_path(path : String) -> String:
+func _ready():
+	print("loader ready!")
+
+func generator_name_from_path(path : String) -> String:
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
 		print(p)
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
-static func load_gen(filename: String) -> MMGenBase:
+func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
 		return create_gen(data)
 	return null
 
-static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
+func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
@@ -35,7 +37,7 @@ static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 				rv.connections.append(c)
 	return rv
 
-static func create_gen(data) -> MMGenBase:
+func create_gen(data) -> MMGenBase:
 	var guess = [
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
@@ -88,7 +90,7 @@ static func create_gen(data) -> MMGenBase:
 		generator.deserialize(data)
 	return generator
 
-static func get_generator_list() -> Array:
+func get_generator_list() -> Array:
 	var rv = []
 	var dir : Directory = Directory.new()
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:

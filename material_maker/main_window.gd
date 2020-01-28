@@ -195,7 +195,7 @@ func add_recent(path) -> void:
 	f.close()
 
 func create_menu_create(menu) -> void:
-	var gens = MMGenLoader.get_generator_list()
+	var gens = mm_loader.get_generator_list()
 	menu.clear()
 	for i in gens.size():
 		menu.add_item(gens[i], i)
@@ -205,7 +205,7 @@ func create_menu_create(menu) -> void:
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		var gens = MMGenLoader.get_generator_list()
+		var gens = mm_loader.get_generator_list()
 		graph_edit.create_gen_from_type(gens[id])
 
 func menu_about_to_show(name, menu) -> void:

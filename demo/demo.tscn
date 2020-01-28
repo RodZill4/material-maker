@@ -1,13 +1,16 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://material_maker/examples/skulls.ptex" type="Material" id=1]
+[ext_resource path="res://material_maker/examples/bricks.ptex" type="Material" id=1]
 [ext_resource path="res://material_maker/preview/panoramas/studio_sky.tres" type="Environment" id=2]
+[ext_resource path="res://demo/object.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/examples/marble.ptex" type="Material" id=4]
+[ext_resource path="res://material_maker/examples/medieval_wall.ptex" type="Material" id=5]
+[ext_resource path="res://material_maker/examples/floor1.ptex" type="Material" id=6]
+[ext_resource path="res://material_maker/examples/beehive.ptex" type="Material" id=7]
 
-[sub_resource type="SphereMesh" id=1]
-
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 resource_name = "rotate"
-length = 10.0
+length = 5.0
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("CamPivot:rotation_degrees")
@@ -16,68 +19,66 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 10 ),
+"times": PoolRealArray( 0, 5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[sub_resource type="SpatialMaterial" id=4]
-flags_unshaded = true
-flags_do_not_receive_shadows = true
-
-[sub_resource type="SphereMesh" id=5]
-material = SubResource( 4 )
-radius = 0.1
-height = 0.2
-
-[sub_resource type="Animation" id=3]
-resource_name = "rotate"
-length = 5.0
+[sub_resource type="Animation" id=2]
+resource_name = "move"
+length = 50.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("LightPivot:rotation_degrees")
+tracks/0/path = NodePath("CamPivot:translation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 4, 5, 9, 10, 14, 15, 19, 20, 24, 25, 29, 30, 34, 35, 39, 40, 44, 45, 49 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ) ]
 }
 
 [node name="Spatial" type="Spatial"]
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = SubResource( 1 )
-material/0 = ExtResource( 1 )
-
 [node name="CamPivot" type="Spatial" parent="."]
-transform = Transform( 0.982287, 0, 0.187381, 0, 1, 0, -0.187381, 0, 0.982287, 0, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
 
 [node name="Camera" type="Camera" parent="CamPivot"]
 transform = Transform( 0.999487, 0.0319038, 0.00268748, -0.0319038, 0.985399, 0.167245, 0.00268751, -0.167245, 0.985912, 0.28563, 0.826821, 2.79088 )
 
 [node name="CamRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"
-anims/rotate = SubResource( 2 )
+anims/rotate = SubResource( 1 )
 
-[node name="LightPivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.929776, -0.368125, 0, 0.368125, 0.929776, 0, 0, 0 )
+[node name="CamMove" type="AnimationPlayer" parent="."]
+autoplay = "move"
+anims/move = SubResource( 2 )
 
-[node name="OmniLight" type="OmniLight" parent="LightPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0746527, 1.74306, 0 )
+[node name="Skulls" parent="." instance=ExtResource( 3 )]
 
-[node name="MeshInstance" type="MeshInstance" parent="LightPivot/OmniLight"]
-cast_shadow = 0
-mesh = SubResource( 5 )
-material/0 = null
+[node name="Bricks" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
+material/0 = ExtResource( 1 )
 
-[node name="LightRotate" type="AnimationPlayer" parent="."]
-autoplay = "rotate"
-anims/rotate = SubResource( 3 )
+[node name="Floor" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10 )
+material/0 = ExtResource( 6 )
+
+[node name="Marble" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15 )
+material/0 = ExtResource( 4 )
+
+[node name="MedievalWall" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20 )
+material/0 = ExtResource( 5 )
+
+[node name="BeeHive" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25 )
+material/0 = ExtResource( 7 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 2 )

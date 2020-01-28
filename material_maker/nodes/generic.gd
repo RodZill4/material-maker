@@ -320,9 +320,9 @@ func do_load_generator(file_name : String) -> void:
 			new_generator.set_shader_model(parse_json(file.get_as_text()))
 			file.close()
 	else:
-		new_generator = MMGenLoader.load_gen(file_name)
+		new_generator = mm_loader.load_gen(file_name)
 	if new_generator != null:
-		var gen_name = MMGenLoader.generator_name_from_path(file_name)
+		var gen_name = mm_loader.generator_name_from_path(file_name)
 		if gen_name != "":
 			new_generator.model = gen_name
 		var parent_generator = generator.get_parent()

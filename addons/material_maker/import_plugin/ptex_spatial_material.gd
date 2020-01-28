@@ -13,8 +13,7 @@ func set_ptex(s : String) -> void :
 	call_deferred("update_texture")
 
 func update_texture() -> void:
-	var loader = MMGenLoader.new()
-	var mm_graph = loader.create_gen(parse_json(ptex))
+	var mm_graph = mm_loader.create_gen(parse_json(ptex))
 	if mm_graph == null:
 		return
 	var mm_material : MMGenMaterial = mm_graph.get_node("Material")

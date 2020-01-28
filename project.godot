@@ -64,11 +64,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_image.gd"
 }, {
-"base": "Object",
-"class": "MMGenLoader",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/loader.gd"
-}, {
 "base": "MMGenBase",
 "class": "MMGenMaterial",
 "language": "GDScript",
@@ -156,7 +151,6 @@ _global_script_class_icons={
 "MMGenGraph": "",
 "MMGenIOs": "",
 "MMGenImage": "",
-"MMGenLoader": "",
 "MMGenMaterial": "",
 "MMGenRemote": "",
 "MMGenRenderer": "",
@@ -178,7 +172,7 @@ _global_script_class_icons={
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material generation tool"
-run/main_scene="res://material_maker/main_window.tscn"
+run/main_scene="res://start.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 boot_splash/image="res://rodz_labs_logo.png"
@@ -189,6 +183,7 @@ config/release="0.8"
 
 [autoload]
 
+mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 
 [debug]
