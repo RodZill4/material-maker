@@ -355,7 +355,12 @@ func update_preview_buttons(index : int) -> void:
 			var line = get_child(i)
 			line.get_child(line.get_child_count()-1).pressed = false
 
+var processing_button = false
+
 func on_preview_button(pressed : bool, index : int) -> void:
+	if processing_button:
+		return
+	processing_button = true
 	if pressed:
 		preview_index = index
 		var width
@@ -371,6 +376,7 @@ func on_preview_button(pressed : bool, index : int) -> void:
 		preview.visible = false
 		remove_child(preview)
 		rect_size = Vector2(0, 0)
+	processing_button = false
 
 func update_preview(size : int = 0) -> void:
 	if preview_index == -1:
