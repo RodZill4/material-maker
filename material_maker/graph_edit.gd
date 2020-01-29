@@ -34,7 +34,6 @@ func _gui_input(event) -> void:
 			remove_selection()
 
 # Misc. useful functions
-
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
 		if c.to == node and c.to_port == port:
@@ -372,6 +371,10 @@ func set_last_selected(node) -> void:
 		last_selected = null
 
 func _on_GraphEdit_gui_input(event) -> void:
+	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
+		$AddNodePopup.rect_global_position = get_global_mouse_position()
+		$AddNodePopup.show()
+	
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
 
@@ -379,3 +382,5 @@ func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
 		last_selected = null
 		emit_signal("node_selected", null)
+
+

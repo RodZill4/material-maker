@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/widgets/add_node_popup.tscn" type="PackedScene" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -34,6 +35,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="GraphUI" type="HBoxContainer" parent="."]
+editor/display_folded = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -262.0
@@ -75,6 +77,8 @@ margin_right = 246.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 4 )
+
+[node name="AddNodePopup" parent="." instance=ExtResource( 3 )]
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
