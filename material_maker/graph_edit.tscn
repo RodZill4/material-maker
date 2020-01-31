@@ -28,6 +28,9 @@ custom_styles/bg = SubResource( 1 )
 right_disconnects = true
 use_snap = false
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
@@ -76,6 +79,7 @@ margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 4 )
 [connection signal="connection_request" from="." to="." method="connect_node"]
+[connection signal="connection_to_empty" from="." to="." method="request_popup"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
 [connection signal="gui_input" from="." to="." method="_on_GraphEdit_gui_input"]

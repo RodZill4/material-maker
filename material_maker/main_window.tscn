@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/library.tscn" type="PackedScene" id=2]
@@ -6,17 +6,18 @@
 [ext_resource path="res://material_maker/preview/preview_3d.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://material_maker/widgets/tabs.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=7]
-[ext_resource path="res://material_maker/node_factory.gd" type="Script" id=8]
+[ext_resource path="res://material_maker/widgets/add_node_popup.tscn" type="PackedScene" id=7]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
+[ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 32 )
 
 [node name="MainWindow" type="Panel"]
@@ -152,6 +153,8 @@ margin_bottom = 24.0
 tab_align = 0
 tab_close_display_policy = 1
 
+[node name="AddNodePopup" parent="VBoxContainer/HBoxContainer/ProjectsPane/Projects" instance=ExtResource( 7 )]
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -191,7 +194,7 @@ margin_bottom = 30.0
 size_flags_vertical = 4
 
 [node name="NodeFactory" type="Node" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 [connection signal="need_update" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" to="." method="update_preview_3d"]
 [connection signal="environment_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Environment_item_selected"]
 [connection signal="model_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Model_item_selected"]
