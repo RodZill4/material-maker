@@ -117,6 +117,13 @@ or group of nodes can easily be shared using this format.
 The contents of the clipboard can be pasted into a graph using the **Edit -> Paste**
 menu or the **Control+V** keyboard shortcut.
 
+Background 3D preview
+^^^^^^^^^^^^^^^^^^^^^
+
+The bottom left ("cube") button can be used to show a 3D preview in the background
+of the graph view. The blue/red arrows icon is used to rotate the object or the view,
+and other controls are similar to the 3D preview.
+
 Library pane
 ------------
 
@@ -135,18 +142,34 @@ give focus to the search field using the **Control+F** keyboard shortcut.
 Preview pane
 ------------
 
-The preview pane shows a 3D preview of the material, and a 2D preview of the first output
-of the selected node.
+The preview pane has tabs for a 2D preview and the 3D preview.
 
-.. image:: images/preview.png
+2D preview
+^^^^^^^^^^
+
+The 2D preview shows a tiled preview of the first output of the selected
+node. The animated dashed lines show the bounds of the texture, so it is
+easy to check that the texture wraps correctly.
+
+.. image:: images/preview_2d.png
+  :align: center
+
+Depending on the selected node, controls can be shown and they can me moved
+around to modify the associated parameters.
+
+3D preview
+^^^^^^^^^^
+
+The 3D preview pane shows a 3D preview of the current material.
+
+.. image:: images/preview_3d.png
   :align: center
 
 The left select button can be used to select a model for the 3D preview, and the second
 one provides different environments. The **R** button can be used to start and stop the
-object's rotation animation. Pressing the **O** button will show the 3D preview as
-background of the graph pane.
+object's rotation animation.
 
-In the 3d view, the object can be rotated about the yaw and the pitch axes (from the
+In the 3D view, the object can be rotated about the yaw and the pitch axes (from the
 camera's point of view) by holding the right mouse button and moving the mouse horizontally
 or vertically. The object can also be rotated about the roll axis by holding Shift and
 and the right mouse button and moving the mouse horizontally.
@@ -157,8 +180,6 @@ Rotating the object or the camera will automatically disable the object's rotate
 
 The mouse wheel can be used to move the camera along its longitudinal axis (hense zooming
 forward or backward).
-
-Clicking on the 2D preview will minimize or maximize it.
 
 Main menu
 ---------

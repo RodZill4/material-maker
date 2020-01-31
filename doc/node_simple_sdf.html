@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Signed distance function geometry nodes &mdash; Material Maker  documentation</title>
+  <title>2D Signed distance function geometry nodes &mdash; Material Maker  documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="sdCircle node" href="node_simple_sdf_shapes_sdcircle.html" />
+    <link rel="next" title="sdShow node" href="node_simple_sdf_operators_sdshow.html" />
     <link rel="prev" title="Gradient nodes" href="node_simple_gradient.html" /> 
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -92,7 +92,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_shape.html">Shape node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_image.html">Image node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_gradient.html">Gradient nodes</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Signed distance function geometry nodes</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2D Signed distance function geometry nodes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="node_simple_sdf_operators_sdshow.html">sdShow node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#shapes">Shapes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#operators">Operators</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
@@ -100,10 +101,12 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
@@ -156,7 +159,7 @@
         
           <li><a href="nodes_simple.html">Simple nodes</a> &raquo;</li>
         
-      <li>Signed distance function geometry nodes</li>
+      <li>2D Signed distance function geometry nodes</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -173,15 +176,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="signed-distance-function-geometry-nodes">
-<h1>Signed distance function geometry nodes<a class="headerlink" href="#signed-distance-function-geometry-nodes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="d-signed-distance-function-geometry-nodes">
+<h1>2D Signed distance function geometry nodes<a class="headerlink" href="#d-signed-distance-function-geometry-nodes" title="Permalink to this headline">¶</a></h1>
 <p>The signed distance function nodes can be used to define complex geometry using simple
 shapes.</p>
 <p>They are based on a very small set of basic shapes, that can be combined using operators,
 and finally output as a greyscale image using the <strong>sdShow</strong> node.</p>
-<p>All output samples shown in this sections are images generated through the <strong>sdView</strong> node.</p>
+<p>All output samples shown in this sections are images generated through the <strong>sdShow</strong> node.</p>
 <p>All Signed Distance Functions nodes are based on code written by Inigo Quilez that can be found
 <a class="reference external" href="https://www.iquilezles.org/www/articles/distfunctions2d/distfunctions2d.htm">on this page</a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdshow.html">sdShow node</a></li>
+</ul>
+</div>
 <div class="section" id="shapes">
 <h2>Shapes<a class="headerlink" href="#shapes" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -201,7 +209,7 @@ and finally output as a greyscale image using the <strong>sdShow</strong> node.<
 <li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdsmoothboolean.html">sdSmoothBoolean node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdroundedshape.html">sdRoundedShape node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdannularshape.html">sdAnnularShape node</a></li>
-<li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdshow.html">sdShow node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_simple_sdf_operators_sdmorph.html">sdMorph node</a></li>
 </ul>
 </div>
 </div>
@@ -219,7 +227,7 @@ and finally output as a greyscale image using the <strong>sdShow</strong> node.<
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_simple_sdf_shapes_sdcircle.html" class="btn btn-neutral float-right" title="sdCircle node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_simple_sdf_operators_sdshow.html" class="btn btn-neutral float-right" title="sdShow node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="node_simple_gradient.html" class="btn btn-neutral" title="Gradient nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -231,7 +239,7 @@ and finally output as a greyscale image using the <strong>sdShow</strong> node.<
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

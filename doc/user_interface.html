@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -91,10 +91,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#grid-and-zoom">Grid and zoom</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#material-navigation">Material navigation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#selecting-and-copying-nodes">Selecting and copying nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-3d-preview">Background 3D preview</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#library-pane">Library pane</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#preview-pane">Preview pane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preview-pane">Preview pane</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d-preview">2D preview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">3D preview</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#main-menu">Main menu</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#file-menu">File menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#edit-menu">Edit menu</a></li>
@@ -258,6 +263,12 @@ or group of nodes can easily be shared using this format.</p>
 <p>The contents of the clipboard can be pasted into a graph using the <strong>Edit -&gt; Paste</strong>
 menu or the <strong>Control+V</strong> keyboard shortcut.</p>
 </div>
+<div class="section" id="background-3d-preview">
+<h3>Background 3D preview<a class="headerlink" href="#background-3d-preview" title="Permalink to this headline">¶</a></h3>
+<p>The bottom left (“cube”) button can be used to show a 3D preview in the background
+of the graph view. The blue/red arrows icon is used to rotate the object or the view,
+and other controls are similar to the 3D preview.</p>
+</div>
 </div>
 <div class="section" id="library-pane">
 <h2>Library pane<a class="headerlink" href="#library-pane" title="Permalink to this headline">¶</a></h2>
@@ -272,14 +283,24 @@ give focus to the search field using the <strong>Control+F</strong> keyboard sho
 </div>
 <div class="section" id="preview-pane">
 <h2>Preview pane<a class="headerlink" href="#preview-pane" title="Permalink to this headline">¶</a></h2>
-<p>The preview pane shows a 3D preview of the material, and a 2D preview of the first output
-of the selected node.</p>
-<img alt="_images/preview.png" class="align-center" src="_images/preview.png" />
+<p>The preview pane has tabs for a 2D preview and the 3D preview.</p>
+<div class="section" id="d-preview">
+<h3>2D preview<a class="headerlink" href="#d-preview" title="Permalink to this headline">¶</a></h3>
+<p>The 2D preview shows a tiled preview of the first output of the selected
+node. The animated dashed lines show the bounds of the texture, so it is
+easy to check that the texture wraps correctly.</p>
+<img alt="_images/preview_2d.png" class="align-center" src="_images/preview_2d.png" />
+<p>Depending on the selected node, controls can be shown and they can me moved
+around to modify the associated parameters.</p>
+</div>
+<div class="section" id="id1">
+<h3>3D preview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The 3D preview pane shows a 3D preview of the current material.</p>
+<img alt="_images/preview_3d.png" class="align-center" src="_images/preview_3d.png" />
 <p>The left select button can be used to select a model for the 3D preview, and the second
 one provides different environments. The <strong>R</strong> button can be used to start and stop the
-object’s rotation animation. Pressing the <strong>O</strong> button will show the 3D preview as
-background of the graph pane.</p>
-<p>In the 3d view, the object can be rotated about the yaw and the pitch axes (from the
+object’s rotation animation.</p>
+<p>In the 3D view, the object can be rotated about the yaw and the pitch axes (from the
 camera’s point of view) by holding the right mouse button and moving the mouse horizontally
 or vertically. The object can also be rotated about the roll axis by holding Shift and
 and the right mouse button and moving the mouse horizontally.</p>
@@ -287,7 +308,7 @@ and the right mouse button and moving the mouse horizontally.</p>
 <p>Rotating the object or the camera will automatically disable the object’s rotate animation.</p>
 <p>The mouse wheel can be used to move the camera along its longitudinal axis (hense zooming
 forward or backward).</p>
-<p>Clicking on the 2D preview will minimize or maximize it.</p>
+</div>
 </div>
 <div class="section" id="main-menu">
 <h2>Main menu<a class="headerlink" href="#main-menu" title="Permalink to this headline">¶</a></h2>
@@ -392,7 +413,7 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

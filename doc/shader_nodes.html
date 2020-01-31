@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -175,9 +175,14 @@
   <div class="section" id="shader-nodes">
 <h1>Shader nodes<a class="headerlink" href="#shader-nodes" title="Permalink to this headline">¶</a></h1>
 <p>Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
-but as shader programs that calculates the color of a pixel from its coordinates.
-When shader nodes are connected, Material Maker will combine their shader programs.
-As a consequence, shader nodes are resolution independant.</p>
+but as shader programs that calculates</p>
+<ul class="simple">
+<li><p>the color of a pixel from its coordinates for greyscale, color and RGBA outputs</p></li>
+<li><p>the signed distance of a 2D point from its coordinates for SDF2D outputs</p></li>
+<li><p>the signed distance of a 3D point from its coordinates for SDF3D outputs</p></li>
+</ul>
+<p>When shader nodes are connected, Material Maker will combine their shader programs.
+As a consequence, most shader nodes are resolution independant.</p>
 <p>Editing a shader node will show the <strong>Node Editor</strong> window.</p>
 <div class="section" id="defining-a-shader-node-interface">
 <h2>Defining a shader node interface<a class="headerlink" href="#defining-a-shader-node-interface" title="Permalink to this headline">¶</a></h2>
@@ -200,6 +205,7 @@ There are a few tricks with this label that can help tweaking the UI.</p></li>
 are <strong>float</strong>, <strong>size</strong>, <strong>enum</strong>, <strong>boolean</strong>, <strong>color</strong> and <strong>gradient</strong></p></li>
 <li><p>on the right of the type selector, controls can be used to define a default value and
 constraints for the parameter</p></li>
+<li><p><strong>float</strong> parameters can be assigned a <strong>control</strong> variable in the 2D preview</p></li>
 </ul>
 <p>To use a parameter in your shader code it is necessary to prefix it with a dollar sign.
 So a <strong>foo</strong> parameter can be refered to by <strong>$foo</strong> or <strong>$(foo)</strong> in the shader code.
@@ -222,6 +228,11 @@ for <strong>RGBA</strong>. Inputs default values can use the <strong>$uv</strong
 want to define interesting default inputs for your nodes, so it is possible
 to see their effect without connecting the inputs (the screenshot above is the
 Blend filter and has a vertical and an horizontal gradient as default inputs).</p>
+<p>The “Function” checkbox changes the way the code is generated for this input.
+When set to true, the input is generated as a function and can be used in the <em>Instance
+functions</em> section. If the parameter is false, the input code is inlined. is is not advised
+to set this parameter to true when not required, because generating functions can have
+an impact on performance.</p>
 <p>In shader code, inputs are used as functions that take a single <strong>vec2</strong> parameter. For
 example <strong>$myinput(2.0*$uv+vec2(0.2, 0.3))</strong> refers to <strong>myinput</strong>, scaled and translated.</p>
 </div>
@@ -299,7 +310,7 @@ Maker provides the name_uv implicit variable for this.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

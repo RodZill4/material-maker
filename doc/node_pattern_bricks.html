@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -88,6 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_generic.html">Pattern node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Bricks node</a><ul>
@@ -108,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
@@ -194,6 +196,10 @@ or pavement.</p>
 <li><p>The second one is a color image where all bricks are drawn using a random uniform color.</p></li>
 <li><p>The 3rd and 4th textures are greyscale images of the X and Y position of the center of
 each brick.</p></li>
+<li><p>The 5th texture is an UV map texture for each brick (and can be used with the <strong>CustomUV</strong>
+node to apply a texture on each brick)</p></li>
+<li><p>the 6th texture is an UV map for each corner of each brick (and can be used with the
+<strong>CustomUV</strong> node to apply a texture on each corner)</p></li>
 </ul>
 <p>Those images can be used together to create complex materials that show for example bricks
 of different colors.</p>
@@ -211,6 +217,8 @@ axes of the texture.</p></li>
 only applies to the <em>Running bond</em> patterns.</p></li>
 <li><p>the <em>Mortar</em> parameter defines the relative thickness of mortar in patterns.</p></li>
 <li><p>the <em>Bevel</em> parameter defines the relative thickness of brick bevel in patterns.</p></li>
+<li><p>the <em>Round</em> parameter defines the radius of each round corner.</p></li>
+<li><p>the <em>Corner</em> parameter defines the size of each corner (for the 6th output texture).</p></li>
 </ul>
 </div>
 <div class="section" id="notes">
@@ -245,7 +253,7 @@ are not changed.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

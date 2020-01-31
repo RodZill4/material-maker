@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Colorize node" href="node_filter_colorize.html" />
+    <link rel="next" title="Greyscale node" href="node_filter_greyscale.html" />
     <link rel="prev" title="BrightnessContrast node" href="node_filter_brightness_contrast.html" /> 
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -88,6 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_filter.html">Filter nodes</a><ul class="current">
@@ -100,12 +101,16 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_occlusion.html">Occlusion node</a></li>
@@ -113,6 +118,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
@@ -217,7 +223,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_filter_colorize.html" class="btn btn-neutral float-right" title="Colorize node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_filter_greyscale.html" class="btn btn-neutral float-right" title="Greyscale node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="node_filter_brightness_contrast.html" class="btn btn-neutral" title="BrightnessContrast node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -229,7 +235,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.7
+                0.8
               </div>
             
           
@@ -174,8 +174,20 @@ in the user interface, and inputs to receive data from other nodes.</p>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
 <p>Nodes can have several outputs that represent the images they provide. Each node output can be
-connected to several node inputs. Each node output can be either <strong>greyscale</strong>, <strong>color</strong> or
-<strong>RGBA</strong>. Greyscale ports are drawn in grey, color in blue and RGBA in semi-transparent green.</p>
+connected to several node inputs. Each node output (and input) can be:</p>
+<ul class="simple">
+<li><p>a <strong>greyscale image</strong> (shown in grey)</p></li>
+<li><p>a <strong>color image</strong> (shown in blue)</p></li>
+<li><p>an <strong>RGBA image</strong> (shown in semi-transparent green)</p></li>
+<li><p>a <strong>2D signed distance function</strong> (shown in orange)</p></li>
+<li><p>a <strong>3D signed distance function</strong> (shown in red)</p></li>
+</ul>
+<p>Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
+converted when required.</p>
+<p>2D signed distance functions have a specific preview that shows the associated signed distance
+field. They can be converted into greyscale images using the <cite>sdShow node</cite>.</p>
+<p>3D signed distance functions have a specific preview that shows the lit 3Dscene. They can be
+converted into a greyscale height map and a color normal map using the <cite>Render node</cite>.</p>
 <p>Next to the output, an (open or closed) eye icon indicates that a preview is available. Clicking
 on it will show the preview at the bottom of the node. When a node has several outputs, only
 one of them can be previewed at a time.</p>
@@ -183,7 +195,7 @@ one of them can be previewed at a time.</p>
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
 <p>Inputs are images the node will transform (if any). An input is always connected to at most
-an output. Inputs generally have a default image that is used when it is not connected.</p>
+an output. Inputs generally have a default value that is used when it is not connected.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -269,7 +281,7 @@ outputs).</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Rodz Labs.
+        &copy; Copyright 2018-2020, Rodz Labs.
 
     </p>
   </div>

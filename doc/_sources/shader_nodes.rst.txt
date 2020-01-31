@@ -2,9 +2,16 @@ Shader nodes
 ------------
 
 Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
-but as shader programs that calculates the color of a pixel from its coordinates.
+but as shader programs that calculates
+
+* the color of a pixel from its coordinates for greyscale, color and RGBA outputs
+
+* the signed distance of a 2D point from its coordinates for SDF2D outputs
+
+* the signed distance of a 3D point from its coordinates for SDF3D outputs
+
 When shader nodes are connected, Material Maker will combine their shader programs.
-As a consequence, shader nodes are resolution independant.
+As a consequence, most shader nodes are resolution independant.
 
 Editing a shader node will show the **Node Editor** window.
 
@@ -35,6 +42,7 @@ the new parameter. On this line:
   are **float**, **size**, **enum**, **boolean**, **color** and **gradient**
 * on the right of the type selector, controls can be used to define a default value and
   constraints for the parameter
+* **float** parameters can be assigned a **control** variable in the 2D preview
 
 To use a parameter in your shader code it is necessary to prefix it with a dollar sign.
 So a **foo** parameter can be refered to by **$foo** or **$(foo)** in the shader code.
@@ -59,6 +67,12 @@ for **RGBA**. Inputs default values can use the **$uv** implicit variable. You m
 want to define interesting default inputs for your nodes, so it is possible
 to see their effect without connecting the inputs (the screenshot above is the
 Blend filter and has a vertical and an horizontal gradient as default inputs).
+
+The "Function" checkbox changes the way the code is generated for this input.
+When set to true, the input is generated as a function and can be used in the *Instance
+functions* section. If the parameter is false, the input code is inlined. is is not advised
+to set this parameter to true when not required, because generating functions can have
+an impact on performance.
 
 In shader code, inputs are used as functions that take a single **vec2** parameter. For
 example **$myinput(2.0*$uv+vec2(0.2, 0.3))** refers to **myinput**, scaled and translated.
