@@ -5,6 +5,8 @@ var data = []
 onready var itemlist : ItemList = $PanelContainer/VBoxContainer/ItemList 
 onready var filter_line_edit : LineEdit = $PanelContainer/VBoxContainer/Filter
 
+func get_current_graph():
+	return get_parent().get_current_tab_control()
 func _ready() -> void:
 	
 	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
@@ -15,37 +17,71 @@ func _ready() -> void:
 	
 	filter_line_edit.connect("text_changed" ,self,"update_list")
 	filter_line_edit.connect("text_entered",self,"filter_entered")
-	itemlist.connect("item_activated",self,"item_activated")
-	
+	itemlist.connect("item_selected",self,"item_selected")
+	itemlist.connect("item_activated",self,"item_selected")
 	update_list()
 
 func filter_entered(filter):
-	item_activated(0)
+	item_selected(0)
+
+		#print (c.get_metadata(0))
 #func get_selected_item_name() -> String:
 #	return get_item_path(itemlist.get_selected())
-func item_activated(index):
-	if (index>=itemlist.get_item_count()):
-		return
-	if (itemlist.is_item_selectable(index) == false):
-		item_activated(index+1)
-		return
-	get_parent().create_nodes(data[index],get_parent().offset_from_global_position(get_global_transform().xform(get_local_mouse_position())))
+func add_node(data):
+	var node:GraphNode = get_current_graph().create_nodes(data,get_current_graph().offset_from_global_position(get_transform().xform(Vector2(0,0))))[0]
 	hide()
 	clear()
+	
+	# if this node created by dragging to an empty space
+	if quick_connect_node != null:
+		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
+		for new_slot in node.get_connection_input_count():
+			if type == node.get_connection_input_type(new_slot):
+				#connect the first two slots with the same type
+				get_current_graph().connect_node(quick_connect_node.name,quick_connect_slot,node.name,new_slot)
+				break 
+	quick_connect_node = null
+	
+func item_selected(index):
+	# checks if mouse left | enter pressed. it prevents
+	# adding nodes just by using arrow keys as it selects the item 
+	if Input.is_mouse_button_pressed(BUTTON_LEFT) || Input.is_key_pressed(KEY_ENTER):
+		if (index>=itemlist.get_item_count()):
+			return
+		if (itemlist.is_item_selectable(index) == false):
+			item_selected(index+1)
+			return
+		add_node(data[index])
+		hide()
+		clear()
+
+	
 	pass
 func show():
 	.show()
+	update_list()
 	filter_line_edit.grab_focus()
-func update_list(filter=""):
+	var parent_rect = get_parent().get_parent().get_global_rect()
+
+	var clipped = parent_rect.clip(get_global_rect())
+	var offset =  (get_rect().size-clipped.size)
+	rect_position = rect_position - offset
+	
+func update_list(filter : String = "") -> void:
 	clear_list()
 	data.clear()
 	for library in libraries:
 		for obj in library:
-	
-			if (obj.tree_item.to_lower().find(filter)!=-1 || filter == ""):
+			if !obj.has("type"):
+				continue
+			var show : bool = true
+			for f in filter.to_lower().split(" ", false):
+				if f != "" && obj.tree_item.to_lower().find(f) == -1:
+					show = false
+					break
+			if show:
 				data.append(obj)
-				itemlist.add_item(obj.tree_item.split("/")[-1],get_preview_texture(obj),obj.has("type"))
-
+				itemlist.add_item(obj.tree_item, get_preview_texture(obj))
 
 func get_preview_texture(data : Dictionary) -> ImageTexture:
 	if data.has("icon") and data.has("library"):
@@ -56,6 +92,7 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 		t = ImageTexture.new()
 		var image : Image = Image.new()
 		if image.load(image_path) == OK:
+			image.resize(16, 16)
 			t.create_from_image(image)
 		else:
 			print("Cannot load image "+image_path)
@@ -80,17 +117,29 @@ func add_library(file_name : String, filter : String = "") -> bool:
 	return false
 
 
+# Quickly connecting when tried to connect to empty
+var quick_connect_node:GraphNode
+var quick_connect_slot = 0
+func set_quick_connect(from,from_slot):
+	quick_connect_node = get_current_graph().get_node(from)
+	quick_connect_slot = from_slot
+
 func _input(event):
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
 		if !get_rect().has_point(event.position):
 			clear()
 			hide()
-			
 func _unhandled_input(event):
 	if event is InputEventKey and event.scancode == KEY_ESCAPE:
 		clear()
 		hide()
-	
 func clear():
 	filter_line_edit.text = ""
-	update_list()
+
+
+func _on_itemlist_focus_entered():
+	# if itemlist received focus and no item is yet selected
+	# select the first item
+	if itemlist.get_selected_items().size() == 0:
+		itemlist.select(0)
+	pass # Replace with function body.

@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/widgets/add_node_popup.gd" type="Script" id=1]
 
 [node name="AddNodePopup" type="Popup"]
-visible = true
 margin_right = 228.0
 margin_bottom = 319.0
 mouse_filter = 1
@@ -31,3 +30,5 @@ margin_right = 214.0
 margin_bottom = 305.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+allow_reselect = true
+[connection signal="focus_entered" from="PanelContainer/VBoxContainer/ItemList" to="." method="_on_itemlist_focus_entered"]

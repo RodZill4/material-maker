@@ -164,6 +164,7 @@ func update_graph(generators, connections) -> Array:
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+	
 	return rv
 
 func new_material() -> void:
@@ -372,11 +373,17 @@ func set_last_selected(node) -> void:
 
 func _on_GraphEdit_gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
-		$AddNodePopup.rect_global_position = get_global_mouse_position()
-		$AddNodePopup.show()
-	
+		$"../AddNodePopup".rect_global_position = get_global_mouse_position()
+		$"../AddNodePopup".show()
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
+
+func request_popup(from,from_slot,release_position):
+	$"../AddNodePopup".rect_global_position = get_global_mouse_position()
+	$"../AddNodePopup".show()
+	$"../AddNodePopup".set_quick_connect(from,from_slot)
+	#$"../AddNodePopup".connect_to
+	pass
 
 func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
