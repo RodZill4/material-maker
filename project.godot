@@ -221,6 +221,10 @@ toggle_fullscreen={
 
 file_logging/log_path=""
 
+[memory]
+
+limits/message_queue/max_size_kb=16384
+
 [rendering]
 
 environment/default_environment="res://default_env.tres"

@@ -126,7 +126,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 			if src_code.has(type):
 				src_code.string = src_code[type]
 			else:
-				src_code.string = "*error*"
+				src_code.string = "*error missing "+type+"*\n"+JSON.print(src_code)
 		# Add global definitions
 		if src_code.has("globals"):
 			for d in src_code.globals:
