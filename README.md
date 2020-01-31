@@ -9,7 +9,7 @@ as interconnected texture generators and operators.
 
 ## Documentation
 
-- **[User manual](https://rodzill4.github.io/godot-procedural-textures/doc/)**
+- **[User manual](https://rodzill4.github.io/material-maker/doc/)**
 
 ## Screenshot
 
@@ -17,7 +17,7 @@ as interconnected texture generators and operators.
 
 ## License
 
-Copyright (c) 2018-2020 Rodz Labs and contributors
+Copyright (c) 2018-2020 Rodolphe Suescun and contributors
 
 Unless otherwise specified, files in this repository are licensed under the
 MIT license. See [LICENSE.md](LICENSE.md) for more information.
