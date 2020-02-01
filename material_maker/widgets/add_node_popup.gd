@@ -25,8 +25,6 @@ func filter_entered(filter) -> void:
 
 func add_node(data) -> void:
 	var node : GraphNode = get_current_graph().create_nodes(data, get_current_graph().offset_from_global_position(insert_position))[0]
-	hide()
-	clear()
 	# if this node created by dragging to an empty space
 	if quick_connect_node != null:
 		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
@@ -36,6 +34,7 @@ func add_node(data) -> void:
 				get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
 				break 
 	quick_connect_node = null
+	hide()
 
 func item_selected(index) -> void:
 	# checks if mouse left | enter pressed. it prevents
@@ -48,7 +47,17 @@ func item_selected(index) -> void:
 			return
 		add_node(data[index])
 		hide()
-		clear()
+
+func hide()->void:
+	.hide()
+	
+	# clearing the quick connect data after hiding to prevent unintended autoconnection
+	quick_connect_node = null
+	
+	# grabbing the focus for the graph again as creating popup removes the focus.
+	get_current_graph().grab_focus()
+	
+	clear()
 
 func show() -> void:
 	.show()
