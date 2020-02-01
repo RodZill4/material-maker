@@ -12,6 +12,8 @@ var generator = null
 
 var last_selected = null
 
+onready var node_popup = $"../AddNodePopup"
+
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -373,17 +375,15 @@ func set_last_selected(node) -> void:
 
 func _on_GraphEdit_gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
-		$"../AddNodePopup".rect_global_position = get_global_mouse_position()
-		$"../AddNodePopup".show()
+		node_popup.rect_global_position = get_global_mouse_position()
+		node_popup.show()
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
 
-func request_popup(from,from_slot,release_position):
-	$"../AddNodePopup".rect_global_position = get_global_mouse_position()
-	$"../AddNodePopup".show()
-	$"../AddNodePopup".set_quick_connect(from,from_slot)
-	#$"../AddNodePopup".connect_to
-	pass
+func request_popup(from, from_slot, release_position) -> void:
+	node_popup.rect_global_position = get_global_mouse_position()
+	node_popup.show()
+	node_popup.set_quick_connect(from, from_slot)
 
 func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
