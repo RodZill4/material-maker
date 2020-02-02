@@ -177,6 +177,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Material Maker"
+config/description="An open source, extensible procedural material generation tool"
 run/main_scene="res://material_maker/main_window.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
@@ -184,7 +185,6 @@ boot_splash/image="res://rodz_labs_logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
-config/description="An open source, extensible procedural material generation tool"
 config/release="0.8"
 
 [autoload]

@@ -48,7 +48,7 @@ func item_selected(index) -> void:
 		add_node(data[index])
 		hide()
 
-func hide()->void:
+func hide() -> void:
 	.hide()
 	
 	# clearing the quick connect data after hiding to prevent unintended autoconnection
