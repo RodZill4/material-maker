@@ -7,6 +7,17 @@ be used to create textures procedurally. It can also be used as a Godot addon
 Its user interface is based on Godot's GraphEdit node: textures are described
 as interconnected texture generators and operators.
 
+## Download
+
+- **[Download on itch.io](https://rodzilla.itch.io/material-maker)**
+
+On Windows, you can also install Material Maker using [Scoop](https://scoop.sh):
+
+```text
+scoop bucket add extras
+scoop install material-maker
+```
+
 ## Documentation
 
 - **[User manual](https://rodzill4.github.io/material-maker/doc/)**
