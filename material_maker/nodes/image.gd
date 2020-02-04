@@ -1,4 +1,3 @@
-tool
 extends MMGraphNodeBase
 
 func _ready() -> void:

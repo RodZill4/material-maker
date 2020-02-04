@@ -1,4 +1,3 @@
-tool
 extends VBoxContainer
 
 func update_up_down_buttons() -> void:

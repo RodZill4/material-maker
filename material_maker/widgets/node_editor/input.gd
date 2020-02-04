@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 func update_up_down_button() -> void:

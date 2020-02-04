@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 var text setget set_text, get_text

@@ -1,4 +1,3 @@
-tool
 extends Popup
 
 signal item_double_clicked(generator)

@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 var enum_values = [ {name="Foo", value="foo"} ]

@@ -1,4 +1,3 @@
-tool
 extends MMGraphNodeGeneric
 
 var fixed_lines : int = 0

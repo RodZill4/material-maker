@@ -3,12 +3,10 @@
 [ext_resource path="res://material_maker/widgets/gradient_popup.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/widgets/gradient_editor.tscn" type="PackedScene" id=2]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0, 0, 0.25098, 0.752941 )
 
 [node name="GradientPopup" type="Popup"]
-visible = true
 margin_right = 632.0
 margin_bottom = 49.0
 size_flags_horizontal = 0

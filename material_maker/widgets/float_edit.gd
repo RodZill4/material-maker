@@ -1,4 +1,3 @@
-tool
 extends LineEdit
 class_name MMFloatEdit
 

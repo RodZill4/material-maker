@@ -1,4 +1,3 @@
-tool
 extends Tree
 
 func get_drag_data(position):

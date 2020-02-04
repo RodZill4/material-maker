@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 onready var default = $Default

@@ -1,4 +1,3 @@
-tool
 extends MMGraphNodeGeneric
 class_name MMGraphNodeRemote
 
