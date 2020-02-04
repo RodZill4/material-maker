@@ -1,4 +1,3 @@
-tool
 extends GraphNode
 class_name MMGraphNodeBase
 
@@ -30,3 +29,4 @@ func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT and Rect2(rect_size.x-48, 4, 16, 16).has_point(event.position):
 		generator.toggle_lock_seed()
 		update()
+		get_parent().send_changed_signal()

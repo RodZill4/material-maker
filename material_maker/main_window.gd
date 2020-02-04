@@ -18,6 +18,8 @@ onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Prev
 
 const RECENT_FILES_COUNT = 15
 
+const THEMES = [ "Dark", "Default", "Light" ]
+
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
 	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
@@ -36,6 +38,8 @@ const MENU = [
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
+	{ menu="Edit" },
+	{ menu="Edit", submenu="set_theme", description="Set theme" },
 
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
@@ -61,19 +65,22 @@ var is_mac = false
 func _ready() -> void:
 	# Restore the window position/size if values are present in the configuration cache
 	config_cache.load("user://cache.ini")
-	if Engine.editor_hint:
-		set_process_input(false)
-	else:
-		if config_cache.has_section_key("window", "screen"):
-			OS.current_screen = config_cache.get_value("window", "screen")
-		if config_cache.has_section_key("window", "maximized"):
-			OS.window_maximized = config_cache.get_value("window", "maximized")
+	if config_cache.has_section_key("window", "screen"):
+		OS.current_screen = config_cache.get_value("window", "screen")
+	if config_cache.has_section_key("window", "maximized"):
+		OS.window_maximized = config_cache.get_value("window", "maximized")
+
+	if !OS.window_maximized:
+		if config_cache.has_section_key("window", "position"):
+			OS.window_position = config_cache.get_value("window", "position")
+		if config_cache.has_section_key("window", "size"):
+			OS.window_size = config_cache.get_value("window", "size")
 	
-		if !OS.window_maximized:
-			if config_cache.has_section_key("window", "position"):
-				OS.window_position = config_cache.get_value("window", "position")
-			if config_cache.has_section_key("window", "size"):
-				OS.window_size = config_cache.get_value("window", "size")
+	# Restore the theme
+	var theme_name : String = "default"
+	if config_cache.has_section_key("window", "theme"):
+		theme_name = config_cache.get_value("window", "theme")
+	set_theme(theme_name)
 
 	if OS.get_name() == "OSX":
 		is_mac = true
@@ -103,8 +110,7 @@ func _ready() -> void:
 	# This property is only available in 3.2alpha or later, so use `set()` to fail gracefully if it doesn't exist.
 	OS.set("min_window_size", Vector2(1024, 600))
 
-	if !Engine.editor_hint:
-		OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 	load_recents()
 	for m in $VBoxContainer/Menu.get_children():
 		var menu = m.get_popup()
@@ -193,6 +199,21 @@ func add_recent(path) -> void:
 	f.open("user://recent_files.bin", File.WRITE)
 	f.store_string(to_json(recent_files))
 	f.close()
+
+func create_menu_set_theme(menu) -> void:
+	menu.clear()
+	for t in THEMES:
+		menu.add_item(t)
+	if !menu.is_connected("id_pressed", self, "_on_SetTheme_id_pressed"):
+		menu.connect("id_pressed", self, "_on_SetTheme_id_pressed")
+
+func set_theme(theme_name) -> void:
+	theme = load("res://material_maker/theme/"+theme_name+".tres")
+
+func _on_SetTheme_id_pressed(id) -> void:
+	var theme_name : String = THEMES[id].to_lower()
+	set_theme(theme_name)
+	config_cache.set_value("window", "theme", theme_name)
 
 func create_menu_create(menu) -> void:
 	var gens = mm_loader.get_generator_list()
@@ -295,11 +316,8 @@ func export_material_is_disabled() -> bool:
 	return graph_edit == null or graph_edit.save_path == null
 
 func quit() -> void:
-	if Engine.editor_hint:
-		emit_signal("quit")
-	else:
-		dim_window()
-		get_tree().quit()
+	dim_window()
+	get_tree().quit()
 
 func edit_cut() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -521,17 +539,15 @@ func _on_Projects_tab_changed(tab) -> void:
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
-	if !Engine.editor_hint:
-		config_cache.set_value("window", "screen", OS.current_screen)
-		config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
-		config_cache.set_value("window", "position", OS.window_position)
-		config_cache.set_value("window", "size", OS.window_size)
-		config_cache.save("user://cache.ini")
+	config_cache.set_value("window", "screen", OS.current_screen)
+	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
+	config_cache.set_value("window", "position", OS.window_position)
+	config_cache.set_value("window", "size", OS.window_size)
+	config_cache.save("user://cache.ini")
 
 func _notification(what : int) -> void:
-	if !Engine.editor_hint:
-		if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-			dim_window()
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		dim_window()
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting

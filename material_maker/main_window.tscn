@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/library.tscn" type="PackedScene" id=2]
@@ -6,17 +6,19 @@
 [ext_resource path="res://material_maker/preview/preview_3d.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://material_maker/widgets/tabs.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=7]
-[ext_resource path="res://material_maker/node_factory.gd" type="Script" id=8]
+[ext_resource path="res://material_maker/widgets/add_node_popup.tscn" type="PackedScene" id=7]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
+[ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
+[ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 32 )
 
 [node name="MainWindow" type="Panel"]
@@ -24,6 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 10 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -38,14 +41,17 @@ margin_right = -6.0
 margin_bottom = -6.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 1268.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 
 [node name="File" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_right = 35.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 text = "File"
 items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 4, 268435539, null, "", false, "Save material as...", null, 0, false, false, 5, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 8, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 10, 0, null, "", false, "Quit", null, 0, false, false, 11, 268435537, null, "", false ]
 switch_on_hover = true
@@ -53,7 +59,7 @@ switch_on_hover = true
 [node name="Edit" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 39.0
 margin_right = 75.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 text = "Edit"
 items = [ "Cut", null, 0, false, false, 12, 268435544, null, "", false, "Copy", null, 0, false, false, 13, 268435523, null, "", false, "Paste", null, 0, false, false, 14, 268435542, null, "", false, "Duplicate", null, 0, false, false, 15, 268435524, null, "", false ]
 switch_on_hover = true
@@ -61,7 +67,7 @@ switch_on_hover = true
 [node name="View" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 79.0
 margin_right = 121.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 text = "View"
 items = [ "Center view", null, 0, false, false, 16, 67, null, "", false, "Reset zoom", null, 0, false, false, 17, 268435504, null, "", false ]
 switch_on_hover = true
@@ -69,7 +75,7 @@ switch_on_hover = true
 [node name="Tools" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 125.0
 margin_right = 171.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 text = "Tools"
 items = [ "Create", null, 0, false, false, 0, 0, null, "PopupMenu", false, "Create group", null, 0, false, false, 19, 268435527, null, "", false, "Make selected nodes editable", null, 0, false, false, 20, 268435543, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Add selected node to user library", null, 0, false, false, 22, 0, null, "", false, "Export the nodes library", null, 0, false, false, 23, 0, null, "", false ]
 switch_on_hover = true
@@ -77,51 +83,55 @@ switch_on_hover = true
 [node name="Help" type="MenuButton" parent="VBoxContainer/Menu"]
 margin_left = 175.0
 margin_right = 217.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 text = "Help"
 items = [ "User manual", null, 0, false, false, 24, 16777244, null, "", false, "Show selected library item documentation", null, 0, false, false, 25, 285212700, null, "", false, "Report a bug", null, 0, false, false, 26, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "About", null, 0, false, false, 28, 0, null, "", false ]
 switch_on_hover = true
 
 [node name="HBoxContainer" type="HSplitContainer" parent="VBoxContainer"]
-margin_top = 24.0
+margin_top = 26.0
 margin_right = 1268.0
 margin_bottom = 708.0
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VSplitContainer" parent="VBoxContainer/HBoxContainer"]
-margin_right = 311.0
-margin_bottom = 684.0
+margin_right = 313.0
+margin_bottom = 682.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Library" parent="VBoxContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 2 )]
-margin_right = 311.0
-margin_bottom = 386.0
+margin_right = 313.0
+margin_bottom = 390.0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.5
 
 [node name="Preview" type="TabContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_top = 398.0
-margin_right = 311.0
-margin_bottom = 684.0
+margin_right = 313.0
+margin_bottom = 682.0
 tab_align = 0
 
 [node name="Preview2D" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview" instance=ExtResource( 3 )]
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
 rect_min_size = Vector2( 250, 250 )
 
 [node name="Preview3D" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview" instance=ExtResource( 4 )]
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
 rect_min_size = Vector2( 250, 250 )
 
 [node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" instance=ExtResource( 5 )]
 
 [node name="ProjectsPane" type="Control" parent="VBoxContainer/HBoxContainer"]
-margin_left = 323.0
+margin_left = 321.0
 margin_right = 1268.0
-margin_bottom = 684.0
+margin_bottom = 682.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
@@ -152,6 +162,8 @@ margin_bottom = 24.0
 tab_align = 0
 tab_close_display_policy = 1
 
+[node name="AddNodePopup" parent="VBoxContainer/HBoxContainer/ProjectsPane/Projects" instance=ExtResource( 7 )]
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -163,7 +175,7 @@ custom_constants/separation = 7
 
 [node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
 margin_right = 44.0
-margin_bottom = 38.0
+margin_bottom = 40.0
 hint_tooltip = "Show 3D preview"
 toggle_mode = true
 icon = SubResource( 1 )
@@ -191,7 +203,7 @@ margin_bottom = 30.0
 size_flags_vertical = 4
 
 [node name="NodeFactory" type="Node" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 9 )
 [connection signal="need_update" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" to="." method="update_preview_3d"]
 [connection signal="environment_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Environment_item_selected"]
 [connection signal="model_selected" from="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D/Preview3DUI" to="VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D" method="_on_Model_item_selected"]
