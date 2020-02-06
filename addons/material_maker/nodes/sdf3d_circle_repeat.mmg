@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"a": 0,
-		"c": 4,
+		"c": 5,
 		"r": 0.24,
 		"rx": 4,
 		"ry": 4,
@@ -20,22 +20,23 @@
 		"global": "vec3 circle_repeat_transform(vec3 p, float count) {\n\tfloat r = 6.28/count;\n\tfloat pa = atan(p.x, p.y);\n\tfloat a = mod(pa+0.5*r, r)-0.5*r;\n\tvec3 rv;\n\tfloat c = cos(a-pa);\n\tfloat s = sin(a-pa);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Circle Repeat",
 		"outputs": [
 			{
-				"sdf3d": "$in(circle_repeat_transform($uv, $c))",
-				"type": "sdf3d"
+				"sdf3dc": "$in(circle_repeat_transform($uv, $c))",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "",
 				"max": 32,

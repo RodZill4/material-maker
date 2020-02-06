@@ -49,60 +49,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "raymarching",
-			"from_port": 0,
-			"to": "10053_2",
-			"to_port": 0
-		},
-		{
-			"from": "raymarching",
-			"from_port": 2,
-			"to": "10053_2",
-			"to_port": 1
-		},
-		{
-			"from": "raymarching",
-			"from_port": 0,
-			"to": "10053_2_2",
-			"to_port": 0
-		},
-		{
-			"from": "raymarching",
-			"from_port": 2,
-			"to": "10053_2_2",
-			"to_port": 1
-		},
-		{
-			"from": "raymarching",
-			"from_port": 0,
-			"to": "10053",
-			"to_port": 0
-		},
-		{
-			"from": "raymarching",
-			"from_port": 2,
-			"to": "10053",
-			"to_port": 1
-		},
-		{
-			"from": "10053",
-			"from_port": 0,
-			"to": "mwf_create_map",
-			"to_port": 0
-		},
-		{
-			"from": "10053_2_2",
-			"from_port": 0,
-			"to": "mwf_create_map_3",
-			"to_port": 0
-		},
-		{
-			"from": "10053_2",
-			"from_port": 0,
-			"to": "mwf_create_map_2",
-			"to_port": 0
-		},
-		{
 			"from": "mwf_create_map",
 			"from_port": 0,
 			"to": "mwf_map",
@@ -397,16 +343,64 @@
 			"to_port": 0
 		},
 		{
-			"from": "perlin_2",
-			"from_port": 0,
-			"to": "10053_2_2_2",
-			"to_port": 1
-		},
-		{
 			"from": "mwf_output",
 			"from_port": 6,
 			"to": "Material",
 			"to_port": 6
+		},
+		{
+			"from": "raymarching",
+			"from_port": 0,
+			"to": "mul_detect",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 2,
+			"to": "mul_detect",
+			"to_port": 1
+		},
+		{
+			"from": "mul_detect",
+			"from_port": 0,
+			"to": "mwf_create_map",
+			"to_port": 0
+		},
+		{
+			"from": "mul_detect_2",
+			"from_port": 0,
+			"to": "mwf_create_map_3",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 0,
+			"to": "mul_detect_2",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 2,
+			"to": "mul_detect_2",
+			"to_port": 1
+		},
+		{
+			"from": "raymarching",
+			"from_port": 0,
+			"to": "mul_detect_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "mul_detect_2_2",
+			"from_port": 0,
+			"to": "mwf_create_map_2",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 2,
+			"to": "mul_detect_2_2",
+			"to_port": 1
 		}
 	],
 	"label": "Graph",
@@ -419,8 +413,8 @@
 		{
 			"name": "Material",
 			"node_position": {
-				"x": 1730.920044,
-				"y": -7.312012
+				"x": 1596.135986,
+				"y": -86.800011
 			},
 			"parameters": {
 				"albedo_color": {
@@ -444,8 +438,8 @@
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": -87.107498,
-				"y": 153.625015
+				"x": -93.107498,
+				"y": 112.625015
 			},
 			"parameters": {
 
@@ -568,8 +562,8 @@
 			"label": "Donut",
 			"name": "graph",
 			"node_position": {
-				"x": -685.679138,
-				"y": -17.270287
+				"x": -664.759155,
+				"y": -18.094296
 			},
 			"nodes": [
 				{
@@ -1126,8 +1120,8 @@
 		{
 			"name": "sdf3d_repeat",
 			"node_position": {
-				"x": -508.122192,
-				"y": -14.881775
+				"x": -482.202179,
+				"y": -14.881774
 			},
 			"parameters": {
 				"a": 0,
@@ -1196,8 +1190,8 @@
 		{
 			"name": "sdf3d_scale_2",
 			"node_position": {
-				"x": -690.122192,
-				"y": 57.118225
+				"x": -670.842224,
+				"y": 66.030228
 			},
 			"parameters": {
 				"a": 0,
@@ -1243,12 +1237,12 @@
 		{
 			"name": "sdf3d_repeat_2",
 			"node_position": {
-				"x": -506.122192,
+				"x": -480.202179,
 				"y": 110.618225
 			},
 			"parameters": {
 				"a": 0,
-				"r": 0.33,
+				"r": 0.21,
 				"rx": 3,
 				"ry": 3,
 				"s": 0.3,
@@ -1313,13 +1307,13 @@
 		{
 			"name": "sdf3d_translate_3_2_2",
 			"node_position": {
-				"x": -505.872192,
+				"x": -479.952209,
 				"y": 213.034912
 			},
 			"parameters": {
 				"x": 0.14,
 				"y": 0.11,
-				"z": 0.1
+				"z": 0.2
 			},
 			"shader_model": {
 				"code": "",
@@ -1378,8 +1372,8 @@
 		{
 			"name": "sdf3d_boolean",
 			"node_position": {
-				"x": -270.800781,
-				"y": 120.820618
+				"x": -252.248795,
+				"y": 76.092621
 			},
 			"parameters": {
 				"bevel": 0,
@@ -1443,8 +1437,8 @@
 		{
 			"name": "sdf3d_translate_3_2_2_2",
 			"node_position": {
-				"x": -281.800781,
-				"y": 194.820618
+				"x": -278.344788,
+				"y": 149.892624
 			},
 			"parameters": {
 				"x": 0,
@@ -1515,171 +1509,24 @@
 			},
 			"name": "comment",
 			"node_position": {
-				"x": -718.245239,
-				"y": -47.346039
+				"x": -681.957275,
+				"y": -50.802036
 			},
 			"parameters": {
 				"size": 4
 			},
 			"size": {
-				"x": 790,
-				"y": 394.999969
+				"x": 757.167969,
+				"y": 382.903992
 			},
 			"text": "\n",
 			"title": "Render donuts with color indexes",
 			"type": "comment"
 		},
 		{
-			"name": "10053",
-			"node_position": {
-				"x": 117.221985,
-				"y": -12.346039
-			},
-			"parameters": {
-				"v": 0.31
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "1.0",
-						"label": "Label",
-						"name": "mul",
-						"type": "f"
-					},
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "MulDetect",
-				"outputs": [
-					{
-						"f": "$mul($uv)*(1.0-10.0*($in($uv)-$v)*($in($uv)-$v))",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "",
-						"max": 1,
-						"min": 0,
-						"name": "v",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "10053_2",
-			"node_position": {
-				"x": 121.462341,
-				"y": 395.472137
-			},
-			"parameters": {
-				"v": 0.08
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "1.0",
-						"label": "Label",
-						"name": "mul",
-						"type": "f"
-					},
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "MulDetect",
-				"outputs": [
-					{
-						"f": "$mul($uv)*(1.0-10.0*($in($uv)-$v)*($in($uv)-$v))",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "",
-						"max": 1,
-						"min": 0,
-						"name": "v",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "10053_2_2",
-			"node_position": {
-				"x": 113.786713,
-				"y": 170.138794
-			},
-			"parameters": {
-				"v": 0.87
-			},
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "1.0",
-						"label": "Label",
-						"name": "mul",
-						"type": "f"
-					},
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "MulDetect",
-				"outputs": [
-					{
-						"f": "$mul($uv)*clamp((1.0-10.0*($in($uv)-$v)*($in($uv)-$v)), 0.0, 1.0)",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "",
-						"max": 1,
-						"min": 0,
-						"name": "v",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
 			"name": "mwf_create_map",
 			"node_position": {
-				"x": 358.843994,
+				"x": 360.571991,
 				"y": -128.630447
 			},
 			"parameters": {
@@ -1765,8 +1612,8 @@
 		{
 			"name": "mwf_mix",
 			"node_position": {
-				"x": 864.268921,
-				"y": 189.119568
+				"x": 853.900879,
+				"y": 164.927567
 			},
 			"parameters": {
 
@@ -1776,8 +1623,8 @@
 		{
 			"name": "mwf_mix_2",
 			"node_position": {
-				"x": 1141.761108,
-				"y": -8.130447
+				"x": 1083.009155,
+				"y": -87.618446
 			},
 			"parameters": {
 
@@ -1874,8 +1721,8 @@
 			"label": "Output",
 			"name": "mwf_output",
 			"node_position": {
-				"x": 1405.761108,
-				"y": -1.630447
+				"x": 1307.265137,
+				"y": -74.206451
 			},
 			"nodes": [
 				{
@@ -2470,8 +2317,8 @@
 		{
 			"name": "mwf_mix_3",
 			"node_position": {
-				"x": 857.856567,
-				"y": -274.880432
+				"x": 845.760559,
+				"y": -242.048431
 			},
 			"parameters": {
 
@@ -2526,8 +2373,8 @@
 		{
 			"name": "perlin",
 			"node_position": {
-				"x": 358.92984,
-				"y": 508.119568
+				"x": 363.92984,
+				"y": 499.119568
 			},
 			"parameters": {
 				"iterations": 8,
@@ -2571,21 +2418,21 @@
 			"color": {
 				"a": 1,
 				"b": 0,
-				"g": 0.5,
-				"r": 1,
+				"g": 1,
+				"r": 0.9375,
 				"type": "Color"
 			},
 			"name": "comment_2",
 			"node_position": {
-				"x": 97.468719,
-				"y": -49.148132
+				"x": 82.468719,
+				"y": -50.148132
 			},
 			"parameters": {
 				"size": 4
 			},
 			"size": {
-				"x": 242,
-				"y": 533
+				"x": 255.271576,
+				"y": 432.232056
 			},
 			"text": "",
 			"title": "Separate colors",
@@ -2618,100 +2465,62 @@
 		{
 			"color": {
 				"a": 1,
-				"b": 0,
-				"g": 0.6875,
-				"r": 1,
+				"b": 1,
+				"g": 0,
+				"r": 0.96875,
 				"type": "Color"
 			},
 			"name": "comment_2_2_2",
 			"node_position": {
-				"x": 838.947449,
-				"y": -317.398193
+				"x": 828.579407,
+				"y": -289.750183
 			},
 			"parameters": {
 				"size": 4
 			},
 			"size": {
-				"x": 837,
-				"y": 783
+				"x": 743.688171,
+				"y": 725.975952
 			},
 			"text": "",
 			"title": "Mix the result and generate output",
 			"type": "comment"
 		},
 		{
-			"name": "10053_2_2_2",
+			"name": "mul_detect",
 			"node_position": {
-				"x": -158.775818,
-				"y": -271.032806
+				"x": 90.234436,
+				"y": -13.032837
 			},
 			"parameters": {
-				"t": 0.009,
-				"v": 0.47
+				"t": 0.01,
+				"v": 0.31
 			},
-			"shader_model": {
-				"code": "float $(name_uv)_d = ($in($uv)-$v)/$t;",
-				"global": "",
-				"inputs": [
-					{
-						"default": "1.0",
-						"label": "",
-						"name": "mul",
-						"type": "f"
-					},
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "MulDetect",
-				"outputs": [
-					{
-						"f": "$mul($uv)*clamp(1.0-$(name_uv)_d*$(name_uv)_d, 0.0, 1.0)",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "Value",
-						"max": 1,
-						"min": 0,
-						"name": "v",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 0.1,
-						"label": "Tolerance",
-						"max": 1,
-						"min": 0.01,
-						"name": "t",
-						"step": 0.001,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
+			"type": "mul_detect"
 		},
 		{
-			"name": "perlin_2",
+			"name": "mul_detect_2",
 			"node_position": {
-				"x": -463.275513,
-				"y": -249.782776
+				"x": 94.964081,
+				"y": 132.26152
 			},
 			"parameters": {
-				"iterations": 3,
-				"persistence": 0.5,
-				"scale_x": 4,
-				"scale_y": 4
+				"t": 0.01,
+				"v": 0.87
 			},
-			"type": "perlin"
+			"type": "mul_detect"
+		},
+		{
+			"name": "mul_detect_2_2",
+			"node_position": {
+				"x": 90.964081,
+				"y": 288.261536
+			},
+			"parameters": {
+				"t": 0.01,
+				"v": 0.08
+			},
+			"type": "mul_detect"
 		}
 	],
 	"parameters": {

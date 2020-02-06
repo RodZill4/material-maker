@@ -15,47 +15,47 @@
 	},
 	"shader_model": {
 		"code": "",
-		"global": "",
+		"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, -b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in1",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			},
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in2",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Boolean",
 		"outputs": [
 			{
-				"sdf3d": "$op $in1($uv), $in2($uv))",
-				"type": "sdf3d"
+				"sdf3dc": "$op($in1($uv), $in2($uv))",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [
 			{
-				"default": 1,
+				"default": 2,
 				"label": "",
 				"name": "op",
 				"type": "enum",
 				"values": [
 					{
 						"name": "Union",
-						"value": "min("
+						"value": "sdf3dc_union"
 					},
 					{
 						"name": "Subtraction",
-						"value": "max(-"
+						"value": "sdf3dc_sub"
 					},
 					{
 						"name": "Intersection",
-						"value": "max("
+						"value": "sdf3dc_inter"
 					}
 				]
 			}

@@ -139,12 +139,6 @@
 			"to_port": 1
 		},
 		{
-			"from": "sdf3d_boolean_2_2_2",
-			"from_port": 0,
-			"to": "_3_2",
-			"to_port": 0
-		},
-		{
 			"from": "blend_2",
 			"from_port": 0,
 			"to": "Material",
@@ -154,12 +148,6 @@
 			"from": "perlin",
 			"from_port": 0,
 			"to": "normal_map",
-			"to_port": 0
-		},
-		{
-			"from": "_3_2",
-			"from_port": 1,
-			"to": "blend_2",
 			"to_port": 0
 		},
 		{
@@ -178,12 +166,6 @@
 			"from": "graph_3",
 			"from_port": 0,
 			"to": "sdf3d_scale",
-			"to_port": 0
-		},
-		{
-			"from": "_3_2",
-			"from_port": 0,
-			"to": "buffer",
 			"to_port": 0
 		},
 		{
@@ -233,6 +215,24 @@
 			"from_port": 0,
 			"to": "blend",
 			"to_port": 2
+		},
+		{
+			"from": "sdf3d_boolean_2_2_2",
+			"from_port": 0,
+			"to": "raymarching",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "raymarching",
+			"from_port": 1,
+			"to": "blend_2",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -310,45 +310,6 @@
 				}
 			},
 			"type": "colorize"
-		},
-		{
-			"name": "_3_2",
-			"node_position": {
-				"x": -378.336426,
-				"y": 1476.947388
-			},
-			"parameters": {
-
-			},
-			"shader_model": {
-				"code": "float $(name_uv)_d = raymarch_$name($uv);\n",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "sdf",
-						"type": "sdf3d"
-					}
-				],
-				"instance": "float input_$name(vec3 p) {\n\treturn min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO=0.;\n    \n    for (int i=0; i < 50; i++) {\n    \tvec3 p = ro + rd*dO;\n        float dS = input_$name(p);\n        dO += dS;\n        if (dO > 0.001 && dS < 0.0001) break;\n    }\n    \n    return dO;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = input_$name(p);\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        input_$name(p-vec3(e, 0.0, 0.0)),\n        input_$name(p-vec3(0.0, e, 0.0)),\n        input_$name(p-vec3(0.0, 0.0, e)));\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
-				"name": "Raymarching",
-				"outputs": [
-					{
-						"f": "1.0-$(name_uv)_d",
-						"type": "f"
-					},
-					{
-						"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d))",
-						"type": "rgb"
-					}
-				],
-				"parameters": [
-
-				]
-			},
-			"type": "shader"
 		},
 		{
 			"name": "colorize_2",
@@ -1108,6 +1069,8 @@
 				"param0": 11,
 				"param1": 1.02,
 				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -2007,6 +1970,17 @@
 				"blend_type": 3
 			},
 			"type": "blend"
+		},
+		{
+			"name": "raymarching",
+			"node_position": {
+				"x": -371.992065,
+				"y": 1466.176514
+			},
+			"parameters": {
+
+			},
+			"type": "raymarching"
 		}
 	],
 	"parameters": {

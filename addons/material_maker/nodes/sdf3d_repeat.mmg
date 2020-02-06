@@ -6,9 +6,9 @@
 	},
 	"parameters": {
 		"a": 0,
-		"r": 0.24,
-		"rx": 4,
-		"ry": 4,
+		"r": 0.3,
+		"rx": 3,
+		"ry": 3,
 		"s": 0.3,
 		"x": 0.35,
 		"y": 0,
@@ -19,22 +19,23 @@
 		"global": "vec3 repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 a = (rand3(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Repeat",
 		"outputs": [
 			{
-				"sdf3d": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
-				"type": "sdf3d"
+				"sdf3dc": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "X",
 				"max": 32,
@@ -44,6 +45,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Y",
 				"max": 32,
@@ -53,6 +55,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "R",
 				"max": 1,

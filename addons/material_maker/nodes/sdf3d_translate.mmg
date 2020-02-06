@@ -14,18 +14,18 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Translate",
 		"outputs": [
 			{
-				"sdf3d": "$in($uv-vec3($x, $y, $z))",
-				"type": "sdf3d"
+				"sdf3dc": "$in($uv-vec3($x, $y, $z))",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [

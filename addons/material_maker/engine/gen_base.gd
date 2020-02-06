@@ -204,7 +204,7 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 	var rv = _get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
-	if rv.has("type"):
+	if rv.has("type") and mm_io_types.types.has(rv.type):
 		if mm_io_types.types[rv.type].has("convert"):
 			for c in mm_io_types.types[rv.type].convert:
 				if !rv.has(c.type):
