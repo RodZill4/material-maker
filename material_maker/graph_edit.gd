@@ -350,8 +350,8 @@ func create_subgraph() -> void:
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instance()
-	graph_tree.init("Top", top_generator)
 	add_child(graph_tree)
+	graph_tree.init("Top", top_generator)
 	graph_tree.connect("item_double_clicked", self, "edit_subgraph")
 	graph_tree.popup_centered()
 
