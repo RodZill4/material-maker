@@ -190,11 +190,11 @@ func get_free_name(type) -> String:
 	return ""
 
 func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
-	if data == null:
+	if !data is Dictionary:
 		return []
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
-	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
+	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
 		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
 		for g in new_stuff.generators:
 			g.position += position
