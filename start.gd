@@ -2,6 +2,8 @@ extends Control
 
 var loader
 
+onready var progress_bar = $VBoxContainer/ProgressBar
+
 func _ready():
 	var path : String
 	if Directory.new().file_exists("res://material_maker/main_window.tscn"):
@@ -13,7 +15,7 @@ func _ready():
 		print("error")
 		queue_free()
 
-func _process(delta):
+func _process(_delta):
 	var err = loader.poll()
 	if err == ERR_FILE_EOF:
 		var resource = loader.get_resource()
@@ -21,7 +23,7 @@ func _process(delta):
 		queue_free()
 	elif err == OK:
 		var progress = float(loader.get_stage()) / loader.get_stage_count()
-		$VBoxContainer/ProgressBar.value = 100.0*progress
+		progress_bar.value = 100.0*progress
 	else: # error during loading
 		print("error")
 		queue_free()

@@ -51,7 +51,9 @@ func add_node(node) -> void:
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
-	if generator.connect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+	var from_node : MMGraphNodeBase = get_node(from)
+	var to_node : MMGraphNodeBase = get_node(to)
+	if generator.connect_children(from_node.generator, from_slot, to_node.generator, to_slot):
 		var disconnect = get_source(to, to_slot)
 		if !disconnect.empty():
 			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
