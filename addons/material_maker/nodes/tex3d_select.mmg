@@ -1,0 +1,60 @@
+{
+	"name": "tex3d_select",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"t": 0.01,
+		"v": 0.5
+	},
+	"shader_model": {
+		"code": "float $(name_uv)_d = ($uv.w-$v)/$t;",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"name": "in1",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"name": "in2",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"name": "TEX3D Select",
+		"outputs": [
+			{
+				"tex3d": "mix($in1($uv), $in2($uv), clamp(1.0-$(name_uv)_d*$(name_uv)_d, 0.0, 1.0))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Value",
+				"max": 1,
+				"min": 0,
+				"name": "v",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Tolerance",
+				"max": 1,
+				"min": 0.01,
+				"name": "t",
+				"step": 0.001,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

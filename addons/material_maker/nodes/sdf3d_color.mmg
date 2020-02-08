@@ -1,0 +1,51 @@
+{
+	"name": "sdf3d_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"c": 0.5,
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"k": 0.15,
+		"op": 0,
+		"r": 0.15,
+		"w": 0.28
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"name": "Color",
+		"outputs": [
+			{
+				"sdf3dc": "vec2($in($uv), $c)",
+				"type": "sdf3dc"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "c",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
