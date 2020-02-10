@@ -1,0 +1,46 @@
+{
+	"name": "tex3d_apply",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "Height",
+				"name": "z",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "Color",
+				"name": "c",
+				"type": "f"
+			},
+			{
+				"default": "vec3(1.0)",
+				"label": "Texture",
+				"name": "t",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"name": "TEX3D Apply",
+		"outputs": [
+			{
+				"rgb": "$t(vec4($uv, $z($uv), $c($uv)))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}
