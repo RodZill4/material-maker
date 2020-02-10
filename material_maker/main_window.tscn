@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/library.tscn" type="PackedScene" id=2]
@@ -10,16 +10,45 @@
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
+[ext_resource path="res://material_maker/preview/preview_2d.gd" type="Script" id=11]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+uniform vec2 size;
+
+void fragment() {
+	float ms = max(size.x, size.y);
+	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
+	vec2 m2 = min(fract(uv), 1.0-fract(uv));
+	vec4 image = texture(tex, uv);
+	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
+	float lines_color = 0.5*(cos(5.0*TIME+100.0*(UV.x+UV.y))+1.0);
+	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(min(m2.x, m2.y), 1.0/min(size.x, size.y))), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/size = Vector2( 721, 546 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 8 )
+region = Rect2( 96, 96, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0, 0, 0, 0.772549 )
+
+[sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 8 )
-region = Rect2( 96, 64, 32, 32 )
+region = Rect2( 96, 64, 32, 31 )
 
 [node name="MainWindow" type="Panel"]
 anchor_right = 1.0
@@ -136,12 +165,28 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
+[node name="Preview2D" type="ColorRect" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
+visible = false
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 64, 64 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 0
+size_flags_vertical = 8
+script = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
 [node name="Preview3D" parent="VBoxContainer/HBoxContainer/ProjectsPane" instance=ExtResource( 4 )]
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 0.0
 margin_bottom = 0.0
-ui_path = "../HBoxContainer/HBoxContainer/Preview3DUI"
+ui_path = "../PreviewUI/Panel/HBoxContainer/Preview3DUI"
 
 [node name="Projects" type="Panel" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -164,7 +209,7 @@ tab_close_display_policy = 1
 
 [node name="AddNodePopup" parent="VBoxContainer/HBoxContainer/ProjectsPane/Projects" instance=ExtResource( 7 )]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
+[node name="PreviewUI" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 1.0
@@ -172,35 +217,64 @@ margin_top = -45.0
 margin_right = 331.0
 margin_bottom = -13.0
 custom_constants/separation = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
+[node name="Preview2DButton" type="Button" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI"]
 margin_right = 44.0
+margin_bottom = 40.0
+hint_tooltip = "Show 2D preview"
+toggle_mode = true
+icon = SubResource( 3 )
+
+[node name="Preview3DButton" type="Button" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI"]
+margin_left = 51.0
+margin_right = 95.0
 margin_bottom = 40.0
 hint_tooltip = "Show 3D preview"
 toggle_mode = true
-icon = SubResource( 1 )
+icon = SubResource( 4 )
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer"]
+[node name="Panel" type="PanelContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI"]
 visible = false
-margin_left = 51.0
-margin_right = 354.0
-margin_bottom = 38.0
-custom_constants/separation = 8
+self_modulate = Color( 1, 1, 1, 0.768627 )
+margin_left = 102.0
+margin_right = 399.0
+margin_bottom = 40.0
+custom_styles/panel = SubResource( 5 )
 
-[node name="ControlView" type="TextureRect" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer"]
-margin_top = 3.0
-margin_right = 32.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel"]
+margin_right = 297.0
+margin_bottom = 40.0
+custom_constants/separation = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpaceLeft" type="Control" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
+margin_bottom = 40.0
+
+[node name="ControlView" type="TextureRect" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
+margin_left = 5.0
+margin_top = 4.0
+margin_right = 37.0
 margin_bottom = 35.0
 size_flags_vertical = 4
-texture = SubResource( 2 )
+texture = SubResource( 6 )
 
-[node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer" instance=ExtResource( 5 )]
+[node name="Preview3DUI" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
-margin_left = 40.0
+margin_left = 42.0
 margin_top = 8.0
-margin_right = 303.0
-margin_bottom = 30.0
+margin_right = 292.0
+margin_bottom = 32.0
 size_flags_vertical = 4
+
+[node name="SpaceRight" type="Control" parent="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
+margin_left = 297.0
+margin_right = 297.0
+margin_bottom = 40.0
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 9 )
@@ -215,8 +289,9 @@ script = ExtResource( 9 )
 [connection signal="reposition_active_tab_request" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/HBoxContainer/ProjectsPane/Projects/Tabs" to="VBoxContainer/HBoxContainer/ProjectsPane/Projects" method="close_tab"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/Button" to="." method="show_background_preview"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/ControlView" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="on_gui_input"]
-[connection signal="environment_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Environment_item_selected"]
-[connection signal="model_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Model_item_selected"]
-[connection signal="rotate_toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Rotate_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="on_gui_input"]
+[connection signal="environment_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Environment_item_selected"]
+[connection signal="model_selected" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Model_item_selected"]
+[connection signal="rotate_toggled" from="VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/HBoxContainer/ProjectsPane/Preview3D" method="_on_Rotate_toggled"]

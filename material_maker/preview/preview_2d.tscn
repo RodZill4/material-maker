@@ -4,8 +4,6 @@
 [ext_resource path="res://material_maker/preview/control_point.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
 
-
-
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
@@ -16,8 +14,10 @@ void fragment() {
 	float ms = max(size.x, size.y);
 	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
 	vec2 m2 = min(fract(uv), 1.0-fract(uv));
-	float color = 0.5*(cos(5.0*TIME+100.0*(UV.x+UV.y))+1.0);
-	COLOR = mix(texture(tex, uv), vec4(vec3(color), 1.0), step(min(m2.x, m2.y), 1.0/min(size.x, size.y)));
+	vec4 image = texture(tex, uv);
+	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
+	float lines_color = 0.5*(cos(5.0*TIME+100.0*(UV.x+UV.y))+1.0);
+	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(min(m2.x, m2.y), 1.0/min(size.x, size.y))), 1.0);
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -46,6 +46,9 @@ mouse_filter = 1
 size_flags_horizontal = 0
 size_flags_vertical = 8
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="P1" parent="." instance=ExtResource( 2 )]
 visible = false

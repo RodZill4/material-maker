@@ -16,6 +16,8 @@ onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
 onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
 
+onready var preview_2d_background = $VBoxContainer/HBoxContainer/ProjectsPane/Preview2D
+
 const RECENT_FILES_COUNT = 15
 
 const THEMES = [ "Dark", "Default", "Light" ]
@@ -507,8 +509,10 @@ func update_preview_2d(node = null) -> void:
 			result.copy_to_texture(tex)
 			result.release()
 			preview_2d.set_preview_texture(tex)
+			preview_2d_background.set_preview_texture(tex)
 		else:
 			preview_2d.set_preview_texture(null)
+			preview_2d_background.set_preview_texture(null)
 
 func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -554,6 +558,17 @@ func dim_window() -> void:
 	# (it won't respond to user input in this state).
 	modulate = Color(0.5, 0.5, 0.5)
 
-func show_background_preview(button_pressed):
+func show_background_preview_2d(button_pressed):
+	$VBoxContainer/HBoxContainer/ProjectsPane/Preview2D.visible = button_pressed
+	if button_pressed:
+		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview3DButton.pressed = false
+
+func show_background_preview_3d(button_pressed):
 	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
-	$VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer.visible = button_pressed
+	$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel.visible = button_pressed
+	if button_pressed:
+		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton.pressed = false
+
+
+func set_rect_size():
+	pass # Replace with function body.
