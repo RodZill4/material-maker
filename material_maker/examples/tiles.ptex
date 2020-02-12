@@ -130,7 +130,8 @@
 				"metallic": 1,
 				"normal_scale": 2.15,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -228,9 +229,11 @@
 			"parameters": {
 				"bevel": 0,
 				"columns": 8,
+				"corner": 0,
 				"mortar": 0.1,
 				"pattern": 0,
 				"repeat": 1,
+				"round": 0,
 				"row_offset": 0,
 				"rows": 8
 			},
@@ -284,6 +287,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -315,6 +319,9 @@
 				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.69,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -327,6 +334,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,

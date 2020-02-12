@@ -2449,6 +2449,13 @@
 			"type": "uniform"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment",
 			"node_position": {
 				"x": -2427.006836,
@@ -2462,13 +2469,21 @@
 				"y": 124
 			},
 			"text": "This example first defines shapes (with heigth and material rotation information) then associated them a material and finally merges the result into a single material.",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2",
 			"node_position": {
-				"x": -1648.280762,
-				"y": 291.200073
+				"x": -1653.280762,
+				"y": 272.200073
 			},
 			"parameters": {
 				"size": 4
@@ -2478,13 +2493,21 @@
 				"y": 50
 			},
 			"text": "Wood shapes",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2_2",
 			"node_position": {
-				"x": -1502.780762,
-				"y": 375.700073
+				"x": -1504.780762,
+				"y": 354.700073
 			},
 			"parameters": {
 				"size": 4
@@ -2494,13 +2517,21 @@
 				"y": 73
 			},
 			"text": "Wood shapes with material applied",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2_2_2",
 			"node_position": {
-				"x": -1491.280762,
-				"y": 697.200073
+				"x": -1502.280762,
+				"y": 788.200073
 			},
 			"parameters": {
 				"size": 4
@@ -2510,13 +2541,21 @@
 				"y": 44
 			},
 			"text": "Bricks",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2_2_2_2",
 			"node_position": {
-				"x": -1342.280762,
-				"y": 344.700073
+				"x": -1350.280762,
+				"y": 318.700073
 			},
 			"parameters": {
 				"size": 4
@@ -2526,9 +2565,17 @@
 				"y": 128
 			},
 			"text": "Wood shapes blended with bricks based on height information",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2_2_2_2_2",
 			"node_position": {
 				"x": -1175.626587,
@@ -2542,6 +2589,7 @@
 				"y": 72
 			},
 			"text": "This node converts material+shapes data into what Material expects",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
@@ -2571,8 +2619,8 @@
 		{
 			"name": "mwf_map",
 			"node_position": {
-				"x": -1508.537354,
-				"y": 583.016724
+				"x": -1514.537354,
+				"y": 628.016724
 			},
 			"parameters": {
 
@@ -2699,8 +2747,8 @@
 		{
 			"name": "brightness_contrast",
 			"node_position": {
-				"x": -1468.755005,
-				"y": 754.429321
+				"x": -1481.755005,
+				"y": 892.429321
 			},
 			"parameters": {
 				"brightness": 0,

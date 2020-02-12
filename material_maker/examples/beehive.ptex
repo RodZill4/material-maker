@@ -215,6 +215,8 @@
 				"param0": 11,
 				"param1": 1.02,
 				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"

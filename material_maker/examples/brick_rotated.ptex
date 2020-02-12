@@ -88,7 +88,8 @@
 				"metallic": 1,
 				"normal_scale": 1,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -258,6 +259,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -296,6 +298,13 @@
 			"type": "transform"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment",
 			"node_position": {
 				"x": -391.274048,
@@ -309,6 +318,7 @@
 				"y": 85
 			},
 			"text": "This example shows how to use the 3rd and 4th outputs of the bricks node to get the center of each brick.",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
@@ -318,8 +328,13 @@
 				"y": -40.645294
 			},
 			"parameters": {
+				"amount": 0.5,
 				"param0": 11,
-				"param1": 0.995
+				"param1": 0.995,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
+				"size": 4
 			},
 			"type": "normal_map"
 		}

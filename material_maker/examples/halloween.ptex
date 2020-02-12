@@ -478,6 +478,8 @@
 				"param0": 10,
 				"param1": 0.185,
 				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -615,6 +617,13 @@
 			"type": "colorize"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment",
 			"node_position": {
 				"x": 40.787872,
@@ -628,6 +637,7 @@
 				"y": 69
 			},
 			"text": "Best viewed on \"Sphere\" mesh",
+			"title": "Comment",
 			"type": "comment"
 		}
 	],

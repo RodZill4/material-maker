@@ -225,8 +225,11 @@ func _serialize(data: Dictionary) -> Dictionary:
 
 func serialize() -> Dictionary:
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
-	for p in parameters.keys():
-		rv.parameters[p] = MMType.serialize_value(parameters[p])
+	for p in get_parameter_defs():
+		if parameters.has(p.name):
+			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
+		else:
+			rv.parameters[p.name] = p.default
 	if seed_locked:
 		rv.seed_value = seed_value
 	if model != null:

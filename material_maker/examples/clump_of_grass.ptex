@@ -126,6 +126,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -171,6 +172,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 0,
@@ -234,7 +236,8 @@
 				"normal_scale": 1,
 				"resolution": 1,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -247,7 +250,11 @@
 			"parameters": {
 				"amount": 0.5,
 				"param0": 10,
-				"param1": 0.995
+				"param1": 0.995,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
+				"size": 4
 			},
 			"type": "normal_map"
 		}

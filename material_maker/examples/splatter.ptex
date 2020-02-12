@@ -238,9 +238,7 @@
 				"y": -404
 			},
 			"parameters": {
-				"param0": 6,
-				"param1": 0,
-				"param2": 0
+				"param0": 0
 			},
 			"type": "remote",
 			"widgets": [
@@ -328,6 +326,8 @@
 				"param0": 12,
 				"param1": 1.02,
 				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
