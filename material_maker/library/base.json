@@ -1229,6 +1229,134 @@
 			"type": "sdf3d_rotate"
 		},
 		{
+			"collapsed": true,
+			"tree_item": "3D/Texture"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_apply",
+			"name": "tex3d_apply",
+			"parameters": {
+
+			},
+			"tree_item": "3D/Texture/Apply",
+			"type": "tex3d_apply"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_select",
+			"name": "tex3d_select",
+			"parameters": {
+				"t": 0.01,
+				"v": 1
+			},
+			"tree_item": "3D/Texture/Select",
+			"type": "tex3d_select"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_from2d",
+			"name": "tex3d_from2d",
+			"parameters": {
+
+			},
+			"tree_item": "3D/Texture/From2D",
+			"type": "tex3d_from2d"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_pattern",
+			"name": "tex3d_pattern_2",
+			"parameters": {
+				"mix": 4,
+				"x_scale": 2,
+				"x_wave": 2,
+				"y_scale": 2,
+				"y_wave": 2,
+				"z_scale": 2,
+				"z_wave": 2
+			},
+			"tree_item": "3D/Texture/Pattern",
+			"type": "tex3d_pattern"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_fbm",
+			"name": "tex3d_fbm_4",
+			"parameters": {
+				"iterations": 1,
+				"noise": 0,
+				"persistence": 0.5,
+				"scale_x": 8,
+				"scale_y": 8,
+				"scale_z": 8
+			},
+			"tree_item": "3D/Texture/FBM",
+			"type": "tex3d_fbm"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_blend",
+			"name": "tex3d_blend_2",
+			"parameters": {
+				"amount": 0.5,
+				"blend_type": 0
+			},
+			"tree_item": "3D/Texture/Blend",
+			"type": "tex3d_blend"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_colorize",
+			"name": "tex3d_colorize_3",
+			"parameters": {
+				"g": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.46875,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"tree_item": "3D/Texture/Colorize",
+			"type": "tex3d_colorize"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_rotate",
+			"name": "tex3d_rotate",
+			"parameters": {
+				"ax": 0,
+				"ay": 0,
+				"az": 0
+			},
+			"tree_item": "3D/Texture/Rotate",
+			"type": "tex3d_rotate"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_texture_distort",
+			"name": "tex3d_distort_2",
+			"parameters": {
+				"Distort": 0.3
+			},
+			"tree_item": "3D/Texture/Distort",
+			"type": "tex3d_distort"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Pattern"
 		},

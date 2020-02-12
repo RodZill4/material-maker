@@ -34,13 +34,13 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec3(1.0)",
 				"label": "",
 				"name": "in1",
 				"type": "tex3d"
 			},
 			{
-				"default": "0.0",
+				"default": "vec3(0.0)",
 				"label": "",
 				"name": "in2",
 				"type": "tex3d"
