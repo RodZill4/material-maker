@@ -290,25 +290,23 @@ func cut() -> void:
 func copy() -> void:
 	OS.clipboard = to_json(serialize_selection())
 
-func paste(pos = Vector2(0, 0)) -> void:
+func do_paste(data) -> void:
+	var position = scroll_offset+0.5*rect_size
+	if Rect2(Vector2(0, 0), rect_size).has_point(get_local_mouse_position()):
+		position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = false
-	var data = parse_json(OS.clipboard)
-	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
+	var new_nodes = create_nodes(data, position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
 
+func paste() -> void:
+	do_paste(parse_json(OS.clipboard))
+
 func duplicate_selected() -> void:
-	var data = serialize_selection()
-	for c in get_children():
-		if c is GraphNode:
-			c.selected = false
-	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
-	if new_nodes != null:
-		for c in new_nodes:
-			c.selected = true
+	do_paste(serialize_selection())
 
 # Delay after graph update
 
