@@ -10,7 +10,7 @@
 		"corner": 0,
 		"mortar": 0.1,
 		"pattern": 0,
-		"repeat": 1,
+		"repeat": 147,
 		"round": 0,
 		"row_offset": 0.5,
 		"rows": 6
@@ -29,7 +29,7 @@
 				"type": "f"
 			},
 			{
-				"rgb": "rand3(vec2($(name_uv).w, $(seed)))",
+				"rgb": "rand3(fract($(name_uv)_rect.xy)+rand2(vec2($seed)))",
 				"type": "rgb"
 			},
 			{
