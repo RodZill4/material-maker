@@ -78,7 +78,6 @@ func find_keyword_call(string, keyword):
 		return null
 	var parenthesis_level = 0
 	var parameter_begin = position+search_string.length()
-	var parameter_end = -1
 	for i in range(parameter_begin, string.length()):
 		if string[i] == '(':
 			parenthesis_level += 1
@@ -235,10 +234,6 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 						required_textures[t] = result.textures[t]
 			cont = changed and new_pass_required
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
-
-func create_input_function(function_name : String, input_index : int, context : MMGenContext) -> Dictionary:
-	var rv = { globals=[], defs="", code="", textures={} }
-	return rv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())

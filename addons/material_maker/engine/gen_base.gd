@@ -139,7 +139,7 @@ func get_targets(output_index : int) -> Array:
 	return []
 
 # get the list of outputs that depend on the input whose index is passed as parameter
-func follow_input(input_index : int) -> Array:
+func follow_input(_input_index : int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
 		rv.push_back(OutputPort.new(self, i))
@@ -238,7 +238,7 @@ func serialize() -> Dictionary:
 		rv = _serialize(rv)
 	return rv
 
-func _deserialize(data : Dictionary) -> void:
+func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
