@@ -2218,6 +2218,20 @@
 			"type": "color_noise"
 		},
 		{
+			"collapsed": true,
+			"icon": "noise_fbm",
+			"name": "fbm",
+			"parameters": {
+				"iterations": 5,
+				"noise": 0,
+				"persistence": 0.5,
+				"scale_x": 2,
+				"scale_y": 2
+			},
+			"tree_item": "Noise/FBM",
+			"type": "fbm"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Filter"
 		},
@@ -2566,6 +2580,32 @@
 			},
 			"tree_item": "Transform/CustomUV",
 			"type": "custom_uv"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_splatter",
+			"name": "splatter",
+			"parameters": {
+				"count": 25,
+				"rotate": 0,
+				"scale": 0,
+				"select_inputs": 0
+			},
+			"tree_item": "Transform/Splatter",
+			"type": "splatter"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_splatter_color",
+			"name": "splatter_color",
+			"parameters": {
+				"count": 25,
+				"rotate": 0,
+				"scale": 0,
+				"select_inputs": 0
+			},
+			"tree_item": "Transform/Splatter/Color",
+			"type": "splatter_color"
 		},
 		{
 			"collapsed": false,
