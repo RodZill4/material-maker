@@ -3,10 +3,13 @@ extends Node
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
-var generators = {}
+var predefined_generators = {}
 
 func _ready()-> void:
-	var gen_count = 0
+	update_predefined_generators()
+
+func update_predefined_generators()-> void:
+	predefined_generators = {}
 	for path in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
 		var dir = Directory.new()
 		if dir.open(path) == OK:
@@ -16,14 +19,9 @@ func _ready()-> void:
 				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
 					var file : File = File.new()
 					if file.open(path+"/"+file_name, File.READ) == OK:
-						if !generators.has(file_name.get_basename()):
-							gen_count += 1
-						generators[file_name.get_basename()] = parse_json(file.get_as_text())
+						predefined_generators[file_name.get_basename()] = parse_json(file.get_as_text())
 						file.close()
 				file_name = dir.get_next()
-		else:
-			print("An error occurred when trying to access the path.")
-	print(gen_count)
 
 func generator_name_from_path(path : String) -> String:
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
@@ -85,9 +83,11 @@ func create_gen(data) -> MMGenBase:
 		if types.has(data.type):
 			generator = types[data.type].new()
 		else:
-			generator = create_gen(generators[data.type])
+			generator = create_gen(predefined_generators[data.type])
 			if generator == null:
 				print("Cannot find description for "+data.type)
+			else:
+				generator.model = data.type
 		if generator != null:
 			generator.name = data.type
 	if generator == null:

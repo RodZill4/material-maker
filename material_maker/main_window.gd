@@ -524,9 +524,12 @@ func update_preview_3d(previews : Array) -> void:
 		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
+var selected_node = null
 func on_selected_node_change(node) -> void:
-	preview_2d.setup_controls(node.generator if node != null else null)
-	update_preview_2d(node)
+	if node != selected_node:
+		selected_node = node
+		preview_2d.setup_controls(node.generator if node != null else null)
+		update_preview_2d(node)
 
 func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()

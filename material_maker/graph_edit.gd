@@ -32,8 +32,13 @@ func _ready() -> void:
 func _gui_input(event) -> void:
 	if event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_DELETE || scancode_with_modifiers == KEY_BACKSPACE:
+		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
+	return
+	if event is InputEventMouseMotion and event.button_mask == 0:
+		for c in get_children():
+			if c is GraphNode and Rect2(c.rect_global_position, c.rect_size*c.get_global_transform().get_scale()).has_point(event.global_position):
+				hint_tooltip = c.get_slot_tooltip(c.get_global_transform().xform_inv(event.global_position))
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:

@@ -309,7 +309,7 @@ func load_generator() -> void:
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.mmg,*.mmn;Material Maker Generator")
+	dialog.add_filter("*.mmg;Material Maker Generator")
 	dialog.connect("file_selected", self, "do_load_generator")
 	dialog.popup_centered()
 
@@ -350,6 +350,7 @@ func do_save_generator(file_name : String) -> void:
 		data.node_position = { x=0, y=0 }
 		file.store_string(JSON.print(data, "\t", true))
 		file.close()
+		mm_loader.update_predefined_generators()
 
 func update_preview_buttons(index : int) -> void:
 	for i in range(output_count):
