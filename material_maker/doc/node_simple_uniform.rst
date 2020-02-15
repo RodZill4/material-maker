@@ -4,7 +4,8 @@ Uniform nodes
 The **Uniform** and **Uniform/Greyscale** node output a single uniform image
 whose color is configurable.
 
-.. image:: images/node_uniform.png
+.. image:: images/node_simple_uniform.png
+	:align: center
 
 Inputs
 ++++++

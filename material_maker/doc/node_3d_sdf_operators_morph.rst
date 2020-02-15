@@ -4,7 +4,7 @@ Morph node
 The **Morph** node generates a 3D signed distance function obtained by mixing two input
 3D signed distance functions.
 
-.. image:: images/node_sdf3d_morph.png
+.. image:: images/node_3d_sdf_operators_morph.png
 	:align: center
 
 Inputs

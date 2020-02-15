@@ -3,7 +3,7 @@ Box node
 
 The **Box** node generates a 3d signed distance function for a box with rounded corners.
 
-.. image:: images/node_sdf3d_box.png
+.. image:: images/node_3d_sdf_shapes_box.png
 	:align: center
 
 Inputs

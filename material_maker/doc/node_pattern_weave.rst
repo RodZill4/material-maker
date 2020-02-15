@@ -3,7 +3,8 @@ Weave node
 
 The **Weave** node outputs a weave pattern, that can be used for cloth.
 
-.. image:: images/node_weave.png
+.. image:: images/node_pattern_weave.png
+	:align: center
 
 Inputs
 ++++++

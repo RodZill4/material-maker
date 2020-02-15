@@ -5,7 +5,7 @@ The **sdShow** node converts a signed distance image into a greyscale
 image whose background is black and the shape described by its input
 is white.
 
-.. image:: images/node_sdshow.png
+.. image:: images/node_simple_sdf_sdshow.png
 	:align: center
 
 Inputs

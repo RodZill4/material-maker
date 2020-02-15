@@ -5,7 +5,7 @@ The **sdAnnularShape** node generates a signed distance image of an annular shap
 based on its input, by substracting a constant from the absolute value of the
 distance function (i.e. creating a ring around the shape).
 
-.. image:: images/node_sdannularshape.png
+.. image:: images/node_simple_sdf_operators_sdannularshape.png
 	:align: center
 
 Inputs

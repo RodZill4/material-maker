@@ -5,6 +5,7 @@ The **Output** node converts an applied map into a material. It uses the height 
 generate the normal and occlusion maps.
 
 .. image:: images/node_workflow_output.png
+	:align: center
 
 Inputs
 ++++++

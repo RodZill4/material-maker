@@ -9,7 +9,7 @@ Base class for texture generators that provide a texture as output
 var texture : ImageTexture = ImageTexture.new()
 
 func get_output_defs() -> Array:
-	return [ { rgba="" } ]
+	return [ { rgba="", type="rgba" } ]
 
 func _get_shader_code_lod(uv : String, output_index : int, context : MMGenContext, lod : float = 0.0) -> Dictionary:
 	var genname = "o"+str(get_instance_id())

@@ -3,7 +3,8 @@ Truchet node
 
 The **Truchet** node outputs a truchet pattern.
 
-.. image:: images/node_truchet.png
+.. image:: images/node_pattern_truchet.png
+	:align: center
 
 Inputs
 ++++++

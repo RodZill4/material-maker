@@ -3,7 +3,7 @@ Capsule node
 
 The **Capsule** node generates a 3d signed distance function for a capsule.
 
-.. image:: images/node_sdf3d_capsule.png
+.. image:: images/node_3d_sdf_shapes_capsule.png
 	:align: center
 
 Inputs

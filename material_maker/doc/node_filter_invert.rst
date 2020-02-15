@@ -4,7 +4,7 @@ Invert node
 The **Invert** node inverts the input image. The R, G and B channel are inverted, and the A channel
 is left untouched.
 
-.. image:: images/node_invert.png
+.. image:: images/node_filter_invert.png
 	:align: center
 
 Inputs

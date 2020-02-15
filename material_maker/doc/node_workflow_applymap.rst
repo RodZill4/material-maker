@@ -5,6 +5,7 @@ The **ApplyMap** node applys a map to a simple material by adjusting its orienta
 and outputs the modified map and the height information.
 
 .. image:: images/node_workflow_applymap.png
+	:align: center
 
 Inputs
 ++++++

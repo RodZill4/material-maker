@@ -3,7 +3,7 @@ Normal map node
 
 The **Normal map** node generates a normal map from its input.
 
-.. image:: images/node_normal_map.png
+.. image:: images/node_filter_normal_map.png
 	:align: center
 
 Inputs

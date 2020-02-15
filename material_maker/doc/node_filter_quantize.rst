@@ -3,7 +3,7 @@ Quantize node
 
 The **Quantize** node approximates the colors of the input image.
 
-.. image:: images/node_quantize.png
+.. image:: images/node_filter_quantize.png
 	:align: center
 
 Inputs

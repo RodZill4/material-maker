@@ -4,7 +4,7 @@ sdBoolean node
 The **sdBoolean** node generates a signed distance image for the combination (union,
 intersection or difference) of its inputs.
 
-.. image:: images/node_sdboolean.png
+.. image:: images/node_simple_sdf_operators_sdboolean.png
 	:align: center
 
 Inputs

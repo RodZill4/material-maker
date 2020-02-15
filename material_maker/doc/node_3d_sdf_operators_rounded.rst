@@ -1,11 +1,11 @@
 Rounded node
-.................
+............
 
 The **Rounded** node generates a 3D signed distance function of a rounded shape
 based on its input, by substracting a constant from its input (i.e.
 "growing" it towards the outside).
 
-.. image:: images/node_sdf3d_roundedshape.png
+.. image:: images/node_3d_sdf_operators_rounded.png
 	:align: center
 
 Inputs

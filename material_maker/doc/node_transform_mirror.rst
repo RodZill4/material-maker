@@ -3,7 +3,8 @@ Mirror node
 
 The **Mirror** node applies a mirror filter on its input.
 
-.. image:: images/node_mirror.png
+.. image:: images/node_transform_mirror.png
+	:align: center
 
 Inputs
 ++++++

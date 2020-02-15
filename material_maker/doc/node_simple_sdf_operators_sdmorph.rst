@@ -4,7 +4,7 @@ sdMorph node
 The **sdMorph** node generates a signed distance image obtained by mixing two input
 2D signed distance functions.
 
-.. image:: images/node_sdmorph.png
+.. image:: images/node_simple_sdf_operators_sdmorph.png
 	:align: center
 
 Inputs

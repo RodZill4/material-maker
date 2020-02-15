@@ -963,6 +963,16 @@
 			"type": "raymarching"
 		},
 		{
+			"collapsed": true,
+			"icon": "3d_sdf_color",
+			"name": "sdf3d_color",
+			"parameters": {
+				"c": 0.5
+			},
+			"tree_item": "3D/SDF/Color",
+			"type": "sdf3d_color"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "3D/SDF/Shapes"
 		},
@@ -1098,6 +1108,18 @@
 			},
 			"tree_item": "3D/SDF/Operators/Rounded",
 			"type": "sdf3d_rounded"
+		},
+		{
+			"collapsed": true,
+			"icon": "3d_sdf_operators_elongation",
+			"name": "sdf3d_elongation",
+			"parameters": {
+				"x": 0.2,
+				"y": 0,
+				"z": 0
+			},
+			"tree_item": "3D/SDF/Operators/Elongation",
+			"type": "sdf3d_elongation"
 		},
 		{
 			"collapsed": true,

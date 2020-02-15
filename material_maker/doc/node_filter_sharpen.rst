@@ -3,7 +3,7 @@ Sharpen node
 
 The **Sharpen** node applies a sharpen filter (that enhances the edges of the image) to its input.
 
-.. image:: images/node_sharpen.png
+.. image:: images/node_filter_sharpen.png
 	:align: center
 
 Inputs

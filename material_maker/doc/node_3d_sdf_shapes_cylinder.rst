@@ -3,7 +3,7 @@ Cylinder node
 
 The **Cylinder** node generates a 3d signed distance function for a cylinder.
 
-.. image:: images/node_sdf3d_cylinder.png
+.. image:: images/node_3d_sdf_shapes_cylinder.png
 	:align: center
 
 Inputs

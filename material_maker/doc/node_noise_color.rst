@@ -3,7 +3,8 @@ Color Noise node
 
 The **Color Noise** node outputs a randomly generated black and white texture.
 
-.. image:: images/node_color_noise.png
+.. image:: images/node_noise_color.png
+	:align: center
 
 Inputs
 ++++++

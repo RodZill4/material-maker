@@ -3,7 +3,7 @@ Greyscale node
 
 The **Greyscale** node converts a color image into greyscale.
 
-.. image:: images/node_greyscale.png
+.. image:: images/node_filter_greyscale.png
 	:align: center
 
 Inputs

@@ -3,7 +3,8 @@ CustomUV node
 
 The **CustomUV** node deforms an input image according to a custom UV map given as input.
 
-.. image:: images/node_customuv.png
+.. image:: images/node_transform_customuv.png
+	:align: center
 
 Inputs
 ++++++

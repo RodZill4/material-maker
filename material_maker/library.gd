@@ -170,3 +170,34 @@ func export_libraries(path : String) -> void:
 	if file.open(path, File.WRITE) == OK:
 		file.store_string(JSON.print({lib=array}, "\t", true))
 		file.close()
+
+
+func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
+	var count : int = 0
+	if item == null:
+		item = tree.get_root()
+	item = item.get_children()
+	while item != null:
+		if item.get_metadata(0) != null:
+			var timer : Timer = Timer.new()
+			add_child(timer)
+			var new_nodes = graph_edit.create_nodes(item.get_metadata(0))
+			timer.wait_time = 0.05
+			timer.one_shot = true
+			timer.start()
+			yield(timer, "timeout")
+			var image = get_viewport().get_texture().get_data()
+			image.flip_y()
+			image = image.get_rect(Rect2(new_nodes[0].rect_global_position-Vector2(1, 2), new_nodes[0].rect_size+Vector2(4, 4)))
+			print(get_icon_name(get_item_path(item)))
+			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
+			for n in new_nodes:
+				graph_edit.remove_node(n)
+			remove_child(timer)
+			count += 1
+		var result = generate_screenshots(graph_edit, item)
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		count += result
+		item = item.get_next()
+	return count

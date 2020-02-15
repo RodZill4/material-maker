@@ -5,7 +5,7 @@ The **Switch** node can be used to select sources for 2 to 5 output textures
 from a choice of 2 to five inputs sets. It is useful to create variations
 of a material and easily switch between them.
 
-.. image:: images/node_switch.png
+.. image:: images/node_miscellaneous_switch.png
 	:align: center
 
 Inputs

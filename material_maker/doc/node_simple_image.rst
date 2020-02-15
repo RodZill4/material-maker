@@ -3,7 +3,8 @@ Image node
 
 The image node outputs a single texture based on an image file.
 
-.. image:: images/node_image.png
+.. image:: images/node_simple_image.png
+	:align: center
 
 Inputs
 ++++++

@@ -5,7 +5,8 @@ The **Runes** node outputs a runes pattern.
 
 It is based on code written by Otavio Good (https://www.shadertoy.com/view/MsXSRn).
 
-.. image:: images/node_runes.png
+.. image:: images/node_pattern_runes.png
+	:align: center
 
 Inputs
 ++++++

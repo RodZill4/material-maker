@@ -1,9 +1,10 @@
 MixMaps node
-~~~~~~~~~
+~~~~~~~~~~~~
 
 The **MixMaps** node combines up to 4 maps holding height, orientation and offset information.
 
-.. image:: images/node_workflow_mixmaps.png
+.. image:: images/node_workflow_mixmap.png
+	:align: center
 
 Inputs
 ++++++

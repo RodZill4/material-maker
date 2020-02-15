@@ -5,7 +5,7 @@ The **sdLine** node generates a signed distance image for a line segment. It can
 easily be turned into a capsule shape using an **sdRoundedShape** node (the result
 is shown in the example image below).
 
-.. image:: images/node_sdline.png
+.. image:: images/node_simple_sdf_shapes_sdline.png
 	:align: center
 
 Inputs

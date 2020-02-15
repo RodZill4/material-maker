@@ -5,6 +5,7 @@ The **CreateMap** node creates a map holding height, orientation and offset info
 used to combine simple materials.
 
 .. image:: images/node_workflow_createmap.png
+	:align: center
 
 Inputs
 ++++++

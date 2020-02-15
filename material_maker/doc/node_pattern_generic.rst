@@ -3,7 +3,8 @@ Pattern node
 
 The **Pattern** node outputs a pattern texture generated from common waveform shapes.
 
-.. image:: images/node_pattern.png
+.. image:: images/node_pattern_generic.png
+	:align: center
 
 Inputs
 ++++++
@@ -24,7 +25,7 @@ Parameters
 The Pattern node accepts the following parameters:
 
 * the *X* and *Y* parameters define the pattern and their number of repetitions
-  that will be propagated along the X axis and Y.
+  that will be propagated along the X and Y axes.
   The following patterns are available:
 
   * Sine: the value follows a sinus waveform

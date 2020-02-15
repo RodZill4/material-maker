@@ -52,6 +52,10 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
+	
+	{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
+	
+	
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -573,5 +577,8 @@ func show_background_preview_3d(button_pressed):
 		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton.pressed = false
 
 
-func set_rect_size():
-	pass # Replace with function body.
+func generate_screenshots():
+	var result = library.generate_screenshots(get_current_graph_edit())
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	print(result)

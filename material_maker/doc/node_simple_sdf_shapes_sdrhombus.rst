@@ -3,7 +3,7 @@ sdRhombus node
 
 The **sdRhombus** node generates a signed distance image for a rhombus.
 
-.. image:: images/node_sdrhombus.png
+.. image:: images/node_simple_sdf_shapes_sdrhombus.png
 	:align: center
 
 Inputs

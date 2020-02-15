@@ -3,7 +3,8 @@ Fibers node
 
 The **Fibers** node outputs a fibers pattern, that can be used for cloth.
 
-.. image:: images/node_fibers.png
+.. image:: images/node_pattern_fibers.png
+	:align: center
 
 Inputs
 ++++++

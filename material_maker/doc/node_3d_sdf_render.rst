@@ -3,7 +3,7 @@ Render node
 
 The **Render** node generates images from a 3D signed distance function inputs.
 
-.. image:: images/node_sdf3d_render.png
+.. image:: images/node_3d_sdf_render.png
 	:align: center
 
 Inputs

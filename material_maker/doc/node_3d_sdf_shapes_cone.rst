@@ -3,7 +3,7 @@ Cone node
 
 The **Cone** node generates a 3d signed distance function for an infinite cone.
 
-.. image:: images/node_sdf3d_cone.png
+.. image:: images/node_3d_sdf_shapes_cone.png
 	:align: center
 
 Inputs

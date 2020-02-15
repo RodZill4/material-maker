@@ -4,7 +4,8 @@ Bricks node
 The **Bricks** node outputs 4 related bricks pattern textures that can be used for walls
 or pavement.
 
-.. image:: images/node_bricks.png
+.. image:: images/node_pattern_bricks.png
+	:align: center
 
 Inputs
 ++++++

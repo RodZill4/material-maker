@@ -4,6 +4,7 @@ Mix node
 The **Mix** node mixes two applied maps based on the height information.
 
 .. image:: images/node_workflow_mix.png
+	:align: center
 
 Inputs
 ++++++

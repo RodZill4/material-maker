@@ -4,7 +4,7 @@ Revolution node
 The **Revolution** node generates a 3D signed distance function of a shape based on
 the revolution along the Z axis of its (2D signed function) input.
 
-.. image:: images/node_sdf3d_revolution.png
+.. image:: images/node_3d_sdf_operators_revolution.png
 	:align: center
 
 Inputs
