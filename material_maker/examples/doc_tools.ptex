@@ -91,7 +91,67 @@
 			"to_port": 0
 		},
 		{
-			"from": "fbm",
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2_3",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2_2",
+			"from_port": 0,
+			"to": "colorize_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2_2_2",
+			"from_port": 0,
+			"to": "colorize_2_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "tile2x2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "tile2x2",
+			"to_port": 1
+		},
+		{
+			"from": "colorize_2_2",
+			"from_port": 0,
+			"to": "tile2x2",
+			"to_port": 2
+		},
+		{
+			"from": "colorize_2_2_2",
+			"from_port": 0,
+			"to": "tile2x2",
+			"to_port": 3
+		},
+		{
+			"from": "tile2x2",
+			"from_port": 0,
+			"to": "splatter",
+			"to_port": 0
+		},
+		{
+			"from": "tile2x2",
+			"from_port": 0,
+			"to": "splatter_color",
+			"to_port": 0
+		},
+		{
+			"from": "splatter_color",
 			"from_port": 0,
 			"to": "Material",
 			"to_port": 0
@@ -2214,6 +2274,235 @@
 				"select_inputs": 0
 			},
 			"type": "splatter"
+		},
+		{
+			"name": "colorize_2_2_2",
+			"node_position": {
+				"x": -819.442566,
+				"y": 1165.332642
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 0.093751,
+							"pos": 0.045455,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "shape_2_2",
+			"node_position": {
+				"x": -1016.442627,
+				"y": 1034.332642
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.21,
+				"shape": 0,
+				"sides": 6
+			},
+			"type": "shape"
+		},
+		{
+			"name": "colorize_2_2",
+			"node_position": {
+				"x": -840.442566,
+				"y": 1029.332642
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 1,
+							"pos": 0.036364,
+							"r": 0.21875
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "shape_2",
+			"node_position": {
+				"x": -1019.442627,
+				"y": 754.082642
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.18,
+				"shape": 1,
+				"sides": 6
+			},
+			"type": "shape"
+		},
+		{
+			"name": "shape_2_3",
+			"node_position": {
+				"x": -1022.442627,
+				"y": 897.332642
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.06,
+				"shape": 2,
+				"sides": 5
+			},
+			"type": "shape"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -838.442566,
+				"y": 893.332642
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.9375,
+							"pos": 0.045455,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -840.442566,
+				"y": 748.082642
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.036364,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "shape_2_2_2",
+			"node_position": {
+				"x": -1016.442627,
+				"y": 1170.332642
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.13,
+				"shape": 3,
+				"sides": 7
+			},
+			"type": "shape"
+		},
+		{
+			"name": "tile2x2",
+			"node_position": {
+				"x": -522.442566,
+				"y": 943.082642
+			},
+			"parameters": {
+
+			},
+			"type": "tile2x2"
+		},
+		{
+			"name": "splatter_color",
+			"node_position": {
+				"x": -328.164795,
+				"y": 1041.0271
+			},
+			"parameters": {
+				"count": 100,
+				"rotate": 0,
+				"scale": 0,
+				"select_inputs": 0
+			},
+			"type": "splatter_color"
 		}
 	],
 	"parameters": {
