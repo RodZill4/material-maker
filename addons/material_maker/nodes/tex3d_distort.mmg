@@ -1,0 +1,71 @@
+{
+	"name": "tex3d_distort",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"Color": {
+			"a": 1,
+			"b": 0.145098,
+			"g": 0.443137,
+			"r": 0.92549,
+			"type": "Color"
+		},
+		"Distort": 0.3,
+		"bevel": 0,
+		"color": {
+			"a": 1,
+			"b": 0,
+			"g": 0,
+			"r": 1,
+			"type": "Color"
+		},
+		"cx": 0,
+		"cy": 0,
+		"h": 0.08,
+		"k": 0.15,
+		"op": 0,
+		"r": 0.15,
+		"w": 0.28
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"name": "in1",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "",
+				"name": "in2",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"name": "TEX3D Distort",
+		"outputs": [
+			{
+				"tex3d": "$in1(vec4($uv.xyz+($in2($uv)*$Distort*0.5-0.5), 0.0))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Distort",
+				"max": 1,
+				"min": 0,
+				"name": "Distort",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

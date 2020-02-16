@@ -1,5 +1,11 @@
 extends HBoxContainer
 
+func _ready():
+	$Type.clear()
+	for tn in mm_io_types.type_names:
+		var t = mm_io_types.types[tn]
+		$Type.add_item(t.label)
+
 func update_up_down_button() -> void:
 	var parent = get_parent()
 	if parent == null:
@@ -8,33 +14,13 @@ func update_up_down_button() -> void:
 	$Down.disabled = (get_index() == get_parent().get_child_count()-2)
 
 func set_model_data(data) -> void:
-	if data.has("rgb"):
-		$Type.selected = 1
-		$Value.text = data.rgb
-	elif data.has("rgba"):
-		$Type.selected = 2
-		$Value.text = data.rgba
-	elif data.has("sdf2d"):
-		$Type.selected = 3
-		$Value.text = data.sdf2d
-	elif data.has("sdf3d"):
-		$Type.selected = 4
-		$Value.text = data.sdf3d
-	elif data.has("f"):
-		$Type.selected = 0
-		$Value.text = data.f
+	for i in range(mm_io_types.type_names.size()):
+		if data.has(mm_io_types.type_names[i]):
+			$Type.selected = i
+			$Value.text = data[mm_io_types.type_names[i]]
 
 func get_model_data() -> Dictionary:
-	if $Type.selected == 1:
-		return { rgb=$Value.text }
-	elif $Type.selected == 2:
-		return { rgba=$Value.text }
-	elif $Type.selected == 3:
-		return { sdf2d=$Value.text }
-	elif $Type.selected == 4:
-		return { sdf3d=$Value.text }
-	else:
-		return { f=$Value.text }
+	return { mm_io_types.type_names[$Type.selected]:$Value.text }
 
 func _on_Delete_pressed() -> void:
 	var p = get_parent()

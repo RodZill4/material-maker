@@ -12,22 +12,22 @@
 		"z": 0
 	},
 	"shader_model": {
-		"code": "",
+		"code": "vec2 $(name_uv)_in = $in(($uv)/$s);",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Scale",
 		"outputs": [
 			{
-				"sdf3d": "$in(($uv)/$s)*$s",
-				"type": "sdf3d"
+				"sdf3dc": "vec2($(name_uv)_in.x*$s, $(name_uv)_in.y)",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [

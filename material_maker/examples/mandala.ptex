@@ -118,7 +118,8 @@
 				"metallic": 0.25,
 				"normal_scale": 1,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -164,6 +165,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -230,8 +232,13 @@
 						"y": -82.444458
 					},
 					"parameters": {
+						"amount": 0.5,
 						"param0": 11,
-						"param1": 0.995
+						"param1": 0.995,
+						"param2": 0,
+						"param3": 0,
+						"param4": 1,
+						"size": 4
 					},
 					"type": "normal_map"
 				}
@@ -335,6 +342,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -371,6 +379,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -465,6 +474,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -508,6 +518,7 @@
 					},
 					"parameters": {
 						"gradient": {
+							"interpolation": 1,
 							"points": [
 								{
 									"a": 1,
@@ -591,6 +602,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -753,6 +765,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -829,6 +842,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -877,6 +891,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -921,6 +936,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1092,6 +1108,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1161,6 +1178,7 @@
 											"widget": "count"
 										}
 									],
+									"name": "param0",
 									"type": "linked_control"
 								},
 								{
@@ -1171,6 +1189,7 @@
 											"widget": "radius"
 										}
 									],
+									"name": "param1",
 									"type": "linked_control"
 								}
 							]
@@ -1408,6 +1427,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1491,6 +1511,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1539,6 +1560,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1583,6 +1605,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1737,6 +1760,7 @@
 							},
 							"parameters": {
 								"gradient": {
+									"interpolation": 1,
 									"points": [
 										{
 											"a": 1,
@@ -1806,6 +1830,7 @@
 											"widget": "count"
 										}
 									],
+									"name": "param0",
 									"type": "linked_control"
 								},
 								{
@@ -1816,6 +1841,7 @@
 											"widget": "radius"
 										}
 									],
+									"name": "param1",
 									"type": "linked_control"
 								}
 							]
@@ -2045,6 +2071,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -2088,6 +2115,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,

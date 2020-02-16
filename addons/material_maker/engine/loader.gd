@@ -1,23 +1,42 @@
 tool
-extends Object
-class_name MMGenLoader
+extends Node
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
-static func generator_name_from_path(path : String) -> String:
+var predefined_generators = {}
+
+func _ready()-> void:
+	update_predefined_generators()
+
+func update_predefined_generators()-> void:
+	predefined_generators = {}
+	for path in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
+		var dir = Directory.new()
+		if dir.open(path) == OK:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
+					var file : File = File.new()
+					if file.open(path+"/"+file_name, File.READ) == OK:
+						predefined_generators[file_name.get_basename()] = parse_json(file.get_as_text())
+						file.close()
+				file_name = dir.get_next()
+
+func generator_name_from_path(path : String) -> String:
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
 		print(p)
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
-static func load_gen(filename: String) -> MMGenBase:
+func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
 		return create_gen(data)
 	return null
 
-static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
+func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
@@ -35,7 +54,7 @@ static func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 				rv.connections.append(c)
 	return rv
 
-static func create_gen(data) -> MMGenBase:
+func create_gen(data) -> MMGenBase:
 	var guess = [
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
@@ -64,22 +83,11 @@ static func create_gen(data) -> MMGenBase:
 		if types.has(data.type):
 			generator = types[data.type].new()
 		else:
-			var file = File.new()
-			var gen_paths = [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]
-			for p in gen_paths:
-				if file.open(p+"/"+data.type+".mmg", File.READ) == OK:
-					generator = create_gen(parse_json(file.get_as_text()))
-					generator.model = data.type
-					file.close()
-					break
-				elif file.open(p+"/"+data.type+".mmn", File.READ) == OK:
-					generator = MMGenShader.new()
-					generator.model = data.type
-					generator.set_shader_model(parse_json(file.get_as_text()))
-					file.close()
-					break
+			generator = create_gen(predefined_generators[data.type])
 			if generator == null:
 				print("Cannot find description for "+data.type)
+			else:
+				generator.model = data.type
 		if generator != null:
 			generator.name = data.type
 	if generator == null:
@@ -88,7 +96,7 @@ static func create_gen(data) -> MMGenBase:
 		generator.deserialize(data)
 	return generator
 
-static func get_generator_list() -> Array:
+func get_generator_list() -> Array:
 	var rv = []
 	var dir : Directory = Directory.new()
 	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:

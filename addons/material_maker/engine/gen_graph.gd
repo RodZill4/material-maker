@@ -331,5 +331,4 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("label"):
 		label = data.label
 	var nodes = data.nodes if data.has("nodes") else []
-	var connections = data.connections if data.has("connections") else []
-	load("res://addons/material_maker/engine/loader.gd").add_to_gen_graph(self, nodes, connections)
+	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])

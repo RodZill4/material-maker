@@ -114,7 +114,9 @@
 				"intensity": 0.6,
 				"randomness": 1,
 				"scale_x": 4,
-				"scale_y": 4
+				"scale_y": 4,
+				"stretch_x": 1,
+				"stretch_y": 1
 			},
 			"type": "voronoi"
 		},
@@ -126,6 +128,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -169,6 +172,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -225,7 +229,8 @@
 				"normal_scale": 1,
 				"resolution": 1,
 				"roughness": 1,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -237,6 +242,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -305,6 +311,9 @@
 				"amount": 0.35,
 				"param0": 11,
 				"param1": 0.99,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 2
 			},
 			"type": "normal_map"
@@ -317,6 +326,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -346,6 +356,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,

@@ -64,11 +64,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_image.gd"
 }, {
-"base": "Object",
-"class": "MMGenLoader",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/loader.gd"
-}, {
 "base": "MMGenBase",
 "class": "MMGenMaterial",
 "language": "GDScript",
@@ -156,7 +151,6 @@ _global_script_class_icons={
 "MMGenGraph": "",
 "MMGenIOs": "",
 "MMGenImage": "",
-"MMGenLoader": "",
 "MMGenMaterial": "",
 "MMGenRemote": "",
 "MMGenRenderer": "",
@@ -178,7 +172,7 @@ _global_script_class_icons={
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material generation tool"
-run/main_scene="res://material_maker/main_window.tscn"
+run/main_scene="res://start.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 boot_splash/image="res://rodz_labs_logo.png"
@@ -189,12 +183,13 @@ config/release="0.8"
 
 [autoload]
 
+mm_io_types="*res://addons/material_maker/engine/io_types.gd"
+mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 
 [debug]
 
-gdscript/warnings/unsafe_property_access=true
-gdscript/warnings/unsafe_method_access=true
+gdscript/warnings/exclude_addons=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true
 
@@ -228,7 +223,11 @@ ui_library_popup={
 
 [logging]
 
-file_logging/enable_file_logging=true
+file_logging/log_path=""
+
+[memory]
+
+limits/message_queue/max_size_kb=16384
 
 [rendering]
 

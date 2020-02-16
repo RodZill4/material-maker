@@ -1,0 +1,52 @@
+{
+	"name": "tile2x2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in1",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in2",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in3",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in4",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Tile2x2",
+		"outputs": [
+			{
+				"rgba": "($uv.y < 0.5) ? (($uv.x < 0.5) ? ($in1(2.0*$uv)) : ($in2(2.0*$uv-vec2(1.0, 0.0)))) : (($uv.x < 0.5) ? ($in3(2.0*$uv-vec2(0.0, 1.0))) : ($in4(2.0*$uv-vec2(1.0, 1.0))))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

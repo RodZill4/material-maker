@@ -37,7 +37,6 @@ func get_next_widget_name() -> String:
 
 func fix() -> void:
 	# Make sure all widgets have a name
-	var i = 0
 	for w in widgets:
 		if !w.has("name"):
 			w.name = get_next_widget_name()
@@ -76,7 +75,6 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	var rv = []
-	var i = 0
 	for w in widgets:
 		match w.type:
 			"config_control":
@@ -90,7 +88,6 @@ func get_parameter_defs() -> Array:
 					for c in configurations:
 						p.values.push_back({ name=c, value=c })
 				rv.append(p)
-				i += 1
 			"linked_control":
 				var linked = w.linked_widgets[0]
 				var p : Dictionary
@@ -105,7 +102,6 @@ func get_parameter_defs() -> Array:
 				p.name = w.name
 				p.label = w.label
 				rv.append(p)
-				i += 1
 			_:
 				print("Unsupported widget of type "+str(w.type))
 	return rv

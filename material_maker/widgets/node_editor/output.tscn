@@ -3,8 +3,6 @@
 [ext_resource path="res://material_maker/widgets/node_editor/output.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 
-
-
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )
@@ -55,17 +53,17 @@ flat = true
 
 [node name="Type" type="OptionButton" parent="."]
 margin_left = 88.0
-margin_right = 192.0
+margin_right = 190.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
-text = "GreyScale"
-items = [ "GreyScale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null ]
+text = "Greyscale"
+items = [ "Greyscale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null, "SDF3D-C", null, false, 5, null ]
 selected = 0
 
 [node name="Value" type="LineEdit" parent="."]
-margin_left = 196.0
-margin_right = 290.0
+margin_left = 194.0
+margin_right = 288.0
 margin_bottom = 25.0
 hint_tooltip = "Default value"
 size_flags_horizontal = 3

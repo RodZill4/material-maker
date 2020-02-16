@@ -177,8 +177,9 @@ func update_node() -> void:
 		var type_left = 0
 		if typeof(input) == TYPE_DICTIONARY:
 			enable_left = true
-			color_left = MMGenBase.PORT_TYPES[input.type].color
-			type_left = MMGenBase.PORT_TYPES[input.type].slot_type
+			if mm_io_types.types.has(input.type):
+				color_left = mm_io_types.types[input.type].color
+				type_left = mm_io_types.types[input.type].slot_type
 		set_slot(i, enable_left, type_left, color_left, false, 0, Color())
 		var hsizer : HBoxContainer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -251,8 +252,9 @@ func update_node() -> void:
 		assert(typeof(output) == TYPE_DICTIONARY)
 		assert(output.has("type"))
 		enable_right = true
-		color_right = MMGenBase.PORT_TYPES[output.type].color
-		type_right = MMGenBase.PORT_TYPES[output.type].slot_type
+		if mm_io_types.types.has(output.type):
+			color_right = mm_io_types.types[output.type].color
+			type_right = mm_io_types.types[output.type].slot_type
 		set_slot(i, is_slot_enabled_left(i), get_slot_type_left(i), get_slot_color_left(i), enable_right, type_right, color_right)
 		var hsizer : HBoxContainer
 		while i >= get_child_count():
@@ -307,7 +309,7 @@ func load_generator() -> void:
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.mmg,*.mmn;Material Maker Generator")
+	dialog.add_filter("*.mmg;Material Maker Generator")
 	dialog.connect("file_selected", self, "do_load_generator")
 	dialog.popup_centered()
 
@@ -320,9 +322,9 @@ func do_load_generator(file_name : String) -> void:
 			new_generator.set_shader_model(parse_json(file.get_as_text()))
 			file.close()
 	else:
-		new_generator = MMGenLoader.load_gen(file_name)
+		new_generator = mm_loader.load_gen(file_name)
 	if new_generator != null:
-		var gen_name = MMGenLoader.generator_name_from_path(file_name)
+		var gen_name = mm_loader.generator_name_from_path(file_name)
 		if gen_name != "":
 			new_generator.model = gen_name
 		var parent_generator = generator.get_parent()
@@ -348,6 +350,7 @@ func do_save_generator(file_name : String) -> void:
 		data.node_position = { x=0, y=0 }
 		file.store_string(JSON.print(data, "\t", true))
 		file.close()
+		mm_loader.update_predefined_generators()
 
 func update_preview_buttons(index : int) -> void:
 	for i in range(output_count):

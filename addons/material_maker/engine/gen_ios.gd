@@ -55,7 +55,6 @@ func set_port_name(i : int, n : String) -> void:
 	ports[i].name = n
 
 func set_port_type(i : int, t : String) -> void:
-	print(t)
 	ports[i].type = t
 	emit_signal("parameter_changed", "__update_all__", null)
 

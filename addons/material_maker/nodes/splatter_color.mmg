@@ -1,0 +1,94 @@
+{
+	"name": "splatter_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"count": 30,
+		"rotate": 0,
+		"scale": 0,
+		"select_inputs": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"name": "mask",
+				"type": "f"
+			}
+		],
+		"instance": "vec4 splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tvec4 c = vec4(0.0);\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tfloat mask = $mask(seed+vec2(0.5));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv += vec2(0.5);\n\t\t\t$select_inputs\n\t\t\tvec4 n = $in(pv);\n\t\t\tfloat na = n.a*mask;\n\t\t\tfloat a = (1.0-c.a)*(1.0*na);\n\t\t\tc = mix(c, n, na);\n\t\t}\n\t}\n\treturn c;\n}\n",
+		"name": "Color Splatter",
+		"outputs": [
+			{
+				"rgba": "splatter_$(name)($uv, int($count), vec2($seed))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 10,
+				"label": "Count",
+				"max": 100,
+				"min": 1,
+				"name": "count",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Inputs",
+				"name": "select_inputs",
+				"type": "enum",
+				"values": [
+					{
+						"name": "1",
+						"value": " "
+					},
+					{
+						"name": "4",
+						"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+					},
+					{
+						"name": "16",
+						"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rotate",
+				"max": 180,
+				"min": 0,
+				"name": "rotate",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Scale",
+				"max": 1,
+				"min": 0,
+				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

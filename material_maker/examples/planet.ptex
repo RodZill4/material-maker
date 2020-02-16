@@ -94,7 +94,8 @@
 				"metallic": 0.05,
 				"normal_scale": 1,
 				"roughness": 0.75,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -120,6 +121,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -177,6 +179,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -206,6 +209,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -237,6 +241,9 @@
 				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.99,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -264,6 +271,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -305,6 +313,13 @@
 			"type": "blend"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment",
 			"node_position": {
 				"x": -544.5,
@@ -318,6 +333,7 @@
 				"y": 67
 			},
 			"text": "Best viewed on Sphere mesh",
+			"title": "Comment",
 			"type": "comment"
 		}
 	],

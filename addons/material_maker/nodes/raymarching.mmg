@@ -8,7 +8,7 @@
 
 	},
 	"shader_model": {
-		"code": "float $(name_uv)_d = raymarch_$name($uv);\n",
+		"code": "vec2 $(name_uv)_d = raymarch_$name($uv);\n",
 		"global": "",
 		"inputs": [
 			{
@@ -16,19 +16,23 @@
 				"function": true,
 				"label": "",
 				"name": "sdf",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
-		"instance": "float input_$name(vec3 p) {\n\tif (p.z > 0.0) {\n\t\treturn $sdf(p);\n\t} else {\n\t\treturn p.z;\n\t}\n}\n\nfloat raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO=0.;\n    \n    for (int i=0; i < 25; i++) {\n    \tvec3 p = ro + rd*dO;\n        float dS = input_$name(p);\n        dO += dS;\n        if (dO > 1.0 || dS < 0.0001) break;\n    }\n    \n    return dO;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = input_$name(p);\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        input_$name(p-vec3(e, 0.0, 0.0)),\n        input_$name(p-vec3(0.0, e, 0.0)),\n        input_$name(p-vec3(0.0, 0.0, e)));\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
+		"instance": "vec2 raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO = 0.0;\n\tfloat c = 0.0;\n    for (int i=0; i < 100; i++) {\n    \tvec3 p = ro + rd*dO;\n        vec2 dS = $sdf(p);\n        dO += dS.x;\n\n        if (dO >= 1.0) {\n\t\t\tbreak;\n\t\t} else if (dS.x < 0.0001) {\n\t\t\tc = dS.y;\n\t\t\tbreak;\n\t\t}\n    }\n    \n    return vec2(dO, c);\n}\n\nvec3 normal_$name(vec3 p) {\n\tif (p.z <= 0.0) {\n\t\treturn vec3(0.0, 0.0, 1.0);\n\t}\n\n\tfloat d = $sdf(p).x;\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        $sdf(p-vec3(e, 0.0, 0.0)).x,\n        $sdf(p-vec3(0.0, e, 0.0)).x,\n        $sdf(p-vec3(0.0, 0.0, e)).x);\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
 		"name": "Raymarching",
 		"outputs": [
 			{
-				"f": "1.0-$(name_uv)_d",
+				"f": "1.0-$(name_uv)_d.x",
 				"type": "f"
 			},
 			{
-				"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d))",
+				"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d.x))",
 				"type": "rgb"
+			},
+			{
+				"f": "$(name_uv)_d.y",
+				"type": "f"
 			}
 		],
 		"parameters": [

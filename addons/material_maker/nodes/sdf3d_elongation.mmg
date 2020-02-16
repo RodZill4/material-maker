@@ -1,0 +1,65 @@
+{
+	"name": "sdf3d_elongation",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"x": 0.2,
+		"y": 0,
+		"z": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec2(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "sdf3dc"
+			}
+		],
+		"instance": "",
+		"name": "Elongation",
+		"outputs": [
+			{
+				"sdf3dc": "$in($uv-clamp($uv, -abs(vec3($x, $y, $z)), abs(vec3($x, $y, $z))))",
+				"type": "sdf3dc"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "X",
+				"max": 1,
+				"min": 0,
+				"name": "x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Y",
+				"max": 1,
+				"min": 0,
+				"name": "y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Z",
+				"max": 1,
+				"min": 0,
+				"name": "z",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

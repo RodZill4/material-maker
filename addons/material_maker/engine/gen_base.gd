@@ -37,17 +37,6 @@ var parameters = {}
 var seed_locked : bool = false
 var seed_value : int = 0
 
-const PORT_TYPE_NAMES : Array = [ "f", "rgb", "rgba", "sdf2d", "sdf3d" ]
-
-const PORT_TYPES : Dictionary = {
-	f     = { type="float", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 0.5) },
-	rgb   = { type="vec3", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.5, 0.5, 1.0) },
-	rgba  = { type="vec4", paramdefs="vec2 uv", params="uv", slot_type=0, color=Color(0.0, 0.5, 0.0, 0.5) },
-	sdf2d = { type="float", paramdefs="vec2 uv", params="uv", slot_type=1, color=Color(1.0, 0.5, 0.0) },
-	sdf3d = { type="float", paramdefs="vec3 p", params="p", slot_type=2, color=Color(1.0, 0.0, 0.0) },
-	any = { slot_type=42, color=Color(1.0, 1.0, 1.0) }
-}
-
 func _ready() -> void:
 	init_parameters()
 
@@ -150,7 +139,7 @@ func get_targets(output_index : int) -> Array:
 	return []
 
 # get the list of outputs that depend on the input whose index is passed as parameter
-func follow_input(input_index : int) -> Array:
+func follow_input(_input_index : int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
 		rv.push_back(OutputPort.new(self, i))
@@ -165,6 +154,31 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
+func generate_preview_shader(src_code, type) -> String:
+	var code
+	code = "shader_type canvas_item;\n"
+	code += "render_mode blend_disabled;\n"
+	code += "uniform float preview_size = 64;\n"
+	var file = File.new()
+	file.open("res://addons/material_maker/common.shader", File.READ)
+	code += file.get_as_text()
+	code += "\n"
+	if src_code.has("textures"):
+		for t in src_code.textures.keys():
+			code += "uniform sampler2D "+t+";\n"
+	if src_code.has("globals"):
+		for g in src_code.globals:
+			code += g
+	var shader_code = src_code.defs
+	if src_code.has(type):
+		var preview_code : String = mm_io_types.types[type].preview
+		preview_code = preview_code.replace("$(code)", src_code.code)
+		preview_code = preview_code.replace("$(value)", src_code[type])
+		shader_code += preview_code
+	#print("GENERATED SHADER:\n"+shader_code)
+	code += shader_code
+	return code
+
 func render(output_index : int, size : int, preview : bool = false) -> Object:
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
@@ -174,7 +188,11 @@ func render(output_index : int, size : int, preview : bool = false) -> Object:
 		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
 	var shader : String
 	if preview:
-		shader = mm_renderer.generate_preview_shader(source)
+		var output_type = "rgba"
+		var outputs = get_output_defs()
+		if outputs.size() > output_index:
+			output_type = outputs[output_index].type
+		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
 	var result = mm_renderer.render_shader(shader, source.textures, size)
@@ -186,20 +204,15 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 	var rv = _get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
-	if !rv.empty():
-		if !rv.has("f"):
-			if rv.has("rgb"):
-				rv.f = "(dot("+rv.rgb+", vec3(1.0))/3.0)"
-			elif rv.has("rgba"):
-				rv.f = "(dot("+rv.rgba+".rgb, vec3(1.0))/3.0)"
-		if !rv.has("rgb"):
-			if rv.has("rgba"):
-				rv.rgb = rv.rgba+".rgb"
-			elif rv.has("f"):
-				rv.rgb = "vec3("+rv.f+")"
-		if !rv.has("rgba"):
-			if rv.has("rgb"):
-				rv.rgba = "vec4("+rv.rgb+", 1.0)"
+	if rv.has("type") and mm_io_types.types.has(rv.type):
+		if mm_io_types.types[rv.type].has("convert"):
+			for c in mm_io_types.types[rv.type].convert:
+				if !rv.has(c.type):
+					var expr = c.expr.replace("$(value)", rv[rv.type])
+					rv[c.type] = expr
+	else:
+		print("Missing type for node ")
+		print(rv)
 	return rv
 
 func _get_shader_code(__, __, __) -> Dictionary:
@@ -212,8 +225,11 @@ func _serialize(data: Dictionary) -> Dictionary:
 
 func serialize() -> Dictionary:
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
-	for p in parameters.keys():
-		rv.parameters[p] = MMType.serialize_value(parameters[p])
+	for p in get_parameter_defs():
+		if parameters.has(p.name):
+			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
+		else:
+			rv.parameters[p.name] = p.default
 	if seed_locked:
 		rv.seed_value = seed_value
 	if model != null:
@@ -222,7 +238,7 @@ func serialize() -> Dictionary:
 		rv = _serialize(rv)
 	return rv
 
-func _deserialize(data : Dictionary) -> void:
+func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:

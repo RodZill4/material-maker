@@ -16,6 +16,8 @@ onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
 onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
 onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
 
+onready var preview_2d_background = $VBoxContainer/HBoxContainer/ProjectsPane/Preview2D
+
 const RECENT_FILES_COUNT = 15
 
 const THEMES = [ "Dark", "Default", "Light" ]
@@ -50,6 +52,10 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
+	
+	{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
+	
+	
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -216,7 +222,7 @@ func _on_SetTheme_id_pressed(id) -> void:
 	config_cache.set_value("window", "theme", theme_name)
 
 func create_menu_create(menu) -> void:
-	var gens = MMGenLoader.get_generator_list()
+	var gens = mm_loader.get_generator_list()
 	menu.clear()
 	for i in gens.size():
 		menu.add_item(gens[i], i)
@@ -226,7 +232,7 @@ func create_menu_create(menu) -> void:
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		var gens = MMGenLoader.get_generator_list()
+		var gens = mm_loader.get_generator_list()
 		graph_edit.create_gen_from_type(gens[id])
 
 func menu_about_to_show(name, menu) -> void:
@@ -507,8 +513,10 @@ func update_preview_2d(node = null) -> void:
 			result.copy_to_texture(tex)
 			result.release()
 			preview_2d.set_preview_texture(tex)
+			preview_2d_background.set_preview_texture(tex)
 		else:
 			preview_2d.set_preview_texture(null)
+			preview_2d_background.set_preview_texture(null)
 
 func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -520,9 +528,12 @@ func update_preview_3d(previews : Array) -> void:
 		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
+var selected_node = null
 func on_selected_node_change(node) -> void:
-	preview_2d.setup_controls(node.generator if node != null else null)
-	update_preview_2d(node)
+	if node != selected_node:
+		selected_node = node
+		preview_2d.setup_controls(node.generator if node != null else null)
+		update_preview_2d(node)
 
 func _on_Projects_tab_changed(tab) -> void:
 	var new_tab = projects.get_current_tab_control()
@@ -554,6 +565,20 @@ func dim_window() -> void:
 	# (it won't respond to user input in this state).
 	modulate = Color(0.5, 0.5, 0.5)
 
-func show_background_preview(button_pressed):
+func show_background_preview_2d(button_pressed):
+	$VBoxContainer/HBoxContainer/ProjectsPane/Preview2D.visible = button_pressed
+	if button_pressed:
+		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview3DButton.pressed = false
+
+func show_background_preview_3d(button_pressed):
 	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
-	$VBoxContainer/HBoxContainer/ProjectsPane/HBoxContainer/HBoxContainer.visible = button_pressed
+	$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel.visible = button_pressed
+	if button_pressed:
+		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton.pressed = false
+
+
+func generate_screenshots():
+	var result = library.generate_screenshots(get_current_graph_edit())
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	print(result)

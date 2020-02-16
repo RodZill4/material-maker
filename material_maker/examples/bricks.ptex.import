@@ -12,4 +12,4 @@ dest_files=[ "res://.import/bricks.ptex-8a4a409b5b41c018677a6156ef3f93e5.tres" ]
 [params]
 
 render=false
-scale=1.0
+scale=3.0

@@ -18,22 +18,23 @@
 		"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"label": "",
 				"name": "in",
-				"type": "sdf3d"
+				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
 		"name": "Rotate",
 		"outputs": [
 			{
-				"sdf3d": "$in(rotate3d($uv, -vec3($ax, $ay, $az)*0.01745329251))",
-				"type": "sdf3d"
+				"sdf3dc": "$in(rotate3d($uv, -vec3($ax, $ay, $az)*0.01745329251))",
+				"type": "sdf3dc"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0,
 				"label": "X",
 				"max": 180,
@@ -43,6 +44,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Y",
 				"max": 180,
@@ -52,6 +54,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Z",
 				"max": 180,

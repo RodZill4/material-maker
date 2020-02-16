@@ -25,15 +25,20 @@ signal graph_changed
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
-	for t in range(5):
+	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
 
 func _gui_input(event) -> void:
 	if event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_DELETE || scancode_with_modifiers == KEY_BACKSPACE:
+		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
+	return
+	if event is InputEventMouseMotion and event.button_mask == 0:
+		for c in get_children():
+			if c is GraphNode and Rect2(c.rect_global_position, c.rect_size*c.get_global_transform().get_scale()).has_point(event.global_position):
+				hint_tooltip = c.get_slot_tooltip(c.get_global_transform().xform_inv(event.global_position))
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -51,7 +56,9 @@ func add_node(node) -> void:
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
-	if generator.connect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+	var from_node : MMGraphNodeBase = get_node(from)
+	var to_node : MMGraphNodeBase = get_node(to)
+	if generator.connect_children(from_node.generator, from_slot, to_node.generator, to_slot):
 		var disconnect = get_source(to, to_slot)
 		if !disconnect.empty():
 			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
@@ -171,8 +178,7 @@ func update_graph(generators, connections) -> Array:
 
 func new_material() -> void:
 	clear_material()
-	var loader = MMGenLoader.new()
-	top_generator = loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
+	top_generator = mm_loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -191,12 +197,12 @@ func get_free_name(type) -> String:
 	return ""
 
 func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
-	if data == null:
+	if !data is Dictionary:
 		return []
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
-	if typeof(data.nodes) == TYPE_ARRAY and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = MMGenLoader.add_to_gen_graph(generator, data.nodes, data.connections)
+	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
+		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
 		for g in new_stuff.generators:
 			g.position += position
 		return update_graph(new_stuff.generators, new_stuff.connections)
@@ -207,7 +213,7 @@ func create_gen_from_type(gen_name) -> void:
 
 func load_file(filename) -> void:
 	clear_material()
-	top_generator = MMGenLoader.load_gen(filename)
+	top_generator = mm_loader.load_gen(filename)
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -289,25 +295,23 @@ func cut() -> void:
 func copy() -> void:
 	OS.clipboard = to_json(serialize_selection())
 
-func paste(pos = Vector2(0, 0)) -> void:
+func do_paste(data) -> void:
+	var position = scroll_offset+0.5*rect_size
+	if Rect2(Vector2(0, 0), rect_size).has_point(get_local_mouse_position()):
+		position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = false
-	var data = parse_json(OS.clipboard)
-	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
+	var new_nodes = create_nodes(data, position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
 
+func paste() -> void:
+	do_paste(parse_json(OS.clipboard))
+
 func duplicate_selected() -> void:
-	var data = serialize_selection()
-	for c in get_children():
-		if c is GraphNode:
-			c.selected = false
-	var new_nodes = create_nodes(data, scroll_offset+0.5*rect_size)
-	if new_nodes != null:
-		for c in new_nodes:
-			c.selected = true
+	do_paste(serialize_selection())
 
 # Delay after graph update
 
@@ -349,8 +353,8 @@ func create_subgraph() -> void:
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instance()
-	graph_tree.init("Top", top_generator)
 	add_child(graph_tree)
+	graph_tree.init("Top", top_generator)
 	graph_tree.connect("item_double_clicked", self, "edit_subgraph")
 	graph_tree.popup_centered()
 

@@ -40,7 +40,7 @@ func find_control(gp) -> Dictionary:
 			if c.get("controls") != null:
 				for w in c.controls:
 					var widget = c.controls[w]
-					if widget != null and Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
+					if is_instance_valid(widget) and Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
 						return { node=c, widget=widget }
 	return {}
 

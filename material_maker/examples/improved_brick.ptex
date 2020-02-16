@@ -226,7 +226,8 @@
 				"metallic": 0,
 				"normal_scale": 1,
 				"roughness": 0.85,
-				"size": 11
+				"size": 11,
+				"subsurf_scatter_strength": 0
 			},
 			"type": "material"
 		},
@@ -239,9 +240,11 @@
 			"parameters": {
 				"bevel": 0,
 				"columns": 6,
+				"corner": 0,
 				"mortar": 0.087751,
 				"pattern": 1,
 				"repeat": 1,
+				"round": 0,
 				"row_offset": 0.5,
 				"rows": 20
 			},
@@ -255,6 +258,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -310,6 +314,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -353,6 +358,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 0.898039,
@@ -396,6 +402,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 0.588235,
@@ -468,6 +475,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -497,6 +505,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -526,6 +535,13 @@
 			"type": "colorize"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment",
 			"node_position": {
 				"x": -1405.656738,
@@ -539,6 +555,7 @@
 				"y": 165.399994
 			},
 			"text": "Realistic Bricks by Rafe Hall\n\nProcedural brick material that supports brick color, wear, ambient occlusion, grime, and depth.\n\nTODO: Edge wear, plaster and better layering.",
+			"title": "Comment",
 			"type": "comment"
 		},
 		{
@@ -575,6 +592,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -604,6 +622,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -653,9 +672,11 @@
 			"parameters": {
 				"bevel": 0.087751,
 				"columns": 6,
+				"corner": 0,
 				"mortar": 0,
 				"pattern": 1,
 				"repeat": 1,
+				"round": 0,
 				"row_offset": 0.5,
 				"rows": 20
 			},
@@ -671,6 +692,9 @@
 				"amount": 0.5,
 				"param0": 11,
 				"param1": 1,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -683,6 +707,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -726,6 +751,9 @@
 				"amount": 0.5,
 				"param0": 11,
 				"param1": 1,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -738,6 +766,7 @@
 			},
 			"parameters": {
 				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -769,6 +798,9 @@
 				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.42,
+				"param2": 0,
+				"param3": 0,
+				"param4": 1,
 				"size": 4
 			},
 			"type": "normal_map"
@@ -786,6 +818,13 @@
 			"type": "blend"
 		},
 		{
+			"color": {
+				"a": 1,
+				"b": 0,
+				"g": 0.5,
+				"r": 1,
+				"type": "Color"
+			},
 			"name": "comment_2",
 			"node_position": {
 				"x": -202.672852,
@@ -799,6 +838,7 @@
 				"y": 49
 			},
 			"text": "Improved bricks, by Rafe Hall (aka MrDiamondGold)",
+			"title": "Comment",
 			"type": "comment"
 		}
 	],
