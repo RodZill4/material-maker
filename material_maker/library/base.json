@@ -2605,6 +2605,16 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "transform_tile2x2",
+			"name": "tile2x2",
+			"parameters": {
+
+			},
+			"tree_item": "Transform/Tile2x2",
+			"type": "tile2x2"
+		},
+		{
+			"collapsed": true,
 			"icon": "transform_splatter",
 			"name": "splatter",
 			"parameters": {
