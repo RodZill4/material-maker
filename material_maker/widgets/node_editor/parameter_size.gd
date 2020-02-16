@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 var size_first : int = 0

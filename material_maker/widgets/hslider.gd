@@ -1,4 +1,3 @@
-tool
 extends HSlider
 
 func _ready() -> void:

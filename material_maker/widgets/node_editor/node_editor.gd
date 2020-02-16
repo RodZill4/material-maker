@@ -1,4 +1,3 @@
-tool
 extends WindowDialog
 
 var model_data = null

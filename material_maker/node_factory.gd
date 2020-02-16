@@ -1,4 +1,3 @@
-tool
 extends Node
 
 var includes

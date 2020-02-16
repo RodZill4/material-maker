@@ -1,4 +1,3 @@
-tool
 extends HBoxContainer
 
 func get_model_data() -> Dictionary:
