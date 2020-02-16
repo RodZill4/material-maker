@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"count": 25,
+		"count": 30,
 		"rotate": 0,
 		"scale": 0,
 		"select_inputs": 0
@@ -20,9 +20,16 @@
 				"label": "",
 				"name": "in",
 				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"name": "mask",
+				"type": "f"
 			}
 		],
-		"instance": "float splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tfloat c = 0.0;\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tvec2 pv = fract(uv - seed);\n\t\tseed = rand2(seed);\n\t\tpv -= vec2(0.5);\n\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate;\n\t\tfloat ca = cos(angle);\n\t\tfloat sa = sin(angle);\n\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\tpv += vec2(0.5);\n\t\t$select_inputs\n\t\tc = max(c, $in(pv));\n\t}\n\treturn c;\n}",
+		"instance": "float splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tfloat c = 0.0;\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tfloat mask = $mask(seed+vec2(0.5));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv += vec2(0.5);\n\t\t\t$select_inputs\n\t\t\tc = max(c, $in(pv)*mask);\n\t\t}\n\t}\n\treturn c;\n}",
 		"name": "Splatter",
 		"outputs": [
 			{
