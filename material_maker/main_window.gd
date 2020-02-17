@@ -31,7 +31,8 @@ const MENU = [
 	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
 	{ menu="File", command="save_all_materials", description="Save all materials..." },
 	{ menu="File" },
-	{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
+	{ menu="File", submenu="export_material", description="Export material" },
+	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
@@ -53,7 +54,7 @@ const MENU = [
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
 	
-	{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
+	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
 	
 	
 
@@ -206,6 +207,45 @@ func add_recent(path) -> void:
 	f.store_string(to_json(recent_files))
 	f.close()
 
+
+func create_menu_export_material(menu) -> void:
+	menu.clear()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		var material_node = graph_edit.get_material_node()
+		for p in material_node.get_export_profiles():
+			menu.add_item(p)
+		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
+			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
+
+func export_material(file_path : String, profile : String) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var material_node = graph_edit.get_material_node()
+	if material_node == null:
+		return
+	material_node.export_material(file_path.trim_suffix("."+file_path.get_extension()), profile)
+
+func _on_ExportMaterial_id_pressed(id) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var material_node = graph_edit.get_material_node()
+	if material_node == null:
+		return
+	var profile = material_node.get_export_profiles()[id]
+	print("Exporting for "+profile)
+	var dialog : FileDialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	dialog.connect("file_selected", self, "export_material", [ profile ])
+	dialog.popup_centered()
+
+
 func create_menu_set_theme(menu) -> void:
 	menu.clear()
 	for t in THEMES:
@@ -311,11 +351,6 @@ func save_material_as() -> void:
 
 func close_material() -> void:
 	projects.close_tab()
-
-func export_material() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null :
-		graph_edit.export_textures()
 
 func export_material_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

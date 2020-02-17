@@ -231,6 +231,12 @@ func save_file(filename) -> void:
 	set_save_path(filename)
 	set_need_save(false)
 
+func get_material_node() -> MMGenMaterial:
+	for g in top_generator.get_children():
+		if g.has_method("get_export_profiles"):
+			return g
+	return null
+
 func export_textures() -> void:
 	if save_path != null:
 		var prefix = save_path.left(save_path.rfind("."))

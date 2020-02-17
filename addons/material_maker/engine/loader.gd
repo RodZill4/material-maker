@@ -56,6 +56,8 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 
 func create_gen(data) -> MMGenBase:
 	var guess = [
+		{ keyword="export", type=MMGenMaterial },
+		{ keyword="connections", type=MMGenGraph },
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="shader_model", type=MMGenShader },
@@ -65,7 +67,7 @@ func create_gen(data) -> MMGenBase:
 		{ keyword="widgets", type=MMGenRemote }
 	]
 	var types = {
-		material = MMGenMaterial,
+		material_export = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
 		ios = MMGenIOs,

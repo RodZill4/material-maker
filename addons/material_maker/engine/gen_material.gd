@@ -1,5 +1,5 @@
 tool
-extends MMGenBase
+extends MMGenShader
 class_name MMGenMaterial
 
 var material : SpatialMaterial
@@ -7,12 +7,21 @@ var generated_textures = {}
 
 const TEXTURE_LIST = [
 	{ port=0, texture="albedo" },
-	{ port=3, texture="emission" },
-	{ port=4, texture="normal" },
-	{ ports=[5, 2, 1], default_values=["1.0", "1.0", "1.0"], texture="orm" },
-	{ port=6, texture="depth" },
-	{ port=7, texture="subsurf_scatter" }
+	{ port=1, texture="orm" },
+	{ port=2, texture="emission" },
+	{ port=3, texture="normal" },
+	{ port=4, texture="depth" },
+	{ port=5, texture="sss" }
 ]
+
+const INPUT_ALBEDO    : int = 0
+const INPUT_METALLIC  : int = 1
+const INPUT_ROUGHNESS : int = 2
+const INPUT_EMISSION  : int = 3
+const INPUT_NORMAL    : int = 4
+const INPUT_OCCLUSION : int = 5
+const INPUT_DEPTH     : int = 6
+const INPUT_SSS       : int = 7
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_SIZE_MIN = 4  # 16x16
@@ -22,6 +31,7 @@ const TEXTURE_SIZE_MAX = 12  # 4096x4096
 
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
+
 
 func _ready() -> void:
 	for t in TEXTURE_LIST:
@@ -37,30 +47,8 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Material"
 
-func get_parameter_defs() -> Array:
-	return [
-		{ name="albedo_color", label="Albedo", type="color", default={ r=1.0, g=1.0, b=1.0, a=1.0} },
-		{ name="metallic", label="Metallic", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="roughness", label="Roughness", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="emission_energy", label="Emission", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
-		{ name="normal_scale", label="Normal", type="float", min=0.0, max=8.0, step=0.05, default=1.0 },
-		{ name="ao_light_affect", label="Ambient occlusion", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="depth_scale", label="Depth", type="float", min=0.0, max=1.0, step=0.05, default=1.0 },
-		{ name="subsurf_scatter_strength", label="Subsurf. Scatter.", type="float", min=0.0, max=1.0, step=0.05, default=0.0 },
-		{ name="size", label="Size", type="size", first=TEXTURE_SIZE_MIN, last=TEXTURE_SIZE_MAX, default=TEXTURE_SIZE_DEFAULT }
-	]
-
-func get_input_defs() -> Array:
-	return [
-		{ name="albedo_texture", label="", type="rgb" },
-		{ name="metallic_texture", label="", type="f" },
-		{ name="roughness_texture", label="", type="f" },
-		{ name="emission_texture", label="", type="rgb" },
-		{ name="normal_texture", label="", type="rgb" },
-		{ name="ao_texture", label="", type="f" },
-		{ name="depth_texture", label="", type="f" },
-		{ name="subsurf_scatter_texture", label="", type="f" }
-	]
+func get_output_defs__() -> Array:
+	return []
 
 func get_image_size() -> int:
 	var rv : int
@@ -96,37 +84,10 @@ func render_textures() -> void:
 		if t.has("port"):
 			if generated_textures[t.texture] != null:
 				continue
-			var source = get_source(t.port)
-			if source == null:
-				generated_textures[t.texture] = null
-				continue
-			result = source.generator.render(source.output_index, get_image_size())
-		elif t.has("ports"):
-			var context : MMGenContext = MMGenContext.new()
-			var code = []
-			var shader_textures = {}
-			var sources = 0
-			for i in range(t.ports.size()):
-				var source = get_source(t.ports[i])
-				if source != null:
-					var status = source.generator.get_shader_code("UV", source.output_index, context)
-					while status is GDScriptFunctionState:
-						status = yield(status, "completed")
-					code.push_back(status)
-					for t in status.textures.keys():
-						shader_textures[t] = status.textures[t]
-					sources += 1
-				else:
-					code.push_back({ defs="", code="", f=t.default_values[i] })
-			if sources == 0:
-				generated_textures[t.texture] = null
-				continue
-			var shader : String = mm_renderer.generate_combined_shader(code[0], code[1], code[2])
-			result = mm_renderer.render_shader(shader, shader_textures, get_image_size())
+			result = render(t.port, get_image_size())
 		else:
 			generated_textures[t.texture] = null
 			continue
-
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		texture = ImageTexture.new()
@@ -144,7 +105,7 @@ func render_textures() -> void:
 
 func update_materials(material_list) -> void:
 	for m in material_list:
-		update_spatial_material(m)
+		update_material(m)
 
 func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 	if file_prefix != null:
@@ -157,62 +118,62 @@ func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 	else:
 		return generated_textures[slot]
 
-func update_spatial_material(m, file_prefix = null) -> void:
+func update_material(m, file_prefix = null) -> void:
 	var texture
-
 	if m is SpatialMaterial:
 		# Make the material double-sided for better visiblity in the preview
 		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
 		# Albedo
-		m.albedo_color = parameters.albedo_color
+		m.albedo_color = parameters.albedo
 		m.albedo_texture = get_generated_texture("albedo", file_prefix)
-		m.metallic = parameters.metallic
-		m.roughness = parameters.roughness
-		# Metallic
-		texture = get_generated_texture("orm", file_prefix)
-		m.metallic_texture = texture
-		m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
-		# Roughness
-		m.roughness_texture = texture
-		m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
-		# Emission
-		texture = get_generated_texture("emission", file_prefix)
-		if texture != null:
-			m.emission_enabled = true
-			m.emission_energy = parameters.emission_energy
-			m.emission_texture = texture
-		else:
-			m.emission_enabled = false
-		# Normal map
-		texture = get_generated_texture("normal", file_prefix)
-		if texture != null:
-			m.normal_enabled = true
-			m.normal_texture = texture
-		else:
-			m.normal_enabled = false
 		# Ambient occlusion
-		if get_source(5) != null:
+		if get_source(INPUT_OCCLUSION) != null:
 			m.ao_enabled = true
-			m.ao_light_affect = parameters.ao_light_affect
-			m.ao_texture = m.metallic_texture
+			m.ao_light_affect = parameters.ao
+			m.ao_texture = get_generated_texture("orm", file_prefix)
 			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 		else:
 			m.ao_enabled = false
+		# Roughness
+		m.roughness = parameters.roughness
+		if get_source(INPUT_ROUGHNESS) != null:
+			m.roughness_texture = get_generated_texture("orm", file_prefix)
+			m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
+		else:
+			m.roughness_texture = null
+		# Metallic
+		m.metallic = parameters.metallic
+		if get_source(INPUT_ROUGHNESS) != null:
+			m.metallic_texture = get_generated_texture("orm", file_prefix)
+			m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
+		else:
+			m.metallic_texture = null
+		# Emission
+		if get_source(INPUT_EMISSION) != null:
+			m.emission_enabled = true
+			m.emission_energy = parameters.emission
+			m.emission_texture = get_generated_texture("emission", file_prefix)
+		else:
+			m.emission_enabled = false
+		# Normal map
+		if get_source(INPUT_NORMAL) != null:
+			m.normal_enabled = true
+			m.normal_texture = get_generated_texture("normal", file_prefix)
+		else:
+			m.normal_enabled = false
 		# Depth
-		texture = get_generated_texture("depth", file_prefix)
-		if texture != null and parameters.depth_scale > 0:
+		if get_source(INPUT_DEPTH) != null and parameters.depth > 0:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
-			m.depth_scale = parameters.depth_scale * 0.2
-			m.depth_texture = texture
+			m.depth_scale = parameters.depth * 0.2
+			m.depth_texture = get_generated_texture("depth", file_prefix)
 		else:
 			m.depth_enabled = false
 		# Subsurface scattering
-		texture = get_generated_texture("subsurf_scatter", file_prefix)
-		if texture != null:
+		if get_source(INPUT_SSS) != null:
 			m.subsurf_scatter_enabled = true
-			m.subsurf_scatter_strength = parameters.subsurf_scatter_strength
-			m.subsurf_scatter_texture = texture
+			m.subsurf_scatter_strength = parameters.sss
+			m.subsurf_scatter_texture = get_generated_texture("sss", file_prefix)
 		else:
 			m.subsurf_scatter_enabled = false
 	else:
@@ -231,25 +192,37 @@ func update_spatial_material(m, file_prefix = null) -> void:
 		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
 		m.set_shader_param("texture_depth", get_generated_texture("depth", file_prefix))
 
-func export_textures(prefix, editor_interface = null) -> SpatialMaterial:
-	for t in TEXTURE_LIST:
-		var texture = generated_textures[t.texture]
-		if texture != null:
-			var image = texture.get_data()
-			image.save_png("%s_%s.png" % [ prefix, t.texture ])
-	if Engine.editor_hint and editor_interface != null:
-		var resource_filesystem = editor_interface.get_resource_filesystem()
-		resource_filesystem.scan()
-		yield(resource_filesystem, "resources_reimported")
-		print("resources_reimported")
-		var new_material = SpatialMaterial.new()
-		update_spatial_material(new_material, prefix)
-		var file_name : String = "%s.tres" % [ prefix ]
-		ResourceSaver.save(file_name, new_material)
-		resource_filesystem.update_file(file_name)
-		return new_material
+# Export
 
-	return null
+func get_export_profiles() -> Array:
+	return shader_model.exports.keys()
+
+func get_export_extension(profile : String) -> String:
+	return shader_model.exports[profile].export_extension
+
+func export_material(prefix, profile) -> void:
+	for f in shader_model.exports[profile].files:
+		match f.type:
+			"texture":
+				var file_name = f.file_name.replace("$(file_prefix)", prefix)
+				if f.has("conditions"):
+					var condition = f.conditions
+					for input_index in range(shader_model.inputs.size()):
+						var input = shader_model.inputs[input_index]
+						var is_input_connected = "true" if get_source(input_index) != null else "false"
+						condition = condition.replace("$(connected:"+input.name+")", is_input_connected)
+					var expr = Expression.new()
+					var error = expr.parse(condition, [])
+					if error != OK:
+						print("Error in expression: "+expr.get_error_text())
+						continue
+					if !expr.execute():
+						continue
+				var result = render(f.output, get_image_size())
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
+				result.save_to_file(file_name)
+				result.release()
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

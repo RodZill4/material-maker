@@ -64,7 +64,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_image.gd"
 }, {
-"base": "MMGenBase",
+"base": "MMGenShader",
 "class": "MMGenMaterial",
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_material.gd"
@@ -179,6 +179,7 @@ boot_splash/image="res://rodz_labs_logo.png"
 boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 config/release="0.8"
 
 [autoload]
