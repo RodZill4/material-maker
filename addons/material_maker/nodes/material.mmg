@@ -34,13 +34,13 @@
 				"type": "rgb"
 			},
 			{
-				"default": "1",
+				"default": "1.0",
 				"label": "",
 				"name": "metallic_tex",
 				"type": "f"
 			},
 			{
-				"default": "1",
+				"default": "1.0",
 				"label": "",
 				"name": "roughness_tex",
 				"type": "f"
@@ -96,7 +96,7 @@
 			},
 			{
 				"desc":"3: normal map for Godot",
-				"rgb": "$normal_tex($uv)",
+				"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, 1.0)+vec3(1.0, 0.0, 0.0)",
 				"type": "rgb"
 			},
 			{
@@ -108,6 +108,31 @@
 				"desc":"5: sub surface scattering",
 				"f": "$sss_tex($uv)",
 				"type": "f"
+			},
+			{
+				"desc":"6: unity metallic/smoothness",
+				"rgba": "vec4(vec3($metallic_tex($uv)), 1.0-$roughness_tex($uv))",
+				"type": "rgba"
+			},
+			{
+				"desc":"7: unity normal",
+				"rgb": "$normal_tex($uv)*vec3(1.0, 1.0, -1.0)+vec3(0.0, 0.0, 1.0)",
+				"type": "rgb"
+			},
+			{
+				"desc":"8: unity height",
+				"f": "1.0-$depth_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"9: unity occlusion",
+				"f": "$ao_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"10: unreal normal",
+				"rgb": "$normal_tex($uv)*vec3(-1.0)+vec3(1.0)",
+				"type": "rgb"
 			}
 		],
 		"exports": {
@@ -116,43 +141,87 @@
 				"files": [
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_albedo.png",
+						"file_name":"$(path_prefix)_albedo.png",
 						"output":0,
 						"conditions":"$(connected:albedo_tex)"
 					},
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_orm.png",
+						"file_name":"$(path_prefix)_orm.png",
 						"output":1,
 						"conditions":"$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)"
 					},
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_emission.png",
+						"file_name":"$(path_prefix)_emission.png",
 						"output":2,
 						"conditions":"$(connected:emission_tex)"
 					},
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_normal.png",
+						"file_name":"$(path_prefix)_normal.png",
 						"output":3,
 						"conditions":"$(connected:normal_tex)"
 					},
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_depth.png",
+						"file_name":"$(path_prefix)_depth.png",
 						"output":4,
 						"conditions":"$(connected:depth_tex)"
 					},
 					{
 						"type":"texture",
-						"file_name":"$(file_prefix)_sss.png",
+						"file_name":"$(path_prefix)_sss.png",
 						"output":5,
 						"conditions":"$(connected:sss_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix).tres",
+						"template":"godot.tres.tmpl"
 					}
 				]
 			},
 			"Unity": {
+				"export_extension":"mat",
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.png",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_metal_smoothness.png",
+						"output":6,
+						"conditions":"$(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.png",
+						"output":7,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_height.png",
+						"output":8,
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_occlusion.png",
+						"output":9,
+						"conditions":"$(connected:ao_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.png",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					}
+				]
 			},
 			"Unreal": {
 			}
@@ -166,7 +235,7 @@
 					"r": 1
 				},
 				"label": "Albedo",
-				"name": "albeco_color",
+				"name": "albedo_color",
 				"type": "color"
 			},
 			{
@@ -195,7 +264,7 @@
 				"label": "Emission",
 				"max": 1,
 				"min": 0,
-				"name": "emission",
+				"name": "emission_energy",
 				"step": 0.01,
 				"type": "float"
 			},

@@ -1,0 +1,48 @@
+[gd_resource type="SpatialMaterial" load_steps=5 format=2]
+
+$if $(connected:albedo_tex)
+[ext_resource path="$(file_prefix)_albedo.png" type="Texture" id=1]
+$fi
+$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)
+[ext_resource path="$(file_prefix)_orm.png" type="Texture" id=2]
+$fi
+$if $(connected:normal_tex)
+[ext_resource path="$(file_prefix)_normal.png" type="Texture" id=3]
+$fi
+$if $(connected:depth_tex)
+[ext_resource path="$(file_prefix)_depth.png" type="Texture" id=4]
+$fi
+
+[resource]
+$if $(connected:albedo_tex)
+albedo_texture = ExtResource( 1 )
+$fi
+metallic = 1.0
+$if $(connected:metallic_tex)
+metallic_texture = ExtResource( 2 )
+metallic_texture_channel = 2
+$fi
+$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)
+roughness_texture = ExtResource( 2 )
+roughness_texture_channel = 1
+$fi
+$if $(connected:normal_tex)
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 3 )
+$fi
+$if $(connected:ao_tex)
+ao_enabled = true
+ao_light_affect = 0.0
+ao_texture = ExtResource( 2 )
+ao_on_uv2 = false
+ao_texture_channel = 0
+$fi
+$if $(connected:depth_tex)
+depth_enabled = true
+depth_scale = 0.05
+depth_deep_parallax = false
+depth_flip_tangent = false
+depth_flip_binormal = false
+depth_texture = ExtResource( 4 )
+$fi

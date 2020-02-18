@@ -6,12 +6,12 @@ var material : SpatialMaterial
 var generated_textures = {}
 
 const TEXTURE_LIST = [
-	{ port=0, texture="albedo" },
-	{ port=1, texture="orm" },
-	{ port=2, texture="emission" },
-	{ port=3, texture="normal" },
-	{ port=4, texture="depth" },
-	{ port=5, texture="sss" }
+	{ port=0, texture="albedo", sources=[0] },
+	{ port=1, texture="orm", sources=[1, 2, 5] },
+	{ port=2, texture="emission", sources=[3] },
+	{ port=3, texture="normal", sources=[4] },
+	{ port=4, texture="depth", sources=[6] },
+	{ port=5, texture="sss", sources=[7] }
 ]
 
 const INPUT_ALBEDO    : int = 0
@@ -47,7 +47,7 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Material"
 
-func get_output_defs__() -> Array:
+func get_output_defs() -> Array:
 	return []
 
 func get_image_size() -> int:
@@ -70,10 +70,9 @@ func set_parameter(p, v) -> void:
 	update_preview()
 
 func source_changed(input_index : int) -> void:
+	print("source_changed "+str(input_index))
 	for t in TEXTURE_LIST:
-		if t.has("port") and t.port == input_index:
-			generated_textures[t.texture] = null
-		elif t.has("ports") and t.ports.has(input_index):
+		if t.has("sources") and t.sources.find(input_index) != -1:
 			generated_textures[t.texture] = null
 	update_preview()
 
@@ -104,6 +103,7 @@ func render_textures() -> void:
 		generated_textures[t.texture] = texture
 
 func update_materials(material_list) -> void:
+	render_textures()
 	for m in material_list:
 		update_material(m)
 
@@ -124,7 +124,7 @@ func update_material(m, file_prefix = null) -> void:
 		# Make the material double-sided for better visiblity in the preview
 		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
 		# Albedo
-		m.albedo_color = parameters.albedo
+		m.albedo_color = parameters.albedo_color
 		m.albedo_texture = get_generated_texture("albedo", file_prefix)
 		# Ambient occlusion
 		if get_source(INPUT_OCCLUSION) != null:
@@ -143,7 +143,7 @@ func update_material(m, file_prefix = null) -> void:
 			m.roughness_texture = null
 		# Metallic
 		m.metallic = parameters.metallic
-		if get_source(INPUT_ROUGHNESS) != null:
+		if get_source(INPUT_METALLIC) != null:
 			m.metallic_texture = get_generated_texture("orm", file_prefix)
 			m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
 		else:
@@ -151,7 +151,7 @@ func update_material(m, file_prefix = null) -> void:
 		# Emission
 		if get_source(INPUT_EMISSION) != null:
 			m.emission_enabled = true
-			m.emission_energy = parameters.emission
+			m.emission_energy = parameters.emission_energy
 			m.emission_texture = get_generated_texture("emission", file_prefix)
 		else:
 			m.emission_enabled = false
@@ -159,13 +159,14 @@ func update_material(m, file_prefix = null) -> void:
 		if get_source(INPUT_NORMAL) != null:
 			m.normal_enabled = true
 			m.normal_texture = get_generated_texture("normal", file_prefix)
+			m.normal_scale = parameters.normal
 		else:
 			m.normal_enabled = false
 		# Depth
 		if get_source(INPUT_DEPTH) != null and parameters.depth > 0:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
-			m.depth_scale = parameters.depth * 0.2
+			m.depth_scale = parameters.depth_scale * 0.2
 			m.depth_texture = get_generated_texture("depth", file_prefix)
 		else:
 			m.depth_enabled = false
@@ -200,17 +201,55 @@ func get_export_profiles() -> Array:
 func get_export_extension(profile : String) -> String:
 	return shader_model.exports[profile].export_extension
 
+func subst_string(s : String, export_context : Dictionary) -> String:
+	for k in export_context.keys():
+		s = s.replace("$("+k+")", export_context[k])
+	for input_index in range(shader_model.inputs.size()):
+		var input = shader_model.inputs[input_index]
+		var is_input_connected = "true" if get_source(input_index) != null else "false"
+		s = s.replace("$(connected:"+input.name+")", is_input_connected)
+	return s
+
+func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+	var in_file = File.new()
+	var out_file = File.new()
+	if in_file.open(mm_loader.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
+		if in_file.open(OS.get_executable_path().get_base_dir()+"/generators/"+template, File.READ) != OK:
+			print("Cannot find template file "+template)
+			return false
+	if out_file.open(file_name, File.WRITE):
+		print("Cannot write file '"+file_name+"'")
+		return false
+	var skip_state : Array = [ false ]
+	while ! in_file.eof_reached():
+		var l = in_file.get_line()
+		if l.left(4) == "$if ":
+			var condition = subst_string(l.right(4), export_context)
+			var expr = Expression.new()
+			var error = expr.parse(condition, [])
+			if error != OK:
+				print("Error in expression: "+expr.get_error_text())
+				continue
+			skip_state.push_back(!expr.execute())
+		elif l.left(3) == "$fi":
+			skip_state.pop_back()
+		elif l.left(5) == "$else":
+			skip_state.push_back(!skip_state.pop_back())
+		elif ! skip_state.back():
+			out_file.store_line(subst_string(l, export_context))
+	return true
+
 func export_material(prefix, profile) -> void:
+	var export_context : Dictionary = {
+		path_prefix=prefix,
+		file_prefix=prefix.get_file()
+	}
 	for f in shader_model.exports[profile].files:
 		match f.type:
 			"texture":
-				var file_name = f.file_name.replace("$(file_prefix)", prefix)
+				var file_name = subst_string(f.file_name, export_context)
 				if f.has("conditions"):
-					var condition = f.conditions
-					for input_index in range(shader_model.inputs.size()):
-						var input = shader_model.inputs[input_index]
-						var is_input_connected = "true" if get_source(input_index) != null else "false"
-						condition = condition.replace("$(connected:"+input.name+")", is_input_connected)
+					var condition = subst_string(f.conditions, export_context)
 					var expr = Expression.new()
 					var error = expr.parse(condition, [])
 					if error != OK:
@@ -223,6 +262,9 @@ func export_material(prefix, profile) -> void:
 					result = yield(result, "completed")
 				result.save_to_file(file_name)
 				result.release()
+			"template":
+				var file_name = f.file_name.replace("$(path_prefix)", prefix)
+				create_file_from_template(f.template, file_name, export_context)
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data
