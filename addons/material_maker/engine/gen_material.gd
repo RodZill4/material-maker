@@ -70,7 +70,6 @@ func set_parameter(p, v) -> void:
 	update_preview()
 
 func source_changed(input_index : int) -> void:
-	print("source_changed "+str(input_index))
 	for t in TEXTURE_LIST:
 		if t.has("sources") and t.sources.find(input_index) != -1:
 			generated_textures[t.texture] = null
@@ -163,7 +162,7 @@ func update_material(m, file_prefix = null) -> void:
 		else:
 			m.normal_enabled = false
 		# Depth
-		if get_source(INPUT_DEPTH) != null and parameters.depth > 0:
+		if get_source(INPUT_DEPTH) != null and parameters.depth_scale > 0:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
 			m.depth_scale = parameters.depth_scale * 0.2
@@ -203,11 +202,28 @@ func get_export_extension(profile : String) -> String:
 
 func subst_string(s : String, export_context : Dictionary) -> String:
 	for k in export_context.keys():
-		s = s.replace("$("+k+")", export_context[k])
-	for input_index in range(shader_model.inputs.size()):
-		var input = shader_model.inputs[input_index]
-		var is_input_connected = "true" if get_source(input_index) != null else "false"
-		s = s.replace("$(connected:"+input.name+")", is_input_connected)
+		s = s.replace(k, export_context[k])
+	while (true):
+		var search_string = "$(expr:"
+		var position = s.find(search_string)
+		if position == -1:
+			break
+		var parenthesis_level = 0
+		var expr_begin = position+search_string.length()
+		for i in range(expr_begin, s.length()):
+			if s[i] == '(':
+				parenthesis_level += 1
+			elif s[i] == ')':
+				if parenthesis_level == 0:
+					var expression = s.substr(expr_begin, i-expr_begin)
+					var expr = Expression.new()
+					var error = expr.parse(expression, [])
+					if error == OK:
+						s = s.replace(s.substr(position, i+1-position), str(expr.execute()))
+					else:
+						s = s.replace(s.substr(position, i+1-position), "EXPRESSION ERROR ("+expression+")")
+					break
+				parenthesis_level -= 1
 	return s
 
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
@@ -228,7 +244,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
-				print("Error in expression: "+expr.get_error_text())
+				print("Error in expression "+condition+": "+expr.get_error_text())
 				continue
 			skip_state.push_back(!expr.execute())
 		elif l.left(3) == "$fi":
@@ -241,9 +257,26 @@ func create_file_from_template(template : String, file_name : String, export_con
 
 func export_material(prefix, profile) -> void:
 	var export_context : Dictionary = {
-		path_prefix=prefix,
-		file_prefix=prefix.get_file()
+		"$(path_prefix)":prefix,
+		"$(file_prefix)":prefix.get_file()
 	}
+	for i in range(shader_model.inputs.size()):
+		var input = shader_model.inputs[i]
+		export_context["$(connected:"+input.name+")"] = "true" if get_source(i) != null else "false"
+	for p in shader_model.parameters:
+		var value = p.default
+		if parameters.has(p.name):
+			value = parameters[p.name]
+		match p.type:
+			"float", "size":
+				export_context["$(param:"+p.name+")"] = str(value)
+			"color":
+				export_context["$(param:"+p.name+".r)"] = str(value.r)
+				export_context["$(param:"+p.name+".g)"] = str(value.g)
+				export_context["$(param:"+p.name+".b)"] = str(value.b)
+				export_context["$(param:"+p.name+".a)"] = str(value.a)
+			_:
+				print(p.type+" not supported in material")
 	for f in shader_model.exports[profile].files:
 		match f.type:
 			"texture":

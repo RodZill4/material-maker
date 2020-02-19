@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"albedo": {
+		"albedo_color": {
 			"a": 1,
 			"b": 1,
 			"g": 1,
@@ -13,7 +13,7 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth": 0.5,
+		"depth_scale": 0.5,
 		"emission": 1,
 		"metallic": 1,
 		"normal": 1,
@@ -294,7 +294,7 @@
 				"label": "Depth",
 				"max": 1,
 				"min": 0,
-				"name": "depth",
+				"name": "depth_scale",
 				"step": 0.01,
 				"type": "float"
 			},
