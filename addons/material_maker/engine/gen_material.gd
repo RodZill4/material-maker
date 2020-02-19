@@ -2,6 +2,8 @@ tool
 extends MMGenShader
 class_name MMGenMaterial
 
+var export_paths = {}
+
 var material : SpatialMaterial
 var generated_textures = {}
 
@@ -200,9 +202,20 @@ func get_export_profiles() -> Array:
 func get_export_extension(profile : String) -> String:
 	return shader_model.exports[profile].export_extension
 
+func get_export_path(profile : String) -> String:
+	if export_paths.has(profile):
+		return export_paths[profile]
+	return ""
+
 func subst_string(s : String, export_context : Dictionary) -> String:
-	for k in export_context.keys():
-		s = s.replace(k, export_context[k])
+	var modified : bool = true
+	while modified:
+		modified = false
+		for k in export_context.keys():
+			var new_s = s.replace(k, export_context[k])
+			if new_s != s:
+				s = new_s
+				modified = true
 	while (true):
 		var search_string = "$(expr:"
 		var position = s.find(search_string)
@@ -233,8 +246,9 @@ func create_file_from_template(template : String, file_name : String, export_con
 		if in_file.open(OS.get_executable_path().get_base_dir()+"/generators/"+template, File.READ) != OK:
 			print("Cannot find template file "+template)
 			return false
-	if out_file.open(file_name, File.WRITE):
-		print("Cannot write file '"+file_name+"'")
+	Directory.new().remove(file_name)
+	if out_file.open(file_name, File.WRITE) != OK:
+		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
 		return false
 	var skip_state : Array = [ false ]
 	while ! in_file.eof_reached():
@@ -256,6 +270,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	return true
 
 func export_material(prefix, profile) -> void:
+	export_paths[profile] = prefix
 	var export_context : Dictionary = {
 		"$(path_prefix)":prefix,
 		"$(file_prefix)":prefix.get_file()
@@ -277,27 +292,49 @@ func export_material(prefix, profile) -> void:
 				export_context["$(param:"+p.name+".a)"] = str(value.a)
 			_:
 				print(p.type+" not supported in material")
+	if shader_model.exports[profile].has("uids"):
+		for i in range(shader_model.exports[profile].uids):
+			var uid : String
+			var r = []
+			for k in range(16):
+				r.append(randi() & 255)
+			r[6] = (r[6] & 0x0f) | 0x40
+			r[8] = (r[8] & 0x3f) | 0x80
+			for k in range(16):
+				uid += '%02x' % r[k]
+			export_context["$(uid:"+str(i)+")"] = uid
 	for f in shader_model.exports[profile].files:
+		if f.has("conditions"):
+			var condition = subst_string(f.conditions, export_context)
+			var expr = Expression.new()
+			var error = expr.parse(condition, [])
+			if error != OK:
+				print("Error in expression: "+expr.get_error_text())
+				continue
+			if !expr.execute():
+				continue
 		match f.type:
 			"texture":
 				var file_name = subst_string(f.file_name, export_context)
-				if f.has("conditions"):
-					var condition = subst_string(f.conditions, export_context)
-					var expr = Expression.new()
-					var error = expr.parse(condition, [])
-					if error != OK:
-						print("Error in expression: "+expr.get_error_text())
-						continue
-					if !expr.execute():
-						continue
 				var result = render(f.output, get_image_size())
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				result.save_to_file(file_name)
 				result.release()
 			"template":
-				var file_name = f.file_name.replace("$(path_prefix)", prefix)
-				create_file_from_template(f.template, file_name, export_context)
+				var file_export_context = export_context.duplicate()
+				if f.has("file_params"):
+					for p in f.file_params.keys():
+						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
+				var file_name = subst_string(f.file_name, export_context)
+				create_file_from_template(f.template, file_name, file_export_context)
 
-func _serialize(data: Dictionary) -> Dictionary:
+func _serialize_data(data: Dictionary) -> Dictionary:
+	data = ._serialize_data(data)
+	data.export_paths = export_paths
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	._deserialize(data)
+	if data.has("export_paths"):
+		export_paths = data.export_paths.duplicate()

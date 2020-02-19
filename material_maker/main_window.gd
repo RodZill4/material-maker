@@ -237,13 +237,15 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
-	print("Exporting for "+profile)
 	var dialog : FileDialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	var export_path = material_node.get_export_path(profile)
+	if export_path != "":
+		dialog.current_path = export_path
 	dialog.connect("file_selected", self, "export_material", [ profile ])
 	dialog.popup_centered()
 

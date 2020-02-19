@@ -223,12 +223,15 @@ func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+name)
 	return data
 
+func _serialize_data(data: Dictionary) -> Dictionary:
+	return data
+
 func serialize() -> Dictionary:
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
 	for p in get_parameter_defs():
 		if parameters.has(p.name):
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
-		else:
+		elif p.has("default"):
 			rv.parameters[p.name] = p.default
 	if seed_locked:
 		rv.seed_value = seed_value
@@ -236,6 +239,7 @@ func serialize() -> Dictionary:
 		rv.type = model
 	else:
 		rv = _serialize(rv)
+	rv = _serialize_data(rv)
 	return rv
 
 func _deserialize(_data : Dictionary) -> void:

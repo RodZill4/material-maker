@@ -116,7 +116,7 @@
 			},
 			{
 				"desc":"7: unity normal",
-				"rgb": "$normal_tex($uv)*vec3(1.0, 1.0, -1.0)+vec3(0.0, 0.0, 1.0)",
+				"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
 				"type": "rgb"
 			},
 			{
@@ -184,11 +184,23 @@
 			},
 			"Unity": {
 				"export_extension":"mat",
+				"uids":6,
 				"files": [
 					{
 						"type":"texture",
 						"file_name":"$(path_prefix)_albedo.png",
 						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_albedo.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:0)",
+							"srgb":"1",
+							"normal":"0"
+						},
 						"conditions":"$(connected:albedo_tex)"
 					},
 					{
@@ -198,9 +210,31 @@
 						"conditions":"$(connected:roughness_tex) or $(connected:metallic_tex)"
 					},
 					{
+						"type":"template",
+						"file_name":"$(path_prefix)_metal_smoothness.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:1)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
 						"type":"texture",
 						"file_name":"$(path_prefix)_normal.png",
 						"output":7,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_normal.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:2)",
+							"srgb":"0",
+							"normal":"1"
+						},
 						"conditions":"$(connected:normal_tex)"
 					},
 					{
@@ -210,9 +244,31 @@
 						"conditions":"$(connected:depth_tex)"
 					},
 					{
+						"type":"template",
+						"file_name":"$(path_prefix)_height.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:3)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
 						"type":"texture",
 						"file_name":"$(path_prefix)_occlusion.png",
 						"output":9,
+						"conditions":"$(connected:ao_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_occlusion.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:4)",
+							"srgb":"1",
+							"normal":"0"
+						},
 						"conditions":"$(connected:ao_tex)"
 					},
 					{
@@ -220,6 +276,22 @@
 						"file_name":"$(path_prefix)_emission.png",
 						"output":2,
 						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_emission.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:5)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix).mat",
+						"template":"unity.mat.tmpl"
 					}
 				]
 			},
