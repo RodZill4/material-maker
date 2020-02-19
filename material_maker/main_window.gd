@@ -124,6 +124,8 @@ func _ready() -> void:
 		create_menu(menu, m.name)
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
+	
+	do_load_materials(OS.get_cmdline_args())
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):

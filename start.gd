@@ -8,6 +8,7 @@ func _ready():
 	var path : String
 	if Directory.new().file_exists("res://material_maker/main_window.tscn"):
 		path = "res://material_maker/main_window.tscn"
+		
 	else:
 		path = "res://demo/demo.tscn"
 	loader = ResourceLoader.load_interactive(path)
@@ -19,7 +20,8 @@ func _process(_delta):
 	var err = loader.poll()
 	if err == ERR_FILE_EOF:
 		var resource = loader.get_resource()
-		get_node("/root").add_child(resource.instance())
+		var scene = resource.instance()
+		get_node("/root").add_child(scene)
 		queue_free()
 	elif err == OK:
 		var progress = float(loader.get_stage()) / loader.get_stage_count()
