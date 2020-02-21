@@ -296,7 +296,40 @@
 				]
 			},
 			"Unreal": {
-			}
+				"export_extension":"tres",
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.png",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_orm.png",
+						"output":1,
+						"conditions":"$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.png",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.png",
+						"output":10,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_height.png",
+						"output":8,
+						"conditions":"$(connected:depth_tex)"
+					}
+				]
+			},
 		},
 		"parameters": [
 			{
