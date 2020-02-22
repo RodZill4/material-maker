@@ -151,7 +151,13 @@
 			"to_port": 0
 		},
 		{
-			"from": "splatter_color",
+			"from": "tile2x2",
+			"from_port": 0,
+			"to": "tiler_color",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_color",
 			"from_port": 0,
 			"to": "Material",
 			"to_port": 0
@@ -2320,7 +2326,7 @@
 			},
 			"parameters": {
 				"edge": 1,
-				"radius": 0.21,
+				"radius": 0.13,
 				"shape": 0,
 				"sides": 6
 			},
@@ -2371,7 +2377,7 @@
 			},
 			"parameters": {
 				"edge": 1,
-				"radius": 0.18,
+				"radius": 0.12,
 				"shape": 1,
 				"sides": 6
 			},
@@ -2473,7 +2479,7 @@
 			},
 			"parameters": {
 				"edge": 1,
-				"radius": 0.13,
+				"radius": 0.12,
 				"shape": 3,
 				"sides": 7
 			},
@@ -2482,8 +2488,8 @@
 		{
 			"name": "tile2x2",
 			"node_position": {
-				"x": -522.442566,
-				"y": 943.082642
+				"x": -558.442566,
+				"y": 890.082642
 			},
 			"parameters": {
 
@@ -2503,6 +2509,23 @@
 				"select_inputs": 0
 			},
 			"type": "splatter_color"
+		},
+		{
+			"name": "tiler_color",
+			"node_position": {
+				"x": -598.862,
+				"y": 599.541748
+			},
+			"parameters": {
+				"offset": 0.62,
+				"overlap": 1,
+				"rotate": 45,
+				"scale": 0.2,
+				"select_inputs": 1,
+				"tx": 8,
+				"ty": 8
+			},
+			"type": "tiler_color"
 		}
 	],
 	"parameters": {

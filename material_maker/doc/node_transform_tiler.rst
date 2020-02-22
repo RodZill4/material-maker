@@ -1,18 +1,18 @@
-Splatter node
-~~~~~~~~~~~~~
+Tiler node
+~~~~~~~~~~
 
-The **Splatter** node splats several instances of its input with optional scale and rotation variations.
+The **Tiler** node tiles several instances of its input with optional scale and rotation variations.
 Overlapping instances are mixed with each other using a *lighten* filter.
 
-The **Splatter** also has a color version whose input is in RGBA format.
+The **Tiler** also has a color version whose input is in RGBA format.
 
-.. image:: images/node_transform_splatter.png
+.. image:: images/node_transform_tiler.png
 	:align: center
 
 Inputs
 ++++++
 
-The **Splatter** node accepts two inputs:
+The **Tiler** node accepts two inputs:
 
 * The *Source* inputs is the image to be splat into the output.
 
@@ -21,22 +21,22 @@ The **Splatter** node accepts two inputs:
 Outputs
 +++++++
 
-The **Splatter** node outputs the splat image.
+The **Tiler** node outputs the splat image.
 
 Parameters
 ++++++++++
 
-The **Splatter** node accepts the following parameters:
+The **Tiler** node accepts the following parameters:
 
-* *Count*, the number of instances of the source image in the result, including those canceled by the mask.
+* *Tile X* and *Tile Y*, the number of columns and rows of of the tile pattern.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
+* *Offset* is the maximum random offset applied to each instance (relative to tiles size).
 * *Rotate* is the maximum angle of the random rotation applied to each instance.
 * *Scale* is the amount of scaling applied to each instance.
-
 
 Example images
 ++++++++++++++
 
-.. image:: images/node_transform_splatter_samples.png
+.. image:: images/node_transform_tiler_samples.png
 	:align: center
