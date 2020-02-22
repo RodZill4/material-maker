@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/graphedit_more.png-5728011d4d7a1ab6065d51f895c0d07d.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://material_maker/theme/dark/graphedit_more.png"
+dest_files=[ "res://.import/graphedit_more.png-5728011d4d7a1ab6065d51f895c0d07d.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0
