@@ -239,6 +239,8 @@ func export_textures() -> void:
 				g.render_textures()
 				if g.has_method("export_textures"):
 					g.export_textures(prefix, editor_interface)
+					# wait a little for the file operation to finish
+					yield(get_tree().create_timer(1.0), "timeout")
 
 # Cut / copy / paste / duplicate
 
