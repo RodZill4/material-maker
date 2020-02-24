@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/sb_vscrollbar_scroll_texture.png-9eabbee499668e9d4d521e3ad09ca0ec.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://material_maker/theme/default/sb_vscrollbar_scroll_texture.png"
+dest_files=[ "res://.import/sb_vscrollbar_scroll_texture.png-9eabbee499668e9d4d521e3ad09ca0ec.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0
