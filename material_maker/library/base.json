@@ -2640,6 +2640,38 @@
 			"type": "splatter_color"
 		},
 		{
+			"collapsed": true,
+			"icon": "transform_tiler",
+			"name": "tiler",
+			"parameters": {
+				"offset": 0.25,
+				"overlap": 2,
+				"rotate": 45,
+				"scale": 0.2,
+				"select_inputs": 0,
+				"tx": 4,
+				"ty": 4
+			},
+			"tree_item": "Transform/Tiler",
+			"type": "tiler"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_tiler_color",
+			"name": "tiler_color",
+			"parameters": {
+				"offset": 0.25,
+				"overlap": 1,
+				"rotate": 45,
+				"scale": 0.2,
+				"select_inputs": 0,
+				"tx": 4,
+				"ty": 4
+			},
+			"tree_item": "Transform/Tiler/Color",
+			"type": "tiler_color"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Workflow"
 		},
