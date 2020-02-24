@@ -237,14 +237,10 @@ func get_material_node() -> MMGenMaterial:
 			return g
 	return null
 
-func export_textures() -> void:
-	if save_path != null:
-		var prefix = save_path.left(save_path.rfind("."))
-		for g in top_generator.get_children():
-			if g.has_method("render_textures"):
-				g.render_textures()
-				if g.has_method("export_textures"):
-					g.export_textures(prefix, editor_interface)
+func export_material(export_prefix, profile) -> void:
+	for g in top_generator.get_children():
+		if g.has_method("export_material"):
+			g.export_material(export_prefix, profile)
 
 # Cut / copy / paste / duplicate
 

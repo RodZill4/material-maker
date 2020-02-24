@@ -34,19 +34,11 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
-func render_textures() -> void:
+func export_material(prefix, _profile) -> void:
 	var source = get_source(0)
 	if source != null:
 		var result = source.generator.render(source.output_index, get_image_size())
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
-		texture = ImageTexture.new()
-		result.copy_to_texture(texture)
+		result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix])
 		result.release()
-	else:
-		texture = null
-
-func export_textures(prefix, __ = null) -> void:
-	if texture != null:
-		var image = texture.get_data()
-		image.save_png("%s_%s.png" % [ prefix, parameters.suffix])

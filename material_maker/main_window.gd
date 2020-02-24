@@ -224,10 +224,8 @@ func export_material(file_path : String, profile : String) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit == null:
 		return
-	var material_node = graph_edit.get_material_node()
-	if material_node == null:
-		return
-	material_node.export_material(file_path.trim_suffix("."+file_path.get_extension()), profile)
+	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
+	graph_edit.export_material(export_prefix, profile)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -238,14 +236,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		return
 	var profile = material_node.get_export_profiles()[id]
 	var dialog : FileDialog = FileDialog.new()
-	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
-	var export_path = material_node.get_export_path(profile)
-	if export_path != "":
-		dialog.current_path = export_path
+	add_child(dialog)
 	dialog.connect("file_selected", self, "export_material", [ profile ])
 	dialog.popup_centered()
 
@@ -355,10 +350,6 @@ func save_material_as() -> void:
 
 func close_material() -> void:
 	projects.close_tab()
-
-func export_material_is_disabled() -> bool:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit == null or graph_edit.save_path == null
 
 func quit() -> void:
 	dim_window()
