@@ -72,7 +72,8 @@ func create_gen(data) -> MMGenBase:
 		switch = MMGenSwitch,
 		export = MMGenExport,
 		comment = MMGenComment,
-		debug = MMGenDebug
+		debug = MMGenDebug,
+		audio = MMGenAudio
 	}
 	var generator = null
 	for g in guess:

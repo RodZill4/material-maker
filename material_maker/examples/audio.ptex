@@ -1,0 +1,264 @@
+{
+	"connections": [
+		{
+			"from": "206_2",
+			"from_port": 0,
+			"to": "206_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "206_2_2",
+			"from_port": 0,
+			"to": "206",
+			"to_port": 0
+		},
+		{
+			"from": "206_2_2",
+			"from_port": 0,
+			"to": "audio",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"name": "59",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "Material",
+			"node_position": {
+				"x": 184,
+				"y": -37
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao_light_affect": 1,
+				"depth_scale": 1,
+				"emission_energy": 1,
+				"metallic": 1,
+				"normal_scale": 1,
+				"roughness": 1,
+				"size": 11,
+				"subsurf_scatter_strength": 0
+			},
+			"type": "material"
+		},
+		{
+			"name": "206",
+			"node_position": {
+				"x": -438.5,
+				"y": -376
+			},
+			"parameters": {
+				"attack": 0,
+				"decay": 0.4,
+				"release": 0.4,
+				"sustain": 0.25
+			},
+			"shader_model": {
+				"code": "",
+				"global": "float enveloppe(float time, float attack, float decay, float sustain, float release) {\n\tfloat rv = 0.0;\n\tif (time < attack) {\n\t\trv = time/attack;\n\t} else if (time < attack+decay) {\n\t\trv = 1.0-(1.0-sustain)*(time-attack)/(decay);\n\t} else {\n\t\trv = sustain-sustain*(time-attack-decay)/(release);\n\t}\n\treturn clamp(rv, 0.0, 1.0);\n}",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Enveloppe",
+				"outputs": [
+					{
+						"sound": "$in($uv)*enveloppe($uv.y, $attack, $decay, $sustain, $release)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.2,
+						"label": "Attack",
+						"max": 10,
+						"min": 0,
+						"name": "attack",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Decay",
+						"max": 10,
+						"min": 0,
+						"name": "decay",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sustain",
+						"max": 1,
+						"min": 0,
+						"name": "sustain",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 2,
+						"label": "Release",
+						"max": 10,
+						"min": 0,
+						"name": "release",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "206_2",
+			"node_position": {
+				"x": -432.5,
+				"y": -488
+			},
+			"parameters": {
+				"frequency": 930.2,
+				"type": 0
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+
+				],
+				"instance": "",
+				"name": "Wave",
+				"outputs": [
+					{
+						"sound": "vec2($type)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"default": 3,
+						"label": "Type",
+						"name": "type",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Sine",
+								"value": "sin($frequency*$uv.x*6.28)"
+							},
+							{
+								"name": "Rect",
+								"value": "2.0*step(fract($frequency*$uv.x), 0.5)-1.0"
+							},
+							{
+								"name": "Sawtooth",
+								"value": "2.0*fract($frequency*$uv.x)-1.0"
+							},
+							{
+								"name": "Triangle",
+								"value": "4.0*abs(fract($frequency*$uv.x)-0.5)-1.0"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 440,
+						"label": "Frequency",
+						"max": 22000,
+						"min": 0,
+						"name": "frequency",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "audio",
+			"node_position": {
+				"x": -380.958374,
+				"y": -205.208374
+			},
+			"parameters": {
+
+			},
+			"seed_value": 8978,
+			"type": "audio"
+		},
+		{
+			"name": "206_2_2",
+			"node_position": {
+				"x": -143.958374,
+				"y": -463.508362
+			},
+			"parameters": {
+				"amplitude": 0.056,
+				"speed": 0.98
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Sine",
+				"outputs": [
+					{
+						"sound": "$in(vec3($uv.x*(1.0+$amplitude*sin($uv.y*$speed*6.28318530718)/$uv.y), $uv.yz))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.1,
+						"label": "Amplitude",
+						"max": 0.5,
+						"min": 0,
+						"name": "amplitude",
+						"step": 0.001,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 2,
+						"label": "Speed",
+						"max": 20,
+						"min": 0,
+						"name": "speed",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+
+	},
+	"type": "graph"
+}

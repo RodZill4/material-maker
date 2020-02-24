@@ -1,0 +1,15 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/audio.ptex-9e2c2e20f2d1e2d6957feaedacaf2a96.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/audio.ptex"
+dest_files=[ "res://.import/audio.ptex-9e2c2e20f2d1e2d6957feaedacaf2a96.tres" ]
+
+[params]
+
+render=false
+scale=1.0

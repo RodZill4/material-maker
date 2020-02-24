@@ -4,8 +4,6 @@
 [ext_resource path="res://material_maker/widgets/node_editor/node_editor_item_list.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
 
-
-
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 3 )

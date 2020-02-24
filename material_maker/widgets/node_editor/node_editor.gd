@@ -86,6 +86,7 @@ func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
 
 func _on_OK_pressed() -> void:
+	print("OK pressed")
 	emit_signal("node_changed", get_model_data())
 	queue_free()
 

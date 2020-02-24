@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://material_maker/widgets/float_edit.gd"
 }, {
+"base": "MMGenBase",
+"class": "MMGenAudio",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_audio.gd"
+}, {
 "base": "Node",
 "class": "MMGenBase",
 "language": "GDScript",
@@ -141,6 +146,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "MMFloatEdit": "",
+"MMGenAudio": "",
 "MMGenBase": "",
 "MMGenBuffer": "",
 "MMGenComment": "",
