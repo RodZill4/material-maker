@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sb_lineedit_focus_texture.png-7777250b8201ffe1184a21f33d6e34e0.stex"
+path="res://.import/sb_hsplitcontainer_bg_texture.png-4c932338ca2612701d214a7c590447c3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/theme/default/sb_lineedit_focus_texture.png"
-dest_files=[ "res://.import/sb_lineedit_focus_texture.png-7777250b8201ffe1184a21f33d6e34e0.stex" ]
+source_file="res://material_maker/theme/default/sb_hsplitcontainer_bg_texture.png"
+dest_files=[ "res://.import/sb_hsplitcontainer_bg_texture.png-4c932338ca2612701d214a7c590447c3.stex" ]
 
 [params]
 
