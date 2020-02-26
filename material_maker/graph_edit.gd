@@ -211,16 +211,25 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 func create_gen_from_type(gen_name) -> void:
 	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
 
-func load_file(filename) -> void:
-	clear_material()
-	top_generator = mm_loader.load_gen(filename)
-	if top_generator != null:
+func load_file(filename) -> bool:
+	var new_generator = mm_loader.load_gen(filename)
+	if new_generator != null:
+		clear_material()
+		top_generator = new_generator
 		add_child(top_generator)
 		move_child(top_generator, 0)
 		update_view(top_generator)
 		center_view()
 		set_save_path(filename)
 		set_need_save(false)
+		return true
+	else:
+		var dialog : AcceptDialog = AcceptDialog.new()
+		add_child(dialog)
+		dialog.window_title = "Load failed!"
+		dialog.dialog_text = "Failed to load "+filename
+		dialog.popup_centered()
+		return false
 
 func save_file(filename) -> void:
 	var data = top_generator.serialize()

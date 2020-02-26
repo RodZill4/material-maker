@@ -175,7 +175,6 @@ func create_menu(menu, menu_name) -> PopupMenu:
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
-
 	if recent_files.empty():
 		menu.add_item("No items found", 0)
 		menu.set_item_disabled(0, true)
@@ -186,7 +185,8 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_material(recent_files[id])
+	if !do_load_material(recent_files[id]):
+		recent_files.remove(id)
 
 func load_recents() -> void:
 	var f = File.new()
@@ -313,7 +313,7 @@ func do_load_materials(filenames) -> void:
 	for f in filenames:
 		do_load_material(f)
 
-func do_load_material(filename) -> void:
+func do_load_material(filename) -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -325,8 +325,10 @@ func do_load_material(filename) -> void:
 					break
 	if node_count > 1:
 		graph_edit = new_pane()
-	graph_edit.load_file(filename)
-	add_recent(filename)
+	if graph_edit.load_file(filename):
+		add_recent(filename)
+		return true
+	return false
 
 func save_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
