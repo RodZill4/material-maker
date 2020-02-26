@@ -4,7 +4,7 @@ extends EditorScript
 # This script grabs all textures from a theme and throws them into the icons
 
 func _run():
-	for t in ["res://material_maker/theme/dark.tres", "res://material_maker/theme/default.tres", "res://material_maker/theme/light.tres"]:
+	for t in ["res://material_maker/theme/default.tres"]:
 		optimize_theme(t)
 
 func optimize_theme(theme_path):
@@ -29,8 +29,18 @@ func optimize_theme(theme_path):
 					if new_sb[t] != null:
 						var png_name = ("sb_"+stylebox_name+"_"+sb_name+"_"+t).to_lower()
 						var png_path : String = icon_dir+"/"+png_name+".png"
-						new_sb[t].get_data().save_png(png_path)
-						new_sb[t] = load(png_path)
+						var new_icon = load(png_path)
+						if new_icon == null:
+							print("missing icon "+png_path)
+							var image = new_sb[t].get_data()
+							if image != null:
+								print("saving icon "+png_path)
+								image.save_png(png_path)
+								new_icon = load(png_path)
+								if new_icon != null:
+									new_sb[t] = new_icon
+						else:
+							new_sb[t] = new_icon
 			else:
 				new_theme.set_stylebox(sb_name, stylebox_name, theme.get_stylebox(sb_name, stylebox_name))
 		for icon_name in theme.get_icon_list(stylebox_name):
@@ -45,8 +55,9 @@ func optimize_theme(theme_path):
 					print("saving icon "+png_path)
 					image.save_png(png_path)
 					new_icon = load(png_path)
-					new_theme.set_icon(icon_name, stylebox_name, new_icon)
+					if new_icon != null:
+						new_theme.set_icon(icon_name, stylebox_name, new_icon)
 			else:
 				new_theme.set_icon(icon_name, stylebox_name, new_icon)
-	ResourceSaver.save(theme_path.replace(".tres", "_opt.tres"), new_theme)
+	ResourceSaver.save(theme_path, new_theme)
 	print("done")

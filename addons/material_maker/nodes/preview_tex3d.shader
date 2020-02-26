@@ -9,7 +9,7 @@ vec3 calcColor(vec4 uv) {
 
 float raymarch(vec3 ro, vec3 rd) {
     float d=0.0;
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 200; i++) {
         vec3 p = ro + rd*d;
         float dstep = calcdist(p);
         d += dstep;
