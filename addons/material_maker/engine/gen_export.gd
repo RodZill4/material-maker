@@ -34,10 +34,12 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
-func export_material(prefix, _profile) -> void:
+func export_material(prefix : String, _profile : String, size : int = 0) -> void:
+	if size == 0:
+		size = get_image_size()
 	var source = get_source(0)
 	if source != null:
-		var result = source.generator.render(source.output_index, get_image_size())
+		var result = source.generator.render(source.output_index, size)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix])

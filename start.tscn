@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
 [ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0235294, 0.0313726, 0.12549, 0.929412 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 1, 0, 0, 1 )
 
 [node name="Start" type="Panel"]
 anchor_right = 1.0
@@ -40,3 +48,26 @@ align = 1
 margin_top = 492.0
 margin_right = 256.0
 margin_bottom = 506.0
+
+[node name="ErrorPanel" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -268.5
+margin_top = -76.0
+margin_right = 268.5
+margin_bottom = 76.0
+rect_pivot_offset = Vector2( 267.976, 75.7381 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="Label" type="Label" parent="ErrorPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+align = 1
+valign = 1

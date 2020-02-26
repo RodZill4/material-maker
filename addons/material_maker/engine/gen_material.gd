@@ -269,7 +269,9 @@ func create_file_from_template(template : String, file_name : String, export_con
 			out_file.store_line(subst_string(l, export_context))
 	return true
 
-func export_material(prefix, profile) -> void:
+func export_material(prefix : String, profile : String, size : int = 0) -> void:
+	if size == 0:
+		size = get_image_size()
 	export_paths[profile] = prefix
 	var export_context : Dictionary = {
 		"$(path_prefix)":prefix,
@@ -316,7 +318,7 @@ func export_material(prefix, profile) -> void:
 		match f.type:
 			"texture":
 				var file_name = subst_string(f.file_name, export_context)
-				var result = render(f.output, get_image_size())
+				var result = render(f.output, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				result.save_to_file(file_name)
