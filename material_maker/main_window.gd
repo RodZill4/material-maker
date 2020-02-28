@@ -10,13 +10,17 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
-onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
+onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
+onready var library = $VBoxContainer/Layout/Left/Top/Library
 
-onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
-onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
+var preview_2d
+var preview_3d
 
-onready var preview_2d_background = $VBoxContainer/HBoxContainer/ProjectsPane/Preview2D
+onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D
+onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview2DButton
+onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D
+onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview3DButton
+onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel
 
 const RECENT_FILES_COUNT = 15
 
@@ -63,6 +67,20 @@ const MENU = [
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
+
+const PANEL_POSITIONS = {
+	TopLeft="VBoxContainer/Layout/Left/Top",
+	BottomLeft="VBoxContainer/Layout/Left/Bottom",
+	TopRight="VBoxContainer/Layout/SplitRight/Right/Top",
+	BottomRight="VBoxContainer/Layout/SplitRight/Right/Bottom"
+}
+const PANELS = [
+	{ name="Library", scene=preload("res://material_maker/library.tscn"), position="TopLeft" },
+	{ name="Preview2D", scene=preload("res://material_maker/preview/preview_2d_panel.tscn"), position="BottomLeft" },
+	{ name="Preview3D", scene=preload("res://material_maker/preview/preview_3d_panel.tscn"), position="BottomLeft" }
+]
+
+var panels = {}
 
 signal quit
 
@@ -116,8 +134,32 @@ func _ready() -> void:
 	# This property is only available in 3.2alpha or later, so use `set()` to fail gracefully if it doesn't exist.
 	OS.set("min_window_size", Vector2(1024, 600))
 
+	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+
+	# Create panels
+	for panel_pos in PANEL_POSITIONS.keys():
+		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
+	for panel in PANELS:
+		var node = panel.scene.instance()
+		node.name = panel.name
+		var tab = get_node(PANEL_POSITIONS[panel.position])
+		tab.add_child(node)
+		panels[panel.name] = node
+	preview_2d = panels["Preview2D"]
+	preview_3d = panels["Preview3D"]
+
+	# Load recent projects
 	load_recents()
+
+	# Create menus
+	for i in MENU.size():
+		if ! $VBoxContainer/Menu.has_node(MENU[i].menu):
+			var menu_button = MenuButton.new()
+			menu_button.name = MENU[i].menu
+			menu_button.text = MENU[i].menu
+			menu_button.switch_on_hover = true
+			$VBoxContainer/Menu.add_child(menu_button)
 	for m in $VBoxContainer/Menu.get_children():
 		var menu = m.get_popup()
 		create_menu(menu, m.name)
@@ -492,7 +534,7 @@ func update_preview() -> void:
 		status = update_preview_2d()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		status = update_preview_3d([ $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D, $VBoxContainer/HBoxContainer/ProjectsPane/Preview3D])
+		status = update_preview_3d([ preview_3d, preview_3d_background ])
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 	updating = false
@@ -566,15 +608,15 @@ func dim_window() -> void:
 	modulate = Color(0.5, 0.5, 0.5)
 
 func show_background_preview_2d(button_pressed):
-	$VBoxContainer/HBoxContainer/ProjectsPane/Preview2D.visible = button_pressed
+	preview_2d_background.visible = button_pressed
 	if button_pressed:
-		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview3DButton.pressed = false
+		preview_3d_background_button.pressed = false
 
 func show_background_preview_3d(button_pressed):
-	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
-	$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel.visible = button_pressed
+	preview_3d_background.visible = button_pressed
+	preview_3d_background_panel.visible = button_pressed
 	if button_pressed:
-		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton.pressed = false
+		preview_2d_background_button.pressed = false
 
 
 func generate_screenshots():
