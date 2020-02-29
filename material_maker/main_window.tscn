@@ -89,18 +89,18 @@ margin_top = 26.0
 margin_right = 1268.0
 margin_bottom = 708.0
 size_flags_vertical = 3
-split_offset = -1039
+split_offset = -1118
 script = ExtResource( 2 )
 
 [node name="Left" type="VSplitContainer" parent="VBoxContainer/Layout"]
-margin_right = 203.0
+margin_right = 124.0
 margin_bottom = 682.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/Left"]
-margin_right = 203.0
+margin_right = 124.0
 margin_bottom = 346.0
 tab_align = 0
 drag_to_rearrange_enabled = true
@@ -108,19 +108,20 @@ use_hidden_tabs_for_min_size = true
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 margin_top = 354.0
-margin_right = 203.0
+margin_right = 124.0
 margin_bottom = 682.0
 tab_align = 0
 drag_to_rearrange_enabled = true
+use_hidden_tabs_for_min_size = true
 
 [node name="SplitRight" type="HSplitContainer" parent="VBoxContainer/Layout"]
-margin_left = 211.0
+margin_left = 132.0
 margin_right = 1268.0
 margin_bottom = 682.0
-split_offset = -226
+split_offset = 133
 
 [node name="ProjectsPane" type="Control" parent="VBoxContainer/Layout/SplitRight"]
-margin_right = 562.0
+margin_right = 981.0
 margin_bottom = 682.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -240,29 +241,33 @@ margin_right = 297.0
 margin_bottom = 40.0
 
 [node name="Right" type="VSplitContainer" parent="VBoxContainer/Layout/SplitRight"]
-margin_left = 570.0
-margin_right = 1057.0
+margin_left = 989.0
+margin_right = 1136.0
 margin_bottom = 682.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
-margin_right = 487.0
+margin_right = 147.0
 margin_bottom = 346.0
 tab_align = 0
 drag_to_rearrange_enabled = true
+use_hidden_tabs_for_min_size = true
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
 margin_top = 354.0
-margin_right = 487.0
+margin_right = 147.0
 margin_bottom = 682.0
 tab_align = 0
 drag_to_rearrange_enabled = true
+use_hidden_tabs_for_min_size = true
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 9 )
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
+[connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
+[connection signal="tab_changed" from="VBoxContainer/Layout/Left/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="dragged" from="VBoxContainer/Layout/SplitRight" to="VBoxContainer/Layout" method="_on_Right_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D" method="on_resized"]
 [connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" to="." method="update_preview_3d"]
@@ -278,3 +283,5 @@ script = ExtResource( 9 )
 [connection signal="environment_selected" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Environment_item_selected"]
 [connection signal="model_selected" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Model_item_selected"]
 [connection signal="rotate_toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Rotate_toggled"]
+[connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
+[connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]

@@ -24,6 +24,7 @@ func load_panes() -> void:
 		var tab = get_node(PANE_POSITIONS[pane.position])
 		tab.add_child(node)
 		panes[pane.name] = node
+	update_panes()
 
 func get_pane(n) -> Control:
 	return panes[n]
@@ -43,10 +44,44 @@ func set_pane_visible(pane_name : String, v : bool) -> void:
 	else:
 		pane.set_meta("parent_tab_container", pane.get_parent())
 		pane.get_parent().remove_child(pane)
+	update_panes()
 
+func update_panes() -> void:
+	var left_width = $Left.rect_size.x
+	var left_requested = left_width
+	var right_width = $SplitRight/Right.rect_size.x
+	var right_requested = right_width
+	if $Left/Top.get_tab_count() == 0:
+		if $Left/Bottom.get_tab_count() == 0:
+			left_requested = 10
+			$Left.split_offset -= ($Left/Top.rect_size.y-$Left/Bottom.rect_size.y)/2
+			$Left.clamp_split_offset()
+		else:
+			$Left.split_offset -= $Left/Top.rect_size.y-10
+			$Left.clamp_split_offset()
+	elif $Left/Bottom.get_tab_count() == 0:
+		$Left.split_offset += $Left/Bottom.rect_size.y-10
+		$Left.clamp_split_offset()
+	if $SplitRight/Right/Top.get_tab_count() == 0:
+		if $SplitRight/Right/Bottom.get_tab_count() == 0:
+			right_requested = 10
+			$SplitRight/Right.split_offset -= ($SplitRight/Right/Top.rect_size.y-$SplitRight/Right/Bottom.rect_size.y)/2
+			$SplitRight/Right.clamp_split_offset()
+		else:
+			$SplitRight/Right.split_offset -= $SplitRight/Right/Top.rect_size.y-10
+			$SplitRight/Right.clamp_split_offset()
+	elif $SplitRight/Right/Bottom.get_tab_count() == 0:
+		$SplitRight/Right.split_offset += $SplitRight/Right/Bottom.rect_size.y-10
+		$SplitRight/Right.clamp_split_offset()
+	split_offset += left_requested - left_width + right_requested - right_width
+	clamp_split_offset()
+	$SplitRight.split_offset += right_width - right_requested
 
 func _on_Left_dragged(offset : int) -> void:
-	print(offset)
+	$Left.clamp_split_offset()
 
 func _on_Right_dragged(offset : int) -> void:
-	print(offset)
+	$SplitRight/Right.clamp_split_offset()
+
+func _on_tab_changed(_tab):
+	update_panes()

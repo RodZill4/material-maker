@@ -11,9 +11,9 @@ var updating : bool = false
 var need_update : bool = false
 
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
-onready var library = $VBoxContainer/Layout/Left/Top/Library
 
 onready var layout = $VBoxContainer/Layout
+var library
 var preview_2d
 var preview_3d
 
@@ -127,6 +127,7 @@ func _ready() -> void:
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
 	layout.load_panes()
+	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
 	preview_3d = layout.get_pane("Preview3D")
 
