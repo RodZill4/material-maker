@@ -104,6 +104,7 @@ margin_right = 203.0
 margin_bottom = 346.0
 tab_align = 0
 drag_to_rearrange_enabled = true
+use_hidden_tabs_for_min_size = true
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 margin_top = 354.0

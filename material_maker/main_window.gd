@@ -13,6 +13,7 @@ var need_update : bool = false
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
 onready var library = $VBoxContainer/Layout/Left/Top/Library
 
+onready var layout = $VBoxContainer/Layout
 var preview_2d
 var preview_3d
 
@@ -49,6 +50,8 @@ const MENU = [
 
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
+	{ menu="View" },
+	{ menu="View", submenu="show_panes", description="Panes" },
 
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
@@ -67,20 +70,6 @@ const MENU = [
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
-
-const PANEL_POSITIONS = {
-	TopLeft="VBoxContainer/Layout/Left/Top",
-	BottomLeft="VBoxContainer/Layout/Left/Bottom",
-	TopRight="VBoxContainer/Layout/SplitRight/Right/Top",
-	BottomRight="VBoxContainer/Layout/SplitRight/Right/Bottom"
-}
-const PANELS = [
-	{ name="Library", scene=preload("res://material_maker/library.tscn"), position="TopLeft" },
-	{ name="Preview2D", scene=preload("res://material_maker/preview/preview_2d_panel.tscn"), position="BottomLeft" },
-	{ name="Preview3D", scene=preload("res://material_maker/preview/preview_3d_panel.tscn"), position="BottomLeft" }
-]
-
-var panels = {}
 
 signal quit
 
@@ -137,17 +126,9 @@ func _ready() -> void:
 	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
-	# Create panels
-	for panel_pos in PANEL_POSITIONS.keys():
-		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
-	for panel in PANELS:
-		var node = panel.scene.instance()
-		node.name = panel.name
-		var tab = get_node(PANEL_POSITIONS[panel.position])
-		tab.add_child(node)
-		panels[panel.name] = node
-	preview_2d = panels["Preview2D"]
-	preview_3d = panels["Preview3D"]
+	layout.load_panes()
+	preview_2d = layout.get_pane("Preview2D")
+	preview_3d = layout.get_pane("Preview3D")
 
 	# Load recent projects
 	load_recents()
@@ -262,6 +243,21 @@ func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
 	set_theme(theme_name)
 	config_cache.set_value("window", "theme", theme_name)
+
+
+func create_menu_show_panes(menu : PopupMenu) -> void:
+	menu.clear()
+	var panes = layout.get_pane_list()
+	for i in range(panes.size()):
+		menu.add_check_item(panes[i], i)
+		menu.set_item_checked(i, layout.is_pane_visible(panes[i]))
+	if !menu.is_connected("id_pressed", self, "_on_ShowPanes_id_pressed"):
+		menu.connect("id_pressed", self, "_on_ShowPanes_id_pressed")
+
+func _on_ShowPanes_id_pressed(id) -> void:
+	var pane : String = layout.get_pane_list()[id]
+	layout.set_pane_visible(pane, !layout.is_pane_visible(pane))
+	print(pane)
 
 func create_menu_create(menu) -> void:
 	var gens = mm_loader.get_generator_list()
