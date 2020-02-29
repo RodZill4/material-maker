@@ -126,7 +126,7 @@ func _ready() -> void:
 	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
-	layout.load_panes()
+	layout.load_panes(config_cache)
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
 	preview_3d = layout.get_pane("Preview3D")
@@ -593,6 +593,7 @@ func _exit_tree() -> void:
 	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
 	config_cache.set_value("window", "position", OS.window_position)
 	config_cache.set_value("window", "size", OS.window_size)
+	layout.save_config(config_cache)
 	config_cache.save("user://cache.ini")
 
 func _notification(what : int) -> void:
