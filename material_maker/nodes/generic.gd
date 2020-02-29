@@ -17,9 +17,7 @@ func _draw() -> void:
 		var conn_pos = get_connection_output_position(preview_index)
 		if preview_index > 0:
 			conn_pos.y += 1
-		print(conn_pos)
 		conn_pos /= get_global_transform().get_scale()
-		print(conn_pos)
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8))
 
 func set_generator(g) -> void:
