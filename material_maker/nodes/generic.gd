@@ -11,6 +11,17 @@ var preview_position : int
 var preview_size : int
 var preview_timer : Timer = null
 
+func _draw() -> void:
+	._draw()
+	if preview_index >= 0:
+		var conn_pos = get_connection_output_position(preview_index)
+		if preview_index > 0:
+			conn_pos.y += 1
+		print(conn_pos)
+		conn_pos /= get_global_transform().get_scale()
+		print(conn_pos)
+		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8))
+
 func set_generator(g) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
@@ -262,23 +273,8 @@ func update_node() -> void:
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 			add_child(hsizer)
 		hsizer = get_child(i)
-		var has_filler = false
-		for c in hsizer.get_children():
-			if c.size_flags_horizontal & SIZE_EXPAND != 0:
-				has_filler = true
-				break
-		if !has_filler:
-			var empty_control : Control = Control.new()
-			empty_control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.add_child(empty_control)
-		var button = preload("res://material_maker/widgets/preview_button.tscn").instance()
-		button.size_flags_horizontal = SIZE_SHRINK_END
-		button.size_flags_vertical = SIZE_SHRINK_CENTER
-		if i == preview_index:
-			button.pressed = true
-		hsizer.add_child(button)
-		button.connect("toggled", self, "on_preview_button", [ i ])
-		button_width = button.rect_size.x
+		if hsizer.get_child_count() == 0:
+			hsizer.rect_min_size.y = 16
 	if !outputs.empty():
 		for i in range(output_count, get_child_count()):
 			var hsizer : HBoxContainer = get_child(i)
@@ -352,34 +348,22 @@ func do_save_generator(file_name : String) -> void:
 		file.close()
 		mm_loader.update_predefined_generators()
 
-func update_preview_buttons(index : int) -> void:
-	for i in range(output_count):
-		if i != index:
-			var line = get_child(i)
-			line.get_child(line.get_child_count()-1).pressed = false
-
-var processing_button = false
-
-func on_preview_button(pressed : bool, index : int) -> void:
-	if processing_button:
-		return
-	processing_button = true
-	if pressed:
+func on_clicked_output(index : int) -> void:
+	if preview_index == index:
+		preview_index = -1
+		preview.visible = false
+		remove_child(preview)
+		rect_size = Vector2(0, 0)
+	else:
 		preview_index = index
 		var width
 		if preview.visible:
-			update_preview_buttons(index)
 			update_preview()
 		else:
 			var status = update_preview(get_child(0).rect_size.x)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
-	else:
-		preview_index = -1
-		preview.visible = false
-		remove_child(preview)
-		rect_size = Vector2(0, 0)
-	processing_button = false
+	update()
 
 func update_preview(size : int = 0) -> void:
 	if preview_index == -1:
