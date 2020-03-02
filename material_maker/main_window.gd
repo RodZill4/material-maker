@@ -16,6 +16,7 @@ onready var layout = $VBoxContainer/Layout
 var library
 var preview_2d
 var preview_3d
+var hierarchy
 
 onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D
 onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview2DButton
@@ -130,6 +131,8 @@ func _ready() -> void:
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
 	preview_3d = layout.get_pane("Preview3D")
+	hierarchy = layout.get_pane("Hierarchy")
+	hierarchy.connect("group_selected", self, "on_group_selected")
 
 	# Load recent projects
 	load_recents()
@@ -521,6 +524,7 @@ func _on_PopupMenu_id_pressed(id) -> void:
 # Preview
 
 func update_preview() -> void:
+	hierarchy.update_from_graph_edit(get_current_graph_edit())
 	var status
 	need_update = true
 	if updating:
@@ -586,6 +590,11 @@ func _on_Projects_tab_changed(tab) -> void:
 				new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
+
+func on_group_selected(generator) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.edit_subgraph(generator)
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application

@@ -7,6 +7,7 @@ Base class for texture generators, that defines their API
 """
 
 signal parameter_changed
+signal output_changed(index)
 
 class InputPort:
 	var generator : MMGenBase = null
@@ -48,6 +49,9 @@ func can_be_deleted() -> bool:
 
 func toggle_editable() -> bool:
 	return false
+
+func is_template() -> bool:
+	return model != null
 
 func is_editable() -> bool:
 	return false
@@ -117,6 +121,7 @@ func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
 	for target in targets:
 		target.generator.source_changed(target.input_index)
+	emit_signal("output_changed", output_index)
 
 func source_changed(__) -> void:
 	emit_signal("parameter_changed", "__input_changed__", 0)
