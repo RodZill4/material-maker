@@ -73,12 +73,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "voronoi_0",
-			"from_port": 1,
-			"to": "colorize_5",
-			"to_port": 0
-		},
-		{
 			"from": "blend_0",
 			"from_port": 0,
 			"to": "Material",
@@ -159,52 +153,6 @@
 	},
 	"nodes": [
 		{
-			"name": "voronoi_0",
-			"node_position": {
-				"x": -288,
-				"y": -107
-			},
-			"parameters": {
-				"intensity": 1,
-				"randomness": 1,
-				"scale_x": 8,
-				"scale_y": 8,
-				"stretch_x": 1,
-				"stretch_y": 1
-			},
-			"type": "voronoi"
-		},
-		{
-			"name": "colorize_5",
-			"node_position": {
-				"x": -104,
-				"y": -87
-			},
-			"parameters": {
-				"gradient": {
-					"interpolation": 1,
-					"points": [
-						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0.027273,
-							"r": 0
-						},
-						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0.1,
-							"r": 1
-						}
-					],
-					"type": "Gradient"
-				}
-			},
-			"type": "colorize"
-		},
-		{
 			"name": "colorize_0",
 			"node_position": {
 				"x": 560.943665,
@@ -237,8 +185,8 @@
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": 13,
-				"y": 218
+				"x": -72,
+				"y": 250
 			},
 			"parameters": {
 				"iterations": 4,
@@ -321,8 +269,8 @@
 		{
 			"name": "Perlin",
 			"node_position": {
-				"x": 74,
-				"y": -255
+				"x": -66,
+				"y": -133
 			},
 			"parameters": {
 				"iterations": 8,
@@ -440,7 +388,6 @@
 				"emission_energy": 1,
 				"metallic": 1,
 				"normal_scale": 1,
-				"resolution": 1,
 				"roughness": 1,
 				"size": 11,
 				"subsurf_scatter_strength": 0
@@ -454,14 +401,7 @@
 				"y": -22.258774
 			},
 			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
+
 			},
 			"type": "combine"
 		},
@@ -532,13 +472,10 @@
 				"y": 211.716217
 			},
 			"parameters": {
-				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.79,
 				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param4": 1
 			},
 			"type": "normal_map"
 		},
@@ -550,8 +487,7 @@
 			},
 			"parameters": {
 				"amount": 0.05,
-				"eps": 0.05,
-				"epsilon": 0
+				"eps": 0.05
 			},
 			"type": "warp"
 		},
@@ -570,8 +506,8 @@
 		{
 			"name": "Bricks",
 			"node_position": {
-				"x": -56,
-				"y": -6
+				"x": -61,
+				"y": 2
 			},
 			"parameters": {
 				"bevel": 0.15,
