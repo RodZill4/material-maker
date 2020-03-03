@@ -1,13 +1,18 @@
 extends Tree
 
+export(int, 0, 3) var preview : int = 0
+
+var update_index : int = 0
+
 signal group_selected
 
 func update_from_graph_edit(graph_edit) -> void:
+	update_index += 1
 	set_column_expand(0, true)
-#	columns = 4
-#	for i in range(1, 4):
-#		set_column_expand(i, false)
-#		set_column_min_width(i, 24)
+	columns = preview+1
+	for i in range(1, columns):
+		set_column_expand(i, false)
+		set_column_min_width(i, 28)
 	if graph_edit == null:
 		return
 	var file_name = "PTex"
@@ -28,14 +33,20 @@ func fill_tree(top : MMGenGraph, selected : MMGenGraph, top_name : String) -> vo
 	root.set_metadata(0, top)
 	fill_item(root, top, selected)
 
-#func set_icon(item, generator):
-#	var result = generator.render(0, 24, true)
-#	while result is GDScriptFunctionState:
-#		result = yield(result, "completed")
-#	var tex = ImageTexture.new()
-#	result.copy_to_texture(tex)
-#	result.release()
-#	item.set_icon(3, tex)
+func set_icon(item, generator) -> void:
+	var index = update_index
+	var output_count = min(generator.get_output_defs().size(), 3)
+	for o in range(output_count):
+		var result = generator.render(o, 24, true)
+		while result is GDScriptFunctionState:
+			if index != update_index:
+				return
+			result = yield(result, "completed")
+		if index == update_index:
+			var tex = ImageTexture.new()
+			result.copy_to_texture(tex)
+			item.set_icon(1+preview-output_count+o, tex)
+		result.release()
 
 func fill_item(parent : TreeItem, generator : MMGenGraph, selected : MMGenGraph) -> void:
 	for c in generator.get_children():
@@ -49,8 +60,8 @@ func fill_item(parent : TreeItem, generator : MMGenGraph, selected : MMGenGraph)
 			elif c.is_editable():
 				item.set_custom_color(0, Color(1, 1, 1))
 			item.set_metadata(0, c)
-#			if c.get_output_defs().size() > 0:
-#				call_deferred("set_icon", item, c)
+			if preview > 0 and c.get_output_defs().size() > 0:
+				call_deferred("set_icon", item, c)
 			fill_item(item, c, selected)
 
 func _on_Hierarchy_item_double_clicked():
