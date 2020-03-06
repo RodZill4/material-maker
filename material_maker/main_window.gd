@@ -314,9 +314,10 @@ func load_material() -> void:
 
 func do_load_materials(filenames) -> void:
 	for f in filenames:
-		do_load_material(f)
+		do_load_material(f, false)
+	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func do_load_material(filename) -> void:
+func do_load_material(filename : String, update_hierarchy : bool = true) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -330,12 +331,15 @@ func do_load_material(filename) -> void:
 		graph_edit = new_pane()
 	graph_edit.load_file(filename)
 	add_recent(filename)
+	if update_hierarchy:
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func save_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
 			graph_edit.save_file(graph_edit.save_path)
+			add_recent(graph_edit.save_path)
 		else:
 			save_material_as()
 
@@ -524,7 +528,6 @@ func _on_PopupMenu_id_pressed(id) -> void:
 # Preview
 
 func update_preview() -> void:
-	hierarchy.update_from_graph_edit(get_current_graph_edit())
 	var status
 	need_update = true
 	if updating:
@@ -590,6 +593,7 @@ func _on_Projects_tab_changed(tab) -> void:
 				new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

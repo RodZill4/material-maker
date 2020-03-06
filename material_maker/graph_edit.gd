@@ -21,6 +21,7 @@ onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmits
 
 signal save_path_changed
 signal graph_changed
+signal view_updated
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -151,6 +152,7 @@ func update_view(g) -> void:
 		button_transmits_seed.pressed = generator.transmits_seed
 	else:
 		button_transmits_seed.visible = false
+	emit_signal("view_updated", generator)
 
 
 func clear_material() -> void:
