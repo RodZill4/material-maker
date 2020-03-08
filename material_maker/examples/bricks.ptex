@@ -97,18 +97,6 @@
 			"to_port": 5
 		},
 		{
-			"from": "uniform_0",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 0
-		},
-		{
-			"from": "colorize_4",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 1
-		},
-		{
 			"from": "colorize_1",
 			"from_port": 0,
 			"to": "adjust_hsv_0",
@@ -207,7 +195,6 @@
 				"emission_energy": 1,
 				"metallic": 1,
 				"normal_scale": 1,
-				"resolution": 1,
 				"roughness": 1,
 				"size": 11,
 				"subsurf_scatter_strength": 0
@@ -241,8 +228,8 @@
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 544.943665,
-				"y": 159
+				"x": 533.943665,
+				"y": 141
 			},
 			"parameters": {
 				"gradient": {
@@ -271,8 +258,8 @@
 		{
 			"name": "uniform_0",
 			"node_position": {
-				"x": 764,
-				"y": 164
+				"x": 760,
+				"y": 156
 			},
 			"parameters": {
 				"color": {
@@ -284,24 +271,6 @@
 				}
 			},
 			"type": "uniform"
-		},
-		{
-			"name": "combine_0",
-			"node_position": {
-				"x": 896,
-				"y": 86
-			},
-			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
-			},
-			"type": "combine"
 		},
 		{
 			"name": "colorize_4",
@@ -396,8 +365,8 @@
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": 406.943665,
-				"y": -80
+				"x": 383.943665,
+				"y": -76
 			},
 			"parameters": {
 				"gradient": {
@@ -454,8 +423,8 @@
 		{
 			"name": "blend_1",
 			"node_position": {
-				"x": 316,
-				"y": 217
+				"x": 288,
+				"y": 203
 			},
 			"parameters": {
 				"amount": 0.5,
@@ -485,8 +454,7 @@
 			},
 			"parameters": {
 				"amount": 0.04,
-				"eps": 0.045,
-				"epsilon": 0
+				"eps": 0.045
 			},
 			"type": "warp"
 		},
@@ -506,8 +474,8 @@
 		{
 			"name": "_2_2",
 			"node_position": {
-				"x": 244.467804,
-				"y": -350.036743
+				"x": 243.467804,
+				"y": -299.036743
 			},
 			"parameters": {
 				"param1": 0,
@@ -976,24 +944,21 @@
 				}
 			],
 			"parameters": {
-
+				"param0": 0
 			},
 			"type": "graph"
 		},
 		{
 			"name": "normal_map_2",
 			"node_position": {
-				"x": 986.357788,
-				"y": 281.520294
+				"x": 974.357788,
+				"y": 284.520294
 			},
 			"parameters": {
-				"amount": 0.5,
 				"param0": 11,
 				"param1": 1.02,
 				"param2": 0,
-				"param3": 0,
-				"param4": 0,
-				"size": 4
+				"param4": 0
 			},
 			"type": "normal_map"
 		}

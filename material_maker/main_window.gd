@@ -10,13 +10,19 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-onready var projects = $VBoxContainer/HBoxContainer/ProjectsPane/Projects
-onready var library = $VBoxContainer/HBoxContainer/VBoxContainer/Library
+onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
 
-onready var preview_2d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview2D
-onready var preview_3d = $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D
+onready var layout = $VBoxContainer/Layout
+var library
+var preview_2d
+var preview_3d
+var hierarchy
 
-onready var preview_2d_background = $VBoxContainer/HBoxContainer/ProjectsPane/Preview2D
+onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D
+onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview2DButton
+onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D
+onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview3DButton
+onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel
 
 const RECENT_FILES_COUNT = 15
 
@@ -45,6 +51,8 @@ const MENU = [
 
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
+	{ menu="View" },
+	{ menu="View", submenu="show_panes", description="Panes" },
 
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
@@ -116,8 +124,27 @@ func _ready() -> void:
 	# This property is only available in 3.2alpha or later, so use `set()` to fail gracefully if it doesn't exist.
 	OS.set("min_window_size", Vector2(1024, 600))
 
+	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+
+	layout.load_panes(config_cache)
+	library = layout.get_pane("Library")
+	preview_2d = layout.get_pane("Preview2D")
+	preview_3d = layout.get_pane("Preview3D")
+	hierarchy = layout.get_pane("Hierarchy")
+	hierarchy.connect("group_selected", self, "on_group_selected")
+
+	# Load recent projects
 	load_recents()
+
+	# Create menus
+	for i in MENU.size():
+		if ! $VBoxContainer/Menu.has_node(MENU[i].menu):
+			var menu_button = MenuButton.new()
+			menu_button.name = MENU[i].menu
+			menu_button.text = MENU[i].menu
+			menu_button.switch_on_hover = true
+			$VBoxContainer/Menu.add_child(menu_button)
 	for m in $VBoxContainer/Menu.get_children():
 		var menu = m.get_popup()
 		create_menu(menu, m.name)
@@ -221,6 +248,21 @@ func _on_SetTheme_id_pressed(id) -> void:
 	set_theme(theme_name)
 	config_cache.set_value("window", "theme", theme_name)
 
+
+func create_menu_show_panes(menu : PopupMenu) -> void:
+	menu.clear()
+	var panes = layout.get_pane_list()
+	for i in range(panes.size()):
+		menu.add_check_item(panes[i], i)
+		menu.set_item_checked(i, layout.is_pane_visible(panes[i]))
+	if !menu.is_connected("id_pressed", self, "_on_ShowPanes_id_pressed"):
+		menu.connect("id_pressed", self, "_on_ShowPanes_id_pressed")
+
+func _on_ShowPanes_id_pressed(id) -> void:
+	var pane : String = layout.get_pane_list()[id]
+	layout.set_pane_visible(pane, !layout.is_pane_visible(pane))
+	print(pane)
+
 func create_menu_create(menu) -> void:
 	var gens = mm_loader.get_generator_list()
 	menu.clear()
@@ -259,6 +301,7 @@ func new_material() -> void:
 	var graph_edit = new_pane()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
+	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func load_material() -> void:
 	var dialog = FileDialog.new()
@@ -272,9 +315,10 @@ func load_material() -> void:
 
 func do_load_materials(filenames) -> void:
 	for f in filenames:
-		do_load_material(f)
+		do_load_material(f, false)
+	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func do_load_material(filename) -> void:
+func do_load_material(filename : String, update_hierarchy : bool = true) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -288,12 +332,15 @@ func do_load_material(filename) -> void:
 		graph_edit = new_pane()
 	graph_edit.load_file(filename)
 	add_recent(filename)
+	if update_hierarchy:
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func save_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
 			graph_edit.save_file(graph_edit.save_path)
+			add_recent(graph_edit.save_path)
 		else:
 			save_material_as()
 
@@ -492,7 +539,7 @@ func update_preview() -> void:
 		status = update_preview_2d()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		status = update_preview_3d([ $VBoxContainer/HBoxContainer/VBoxContainer/Preview/Preview3D, $VBoxContainer/HBoxContainer/ProjectsPane/Preview3D])
+		status = update_preview_3d([ preview_3d, preview_3d_background ])
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 	updating = false
@@ -547,6 +594,12 @@ func _on_Projects_tab_changed(tab) -> void:
 				new_tab.connect("node_selected", self, "on_selected_node_change")
 		current_tab = new_tab
 		update_preview()
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
+
+func on_group_selected(generator) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.edit_subgraph(generator)
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -554,6 +607,7 @@ func _exit_tree() -> void:
 	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
 	config_cache.set_value("window", "position", OS.window_position)
 	config_cache.set_value("window", "size", OS.window_size)
+	layout.save_config(config_cache)
 	config_cache.save("user://cache.ini")
 
 func _notification(what : int) -> void:
@@ -566,15 +620,15 @@ func dim_window() -> void:
 	modulate = Color(0.5, 0.5, 0.5)
 
 func show_background_preview_2d(button_pressed):
-	$VBoxContainer/HBoxContainer/ProjectsPane/Preview2D.visible = button_pressed
+	preview_2d_background.visible = button_pressed
 	if button_pressed:
-		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview3DButton.pressed = false
+		preview_3d_background_button.pressed = false
 
 func show_background_preview_3d(button_pressed):
-	$VBoxContainer/HBoxContainer/ProjectsPane/Preview3D.visible = button_pressed
-	$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Panel.visible = button_pressed
+	preview_3d_background.visible = button_pressed
+	preview_3d_background_panel.visible = button_pressed
 	if button_pressed:
-		$VBoxContainer/HBoxContainer/ProjectsPane/PreviewUI/Preview2DButton.pressed = false
+		preview_2d_background_button.pressed = false
 
 
 func generate_screenshots():
