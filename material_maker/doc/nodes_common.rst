@@ -24,18 +24,20 @@ connected to several node inputs. Each node output (and input) can be:
 
 * a **3D signed distance function** (shown in red)
 
+* a **3D texture** (shown in fuchia)
+
 Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
 converted when required.
 
 2D signed distance functions have a specific preview that shows the associated signed distance
-field. They can be converted into greyscale images using the `sdShow node`.
+field. They can be converted into greyscale images using the `sdShow` node.
 
-3D signed distance functions have a specific preview that shows the lit 3Dscene. They can be
-converted into a greyscale height map and a color normal map using the `Render node`.
+3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
+converted into a greyscale height map and a color normal map using the `Render` node.
 
-Next to the output, an (open or closed) eye icon indicates that a preview is available. Clicking
-on it will show the preview at the bottom of the node. When a node has several outputs, only
-one of them can be previewed at a time.
+Clicking on an output slot it will show the corresponding preview at the bottom of the node.
+When a node has several outputs, only one of them can be previewed at a time. The previewed
+output slot will has a circle around it, and clicking it again will hide the preview.
 
 Inputs
 ^^^^^^

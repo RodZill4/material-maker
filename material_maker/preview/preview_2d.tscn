@@ -20,6 +20,7 @@ void fragment() {
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/size = Vector2( 585, 492 )
 

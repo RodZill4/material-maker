@@ -10,7 +10,13 @@ var editable : bool = false
 var transmits_seed : bool = true
 
 signal connections_changed(removed_connections, added_connections)
+signal hierarchy_changed
 
+func emit_hierarchy_changed():
+	var top = self
+	while top.get_parent() != null and top.get_parent().get_script() == get_script():
+		top = top.get_parent()
+	top.emit_signal("hierarchy_changed")
 
 func fix_remotes() -> void:
 	for c in get_children():
@@ -111,6 +117,8 @@ func add_generator(generator : MMGenBase) -> bool:
 		name = generator.name + "_" + str(index)
 	generator.name = name
 	add_child(generator)
+	if generator.get_script() == get_script():
+		emit_hierarchy_changed()
 	return true
 
 func remove_generator(generator : MMGenBase) -> bool:
@@ -123,6 +131,8 @@ func remove_generator(generator : MMGenBase) -> bool:
 	connections = new_connections
 	remove_child(generator)
 	fix_remotes()
+	if generator.get_script() == get_script():
+		emit_hierarchy_changed()
 	generator.queue_free()
 	return true
 
@@ -130,8 +140,10 @@ func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	new.name = old.name
 	new.position = old.position
 	remove_child(old)
-	old.free()
 	add_child(new)
+	if old.get_script() == get_script() or new.get_script() == get_script():
+		emit_hierarchy_changed()
+	old.free()
 
 func get_connected_inputs(generator) -> Array:
 	var rv : Array = []
@@ -312,10 +324,11 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	if !found_remote:
 		var gen_parameters = remote_script.new()
 		gen_parameters.name = "gen_parameters"
-		gen_parameters.position = Vector2(center.x - 200, upper_bound-300)
+		gen_parameters.position = Vector2(center.x-200, upper_bound-300)
 		new_graph.add_child(gen_parameters)
 	fix_remotes()
 	new_graph.fix_remotes()
+	emit_hierarchy_changed()
 	return new_graph
 
 

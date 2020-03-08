@@ -87,7 +87,7 @@ func create_gen(data) -> MMGenBase:
 	if generator == null and data.has("type"):
 		if types.has(data.type):
 			generator = types[data.type].new()
-		else:
+		elif predefined_generators.has(data.type):
 			generator = create_gen(predefined_generators[data.type])
 			if generator == null:
 				print("Cannot find description for "+data.type)

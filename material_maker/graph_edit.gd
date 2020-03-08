@@ -21,6 +21,7 @@ onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmits
 
 signal save_path_changed
 signal graph_changed
+signal view_updated
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -151,6 +152,7 @@ func update_view(g) -> void:
 		button_transmits_seed.pressed = generator.transmits_seed
 	else:
 		button_transmits_seed.visible = false
+	emit_signal("view_updated", generator)
 
 
 func clear_material() -> void:
@@ -396,9 +398,18 @@ func _on_GraphEdit_gui_input(event) -> void:
 		call_deferred("check_last_selected")
 
 func request_popup(from, from_slot, release_position) -> void:
-	node_popup.rect_global_position = get_global_mouse_position()
-	node_popup.show()
-	node_popup.set_quick_connect(from, from_slot)
+	# Check if the connector was actually dragged
+	var node : GraphNode = get_node(from)
+	var node_transform : Transform2D = node.get_global_transform()
+	var output_position = node_transform.xform(node.get_connection_output_position(from_slot)/node_transform.get_scale())
+	if (get_global_mouse_position()-output_position).length() < 20:
+		# Tell the node its connector was clicked
+		node.on_clicked_output(from_slot)
+	else:
+		# Request the popup
+		node_popup.rect_global_position = get_global_mouse_position()
+		node_popup.show()
+		node_popup.set_quick_connect(from, from_slot)
 
 func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):

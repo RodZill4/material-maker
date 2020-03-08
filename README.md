@@ -24,7 +24,7 @@ scoop install material-maker
 
 ## Screenshot
 
-![Screenshot](addons/material_maker/doc/images/screenshot.png)
+![Screenshot](material_maker/doc/images/screenshot.png)
 
 ## License
 
