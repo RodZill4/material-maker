@@ -97,18 +97,6 @@
 			"to_port": 5
 		},
 		{
-			"from": "uniform_0",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 0
-		},
-		{
-			"from": "colorize_4",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 1
-		},
-		{
 			"from": "colorize_1",
 			"from_port": 0,
 			"to": "adjust_hsv_0",
@@ -240,8 +228,8 @@
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 544.943665,
-				"y": 159
+				"x": 533.943665,
+				"y": 141
 			},
 			"parameters": {
 				"gradient": {
@@ -270,8 +258,8 @@
 		{
 			"name": "uniform_0",
 			"node_position": {
-				"x": 764,
-				"y": 164
+				"x": 760,
+				"y": 156
 			},
 			"parameters": {
 				"color": {
@@ -283,18 +271,6 @@
 				}
 			},
 			"type": "uniform"
-		},
-		{
-			"name": "combine_0",
-			"node_position": {
-				"x": 896,
-				"y": 86
-			},
-			"parameters": {
-
-			},
-			"seed_value": 60630,
-			"type": "combine"
 		},
 		{
 			"name": "colorize_4",
@@ -389,8 +365,8 @@
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": 406.943665,
-				"y": -80
+				"x": 383.943665,
+				"y": -76
 			},
 			"parameters": {
 				"gradient": {
@@ -447,8 +423,8 @@
 		{
 			"name": "blend_1",
 			"node_position": {
-				"x": 316,
-				"y": 217
+				"x": 288,
+				"y": 203
 			},
 			"parameters": {
 				"amount": 0.5,
@@ -498,8 +474,8 @@
 		{
 			"name": "_2_2",
 			"node_position": {
-				"x": 244.467804,
-				"y": -350.036743
+				"x": 243.467804,
+				"y": -299.036743
 			},
 			"parameters": {
 				"param1": 0,
@@ -543,12 +519,440 @@
 				}
 			]
 		},
-		null,
+		{
+			"connections": [
+				{
+					"from": "switch_0",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "switch_0",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "Bricks",
+					"from_port": 0,
+					"to": "switch_0",
+					"to_port": 0
+				},
+				{
+					"from": "voronoi_0",
+					"from_port": 2,
+					"to": "switch_0",
+					"to_port": 3
+				},
+				{
+					"from": "voronoi_0",
+					"from_port": 1,
+					"to": "colorize_5",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_5",
+					"from_port": 0,
+					"to": "switch_0",
+					"to_port": 2
+				},
+				{
+					"from": "Bricks",
+					"from_port": 1,
+					"to": "switch_0",
+					"to_port": 1
+				}
+			],
+			"label": "Modular Bricks",
+			"name": "graph",
+			"node_position": {
+				"x": 15,
+				"y": 56
+			},
+			"nodes": [
+				{
+					"name": "colorize_5",
+					"node_position": {
+						"x": -238.515076,
+						"y": -62.762329
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.027273,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.2,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "Bricks",
+					"node_position": {
+						"x": -250,
+						"y": -240
+					},
+					"parameters": {
+						"bevel": 0.2,
+						"columns": 2,
+						"corner": 0,
+						"mortar": 0.05,
+						"pattern": 3,
+						"repeat": 2,
+						"round": 0,
+						"row_offset": 0.5,
+						"rows": 2
+					},
+					"type": "bricks"
+				},
+				{
+					"name": "voronoi_0",
+					"node_position": {
+						"x": -248.515076,
+						"y": -2.762329
+					},
+					"parameters": {
+						"intensity": 1,
+						"randomness": 1,
+						"scale_x": 8,
+						"scale_y": 8,
+						"stretch_x": 1,
+						"stretch_y": 1
+					},
+					"type": "voronoi"
+				},
+				{
+					"name": "switch_0",
+					"node_position": {
+						"x": -7.515076,
+						"y": -126.762329
+					},
+					"parameters": {
+						"choices": 2,
+						"outputs": 2,
+						"source": 0
+					},
+					"type": "switch"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -295.330811,
+						"y": -317.657043
+					},
+					"parameters": {
+						"param0": 0
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"configurations": {
+								"Basket weave": [
+									{
+										"node": "Bricks",
+										"value": 3,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 0,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								],
+								"Herring bone": [
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 0,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								],
+								"Running bond 1": [
+									{
+										"node": "Bricks",
+										"value": 0,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 1,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 8,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 4,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 0,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								],
+								"Running bond 2": [
+									{
+										"node": "Bricks",
+										"value": 1,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 1,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 8,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 4,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 0,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								],
+								"Spanish bond": [
+									{
+										"node": "Bricks",
+										"value": 4,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 3,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 0,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								],
+								"Uneven": [
+									{
+										"node": "Bricks",
+										"value": 3,
+										"widget": "pattern"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "repeat"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "rows"
+									},
+									{
+										"node": "Bricks",
+										"value": 2,
+										"widget": "columns"
+									},
+									{
+										"node": "switch_0",
+										"value": 1,
+										"widget": "source"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_x"
+									},
+									{
+										"node": "voronoi_0",
+										"value": 8,
+										"widget": "scale_y"
+									}
+								]
+							},
+							"label": "Pattern",
+							"linked_widgets": [
+								{
+									"node": "Bricks",
+									"widget": "pattern"
+								},
+								{
+									"node": "Bricks",
+									"widget": "repeat"
+								},
+								{
+									"node": "Bricks",
+									"widget": "rows"
+								},
+								{
+									"node": "Bricks",
+									"widget": "columns"
+								},
+								{
+									"node": "switch_0",
+									"widget": "source"
+								},
+								{
+									"node": "voronoi_0",
+									"widget": "scale_x"
+								},
+								{
+									"node": "voronoi_0",
+									"widget": "scale_y"
+								}
+							],
+							"name": "param0",
+							"type": "config_control"
+						}
+					]
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 190,
+						"y": -124
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						},
+						{
+							"name": "port1",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"param0": 0
+			},
+			"type": "graph"
+		},
 		{
 			"name": "normal_map_2",
 			"node_position": {
-				"x": 986.357788,
-				"y": 281.520294
+				"x": 974.357788,
+				"y": 284.520294
 			},
 			"parameters": {
 				"param0": 11,
