@@ -301,6 +301,7 @@ func new_material() -> void:
 	var graph_edit = new_pane()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
+	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func load_material() -> void:
 	var dialog = FileDialog.new()

@@ -6,6 +6,7 @@ var default_texture : ImageTexture = null
 var current_graph_edit = null
 var current_generator = null
 var item_from_gen : Dictionary = {}
+var update_index = 0
 
 var pending_updates = {}
 
@@ -19,6 +20,9 @@ func _ready() -> void:
 	default_texture.create_from_image(default_image)
 
 func update_from_graph_edit(graph_edit) -> void:
+	$Delay.stop()
+	pending_updates = {}
+	update_index += 1
 	for g in item_from_gen.keys():
 		if is_instance_valid(g):
 			g.disconnect("output_changed", self, "on_gen_output_changed")
@@ -32,6 +36,8 @@ func update_from_graph_edit(graph_edit) -> void:
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
 		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
+	if current_generator != null and is_instance_valid(current_generator):
+		current_generator.disconnect("hierarchy_changed", self, "on_hierarchy_changed")
 	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
 		current_graph_edit = null
 		current_generator = null
@@ -39,26 +45,26 @@ func update_from_graph_edit(graph_edit) -> void:
 	current_graph_edit = graph_edit
 	current_graph_edit.connect("view_updated", self, "on_view_updated")
 	current_generator = graph_edit.generator
+	current_generator.connect("hierarchy_changed", self, "on_hierarchy_changed")
 	var file_name = "PTex"
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
 	fill_item(create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
 
 func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
+	var index = update_index
 	if output >= preview:
 		return
 	var result = generator.render(output, 24, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	var tex = ImageTexture.new()
-	result.copy_to_texture(tex)
-	item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
-	result.release()
-
-func set_icons(item : TreeItem, generator : MMGenGraph) -> void:
-	var output_count = min(generator.get_output_defs().size(), preview)
-	for output in range(output_count):
-		set_icon(item, generator, output)
+	if index == update_index:
+		var tex = ImageTexture.new()
+		result.copy_to_texture(tex)
+		result.release()
+		item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
+	else:
+		result.release()
 
 func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, name = null) -> void:
 	item.set_text(0, name if name != null else generator.get_type_name())
@@ -72,7 +78,9 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 	if preview > 0 and generator.get_output_defs().size() > 0:
 		for i in range(min(preview, generator.get_output_defs().size())):
 			item.set_icon(i+1, default_texture)
-		call_deferred("set_icons", item, generator)
+		var output_count = min(generator.get_output_defs().size(), preview)
+		for output in range(output_count):
+			on_gen_output_changed(output, generator)
 	for c in generator.get_children():
 		if c is MMGenGraph:
 			if c.is_template():
@@ -98,6 +106,9 @@ func on_gen_output_changed(index, generator) -> void:
 		$Delay.stop()
 		$Delay.start()
 
+func on_hierarchy_changed() -> void:
+	update_from_graph_edit(current_graph_edit)
+
 func _on_Delay_timeout() -> void:
 	for generator in pending_updates.keys():
 		var item = item_from_gen[generator]
@@ -112,5 +123,3 @@ func _on_Hierarchy_gui_input(event):
 func _on_ContextMenu_id_pressed(id):
 	preview = id
 	update_from_graph_edit(current_graph_edit)
-
-
