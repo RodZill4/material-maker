@@ -29,8 +29,8 @@
 		{
 			"name": "Material",
 			"node_position": {
-				"x": 184,
-				"y": -37
+				"x": -57,
+				"y": -506
 			},
 			"parameters": {
 				"albedo_color": {
@@ -54,8 +54,8 @@
 		{
 			"name": "206",
 			"node_position": {
-				"x": -438.5,
-				"y": -376
+				"x": -424.5,
+				"y": -437
 			},
 			"parameters": {
 				"attack": 0,
@@ -130,12 +130,12 @@
 		{
 			"name": "206_2",
 			"node_position": {
-				"x": -432.5,
-				"y": -488
+				"x": -429.5,
+				"y": -595
 			},
 			"parameters": {
-				"frequency": 930.2,
-				"type": 0
+				"frequency": 613.8,
+				"type": 3
 			},
 			"shader_model": {
 				"code": "",
@@ -193,8 +193,8 @@
 		{
 			"name": "audio",
 			"node_position": {
-				"x": -380.958374,
-				"y": -205.208374
+				"x": -372.958374,
+				"y": -314.208374
 			},
 			"parameters": {
 
@@ -205,12 +205,12 @@
 		{
 			"name": "206_2_2",
 			"node_position": {
-				"x": -143.958374,
-				"y": -463.508362
+				"x": -429.958374,
+				"y": -515.508362
 			},
 			"parameters": {
-				"amplitude": 0.056,
-				"speed": 0.98
+				"amplitude": 0.027,
+				"speed": 1.01
 			},
 			"shader_model": {
 				"code": "",
