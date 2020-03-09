@@ -2,7 +2,7 @@ Splatter node
 ~~~~~~~~~~~~~
 
 The **Splatter** node splats several instances of its input with optional scale and rotation variations.
-instances are mixed with each other using a *lighten* filter.
+Overlapping instances are mixed with each other using a *lighten* filter.
 
 The **Splatter** also has a color version whose input is in RGBA format.
 
@@ -26,7 +26,7 @@ The **Splatter** node outputs the splat image.
 Parameters
 ++++++++++
 
-The **Splatter** node has two parameters:
+The **Splatter** node accepts the following parameters:
 
 * *Count*, the number of instances of the source image in the result, including those canceled by the mask.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several

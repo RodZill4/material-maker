@@ -327,8 +327,8 @@
 			"label": "Wood simple",
 			"name": "graph_2",
 			"node_position": {
-				"x": -1260.345703,
-				"y": -185.932098
+				"x": -823.345703,
+				"y": -124.932098
 			},
 			"nodes": [
 				{
@@ -556,7 +556,6 @@
 						"y": -49
 					},
 					"parameters": {
-						"Randomness": 0.5,
 						"angle": 0,
 						"layers": 5,
 						"length": 0.02,
@@ -696,8 +695,7 @@
 					},
 					"parameters": {
 						"amount": 0.04,
-						"eps": 0.03,
-						"epsilon": 0
+						"eps": 0.03
 					},
 					"shader_model": {
 						"global": "",
@@ -896,14 +894,7 @@
 						"y": -117.463135
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -931,13 +922,10 @@
 						"y": 4.536865
 					},
 					"parameters": {
-						"amount": 0.5,
 						"param0": 10,
 						"param1": 1,
 						"param2": 0,
-						"param3": 0,
-						"param4": 0,
-						"size": 4
+						"param4": 0
 					},
 					"type": "normal_map"
 				}
@@ -1177,8 +1165,7 @@
 							"parameters": {
 								"amount": 1,
 								"format": 0,
-								"size": 11,
-								"type": 0
+								"size": 11
 							},
 							"shader_model": {
 								"code": "",
@@ -1248,12 +1235,9 @@
 								"y": -29.916687
 							},
 							"parameters": {
-								"amount": 0.5,
 								"param0": 11,
 								"param1": 1,
-								"param2": 0,
-								"param3": 1,
-								"size": 4
+								"param2": 0
 							},
 							"type": "remote",
 							"widgets": [
@@ -1336,12 +1320,9 @@
 						}
 					],
 					"parameters": {
-						"amount": 0.5,
 						"param0": 11,
 						"param1": 1,
-						"param2": 0,
-						"param3": 1,
-						"size": 4
+						"param2": 0
 					},
 					"type": "graph"
 				},
@@ -1527,7 +1508,6 @@
 							},
 							"parameters": {
 								"param0": 10,
-								"param1": 50,
 								"param2": 1
 							},
 							"type": "remote",
@@ -1689,7 +1669,6 @@
 					],
 					"parameters": {
 						"param0": 10,
-						"param1": 50,
 						"param2": 1
 					},
 					"type": "graph"
@@ -1799,7 +1778,6 @@
 					},
 					"parameters": {
 						"param0": 0.25,
-						"param1": 10,
 						"param2": 1
 					},
 					"type": "remote",
@@ -1831,7 +1809,6 @@
 			],
 			"parameters": {
 				"param0": 0.25,
-				"param1": 10,
 				"param2": 1
 			},
 			"type": "graph"
@@ -1884,8 +1861,8 @@
 			"label": "Metal",
 			"name": "graph_2_2",
 			"node_position": {
-				"x": -1257.244629,
-				"y": -432.490662
+				"x": -820.244629,
+				"y": -371.490662
 			},
 			"nodes": [
 				{
@@ -1962,14 +1939,7 @@
 						"y": -176.48642
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -2211,8 +2181,8 @@
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -670.527832,
-				"y": -352.071716
+				"x": -512.527832,
+				"y": -343.071716
 			},
 			"parameters": {
 				"choices": 3,
@@ -2305,8 +2275,8 @@
 			"label": "Marble",
 			"name": "graph_3_3_2",
 			"node_position": {
-				"x": -1254.027832,
-				"y": -320.571716
+				"x": -812.027832,
+				"y": -250.571716
 			},
 			"nodes": [
 				{
@@ -2560,14 +2530,7 @@
 						"y": 39.197388
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -2589,13 +2552,10 @@
 						"y": 186.780701
 					},
 					"parameters": {
-						"amount": 0.5,
 						"param0": 11,
 						"param1": 2,
 						"param2": 0,
-						"param3": 0,
-						"param4": 0,
-						"size": 4
+						"param4": 0
 					},
 					"type": "normal_map"
 				},
@@ -2623,7 +2583,6 @@
 						"y": 149.637848
 					},
 					"parameters": {
-						"Randomness": 0.5,
 						"angle": -1,
 						"layers": 10,
 						"length": 0.05,
@@ -2900,8 +2859,8 @@
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": -486.94574,
-				"y": -385.608154
+				"x": -539.94574,
+				"y": -423.608154
 			},
 			"parameters": {
 				"color": 1

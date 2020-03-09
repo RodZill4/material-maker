@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/preview/preview_3d.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=2]
+
+[node name="Preview3D" instance=ExtResource( 1 )]
+visible = true
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
+rect_min_size = Vector2( 250, 200 )
+
+[node name="MaterialPreview" parent="." index="0"]
+size = Vector2( 1280, 720 )
+render_target_update_mode = 3
+
+[node name="Preview3DUI" parent="." index="1" instance=ExtResource( 2 )]
+[connection signal="environment_selected" from="Preview3DUI" to="." method="_on_Environment_item_selected"]
+[connection signal="model_selected" from="Preview3DUI" to="." method="_on_Model_item_selected"]
+[connection signal="rotate_toggled" from="Preview3DUI" to="." method="_on_Rotate_toggled"]
