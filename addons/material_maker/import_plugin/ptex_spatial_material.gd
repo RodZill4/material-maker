@@ -23,6 +23,6 @@ func update_texture() -> void:
 	var status = mm_material.render_textures()
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
-	mm_material.update_spatial_material(self)
+	mm_material.update_material(self)
 	mm_graph.queue_free()
 	

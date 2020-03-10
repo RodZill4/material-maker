@@ -8,9 +8,12 @@ var predefined_generators = {}
 func _ready()-> void:
 	update_predefined_generators()
 
+func get_nodes_paths() -> Array:
+	return [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/nodes" ]
+
 func update_predefined_generators()-> void:
 	predefined_generators = {}
-	for path in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
+	for path in get_nodes_paths():
 		var dir = Directory.new()
 		if dir.open(path) == OK:
 			dir.list_dir_begin()
@@ -24,7 +27,7 @@ func update_predefined_generators()-> void:
 				file_name = dir.get_next()
 
 func generator_name_from_path(path : String) -> String:
-	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
+	for p in get_nodes_paths():
 		print(p)
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
@@ -56,6 +59,8 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 
 func create_gen(data) -> MMGenBase:
 	var guess = [
+		{ keyword="export", type=MMGenMaterial },
+		{ keyword="connections", type=MMGenGraph },
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="shader_model", type=MMGenShader },
@@ -65,7 +70,7 @@ func create_gen(data) -> MMGenBase:
 		{ keyword="widgets", type=MMGenRemote }
 	]
 	var types = {
-		material = MMGenMaterial,
+		material_export = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
 		ios = MMGenIOs,
@@ -99,7 +104,7 @@ func create_gen(data) -> MMGenBase:
 func get_generator_list() -> Array:
 	var rv = []
 	var dir : Directory = Directory.new()
-	for p in [ STD_GENDEF_PATH, OS.get_executable_path().get_base_dir()+"/generators" ]:
+	for p in get_nodes_paths():
 		dir.open(p)
 		dir.list_dir_begin(true)
 		while true:
