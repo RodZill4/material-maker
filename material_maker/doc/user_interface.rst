@@ -224,10 +224,10 @@ The main menu bar is organized in 5 menus:
 File menu
 ^^^^^^^^^
 
-* *New material* creates a new material and opens a tab in the right pane to edit it
+* *New material* creates a new material and opens a tab in the center pane to edit it
 
 * *Load material* opens a file dialog to select a procedural material (.ptex) file. If
-  a material file is selected, it will be open in a new tab in the right pane. If the current
+  a material file is selected, it will be open in a new tab in the center pane. If the current
   tab contains an empty material (about material that only consists of a Material node), the
   material will be loaded into this tab.
 
@@ -239,12 +239,10 @@ File menu
 * *Save all materials* saves all currently open materials. Materials that were already
   saved are ignored.
 
-* *Export material* generates PNG image files for all elements of the material. File names are
-  defined using the path of the **.ptex** material file and their role (albedo, emission...)
-  in the material.
-  The Ambient occlusion, roughness and metallic textures are saved into a single file whose
-  suffix is **orm**.
-  If the material contains **export** nodes, their textures will be exported as well.
+* the *Export* submenu can be used to export the current Material for Godot, Unity
+  or Unreal. It will prompt for a file name and generate PNG files for all components
+  of the material. Exporting to one of those engines is described in the
+  :ref:`export-section` section.
 
 * *Close material* closes the current material.
 
