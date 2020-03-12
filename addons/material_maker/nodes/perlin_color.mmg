@@ -54,7 +54,7 @@
 			},
 			{
 				"default": 0.5,
-				"label": "Persistance",
+				"label": "Persistence",
 				"max": 1,
 				"min": 0,
 				"name": "persistence",
