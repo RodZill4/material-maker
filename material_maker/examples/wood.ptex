@@ -73,21 +73,9 @@
 			"to_port": 1
 		},
 		{
-			"from": "colorize_0",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 1
-		},
-		{
 			"from": "blend_0",
 			"from_port": 0,
 			"to": "colorize_2",
-			"to_port": 0
-		},
-		{
-			"from": "blend_0",
-			"from_port": 0,
-			"to": "combine_0",
 			"to_port": 0
 		},
 		{
@@ -121,8 +109,8 @@
 		{
 			"name": "perlin_1",
 			"node_position": {
-				"x": -424,
-				"y": 343.5
+				"x": -635,
+				"y": 341.5
 			},
 			"parameters": {
 				"iterations": 3,
@@ -135,8 +123,8 @@
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": -424,
-				"y": 212.5
+				"x": -635,
+				"y": 210.5
 			},
 			"parameters": {
 				"iterations": 3,
@@ -149,21 +137,20 @@
 		{
 			"name": "warp_0",
 			"node_position": {
-				"x": -180,
-				"y": 317.5
+				"x": -311,
+				"y": 280.5
 			},
 			"parameters": {
 				"amount": 0.1,
-				"eps": 0.05,
-				"epsilon": 0
+				"eps": 0.05
 			},
 			"type": "warp"
 		},
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": -194,
-				"y": 466.5
+				"x": -340,
+				"y": 402.5
 			},
 			"parameters": {
 				"gradient": {
@@ -192,21 +179,20 @@
 		{
 			"name": "warp_1",
 			"node_position": {
-				"x": -31,
-				"y": 349.5
+				"x": -89,
+				"y": 325.5
 			},
 			"parameters": {
 				"amount": 0.1,
-				"eps": 0.045,
-				"epsilon": 0
+				"eps": 0.045
 			},
 			"type": "warp"
 		},
 		{
 			"name": "voronoi_0",
 			"node_position": {
-				"x": -437,
-				"y": 484.5
+				"x": -648,
+				"y": 482.5
 			},
 			"parameters": {
 				"intensity": 1,
@@ -221,8 +207,8 @@
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 83,
-				"y": 245.5
+				"x": 101,
+				"y": 250.5
 			},
 			"parameters": {
 				"amount": 1,
@@ -231,28 +217,10 @@
 			"type": "blend"
 		},
 		{
-			"name": "combine_0",
-			"node_position": {
-				"x": 515.35144,
-				"y": -15.818176
-			},
-			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
-			},
-			"type": "combine"
-		},
-		{
 			"name": "Material",
 			"node_position": {
-				"x": 544,
-				"y": 79
+				"x": 687,
+				"y": 172
 			},
 			"parameters": {
 				"albedo_color": {
@@ -267,7 +235,6 @@
 				"emission_energy": 1,
 				"metallic": 1,
 				"normal_scale": 1,
-				"resolution": 1,
 				"roughness": 1,
 				"size": 11,
 				"subsurf_scatter_strength": 0
@@ -277,25 +244,46 @@
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 305.35144,
-				"y": 76.181824
+				"x": 407.35144,
+				"y": 127.181824
 			},
 			"parameters": {
 				"gradient": {
-					"interpolation": 1,
+					"interpolation": 2,
 					"points": [
 						{
 							"a": 1,
 							"b": 0.071126,
 							"g": 0.34877,
-							"pos": 0,
+							"pos": 0.120364,
 							"r": 0.59375
 						},
 						{
 							"a": 1,
 							"b": 0.013021,
 							"g": 0.144043,
-							"pos": 1,
+							"pos": 0.263636,
+							"r": 0.3125
+						},
+						{
+							"a": 1,
+							"b": 0.071126,
+							"g": 0.34877,
+							"pos": 0.402182,
+							"r": 0.59375
+						},
+						{
+							"a": 1,
+							"b": 0.071126,
+							"g": 0.34877,
+							"pos": 0.663636,
+							"r": 0.59375
+						},
+						{
+							"a": 1,
+							"b": 0.013021,
+							"g": 0.144043,
+							"pos": 0.893091,
 							"r": 0.3125
 						}
 					],
@@ -307,25 +295,22 @@
 		{
 			"name": "normal_map_0",
 			"node_position": {
-				"x": 319,
-				"y": 265.5
+				"x": 431,
+				"y": 423.5
 			},
 			"parameters": {
-				"amount": 0.1,
 				"param0": 11,
 				"param1": 0.99,
 				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 5
+				"param4": 1
 			},
 			"type": "normal_map"
 		},
 		{
 			"name": "colorize_0",
 			"node_position": {
-				"x": 313,
-				"y": 176.5
+				"x": 423,
+				"y": 306.5
 			},
 			"parameters": {
 				"gradient": {

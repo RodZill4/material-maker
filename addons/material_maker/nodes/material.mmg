@@ -1,0 +1,427 @@
+{
+	"name": "material",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"albedo_color": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		},
+		"ao": 1,
+		"depth_scale": 0.5,
+		"emission": 1,
+		"metallic": 1,
+		"normal": 1,
+		"roughness": 1,
+		"size": 11,
+		"sss": 0
+	},
+	"export": {
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"name": "albedo_tex",
+				"type": "rgb"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"name": "metallic_tex",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"name": "roughness_tex",
+				"type": "f"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "",
+				"name": "emission_tex",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"name": "normal_tex",
+				"type": "rgb"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"name": "ao_tex",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "depth_tex",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "sss_tex",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Material",
+		"outputs": [
+			{
+				"desc":"0: albedo",
+				"rgb": "$albedo_tex($uv)",
+				"type": "rgb"
+			},
+			{
+				"desc":"1: ambient occlusion, roughness, metallic",
+				"rgb": "vec3($ao_tex($uv), $roughness_tex($uv), $metallic_tex($uv))",
+				"type": "rgb"
+			},
+			{
+				"desc":"2: emission",
+				"rgb": "$emission_tex($uv)",
+				"type": "rgb"
+			},
+			{
+				"desc":"3: normal map for Godot",
+				"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, 1.0)+vec3(1.0, 0.0, 0.0)",
+				"type": "rgb"
+			},
+			{
+				"desc":"4: normal map for Godot",
+				"f": "$depth_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"5: sub surface scattering",
+				"f": "$sss_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"6: unity metallic/smoothness",
+				"rgba": "vec4(vec3($metallic_tex($uv)), 1.0-$roughness_tex($uv))",
+				"type": "rgba"
+			},
+			{
+				"desc":"7: unity normal",
+				"rgb": "$normal_tex($uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)",
+				"type": "rgb"
+			},
+			{
+				"desc":"8: unity height",
+				"f": "1.0-$depth_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"9: unity occlusion",
+				"f": "$ao_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"10: unreal normal",
+				"rgb": "$normal_tex($uv)*vec3(-1.0)+vec3(1.0)",
+				"type": "rgb"
+			}
+		],
+		"exports": {
+			"Godot": {
+				"export_extension":"tres",
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.png",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_orm.png",
+						"output":1,
+						"conditions":"$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.png",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.png",
+						"output":3,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_depth.png",
+						"output":4,
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_sss.png",
+						"output":5,
+						"conditions":"$(connected:sss_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix).tres",
+						"template":"godot.tres.tmpl"
+					}
+				]
+			},
+			"Unity": {
+				"export_extension":"mat",
+				"uids":6,
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.png",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_albedo.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:0)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_metal_smoothness.png",
+						"output":6,
+						"conditions":"$(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_metal_smoothness.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:1)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.png",
+						"output":7,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_normal.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:2)",
+							"srgb":"0",
+							"normal":"1"
+						},
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_height.png",
+						"output":8,
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_height.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:3)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_occlusion.png",
+						"output":9,
+						"conditions":"$(connected:ao_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_occlusion.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:4)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:ao_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.png",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix)_emission.png.meta",
+						"template":"unity.png.meta.tmpl",
+						"file_params": {
+							"uid":"$(uid:5)",
+							"srgb":"1",
+							"normal":"0"
+						},
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"template",
+						"file_name":"$(path_prefix).mat",
+						"template":"unity.mat.tmpl"
+					}
+				]
+			},
+			"Unreal": {
+				"export_extension":"tres",
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.png",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_orm.png",
+						"output":1,
+						"conditions":"$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.png",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.png",
+						"output":10,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_height.png",
+						"output":8,
+						"conditions":"$(connected:depth_tex)"
+					}
+				]
+			},
+		},
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "Albedo",
+				"name": "albedo_color",
+				"type": "color"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Metallic",
+				"max": 1,
+				"min": 0,
+				"name": "metallic",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Roughness",
+				"max": 1,
+				"min": 0,
+				"name": "roughness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Emission",
+				"max": 1,
+				"min": 0,
+				"name": "emission_energy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Normal",
+				"max": 10,
+				"min": 0,
+				"name": "normal",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Ambient occlusion",
+				"max": 1,
+				"min": 0,
+				"name": "ao",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Depth",
+				"max": 1,
+				"min": 0,
+				"name": "depth_scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Subsurf. scatter.",
+				"max": 1,
+				"min": 0,
+				"name": "sss",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 11,
+				"first": 6,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			}
+		]
+	},
+	"type": "material_export"
+}

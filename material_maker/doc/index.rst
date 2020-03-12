@@ -8,3 +8,5 @@ Material Maker User Manual
    user_interface
    nodes
    base_library
+   export
+   command_line

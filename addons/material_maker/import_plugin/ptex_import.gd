@@ -46,20 +46,26 @@ func get_visible_name() -> String:
 	return "Material Maker Importer"
 
 func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> int:
-	var filename = save_path + "." + get_save_extension()
 	var material = null
 	if options.render:
-		material = plugin.generate_material(source_file)
-		while material is GDScriptFunctionState:
-			material = yield(material, "completed")
+		var gen = mm_loader.load_gen(source_file)
+		if gen != null:
+			plugin.add_child(gen)
+			for c in gen.get_children():
+				if c.has_method("get_export_profiles"):
+					var result = c.export_material(source_file.get_basename(), "Godot")
+					while result is GDScriptFunctionState:
+						result = yield(result, "completed")
+					break
+			gen.queue_free()
 	else:
+		var filename = save_path + "." + get_save_extension()
 		material = SpatialMaterial.new()
 		material.set_script(preload("res://addons/material_maker/import_plugin/ptex_spatial_material.gd"))
 		var file : File = File.new()
 		if file.open(source_file, File.READ) == OK:
 			material.set_ptex_no_render(to_json(parse_json(file.get_as_text())))
 			file.close()
-	if material != null:
 		material.uv1_scale = options.scale * Vector3(1.0, 1.0, 1.0)
 		ResourceSaver.save(filename, material)
 	return OK

@@ -157,6 +157,10 @@ func replace_variable(string : String, variable : String, value : String) -> Str
 			break
 		new_string += string.left(pos)
 		string = string.right(pos)
+		if string.length() > keyword_size and is_word_letter(string[keyword_size]):
+			new_string += string.left(keyword_size)
+			string = string.right(keyword_size)
+			continue
 		if string.empty() or !is_word_letter(string[0]):
 			new_string += value
 		else:
