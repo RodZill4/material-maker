@@ -42,6 +42,10 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return label
 
+func set_type_name(l) -> void:
+	if l !=label:
+		label = l
+		emit_hierarchy_changed()
 
 func toggle_editable() -> bool:
 	editable = !editable

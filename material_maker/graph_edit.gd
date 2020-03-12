@@ -352,7 +352,7 @@ func on_ButtonUp_pressed() -> void:
 		call_deferred("update_view", generator.get_parent())
 
 func _on_Label_text_changed(new_text) -> void:
-	generator.label = new_text
+	generator.set_type_name(new_text)
 
 # Create subgraph
 

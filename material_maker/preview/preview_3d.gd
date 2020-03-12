@@ -54,7 +54,9 @@ func _on_Rotate_toggled(button_pressed) -> void:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 
 func get_materials() -> Array:
-	return [ current_object.get_surface_material(0) ]
+	if current_object != null:
+		return [ current_object.get_surface_material(0) ]
+	return []
 
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
