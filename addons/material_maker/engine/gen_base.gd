@@ -110,12 +110,19 @@ func get_parameter_def(param_name : String) -> Dictionary:
 	return {}
 
 func get_parameter(n : String):
-	return parameters[n]
+	if parameters.has(n):
+		return parameters[n]
+	else:
+		return get_parameter_def(n).default
 
 func set_parameter(n : String, v) -> void:
 	parameters[n] = v
 	source_changed(0)
 	emit_signal("parameter_changed", n, v)
+	if is_inside_tree():
+		var parameter_def : Dictionary = get_parameter_def(n)
+		if parameter_def.has("type") and parameter_def.type == "float":
+			get_tree().call_group("preview", "on_float_parameter_changed", "p_o%s_%s" % [ str(get_instance_id()), n ], v)
 
 func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
@@ -159,7 +166,7 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func generate_preview_shader(src_code, type) -> String:
+static func generate_preview_shader(src_code, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -182,6 +189,7 @@ func generate_preview_shader(src_code, type) -> String:
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
+	code += main_fct
 	return code
 
 func render(output_index : int, size : int, preview : bool = false) -> Object:

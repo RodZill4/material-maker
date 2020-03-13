@@ -1,5 +1,4 @@
-void fragment() {
-	vec2 uv = UV;
+vec4 preview_2d(vec2 uv) {
 	$(code)
-	COLOR = $(value);
+	return $(value);
 }

@@ -188,7 +188,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			var value = parameters[p.name]
 			var value_string = null
 			if p.type == "float":
-				value_string = "%.9f" % value
+				value_string = "p_%s_%s" % [ genname, p.name ]
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
@@ -247,7 +247,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		if !context.has_variant(self):
 			# Generate functions for gradients
 			for p in shader_model.parameters:
-				if p.type == "gradient":
+				if p.type == "float":
+					rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
+				elif p.type == "gradient":
 					var g = parameters[p.name]
 					if !(g is MMGradient):
 						g = MMGradient.new()

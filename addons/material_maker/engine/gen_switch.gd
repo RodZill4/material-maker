@@ -39,7 +39,7 @@ func get_input_defs() -> Array:
 
 func get_output_defs() -> Array:
 	var rv : Array = []
-	for o in range(parameters.outputs):
+	for o in range(get_parameter("outputs")):
 		var n = PoolByteArray([65+o]).get_string_from_ascii()
 		rv.push_back({ name=n, type="any" })
 	return rv

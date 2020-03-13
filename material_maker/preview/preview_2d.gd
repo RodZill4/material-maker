@@ -1,24 +1,39 @@
 extends ColorRect
 
-var generator = null
+export(String, MULTILINE) var shader : String = ""
 
-func set_preview_texture(tex: Texture) -> void:
-	material.set_shader_param("tex", tex)
+var generator : MMGenBase = null
 
-func on_resized() -> void:
-	material.set_shader_param("size", rect_size)
-	setup_controls(generator)
-
-func setup_controls(g : MMGenBase) -> void:
+func set_generator(g : MMGenBase) -> void:
+	if generator != null and is_instance_valid(generator):
+		generator.disconnect("float_param_changed", self, "on_float_param_changed")
+	var source = { defs="", code="", textures={}, type="f", f="1.0" }
 	if is_instance_valid(g):
 		generator = g
 		var param_defs : Array = generator.get_parameter_defs()
 		for c in get_children():
 			c.setup_control(generator, param_defs)
+		generator.connect("float_param_changed", self, "on_float_param_changed")
+		var gen_output_defs = generator.get_output_defs()
+		if ! gen_output_defs.empty():
+			var context : MMGenContext = MMGenContext.new()
+			source = generator.get_shader_code("uv", 0, context)
+			while source is GDScriptFunctionState:
+				source = yield(source, "completed")
+			if source.empty():
+				source = { defs="", code="", textures={}, type="f", f="1.0" }
 	else:
 		g = null
 		for c in get_children():
 			c.setup_control(generator, [])
+	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
+
+func on_float_parameter_changed(n : String, v : float) -> void:
+	material.set_shader_param(n, v)
+
+func on_resized() -> void:
+	material.set_shader_param("size", rect_size)
+	set_generator(generator)
 
 func value_to_pos(value : Vector2) -> Vector2:
 	return rect_size*0.5+value*min(rect_size.x, rect_size.y)/1.2

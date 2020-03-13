@@ -3,28 +3,14 @@
 [ext_resource path="res://material_maker/preview/preview_2d.gd" type="Script" id=1]
 
 [sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform sampler2D tex;
-uniform vec2 size;
-
-void fragment() {
-	float ms = max(size.x, size.y);
-	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
-	float is = min(size.x, size.y)/1.2;
-	vec2 m2 = min(fract(uv), 1.0-fract(uv));
-	vec4 image = texture(tex, uv);
-	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
-	float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
-	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
-}"
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/size = Vector2( 585, 492 )
 
-[node name="Preview2D" type="ColorRect"]
+[node name="Preview2D" type="ColorRect" groups=[
+"preview",
+]]
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -39,4 +25,16 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+shader = "uniform vec2 size;
+
+void fragment() {
+	float ms = max(size.x, size.y);
+	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
+	float is = min(size.x, size.y)/1.2;
+	vec2 m2 = min(fract(uv), 1.0-fract(uv));
+	vec4 image = preview_2d(uv);
+	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
+	float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
+	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+}"
 [connection signal="resized" from="." to="." method="on_resized"]

@@ -583,33 +583,33 @@ func update_preview_2d(node = null) -> void:
 					node = n
 					break
 		if node != null:
-			var result = node.generator.render(0, 1024, true)
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
-			var tex = ImageTexture.new()
-			result.copy_to_texture(tex)
-			result.release()
-			preview_2d.set_preview_texture(tex)
-			preview_2d_background.set_preview_texture(tex)
+			preview_2d.set_generator(node.generator)
+			preview_2d_background.set_generator(node.generator)
 		else:
-			preview_2d.set_preview_texture(null)
-			preview_2d_background.set_preview_texture(null)
+			preview_2d.set_generator(null)
+			preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array) -> void:
+	var visible_previews = []
+	for p in previews:
+		if p.is_visible_in_tree():
+			visible_previews.push_back(p)
+	if visible_previews.empty():
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
 		var status = gen_material.render_textures()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		for p in previews:
+		for p in visible_previews:
 			gen_material.update_materials(p.get_materials())
 
 var selected_node = null
 func on_selected_node_change(node) -> void:
 	if node != selected_node:
 		selected_node = node
-		preview_2d.setup_controls(node.generator if node != null else null)
+		preview_2d.set_generator(node.generator if node != null else null)
 		update_preview_2d(node)
 
 func _on_Projects_tab_changed(tab) -> void:
