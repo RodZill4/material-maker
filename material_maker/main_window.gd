@@ -132,6 +132,7 @@ func _ready() -> void:
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
 	preview_3d = layout.get_pane("Preview3D")
+	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = layout.get_pane("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
 
