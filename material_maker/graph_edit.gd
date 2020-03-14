@@ -393,7 +393,7 @@ func set_last_selected(node) -> void:
 func _on_GraphEdit_gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
 		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show()
+		node_popup.show_popup()
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
 
@@ -408,7 +408,7 @@ func request_popup(from, from_slot, release_position) -> void:
 	else:
 		# Request the popup
 		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show()
+		node_popup.show_popup(mm_io_types.types[node.generator.get_output_defs()[from_slot].type].slot_type)
 		node_popup.set_quick_connect(from, from_slot)
 
 func check_last_selected() -> void:
