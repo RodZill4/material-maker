@@ -243,7 +243,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	var in_file = File.new()
 	var out_file = File.new()
 	if in_file.open(mm_loader.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
-		if in_file.open(OS.get_executable_path().get_base_dir()+"/generators/"+template, File.READ) != OK:
+		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
 			print("Cannot find template file "+template)
 			return false
 	Directory.new().remove(file_name)
