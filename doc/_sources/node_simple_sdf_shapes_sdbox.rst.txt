@@ -3,7 +3,7 @@ sdBox node
 
 The **sdBox** node generates a signed distance image for a rectangle.
 
-.. image:: images/node_sdbox.png
+.. image:: images/node_simple_sdf_shapes_sdbox.png
 	:align: center
 
 Inputs

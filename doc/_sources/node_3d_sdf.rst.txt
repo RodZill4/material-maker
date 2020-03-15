@@ -11,6 +11,9 @@ Describing 3D objects using SDF primitives is more difficult than using existing
 method integrates smoothly with shader generation, and (as many nodes in Material Maker) is
 resolution independant.
 
+All shapes can be associated to a color index that can be used to apply different (2D or 3D) textures
+to the result.
+
 All output samples shown in this section are preview images.
 
 All Signed Distance Functions nodes are based on code written by Inigo Quilez that can be found
@@ -24,6 +27,7 @@ __ sdf3dpage_
 	:maxdepth: 1
 
 	node_3d_sdf_render
+	node_3d_sdf_color
 
 Shapes
 ++++++
@@ -47,6 +51,7 @@ Operators
 	node_3d_sdf_operators_boolean
 	node_3d_sdf_operators_smoothboolean
 	node_3d_sdf_operators_rounded
+	node_3d_sdf_operators_elongation
 	node_3d_sdf_operators_repeat
 	node_3d_sdf_operators_circlerepeat
 	node_3d_sdf_operators_extrusion

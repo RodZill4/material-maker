@@ -4,7 +4,7 @@ Remote node
 The **Remote** node has no direct effect on the material but can be used to
 control key parameters of the material to configure it easily.
 
-.. image:: images/node_remote.png
+.. image:: images/node_miscellaneous_remote.png
 	:align: center
 
 When started, the Remote node only shows 2 buttons.

@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pattern node &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="FBM node" href="node_3d_texture_fbm.html" />
+    <link rel="prev" title="From2D node" href="node_3d_texture_from2d.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_3d.html">3D nodes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_3d_box.html">Box node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sphere.html">Sphere node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sdf.html">3D signed distance function geometry nodes</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="node_3d_texture.html">3D textures</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_apply.html">Apply node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_select.html">Select node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_from2d.html">From2D node</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Pattern node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_fbm.html">FBM node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_blend.html">Blend node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_colorize.html">Colorize node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_rotate.html">Rotate node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_distort.html">Distort node</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
+          <li><a href="nodes_3d.html">3D nodes</a> &raquo;</li>
+        
+          <li><a href="node_3d_texture.html">3D textures</a> &raquo;</li>
+        
+      <li>Pattern node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pattern-node">
+<h1>Pattern node<a class="headerlink" href="#pattern-node" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Pattern</strong> node outputs a 3D pattern texture generated from common waveform shapes.</p>
+<img alt="_images/node_3d_texture_pattern.png" class="align-center" src="_images/node_3d_texture_pattern.png" />
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Pattern</strong> node does not accept any input.</p>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Pattern</strong> node provides a greyscale 3D texture obtained by mixing a pattern on each X, Y and Z axes.</p>
+<p>Many different patterns can be created using this node, do not hesitate to experiment.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The Pattern node accepts the following parameters:</p>
+<ul class="simple">
+<li><p>the <em>X</em>, <em>Y</em> and <em>Z</em> parameters define the pattern and their number of repetitions
+that will be propagated along the X, Y and Y axes.
+The following patterns are available:</p>
+<ul>
+<li><p>Sine: the value follows a sinus waveform</p></li>
+<li><p>Triangle: the value follows a triangle waveform (changes linearly from 0 to 1 and from 1 to 0)</p></li>
+<li><p>Square: the value follows a square waveform (stays constant at 0, then 1)</p></li>
+<li><p>Sawtooth: the value follows a sawtooth waveform (changes linearly from 0 to 1, then jumps back to 0)</p></li>
+<li><p>Constant: the value is 1</p></li>
+<li><p>Bounce: the value follows a half-circle waveform</p></li>
+</ul>
+</li>
+<li><p>the <em>Combiner</em> parameter is the function used to combine the <em>X</em>, <em>Y</em> and <em>Z</em> patterns. The available
+functions are <em>multiply</em>, <em>add</em>, <em>max</em>, <em>min</em>, <em>xor</em> and <em>pow</em></p></li>
+</ul>
+</div>
+<div class="section" id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/node_3d_texture_pattern_sample.png" class="align-center" src="_images/node_3d_texture_pattern_sample.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="node_3d_texture_fbm.html" class="btn btn-neutral float-right" title="FBM node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="node_3d_texture_from2d.html" class="btn btn-neutral" title="From2D node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,7 +3,7 @@ BrightnessContrast node
 
 The **BrightnessContrast** node adjusts the brightness and contrast of the input image.
 
-.. image:: images/node_brightness_contrast.png
+.. image:: images/node_filter_brightnesscontrast.png
 	:align: center
 
 Inputs

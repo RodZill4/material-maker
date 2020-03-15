@@ -4,6 +4,7 @@ Noise node
 The **Noise** node outputs a randomly generated black and white texture.
 
 .. image:: images/node_noise.png
+	:align: center
 
 Inputs
 ++++++

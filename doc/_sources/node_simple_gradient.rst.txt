@@ -4,7 +4,7 @@ Gradient nodes
 The **Gradient**, **Circular Gradient** and **Radial Gradient** nodes generate
 a color, user defined gradient.
 
-.. image:: images/node_gradient.png
+.. image:: images/node_simple_gradient.png
 	:align: center
 
 Inputs

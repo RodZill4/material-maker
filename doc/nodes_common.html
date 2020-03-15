@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.8
+                0.9
               </div>
             
           
@@ -101,6 +101,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
             
@@ -181,16 +183,17 @@ connected to several node inputs. Each node output (and input) can be:</p>
 <li><p>an <strong>RGBA image</strong> (shown in semi-transparent green)</p></li>
 <li><p>a <strong>2D signed distance function</strong> (shown in orange)</p></li>
 <li><p>a <strong>3D signed distance function</strong> (shown in red)</p></li>
+<li><p>a <strong>3D texture</strong> (shown in fuchia)</p></li>
 </ul>
 <p>Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
 converted when required.</p>
 <p>2D signed distance functions have a specific preview that shows the associated signed distance
-field. They can be converted into greyscale images using the <cite>sdShow node</cite>.</p>
-<p>3D signed distance functions have a specific preview that shows the lit 3Dscene. They can be
-converted into a greyscale height map and a color normal map using the <cite>Render node</cite>.</p>
-<p>Next to the output, an (open or closed) eye icon indicates that a preview is available. Clicking
-on it will show the preview at the bottom of the node. When a node has several outputs, only
-one of them can be previewed at a time.</p>
+field. They can be converted into greyscale images using the <cite>sdShow</cite> node.</p>
+<p>3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
+converted into a greyscale height map and a color normal map using the <cite>Render</cite> node.</p>
+<p>Clicking on an output slot it will show the corresponding preview at the bottom of the node.
+When a node has several outputs, only one of them can be previewed at a time. The previewed
+output slot will has a circle around it, and clicking it again will hide the preview.</p>
 </div>
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>

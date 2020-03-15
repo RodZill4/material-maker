@@ -3,7 +3,7 @@ sdCircle node
 
 The **sdCircle** node generates a signed distance image for a circle.
 
-.. image:: images/node_sdcircle.png
+.. image:: images/node_simple_sdf_shapes_sdcircle.png
 	:align: center
 
 Inputs

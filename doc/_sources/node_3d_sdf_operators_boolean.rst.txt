@@ -2,9 +2,10 @@ Boolean node
 ............
 
 The **Boolean** node generates a 3D signed distance function for the combination (union,
-intersection or difference) of its inputs.
+intersection or difference) of its inputs. If the input shapes are associated to color indexes, the
+boolean node applies them to the output.
 
-.. image:: images/node_sdf3d_boolean.png
+.. image:: images/node_3d_sdf_operators_boolean.png
 	:align: center
 
 Inputs

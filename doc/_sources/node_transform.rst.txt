@@ -4,6 +4,7 @@ Transform node
 The **Transform** node applies a scale operation, a rotation and a translation to the input image.
 
 .. image:: images/node_transform.png
+	:align: center
 
 Inputs
 ++++++

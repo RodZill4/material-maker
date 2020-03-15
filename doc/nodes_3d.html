@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.8
+                0.9
               </div>
             
           
@@ -92,6 +92,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_3d_box.html">Box node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sphere.html">Sphere node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sdf.html">3D signed distance function geometry nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture.html">3D textures</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
@@ -102,6 +103,8 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
             
@@ -192,6 +195,12 @@
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_render.html#parameters">Parameters</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_sdf_color.html">Color node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_color.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_color.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_color.html#parameters">Parameters</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="node_3d_sdf.html#shapes">Shapes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_shapes_sphere.html">Sphere node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_shapes_sphere.html#inputs">Inputs</a></li>
@@ -259,6 +268,13 @@
 <li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_rounded.html#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_operators_elongation.html">Elongation node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_elongation.html#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_elongation.html#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_elongation.html#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_elongation.html#example-images">Example images</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sdf_operators_repeat.html">Repeat node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_repeat.html#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_operators_repeat.html#outputs">Outputs</a></li>
@@ -318,6 +334,70 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="node_3d_sdf.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="node_3d_texture.html">3D textures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_apply.html">Apply node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_apply.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_apply.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_apply.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_select.html">Select node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_select.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_select.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_select.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_from2d.html">From2D node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_from2d.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_from2d.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_from2d.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_from2d.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_pattern.html">Pattern node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_pattern.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_pattern.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_pattern.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_pattern.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_fbm.html">FBM node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_fbm.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_fbm.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_fbm.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_fbm.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_blend.html">Blend node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_colorize.html">Colorize node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_colorize.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_colorize.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_colorize.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_colorize.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_rotate.html">Rotate node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_rotate.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_rotate.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_rotate.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_rotate.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_distort.html">Distort node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_distort.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_distort.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_distort.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_distort.html#example-images">Example images</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

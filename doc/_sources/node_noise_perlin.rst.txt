@@ -5,7 +5,8 @@ The **Perlin** noise node outputs a texture generated as a sum of Perlin noise f
 with increasing frequencies and decreasing amplitudes. Perlin noise has a wide range of
 applications, such as stains, wood, dust...
 
-.. image:: images/node_perlin.png
+.. image:: images/node_noise_perlin.png
+	:align: center
 
 Inputs
 ++++++

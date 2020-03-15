@@ -3,7 +3,7 @@ Emboss node
 
 The **Emboss** node generates an image that simulates lighting on its input.
 
-.. image:: images/node_emboss.png
+.. image:: images/node_filter_emboss.png
 	:align: center
 
 Inputs

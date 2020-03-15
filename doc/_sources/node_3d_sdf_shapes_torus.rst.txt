@@ -3,7 +3,7 @@ Torus node
 
 The **Torus** node generates a 3d signed distance function for a torus.
 
-.. image:: images/node_sdf3d_torus.png
+.. image:: images/node_3d_sdf_shapes_torus.png
 	:align: center
 
 Inputs

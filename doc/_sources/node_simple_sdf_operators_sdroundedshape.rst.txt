@@ -5,7 +5,7 @@ The **sdRoundedShape** node generates a signed distance image of a rounded shape
 based on its input, by substracting a constant from its distance function (i.e.
 "growing" it towards the outside).
 
-.. image:: images/node_sdroundedshape.png
+.. image:: images/node_simple_sdf_operators_sdroundedshape.png
 	:align: center
 
 Inputs

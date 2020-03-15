@@ -16,7 +16,7 @@ and metallic textures are combined into a single file whose suffix is "orm".
 When using Material Maker as a Godot addon, a SpatialMaterial is generated
 automatically.
 
-.. image:: images/node_material.png
+.. image:: images/node_miscellaneous_material.png
 	:align: center
 
 Inputs

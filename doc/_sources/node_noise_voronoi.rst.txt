@@ -4,7 +4,8 @@ Voronoi noise node
 The **Voronoi** noise node outputs Voronoi noise textures that can be used for irregular
 tiles, animal skin or scales, cracks...
 
-.. image:: images/node_voronoi.png
+.. image:: images/node_noise_voronoi.png
+	:align: center
 
 Inputs
 ++++++

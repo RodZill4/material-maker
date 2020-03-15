@@ -5,7 +5,7 @@ The **Blend** node blends two inputs using an optional opacity. It performs a bl
 defined by the blend mode between both inputs, and mixes the result with the bottom input
 using the opacity (defines by the *opacity* parameter, or the optional greyscale input).
 
-.. image:: images/node_blend.png
+.. image:: images/node_filter_blend.png
 	:align: center
 
 Inputs

@@ -5,7 +5,7 @@ The **Colorize** node applies a user-defined gradient to a greyscale image: blac
 will be colored with the leftmost color of the gradient and white pixels will take
 the rightmost color.
 
-.. image:: images/node_colorize.png
+.. image:: images/node_filter_colorize.png
 	:align: center
 
 Inputs

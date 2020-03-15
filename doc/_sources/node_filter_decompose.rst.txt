@@ -3,7 +3,7 @@ Decompose node
 
 The **Decompose** node decomposes an RGBA input into four greyscale outputs.
 
-.. image:: images/node_decompose.png
+.. image:: images/node_filter_decompose.png
 	:align: center
 
 Inputs

@@ -5,7 +5,7 @@ The **Repeat** node generates a 3D signed distance image of a repetition of its
 input on the X and Y axes. It can also apply a random rotation to the repeated
 object instances.
 
-.. image:: images/node_sdf3d_repeat.png
+.. image:: images/node_3d_sdf_operators_repeat.png
 	:align: center
 
 Inputs

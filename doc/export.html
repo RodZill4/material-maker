@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exporting Materials &mdash; Material Maker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command line arguments" href="command_line.html" />
+    <link rel="prev" title="Debug node" href="node_miscellaneous_debug.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Exporting Materials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#godot-game-engine">Godot game engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unity-game-engine">Unity game engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unreal-game-engine">Unreal game engine</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Exporting Materials</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exporting-materials">
+<span id="export-section"></span><h1>Exporting Materials<a class="headerlink" href="#exporting-materials" title="Permalink to this headline">¶</a></h1>
+<p>When exporting a material, using either the Export submenu or the command line arguments,
+Material Maker generates PNG image files for all elements of the material as well as
+specific files for the target game engine.</p>
+<p>In all cases, the generated PNG files (and especially the normal map) is generated in the
+correct format.</p>
+<div class="section" id="godot-game-engine">
+<h2>Godot game engine<a class="headerlink" href="#godot-game-engine" title="Permalink to this headline">¶</a></h2>
+<p>When exporting for the Godot game engine, Material Maker will generate a .tres file that
+describes a fully configured SpatialMaterial.</p>
+<p>Note that exporting for Godot is not necessary if you use the Material maker addon, that
+provides an import plugin. This import plugin can either generate a precomputed material,
+or a material that will be rendered at runtime.</p>
+</div>
+<div class="section" id="unity-game-engine">
+<h2>Unity game engine<a class="headerlink" href="#unity-game-engine" title="Permalink to this headline">¶</a></h2>
+<p>When exporting for the Unity game engine, Material Maker will generate a .mat file that
+describes a fully configured material. It is thus possible to export materials directly
+into one of your project assets directory, and Unity will automatically detect the newly
+exported materials.</p>
+</div>
+<div class="section" id="unreal-game-engine">
+<h2>Unreal game engine<a class="headerlink" href="#unreal-game-engine" title="Permalink to this headline">¶</a></h2>
+<p>When exporting for the Unreal game engine, Material Maker will only generate PNG image
+files, and it is necessary to create the material in Unreal.</p>
+<p>To create a minimal material:</p>
+<ul class="simple">
+<li><p>import all PNG files into unreal</p></li>
+<li><p>create a new material using the <strong>Add new -&gt; Material</strong> menu</p></li>
+<li><p>open the new material to edit it</p></li>
+<li><p>drag and drop all textures into the material graph to create a Texture Sample node
+for each texture</p></li>
+<li><p>connect the RGB output of the albedo <em>Texture Sample</em> node to the <em>Base Color</em> input
+of the material node</p></li>
+<li><p>connect the R output of the ORM <em>Texture Sample</em> node to the <em>Ambient Occlusion</em> input
+of the material node</p></li>
+<li><p>connect the G output of the ORM <em>Texture Sample</em> node to the <em>Roughness</em> input
+of the material node</p></li>
+<li><p>connect the B output of the ORM <em>Texture Sample</em> node to the <em>Metallic</em> input
+of the material node</p></li>
+<li><p>connect the RGB output of the normal <em>Texture Sample</em> node to the <em>Normal</em> input
+of the material node</p></li>
+</ul>
+<p>More complex materials with support for emission textures, depth maps, texture
+coordinate scaling…</p>
+<img alt="_images/unreal_export.png" class="align-center" src="_images/unreal_export.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="command_line.html" class="btn btn-neutral float-right" title="Command line arguments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="node_miscellaneous_debug.html" class="btn btn-neutral" title="Debug node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, Rodz Labs.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/language_data.js"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -9,7 +9,7 @@ shader's complexity), or to create a cheap blur/pixelization effect (by using th
 LOD output). Note that convolution transforms that are provided in the nodes library
 already include buffers where necessary.
 
-.. image:: images/node_buffer.png
+.. image:: images/node_miscellaneous_buffer.png
 	:align: center
 
 Inputs

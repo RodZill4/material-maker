@@ -9,4 +9,5 @@ The simple nodes are nodes that do not accept any input and generate one or seve
 	node_3d_box
 	node_3d_sphere
 	node_3d_sdf
+	node_3d_texture
 	

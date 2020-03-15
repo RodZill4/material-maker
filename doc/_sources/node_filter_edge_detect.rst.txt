@@ -4,7 +4,7 @@ Edge detect node
 There are 3 different **Edge detect** nodes that apply an edge detect
 filter to their input.
 
-.. image:: images/node_edge_detect.png
+.. image:: images/node_filter_edge_detect.png
 	:align: center
 
 Inputs

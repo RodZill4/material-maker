@@ -3,7 +3,7 @@ Shape node
 
 The **Shape** node outputs a simple greyscale shape.
 
-.. image:: images/node_shape.png
+.. image:: images/node_simple_shape.png
 	:align: center
 
 Inputs

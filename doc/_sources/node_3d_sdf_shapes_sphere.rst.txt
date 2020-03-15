@@ -3,7 +3,7 @@ Sphere node
 
 The **Sphere** node generates a 3d signed distance function for a sphere.
 
-.. image:: images/node_sdf3d_sphere.png
+.. image:: images/node_3d_sdf_shapes_sphere.png
 	:align: center
 
 Inputs

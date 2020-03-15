@@ -3,7 +3,8 @@ Warp node
 
 The **Warp** node deforms an input image according to the derivative of the second input image.
 
-.. image:: images/node_warp.png
+.. image:: images/node_transform_warp.png
+	:align: center
 
 Inputs
 ++++++

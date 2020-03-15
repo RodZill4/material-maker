@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.8
+                0.9
               </div>
             
           
@@ -93,12 +93,14 @@
 <li class="toctree-l3"><a class="reference internal" href="node_3d_sphere.html">Sphere node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">3D signed distance function geometry nodes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_render.html">Render node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_sdf_color.html">Color node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#shapes">Shapes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#operators">Operators</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#transforms">Transforms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture.html">3D textures</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
@@ -109,6 +111,8 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
             
@@ -184,12 +188,15 @@ and finally output as a greyscale heightmap and a color normal map using the <st
 <p>Describing 3D objects using SDF primitives is more difficult than using existing meshes, but this
 method integrates smoothly with shader generation, and (as many nodes in Material Maker) is
 resolution independant.</p>
+<p>All shapes can be associated to a color index that can be used to apply different (2D or 3D) textures
+to the result.</p>
 <p>All output samples shown in this section are preview images.</p>
 <p>All Signed Distance Functions nodes are based on code written by Inigo Quilez that can be found
 <a class="reference external" href="https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm">on this page</a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_render.html">Render node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_color.html">Color node</a></li>
 </ul>
 </div>
 <div class="section" id="shapes">
@@ -212,6 +219,7 @@ resolution independant.</p>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_boolean.html">Boolean node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_smoothboolean.html">SmoothBoolean node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_rounded.html">Rounded node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_elongation.html">Elongation node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_repeat.html">Repeat node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_circlerepeat.html">CircleRepeat node</a></li>
 <li class="toctree-l1"><a class="reference internal" href="node_3d_sdf_operators_extrusion.html">Extrusion node</a></li>

@@ -7,7 +7,8 @@ scratches on any material or messy fibers.
 It is inspired from a the *Fuzzy scratches* shadertoy from
 Daedalus (https://www.shadertoy.com/view/4syXRD).
 
-.. image:: images/node_scratches.png
+.. image:: images/node_pattern_scratches.png
+	:align: center
 
 Inputs
 ++++++
