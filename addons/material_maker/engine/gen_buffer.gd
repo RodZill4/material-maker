@@ -7,11 +7,16 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times (such as convolutions)
 """
 
-var updated : bool = false
+var material : ShaderMaterial = null
+var updating : bool = false
+var update_again : bool = false
 
 func _ready() -> void:
+	material = ShaderMaterial.new()
+	material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
+	add_to_group("preview")
 
 func get_type() -> String:
 	return "buffer"
@@ -31,20 +36,51 @@ func get_input_defs() -> Array:
 func get_output_defs() -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
-func source_changed(input_port_index : int) -> void:
-	updated = false
-	.source_changed(input_port_index)
+func source_changed(_input_port_index : int) -> void:
+	if !is_inside_tree():
+		return
+	var context : MMGenContext = MMGenContext.new()
+	var source = {}
+	var source_output = get_source(0)
+	if source_output != null:
+		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+		while source is GDScriptFunctionState:
+			source = yield(source, "completed")
+	if source.empty():
+		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
+	material.shader.code = mm_renderer.generate_shader(source)
+	if source.has("textures"):
+		for k in source.textures.keys():
+			material.set_shader_param(k, source.textures[k])
+	update_buffer()
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func on_float_parameter_changed(n : String, v : float) -> void:
+	material.set_shader_param(n, v)
+	update_buffer()
+
+func update_buffer():
+	update_again = true
+	if !updating:
+		updating = true
+		while update_again:
+			update_again = false
+			var result = mm_renderer.render_material(material, pow(2, parameters.size))
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if !update_again:
+				result.copy_to_texture(texture)
+			result.release()
+		updating = false
+
+func __get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(0)
-	if source != null and !updated:
+	if source != null:
 		var result = source.generator.render(source.output_index, pow(2, parameters.size))
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		result.copy_to_texture(texture)
 		result.release()
 		texture.flags = Texture.FLAG_MIPMAPS
-		updated = true
 	var rv = ._get_shader_code_lod(uv, output_index, context, 0 if output_index == 0 else parameters.lod)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")

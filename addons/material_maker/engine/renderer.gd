@@ -5,19 +5,24 @@ class_name MMGenRenderer
 export(String) var debug_path = ""
 var debug_file_index : int = 0
 
+var common_shader : String
+
 var rendering : bool = false
+
 signal done
+
 
 func _ready() -> void:
 	$ColorRect.material = $ColorRect.material.duplicate(true)
+	var file = File.new()
+	file.open("res://addons/material_maker/common.shader", File.READ)
+	common_shader = file.get_as_text()
 
-static func generate_shader(src_code) -> String:
+func generate_shader(src_code) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
+	code += common_shader
 	code += "\n"
 	if src_code.has("textures"):
 		for t in src_code.textures.keys():
@@ -38,13 +43,11 @@ static func generate_shader(src_code) -> String:
 	code += shader_code
 	return code
 
-static func generate_combined_shader(red_code, green_code, blue_code) -> String:
+func generate_combined_shader(red_code, green_code, blue_code) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
+	code += common_shader
 	code += "\n"
 	var globals = []
 	var textures = {}
@@ -83,6 +86,22 @@ func setup_material(shader_material, textures, shader_code) -> void:
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
+
+func render_material(material, render_size) -> Object:
+	while rendering:
+		yield(self, "done")
+	rendering = true
+	var shader_material = $ColorRect.material
+	size = Vector2(render_size, render_size)
+	$ColorRect.rect_position = Vector2(0, 0)
+	$ColorRect.rect_size = size
+	$ColorRect.material = material
+	render_target_update_mode = Viewport.UPDATE_ONCE
+	update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	$ColorRect.material = shader_material
+	return self
 
 func render_shader(shader, textures, render_size) -> Object:
 	if debug_path != null and debug_path != "":

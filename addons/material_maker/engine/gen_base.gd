@@ -117,12 +117,13 @@ func get_parameter(n : String):
 
 func set_parameter(n : String, v) -> void:
 	parameters[n] = v
-	source_changed(0)
 	emit_signal("parameter_changed", n, v)
 	if is_inside_tree():
 		var parameter_def : Dictionary = get_parameter_def(n)
 		if parameter_def.has("type") and parameter_def.type == "float":
 			get_tree().call_group("preview", "on_float_parameter_changed", "p_o%s_%s" % [ str(get_instance_id()), n ], v)
+		else:
+			source_changed(0)
 
 func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)

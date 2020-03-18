@@ -5,15 +5,12 @@ export(String, MULTILINE) var shader : String = ""
 var generator : MMGenBase = null
 
 func set_generator(g : MMGenBase) -> void:
-	if generator != null and is_instance_valid(generator):
-		generator.disconnect("float_param_changed", self, "on_float_param_changed")
 	var source = { defs="", code="", textures={}, type="f", f="1.0" }
 	if is_instance_valid(g):
 		generator = g
 		var param_defs : Array = generator.get_parameter_defs()
 		for c in get_children():
 			c.setup_control(generator, param_defs)
-		generator.connect("float_param_changed", self, "on_float_param_changed")
 		var gen_output_defs = generator.get_output_defs()
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
@@ -27,6 +24,9 @@ func set_generator(g : MMGenBase) -> void:
 		for c in get_children():
 			c.setup_control(generator, [])
 	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	if source.has("textures"):
+		for k in source.textures.keys():
+			material.set_shader_param(k, source.textures[k])
 
 func on_float_parameter_changed(n : String, v : float) -> void:
 	material.set_shader_param(n, v)

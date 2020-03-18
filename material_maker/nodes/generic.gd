@@ -95,7 +95,8 @@ func _on_value_changed(new_value, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
-	update_shaders()
+	if ! (new_value is float):
+		update_shaders()
 
 func _on_color_changed(new_color, variable) -> void:
 	ignore_parameter_change = variable
