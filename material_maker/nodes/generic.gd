@@ -82,7 +82,7 @@ func initialize_properties() -> void:
 			print("unsupported widget "+str(o))
 
 func update_shaders() -> void:
-	get_parent().send_changed_signal()
+	#get_parent().send_changed_signal()
 	update_preview()
 
 func _on_text_changed(new_text, variable) -> void:

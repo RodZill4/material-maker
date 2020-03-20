@@ -7,6 +7,7 @@ var export_paths = {}
 var material : SpatialMaterial
 var shader_materials = {}
 var need_update = {}
+var need_render = {}
 var generated_textures = {}
 var updating : bool = false
 var update_again : bool = false
@@ -43,6 +44,7 @@ func _ready() -> void:
 	for t in TEXTURE_LIST:
 		generated_textures[t.texture] = null
 		need_update[t.texture] = true
+		need_render[t.texture] = true
 		shader_materials[t.texture] = ShaderMaterial.new()
 		shader_materials[t.texture].shader = Shader.new()
 	material = SpatialMaterial.new()
@@ -122,17 +124,34 @@ func render_textures() -> void:
 		need_update[t.texture] = false
 
 func on_float_parameter_changed(n : String, v : float) -> void:
-	var image_size = get_image_size()
 	for t in TEXTURE_LIST:
 		if generated_textures[t.texture] != null:
-			shader_materials[t.texture].set_shader_param(n, v)
+			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
+				if p.name == n:
+					shader_materials[t.texture].set_shader_param(n, v)
+					need_render[t.texture] = true
+					update_textures()
+					break
+
+
+func on_texture_changed(n : String) -> void:
+	for t in TEXTURE_LIST:
+		if generated_textures[t.texture] != null:
+			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
+				if p.name == n:
+					need_render[t.texture] = true
+					update_textures()
+					break
+
+func update_textures() -> void:
 	update_again = true
 	if !updating:
+		var image_size = get_image_size()
 		updating = true
 		while update_again:
 			update_again = false
 			for t in TEXTURE_LIST:
-				if generated_textures[t.texture] != null:
+				if need_render[t.texture]:
 					var result = mm_renderer.render_material(shader_materials[t.texture], image_size)
 					while result is GDScriptFunctionState:
 						result = yield(result, "completed")

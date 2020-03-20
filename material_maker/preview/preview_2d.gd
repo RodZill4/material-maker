@@ -4,7 +4,7 @@ export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
 
-func set_generator(g : MMGenBase) -> void:
+func set_generator(g : MMGenBase, output : int = 0) -> void:
 	var source = { defs="", code="", textures={}, type="f", f="1.0" }
 	if is_instance_valid(g):
 		generator = g
@@ -14,7 +14,7 @@ func set_generator(g : MMGenBase) -> void:
 		var gen_output_defs = generator.get_output_defs()
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
-			source = generator.get_shader_code("uv", 0, context)
+			source = generator.get_shader_code("uv", output, context)
 			while source is GDScriptFunctionState:
 				source = yield(source, "completed")
 			if source.empty():
@@ -29,7 +29,10 @@ func set_generator(g : MMGenBase) -> void:
 			material.set_shader_param(k, source.textures[k])
 
 func on_float_parameter_changed(n : String, v : float) -> void:
-	material.set_shader_param(n, v)
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		if p.name == n:
+			material.set_shader_param(n, v)
+			return
 
 func on_resized() -> void:
 	material.set_shader_param("size", rect_size)

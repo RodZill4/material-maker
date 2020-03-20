@@ -55,10 +55,19 @@ func source_changed(_input_port_index : int) -> void:
 	update_buffer()
 
 func on_float_parameter_changed(n : String, v : float) -> void:
-	material.set_shader_param(n, v)
-	update_buffer()
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		if p.name == n:
+			material.set_shader_param(n, v)
+			update_buffer()
+			return
 
-func update_buffer():
+func on_texture_changed(n : String) -> void:
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		if p.name == n:
+			update_buffer()
+			return
+
+func update_buffer() -> void:
 	update_again = true
 	if !updating:
 		updating = true
@@ -71,20 +80,7 @@ func update_buffer():
 				result.copy_to_texture(texture)
 			result.release()
 		updating = false
-
-func __get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	var source = get_source(0)
-	if source != null:
-		var result = source.generator.render(source.output_index, pow(2, parameters.size))
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
-		result.copy_to_texture(texture)
-		result.release()
-		texture.flags = Texture.FLAG_MIPMAPS
-	var rv = ._get_shader_code_lod(uv, output_index, context, 0 if output_index == 0 else parameters.lod)
-	while rv is GDScriptFunctionState:
-		rv = yield(rv, "completed")
-	return rv
+		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"
