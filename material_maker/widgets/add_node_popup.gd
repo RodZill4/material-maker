@@ -4,6 +4,7 @@ var libraries = []
 var data = []
 onready var itemlist : ItemList = $PanelContainer/VBoxContainer/ItemList 
 onready var filter_line_edit : LineEdit = $PanelContainer/VBoxContainer/Filter
+var quick_connect : int = -1
 var insert_position : Vector2
 
 func get_current_graph():
@@ -14,10 +15,10 @@ func _ready() -> void:
 	if !add_library(lib_path):
 		add_library("res://material_maker/library/base.json")
 	add_library("user://library/user.json")
-	filter_line_edit.connect("text_changed" ,self,"update_list")
-	filter_line_edit.connect("text_entered",self,"filter_entered")
-	itemlist.connect("item_selected",self,"item_selected")
-	itemlist.connect("item_activated",self,"item_selected")
+	filter_line_edit.connect("text_changed", self, "update_list")
+	filter_line_edit.connect("text_entered", self, "filter_entered")
+	itemlist.connect("item_selected", self, "item_selected")
+	itemlist.connect("item_activated", self, "item_selected")
 	update_list()
 
 func filter_entered(filter) -> void:
@@ -29,10 +30,10 @@ func add_node(data) -> void:
 	if quick_connect_node != null:
 		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
 		for new_slot in node.get_connection_input_count():
-			if type == node.get_connection_input_type(new_slot):
+			#if type == node.get_connection_input_type(new_slot):
 				#connect the first two slots with the same type
-				get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
-				break 
+			get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
+			break 
 	quick_connect_node = null
 	hide()
 
@@ -59,8 +60,9 @@ func hide() -> void:
 	
 	clear()
 
-func show() -> void:
-	.show()
+func show_popup(qc : int = -1) -> void:
+	show()
+	quick_connect = qc
 	update_list()
 	filter_line_edit.grab_focus()
 	var parent_rect = get_parent().get_parent().get_global_rect()
@@ -76,6 +78,28 @@ func update_list(filter : String = "") -> void:
 		for obj in library:
 			if !obj.has("type"):
 				continue
+			if quick_connect != -1:
+				var ref_obj = obj
+				if mm_loader.predefined_generators.has(obj.type):
+					ref_obj = mm_loader.predefined_generators[obj.type]
+				if ref_obj.has("shader_model"):
+					if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
+						continue
+					elif mm_io_types.types[ref_obj.shader_model.inputs[0].type].slot_type != quick_connect:
+						continue
+				elif ref_obj.has("nodes"):
+					var input_ports = []
+					for n in ref_obj.nodes:
+						if n.name == "gen_inputs":
+							if input_ports.has("ports"):
+								input_ports = n.ports
+							break
+					if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != quick_connect:
+						continue
+				elif ref_obj.type == "comment" or ref_obj.type == "image" or ref_obj.type == "remote":
+					continue
+				elif (ref_obj.type == "convolution" or ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
+					continue
 			var show : bool = true
 			for f in filter.to_lower().split(" ", false):
 				if f != "" && obj.tree_item.to_lower().find(f) == -1:
