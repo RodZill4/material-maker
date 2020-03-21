@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://material_maker/nodes/levels.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/nodes/tones.gd" type="Script" id=1]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -12,17 +12,17 @@ void fragment() {
 }
 "
 
-[sub_resource type="ImageTexture" id=14]
+[sub_resource type="ImageTexture" id=2]
 resource_local_to_scene = true
 flags = 0
 flags = 0
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/tex = SubResource( 14 )
+shader_param/tex = SubResource( 2 )
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
 
 uniform sampler2D tex;
@@ -36,15 +36,15 @@ void fragment() {
 }
 "
 
-[sub_resource type="ViewportTexture" id=6]
+[sub_resource type="ViewportTexture" id=5]
 viewport_path = NodePath("ViewportImage")
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=6]
 resource_local_to_scene = true
-shader = SubResource( 5 )
-shader_param/tex = SubResource( 6 )
+shader = SubResource( 4 )
+shader_param/tex = SubResource( 5 )
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 
 uniform sampler2D tex;
@@ -57,15 +57,15 @@ void fragment() {
 	COLOR = vec4(sum.xyz/255.0, 1.0);
 }"
 
-[sub_resource type="ViewportTexture" id=9]
+[sub_resource type="ViewportTexture" id=8]
 viewport_path = NodePath("ViewportHistogram1")
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=9]
 resource_local_to_scene = true
-shader = SubResource( 8 )
-shader_param/tex = SubResource( 9 )
+shader = SubResource( 7 )
+shader_param/tex = SubResource( 8 )
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
 
 uniform sampler2D tex;
@@ -78,26 +78,27 @@ void fragment() {
 		for (int i = 0; i < 128; ++i) {
 			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
 		}
-		vec4 value = 0.5*(texture(tex, vec2(max(0.0, UV.x-0.025), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.025), 0.0)));
-		COLOR = vec4(step(vec4(0.95-UV.y)*highest/0.9, value).xyz, 1.0);
+		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, 0.5*(texture(tex, vec2(max(0.0, UV.x-0.01), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.01), 0.0))));
+		float alpha = step(0.1, dot(value, vec4(1.0)));
+		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
 	}
 }"
 
-[sub_resource type="ViewportTexture" id=12]
+[sub_resource type="ViewportTexture" id=11]
 viewport_path = NodePath("ViewportHistogram2")
 
-[sub_resource type="ShaderMaterial" id=13]
+[sub_resource type="ShaderMaterial" id=12]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/tex = SubResource( 12 )
+shader = SubResource( 10 )
+shader_param/tex = SubResource( 11 )
 
 [node name="Tones" type="GraphNode"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -39.6668
-margin_top = 14.4243
-margin_right = -1095.67
-margin_bottom = -579.576
+margin_left = 2.75074
+margin_top = 1.78928
+margin_right = -1053.25
+margin_bottom = -529.211
 title = "Tones"
 show_close = true
 slot/0/left_enabled = true
@@ -138,7 +139,7 @@ render_target_v_flip = true
 render_target_update_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="ViewportImage"]
-material = SubResource( 4 )
+material = SubResource( 3 )
 margin_right = 256.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 256, 256 )
@@ -152,7 +153,7 @@ render_target_v_flip = true
 render_target_update_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_right = 128.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 128, 128 )
@@ -166,7 +167,7 @@ render_target_v_flip = true
 render_target_update_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram2"]
-material = SubResource( 10 )
+material = SubResource( 9 )
 margin_right = 128.0
 margin_bottom = 2.0
 rect_min_size = Vector2( 128, 2 )
@@ -191,7 +192,7 @@ __meta__ = {
 }
 
 [node name="Histogram" type="ColorRect" parent="."]
-material = SubResource( 13 )
+material = SubResource( 12 )
 margin_left = 16.0
 margin_top = 50.0
 margin_right = 208.0
