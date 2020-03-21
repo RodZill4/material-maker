@@ -1,0 +1,209 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://material_maker/nodes/levels.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+
+void fragment() {
+	COLOR = texture(tex, UV);
+}
+"
+
+[sub_resource type="ImageTexture" id=14]
+resource_local_to_scene = true
+flags = 0
+flags = 0
+
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/tex = SubResource( 14 )
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+
+void fragment() {
+	vec4 sum = vec4(0.0);
+	for (int i = 0; i < 128; ++i) {
+		sum += step(abs(texture(tex, vec2(UV.x, float(i)/127.0))-UV.y), vec4(0.02));
+	}
+	COLOR = vec4(sum.xyz/255.0, 1.0);
+}
+"
+
+[sub_resource type="ViewportTexture" id=6]
+viewport_path = NodePath("ViewportImage")
+
+[sub_resource type="ShaderMaterial" id=7]
+resource_local_to_scene = true
+shader = SubResource( 5 )
+shader_param/tex = SubResource( 6 )
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+
+void fragment() {
+	vec4 sum = vec4(0.0);
+	for (int i = 0; i < 128; ++i) {
+		sum += texture(tex, vec2(float(i)/127.0, UV.x));
+	}
+	COLOR = vec4(sum.xyz/255.0, 1.0);
+}"
+
+[sub_resource type="ViewportTexture" id=9]
+viewport_path = NodePath("ViewportHistogram1")
+
+[sub_resource type="ShaderMaterial" id=10]
+resource_local_to_scene = true
+shader = SubResource( 8 )
+shader_param/tex = SubResource( 9 )
+
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+
+void fragment() {
+	if (abs(fract(UV.y+0.05)) < 0.1) {
+		COLOR = vec4(vec3(UV.x), 1.0);
+	} else {
+		vec4 highest = vec4(0.0);
+		for (int i = 0; i < 128; ++i) {
+			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
+		}
+		vec4 value = 0.5*(texture(tex, vec2(max(0.0, UV.x-0.025), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.025), 0.0)));
+		COLOR = vec4(step(vec4(0.95-UV.y)*highest/0.9, value).xyz, 1.0);
+	}
+}"
+
+[sub_resource type="ViewportTexture" id=12]
+viewport_path = NodePath("ViewportHistogram2")
+
+[sub_resource type="ShaderMaterial" id=13]
+resource_local_to_scene = true
+shader = SubResource( 11 )
+shader_param/tex = SubResource( 12 )
+
+[node name="Tones" type="GraphNode"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -39.6668
+margin_top = 14.4243
+margin_right = -1095.67
+margin_bottom = -579.576
+title = "Tones"
+show_close = true
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color( 0, 0.396078, 1, 1 )
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color( 0, 0.415686, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color( 1, 1, 1, 1 )
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewportImage" type="Viewport" parent="."]
+size = Vector2( 256, 256 )
+disable_3d = true
+keep_3d_linear = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportImage"]
+material = SubResource( 4 )
+margin_right = 256.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 256, 256 )
+
+[node name="ViewportHistogram1" type="Viewport" parent="."]
+size = Vector2( 128, 128 )
+disable_3d = true
+keep_3d_linear = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
+material = SubResource( 7 )
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+
+[node name="ViewportHistogram2" type="Viewport" parent="."]
+size = Vector2( 128, 2 )
+disable_3d = true
+keep_3d_linear = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportHistogram2"]
+material = SubResource( 10 )
+margin_right = 128.0
+margin_bottom = 2.0
+rect_min_size = Vector2( 128, 2 )
+
+[node name="Mode" type="OptionButton" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 208.0
+margin_bottom = 44.0
+text = "Luminance"
+items = [ "Luminance", null, false, 0, null, "Red", null, false, 1, null, "Green", null, false, 2, null, "Blue", null, false, 3, null, "Alpha", null, false, 4, null ]
+selected = 0
+
+[node name="Spacer1" type="Control" parent="."]
+margin_left = 16.0
+margin_top = 45.0
+margin_right = 208.0
+margin_bottom = 49.0
+rect_min_size = Vector2( 0, 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Histogram" type="ColorRect" parent="."]
+material = SubResource( 13 )
+margin_left = 16.0
+margin_top = 50.0
+margin_right = 208.0
+margin_bottom = 178.0
+rect_min_size = Vector2( 192, 128 )
+
+[node name="Spacer2" type="Control" parent="."]
+margin_left = 16.0
+margin_top = 179.0
+margin_right = 208.0
+margin_bottom = 183.0
+rect_min_size = Vector2( 0, 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

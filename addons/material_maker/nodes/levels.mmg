@@ -1,0 +1,122 @@
+{
+	"name": "levels",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"in_max": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		},
+		"in_mid": {
+			"a": 0.5,
+			"b": 0.5,
+			"g": 0.5,
+			"r": 0.5,
+			"type": "Color"
+		},
+		"in_min": {
+			"a": 0,
+			"b": 0,
+			"g": 0,
+			"r": 0,
+			"type": "Color"
+		},
+		"out_max": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		},
+		"out_min": {
+			"a": 0,
+			"b": 0,
+			"g": 0,
+			"r": 0,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec4 adjust_levels(vec4 input, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {\n\tinput = clamp((input-in_min)/(in_max-in_min), 0.0, 1.0);\n\tin_mid = (in_mid-in_min)/(in_max-in_min);\n\tvec4 dark = step(in_mid, input);\n\tinput = 0.5*mix(input/(in_mid), 1.0+(input-in_mid)/(1.0-in_mid), dark);\n\treturn out_min+input*(out_max-out_min);\n}\n",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Levels",
+		"outputs": [
+			{
+				"rgba": "adjust_levels($input($uv), $in_min, $in_mid, $in_max, $out_min, $out_max)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 0,
+					"b": 0,
+					"g": 0,
+					"r": 0
+				},
+				"label": "",
+				"name": "in_min",
+				"type": "color"
+			},
+			{
+				"default": {
+					"a": 0.498039,
+					"b": 0.498039,
+					"g": 0.498039,
+					"r": 0.498039
+				},
+				"label": "",
+				"name": "in_mid",
+				"type": "color"
+			},
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"name": "in_max",
+				"type": "color"
+			},
+			{
+				"default": {
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"r": 0
+				},
+				"label": "",
+				"name": "out_min",
+				"type": "color"
+			},
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"name": "out_max",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}
