@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/nodes/tones.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/widgets/histogram/histogram.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 16, 80, 16, 16 )
 
 [node name="Tones" type="GraphNode"]
 anchor_right = 1.0
@@ -41,14 +47,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Mode" type="OptionButton" parent="."]
+[node name="Bar" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
 margin_right = 208.0
 margin_bottom = 44.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Mode" type="OptionButton" parent="Bar"]
+margin_right = 172.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
 text = "Luminance"
 items = [ "Luminance", null, false, 0, null, "Red", null, false, 1, null, "Green", null, false, 2, null, "Blue", null, false, 3, null, "Alpha", null, false, 4, null ]
 selected = 0
+
+[node name="Auto" type="TextureButton" parent="Bar"]
+margin_left = 176.0
+margin_top = 2.0
+margin_right = 192.0
+margin_bottom = 18.0
+hint_tooltip = "Set levels automatically"
+size_flags_vertical = 4
+texture_normal = SubResource( 1 )
 
 [node name="Spacer1" type="Control" parent="."]
 margin_left = 16.0
@@ -76,4 +99,5 @@ rect_min_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="item_selected" from="Mode" to="." method="_on_Mode_item_selected"]
+[connection signal="item_selected" from="Bar/Mode" to="." method="_on_Mode_item_selected"]
+[connection signal="pressed" from="Bar/Auto" to="." method="_on_Auto_pressed"]

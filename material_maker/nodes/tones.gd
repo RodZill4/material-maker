@@ -36,11 +36,13 @@ class Cursor:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			rect_position.x += ev.relative.x
 			rect_position.x = min(max(-0.5*WIDTH, rect_position.x), get_parent().rect_size.x-0.5*WIDTH)
-			var new_position = (rect_position.x+0.5*WIDTH)/get_parent().rect_size.x
-			if new_position != position:
-				position = new_position
-				get_parent().get_parent().update_value(self, position)
-				update()
+			update_value((rect_position.x+0.5*WIDTH)/get_parent().rect_size.x)
+	
+	func update_value(p : float) -> void:
+		if p != position:
+			set_value(p)
+			get_parent().get_parent().update_value(self, position)
+			update()
 	
 	func set_value(v : float):
 		position = v
@@ -70,7 +72,6 @@ func _ready() -> void:
 func set_generator(g) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
-	update_node()
 	_on_Mode_item_selected(0)
 
 func on_parameter_changed(p, v) -> void:
@@ -84,7 +85,7 @@ func on_parameter_changed(p, v) -> void:
 
 func get_parameter(n : String) -> float:
 	var value = generator.get_parameter(n)
-	match $Mode.selected:
+	match $Bar/Mode.selected:
 		1:
 			return value.r
 		2:
@@ -104,7 +105,7 @@ func _on_Mode_item_selected(_id):
 
 func set_parameter(n : String, v : float, d : float) -> void:
 	var value = generator.get_parameter(n)
-	match $Mode.selected:
+	match $Bar/Mode.selected:
 		0:
 			value.r = v
 			value.g = v
@@ -134,44 +135,36 @@ func update_value(control : Cursor, value : float) -> void:
 			 set_parameter("out_max", value, 1)
 	get_parent().send_changed_signal()
 
-# Everything below is only meant for editing the shader
-
-func update_node() -> void:
-	if has_node("NodeEditButtons"):
-		var r = $NodeEditButtons
-		remove_child(r)
-		r.free()
-	rect_size = Vector2(0, 0)
-	if generator.is_editable():
-		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
-		add_child(edit_buttons)
-		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
-
-func edit_generator() -> void:
-	if generator.has_method("edit"):
-		generator.edit(self)
-
-func update_generator(shader_model : Dictionary) -> void:
-	generator.set_shader_model(shader_model)
-	update_node()
-
-func save_generator() -> void:
-	var dialog = FileDialog.new()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.mmg;Material Maker Generator")
-	dialog.connect("file_selected", self, "do_save_generator")
-	dialog.popup_centered()
-
-func do_save_generator(file_name : String) -> void:
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		var data = generator.serialize()
-		data.name = file_name.get_file().get_basename()
-		data.node_position = { x=0, y=0 }
-		file.store_string(JSON.print(data, "\t", true))
-		file.close()
-		mm_loader.update_predefined_generators()
+func _on_Auto_pressed():
+	var histogram = $Histogram.get_histogram_texture().get_data()
+	histogram.lock()
+	var in_min : int = -1
+	var in_mid : int = -1
+	var in_mid_value : float = 0
+	var in_max : int = -1
+	var histogram_size = histogram.get_size().x
+	for i in range(histogram_size):
+		var color : Color = histogram.get_pixel(i, 0)
+		var value : float
+		match $Bar/Mode.selected:
+			0:
+				value = (color.r+color.g+color.b)/3.0
+			1:
+				value = color.r
+			2:
+				value = color.g
+			3:
+				value = color.b
+			4:
+				value = color.a
+		if value > 0.0:
+			if in_min == -1:
+				in_min = i
+			in_max = i
+			if in_mid_value < value:
+				in_mid = i
+				in_mid_value = value
+	histogram.unlock()
+	cursor_in_min.update_value(in_min/(histogram_size-1))
+	cursor_in_mid.update_value(in_mid/(histogram_size-1))
+	cursor_in_max.update_value(in_max/(histogram_size-1))

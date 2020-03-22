@@ -81,7 +81,7 @@ void fragment() {
 		for (int i = 0; i < 128; ++i) {
 			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
 		}
-		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, 0.5*(texture(tex, vec2(max(0.0, UV.x-0.015), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.015), 0.0))));
+		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, texture(tex, vec2(UV.x, 0.0)));
 		float alpha = step(0.1, dot(value, vec4(1.0)));
 		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
 	}
