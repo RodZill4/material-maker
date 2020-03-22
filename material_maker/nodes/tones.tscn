@@ -76,3 +76,4 @@ rect_min_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="item_selected" from="Mode" to="." method="_on_Mode_item_selected"]

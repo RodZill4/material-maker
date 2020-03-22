@@ -16,9 +16,10 @@ class Cursor:
 		top = t
 	
 	func _ready() -> void:
-		rect_position = Vector2(position * get_parent().rect_size.x - 0.5*WIDTH, -2 if top else get_parent().rect_size.y+2-HEIGHT)
+		rect_position.y = -2 if top else get_parent().rect_size.y+2-HEIGHT
+		set_value(position)
 		rect_size = Vector2(WIDTH, HEIGHT)
-
+	
 	func _draw() -> void:
 		var polygon : PoolVector2Array
 		if top:
@@ -30,7 +31,7 @@ class Cursor:
 		draw_colored_polygon(polygon, c)
 		var outline_color = 0.0 if position > 0.5 else 1.0
 		draw_polyline(polygon, Color(outline_color, outline_color, outline_color), 1.0, true)
-
+	
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			rect_position.x += ev.relative.x
@@ -40,9 +41,10 @@ class Cursor:
 				position = new_position
 				get_parent().get_parent().update_value(self, position)
 				update()
-
-	func get_position() -> Vector2:
-		return rect_position.x / (get_parent().rect_size.x - WIDTH)
+	
+	func set_value(v : float):
+		position = v
+		rect_position.x = position * get_parent().rect_size.x - 0.5*WIDTH
 
 var cursor_in_min : Cursor
 var cursor_in_mid : Cursor
@@ -69,18 +71,7 @@ func set_generator(g) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
-
-func update_node() -> void:
-	if has_node("NodeEditButtons"):
-		var r = $NodeEditButtons
-		remove_child(r)
-		r.free()
-	rect_size = Vector2(0, 0)
-	if generator.is_editable():
-		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
-		add_child(edit_buttons)
-		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
+	_on_Mode_item_selected(0)
 
 func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
@@ -90,6 +81,26 @@ func on_parameter_changed(p, v) -> void:
 			result = yield(result, "completed")
 		result.copy_to_texture($Histogram.get_image_texture())
 		result.release()
+
+func get_parameter(n : String) -> float:
+	var value = generator.get_parameter(n)
+	match $Mode.selected:
+		1:
+			return value.r
+		2:
+			return value.g
+		3:
+			return value.b
+		4:
+			return value.a
+	return (value.r+value.g+value.b)/3.0
+
+func _on_Mode_item_selected(_id):
+	cursor_in_min.set_value(get_parameter("in_min"))
+	cursor_in_mid.set_value(get_parameter("in_mid"))
+	cursor_in_max.set_value(get_parameter("in_max"))
+	cursor_out_min.set_value(get_parameter("out_min"))
+	cursor_out_max.set_value(get_parameter("out_max"))
 
 func set_parameter(n : String, v : float, d : float) -> void:
 	var value = generator.get_parameter(n)
@@ -122,6 +133,20 @@ func update_value(control : Cursor, value : float) -> void:
 		cursor_out_max:
 			 set_parameter("out_max", value, 1)
 	get_parent().send_changed_signal()
+
+# Everything below is only meant for editing the shader
+
+func update_node() -> void:
+	if has_node("NodeEditButtons"):
+		var r = $NodeEditButtons
+		remove_child(r)
+		r.free()
+	rect_size = Vector2(0, 0)
+	if generator.is_editable():
+		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
+		add_child(edit_buttons)
+		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
+		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 
 func edit_generator() -> void:
 	if generator.has_method("edit"):
