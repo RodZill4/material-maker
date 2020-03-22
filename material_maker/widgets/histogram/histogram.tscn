@@ -1,0 +1,157 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://material_maker/widgets/histogram/histogram.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+render_mode blend_disabled;
+
+uniform sampler2D tex;
+
+void fragment() {
+	COLOR = texture(tex, UV);
+}
+"
+
+[sub_resource type="ImageTexture" id=2]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/tex = SubResource( 2 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+render_mode blend_disabled;
+
+uniform sampler2D tex;
+
+void fragment() {
+	vec4 sum = vec4(0.0);
+	for (int i = 0; i < 128; ++i) {
+		sum += step(abs(texture(tex, vec2(UV.x, float(i)/127.0))-UV.y), vec4(0.02));
+	}
+	COLOR = sum/255.0;
+}
+"
+
+[sub_resource type="ViewportTexture" id=5]
+viewport_path = NodePath("ViewportImage")
+
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = SubResource( 4 )
+shader_param/tex = SubResource( 5 )
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+render_mode blend_disabled;
+
+uniform sampler2D tex;
+
+void fragment() {
+	vec4 sum = vec4(0.0);
+	for (int i = 0; i < 128; ++i) {
+		sum += texture(tex, vec2(float(i)/127.0, UV.x));
+	}
+	COLOR = sum/255.0;
+}"
+
+[sub_resource type="ViewportTexture" id=8]
+viewport_path = NodePath("ViewportHistogram1")
+
+[sub_resource type="ShaderMaterial" id=9]
+resource_local_to_scene = true
+shader = SubResource( 7 )
+shader_param/tex = SubResource( 8 )
+
+[sub_resource type="Shader" id=10]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+render_mode blend_disabled;
+
+void fragment() {
+	if (abs(fract(UV.y+0.05)) < 0.1) {
+		COLOR = vec4(vec3(UV.x), 1.0);
+	} else {
+		vec4 highest = vec4(0.0);
+		for (int i = 0; i < 128; ++i) {
+			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
+		}
+		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, 0.5*(texture(tex, vec2(max(0.0, UV.x-0.015), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.015), 0.0))));
+		float alpha = step(0.1, dot(value, vec4(1.0)));
+		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
+	}
+}"
+
+[sub_resource type="ViewportTexture" id=11]
+flags = 4
+viewport_path = NodePath("ViewportHistogram2")
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = SubResource( 10 )
+shader_param/tex = SubResource( 11 )
+
+[node name="Histogram" type="Control"]
+margin_right = 64.0
+margin_bottom = 64.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewportImage" type="Viewport" parent="."]
+size = Vector2( 256, 256 )
+transparent_bg = true
+hdr = false
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportImage"]
+material = SubResource( 3 )
+margin_right = 256.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 256, 256 )
+
+[node name="ViewportHistogram1" type="Viewport" parent="."]
+size = Vector2( 128, 128 )
+own_world = true
+transparent_bg = true
+hdr = false
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
+material = SubResource( 6 )
+margin_right = 128.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 128, 128 )
+
+[node name="ViewportHistogram2" type="Viewport" parent="."]
+size = Vector2( 128, 2 )
+transparent_bg = true
+disable_3d = true
+keep_3d_linear = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportHistogram2"]
+material = SubResource( 9 )
+margin_right = 128.0
+margin_bottom = 2.0
+rect_min_size = Vector2( 128, 2 )
+
+[node name="Control" type="ColorRect" parent="."]
+material = SubResource( 12 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

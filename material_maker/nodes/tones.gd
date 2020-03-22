@@ -7,7 +7,6 @@ class Cursor:
 	var top : bool = true
 	var position : float
 
-
 	const WIDTH : int = 8
 	const HEIGHT : int = 8
 
@@ -89,7 +88,7 @@ func on_parameter_changed(p, v) -> void:
 		var result = source.generator.render(source.output_index, 128, true)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
-		result.copy_to_texture($ViewportImage/ColorRect.material.get_shader_param("tex"))
+		result.copy_to_texture($Histogram.get_image_texture())
 		result.release()
 
 func set_parameter(n : String, v : float, d : float) -> void:
