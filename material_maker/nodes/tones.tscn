@@ -4,6 +4,7 @@
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
+render_mode blend_disabled;
 
 uniform sampler2D tex;
 
@@ -13,9 +14,6 @@ void fragment() {
 "
 
 [sub_resource type="ImageTexture" id=2]
-resource_local_to_scene = true
-flags = 0
-flags = 0
 
 [sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
@@ -24,6 +22,7 @@ shader_param/tex = SubResource( 2 )
 
 [sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
+render_mode blend_disabled;
 
 uniform sampler2D tex;
 
@@ -32,7 +31,7 @@ void fragment() {
 	for (int i = 0; i < 128; ++i) {
 		sum += step(abs(texture(tex, vec2(UV.x, float(i)/127.0))-UV.y), vec4(0.02));
 	}
-	COLOR = vec4(sum.xyz/255.0, 1.0);
+	COLOR = sum/255.0;
 }
 "
 
@@ -46,6 +45,7 @@ shader_param/tex = SubResource( 5 )
 
 [sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
+render_mode blend_disabled;
 
 uniform sampler2D tex;
 
@@ -54,7 +54,7 @@ void fragment() {
 	for (int i = 0; i < 128; ++i) {
 		sum += texture(tex, vec2(float(i)/127.0, UV.x));
 	}
-	COLOR = vec4(sum.xyz/255.0, 1.0);
+	COLOR = sum/255.0;
 }"
 
 [sub_resource type="ViewportTexture" id=8]
@@ -69,6 +69,7 @@ shader_param/tex = SubResource( 8 )
 code = "shader_type canvas_item;
 
 uniform sampler2D tex;
+render_mode blend_disabled;
 
 void fragment() {
 	if (abs(fract(UV.y+0.05)) < 0.1) {
@@ -78,7 +79,7 @@ void fragment() {
 		for (int i = 0; i < 128; ++i) {
 			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
 		}
-		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, 0.5*(texture(tex, vec2(max(0.0, UV.x-0.01), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.01), 0.0))));
+		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, 0.5*(texture(tex, vec2(max(0.0, UV.x-0.015), 0.0))+texture(tex, vec2(min(1.0, UV.x+0.015), 0.0))));
 		float alpha = step(0.1, dot(value, vec4(1.0)));
 		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
 	}
@@ -132,8 +133,8 @@ __meta__ = {
 
 [node name="ViewportImage" type="Viewport" parent="."]
 size = Vector2( 256, 256 )
-disable_3d = true
-keep_3d_linear = true
+transparent_bg = true
+hdr = false
 usage = 0
 render_target_v_flip = true
 render_target_update_mode = 3
@@ -146,8 +147,9 @@ rect_min_size = Vector2( 256, 256 )
 
 [node name="ViewportHistogram1" type="Viewport" parent="."]
 size = Vector2( 128, 128 )
-disable_3d = true
-keep_3d_linear = true
+own_world = true
+transparent_bg = true
+hdr = false
 usage = 0
 render_target_v_flip = true
 render_target_update_mode = 3
@@ -160,6 +162,7 @@ rect_min_size = Vector2( 128, 128 )
 
 [node name="ViewportHistogram2" type="Viewport" parent="."]
 size = Vector2( 128, 2 )
+transparent_bg = true
 disable_3d = true
 keep_3d_linear = true
 usage = 0
