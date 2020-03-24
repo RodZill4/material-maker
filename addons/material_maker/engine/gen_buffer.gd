@@ -37,8 +37,9 @@ func get_output_defs() -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(_input_port_index : int) -> void:
-	if !is_inside_tree():
-		return
+	call_deferred("update_shader")
+
+func update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(0)
@@ -73,7 +74,7 @@ func update_buffer() -> void:
 		updating = true
 		while update_again:
 			update_again = false
-			var result = mm_renderer.render_material(material, pow(2, parameters.size))
+			var result = mm_renderer.render_material(material, pow(2, get_parameter("size")))
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			if !update_again:

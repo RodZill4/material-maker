@@ -36,7 +36,7 @@
 		"name": "Color Tiler",
 		"outputs": [
 			{
-				"rgba": "tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2($seed))",
+				"rgba": "tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)))",
 				"type": "rgba"
 			}
 		],

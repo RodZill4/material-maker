@@ -23,7 +23,14 @@ func set_generator(g : MMGenBase, output : int = 0) -> void:
 		g = null
 		for c in get_children():
 			c.setup_control(generator, [])
+	# Update shader
 	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	# Get parameter values from the shader code
+	var regex = RegEx.new()
+	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
+	for p in regex.search_all(material.shader.code):
+		material.set_shader_param(p.strings[2], float(p.strings[3]))
+	# Set texture params
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])

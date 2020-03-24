@@ -18,8 +18,10 @@ func toggle_editable() -> bool:
 func is_editable() -> bool:
 	return editable
 
+
 func has_randomness() -> bool:
 	return uses_seed
+
 
 func get_type() -> String:
 	return "shader"
@@ -178,7 +180,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
 		string = replace_variable(string, "name_uv", genname_uv)
-	var tmp_string = replace_variable(string, "seed", str(get_seed()))
+	var tmp_string = replace_variable(string, "seed", "seed_"+genname)
 	if tmp_string != string:
 		string = tmp_string
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
@@ -246,6 +248,8 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		var output = shader_model.outputs[output_index]
 		if !context.has_variant(self):
 			# Generate functions for gradients
+			if has_randomness():
+				rv.defs += "uniform int seed_%s = %d;\n" % [ genname, get_seed() ]
 			for p in shader_model.parameters:
 				if p.type == "float":
 					rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]

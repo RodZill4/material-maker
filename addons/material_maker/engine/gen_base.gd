@@ -90,8 +90,8 @@ func init_parameters() -> void:
 
 func set_position(p) -> void:
 	position = p
-	if has_randomness() and !is_seed_locked():
-		source_changed(0)
+	if has_randomness() and !is_seed_locked() and is_inside_tree():
+		get_tree().call_group("preview", "on_float_parameter_changed", "seed_o%s" % [ str(get_instance_id()) ], get_seed())
 
 func get_type() -> String:
 	return "generic"

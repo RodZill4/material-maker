@@ -5,7 +5,8 @@ var controls = {}
 var ignore_parameter_change = ""
 var output_count = 0
 
-var preview : TextureRect
+var preview : ColorRect
+#var preview : TextureRect
 var preview_index : int = -1
 var preview_position : int
 var preview_size : int
@@ -151,7 +152,8 @@ func save_preview_widget() -> void:
 
 func restore_preview_widget() -> void:
 	if preview == null:
-		preview = TextureRect.new()
+		preview = preload("res://material_maker/preview/preview_2d.tscn").instance()
+		preview.shader = "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}"
 		preview.visible = false
 	preview_position = get_child_count()
 	if preview.visible:
@@ -372,14 +374,9 @@ func update_preview(size : int = 0) -> void:
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	var result = generator.render(preview_index, preview_size, true)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	if preview.texture == null:
-		preview.texture = ImageTexture.new()
-	result.copy_to_texture(preview.texture)
-	result.release()
 	if !preview.visible:
 		add_child(preview)
 		move_child(preview, preview_position)
 		preview.visible = true
+	preview.set_generator(generator, preview_index)
+	preview.rect_min_size = Vector2(preview_size, preview_size)

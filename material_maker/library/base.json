@@ -4854,6 +4854,9 @@
 		{
 			"collapsed": true,
 			"icon": "miscellaneous_buffer",
+			"parameters": {
+				"size": 9
+			},
 			"tree_item": "Miscellaneous/Buffer",
 			"type": "buffer"
 		},
