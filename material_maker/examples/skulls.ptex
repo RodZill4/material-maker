@@ -165,6 +165,9 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 356,
@@ -178,14 +181,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 1,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -493,18 +496,6 @@
 		{
 			"connections": [
 				{
-					"from": "sdf3d_scale",
-					"from_port": 0,
-					"to": "sdf3d_scale_2",
-					"to_port": 0
-				},
-				{
-					"from": "sdf3d_scale_2",
-					"from_port": 0,
-					"to": "sdf3d_boolean_2",
-					"to_port": 0
-				},
-				{
 					"from": "sdf3d_translate_4",
 					"from_port": 0,
 					"to": "sdf3d_boolean_2",
@@ -532,6 +523,18 @@
 					"from": "graph_3",
 					"from_port": 0,
 					"to": "sdf3d_scale",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_scale",
+					"from_port": 0,
+					"to": "sdf3d_repeat_2",
+					"to_port": 0
+				},
+				{
+					"from": "sdf3d_repeat_2",
+					"from_port": 0,
+					"to": "sdf3d_boolean_2",
 					"to_port": 0
 				}
 			],
@@ -1320,68 +1323,6 @@
 					"type": "sdf3d_boolean"
 				},
 				{
-					"name": "sdf3d_scale_2",
-					"node_position": {
-						"x": -985.183411,
-						"y": 1271.851807
-					},
-					"parameters": {
-						"r": 0.25,
-						"rx": 4,
-						"ry": 4
-					},
-					"shader_model": {
-						"code": "",
-						"global": "vec3 repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 a = (rand3(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
-						"inputs": [
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "in",
-								"type": "sdf3d"
-							}
-						],
-						"instance": "",
-						"name": "Repeat",
-						"outputs": [
-							{
-								"sdf3d": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
-								"type": "sdf3d"
-							}
-						],
-						"parameters": [
-							{
-								"default": 4,
-								"label": "X",
-								"max": 32,
-								"min": 1,
-								"name": "rx",
-								"step": 1,
-								"type": "float"
-							},
-							{
-								"default": 4,
-								"label": "Y",
-								"max": 32,
-								"min": 1,
-								"name": "ry",
-								"step": 1,
-								"type": "float"
-							},
-							{
-								"default": 0.5,
-								"label": "R",
-								"max": 1,
-								"min": 0,
-								"name": "r",
-								"step": 0.01,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
 					"name": "sdf3d_repeat",
 					"node_position": {
 						"x": -986.79303,
@@ -1438,6 +1379,19 @@
 					"widgets": [
 
 					]
+				},
+				{
+					"name": "sdf3d_repeat_2",
+					"node_position": {
+						"x": -986.70166,
+						"y": 1268.091553
+					},
+					"parameters": {
+						"r": 0.25,
+						"rx": 4,
+						"ry": 4
+					},
+					"type": "sdf3d_repeat"
 				}
 			],
 			"parameters": {
