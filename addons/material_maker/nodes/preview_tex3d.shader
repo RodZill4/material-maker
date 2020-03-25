@@ -25,7 +25,7 @@ vec3 normal(vec3 p) {
 }
 
 vec4 preview_2d(vec2 uv) {
-    vec2 uv -= vec2(0.5);
+    uv -= vec2(0.5);
     vec3 p = vec3(uv, 2.0-raymarch(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));
     vec3 n = normal(p);
     vec3 l = vec3(5.0, 5.0, 10.0);

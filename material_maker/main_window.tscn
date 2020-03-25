@@ -2,6 +2,7 @@
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/preview/preview_2d.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/preview/preview_3d.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://material_maker/widgets/tabs.gd" type="Script" id=6]
@@ -9,27 +10,13 @@
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
-[ext_resource path="res://material_maker/preview/preview_2d.gd" type="Script" id=11]
 
 [sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-uniform sampler2D tex;
-uniform vec2 size;
-
-void fragment() {
-	float ms = max(size.x, size.y);
-	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
-	vec2 m2 = min(fract(uv), 1.0-fract(uv));
-	vec4 image = texture(tex, uv);
-	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
-	float lines_color = 0.5*(cos(5.0*TIME+100.0*(UV.x+UV.y))+1.0);
-	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(min(m2.x*size.x, m2.y*size.y), 1.0)), 1.0);
-}"
+resource_local_to_scene = true
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/size = Vector2( 947, 682 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
@@ -127,20 +114,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Preview2D" type="ColorRect" parent="VBoxContainer/Layout/SplitRight/ProjectsPane"]
+[node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPane" instance=ExtResource( 3 )]
 visible = false
 material = SubResource( 2 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 64, 64 )
-rect_clip_content = true
-mouse_filter = 1
-size_flags_horizontal = 0
-size_flags_vertical = 8
-script = ExtResource( 11 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 0.0
+margin_bottom = 0.0
 
 [node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPane" instance=ExtResource( 4 )]
 margin_left = 0.0
@@ -269,7 +247,6 @@ script = ExtResource( 9 )
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="dragged" from="VBoxContainer/Layout/SplitRight" to="VBoxContainer/Layout" method="_on_Right_dragged"]
-[connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D" method="on_resized"]
 [connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" to="." method="update_preview_3d"]
 [connection signal="no_more_tabs" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Projects" to="." method="new_material"]
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPane/Projects" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Projects" method="_on_Projects_resized"]

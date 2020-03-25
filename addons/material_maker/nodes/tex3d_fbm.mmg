@@ -22,7 +22,7 @@
 		"name": "TEX3D FBM",
 		"outputs": [
 			{
-				"tex3d": "vec3($(name)_fbm($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), $(seed)))",
+				"tex3d": "vec3($(name)_fbm($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed))))",
 				"type": "tex3d"
 			}
 		],

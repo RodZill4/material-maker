@@ -3,11 +3,16 @@ extends ColorRect
 export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
+var output : int = 0
 
-func set_generator(g : MMGenBase, output : int = 0) -> void:
+func set_generator(g : MMGenBase, o : int = 0) -> void:
+	if is_instance_valid(generator):
+		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = { defs="", code="", textures={}, type="f", f="1.0" }
 	if is_instance_valid(g):
 		generator = g
+		output = o
+		generator.connect("parameter_changed", self, "on_parameter_changed")
 		var param_defs : Array = generator.get_parameter_defs()
 		for c in get_children():
 			c.setup_control(generator, param_defs)
@@ -34,6 +39,15 @@ func set_generator(g : MMGenBase, output : int = 0) -> void:
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])
+
+func on_parameter_changed(n : String, v) -> void:
+	var p = generator.get_parameter_def(n)
+	if p.has("type"):
+		match p.type:
+			"float":
+				pass
+			_:
+				set_generator(generator, output)
 
 func on_float_parameter_changed(n : String, v : float) -> void:
 	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
