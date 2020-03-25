@@ -41,6 +41,8 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			material.set_shader_param(k, source.textures[k])
 
 func on_parameter_changed(n : String, v) -> void:
+	if n == "__input_changed__":
+		set_generator(generator, output)
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:

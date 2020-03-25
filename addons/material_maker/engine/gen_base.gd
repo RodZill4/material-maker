@@ -6,8 +6,7 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
-signal parameter_changed
-signal output_changed(index)
+signal parameter_changed(n, v)
 
 class InputPort:
 	var generator : MMGenBase = null
@@ -129,10 +128,10 @@ func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
 	for target in targets:
 		target.generator.source_changed(target.input_index)
-	emit_signal("output_changed", output_index)
+	emit_signal("parameter_changed", "__output_changed__", output_index)
 
-func source_changed(__) -> void:
-	emit_signal("parameter_changed", "__input_changed__", 0)
+func source_changed(input_index : int) -> void:
+	emit_signal("parameter_changed", "__input_changed__", input_index)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
