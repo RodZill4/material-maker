@@ -123,16 +123,16 @@ func render_textures() -> void:
 			texture.flags ^= ImageTexture.FLAG_FILTER
 		need_update[t.texture] = false
 
-func on_float_parameter_changed(n : String, v : float) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	for t in TEXTURE_LIST:
 		if generated_textures[t.texture] != null:
-			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
-				if p.name == n:
-					shader_materials[t.texture].set_shader_param(n, v)
-					need_render[t.texture] = true
-					update_textures()
-					break
-
+			for n in parameter_changes.keys():
+				for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
+					if p.name == n:
+						shader_materials[t.texture].set_shader_param(n, parameter_changes[n])
+						need_render[t.texture] = true
+						update_textures()
+						break
 
 func on_texture_changed(n : String) -> void:
 	for t in TEXTURE_LIST:

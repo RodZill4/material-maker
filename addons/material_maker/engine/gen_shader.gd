@@ -72,6 +72,7 @@ func set_shader_model(data: Dictionary) -> void:
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
 			uses_seed = true
+	source_changed(0)
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword

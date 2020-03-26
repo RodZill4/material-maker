@@ -55,12 +55,12 @@ func update_shader() -> void:
 			material.set_shader_param(k, source.textures[k])
 	update_buffer()
 
-func on_float_parameter_changed(n : String, v : float) -> void:
-	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-		if p.name == n:
-			material.set_shader_param(n, v)
-			update_buffer()
-			return
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+			if p.name == n:
+				material.set_shader_param(n, parameter_changes[n])
+				break
 
 func on_texture_changed(n : String) -> void:
 	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):

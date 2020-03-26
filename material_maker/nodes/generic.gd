@@ -53,7 +53,7 @@ func on_parameter_changed(p, v) -> void:
 			o.value = gradient
 		else:
 			print("unsupported widget "+str(o))
-	update_shaders()
+	get_parent().set_need_save()
 
 func initialize_properties() -> void:
 	var parameter_names = []
@@ -82,33 +82,29 @@ func initialize_properties() -> void:
 		else:
 			print("unsupported widget "+str(o))
 
-func update_shaders() -> void:
-	#get_parent().send_changed_signal()
-	update_preview()
-
 func _on_text_changed(new_text, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func _on_value_changed(new_value, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
-	if ! (new_value is float):
-		update_shaders()
+	get_parent().set_need_save()
 
 func _on_color_changed(new_color, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func _on_gradient_changed(new_gradient, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
 	ignore_parameter_change = ""
+	get_parent().set_need_save()
 
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
@@ -297,7 +293,7 @@ func edit_generator() -> void:
 func update_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
 	update_node()
-	update_shaders()
+	get_parent().set_need_save()
 
 func load_generator() -> void:
 	var dialog = FileDialog.new()

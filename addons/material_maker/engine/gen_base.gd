@@ -90,7 +90,7 @@ func init_parameters() -> void:
 func set_position(p) -> void:
 	position = p
 	if has_randomness() and !is_seed_locked() and is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameter_changed", "seed_o%s" % [ str(get_instance_id()) ], get_seed())
+		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
 
 func get_type() -> String:
 	return "generic"
@@ -127,7 +127,7 @@ func set_parameter(n : String, v) -> void:
 		if parameter_def.has("type"):
 			if parameter_def.type == "float":
 				var parameter_name = "p_o%s_%s" % [ str(get_instance_id()), n ]
-				get_tree().call_group("preview", "on_float_parameter_changed", parameter_name, v)
+				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
 				return
 			elif parameter_def.type == "gradient":
 				if v.interpolation == old_value.interpolation && v.points.size() == old_value.points.size():
@@ -138,13 +138,14 @@ func set_parameter(n : String, v) -> void:
 							old_value.points[i] = { pos=old.v, r=old.c.r, g=old.c.g, b=old.c.b, a=old.c.a }
 					old_value.points.sort_custom(CustomGradientSorter, "compare")
 					v.points.sort_custom(CustomGradientSorter, "compare")
+					var parameter_changes = {}
 					for i in range(old_value.points.size()):
 						for f in [ "pos", "r", "g", "b", "a" ]:
 							if v.points[i][f] != old_value.points[i][f]:
 								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
-								get_tree().call_group("preview", "on_float_parameter_changed", parameter_name, v.points[i][f])
+								parameter_changes[parameter_name] = v.points[i][f]
+					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 					return
-				print("regenerating shader")
 		source_changed(0)
 
 func notify_output_change(output_index : int) -> void:
