@@ -46,7 +46,7 @@ func on_parameter_changed(n : String, v) -> void:
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:
-			"float", "gradient":
+			"float", "color", "gradient":
 				pass
 			_:
 				set_generator(generator, output)

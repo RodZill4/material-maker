@@ -126,8 +126,15 @@ func set_parameter(n : String, v) -> void:
 		var parameter_def : Dictionary = get_parameter_def(n)
 		if parameter_def.has("type"):
 			if parameter_def.type == "float":
-				var parameter_name = "p_o%s_%s" % [ str(get_instance_id()), n ]
+				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
 				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
+				return
+			elif parameter_def.type == "color":
+				var parameter_changes = {}
+				for f in [ "r", "g", "b", "a" ]:
+					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
+					parameter_changes[parameter_name] = v[f]
+				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 				return
 			elif parameter_def.type == "gradient":
 				if v.interpolation == old_value.interpolation && v.points.size() == old_value.points.size():
