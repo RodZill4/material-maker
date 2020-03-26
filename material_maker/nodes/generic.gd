@@ -109,7 +109,6 @@ func _on_gradient_changed(new_gradient, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
 	ignore_parameter_change = ""
-	update_shaders()
 
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null

@@ -114,15 +114,38 @@ func get_parameter(n : String):
 	else:
 		return get_parameter_def(n).default
 
+class CustomGradientSorter:
+	static func compare(a, b) -> bool:
+		return a.pos < b.pos
+
 func set_parameter(n : String, v) -> void:
+	var old_value = parameters[n] if parameters.has(n) else null
 	parameters[n] = v
 	emit_signal("parameter_changed", n, v)
 	if is_inside_tree():
 		var parameter_def : Dictionary = get_parameter_def(n)
-		if parameter_def.has("type") and parameter_def.type == "float":
-			get_tree().call_group("preview", "on_float_parameter_changed", "p_o%s_%s" % [ str(get_instance_id()), n ], v)
-		else:
-			source_changed(0)
+		if parameter_def.has("type"):
+			if parameter_def.type == "float":
+				var parameter_name = "p_o%s_%s" % [ str(get_instance_id()), n ]
+				get_tree().call_group("preview", "on_float_parameter_changed", parameter_name, v)
+				return
+			elif parameter_def.type == "gradient":
+				if v.interpolation == old_value.interpolation && v.points.size() == old_value.points.size():
+					# convert from old format
+					for i in range(old_value.points.size()):
+						if old_value.points[i].has("v"):
+							var old = old_value.points[i]
+							old_value.points[i] = { pos=old.v, r=old.c.r, g=old.c.g, b=old.c.b, a=old.c.a }
+					old_value.points.sort_custom(CustomGradientSorter, "compare")
+					v.points.sort_custom(CustomGradientSorter, "compare")
+					for i in range(old_value.points.size()):
+						for f in [ "pos", "r", "g", "b", "a" ]:
+							if v.points[i][f] != old_value.points[i][f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								get_tree().call_group("preview", "on_float_parameter_changed", parameter_name, v.points[i][f])
+					return
+				print("regenerating shader")
+		source_changed(0)
 
 func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)

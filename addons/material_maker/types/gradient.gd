@@ -33,6 +33,9 @@ func add_point(v, c) -> void:
 func sort() -> void:
 	if !sorted:
 		points.sort_custom(CustomSorter, "compare")
+		for i in range(points.size()-1):
+			if points[i].v+0.0000005 >= points[i+1].v:
+				points[i+1].v = points[i].v+0.000001
 		sorted = true
 
 func get_color(x) -> Color:
@@ -52,69 +55,81 @@ func get_color(x) -> Color:
 	else:
 		return Color(0.0, 0.0, 0.0, 1.0)
 
+func get_shader_params(name) -> Dictionary:
+	sort()
+	var rv = {}
+	for i in range(points.size()):
+		rv["p_"+name+"_"+str(i)+"_pos"] = points[i].v
+		rv["p_"+name+"_"+str(i)+"_r"] = points[i].c.r
+		rv["p_"+name+"_"+str(i)+"_g"] = points[i].c.g
+		rv["p_"+name+"_"+str(i)+"_b"] = points[i].c.b
+		rv["p_"+name+"_"+str(i)+"_a"] = points[i].c.a
+	return rv
+
 # get_color_in_shader
 func gcis(color) -> String:
 	return "vec4(%.9f,%.9f,%.9f,%.9f)" % [color.r, color.g, color.b, color.a]
 
+func pv(name : String, i : int) -> String:
+	return "p_"+name+"_"+str(i)+"_pos"
+
+func pc(name : String, i : int) -> String:
+	return "vec4(p_"+name+"_"+str(i)+"_r,p_"+name+"_"+str(i)+"_g,p_"+name+"_"+str(i)+"_b,p_"+name+"_"+str(i)+"_a)"
+
 func get_shader(name) -> String:
 	sort()
 	var shader
-	shader  = "vec4 "+name+"(float x) {\n"
+	shader  = "vec4 "+name+"_gradient_fct(float x) {\n"
 	match interpolation:
 		0:
 			if points.size() > 0:
-				shader += "  if (x < %.9f) {\n" % (0.5*(points[0].v + points[1].v))
-				shader += "    return "+gcis(points[0].c)+";\n"
+				shader += "  if (x < 0.5*(%s+%s)) {\n" % [ pv(name, 0), pv(name, 1) ]
+				shader += "    return "+pc(name, 0)+";\n"
 				var s = points.size()-1
-				for i in range(s):
-					if points[i+1].v-points[i].v > 0:
-						shader += "  } else if (x < %.9f) {\n" % (0.5*(points[i].v + points[i+1].v))
-						shader += "    return "+gcis(points[i].c)+";\n"
+				for i in range(1, s):
+					shader += "  } else if (x < 0.5*(%s+%s)) {\n" % [ pv(name, i), pv(name, i+1) ]
+					shader += "    return "+pc(name, i)+";\n"
 				shader += "  }\n"
-				shader += "  return "+gcis(points[s].c)+";\n"
+				shader += "  return "+pc(name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		1, 2:
 			if points.size() > 0:
-				shader += "  if (x < %.9f) {\n" % points[0].v
-				shader += "    return "+gcis(points[0].c)+";\n"
+				shader += "  if (x < %s) {\n" % pv(name, 0)
+				shader += "    return "+pc(name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(s):
-					var p1mp0 = points[i+1].v-points[i].v
-					if p1mp0 > 0:
-						shader += "  } else if (x < %.9f) {\n" % points[i+1].v
-						var function = "(" if interpolation == 1 else "0.5-0.5*cos(3.14159265359*"
-						shader += "    return mix(%s, %s, %s(x-%.9f)/%.9f));\n" % [ gcis(points[i].c), gcis(points[i+1].c), function, points[i].v, p1mp0 ]
+					shader += "  } else if (x < %s) {\n" % pv(name, i+1)
+					var function = "(" if interpolation == 1 else "0.5-0.5*cos(3.14159265359*"
+					shader += "    return mix(%s, %s, %s(x-%s)/(%s-%s)));\n" % [ pc(name, i), pc(name, i+1), function, pv(name, i), pv(name, i+1), pv(name, i) ]
 				shader += "  }\n"
-				shader += "  return "+gcis(points[s].c)+";\n"
+				shader += "  return "+pc(name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		3:
 			if points.size() > 0:
-				shader += "  if (x < %.9f) {\n" % points[0].v
-				shader += "    return "+gcis(points[0].c)+";\n"
+				shader += "  if (x < %s) {\n" % pv(name, 0)
+				shader += "    return "+pc(name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(s):
-					var p1mp0 = points[i+1].v-points[i].v
-					if p1mp0 > 0:
-						shader += "  } else if (x < %.9f) {\n" % points[i+1].v
-						var dx : String = "(x-%.9f)/%.9f" % [ points[i].v, p1mp0 ]
-						var b : String = "mix(%s, %s, %s)" % [ gcis(points[i].c), gcis(points[i+1].c), dx ]
-						if i > 0 and points[i-1].v < points[i].v:
-							var a : String = "mix(%s, %s, (x-%.9f)/%.9f)" % [ gcis(points[i-1].c), gcis(points[i].c), points[i-1].v, points[i].v-points[i-1].v ]
-							if i < s-1 and points[i+1].v < points[i+2].v:
-								var c : String = "mix(%s, %s, (x-%.9f)/%.9f)" % [ gcis(points[i+1].c), gcis(points[i+2].c), points[i+1].v, points[i+2].v-points[i+1].v ]
-								var ac : String = "mix("+a+", "+c+", 0.5-0.5*cos(3.14159265359*"+dx+"))"
-								shader += "    return 0.5*("+b+" + "+ac+");\n"
-							else:
-								shader += "    return mix("+a+", "+b+", 0.5+0.5*"+dx+");\n"
-						elif i < s-1 and points[i+1].v < points[i+2].v:
-							var c : String = "mix(%s, %s, (x-%.9f)/%.9f)" % [ gcis(points[i+1].c), gcis(points[i+2].c), points[i+1].v, points[i+2].v-points[i+1].v ]
-							shader += "    return mix("+c+", "+b+", 1.0-0.5*"+dx+");\n"
+					shader += "  } else if (x < %s) {\n" % pv(name, i+1)
+					var dx : String = "(x-%s)/(%s-%s)" % [ pv(name, i), pv(name, i+1), pv(name, i) ]
+					var b : String = "mix(%s, %s, %s)" % [ pc(name, i), pc(name, i+1), dx ]
+					if i > 0:
+						var a : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i-1), pc(name, i), pv(name, i-1), pv(name, i), pv(name, i-1) ]
+						if i < s-1:
+							var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i+1), pc(name, i+2), pv(name, i+1), pv(name, i+2), pv(name, i+1) ]
+							var ac : String = "mix("+a+", "+c+", 0.5-0.5*cos(3.14159265359*"+dx+"))"
+							shader += "    return 0.5*("+b+" + "+ac+");\n"
 						else:
-							shader += "    return "+b+";\n"
+							shader += "    return mix("+a+", "+b+", 0.5+0.5*"+dx+");\n"
+					elif i < s-1:
+						var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i+1), pc(name, i+2), pv(name, i+1), pv(name, i+2), pv(name, i+1) ]
+						shader += "    return mix("+c+", "+b+", 1.0-0.5*"+dx+");\n"
+					else:
+						shader += "    return "+b+";\n"
 				shader += "  }\n"
-				shader += "  return "+gcis(points[s].c)+";\n"
+				shader += "  return "+pc(name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		_:
