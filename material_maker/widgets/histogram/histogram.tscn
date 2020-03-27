@@ -96,7 +96,9 @@ resource_local_to_scene = true
 shader = SubResource( 10 )
 shader_param/tex = SubResource( 11 )
 
-[node name="Histogram" type="Control"]
+[node name="Histogram" type="Control" groups=[
+"preview",
+]]
 margin_right = 64.0
 margin_bottom = 64.0
 script = ExtResource( 1 )

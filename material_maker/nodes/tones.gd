@@ -69,19 +69,10 @@ func _ready() -> void:
 	cursor_out_max = Cursor.new(Color(1.0, 1.0, 1.0), 1.0, false)
 	$Histogram.add_child(cursor_out_max)
 
-func set_generator(g) -> void:
-	.set_generator(g)
-	generator.connect("parameter_changed", self, "on_parameter_changed")
-	_on_Mode_item_selected(0)
-
 func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
-		var result = source.generator.render(source.output_index, 128, true)
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
-		result.copy_to_texture($Histogram.get_image_texture())
-		result.release()
+		$Histogram.set_generator(source.generator, source.output_index)
 
 func get_parameter(n : String) -> float:
 	var value = generator.get_parameter(n)

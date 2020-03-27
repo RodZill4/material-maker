@@ -15,6 +15,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
 onready var layout = $VBoxContainer/Layout
 var library
 var preview_2d
+var histogram
 var preview_3d
 var hierarchy
 
@@ -131,6 +132,7 @@ func _ready() -> void:
 	layout.load_panes(config_cache)
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
+	histogram = layout.get_pane("Histogram")
 	preview_3d = layout.get_pane("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = layout.get_pane("Hierarchy")
@@ -585,9 +587,11 @@ func update_preview_2d(node = null) -> void:
 					break
 		if node != null:
 			preview_2d.set_generator(node.generator)
+			histogram.set_generator(node.generator)
 			preview_2d_background.set_generator(node.generator)
 		else:
 			preview_2d.set_generator(null)
+			histogram.set_generator(null)
 			preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array) -> void:
