@@ -2291,6 +2291,50 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_tones",
+			"name": "tones",
+			"parameters": {
+				"in_max": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"in_mid": {
+					"a": 0.5,
+					"b": 0.5,
+					"g": 0.5,
+					"r": 0.5,
+					"type": "Color"
+				},
+				"in_min": {
+					"a": 0,
+					"b": 0,
+					"g": 0,
+					"r": 0,
+					"type": "Color"
+				},
+				"out_max": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"out_min": {
+					"a": 0,
+					"b": 0,
+					"g": 0,
+					"r": 0,
+					"type": "Color"
+				}
+			},
+			"tree_item": "Filter/Tones",
+			"type": "tones"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_greyscale",
 			"name": "greyscale",
 			"parameters": {

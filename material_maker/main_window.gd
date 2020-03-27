@@ -462,7 +462,7 @@ func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		for n in selected_nodes:
-			if n.generator.toggle_editable():
+			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
 func add_to_user_library() -> void:

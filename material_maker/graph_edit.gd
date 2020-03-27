@@ -166,7 +166,7 @@ func clear_material() -> void:
 func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
-		var node = node_factory.create_node(g.get_type())
+		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
 		if node != null:
 			node.name = "node_"+g.name
 			add_node(node)
