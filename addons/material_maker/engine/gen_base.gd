@@ -53,6 +53,9 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
+func get_template_name() -> bool:
+	return model
+
 func is_editable() -> bool:
 	return false
 
