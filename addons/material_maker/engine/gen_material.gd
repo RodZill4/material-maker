@@ -103,7 +103,7 @@ func render_textures() -> void:
 			if source.has("textures"):
 				for k in source.textures.keys():
 					shader_materials[t.texture].set_shader_param(k, source.textures[k])
-			result = mm_renderer.render_material(shader_materials[t.texture], get_image_size())
+			result = mm_renderer.render_material(shader_materials[t.texture], get_image_size(), false)
 		else:
 			generated_textures[t.texture] = null
 			need_update[t.texture] = false
@@ -124,6 +124,7 @@ func render_textures() -> void:
 		need_update[t.texture] = false
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var do_update : bool = false
 	for t in TEXTURE_LIST:
 		if generated_textures[t.texture] != null:
 			for n in parameter_changes.keys():
@@ -131,17 +132,22 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 					if p.name == n:
 						shader_materials[t.texture].set_shader_param(n, parameter_changes[n])
 						need_render[t.texture] = true
-						update_textures()
+						do_update = true
 						break
+	if do_update:
+		update_textures()
 
 func on_texture_changed(n : String) -> void:
+	var do_update : bool = false
 	for t in TEXTURE_LIST:
 		if generated_textures[t.texture] != null:
 			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
 				if p.name == n:
 					need_render[t.texture] = true
-					update_textures()
+					do_update = true
 					break
+	if do_update:
+		update_textures()
 
 func update_textures() -> void:
 	update_again = true
@@ -152,7 +158,7 @@ func update_textures() -> void:
 			update_again = false
 			for t in TEXTURE_LIST:
 				if need_render[t.texture]:
-					var result = mm_renderer.render_material(shader_materials[t.texture], image_size)
+					var result = mm_renderer.render_material(shader_materials[t.texture], image_size, false)
 					while result is GDScriptFunctionState:
 						result = yield(result, "completed")
 					result.copy_to_texture(generated_textures[t.texture])

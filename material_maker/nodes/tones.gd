@@ -1,4 +1,4 @@
-extends MMGraphNodeBase
+extends MMGraphNodeGeneric
 
 class Cursor:
 	extends Control
@@ -69,10 +69,19 @@ func _ready() -> void:
 	cursor_out_max = Cursor.new(Color(1.0, 1.0, 1.0), 1.0, false)
 	$Histogram.add_child(cursor_out_max)
 
+func update_node() -> void:
+	_on_Mode_item_selected(0)
+	on_parameter_changed("__input_changed__", 0)
+	# Preview
+	restore_preview_widget()
+
 func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
-		$Histogram.set_generator(source.generator, source.output_index)
+		if source != null:
+			$Histogram.set_generator(source.generator, source.output_index)
+		else:
+			$Histogram.set_generator(null, 0)
 
 func get_parameter(n : String) -> float:
 	var value = generator.get_parameter(n)

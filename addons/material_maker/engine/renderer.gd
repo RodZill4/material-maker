@@ -43,51 +43,12 @@ func generate_shader(src_code) -> String:
 	code += shader_code
 	return code
 
-func generate_combined_shader(red_code, green_code, blue_code) -> String:
-	var code
-	code = "shader_type canvas_item;\n"
-	code += "render_mode blend_disabled;\n"
-	code += common_shader
-	code += "\n"
-	var globals = []
-	var textures = {}
-	var output = []
-	for c in [ red_code, green_code, blue_code ]:
-		if c.has("textures"):
-			for t in c.textures.keys():
-				textures[t] = c.textures[t]
-		if c.has("globals"):
-			for g in c.globals:
-				if globals.find(g) == -1:
-					globals.push_back(g)
-		if c.has("f"):
-			output.push_back(c.f)
-		else:
-			output.push_back("1.0")
-	for t in textures.keys():
-		code += "uniform sampler2D "+t+";\n"
-	for g in globals:
-		code += g
-	var shader_code = ""
-	shader_code += red_code.defs
-	shader_code += green_code.defs
-	shader_code += blue_code.defs
-	shader_code += "void fragment() {\n"
-	shader_code += red_code.code
-	shader_code += green_code.code
-	shader_code += blue_code.code
-	shader_code += "COLOR = vec4("+output[0]+", "+output[1]+", "+output[2]+", 1.0);\n"
-	shader_code += "}\n"
-	#print("GENERATED COMBINED SHADER:\n"+shader_code)
-	code += shader_code
-	return code
-
 func setup_material(shader_material, textures, shader_code) -> void:
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
-func render_material(material, render_size) -> Object:
+func render_material(material, render_size, with_hdr = true) -> Object:
 	while rendering:
 		yield(self, "done")
 	rendering = true
@@ -96,6 +57,7 @@ func render_material(material, render_size) -> Object:
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
+	hdr = with_hdr
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
@@ -145,4 +107,5 @@ func save_to_file(fn : String) -> void:
 
 func release() -> void:
 	rendering = false
+	hdr = false
 	emit_signal("done")
