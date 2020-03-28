@@ -15,6 +15,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
 onready var layout = $VBoxContainer/Layout
 var library
 var preview_2d
+var histogram
 var preview_3d
 var hierarchy
 
@@ -131,6 +132,7 @@ func _ready() -> void:
 	layout.load_panes(config_cache)
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
+	histogram = layout.get_pane("Histogram")
 	preview_3d = layout.get_pane("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = layout.get_pane("Hierarchy")
@@ -584,17 +586,13 @@ func update_preview_2d(node = null) -> void:
 					node = n
 					break
 		if node != null:
-			var result = node.generator.render(0, 1024, true)
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
-			var tex = ImageTexture.new()
-			result.copy_to_texture(tex)
-			result.release()
-			preview_2d.set_preview_texture(tex)
-			preview_2d_background.set_preview_texture(tex)
+			preview_2d.set_generator(node.generator)
+			histogram.set_generator(node.generator)
+			preview_2d_background.set_generator(node.generator)
 		else:
-			preview_2d.set_preview_texture(null)
-			preview_2d_background.set_preview_texture(null)
+			preview_2d.set_generator(null)
+			histogram.set_generator(null)
+			preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -610,7 +608,7 @@ var selected_node = null
 func on_selected_node_change(node) -> void:
 	if node != selected_node:
 		selected_node = node
-		preview_2d.setup_controls(node.generator if node != null else null)
+		preview_2d.set_generator(node.generator if node != null else null)
 		update_preview_2d(node)
 
 func _on_Projects_tab_changed(tab) -> void:

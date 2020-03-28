@@ -39,7 +39,7 @@ func get_input_defs() -> Array:
 
 func get_output_defs() -> Array:
 	var rv : Array = []
-	for o in range(parameters.outputs):
+	for o in range(get_parameter("outputs")):
 		var n = PoolByteArray([65+o]).get_string_from_ascii()
 		rv.push_back({ name=n, type="any" })
 	return rv
@@ -73,6 +73,9 @@ func set_parameter(p, v) -> void:
 			parent.reconnect_outputs(self, outputs_changes)
 	.set_parameter(p, v)
 	emit_signal("parameter_changed", "__update_all__", null)
+	if p == "source":
+		for i in range(int(parameters.outputs)):
+			notify_output_change(i)
 
 # get the list of outputs that depend on the input whose index is passed as parameter
 func follow_input(input_index : int) -> Array:
@@ -89,7 +92,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")
 		return rv
-	return { globals=[], defs="", code="", textures={} }
+	return { globals=[], defs="", code="", textures={}, type="f", f="0.0" }
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

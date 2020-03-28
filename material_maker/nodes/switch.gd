@@ -5,12 +5,6 @@ var fixed_lines : int = 0
 func _ready() -> void:
 	update_node()
 
-func update_preview_buttons(index : int) -> void:
-	for i in range(generator.parameters.outputs):
-		if i != index:
-			var line = get_child(i)
-			line.get_child(2).pressed = false
-
 func update_node() -> void:
 	if generator == null or !generator.parameters.has("outputs") or !generator.parameters.has("choices"):
 		return
@@ -48,7 +42,6 @@ func update_node() -> void:
 			sizer.add_child(control)
 			control.connect("value_changed", self, "_on_value_changed", [ l.name ])
 			controls[l.name] = control
-			sizer.add_child(preload("res://material_maker/widgets/preview_button.tscn").instance())
 			add_child(sizer)
 	else:
 		# Keep lines with controls
@@ -64,22 +57,12 @@ func update_node() -> void:
 		var sizer = HBoxContainer.new()
 		var input_label = Label.new()
 		sizer.add_child(input_label)
-		if get_child_count() < 5:
-			var space = Control.new()
-			space.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			sizer.add_child(space)
-			var button = preload("res://material_maker/widgets/preview_button.tscn").instance()
-			sizer.add_child(button)
-			button.connect("toggled", self, "on_preview_button", [ get_child_count()-1 ])
 		add_child(sizer)
 	rect_size = Vector2(0, 0)
 	for i in range(get_child_count()):
 		var sizer = get_child(i)
 		var has_input = true
-		var has_output = false
-		if i < 5:
-			has_output = i < output_count
-			sizer.get_child(sizer.get_child_count()-1).visible = has_output
+		var has_output = i < output_count
 		if i >= input_count:
 			sizer.get_child(0).text = ""
 			has_input = false

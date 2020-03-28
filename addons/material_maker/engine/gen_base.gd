@@ -6,8 +6,7 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
-signal parameter_changed
-signal output_changed(index)
+signal parameter_changed(n, v)
 
 class InputPort:
 	var generator : MMGenBase = null
@@ -93,8 +92,8 @@ func init_parameters() -> void:
 
 func set_position(p) -> void:
 	position = p
-	if has_randomness() and !is_seed_locked():
-		source_changed(0)
+	if has_randomness() and !is_seed_locked() and is_inside_tree():
+		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
 
 func get_type() -> String:
 	return "generic"
@@ -113,21 +112,60 @@ func get_parameter_def(param_name : String) -> Dictionary:
 	return {}
 
 func get_parameter(n : String):
-	return parameters[n]
+	if parameters.has(n):
+		return parameters[n]
+	else:
+		return get_parameter_def(n).default
+
+class CustomGradientSorter:
+	static func compare(a, b) -> bool:
+		return a.pos < b.pos
 
 func set_parameter(n : String, v) -> void:
+	var old_value = parameters[n] if parameters.has(n) else null
 	parameters[n] = v
-	source_changed(0)
 	emit_signal("parameter_changed", n, v)
+	if is_inside_tree():
+		var parameter_def : Dictionary = get_parameter_def(n)
+		if parameter_def.has("type"):
+			if parameter_def.type == "float":
+				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
+				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
+				return
+			elif parameter_def.type == "color":
+				var parameter_changes = {}
+				for f in [ "r", "g", "b", "a" ]:
+					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
+					parameter_changes[parameter_name] = v[f]
+				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+				return
+			elif parameter_def.type == "gradient":
+				if v.interpolation == old_value.interpolation && v.points.size() == old_value.points.size():
+					# convert from old format
+					for i in range(old_value.points.size()):
+						if old_value.points[i].has("v"):
+							var old = old_value.points[i]
+							old_value.points[i] = { pos=old.v, r=old.c.r, g=old.c.g, b=old.c.b, a=old.c.a }
+					old_value.points.sort_custom(CustomGradientSorter, "compare")
+					v.points.sort_custom(CustomGradientSorter, "compare")
+					var parameter_changes = {}
+					for i in range(old_value.points.size()):
+						for f in [ "pos", "r", "g", "b", "a" ]:
+							if v.points[i][f] != old_value.points[i][f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i][f]
+					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+					return
+		source_changed(0)
 
 func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
 	for target in targets:
 		target.generator.source_changed(target.input_index)
-	emit_signal("output_changed", output_index)
+	emit_signal("parameter_changed", "__output_changed__", output_index)
 
-func source_changed(__) -> void:
-	emit_signal("parameter_changed", "__input_changed__", 0)
+func source_changed(input_index : int) -> void:
+	emit_signal("parameter_changed", "__input_changed__", input_index)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
@@ -162,7 +200,7 @@ func get_input_shader(input_index : int) -> Dictionary:
 func get_shader(output_index : int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-func generate_preview_shader(src_code, type) -> String:
+static func generate_preview_shader(src_code, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -185,6 +223,7 @@ func generate_preview_shader(src_code, type) -> String:
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
+	code += main_fct
 	return code
 
 func render(output_index : int, size : int, preview : bool = false) -> Object:

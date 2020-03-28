@@ -7,11 +7,16 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times (such as convolutions)
 """
 
-var updated : bool = false
+var material : ShaderMaterial = null
+var updating : bool = false
+var update_again : bool = false
 
 func _ready() -> void:
+	material = ShaderMaterial.new()
+	material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
+	add_to_group("preview")
 
 func get_type() -> String:
 	return "buffer"
@@ -31,24 +36,56 @@ func get_input_defs() -> Array:
 func get_output_defs() -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
-func source_changed(input_port_index : int) -> void:
-	updated = false
-	.source_changed(input_port_index)
+func source_changed(_input_port_index : int) -> void:
+	call_deferred("update_shader")
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	var source = get_source(0)
-	if source != null and !updated:
-		var result = source.generator.render(source.output_index, pow(2, parameters.size))
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
-		result.copy_to_texture(texture)
-		result.release()
-		texture.flags = Texture.FLAG_MIPMAPS
-		updated = true
-	var rv = ._get_shader_code_lod(uv, output_index, context, 0 if output_index == 0 else parameters.lod)
-	while rv is GDScriptFunctionState:
-		rv = yield(rv, "completed")
-	return rv
+func update_shader() -> void:
+	var context : MMGenContext = MMGenContext.new()
+	var source = {}
+	var source_output = get_source(0)
+	if source_output != null:
+		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+		while source is GDScriptFunctionState:
+			source = yield(source, "completed")
+	if source.empty():
+		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
+	material.shader.code = mm_renderer.generate_shader(source)
+	if source.has("textures"):
+		for k in source.textures.keys():
+			material.set_shader_param(k, source.textures[k])
+	update_buffer()
+
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var do_update : bool = false
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+			if p.name == n:
+				material.set_shader_param(n, parameter_changes[n])
+				do_update = true
+				break
+	if do_update:
+		update_buffer()
+
+func on_texture_changed(n : String) -> void:
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		if p.name == n:
+			update_buffer()
+			return
+
+func update_buffer() -> void:
+	update_again = true
+	if !updating:
+		updating = true
+		while update_again:
+			update_again = false
+			var result = mm_renderer.render_material(material, pow(2, get_parameter("size")))
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if !update_again:
+				result.copy_to_texture(texture)
+			result.release()
+		updating = false
+		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"

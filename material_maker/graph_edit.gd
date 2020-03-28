@@ -103,7 +103,7 @@ func update_tab_title() -> void:
 	if get_parent().has_method("set_tab_title"):
 		get_parent().set_tab_title(get_index(), title)
 
-func set_need_save(ns) -> void:
+func set_need_save(ns = true) -> void:
 	if ns != need_save:
 		need_save = ns
 		update_tab_title()

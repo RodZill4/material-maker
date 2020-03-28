@@ -5,7 +5,6 @@
 		"y": 0
 	},
 	"parameters": {
-		"Randomness": 0.5,
 		"angle": -1,
 		"layers": 5,
 		"length": 0.25,
@@ -23,12 +22,13 @@
 		"name": "Scratches",
 		"outputs": [
 			{
-				"f": "scratches($uv, int($layers), vec2($length, $width), $waviness, $angle, $randomness, vec2($seed, 0.0))",
+				"f": "scratches($uv, int($layers), vec2($length, $width), $waviness, $angle, $randomness, vec2(float($seed), 0.0))",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0.25,
 				"label": "Length",
 				"max": 1,
@@ -38,6 +38,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Width",
 				"max": 1,
@@ -47,6 +48,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Layers",
 				"max": 10,
@@ -56,6 +58,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Waviness",
 				"max": 1,
@@ -65,6 +68,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Angle",
 				"max": 180,
@@ -74,6 +78,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Randomness",
 				"max": 1,

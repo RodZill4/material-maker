@@ -7,30 +7,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "sdf3d_scale_2",
-			"from_port": 0,
-			"to": "sdf3d_repeat",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_scale_2",
-			"from_port": 0,
-			"to": "sdf3d_repeat_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_repeat_2",
-			"from_port": 0,
-			"to": "sdf3d_translate_3_2_2",
-			"to_port": 0
-		},
-		{
-			"from": "sdf3d_repeat",
-			"from_port": 0,
-			"to": "sdf3d_boolean",
-			"to_port": 0
-		},
-		{
 			"from": "sdf3d_translate_3_2_2",
 			"from_port": 0,
 			"to": "sdf3d_boolean",
@@ -401,6 +377,30 @@
 			"from_port": 2,
 			"to": "mul_detect_2_2",
 			"to_port": 1
+		},
+		{
+			"from": "sdf3d_scale_2",
+			"from_port": 0,
+			"to": "sdf3d_repeat_3",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_repeat_3",
+			"from_port": 0,
+			"to": "sdf3d_boolean",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_scale_2",
+			"from_port": 0,
+			"to": "sdf3d_repeat_3_2",
+			"to_port": 0
+		},
+		{
+			"from": "sdf3d_repeat_3_2",
+			"from_port": 0,
+			"to": "sdf3d_translate_3_2_2",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -411,6 +411,9 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 1596.135986,
@@ -424,14 +427,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 0.3,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -562,8 +565,8 @@
 			"label": "Donut",
 			"name": "graph",
 			"node_position": {
-				"x": -664.759155,
-				"y": -18.094296
+				"x": -660.759155,
+				"y": 14.905704
 			},
 			"nodes": [
 				{
@@ -573,15 +576,7 @@
 						"y": 249.420105
 					},
 					"parameters": {
-						"bevel": 0,
-						"c": 0.31,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"k": 0.15,
-						"op": 0,
-						"r": 0.15,
-						"w": 0.28
+						"c": 0.31
 					},
 					"shader_model": {
 						"code": "",
@@ -624,13 +619,7 @@
 						"y": 320.541656
 					},
 					"parameters": {
-						"bevel": 0,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"op": 2,
-						"r": 0.3,
-						"w": 0.28
+						"op": 2
 					},
 					"shader_model": {
 						"code": "",
@@ -699,18 +688,13 @@
 					"name": "sdf3d_repeat",
 					"node_position": {
 						"x": -768.854126,
-						"y": 276.291656
+						"y": 281.291656
 					},
 					"parameters": {
-						"a": 0,
 						"r": 0.51,
 						"rx": 16,
 						"ry": 16,
-						"rz": 16,
-						"s": 0.3,
-						"x": 0.35,
-						"y": 0,
-						"z": 0
+						"rz": 16
 					},
 					"shader_model": {
 						"code": "",
@@ -727,7 +711,7 @@
 						"name": "Repeat",
 						"outputs": [
 							{
-								"sdf3dc": "$in(sdf3d_repeat($uv, vec3(1.0/$rx, 1.0/$ry, 1.0/$rz), $seed, $r))",
+								"sdf3dc": "$in(sdf3d_repeat($uv, vec3(1.0/$rx, 1.0/$ry, 1.0/$rz), float($seed), $r))",
 								"type": "sdf3dc"
 							}
 						],
@@ -784,10 +768,7 @@
 					},
 					"parameters": {
 						"l": 0.02,
-						"r": 0.01,
-						"sx": 0.25,
-						"sy": 0.25,
-						"sz": 0.5
+						"r": 0.01
 					},
 					"type": "sdf3d_capsule"
 				},
@@ -799,10 +780,7 @@
 					},
 					"parameters": {
 						"R": 0.3,
-						"r": 0.14,
-						"sx": 0.1,
-						"sy": 0.1,
-						"sz": 0.02
+						"r": 0.14
 					},
 					"type": "sdf3d_torus"
 				},
@@ -814,10 +792,7 @@
 					},
 					"parameters": {
 						"R": 0.3,
-						"r": 0.15,
-						"sx": 0.1,
-						"sy": 0.1,
-						"sz": 0.02
+						"r": 0.15
 					},
 					"type": "sdf3d_torus"
 				},
@@ -828,13 +803,7 @@
 						"y": -3.083344
 					},
 					"parameters": {
-						"bevel": 0,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"op": 0,
-						"r": 0.3,
-						"w": 0.28
+						"op": 0
 					},
 					"shader_model": {
 						"code": "",
@@ -893,15 +862,7 @@
 						"y": -156.583344
 					},
 					"parameters": {
-						"bevel": 0,
-						"c": 0.08,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"k": 0.15,
-						"op": 0,
-						"r": 0.15,
-						"w": 0.28
+						"c": 0.08
 					},
 					"shader_model": {
 						"code": "",
@@ -957,15 +918,7 @@
 						"y": 130.166656
 					},
 					"parameters": {
-						"bevel": 0,
-						"c": 0.87,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"k": 0.15,
-						"op": 0,
-						"r": 0.15,
-						"w": 0.28
+						"c": 0.87
 					},
 					"shader_model": {
 						"code": "",
@@ -1008,13 +961,7 @@
 						"y": 127.920105
 					},
 					"parameters": {
-						"bevel": 0,
-						"cx": 0,
-						"cy": 0,
-						"h": 0.08,
-						"op": 0,
-						"r": 0.3,
-						"w": 0.28
+						"op": 0
 					},
 					"shader_model": {
 						"code": "",
@@ -1118,87 +1065,13 @@
 			"type": "graph"
 		},
 		{
-			"name": "sdf3d_repeat",
-			"node_position": {
-				"x": -482.202179,
-				"y": -14.881774
-			},
-			"parameters": {
-				"a": 0,
-				"r": 0.2,
-				"rx": 3,
-				"ry": 3,
-				"s": 0.3,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "vec3 repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 a = (rand3(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf3dc"
-					}
-				],
-				"instance": "",
-				"name": "Repeat",
-				"outputs": [
-					{
-						"sdf3dc": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
-						"type": "sdf3dc"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 4,
-						"label": "X",
-						"max": 32,
-						"min": 1,
-						"name": "rx",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 4,
-						"label": "Y",
-						"max": 32,
-						"min": 1,
-						"name": "ry",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "R",
-						"max": 1,
-						"min": 0,
-						"name": "r",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
 			"name": "sdf3d_scale_2",
 			"node_position": {
 				"x": -670.842224,
 				"y": 66.030228
 			},
 			"parameters": {
-				"a": 0,
-				"s": 0.37,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
+				"s": 0.37
 			},
 			"shader_model": {
 				"code": "vec2 $(name_uv)_in = $in(($uv)/$s);",
@@ -1235,85 +1108,15 @@
 			"type": "shader"
 		},
 		{
-			"name": "sdf3d_repeat_2",
-			"node_position": {
-				"x": -480.202179,
-				"y": 110.618225
-			},
-			"parameters": {
-				"a": 0,
-				"r": 0.21,
-				"rx": 3,
-				"ry": 3,
-				"s": 0.3,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "vec3 repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 a = (rand3(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
-				"inputs": [
-					{
-						"default": "0.0",
-						"label": "",
-						"name": "in",
-						"type": "sdf3dc"
-					}
-				],
-				"instance": "",
-				"name": "Repeat",
-				"outputs": [
-					{
-						"sdf3dc": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
-						"type": "sdf3dc"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 4,
-						"label": "X",
-						"max": 32,
-						"min": 1,
-						"name": "rx",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 4,
-						"label": "Y",
-						"max": 32,
-						"min": 1,
-						"name": "ry",
-						"step": 1,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "R",
-						"max": 1,
-						"min": 0,
-						"name": "r",
-						"step": 0.01,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
 			"name": "sdf3d_translate_3_2_2",
 			"node_position": {
-				"x": -479.952209,
-				"y": 213.034912
+				"x": -478.952209,
+				"y": 207.034912
 			},
 			"parameters": {
-				"x": 0.14,
+				"x": 0.18,
 				"y": 0.11,
-				"z": 0.2
+				"z": 0.14
 			},
 			"shader_model": {
 				"code": "",
@@ -1372,17 +1175,11 @@
 		{
 			"name": "sdf3d_boolean",
 			"node_position": {
-				"x": -252.248795,
+				"x": -265.248779,
 				"y": 76.092621
 			},
 			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"op": 0,
-				"r": 0.3,
-				"w": 0.28
+				"op": 0
 			},
 			"shader_model": {
 				"code": "",
@@ -1443,7 +1240,7 @@
 			"parameters": {
 				"x": 0,
 				"y": 0,
-				"z": 0.1
+				"z": 0.07
 			},
 			"shader_model": {
 				"code": "",
@@ -1513,7 +1310,7 @@
 				"y": -50.802036
 			},
 			"parameters": {
-				"size": 4
+
 			},
 			"size": {
 				"x": 757.167969,
@@ -1907,7 +1704,6 @@
 							},
 							"parameters": {
 								"param0": 10,
-								"param1": 50,
 								"param2": 4.9
 							},
 							"type": "remote",
@@ -2069,7 +1865,6 @@
 					],
 					"parameters": {
 						"param0": 10,
-						"param1": 50,
 						"param2": 4.9
 					},
 					"type": "graph"
@@ -2179,7 +1974,6 @@
 					},
 					"parameters": {
 						"param0": 0,
-						"param1": 10,
 						"param2": 4.9
 					},
 					"type": "remote",
@@ -2216,8 +2010,7 @@
 					},
 					"parameters": {
 						"brightness": 0,
-						"contrast": 1,
-						"steps": 6
+						"contrast": 1
 					},
 					"type": "brightness_contrast"
 				},
@@ -2228,20 +2021,16 @@
 						"y": 544.75
 					},
 					"parameters": {
-						"amount": 0.5,
 						"param0": 10,
 						"param1": 1.02,
 						"param2": 0,
-						"param3": 0,
-						"param4": 1,
-						"size": 4
+						"param4": 1
 					},
 					"type": "normal_map"
 				}
 			],
 			"parameters": {
 				"param0": 0,
-				"param1": 10,
 				"param2": 4.9
 			},
 			"type": "graph"
@@ -2428,7 +2217,7 @@
 				"y": -50.148132
 			},
 			"parameters": {
-				"size": 4
+
 			},
 			"size": {
 				"x": 255.271576,
@@ -2452,7 +2241,7 @@
 				"y": -373.398132
 			},
 			"parameters": {
-				"size": 4
+
 			},
 			"size": {
 				"x": 464,
@@ -2476,7 +2265,7 @@
 				"y": -289.750183
 			},
 			"parameters": {
-				"size": 4
+
 			},
 			"size": {
 				"x": 743.688171,
@@ -2521,6 +2310,32 @@
 				"v": 0.08
 			},
 			"type": "mul_detect"
+		},
+		{
+			"name": "sdf3d_repeat_3",
+			"node_position": {
+				"x": -479.340515,
+				"y": 4.22731
+			},
+			"parameters": {
+				"r": 0.2,
+				"rx": 3,
+				"ry": 3
+			},
+			"type": "sdf3d_repeat"
+		},
+		{
+			"name": "sdf3d_repeat_3_2",
+			"node_position": {
+				"x": -479.107727,
+				"y": 105.348923
+			},
+			"parameters": {
+				"r": 0.2,
+				"rx": 3,
+				"ry": 3
+			},
+			"type": "sdf3d_repeat"
 		}
 	],
 	"parameters": {

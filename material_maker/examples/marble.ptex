@@ -255,6 +255,9 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 424,
@@ -268,14 +271,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 0.95,
+				"ao": 1,
 				"depth_scale": 0,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -286,7 +289,7 @@
 				"y": 34.016663
 			},
 			"parameters": {
-				"steps": 6
+
 			},
 			"type": "invert"
 		},
@@ -328,21 +331,21 @@
 					"to_port": 0
 				},
 				{
-					"from": "_2_2_2_2",
+					"from": "blend",
 					"from_port": 0,
-					"to": "gen_outputs",
+					"to": "mwf_create_map",
 					"to_port": 0
 				},
 				{
 					"from": "bricks",
 					"from_port": 1,
-					"to": "_2_2_2_2",
+					"to": "mwf_create_map",
 					"to_port": 1
 				},
 				{
-					"from": "blend",
+					"from": "mwf_create_map",
 					"from_port": 0,
-					"to": "_2_2_2_2",
+					"to": "gen_outputs",
 					"to_port": 0
 				}
 			],
@@ -371,7 +374,7 @@
 						"y": -369.233337
 					},
 					"parameters": {
-						"steps": 6
+
 					},
 					"type": "invert"
 				},
@@ -485,67 +488,6 @@
 					]
 				},
 				{
-					"name": "_2_2_2_2",
-					"node_position": {
-						"x": -467.634766,
-						"y": -373.905029
-					},
-					"parameters": {
-						"angle": 0,
-						"height": 1
-					},
-					"seed_value": -41854,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "in",
-								"type": "f"
-							},
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "rand",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "Create Map",
-						"outputs": [
-							{
-								"rgb": "vec3($height*$in($uv), $angle*0.01745329251, rand(vec2($seed.0+$rand($uv))))",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 1,
-								"label": "Height",
-								"max": 1,
-								"min": 0,
-								"name": "height",
-								"step": 0.01,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0,
-								"label": "Angle",
-								"max": 180,
-								"min": -180,
-								"name": "angle",
-								"step": 0.1,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
 					"name": "uniform_greyscale_2",
 					"node_position": {
 						"x": -498.801514,
@@ -555,6 +497,18 @@
 						"color": 1
 					},
 					"type": "uniform_greyscale"
+				},
+				{
+					"name": "mwf_create_map",
+					"node_position": {
+						"x": -497.801086,
+						"y": -339.560547
+					},
+					"parameters": {
+						"angle": 0,
+						"height": 1
+					},
+					"type": "mwf_create_map"
 				}
 			],
 			"parameters": {
@@ -609,14 +563,7 @@
 						"y": -230.983337
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -1108,14 +1055,7 @@
 						"y": 39.197388
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -1137,13 +1077,10 @@
 						"y": 186.780701
 					},
 					"parameters": {
-						"amount": 0.5,
 						"param0": 11,
 						"param1": 2,
 						"param2": 0,
-						"param3": 0,
-						"param4": 0,
-						"size": 4
+						"param4": 0
 					},
 					"type": "normal_map"
 				},
@@ -1171,7 +1108,6 @@
 						"y": 149.637848
 					},
 					"parameters": {
-						"Randomness": 0.5,
 						"angle": -1,
 						"layers": 10,
 						"length": 0.05,
@@ -1784,14 +1720,7 @@
 						"y": 39.197388
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"r": 1,
-							"type": "Color"
-						},
-						"name": 0
+
 					},
 					"type": "combine"
 				},
@@ -1813,13 +1742,10 @@
 						"y": 186.780701
 					},
 					"parameters": {
-						"amount": 0.5,
 						"param0": 11,
 						"param1": 2,
 						"param2": 0,
-						"param3": 0,
-						"param4": 0,
-						"size": 4
+						"param4": 0
 					},
 					"type": "normal_map"
 				},
@@ -1847,7 +1773,6 @@
 						"y": 149.637848
 					},
 					"parameters": {
-						"Randomness": 0.5,
 						"angle": -1,
 						"layers": 10,
 						"length": 0.05,
@@ -2129,7 +2054,6 @@
 			},
 			"parameters": {
 				"param0": 1,
-				"param1": 10,
 				"param2": 1
 			},
 			"type": "mwf_output"

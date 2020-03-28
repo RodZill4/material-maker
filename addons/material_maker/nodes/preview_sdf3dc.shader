@@ -31,8 +31,8 @@ vec3 rm_color(float c) {
 	return 1.0 * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), 1.0);
 }
 
-void fragment() {
-	vec2 uv = UV-vec2(0.5);
+vec4 preview_2d(vec2 uv) {
+	uv -= vec2(0.5);
 	vec2 rm = raymarch(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0));
 	vec3 p = vec3(uv, 2.0-rm.x);
 	vec3 n = normal(p);
@@ -41,5 +41,5 @@ void fragment() {
 	float o = step(p.z, 0.001);
 	float shadow = 1.0-0.75*step(raymarch(l, -ld).x, length(l-p)-0.01);
 	float light = 0.3+0.7*dot(n, ld)*shadow;
-	COLOR = vec4(mix(rm_color(fract(rm.y)), vec3(0.9), o)*light, 1.0);
+	return vec4(mix(rm_color(fract(rm.y)), vec3(0.9), o)*light, 1.0);
 }

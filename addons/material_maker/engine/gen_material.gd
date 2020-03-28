@@ -5,7 +5,12 @@ class_name MMGenMaterial
 var export_paths = {}
 
 var material : SpatialMaterial
+var shader_materials = {}
+var need_update = {}
+var need_render = {}
 var generated_textures = {}
+var updating : bool = false
+var update_again : bool = false
 
 const TEXTURE_LIST = [
 	{ port=0, texture="albedo", sources=[0] },
@@ -38,7 +43,12 @@ const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 func _ready() -> void:
 	for t in TEXTURE_LIST:
 		generated_textures[t.texture] = null
+		need_update[t.texture] = true
+		need_render[t.texture] = true
+		shader_materials[t.texture] = ShaderMaterial.new()
+		shader_materials[t.texture].shader = Shader.new()
 	material = SpatialMaterial.new()
+	add_to_group("preview")
 
 func can_be_deleted() -> bool:
 	return false
@@ -74,34 +84,86 @@ func set_parameter(p, v) -> void:
 func source_changed(input_index : int) -> void:
 	for t in TEXTURE_LIST:
 		if t.has("sources") and t.sources.find(input_index) != -1:
-			generated_textures[t.texture] = null
+			need_update[t.texture] = true
 	update_preview()
 
 func render_textures() -> void:
 	for t in TEXTURE_LIST:
-		var texture = null
 		var result
 		if t.has("port"):
-			if generated_textures[t.texture] != null:
+			if !need_update[t.texture]:
 				continue
-			result = render(t.port, get_image_size())
+			var context : MMGenContext = MMGenContext.new()
+			var source = get_shader_code("uv", t.port, context)
+			while source is GDScriptFunctionState:
+				source = yield(source, "completed")
+			if source.empty():
+				source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
+			shader_materials[t.texture].shader.code = mm_renderer.generate_shader(source)
+			if source.has("textures"):
+				for k in source.textures.keys():
+					shader_materials[t.texture].set_shader_param(k, source.textures[k])
+			result = mm_renderer.render_material(shader_materials[t.texture], get_image_size(), false)
 		else:
 			generated_textures[t.texture] = null
+			need_update[t.texture] = false
 			continue
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
-		texture = ImageTexture.new()
+		if generated_textures[t.texture] == null:
+			generated_textures[t.texture] = ImageTexture.new()
+		var texture = generated_textures[t.texture]
 		result.copy_to_texture(texture)
 		result.release()
 		# To work, this must be set after calling `copy_to_texture()`
 		texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
-
 		# Disable filtering for small textures, as they're considered to be used
 		# for a pixel art style
 		if texture.get_size().x <= 128:
 			texture.flags ^= ImageTexture.FLAG_FILTER
+		need_update[t.texture] = false
 
-		generated_textures[t.texture] = texture
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var do_update : bool = false
+	for t in TEXTURE_LIST:
+		if generated_textures[t.texture] != null:
+			for n in parameter_changes.keys():
+				for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
+					if p.name == n:
+						shader_materials[t.texture].set_shader_param(n, parameter_changes[n])
+						need_render[t.texture] = true
+						do_update = true
+						break
+	if do_update:
+		update_textures()
+
+func on_texture_changed(n : String) -> void:
+	var do_update : bool = false
+	for t in TEXTURE_LIST:
+		if generated_textures[t.texture] != null:
+			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
+				if p.name == n:
+					need_render[t.texture] = true
+					do_update = true
+					break
+	if do_update:
+		update_textures()
+
+func update_textures() -> void:
+	update_again = true
+	if !updating:
+		var image_size = get_image_size()
+		updating = true
+		while update_again:
+			update_again = false
+			for t in TEXTURE_LIST:
+				if need_render[t.texture]:
+					var result = mm_renderer.render_material(shader_materials[t.texture], image_size, false)
+					while result is GDScriptFunctionState:
+						result = yield(result, "completed")
+					result.copy_to_texture(generated_textures[t.texture])
+					result.release()
+		updating = false
 
 func update_materials(material_list) -> void:
 	render_textures()
