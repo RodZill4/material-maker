@@ -595,19 +595,13 @@ func update_preview_2d(node = null) -> void:
 			preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array) -> void:
-	var visible_previews = []
-	for p in previews:
-		if p.is_visible_in_tree():
-			visible_previews.push_back(p)
-	if visible_previews.empty():
-		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
 		var status = gen_material.render_textures()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		for p in visible_previews:
+		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
 var selected_node = null
