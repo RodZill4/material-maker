@@ -5,7 +5,7 @@ func set_generator(g) -> void:
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
 
-func on_parameter_changed(p, v) -> void:
+func on_parameter_changed(p, _v) -> void:
 	if p == "__update_all__":
 		call_deferred("update_node")
 

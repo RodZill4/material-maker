@@ -37,7 +37,8 @@ const MENU = [
 	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
 	{ menu="File", command="save_all_materials", description="Save all materials..." },
 	{ menu="File" },
-	{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
+	{ menu="File", submenu="export_material", description="Export material" },
+	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
@@ -61,7 +62,7 @@ const MENU = [
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
 	
-	{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
+	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
 	
 	
 
@@ -131,6 +132,7 @@ func _ready() -> void:
 	library = layout.get_pane("Library")
 	preview_2d = layout.get_pane("Preview2D")
 	preview_3d = layout.get_pane("Preview3D")
+	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = layout.get_pane("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
 
@@ -150,6 +152,8 @@ func _ready() -> void:
 		create_menu(menu, m.name)
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
+	
+	do_load_materials(OS.get_cmdline_args())
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -199,7 +203,6 @@ func create_menu(menu, menu_name) -> PopupMenu:
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
-
 	if recent_files.empty():
 		menu.add_item("No items found", 0)
 		menu.set_item_disabled(0, true)
@@ -210,7 +213,8 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_material(recent_files[id])
+	if !do_load_material(recent_files[id]):
+		recent_files.remove(id)
 
 func load_recents() -> void:
 	var f = File.new()
@@ -232,6 +236,42 @@ func add_recent(path) -> void:
 	f.open("user://recent_files.bin", File.WRITE)
 	f.store_string(to_json(recent_files))
 	f.close()
+
+
+func create_menu_export_material(menu) -> void:
+	menu.clear()
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		var material_node = graph_edit.get_material_node()
+		for p in material_node.get_export_profiles():
+			menu.add_item(p)
+		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
+			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
+
+func export_material(file_path : String, profile : String) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
+	graph_edit.export_material(export_prefix, profile)
+
+func _on_ExportMaterial_id_pressed(id) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var material_node = graph_edit.get_material_node()
+	if material_node == null:
+		return
+	var profile = material_node.get_export_profiles()[id]
+	var dialog : FileDialog = FileDialog.new()
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	add_child(dialog)
+	dialog.connect("file_selected", self, "export_material", [ profile ])
+	dialog.popup_centered()
+
 
 func create_menu_set_theme(menu) -> void:
 	menu.clear()
@@ -359,15 +399,6 @@ func save_material_as() -> void:
 func close_material() -> void:
 	projects.close_tab()
 
-func export_material() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null :
-		graph_edit.export_textures()
-
-func export_material_is_disabled() -> bool:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit == null or graph_edit.save_path == null
-
 func quit() -> void:
 	dim_window()
 	get_tree().quit()
@@ -431,7 +462,7 @@ func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		for n in selected_nodes:
-			if n.generator.toggle_editable():
+			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
 func add_to_user_library() -> void:

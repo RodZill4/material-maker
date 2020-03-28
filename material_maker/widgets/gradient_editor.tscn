@@ -78,18 +78,16 @@ rect_min_size = Vector2( 112, 17 )
 mouse_filter = 2
 theme = SubResource( 5 )
 
-[node name="Popup" type="Popup" parent="Gradient"]
-margin_left = 47.0
-margin_top = 33.0
-margin_right = 353.0
-margin_bottom = 475.0
+[node name="Popup" type="PopupPanel" parent="Gradient"]
+visible = true
+margin_right = 318.0
+margin_bottom = 470.0
 
 [node name="ColorPicker" type="ColorPicker" parent="Gradient/Popup"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 4.0
-margin_bottom = 4.0
-rect_scale = Vector2( 0.75, 0.75 )
+margin_right = 314.0
+margin_bottom = 466.0
 
 [node name="Interpolation" type="OptionButton" parent="."]
 margin_left = 0.418457

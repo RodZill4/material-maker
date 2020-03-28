@@ -166,7 +166,7 @@ func clear_material() -> void:
 func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
-		var node = node_factory.create_node(g.get_type())
+		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
 		if node != null:
 			node.name = "node_"+g.name
 			add_node(node)
@@ -213,16 +213,25 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 func create_gen_from_type(gen_name) -> void:
 	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
 
-func load_file(filename) -> void:
-	clear_material()
-	top_generator = mm_loader.load_gen(filename)
-	if top_generator != null:
+func load_file(filename) -> bool:
+	var new_generator = mm_loader.load_gen(filename)
+	if new_generator != null:
+		clear_material()
+		top_generator = new_generator
 		add_child(top_generator)
 		move_child(top_generator, 0)
 		update_view(top_generator)
 		center_view()
 		set_save_path(filename)
 		set_need_save(false)
+		return true
+	else:
+		var dialog : AcceptDialog = AcceptDialog.new()
+		add_child(dialog)
+		dialog.window_title = "Load failed!"
+		dialog.dialog_text = "Failed to load "+filename
+		dialog.popup_centered()
+		return false
 
 func save_file(filename) -> void:
 	var data = top_generator.serialize()
@@ -233,14 +242,16 @@ func save_file(filename) -> void:
 	set_save_path(filename)
 	set_need_save(false)
 
-func export_textures() -> void:
-	if save_path != null:
-		var prefix = save_path.left(save_path.rfind("."))
-		for g in top_generator.get_children():
-			if g.has_method("render_textures"):
-				g.render_textures()
-				if g.has_method("export_textures"):
-					g.export_textures(prefix, editor_interface)
+func get_material_node() -> MMGenMaterial:
+	for g in top_generator.get_children():
+		if g.has_method("get_export_profiles"):
+			return g
+	return null
+
+func export_material(export_prefix, profile) -> void:
+	for g in top_generator.get_children():
+		if g.has_method("export_material"):
+			g.export_material(export_prefix, profile)
 
 # Cut / copy / paste / duplicate
 
@@ -341,7 +352,7 @@ func on_ButtonUp_pressed() -> void:
 		call_deferred("update_view", generator.get_parent())
 
 func _on_Label_text_changed(new_text) -> void:
-	generator.label = new_text
+	generator.set_type_name(new_text)
 
 # Create subgraph
 
@@ -382,7 +393,7 @@ func set_last_selected(node) -> void:
 func _on_GraphEdit_gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
 		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show()
+		node_popup.show_popup()
 	if event is InputEventMouseButton:
 		call_deferred("check_last_selected")
 
@@ -397,7 +408,7 @@ func request_popup(from, from_slot, release_position) -> void:
 	else:
 		# Request the popup
 		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show()
+		node_popup.show_popup(mm_io_types.types[node.generator.get_output_defs()[from_slot].type].slot_type)
 		node_popup.set_quick_connect(from, from_slot)
 
 func check_last_selected() -> void:

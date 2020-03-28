@@ -6,7 +6,6 @@ var links = {}
 onready var grid = $Controls
 
 func add_control(text, control) -> void:
-	var index = grid.get_child_count() / 4
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
 	label.connect("label_changed", self, "on_label_changed", [ control.name ])
