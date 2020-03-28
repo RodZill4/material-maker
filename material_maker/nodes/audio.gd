@@ -28,7 +28,8 @@ func update_shader():
 	code += "uniform float start_time = 0.0;\n"
 	code += "const float buffer_size = 64.0;\n"
 	code += "float s2ttime(vec2 uv) {\nreturn start_time+(floor(uv.x*buffer_size)+buffer_size*floor(uv.y*buffer_size))/44100.0;\n}\n"
-	code += "vec4 au2tex(vec2 s) {\nvec2 v = floor((0.5+0.5*s)*65536.0);\nvec2 vl = mod(v, 256.0)/255.0;\nvec2 vh = floor(v/256.0)/255.0;\nreturn vec4(vh.x, vl.x, vh.y, vl.y);\n}\n"
+	#code += "vec4 au2tex(vec2 s) {\nvec2 v = floor((0.5+0.5*s)*65536.0);\nvec2 vl = mod(v, 256.0)/255.0;\nvec2 vh = floor(v/256.0)/255.0;\nreturn vec4(vh.x, vl.x, vh.y, vl.y);\n}\n"
+	code += "vec4 au2tex(vec2 s) {\nreturn vec4(s.x, s.y, 0.0, 0.0);\n}\n"
 	for g in result.globals:
 		code += g
 	code += "void fragment() {\n"
@@ -56,11 +57,14 @@ func _process(delta):
 	var image = $ViewportContainer/Viewport.get_texture().get_data()
 	var to_fill = min(playback.get_frames_available(), image.data.width*image.data.height)
 	var i : int = 0
+	image.lock()
 	for j in range(to_fill):
-		var left = (image.data.data[i]+image.data.data[i+1]/256.0)/128.0-1.0
-		var right = (image.data.data[i+2]+image.data.data[i+3]/256.0)/128.0-1.0
+		var p = image.get_pixel(j%image.data.width, j/image.data.width)
+		var left = p.r
+		var right = p.g
 		playback.push_frame(Vector2(left, right))
 		i += 4
 	samples_played += to_fill
+	image.unlock()
 	$ViewportContainer/Viewport/ColorRect.material.set_shader_param("start_time", samples_played/44100.0)
 
