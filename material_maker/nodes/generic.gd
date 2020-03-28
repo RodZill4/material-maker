@@ -5,7 +5,8 @@ var controls = {}
 var ignore_parameter_change = ""
 var output_count = 0
 
-var preview : TextureRect
+var preview : ColorRect
+#var preview : TextureRect
 var preview_index : int = -1
 var preview_position : int
 var preview_size : int
@@ -52,7 +53,7 @@ func on_parameter_changed(p, v) -> void:
 			o.value = gradient
 		else:
 			print("unsupported widget "+str(o))
-	update_shaders()
+	get_parent().set_need_save()
 
 func initialize_properties() -> void:
 	var parameter_names = []
@@ -81,33 +82,29 @@ func initialize_properties() -> void:
 		else:
 			print("unsupported widget "+str(o))
 
-func update_shaders() -> void:
-	get_parent().send_changed_signal()
-	update_preview()
-
 func _on_text_changed(new_text, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func _on_value_changed(new_value, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func _on_color_changed(new_color, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func _on_gradient_changed(new_gradient, variable) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
 	ignore_parameter_change = ""
-	update_shaders()
+	get_parent().set_need_save()
 
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
@@ -150,7 +147,8 @@ func save_preview_widget() -> void:
 
 func restore_preview_widget() -> void:
 	if preview == null:
-		preview = TextureRect.new()
+		preview = preload("res://material_maker/preview/preview_2d.tscn").instance()
+		preview.shader = "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}"
 		preview.visible = false
 	preview_position = get_child_count()
 	if preview.visible:
@@ -295,7 +293,7 @@ func edit_generator() -> void:
 func update_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
 	update_node()
-	update_shaders()
+	get_parent().set_need_save()
 
 func load_generator() -> void:
 	var dialog = FileDialog.new()
@@ -371,14 +369,9 @@ func update_preview(size : int = 0) -> void:
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	var result = generator.render(preview_index, preview_size, true)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	if preview.texture == null:
-		preview.texture = ImageTexture.new()
-	result.copy_to_texture(preview.texture)
-	result.release()
 	if !preview.visible:
 		add_child(preview)
 		move_child(preview, preview_position)
 		preview.visible = true
+	preview.set_generator(generator, preview_index)
+	preview.rect_min_size = Vector2(preview_size, preview_size)

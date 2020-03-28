@@ -33,7 +33,7 @@
 		"name": "Splatter",
 		"outputs": [
 			{
-				"f": "splatter_$(name)($uv, int($count), vec2($seed))",
+				"f": "splatter_$(name)($uv, int($count), vec2(float($seed)))",
 				"type": "f"
 			}
 		],

@@ -5,14 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0,
 		"r": 0.3,
 		"rx": 3,
-		"ry": 3,
-		"s": 0.3,
-		"x": 0.35,
-		"y": 0,
-		"z": 0
+		"ry": 3
 	},
 	"shader_model": {
 		"code": "",
@@ -29,7 +24,7 @@
 		"name": "Repeat",
 		"outputs": [
 			{
-				"sdf3dc": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), $seed, $r))",
+				"sdf3dc": "$in(repeat($uv, vec3(1.0/$rx, 1.0/$ry, 0.0), float($seed), $r))",
 				"type": "sdf3dc"
 			}
 		],

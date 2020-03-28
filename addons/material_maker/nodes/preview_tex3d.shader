@@ -24,8 +24,8 @@ vec3 normal(vec3 p) {
     return normalize(n);
 }
 
-void fragment() {
-    vec2 uv = UV-vec2(0.5);
+vec4 preview_2d(vec2 uv) {
+    uv -= vec2(0.5);
     vec3 p = vec3(uv, 2.0-raymarch(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));
     vec3 n = normal(p);
     vec3 l = vec3(5.0, 5.0, 10.0);
@@ -33,5 +33,5 @@ void fragment() {
     float o = step(p.z, 0.001);
     float shadow = 1.0-0.75*step(raymarch(l, -ld), length(l-p)-0.01);
     float light = 0.3+0.7*dot(n, ld)*shadow;
-    COLOR = vec4(calcColor(vec4(p, 0.0))*light, 1.0);
+    return vec4(calcColor(vec4(p, 0.0))*light, 1.0);
 }

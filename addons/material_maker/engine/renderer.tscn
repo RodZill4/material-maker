@@ -18,7 +18,6 @@ own_world = true
 transparent_bg = true
 hdr = false
 keep_3d_linear = true
-usage = 0
 render_target_v_flip = true
 render_target_update_mode = 1
 gui_disable_input = true

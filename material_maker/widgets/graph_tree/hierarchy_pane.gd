@@ -25,7 +25,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	update_index += 1
 	for g in item_from_gen.keys():
 		if is_instance_valid(g):
-			g.disconnect("output_changed", self, "on_gen_output_changed")
+			g.disconnect("parameter_changed", self, "on_gen_parameter_changed")
 	item_from_gen = {}
 	set_column_expand(0, true)
 	columns = preview+1
@@ -74,7 +74,7 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 		item.set_custom_color(0, Color(1, 1, 1))
 	item.set_metadata(0, generator)
 	item_from_gen[generator] = item
-	generator.connect("output_changed", self, "on_gen_output_changed", [ generator ])
+	generator.connect("parameter_changed", self, "on_gen_parameter_changed", [ generator ])
 	if preview > 0 and generator.get_output_defs().size() > 0:
 		for i in range(min(preview, generator.get_output_defs().size())):
 			item.set_icon(i+1, default_texture)
@@ -97,7 +97,11 @@ func on_view_updated(generator) -> void:
 	if item_from_gen.has(current_generator):
 		item_from_gen[current_generator].set_custom_color(0, Color(0.5, 0.5, 1))
 
-func on_gen_output_changed(index, generator) -> void:
+func on_gen_parameter_changed(param_name : String, index : int, generator) -> void:
+	if param_name == "__output_changed__":
+		on_gen_output_changed(index, generator)
+
+func on_gen_output_changed(index : int, generator) -> void:
 	if item_from_gen.has(generator) and index < preview:
 		if !pending_updates.has(generator):
 			pending_updates[generator] = [index]

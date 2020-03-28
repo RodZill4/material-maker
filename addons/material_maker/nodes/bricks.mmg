@@ -29,7 +29,7 @@
 				"type": "f"
 			},
 			{
-				"rgb": "rand3(fract($(name_uv)_rect.xy)+rand2(vec2($seed)))",
+				"rgb": "rand3(fract($(name_uv)_rect.xy)+rand2(vec2(float($seed))))",
 				"type": "rgb"
 			},
 			{

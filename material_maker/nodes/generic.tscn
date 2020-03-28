@@ -8,3 +8,6 @@ margin_bottom = 29.0
 title = "Generic"
 show_close = true
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

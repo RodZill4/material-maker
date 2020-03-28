@@ -33,7 +33,7 @@
 		"name": "Color Splatter",
 		"outputs": [
 			{
-				"rgba": "splatter_$(name)($uv, int($count), vec2($seed))",
+				"rgba": "splatter_$(name)($uv, int($count), vec2(float($seed)))",
 				"type": "rgba"
 			}
 		],

@@ -96,7 +96,9 @@ resource_local_to_scene = true
 shader = SubResource( 10 )
 shader_param/tex = SubResource( 11 )
 
-[node name="Histogram" type="Control"]
+[node name="Histogram" type="Control" groups=[
+"preview",
+]]
 margin_right = 64.0
 margin_bottom = 64.0
 script = ExtResource( 1 )
@@ -110,7 +112,7 @@ transparent_bg = true
 hdr = false
 usage = 0
 render_target_v_flip = true
-render_target_update_mode = 3
+render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportImage"]
 material = SubResource( 3 )
@@ -122,10 +124,10 @@ rect_min_size = Vector2( 256, 256 )
 size = Vector2( 128, 128 )
 own_world = true
 transparent_bg = true
-hdr = false
-usage = 0
+disable_3d = true
+keep_3d_linear = true
 render_target_v_flip = true
-render_target_update_mode = 3
+render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
 material = SubResource( 6 )
@@ -138,7 +140,6 @@ size = Vector2( 128, 2 )
 transparent_bg = true
 disable_3d = true
 keep_3d_linear = true
-usage = 0
 render_target_v_flip = true
 render_target_update_mode = 3
 
@@ -155,3 +156,4 @@ anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="visibility_changed" from="." to="." method="_on_Histogram_visibility_changed"]

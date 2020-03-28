@@ -147,8 +147,11 @@ func get_gradient_color(x) -> Color:
 func update_shader() -> void:
 	var shader
 	shader  = "shader_type canvas_item;\n"
-	shader += value.get_shader("gradient")
-	shader += "void fragment() { COLOR = gradient(UV.x); }"
+	var params = value.get_shader_params("")
+	for sp in params.keys():
+		shader += "uniform float "+sp+" = "+str(params[sp])+";\n"
+	shader += value.get_shader("")
+	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
 	emit_signal("updated", value)
 

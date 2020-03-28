@@ -1,9 +1,5 @@
 extends ViewportContainer
 
-const ENVIRONMENTS = [
-	"experiment", "lobby", "night", "park", "schelde"
-]
-
 const CAMERA_DISTANCE_MIN = 1.0
 const CAMERA_DISTANCE_MAX = 10.0
 
