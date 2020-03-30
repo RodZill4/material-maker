@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+[ext_resource path="res://Logo.png" type="Texture" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0235294, 0.0313726, 0.12549, 0.929412 )
@@ -23,31 +23,32 @@ __meta__ = {
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -128.0
-margin_right = 128.0
+margin_left = -270.0
+margin_right = 242.0
+margin_bottom = 6.10352e-05
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-margin_top = 214.0
-margin_right = 256.0
-margin_bottom = 470.0
+margin_top = 86.0
+margin_right = 512.0
+margin_bottom = 598.0
 texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_top = 474.0
-margin_right = 256.0
-margin_bottom = 488.0
+margin_top = 602.0
+margin_right = 512.0
+margin_bottom = 616.0
 text = "Loading..."
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
-margin_top = 492.0
-margin_right = 256.0
-margin_bottom = 506.0
+margin_top = 620.0
+margin_right = 512.0
+margin_bottom = 634.0
 
 [node name="ErrorPanel" type="Panel" parent="."]
 visible = false
