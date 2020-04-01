@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/nodes/audio.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/nodes/audio_keyboard.gd" type="Script" id=2]
 
 [sub_resource type="AudioStreamGenerator" id=1]
-buffer_length = 0.1
+buffer_length = 0.05
 
 [sub_resource type="Shader" id=2]
 resource_local_to_scene = true
@@ -12,7 +13,9 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 shader = SubResource( 2 )
 
-[node name="Audio" type="GraphNode"]
+[node name="Audio" type="GraphNode" groups=[
+"preview",
+]]
 margin_right = 96.0
 margin_bottom = 115.0
 title = "Audio"
@@ -29,6 +32,12 @@ slot/1/left_color = Color( 1, 1, 1, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false,
@@ -42,14 +51,21 @@ margin_right = 80.0
 margin_bottom = 44.0
 text = "Play"
 
+[node name="Midi" type="CheckBox" parent="."]
+margin_left = 16.0
+margin_top = 45.0
+margin_right = 80.0
+margin_bottom = 69.0
+text = "MIDI"
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = SubResource( 1 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_left = 16.0
-margin_top = 45.0
+margin_top = 70.0
 margin_right = 80.0
-margin_bottom = 109.0
+margin_bottom = 134.0
 rect_min_size = Vector2( 64, 64 )
 mouse_filter = 2
 
@@ -70,5 +86,11 @@ rect_min_size = Vector2( 64, 64 )
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="Keyboard" type="Node2D" parent="."]
+visible = false
+position = Vector2( -174.468, 146.693 )
+script = ExtResource( 2 )
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="toggled" from="Midi" to="." method="_on_Midi_toggled"]
 [connection signal="timeout" from="Timer" to="." method="update_shader"]

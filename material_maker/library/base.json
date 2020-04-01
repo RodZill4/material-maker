@@ -2,6 +2,866 @@
 	"lib": [
 		{
 			"collapsed": false,
+			"tree_item": "Audio"
+		},
+		{
+			"collapsed": true,
+			"name": "audio",
+			"parameters": {
+
+			},
+			"seed_value": 57148,
+			"tree_item": "Audio/Out",
+			"type": "audio"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2",
+			"parameters": {
+				"frequency": 440,
+				"type": 0
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+
+				],
+				"instance": "",
+				"name": "Oscillator",
+				"outputs": [
+					{
+						"sound": "vec2($type)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"default": 4,
+						"label": "Type",
+						"name": "type",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Sine",
+								"value": "sin($frequency*$uv.x*6.28)"
+							},
+							{
+								"name": "Rect",
+								"value": "2.0*step(fract($frequency*$uv.x), 0.5)-1.0"
+							},
+							{
+								"name": "Sawtooth",
+								"value": "2.0*fract($frequency*$uv.x)-1.0"
+							},
+							{
+								"name": "Triangle",
+								"value": "4.0*abs(fract($frequency*$uv.x)-0.5)-1.0"
+							},
+							{
+								"name": "Noise",
+								"value": "2.0*fract(rand(vec2($uv.x)))-1.0"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 440,
+						"label": "Frequency",
+						"max": 22000,
+						"min": 0,
+						"name": "frequency",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Oscillator",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_2",
+			"parameters": {
+				"v": 0.23
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "control",
+						"type": "control"
+					}
+				],
+				"instance": "",
+				"name": "Volume",
+				"outputs": [
+					{
+						"sound": "$in($uv)*$v*$control($uv.z)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 3,
+						"min": 0,
+						"name": "v",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Volume",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_4_3",
+			"parameters": {
+				"b": 0
+			},
+			"seed_value": 61757,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "control",
+						"type": "control"
+					}
+				],
+				"instance": "",
+				"name": "Balance",
+				"outputs": [
+					{
+						"sound": "$in($uv)*clamp(vec2(1.0)-($b+$control($uv.z))*vec2(1.0, -1.0), vec2(0.0), vec2(1.0))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0,
+						"label": "",
+						"max": 1,
+						"min": -1,
+						"name": "b",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Balance",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206",
+			"parameters": {
+				"attack": 0.19,
+				"decay": 0.7,
+				"release": 0.25,
+				"sustain": 0
+			},
+			"shader_model": {
+				"code": "",
+				"global": "float enveloppe(float time, float attack, float decay, float sustain, float release) {\n\tfloat rv = 0.0;\n\tif (time < attack) {\n\t\trv = time/attack;\n\t} else if (time < attack+decay) {\n\t\trv = 1.0-(1.0-sustain)*(time-attack)/(decay);\n\t} else if (time < envelope_time) {\n\t\trv = sustain;\n\t} else {\n\t\trv = sustain-sustain*(time-envelope_time)/(release);\n\t}\n\treturn clamp(rv, 0.0, 1.0);\n}",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Envelope",
+				"outputs": [
+					{
+						"sound": "$in($uv)*enveloppe($uv.y, $attack, $decay, $sustain, $release)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.2,
+						"label": "Attack",
+						"max": 10,
+						"min": 0,
+						"name": "attack",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Decay",
+						"max": 10,
+						"min": 0,
+						"name": "decay",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sustain",
+						"max": 1,
+						"min": 0,
+						"name": "sustain",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 2,
+						"label": "Release",
+						"max": 10,
+						"min": 0,
+						"name": "release",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Envelope",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_4_2_3",
+			"parameters": {
+				"v1": 0.25,
+				"v2": 0.25,
+				"v3": 0.25,
+				"v4": 0.25
+			},
+			"seed_value": 61757,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in1",
+						"type": "sound"
+					},
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in2",
+						"type": "sound"
+					},
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in3",
+						"type": "sound"
+					},
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in4",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Mix",
+				"outputs": [
+					{
+						"sound": " $v1*$in1($uv)+$v2*$in2($uv)+$v3*$in3($uv)+$v4*$in4($uv)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "v1",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "v2",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "v3",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "v4",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Mix",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_4_2_2",
+			"parameters": {
+				"t": 0
+			},
+			"seed_value": 61757,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Transpose",
+				"outputs": [
+					{
+						"sound": " $in(vec3($uv.x*pow(1.05946309436, $t), $uv.yz))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0,
+						"label": "",
+						"max": 64,
+						"min": -64,
+						"name": "t",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Transpose",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2",
+			"parameters": {
+				"amplitude": 0.053,
+				"speed": 1.65
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Vibrato",
+				"outputs": [
+					{
+						"sound": "$in(vec3($uv.x*(1.0+0.1*$amplitude*sin($uv.y*$speed*6.28318530718)/$uv.x/$speed), $uv.yz))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.1,
+						"label": "Amplitude",
+						"max": 0.5,
+						"min": 0,
+						"name": "amplitude",
+						"step": 0.001,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 2,
+						"label": "Speed",
+						"max": 20,
+						"min": 0,
+						"name": "speed",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Vibrato",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_3",
+			"parameters": {
+				"detune": 0.06,
+				"voices": 4
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "vec2 chorus_$(name)(vec3 t, int voices, float detune, float seed) {\n\tvec2 result = vec2(0.0);\n\tfor (int i = 0; i < voices; ++i) {\n\t\tseed = rand(vec2(seed, seed));\n\t\tresult += $in(vec3(t.x*(1.0+detune*(fract(seed)-0.5)), t.yz))/float(voices);\n\t}\n\treturn result;\n}",
+				"name": "Chorus",
+				"outputs": [
+					{
+						"sound": "chorus_$(name)($uv, int($voices), $detune, float($seed))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 3,
+						"label": "Voices",
+						"max": 10,
+						"min": 1,
+						"name": "voices",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.2,
+						"label": "Detune",
+						"max": 2,
+						"min": 0,
+						"name": "detune",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Chorus",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_2_2_2",
+			"parameters": {
+
+			},
+			"seed_value": 47451,
+			"shader_model": {
+				"code": "",
+				"global": "vec2 overdrive(vec2 x) {\n\tvec2 ax = abs(x);\n\tvec2 sx = sign(x);\n\tvec2 absx3 = 3.0*ax;\n\treturn sx*mix(mix(2.0*ax, 1.0-((2.0-absx3)*(2.0-absx3))/3.0, step(vec2(1.0), absx3)), vec2(1.0), step(vec2(2.0), absx3));\n}",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Overdrive",
+				"outputs": [
+					{
+						"sound": "overdrive($in($uv))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"tree_item": "Audio/Overdrive",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_2_2_3",
+			"parameters": {
+				"a": 0.8
+			},
+			"seed_value": 47451,
+			"shader_model": {
+				"code": "",
+				"global": "vec2 distorsion(vec2 x, float a) {\n\treturn sign(x)*(vec2(1.0)-pow(vec2(2.71828182846), (a*abs(x))));\n}",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "control",
+						"type": "control"
+					}
+				],
+				"instance": "",
+				"name": "Distorsion",
+				"outputs": [
+					{
+						"sound": "distorsion($in($uv), $control($uv.z)*$a)",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 3,
+						"min": 0,
+						"name": "a",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Distorsion",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_4_2",
+			"parameters": {
+				"v1": 0.98,
+				"v2": 0.54,
+				"v3": 0.83,
+				"v4": 0.47,
+				"v5": 0.57,
+				"v6": 0.26,
+				"v7": 0.58,
+				"v8": 0.13
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Harmonics",
+				"outputs": [
+					{
+						"sound": " $v1*$in($uv)+$v2*$in(vec3($uv.x*2.0, $uv.yz))+$v3*$in(vec3($uv.x*3.0, $uv.yz))+$v4*$in(vec3($uv.x*4.0, $uv.yz))+$v5*$in(vec3($uv.x*5.0, $uv.yz))+$v6*$in(vec3($uv.x*6.0, $uv.yz))+$v7*$in(vec3($uv.x*7.0, $uv.yz))+$v8*$in(vec3($uv.x*8.0, $uv.yz))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "1",
+						"max": 1,
+						"min": 0,
+						"name": "v1",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "2",
+						"max": 1,
+						"min": 0,
+						"name": "v2",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "3",
+						"max": 1,
+						"min": 0,
+						"name": "v3",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "4",
+						"max": 1,
+						"min": 0,
+						"name": "v4",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "5",
+						"max": 1,
+						"min": 0,
+						"name": "v5",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "6",
+						"max": 1,
+						"min": 0,
+						"name": "v6",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "7",
+						"max": 1,
+						"min": 0,
+						"name": "v7",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "8",
+						"max": 1,
+						"min": 0,
+						"name": "v8",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Harmonics",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_2_2_2_2_4_2_2_2_2_2_2",
+			"parameters": {
+				"a": 24,
+				"t": 0.15
+			},
+			"seed_value": 61757,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec2(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "sound"
+					}
+				],
+				"instance": "",
+				"name": "Random notes",
+				"outputs": [
+					{
+						"sound": "$in(vec3($uv.x*pow(1.05946309436, floor($a*(rand(vec2(floor($uv.z/$t)))-0.5))), mod($uv.z, $t), $uv.z))",
+						"type": "sound"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Note duration",
+						"max": 1,
+						"min": 0,
+						"name": "t",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 12,
+						"label": "Amplitude",
+						"max": 24,
+						"min": 0,
+						"name": "a",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Random notes",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "1289_2",
+			"parameters": {
+				"value": 0
+			},
+			"seed_value": 26490,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+
+				],
+				"instance": "",
+				"name": "Control",
+				"outputs": [
+					{
+						"control": "$value",
+						"type": "control"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0,
+						"label": "",
+						"max": 64,
+						"min": -64,
+						"name": "value",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Control",
+			"type": "shader"
+		},
+		{
+			"collapsed": true,
+			"name": "206_2_3_2",
+			"parameters": {
+				"amplitude": 0.94,
+				"center": 0,
+				"frequency": 1,
+				"type": 0
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+
+				],
+				"instance": "",
+				"name": "Wave control",
+				"outputs": [
+					{
+						"control": "$center+$amplitude*$type",
+						"type": "control"
+					}
+				],
+				"parameters": [
+					{
+						"default": 1,
+						"label": "Type",
+						"name": "type",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Sine",
+								"value": "sin($frequency*$uv*6.28)"
+							},
+							{
+								"name": "Rect",
+								"value": "clamp(10.0*sin($frequency*$uv*6.28), -1.0, 1.0)"
+							},
+							{
+								"name": "Sawtooth",
+								"value": "2.0*fract($frequency*$uv)-1.0"
+							},
+							{
+								"name": "Triangle",
+								"value": "4.0*abs(fract($frequency*$uv)-0.5)-1.0"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Frequency",
+						"max": 20,
+						"min": 0,
+						"name": "frequency",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Center",
+						"max": 10,
+						"min": -10,
+						"name": "center",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Amplitude",
+						"max": 10,
+						"min": 0,
+						"name": "amplitude",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"tree_item": "Audio/Control/Wave",
+			"type": "shader"
+		},
+		{
+			"collapsed": false,
 			"tree_item": "Simple"
 		},
 		{
