@@ -95,7 +95,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")
 		return rv
-	return { defs="", code="", textures={} }
+	return DEFAULT_GENERATED_SHADER
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "ios"

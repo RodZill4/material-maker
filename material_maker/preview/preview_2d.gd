@@ -8,7 +8,7 @@ var output : int = 0
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
-	var source = { defs="", code="", textures={}, type="f", f="1.0" }
+	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -23,7 +23,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			while source is GDScriptFunctionState:
 				source = yield(source, "completed")
 			if source.empty():
-				source = { defs="", code="", textures={}, type="f", f="1.0" }
+				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	else:
 		g = null
 		for c in get_children():

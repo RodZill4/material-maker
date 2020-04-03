@@ -8,6 +8,8 @@ Base class for texture generators, that defines their API
 
 signal parameter_changed(n, v)
 
+const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
+
 class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
@@ -232,7 +234,7 @@ func render(output_index : int, size : int, preview : bool = false) -> Object:
 	while source is GDScriptFunctionState:
 		source = yield(source, "completed")
 	if source.empty():
-		source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
+		source = DEFAULT_GENERATED_SHADER
 	var shader : String
 	if preview:
 		var output_type = "rgba"

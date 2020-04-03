@@ -98,7 +98,7 @@ func render_textures() -> void:
 			while source is GDScriptFunctionState:
 				source = yield(source, "completed")
 			if source.empty():
-				source = { defs="", code="", textures={}, rgba="vec4(0.0)" }
+				source = DEFAULT_GENERATED_SHADER
 			shader_materials[t.texture].shader.code = mm_renderer.generate_shader(source)
 			if source.has("textures"):
 				for k in source.textures.keys():

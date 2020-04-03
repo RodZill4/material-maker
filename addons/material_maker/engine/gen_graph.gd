@@ -62,9 +62,10 @@ func get_parameter_defs() -> Array:
 		return get_node("gen_parameters").get_parameter_defs()
 	return []
 
-func set_parameter(p, v) -> void:
+func set_parameter(n : String, v) -> void:
+	.set_parameter(n, v)
 	if has_node("gen_parameters"):
-		get_node("gen_parameters").set_parameter(p, v)
+		get_node("gen_parameters").set_parameter(n, v)
 
 func get_input_defs() -> Array:
 	if has_node("gen_inputs"):

@@ -15,7 +15,7 @@ func get_histogram_texture() -> ImageTexture:
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
-	var source = { defs="", code="", textures={}, type="f", f="1.0" }
+	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -28,7 +28,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			while source is GDScriptFunctionState:
 				source = yield(source, "completed")
 			if source.empty():
-				source = { defs="", code="", textures={}, type="f", f="1.0" }
+				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader
 	$ViewportImage/ColorRect.material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
 	# Get parameter values from the shader code
