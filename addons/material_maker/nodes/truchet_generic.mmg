@@ -5,10 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"Size": 4,
-		"shape": 0,
-		"size": 6,
-		"type": 1
+		"size": 6
 	},
 	"shader_model": {
 		"code": "",
@@ -25,12 +22,13 @@
 		"name": "Generic Truchet",
 		"outputs": [
 			{
-				"rgba": "$in(truchet_generic_uv($uv*$size, vec2($seed, $seed)))",
+				"rgba": "$in(truchet_generic_uv($uv*$size, vec2(float($seed))))",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Size",
 				"max": 64,
