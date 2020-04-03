@@ -1,9 +1,30 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+[ext_resource path="res://material_maker/fonts/vegur_regular.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://material_maker/icons/godot_logo.svg" type="Texture" id=3]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="DynamicFont" id=1]
+size = 72
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.380392, 0.388235, 0.486275, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.380392, 0.388235, 0.486275, 1 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.380392, 0.388235, 0.486275, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.0235294, 0.0313726, 0.12549, 0.929412 )
 border_width_left = 3
 border_width_top = 3
@@ -21,33 +42,81 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -128.0
-margin_right = 128.0
+anchor_bottom = 0.5
+margin_left = -221.0
+margin_top = -360.0
+margin_right = 221.0
+margin_bottom = 360.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-margin_top = 214.0
-margin_right = 256.0
-margin_bottom = 470.0
-texture = ExtResource( 2 )
-stretch_mode = 4
+[node name="Space1" type="Control" parent="VBoxContainer"]
+margin_bottom = 281.0
+size_flags_horizontal = 0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+margin_top = 285.0
+margin_right = 442.0
+margin_bottom = 372.0
+custom_fonts/font = SubResource( 1 )
+text = "Material Maker"
+align = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_top = 474.0
-margin_right = 256.0
-margin_bottom = 488.0
-text = "Loading..."
+margin_top = 376.0
+margin_right = 442.0
+margin_bottom = 390.0
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
-margin_top = 492.0
-margin_right = 256.0
-margin_bottom = 506.0
+margin_left = 96.0
+margin_top = 394.0
+margin_right = 346.0
+margin_bottom = 410.0
+rect_min_size = Vector2( 250, 16 )
+size_flags_horizontal = 4
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+value = 50.0
+percent_visible = false
+
+[node name="Space2" type="Control" parent="VBoxContainer"]
+margin_top = 414.0
+margin_bottom = 519.0
+size_flags_horizontal = 0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+margin_top = 523.0
+margin_right = 442.0
+margin_bottom = 537.0
+text = "Powered by"
+align = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+margin_left = 127.0
+margin_top = 541.0
+margin_right = 314.0
+margin_bottom = 610.0
+size_flags_horizontal = 4
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Space3" type="Control" parent="VBoxContainer"]
+margin_top = 614.0
+margin_bottom = 720.0
+size_flags_horizontal = 0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.75
 
 [node name="ErrorPanel" type="Panel" parent="."]
 visible = false
@@ -60,7 +129,7 @@ margin_top = -76.0
 margin_right = 268.5
 margin_bottom = 76.0
 rect_pivot_offset = Vector2( 267.976, 75.7381 )
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Label" type="Label" parent="ErrorPanel"]
 anchor_right = 1.0
