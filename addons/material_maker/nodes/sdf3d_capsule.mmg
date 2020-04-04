@@ -5,14 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
+		"axis": 1,
 		"l": 0.3,
-		"r": 0.15,
-		"sx": 0.25,
-		"sy": 0.25,
-		"sz": 0.5
+		"r": 0.2
 	},
 	"shader_model": {
-		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.y -= clamp($(name_uv)_p.y, -$l, $l);\n",
+		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);\n",
 		"global": "",
 		"inputs": [
 
@@ -26,6 +24,26 @@
 			}
 		],
 		"parameters": [
+			{
+				"default": 1,
+				"label": "Axis",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "x"
+					},
+					{
+						"name": "Y",
+						"value": "y"
+					},
+					{
+						"name": "Z",
+						"value": "z"
+					}
+				]
+			},
 			{
 				"control": "Rect1.y",
 				"default": 0.25,

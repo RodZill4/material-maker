@@ -6,10 +6,7 @@
 	},
 	"parameters": {
 		"a": 30,
-		"r": 0,
-		"sx": 0.01,
-		"sy": 0.01,
-		"sz": 0.015
+		"axis": 2
 	},
 	"shader_model": {
 		"code": "",
@@ -21,12 +18,45 @@
 		"name": "Cone",
 		"outputs": [
 			{
-				"sdf3d": "dot(vec2(cos($a*0.01745329251),sin($a*0.01745329251)),vec2(length($uv.xz),$uv.y))",
+				"sdf3d": "dot(vec2(cos($a*0.01745329251),sin($a*0.01745329251)),vec2($axis))",
 				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
+				"default": 5,
+				"label": "Axis",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "+X",
+						"value": "length($uv.yz),-$uv.x"
+					},
+					{
+						"name": "-X",
+						"value": "length($uv.yz),$uv.x"
+					},
+					{
+						"name": "+Y",
+						"value": "length($uv.xz),$uv.y"
+					},
+					{
+						"name": "-Y",
+						"value": "length($uv.xz),-$uv.y"
+					},
+					{
+						"name": "+Z",
+						"value": "length($uv.xy),-$uv.z"
+					},
+					{
+						"name": "-Z",
+						"value": "length($uv.xy),$uv.z"
+					}
+				]
+			},
+			{
+				"control": "None",
 				"default": 30,
 				"label": "Angle",
 				"max": 90,

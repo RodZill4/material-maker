@@ -6,13 +6,11 @@
 	},
 	"parameters": {
 		"R": 0.3,
-		"r": 0.1,
-		"sx": 0.1,
-		"sy": 0.1,
-		"sz": 0.02
+		"axis": 2,
+		"r": 0.15
 	},
 	"shader_model": {
-		"code": "vec2 $(name_uv)_q = vec2(length($uv.xy)-$R,$uv.z);\n",
+		"code": "vec2 $(name_uv)_q = vec2($axis);\n",
 		"global": "",
 		"inputs": [
 
@@ -26,6 +24,26 @@
 			}
 		],
 		"parameters": [
+			{
+				"default": 0,
+				"label": "Axis",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "length($uv.yz)-$R,$uv.x"
+					},
+					{
+						"name": "Y",
+						"value": "length($uv.zx)-$R,$uv.y"
+					},
+					{
+						"name": "Z",
+						"value": "length($uv.xy)-$R,$uv.z"
+					}
+				]
+			},
 			{
 				"control": "Radius1.r",
 				"default": 0.5,
