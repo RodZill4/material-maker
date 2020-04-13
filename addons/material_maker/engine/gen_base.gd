@@ -130,7 +130,7 @@ func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		var parameter_def : Dictionary = get_parameter_def(n)
 		if parameter_def.has("type"):
-			if parameter_def.type == "float":
+			if parameter_def.type == "float" and v is float and old_value is float:
 				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
 				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
 				return

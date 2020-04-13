@@ -31,7 +31,21 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 
 func _gui_input(event) -> void:
-	if event is InputEventKey and event.pressed:
+	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
+		node_popup.rect_global_position = get_global_mouse_position()
+		node_popup.show_popup()
+	elif event is InputEventMouseButton:
+		if event.button_index == BUTTON_WHEEL_DOWN and event.control:
+			zoom *= 1.1
+			print(zoom)
+			get_tree().set_input_as_handled()
+		elif event.button_index == BUTTON_WHEEL_UP and event.control:
+			zoom /= 1.1
+			print(zoom)
+			get_tree().set_input_as_handled()
+		else:
+			call_deferred("check_last_selected")
+	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
@@ -390,13 +404,6 @@ func set_last_selected(node) -> void:
 	else:
 		last_selected = null
 
-func _on_GraphEdit_gui_input(event) -> void:
-	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
-		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show_popup()
-	if event is InputEventMouseButton:
-		call_deferred("check_last_selected")
-
 func request_popup(from, from_slot, release_position) -> void:
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(from)
@@ -415,5 +422,3 @@ func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
 		last_selected = null
 		emit_signal("node_selected", null)
-
-

@@ -83,7 +83,6 @@ icon = SubResource( 4 )
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
-[connection signal="gui_input" from="." to="." method="_on_GraphEdit_gui_input"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]
 [connection signal="paste_nodes_request" from="." to="." method="paste"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]

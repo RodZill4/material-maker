@@ -77,16 +77,24 @@ func get_value() -> Vector2:
 	if is_instance_valid(generator):
 		if is_xy:
 			if parameter_x != "":
-				pos.x = generator.get_parameter(parameter_x)
+				var p = generator.get_parameter(parameter_x)
+				if p is float:
+					pos.x = p
 			if parameter_y != "":
-				pos.y = generator.get_parameter(parameter_y)
+				var p = generator.get_parameter(parameter_y)
+				if p is float:
+					pos.y = p
 		else:
 			var r = 0.25
 			var a = 0
 			if parameter_r != "":
-				r = generator.get_parameter(parameter_r)
+				var p = generator.get_parameter(parameter_r)
+				if p is float:
+					r = p
 			if parameter_a != "":
-				a = generator.get_parameter(parameter_a)*0.01745329251
+				var p = generator.get_parameter(parameter_a)
+				if p is float:
+					a = p*0.01745329251
 			pos.x = r*cos(a)
 			pos.y = r*sin(a)
 	return pos
@@ -101,8 +109,12 @@ func get_parent_value() -> Vector2:
 
 func on_parameter_changed(p, v) -> void:
 	if !dragging and (p == parameter_x or p == parameter_y or p == parameter_r or p == parameter_a):
-		update_position(get_value())
-		update()
+		if v is float:
+			visible = true
+			update_position(get_value())
+			update()
+		else:
+			visible = false
 
 func update_parameters(value : Vector2) -> void:
 	if !is_instance_valid(generator):

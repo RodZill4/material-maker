@@ -149,27 +149,33 @@ func replace_input(string : String, context, input : String, type : String, src 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
 
-func replace_variable(string : String, variable : String, value : String) -> String:
-	string = string.replace("$(%s)" % variable, value)
-	var keyword_size = variable.length()+1
-	var new_string = ""
-	while !string.empty():
-		var pos = string.find("$"+variable)
-		if pos == -1:
-			new_string += string
+func replace_variables(string : String, variables : Dictionary) -> String:
+	while true:
+		var old_string = string
+		for variable in variables.keys():
+			string = string.replace("$(%s)" % variable, variables[variable])
+			var keyword_size : int = variable.length()+1
+			var new_string : String = ""
+			while !string.empty():
+				var pos : int = string.find("$"+variable)
+				if pos == -1:
+					new_string += string
+					break
+				new_string += string.left(pos)
+				string = string.right(pos)
+				if string.length() > keyword_size and is_word_letter(string[keyword_size]):
+					new_string += string.left(keyword_size)
+					string = string.right(keyword_size)
+					continue
+				if string.empty() or !is_word_letter(string[0]):
+					new_string += variables[variable]
+				else:
+					new_string += "$"+variable
+				string = string.right(keyword_size)
+			string = new_string
+		if string == old_string:
 			break
-		new_string += string.left(pos)
-		string = string.right(pos)
-		if string.length() > keyword_size and is_word_letter(string[keyword_size]):
-			new_string += string.left(keyword_size)
-			string = string.right(keyword_size)
-			continue
-		if string.empty() or !is_word_letter(string[0]):
-			new_string += value
-		else:
-			new_string += "$"+variable
-		string = string.right(keyword_size)
-	return new_string
+	return string
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
@@ -177,13 +183,13 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
-	string = replace_variable(string, "name", genname)
+	var variables = {}
+	variables["name"] = genname
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
-		string = replace_variable(string, "name_uv", genname_uv)
-	var tmp_string = replace_variable(string, "seed", "seed_"+genname)
-	if tmp_string != string:
-		string = tmp_string
+		variables["name_uv"] = genname_uv
+	variables["seed"] = "seed_"+genname
+	variables["node_id"] = str(get_instance_id())
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
 		for p in shader_model.parameters:
 			if !p.has("name") or !p.has("type"):
@@ -191,7 +197,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			var value = parameters[p.name]
 			var value_string = null
 			if p.type == "float":
-				value_string = "p_%s_%s" % [ genname, p.name ]
+				if parameters[p.name] is float:
+					value_string = "p_%s_%s" % [ genname, p.name ]
+				elif parameters[p.name] is String:
+					value_string = "("+parameters[p.name]+")"
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
@@ -207,9 +216,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			else:
 				print("Cannot replace parameter of type "+p.type)
 			if value_string != null:
-				string = replace_variable(string, p.name, value_string)
+				variables[p.name] = value_string
 	if uv != "":
-		string = replace_variable(string, "uv", "("+uv+")")
+		variables["uv"] = "("+uv+")"
+	variables["time"] = "elapsed_time"
+	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true
 		while cont:
@@ -252,7 +263,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if has_randomness():
 				rv.defs += "uniform int seed_%s = %d;\n" % [ genname, get_seed() ]
 			for p in shader_model.parameters:
-				if p.type == "float":
+				if p.type == "float" and parameters[p.name] is float:
 					rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
 				elif p.type == "color":
 					rv.defs += "uniform float p_%s_%s_r = %.9f;\n" % [ genname, p.name, parameters[p.name].r ]
@@ -266,7 +277,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						g.deserialize(parameters[p.name])
 					var params = g.get_shader_params(genname+"_"+p.name)
 					for sp in params.keys():
-						rv.defs += "uniform float "+sp+" = "+str(params[sp])+";\n"
+						rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
 					rv.defs += g.get_shader(genname+"_"+p.name)
 			# Generate functions for inputs
 			if shader_model.has("inputs"):

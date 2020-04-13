@@ -13,9 +13,6 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 		generator = g
 		output = o
 		generator.connect("parameter_changed", self, "on_parameter_changed")
-		var param_defs : Array = generator.get_parameter_defs()
-		for c in get_children():
-			c.setup_control(generator, param_defs)
 		var gen_output_defs = generator.get_output_defs()
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
@@ -25,9 +22,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	else:
-		g = null
-		for c in get_children():
-			c.setup_control(generator, [])
+		generator = null
 	# Update shader
 	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
 	# Get parameter values from the shader code
@@ -60,13 +55,30 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 
 func on_resized() -> void:
 	material.set_shader_param("size", rect_size)
-	set_generator(generator)
 
-func value_to_pos(value : Vector2) -> Vector2:
-	return rect_size*0.5+value*min(rect_size.x, rect_size.y)/1.2
+func _on_Export_id_pressed(id):
+	var dialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.png;PNG image file")
+	dialog.connect("file_selected", self, "export_as_png", [ 256 << id ])
+	dialog.popup_centered()
 
-func value_to_offset(value : Vector2) -> Vector2:
-	return value*min(rect_size.x, rect_size.y)/1.2
+func export_as_png(file_name : String, size : int) -> void:
+	var previous_size = material.get_shader_param("size")
+	var previous_margin = material.get_shader_param("margin")
+	var previous_show_tiling = material.get_shader_param("show_tiling")
+	material.set_shader_param("size", Vector2(size, size))
+	material.set_shader_param("margin", 0.0)
+	material.set_shader_param("show_tiling", false)
+	var result = mm_renderer.render_material(material, size, false)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	result.save_to_file(file_name)
+	result.release()
+	material.set_shader_param("size", previous_size)
+	material.set_shader_param("margin", previous_margin)
+	material.set_shader_param("show_tiling", previous_show_tiling)
 
-func pos_to_value(pos : Vector2) -> Vector2:
-	return (pos - rect_size*0.5)*1.2/min(rect_size.x, rect_size.y)

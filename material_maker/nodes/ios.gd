@@ -23,17 +23,19 @@ func update_node() -> void:
 	var color = Color(0.0, 0.5, 0.0, 0.5)
 	for p in generator.get_io_defs():
 		color = mm_io_types.types[p.type].color
-		set_slot(get_child_count(), generator.name != "gen_inputs", 0, color, generator.name != "gen_outputs", 0, color)
+		var slot_type = mm_io_types.types[p.type].slot_type
+		set_slot(get_child_count(), generator.name != "gen_inputs", slot_type, color, generator.name != "gen_outputs", slot_type, color)
 		var port : Control
 		if generator.is_editable():
 			port = preload("res://material_maker/nodes/ios/port.tscn").instance()
+			add_child(port)
 			if p.has("name"):
 				port.set_label(p.name)
 			port.set_type(p.type)
 		else:
 			port = Label.new()
+			add_child(port)
 			port.text = p.name
-		add_child(port)
 	if generator.is_editable():
 		var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instance()
 		add_child(add_button)

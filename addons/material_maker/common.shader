@@ -1,3 +1,9 @@
+varying float elapsed_time;
+
+void vertex() {
+	elapsed_time = TIME;
+}
+
 float rand(vec2 x) {
     return fract(cos(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
 }

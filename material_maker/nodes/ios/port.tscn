@@ -4,9 +4,6 @@
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://material_maker/widgets/linked_widgets/editable_label.tscn" type="PackedScene" id=3]
 
-
-
-
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )
@@ -54,12 +51,11 @@ rect_min_size = Vector2( 30, 0 )
 
 [node name="Type" type="OptionButton" parent="."]
 margin_left = 118.0
-margin_right = 222.0
+margin_right = 220.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "Greyscale"
-items = [ "Greyscale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null ]
 selected = 0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]

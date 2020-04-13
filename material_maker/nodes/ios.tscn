@@ -2,8 +2,10 @@
 
 [ext_resource path="res://material_maker/nodes/ios.gd" type="Script" id=1]
 
-
 [node name="IOs" type="GraphNode"]
 margin_right = 32.0
 margin_bottom = 29.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

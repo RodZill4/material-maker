@@ -5,6 +5,7 @@ export var value : float = 0.5 setget set_value
 export var min_value : float = 0.0 setget set_min_value
 export var max_value : float = 1.0 setget set_max_value
 export var step : float = 0.0 setget set_step
+export var float_only : bool = false
 
 var sliding : bool = false
 var start_position : float
@@ -17,14 +18,19 @@ var from_upper_bound : bool = false
 onready var slider = $Slider
 onready var cursor = $Slider/Cursor
 
-signal value_changed
+signal value_changed(value)
 
 func _ready() -> void:
 	do_update()
 
-func set_value(v : float) -> void:
-	value = v
-	do_update()
+func set_value(v) -> void:
+	if v is float:
+		value = v
+		do_update()
+		$Slider.visible = true
+	elif v is String and !float_only:
+		text = v
+		$Slider.visible = false
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -39,7 +45,7 @@ func set_step(v : float) -> void:
 	do_update()
 
 func do_update(update_text : bool = true) -> void:
-	if update_text:
+	if update_text and $Slider.visible:
 		text = str(value)
 		if cursor != null:
 			if max_value != min_value:
@@ -58,6 +64,8 @@ func get_modifiers(event):
 	return modifiers
 
 func _on_LineEdit_gui_input(event : InputEvent) -> void:
+	if !$Slider.visible:
+		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.is_pressed():
 			last_position = event.position.x
@@ -110,9 +118,12 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 func _on_LineEdit_text_entered(new_text : String) -> void:
 	if new_text.is_valid_float():
 		value = new_text.to_float()
-	do_update()
-	emit_signal("value_changed", value)
+		do_update()
+		emit_signal("value_changed", value)
+		$Slider.visible = true
+	else:
+		emit_signal("value_changed", new_text)
+		$Slider.visible = false
 
 func _on_LineEdit_focus_exited() -> void:
-	do_update()
-	emit_signal("value_changed", value)
+	_on_LineEdit_text_entered(text)

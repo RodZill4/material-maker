@@ -1,30 +1,44 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=1]
 [ext_resource path="res://material_maker/preview/control_point.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/preview/preview_2d.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/preview/preview_2d_panel.gd" type="Script" id=4]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
-uniform sampler2D tex;
-uniform vec2 size;
+uniform vec2 size = vec2(585.0, 453.0);
+uniform bool show_tiling = false;
+uniform float margin = 0.2;
+
+vec4 preview_2d(vec2 uv) {
+	return vec4(0.8);
+}
 
 void fragment() {
 	float ms = max(size.x, size.y);
-	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/size.yx);
-	float is = min(size.x, size.y)/1.2;
-	vec2 m2 = min(fract(uv), 1.0-fract(uv));
-	vec4 image = texture(tex, uv);
-	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
-	float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
-	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+	float margin_factor = 1.0+max(0.0, margin);
+	vec2 uv = 0.5+margin_factor*(UV-vec2(0.5))*ms/size.yx;
+	float is = min(size.x, size.y)/margin_factor;
+	vec4 image = preview_2d(fract(uv));
+	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+	if (show_tiling) {
+		vec2 m2 = min(fract(uv), 1.0-fract(uv));
+		float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
+		COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+	} else {
+		vec2 outside = step(abs(uv-vec2(0.5)), vec2(0.5));
+		COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
+	}
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
-resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/size = Vector2( 585, 492 )
+shader_param/show_tiling = false
+shader_param/margin = 0.5
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
@@ -38,7 +52,32 @@ region = Rect2( 16, 64, 16, 16 )
 
 [node name="Preview2D" instance=ExtResource( 3 )]
 material = SubResource( 2 )
+margin_right = -758.0
+margin_bottom = -267.0
 rect_min_size = Vector2( 200, 200 )
+script = ExtResource( 4 )
+shader = "uniform vec2 size;
+uniform bool show_tiling = true;
+uniform float margin = 0.5;
+
+void fragment() {
+	float ms = max(size.x, size.y);
+	float margin_factor = 1.0+max(0.0, margin);
+	vec2 uv = 0.5+margin_factor*(UV-vec2(0.5))*ms/size.yx;
+	float is = min(size.x, size.y)/margin_factor;
+	vec4 image = preview_2d(fract(uv));
+	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+	if (show_tiling) {
+		vec2 m2 = min(fract(uv), 1.0-fract(uv));
+		float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
+		COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+	} else {
+		vec2 outside = step(abs(uv-vec2(0.5)), vec2(0.5));
+		COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
+	}
+}
+"
 
 [node name="P1" parent="." index="0" instance=ExtResource( 2 )]
 visible = false
@@ -128,3 +167,16 @@ mouse_default_cursor_shape = 10
 texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 2
+
+[node name="ContextMenu" type="PopupMenu" parent="." index="8"]
+margin_right = 109.0
+margin_bottom = 52.0
+items = [ "Show tiling", null, 1, false, false, 0, 0, null, "", false ]
+
+[node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
+margin_right = 91.0
+margin_bottom = 88.0
+items = [ "256x256", null, 0, false, false, 0, 0, null, "", false, "512x512", null, 0, false, false, 1, 0, null, "", false, "1024x1024", null, 0, false, false, 2, 0, null, "", false, "2048x2048", null, 0, false, false, 3, 0, null, "", false ]
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]

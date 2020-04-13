@@ -1,10 +1,16 @@
 extends HBoxContainer
 
+func _ready() -> void:
+	$Type.clear()
+	for tn in mm_io_types.type_names:
+		var t = mm_io_types.types[tn]
+		$Type.add_item(t.label)
+
 func set_label(l : String) -> void:
 	$Name.set_text(l)
 
 func set_type(t : String) -> void:
-	$Type.selected = mm_io_types.type_names.find(t)
+	$Type.select(mm_io_types.type_names.find(t))
 
 func update_up_down_button() -> void:
 	var parent = get_parent()

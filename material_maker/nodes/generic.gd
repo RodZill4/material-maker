@@ -147,7 +147,7 @@ func save_preview_widget() -> void:
 
 func restore_preview_widget() -> void:
 	if preview == null:
-		preview = preload("res://material_maker/preview/preview_2d.tscn").instance()
+		preview = preload("res://material_maker/preview/preview_2d_node.tscn").instance()
 		preview.shader = "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}"
 		preview.visible = false
 	preview_position = get_child_count()
