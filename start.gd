@@ -5,6 +5,7 @@ var loader = null
 onready var progress_bar = $VBoxContainer/ProgressBar
 
 func _ready():
+	randomize()
 	set_process(false)
 	var path : String
 	if Directory.new().file_exists("res://material_maker/main_window.tscn"):
