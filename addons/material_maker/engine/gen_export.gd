@@ -42,5 +42,8 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 		var result = source.generator.render(source.output_index, size)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
-		result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix])
+		if parameters.suffix != "":
+			result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix ])
+		else:
+			result.save_to_file("%s.png" % [ prefix ])
 		result.release()
