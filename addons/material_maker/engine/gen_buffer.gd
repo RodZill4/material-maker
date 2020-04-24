@@ -87,6 +87,9 @@ func update_buffer() -> void:
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+	return _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
+
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"
 	return data

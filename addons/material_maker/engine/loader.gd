@@ -25,6 +25,11 @@ func update_predefined_generators()-> void:
 						predefined_generators[file_name.get_basename()] = parse_json(file.get_as_text())
 						file.close()
 				file_name = dir.get_next()
+	if false:
+		var file : File = File.new()
+		if file.open("predefined_nodes.json", File.WRITE) == OK:
+			file.store_string(to_json(predefined_generators))
+			file.close()
 
 func generator_name_from_path(path : String) -> String:
 	for p in get_nodes_paths():
@@ -73,6 +78,7 @@ func create_gen(data) -> MMGenBase:
 		material_export = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
+		iterate_buffer = MMGenIterateBuffer,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,
 		export = MMGenExport,
