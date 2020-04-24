@@ -1,0 +1,160 @@
+{
+	"connections": [
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "fill_iterate",
+			"to_port": 0
+		},
+		{
+			"from": "fill_iterate",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "fill_preprocess",
+			"to_port": 0
+		},
+		{
+			"from": "fill_preprocess",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		}
+	],
+	"label": "Fill",
+	"name": "fill",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "iterate_buffer",
+			"node_position": {
+				"x": -129.307083,
+				"y": -370.480591
+			},
+			"parameters": {
+				"iterations": 10,
+				"size": 9
+			},
+			"seed_value": 29168,
+			"type": "iterate_buffer"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -427.307068,
+				"y": -362.662445
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 198.267258,
+				"y": -362.662445
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -171.110138,
+				"y": -541.509705
+			},
+			"parameters": {
+				"param0": 9,
+				"param1": 10
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "size"
+						},
+						{
+							"node": "fill_preprocess",
+							"widget": "s"
+						},
+						{
+							"node": "fill_iterate",
+							"widget": "s"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "iterations"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "fill_iterate",
+			"node_position": {
+				"x": -92.913391,
+				"y": -290.886963
+			},
+			"parameters": {
+				"s": 8
+			},
+			"type": "fill_iterate"
+		},
+		{
+			"name": "fill_preprocess",
+			"node_position": {
+				"x": -110.443481,
+				"y": -427.202026
+			},
+			"parameters": {
+				"s": 8
+			},
+			"type": "fill_preprocess"
+		}
+	],
+	"parameters": {
+		"param0": 9,
+		"param1": 10
+	},
+	"type": "graph"
+}

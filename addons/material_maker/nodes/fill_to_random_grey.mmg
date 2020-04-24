@@ -1,0 +1,43 @@
+{
+	"name": "fill_to_random_grey",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edgecolor": 1
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to Random Grey",
+		"outputs": [
+			{
+				"f": "mix($edgecolor, rand(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Edge color",
+				"max": 1,
+				"min": 0,
+				"name": "edgecolor",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -67,9 +67,13 @@ func update_shader(input_port_index : int) -> void:
 			m.set_shader_param(k, source.textures[k])
 	update_buffer()
 
+func set_parameter(n : String, v) -> void:
+	.set_parameter(n, v)
+	current_iteration = 0
+	update_buffer()
+
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var do_update : bool = false
-	print(parameter_changes)
 	if parameter_changes.has("p_o%s_iterations" % str(get_instance_id())):
 		do_update = true
 	for m in [ material, loop_material ]:
@@ -91,7 +95,6 @@ func on_texture_changed(n : String) -> void:
 				return
 
 func update_buffer() -> void:
-	print("updating "+str(current_iteration))
 	update_again = true
 	if !updating:
 		updating = true
@@ -106,16 +109,17 @@ func update_buffer() -> void:
 				result = yield(result, "completed")
 			if !update_again:
 				result.copy_to_texture(texture)
+				texture.flags = 0
 			result.release()
 		updating = false
 		if current_iteration < get_parameter("iterations"):
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
 		else:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+
 		current_iteration += 1
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	print(output_index)
 	return _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
 
 func _serialize(data: Dictionary) -> Dictionary:

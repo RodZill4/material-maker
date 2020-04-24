@@ -327,6 +327,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				# Add generated code
 				rv.code += subst_code.code
 				rv.code += subst_code.string
+				# process textures
+				for t in subst_code.textures.keys():
+					rv.textures[t] = subst_code.textures[t]
 		# Add output_code
 		var variant_string = uv+","+str(output_index)
 		var variant_index = context.get_variant(self, variant_string)

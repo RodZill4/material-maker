@@ -1,0 +1,34 @@
+{
+	"name": "fill_to_uv",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to UV            ",
+		"outputs": [
+			{
+				"rgb": "vec3((fract($uv-$(name_uv)_bb.xy)/$(name_uv)_bb.zw), rand(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

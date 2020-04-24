@@ -1,0 +1,50 @@
+{
+	"name": "fill_to_random_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edgecolor": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to Random Color        ",
+		"outputs": [
+			{
+				"rgb": "mix($edgecolor.rgb, rand3(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "Edge Color",
+				"name": "edgecolor",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}
