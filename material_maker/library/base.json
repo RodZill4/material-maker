@@ -2580,6 +2580,18 @@
 			"type": "quantize"
 		},
 		{
+			"collapsed": true,
+			"icon": "filter_dilate",
+			"name": "dilate",
+			"parameters": {
+				"param0": 9,
+				"param1": 0.1,
+				"param2": 0
+			},
+			"tree_item": "Filter/Dilate",
+			"type": "dilate"
+		},
+		{
 			"collapsed": false,
 			"icon": "transform",
 			"parameters": {

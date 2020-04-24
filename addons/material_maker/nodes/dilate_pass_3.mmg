@@ -1,0 +1,49 @@
+{
+	"name": "distance_pass_3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.0)",
+				"label": "",
+				"name": "distance",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"name": "source",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "Distance pass 3",
+		"outputs": [
+			{
+				"rgb": "$source($distance($uv).yz)*mix($distance($uv).x, 1.0, $amount)",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "amount",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

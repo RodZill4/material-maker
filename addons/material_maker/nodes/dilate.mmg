@@ -1,0 +1,246 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "dilate_pass_1",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_1",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "dilate_pass_2",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_2",
+			"from_port": 0,
+			"to": "buffer_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2_2",
+			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "dilate_pass_3",
+			"to_port": 1
+		},
+		{
+			"from": "dilate_pass_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Dilate",
+	"name": "dilate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -473.691315,
+				"y": -200.988342
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -256.691315,
+				"y": -112.988342
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -175.306458,
+				"y": -342.953613
+			},
+			"parameters": {
+				"param0": 9,
+				"param1": 0.1,
+				"param2": 0
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2_2",
+							"widget": "size"
+						},
+						{
+							"node": "dilate_pass_1",
+							"widget": "s"
+						},
+						{
+							"node": "dilate_pass_2",
+							"widget": "s"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "d"
+						},
+						{
+							"node": "dilate_pass_2",
+							"widget": "d"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_3",
+							"widget": "amount"
+						}
+					],
+					"name": "param2",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -621.306458,
+				"y": -196.4814
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "mask",
+					"type": "f"
+				},
+				{
+					"name": "source",
+					"type": "rgb"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 183.21106,
+				"y": 5.5186
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "out",
+					"type": "rgb"
+				}
+			],
+			"seed_value": -14401,
+			"type": "ios"
+		},
+		{
+			"name": "buffer_2_2",
+			"node_position": {
+				"x": -31.323547,
+				"y": -88.695679
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "dilate_pass_1",
+			"node_position": {
+				"x": -252.698792,
+				"y": -201.368988
+			},
+			"parameters": {
+				"d": 0.1,
+				"s": 9
+			},
+			"seed_value": 71939,
+			"type": "dilate_pass_1"
+		},
+		{
+			"name": "dilate_pass_2",
+			"node_position": {
+				"x": -33.698792,
+				"y": -203.368988
+			},
+			"parameters": {
+				"d": 0.1,
+				"s": 9
+			},
+			"seed_value": 44978,
+			"type": "dilate_pass_2"
+		},
+		{
+			"name": "dilate_pass_3",
+			"node_position": {
+				"x": -27.698792,
+				"y": 24.631012
+			},
+			"parameters": {
+				"amount": 0
+			},
+			"type": "dilate_pass_3"
+		}
+	],
+	"parameters": {
+		"param0": 9,
+		"param1": 0.1,
+		"param2": 0
+	},
+	"type": "graph"
+}

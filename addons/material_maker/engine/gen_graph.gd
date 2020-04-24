@@ -82,19 +82,23 @@ func source_changed(input_index : int) -> void:
 		get_node("gen_inputs").source_changed(input_index)
 
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
+	var rv = null
 	if gen_name == "gen_inputs":
 		var parent = get_parent()
 		if parent != null and parent.get_script() == get_script():
-			return parent.get_port_source(name, input_index)
+			rv = parent.get_port_source(name, input_index)
 	else:
 		for c in connections:
 			if c.to == gen_name and c.to_port == input_index:
 				var src_gen = get_node(c.from)
 				if src_gen != null:
 					if src_gen.get_script() == get_script():
-						return src_gen.get_port_source("gen_outputs", c.from_port)
-					return OutputPort.new(src_gen, c.from_port)
-	return null
+						rv = src_gen.get_port_source("gen_outputs", c.from_port)
+					else:
+						rv = OutputPort.new(src_gen, c.from_port)
+	if rv != null and rv.generator.name == "gen_inputs":
+		rv = get_port_source("gen_inputs", rv.output_index)
+	return rv
 
 func get_port_targets(gen_name: String, output_index: int) -> Array:
 	var rv = []

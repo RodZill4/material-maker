@@ -1,0 +1,53 @@
+{
+	"name": "distance_pass_2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"d": 0.1,
+		"s": 9
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgb"
+			}
+		],
+		"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = $in(uv);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = $in(uv+dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = 1.0-sqrt((1.0-p2.x)*(1.0-p2.x)+dx.y*dx.y/$d/$d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = $in(uv-dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = 1.0-sqrt((1.0-p2.x)*(1.0-p2.x)+dx.y*dx.y/$d/$d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
+		"name": "Distance pass 2",
+		"outputs": [
+			{
+				"rgb": "$(name)_distance_v($uv)",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 6,
+				"label": "",
+				"last": 12,
+				"name": "s",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "d",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
