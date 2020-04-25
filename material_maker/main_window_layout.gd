@@ -109,10 +109,10 @@ func update_panes() -> void:
 	clamp_split_offset()
 	$SplitRight.split_offset += right_width - right_requested
 
-func _on_Left_dragged(offset : int) -> void:
+func _on_Left_dragged(_offset : int) -> void:
 	$Left.clamp_split_offset()
 
-func _on_Right_dragged(offset : int) -> void:
+func _on_Right_dragged(_offset : int) -> void:
 	$SplitRight/Right.clamp_split_offset()
 
 func _on_tab_changed(_tab):

@@ -54,14 +54,14 @@ func do_update(update_text : bool = true) -> void:
 				cursor.rect_position.x = 0
 
 func get_modifiers(event):
-	var modifiers = 0
+	var new_modifiers = 0
 	if event.shift:
-		modifiers |= 1
+		new_modifiers |= 1
 	if event.control:
-		modifiers |= 2
+		new_modifiers |= 2
 	if event.alt:
-		modifiers |= 4
-	return modifiers
+		new_modifiers |= 4
+	return new_modifiers
 
 func _on_LineEdit_gui_input(event : InputEvent) -> void:
 	if !$Slider.visible:

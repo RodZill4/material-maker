@@ -164,7 +164,6 @@ func restore_preview_widget() -> void:
 
 func update_node() -> void:
 	# Clean node
-	var custom_node_buttons = null
 	clear_all_slots()
 	save_preview_widget()
 	for c in get_children():
@@ -352,10 +351,10 @@ func on_clicked_output(index : int) -> void:
 		rect_size = Vector2(0, 0)
 	else:
 		preview_index = index
-		var width
 		if preview.visible:
 			update_preview()
 		else:
+# warning-ignore:void_assignment
 			var status = update_preview(get_child(0).rect_size.x)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")

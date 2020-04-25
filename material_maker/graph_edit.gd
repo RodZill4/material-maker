@@ -50,10 +50,6 @@ func _gui_input(event) -> void:
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
 	return
-	if event is InputEventMouseMotion and event.button_mask == 0:
-		for c in get_children():
-			if c is GraphNode and Rect2(c.rect_global_position, c.rect_size*c.get_global_transform().get_scale()).has_point(event.global_position):
-				hint_tooltip = c.get_slot_tooltip(c.get_global_transform().xform_inv(event.global_position))
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -352,7 +348,7 @@ func do_send_changed_signal() -> void:
 
 # Drag and drop
 
-func can_drop_data(position, data) -> bool:
+func can_drop_data(_position, data) -> bool:
 	return typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
 func drop_data(position, data) -> void:
@@ -404,7 +400,7 @@ func set_last_selected(node) -> void:
 	else:
 		last_selected = null
 
-func request_popup(from, from_slot, release_position) -> void:
+func request_popup(from, from_slot, _release_position) -> void:
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(from)
 	var node_transform : Transform2D = node.get_global_transform()

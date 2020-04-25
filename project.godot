@@ -197,6 +197,7 @@ mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 [debug]
 
 gdscript/warnings/exclude_addons=false
+gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true
 
