@@ -42,6 +42,7 @@ func get_output_defs() -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(input_port_index : int) -> void:
+	current_iteration = 0
 	call_deferred("update_shader", input_port_index)
 
 func follow_input(input_index : int) -> Array:
