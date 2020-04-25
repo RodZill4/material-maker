@@ -13,6 +13,7 @@ class GradientCursor:
 		rect_size = Vector2(WIDTH, 15)
 
 	func _draw() -> void:
+# warning-ignore:integer_division
 		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15), Vector2(0, 5)])
 		var c = color
 		c.a = 1.0
@@ -63,7 +64,7 @@ func get_gradient_from_data(data):
 			return data
 	return null
 
-func get_drag_data(position : Vector2):
+func get_drag_data(_position : Vector2):
 	var data = MMType.serialize_value(value)
 	var preview = ColorRect.new()
 	preview.rect_size = Vector2(64, 24)
@@ -71,10 +72,10 @@ func get_drag_data(position : Vector2):
 	set_drag_preview(preview)
 	return data
 
-func can_drop_data(position : Vector2, data) -> bool:
+func can_drop_data(_position : Vector2, data) -> bool:
 	return get_gradient_from_data(data) != null
 
-func drop_data(position : Vector2, data) -> void:
+func drop_data(_position : Vector2, data) -> void:
 	var gradient = get_gradient_from_data(data)
 	if gradient != null:
 		set_value(MMType.deserialize_value(gradient))

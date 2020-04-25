@@ -62,6 +62,7 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 		var tex = ImageTexture.new()
 		result.copy_to_texture(tex)
 		result.release()
+# warning-ignore:narrowing_conversion
 		item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
 	else:
 		result.release()

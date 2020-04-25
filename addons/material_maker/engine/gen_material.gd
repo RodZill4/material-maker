@@ -182,7 +182,6 @@ func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
 		return generated_textures[slot]
 
 func update_material(m, file_prefix = null) -> void:
-	var texture
 	if m is SpatialMaterial:
 		# Make the material double-sided for better visiblity in the preview
 		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
@@ -360,11 +359,12 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 		for i in range(shader_model.exports[profile].uids):
 			var uid : String
 			var r = []
-			for k in range(16):
+			for _k in range(16):
 				r.append(randi() & 255)
 			r[6] = (r[6] & 0x0f) | 0x40
 			r[8] = (r[8] & 0x3f) | 0x80
 			for k in range(16):
+# warning-ignore:unassigned_variable_op_assign
 				uid += '%02x' % r[k]
 			export_context["$(uid:"+str(i)+")"] = uid
 	for f in shader_model.exports[profile].files:

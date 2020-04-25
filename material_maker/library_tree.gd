@@ -1,6 +1,6 @@
 extends Tree
 
-func get_drag_data(position):
+func get_drag_data(_position):
 	var selected_item = get_selected()
 	if selected_item != null:
 		var data = selected_item.get_metadata(0)

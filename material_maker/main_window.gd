@@ -75,6 +75,7 @@ const MENU = [
 	{ menu="Help", command="about", description="About" }
 ]
 
+# warning-ignore:unused_signal
 signal quit
 
 var is_mac = false
@@ -557,7 +558,6 @@ func about() -> void:
 	about_box.popup_centered()
 
 func _on_PopupMenu_id_pressed(id) -> void:
-	var node_type = null
 	if MENU[id].has("command"):
 		var command = MENU[id].command
 		if has_method(command):
@@ -573,6 +573,7 @@ func update_preview() -> void:
 	updating = true
 	while need_update:
 		need_update = false
+# warning-ignore:void_assignment
 		status = update_preview_2d()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
@@ -615,7 +616,7 @@ func on_selected_node_change(node) -> void:
 		preview_2d.set_generator(node.generator if node != null else null)
 		update_preview_2d(node)
 
-func _on_Projects_tab_changed(tab) -> void:
+func _on_Projects_tab_changed(_tab) -> void:
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
 		if new_tab != null:

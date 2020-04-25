@@ -28,7 +28,7 @@ func get_output_defs() -> Array:
 func set_convolution_params(data: Dictionary) -> void:
 	convolution_params = data
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, _output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var epsilon = 1.0/pow(2, parameters.size)
 	var types = { "rgba": { type="vec4", init="vec4(0.0)" }, "rgb": { type="vec3", init="vec3(0.0)" }, "f": { type="float", init="0.0" } }

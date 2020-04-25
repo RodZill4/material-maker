@@ -32,8 +32,7 @@ func get_selected_item_doc_name() -> String:
 		return ""
 	return m.icon
 
-func add_library(file_name : String, filter : String = "") -> bool:
-	var root = tree.get_root()
+func add_library(file_name : String, _filter : String = "") -> bool:
 	var file = File.new()
 	if file.open(file_name, File.READ) != OK:
 		return false
@@ -49,7 +48,6 @@ func add_library(file_name : String, filter : String = "") -> bool:
 func update_tree(filter : String = "") -> void:
 	filter = filter.to_lower()
 	tree.clear()
-	var root = tree.create_item()
 	for l in libraries:
 		for m in l:
 			if filter == "" or m.tree_item.to_lower().find(filter) != -1:
@@ -74,6 +72,8 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 	if item_parent == null:
 		item.tree_item = item_name
 		item_parent = tree.get_root()
+		if not item_parent:
+			return null
 	var slash_position = item_name.find("/")
 	if slash_position == -1:
 		var new_item : TreeItem = null
@@ -149,7 +149,7 @@ func serialize_library(array : Array, library_name : String = "", item : TreeIte
 		serialize_library(array, library_name, item, icon_dir)
 		item = item.get_next()
 
-func save_library(library_name : String, item : TreeItem = null) -> void:
+func save_library(library_name : String, _item : TreeItem = null) -> void:
 	var array : Array = []
 	serialize_library(array, library_name)
 	var file = File.new()

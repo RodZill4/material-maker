@@ -21,14 +21,14 @@ func _ready() -> void:
 	itemlist.connect("item_activated", self, "item_selected")
 	update_list()
 
-func filter_entered(filter) -> void:
+func filter_entered(_filter) -> void:
 	item_selected(0)
 
-func add_node(data) -> void:
-	var node : GraphNode = get_current_graph().create_nodes(data, get_current_graph().offset_from_global_position(insert_position))[0]
+func add_node(node_data) -> void:
+	var node : GraphNode = get_current_graph().create_nodes(node_data, get_current_graph().offset_from_global_position(insert_position))[0]
 	# if this node created by dragging to an empty space
 	if quick_connect_node != null:
-		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
+#		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
 		for new_slot in node.get_connection_input_count():
 			#if type == node.get_connection_input_type(new_slot):
 				#connect the first two slots with the same type
@@ -109,9 +109,9 @@ func update_list(filter : String = "") -> void:
 				data.append(obj)
 				itemlist.add_item(obj.tree_item, get_preview_texture(obj))
 
-func get_preview_texture(data : Dictionary) -> ImageTexture:
-	if data.has("icon") and data.has("library"):
-		var image_path = data.library.left(data.library.rfind("."))+"/"+data.icon+".png"
+func get_preview_texture(icon_data : Dictionary) -> ImageTexture:
+	if icon_data.has("icon") and icon_data.has("library"):
+		var image_path = icon_data.library.left(icon_data.library.rfind("."))+"/"+icon_data.icon+".png"
 		var t : ImageTexture
 		if image_path.left(6) == "res://":
 			image_path = ProjectSettings.globalize_path(image_path)
@@ -128,7 +128,7 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 func clear_list() -> void:
 	itemlist.clear()
 
-func add_library(file_name : String, filter : String = "") -> bool:
+func add_library(file_name : String, _filter : String = "") -> bool:
 	var file = File.new()
 	if file.open(file_name, File.READ) != OK:
 		return false

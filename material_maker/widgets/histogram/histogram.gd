@@ -20,7 +20,6 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 		generator = g
 		output = o
 		generator.connect("parameter_changed", self, "on_parameter_changed")
-		var param_defs : Array = generator.get_parameter_defs()
 		var gen_output_defs = generator.get_output_defs()
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
@@ -42,7 +41,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			$ViewportImage/ColorRect.material.set_shader_param(k, source.textures[k])
 	update_histogram()
 
-func on_parameter_changed(n : String, v) -> void:
+func on_parameter_changed(n : String, _v) -> void:
 	if n == "__input_changed__":
 		set_generator(generator, output)
 	var p = generator.get_parameter_def(n)
