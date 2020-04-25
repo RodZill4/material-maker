@@ -13,10 +13,11 @@ class GradientCursor:
 		rect_size = Vector2(WIDTH, 15)
 
 	func _draw() -> void:
-		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15)])
+		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15), Vector2(0, 5)])
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
+		draw_polyline(polygon, Color(0.0, 0.0, 0.0) if color.gray() > 0.5 else Color(1.0, 1.0, 1.0))
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseButton:

@@ -9,6 +9,7 @@ code = "shader_type canvas_item;
 void fragment() {
 	COLOR = vec4(vec3(2.0*fract(0.5*(floor(0.12*FRAGCOORD.x)+floor(0.125*FRAGCOORD.y)))), 1.0);
 }"
+custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
@@ -24,6 +25,7 @@ vec4 gradient(float x) {
   return vec4(1.000000000,1.000000000,1.000000000,1.000000000);
 }
 void fragment() { COLOR = gradient(UV.x); }"
+custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = SubResource( 3 )
