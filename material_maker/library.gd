@@ -48,6 +48,7 @@ func add_library(file_name : String, _filter : String = "") -> bool:
 func update_tree(filter : String = "") -> void:
 	filter = filter.to_lower()
 	tree.clear()
+	tree.create_item()
 	for l in libraries:
 		for m in l:
 			if filter == "" or m.tree_item.to_lower().find(filter) != -1:
@@ -72,8 +73,6 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 	if item_parent == null:
 		item.tree_item = item_name
 		item_parent = tree.get_root()
-		if not item_parent:
-			return null
 	var slash_position = item_name.find("/")
 	if slash_position == -1:
 		var new_item : TreeItem = null
