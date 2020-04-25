@@ -70,6 +70,7 @@ const MENU = [
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
+	{ menu="Help", command="show_reddit", description="Material Maker on reddit" },
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
@@ -546,6 +547,9 @@ func show_library_item_doc_is_disabled() -> bool:
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
+
+func show_reddit() -> void:
+	OS.shell_open("https://www.reddit.com/r/MaterialMaker/")
 
 func about() -> void:
 	var about_box = preload("res://material_maker/widgets/about/about.tscn").instance()
