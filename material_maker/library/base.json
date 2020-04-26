@@ -2593,6 +2593,53 @@
 		},
 		{
 			"collapsed": false,
+			"icon": "filter_fill",
+			"name": "fill_2",
+			"parameters": {
+				"param0": 8,
+				"param1": 10
+			},
+			"tree_item": "Filter/Fill",
+			"type": "fill"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_fill_to_random_grey",
+			"name": "fill_to_random_grey",
+			"parameters": {
+				"edgecolor": 1
+			},
+			"tree_item": "Filter/Fill/To random grey",
+			"type": "fill_to_random_grey"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_fill_to_random_color",
+			"name": "fill_to_random_color",
+			"parameters": {
+				"edgecolor": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"tree_item": "Filter/Fill/To random color",
+			"type": "fill_to_random_color"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_fill_to_uv",
+			"name": "fill_to_uv",
+			"parameters": {
+
+			},
+			"tree_item": "Filter/Fill/To UV",
+			"type": "fill_to_uv"
+		},
+		{
+			"collapsed": false,
 			"icon": "transform",
 			"parameters": {
 				"rotate": 0,
