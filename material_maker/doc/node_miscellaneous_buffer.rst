@@ -4,9 +4,9 @@ Buffer node
 The **Buffer** node samples its input into a texture of a given resolution and
 outputs the result.
 
-Buffers can be used either as inputs of convolution nodes (to limit the combined
+Buffers can be used either as inputs of complex nodes (to limit the combined
 shader's complexity), or to create a cheap blur/pixelization effect (by using the
-LOD output). Note that convolution transforms that are provided in the nodes library
+LOD output). Note that many complex transforms that are provided in the nodes library
 already include buffers where necessary.
 
 .. image:: images/node_miscellaneous_buffer.png
@@ -15,7 +15,7 @@ already include buffers where necessary.
 Inputs
 ++++++
 
-The **Buffer** node has an input that will be saved when exporting the project.
+The **Buffer** node has an input that will be stored into its buffer image.
 
 Outputs
 +++++++
