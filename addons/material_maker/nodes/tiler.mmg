@@ -11,7 +11,8 @@
 		"scale": 0,
 		"select_inputs": 0,
 		"tx": 4,
-		"ty": 4
+		"ty": 4,
+		"value": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -32,7 +33,7 @@
 				"type": "f"
 			}
 		],
-		"instance": "float tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\tpos = fract(pos+$offset*seed/tile);\n\t\t\tfloat mask = $mask(pos+vec2(0.5));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\t$select_inputs\n\t\t\t\tc = max(c, $in(pv)*mask);\n\t\t\t}\n\t\t}\n\t}\n\treturn c;\n}",
+		"instance": "float tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\tpos = fract(pos+$offset*seed/tile);\n\t\t\tfloat mask = $mask(pos+vec2(0.5));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\t$select_inputs\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tc = max(c, $in(pv)*mask*(1.0-$value*seed.x));\n\t\t\t}\n\t\t}\n\t}\n\treturn c;\n}",
 		"name": "Tiler",
 		"outputs": [
 			{
@@ -118,6 +119,16 @@
 				"max": 1,
 				"min": 0,
 				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Value",
+				"max": 1,
+				"min": 0,
+				"name": "value",
 				"step": 0.01,
 				"type": "float"
 			}

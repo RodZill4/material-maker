@@ -5,7 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"count": 30,
+		"count": 25,
+		"opacity": 0,
 		"rotate": 0,
 		"scale": 0,
 		"select_inputs": 0
@@ -29,7 +30,7 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tvec4 c = vec4(0.0);\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tfloat mask = $mask(seed+vec2(0.5));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv += vec2(0.5);\n\t\t\t$select_inputs\n\t\t\tvec4 n = $in(pv);\n\t\t\tfloat na = n.a*mask;\n\t\t\tfloat a = (1.0-c.a)*(1.0*na);\n\t\t\tc = mix(c, n, na);\n\t\t}\n\t}\n\treturn c;\n}\n",
+		"instance": "vec4 splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tvec4 c = vec4(0.0);\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tfloat mask = $mask(seed+vec2(0.5));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv += vec2(0.5);\n\t\t\t$select_inputs\n\t\t\tvec4 n = $in(pv);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat na = n.a*mask*(1.0-$opacity*seed.x);\n\t\t\tfloat a = (1.0-c.a)*(1.0*na);\n\t\t\tc = mix(c, n, na);\n\t\t}\n\t}\n\treturn c;\n}\n",
 		"name": "Color Splatter",
 		"outputs": [
 			{
@@ -85,6 +86,16 @@
 				"max": 1,
 				"min": 0,
 				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Opacity",
+				"max": 1,
+				"min": 0,
+				"name": "opacity",
 				"step": 0.01,
 				"type": "float"
 			}
