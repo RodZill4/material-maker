@@ -1,8 +1,12 @@
 extends "res://material_maker/preview/preview_2d.gd"
 
+var config_cache : ConfigFile
+
 var shader_margin : float = 0
 
 func _ready():
+	if config_cache.has_section_key("preview_2d", "show_tiling"):
+		$ContextMenu.set_item_checked(0, config_cache.get_value("preview_2d", "show_tiling"))
 	update_shader_options()
 	$ContextMenu.add_submenu_item("Export", "Export")
 
@@ -47,6 +51,7 @@ func _on_gui_input(event):
 func _on_ContextMenu_id_pressed(id) -> void:
 	if $ContextMenu.is_item_checkable(id):
 		$ContextMenu.toggle_item_checked(id)
+		config_cache.set_value("preview_2d", "show_tiling", $ContextMenu.is_item_checked(0))
 	match id:
 		0:
 			update_shader_options()

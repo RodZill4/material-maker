@@ -23,6 +23,8 @@ func load_panes(config_cache) -> void:
 	for pane in PANES:
 		var node = pane.scene.instance()
 		node.name = pane.name
+		if "config_cache" in node:
+			node.config_cache = config_cache
 		panes[pane.name] = node
 		var tab = get_node(PANE_POSITIONS[pane.position])
 		if config_cache.has_section_key("layout", pane.name+"_location"):
