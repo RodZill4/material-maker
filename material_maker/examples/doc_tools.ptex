@@ -19,48 +19,6 @@
 			"to_port": 2
 		},
 		{
-			"from": "shape",
-			"from_port": 0,
-			"to": "quantize",
-			"to_port": 0
-		},
-		{
-			"from": "quantize",
-			"from_port": 0,
-			"to": "edge_detect_1",
-			"to_port": 0
-		},
-		{
-			"from": "quantize",
-			"from_port": 0,
-			"to": "edge_detect_2",
-			"to_port": 0
-		},
-		{
-			"from": "quantize",
-			"from_port": 0,
-			"to": "edge_detect_3",
-			"to_port": 0
-		},
-		{
-			"from": "quantize",
-			"from_port": 0,
-			"to": "sharpen",
-			"to_port": 0
-		},
-		{
-			"from": "quantize",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 0
-		},
-		{
-			"from": "edge_detect_1",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 1
-		},
-		{
 			"from": "tex3d_fbm_4",
 			"from_port": 0,
 			"to": "tex3d_distort_2",
@@ -161,6 +119,60 @@
 			"from_port": 0,
 			"to": "Material",
 			"to_port": 0
+		},
+		{
+			"from": "shape",
+			"from_port": 0,
+			"to": "colorize_3",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_3",
+			"from_port": 0,
+			"to": "splatter_2",
+			"to_port": 0
+		},
+		{
+			"from": "splatter_2",
+			"from_port": 0,
+			"to": "fill_2",
+			"to_port": 0
+		},
+		{
+			"from": "fill_2",
+			"from_port": 0,
+			"to": "fill_to_random_grey",
+			"to_port": 0
+		},
+		{
+			"from": "fill_2",
+			"from_port": 0,
+			"to": "fill_to_random_color",
+			"to_port": 0
+		},
+		{
+			"from": "fill_2",
+			"from_port": 0,
+			"to": "fill_to_uv",
+			"to_port": 0
+		},
+		{
+			"from": "splatter_2",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "fill_to_uv",
+			"from_port": 0,
+			"to": "@@1644",
+			"to_port": 0
+		},
+		{
+			"from": "@@1644",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -171,6 +183,9 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 23.544006,
@@ -184,14 +199,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 1,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 8,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -826,17 +841,17 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0,
-									"g": 0,
+									"b": 1,
+									"g": 1,
 									"pos": 0,
-									"r": 0
+									"r": 1
 								},
 								{
 									"a": 1,
-									"b": 1,
-									"g": 1,
+									"b": 0,
+									"g": 0,
 									"pos": 1,
-									"r": 1
+									"r": 0
 								}
 							],
 							"type": "Gradient"
@@ -858,17 +873,17 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0,
-									"g": 0,
+									"b": 1,
+									"g": 1,
 									"pos": 0,
-									"r": 0
+									"r": 1
 								},
 								{
 									"a": 1,
-									"b": 1,
-									"g": 1,
+									"b": 0,
+									"g": 0,
 									"pos": 1,
-									"r": 1
+									"r": 0
 								}
 							],
 							"type": "Gradient"
@@ -951,17 +966,17 @@
 					"points": [
 						{
 							"a": 1,
-							"b": 0,
-							"g": 0,
+							"b": 1,
+							"g": 1,
 							"pos": 0,
-							"r": 0
+							"r": 1
 						},
 						{
 							"a": 1,
-							"b": 1,
-							"g": 1,
+							"b": 0,
+							"g": 0,
 							"pos": 1,
-							"r": 1
+							"r": 0
 						}
 					],
 					"type": "Gradient"
@@ -973,7 +988,7 @@
 			"name": "blend",
 			"node_position": {
 				"x": 549.235168,
-				"y": 819.099731
+				"y": 820.099731
 			},
 			"parameters": {
 				"amount": 1,
@@ -984,8 +999,8 @@
 		{
 			"name": "blend_2",
 			"node_position": {
-				"x": 553.235168,
-				"y": 730.099731
+				"x": 548.235168,
+				"y": 710.099731
 			},
 			"parameters": {
 				"amount": 1,
@@ -1816,6 +1831,7 @@
 						"y": 994.5
 					},
 					"parameters": {
+						"axis": 1,
 						"l": 0.06,
 						"r": 0.15
 					},
@@ -2033,82 +2049,25 @@
 				"y": 10.501892
 			},
 			"parameters": {
+				"axis": 1,
 				"l": 0.25,
 				"r": 0.25
 			},
 			"type": "sdf3d_cylinder"
 		},
 		{
-			"name": "edge_detect_1",
-			"node_position": {
-				"x": 135.801086,
-				"y": 669.017395
-			},
-			"parameters": {
-				"size": 7
-			},
-			"type": "edge_detect_1"
-		},
-		{
 			"name": "shape",
 			"node_position": {
-				"x": -284.198914,
-				"y": 863.517395
+				"x": -100.198914,
+				"y": 824.517395
 			},
 			"parameters": {
 				"edge": 0.754975,
-				"radius": 1,
+				"radius": 0.41,
 				"shape": 1,
-				"sides": 7
+				"sides": 6
 			},
 			"type": "shape"
-		},
-		{
-			"name": "edge_detect_2",
-			"node_position": {
-				"x": 135.801086,
-				"y": 722.017395
-			},
-			"parameters": {
-				"size": 6
-			},
-			"seed_value": 27531,
-			"type": "edge_detect_2"
-		},
-		{
-			"name": "edge_detect_3",
-			"node_position": {
-				"x": 134.801086,
-				"y": 775.017395
-			},
-			"parameters": {
-				"size": 6
-			},
-			"seed_value": 18749,
-			"type": "edge_detect_3"
-		},
-		{
-			"name": "sharpen",
-			"node_position": {
-				"x": 122.801086,
-				"y": 909.017395
-			},
-			"parameters": {
-				"size": 6
-			},
-			"seed_value": 55115,
-			"type": "sharpen"
-		},
-		{
-			"name": "quantize",
-			"node_position": {
-				"x": -84.198914,
-				"y": 926.517395
-			},
-			"parameters": {
-				"steps": 4
-			},
-			"type": "quantize"
 		},
 		{
 			"name": "4330",
@@ -2248,6 +2207,7 @@
 			},
 			"parameters": {
 				"R": 0.180551,
+				"axis": 2,
 				"r": 0.097392
 			},
 			"type": "sdf3d_torus"
@@ -2526,6 +2486,142 @@
 				"ty": 8
 			},
 			"type": "tiler_color"
+		},
+		{
+			"name": "splatter_2",
+			"node_position": {
+				"x": -69.299805,
+				"y": 1020.827515
+			},
+			"parameters": {
+				"count": 8,
+				"rotate": 0,
+				"scale": 0,
+				"select_inputs": 0
+			},
+			"type": "splatter"
+		},
+		{
+			"name": "colorize_3",
+			"node_position": {
+				"x": -100.299805,
+				"y": 952.827515
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 0,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0.081818,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0.163636,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"type": "colorize"
+		},
+		{
+			"name": "fill_2",
+			"node_position": {
+				"x": 139.928162,
+				"y": 873.827515
+			},
+			"parameters": {
+				"param0": 8,
+				"param1": 10
+			},
+			"type": "fill"
+		},
+		{
+			"name": "fill_to_random_grey",
+			"node_position": {
+				"x": 209.928162,
+				"y": 965.827515
+			},
+			"parameters": {
+				"edgecolor": 1
+			},
+			"type": "fill_to_random_grey"
+		},
+		{
+			"name": "fill_to_random_color",
+			"node_position": {
+				"x": 203.903778,
+				"y": 1033.827515
+			},
+			"parameters": {
+				"edgecolor": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"type": "fill_to_random_color"
+		},
+		{
+			"name": "fill_to_uv",
+			"node_position": {
+				"x": 228.874451,
+				"y": 1094.827515
+			},
+			"parameters": {
+
+			},
+			"type": "fill_to_uv"
+		},
+		{
+			"name": "@@1644",
+			"node_position": {
+				"x": 465.442322,
+				"y": 1070.827515
+			},
+			"parameters": {
+
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "Limit",
+				"outputs": [
+					{
+						"rgb": "clamp($in($uv), vec3(0.0), vec3(1.0))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {

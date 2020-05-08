@@ -115,18 +115,6 @@
 			"to_port": 5
 		},
 		{
-			"from": "uniform_0",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 0
-		},
-		{
-			"from": "colorize_7",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 1
-		},
-		{
 			"from": "normal_map_0",
 			"from_port": 0,
 			"to": "Material",
@@ -143,6 +131,18 @@
 			"from_port": 0,
 			"to": "normal_map_0",
 			"to_port": 0
+		},
+		{
+			"from": "blend_0",
+			"from_port": 0,
+			"to": "394",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map_0",
+			"from_port": 0,
+			"to": "394",
+			"to_port": 1
 		}
 	],
 	"label": "Graph",
@@ -343,8 +343,8 @@
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 763.943726,
-				"y": 13
+				"x": 790.943726,
+				"y": -35
 			},
 			"parameters": {
 				"amount": 1,
@@ -370,6 +370,9 @@
 			"type": "uniform"
 		},
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 1161,
@@ -383,27 +386,16 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 0.2,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
-		},
-		{
-			"name": "combine_0",
-			"node_position": {
-				"x": 1119.687012,
-				"y": -22.258774
-			},
-			"parameters": {
-
-			},
-			"type": "combine"
 		},
 		{
 			"name": "colorize_7",
@@ -521,6 +513,88 @@
 				"rows": 6
 			},
 			"type": "bricks"
+		},
+		{
+			"name": "394",
+			"node_position": {
+				"x": 1184.978027,
+				"y": -175.340729
+			},
+			"parameters": {
+				"ambient": 0.29,
+				"lx": 0.49,
+				"ly": 0.5,
+				"lz": -1
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "color",
+						"type": "rgb"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "normal",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "Light",
+				"outputs": [
+					{
+						"rgb": "$color($uv)*min(1.0, $ambient+max(0.0, dot(normalize(vec3($lx, $ly, $lz)), 2.0*$normal($uv)-vec3(1.0))))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Light X",
+						"max": 1,
+						"min": -1,
+						"name": "lx",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Light Y",
+						"max": 1,
+						"min": -1,
+						"name": "ly",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Light Z",
+						"max": 1,
+						"min": -1,
+						"name": "lz",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Ambient",
+						"max": 1,
+						"min": 0,
+						"name": "ambient",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {

@@ -139,66 +139,6 @@
 			"to_port": 5
 		},
 		{
-			"from": "mwf_mix_2",
-			"from_port": 0,
-			"to": "mwf_output",
-			"to_port": 0
-		},
-		{
-			"from": "mwf_mix_2",
-			"from_port": 1,
-			"to": "mwf_output",
-			"to_port": 1
-		},
-		{
-			"from": "mwf_mix_2",
-			"from_port": 2,
-			"to": "mwf_output",
-			"to_port": 2
-		},
-		{
-			"from": "mwf_mix_2",
-			"from_port": 3,
-			"to": "mwf_output",
-			"to_port": 3
-		},
-		{
-			"from": "mwf_mix_2",
-			"from_port": 4,
-			"to": "mwf_output",
-			"to_port": 4
-		},
-		{
-			"from": "mwf_output",
-			"from_port": 0,
-			"to": "Material",
-			"to_port": 0
-		},
-		{
-			"from": "mwf_output",
-			"from_port": 1,
-			"to": "Material",
-			"to_port": 1
-		},
-		{
-			"from": "mwf_output",
-			"from_port": 2,
-			"to": "Material",
-			"to_port": 2
-		},
-		{
-			"from": "mwf_output",
-			"from_port": 3,
-			"to": "Material",
-			"to_port": 3
-		},
-		{
-			"from": "mwf_output",
-			"from_port": 5,
-			"to": "Material",
-			"to_port": 5
-		},
-		{
 			"from": "uniform_2",
 			"from_port": 0,
 			"to": "mwf_map_2",
@@ -221,12 +161,6 @@
 			"from_port": 0,
 			"to": "mwf_map_2_2",
 			"to_port": 2
-		},
-		{
-			"from": "raymarching",
-			"from_port": 1,
-			"to": "Material",
-			"to_port": 4
 		},
 		{
 			"from": "mwf_map",
@@ -319,12 +253,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "mwf_output",
-			"from_port": 6,
-			"to": "Material",
-			"to_port": 6
-		},
-		{
 			"from": "raymarching",
 			"from_port": 0,
 			"to": "mul_detect",
@@ -401,6 +329,78 @@
 			"from_port": 0,
 			"to": "sdf3d_translate_3_2_2",
 			"to_port": 0
+		},
+		{
+			"from": "mwf_mix_2",
+			"from_port": 0,
+			"to": "mwf_output_2",
+			"to_port": 0
+		},
+		{
+			"from": "mwf_mix_2",
+			"from_port": 1,
+			"to": "mwf_output_2",
+			"to_port": 1
+		},
+		{
+			"from": "mwf_mix_2",
+			"from_port": 2,
+			"to": "mwf_output_2",
+			"to_port": 2
+		},
+		{
+			"from": "mwf_mix_2",
+			"from_port": 3,
+			"to": "mwf_output_2",
+			"to_port": 3
+		},
+		{
+			"from": "mwf_mix_2",
+			"from_port": 4,
+			"to": "mwf_output_2",
+			"to_port": 4
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 1,
+			"to": "Material",
+			"to_port": 1
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 2,
+			"to": "Material",
+			"to_port": 2
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 3,
+			"to": "Material",
+			"to_port": 3
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 5,
+			"to": "Material",
+			"to_port": 5
+		},
+		{
+			"from": "mwf_output_2",
+			"from_port": 6,
+			"to": "Material",
+			"to_port": 6
+		},
+		{
+			"from": "raymarching",
+			"from_port": 1,
+			"to": "Material",
+			"to_port": 4
 		}
 	],
 	"label": "Graph",
@@ -441,12 +441,13 @@
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": -93.107498,
-				"y": 112.625015
+				"x": -101.683472,
+				"y": 134.825012
 			},
 			"parameters": {
 
 			},
+			"seed_value": -20022,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_d = raymarch_$name($uv);\n",
 				"global": "",
@@ -767,6 +768,7 @@
 						"y": 197.291656
 					},
 					"parameters": {
+						"axis": 1,
 						"l": 0.02,
 						"r": 0.01
 					},
@@ -780,6 +782,7 @@
 					},
 					"parameters": {
 						"R": 0.3,
+						"axis": 2,
 						"r": 0.14
 					},
 					"type": "sdf3d_torus"
@@ -792,6 +795,7 @@
 					},
 					"parameters": {
 						"R": 0.3,
+						"axis": 2,
 						"r": 0.15
 					},
 					"type": "sdf3d_torus"
@@ -1429,613 +1433,6 @@
 			"type": "mwf_mix"
 		},
 		{
-			"connections": [
-				{
-					"from": "colorize_3",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 6
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "colorize_3",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "gaussian_blur",
-					"to_port": 0
-				},
-				{
-					"from": "gaussian_blur",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 5
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 2,
-					"to": "decompose",
-					"to_port": 0
-				},
-				{
-					"from": "decompose",
-					"from_port": 1,
-					"to": "gen_outputs",
-					"to_port": 2
-				},
-				{
-					"from": "decompose",
-					"from_port": 2,
-					"to": "gen_outputs",
-					"to_port": 1
-				},
-				{
-					"from": "blend_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 4
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 1,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 3,
-					"to": "gen_outputs",
-					"to_port": 3
-				},
-				{
-					"from": "brightness_contrast",
-					"from_port": 0,
-					"to": "blend_2",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 4,
-					"to": "brightness_contrast",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "normal_map_2",
-					"to_port": 0
-				},
-				{
-					"from": "normal_map_2",
-					"from_port": 0,
-					"to": "blend_2",
-					"to_port": 1
-				}
-			],
-			"label": "Output",
-			"name": "mwf_output",
-			"node_position": {
-				"x": 1307.265137,
-				"y": -74.206451
-			},
-			"nodes": [
-				{
-					"name": "colorize_3",
-					"node_position": {
-						"x": -939.637451,
-						"y": 871.842407
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 0
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"connections": [
-						{
-							"from": "buffer",
-							"from_port": 0,
-							"to": "blurx_convolution",
-							"to_port": 0
-						},
-						{
-							"from": "buffer_2",
-							"from_port": 0,
-							"to": "blurx_convolution_2",
-							"to_port": 0
-						},
-						{
-							"from": "gen_inputs",
-							"from_port": 0,
-							"to": "buffer",
-							"to_port": 0
-						},
-						{
-							"from": "blend",
-							"from_port": 0,
-							"to": "colorize",
-							"to_port": 0
-						},
-						{
-							"from": "blurx_convolution",
-							"from_port": 0,
-							"to": "buffer_2",
-							"to_port": 0
-						},
-						{
-							"from": "blurx_convolution_2",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 1
-						},
-						{
-							"from": "buffer",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 0
-						},
-						{
-							"from": "colorize",
-							"from_port": 0,
-							"to": "_2",
-							"to_port": 0
-						},
-						{
-							"from": "_2",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						}
-					],
-					"label": "Occlusion",
-					"name": "gaussian_blur",
-					"node_position": {
-						"x": -994.845825,
-						"y": 786.968262
-					},
-					"nodes": [
-						{
-							"convolution_params": {
-								"input_type": "rgba",
-								"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-								"normalized": true,
-								"output_type": "rgba",
-								"parameters": [
-									{
-										"max": 50,
-										"min": 0.05,
-										"name": "sigma",
-										"type": "float"
-									}
-								],
-								"x": 50,
-								"y": 0
-							},
-							"name": "blurx_convolution",
-							"node_position": {
-								"x": -407.5,
-								"y": -192.5
-							},
-							"parameters": {
-								"sigma": 50,
-								"size": 10
-							},
-							"type": "convolution"
-						},
-						{
-							"name": "buffer_2",
-							"node_position": {
-								"x": -404.875,
-								"y": -116.625
-							},
-							"parameters": {
-								"lod": 0,
-								"size": 10
-							},
-							"type": "buffer"
-						},
-						{
-							"convolution_params": {
-								"input_type": "rgba",
-								"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-								"normalized": true,
-								"output_type": "rgba",
-								"parameters": [
-									{
-										"max": 50,
-										"min": 0.05,
-										"name": "sigma",
-										"type": "float"
-									}
-								],
-								"x": 0,
-								"y": 50
-							},
-							"name": "blurx_convolution_2",
-							"node_position": {
-								"x": -407.125,
-								"y": -44.375
-							},
-							"parameters": {
-								"sigma": 50,
-								"size": 10
-							},
-							"type": "convolution"
-						},
-						{
-							"name": "buffer",
-							"node_position": {
-								"x": -408.25,
-								"y": -265.75
-							},
-							"parameters": {
-								"lod": 0,
-								"size": 10
-							},
-							"type": "buffer"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -447.666626,
-								"y": -370.666656
-							},
-							"parameters": {
-								"param0": 10,
-								"param2": 4.9
-							},
-							"type": "remote",
-							"widgets": [
-								{
-									"label": "Grid size:",
-									"linked_widgets": [
-										{
-											"node": "buffer",
-											"widget": "size"
-										},
-										{
-											"node": "blurx_convolution",
-											"widget": "size"
-										},
-										{
-											"node": "buffer_2",
-											"widget": "size"
-										},
-										{
-											"node": "blurx_convolution_2",
-											"widget": "size"
-										}
-									],
-									"name": "param0",
-									"type": "linked_control"
-								},
-								{
-									"label": "Strength",
-									"linked_widgets": [
-										{
-											"node": "_2",
-											"widget": "g"
-										}
-									],
-									"name": "param2",
-									"type": "linked_control"
-								}
-							]
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -585.666626,
-								"y": -112.392853
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"name": "port0",
-									"type": "rgba"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": 55.547607,
-								"y": -133.392853
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"name": "port0",
-									"type": "rgba"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "blend",
-							"node_position": {
-								"x": -420.79895,
-								"y": 27.16272
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 11
-							},
-							"type": "blend"
-						},
-						{
-							"name": "colorize",
-							"node_position": {
-								"x": -167.79895,
-								"y": -178.83728
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 1,
-											"g": 1,
-											"pos": 0,
-											"r": 1
-										},
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 1,
-											"r": 0
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "colorize"
-						},
-						{
-							"name": "_2",
-							"node_position": {
-								"x": -134.403687,
-								"y": -110.29187
-							},
-							"parameters": {
-								"g": 4.9
-							},
-							"shader_model": {
-								"code": "",
-								"global": "",
-								"inputs": [
-									{
-										"default": "0.0",
-										"label": "",
-										"name": "in",
-										"type": "f"
-									}
-								],
-								"instance": "",
-								"name": "",
-								"outputs": [
-									{
-										"f": "pow($in($uv), $g)",
-										"type": "f"
-									}
-								],
-								"parameters": [
-									{
-										"default": 1,
-										"label": "",
-										"max": 2,
-										"min": 0,
-										"name": "g",
-										"step": 0.1,
-										"type": "float"
-									}
-								]
-							},
-							"type": "shader"
-						}
-					],
-					"parameters": {
-						"param0": 10,
-						"param2": 4.9
-					},
-					"type": "graph"
-				},
-				{
-					"name": "decompose",
-					"node_position": {
-						"x": -924.371338,
-						"y": 570.25
-					},
-					"parameters": {
-
-					},
-					"type": "decompose"
-				},
-				{
-					"name": "blend_2",
-					"node_position": {
-						"x": -931.305542,
-						"y": 677.328491
-					},
-					"parameters": {
-						"amount": 0,
-						"blend_type": 4
-					},
-					"type": "blend"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -1336.805542,
-						"y": 597.758606
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "Height",
-							"type": "f"
-						},
-						{
-							"name": "Albedo",
-							"type": "rgb"
-						},
-						{
-							"name": "ORM",
-							"type": "rgb"
-						},
-						{
-							"name": "Emission",
-							"type": "rgb"
-						},
-						{
-							"name": "Normal",
-							"type": "rgb"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": -635.305542,
-						"y": 597.758606
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "Albedo",
-							"type": "rgb"
-						},
-						{
-							"name": "Metallic",
-							"type": "f"
-						},
-						{
-							"name": "Roughness",
-							"type": "f"
-						},
-						{
-							"name": "Emission",
-							"type": "rgb"
-						},
-						{
-							"name": "Normal",
-							"type": "rgb"
-						},
-						{
-							"name": "Occlusion",
-							"type": "f"
-						},
-						{
-							"name": "Depth",
-							"type": "f"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -1100.881836,
-						"y": 438.25
-					},
-					"parameters": {
-						"param0": 0,
-						"param2": 4.9
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Occlusion",
-							"linked_widgets": [
-								{
-									"node": "gaussian_blur",
-									"widget": "param2"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Mat Normal",
-							"linked_widgets": [
-								{
-									"node": "blend_2",
-									"widget": "amount"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "brightness_contrast",
-					"node_position": {
-						"x": -1177.223877,
-						"y": 677.062317
-					},
-					"parameters": {
-						"brightness": 0,
-						"contrast": 1
-					},
-					"type": "brightness_contrast"
-				},
-				{
-					"name": "normal_map_2",
-					"node_position": {
-						"x": -1152.5,
-						"y": 544.75
-					},
-					"parameters": {
-						"param0": 10,
-						"param1": 1.02,
-						"param2": 0,
-						"param4": 1
-					},
-					"type": "normal_map"
-				}
-			],
-			"parameters": {
-				"param0": 0,
-				"param2": 4.9
-			},
-			"type": "graph"
-		},
-		{
 			"name": "uniform_2",
 			"node_position": {
 				"x": 415.732727,
@@ -2336,6 +1733,18 @@
 				"ry": 3
 			},
 			"type": "sdf3d_repeat"
+		},
+		{
+			"name": "mwf_output_2",
+			"node_position": {
+				"x": 1286.272217,
+				"y": -79.138245
+			},
+			"parameters": {
+				"param0": 1,
+				"param2": 1
+			},
+			"type": "mwf_output"
 		}
 	],
 	"parameters": {
