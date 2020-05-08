@@ -1,21 +1,21 @@
 {
 	"connections": [
 		{
-			"from": "_2",
-			"from_port": 0,
-			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
 			"from": "gen_inputs",
 			"from_port": 0,
-			"to": "emboss_convolution_2_2",
+			"to": "buffer",
 			"to_port": 0
 		},
 		{
-			"from": "emboss_convolution_2_2",
+			"from": "buffer",
 			"from_port": 0,
-			"to": "_2",
+			"to": "598",
+			"to_port": 0
+		},
+		{
+			"from": "598",
+			"from_port": 0,
+			"to": "gen_outputs",
 			"to_port": 0
 		}
 	],
@@ -27,46 +27,29 @@
 	},
 	"nodes": [
 		{
-			"convolution_params": {
-				"input_type": "f",
-				"matrix_function": "cos(atan2(y, x)-angle*3.14159265359/180.0)",
-				"matrix_sparse": {
-					"0": {
-						"0": 0
-					}
-				},
-				"normalized": false,
-				"output_type": "f",
-				"parameters": [
-					{
-						"max": 180,
-						"min": -180,
-						"name": "angle",
-						"type": "float"
-					}
-				],
-				"x": 1,
-				"y": 1
-			},
-			"name": "emboss_convolution_2_2",
+			"name": "buffer",
 			"node_position": {
-				"x": -341.916626,
-				"y": -251.958313
+				"x": -65.493774,
+				"y": -609.5
 			},
 			"parameters": {
-				"angle": 0,
+				"lod": 0,
 				"size": 9
 			},
-			"type": "convolution"
+			"seed_value": 10109,
+			"type": "buffer"
 		},
 		{
-			"name": "_2",
+			"name": "598",
 			"node_position": {
-				"x": -337.833313,
-				"y": -174.166656
+				"x": -77.579605,
+				"y": -527.738281
 			},
 			"parameters": {
-				"amount": 5
+				"amount": 5,
+				"angle": 0,
+				"size": 9,
+				"width": 1
 			},
 			"shader_model": {
 				"code": "",
@@ -74,27 +57,57 @@
 				"inputs": [
 					{
 						"default": "0.0",
+						"function": true,
 						"label": "",
-						"name": "conv",
+						"name": "in",
 						"type": "f"
 					}
 				],
-				"instance": "",
-				"name": "Emboss postprocess",
+				"instance": "float $(name)_fct(vec2 uv) {\n\tfloat pixels = $width;\n\tfloat e = 1.0/$size;\n\tfloat rv = 0.0;\n\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {\n\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {\n\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {\n\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));\n\t\t\t}\n\t\t}\n\t}\n\treturn $amount*rv/pixels+0.5;\n}",
+				"name": "Emboss",
 				"outputs": [
 					{
-						"f": "$amount*($conv($uv))+0.5",
+						"f": "$(name)_fct($uv)",
 						"type": "f"
 					}
 				],
 				"parameters": [
 					{
+						"default": 9,
+						"first": 6,
+						"label": "Size",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
 						"default": 0,
-						"label": "Label",
+						"label": "Angle",
+						"max": 180,
+						"min": -180,
+						"name": "angle",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Amount",
 						"max": 10,
 						"min": 0,
 						"name": "amount",
-						"step": 0.01,
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Width",
+						"max": 5,
+						"min": 1,
+						"name": "width",
+						"step": 1,
 						"type": "float"
 					}
 				]
@@ -104,8 +117,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -461.916626,
-				"y": -199.062485
+				"x": -377.57959,
+				"y": -569.119141
 			},
 			"parameters": {
 
@@ -113,7 +126,7 @@
 			"ports": [
 				{
 					"name": "port0",
-					"type": "rgba"
+					"type": "f"
 				}
 			],
 			"type": "ios"
@@ -121,8 +134,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -103.833313,
-				"y": -222.062485
+				"x": 235.506226,
+				"y": -527.119141
 			},
 			"parameters": {
 
@@ -130,7 +143,7 @@
 			"ports": [
 				{
 					"name": "port0",
-					"type": "rgba"
+					"type": "f"
 				}
 			],
 			"type": "ios"
@@ -138,13 +151,14 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -376.875,
-				"y": -385.958313
+				"x": -111.036682,
+				"y": -777.5
 			},
 			"parameters": {
 				"param0": 9,
 				"param1": 0,
-				"param2": 5
+				"param2": 5,
+				"param3": 1
 			},
 			"type": "remote",
 			"widgets": [
@@ -152,7 +166,11 @@
 					"label": "Size",
 					"linked_widgets": [
 						{
-							"node": "emboss_convolution_2_2",
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "598",
 							"widget": "size"
 						}
 					],
@@ -163,7 +181,7 @@
 					"label": "Angle",
 					"linked_widgets": [
 						{
-							"node": "emboss_convolution_2_2",
+							"node": "598",
 							"widget": "angle"
 						}
 					],
@@ -174,11 +192,22 @@
 					"label": "Amount",
 					"linked_widgets": [
 						{
-							"node": "_2",
+							"node": "598",
 							"widget": "amount"
 						}
 					],
 					"name": "param2",
+					"type": "linked_control"
+				},
+				{
+					"label": "Width",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "width"
+						}
+					],
+					"name": "param3",
 					"type": "linked_control"
 				}
 			]
@@ -187,7 +216,8 @@
 	"parameters": {
 		"param0": 9,
 		"param1": 0,
-		"param2": 5
+		"param2": 5,
+		"param3": 1
 	},
 	"type": "graph"
 }

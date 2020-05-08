@@ -1,18 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "buffer",
-			"from_port": 0,
-			"to": "blurx_convolution",
-			"to_port": 0
-		},
-		{
-			"from": "buffer_2",
-			"from_port": 0,
-			"to": "blurx_convolution_2",
-			"to_port": 0
-		},
-		{
 			"from": "switch",
 			"from_port": 0,
 			"to": "buffer_2",
@@ -25,27 +13,9 @@
 			"to_port": 0
 		},
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 1
-		},
-		{
-			"from": "blurx_convolution",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 0
-		},
-		{
 			"from": "switch_2",
 			"from_port": 0,
 			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
-			"from": "blurx_convolution_2",
-			"from_port": 0,
-			"to": "switch_2",
 			"to_port": 0
 		},
 		{
@@ -53,6 +23,36 @@
 			"from_port": 0,
 			"to": "switch_2",
 			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "gaussian_blur_x",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_x",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_y",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gaussian_blur_y",
+			"to_port": 0
 		}
 	],
 	"label": "Gaussian Blur",
@@ -63,77 +63,22 @@
 	},
 	"nodes": [
 		{
-			"convolution_params": {
-				"input_type": "rgba",
-				"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-				"normalized": true,
-				"output_type": "rgba",
-				"parameters": [
-					{
-						"max": 50,
-						"min": 0.05,
-						"name": "sigma",
-						"type": "float"
-					}
-				],
-				"x": 50,
-				"y": 0
-			},
-			"name": "blurx_convolution",
-			"node_position": {
-				"x": -407.5,
-				"y": -217.5
-			},
-			"parameters": {
-				"sigma": 10.175,
-				"size": 5
-			},
-			"type": "convolution"
-		},
-		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -408.875,
-				"y": -90.625
+				"x": -399.875,
+				"y": -43.625
 			},
 			"parameters": {
-				"size": 5
+				"lod": 0,
+				"size": 9
 			},
 			"type": "buffer"
 		},
 		{
-			"convolution_params": {
-				"input_type": "rgba",
-				"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-				"normalized": true,
-				"output_type": "rgba",
-				"parameters": [
-					{
-						"max": 50,
-						"min": 0.05,
-						"name": "sigma",
-						"type": "float"
-					}
-				],
-				"x": 0,
-				"y": 50
-			},
-			"name": "blurx_convolution_2",
-			"node_position": {
-				"x": -407.125,
-				"y": -44.375
-			},
-			"parameters": {
-				"sigma": 10.175,
-				"size": 5
-			},
-			"type": "convolution"
-		},
-		{
 			"name": "switch",
 			"node_position": {
-				"x": -437.452393,
-				"y": -147.166656
+				"x": -496.452393,
+				"y": -130.166656
 			},
 			"parameters": {
 				"choices": 2,
@@ -145,8 +90,8 @@
 		{
 			"name": "switch_2",
 			"node_position": {
-				"x": -323.452393,
-				"y": -173.666656
+				"x": -298.452393,
+				"y": -131.666656
 			},
 			"parameters": {
 				"choices": 2,
@@ -158,23 +103,24 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -408.25,
-				"y": -265.75
+				"x": -402.25,
+				"y": -315.75
 			},
 			"parameters": {
-				"size": 5
+				"lod": 0,
+				"size": 9
 			},
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -438.666626,
-				"y": -391.666656
+				"x": -439.666626,
+				"y": -456.666656
 			},
 			"parameters": {
-				"param0": 5,
-				"param1": 10.175,
+				"param0": 9,
+				"param1": 50,
 				"param2": 0
 			},
 			"type": "remote",
@@ -187,32 +133,34 @@
 							"widget": "size"
 						},
 						{
-							"node": "blurx_convolution",
-							"widget": "size"
-						},
-						{
 							"node": "buffer_2",
 							"widget": "size"
 						},
 						{
-							"node": "blurx_convolution_2",
+							"node": "gaussian_blur_x",
+							"widget": "size"
+						},
+						{
+							"node": "gaussian_blur_y",
 							"widget": "size"
 						}
 					],
+					"name": "param0",
 					"type": "linked_control"
 				},
 				{
 					"label": "Sigma:",
 					"linked_widgets": [
 						{
-							"node": "blurx_convolution",
+							"node": "gaussian_blur_x",
 							"widget": "sigma"
 						},
 						{
-							"node": "blurx_convolution_2",
+							"node": "gaussian_blur_y",
 							"widget": "sigma"
 						}
 					],
+					"name": "param1",
 					"type": "linked_control"
 				},
 				{
@@ -265,6 +213,7 @@
 							"widget": "source"
 						}
 					],
+					"name": "param2",
 					"type": "config_control"
 				}
 			]
@@ -302,10 +251,36 @@
 				}
 			],
 			"type": "ios"
+		},
+		{
+			"name": "gaussian_blur_x",
+			"node_position": {
+				"x": -412.993408,
+				"y": -221.281738
+			},
+			"parameters": {
+				"sigma": 50,
+				"size": 9
+			},
+			"type": "gaussian_blur_x"
+		},
+		{
+			"name": "gaussian_blur_y",
+			"node_position": {
+				"x": -405.993408,
+				"y": 38.718262
+			},
+			"parameters": {
+				"sigma": 50,
+				"size": 9
+			},
+			"seed_value": 12279,
+			"type": "gaussian_blur_y"
 		}
 	],
 	"parameters": {
-		"param0": 5,
+		"param0": 9,
+		"param1": 50,
 		"param2": 0
 	},
 	"type": "graph"

@@ -1,1 +1,42 @@
-{"convolution_params":{"name":"Sharpen","input_type":"rgb","matrix":[[0,-1,0],[-1,5,-1],[0,-1,0]],"output_type":"rgb","x":1,"y":1},"name":"edge_detect","node_position":{"x":0,"y":0},"parameters":{"size":10},"type":"convolution"}
+{
+	"name": "sharpen",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 6
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "f"
+			}
+		],
+		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tfloat rv = 5.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn rv;\n}",
+		"name": "Sharpen",
+		"outputs": [
+			{
+				"f": "$(name)_fct($uv)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 4,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			}
+		]
+	},
+	"type": "shader"
+}

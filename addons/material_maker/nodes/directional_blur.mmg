@@ -9,24 +9,12 @@
 		{
 			"from": "buffer",
 			"from_port": 0,
-			"to": "transform_3",
+			"to": "edge_detect_3_3_2",
 			"to_port": 0
 		},
 		{
-			"from": "transform_3",
+			"from": "edge_detect_3_3_2",
 			"from_port": 0,
-			"to": "blurx_convolution",
-			"to_port": 0
-		},
-		{
-			"from": "blurx_convolution",
-			"from_port": 0,
-			"to": "transform_3_2",
-			"to_port": 0
-		},
-		{
-			"from": "transform_3_2",
-			"from_port": 1,
 			"to": "gen_outputs",
 			"to_port": 0
 		}
@@ -39,38 +27,10 @@
 	},
 	"nodes": [
 		{
-			"convolution_params": {
-				"input_type": "rgba",
-				"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-				"normalized": true,
-				"output_type": "rgba",
-				"parameters": [
-					{
-						"max": 50,
-						"min": 0.05,
-						"name": "sigma",
-						"type": "float"
-					}
-				],
-				"x": 50,
-				"y": 0
-			},
-			"name": "blurx_convolution",
-			"node_position": {
-				"x": -412.5,
-				"y": -99.5
-			},
-			"parameters": {
-				"sigma": 50,
-				"size": 9
-			},
-			"type": "convolution"
-		},
-		{
 			"name": "buffer",
 			"node_position": {
-				"x": -410.25,
-				"y": -271.75
+				"x": -395.25,
+				"y": -274.75
 			},
 			"parameters": {
 				"lod": 0,
@@ -99,7 +59,7 @@
 							"widget": "size"
 						},
 						{
-							"node": "blurx_convolution",
+							"node": "edge_detect_3_3_2",
 							"widget": "size"
 						}
 					],
@@ -107,10 +67,10 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Sigma:",
+					"label": "Sigma",
 					"linked_widgets": [
 						{
-							"node": "blurx_convolution",
+							"node": "edge_detect_3_3_2",
 							"widget": "sigma"
 						}
 					],
@@ -118,15 +78,11 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Angle:",
+					"label": "Angle",
 					"linked_widgets": [
 						{
-							"node": "transform_3",
-							"widget": "rotate"
-						},
-						{
-							"node": "transform_3_2",
-							"widget": "rotate"
+							"node": "edge_detect_3_3_2",
+							"widget": "angle"
 						}
 					],
 					"name": "param2",
@@ -169,138 +125,65 @@
 			"type": "ios"
 		},
 		{
-			"name": "transform_3",
+			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -409.653931,
-				"y": -193.871338
+				"x": -399.725464,
+				"y": -198.178955
 			},
 			"parameters": {
-				"repeat": true,
-				"rotate": 45,
-				"scale": 1.5,
-				"scale_x": 1,
-				"scale_y": 1,
-				"translate_x": 0,
-				"translate_y": 0
+				"angle": 45,
+				"sigma": 50,
+				"size": 9
 			},
+			"seed_value": -47470,
 			"shader_model": {
 				"code": "",
-				"global": "vec2 db_rotate(vec2 uv, float rotate, float scale) {\n \tvec2 rv;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv *= scale;\n\trv += vec2(0.5);\n\treturn fract(rv);\n}",
+				"global": "",
 				"inputs": [
 					{
-						"default": "vec4($uv, 0.0, 1.0)",
+						"default": "vec4(1.0)",
+						"function": true,
 						"label": "",
-						"name": "i",
+						"name": "in",
 						"type": "rgba"
-					},
-					{
-						"default": "1.0",
-						"label": "",
-						"name": "r",
-						"type": "f"
 					}
 				],
-				"instance": "",
-				"name": "DBRotate",
+				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfor (float i = -50.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/$sigma, 2.0)))/(6.28318530718*$sigma*$sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"name": "Directional Blur",
 				"outputs": [
 					{
-						"rgba": "$i(db_rotate($uv, $rotate*0.01745329251*(2.0*$r($uv)-1.0), $scale))",
-						"type": "rgba"
-					},
-					{
-						"rgba": "$i(db_rotate($uv, -$rotate*0.01745329251*(2.0*$r($uv)-1.0), 1.0/$scale))",
+						"rgba": "$(name)_fct($uv)",
 						"type": "rgba"
 					}
 				],
 				"parameters": [
 					{
+						"default": 9,
+						"first": 4,
+						"label": "Size",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sigma",
+						"max": 50,
+						"min": 0,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
 						"default": 0,
-						"label": "Rotate:",
-						"max": 720,
-						"min": -720,
-						"name": "rotate",
-						"step": 0.005,
-						"type": "float",
-						"widget": "spinbox"
-					},
-					{
-						"default": 1,
-						"label": "Label",
-						"max": 2,
-						"min": 0.1,
-						"name": "scale",
-						"step": 0.01,
-						"type": "float",
-						"widget": "spinbox"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "transform_3_2",
-			"node_position": {
-				"x": -407.388733,
-				"y": -24.678955
-			},
-			"parameters": {
-				"repeat": true,
-				"rotate": 45,
-				"scale": 1.5,
-				"scale_x": 1,
-				"scale_y": 1,
-				"translate_x": 0,
-				"translate_y": 0
-			},
-			"shader_model": {
-				"code": "",
-				"global": "vec2 db_rotate(vec2 uv, float rotate, float scale) {\n \tvec2 rv;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv *= scale;\n\trv += vec2(0.5);\n\treturn fract(rv);\n}",
-				"inputs": [
-					{
-						"default": "vec4($uv, 0.0, 1.0)",
-						"label": "",
-						"name": "i",
-						"type": "rgba"
-					},
-					{
-						"default": "1.0",
-						"label": "",
-						"name": "r",
-						"type": "f"
-					}
-				],
-				"instance": "",
-				"name": "DBRotate",
-				"outputs": [
-					{
-						"rgba": "$i(db_rotate($uv, $rotate*0.01745329251*(2.0*$r($uv)-1.0), $scale))",
-						"type": "rgba"
-					},
-					{
-						"rgba": "$i(db_rotate($uv, -$rotate*0.01745329251*(2.0*$r($uv)-1.0), 1.0/$scale))",
-						"type": "rgba"
-					}
-				],
-				"parameters": [
-					{
-						"default": 0,
-						"label": "Rotate:",
-						"max": 720,
-						"min": -720,
-						"name": "rotate",
-						"step": 0.005,
-						"type": "float",
-						"widget": "spinbox"
-					},
-					{
-						"default": 1,
-						"label": "Label",
-						"max": 2,
-						"min": 0.1,
-						"name": "scale",
-						"step": 0.01,
-						"type": "float",
-						"widget": "spinbox"
+						"label": "Angle",
+						"max": 180,
+						"min": -180,
+						"name": "angle",
+						"step": 0.1,
+						"type": "float"
 					}
 				]
 			},

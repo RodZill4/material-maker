@@ -1,0 +1,54 @@
+{
+	"name": "gaussian_blur_x",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"sigma": 50,
+		"size": 9
+	},
+	"seed_value": -47470,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "vec4 $(name)_fct(vec2 uv) {\n\tfloat e = 1.0/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfor (float i = -50.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/$sigma, 2.0)))/(6.28318530718*$sigma*$sigma);\n\t\trv += $in(uv+vec2(i*e, 0.0))*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+		"name": "Gaussian blur X",
+		"outputs": [
+			{
+				"rgba": "$(name)_fct($uv)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 4,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Sigma",
+				"max": 50,
+				"min": 0,
+				"name": "sigma",
+				"step": 0.1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

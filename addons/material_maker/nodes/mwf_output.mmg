@@ -15,11 +15,11 @@
 		{
 			"from": "gen_inputs",
 			"from_port": 0,
-			"to": "gaussian_blur",
+			"to": "occlusion",
 			"to_port": 0
 		},
 		{
-			"from": "gaussian_blur",
+			"from": "occlusion",
 			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 5
@@ -123,323 +123,18 @@
 			"type": "colorize"
 		},
 		{
-			"connections": [
-				{
-					"from": "buffer",
-					"from_port": 0,
-					"to": "blurx_convolution",
-					"to_port": 0
-				},
-				{
-					"from": "buffer_2",
-					"from_port": 0,
-					"to": "blurx_convolution_2",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "buffer",
-					"to_port": 0
-				},
-				{
-					"from": "blend",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "blurx_convolution",
-					"from_port": 0,
-					"to": "buffer_2",
-					"to_port": 0
-				},
-				{
-					"from": "blurx_convolution_2",
-					"from_port": 0,
-					"to": "blend",
-					"to_port": 1
-				},
-				{
-					"from": "buffer",
-					"from_port": 0,
-					"to": "blend",
-					"to_port": 0
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "_2",
-					"to_port": 0
-				},
-				{
-					"from": "_2",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
 			"label": "Occlusion",
-			"name": "gaussian_blur",
+			"name": "occlusion",
 			"node_position": {
 				"x": -994.845825,
 				"y": 786.968262
 			},
-			"nodes": [
-				{
-					"convolution_params": {
-						"input_type": "rgba",
-						"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-						"normalized": true,
-						"output_type": "rgba",
-						"parameters": [
-							{
-								"max": 50,
-								"min": 0.05,
-								"name": "sigma",
-								"type": "float"
-							}
-						],
-						"x": 50,
-						"y": 0
-					},
-					"name": "blurx_convolution",
-					"node_position": {
-						"x": -407.5,
-						"y": -192.5
-					},
-					"parameters": {
-						"sigma": 50,
-						"size": 10
-					},
-					"type": "convolution"
-				},
-				{
-					"name": "buffer_2",
-					"node_position": {
-						"x": -404.875,
-						"y": -116.625
-					},
-					"parameters": {
-						"lod": 0,
-						"size": 10
-					},
-					"type": "buffer"
-				},
-				{
-					"convolution_params": {
-						"input_type": "rgba",
-						"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-						"normalized": true,
-						"output_type": "rgba",
-						"parameters": [
-							{
-								"max": 50,
-								"min": 0.05,
-								"name": "sigma",
-								"type": "float"
-							}
-						],
-						"x": 0,
-						"y": 50
-					},
-					"name": "blurx_convolution_2",
-					"node_position": {
-						"x": -407.125,
-						"y": -44.375
-					},
-					"parameters": {
-						"sigma": 50,
-						"size": 10
-					},
-					"type": "convolution"
-				},
-				{
-					"name": "buffer",
-					"node_position": {
-						"x": -408.25,
-						"y": -265.75
-					},
-					"parameters": {
-						"lod": 0,
-						"size": 10
-					},
-					"type": "buffer"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -447.666626,
-						"y": -370.666656
-					},
-					"parameters": {
-						"param0": 10,
-						"param1": 50,
-						"param2": 1
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Grid size:",
-							"linked_widgets": [
-								{
-									"node": "buffer",
-									"widget": "size"
-								},
-								{
-									"node": "blurx_convolution",
-									"widget": "size"
-								},
-								{
-									"node": "buffer_2",
-									"widget": "size"
-								},
-								{
-									"node": "blurx_convolution_2",
-									"widget": "size"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Strength",
-							"linked_widgets": [
-								{
-									"node": "_2",
-									"widget": "g"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -585.666626,
-						"y": -112.392853
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 55.547607,
-						"y": -133.392853
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "blend",
-					"node_position": {
-						"x": -420.79895,
-						"y": 27.16272
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 11
-					},
-					"type": "blend"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -167.79895,
-						"y": -178.83728
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 0
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "_2",
-					"node_position": {
-						"x": -134.403687,
-						"y": -110.29187
-					},
-					"parameters": {
-						"g": 1
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "in",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "",
-						"outputs": [
-							{
-								"f": "pow($in($uv), $g)",
-								"type": "f"
-							}
-						],
-						"parameters": [
-							{
-								"default": 1,
-								"label": "",
-								"max": 2,
-								"min": 0,
-								"name": "g",
-								"step": 0.1,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				}
-			],
 			"parameters": {
 				"param0": 10,
 				"param1": 50,
 				"param2": 1
 			},
-			"type": "graph"
+			"type": "occlusion"
 		},
 		{
 			"name": "decompose",
@@ -555,7 +250,7 @@
 					"label": "Occlusion",
 					"linked_widgets": [
 						{
-							"node": "gaussian_blur",
+							"node": "occlusion",
 							"widget": "param2"
 						}
 					],

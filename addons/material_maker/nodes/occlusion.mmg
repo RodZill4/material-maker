@@ -1,18 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "buffer",
-			"from_port": 0,
-			"to": "blurx_convolution",
-			"to_port": 0
-		},
-		{
-			"from": "buffer_2",
-			"from_port": 0,
-			"to": "blurx_convolution_2",
-			"to_port": 0
-		},
-		{
 			"from": "gen_inputs",
 			"from_port": 0,
 			"to": "buffer",
@@ -23,18 +11,6 @@
 			"from_port": 0,
 			"to": "colorize",
 			"to_port": 0
-		},
-		{
-			"from": "blurx_convolution",
-			"from_port": 0,
-			"to": "buffer_2",
-			"to_port": 0
-		},
-		{
-			"from": "blurx_convolution_2",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 1
 		},
 		{
 			"from": "buffer",
@@ -53,6 +29,30 @@
 			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "gaussian_blur_x",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_x",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gaussian_blur_y",
+			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_y",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
 		}
 	],
 	"label": "Occlusion",
@@ -63,72 +63,17 @@
 	},
 	"nodes": [
 		{
-			"convolution_params": {
-				"input_type": "rgba",
-				"matrix_function": "exp(-0.5*(pow(x/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-				"normalized": true,
-				"output_type": "rgba",
-				"parameters": [
-					{
-						"max": 50,
-						"min": 0.05,
-						"name": "sigma",
-						"type": "float"
-					}
-				],
-				"x": 50,
-				"y": 0
-			},
-			"name": "blurx_convolution",
-			"node_position": {
-				"x": -407.5,
-				"y": -192.5
-			},
-			"parameters": {
-				"sigma": 50,
-				"size": 10
-			},
-			"type": "convolution"
-		},
-		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -404.875,
-				"y": -116.625
+				"x": -409.875,
+				"y": -112.625
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 10
+				"size": 9
 			},
+			"seed_value": 61344,
 			"type": "buffer"
-		},
-		{
-			"convolution_params": {
-				"input_type": "rgba",
-				"matrix_function": "exp(-0.5*(pow(y/sigma, 2.0)))/(6.28318530718 *sigma*sigma)",
-				"normalized": true,
-				"output_type": "rgba",
-				"parameters": [
-					{
-						"max": 50,
-						"min": 0.05,
-						"name": "sigma",
-						"type": "float"
-					}
-				],
-				"x": 0,
-				"y": 50
-			},
-			"name": "blurx_convolution_2",
-			"node_position": {
-				"x": -407.125,
-				"y": -44.375
-			},
-			"parameters": {
-				"sigma": 50,
-				"size": 10
-			},
-			"type": "convolution"
 		},
 		{
 			"name": "buffer",
@@ -138,8 +83,9 @@
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 10
+				"size": 9
 			},
+			"seed_value": 53030,
 			"type": "buffer"
 		},
 		{
@@ -149,9 +95,8 @@
 				"y": -370.666656
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 50,
-				"param2": 1
+				"param0": 9,
+				"param2": 1.5
 			},
 			"type": "remote",
 			"widgets": [
@@ -163,15 +108,15 @@
 							"widget": "size"
 						},
 						{
-							"node": "blurx_convolution",
-							"widget": "size"
-						},
-						{
 							"node": "buffer_2",
 							"widget": "size"
 						},
 						{
-							"node": "blurx_convolution_2",
+							"node": "gaussian_blur_x",
+							"widget": "size"
+						},
+						{
+							"node": "gaussian_blur_y",
 							"widget": "size"
 						}
 					],
@@ -211,8 +156,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 55.547607,
-				"y": -133.392853
+				"x": 33.547607,
+				"y": -132.392853
 			},
 			"parameters": {
 
@@ -228,8 +173,8 @@
 		{
 			"name": "blend",
 			"node_position": {
-				"x": -420.79895,
-				"y": 27.16272
+				"x": -422.79895,
+				"y": 63.16272
 			},
 			"parameters": {
 				"amount": 1,
@@ -265,16 +210,17 @@
 					"type": "Gradient"
 				}
 			},
+			"seed_value": 33856,
 			"type": "colorize"
 		},
 		{
 			"name": "_2",
 			"node_position": {
-				"x": -134.403687,
-				"y": -110.29187
+				"x": -145.403687,
+				"y": -112.29187
 			},
 			"parameters": {
-				"g": 1
+				"g": 1.5
 			},
 			"shader_model": {
 				"code": "",
@@ -308,12 +254,35 @@
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "gaussian_blur_x",
+			"node_position": {
+				"x": -413.053711,
+				"y": -189.016876
+			},
+			"parameters": {
+				"sigma": 50,
+				"size": 9
+			},
+			"type": "gaussian_blur_x"
+		},
+		{
+			"name": "gaussian_blur_y",
+			"node_position": {
+				"x": -405.053711,
+				"y": -21.016876
+			},
+			"parameters": {
+				"sigma": 50,
+				"size": 9
+			},
+			"type": "gaussian_blur_y"
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 50,
-		"param2": 1
+		"param0": 9,
+		"param2": 1.5
 	},
 	"type": "graph"
 }

@@ -1,1 +1,43 @@
-{"convolution_params":{"name":"Edge detect 3","input_type":"rgb","matrix":[[1,0,-1],[0,0,0],[-1,0,1]],"output_type":"rgb","x":1,"y":1},"name":"edge_detect","node_position":{"x":0,"y":0},"parameters":{"size":10},"type":"convolution"}
+{
+	"name": "edge_detect_3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 9
+	},
+	"seed_value": 43969,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "f"
+			}
+		],
+		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, -1.0/$size);\n\tfloat rv = 4.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.xx);\n\trv -= $in(uv-e.xx);\n\treturn abs(rv)*$size;\n}",
+		"name": "Edge detect 3",
+		"outputs": [
+			{
+				"f": "$(name)_fct($uv)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 4,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			}
+		]
+	},
+	"type": "shader"
+}
