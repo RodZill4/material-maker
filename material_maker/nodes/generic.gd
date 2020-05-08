@@ -174,8 +174,12 @@ func update_node() -> void:
 	show_close = generator.can_be_deleted()
 	# Rebuild node
 	title = generator.get_type_name()
+	# Regex for labels
+	var regex = RegEx.new()
+	regex.compile("^(\\d+):(.*)")
 	# Inputs
 	var inputs = generator.get_input_defs()
+	var index = -1
 	for i in range(inputs.size()):
 		var input = inputs[i]
 		var enable_left = false
@@ -186,18 +190,34 @@ func update_node() -> void:
 			if mm_io_types.types.has(input.type):
 				color_left = mm_io_types.types[input.type].color
 				type_left = mm_io_types.types[input.type].slot_type
-		set_slot(i, enable_left, type_left, color_left, false, 0, Color())
-		var hsizer : HBoxContainer = HBoxContainer.new()
+		var label = ""
+		if input.has("label"):
+			label = input.label
+		var result = regex.search(label)
+		if result:
+			index = result.get_string(1).to_int()-1
+			label = result.get_string(2)
+		else:
+			index += 1
+		var hsizer : HBoxContainer
+		while get_child_count() < index:
+			hsizer = HBoxContainer.new()
+			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			add_child(hsizer)
+			hsizer.add_child(Control.new())
+			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
+		hsizer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-		if input.has("label") and input.label != "":
-			var label : Label = Label.new()
-			label.text = input.label
-			hsizer.add_child(label)
+		add_child(hsizer)
+		if label != "":
+			var label_widget : Label = Label.new()
+			label_widget.text = label
+			hsizer.add_child(label_widget)
 		else:
 			var control : Control = Control.new()
 			control.rect_min_size.y = 16
 			hsizer.add_child(control)
-		add_child(hsizer)
+		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
 	var input_names_width : int = 0
 	for c in get_children():
 		var width = c.get_child(0).rect_size.x
@@ -209,9 +229,7 @@ func update_node() -> void:
 		c.get_child(0).rect_min_size.x = input_names_width
 	# Parameters
 	controls = {}
-	var index = -1
-	var regex = RegEx.new()
-	regex.compile("^(\\d+):(.*)")
+	index = -1
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
