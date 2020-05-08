@@ -36,6 +36,11 @@ func has_randomness() -> bool:
 			return true
 	return false
 
+func set_position(p) -> void:
+	position = p
+	if !is_seed_locked():
+		for c in get_children():
+			c.set_position(c.position)
 
 func get_type() -> String:
 	return "graph"
