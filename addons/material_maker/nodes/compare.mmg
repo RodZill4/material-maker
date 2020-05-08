@@ -1,0 +1,40 @@
+{
+	"name": "compare",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in1",
+				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in2",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Compare",
+		"outputs": [
+			{
+				"f": "dot(abs($in1($uv)-$in2($uv)), vec4(1.0))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

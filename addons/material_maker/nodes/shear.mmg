@@ -1,0 +1,60 @@
+{
+	"name": "shear",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 1,
+		"direction": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Shear",
+		"outputs": [
+			{
+				"rgba": "$in($uv+$amount*$uv.yx*vec2($direction))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"name": "direction",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Horizontal",
+						"value": "1.0, 0.0"
+					},
+					{
+						"name": "Vertical",
+						"value": "0.0, 1.0"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": -1,
+				"name": "amount",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
