@@ -1,6 +1,10 @@
 extends "res://material_maker/preview/preview_2d.gd"
 
 func _ready():
+	$ContextMenu/Export.clear()
+	for i in range(7):
+		var s = 64 << i
+		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 	$ContextMenu.add_submenu_item("Export", "Export")
 
 func _on_gui_input(event):

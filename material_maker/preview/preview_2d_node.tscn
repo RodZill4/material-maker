@@ -22,6 +22,5 @@ margin_bottom = 52.0
 [node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "256x256", null, 0, false, false, 0, 0, null, "", false, "512x512", null, 0, false, false, 1, 0, null, "", false, "1024x1024", null, 0, false, false, 2, 0, null, "", false, "2048x2048", null, 0, false, false, 3, 0, null, "", false ]
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]

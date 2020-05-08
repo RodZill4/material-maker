@@ -8,8 +8,12 @@ func _ready():
 	if config_cache.has_section_key("preview_2d", "show_tiling"):
 		$ContextMenu.set_item_checked(0, config_cache.get_value("preview_2d", "show_tiling"))
 	update_shader_options()
+	$ContextMenu/Export.clear()
+	for i in range(7):
+		var s = 64 << i
+		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 	$ContextMenu.add_submenu_item("Export", "Export")
-
+ 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	.set_generator(g, o)
 	setup_controls()
