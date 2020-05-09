@@ -91,7 +91,7 @@ func update_list(filter : String = "") -> void:
 					var input_ports = []
 					for n in ref_obj.nodes:
 						if n.name == "gen_inputs":
-							if input_ports.has("ports"):
+							if n.has("ports"):
 								input_ports = n.ports
 							break
 					if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != quick_connect:
