@@ -76,7 +76,7 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 	if generator == selected:
 		item.set_custom_color(0, Color(0.5, 0.5, 1))
 	else:
-		item.set_custom_color(0, Color(1, 1, 1))
+		item.clear_custom_color(0)
 	item.set_metadata(0, generator)
 	item_from_gen[generator] = item
 	generator.connect("parameter_changed", self, "on_gen_parameter_changed", [ generator ])
@@ -97,7 +97,7 @@ func _on_Hierarchy_item_double_clicked() -> void:
 
 func on_view_updated(generator) -> void:
 	if item_from_gen.has(current_generator):
-		item_from_gen[current_generator].set_custom_color(0, Color(1, 1, 1))
+		item_from_gen[current_generator].clear_custom_color(0)
 	current_generator = generator
 	if item_from_gen.has(current_generator):
 		item_from_gen[current_generator].set_custom_color(0, Color(0.5, 0.5, 1))
