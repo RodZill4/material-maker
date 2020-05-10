@@ -2653,6 +2653,17 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "transform_shear",
+			"name": "shear",
+			"parameters": {
+				"amount": 1,
+				"direction": 0
+			},
+			"tree_item": "Transform/Shear",
+			"type": "shear"
+		},
+		{
+			"collapsed": true,
 			"icon": "transform_mirror",
 			"name": "mirror",
 			"parameters": {
