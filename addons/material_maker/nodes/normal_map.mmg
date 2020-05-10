@@ -133,8 +133,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -412.663818,
-				"y": 83.047363
+				"x": -415.663818,
+				"y": 78.047363
 			},
 			"parameters": {
 
@@ -142,7 +142,7 @@
 			"ports": [
 				{
 					"name": "Normal",
-					"type": "rgba"
+					"type": "rgb"
 				}
 			],
 			"type": "ios"
@@ -159,9 +159,10 @@
 			"ports": [
 				{
 					"name": "Bump",
-					"type": "rgba"
+					"type": "f"
 				}
 			],
+			"seed_value": 12483,
 			"type": "ios"
 		},
 		{
