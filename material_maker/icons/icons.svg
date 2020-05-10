@@ -55,9 +55,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.152214"
-     inkscape:cx="122.70346"
-     inkscape:cy="36.247815"
+     inkscape:zoom="3.576107"
+     inkscape:cx="154.56774"
+     inkscape:cy="35.136821"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -86,7 +86,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -408,7 +408,8 @@
          height="13.002968"
          width="13.002968"
          id="rect873"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:18.89763832;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.75590551;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         ry="2.3768864" />
       <path
          inkscape:connector-curvature="0"
          id="path877"
@@ -425,12 +426,13 @@
        id="g900"
        transform="translate(16.00903,-64.034954)">
       <rect
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:18.89763832;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.75590551;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect894"
          width="13.002968"
          height="13.002968"
          x="65.504196"
-         y="313.76132" />
+         y="313.76132"
+         ry="1.9574358" />
       <path
          style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:30.23622131;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 68.300602,315.40441 a 1.1185348,1.1185348 0 0 0 -1.11914,1.11719 1.1185348,1.1185348 0 0 0 1.11914,1.11914 1.1185348,1.1185348 0 0 0 1.119141,-1.11914 1.1185348,1.1185348 0 0 0 -1.119141,-1.11719 z m 7.480469,0 a 1.1185348,1.1185348 0 0 0 -1.11914,1.11719 1.1185348,1.1185348 0 0 0 1.11914,1.11914 1.1185348,1.1185348 0 0 0 1.119141,-1.11914 1.1185348,1.1185348 0 0 0 -1.119141,-1.11719 z m -7.550781,7.48047 a 1.1185348,1.1185348 0 0 0 -1.119141,1.11914 1.1185348,1.1185348 0 0 0 1.119141,1.11719 1.1185348,1.1185348 0 0 0 1.119141,-1.11719 1.1185348,1.1185348 0 0 0 -1.119141,-1.11914 z m 7.480469,0 a 1.1185348,1.1185348 0 0 0 -1.119141,1.11914 1.1185348,1.1185348 0 0 0 1.119141,1.11719 1.1185348,1.1185348 0 0 0 1.11914,-1.11719 1.1185348,1.1185348 0 0 0 -1.11914,-1.11914 z"
