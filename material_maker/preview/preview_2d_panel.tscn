@@ -58,6 +58,7 @@ margin_bottom = -267.0
 rect_min_size = Vector2( 200, 200 )
 script = ExtResource( 4 )
 shader = "uniform vec2 size;
+uniform bool export = false;
 uniform bool show_tiling = true;
 uniform float margin = 0.5;
 
@@ -67,15 +68,19 @@ void fragment() {
 	vec2 uv = 0.5+margin_factor*(UV-vec2(0.5))*ms/size.yx;
 	float is = min(size.x, size.y)/margin_factor;
 	vec4 image = preview_2d(fract(uv));
-	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
-	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
-	if (show_tiling) {
-		vec2 m2 = min(fract(uv), 1.0-fract(uv));
-		float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
-		COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+	if (export) {
+		COLOR = image;
 	} else {
-		vec2 outside = step(abs(uv-vec2(0.5)), vec2(0.5));
-		COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
+		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+		if (show_tiling) {
+			vec2 m2 = min(fract(uv), 1.0-fract(uv));
+			float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
+			COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+		} else {
+			vec2 outside = step(abs(uv-vec2(0.5)), vec2(0.5));
+			COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
+		}
 	}
 }
 "

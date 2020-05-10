@@ -73,6 +73,7 @@ func export_as_png(file_name : String, size : int) -> void:
 	material.set_shader_param("size", Vector2(size, size))
 	material.set_shader_param("margin", 0.0)
 	material.set_shader_param("show_tiling", false)
+	material.set_shader_param("export", true)
 	var result = mm_renderer.render_material(material, size, false)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
@@ -81,4 +82,4 @@ func export_as_png(file_name : String, size : int) -> void:
 	material.set_shader_param("size", previous_size)
 	material.set_shader_param("margin", previous_margin)
 	material.set_shader_param("show_tiling", previous_show_tiling)
-
+	material.set_shader_param("export", false)
