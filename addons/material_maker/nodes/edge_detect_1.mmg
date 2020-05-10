@@ -7,20 +7,19 @@
 	"parameters": {
 		"size": 9
 	},
-	"seed_value": 43969,
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec3(0.0)",
 				"function": true,
 				"label": "",
 				"name": "in",
-				"type": "f"
+				"type": "rgb"
 			}
 		],
-		"instance": "float $(name)_fct(vec2 uv) {\n\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);\n\tfloat rv = 8.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.xx);\n\trv -= $in(uv-e.xx);\n\trv -= $in(uv+e.xz);\n\trv -= $in(uv-e.xz);\n\trv -= $in(uv+e.zx);\n\trv -= $in(uv-e.zx);\n\treturn abs(rv)*$size;\n}",
+		"instance": "float $(name)_fct(vec2 uv) {\n\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);\n\tvec3 rv = 8.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.xx);\n\trv -= $in(uv-e.xx);\n\trv -= $in(uv+e.xz);\n\trv -= $in(uv-e.xz);\n\trv -= $in(uv+e.zx);\n\trv -= $in(uv-e.zx);\n\trv = abs(rv);\n\treturn max(rv.x, max(rv.y ,rv.z))*$size;\n}",
 		"name": "Edge detect 1",
 		"outputs": [
 			{

@@ -7,20 +7,19 @@
 	"parameters": {
 		"size": 9
 	},
-	"seed_value": 43969,
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec3(0.0)",
 				"function": true,
 				"label": "",
 				"name": "in",
-				"type": "f"
+				"type": "rgb"
 			}
 		],
-		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tfloat rv = 4.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn abs(rv)*$size;\n}",
+		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tvec3 rv = 4.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\trv = abs(rv);\n\treturn max(rv.x, max(rv.y ,rv.z))*$size;\n}",
 		"name": "Edge detect 2",
 		"outputs": [
 			{
