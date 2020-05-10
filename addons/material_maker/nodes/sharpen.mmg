@@ -5,26 +5,26 @@
 		"y": 0
 	},
 	"parameters": {
-		"size": 6
+		"size": 9
 	},
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec3(0.0)",
 				"function": true,
 				"label": "",
 				"name": "in",
-				"type": "f"
+				"type": "rgb"
 			}
 		],
-		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tfloat rv = 5.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn rv;\n}",
+		"instance": "vec3 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tvec3 rv = 5.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn rv;\n}",
 		"name": "Sharpen",
 		"outputs": [
 			{
-				"f": "$(name)_fct($uv)",
-				"type": "f"
+				"rgb": "$(name)_fct($uv)",
+				"type": "rgb"
 			}
 		],
 		"parameters": [
