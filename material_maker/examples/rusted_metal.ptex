@@ -77,18 +77,6 @@
 			"from_port": 0,
 			"to": "colorize_4",
 			"to_port": 0
-		},
-		{
-			"from": "colorize_3",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 0
-		},
-		{
-			"from": "blend_1",
-			"from_port": 0,
-			"to": "combine_0",
-			"to_port": 1
 		}
 	],
 	"label": "Graph",
@@ -221,7 +209,7 @@
 							"a": 1,
 							"b": 1,
 							"g": 1,
-							"pos": 0.445455,
+							"pos": 0.445456,
 							"r": 1
 						}
 					],
@@ -291,6 +279,9 @@
 			"type": "colorize"
 		},
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 837,
@@ -304,15 +295,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 1,
 				"emission_energy": 1,
 				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -339,24 +329,6 @@
 				"blend_type": 0
 			},
 			"type": "blend"
-		},
-		{
-			"name": "combine_0",
-			"node_position": {
-				"x": 849,
-				"y": -6
-			},
-			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
-			},
-			"type": "combine"
 		}
 	],
 	"parameters": {
