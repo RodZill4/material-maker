@@ -22,9 +22,10 @@ connected to several node inputs. Each node output (and input) can be:
 
 * a **2D signed distance function** (shown in orange)
 
-* a **3D signed distance function** (shown in red)
+* a **3D signed distance function** (shown in red), with or without a color index
 
-* a **3D texture** (shown in fuchia)
+* a **3D texture** (shown in fuchia), that can be associated to a color index, which makes
+  it possible to associate several 3D textures in a single 3D scene
 
 Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
 converted when required.
@@ -35,9 +36,9 @@ field. They can be converted into greyscale images using the `sdShow` node.
 3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
 converted into a greyscale height map and a color normal map using the `Render` node.
 
-Clicking on an output slot it will show the corresponding preview at the bottom of the node.
+Clicking on an output slot will show the corresponding preview at the bottom of the node.
 When a node has several outputs, only one of them can be previewed at a time. The previewed
-output slot will has a circle around it, and clicking it again will hide the preview.
+output slot will have a circle around it, and clicking it again will hide the preview.
 
 Inputs
 ^^^^^^
@@ -67,6 +68,7 @@ Parameters are used to configure nodes. The following types are supported:
   mouse button, and removed using the right mouse button.
 
   The drop down list box can be used to select one of the 4 interpolation options.
+  
   Double clicking in the upper part of the gradient editor will open a larger version of the
   widget to move cursors mode precisely.
 
@@ -117,4 +119,4 @@ makes them a lot easier to access and results in smaller material files (only
 references to the templates are saved and not the whole node description).
 Consequently, modifying a template without ensuring compatibility with the old
 version (i.e. removing or renaming parameters, removing or swapping inputs or
-outputs).
+outputs) may break existing materials, and should thus be avoided.

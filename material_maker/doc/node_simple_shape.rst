@@ -9,7 +9,8 @@ The **Shape** node outputs a simple greyscale shape.
 Inputs
 ++++++
 
-The shape node do not accept any input.
+The shape node accepts 2 optional greyscale input maps for the shape size and
+edge width (the corresponding parameter is multiplied by the map value).
 
 Outputs
 +++++++
