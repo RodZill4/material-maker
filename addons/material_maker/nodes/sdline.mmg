@@ -5,15 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-		"ax": 0.224,
-		"ay": 0.2672,
-		"bx": -0.272,
-		"by": -0.2344,
-		"cx": 0,
-		"cy": 0,
-		"h": 0.2,
-		"r": 0.3,
-		"w": 0.3
+		"ax": -0.2568,
+		"ay": -0.2232,
+		"bx": 0.3,
+		"by": 0.3,
+		"r": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -25,7 +21,7 @@
 		"name": "sdLine",
 		"outputs": [
 			{
-				"sdf2d": "sdLine($uv, vec2($ax+0.5, $ay+0.5), vec2($bx+0.5, $by+0.5))",
+				"sdf2d": "sdLine($uv, vec2($ax+0.5, $ay+0.5), vec2($bx+0.5, $by+0.5))-$r",
 				"type": "sdf2d"
 			}
 		],
@@ -67,6 +63,16 @@
 				"max": 1,
 				"min": -1,
 				"name": "by",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0,
+				"label": "Width",
+				"max": 1,
+				"min": 0,
+				"name": "r",
 				"step": 0.01,
 				"type": "float"
 			}

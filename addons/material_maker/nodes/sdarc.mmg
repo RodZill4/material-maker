@@ -5,11 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"a1": 135,
-		"a2": 45,
-		"cx": 0,
-		"cy": 0,
-		"r": 0.4,
+		"a1": 0,
+		"a2": 0,
 		"r1": 0.3,
 		"r2": 0.1
 	},
@@ -51,7 +48,7 @@
 			{
 				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "Radius 1",
+				"label": "Radius",
 				"max": 1,
 				"min": 0,
 				"name": "r1",
@@ -61,7 +58,7 @@
 			{
 				"control": "Radius11.r",
 				"default": 0.1,
-				"label": "Radius 2",
+				"label": "Width",
 				"max": 1,
 				"min": 0,
 				"name": "r2",
