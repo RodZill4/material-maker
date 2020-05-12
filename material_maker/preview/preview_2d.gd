@@ -5,6 +5,13 @@ export(String, MULTILINE) var shader : String = ""
 var generator : MMGenBase = null
 var output : int = 0
 
+func update_export_menu() -> void:
+	$ContextMenu/Export.clear()
+	for i in range(7):
+		var s = 64 << i
+		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
+	$ContextMenu.add_submenu_item("Export", "Export")
+
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
@@ -63,7 +70,7 @@ func _on_Export_id_pressed(id):
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
-	dialog.connect("file_selected", self, "export_as_png", [ 256 << id ])
+	dialog.connect("file_selected", self, "export_as_png", [ 64 << id ])
 	dialog.popup_centered()
 
 func export_as_png(file_name : String, size : int) -> void:
