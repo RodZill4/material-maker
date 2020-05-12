@@ -70,7 +70,7 @@
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 8
 			},
 			"seed_value": 61344,
 			"type": "buffer"
@@ -83,7 +83,7 @@
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 8
 			},
 			"seed_value": 53030,
 			"type": "buffer"
@@ -95,7 +95,7 @@
 				"y": -370.666656
 			},
 			"parameters": {
-				"param0": 9,
+				"param0": 8,
 				"param2": 1.5
 			},
 			"type": "remote",
@@ -148,7 +148,7 @@
 			"ports": [
 				{
 					"name": "port0",
-					"type": "rgba"
+					"type": "f"
 				}
 			],
 			"type": "ios"
@@ -165,7 +165,7 @@
 			"ports": [
 				{
 					"name": "port0",
-					"type": "rgba"
+					"type": "f"
 				}
 			],
 			"type": "ios"
@@ -263,7 +263,7 @@
 			},
 			"parameters": {
 				"sigma": 50,
-				"size": 9
+				"size": 8
 			},
 			"type": "gaussian_blur_x"
 		},
@@ -275,13 +275,13 @@
 			},
 			"parameters": {
 				"sigma": 50,
-				"size": 9
+				"size": 8
 			},
 			"type": "gaussian_blur_y"
 		}
 	],
 	"parameters": {
-		"param0": 9,
+		"param0": 8,
 		"param2": 1.5
 	},
 	"type": "graph"
