@@ -11,4 +11,3 @@ The simple nodes are nodes that do not accept any input and generate one or seve
 	node_simple_image
 	node_simple_gradient
 	node_simple_sdf
-	
