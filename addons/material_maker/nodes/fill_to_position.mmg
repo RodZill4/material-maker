@@ -1,0 +1,49 @@
+{
+	"name": "fill_to_position",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"axis": 0
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to Position",
+		"outputs": [
+			{
+				"f": "fract(dot($(name_uv)_bb.$axis, vec2(1.0, 0.5)))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "xz"
+					},
+					{
+						"name": "Y",
+						"value": "yw"
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}

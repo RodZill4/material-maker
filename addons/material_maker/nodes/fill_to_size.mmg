@@ -1,0 +1,57 @@
+{
+	"name": "fill_to_size",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"formula": 0
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to Size",
+		"outputs": [
+			{
+				"f": "$formula",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "formula",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Area",
+						"value": "sqrt($(name_uv)_bb.z*$(name_uv)_bb.w)"
+					},
+					{
+						"name": "Width",
+						"value": "$(name_uv)_bb.z"
+					},
+					{
+						"name": "Height",
+						"value": "$(name_uv)_bb.w"
+					},
+					{
+						"name": "max(W, H)",
+						"value": "max($(name_uv)_bb.z, $(name_uv)_bb.w)"
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}

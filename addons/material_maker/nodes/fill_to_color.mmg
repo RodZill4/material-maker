@@ -1,0 +1,57 @@
+{
+	"name": "fill_to_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edgecolor": {
+			"a": 1,
+			"b": 0.99899,
+			"g": 0.99899,
+			"r": 0.99899,
+			"type": "Color"
+		}
+	},
+	"seed_value": -4796,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "map",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Fill to Color",
+		"outputs": [
+			{
+				"rgba": "mix($edgecolor, $map(fract($(name_uv)_bb.xy+0.5*$(name_uv)_bb.zw)), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "Edge Color",
+				"name": "edgecolor",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}
