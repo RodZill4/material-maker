@@ -5,11 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"rotate": 0,
+		"scale": 0
 	},
 	"shader_model": {
-		"code": "",
-		"global": "",
+		"code": "vec3 $(name_uv)_map = $map($uv);",
+		"global": "vec2 custom_uv_transform(vec2 uv, float rotate, float scale, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (seed.x * 2.0 - 1.0) * rotate;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv *= (seed.y-0.5)*2.0*scale+1.0;\n\tuv += vec2(0.5);\n\treturn uv;\n}\n",
 		"inputs": [
 			{
 				"default": "vec4(1.0)",
@@ -18,7 +19,7 @@
 				"type": "rgba"
 			},
 			{
-				"default": "0.0",
+				"default": "vec3(1.0)",
 				"label": "UV",
 				"name": "map",
 				"type": "rgb"
@@ -28,12 +29,31 @@
 		"name": "Custom UV",
 		"outputs": [
 			{
-				"rgba": "$in($map($uv).xy)",
+				"rgba": "$in(custom_uv_transform($(name_uv)_map.xy, $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed))))",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
-
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rotate",
+				"max": 180,
+				"min": 0,
+				"name": "rotate",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Scale",
+				"max": 1,
+				"min": 0,
+				"name": "scale",
+				"step": 0.1,
+				"type": "float"
+			}
 		]
 	},
 	"type": "shader"
