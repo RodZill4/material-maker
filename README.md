@@ -22,6 +22,10 @@ scoop install material-maker
 
 - **[User manual](https://rodzill4.github.io/material-maker/doc/)**
 
+## Community
+
+- **[Material Maker subreddit](https://www.reddit.com/r/MaterialMaker/)**
+
 ## Screenshot
 
 ![Screenshot](material_maker/doc/images/screenshot.png)
