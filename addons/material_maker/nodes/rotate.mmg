@@ -1,0 +1,65 @@
+{
+	"name": "rotate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"rotate": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec2 rotate(vec2 uv, vec2 center, float rotate) {\n \tvec2 rv;\n\tuv -= center;\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv += center;\n    return rv;\t\n}",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"name": "i",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Rotate",
+		"outputs": [
+			{
+				"rgba": "$i(rotate($uv, vec2(0.5+$cx, 0.5+$cy), $rotate*0.01745329251))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X:",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y:",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.a",
+				"default": 0,
+				"label": "Rotate:",
+				"max": 720,
+				"min": -720,
+				"name": "rotate",
+				"step": 0.005,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

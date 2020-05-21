@@ -1,0 +1,54 @@
+{
+	"name": "translate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"translate_x": 0,
+		"translate_y": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"name": "i",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Translate",
+		"outputs": [
+			{
+				"rgba": "$i($uv-vec2($translate_x, $translate_y))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Translate X:",
+				"max": 1,
+				"min": -1,
+				"name": "translate_x",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Translate Y:",
+				"max": 1,
+				"min": -1,
+				"name": "translate_y",
+				"step": 0.005,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
