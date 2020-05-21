@@ -2604,6 +2604,43 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_fill_to_position",
+			"name": "fill_to_position",
+			"parameters": {
+				"axis": 0
+			},
+			"tree_item": "Filter/Fill/To Position",
+			"type": "fill_to_position"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_fill_to_size",
+			"name": "fill_to_size",
+			"parameters": {
+				"formula": 0
+			},
+			"seed_value": -52887,
+			"tree_item": "Filter/Fill/To Size",
+			"type": "fill_to_size"
+		},
+		{
+			"collapsed": true,
+			"icon": "filter_fill_to_color",
+			"name": "fill_to_color",
+			"parameters": {
+				"edgecolor": {
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"r": 0,
+					"type": "Color"
+				}
+			},
+			"tree_item": "Filter/Fill/To Color",
+			"type": "fill_to_color"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_fill_to_random_grey",
 			"name": "fill_to_random_grey",
 			"parameters": {
@@ -2650,6 +2687,42 @@
 			},
 			"tree_item": "Transform",
 			"type": "transform"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_translate",
+			"name": "translate",
+			"parameters": {
+				"translate_x": 0,
+				"translate_y": 0
+			},
+			"tree_item": "Transform/Translate",
+			"type": "translate"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_rotate",
+			"name": "rotate",
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": 0
+			},
+			"tree_item": "Transform/Rotate",
+			"type": "rotate"
+		},
+		{
+			"collapsed": true,
+			"icon": "transform_scale",
+			"name": "scale",
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"scale_x": 1,
+				"scale_y": 1
+			},
+			"tree_item": "Transform/Scale",
+			"type": "scale"
 		},
 		{
 			"collapsed": true,
