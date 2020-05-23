@@ -49,7 +49,7 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 	var gennames = {}
 	for n in generators:
 		var g = create_gen(n)
-		if g != null:
+		if g:
 			var orig_name = g.name
 			if gen_graph.add_generator(g):
 				rv.generators.append(g)
@@ -95,15 +95,15 @@ func create_gen(data) -> MMGenBase:
 			generator = types[data.type].new()
 		elif predefined_generators.has(data.type):
 			generator = create_gen(predefined_generators[data.type])
-			if generator == null:
+			if not generator:
 				print("Cannot find description for "+data.type)
 			else:
 				generator.model = data.type
-		if generator != null:
+		if generator:
 			generator.name = data.type
-	if generator == null:
+	if not generator:
 		print("LOADER: data not supported:"+str(data))
-	if generator != null:
+	if generator:
 		generator.deserialize(data)
 	return generator
 

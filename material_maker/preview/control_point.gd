@@ -18,7 +18,7 @@ var children_control_nodes = []
 func _ready() -> void:
 	if parent_control != "":
 		parent_control_node = get_parent().get_node(parent_control)
-		if parent_control_node != null:
+		if parent_control_node:
 			parent_control_node.children_control_nodes.push_back(self)
 
 func _draw() -> void:
@@ -28,17 +28,17 @@ func _draw() -> void:
 			draw_rect(Rect2(0.5*rect_size, 2.0*(ppos-(rect_position+0.5*rect_size))), modulate, false)
 		2: # Radius
 			var ppos
-			if parent_control_node == null:
+			if not parent_control_node:
 				ppos = get_parent().value_to_pos(Vector2(0, 0))
 			else:
 				ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size
 			draw_line(0.5*rect_size, ppos-rect_position, modulate)
 		3: # Scale
 			var ppos
-			if parent_control_node == null:
+			if not parent_control_node:
 				ppos = get_parent().value_to_pos(Vector2(0, 0))
 			else:
-				ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size 
+				ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size
 			draw_rect(Rect2(0.5*rect_size, ppos-(rect_position+0.5*rect_size)), modulate, false)
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:
@@ -138,7 +138,7 @@ func update_position(pos : Vector2) -> void:
 	match control_type:
 		3: # Scale
 			pos *= 0.25
-	if parent_control_node != null:
+	if parent_control_node:
 		pos += parent_control_node.get_value()
 	rect_position = get_parent().value_to_pos(pos)-0.5*rect_size
 	for c in children_control_nodes:

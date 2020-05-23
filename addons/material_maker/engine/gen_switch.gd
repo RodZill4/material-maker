@@ -47,7 +47,7 @@ func get_output_defs() -> Array:
 func set_parameter(p, v) -> void:
 	if p == "outputs" or p == "choices":
 		var parent = get_parent()
-		if parent != null:
+		if parent:
 			var connected_inputs : Array = parent.get_connected_inputs(self)
 			var connected_outputs : Array = parent.get_connected_outputs(self)
 			var inputs_changes : Dictionary = {}
@@ -88,7 +88,7 @@ func source_changed(input_index : int) -> void:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(output_index+parameters.source*parameters.outputs)
-	if source != null:
+	if source:
 		var rv = source.generator._get_shader_code(uv, source.output_index, context)
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")

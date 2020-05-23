@@ -97,7 +97,7 @@ func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 		for c in connections:
 			if c.to == gen_name and c.to_port == input_index:
 				var src_gen = get_node(c.from)
-				if src_gen != null:
+				if src_gen:
 					if src_gen.get_script() == get_script():
 						rv = src_gen.get_port_source("gen_outputs", c.from_port)
 					else:
@@ -111,7 +111,7 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 	for c in connections:
 		if c.from == gen_name and c.from_port == output_index:
 			var tgt_gen = get_node(c.to)
-			if tgt_gen != null:
+			if tgt_gen:
 				rv.push_back(InputPort.new(tgt_gen, c.to_port))
 	return rv
 
@@ -245,7 +245,7 @@ func reconnect_outputs(generator, reconnects : Dictionary) -> bool:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var outputs = get_node("gen_outputs")
-	if outputs != null:
+	if outputs:
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")

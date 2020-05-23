@@ -8,6 +8,6 @@ func _enter_tree() -> void:
 	add_import_plugin(importer)
 
 func _exit_tree() -> void:
-	if importer != null:
+	if importer:
 		remove_import_plugin(importer)
 		importer = null

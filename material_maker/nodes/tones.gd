@@ -14,12 +14,12 @@ class Cursor:
 		color = c
 		position = p
 		top = t
-	
+
 	func _ready() -> void:
 		rect_position.y = -2 if top else get_parent().rect_size.y+2-HEIGHT
 		set_value(position)
 		rect_size = Vector2(WIDTH, HEIGHT)
-	
+
 	func _draw() -> void:
 		var polygon : PoolVector2Array
 		if top:
@@ -31,19 +31,19 @@ class Cursor:
 		draw_colored_polygon(polygon, c)
 		var outline_color = 0.0 if position > 0.5 else 1.0
 		draw_polyline(polygon, Color(outline_color, outline_color, outline_color), 1.0, true)
-	
+
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			rect_position.x += ev.relative.x
 			rect_position.x = min(max(-0.5*WIDTH, rect_position.x), get_parent().rect_size.x-0.5*WIDTH)
 			update_value((rect_position.x+0.5*WIDTH)/get_parent().rect_size.x)
-	
+
 	func update_value(p : float) -> void:
 		if p != position:
 			set_value(p)
 			get_parent().get_parent().update_value(self, position)
 			update()
-	
+
 	func set_value(v : float):
 		position = v
 		rect_position.x = position * get_parent().rect_size.x - 0.5*WIDTH
@@ -78,7 +78,7 @@ func update_node() -> void:
 func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
-		if source != null:
+		if source:
 			$Histogram.set_generator(source.generator, source.output_index)
 		else:
 			$Histogram.set_generator(null, 0)

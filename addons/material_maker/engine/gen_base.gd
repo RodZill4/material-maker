@@ -182,7 +182,7 @@ func get_source(input_index : int) -> OutputPort:
 
 func get_targets(output_index : int) -> Array:
 	var parent = get_parent()
-	if parent != null:
+	if parent:
 		return get_parent().get_port_targets(name, output_index)
 	return []
 
@@ -195,7 +195,7 @@ func follow_input(_input_index : int) -> Array:
 
 func get_input_shader(input_index : int) -> Dictionary:
 	var source = get_source(input_index)
-	if source != null:
+	if source:
 		return source.get_shader()
 	return {}
 
@@ -284,7 +284,7 @@ func serialize() -> Dictionary:
 			rv.parameters[p.name] = p.default
 	if seed_locked:
 		rv.seed_value = seed_value
-	if model != null:
+	if model:
 		rv.type = model
 	else:
 		rv = _serialize(rv)

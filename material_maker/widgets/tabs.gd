@@ -12,7 +12,7 @@ func add_child(control, legible_unique_name = false) -> void:
 		move_child(control, $Tabs.get_tab_count()-1)
 
 func close_tab(tab = null) -> void:
-	if tab == null:
+	if not tab:
 		tab = $Tabs.get_current_tab()
 	get_child(tab).queue_free()
 	$Tabs.remove_tab(tab)

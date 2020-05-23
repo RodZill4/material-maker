@@ -18,7 +18,7 @@ func add_child(control, legible_unique_name = false) -> void:
 		set_current_tab($Tabs.get_tab_count()-1)
 
 func close_tab(tab = null) -> void:
-	if tab == null:
+	if not tab:
 		tab = $Tabs.get_current_tab()
 	get_node($Tabs.get_tab_title(tab)).queue_free()
 	$Tabs.remove_tab(tab)
@@ -37,7 +37,7 @@ func set_current_tab(t) -> void:
 	var node
 	if current_tab >= 0:
 		node = get_node($Tabs.get_tab_title(current_tab))
-		if node != null:
+		if node:
 			node.visible = false
 	print("Hiding "+$Tabs.get_tab_title($Tabs.current_tab))
 	$Tabs.current_tab = t
@@ -46,10 +46,10 @@ func set_current_tab(t) -> void:
 	for tab_container in get_tree().get_nodes_in_group("tab_group_"+str(rearrange_group)):
 		print(tab_container.name)
 		node = tab_container.get_node($Tabs.get_tab_title(t))
-		if node != null:
+		if node:
 			break
 	print(node)
-	if node != null:
+	if node:
 		if node.get_parent() != self:
 			node.get_parent().call_deferred("set_current_tab", 0)
 			node.get_parent().remove_child(node)

@@ -25,7 +25,7 @@ func get_selected_item_name() -> String:
 
 func get_selected_item_doc_name() -> String:
 	var item : TreeItem = tree.get_selected()
-	if item == null:
+	if not item:
 		return ""
 	var m : Dictionary = item.get_metadata(0)
 	if m == null or !m.has("icon"):
@@ -70,7 +70,7 @@ func get_preview_texture(data : Dictionary) -> ImageTexture:
 	return null
 
 func add_item(item, item_name, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
-	if item_parent == null:
+	if not item_parent:
 		item.tree_item = item_name
 		item_parent = tree.get_root()
 	var slash_position = item_name.find("/")
@@ -82,11 +82,11 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 				new_item = c
 				break
 			c = c.get_next()
-		if new_item == null:
+		if not new_item:
 			new_item = tree.create_item(item_parent)
 			new_item.set_text(0, item_name)
 			new_item.collapsed = !force_expand
-		if item_icon != null:
+		if item_icon:
 			new_item.set_icon(1, item_icon)
 			new_item.set_icon_max_width(1, 32)
 		if item.has("type") || item.has("nodes"):
@@ -104,14 +104,14 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 				new_parent = c
 				break
 			c = c.get_next()
-		if new_parent == null:
+		if not new_parent:
 			new_parent = tree.create_item(item_parent)
 			new_parent.collapsed = !force_expand
 		new_parent.set_text(0, prefix)
 		return add_item(item, suffix, item_icon, new_parent, force_expand)
 
 func get_item_path(item : TreeItem) -> String:
-	if item == null:
+	if not item:
 		return ""
 	var item_path = item.get_text(0)
 	var item_parent = item.get_parent()
@@ -124,11 +124,11 @@ func get_icon_name(item_name : String) -> String:
 	return item_name.to_lower().replace("/", "_").replace(" ", "_")
 
 func serialize_library(array : Array, library_name : String = "", item : TreeItem = null, icon_dir : String = "") -> void:
-	if item == null:
+	if not item:
 		item = tree.get_root()
 	item = item.get_children()
 	while item != null:
-		if item.get_metadata(0) != null:
+		if item.get_metadata(0):
 			var m : Dictionary = item.get_metadata(0)
 			if library_name == "" or (m.has("library") and m.library == library_name):
 				var copy : Dictionary = m.duplicate()
@@ -173,11 +173,11 @@ func export_libraries(path : String) -> void:
 
 func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
 	var count : int = 0
-	if item == null:
+	if not item:
 		item = tree.get_root()
 	item = item.get_children()
 	while item != null:
-		if item.get_metadata(0) != null:
+		if item.get_metadata(0):
 			var timer : Timer = Timer.new()
 			add_child(timer)
 			var new_nodes = graph_edit.create_nodes(item.get_metadata(0))

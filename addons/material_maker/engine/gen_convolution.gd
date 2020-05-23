@@ -34,7 +34,7 @@ func _get_shader_code(uv : String, _output_index : int, context : MMGenContext) 
 	var types = { "rgba": { type="vec4", init="vec4(0.0)" }, "rgb": { type="vec3", init="vec3(0.0)" }, "f": { type="float", init="0.0" } }
 	var rv = { globals=[], defs="", code="", textures={} }
 	var source = get_source(0)
-	if source == null:
+	if not source:
 		return rv
 	var variant_index = context.get_variant(self, uv)
 	if variant_index == -1:
@@ -75,11 +75,11 @@ func _get_shader_code(uv : String, _output_index : int, context : MMGenContext) 
 			var line = []
 			for dx in range(-convolution_params.x, convolution_params.x+1):
 				var coef = 0.0
-				if convolution_params.has("matrix") and dy+convolution_params.y < convolution_params.matrix.size() and dx+convolution_params.x < convolution_params.matrix[dy+convolution_params.y].size() and convolution_params.matrix[dy+convolution_params.y][dx+convolution_params.x] != null:
+				if convolution_params.has("matrix") and dy+convolution_params.y < convolution_params.matrix.size() and dx+convolution_params.x < convolution_params.matrix[dy+convolution_params.y].size() and convolution_params.matrix[dy+convolution_params.y][dx+convolution_params.x]:
 					coef = convolution_params.matrix[dy+convolution_params.y][dx+convolution_params.x]
 				elif convolution_params.has("matrix_sparse") and convolution_params.matrix_sparse.has(str(dy)) and convolution_params.matrix_sparse[str(dy)].has(str(dx)):
 					coef = convolution_params.matrix_sparse[str(dy)][str(dx)]
-				elif expr != null:
+				elif expr:
 					expr_values[expr_variables_x_index] = dx
 					expr_values[expr_variables_x_index+1] = dy
 					coef = expr.execute(expr_values)

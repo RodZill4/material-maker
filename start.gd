@@ -73,7 +73,7 @@ func _ready():
 	else:
 		path = "res://demo/demo.tscn"
 	loader = ResourceLoader.load_interactive(path)
-	if loader == null: # check for errors
+	if not loader: # check for errors
 		print("error")
 		queue_free()
 	set_process(true)
@@ -98,7 +98,7 @@ func export_files(files, output_dir, target, size) -> void:
 	$VBoxContainer/ProgressBar.value = 0
 	for f in files:
 		var gen = mm_loader.load_gen(f)
-		if gen != null:
+		if gen:
 			add_child(gen)
 			for c in gen.get_children():
 				if c.has_method("get_export_profiles"):

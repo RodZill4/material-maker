@@ -9,9 +9,9 @@ func set_generator(g) -> void:
 	$TextureButton.texture_normal = generator.texture
 
 func set_texture(path) -> void:
-	if path == null:
+	if not path:
 		return
-	if generator != null:
+	if generator:
 		generator.set_parameter("image", path)
 	$TextureButton.texture_normal = generator.texture
 

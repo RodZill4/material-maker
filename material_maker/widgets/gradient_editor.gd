@@ -77,7 +77,7 @@ func can_drop_data(_position : Vector2, data) -> bool:
 
 func drop_data(_position : Vector2, data) -> void:
 	var gradient = get_gradient_from_data(data)
-	if gradient != null:
+	if gradient:
 		set_value(MMType.deserialize_value(gradient))
 
 func set_value(v) -> void:

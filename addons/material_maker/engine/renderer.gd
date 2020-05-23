@@ -82,7 +82,7 @@ func render_shader(shader, textures, render_size) -> Object:
 	$ColorRect.rect_size = size
 	var shader_material = $ColorRect.material
 	shader_material.shader.code = shader
-	if textures != null:
+	if textures:
 		for k in textures.keys():
 			shader_material.set_shader_param(k, textures[k])
 	shader_material.set_shader_param("preview_size", render_size)
@@ -94,7 +94,7 @@ func render_shader(shader, textures, render_size) -> Object:
 
 func copy_to_texture(t : ImageTexture) -> void:
 	var image : Image = get_texture().get_data()
-	if image != null:
+	if image:
 		image.lock()
 		t.create_from_image(get_texture().get_data())
 		image.unlock()

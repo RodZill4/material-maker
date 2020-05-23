@@ -2,7 +2,7 @@ extends Popup
 
 var libraries = []
 var data = []
-onready var itemlist : ItemList = $PanelContainer/VBoxContainer/ItemList 
+onready var itemlist : ItemList = $PanelContainer/VBoxContainer/ItemList
 onready var filter_line_edit : LineEdit = $PanelContainer/VBoxContainer/Filter
 var quick_connect : int = -1
 var insert_position : Vector2
@@ -27,19 +27,19 @@ func filter_entered(_filter) -> void:
 func add_node(node_data) -> void:
 	var node : GraphNode = get_current_graph().create_nodes(node_data, get_current_graph().offset_from_global_position(insert_position))[0]
 	# if this node created by dragging to an empty space
-	if quick_connect_node != null:
+	if quick_connect_node:
 #		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
 		for new_slot in node.get_connection_input_count():
 			#if type == node.get_connection_input_type(new_slot):
 				#connect the first two slots with the same type
 			get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
-			break 
+			break
 	quick_connect_node = null
 	hide()
 
 func item_selected(index) -> void:
 	# checks if mouse left | enter pressed. it prevents
-	# adding nodes just by using arrow keys as it selects the item 
+	# adding nodes just by using arrow keys as it selects the item
 	if Input.is_mouse_button_pressed(BUTTON_LEFT) || Input.is_key_pressed(KEY_ENTER):
 		if (index>=itemlist.get_item_count()):
 			return
@@ -51,13 +51,13 @@ func item_selected(index) -> void:
 
 func hide() -> void:
 	.hide()
-	
+
 	# clearing the quick connect data after hiding to prevent unintended autoconnection
 	quick_connect_node = null
-	
+
 	# grabbing the focus for the graph again as creating popup removes the focus.
 	get_current_graph().grab_focus()
-	
+
 	clear()
 
 func show_popup(qc : int = -1) -> void:

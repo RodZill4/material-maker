@@ -48,7 +48,7 @@ func save_config(config_cache) -> void:
 	for p in panes:
 		var location = panes[p].get_parent()
 		var hidden = false
-		if location == null:
+		if not location:
 			hidden = true
 			location = panes[p].get_meta("parent_tab_container")
 		config_cache.set_value("layout", p+"_hidden", hidden)

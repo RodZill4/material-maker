@@ -47,7 +47,7 @@ func set_step(v : float) -> void:
 func do_update(update_text : bool = true) -> void:
 	if update_text and $Slider.visible:
 		text = str(value)
-		if cursor != null:
+		if cursor:
 			if max_value != min_value:
 				cursor.rect_position.x = (clamp(value, min_value, max_value)-min_value)*(slider.rect_size.x-cursor.rect_size.x)/(max_value-min_value)
 			else:

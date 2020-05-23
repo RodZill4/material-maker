@@ -9,7 +9,7 @@ func _ready():
 		$ContextMenu.set_item_checked(0, config_cache.get_value("preview_2d", "show_tiling"))
 	update_shader_options()
 	update_export_menu()
- 
+
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	.set_generator(g, o)
 	setup_controls()
@@ -31,7 +31,7 @@ func pos_to_value(pos : Vector2) -> Vector2:
 	return (pos - rect_size*0.5)*(1+shader_margin)/min(rect_size.x, rect_size.y)
 
 func update_shader_options() -> void:
-	if $ContextMenu == null:
+	if not $ContextMenu:
 		return
 	if $ContextMenu.is_item_checked(0):
 		shader_margin = 0.2

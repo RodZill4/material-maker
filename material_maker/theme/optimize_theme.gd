@@ -26,18 +26,18 @@ func optimize_theme(theme_path):
 				var sb = theme.get_stylebox(sb_name, stylebox_name)
 				var new_sb = sb.duplicate(true)
 				for t in [ "texture", "normal_map" ]:
-					if new_sb[t] != null:
+					if new_sb[t]:
 						var png_name = ("sb_"+stylebox_name+"_"+sb_name+"_"+t).to_lower()
 						var png_path : String = icon_dir+"/"+png_name+".png"
 						var new_icon = load(png_path)
-						if new_icon == null:
+						if not new_icon:
 							print("missing icon "+png_path)
 							var image = new_sb[t].get_data()
-							if image != null:
+							if image:
 								print("saving icon "+png_path)
 								image.save_png(png_path)
 								new_icon = load(png_path)
-								if new_icon != null:
+								if new_icon:
 									new_sb[t] = new_icon
 						else:
 							new_sb[t] = new_icon
@@ -47,15 +47,15 @@ func optimize_theme(theme_path):
 			var png_name = (stylebox_name+"_"+icon_name).to_lower()
 			var png_path : String = icon_dir+"/"+png_name+".png"
 			var new_icon = load(png_path)
-			if new_icon == null:
+			if not new_icon:
 				print("missing icon "+png_path)
 				var icon = theme.get_icon(icon_name, stylebox_name)
 				var image = icon.get_data()
-				if image != null:
+				if image:
 					print("saving icon "+png_path)
 					image.save_png(png_path)
 					new_icon = load(png_path)
-					if new_icon != null:
+					if new_icon:
 						new_theme.set_icon(icon_name, stylebox_name, new_icon)
 			else:
 				new_theme.set_icon(icon_name, stylebox_name, new_icon)

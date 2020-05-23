@@ -14,7 +14,7 @@ func set_ptex(s : String) -> void :
 
 func update_texture() -> void:
 	var mm_graph = mm_loader.create_gen(parse_json(ptex))
-	if mm_graph == null:
+	if not mm_graph:
 		return
 	var mm_material : MMGenMaterial = mm_graph.get_node("Material")
 	if ! (mm_material is MMGenMaterial):
@@ -25,4 +25,3 @@ func update_texture() -> void:
 		status = yield(status, "completed")
 	mm_material.update_material(self)
 	mm_graph.queue_free()
-	

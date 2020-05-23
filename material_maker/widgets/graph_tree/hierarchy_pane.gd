@@ -42,7 +42,7 @@ func update_from_graph_edit(graph_edit) -> void:
 		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
 	if current_generator != null and is_instance_valid(current_generator):
 		current_generator.disconnect("hierarchy_changed", self, "on_hierarchy_changed")
-	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
+	if not graph_edit == null or graph_edit.top_generator == null or graph_edit.generator:
 		current_graph_edit = null
 		current_generator = null
 		return
@@ -51,7 +51,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	current_generator = graph_edit.generator
 	current_generator.connect("hierarchy_changed", self, "on_hierarchy_changed")
 	var file_name = "PTex"
-	if graph_edit.save_path != null:
+	if graph_edit.save_path:
 		file_name = graph_edit.save_path.get_file()
 	fill_item(create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
 

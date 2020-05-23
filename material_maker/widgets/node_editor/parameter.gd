@@ -8,7 +8,7 @@ func _ready() -> void:
 
 func update_up_down_button() -> void:
 	var parent = get_parent()
-	if parent == null:
+	if not parent:
 		return
 	$Up.disabled = (get_index() == 0)
 	$Down.disabled = (get_index() == get_parent().get_child_count()-2)
@@ -51,7 +51,7 @@ func _on_Type_item_selected(ID) -> void:
 	for t in $Types.get_children():
 		t.visible = false
 	var t = $Types.get_child(ID)
-	if t != null:
+	if t:
 		t.visible = true
 	else:
 		print(ID)

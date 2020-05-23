@@ -50,7 +50,7 @@ func _on_Rotate_toggled(button_pressed) -> void:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 
 func get_materials() -> Array:
-	if current_object != null:
+	if current_object:
 		return [ current_object.get_surface_material(0) ]
 	return []
 

@@ -37,7 +37,7 @@ func closest(rect, point) -> Vector2:
 func find_control(gp) -> Dictionary:
 	for c in get_parent().get_children():
 		if c is GraphNode:
-			if c.get("controls") != null:
+			if c.get("controls"):
 				for w in c.controls:
 					var widget = c.controls[w]
 					if is_instance_valid(widget) and Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
@@ -48,7 +48,7 @@ func _draw() -> void:
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect
-	if target != null:
+	if target:
 		color = Color(0.5, 1, 0.5, 0.5)
 		rect = get_global_transform().xform_inv(target.get_global_transform().xform(Rect2(Vector2(0, 0), target.rect_size)))
 		draw_rect(rect, color, false)

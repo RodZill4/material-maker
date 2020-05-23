@@ -34,7 +34,7 @@ func update_node() -> void:
 	controls = {}
 	for p in generator.get_parameter_defs():
 		var control = create_parameter_control(p)
-		if control != null:
+		if control:
 			control.name = p.name
 			controls[control.name] = control
 			add_control(generator.get_widget(p.name).label, control)
@@ -45,7 +45,7 @@ func update_node() -> void:
 					current = control.get_item_text(control.selected)
 				control.add_separator()
 				control.add_item("<add configuration>")
-				if current != null:
+				if current:
 					control.add_separator()
 					control.add_item("<update "+current+">")
 					control.add_item("<remove "+current+">")
@@ -128,9 +128,9 @@ func on_enter_widget(widget) -> void:
 	var new_links = []
 	for l in w.linked_widgets:
 		var graph_node = get_parent().get_node("node_"+l.node)
-		if graph_node != null:
+		if graph_node:
 			var control = graph_node.controls[l.widget]
-			if control != null:
+			if control:
 				var link = MMNodeLink.new(get_parent())
 				link.show_link(widget, control)
 				new_links.push_back(link)

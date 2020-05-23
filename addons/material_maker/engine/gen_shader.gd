@@ -94,7 +94,7 @@ func replace_input_with_function_call(string : String, input : String) -> String
 	var genname = "o"+str(get_instance_id())
 	while true:
 		var uv = find_keyword_call(string, input)
-		if uv == null:
+		if not uv:
 			break
 		elif uv == "":
 			print("syntax error")
@@ -110,7 +110,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 	var new_pass_required = false
 	while true:
 		var uv = find_keyword_call(string, input)
-		if uv == null:
+		if not uv:
 			break
 		elif uv == "":
 			print("syntax error")
@@ -119,7 +119,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 			new_pass_required = true
 			break
 		var src_code
-		if src == null:
+		if not src:
 			src_code = subst(default, context, "(%s)" % uv)
 		else:
 			src_code = src.generator.get_shader_code(uv, src.output_index, context)
@@ -215,7 +215,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				value_string = "true" if value else "false"
 			else:
 				print("Cannot replace parameter of type "+p.type)
-			if value_string != null:
+			if value_string:
 				variables[p.name] = value_string
 	if uv != "":
 		variables["uv"] = "("+uv+")"
@@ -372,7 +372,7 @@ func _deserialize(data : Dictionary) -> void:
 
 
 func edit(node) -> void:
-	if shader_model != null:
+	if shader_model:
 		var edit_window = load("res://material_maker/widgets/node_editor/node_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)

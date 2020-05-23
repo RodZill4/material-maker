@@ -38,7 +38,7 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 	if size == 0:
 		size = get_image_size()
 	var source = get_source(0)
-	if source != null:
+	if source:
 		var result = source.generator.render(source.output_index, size)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")

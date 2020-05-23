@@ -106,7 +106,7 @@ func update_tab_title() -> void:
 		print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
-	if save_path != null:
+	if save_path:
 		title = save_path.right(save_path.rfind("/")+1)
 	if need_save:
 		title += " *"
@@ -147,11 +147,11 @@ func center_view() -> void:
 		scroll_offset = center - 0.5*rect_size
 
 func update_view(g) -> void:
-	if generator != null:
+	if generator:
 		generator.disconnect("connections_changed", self, "on_connections_changed")
 	clear_view()
 	generator = g
-	if generator != null:
+	if generator:
 		generator.connect("connections_changed", self, "on_connections_changed")
 	update_graph(generator.get_children(), generator.connections)
 	subgraph_ui.visible = generator != top_generator
@@ -166,7 +166,7 @@ func update_view(g) -> void:
 
 
 func clear_material() -> void:
-	if top_generator != null:
+	if top_generator:
 		remove_child(top_generator)
 		top_generator.free()
 		top_generator = null
@@ -177,7 +177,7 @@ func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
 		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
-		if node != null:
+		if node:
 			node.name = "node_"+g.name
 			add_node(node)
 			node.generator = g
@@ -185,13 +185,13 @@ func update_graph(generators, connections) -> Array:
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
-	
+
 	return rv
 
 func new_material() -> void:
 	clear_material()
 	top_generator = mm_loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
-	if top_generator != null:
+	if top_generator:
 		add_child(top_generator)
 		move_child(top_generator, 0)
 		update_view(top_generator)
@@ -225,7 +225,7 @@ func create_gen_from_type(gen_name) -> void:
 
 func load_file(filename) -> bool:
 	var new_generator = mm_loader.load_gen(filename)
-	if new_generator != null:
+	if new_generator:
 		clear_material()
 		top_generator = new_generator
 		add_child(top_generator)
@@ -326,7 +326,7 @@ func do_paste(data) -> void:
 		if c is GraphNode:
 			c.selected = false
 	var new_nodes = create_nodes(data, position)
-	if new_nodes != null:
+	if new_nodes:
 		for c in new_nodes:
 			c.selected = true
 
@@ -371,7 +371,7 @@ func create_subgraph() -> void:
 	for n in get_selected_nodes():
 		generators.push_back(n.generator)
 	var subgraph = generator.create_subgraph(generators)
-	if subgraph != null:
+	if subgraph:
 		update_view(subgraph)
 
 func _on_ButtonShowTree_pressed() -> void:

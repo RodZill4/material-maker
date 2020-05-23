@@ -141,12 +141,12 @@ func create_parameter_control(p : Dictionary) -> Control:
 func save_preview_widget() -> void:
 	if preview != null and preview.get_parent() == self:
 		remove_child(preview)
-	if preview_timer != null:
+	if preview_timer:
 		preview_timer.stop()
 		remove_child(preview_timer)
 
 func restore_preview_widget() -> void:
-	if preview == null:
+	if not preview:
 		preview = preload("res://material_maker/preview/preview_2d_node.tscn").instance()
 		preview.shader = "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}"
 		preview.visible = false
@@ -156,7 +156,7 @@ func restore_preview_widget() -> void:
 		update_preview()
 	set_slot(preview_position, false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 	# Preview timer
-	if preview_timer == null:
+	if not preview_timer:
 		preview_timer = Timer.new()
 		preview_timer.one_shot = true
 		preview_timer.connect("timeout", self, "do_update_preview")
@@ -234,7 +234,7 @@ func update_node() -> void:
 		if !p.has("name") or !p.has("type"):
 			continue
 		var control = create_parameter_control(p)
-		if control != null:
+		if control:
 			var label = p.name
 			control.name = label
 			controls[control.name] = control
@@ -261,7 +261,7 @@ func update_node() -> void:
 				label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				hsizer.add_child(label_widget)
 			control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			if hsizer != null:
+			if hsizer:
 				hsizer.add_child(control)
 	initialize_properties()
 	# Outputs
@@ -332,7 +332,7 @@ func do_load_generator(file_name : String) -> void:
 			file.close()
 	else:
 		new_generator = mm_loader.load_gen(file_name)
-	if new_generator != null:
+	if new_generator:
 		var gen_name = mm_loader.generator_name_from_path(file_name)
 		if gen_name != "":
 			new_generator.model = gen_name

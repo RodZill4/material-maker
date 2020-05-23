@@ -83,14 +83,14 @@ func swap_ports(i1 : int, i2 : int) -> void:
 
 func source_changed(input_index : int) -> void:
 	if name == "gen_outputs":
-		if get_parent() != null:
+		if get_parent():
 			get_parent().notify_output_change(input_index)
 	else:
 		notify_output_change(input_index)
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(output_index)
-	if source != null:
+	if source:
 		var rv = source.generator._get_shader_code(uv, source.output_index, context)
 		while rv is GDScriptFunctionState:
 			rv = yield(rv, "completed")

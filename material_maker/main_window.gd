@@ -62,10 +62,10 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	
+
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
-	
-	
+
+
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -93,7 +93,7 @@ func _ready() -> void:
 			OS.window_position = config_cache.get_value("window", "position")
 		if config_cache.has_section_key("window", "size"):
 			OS.window_size = config_cache.get_value("window", "size")
-	
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if config_cache.has_section_key("window", "theme"):
@@ -156,7 +156,7 @@ func _ready() -> void:
 		create_menu(menu, m.name)
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
-	
+
 	do_load_materials(OS.get_cmdline_args())
 
 func _input(event: InputEvent) -> void:
@@ -245,7 +245,7 @@ func add_recent(path) -> void:
 func create_menu_export_material(menu) -> void:
 	menu.clear()
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		var material_node = graph_edit.get_material_node()
 		for p in material_node.get_export_profiles():
 			menu.add_item(p)
@@ -254,17 +254,17 @@ func create_menu_export_material(menu) -> void:
 
 func export_material(file_path : String, profile : String) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	if not graph_edit:
 		return
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	graph_edit.export_material(export_prefix, profile)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	if not graph_edit:
 		return
 	var material_node = graph_edit.get_material_node()
-	if material_node == null:
+	if not material_node:
 		return
 	var profile = material_node.get_export_profiles()[id]
 	var dialog : FileDialog = FileDialog.new()
@@ -317,7 +317,7 @@ func create_menu_create(menu) -> void:
 
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		var gens = mm_loader.get_generator_list()
 		graph_edit.create_gen_from_type(gens[id])
 
@@ -365,7 +365,7 @@ func do_load_materials(filenames) -> void:
 func do_load_material(filename : String, update_hierarchy : bool = true) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
-	if graph_edit != null:
+	if graph_edit:
 		node_count = 0
 		for c in graph_edit.get_children():
 			if c is GraphNode:
@@ -381,8 +381,8 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> void
 
 func save_material() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		if graph_edit.save_path != null:
+	if graph_edit:
+		if graph_edit.save_path:
 			graph_edit.save_file(graph_edit.save_path)
 			add_recent(graph_edit.save_path)
 		else:
@@ -390,7 +390,7 @@ func save_material() -> void:
 
 func save_material_as() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		var dialog = FileDialog.new()
 		add_child(dialog)
 		dialog.rect_min_size = Vector2(500, 500)
@@ -409,7 +409,7 @@ func quit() -> void:
 
 func edit_cut() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.cut()
 
 func edit_cut_is_disabled() -> bool:
@@ -418,7 +418,7 @@ func edit_cut_is_disabled() -> bool:
 
 func edit_copy() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.copy()
 
 func edit_copy_is_disabled() -> bool:
@@ -426,7 +426,7 @@ func edit_copy_is_disabled() -> bool:
 
 func edit_paste() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
@@ -435,7 +435,7 @@ func edit_paste_is_disabled() -> bool:
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.duplicate_selected()
 
 func edit_duplicate_is_disabled() -> bool:
@@ -452,14 +452,14 @@ func view_reset_zoom() -> void:
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		return graph_edit.get_selected_nodes()
 	else:
 		return []
 
 func create_subgraph() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.create_subgraph()
 
 func make_selected_nodes_editable() -> void:
@@ -485,7 +485,7 @@ func do_add_to_user_library(name, nodes) -> void:
 	if nodes.size() == 1:
 		data = nodes[0].generator.serialize()
 		data.erase("node_position")
-	elif graph_edit != null:
+	elif graph_edit:
 		data = graph_edit.serialize_selection()
 	var dir = Directory.new()
 	dir.make_dir("user://library")
@@ -584,13 +584,13 @@ func update_preview() -> void:
 
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		if node == null:
+	if graph_edit:
+		if not node:
 			for n in graph_edit.get_children():
 				if n is GraphNode and n.selected:
 					node = n
 					break
-		if node != null:
+		if node:
 			preview_2d.set_generator(node.generator)
 			histogram.set_generator(node.generator)
 			preview_2d_background.set_generator(node.generator)
@@ -619,7 +619,7 @@ func on_selected_node_change(node) -> void:
 func _on_Projects_tab_changed(_tab) -> void:
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
-		if new_tab != null:
+		if new_tab:
 			for c in get_incoming_connections():
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
@@ -632,7 +632,7 @@ func _on_Projects_tab_changed(_tab) -> void:
 
 func on_group_selected(generator) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
+	if graph_edit:
 		graph_edit.edit_subgraph(generator)
 
 func _exit_tree() -> void:

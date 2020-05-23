@@ -55,7 +55,7 @@ func update_shader(input_port_index : int) -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(input_port_index)
-	if source_output != null:
+	if source_output:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
 		while source is GDScriptFunctionState:
 			source = yield(source, "completed")

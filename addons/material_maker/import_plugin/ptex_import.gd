@@ -49,7 +49,7 @@ func import(source_file: String, save_path: String, options: Dictionary, platfor
 	var material = null
 	if options.render:
 		var gen = mm_loader.load_gen(source_file)
-		if gen != null:
+		if gen:
 			plugin.add_child(gen)
 			for c in gen.get_children():
 				if c.has_method("get_export_profiles"):

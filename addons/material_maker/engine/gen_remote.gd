@@ -41,7 +41,7 @@ func fix() -> void:
 		if !w.has("name"):
 			w.name = get_next_widget_name()
 	var parent = get_parent()
-	if parent == null:
+	if not parent:
 		return
 	var updated_widgets : Array = []
 	var removed_widgets = false
@@ -93,7 +93,7 @@ func get_parameter_defs() -> Array:
 				var p : Dictionary
 				if linked != null && is_inside_tree():
 					var gen = get_parent().get_node(linked.node)
-					if gen != null:
+					if gen:
 						var gen_params = gen.get_parameter_defs()
 						for pd in gen_params:
 							if pd.name == linked.widget:
@@ -108,7 +108,7 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(p : String, v) -> void:
 	var parent = get_parent()
-	if parent == null:
+	if not parent:
 		return
 	var widget = get_widget(p)
 	if !widget.empty():
@@ -116,7 +116,7 @@ func set_parameter(p : String, v) -> void:
 			"linked_control":
 				for w in widget.linked_widgets:
 					var node = parent.get_node(w.node)
-					if node != null:
+					if node:
 						node.set_parameter(w.widget, v)
 			"config_control":
 				if v is bool:
@@ -126,7 +126,7 @@ func set_parameter(p : String, v) -> void:
 					configurations.sort()
 					for w in widget.configurations[configurations[v]]:
 						var node = parent.get_node(w.node)
-						if node != null:
+						if node:
 							node.set_parameter(w.widget, MMType.deserialize_value(w.value))
 				else:
 					# incorrect configuration index
@@ -206,7 +206,7 @@ func update_configuration(widget_name : String, config_name : String) -> void:
 		var parent = get_parent()
 		for w in widget.linked_widgets:
 			var g = parent.get_node(w.node)
-			if g != null:
+			if g:
 				var value = MMType.serialize_value(g.parameters[w.widget])
 				c.push_back({ node=w.node, widget=w.widget, value=value })
 		widget.configurations[config_name] = c

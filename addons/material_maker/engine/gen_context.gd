@@ -15,7 +15,7 @@ func has_variant(generator) -> bool:
 func touch_variant(generator) -> void:
 	if !variants.has(generator):
 		variants[generator] = []
-	if parent_context != null:
+	if parent_context:
 		parent_context.touch_variant(generator)
 
 func get_variant(generator, variant) -> int:

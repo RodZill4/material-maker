@@ -110,7 +110,7 @@ func render_textures() -> void:
 			continue
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
-		if generated_textures[t.texture] == null:
+		if not generated_textures[t.texture]:
 			generated_textures[t.texture] = ImageTexture.new()
 		var texture = generated_textures[t.texture]
 		result.copy_to_texture(texture)
@@ -126,7 +126,7 @@ func render_textures() -> void:
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var do_update : bool = false
 	for t in TEXTURE_LIST:
-		if generated_textures[t.texture] != null:
+		if generated_textures[t.texture]:
 			for n in parameter_changes.keys():
 				for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
 					if p.name == n:
@@ -140,7 +140,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 func on_texture_changed(n : String) -> void:
 	var do_update : bool = false
 	for t in TEXTURE_LIST:
-		if generated_textures[t.texture] != null:
+		if generated_textures[t.texture]:
 			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
 				if p.name == n:
 					need_render[t.texture] = true
@@ -171,7 +171,7 @@ func update_materials(material_list) -> void:
 		update_material(m)
 
 func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
-	if file_prefix != null:
+	if file_prefix:
 		var file_name = "%s_%s.png" % [ file_prefix, slot ]
 		if File.new().file_exists(file_name):
 			var texture = load(file_name)
@@ -189,7 +189,7 @@ func update_material(m, file_prefix = null) -> void:
 		m.albedo_color = parameters.albedo_color
 		m.albedo_texture = get_generated_texture("albedo", file_prefix)
 		# Ambient occlusion
-		if get_source(INPUT_OCCLUSION) != null:
+		if get_source(INPUT_OCCLUSION):
 			m.ao_enabled = true
 			m.ao_light_affect = parameters.ao
 			m.ao_texture = get_generated_texture("orm", file_prefix)
@@ -198,27 +198,27 @@ func update_material(m, file_prefix = null) -> void:
 			m.ao_enabled = false
 		# Roughness
 		m.roughness = parameters.roughness
-		if get_source(INPUT_ROUGHNESS) != null:
+		if get_source(INPUT_ROUGHNESS):
 			m.roughness_texture = get_generated_texture("orm", file_prefix)
 			m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
 		else:
 			m.roughness_texture = null
 		# Metallic
 		m.metallic = parameters.metallic
-		if get_source(INPUT_METALLIC) != null:
+		if get_source(INPUT_METALLIC):
 			m.metallic_texture = get_generated_texture("orm", file_prefix)
 			m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
 		else:
 			m.metallic_texture = null
 		# Emission
-		if get_source(INPUT_EMISSION) != null:
+		if get_source(INPUT_EMISSION):
 			m.emission_enabled = true
 			m.emission_energy = parameters.emission_energy
 			m.emission_texture = get_generated_texture("emission", file_prefix)
 		else:
 			m.emission_enabled = false
 		# Normal map
-		if get_source(INPUT_NORMAL) != null:
+		if get_source(INPUT_NORMAL):
 			m.normal_enabled = true
 			m.normal_texture = get_generated_texture("normal", file_prefix)
 			m.normal_scale = parameters.normal
@@ -233,7 +233,7 @@ func update_material(m, file_prefix = null) -> void:
 		else:
 			m.depth_enabled = false
 		# Subsurface scattering
-		if get_source(INPUT_SSS) != null:
+		if get_source(INPUT_SSS):
 			m.subsurf_scatter_enabled = true
 			m.subsurf_scatter_strength = parameters.sss
 			m.subsurf_scatter_texture = get_generated_texture("sss", file_prefix)

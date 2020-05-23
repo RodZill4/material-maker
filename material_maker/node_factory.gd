@@ -10,8 +10,8 @@ func create_node(model : String, type : String) -> Node:
 		file_name = "res://material_maker/nodes/"+type+".tscn"
 	if ResourceLoader.exists(file_name):
 		node_type = load(file_name)
-	if node_type != null:
+	if node_type:
 		node = node_type.instance()
-	if node == null:
+	if not node:
 		node = preload("res://material_maker/nodes/generic.tscn").instance()
 	return node
