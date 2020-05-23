@@ -75,7 +75,7 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 		item_parent = tree.get_root()
 	var slash_position = item_name.find("/")
 	if slash_position == -1:
-		var new_item : TreeItem = null
+		var new_item : TreeItem
 		var c = item_parent.get_children()
 		while c != null:
 			if c.get_text(0) == item_name:
@@ -97,7 +97,7 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 	else:
 		var prefix = item_name.left(slash_position)
 		var suffix = item_name.right(slash_position+1)
-		var new_parent = null
+		var new_parent
 		var c = item_parent.get_children()
 		while c != null:
 			if c.get_text(0) == prefix:

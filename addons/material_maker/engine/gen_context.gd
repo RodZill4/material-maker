@@ -4,7 +4,7 @@ class_name MMGenContext
 
 
 var variants : Dictionary = {}
-var parent_context : MMGenContext = null
+var parent_context : MMGenContext
 
 func _init(p = null) -> void:
 	parent_context = p

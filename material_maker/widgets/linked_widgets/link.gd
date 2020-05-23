@@ -2,10 +2,10 @@ extends Control
 class_name MMNodeLink
 
 var end
-var source = null
-var target = null
+var source
+var target
 
-var generator = null
+var generator
 var param_name : String = ""
 var creating : bool = false
 

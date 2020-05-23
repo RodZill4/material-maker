@@ -6,7 +6,7 @@ class_name MMGenExport
 Can be used to export an additional texture
 """
 
-var texture = null
+var texture
 
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024

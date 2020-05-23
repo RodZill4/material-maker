@@ -7,7 +7,7 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times (such as convolutions)
 """
 
-var material : ShaderMaterial = null
+var material : ShaderMaterial
 var updating : bool = false
 var update_again : bool = false
 

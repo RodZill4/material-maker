@@ -88,7 +88,7 @@ func source_changed(input_index : int) -> void:
 		get_node("gen_inputs").source_changed(input_index)
 
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
-	var rv = null
+	var rv
 	if gen_name == "gen_inputs":
 		var parent = get_parent()
 		if parent != null and parent.get_script() == get_script():

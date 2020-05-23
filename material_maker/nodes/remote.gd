@@ -39,7 +39,7 @@ func update_node() -> void:
 			controls[control.name] = control
 			add_control(generator.get_widget(p.name).label, control)
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
-				var current = null
+				var current
 				if control.get_item_count() > 0 and generator.parameters.has(p.name):
 					control.selected = generator.parameters[p.name]
 					current = control.get_item_text(control.selected)

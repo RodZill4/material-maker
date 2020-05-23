@@ -2,7 +2,7 @@ extends ColorRect
 
 export(String, MULTILINE) var shader : String = ""
 
-var generator : MMGenBase = null
+var generator : MMGenBase
 var output : int = 0
 
 func update_export_menu() -> void:

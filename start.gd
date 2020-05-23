@@ -1,6 +1,6 @@
 extends Control
 
-var loader = null
+var loader
 
 onready var progress_bar = $VBoxContainer/ProgressBar
 

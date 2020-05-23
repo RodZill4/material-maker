@@ -85,7 +85,7 @@ func create_gen(data) -> MMGenBase:
 		comment = MMGenComment,
 		debug = MMGenDebug
 	}
-	var generator = null
+	var generator
 	for g in guess:
 		if data.has(g.keyword):
 			generator = g.type.new()

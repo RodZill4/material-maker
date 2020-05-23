@@ -1,16 +1,16 @@
 extends GraphEdit
 class_name MMGraphEdit
 
-var editor_interface = null
-var node_factory = null
+var editor_interface
+var node_factory
 
-var save_path = null setget set_save_path
+var save_path setget set_save_path
 var need_save = false
 
-var top_generator = null
-var generator = null
+var top_generator
+var generator
 
-var last_selected = null
+var last_selected
 
 onready var node_popup = $"../AddNodePopup"
 
@@ -185,7 +185,7 @@ func update_graph(generators, connections) -> Array:
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
-	
+
 	return rv
 
 func new_material() -> void:

@@ -11,7 +11,7 @@ signal parameter_changed(n, v)
 const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
 
 class InputPort:
-	var generator : MMGenBase = null
+	var generator : MMGenBase
 	var input_index : int = 0
 
 	func _init(g : MMGenBase, i : int) -> void:
@@ -22,7 +22,7 @@ class InputPort:
 		return generator.name+".in("+str(input_index)+")"
 
 class OutputPort:
-	var generator : MMGenBase = null
+	var generator : MMGenBase
 	var output_index : int = 0
 
 	func _init(g : MMGenBase, o : int) -> void:
@@ -33,7 +33,7 @@ class OutputPort:
 		return generator.name+".out("+str(output_index)+")"
 
 var position : Vector2 = Vector2(0, 0)
-var model = null
+var model
 var parameters = {}
 
 var seed_locked : bool = false

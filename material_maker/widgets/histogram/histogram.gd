@@ -1,6 +1,6 @@
 extends Control
 
-var generator : MMGenBase = null
+var generator : MMGenBase
 var output : int = 0
 
 var updating : bool = false

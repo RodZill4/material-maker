@@ -195,7 +195,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if !p.has("name") or !p.has("type"):
 				continue
 			var value = parameters[p.name]
-			var value_string = null
+			var value_string
 			if p.type == "float":
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]

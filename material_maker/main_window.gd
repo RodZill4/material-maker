@@ -4,8 +4,8 @@ var recent_files = []
 
 var config_cache : ConfigFile = ConfigFile.new()
 
-var editor_interface = null
-var current_tab = null
+var editor_interface
+var current_tab
 
 var updating : bool = false
 var need_update : bool = false
@@ -62,10 +62,10 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	
+
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
-	
-	
+
+
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -93,7 +93,7 @@ func _ready() -> void:
 			OS.window_position = config_cache.get_value("window", "position")
 		if config_cache.has_section_key("window", "size"):
 			OS.window_size = config_cache.get_value("window", "size")
-	
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if config_cache.has_section_key("window", "theme"):
@@ -156,7 +156,7 @@ func _ready() -> void:
 		create_menu(menu, m.name)
 		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
 	new_material()
-	
+
 	do_load_materials(OS.get_cmdline_args())
 
 func _input(event: InputEvent) -> void:
@@ -609,7 +609,7 @@ func update_preview_3d(previews : Array) -> void:
 		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
-var selected_node = null
+var selected_node
 func on_selected_node_change(node) -> void:
 	if node != selected_node:
 		selected_node = node

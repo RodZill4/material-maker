@@ -7,8 +7,8 @@ Iterate buffers, that render their input in a specific resolution and apply
 a loop n times on the result.
 """
 
-var material : ShaderMaterial = null
-var loop_material : ShaderMaterial = null
+var material : ShaderMaterial
+var loop_material : ShaderMaterial
 var updating : bool = false
 var update_again : bool = false
 var current_iteration : int = 0

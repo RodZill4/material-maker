@@ -1,7 +1,7 @@
 extends GraphNode
 class_name MMGraphNodeBase
 
-var generator : MMGenBase = null setget set_generator
+var generator : MMGenBase setget set_generator
 
 func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")

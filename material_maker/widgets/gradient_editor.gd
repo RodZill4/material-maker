@@ -45,7 +45,7 @@ class GradientCursor:
 	static func sort(a, b) -> bool:
 		return a.get_position() < b.get_position()
 
-var value = null setget set_value
+var value setget set_value
 export var embedded : bool = true
 
 signal updated(value)

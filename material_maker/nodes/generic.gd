@@ -10,7 +10,7 @@ var preview : ColorRect
 var preview_index : int = -1
 var preview_position : int
 var preview_size : int
-var preview_timer : Timer = null
+var preview_timer : Timer
 
 func _draw() -> void:
 	._draw()
@@ -107,7 +107,7 @@ func _on_gradient_changed(new_gradient, variable) -> void:
 	get_parent().set_need_save()
 
 func create_parameter_control(p : Dictionary) -> Control:
-	var control = null
+	var control
 	if p.type == "float":
 		control = preload("res://material_maker/widgets/float_edit.tscn").instance()
 		control.min_value = p.min
@@ -323,7 +323,7 @@ func load_generator() -> void:
 	dialog.popup_centered()
 
 func do_load_generator(file_name : String) -> void:
-	var new_generator = null
+	var new_generator
 	if file_name.ends_with(".mmn"):
 		var file = File.new()
 		if file.open(file_name, File.READ) == OK:

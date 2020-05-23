@@ -1,7 +1,7 @@
 tool
 extends EditorImportPlugin
 
-var plugin = null
+var plugin
 
 const PRESET_NAMES = [ "Render in game", "Prerender" ]
 const PRESET_OPTIONS = [
@@ -46,7 +46,7 @@ func get_visible_name() -> String:
 	return "Material Maker Importer"
 
 func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array) -> int:
-	var material = null
+	var material
 	if options.render:
 		var gen = mm_loader.load_gen(source_file)
 		if gen != null:

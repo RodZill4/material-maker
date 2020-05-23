@@ -3,8 +3,8 @@ extends Node
 var includes
 
 func create_node(model : String, type : String) -> Node:
-	var node_type = null
-	var node = null
+	var node_type
+	var node
 	var file_name = "res://material_maker/nodes/"+model+".tscn"
 	if ! ResourceLoader.exists(file_name):
 		file_name = "res://material_maker/nodes/"+type+".tscn"

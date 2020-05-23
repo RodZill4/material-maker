@@ -4,9 +4,9 @@ export(int, 0, 3) var preview : int = 0
 
 var config_cache : ConfigFile
 
-var default_texture : ImageTexture = null
-var current_graph_edit = null
-var current_generator = null
+var default_texture : ImageTexture
+var current_graph_edit
+var current_generator
 var item_from_gen : Dictionary = {}
 var update_index = 0
 

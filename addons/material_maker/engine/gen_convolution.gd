@@ -43,7 +43,7 @@ func _get_shader_code(uv : String, _output_index : int, context : MMGenContext) 
 		var errors = 0
 		var sum = [ 0.0, 0.0, 0.0, 0.0 ]
 		var matrix = []
-		var expr : Expression = null
+		var expr : Expression
 		var expr_variables : PoolStringArray
 		var expr_values : Array
 		var expr_variables_x_index : int
