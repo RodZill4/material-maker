@@ -1,0 +1,193 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "edge_detect_3_3_2",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_3_3_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "edge_detect_3_3_2",
+			"to_port": 1
+		}
+	],
+	"label": "Slope Blur",
+	"name": "slope_blur",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -395.25,
+				"y": -274.75
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -445.666626,
+				"y": -390.666656
+			},
+			"parameters": {
+				"param0": 9,
+				"param1": 10
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Grid size:",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "edge_detect_3_3_2",
+							"widget": "size"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				},
+				{
+					"label": "Sigma",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_2",
+							"widget": "sigma"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -872.666626,
+				"y": -243.392853
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "in",
+					"type": "rgba"
+				},
+				{
+					"name": "heightmap",
+					"type": "f"
+				}
+			],
+			"seed_value": 91624,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -45.452393,
+				"y": -195.392853
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "edge_detect_3_3_2",
+			"node_position": {
+				"x": -401.725464,
+				"y": -189.178955
+			},
+			"parameters": {
+				"sigma": 10,
+				"size": 9
+			},
+			"seed_value": -47470,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"name": "heightmap",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tfloat dx = 1.0/$size;\n    float v = $heightmap(uv);\n\tvec2 slope = vec2($heightmap(uv+vec2(dx, 0.0))-v, $heightmap(uv+vec2(0.0, dx))-v);\n\tfloat slope_strength = length(slope)*$size;\n\tvec2 e = dx*normalize(slope);\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = max($sigma, 0.0001)*slope_strength;\n\tfor (float i = 0.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"name": "Slope Blur",
+				"outputs": [
+					{
+						"rgba": "$(name)_fct($uv)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 4,
+						"label": "Size",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sigma",
+						"max": 50,
+						"min": 0,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"param0": 9,
+		"param1": 10
+	},
+	"type": "graph"
+}
