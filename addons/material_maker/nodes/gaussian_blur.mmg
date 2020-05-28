@@ -53,6 +53,18 @@
 			"from_port": 0,
 			"to": "gaussian_blur_y",
 			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "gaussian_blur_x",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "gaussian_blur_y",
+			"to_port": 1
 		}
 	],
 	"label": "Gaussian Blur",
@@ -229,8 +241,12 @@
 			},
 			"ports": [
 				{
-					"name": "port0",
+					"name": "input",
 					"type": "rgba"
+				},
+				{
+					"name": "amount",
+					"type": "f"
 				}
 			],
 			"type": "ios"

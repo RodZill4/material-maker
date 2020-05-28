@@ -17,6 +17,12 @@
 			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "edge_detect_3_3_2",
+			"to_port": 1
 		}
 	],
 	"label": "Directional Blur",
@@ -93,18 +99,23 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -738.666626,
-				"y": -190.392853
+				"x": -779.666626,
+				"y": -247.392853
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"name": "port0",
+					"name": "in",
 					"type": "rgba"
+				},
+				{
+					"name": "amount",
+					"type": "f"
 				}
 			],
+			"seed_value": 91624,
 			"type": "ios"
 		},
 		{
@@ -127,8 +138,8 @@
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -399.725464,
-				"y": -198.178955
+				"x": -420.725464,
+				"y": -191.178955
 			},
 			"parameters": {
 				"angle": 45,
@@ -146,9 +157,16 @@
 						"label": "",
 						"name": "in",
 						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "Label",
+						"name": "amount",
+						"type": "f"
 					}
 				],
-				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfor (float i = -50.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/$sigma, 2.0)))/(6.28318530718*$sigma*$sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = $sigma*$amount(uv);\n\tfor (float i = -50.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
 				"name": "Directional Blur",
 				"outputs": [
 					{
