@@ -11,6 +11,7 @@ var need_render = {}
 var generated_textures = {}
 var updating : bool = false
 var update_again : bool = false
+var render_not_ready : bool = false
 
 const TEXTURE_LIST = [
 	{ port=0, texture="albedo", sources=[0] },
@@ -138,6 +139,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 		update_textures()
 
 func on_texture_changed(n : String) -> void:
+	render_not_ready = true
 	var do_update : bool = false
 	for t in TEXTURE_LIST:
 		if generated_textures[t.texture] != null:
@@ -379,6 +381,15 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				continue
 		match f.type:
 			"texture":
+				# Wait until no buffer has been updated for 5 frames
+				render_not_ready = true
+				while render_not_ready:
+					render_not_ready = false
+					yield(get_tree(), "idle_frame")
+					yield(get_tree(), "idle_frame")
+					yield(get_tree(), "idle_frame")
+					yield(get_tree(), "idle_frame")
+					yield(get_tree(), "idle_frame")
 				var file_name = subst_string(f.file_name, export_context)
 				var result = render(f.output, size)
 				while result is GDScriptFunctionState:
