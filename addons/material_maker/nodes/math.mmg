@@ -8,7 +8,7 @@
 		"clamp": false,
 		"default_in1": 0,
 		"default_in2": 0,
-		"op": 0
+		"op": 19
 	},
 	"shader_model": {
 		"code": "float $(name_uv)_clamp_false = $op;\nfloat $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);\n",
@@ -37,7 +37,7 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": 19,
 				"label": "",
 				"name": "op",
 				"type": "enum",
@@ -117,6 +117,10 @@
 					{
 						"name": "tan(A*B)",
 						"value": "tan($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sqrt(1-A²)",
+						"value": "sqrt(1.0-$in1($uv)*$in1($uv))"
 					}
 				]
 			},
