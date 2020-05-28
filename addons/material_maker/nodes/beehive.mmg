@@ -26,12 +26,13 @@
 				"type": "rgb"
 			},
 			{
-				"rgb": "vec3(vec2(0.5)+$(name_uv)_center.xy, 0.0)",
+				"rgb": "vec3(vec2(0.5)+$(name_uv)_center.xy, rand(fract($(name_uv)_center.zw/vec2($sx, $sy))+vec2(float($seed))))",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 2,
 				"label": "Size X",
 				"max": 64,
@@ -41,6 +42,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 2,
 				"label": "Size Y",
 				"max": 64,
