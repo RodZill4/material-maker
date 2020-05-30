@@ -34,6 +34,12 @@ func _gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):
 		node_popup.rect_global_position = get_global_mouse_position()
 		node_popup.show_popup()
+	elif event.is_action_pressed("ui_hierarchy_up"):
+		on_ButtonUp_pressed()
+	elif event.is_action_pressed("ui_hierarchy_down"):
+		var selected_nodes = get_selected_nodes()
+		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
+			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
 		if event.button_index == BUTTON_WHEEL_DOWN and event.control:
 			zoom *= 1.1
