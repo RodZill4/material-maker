@@ -9,7 +9,7 @@ func _ready():
 	set_process(false)
 	var path : String
 	if Directory.new().file_exists("res://material_maker/main_window.tscn"):
-		if OS.get_cmdline_args().size() > 0 && OS.get_cmdline_args()[0] == "--export":
+		if OS.get_cmdline_args().size() > 0 and (OS.get_cmdline_args()[0] == "--export" or OS.get_cmdline_args()[0] == "--export-material"):
 			var output = []
 			var dir : Directory = Directory.new()
 			match OS.get_name():
