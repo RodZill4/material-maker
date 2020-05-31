@@ -250,10 +250,15 @@ func create_menu_export_material(menu) -> void:
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
+func export_profile_config_key(profile : String) -> String:
+	var key = "export_"+profile.to_lower().replace(" ", "_")
+	return key
+
 func export_material(file_path : String, profile : String) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit == null:
 		return
+	config_cache.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	graph_edit.export_material(export_prefix, profile)
 
@@ -270,6 +275,9 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	var config_key = export_profile_config_key(profile)
+	if config_cache.has_section_key("path", config_key):
+		dialog.current_dir = config_cache.get_value("path", config_key)
 	add_child(dialog)
 	dialog.connect("file_selected", self, "export_material", [ profile ])
 	dialog.popup_centered()
@@ -404,7 +412,8 @@ func save_material_as() -> void:
 		dialog.popup_centered()
 
 func do_save_material(filename : String) -> void:
-	config_cache.set_value("path", "material", filename.get_base_dir())
+
+
 	get_current_graph_edit().save_file(filename)
 
 func close_material() -> void:
