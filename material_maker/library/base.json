@@ -107,193 +107,12 @@
 			"type": "image"
 		},
 		{
-			"collapsed": true,
-			"connections": [
-				{
-					"from": "pattern",
-					"from_port": 0,
-					"to": "transform",
-					"to_port": 0
-				},
-				{
-					"from": "transform",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
+			"collapsed": false,
 			"icon": "simple_gradient",
-			"label": "Gradient",
-			"name": "graph",
-			"nodes": [
-				{
-					"name": "pattern",
-					"node_position": {
-						"x": -389.625,
-						"y": -359.458374
-					},
-					"parameters": {
-						"mix": 0,
-						"x_scale": 1,
-						"x_wave": 3,
-						"y_scale": 1,
-						"y_wave": 4
-					},
-					"type": "pattern"
-				},
-				{
-					"name": "transform",
-					"node_position": {
-						"x": -371.125,
-						"y": -262.458374
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 0,
-						"scale_x": 1,
-						"scale_y": 1,
-						"translate_x": 0,
-						"translate_y": 0
-					},
-					"type": "transform"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -352.125,
-						"y": -69.458374
-					},
-					"parameters": {
-						"gradient": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -406.125,
-						"y": -498.858337
-					},
-					"parameters": {
-						"param0": 1,
-						"param1": 0,
-						"param2": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Repeat",
-							"linked_widgets": [
-								{
-									"node": "pattern",
-									"widget": "x_scale"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Rotate",
-							"linked_widgets": [
-								{
-									"node": "transform",
-									"widget": "rotate"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Gradient",
-							"linked_widgets": [
-								{
-									"node": "colorize",
-									"widget": "gradient"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -706.125,
-						"y": -297.55835
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": -52.125,
-						"y": -297.55835
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				}
-			],
+			"name": "gradient",
 			"parameters": {
-				"param0": 1,
-				"param1": 0,
-				"param2": {
+				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -311,10 +130,12 @@
 						}
 					],
 					"type": "Gradient"
-				}
+				},
+				"repeat": 1,
+				"rotate": 0
 			},
 			"tree_item": "Simple/Gradient",
-			"type": "graph"
+			"type": "gradient"
 		},
 		{
 			"collapsed": true,
@@ -2507,6 +2328,17 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_blur_slope",
+			"name": "slope_blur",
+			"parameters": {
+				"param0": 9,
+				"param1": 20
+			},
+			"tree_item": "Filter/Blur/Slope",
+			"type": "slope_blur"
+		},
+		{
+			"collapsed": true,
 			"icon": "filter_edge_detect",
 			"name": "edge_detect_1",
 			"parameters": {
@@ -2674,6 +2506,18 @@
 			},
 			"tree_item": "Filter/Fill/To UV",
 			"type": "fill_to_uv"
+		},
+		{
+			"collapsed": true,
+			"name": "math",
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 0
+			},
+			"tree_item": "Filter/Math",
+			"type": "math"
 		},
 		{
 			"collapsed": false,
