@@ -313,16 +313,24 @@ func update_generator(shader_model) -> void:
 	get_parent().set_need_save()
 
 func load_generator() -> void:
+	print(get_node("/root/MainWindow"))
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		if config_cache.has_section_key("path", "template"):
+			dialog.current_dir = config_cache.get_value("path", "template")
 	dialog.connect("file_selected", self, "do_load_generator")
 	dialog.popup_centered()
 
 func do_load_generator(file_name : String) -> void:
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		config_cache.set_value("path", "template", file_name.get_base_dir())
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
 		var file = File.new()
@@ -348,10 +356,17 @@ func save_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		if config_cache.has_section_key("path", "template"):
+			dialog.current_dir = config_cache.get_value("path", "template")
 	dialog.connect("file_selected", self, "do_save_generator")
 	dialog.popup_centered()
 
 func do_save_generator(file_name : String) -> void:
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		config_cache.set_value("path", "template", file_name.get_base_dir())
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		var data = generator.serialize()

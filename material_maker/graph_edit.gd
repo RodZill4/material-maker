@@ -1,7 +1,6 @@
 extends GraphEdit
 class_name MMGraphEdit
 
-var editor_interface = null
 var node_factory = null
 
 var save_path = null setget set_save_path

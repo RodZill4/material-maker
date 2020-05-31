@@ -4,7 +4,6 @@ var recent_files = []
 
 var config_cache : ConfigFile = ConfigFile.new()
 
-var editor_interface = null
 var current_tab = null
 
 var updating : bool = false
@@ -335,7 +334,6 @@ func menu_about_to_show(name, menu) -> void:
 func new_pane() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
-	graph_edit.editor_interface = editor_interface
 	projects.add_child(graph_edit)
 	projects.current_tab = graph_edit.get_index()
 	return graph_edit
@@ -353,10 +351,14 @@ func load_material() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
+	if config_cache.has_section_key("path", "material"):
+		dialog.current_dir = config_cache.get_value("path", "material")
 	dialog.connect("files_selected", self, "do_load_materials")
 	dialog.popup_centered()
 
 func do_load_materials(filenames) -> void:
+	if not filenames.empty():
+		config_cache.set_value("path", "material", filenames[0].get_base_dir())
 	for f in filenames:
 		do_load_material(f, false)
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -396,8 +398,14 @@ func save_material_as() -> void:
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.mode = FileDialog.MODE_SAVE_FILE
 		dialog.add_filter("*.ptex;Procedural Textures File")
-		dialog.connect("file_selected", graph_edit, "save_file")
+		if config_cache.has_section_key("path", "material"):
+			dialog.current_dir = config_cache.get_value("path", "material")
+		dialog.connect("file_selected", self, "do_save_material")
 		dialog.popup_centered()
+
+func do_save_material(filename : String) -> void:
+	config_cache.set_value("path", "material", filename.get_base_dir())
+	get_current_graph_edit().save_file(filename)
 
 func close_material() -> void:
 	projects.close_tab()
