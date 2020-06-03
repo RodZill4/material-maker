@@ -70,10 +70,17 @@ func _on_Export_id_pressed(id):
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		if config_cache.has_section_key("path", "save_preview"):
+			dialog.current_dir = config_cache.get_value("path", "save_preview")
 	dialog.connect("file_selected", self, "export_as_png", [ 64 << id ])
 	dialog.popup_centered()
 
 func export_as_png(file_name : String, size : int) -> void:
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		config_cache.set_value("path", "save_preview", file_name.get_base_dir())
 	var previous_size = material.get_shader_param("size")
 	var previous_margin = material.get_shader_param("margin")
 	var previous_show_tiling = material.get_shader_param("show_tiling")
