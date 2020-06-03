@@ -1,5 +1,5 @@
 Fill node
-~~~~~~~~~~~~~
+~~~~~~~~~
 
 The **Fill** node fills all areas surrounded by white pixels, and generates
 a specific input for the **Fill to random grey**, the **Fill to random color** and

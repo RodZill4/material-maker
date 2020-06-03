@@ -7,6 +7,9 @@ The transform nodes are nodes that affect the geometry of their input.
 	:maxdepth: 1
 
 	node_transform
+	node_transform_translate
+	node_transform_rotate
+	node_transform_scale
 	node_transform_shear
 	node_transform_mirror
 	node_transform_kaleidoscope
