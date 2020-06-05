@@ -2509,6 +2509,7 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "filter_math",
 			"name": "math",
 			"parameters": {
 				"clamp": false,
