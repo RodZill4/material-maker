@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/widgets/node_editor/parameter_float.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/widgets/float_edit.tscn" type="PackedScene" id=2]
 
-
 [node name="float" type="HBoxContainer"]
 margin_right = 400.0
 margin_bottom = 24.0
@@ -92,10 +91,9 @@ text = "Control:"
 
 [node name="Control" type="OptionButton" parent="."]
 margin_left = 458.0
-margin_right = 533.0
+margin_right = 521.0
 margin_bottom = 24.0
 text = "None"
-selected = 0
 [connection signal="value_changed" from="Min" to="." method="_on_Min_value_changed"]
 [connection signal="value_changed" from="Max" to="." method="_on_Max_value_changed"]
 [connection signal="value_changed" from="Step" to="." method="_on_Step_value_changed"]

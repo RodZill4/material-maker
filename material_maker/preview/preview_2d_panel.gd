@@ -43,6 +43,10 @@ func update_shader_options() -> void:
 		material.set_shader_param("margin", 0)
 	setup_controls()
 
+func on_resized() -> void:
+	.on_resized()
+	setup_controls()
+
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == BUTTON_RIGHT:

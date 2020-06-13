@@ -9,8 +9,6 @@
 [ext_resource path="res://material_maker/widgets/node_editor/parameter_color.tscn" type="PackedScene" id=7]
 [ext_resource path="res://material_maker/widgets/node_editor/parameter_gradient.tscn" type="PackedScene" id=8]
 
-
-
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )
@@ -67,18 +65,19 @@ text = "Label"
 
 [node name="Type" type="OptionButton" parent="."]
 margin_left = 236.0
-margin_right = 305.0
+margin_right = 293.0
 margin_bottom = 24.0
 text = "float"
-items = [ "float", null, false, -1, null, "size", null, false, -1, null, "enum", null, false, -1, null, "boolean", null, false, -1, null, "color", null, false, -1, null, "gradient", null, false, -1, null ]
+items = [ "float", null, false, 0, null, "size", null, false, 1, null, "enum", null, false, 2, null, "boolean", null, false, 3, null, "color", null, false, 4, null, "gradient", null, false, 5, null ]
 selected = 0
 
 [node name="Types" type="HBoxContainer" parent="."]
-margin_left = 309.0
-margin_right = 856.0
+margin_left = 297.0
+margin_right = 818.0
 margin_bottom = 24.0
 
 [node name="float" parent="Types" instance=ExtResource( 3 )]
+margin_right = 521.0
 
 [node name="size" parent="Types" instance=ExtResource( 4 )]
 visible = false
