@@ -28,24 +28,17 @@ depth_flip_binormal = false
 uv1_scale = Vector3( 3, 2, 1 )
 
 [sub_resource type="CylinderMesh" id=3]
+radial_segments = 32
 
 [sub_resource type="SpatialMaterial" id=4]
 albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 2, 2, 2 )
 
-[sub_resource type="SphereMesh" id=5]
+[sub_resource type="SphereMesh" id=16]
 radius = 1.5
 height = 3.0
-radial_segments = 512
-rings = 256
-
-[sub_resource type="SpatialMaterial" id=6]
-albedo_texture = ExtResource( 1 )
-
-[sub_resource type="SpatialMaterial" id=7]
-albedo_texture = ExtResource( 1 )
-uv1_scale = Vector3( 2, 2, 2 )
-uv1_offset = Vector3( 0, 0.5, 0 )
+radial_segments = 32
+rings = 16
 
 [sub_resource type="PrismMesh" id=8]
 
@@ -54,43 +47,19 @@ albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 3, 2, 2 )
 
 [sub_resource type="PlaneMesh" id=10]
+material = SubResource( 4 )
 size = Vector2( 3, 3 )
-subdivide_width = 256
-subdivide_depth = 256
 
 [sub_resource type="SpatialMaterial" id=11]
 albedo_texture = ExtResource( 1 )
 
 [sub_resource type="PlaneMesh" id=12]
+material = SubResource( 4 )
 size = Vector2( 4, 4 )
-subdivide_width = 1024
-subdivide_depth = 1024
 
 [sub_resource type="SpatialMaterial" id=13]
 albedo_texture = ExtResource( 1 )
 uv1_scale = Vector3( 4, 4, 4 )
-
-[sub_resource type="ShaderMaterial" id=16]
-shader = ExtResource( 2 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/specular = 0.5
-shader_param/metallic = 0.0
-shader_param/roughness = 1.0
-shader_param/point_size = 1.0
-shader_param/emission = null
-shader_param/emission_energy = null
-shader_param/normal_scale = null
-shader_param/ao_texture_channel = null
-shader_param/ao_light_affect = null
-shader_param/depth_scale = null
-shader_param/depth_min_layers = null
-shader_param/depth_max_layers = null
-shader_param/depth_flip = null
-shader_param/uv1_scale = Vector3( 1, 1, 1 )
-shader_param/uv1_offset = Vector3( 0, 0, 0 )
-shader_param/uv2_scale = Vector3( 1, 1, 1 )
-shader_param/uv2_offset = Vector3( 0, 0, 0 )
-shader_param/texture_albedo = ExtResource( 1 )
 
 [sub_resource type="ShaderMaterial" id=15]
 shader = ExtResource( 2 )
@@ -113,6 +82,39 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/uv2_scale = Vector3( 1, 1, 1 )
 shader_param/uv2_offset = Vector3( 0, 0, 0 )
 
+[sub_resource type="PlaneMesh" id=17]
+material = SubResource( 15 )
+size = Vector2( 3, 3 )
+subdivide_width = 128
+subdivide_depth = 128
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = ExtResource( 2 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/specular = 0.5
+shader_param/metallic = 0.0
+shader_param/roughness = 1.0
+shader_param/point_size = 1.0
+shader_param/emission = Color( 0, 0, 0, 1 )
+shader_param/emission_energy = 1.0
+shader_param/normal_scale = null
+shader_param/ao_texture_channel = null
+shader_param/ao_light_affect = null
+shader_param/depth_scale = 0.21
+shader_param/depth_min_layers = null
+shader_param/depth_max_layers = null
+shader_param/depth_flip = null
+shader_param/uv1_scale = Vector3( 1, 1, 1 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/uv2_scale = Vector3( 1, 1, 1 )
+shader_param/uv2_offset = Vector3( 0, 0, 0 )
+
+[sub_resource type="SphereMesh" id=5]
+radius = 1.5
+height = 3.0
+radial_segments = 256
+rings = 128
+
 [node name="Objects" type="Spatial"]
 transform = Transform( 0.999995, 0, 0, 0, 1, 0, 0, 0, 0.999995, 0, 0, 0 )
 
@@ -128,13 +130,13 @@ material/0 = SubResource( 4 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 5 )
-material/0 = SubResource( 6 )
+mesh = SubResource( 16 )
+material/0 = SubResource( 4 )
 
 [node name="Sphere2" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 5 )
-material/0 = SubResource( 7 )
+mesh = SubResource( 16 )
+material/0 = SubResource( 4 )
 
 [node name="Prism" type="MeshInstance" parent="."]
 visible = false
@@ -153,8 +155,8 @@ material/0 = SubResource( 13 )
 
 [node name="QuadTess" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 10 )
-material/0 = SubResource( 16 )
+mesh = SubResource( 17 )
+material/0 = SubResource( 18 )
 
 [node name="SphereTess" type="MeshInstance" parent="."]
 visible = false
