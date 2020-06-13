@@ -252,7 +252,7 @@ func update_material(m, file_prefix = null) -> void:
 		m.set_shader_param("roughness_texture_channel", PoolRealArray([0.0, 1.0, 0.0, 0.0]))
 		m.set_shader_param("emission_energy", parameters.emission_energy)
 		m.set_shader_param("texture_emission", get_generated_texture("emission", file_prefix))
-		m.set_shader_param("normal_scale", parameters.normal_scale)
+		m.set_shader_param("normal_scale", parameters.normal)
 		m.set_shader_param("texture_normal", get_generated_texture("normal", file_prefix))
 		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
 		m.set_shader_param("texture_depth", get_generated_texture("depth", file_prefix))
