@@ -1,0 +1,120 @@
+{
+	"name": "curve",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"ax": -0.35,
+		"ay": -0.2,
+		"bx": 0,
+		"by": 0.5,
+		"cx": 0.35,
+		"cy": -0.2,
+		"repeat": 1,
+		"width": 0.05
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_bezier = sdBezier($uv, vec2($ax+0.5, $ay+0.5), vec2($bx+0.5, $by+0.5), vec2($cx+0.5, $cy+0.5));\nvec2 $(name_uv)_uv = vec2($(name_uv)_bezier.x, $(name_uv)_bezier.y/$width+0.5);\nvec2 $(name_uv)_uvtest = step(vec2(0.5), abs($(name_uv)_uv-vec2(0.5)));\n$(name_uv)_uv = mix(vec2(fract($repeat*$(name_uv)_uv.x), $(name_uv)_uv.y), vec2(0.0), max($(name_uv)_uvtest.x, $(name_uv)_uvtest.y));\n",
+		"global": "float cross2( in vec2 a, in vec2 b ) { return a.x*b.y - a.y*b.x; }\n\n// signed distance to a quadratic bezier\nvec2 sdBezier( in vec2 pos, in vec2 A, in vec2 B, in vec2 C ) {    \n    vec2 a = B - A;\n    vec2 b = A - 2.0*B + C;\n    vec2 c = a * 2.0;\n    vec2 d = A - pos;\n\n    float kk = 1.0/dot(b,b);\n    float kx = kk * dot(a,b);\n    float ky = kk * (2.0*dot(a,a)+dot(d,b))/3.0;\n    float kz = kk * dot(d,a);      \n\n    float res = 0.0;\n    float sgn = 0.0;\n\n    float p = ky - kx*kx;\n    float p3 = p*p*p;\n    float q = kx*(2.0*kx*kx - 3.0*ky) + kz;\n    float h = q*q + 4.0*p3;\n\tfloat rvx;\n\n    if( h>=0.0 ) { // 1 root\n        h = sqrt(h);\n        vec2 x = (vec2(h,-h)-q)/2.0;\n        vec2 uv = sign(x)*pow(abs(x), vec2(1.0/3.0));\n\t\trvx = uv.x+uv.y-kx;\n        float t = clamp(rvx, 0.0, 1.0);\n        vec2 q2 = d+(c+b*t)*t;\n        res = dot(q2, q2);\n    \tsgn = cross2(c+2.0*b*t, q2);\n    } else {   // 3 roots\n        float z = sqrt(-p);\n        float v = acos(q/(p*z*2.0))/3.0;\n        float m = cos(v);\n        float n = sin(v)*1.732050808;\n        vec3  t = clamp(vec3(m+m,-n-m,n-m)*z-kx, 0.0, 1.0);\n        vec2  qx=d+(c+b*t.x)*t.x; float dx=dot(qx, qx), sx = cross2(c+2.0*b*t.x,qx);\n        vec2  qy=d+(c+b*t.y)*t.y; float dy=dot(qy, qy), sy = cross2(c+2.0*b*t.y,qy);\n        if( dx<dy ) { res=dx; sgn=sx; rvx = t.x; } else { res=dy; sgn=sy; rvx = t.y; }\n    }\n    \n    return vec2(rvx, sqrt(res)*sign(sgn));\n}\n",
+		"inputs": [
+			{
+				"default": "vec4(vec3(step(abs($uv.y-0.5), 0.4999)), 1.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Curve",
+		"outputs": [
+			{
+				"rgba": "$in($(name_uv)_uv)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": -0.3,
+				"label": "AX",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "ax",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": -0.1,
+				"label": "AY",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "ay",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P3.x",
+				"default": -0,
+				"label": "BX",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "bx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P3.y",
+				"default": 0.2,
+				"label": "BY",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "by",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P2.x",
+				"default": 0.3,
+				"label": "CX",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P2.y",
+				"default": -0.1,
+				"label": "CY",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Width",
+				"max": 0.5,
+				"min": 0,
+				"name": "width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"max": 16,
+				"min": 1,
+				"name": "repeat",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

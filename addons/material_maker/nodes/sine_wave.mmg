@@ -1,0 +1,60 @@
+{
+	"name": "sine_wave",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amplitude": 0.5,
+		"frequency": 2,
+		"phase": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Sine Wave",
+		"outputs": [
+			{
+				"f": "1.0-abs(2.0*($uv.y-0.5)-$amplitude*sin(($frequency*$uv.x+$phase)*6.28318530718))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Amplitude",
+				"max": 1,
+				"min": 0,
+				"name": "amplitude",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Frequency",
+				"max": 16,
+				"min": 0,
+				"name": "frequency",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Phase",
+				"max": 1,
+				"min": 0,
+				"name": "phase",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

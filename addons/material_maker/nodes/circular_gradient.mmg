@@ -1,0 +1,83 @@
+{
+	"name": "circular_gradient",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"gradient": {
+			"interpolation": 1,
+			"points": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"pos": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"pos": 1,
+					"r": 1
+				}
+			],
+			"type": "Gradient"
+		},
+		"repeat": 1
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Circular Gradient",
+		"outputs": [
+			{
+				"rgba": "$gradient(fract($repeat*0.15915494309*atan($uv.y-0.5, $uv.x-0.5)))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"max": 32,
+				"min": 1,
+				"name": "repeat",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"label": "Gradient",
+				"name": "gradient",
+				"type": "gradient"
+			}
+		]
+	},
+	"type": "shader"
+}

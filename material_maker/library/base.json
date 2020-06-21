@@ -139,174 +139,11 @@
 		},
 		{
 			"collapsed": true,
-			"connections": [
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "pattern",
-					"from_port": 0,
-					"to": "circle_map",
-					"to_port": 0
-				},
-				{
-					"from": "circle_map",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				}
-			],
 			"icon": "simple_gradient_radial",
-			"label": "Radial Gradient",
-			"name": "graph",
-			"nodes": [
-				{
-					"name": "pattern",
-					"node_position": {
-						"x": -251.5,
-						"y": -71
-					},
-					"parameters": {
-						"mix": 0,
-						"x_scale": 1,
-						"x_wave": 4,
-						"y_scale": 1,
-						"y_wave": 3
-					},
-					"type": "pattern"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -208.5,
-						"y": 66
-					},
-					"parameters": {
-						"gradient": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -264.18396,
-						"y": -183.44751
-					},
-					"parameters": {
-						"param0": 1,
-						"param1": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Repeat",
-							"linked_widgets": [
-								{
-									"node": "pattern",
-									"widget": "y_scale"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Gradient",
-							"linked_widgets": [
-								{
-									"node": "colorize",
-									"widget": "gradient"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "circle_map",
-					"node_position": {
-						"x": -171.776794,
-						"y": 23.850616
-					},
-					"parameters": {
-
-					},
-					"type": "circle_map"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -564.18396,
-						"y": -41.149223
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 128.223206,
-						"y": -41.149223
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				}
-			],
+			"name": "radial_gradient",
 			"parameters": {
-				"param0": 1,
-				"param1": {
+				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -324,181 +161,19 @@
 						}
 					],
 					"type": "Gradient"
-				}
+				},
+				"repeat": 1
 			},
 			"tree_item": "Simple/Gradient/Radial",
-			"type": "graph"
+			"type": "radial_gradient"
 		},
 		{
 			"collapsed": true,
-			"connections": [
-				{
-					"from": "circle_map",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "pattern",
-					"from_port": 0,
-					"to": "circle_map",
-					"to_port": 0
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
 			"icon": "simple_gradient_circular",
-			"label": "Circular Gradient",
-			"name": "graph",
-			"nodes": [
-				{
-					"name": "pattern",
-					"node_position": {
-						"x": -280.5,
-						"y": -180
-					},
-					"parameters": {
-						"mix": 0,
-						"x_scale": 1,
-						"x_wave": 3,
-						"y_scale": 1,
-						"y_wave": 4
-					},
-					"type": "pattern"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -256.5,
-						"y": -17
-					},
-					"parameters": {
-						"gradient": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "circle_map",
-					"node_position": {
-						"x": -229.5,
-						"y": -84.5
-					},
-					"parameters": {
-
-					},
-					"type": "circle_map"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -297.5,
-						"y": -290
-					},
-					"parameters": {
-						"param0": 1,
-						"param1": {
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Repeat",
-							"linked_widgets": [
-								{
-									"node": "pattern",
-									"widget": "x_scale"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Gradient",
-							"linked_widgets": [
-								{
-									"node": "colorize",
-									"widget": "gradient"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -480.5,
-						"y": -134.875
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 60.5,
-						"y": -147.875
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				}
-			],
+			"name": "circular_gradient",
 			"parameters": {
-				"param0": 1,
-				"param1": {
+				"gradient": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -516,10 +191,11 @@
 						}
 					],
 					"type": "Gradient"
-				}
+				},
+				"repeat": 1
 			},
 			"tree_item": "Simple/Gradient/Circular",
-			"type": "graph"
+			"type": "circular_gradient"
 		},
 		{
 			"collapsed": true,
@@ -737,6 +413,61 @@
 			},
 			"tree_item": "Simple/SDF/Transforms/Scale",
 			"type": "sdscale"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_curve",
+			"name": "curve",
+			"parameters": {
+				"ax": -0.35,
+				"ay": -0.2,
+				"bx": 0,
+				"by": 0.5,
+				"cx": 0.35,
+				"cy": -0.2,
+				"repeat": 1,
+				"width": 0.05
+			},
+			"tree_item": "Simple/Curve",
+			"type": "curve"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_profile",
+			"name": "profile",
+			"parameters": {
+				"gradient": {
+					"interpolation": 2,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 0.55,
+							"g": 0.55,
+							"pos": 0.504545,
+							"r": 0.55
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"style": 1
+			},
+			"seed_value": 65353,
+			"tree_item": "Simple/Profile",
+			"type": "profile"
 		},
 		{
 			"collapsed": false,
@@ -1338,6 +1069,17 @@
 		},
 		{
 			"collapsed": true,
+			"icon": "pattern_runes_i_ching",
+			"name": "iching",
+			"parameters": {
+				"columns": 2,
+				"rows": 2
+			},
+			"tree_item": "Pattern/Runes/I Ching",
+			"type": "iching"
+		},
+		{
+			"collapsed": true,
 			"connections": [
 				{
 					"from": "pattern",
@@ -1583,6 +1325,18 @@
 			},
 			"tree_item": "Pattern/Beehive",
 			"type": "beehive"
+		},
+		{
+			"collapsed": true,
+			"icon": "pattern_sine_wave",
+			"name": "sine_wave",
+			"parameters": {
+				"amplitude": 0.5,
+				"frequency": 2,
+				"phase": 0
+			},
+			"tree_item": "Pattern/Sine Wave",
+			"type": "sine_wave"
 		},
 		{
 			"collapsed": false,

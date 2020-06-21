@@ -5,11 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount": 0.2,
-		"eps": 0.045,
-		"epsilon": 0
+		"amount": 0.1,
+		"eps": 0.1,
+		"mode": 0
 	},
 	"shader_model": {
+		"code": "vec2 $(name_uv)_slope = $(name)_slope($uv, $eps);\nvec2 $(name_uv)_warp = $mode;",
 		"global": "",
 		"inputs": [
 			{
@@ -20,16 +21,17 @@
 			},
 			{
 				"default": "0.0",
+				"function": true,
 				"label": "",
 				"name": "d",
 				"type": "f"
 			}
 		],
-		"instance": "",
+		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\treturn vec2($d(fract(uv+vec2(epsilon, 0.0)))-$d(fract(uv-vec2(epsilon, 0.0))), $d(fract(uv+vec2(0.0, epsilon)))-$d(fract(uv-vec2(0.0, epsilon))));\n}",
 		"name": "Warp",
 		"outputs": [
 			{
-				"rgba": "$in($uv+$amount*vec2($d(fract($uv+vec2($eps, 0.0)))-$d(fract($uv-vec2($eps, 0.0))), $d(fract($uv+vec2(0.0, $eps)))-$d(fract($uv-vec2(0.0, $eps)))))",
+				"rgba": "$in($uv+$amount*$(name_uv)_warp)",
 				"type": "rgba"
 			}
 		],
@@ -37,23 +39,40 @@
 			{
 				"default": 0,
 				"label": "",
+				"name": "mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Slope",
+						"value": "$(name_uv)_slope"
+					},
+					{
+						"name": "Distance to top",
+						"value": "$(name_uv)_slope*(1.0-$d($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
 				"max": 1,
 				"min": 0,
 				"name": "amount",
 				"step": 0.005,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "",
 				"max": 0.2,
 				"min": 0.005,
 				"name": "eps",
 				"step": 0.005,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			}
 		]
-	}
+	},
+	"type": "shader"
 }

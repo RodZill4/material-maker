@@ -1,0 +1,101 @@
+{
+	"name": "profile",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"gradient": {
+			"interpolation": 1,
+			"points": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"pos": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"pos": 1,
+					"r": 1
+				}
+			],
+			"type": "Gradient"
+		},
+		"style": 0,
+		"width": 0.01
+	},
+	"seed_value": 65353,
+	"shader_model": {
+		"code": "",
+		"global": "float draw_profile_fill(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*(1.0-uv.y-y)/w, 0.0, 1.0);\n}\n\nfloat draw_profile_curve(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*abs(1.0-uv.y-y)/w, 0.0, 1.0);\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Profile",
+		"outputs": [
+			{
+				"f": "draw_profile_$style($uv, dot($gradient($uv.x).xyz, vec3(1.0/3.0)), (dot($gradient($uv.x+0.001).xyz, vec3(1.0/3.0))-dot($gradient($uv.x-0.001).xyz, vec3(1.0/3.0)))/0.002, max(0.0001, $width))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "style",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Curve",
+						"value": "curve"
+					},
+					{
+						"name": "Fill",
+						"value": "fill"
+					}
+				]
+			},
+			{
+				"default": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"label": "",
+				"name": "gradient",
+				"type": "gradient"
+			},
+			{
+				"control": "None",
+				"default": 0.05,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "width",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -5,7 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"radius": 1,
+		"repeat": 1
 	},
 	"shader_model": {
 		"code": "",
@@ -22,12 +23,31 @@
 		"name": "CircleMap",
 		"outputs": [
 			{
-				"rgba": "$in(vec2(fract(atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), min(0.99999, 2.0*length($uv-vec2(0.5)))))",
+				"rgba": "$in(vec2(fract($repeat*atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), min(0.99999, 2.0/$radius*length($uv-vec2(0.5)))))",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
-
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Radius",
+				"max": 1.5,
+				"min": 0,
+				"name": "radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"max": 16,
+				"min": 0,
+				"name": "repeat",
+				"step": 1,
+				"type": "float"
+			}
 		]
 	},
 	"type": "shader"

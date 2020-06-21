@@ -1,0 +1,49 @@
+{
+	"name": "iching",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"columns": 4,
+		"rows": 4
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float IChing(vec2 uv, float seed) {\n\tint value = int(32.0*rand(floor(uv)+vec2(seed)));\n\tfloat base = step(0.5, fract(fract(uv.y)*6.5))*step(0.04, fract(uv.y+0.02))*step(0.2, fract(uv.x+0.1));\n\tint bit = int(fract(uv.y)*6.5);\n\treturn base*step(0.1*step(float(bit & value), 0.5), fract(uv.x+0.55));\n}\n\n\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "I Ching",
+		"outputs": [
+			{
+				"f": "IChing(vec2($columns, $rows)*$uv, float($seed))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Size X",
+				"max": 32,
+				"min": 2,
+				"name": "columns",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Size Y",
+				"max": 32,
+				"min": 2,
+				"name": "rows",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
