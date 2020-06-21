@@ -23,6 +23,8 @@ Outputs
 
 The **Tiler** node outputs the splat image.
 
+The greyscale tiler has a secondary output that assigns a random color to each tile.
+
 Parameters
 ++++++++++
 

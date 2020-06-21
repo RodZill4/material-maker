@@ -28,6 +28,8 @@ describes a fully configured material. It is thus possible to export materials d
 into one of your project assets directory, and Unity will automatically detect the newly
 exported materials.
 
+Two options are available when exporting for Unity: Unity and UnityHDRP.
+
 Unreal game engine
 ------------------
 
