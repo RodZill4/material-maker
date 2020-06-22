@@ -140,10 +140,16 @@ func remove_generator(generator : MMGenBase) -> bool:
 	if !generator.can_be_deleted():
 		return false
 	var new_connections = []
+	var old_connections = []
 	for c in connections:
-		if c.from != generator.name and c.to != generator.name:
+		if c.from == generator.name:
+			old_connections.append(c)
+		elif c.to != generator.name:
 			new_connections.append(c)
 	connections = new_connections
+	# Notify target nodes that their input vanished
+	for c in old_connections:
+		get_node(c.to).source_changed(c.to_port)
 	remove_child(generator)
 	fix_remotes()
 	if generator.get_script() == get_script():
