@@ -13,7 +13,7 @@ image and can thus be used to implement filters that require multiple passes.
 Inputs
 ++++++
 
-The **Iterate Buffer** node has an initialization input that provies the base image,
+The **Iterate Buffer** node has an initialization input that provides the base image,
 and a loop input that provides the image transformed by a single pass.
 
 Outputs
