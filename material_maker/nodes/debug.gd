@@ -5,7 +5,8 @@ static func generate_debug_shader(src_code) -> String:
 	code = ""
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
+	var file_contents = file.get_as_text()
+	code += file_contents.right(file_contents.find("//---"))
 	code += "\n"
 	if src_code.has("textures"):
 		for t in src_code.textures.keys():
@@ -14,7 +15,7 @@ static func generate_debug_shader(src_code) -> String:
 		for g in src_code.globals:
 			code += g
 	var shader_code = src_code.defs
-	shader_code += "\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\nvec2 UV = fragCoord/iResolution.xy;\n"
+	shader_code += "\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord) {\nfloat minSize = min(iResolution.x, iResolution.y);\nvec2 UV = vec2(0.0, 1.0) + vec2(1.0, -1.0) * (fragCoord-0.5*(iResolution.xy-vec2(minSize)))/minSize;\n"
 	shader_code += src_code.code
 	if src_code.has("rgba"):
 		shader_code += "fragColor = "+src_code.rgba+";\n"
@@ -23,6 +24,8 @@ static func generate_debug_shader(src_code) -> String:
 	shader_code += "}\n"
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
+	code = code.replace("uniform", "const")
+	code = code.replace("elapsed_time", "iTime")
 	return code
 
 func _on_Button_pressed() -> void:

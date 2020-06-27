@@ -4,6 +4,8 @@ void vertex() {
 	elapsed_time = TIME;
 }
 
+//---
+
 float rand(vec2 x) {
     return fract(cos(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
 }
@@ -19,7 +21,6 @@ vec3 rand3(vec2 x) {
                           dot(x, vec2(13.254, 5.867)))) * 43758.5453);
 }
 
-// From http://lolengine.net/blog/2013/07/27/rgb-to-hsv-in-glsl
 vec3 rgb2hsv(vec3 c) {
 	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
 	vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
