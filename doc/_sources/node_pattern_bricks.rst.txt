@@ -10,7 +10,8 @@ or pavement.
 Inputs
 ++++++
 
-The **Bricks** node does not accept any input.
+The **Bricks** node accepts 3 optional greyscale input maps for the shape mortar,
+bevel and round parameters (the corresponding parameter is multiplied by the map value).
 
 Outputs
 +++++++

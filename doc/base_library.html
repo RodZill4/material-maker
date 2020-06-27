@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -173,6 +173,8 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_simple_image.html">Image node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_simple_gradient.html">Gradient nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_simple_sdf.html">2D Signed distance function geometry nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_simple_curve.html">Curve node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_simple_profile.html">Profile node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_3d.html">3D nodes</a><ul>
@@ -189,7 +191,9 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_runes.html">Runes node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_pattern_iching.html">I Ching node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_scratches.html">Scratches node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_pattern_sine_wave.html">Sine Wave node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_noise.html">Noise nodes</a><ul>
@@ -204,27 +208,43 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_brightness_contrast.html">BrightnessContrast node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_occlusion.html">Occlusion node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_quantize.html">Quantize node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_dilate.html">Dilate node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill.html">Fill node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_position.html">Fill to Position node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_size.html">Fill to Size node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_color.html">Fill to Color node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_random_grey.html">Fill to random grey node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_random_color.html">Fill to random color node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_fill_to_uv.html">Fill to UV node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_math.html">Math node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="node_transform.html">Transform node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_translate.html">Translate node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_rotate.html">Rotate node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_scale.html">Scale node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_shear.html">Shear node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_warp.html">Warp node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_circlemap.html">Circle Map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_customuv.html">CustomUV node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
@@ -242,6 +262,7 @@ to describe procedural materials.</p>
 <li class="toctree-l1"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_material.html">Material node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_buffer.html">Buffer node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_iterate_buffer.html">Iterate Buffer node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_custom_shader.html">Custom shader node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_switch.html">Switch node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_remote.html">Remote node</a></li>

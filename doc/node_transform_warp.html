@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CustomUV node" href="node_transform_customuv.html" />
-    <link rel="prev" title="Mirror node" href="node_transform_mirror.html" /> 
+    <link rel="next" title="Circle Map node" href="node_transform_circlemap.html" />
+    <link rel="prev" title="Kaleidoscope node" href="node_transform_kaleidoscope.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -94,8 +94,12 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_transform.html">Transform node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_translate.html">Translate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_rotate.html">Rotate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_scale.html">Scale node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_shear.html">Shear node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Warp node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
@@ -103,6 +107,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_circlemap.html">Circle Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_customuv.html">CustomUV node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
@@ -199,8 +204,12 @@
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Warp</strong> node has two parameters:</p>
+<p>The <strong>Warp</strong> node has three parameters:</p>
 <ul class="simple">
+<li><p><em>mode</em>, that defines how the warp node calculates the offset it applies. <em>Slope</em> offsets by
+a distance calculated from the slope, and <em>Distance to top</em> offsets dy a distance calculated
+from the slope and the distance to the top (this mode makes it posible to make all points
+of a slope get their value from the top, hence generating mosaic-like patterns).</p></li>
 <li><p><em>strength</em> to scale the warp effect.</p></li>
 <li><p><em>epsilon</em> is used to evaluate the second input’s derivative</p></li>
 </ul>
@@ -219,10 +228,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_transform_customuv.html" class="btn btn-neutral float-right" title="CustomUV node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_transform_circlemap.html" class="btn btn-neutral float-right" title="Circle Map node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_transform_mirror.html" class="btn btn-neutral" title="Mirror node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="node_transform_kaleidoscope.html" class="btn btn-neutral" title="Kaleidoscope node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

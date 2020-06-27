@@ -23,6 +23,8 @@ Outputs
 
 The **Tiler** node outputs the splat image.
 
+The greyscale tiler has a secondary output that assigns a random color to each tile.
+
 Parameters
 ++++++++++
 
@@ -31,6 +33,7 @@ The **Tiler** node accepts the following parameters:
 * *Tile X* and *Tile Y*, the number of columns and rows of of the tile pattern.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
+* *Fixed Offset* is an offset applied to all odd lines.
 * *Offset* is the maximum random offset applied to each instance (relative to tiles size).
 * *Rotate* is the maximum angle of the random rotation applied to each instance.
 * *Scale* is the amount of scaling applied to each instance.

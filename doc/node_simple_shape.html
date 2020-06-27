@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -99,6 +99,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_image.html">Image node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_gradient.html">Gradient nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_sdf.html">2D Signed distance function geometry nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_curve.html">Curve node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_profile.html">Profile node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
@@ -184,7 +186,8 @@
 <img alt="_images/node_simple_shape.png" class="align-center" src="_images/node_simple_shape.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The shape node do not accept any input.</p>
+<p>The shape node accepts 2 optional greyscale input maps for the shape size and
+edge width (the corresponding parameter is multiplied by the map value).</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>

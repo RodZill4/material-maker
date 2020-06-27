@@ -1,2 +1,4 @@
 
 *.import
+*.doctree
+doc/.doctrees/environment.pickle

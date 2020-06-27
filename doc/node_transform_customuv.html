@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tile2x2 node" href="node_transform_tile2x2.html" />
-    <link rel="prev" title="Warp node" href="node_transform_warp.html" /> 
+    <link rel="prev" title="Circle Map node" href="node_transform_circlemap.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -94,9 +94,14 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_transform.html">Transform node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_translate.html">Translate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_rotate.html">Rotate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_scale.html">Scale node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_shear.html">Shear node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_warp.html">Warp node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_circlemap.html">Circle Map node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">CustomUV node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
@@ -190,7 +195,8 @@
 <ul class="simple">
 <li><p>The <em>Source</em> inputs is the image to be deformed.</p></li>
 <li><p>The <em>UV</em> input is a color image whose red and green channels are used as
-U and V (X and Y in texture space) coordinates.</p></li>
+U and V (X and Y in texture space) coordinates, and the blue channel holds
+a value to be used for pseudo-random scale and rotate transforms.</p></li>
 </ul>
 </div>
 <div class="section" id="outputs">
@@ -199,7 +205,9 @@ U and V (X and Y in texture space) coordinates.</p></li>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>CustomUV</strong> node does not have any parameter.</p>
+<p>The <strong>CustomUV</strong> node accepts a <em>scale</em> and a <em>rotate</em> parameters that define
+the strength of the random scale and rotate transforms applied locallly to
+the result.</p>
 </div>
 </div>
 
@@ -214,7 +222,7 @@ U and V (X and Y in texture space) coordinates.</p></li>
         <a href="node_transform_tile2x2.html" class="btn btn-neutral float-right" title="Tile2x2 node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_transform_warp.html" class="btn btn-neutral" title="Warp node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="node_transform_circlemap.html" class="btn btn-neutral" title="Circle Map node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -23,6 +23,8 @@ Outputs
 
 The **Splatter** node outputs the splat image.
 
+The greyscale splatter has a secondary output that assigns a random color to each splat instance.
+
 Parameters
 ++++++++++
 
@@ -33,7 +35,6 @@ The **Splatter** node accepts the following parameters:
   shapes can easily be created using the **Tile2x2** node.
 * *Rotate* is the maximum angle of the random rotation applied to each instance.
 * *Scale* is the amount of scaling applied to each instance.
-
 
 Example images
 ++++++++++++++

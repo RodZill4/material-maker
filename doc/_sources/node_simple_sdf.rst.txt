@@ -31,6 +31,7 @@ Shapes
 	node_simple_sdf_shapes_sdline
 	node_simple_sdf_shapes_sdbox
 	node_simple_sdf_shapes_sdrhombus
+	node_simple_sdf_shapes_sdarc
 
 Operators
 +++++++++

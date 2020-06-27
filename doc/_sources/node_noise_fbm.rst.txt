@@ -27,6 +27,13 @@ The FBM node accepts the following parameters:
 * the number of iterations
 * the persistance, i.e. the strength of each subsequent iteration
 
+Notes
++++++
+
+As with all random nodes, the seed is held by the node's position, so moving the node in the graph
+will modify the texture, and the outputs will remain the same if its position and parameters
+are not changed.
+
 Example images
 ++++++++++++++
 

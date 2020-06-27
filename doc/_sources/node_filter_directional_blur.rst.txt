@@ -9,7 +9,8 @@ The **Directional Blur** node applies a Gaussian blur algorithm to its input in 
 Inputs
 ++++++
 
-The **Directional Blur** node has a single input.
+The **Directional Blur** node accepts a RGBA input to be blurred and an optional blur mask
+that defines the intensity of the blur effect.
 
 Outputs
 +++++++

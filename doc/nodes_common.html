@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -182,8 +182,9 @@ connected to several node inputs. Each node output (and input) can be:</p>
 <li><p>a <strong>color image</strong> (shown in blue)</p></li>
 <li><p>an <strong>RGBA image</strong> (shown in semi-transparent green)</p></li>
 <li><p>a <strong>2D signed distance function</strong> (shown in orange)</p></li>
-<li><p>a <strong>3D signed distance function</strong> (shown in red)</p></li>
-<li><p>a <strong>3D texture</strong> (shown in fuchia)</p></li>
+<li><p>a <strong>3D signed distance function</strong> (shown in red), with or without a color index</p></li>
+<li><p>a <strong>3D texture</strong> (shown in fuchia), that can be associated to a color index, which makes
+it possible to associate several 3D textures in a single 3D scene</p></li>
 </ul>
 <p>Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
 converted when required.</p>
@@ -191,9 +192,9 @@ converted when required.</p>
 field. They can be converted into greyscale images using the <cite>sdShow</cite> node.</p>
 <p>3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
 converted into a greyscale height map and a color normal map using the <cite>Render</cite> node.</p>
-<p>Clicking on an output slot it will show the corresponding preview at the bottom of the node.
+<p>Clicking on an output slot will show the corresponding preview at the bottom of the node.
 When a node has several outputs, only one of them can be previewed at a time. The previewed
-output slot will has a circle around it, and clicking it again will hide the preview.</p>
+output slot will have a circle around it, and clicking it again will hide the preview.</p>
 </div>
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
@@ -219,8 +220,8 @@ drop down list boxes.</p></li>
 <li><p><strong>gradient</strong> parameters are edited in dedicated editor widgets. Cursors can be added by
 double-clicking in the lower part of the widget, dragged left and right using the left
 mouse button, and removed using the right mouse button.</p>
-<p>The drop down list box can be used to select one of the 4 interpolation options.
-Double clicking in the upper part of the gradient editor will open a larger version of the
+<p>The drop down list box can be used to select one of the 4 interpolation options.</p>
+<p>Double clicking in the upper part of the gradient editor will open a larger version of the
 widget to move cursors mode precisely.</p>
 <p>Finally, it is possible to drag and drop from the upper part of a gradient editor widget to
 another to duplicate the gradient parameter, or from any <strong>Colorize</strong> node variant in the
@@ -260,7 +261,7 @@ makes them a lot easier to access and results in smaller material files (only
 references to the templates are saved and not the whole node description).
 Consequently, modifying a template without ensuring compatibility with the old
 version (i.e. removing or renaming parameters, removing or swapping inputs or
-outputs).</p>
+outputs) may break existing materials, and should thus be avoided.</p>
 </div>
 </div>
 

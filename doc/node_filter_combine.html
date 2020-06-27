@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Decompose node" href="node_filter_decompose.html" />
-    <link rel="prev" title="Colorize node" href="node_filter_colorize.html" /> 
+    <link rel="prev" title="Blend node" href="node_filter_blend.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -95,8 +95,10 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_brightness_contrast.html">BrightnessContrast node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Combine node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
@@ -104,15 +106,24 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_occlusion.html">Occlusion node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_quantize.html">Quantize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_dilate.html">Dilate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill.html">Fill node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_position.html">Fill to Position node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_size.html">Fill to Size node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_color.html">Fill to Color node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_random_grey.html">Fill to random grey node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_random_color.html">Fill to random color node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_uv.html">Fill to UV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_math.html">Math node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -213,7 +224,7 @@
         <a href="node_filter_decompose.html" class="btn btn-neutral float-right" title="Decompose node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_filter_colorize.html" class="btn btn-neutral" title="Colorize node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="node_filter_blend.html" class="btn btn-neutral" title="Blend node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.9
+                0.92
               </div>
             
           
@@ -94,9 +94,14 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_transform.html">Transform node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_translate.html">Translate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_rotate.html">Rotate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_scale.html">Scale node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_shear.html">Shear node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_warp.html">Warp node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_circlemap.html">Circle Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_customuv.html">CustomUV node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
@@ -198,6 +203,7 @@ Overlapping instances are mixed with each other using a <em>lighten</em> filter.
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>Tiler</strong> node outputs the splat image.</p>
+<p>The greyscale tiler has a secondary output that assigns a random color to each tile.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -206,6 +212,7 @@ Overlapping instances are mixed with each other using a <em>lighten</em> filter.
 <li><p><em>Tile X</em> and <em>Tile Y</em>, the number of columns and rows of of the tile pattern.</p></li>
 <li><p><em>Inputs</em> is the number of alternate shapes in the input (1, 4 or 16). Images containing several
 shapes can easily be created using the <strong>Tile2x2</strong> node.</p></li>
+<li><p><em>Fixed Offset</em> is an offset applied to all odd lines.</p></li>
 <li><p><em>Offset</em> is the maximum random offset applied to each instance (relative to tiles size).</p></li>
 <li><p><em>Rotate</em> is the maximum angle of the random rotation applied to each instance.</p></li>
 <li><p><em>Scale</em> is the amount of scaling applied to each instance.</p></li>
