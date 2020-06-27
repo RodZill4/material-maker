@@ -75,10 +75,13 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
-				"x": 653,
-				"y": 157
+				"x": 217,
+				"y": -183
 			},
 			"parameters": {
 				"albedo_color": {
@@ -88,14 +91,14 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 0.6,
+				"ao": 1,
+				"depth_scale": 1,
 				"emission_energy": 1,
 				"metallic": 0.05,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 0.75,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
@@ -234,17 +237,14 @@
 		{
 			"name": "normal_map",
 			"node_position": {
-				"x": -20.5,
-				"y": 273.5
+				"x": -7.5,
+				"y": -93.5
 			},
 			"parameters": {
-				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.99,
 				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param4": 1
 			},
 			"type": "normal_map"
 		},
@@ -322,17 +322,17 @@
 			},
 			"name": "comment",
 			"node_position": {
-				"x": -544.5,
-				"y": -395.194458
+				"x": -605.5,
+				"y": -386.194458
 			},
 			"parameters": {
-				"size": 4
+
 			},
 			"size": {
-				"x": 190,
-				"y": 67
+				"x": 251,
+				"y": 54
 			},
-			"text": "Best viewed on Sphere mesh",
+			"text": "Best viewed on SphereTess\n mesh",
 			"title": "Comment",
 			"type": "comment"
 		}

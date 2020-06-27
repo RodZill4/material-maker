@@ -163,15 +163,15 @@
 			"to_port": 1
 		},
 		{
-			"from": "fill_to_uv",
+			"from": "fill_2",
 			"from_port": 0,
-			"to": "@@1644",
+			"to": "fill_to_position",
 			"to_port": 0
 		},
 		{
-			"from": "@@1644",
+			"from": "fill_2",
 			"from_port": 0,
-			"to": "blend",
+			"to": "fill_to_size",
 			"to_port": 0
 		}
 	],
@@ -2237,7 +2237,8 @@
 				"count": 25,
 				"rotate": 0,
 				"scale": 0,
-				"select_inputs": 0
+				"select_inputs": 0,
+				"value": 0
 			},
 			"type": "splatter"
 		},
@@ -2464,6 +2465,7 @@
 			},
 			"parameters": {
 				"count": 100,
+				"opacity": 0,
 				"rotate": 0,
 				"scale": 0,
 				"select_inputs": 0
@@ -2477,7 +2479,9 @@
 				"y": 599.541748
 			},
 			"parameters": {
+				"fixed_offset": 0,
 				"offset": 0.62,
+				"opacity": 0,
 				"overlap": 1,
 				"rotate": 45,
 				"scale": 0.2,
@@ -2497,7 +2501,8 @@
 				"count": 8,
 				"rotate": 0,
 				"scale": 0,
-				"select_inputs": 0
+				"select_inputs": 0,
+				"value": 0
 			},
 			"type": "splatter"
 		},
@@ -2590,10 +2595,10 @@
 			"type": "fill_to_uv"
 		},
 		{
-			"name": "@@1644",
+			"name": "1644",
 			"node_position": {
-				"x": 465.442322,
-				"y": 1070.827515
+				"x": 479.442322,
+				"y": 1067.827515
 			},
 			"parameters": {
 
@@ -2622,6 +2627,29 @@
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "fill_to_position",
+			"node_position": {
+				"x": 239.209686,
+				"y": 1157.572266
+			},
+			"parameters": {
+				"axis": 0
+			},
+			"type": "fill_to_position"
+		},
+		{
+			"name": "fill_to_size",
+			"node_position": {
+				"x": 249.209686,
+				"y": 1219.572266
+			},
+			"parameters": {
+				"formula": 1
+			},
+			"seed_value": -52887,
+			"type": "fill_to_size"
 		}
 	],
 	"parameters": {
