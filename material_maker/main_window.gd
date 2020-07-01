@@ -156,6 +156,8 @@ func _ready() -> void:
 	new_material()
 	
 	do_load_materials(OS.get_cmdline_args())
+	
+	get_tree().connect("files_dropped", self, "on_files_dropped")
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -686,3 +688,15 @@ func generate_screenshots():
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	print(result)
+
+# Handle dropped files
+
+func on_files_dropped(files : PoolStringArray, _screen) -> void:
+	for f in files:
+		match f.get_extension():
+			"ptex":
+				do_load_material(f)
+			"bmp", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+				var graph_edit : MMGraphEdit = get_current_graph_edit()
+				if graph_edit != null and graph_edit.get_global_rect().has_point(get_global_mouse_position()):
+					graph_edit.do_paste({type="image", image=f})
