@@ -23,7 +23,7 @@
 		"name": "Edge detect 3",
 		"outputs": [
 			{
-				"f": "$(name)_fct($uv)",
+				"f": "clamp($(name)_fct($uv), 0.0, 1.0)",
 				"type": "f"
 			}
 		],
