@@ -31,6 +31,15 @@ func update_predefined_generators()-> void:
 			file.store_string(to_json(predefined_generators))
 			file.close()
 
+func get_predefined_global(g : String) -> String:
+	if ! predefined_generators.has(g):
+		return ""
+	if ! predefined_generators[g].has("shader_model"):
+		return ""
+	if ! predefined_generators[g].shader_model.has("global"):
+		return ""
+	return predefined_generators[g].shader_model.global
+
 func generator_name_from_path(path : String) -> String:
 	for p in get_nodes_paths():
 		print(p)

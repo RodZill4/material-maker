@@ -4,8 +4,6 @@
 [ext_resource path="res://material_maker/widgets/node_editor/node_editor_item_list.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
 
-
-
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 3 )
@@ -178,7 +176,7 @@ custom_fonts/font = SubResource( 3 )
 syntax_highlighting = true
 show_line_numbers = true
 
-[node name="Global Functions" type="TextEdit" parent="Sizer/Tabs"]
+[node name="Global Functions" type="VBoxContainer" parent="Sizer/Tabs"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -186,7 +184,31 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+
+[node name="Includes" type="HBoxContainer" parent="Sizer/Tabs/Global Functions"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="LabelIncludes" type="Label" parent="Sizer/Tabs/Global Functions/Includes"]
+margin_left = 46.0
+margin_top = 5.0
+margin_right = 88.0
+margin_bottom = 19.0
+text = "Includes:"
+
+[node name="Includes" type="LineEdit" parent="Sizer/Tabs/Global Functions/Includes"]
+margin_left = 469.0
+margin_right = 888.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Functions" type="TextEdit" parent="Sizer/Tabs/Global Functions"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -8.0
+margin_bottom = -36.0
 mouse_default_cursor_shape = 0
+size_flags_vertical = 3
 custom_fonts/font = SubResource( 3 )
 custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
 syntax_highlighting = true

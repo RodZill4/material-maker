@@ -8,7 +8,8 @@ onready var output_list : VBoxContainer = $Sizer/Tabs/Outputs/Outputs/Sizer
 
 onready var main_code_editor : TextEdit = $"Sizer/Tabs/Main Code"
 onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functions"
-onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions"
+onready var includes_editor : LineEdit = $"Sizer/Tabs/Global Functions/Includes/Includes"
+onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions/Functions"
 
 const ParameterEditor = preload("res://material_maker/widgets/node_editor/parameter.tscn")
 const InputEditor = preload("res://material_maker/widgets/node_editor/input.tscn")
@@ -42,6 +43,8 @@ func set_model_data(data) -> void:
 		for o in data.outputs:
 			add_item(output_list, OutputEditor).set_model_data(o)
 		output_list.update_up_down_buttons()
+	if data.has("includes"):
+		includes_editor.text = PoolStringArray(data.includes).join(",")
 	if data.has("global"):
 		global_functions_editor.text = data.global
 	if data.has("instance"):
@@ -52,6 +55,7 @@ func set_model_data(data) -> void:
 func get_model_data() -> Dictionary:
 	var data = {
 		name=$Sizer/Tabs/General/Name/Name.text,
+		includes=includes_editor.text.replace(" ", "").split(","),
 		global=global_functions_editor.text,
 		instance=instance_functions_editor.text,
 		code=main_code_editor.text

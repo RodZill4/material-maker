@@ -355,8 +355,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 		rv.type = output.type
-		if shader_model.has("global") && rv.globals.find(shader_model.global) == -1:
+		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
 			rv.globals.push_back(shader_model.global)
+		if shader_model.has("includes"):
+			for i in shader_model.includes:
+				var g = mm_loader.get_predefined_global(i)
+				if g != "" and rv.globals.find(g) == -1:
+					rv.globals.push_back(g)
 	return rv
 
 
