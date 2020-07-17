@@ -38,3 +38,6 @@ func _on_TextureButton_pressed() -> void:
 	dialog.add_filter("*.webp;WebP Image")
 	dialog.connect("file_selected", self, "set_texture")
 	dialog.popup_centered()
+
+func on_drop_image_file(file_name : String) -> void:
+	set_texture(file_name)

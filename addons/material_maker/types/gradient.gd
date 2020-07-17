@@ -30,6 +30,15 @@ func add_point(v, c) -> void:
 	points.append({ v=v, c=c })
 	sorted = false
 
+func get_point_count() -> int:
+	return points.size()
+
+func get_point_position(i : int) -> float:
+	return points[i].v
+
+func set_point_position(i : int, v : float) -> void:
+	points[i].v = v
+
 func sort() -> void:
 	if !sorted:
 		points.sort_custom(CustomSorter, "compare")

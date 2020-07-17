@@ -691,12 +691,22 @@ func generate_screenshots():
 
 # Handle dropped files
 
+func get_control_at_position(pos : Vector2, parent : Control) -> Control:
+	for c in parent.get_children():
+		if c is Control and c.visible and c.get_global_rect().has_point(pos):
+			return get_control_at_position(pos, c)
+	return parent
+
 func on_files_dropped(files : PoolStringArray, _screen) -> void:
 	for f in files:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
 			"bmp", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
-				var graph_edit : MMGraphEdit = get_current_graph_edit()
-				if graph_edit != null and graph_edit.get_global_rect().has_point(get_global_mouse_position()):
-					graph_edit.do_paste({type="image", image=f})
+				var control : Control = get_control_at_position(get_global_mouse_position(), self)
+				while control != self:
+					if control.has_method("on_drop_image_file"):
+						control.on_drop_image_file(f)
+						break
+					control = control.get_parent()
+				# graph_edit.do_paste({type="image", image=f})

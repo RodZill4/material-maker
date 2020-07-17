@@ -1,0 +1,101 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material_maker/widgets/reference/reference_panel.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/widgets/reference/color_slot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/widgets/reference/gradient_slot.tscn" type="PackedScene" id=3]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D image;
+uniform vec2 canvas_size;
+uniform vec2 image_size;
+uniform float scale;
+uniform vec2 center = vec2(0.5);
+
+void fragment() {
+	vec2 ratio = canvas_size/image_size;
+	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
+	COLOR = mix(vec4(0.0), texture(image, uv), step(length(uv-clamp(uv, vec2(0.0), vec2(1.0))), 0.0001));
+}"
+custom_defines = ""
+
+[sub_resource type="ImageTexture" id=2]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 1 )
+shader_param/canvas_size = null
+shader_param/image_size = null
+shader_param/scale = null
+shader_param/center = Vector2( 0.5, 0.5 )
+shader_param/image = SubResource( 2 )
+
+[node name="ReferencePanel" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1032.0
+margin_bottom = -367.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = -1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Image" type="ColorRect" parent="VBoxContainer"]
+material = SubResource( 3 )
+margin_right = 248.0
+margin_bottom = 291.0
+size_flags_vertical = 3
+
+[node name="Colors" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 290.0
+margin_right = 248.0
+margin_bottom = 322.0
+custom_constants/separation = -1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorSlot1" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
+margin_right = 50.0
+size_flags_horizontal = 3
+
+[node name="ColorSlot2" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
+margin_left = 49.0
+margin_right = 99.0
+size_flags_horizontal = 3
+
+[node name="ColorSlot3" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
+margin_left = 98.0
+margin_right = 148.0
+size_flags_horizontal = 3
+
+[node name="ColorSlot4" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
+margin_left = 147.0
+margin_right = 197.0
+size_flags_horizontal = 3
+
+[node name="ColorSlot5" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
+margin_left = 196.0
+margin_right = 248.0
+size_flags_horizontal = 3
+
+[node name="GradientSlot" parent="VBoxContainer" instance=ExtResource( 3 )]
+margin_top = 321.0
+margin_right = 248.0
+margin_bottom = 353.0
+[connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
+[connection signal="resized" from="VBoxContainer/Image" to="." method="_on_Image_resized"]
+[connection signal="clicked" from="VBoxContainer/Colors/ColorSlot1" to="." method="select_slot"]
+[connection signal="clicked" from="VBoxContainer/Colors/ColorSlot2" to="." method="select_slot"]
+[connection signal="clicked" from="VBoxContainer/Colors/ColorSlot3" to="." method="select_slot"]
+[connection signal="clicked" from="VBoxContainer/Colors/ColorSlot4" to="." method="select_slot"]
+[connection signal="clicked" from="VBoxContainer/Colors/ColorSlot5" to="." method="select_slot"]
+[connection signal="clicked" from="VBoxContainer/GradientSlot" to="." method="select_slot"]

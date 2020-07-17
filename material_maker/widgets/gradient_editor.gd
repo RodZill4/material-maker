@@ -5,6 +5,7 @@ class GradientCursor:
 	extends Control
 
 	var color : Color
+	var sliding : bool = false
 
 	const WIDTH : int = 10
 
@@ -22,18 +23,23 @@ class GradientCursor:
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseButton:
-			if ev.button_index == BUTTON_LEFT && ev.doubleclick:
-				get_parent().select_color(self, ev.global_position)
-			elif ev.button_index == BUTTON_RIGHT && get_parent().get_sorted_cursors().size() > 2:
+			if ev.button_index == BUTTON_LEFT:
+				if ev.doubleclick:
+					get_parent().select_color(self, ev.global_position)
+				elif ev.pressed:
+					sliding = true
+				else:
+					sliding = false
+			elif ev.button_index == BUTTON_RIGHT and get_parent().get_sorted_cursors().size() > 2:
 				var parent = get_parent()
 				parent.remove_child(self)
 				parent.update_value()
 				queue_free()
-		elif ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
+		elif ev is InputEventMouseMotion and (ev.button_mask & BUTTON_MASK_LEFT) != 0 and sliding:
 			rect_position.x += ev.relative.x
 			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
 			get_parent().update_value()
-
+	
 	func get_position() -> Vector2:
 		return rect_position.x / (get_parent().rect_size.x - WIDTH)
 
@@ -44,6 +50,13 @@ class GradientCursor:
 
 	static func sort(a, b) -> bool:
 		return a.get_position() < b.get_position()
+
+	func can_drop_data(_position, data) -> bool:
+		return typeof(data) == TYPE_COLOR
+
+	func drop_data(position, data) -> void:
+		set_color(data)
+
 
 var value = null setget set_value
 export var embedded : bool = true
@@ -105,7 +118,7 @@ func add_cursor(x, color) -> void:
 	cursor.color = color
 
 func _gui_input(ev) -> void:
-	if ev is InputEventMouseButton && ev.button_index == 1 && ev.doubleclick:
+	if ev is InputEventMouseButton and ev.button_index == 1 and ev.doubleclick:
 		if ev.position.y > 15:
 			var p = clamp(ev.position.x, 0, rect_size.x-GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))

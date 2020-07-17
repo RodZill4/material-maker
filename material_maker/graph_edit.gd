@@ -354,13 +354,18 @@ func do_send_changed_signal() -> void:
 # Drag and drop
 
 func can_drop_data(_position, data) -> bool:
-	return typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
+	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
 func drop_data(position, data) -> void:
 	# The following mitigates the SpinBox problem (captures mouse while dragging)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
+	if typeof(data) == TYPE_COLOR:
+		do_paste({type="uniform", color={ r=data.r, g=data.g, b=data.b, a=data.a }})
+	elif typeof(data) == TYPE_DICTIONARY and data.has("type") and data.type == "Gradient" and data.has("points"):
+		do_paste({type="colorize", gradient=data})
+	else:
+		create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator && generator.get_parent() is MMGenGraph:
@@ -423,3 +428,6 @@ func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
 		last_selected = null
 		emit_signal("node_selected", null)
+
+func on_drop_image_file(file_name : String) -> void:
+	do_paste({type="image", image=file_name})

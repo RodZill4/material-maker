@@ -131,6 +131,7 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control = CheckBox.new()
 	elif p.type == "color":
 		control = ColorPickerButton.new()
+		control.set_script(preload("res://material_maker/widgets/color_picker_button.gd"))
 		control.rect_min_size.x = 40
 	elif p.type == "gradient":
 		control = preload("res://material_maker/widgets/gradient_editor.tscn").instance()
