@@ -34,6 +34,8 @@ func _on_Image_gui_input(event) -> void:
 	var center : Vector2 = m.get_shader_param("center")
 	var new_center : Vector2 = center
 	var multiplier : Vector2 = Vector2(canvas_size.x*min(image_size.x/image_size.y, 1.0), canvas_size.y*min(image_size.y/image_size.x, 1.0))
+	var image_rect : Rect2 = $VBoxContainer/Image.get_global_rect()
+	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
 	if event is InputEventMouseButton:
 		if event.pressed:
 			var new_scale = scale
@@ -54,6 +56,7 @@ func _on_Image_gui_input(event) -> void:
 				dragging = true
 			if new_scale != scale:
 				m.set_shader_param("scale", new_scale)
+				m.set_shader_param("center", center+offset_from_center*(scale-new_scale)/multiplier)
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
