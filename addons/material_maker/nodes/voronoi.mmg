@@ -32,10 +32,15 @@
 			{
 				"rgb": "rand3(fract($(name_uv)_xyzw.xy))",
 				"type": "rgb"
+			},
+			{
+				"rgba": "vec4(fract(($(name_uv)_xyzw.xy-0.5)/vec2($scale_x, $scale_y)), vec2(1.0)/vec2($scale_x, $scale_y))",
+				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Scale X",
 				"max": 32,
@@ -45,6 +50,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Scale Y",
 				"max": 32,
@@ -54,6 +60,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 1,
 				"label": "Stretch X",
 				"max": 1,
@@ -63,6 +70,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 1,
 				"label": "Stretch Y",
 				"max": 1,
@@ -72,6 +80,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.75,
 				"label": "Intensity",
 				"max": 1,
@@ -81,6 +90,7 @@
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 1,
 				"label": "Randomness",
 				"max": 1,
