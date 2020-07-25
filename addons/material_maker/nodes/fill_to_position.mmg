@@ -8,8 +8,11 @@
 		"axis": 0
 	},
 	"shader_model": {
-		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"code": "vec2 $(name_uv)_c = fract($in($uv).xy+0.5*$in($uv).zw);",
 		"global": "",
+		"includes": [
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec4(0.0)",
@@ -22,24 +25,28 @@
 		"name": "Fill to Position",
 		"outputs": [
 			{
-				"f": "fract(dot($(name_uv)_bb.$axis, vec2(1.0, 0.5)))",
+				"f": "$axis",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
-				"default": 1,
+				"default": 2,
 				"label": "",
 				"name": "axis",
 				"type": "enum",
 				"values": [
 					{
 						"name": "X",
-						"value": "xz"
+						"value": "$(name_uv)_c.x"
 					},
 					{
 						"name": "Y",
-						"value": "yw"
+						"value": "$(name_uv)_c.y"
+					},
+					{
+						"name": "Radial",
+						"value": "length($(name_uv)_c-vec2(0.5))"
 					}
 				]
 			}
