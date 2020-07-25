@@ -75,6 +75,7 @@ func _on_Export_id_pressed(id):
 		if config_cache.has_section_key("path", "save_preview"):
 			dialog.current_dir = config_cache.get_value("path", "save_preview")
 	dialog.connect("file_selected", self, "export_as_png", [ 64 << id ])
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func export_as_png(file_name : String, size : int) -> void:

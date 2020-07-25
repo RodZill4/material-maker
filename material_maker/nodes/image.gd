@@ -37,6 +37,7 @@ func _on_TextureButton_pressed() -> void:
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
 	dialog.connect("file_selected", self, "set_texture")
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func on_drop_image_file(file_name : String) -> void:

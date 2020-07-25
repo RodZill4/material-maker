@@ -282,6 +282,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		dialog.current_dir = config_cache.get_value("path", config_key)
 	add_child(dialog)
 	dialog.connect("file_selected", self, "export_material", [ profile ])
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 
@@ -364,6 +365,7 @@ func load_material() -> void:
 	if config_cache.has_section_key("path", "material"):
 		dialog.current_dir = config_cache.get_value("path", "material")
 	dialog.connect("files_selected", self, "do_load_materials")
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func do_load_materials(filenames) -> void:
@@ -411,6 +413,7 @@ func save_material_as() -> void:
 		if config_cache.has_section_key("path", "material"):
 			dialog.current_dir = config_cache.get_value("path", "material")
 		dialog.connect("file_selected", self, "do_save_material")
+		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 
 func do_save_material(filename : String) -> void:
@@ -495,6 +498,7 @@ func add_to_user_library() -> void:
 		dialog.set_texts("New library element", "Select a name for the new library element")
 		add_child(dialog)
 		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
+		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 
 func do_add_to_user_library(name, nodes) -> void:
@@ -526,6 +530,7 @@ func export_library() -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.json;JSON files")
 	dialog.connect("file_selected", self, "do_export_library")
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func do_export_library(path : String) -> void:
@@ -573,6 +578,7 @@ func show_reddit() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/widgets/about/about.tscn").instance()
 	add_child(about_box)
+	about_box.connect("popup_hide", about_box, "queue_free")
 	about_box.popup_centered()
 
 func _on_PopupMenu_id_pressed(id) -> void:
@@ -710,3 +716,17 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 						break
 					control = control.get_parent()
 				# graph_edit.do_paste({type="image", image=f})
+
+# Use this to investigate the connect bug
+
+func draw_children(p, x):
+	for c in p.get_children():
+		if c is Control:
+			draw_rect(c.get_global_rect(), Color(1.0, 0.0, 0.0), false)
+			draw_children(c, x)
+			if c.get_global_rect().has_point(x) and !c.visible:
+				c.show()
+				print(c.get_path())
+
+func _draw_debug():
+	draw_children(self, get_global_mouse_position())

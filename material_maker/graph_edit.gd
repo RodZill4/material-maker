@@ -245,6 +245,7 @@ func load_file(filename) -> bool:
 		add_child(dialog)
 		dialog.window_title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
+		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 		return false
 
@@ -389,6 +390,7 @@ func _on_ButtonShowTree_pressed() -> void:
 	add_child(graph_tree)
 	graph_tree.init("Top", top_generator)
 	graph_tree.connect("item_double_clicked", self, "edit_subgraph")
+	graph_tree.connect("popup_hide", graph_tree, "queue_free")
 	graph_tree.popup_centered()
 
 func edit_subgraph(g : MMGenGraph) -> void:

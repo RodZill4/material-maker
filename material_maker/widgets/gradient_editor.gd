@@ -131,6 +131,7 @@ func _gui_input(ev) -> void:
 			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
 			popup.init(value)
 			popup.connect("updated", self, "set_value")
+			popup.connect("popup_hide", popup, "queue_free")
 
 # Showing a color picker popup to change a cursor's color
 
@@ -138,13 +139,14 @@ var active_cursor
 
 func select_color(cursor, position) -> void:
 	active_cursor = cursor
-	$Gradient/Popup/ColorPicker.color = cursor.color
-	$Gradient/Popup/ColorPicker.connect("color_changed", cursor, "set_color")
-	$Gradient/Popup.rect_position = position
-	$Gradient/Popup.popup()
-
-func _on_Popup_popup_hide() -> void:
-	$Gradient/Popup/ColorPicker.disconnect("color_changed", active_cursor, "set_color")
+	var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup.tscn").instance()
+	add_child(color_picker_popup)
+	var color_picker = color_picker_popup.get_node("ColorPicker")
+	color_picker.color = cursor.color
+	color_picker.connect("color_changed", cursor, "set_color")
+	color_picker_popup.rect_position = position
+	color_picker_popup.connect("popup_hide", color_picker_popup, "queue_free")
+	color_picker_popup.popup()
 
 # Calculating a color from the gradient and generating the shader
 

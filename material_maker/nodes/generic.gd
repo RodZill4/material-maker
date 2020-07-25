@@ -314,7 +314,6 @@ func update_generator(shader_model) -> void:
 	get_parent().set_need_save()
 
 func load_generator() -> void:
-	print(get_node("/root/MainWindow"))
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -326,6 +325,7 @@ func load_generator() -> void:
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
 	dialog.connect("file_selected", self, "do_load_generator")
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func do_load_generator(file_name : String) -> void:
@@ -362,6 +362,7 @@ func save_generator() -> void:
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
 	dialog.connect("file_selected", self, "do_save_generator")
+	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
 func do_save_generator(file_name : String) -> void:

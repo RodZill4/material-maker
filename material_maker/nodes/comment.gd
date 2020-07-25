@@ -50,6 +50,7 @@ func _on_gui_input(event) -> void:
 			dialog.set_texts("Comment", "Enter the comment node title")
 			add_child(dialog)
 			dialog.connect("ok", self, "set_title")
+			dialog.connect("popup_hide", dialog, "queue_free")
 			dialog.popup_centered()
 			accept_event()
 

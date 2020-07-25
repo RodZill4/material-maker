@@ -73,6 +73,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 						add_child(dialog)
 						dialog.set_texts("Configuration", "Enter a name for the new configuration")
 						dialog.connect("ok", self, "do_add_configuration", [ variable ])
+						dialog.connect("popup_hide", dialog, "queue_free")
 						dialog.popup_centered()
 					3:
 						generator.update_configuration(variable, current)

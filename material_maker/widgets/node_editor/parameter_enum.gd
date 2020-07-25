@@ -55,11 +55,13 @@ func _on_EnumValues_item_selected(id) -> void:
 		add_child(dialog)
 		dialog.set_value(v.name, v.value)
 		dialog.connect("ok", self, "update_enum_value", [ enum_current ])
+		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
 		var dialog = load("res://material_maker/widgets/node_editor/enum_editor.tscn").instance()
 		add_child(dialog)
 		dialog.connect("ok", self, "update_enum_value", [ -1 ])
+		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 	elif id == ENUM_REMOVE:
 		enum_values.remove(enum_current)
