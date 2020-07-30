@@ -142,7 +142,7 @@ func set_parameter(n : String, v) -> void:
 				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 				return
 			elif parameter_def.type == "gradient":
-				if v.interpolation == old_value.interpolation && v.points.size() == old_value.points.size():
+				if old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
 					# convert from old format
 					for i in range(old_value.points.size()):
 						if old_value.points[i].has("v"):
@@ -314,3 +314,11 @@ func deserialize(data : Dictionary) -> void:
 	else:
 		seed_locked = false
 	_post_load()
+
+
+
+static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
+	var regex = RegEx.new()
+	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
+	for p in regex.search_all(code):
+		material.set_shader_param(p.strings[2], float(p.strings[3]))

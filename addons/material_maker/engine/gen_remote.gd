@@ -127,7 +127,7 @@ func set_parameter(p : String, v) -> void:
 					for w in widget.configurations[configurations[v]]:
 						var node = parent.get_node(w.node)
 						if node != null:
-							node.set_parameter(w.widget, MMType.deserialize_value(w.value))
+							node.set_parameter(w.widget, w.value)
 				else:
 					# incorrect configuration index
 					print("error: incorrect config control parameter value")
