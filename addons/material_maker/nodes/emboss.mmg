@@ -43,7 +43,7 @@
 			"name": "598",
 			"node_position": {
 				"x": -77.579605,
-				"y": -527.738281
+				"y": -529.738281
 			},
 			"parameters": {
 				"amount": 5,
@@ -54,6 +54,9 @@
 			"shader_model": {
 				"code": "",
 				"global": "",
+				"includes": [
+					""
+				],
 				"inputs": [
 					{
 						"default": "0.0",
@@ -63,7 +66,7 @@
 						"type": "f"
 					}
 				],
-				"instance": "float $(name)_fct(vec2 uv) {\n\tfloat pixels = $width;\n\tfloat e = 1.0/$size;\n\tfloat rv = 0.0;\n\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {\n\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {\n\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {\n\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));\n\t\t\t}\n\t\t}\n\t}\n\treturn $amount*rv/pixels+0.5;\n}",
+				"instance": "float $(name)_fct(vec2 uv) {\n\tfloat pixels = max(1.0, $width);\n\tfloat e = 1.0/$size;\n\tfloat rv = 0.0;\n\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {\n\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {\n\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {\n\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));\n\t\t\t}\n\t\t}\n\t}\n\treturn $amount*rv/pixels+0.5;\n}",
 				"name": "Emboss",
 				"outputs": [
 					{
@@ -219,5 +222,6 @@
 		"param2": 5,
 		"param3": 1
 	},
+	"seed_value": 7703,
 	"type": "graph"
 }
