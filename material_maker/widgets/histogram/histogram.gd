@@ -31,10 +31,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 	# Update shader
 	$ViewportImage/ColorRect.material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
 	# Get parameter values from the shader code
-	var regex = RegEx.new()
-	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
-	for p in regex.search_all($ViewportImage/ColorRect.material.shader.code):
-		$ViewportImage/ColorRect.material.set_shader_param(p.strings[2], float(p.strings[3]))
+	MMGenBase.define_shader_float_parameters($ViewportImage/ColorRect.material.shader.code, $ViewportImage/ColorRect.material)
 	# Set texture params
 	if source.has("textures"):
 		for k in source.textures.keys():
