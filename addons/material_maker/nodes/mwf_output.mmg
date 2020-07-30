@@ -171,7 +171,8 @@
 			"ports": [
 				{
 					"name": "Height",
-					"type": "f"
+					"type": "f",
+					"group_size": 5
 				},
 				{
 					"name": "Albedo",
@@ -204,7 +205,8 @@
 			"ports": [
 				{
 					"name": "Albedo",
-					"type": "rgb"
+					"type": "rgb",
+					"group_size": 7
 				},
 				{
 					"name": "Metallic",

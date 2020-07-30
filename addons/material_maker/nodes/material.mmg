@@ -31,7 +31,8 @@
 				"default": "vec3(1.0)",
 				"label": "",
 				"name": "albedo_tex",
-				"type": "rgb"
+				"type": "rgb",
+				"group_size": 7
 			},
 			{
 				"default": "1.0",

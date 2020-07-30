@@ -21,7 +21,8 @@
 				"default": "vec3(0.0)",
 				"label": "Albedo",
 				"name": "mat1",
-				"type": "rgb"
+				"type": "rgb",
+                                "group_size": 4
 			},
 			{
 				"default": "vec3(0.0)",
@@ -47,7 +48,8 @@
 		"outputs": [
 			{
 				"f": "$map($uv).x",
-				"type": "f"
+				"type": "f",
+                                "group_size": 5
 			},
 			{
 				"rgb": "$mat1($(name_uv)_uv)",

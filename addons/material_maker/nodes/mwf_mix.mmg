@@ -15,7 +15,8 @@
 				"default": "0.0",
 				"label": "Height 1",
 				"name": "h1",
-				"type": "f"
+				"type": "f",
+                                "group_size": 5
 			},
 			{
 				"default": "vec3(0.0)",
@@ -45,7 +46,8 @@
 				"default": "0.0",
 				"label": "Height 2",
 				"name": "h2",
-				"type": "f"
+				"type": "f",
+                                "group_size": 5
 			},
 			{
 				"default": "vec3(0.0)",
@@ -77,7 +79,8 @@
 		"outputs": [
 			{
 				"f": "max($h1($uv), $h2($uv))",
-				"type": "f"
+				"type": "f",
+                                "group_size": 5
 			},
 			{
 				"rgb": "mix($c1($uv), $c2($uv), $(name_uv)_a1)",
