@@ -74,11 +74,20 @@ func add_node(node) -> void:
 func connect_node(from, from_slot, to, to_slot):
 	var from_node : MMGraphNodeBase = get_node(from)
 	var to_node : MMGraphNodeBase = get_node(to)
-	if generator.connect_children(from_node.generator, from_slot, to_node.generator, to_slot):
-		var disconnect = get_source(to, to_slot)
-		if !disconnect.empty():
-			.disconnect_node(disconnect.node, disconnect.slot, to, to_slot)
-		.connect_node(from, from_slot, to, to_slot)
+	var connect_count = 1
+	var connected : bool = false
+	var out_ports = from_node.generator.get_output_defs()
+	var in_ports = to_node.generator.get_input_defs()
+	if out_ports[from_slot].has("group_size") and in_ports[to_slot].has("group_size") and out_ports[from_slot].group_size == in_ports[to_slot].group_size:
+		connect_count = out_ports[from_slot].group_size
+	for i in range(connect_count):
+		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
+			var disconnect = get_source(to, to_slot+i)
+			if !disconnect.empty():
+				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
+			.connect_node(from, from_slot+i, to, to_slot+i)
+			connected = true
+	if connected:
 		send_changed_signal()
 
 func disconnect_node(from, from_slot, to, to_slot) -> void:
@@ -228,17 +237,20 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 func create_gen_from_type(gen_name) -> void:
 	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
 
+func set_new_generator(new_generator) -> void:
+	clear_material()
+	top_generator = new_generator
+	add_child(top_generator)
+	move_child(top_generator, 0)
+	update_view(top_generator)
+	center_view()
+	set_need_save(false)
+
 func load_file(filename) -> bool:
 	var new_generator = mm_loader.load_gen(filename)
 	if new_generator != null:
-		clear_material()
-		top_generator = new_generator
-		add_child(top_generator)
-		move_child(top_generator, 0)
-		update_view(top_generator)
-		center_view()
 		set_save_path(filename)
-		set_need_save(false)
+		set_new_generator(new_generator)
 		return true
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
@@ -337,7 +349,28 @@ func do_paste(data) -> void:
 			c.selected = true
 
 func paste() -> void:
-	do_paste(parse_json(OS.clipboard))
+	var data = OS.clipboard
+	if data.left(4) == "http":
+		var http_request = HTTPRequest.new()
+		add_child(http_request)
+		var error = http_request.request(data)
+		if error != OK:
+			push_error("An error occurred in the HTTP request.")
+		data = yield(http_request, "request_completed")[3].get_string_from_utf8()
+		http_request.queue_free()
+	var graph = parse_json(data)
+	if graph != null:
+		if graph is Dictionary and graph.has("type") and graph.type == "graph":
+			var main_window = get_node("/root/MainWindow")
+			var graph_edit = main_window.new_pane()
+			var new_generator = mm_loader.create_gen(graph)
+			if new_generator:
+				graph_edit.set_new_generator(new_generator)
+				main_window.hierarchy.update_from_graph_edit(graph_edit)
+		else:
+			do_paste(graph)
+	else:
+		print(data)
 
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())

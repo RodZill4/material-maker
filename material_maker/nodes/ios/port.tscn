@@ -20,11 +20,12 @@ atlas = ExtResource( 2 )
 region = Rect2( 34, 49, 12, 14 )
 
 [node name="Port" type="HBoxContainer"]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 130.0
-margin_bottom = 44.0
+anchor_right = 1.0
+margin_bottom = 20.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Delete" type="Button" parent="."]
 margin_right = 24.0
@@ -45,20 +46,31 @@ icon = SubResource( 3 )
 
 [node name="Name" parent="." instance=ExtResource( 3 )]
 margin_left = 84.0
-margin_right = 114.0
+margin_right = 1068.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 30, 0 )
+size_flags_horizontal = 3
 
 [node name="Type" type="OptionButton" parent="."]
-margin_left = 118.0
-margin_right = 220.0
+margin_left = 1072.0
+margin_right = 1174.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "Greyscale"
+
+[node name="Group" type="OptionButton" parent="."]
+margin_left = 1178.0
+margin_right = 1280.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 102, 0 )
+hint_tooltip = "Input flag"
+text = "No Group"
+items = [ "No Group", null, false, 0, null, "2", null, false, 1, null, "3", null, false, 2, null, "4", null, false, 3, null, "5", null, false, 4, null, "6", null, false, 5, null, "7", null, false, 6, null, "8", null, false, 7, null, "9", null, false, 8, null ]
 selected = 0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]
 [connection signal="label_changed" from="Name" to="." method="_on_Name_label_changed"]
 [connection signal="item_selected" from="Type" to="." method="_on_Type_item_selected"]
+[connection signal="item_selected" from="Group" to="." method="_on_Group_item_selected"]

@@ -32,6 +32,7 @@ func update_node() -> void:
 			if p.has("name"):
 				port.set_label(p.name)
 			port.set_type(p.type)
+			port.set_group_size(p.group_size if p.has("group_size") and p.group_size > 1 else 0)
 		else:
 			port = Label.new()
 			add_child(port)

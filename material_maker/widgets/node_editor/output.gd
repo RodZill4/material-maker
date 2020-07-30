@@ -18,9 +18,16 @@ func set_model_data(data) -> void:
 		if data.has(mm_io_types.type_names[i]):
 			$Type.selected = i
 			$Value.text = data[mm_io_types.type_names[i]]
+	if data.has("group_size") and data.group_size > 1:
+		$Group.selected = data.group_size-1
+	else:
+		$Group.selected = 0
 
 func get_model_data() -> Dictionary:
-	return { mm_io_types.type_names[$Type.selected]:$Value.text }
+	var data = { mm_io_types.type_names[$Type.selected]:$Value.text }
+	if $Group.selected > 0:
+		data.group_size = $Group.selected+1
+	return data
 
 func _on_Delete_pressed() -> void:
 	var p = get_parent()

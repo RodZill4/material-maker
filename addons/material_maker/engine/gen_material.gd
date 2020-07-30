@@ -101,6 +101,9 @@ func render_textures() -> void:
 			if source.empty():
 				source = DEFAULT_GENERATED_SHADER
 			shader_materials[t.texture].shader.code = mm_renderer.generate_shader(source)
+			# Get parameter values from the shader code
+			define_shader_float_parameters(shader_materials[t.texture].shader.code, shader_materials[t.texture])
+			# Set texture params
 			if source.has("textures"):
 				for k in source.textures.keys():
 					shader_materials[t.texture].set_shader_param(k, source.textures[k])

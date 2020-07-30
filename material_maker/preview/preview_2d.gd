@@ -33,10 +33,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 	# Update shader
 	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
 	# Get parameter values from the shader code
-	var regex = RegEx.new()
-	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
-	for p in regex.search_all(material.shader.code):
-		material.set_shader_param(p.strings[2], float(p.strings[3]))
+	MMGenBase.define_shader_float_parameters(material.shader.code, material)
 	# Set texture params
 	if source.has("textures"):
 		for k in source.textures.keys():
@@ -70,15 +67,16 @@ func _on_Export_id_pressed(id):
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
+	dialog.add_filter("*.exr;EXR image file")
 	if get_node("/root/MainWindow") != null:
 		var config_cache = get_node("/root/MainWindow").config_cache
 		if config_cache.has_section_key("path", "save_preview"):
 			dialog.current_dir = config_cache.get_value("path", "save_preview")
-	dialog.connect("file_selected", self, "export_as_png", [ 64 << id ])
+	dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
 	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
-func export_as_png(file_name : String, size : int) -> void:
+func export_as_image_file(file_name : String, size : int) -> void:
 	if get_node("/root/MainWindow") != null:
 		var config_cache = get_node("/root/MainWindow").config_cache
 		config_cache.set_value("path", "save_preview", file_name.get_base_dir())

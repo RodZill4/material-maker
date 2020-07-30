@@ -19,12 +19,18 @@ func set_model_data(data) -> void:
 	$Type.selected = mm_io_types.type_names.find(data.type)
 	$Default.text = data.default
 	$Function.pressed = data.has("function") and data.function
+	if data.has("group_size") and data.group_size > 1:
+		$Group.selected = data.group_size-1
+	else:
+		$Group.selected = 0
 
 func get_model_data() -> Dictionary:
 	var data = { name=$Name.text, label=$Label.text, default=$Default.text }
 	data.type = mm_io_types.type_names[$Type.selected]
 	if $Function.pressed:
 		data.function = true
+	if $Group.selected > 0:
+		data.group_size = $Group.selected+1
 	return data
 
 func _on_Delete_pressed() -> void:

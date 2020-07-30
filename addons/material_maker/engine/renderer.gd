@@ -102,7 +102,11 @@ func copy_to_texture(t : ImageTexture) -> void:
 func save_to_file(fn : String) -> void:
 	var image : Image = get_texture().get_data()
 	image.lock()
-	image.save_png(fn)
+	match fn.get_extension():
+		"png":
+			image.save_png(fn)
+		"exr":
+			image.save_exr(fn)
 	image.unlock()
 
 func release() -> void:

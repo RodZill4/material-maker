@@ -70,6 +70,16 @@ size_flags_horizontal = 3
 custom_fonts/font = SubResource( 5 )
 text = "0.0"
 context_menu_enabled = false
+
+[node name="Group" type="OptionButton" parent="."]
+margin_left = 292.0
+margin_right = 394.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 102, 0 )
+hint_tooltip = "Input flag"
+text = "No group"
+items = [ "No group", null, false, 0, null, "2", null, false, 1, null, "3", null, false, 2, null, "4", null, false, 3, null, "5", null, false, 4, null, "6", null, false, 5, null, "7", null, false, 6, null, "8", null, false, 7, null, "9", null, false, 8, null ]
+selected = 0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]

@@ -14,6 +14,28 @@ func _draw() -> void:
 	if generator != null and generator.has_randomness():
 		var icon = preload("res://material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://material_maker/icons/randomness_unlocked.tres")
 		draw_texture_rect(icon, Rect2(rect_size.x-48, 4, 16, 16), false)
+	var inputs = generator.get_input_defs()
+	for i in range(inputs.size()):
+		if inputs[i].has("group_size") and inputs[i].group_size > 1:
+			var conn_pos1 = get_connection_input_position(i)
+			var conn_pos2 = get_connection_input_position(min(i+inputs[i].group_size-1, inputs.size()-1))
+			if i > 0:
+				conn_pos1.y += 1
+			conn_pos2.y += 1
+			conn_pos1 /= get_global_transform().get_scale()
+			conn_pos2 /= get_global_transform().get_scale()
+			draw_line(conn_pos1, conn_pos2, Color(1.0, 1.0, 1.0))
+	var outputs = generator.get_output_defs()
+	for i in range(outputs.size()):
+		if outputs[i].has("group_size") and outputs[i].group_size > 1:
+			var conn_pos1 = get_connection_output_position(i)
+			var conn_pos2 = get_connection_output_position(min(i+outputs[i].group_size-1, outputs.size()-1))
+			if i > 0:
+				conn_pos1.y += 1
+			conn_pos2.y += 1
+			conn_pos1 /= get_global_transform().get_scale()
+			conn_pos2 /= get_global_transform().get_scale()
+			draw_line(conn_pos1, conn_pos2, Color(1.0, 1.0, 1.0))
 
 func set_generator(g) -> void:
 	generator = g

@@ -2599,7 +2599,7 @@
 			],
 			"icon": "workflow_materials_marble",
 			"label": "Marble",
-			"name": "graph_3_3_2",
+			"name": "marble",
 			"nodes": [
 				{
 					"name": "uniform_greyscale_2",
@@ -2828,7 +2828,8 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgb"
+							"type": "rgb",
+							"group_size": 4
 						},
 						{
 							"name": "ORM",
@@ -3351,7 +3352,8 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgb"
+							"type": "rgb",
+							"group_size": 4
 						},
 						{
 							"name": "ORM",
@@ -4053,7 +4055,8 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgb"
+							"type": "rgb",
+							"group_size": 4
 						},
 						{
 							"name": "ORM",
@@ -4512,7 +4515,8 @@
 					"ports": [
 						{
 							"name": "Albedo",
-							"type": "rgb"
+							"type": "rgb",
+							"group_size": 4
 						},
 						{
 							"name": "ORM",

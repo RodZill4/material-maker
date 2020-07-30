@@ -27,7 +27,10 @@ func get_type_name() -> String:
 func get_io_defs() -> Array:
 	var rv : Array = []
 	for p in ports:
-		rv.push_back({ name=p.name, type=p.type })
+		var port = { name=p.name, type=p.type }
+		if p.has("group_size") and p.group_size > 1:
+			port.group_size = p.group_size
+		rv.push_back(port)
 	return rv
 
 func get_input_defs() -> Array:
@@ -57,6 +60,10 @@ func set_port_name(i : int, n : String) -> void:
 func set_port_type(i : int, t : String) -> void:
 	ports[i].type = t
 	emit_signal("parameter_changed", "__update_all__", null)
+
+func set_port_group_size(i : int, s : int) -> void:
+	ports[i].group_size = s
+
 
 func delete_port(i : int) -> void:
 	ports.remove(i)
