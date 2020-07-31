@@ -3,13 +3,15 @@
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/preview/preview_2d.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/preview/preview_3d.tscn" type="PackedScene" id=4]
-[ext_resource path="res://material_maker/preview/preview_3d_ui.tscn" type="PackedScene" id=5]
+[ext_resource path="res://material_maker/panels/preview_3d/preview_3d.tscn" type="PackedScene" id=4]
+[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://material_maker/widgets/tabs.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/widgets/add_node_popup.tscn" type="PackedScene" id=7]
+[ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" type="PackedScene" id=7]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
+
+
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true

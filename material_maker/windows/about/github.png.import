@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/twitter.png-41589c52979264912341976c22771822.stex"
+path="res://.import/github.png-3b620d30367445a49ec5c5c9e802508e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/widgets/about/twitter.png"
-dest_files=[ "res://.import/twitter.png-41589c52979264912341976c22771822.stex" ]
+source_file="res://material_maker/windows/about/github.png"
+dest_files=[ "res://.import/github.png-3b620d30367445a49ec5c5c9e802508e.stex" ]
 
 [params]
 

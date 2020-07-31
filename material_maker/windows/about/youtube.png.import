@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/github.png-a497114bf91a1ec9a0e04c3cbb860f05.stex"
+path="res://.import/youtube.png-d1e177893d3242d8514834629872c666.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/widgets/about/github.png"
-dest_files=[ "res://.import/github.png-a497114bf91a1ec9a0e04c3cbb860f05.stex" ]
+source_file="res://material_maker/windows/about/youtube.png"
+dest_files=[ "res://.import/youtube.png-d1e177893d3242d8514834629872c666.stex" ]
 
 [params]
 

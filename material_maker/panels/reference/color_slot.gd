@@ -15,7 +15,7 @@ func _on_ColorSlot_gui_input(event : InputEvent):
 	if event is InputEventMouseButton and event.pressed:
 		emit_signal("clicked", self)
 
-func get_drag_data(position):
+func get_drag_data(_position):
 	var preview = ColorRect.new()
 	preview.color = $ColorRect.color
 	preview.rect_min_size = Vector2(32, 32)

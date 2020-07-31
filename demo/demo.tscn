@@ -1,12 +1,13 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/examples/bricks.ptex" type="Material" id=1]
-[ext_resource path="res://material_maker/preview/panoramas/studio_sky.tres" type="Environment" id=2]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=2]
 [ext_resource path="res://demo/object.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/examples/marble.ptex" type="Material" id=4]
 [ext_resource path="res://material_maker/examples/medieval_wall.ptex" type="Material" id=5]
 [ext_resource path="res://material_maker/examples/floor1.ptex" type="Material" id=6]
 [ext_resource path="res://material_maker/examples/beehive.ptex" type="Material" id=7]
+
 
 [sub_resource type="Animation" id=1]
 resource_name = "rotate"

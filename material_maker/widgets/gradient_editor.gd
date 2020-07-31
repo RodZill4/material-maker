@@ -54,7 +54,7 @@ class GradientCursor:
 	func can_drop_data(_position, data) -> bool:
 		return typeof(data) == TYPE_COLOR
 
-	func drop_data(position, data) -> void:
+	func drop_data(_position, data) -> void:
 		set_color(data)
 
 

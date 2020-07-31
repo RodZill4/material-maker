@@ -1,15 +1,14 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://material_maker/widgets/about/about.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/about/github.png" type="Texture" id=2]
-[ext_resource path="res://material_maker/widgets/about/twitter.png" type="Texture" id=3]
+[ext_resource path="res://material_maker/windows/about/about.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/windows/about/github.png" type="Texture" id=2]
+[ext_resource path="res://material_maker/windows/about/twitter.png" type="Texture" id=3]
 [ext_resource path="res://material_maker/widgets/icon.png" type="Texture" id=4]
-[ext_resource path="res://material_maker/widgets/about/facebook.png" type="Texture" id=5]
-[ext_resource path="res://material_maker/widgets/about/itchio.png" type="Texture" id=6]
-[ext_resource path="res://material_maker/icons/icon.png" type="Texture" id=7]
-[ext_resource path="res://material_maker/widgets/about/youtube.png" type="Texture" id=8]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=9]
-
+[ext_resource path="res://material_maker/windows/about/itchio.png" type="Texture" id=5]
+[ext_resource path="res://material_maker/icons/icon.png" type="Texture" id=6]
+[ext_resource path="res://material_maker/windows/about/youtube.png" type="Texture" id=7]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=8]
+[ext_resource path="res://material_maker/windows/about/facebook.png" type="Texture" id=9]
 
 [node name="About" type="WindowDialog"]
 margin_right = 200.0
@@ -44,7 +43,7 @@ align = 1
 margin_top = 19.0
 margin_right = 95.0
 margin_bottom = 83.0
-texture = ExtResource( 7 )
+texture = ExtResource( 6 )
 stretch_mode = 4
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
@@ -88,7 +87,7 @@ margin_bottom = 64.0
 rect_min_size = Vector2( 64, 64 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource( 9 )
+texture = ExtResource( 8 )
 expand = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer3"]
@@ -103,7 +102,7 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "Facebook"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource( 5 )
+texture_normal = ExtResource( 9 )
 expand = true
 stretch_mode = 4
 
@@ -125,7 +124,7 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "YouTube"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource( 8 )
+texture_normal = ExtResource( 7 )
 expand = true
 stretch_mode = 4
 
@@ -147,7 +146,7 @@ margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 hint_tooltip = "itch.io"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource( 6 )
+texture_normal = ExtResource( 5 )
 expand = true
 stretch_mode = 4
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Godot" to="." method="open_url" binds= [ "https://godotengine.org/" ]]

@@ -130,12 +130,12 @@ func _ready() -> void:
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
 	layout.load_panes(config_cache)
-	library = layout.get_pane("Library")
-	preview_2d = layout.get_pane("Preview2D")
-	histogram = layout.get_pane("Histogram")
-	preview_3d = layout.get_pane("Preview3D")
+	library = layout.get_panel("Library")
+	preview_2d = layout.get_panel("Preview2D")
+	histogram = layout.get_panel("Histogram")
+	preview_3d = layout.get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
-	hierarchy = layout.get_pane("Hierarchy")
+	hierarchy = layout.get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
 
 	# Load recent projects
@@ -304,7 +304,7 @@ func _on_SetTheme_id_pressed(id) -> void:
 
 func create_menu_show_panes(menu : PopupMenu) -> void:
 	menu.clear()
-	var panes = layout.get_pane_list()
+	var panes = layout.get_panel_list()
 	for i in range(panes.size()):
 		menu.add_check_item(panes[i], i)
 		menu.set_item_checked(i, layout.is_pane_visible(panes[i]))
@@ -312,7 +312,7 @@ func create_menu_show_panes(menu : PopupMenu) -> void:
 		menu.connect("id_pressed", self, "_on_ShowPanes_id_pressed")
 
 func _on_ShowPanes_id_pressed(id) -> void:
-	var pane : String = layout.get_pane_list()[id]
+	var pane : String = layout.get_panel_list()[id]
 	layout.set_pane_visible(pane, !layout.is_pane_visible(pane))
 	print(pane)
 
@@ -576,7 +576,7 @@ func show_reddit() -> void:
 	OS.shell_open("https://www.reddit.com/r/MaterialMaker/")
 
 func about() -> void:
-	var about_box = preload("res://material_maker/widgets/about/about.tscn").instance()
+	var about_box = preload("res://material_maker/windows/about/about.tscn").instance()
 	add_child(about_box)
 	about_box.connect("popup_hide", about_box, "queue_free")
 	about_box.popup_centered()

@@ -1,14 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://material_maker/widgets/reference/gradient_slot.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/reference/color_slot.gd" type="Script" id=1]
 
-[sub_resource type="Shader" id=1]
-
-[sub_resource type="ShaderMaterial" id=2]
-resource_local_to_scene = true
-shader = SubResource( 1 )
-
-[node name="GradientSlot" type="ColorRect"]
+[node name="ColorSlot" type="ColorRect"]
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
@@ -19,7 +13,6 @@ __meta__ = {
 }
 
 [node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 3.0

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/itchio.png-a95e597fc237fb94559abc50b9a55983.stex"
+path="res://.import/moonless_golf.hdr-ba41379eff4daee0dc4a59b2052ff248.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/widgets/about/itchio.png"
-dest_files=[ "res://.import/itchio.png-a95e597fc237fb94559abc50b9a55983.stex" ]
+source_file="res://material_maker/panels/preview_3d/panoramas/moonless_golf.hdr"
+dest_files=[ "res://.import/moonless_golf.hdr-ba41379eff4daee0dc4a59b2052ff248.stex" ]
 
 [params]
 

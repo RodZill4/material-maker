@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/epping_forest_01.hdr-a30706c1491400d90fdcd995fe7436bb.stex"
+path="res://.import/facebook.png-3054391e4a8e83c28f6308cb03d4e9b2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/preview/panoramas/epping_forest_01.hdr"
-dest_files=[ "res://.import/epping_forest_01.hdr-a30706c1491400d90fdcd995fe7436bb.stex" ]
+source_file="res://material_maker/windows/about/facebook.png"
+dest_files=[ "res://.import/facebook.png-3054391e4a8e83c28f6308cb03d4e9b2.stex" ]
 
 [params]
 

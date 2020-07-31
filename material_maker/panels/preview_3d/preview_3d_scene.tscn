@@ -1,15 +1,15 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://material_maker/preview/preview_objects.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/preview/panoramas/moonless_golf.hdr" type="Texture" id=2]
-[ext_resource path="res://material_maker/environment.gd" type="Script" id=3]
-[ext_resource path="res://material_maker/preview/panoramas/epping_forest_01.hdr" type="Texture" id=4]
-[ext_resource path="res://material_maker/preview/panoramas/studio_sky.tres" type="Environment" id=5]
+[ext_resource path="res://material_maker/environment.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/preview_3d/preview_objects.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=3]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=4]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/moonless_golf.hdr" type="Texture" id=5]
 
 [sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
 radiance_size = 4
-panorama = ExtResource( 2 )
+panorama = ExtResource( 5 )
 
 [sub_resource type="Environment" id=2]
 resource_local_to_scene = true
@@ -59,7 +59,7 @@ subdivide_depth = 10
 
 [node name="Preview3dScene" type="Spatial"]
 
-[node name="Objects" parent="." instance=ExtResource( 1 )]
+[node name="Objects" parent="." instance=ExtResource( 2 )]
 transform = Transform( -0.799512, 0, 0.60065, 0, 1, 0, -0.60065, 0, -0.799512, 0, 0, 0 )
 
 [node name="CameraPivot" type="Spatial" parent="."]
@@ -79,7 +79,7 @@ anims/rotate = SubResource( 3 )
 
 [node name="Epping Forest" type="Spatial" parent="Environments"]
 visible = false
-script = ExtResource( 3 )
+script = ExtResource( 1 )
 environment = SubResource( 5 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Environments/Epping Forest"]
@@ -95,7 +95,7 @@ material/0 = SubResource( 7 )
 
 [node name="Moonless Golf" type="Spatial" parent="Environments"]
 visible = false
-script = ExtResource( 3 )
+script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Environments/Moonless Golf"]
@@ -105,8 +105,8 @@ shadow_enabled = true
 
 [node name="Studio" type="Spatial" parent="Environments"]
 visible = false
-script = ExtResource( 3 )
-environment = ExtResource( 5 )
+script = ExtResource( 1 )
+environment = ExtResource( 3 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Environments/Studio"]
 transform = Transform( 0.707107, -0.40558, 0.579228, 0, 0.819152, 0.573577, -0.707107, -0.40558, 0.579228, 10, 10, 0 )

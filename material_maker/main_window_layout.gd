@@ -1,36 +1,36 @@
 extends HSplitContainer
 
-const PANE_POSITIONS = {
+const PANEL_POSITIONS = {
 	TopLeft="Left/Top",
 	BottomLeft="Left/Bottom",
 	TopRight="SplitRight/Right/Top",
 	BottomRight="SplitRight/Right/Bottom"
 }
-const PANES = [
+const PANELS = [
 	{ name="Library", scene=preload("res://material_maker/library.tscn"), position="TopLeft" },
 	{ name="Preview2D", scene=preload("res://material_maker/preview/preview_2d_panel.tscn"), position="BottomLeft" },
-	{ name="Preview3D", scene=preload("res://material_maker/preview/preview_3d_panel.tscn"), position="BottomLeft" },
+	{ name="Preview3D", scene=preload("res://material_maker/panels/preview_3d/preview_3d_panel.tscn"), position="BottomLeft" },
 	{ name="Histogram", scene=preload("res://material_maker/widgets/histogram/histogram.tscn"), position="BottomLeft" },
-	{ name="Hierarchy", scene=preload("res://material_maker/widgets/graph_tree/hierarchy_pane.tscn"), position="TopRight" },
-	{ name="Reference", scene=preload("res://material_maker/widgets/reference/reference_panel.tscn"), position="BottomLeft" }
+	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },
+	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" }
 ]
 
-var panes = {}
+var panels = {}
 
 func load_panes(config_cache) -> void:
 	# Create panels
-	for pane_pos in PANE_POSITIONS.keys():
-		get_node(PANE_POSITIONS[pane_pos]).set_tabs_rearrange_group(1)
-	for pane in PANES:
-		var node = pane.scene.instance()
-		node.name = pane.name
+	for panel_pos in PANEL_POSITIONS.keys():
+		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
+	for panel in PANELS:
+		var node = panel.scene.instance()
+		node.name = panel.name
 		if "config_cache" in node:
 			node.config_cache = config_cache
-		panes[pane.name] = node
-		var tab = get_node(PANE_POSITIONS[pane.position])
-		if config_cache.has_section_key("layout", pane.name+"_location"):
-			tab = get_node(PANE_POSITIONS[config_cache.get_value("layout", pane.name+"_location")])
-		if config_cache.has_section_key("layout", pane.name+"_hidden") && config_cache.get_value("layout", pane.name+"_hidden"):
+		panels[panel.name] = node
+		var tab = get_node(PANEL_POSITIONS[panel.position])
+		if config_cache.has_section_key("layout", panel.name+"_location"):
+			tab = get_node(PANEL_POSITIONS[config_cache.get_value("layout", panel.name+"_location")])
+		if config_cache.has_section_key("layout", panel.name+"_hidden") && config_cache.get_value("layout", panel.name+"_hidden"):
 			node.set_meta("parent_tab_container", tab)
 		else:
 			tab.add_child(node)
@@ -43,45 +43,45 @@ func load_panes(config_cache) -> void:
 		$SplitRight.split_offset = config_cache.get_value("layout", "RightVSplitOffset")
 	if config_cache.has_section_key("layout", "RightHSplitOffset"):
 		$SplitRight/Right.split_offset = config_cache.get_value("layout", "RightHSplitOffset")
-	update_panes()
+	update_panels()
 
 func save_config(config_cache) -> void:
-	for p in panes:
-		var location = panes[p].get_parent()
+	for p in panels:
+		var location = panels[p].get_parent()
 		var hidden = false
 		if location == null:
 			hidden = true
-			location = panes[p].get_meta("parent_tab_container")
+			location = panels[p].get_meta("parent_tab_container")
 		config_cache.set_value("layout", p+"_hidden", hidden)
-		for l in PANE_POSITIONS.keys():
-			if location == get_node(PANE_POSITIONS[l]):
+		for l in PANEL_POSITIONS.keys():
+			if location == get_node(PANEL_POSITIONS[l]):
 				config_cache.set_value("layout", p+"_location", l)
 	config_cache.set_value("layout", "LeftVSplitOffset", split_offset)
 	config_cache.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
 	config_cache.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)
 	config_cache.set_value("layout", "RightHSplitOffset", $SplitRight/Right.split_offset)
 
-func get_pane(n) -> Control:
-	return panes[n]
+func get_panel(n) -> Control:
+	return panels[n]
 
-func get_pane_list() -> Array:
-	var panes_list = panes.keys()
-	panes_list.sort()
-	return panes_list
+func get_panel_list() -> Array:
+	var panels_list = panels.keys()
+	panels_list.sort()
+	return panels_list
 
-func is_pane_visible(pane_name : String) -> bool:
-	return panes[pane_name].get_parent() != null
+func is_panel_visible(panel_name : String) -> bool:
+	return panels[panel_name].get_parent() != null
 
-func set_pane_visible(pane_name : String, v : bool) -> void:
-	var pane = panes[pane_name]
+func set_panel_visible(panel_name : String, v : bool) -> void:
+	var panel = panels[panel_name]
 	if v:
-		pane.get_meta("parent_tab_container").add_child(pane)
+		panel.get_meta("parent_tab_container").add_child(panel)
 	else:
-		pane.set_meta("parent_tab_container", pane.get_parent())
-		pane.get_parent().remove_child(pane)
-	update_panes()
+		panel.set_meta("parent_tab_container", panel.get_parent())
+		panel.get_parent().remove_child(panel)
+	update_panels()
 
-func update_panes() -> void:
+func update_panels() -> void:
 	var left_width = $Left.rect_size.x
 	var left_requested = left_width
 	var right_width = $SplitRight/Right.rect_size.x
@@ -119,4 +119,4 @@ func _on_Right_dragged(_offset : int) -> void:
 	$SplitRight/Right.clamp_split_offset()
 
 func _on_tab_changed(_tab):
-	update_panes()
+	update_panels()
