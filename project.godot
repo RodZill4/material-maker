@@ -94,6 +94,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_switch.gd"
 }, {
+"base": "MMGenTexture",
+"class": "MMGenText",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_text.gd"
+}, {
 "base": "MMGenBase",
 "class": "MMGenTexture",
 "language": "GDScript",
@@ -162,6 +167,7 @@ _global_script_class_icons={
 "MMGenRenderer": "",
 "MMGenShader": "",
 "MMGenSwitch": "",
+"MMGenText": "",
 "MMGenTexture": "",
 "MMGradient": "",
 "MMGradientEditor": "",
@@ -186,7 +192,7 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="0.92"
+config/release="0.93"
 
 [autoload]
 
@@ -196,7 +202,7 @@ mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
 
 [debug]
 
-gdscript/warnings/exclude_addons=false
+gdscript/warnings/unused_class_variable=true
 gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true

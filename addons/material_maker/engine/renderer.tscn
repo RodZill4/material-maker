@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/material_maker/engine/renderer.gd" type="Script" id=1]
 
@@ -9,9 +9,17 @@ void fragment() {
 	COLOR = vec4(1.0);
 }
 "
+custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://material_maker/fonts/vegur_regular.otf"
+
+[sub_resource type="DynamicFont" id=4]
+resource_local_to_scene = true
+font_data = SubResource( 3 )
 
 [node name="Renderer" type="Viewport"]
 own_world = true
@@ -27,6 +35,17 @@ script = ExtResource( 1 )
 material = SubResource( 2 )
 margin_right = 40.0
 margin_bottom = 40.0
+
+[node name="Font" type="ColorRect" parent="."]
+visible = false
+margin_right = 200.0
+margin_bottom = 200.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Label" type="Label" parent="Font"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 4 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.1

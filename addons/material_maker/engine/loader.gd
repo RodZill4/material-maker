@@ -87,6 +87,7 @@ func create_gen(data) -> MMGenBase:
 		material_export = MMGenMaterial,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
+		text = MMGenText,
 		iterate_buffer = MMGenIterateBuffer,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,

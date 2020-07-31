@@ -107,6 +107,18 @@
 			"type": "image"
 		},
 		{
+			"name": "text",
+			"icon": "simple_text",
+			"parameters": {
+				"font":"",
+				"font_size":64,
+				"text":"Text",
+				"x":-0.4,
+				"y":-0.4
+			},
+			"tree_item": "Simple/Text",
+			"type":"text"},
+		{
 			"collapsed": false,
 			"icon": "simple_gradient",
 			"name": "gradient",

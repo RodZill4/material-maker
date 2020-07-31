@@ -48,6 +48,28 @@ func setup_material(shader_material, textures, shader_code) -> void:
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
+func render_text(text : String, font_path : String, font_size : int, x : float, y : float) -> Object:
+	while rendering:
+		yield(self, "done")
+	rendering = true
+	size = Vector2(2048, 2048)
+	$Font.visible = true
+	$Font.rect_position = Vector2(0, 0)
+	$Font.rect_size = size
+	$Font/Label.text = text
+	$Font/Label.rect_position = Vector2(2048*(0.5+x), 2048*(0.5+y))
+	var font = $Font/Label.get_font("font")
+	font.size = font_size
+	$ColorRect.visible = false
+	hdr = true
+	render_target_update_mode = Viewport.UPDATE_ONCE
+	update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	$Font.visible = false
+	$ColorRect.visible = true
+	return self
+
 func render_material(material, render_size, with_hdr = true) -> Object:
 	while rendering:
 		yield(self, "done")

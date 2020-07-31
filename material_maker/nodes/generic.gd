@@ -137,6 +137,8 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control = preload("res://material_maker/widgets/gradient_editor.tscn").instance()
 	elif p.type == "string":
 		control = LineEdit.new()
+	elif p.type == "file":
+		control = Button.new()
 	return control
 
 func save_preview_widget() -> void:
