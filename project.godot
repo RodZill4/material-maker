@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Button",
+"class": "FilePickerButton",
+"language": "GDScript",
+"path": "res://material_maker/widgets/file_picker_button/file_picker_button.gd"
+}, {
 "base": "LineEdit",
 "class": "MMFloatEdit",
 "language": "GDScript",
@@ -150,6 +155,7 @@ _global_script_classes=[ {
 "path": "res://material_maker/widgets/size_option_button.gd"
 } ]
 _global_script_class_icons={
+"FilePickerButton": "",
 "MMFloatEdit": "",
 "MMGenBase": "",
 "MMGenBuffer": "",

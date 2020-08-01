@@ -17,7 +17,7 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return [ { name="text", type="string", default="Hello World" },
-			 { name="font", type="file", default="" },
+			 { name="font", type="file", filters= [ "*.otf,*.ttf,*.fnt;Font file" ], default="" },
 			 { name="font_size", type="float", min=0, max=128, step=1, default=32 },
 			 { name="x", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.x" },
 			 { name="y", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.y" } ]

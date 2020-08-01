@@ -21,12 +21,12 @@ func _draw() -> void:
 		conn_pos /= get_global_transform().get_scale()
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8))
 
-func set_generator(g) -> void:
+func set_generator(g : MMGenBase) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
 
-func on_parameter_changed(p, v) -> void:
+func on_parameter_changed(p : String, v) -> void:
 	if ignore_parameter_change == p:
 		return
 	if p == "__update_all__":
@@ -47,6 +47,8 @@ func on_parameter_changed(p, v) -> void:
 			o.pressed = v
 		elif o is ColorPickerButton:
 			o.color = MMType.deserialize_value(v)
+		elif o is FilePickerButton:
+			o.path = v
 		elif o is MMGradientEditor:
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
@@ -77,30 +79,38 @@ func initialize_properties() -> void:
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
+		elif o is FilePickerButton:
+			o.connect("on_file_selected", self, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor.tscn":
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
 
-func _on_text_changed(new_text, variable) -> void:
+func _on_text_changed(new_text, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
-func _on_value_changed(new_value, variable) -> void:
+func _on_value_changed(new_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
-func _on_color_changed(new_color, variable) -> void:
+func _on_color_changed(new_color, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
-func _on_gradient_changed(new_gradient, variable) -> void:
+func _on_file_changed(new_file, variable : String) -> void:
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, new_file)
+	ignore_parameter_change = ""
+	get_parent().set_need_save()
+
+func _on_gradient_changed(new_gradient, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
 	ignore_parameter_change = ""
@@ -138,7 +148,10 @@ func create_parameter_control(p : Dictionary) -> Control:
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "file":
-		control = Button.new()
+		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instance()
+		if p.has("filters"):
+			for f in p.filters:
+				control.add_filter(f)
 	return control
 
 func save_preview_widget() -> void:

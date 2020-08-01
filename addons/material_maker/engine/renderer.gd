@@ -48,6 +48,7 @@ func setup_material(shader_material, textures, shader_code) -> void:
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
+var current_font : String = ""
 func render_text(text : String, font_path : String, font_size : int, x : float, y : float) -> Object:
 	while rendering:
 		yield(self, "done")
@@ -59,6 +60,11 @@ func render_text(text : String, font_path : String, font_size : int, x : float, 
 	$Font/Label.text = text
 	$Font/Label.rect_position = Vector2(2048*(0.5+x), 2048*(0.5+y))
 	var font = $Font/Label.get_font("font")
+	if font_path != "" and font_path != current_font:
+		var font_data = load(font_path)
+		if font_data != null:
+			font.font_data = font_data
+			current_font = font_path
 	font.size = font_size
 	$ColorRect.visible = false
 	hdr = true
