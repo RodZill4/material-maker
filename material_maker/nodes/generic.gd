@@ -33,7 +33,7 @@ func on_parameter_changed(p : String, v) -> void:
 		update_node()
 	elif controls.has(p):
 		var o = controls[p]
-		if o is MMFloatEdit:
+		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.value = v
 		elif o is HSlider:
 			o.value = v
@@ -47,9 +47,9 @@ func on_parameter_changed(p : String, v) -> void:
 			o.pressed = v
 		elif o is ColorPickerButton:
 			o.color = MMType.deserialize_value(v)
-		elif o is FilePickerButton:
+		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.path = v
-		elif o is MMGradientEditor:
+		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
@@ -67,7 +67,7 @@ func initialize_properties() -> void:
 		var o = controls[c]
 		if generator.parameters.has(c):
 			on_parameter_changed(c, generator.parameters[c])
-		if o is MMFloatEdit:
+		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
 		elif o is LineEdit:
 			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
@@ -79,9 +79,9 @@ func initialize_properties() -> void:
 			o.connect("toggled", self, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
 			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
-		elif o is FilePickerButton:
+		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("on_file_selected", self, "_on_file_changed", [ o.name ])
-		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor.tscn":
+		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
@@ -119,7 +119,7 @@ func _on_gradient_changed(new_gradient, variable : String) -> void:
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
 	if p.type == "float":
-		control = preload("res://material_maker/widgets/float_edit.tscn").instance()
+		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
 		control.min_value = p.min
 		control.max_value = p.max
 		control.step = 0.005 if !p.has("step") else p.step
@@ -141,10 +141,10 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control = CheckBox.new()
 	elif p.type == "color":
 		control = ColorPickerButton.new()
-		control.set_script(preload("res://material_maker/widgets/color_picker_button.gd"))
+		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
 		control.rect_min_size.x = 40
 	elif p.type == "gradient":
-		control = preload("res://material_maker/widgets/gradient_editor.tscn").instance()
+		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instance()
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "file":

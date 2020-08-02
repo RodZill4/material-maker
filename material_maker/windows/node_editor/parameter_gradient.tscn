@@ -1,7 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/parameter_gradient.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/gradient_editor.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/widgets/gradient_editor/gradient_editor.tscn" type="PackedScene" id=2]
+
 
 
 

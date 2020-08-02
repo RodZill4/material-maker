@@ -1,5 +1,4 @@
 extends Control
-class_name MMGradientEditor
 
 class GradientCursor:
 	extends Control
@@ -124,7 +123,7 @@ func _gui_input(ev) -> void:
 			add_cursor(p, get_gradient_color(p))
 			update_value()
 		elif embedded:
-			var popup = load("res://material_maker/widgets/gradient_popup.tscn").instance()
+			var popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instance()
 			add_child(popup)
 			var popup_size = popup.rect_size
 			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
@@ -139,7 +138,7 @@ var active_cursor
 
 func select_color(cursor, position) -> void:
 	active_cursor = cursor
-	var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup.tscn").instance()
+	var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instance()
 	add_child(color_picker_popup)
 	var color_picker = color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color

@@ -1,5 +1,4 @@
 extends LineEdit
-class_name MMFloatEdit
 
 export var value : float = 0.5 setget set_value
 export var min_value : float = 0.0 setget set_min_value
