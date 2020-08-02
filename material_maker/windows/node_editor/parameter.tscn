@@ -1,13 +1,14 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://material_maker/widgets/node_editor/parameter.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/windows/node_editor/parameter.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_float.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_size.tscn" type="PackedScene" id=4]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_enum.tscn" type="PackedScene" id=5]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_boolean.tscn" type="PackedScene" id=6]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_color.tscn" type="PackedScene" id=7]
-[ext_resource path="res://material_maker/widgets/node_editor/parameter_gradient.tscn" type="PackedScene" id=8]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_float.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_size.tscn" type="PackedScene" id=4]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_enum.tscn" type="PackedScene" id=5]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_boolean.tscn" type="PackedScene" id=6]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_color.tscn" type="PackedScene" id=7]
+[ext_resource path="res://material_maker/windows/node_editor/parameter_gradient.tscn" type="PackedScene" id=8]
+
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4

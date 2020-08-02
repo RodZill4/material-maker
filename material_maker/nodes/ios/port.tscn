@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/nodes/ios/port.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://material_maker/widgets/linked_widgets/editable_label.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -46,31 +47,27 @@ icon = SubResource( 3 )
 
 [node name="Name" parent="." instance=ExtResource( 3 )]
 margin_left = 84.0
-margin_right = 1068.0
+margin_right = 1154.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 30, 0 )
 size_flags_horizontal = 3
 
 [node name="Type" type="OptionButton" parent="."]
-margin_left = 1072.0
-margin_right = 1174.0
+margin_left = 1158.0
+margin_right = 1260.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
 text = "Greyscale"
 
-[node name="Group" type="OptionButton" parent="."]
-margin_left = 1178.0
+[node name="PortGroupButton" parent="." instance=ExtResource( 4 )]
+margin_left = 1264.0
+margin_top = 2.0
 margin_right = 1280.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 102, 0 )
-hint_tooltip = "Input flag"
-text = "No Group"
-items = [ "No Group", null, false, 0, null, "2", null, false, 1, null, "3", null, false, 2, null, "4", null, false, 3, null, "5", null, false, 4, null, "6", null, false, 5, null, "7", null, false, 6, null, "8", null, false, 7, null, "9", null, false, 8, null ]
-selected = 0
+margin_bottom = 18.0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]
 [connection signal="label_changed" from="Name" to="." method="_on_Name_label_changed"]
 [connection signal="item_selected" from="Type" to="." method="_on_Type_item_selected"]
-[connection signal="item_selected" from="Group" to="." method="_on_Group_item_selected"]
+[connection signal="group_size_changed" from="PortGroupButton" to="." method="_on_PortGroupButton_group_size_changed"]

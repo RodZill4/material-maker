@@ -13,20 +13,22 @@ func update_up_down_button() -> void:
 	$Up.disabled = (get_index() == 0)
 	$Down.disabled = (get_index() == get_parent().get_child_count()-2)
 
-func set_model_data(data) -> void:
+func set_model_data(data, remaining_group_size = 0) -> int:
 	for i in range(mm_io_types.type_names.size()):
 		if data.has(mm_io_types.type_names[i]):
 			$Type.selected = i
 			$Value.text = data[mm_io_types.type_names[i]]
 	if data.has("group_size") and data.group_size > 1:
-		$Group.selected = data.group_size-1
-	else:
-		$Group.selected = 0
+		$PortGroupButton.set_state(1)
+		return data.group_size-1
+	elif remaining_group_size == 1:
+		$PortGroupButton.set_state(1)
+	return int(max(remaining_group_size-1, 0))
 
 func get_model_data() -> Dictionary:
 	var data = { mm_io_types.type_names[$Type.selected]:$Value.text }
-	if $Group.selected > 0:
-		data.group_size = $Group.selected+1
+	if $PortGroupButton.group_size > 0:
+		data.group_size = $PortGroupButton.group_size
 	return data
 
 func _on_Delete_pressed() -> void:

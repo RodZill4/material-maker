@@ -11,9 +11,9 @@ onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functio
 onready var includes_editor : LineEdit = $"Sizer/Tabs/Global Functions/Includes/Includes"
 onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions/Functions"
 
-const ParameterEditor = preload("res://material_maker/widgets/node_editor/parameter.tscn")
-const InputEditor = preload("res://material_maker/widgets/node_editor/input.tscn")
-const OutputEditor = preload("res://material_maker/widgets/node_editor/output.tscn")
+const ParameterEditor = preload("res://material_maker/windows/node_editor/parameter.tscn")
+const InputEditor = preload("res://material_maker/windows/node_editor/input.tscn")
+const OutputEditor = preload("res://material_maker/windows/node_editor/output.tscn")
 
 signal node_changed
 
@@ -36,13 +36,23 @@ func set_model_data(data) -> void:
 			add_item(parameter_list, ParameterEditor).set_model_data(p)
 		parameter_list.update_up_down_buttons()
 	if data.has("inputs"):
-		for i in data.inputs:
-			add_item(input_list, InputEditor).set_model_data(i)
+		var group_size = 0
+		for i in range(data.inputs.size()):
+			var input = data.inputs[i]
+			if group_size > 1 && i == data.inputs.size()-1:
+				group_size = 1
+			group_size = add_item(input_list, InputEditor).set_model_data(input, group_size)
 		input_list.update_up_down_buttons()
+		PortGroupButton.update_groups(input_list)
 	if data.has("outputs"):
-		for o in data.outputs:
-			add_item(output_list, OutputEditor).set_model_data(o)
+		var group_size = 0
+		for o in range(data.outputs.size()):
+			var output = data.outputs[o]
+			if group_size > 1 && o == data.outputs.size()-1:
+				group_size = 1
+			group_size = add_item(output_list, OutputEditor).set_model_data(output, group_size)
 		output_list.update_up_down_buttons()
+		PortGroupButton.update_groups(output_list)
 	if data.has("includes"):
 		includes_editor.text = PoolStringArray(data.includes).join(",")
 	if data.has("global"):

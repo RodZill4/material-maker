@@ -6,14 +6,15 @@ func _ready() -> void:
 		var t = mm_io_types.types[tn]
 		$Type.add_item(t.label)
 
-func set_label(l : String) -> void:
-	$Name.set_text(l)
-
-func set_type(t : String) -> void:
-	$Type.select(mm_io_types.type_names.find(t))
-	
-func set_group_size(s : int) -> void:
-	$Group.select(max(s-1, 0))
+func set_model_data(data, remaining_group_size = 0) -> int:
+	$Name.set_text(data.name if data.has("name") else "")
+	$Type.select(mm_io_types.type_names.find(data.type))
+	if data.has("group_size") and data.group_size > 1:
+		$PortGroupButton.set_state(1)
+		return data.group_size-1
+	elif remaining_group_size == 1:
+		$PortGroupButton.set_state(1)
+	return int(max(remaining_group_size-1, 0))
 
 func update_up_down_button() -> void:
 	var parent = get_parent()
@@ -28,8 +29,8 @@ func _on_Name_label_changed(new_label) -> void:
 func _on_Type_item_selected(ID) -> void:
 	get_parent().generator.set_port_type(get_index(), mm_io_types.type_names[ID])
 
-func _on_Group_item_selected(ID):
-	get_parent().generator.set_port_group_size(get_index(), 0 if ID == 0 else ID+1)
+func _on_PortGroupButton_group_size_changed(s):
+	get_parent().generator.set_port_group_size(get_index(), s)
 	get_parent().update()
 
 func _on_Delete_pressed() -> void:
@@ -40,5 +41,3 @@ func _on_Up_pressed() -> void:
 
 func _on_Down_pressed() -> void:
 	get_parent().generator.swap_ports(get_index(), get_index()+1)
-
-

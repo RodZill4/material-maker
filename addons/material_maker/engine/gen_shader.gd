@@ -378,7 +378,7 @@ func _deserialize(data : Dictionary) -> void:
 
 func edit(node) -> void:
 	if shader_model != null:
-		var edit_window = load("res://material_maker/widgets/node_editor/node_editor.tscn").instance()
+		var edit_window = load("res://material_maker/windows/node_editor/node_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)
 		edit_window.connect("node_changed", node, "update_generator")

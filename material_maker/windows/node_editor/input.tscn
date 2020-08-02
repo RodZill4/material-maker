@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://material_maker/widgets/node_editor/input.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/windows/node_editor/input.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -81,24 +82,20 @@ hint_tooltip = "Default value"
 size_flags_horizontal = 3
 text = "0.0"
 
-[node name="Function" type="CheckBox" parent="."]
+[node name="Function" type="Button" parent="."]
 margin_left = 416.0
-margin_right = 499.0
+margin_right = 447.0
 margin_bottom = 24.0
-text = "Function"
+hint_tooltip = "Generate input as function (can be used in \"Instance Functions\" section)"
+toggle_mode = true
+text = "f(x)"
 
-[node name="Group" type="OptionButton" parent="."]
-margin_left = 503.0
-margin_right = 605.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 102, 0 )
-hint_tooltip = "Input flag"
-text = "No group"
-items = [ "No group", null, false, 0, null, "2", null, false, 1, null, "3", null, false, 2, null, "4", null, false, 3, null, "5", null, false, 4, null, "6", null, false, 5, null, "7", null, false, 6, null, "8", null, false, 7, null, "9", null, false, 8, null ]
-selected = 0
-__meta__ = {
-"_editor_description_": ""
-}
+[node name="PortGroupButton" parent="." instance=ExtResource( 3 )]
+margin_left = 451.0
+margin_top = 4.0
+margin_right = 467.0
+margin_bottom = 20.0
+stretch_mode = 4
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]

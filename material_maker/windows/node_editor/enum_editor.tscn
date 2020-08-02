@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://material_maker/widgets/node_editor/enum_editor.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/windows/node_editor/enum_editor.gd" type="Script" id=1]
+
 
 
 [node name="EnumEditor" type="WindowDialog" index="0"]

@@ -21,7 +21,10 @@ func update_node() -> void:
 	rect_size = Vector2(0, 0)
 	title = generator.get_type_name()
 	var color = Color(0.0, 0.5, 0.0, 0.5)
-	for p in generator.get_io_defs():
+	var io_defs = generator.get_io_defs()
+	var group_size = 0
+	for i in io_defs.size():
+		var p = io_defs[i]
 		color = mm_io_types.types[p.type].color
 		var slot_type = mm_io_types.types[p.type].slot_type
 		set_slot(get_child_count(), generator.name != "gen_inputs", slot_type, color, generator.name != "gen_outputs", slot_type, color)
@@ -29,18 +32,19 @@ func update_node() -> void:
 		if generator.is_editable():
 			port = preload("res://material_maker/nodes/ios/port.tscn").instance()
 			add_child(port)
-			if p.has("name"):
-				port.set_label(p.name)
-			port.set_type(p.type)
-			port.set_group_size(p.group_size if p.has("group_size") and p.group_size > 1 else 0)
+			if group_size > 1 && i == io_defs.size()-1:
+				group_size = 1
+			group_size = port.set_model_data(p, group_size)
 		else:
 			port = Label.new()
 			add_child(port)
 			port.text = p.name
 	if generator.is_editable():
+		PortGroupButton.update_groups(self)
+		
 		var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instance()
 		add_child(add_button)
 		add_button.connect("pressed", generator, "add_port")
 		set_slot(get_child_count()-1, false, 0, color, false, 0, color)
 		update_up_down_buttons()
-
+	PortGroupButton.update_groups(self)
