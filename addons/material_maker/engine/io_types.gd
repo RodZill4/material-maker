@@ -6,7 +6,7 @@ var types : Dictionary = {}
 
 func _ready():
 	var file = File.new()
-	for p in mm_loader.get_nodes_paths():
+	for p in MMPaths.get_nodes_paths():
 		if file.open(p+"/io_types.mmt", File.READ) == OK:
 			var type_list = parse_json(file.get_as_text())
 			file.close()
