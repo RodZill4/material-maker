@@ -2,7 +2,7 @@
 
 [node name="ColorPickerPopup" type="PopupPanel"]
 margin_right = 318.0
-margin_bottom = 466.0
+margin_bottom = 470.0
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
 margin_left = 4.0

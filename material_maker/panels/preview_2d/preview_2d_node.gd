@@ -1,4 +1,4 @@
-extends "res://material_maker/preview/preview_2d.gd"
+extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
 func _ready() -> void:
 	update_export_menu()

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://material_maker/nodes/tones.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/histogram/histogram.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/widgets/histogram/histogram.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/nodes/tones/tones.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
@@ -42,7 +42,7 @@ slot/3/left_color = Color( 1, 1, 1, 1 )
 slot/3/right_enabled = false
 slot/3/right_type = 0
 slot/3/right_color = Color( 1, 1, 1, 1 )
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -83,7 +83,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Histogram" parent="." instance=ExtResource( 2 )]
+[node name="Histogram" parent="." instance=ExtResource( 1 )]
 margin_left = 16.0
 margin_top = 50.0
 margin_right = 208.0

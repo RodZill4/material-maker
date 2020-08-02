@@ -112,7 +112,7 @@ _global_script_classes=[ {
 "base": "GraphEdit",
 "class": "MMGraphEdit",
 "language": "GDScript",
-"path": "res://material_maker/graph_edit.gd"
+"path": "res://material_maker/panels/graph_edit/graph_edit.gd"
 }, {
 "base": "GraphNode",
 "class": "MMGraphNodeBase",
@@ -122,12 +122,12 @@ _global_script_classes=[ {
 "base": "MMGraphNodeBase",
 "class": "MMGraphNodeGeneric",
 "language": "GDScript",
-"path": "res://material_maker/nodes/generic.gd"
+"path": "res://material_maker/nodes/generic/generic.gd"
 }, {
 "base": "MMGraphNodeGeneric",
 "class": "MMGraphNodeRemote",
 "language": "GDScript",
-"path": "res://material_maker/nodes/remote.gd"
+"path": "res://material_maker/nodes/remote/remote.gd"
 }, {
 "base": "Control",
 "class": "MMNodeLink",
@@ -147,7 +147,7 @@ _global_script_classes=[ {
 "base": "OptionButton",
 "class": "SizeOptionButton",
 "language": "GDScript",
-"path": "res://material_maker/widgets/size_option_button.gd"
+"path": "res://material_maker/widgets/size_option_button/size_option_button.gd"
 } ]
 _global_script_class_icons={
 "FilePickerButton": "",

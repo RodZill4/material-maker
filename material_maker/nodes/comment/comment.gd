@@ -45,7 +45,7 @@ func _on_gui_input(event) -> void:
 			$Popup.popup()
 			accept_event()
 		elif Rect2(rect_size.x-68, 4, 16, 16).has_point(event.position):
-			var dialog = preload("res://material_maker/widgets/line_dialog.tscn").instance()
+			var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
 			dialog.set_value(generator.title)
 			dialog.set_texts("Comment", "Enter the comment node title")
 			add_child(dialog)

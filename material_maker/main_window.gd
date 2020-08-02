@@ -343,7 +343,7 @@ func menu_about_to_show(name, menu) -> void:
 				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
 
 func new_pane() -> GraphEdit:
-	var graph_edit = preload("res://material_maker/graph_edit.tscn").instance()
+	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
 	projects.add_child(graph_edit)
 	projects.current_tab = graph_edit.get_index()
@@ -493,7 +493,7 @@ func make_selected_nodes_editable() -> void:
 func add_to_user_library() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
-		var dialog = preload("res://material_maker/widgets/line_dialog.tscn").instance()
+		var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
 		dialog.set_value(library.get_selected_item_name())
 		dialog.set_texts("New library element", "Select a name for the new library element")
 		add_child(dialog)

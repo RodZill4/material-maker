@@ -3,12 +3,13 @@
 [ext_resource path="res://material_maker/windows/about/about.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/windows/about/github.png" type="Texture" id=2]
 [ext_resource path="res://material_maker/windows/about/twitter.png" type="Texture" id=3]
-[ext_resource path="res://material_maker/widgets/icon.png" type="Texture" id=4]
+[ext_resource path="res://material_maker/windows/about/icon.png" type="Texture" id=4]
 [ext_resource path="res://material_maker/windows/about/itchio.png" type="Texture" id=5]
 [ext_resource path="res://material_maker/icons/icon.png" type="Texture" id=6]
 [ext_resource path="res://material_maker/windows/about/youtube.png" type="Texture" id=7]
 [ext_resource path="res://rodz_labs_logo.png" type="Texture" id=8]
 [ext_resource path="res://material_maker/windows/about/facebook.png" type="Texture" id=9]
+
 
 [node name="About" type="WindowDialog"]
 margin_right = 200.0

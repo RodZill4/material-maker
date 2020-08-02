@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://material_maker/library_tree.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/library.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/panels/library/library_tree.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/library/library.gd" type="Script" id=2]
 
 [node name="Library" type="VBoxContainer"]
 anchor_right = 1.0

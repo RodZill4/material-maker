@@ -19,9 +19,6 @@ func _draw() -> void:
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
 			var conn_pos1 = get_connection_input_position(i)
 			var conn_pos2 = get_connection_input_position(min(i+inputs[i].group_size-1, inputs.size()-1))
-			if i > 0:
-				conn_pos1.y += 1
-			conn_pos2.y += 1
 			conn_pos1 /= get_global_transform().get_scale()
 			conn_pos2 /= get_global_transform().get_scale()
 			draw_line(conn_pos1, conn_pos2, Color(1.0, 1.0, 1.0))
@@ -30,9 +27,6 @@ func _draw() -> void:
 		if outputs[i].has("group_size") and outputs[i].group_size > 1:
 			var conn_pos1 = get_connection_output_position(i)
 			var conn_pos2 = get_connection_output_position(min(i+outputs[i].group_size-1, outputs.size()-1))
-			if i > 0:
-				conn_pos1.y += 1
-			conn_pos2.y += 1
 			conn_pos1 /= get_global_transform().get_scale()
 			conn_pos2 /= get_global_transform().get_scale()
 			draw_line(conn_pos1, conn_pos2, Color(1.0, 1.0, 1.0))

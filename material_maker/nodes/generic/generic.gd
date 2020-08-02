@@ -16,8 +16,6 @@ func _draw() -> void:
 	._draw()
 	if preview_index >= 0:
 		var conn_pos = get_connection_output_position(preview_index)
-		if preview_index > 0:
-			conn_pos.y += 1
 		conn_pos /= get_global_transform().get_scale()
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8))
 
@@ -34,8 +32,6 @@ func on_parameter_changed(p : String, v) -> void:
 	elif controls.has(p):
 		var o = controls[p]
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.value = v
-		elif o is HSlider:
 			o.value = v
 		elif o is LineEdit:
 			o.text = v
@@ -163,7 +159,7 @@ func save_preview_widget() -> void:
 
 func restore_preview_widget() -> void:
 	if preview == null:
-		preview = preload("res://material_maker/preview/preview_2d_node.tscn").instance()
+		preview = preload("res://material_maker/panels/preview_2d/preview_2d_node.tscn").instance()
 		preview.shader = "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}"
 		preview.visible = false
 	preview_position = get_child_count()

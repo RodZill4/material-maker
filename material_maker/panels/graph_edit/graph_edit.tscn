@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://material_maker/graph_edit.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]

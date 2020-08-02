@@ -7,8 +7,8 @@ const PANEL_POSITIONS = {
 	BottomRight="SplitRight/Right/Bottom"
 }
 const PANELS = [
-	{ name="Library", scene=preload("res://material_maker/library.tscn"), position="TopLeft" },
-	{ name="Preview2D", scene=preload("res://material_maker/preview/preview_2d_panel.tscn"), position="BottomLeft" },
+	{ name="Library", scene=preload("res://material_maker/panels/library/library.tscn"), position="TopLeft" },
+	{ name="Preview2D", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft" },
 	{ name="Preview3D", scene=preload("res://material_maker/panels/preview_3d/preview_3d_panel.tscn"), position="BottomLeft" },
 	{ name="Histogram", scene=preload("res://material_maker/widgets/histogram/histogram.tscn"), position="BottomLeft" },
 	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },

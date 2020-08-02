@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://material_maker/nodes/switch.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/preview_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/nodes/switch/switch.gd" type="Script" id=1]
 
 [sub_resource type="Theme" id=1]
 
@@ -61,13 +60,6 @@ min_value = 1.0
 max_value = 5.0
 value = 2.0
 
-[node name="PreviewButton" parent="HBox1" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 103.0
-margin_right = 119.0
-margin_bottom = 16.0
-
 [node name="HBox2" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 41.0
@@ -91,13 +83,6 @@ min_value = 2.0
 max_value = 5.0
 value = 2.0
 
-[node name="PreviewButton" parent="HBox2" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 103.0
-margin_right = 119.0
-margin_bottom = 16.0
-
 [node name="HBox3" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 58.0
@@ -120,13 +105,6 @@ hint_tooltip = "Choice"
 max_value = 4.0
 value = 1.0
 ticks_on_borders = true
-
-[node name="PreviewButton" parent="HBox3" instance=ExtResource( 2 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 103.0
-margin_right = 119.0
-margin_bottom = 16.0
 [connection signal="value_changed" from="HBox1/outputs" to="." method="_on_value_changed" binds= [ "outputs" ]]
 [connection signal="value_changed" from="HBox2/choices" to="." method="_on_value_changed" binds= [ "choices" ]]
 [connection signal="value_changed" from="HBox3/source" to="." method="_on_value_changed" binds= [ "source" ]]

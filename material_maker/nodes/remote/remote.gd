@@ -69,7 +69,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 				var command = new_value - widget.configurations.size()
 				match command:
 					1:
-						var dialog = preload("res://material_maker/widgets/line_dialog.tscn").instance()
+						var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
 						add_child(dialog)
 						dialog.set_texts("Configuration", "Enter a name for the new configuration")
 						dialog.connect("ok", self, "do_add_configuration", [ variable ])

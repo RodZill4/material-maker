@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://material_maker/nodes/comment.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/nodes/comment/comment.gd" type="Script" id=1]
+
 
 [sub_resource type="StyleBoxFlat" id=1]
 resource_local_to_scene = true
