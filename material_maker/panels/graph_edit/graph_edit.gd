@@ -229,8 +229,13 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
 		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
+		var actions : Array = []
 		for g in new_stuff.generators:
 			g.position += position
+			actions.append({ action="add_node", node=g.name })
+		for c in new_stuff.connections:
+			actions.append({ action="add_connection", connection=c })
+		$UndoRedo.add_action("Add nodes and connections", actions)
 		return update_graph(new_stuff.generators, new_stuff.connections)
 	return []
 

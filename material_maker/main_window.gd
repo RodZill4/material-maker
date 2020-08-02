@@ -43,6 +43,9 @@ const MENU = [
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
+	{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
+	{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
+	{ menu="Edit" },
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
@@ -63,8 +66,6 @@ const MENU = [
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
 	
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
-	
-	
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -432,6 +433,28 @@ func edit_cut() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.cut()
+
+func edit_undo() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.get_node("UndoRedo").undo()
+
+func edit_undo_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		return !graph_edit.get_node("UndoRedo").can_undo()
+	return false
+
+func edit_redo() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.get_node("UndoRedo").redo()
+
+func edit_redo_is_disabled() ->  bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		return !graph_edit.get_node("UndoRedo").can_redo()
+	return false
 
 func edit_cut_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

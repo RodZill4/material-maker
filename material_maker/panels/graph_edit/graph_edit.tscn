@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/panels/graph_edit/undo_redo.gd" type="Script" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -78,6 +79,9 @@ margin_right = 246.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 4 )
+
+[node name="UndoRedo" type="Node" parent="."]
+script = ExtResource( 3 )
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="connection_to_empty" from="." to="." method="request_popup"]
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
