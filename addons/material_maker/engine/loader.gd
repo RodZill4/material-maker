@@ -78,9 +78,7 @@ func create_gen(data) -> MMGenBase:
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="shader_model", type=MMGenShader },
-		{ keyword="convolution_params", type=MMGenConvolution },
 		{ keyword="model_data", type=MMGenShader },
-		{ keyword="convolution_params", type=MMGenConvolution },
 		{ keyword="widgets", type=MMGenRemote }
 	]
 	var types = {
