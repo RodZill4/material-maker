@@ -98,7 +98,7 @@ func update_list(filter : String = "") -> void:
 						continue
 				elif ref_obj.type == "comment" or ref_obj.type == "image" or ref_obj.type == "remote":
 					continue
-				elif (ref_obj.type == "convolution" or ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
+				elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
 					continue
 			var show : bool = true
 			for f in filter.to_lower().split(" ", false):

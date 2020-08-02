@@ -4,7 +4,7 @@ class_name MMGenBuffer
 
 """
 Texture generator buffers, that render their input in a specific resolution and provide the result as output.
-This is useful when using generators that sample their inputs several times (such as convolutions)
+This is useful when using generators that sample their inputs several times
 """
 
 var material : ShaderMaterial = null
