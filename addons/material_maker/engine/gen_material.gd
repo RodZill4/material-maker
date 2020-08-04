@@ -237,6 +237,16 @@ func update_material(m, file_prefix = null) -> void:
 			m.depth_texture = get_generated_texture("depth", file_prefix)
 		else:
 			m.depth_enabled = false
+		# Transparency
+		if parameters.has("flags_transparent"):
+			m.flags_transparent = parameters.flags_transparent
+			if m.flags_transparent:
+				m.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_ALWAYS
+				m.params_use_alpha_scissor = true
+			else:
+				m.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_OPAQUE_ONLY
+				m.params_use_alpha_scissor = false
+			print(parameters.flags_transparent)
 		# Subsurface scattering
 		if get_source(INPUT_SSS) != null:
 			m.subsurf_scatter_enabled = true

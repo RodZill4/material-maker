@@ -71,6 +71,12 @@
 				"type": "f"
 			},
 			{
+				"default": "1.0",
+				"label": "",
+				"name": "opacity_tex",
+				"type": "f"
+			},
+			{
 				"default": "0.0",
 				"label": "",
 				"name": "sss_tex",
@@ -82,8 +88,8 @@
 		"outputs": [
 			{
 				"desc":"0: albedo",
-				"rgb": "$albedo_tex($uv)",
-				"type": "rgb"
+				"rgba": "vec4($albedo_tex($uv), $opacity_tex($uv))",
+				"type": "rgba"
 			},
 			{
 				"desc":"1: ambient occlusion, roughness, metallic",
@@ -504,6 +510,12 @@
 				"name": "depth_scale",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"name": "flags_transparent",
+				"default": false,
+				"label": "Transparency",
+				"type": "boolean"
 			},
 			{
 				"control": "None",
