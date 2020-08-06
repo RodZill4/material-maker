@@ -1,11 +1,10 @@
 # Material Maker
 
 This is a tool based on [Godot Engine](https://godotengine.org/) that can
-be used to create textures procedurally. It can also be used as a Godot addon
-(but there's no good reason for not using it as a standalone tool).
+be used to create textures procedurally.
 
 Its user interface is based on Godot's GraphEdit node: textures are described
-as interconnected texture generators and operators.
+as interconnected nodes.
 
 ## Download
 
