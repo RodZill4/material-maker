@@ -47,11 +47,11 @@ jobs:
       - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v1
         with:
-          name: ${EXPORT_NAME}_${MM_RELEASE}_windows.zip
-          path: build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip
+          name: ${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
         uses: actions/upload-artifact@v1
         with:
-          name: ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz
-          path: build/${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz
+          name: ${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
 
