@@ -45,13 +45,13 @@ jobs:
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
           ls -la
       - name: Upload Windows Artifact 🚀
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
+          name: Windows snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+          name: Linux snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
 
