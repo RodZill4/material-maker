@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://material_maker/environment.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/preview_3d/environment.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_objects.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=3]
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=4]

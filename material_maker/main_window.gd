@@ -43,9 +43,9 @@ const MENU = [
 	{ menu="File", command="close_material", description="Close material" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
-	{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
-	{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
-	{ menu="Edit" },
+	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
+	#{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
+	#{ menu="Edit" },
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
@@ -78,8 +78,6 @@ const MENU = [
 # warning-ignore:unused_signal
 signal quit
 
-var is_mac = false
-
 func _ready() -> void:
 	# Restore the window position/size if values are present in the configuration cache
 	config_cache.load("user://cache.ini")
@@ -99,9 +97,6 @@ func _ready() -> void:
 	if config_cache.has_section_key("window", "theme"):
 		theme_name = config_cache.get_value("window", "theme")
 	set_theme(theme_name)
-
-	if OS.get_name() == "OSX":
-		is_mac = true
 
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
@@ -143,17 +138,8 @@ func _ready() -> void:
 	load_recents()
 
 	# Create menus
-	for i in MENU.size():
-		if ! $VBoxContainer/Menu.has_node(MENU[i].menu):
-			var menu_button = MenuButton.new()
-			menu_button.name = MENU[i].menu
-			menu_button.text = MENU[i].menu
-			menu_button.switch_on_hover = true
-			$VBoxContainer/Menu.add_child(menu_button)
-	for m in $VBoxContainer/Menu.get_children():
-		var menu = m.get_popup()
-		create_menu(menu, m.name)
-		m.connect("about_to_show", self, "menu_about_to_show", [ m.name, menu ])
+	create_menus(MENU, self, $VBoxContainer/Menu)
+	
 	new_material()
 	
 	do_load_materials(OS.get_cmdline_args())
@@ -170,41 +156,95 @@ func get_current_graph_edit() -> MMGraphEdit:
 		return graph_edit
 	return null
 
-func create_menu(menu, menu_name) -> PopupMenu:
+func create_menus(menu_def, object, menu_bar) -> void:
+	for i in menu_def.size():
+		if ! menu_bar.has_node(menu_def[i].menu.split("/")[0]):
+			var menu_button = MenuButton.new()
+			menu_button.name = menu_def[i].menu
+			menu_button.text = menu_def[i].menu
+			menu_button.switch_on_hover = true
+			menu_bar.add_child(menu_button)
+	for m in menu_bar.get_children():
+		if ! m is MenuButton:
+			continue
+		var menu = m.get_popup()
+		create_menu(menu_def, object, menu, m.name)
+		m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
+
+func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
+	var is_mac : bool = OS.get_name() == "OSX"
+	var submenus = {}
+	var menu_name_length = menu_name.length()
 	menu.clear()
-	menu.connect("id_pressed", self, "_on_PopupMenu_id_pressed")
-	for i in MENU.size():
-		if MENU[i].has("standalone_only") and MENU[i].standalone_only and Engine.editor_hint:
+	menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
+	for i in menu_def.size():
+		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
 			continue
-		if MENU[i].has("editor_only") and MENU[i].editor_only and !Engine.editor_hint:
+		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
 			continue
-		if MENU[i].menu != menu_name:
-			continue
-		if MENU[i].has("submenu"):
-			var submenu = PopupMenu.new()
-			var submenu_function = "create_menu_"+MENU[i].submenu
-			if has_method(submenu_function):
-				submenu.connect("about_to_show", self, submenu_function, [ submenu ]);
+		if menu_def[i].menu == menu_name:
+			if menu_def[i].has("submenu"):
+				var submenu = PopupMenu.new()
+				var submenu_function = "create_menu_"+menu_def[i].submenu
+				if object.has_method(submenu_function):
+					submenu.connect("about_to_show", object, submenu_function, [ submenu ]);
+				else:
+					create_menu(menu_def, object, submenu, menu_def[i].submenu)
+				menu.add_child(submenu)
+				menu.add_submenu_item(menu_def[i].description, submenu.get_name())
+			elif menu_def[i].has("description"):
+				var shortcut = 0
+				if menu_def[i].has("shortcut"):
+					for s in menu_def[i].shortcut.split("+"):
+						if s == "Alt":
+							shortcut |= KEY_MASK_ALT
+						elif s == "Control":
+							shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
+						elif s == "Shift":
+							shortcut |= KEY_MASK_SHIFT
+						else:
+							shortcut |= OS.find_scancode_from_string(s)
+				if menu_def[i].has("toggle") and menu_def[i].toggle:
+					menu.add_check_item(menu_def[i].description, i, shortcut)
+				else:
+					menu.add_item(menu_def[i].description, i, shortcut)
 			else:
-				create_menu(submenu, MENU[i].submenu)
-			menu.add_child(submenu)
-			menu.add_submenu_item(MENU[i].description, submenu.get_name())
-		elif MENU[i].has("description"):
-			var shortcut = 0
-			if MENU[i].has("shortcut"):
-				for s in MENU[i].shortcut.split("+"):
-					if s == "Alt":
-						shortcut |= KEY_MASK_ALT
-					elif s == "Control":
-						shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
-					elif s == "Shift":
-						shortcut |= KEY_MASK_SHIFT
-					else:
-						shortcut |= OS.find_scancode_from_string(s)
-			menu.add_item(MENU[i].description, i, shortcut)
-		else:
-			menu.add_separator()
+				menu.add_separator()
+		elif menu_def[i].menu.begins_with(menu_name+"/"):
+			var submenu_name = menu_def[i].menu.right(menu_name_length+1)
+			submenu_name = submenu_name.split("/")[0]
+			if ! submenus.has(submenu_name):
+				var submenu = PopupMenu.new()
+				create_menu(menu_def, object, submenu, menu_name+"/"+submenu_name)
+				menu.add_child(submenu)
+				menu.add_submenu_item(submenu_name, submenu.get_name())
+				submenus[submenu_name] = submenu
 	return menu
+
+func on_menu_id_pressed(id, menu_def, object) -> void:
+	if menu_def[id].has("command"):
+		var command = menu_def[id].command
+		if object.has_method(command):
+			if menu_def[id].has("toggle") and menu_def[id].toggle:
+				object.call(command, !object.call(command))
+			else:
+				object.call(command)
+
+func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
+	for i in menu_def.size():
+		if menu_def[i].menu != name:
+			continue
+		if menu_def[i].has("submenu"):
+			pass
+		elif menu_def[i].has("command"):
+			var command = menu_def[i].command+"_is_disabled"
+			if object.has_method(command):
+				var is_disabled = object.call(command)
+				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
+			if menu_def[i].has("toggle") and menu_def[i].toggle:
+				command = menu_def[i].command
+				if object.has_method(command):
+					menu.set_item_checked(i, object.call(command))
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
@@ -331,17 +371,6 @@ func _on_Create_id_pressed(id) -> void:
 		var gens = mm_loader.get_generator_list()
 		graph_edit.create_gen_from_type(gens[id])
 
-func menu_about_to_show(name, menu) -> void:
-	for i in MENU.size():
-		if MENU[i].menu != name:
-			continue
-		if MENU[i].has("submenu"):
-			pass
-		elif MENU[i].has("command"):
-			var command_name = MENU[i].command+"_is_disabled"
-			if has_method(command_name):
-				var is_disabled = call(command_name)
-				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
 
 func new_pane() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
@@ -603,12 +632,6 @@ func about() -> void:
 	add_child(about_box)
 	about_box.connect("popup_hide", about_box, "queue_free")
 	about_box.popup_centered()
-
-func _on_PopupMenu_id_pressed(id) -> void:
-	if MENU[id].has("command"):
-		var command = MENU[id].command
-		if has_method(command):
-			call(command)
 
 # Preview
 

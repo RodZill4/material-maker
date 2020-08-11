@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://rodz_labs_logo.png" type="Texture" id=1]
 [ext_resource path="res://addons/material_maker/import_plugin/tesselated.shader" type="Shader" id=2]
@@ -115,11 +115,14 @@ height = 3.0
 radial_segments = 256
 rings = 128
 
+[sub_resource type="SphereMesh" id=16]
+
+[sub_resource type="SpatialMaterial" id=17]
+
 [node name="Objects" type="Spatial"]
 transform = Transform( 0.999995, 0, 0, 0, 1, 0, 0, 0, 0.999995, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="."]
-visible = false
 mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
 
@@ -162,3 +165,8 @@ material/0 = SubResource( 14 )
 visible = false
 mesh = SubResource( 15 )
 material/0 = SubResource( 12 )
+
+[node name="Custom" type="MeshInstance" parent="."]
+visible = false
+mesh = SubResource( 16 )
+material/0 = SubResource( 17 )

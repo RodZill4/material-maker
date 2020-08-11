@@ -457,7 +457,8 @@ func request_popup(from, from_slot, _release_position) -> void:
 	var output_position = node_transform.xform(node.get_connection_output_position(from_slot)/node_transform.get_scale())
 	if (get_global_mouse_position()-output_position).length() < 20:
 		# Tell the node its connector was clicked
-		node.on_clicked_output(from_slot)
+		if node.has_method("on_clicked_output"):
+			node.on_clicked_output(from_slot)
 	else:
 		# Request the popup
 		node_popup.rect_global_position = get_global_mouse_position()

@@ -11,11 +11,6 @@
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
 
-
-
-
-
-
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
 
@@ -187,12 +182,12 @@ icon = SubResource( 4 )
 visible = false
 self_modulate = Color( 1, 1, 1, 0.768627 )
 margin_left = 102.0
-margin_right = 399.0
+margin_right = 328.0
 margin_bottom = 40.0
 custom_styles/panel = SubResource( 5 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel"]
-margin_right = 297.0
+margin_right = 226.0
 margin_bottom = 40.0
 custom_constants/separation = 5
 __meta__ = {
@@ -214,13 +209,13 @@ texture = SubResource( 6 )
 anchor_right = 0.0
 margin_left = 42.0
 margin_top = 8.0
-margin_right = 292.0
+margin_right = 221.0
 margin_bottom = 32.0
 size_flags_vertical = 4
 
 [node name="SpaceRight" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
-margin_left = 297.0
-margin_right = 297.0
+margin_left = 226.0
+margin_right = 226.0
 margin_bottom = 40.0
 
 [node name="Right" type="VSplitContainer" parent="VBoxContainer/Layout/SplitRight"]
@@ -262,8 +257,5 @@ script = ExtResource( 9 )
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]
 [connection signal="gui_input" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="on_gui_input"]
-[connection signal="environment_selected" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Environment_item_selected"]
-[connection signal="model_selected" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Model_item_selected"]
-[connection signal="rotate_toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer/Preview3DUI" to="VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D" method="_on_Rotate_toggled"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]

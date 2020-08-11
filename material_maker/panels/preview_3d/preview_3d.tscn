@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/panels/preview_3d/obj_loader.gd" type="Script" id=3]
 
 [sub_resource type="World" id=1]
 
@@ -33,4 +34,7 @@ render_target_update_mode = 0
 physics_object_picking = true
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
+
+[node name="ObjLoader" type="Node" parent="."]
+script = ExtResource( 3 )
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

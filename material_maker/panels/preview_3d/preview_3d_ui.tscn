@@ -1,49 +1,34 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 48, 48, 16, 16 )
+region = Rect2( 48, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 48, 80, 16, 16 )
 
 [node name="Preview3DUI" type="HBoxContainer"]
 anchor_right = 1.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
-script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Model" type="OptionButton" parent="."]
-margin_right = 100.0
+[node name="Model" type="MenuButton" parent="."]
+margin_right = 71.0
 margin_bottom = 22.0
-rect_min_size = Vector2( 100, 0 )
-text = "Cube"
-items = [ "Cube", null, false, 0, null, "Cylinder", null, false, 1, null, "Sphere", null, false, 2, null, "Sphere2", null, false, 3, null, "Prism", null, false, 4, null, "Quad", null, false, 5, null, "Plane", null, false, 6, null, "SphereTess", null, false, 7, null ]
-selected = 0
-
-[node name="Environment" type="OptionButton" parent="."]
-margin_left = 104.0
-margin_right = 219.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 100, 0 )
-text = "Epping Forest"
-items = [ "Epping Forest", null, false, 0, null, "Moonless Golf", null, false, 1, null, "Studio", null, false, 2, null ]
-selected = 0
-
-[node name="Rotate" type="Button" parent="."]
-margin_left = 223.0
-margin_right = 251.0
-margin_bottom = 22.0
-rect_pivot_offset = Vector2( -4, 7 )
-hint_tooltip = "Rotate object"
-size_flags_horizontal = 2
-toggle_mode = true
-pressed = true
+text = "Model"
 icon = SubResource( 1 )
-[connection signal="item_selected" from="Model" to="." method="_on_Model_item_selected"]
-[connection signal="item_selected" from="Environment" to="." method="_on_Environment_item_selected"]
-[connection signal="toggled" from="Rotate" to="." method="_on_Rotate_toggled"]
+
+[node name="Environment" type="MenuButton" parent="."]
+margin_left = 75.0
+margin_right = 187.0
+margin_bottom = 22.0
+text = "Environment"
+icon = SubResource( 2 )

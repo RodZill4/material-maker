@@ -246,7 +246,6 @@ func update_material(m, file_prefix = null) -> void:
 			else:
 				m.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_OPAQUE_ONLY
 				m.params_use_alpha_scissor = false
-			print(parameters.flags_transparent)
 		# Subsurface scattering
 		if get_source(INPUT_SSS) != null:
 			m.subsurf_scatter_enabled = true

@@ -30,6 +30,7 @@ func _on_TextureButton_pressed() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.bmp;BMP Image")
+	dialog.add_filter("*.exr;EXR Image")
 	dialog.add_filter("*.hdr;Radiance HDR Image")
 	dialog.add_filter("*.jpg,*.jpeg;JPEG Image")
 	dialog.add_filter("*.png;PNG Image")

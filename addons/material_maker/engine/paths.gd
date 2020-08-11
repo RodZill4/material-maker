@@ -1,3 +1,4 @@
+tool
 class_name MMPaths
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
