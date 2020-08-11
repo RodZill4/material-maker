@@ -17,6 +17,8 @@ scoop bucket add extras
 scoop install material-maker
 ```
 
+![dev-desktop-builds](https://github.com/RodZill4/material-maker/workflows/dev-desktop-builds/badge.svg)
+
 ## Documentation
 
 - **[User manual](https://rodzill4.github.io/material-maker/doc/)**
