@@ -43,6 +43,7 @@ jobs:
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
+          ls -la
       - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v1
         with:
