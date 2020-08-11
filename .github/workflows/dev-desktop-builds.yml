@@ -12,8 +12,8 @@ env:
   MM_RELEASE: 0_93
 
 jobs:
-  export-windows:
-    name: Windows Export 🗔
+  generate_releases:
+    name: Generate releases 🗔
     runs-on: ubuntu-latest
     container:
       image: docker://barichello/godot-ci:3.2.2
@@ -24,21 +24,33 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows  ~/.local/share/godot/templates
+          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
-      - name: Windows Build 🔧
+      - name: Windows Build 🗔
         run: godot -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+      - name: Linux Build 🐧
+        run: godot -v --export "Linux" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
           cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
           cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
-      - name: Copy Material Maker data 📁
+          cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
+          cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
+          cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
+      - name: Create archives 📁
         run: |
-          cd build/${EXPORT_NAME}_${MM_RELEASE}_windows
+          cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
-      - name: Upload Artifact 🚀
+          tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
+      - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v1
         with:
-          name: Windows-64bit
+          name: ${EXPORT_NAME}_${MM_RELEASE}_windows.zip
           path: build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip
+      - name: Upload Linux Artifact 🚀
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz
+          path: build/${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz
+
