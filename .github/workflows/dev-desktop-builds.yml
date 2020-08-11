@@ -1,0 +1,44 @@
+name: "dev-desktop-builds"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  GODOT_VERSION: 3.2.2
+  EXPORT_NAME: material_maker
+  MM_RELEASE: 0_93
+
+jobs:
+  export-windows:
+    name: Windows Export 🗔
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:3.2.2
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup 💻
+        run: |
+          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows  ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+      - name: Windows Build 🔧
+        run: godot -v --export "Windows Desktop 64-bit" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+      - name: Copy Material Maker data 📁
+        run: |
+          cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
+          cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
+          cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
+      - name: Copy Material Maker data 📁
+        run: |
+          cd build/${EXPORT_NAME}_${MM_RELEASE}_windows
+          zip build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip build/${EXPORT_NAME}_${MM_RELEASE}_windows
+      - name: Upload Artifact 🚀
+        uses: actions/upload-artifact@v1
+        with:
+          name: Windows-64bit
+          path: build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip
