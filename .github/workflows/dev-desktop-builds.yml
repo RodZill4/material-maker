@@ -36,7 +36,7 @@ jobs:
       - name: Copy Material Maker data 📁
         run: |
           cd build/${EXPORT_NAME}_${MM_RELEASE}_windows
-          zip -r build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip build/${EXPORT_NAME}_${MM_RELEASE}_windows
+          zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
       - name: Upload Artifact 🚀
         uses: actions/upload-artifact@v1
         with:
