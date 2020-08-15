@@ -44,9 +44,9 @@ jobs:
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
-          cp -R ./addons/material_maker/nodes material_maker.app/Contents/Resources
-          cp -R ./material_maker/examples material_maker.app/Contents/Resources
-          cp -R ./material_maker/library material_maker.app/Contents/Resources
+          cp -R ./addons/material_maker/nodes ./build/material_maker.app/Contents/Resources
+          cp -R ./material_maker/examples ./build/material_maker.app/Contents/Resources
+          cp -R ./material_maker/library ./build/material_maker.app/Contents/Resources
       - name: Create archives 📁
         run: |
           cd build
