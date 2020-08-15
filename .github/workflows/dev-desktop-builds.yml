@@ -24,12 +24,18 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux ~/.local/share/godot/templates
+          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux build/${EXPORT_NAME}_${MM_RELEASE}_macosx ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Windows Build 🗔
         run: godot -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: godot -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+      - name: Mac OSX Build 🐧
+        run: godot -v --export "Mac OSX" ./build/${EXPORT_NAME}_${MM_RELEASE}_macosx.zip
+      - name: Unzip Mac OSX build 📁
+        run: |
+          cd build
+          unzip ${EXPORT_NAME}_${MM_RELEASE}_macosx.zip
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -38,12 +44,15 @@ jobs:
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
+          cp -R ./addons/material_maker/nodes material_maker.app/Contents/Resources
+          cp -R ./material_maker/examples material_maker.app/Contents/Resources
+          cp -R ./material_maker/library material_maker.app/Contents/Resources
       - name: Create archives 📁
         run: |
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
-          ls -la
+          zip -r ${EXPORT_NAME}_${MM_RELEASE}_macosx.zip material_maker.app
       - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
@@ -54,4 +63,9 @@ jobs:
         with:
           name: Linux snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+      - name: Upload Mac OSX Artifact 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: Mac OSX snapshot
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_macosx.zip
 
