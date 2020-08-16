@@ -1,0 +1,68 @@
+{
+	"name": "sdrepeat",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"r": 0.5,
+		"rx": 3,
+		"ry": 3
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec2 repeat_2d(vec2 p, vec2 r, float seed, float randomness) {\n\tp -= vec2(0.5);\n\tfloat a = (rand(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy)+vec2(seed)))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec2 rv;\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\treturn rv+vec2(0.5);\n}\n",
+		"includes": [
+			""
+		],
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"name": "Repeat",
+		"outputs": [
+			{
+				"sdf2d": "$in(repeat_2d($uv, vec2(1.0/$rx, 1.0/$ry), float($seed), $r))",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "X",
+				"max": 32,
+				"min": 1,
+				"name": "rx",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Y",
+				"max": 32,
+				"min": 1,
+				"name": "ry",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "R",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

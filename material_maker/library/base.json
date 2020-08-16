@@ -384,6 +384,28 @@
 			"type": "sdmorph"
 		},
 		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdrepeat",
+			"name": "sdrepeat",
+			"parameters": {
+				"r": 0.5,
+				"rx": 3,
+				"ry": 3
+			},
+			"tree_item": "Simple/SDF/Operators/sdRepeat",
+			"type": "sdrepeat"
+		},
+		{
+			"collapsed": true,
+			"icon": "simple_sdf_operators_sdcirclerepeat",
+			"name": "sdcirclerepeat",
+			"parameters": {
+				"c": 6
+			},
+			"tree_item": "Simple/SDF/Operators/sdCircleRepeat",
+			"type": "sdcirclerepeat"
+		},
+		{
 			"collapsed": false,
 			"tree_item": "Simple/SDF/Transforms"
 		},
