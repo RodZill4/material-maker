@@ -14,6 +14,55 @@ func add_child(control, legible_unique_name = false) -> void:
 func close_tab(tab = null) -> void:
 	if tab == null:
 		tab = $Tabs.get_current_tab()
+	var result = check_save_tab(tab)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result:
+		do_close_tab(tab)
+
+func check_save_tabs() -> bool:
+	for i in range($Tabs.get_tab_count()):
+		var result = check_save_tab(i)
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		if !result:
+			return false
+	return true
+
+func check_save_tab(tab) -> bool:
+	var tab_control = get_child(tab)
+	if tab_control.need_save:
+		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		var save_path = tab_control.save_path
+		if save_path == null:
+			save_path = "[unnamed]"
+		dialog.dialog_text = "Save "+save_path+" before closing?"
+		#dialog.dialog_autowrap = true
+		dialog.get_ok().text = "Save and close"
+		dialog.add_button("Discard changes", true, "discard")
+		dialog.add_cancel("Cancel")
+		get_parent().add_child(dialog)
+		var result = dialog.ask()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		match result:
+			"ok":
+				var main_window = get_node("/root/MainWindow")
+				var tab_node = get_child(tab)
+				var status = main_window.save_material(tab_node)
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
+				if !status:
+					return false
+			"cancel":
+				return false
+	return true
+
+func do_close_custom_action(action : String, tab : int, dialog : AcceptDialog) -> void:
+	dialog.queue_free()
+
+
+func do_close_tab(tab = null) -> void:
 	get_child(tab).queue_free()
 	$Tabs.remove_tab(tab)
 	var control = get_child(tab)

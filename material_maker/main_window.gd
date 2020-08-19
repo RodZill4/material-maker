@@ -1,5 +1,7 @@
 extends Panel
 
+var quitting : bool = false
+
 var recent_files = []
 
 var config_cache : ConfigFile = ConfigFile.new()
@@ -76,9 +78,12 @@ const MENU = [
 ]
 
 # warning-ignore:unused_signal
+signal saved_material(material_name, success)
 signal quit
 
 func _ready() -> void:
+	get_tree().set_auto_accept_quit(false)
+	
 	# Restore the window position/size if values are present in the configuration cache
 	config_cache.load("user://cache.ini")
 	if config_cache.has_section_key("window", "screen"):
@@ -422,19 +427,27 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> void
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func save_material() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
+func save_material(graph_edit : MMGraphEdit = null) -> bool:
+	if graph_edit == null:
+		graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
-			graph_edit.save_file(graph_edit.save_path)
-			add_recent(graph_edit.save_path)
+			var status = graph_edit.save_file(graph_edit.save_path)
+			if status:
+				add_recent(graph_edit.save_path)
+				return status
 		else:
-			save_material_as()
+			var status = save_material_as(graph_edit)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			return status
+	return false
 
-func save_material_as() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
+func save_material_as(graph_edit : MMGraphEdit = null) -> bool:
+	if graph_edit == null:
+		graph_edit = get_current_graph_edit()
 	if graph_edit != null:
-		var dialog = FileDialog.new()
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 		add_child(dialog)
 		dialog.rect_min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -442,21 +455,42 @@ func save_material_as() -> void:
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		if config_cache.has_section_key("path", "material"):
 			dialog.current_dir = config_cache.get_value("path", "material")
-		dialog.connect("file_selected", self, "do_save_material")
-		dialog.connect("popup_hide", dialog, "queue_free")
-		dialog.popup_centered()
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() == 1:
+			return do_save_material(files[0], graph_edit)
+	return false
 
-func do_save_material(filename : String) -> void:
-
-
-	get_current_graph_edit().save_file(filename)
+func do_save_material(filename : String, graph_edit : MMGraphEdit = null) -> bool:
+	if graph_edit == null:
+		graph_edit = get_current_graph_edit()
+	return graph_edit.save_file(filename)
 
 func close_material() -> void:
 	projects.close_tab()
 
 func quit() -> void:
-	dim_window()
-	get_tree().quit()
+	if quitting:
+		return
+	quitting = true
+	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	dialog.dialog_text = "Quit Material Maker?"
+	dialog.add_cancel("Cancel")
+	add_child(dialog)
+	var result = dialog.ask()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	match result:
+		"ok":
+			result = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects.check_save_tabs()
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result:
+				dim_window()
+				get_tree().quit()
+	quitting = false
+
 
 func edit_cut() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -716,7 +750,8 @@ func _exit_tree() -> void:
 
 func _notification(what : int) -> void:
 	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		dim_window()
+		yield(get_tree(), "idle_frame")
+		quit()
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting

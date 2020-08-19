@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/windows/file_dialog/file_dialog.gd" type="Script" id=1]
+
+[node name="FileDialog" type="FileDialog"]
+margin_right = 360.0
+margin_bottom = 130.0
+window_title = "Enregistrer un fichier"
+script = ExtResource( 1 )
+[connection signal="dir_selected" from="." to="." method="_on_FileDialog_dir_selected"]
+[connection signal="file_selected" from="." to="." method="_on_FileDialog_file_selected"]
+[connection signal="files_selected" from="." to="." method="_on_FileDialog_files_selected"]
+[connection signal="popup_hide" from="." to="." method="_on_FileDialog_popup_hide"]

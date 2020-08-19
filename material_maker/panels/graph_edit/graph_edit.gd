@@ -54,6 +54,13 @@ func _gui_input(event) -> void:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
+	elif event is InputEventMouseMotion:
+		for c in get_children():
+			if c.has_method("get_slot_tooltip"):
+				if c.get_global_rect().has_point(get_global_mouse_position()):
+					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+				else:
+					c.clear_connection_labels()
 	return
 
 # Misc. useful functions
@@ -266,14 +273,17 @@ func load_file(filename) -> bool:
 		dialog.popup_centered()
 		return false
 
-func save_file(filename) -> void:
+func save_file(filename) -> bool:
 	var data = top_generator.serialize()
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(JSON.print(data, "\t", true))
 		file.close()
+	else:
+		return false
 	set_save_path(filename)
 	set_need_save(false)
+	return true
 
 func get_material_node() -> MMGenMaterial:
 	for g in top_generator.get_children():
