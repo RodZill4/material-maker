@@ -20,6 +20,9 @@ func set_model_data(data) -> void:
 		$Label.text = data.label
 	if !data.has("type"):
 		return
+	$Description.short_description = data.shortdesc if data.has("shortdesc") else ""
+	$Description.long_description = data.longdesc if data.has("longdesc") else ""
+	$Description.update_tooltip()
 	var type = $Types.get_node(data.type)
 	type.set_model_data(data)
 	var selected = type.get_index()
@@ -31,6 +34,10 @@ func get_model_data() -> Dictionary:
 	data.name=$Name.text
 	data.label=$Label.text
 	data.type=$Type.get_item_text($Type.selected)
+	if $Description.short_description != "":
+		data.shortdesc = $Description.short_description
+	if $Description.long_description != "":
+		data.longdesc = $Description.long_description
 	return data
 
 func _on_Delete_pressed() -> void:

@@ -14,6 +14,9 @@ func update_up_down_button() -> void:
 	$Down.disabled = (get_index() == get_parent().get_child_count()-2)
 
 func set_model_data(data, remaining_group_size = 0) -> int:
+	$Description.short_description = data.shortdesc if data.has("shortdesc") else ""
+	$Description.long_description = data.longdesc if data.has("longdesc") else ""
+	$Description.update_tooltip()
 	for i in range(mm_io_types.type_names.size()):
 		if data.has(mm_io_types.type_names[i]):
 			$Type.selected = i
@@ -27,6 +30,10 @@ func set_model_data(data, remaining_group_size = 0) -> int:
 
 func get_model_data() -> Dictionary:
 	var data = { mm_io_types.type_names[$Type.selected]:$Value.text }
+	if $Description.short_description != "":
+		data.shortdesc = $Description.short_description
+	if $Description.long_description != "":
+		data.longdesc = $Description.long_description
 	if $PortGroupButton.group_size > 0:
 		data.group_size = $PortGroupButton.group_size
 	return data

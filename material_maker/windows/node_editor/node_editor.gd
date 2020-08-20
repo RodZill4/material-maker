@@ -65,11 +65,13 @@ func set_model_data(data) -> void:
 func get_model_data() -> Dictionary:
 	var data = {
 		name=$Sizer/Tabs/General/Name/Name.text,
-		includes=includes_editor.text.replace(" ", "").split(","),
 		global=global_functions_editor.text,
 		instance=instance_functions_editor.text,
 		code=main_code_editor.text
 	}
+	var includes : String = includes_editor.text.replace(" ", "")
+	if includes != "":
+		data.includes = includes.split(",")
 	data.parameters = []
 	for p in parameter_list.get_children():
 		if p.has_method("get_model_data"):

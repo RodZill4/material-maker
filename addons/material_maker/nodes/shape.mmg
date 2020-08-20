@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"edge": 0.66,
-		"radius": 0.75,
+		"edge": 0.5,
+		"radius": 0.8,
 		"shape": 1,
 		"sides": 6
 	},
@@ -17,13 +17,17 @@
 			{
 				"default": "1.0",
 				"label": "3:",
+				"longdesc": "An input map that affects the shape size",
 				"name": "radius_map",
+				"shortdesc": "Size map",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"label": "",
+				"longdesc": "An input map that affects the edge width",
 				"name": "edge_map",
+				"shortdesc": "Edge map",
 				"type": "f"
 			}
 		],
@@ -32,6 +36,8 @@
 		"outputs": [
 			{
 				"f": "shape_$(shape)($(uv), $(sides), $(radius)*$radius_map($uv), $(edge)*$edge_map($uv))",
+				"longdesc": "Shows a white shape on a black background",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -39,7 +45,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "The type of shape drawn by this node",
 				"name": "shape",
+				"shortdesc": "Shape",
 				"type": "enum",
 				"values": [
 					{
@@ -68,9 +76,11 @@
 				"control": "None",
 				"default": 3,
 				"label": "",
+				"longdesc": "The number of sides of the generated shape (unused for Circle)",
 				"max": 32,
 				"min": 2,
 				"name": "sides",
+				"shortdesc": "Sides count",
 				"step": 1,
 				"type": "float"
 			},
@@ -78,9 +88,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "",
+				"longdesc": "The size of the generated shape",
 				"max": 1,
 				"min": 0,
 				"name": "radius",
+				"shortdesc": "Shape size",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -88,9 +100,11 @@
 				"control": "None",
 				"default": 0.2,
 				"label": "",
+				"longdesc": "The edge width of the generated shape",
 				"max": 1,
 				"min": 0,
 				"name": "edge",
+				"shortdesc": "Edge width",
 				"step": 0.01,
 				"type": "float"
 			}

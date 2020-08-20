@@ -17,8 +17,10 @@ func add_control(text, control) -> void:
 	button.icon = preload("res://material_maker/icons/link.tres")
 	grid.add_child(button)
 	button.connect("pressed", self, "_on_Link_pressed", [ control.name ])
+	button.hint_tooltip = "Link another parameter"
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/remove.tres")
+	button.hint_tooltip = "Remove parameter"
 	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ control.name ])
 

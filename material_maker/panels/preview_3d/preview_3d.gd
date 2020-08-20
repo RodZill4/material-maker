@@ -32,6 +32,7 @@ func _ready() -> void:
 		o.set_surface_material(0, m.duplicate())
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
+	_on_Environment_item_selected(0)
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()

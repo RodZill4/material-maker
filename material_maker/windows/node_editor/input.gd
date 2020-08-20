@@ -16,6 +16,9 @@ func update_up_down_button() -> void:
 func set_model_data(data, remaining_group_size = 0) -> int:
 	$Name.text = data.name
 	$Label.text = data.label
+	$Description.short_description = data.shortdesc if data.has("shortdesc") else ""
+	$Description.long_description = data.longdesc if data.has("longdesc") else ""
+	$Description.update_tooltip()
 	$Type.selected = mm_io_types.type_names.find(data.type)
 	$Default.text = data.default
 	$Function.pressed = data.has("function") and data.function
@@ -29,6 +32,10 @@ func set_model_data(data, remaining_group_size = 0) -> int:
 func get_model_data() -> Dictionary:
 	var data = { name=$Name.text, label=$Label.text, default=$Default.text }
 	data.type = mm_io_types.type_names[$Type.selected]
+	if $Description.short_description != "":
+		data.shortdesc = $Description.short_description
+	if $Description.long_description != "":
+		data.longdesc = $Description.long_description
 	if $Function.pressed:
 		data.function = true
 	if $PortGroupButton.group_size > 0:

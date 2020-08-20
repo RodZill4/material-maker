@@ -18,16 +18,21 @@
 		"outputs": [
 			{
 				"f": "$(color)",
+				"longdesc": "A uniform image of the selected value",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "",
+				"longdesc": "The value of the uniform greyscale image",
 				"max": 1,
 				"min": 0,
 				"name": "color",
+				"shortdesc": "Value",
 				"step": 0.01,
 				"type": "float"
 			}

@@ -8,18 +8,25 @@
 		"color": {
 			"a": 1,
 			"b": 1,
-			"g": 1,
-			"r": 1,
+			"g": 0.415686,
+			"r": 0,
 			"type": "Color"
 		}
 	},
 	"shader_model": {
+		"code": "",
 		"global": "",
+		"inputs": [
+
+		],
 		"instance": "",
 		"name": "Uniform",
 		"outputs": [
 			{
-				"rgba": "$(color)"
+				"longdesc": "A uniform image of the selected color",
+				"rgba": "$(color)",
+				"shortdesc": "Output",
+				"type": "rgba"
 			}
 		],
 		"parameters": [
@@ -31,9 +38,12 @@
 					"r": 1
 				},
 				"label": "",
+				"longdesc": "Color of the uniform image",
 				"name": "color",
+				"shortdesc": "Color",
 				"type": "color"
 			}
 		]
-	}
+	},
+	"type": "shader"
 }

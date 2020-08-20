@@ -148,6 +148,10 @@ func create_parameter_control(p : Dictionary) -> Control:
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
+	if p.has("shortdesc"):
+		control.hint_tooltip = p.shortdesc+" ("+p.name+")"
+	if p.has("longdesc"):
+		control.hint_tooltip += "\n"+p.longdesc
 	return control
 
 func save_preview_widget() -> void:

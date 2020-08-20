@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/output.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -31,6 +32,9 @@ margin_right = 251.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Delete" type="Button" parent="."]
 margin_right = 28.0
@@ -52,9 +56,15 @@ margin_bottom = 25.0
 icon = SubResource( 3 )
 flat = true
 
-[node name="Type" type="OptionButton" parent="."]
+[node name="Description" parent="." instance=ExtResource( 4 )]
 margin_left = 88.0
-margin_right = 190.0
+margin_right = 116.0
+margin_bottom = 25.0
+description_type = "Output"
+
+[node name="Type" type="OptionButton" parent="."]
+margin_left = 120.0
+margin_right = 222.0
 margin_bottom = 25.0
 rect_min_size = Vector2( 102, 0 )
 hint_tooltip = "Input flag"
@@ -63,8 +73,8 @@ items = [ "Greyscale", null, false, 0, null, "Color", null, false, 1, null, "RGB
 selected = 0
 
 [node name="Value" type="LineEdit" parent="."]
-margin_left = 194.0
-margin_right = 288.0
+margin_left = 226.0
+margin_right = 320.0
 margin_bottom = 25.0
 hint_tooltip = "Default value"
 size_flags_horizontal = 3
@@ -73,9 +83,9 @@ text = "0.0"
 context_menu_enabled = false
 
 [node name="PortGroupButton" parent="." instance=ExtResource( 3 )]
-margin_left = 292.0
+margin_left = 324.0
 margin_top = 4.0
-margin_right = 308.0
+margin_right = 340.0
 margin_bottom = 20.0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
