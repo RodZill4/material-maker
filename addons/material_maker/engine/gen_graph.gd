@@ -126,10 +126,19 @@ func add_generator(generator : MMGenBase) -> bool:
 			if parent != null and parent is Object and parent.get_script() == get_script():
 				# Material is always in top level graph
 				return false
-	var index = 1
-	while has_node(name):
-		index += 1
-		name = generator.name + "_" + str(index)
+	if has_node(name):
+		var name_prefix : String
+		var regex = RegEx.new()
+		regex.compile("^(.*_)\\d+$")
+		var result = regex.search(generator.name)
+		if result:
+			name_prefix = result.get_string(1)
+		else:
+			name_prefix = generator.name + "_"
+		var index = 1
+		while has_node(name):
+			index += 1
+			name = name_prefix + str(index)
 	generator.name = name
 	add_child(generator)
 	if generator.get_script() == get_script():
