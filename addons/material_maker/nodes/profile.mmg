@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"gradient": {
-			"interpolation": 1,
+			"interpolation": 2,
 			"points": [
 				{
 					"a": 1,
@@ -14,6 +14,13 @@
 					"g": 0,
 					"pos": 0,
 					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 0.55,
+					"g": 0.55,
+					"pos": 0.504545,
+					"r": 0.55
 				},
 				{
 					"a": 1,
@@ -25,7 +32,7 @@
 			],
 			"type": "Gradient"
 		},
-		"style": 0,
+		"style": 1,
 		"width": 0.01
 	},
 	"seed_value": 65353,
@@ -40,6 +47,8 @@
 		"outputs": [
 			{
 				"f": "draw_profile_$style($uv, dot($gradient($uv.x).xyz, vec3(1.0/3.0)), (dot($gradient($uv.x+0.001).xyz, vec3(1.0/3.0))-dot($gradient($uv.x-0.001).xyz, vec3(1.0/3.0)))/0.002, max(0.0001, $width))",
+				"longdesc": "An image showing the profile defined by the gradient",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -47,7 +56,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "Style of the output image (fill or curve)",
 				"name": "style",
+				"shortdesc": "Style",
 				"type": "enum",
 				"values": [
 					{
@@ -82,16 +93,20 @@
 					"type": "Gradient"
 				},
 				"label": "",
+				"longdesc": "Gradient that defines the profile to be shown",
 				"name": "gradient",
+				"shortdesc": "Gradient",
 				"type": "gradient"
 			},
 			{
 				"control": "None",
 				"default": 0.05,
 				"label": "",
+				"longdesc": "Width of the curve",
 				"max": 1,
 				"min": 0,
 				"name": "width",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			}

@@ -19,7 +19,7 @@
 					"a": 1,
 					"b": 1,
 					"g": 1,
-					"pos": 0.681818,
+					"pos": 1,
 					"r": 1
 				}
 			],
@@ -37,7 +37,9 @@
 		"name": "Radial Gradient",
 		"outputs": [
 			{
+				"longdesc": "An image showing the gradient",
 				"rgba": "$gradient(fract($repeat*1.41421356237*length(fract($uv)-vec2(0.5, 0.5))))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -46,9 +48,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Repeat",
+				"longdesc": "Number of repetitions of the gradient",
 				"max": 32,
 				"min": 1,
 				"name": "repeat",
+				"shortdesc": "Repeat",
 				"step": 1,
 				"type": "float"
 			},
@@ -74,7 +78,9 @@
 					"type": "Gradient"
 				},
 				"label": "Gradient",
+				"longdesc": "Gradient to be spread on the image",
 				"name": "gradient",
+				"shortdesc": "Gradient",
 				"type": "gradient"
 			}
 		]

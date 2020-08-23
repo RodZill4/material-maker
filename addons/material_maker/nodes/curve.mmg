@@ -5,12 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
-		"ax": -0.35,
-		"ay": -0.2,
+		"ax": -0.4,
+		"ay": -0.3,
 		"bx": 0,
 		"by": 0.5,
-		"cx": 0.35,
-		"cy": -0.2,
+		"cx": 0.4,
+		"cy": -0.3,
 		"repeat": 1,
 		"width": 0.05
 	},
@@ -21,7 +21,9 @@
 			{
 				"default": "vec4(vec3(step(abs($uv.y-0.5), 0.4999)), 1.0)",
 				"label": "",
+				"longdesc": "Input pattern to be drawn along the curve",
 				"name": "in",
+				"shortdesc": "Pattern",
 				"type": "rgba"
 			}
 		],
@@ -29,7 +31,9 @@
 		"name": "Curve",
 		"outputs": [
 			{
+				"longdesc": "An image showing the specified curve",
 				"rgba": "$in($(name_uv)_uv)",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -38,9 +42,11 @@
 				"control": "P1.x",
 				"default": -0.3,
 				"label": "AX",
+				"longdesc": "Position on X axis of the first control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "ax",
+				"shortdesc": "A.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -48,9 +54,11 @@
 				"control": "P1.y",
 				"default": -0.1,
 				"label": "AY",
+				"longdesc": "Position on Y axis of the first control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "ay",
+				"shortdesc": "A.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -58,9 +66,11 @@
 				"control": "P3.x",
 				"default": -0,
 				"label": "BX",
+				"longdesc": "Position on X axis of the second control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "bx",
+				"shortdesc": "B.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -68,9 +78,11 @@
 				"control": "P3.y",
 				"default": 0.2,
 				"label": "BY",
+				"longdesc": "Position on Y axis of the second control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "by",
+				"shortdesc": "B.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -78,9 +90,11 @@
 				"control": "P2.x",
 				"default": 0.3,
 				"label": "CX",
+				"longdesc": "Position on X axis of the third control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "cx",
+				"shortdesc": "C.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -88,9 +102,11 @@
 				"control": "P2.y",
 				"default": -0.1,
 				"label": "CY",
+				"longdesc": "Position on Y axis of the third control point",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "cy",
+				"shortdesc": "C.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -98,9 +114,11 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Width",
+				"longdesc": "Width of the curve pattern",
 				"max": 0.5,
 				"min": 0,
 				"name": "width",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -108,9 +126,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Repeat",
+				"longdesc": "Number of repetitions of the input pattern",
 				"max": 16,
 				"min": 1,
 				"name": "repeat",
+				"shortdesc": "Repeat",
 				"step": 1,
 				"type": "float"
 			}
