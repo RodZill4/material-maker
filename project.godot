@@ -194,6 +194,10 @@ config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.93"
 
+[audio]
+
+driver="Dummy"
+
 [autoload]
 
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
