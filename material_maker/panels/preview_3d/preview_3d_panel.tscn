@@ -1,10 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" type="PackedScene" id=2]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0, 0, 0, 0.780392 )
 
 [node name="Preview3D" instance=ExtResource( 1 )]
 visible = true
@@ -21,10 +18,10 @@ render_target_update_mode = 3
 [node name="UI" type="PanelContainer" parent="." index="1"]
 margin_right = 14.0
 margin_bottom = 14.0
-custom_styles/panel = SubResource( 1 )
 
 [node name="Preview3DUI" parent="UI" index="0" instance=ExtResource( 2 )]
 anchor_right = 0.0
-margin_right = 474.0
-margin_bottom = 22.0
-target = NodePath("../..")
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 194.0
+margin_bottom = 29.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -28,10 +28,7 @@ flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0, 0, 0, 0.772549 )
-
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
@@ -180,43 +177,42 @@ icon = SubResource( 4 )
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI"]
 visible = false
-self_modulate = Color( 1, 1, 1, 0.768627 )
 margin_left = 102.0
-margin_right = 328.0
+margin_right = 336.0
 margin_bottom = 40.0
-custom_styles/panel = SubResource( 5 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel"]
-margin_right = 226.0
-margin_bottom = 40.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 230.0
+margin_bottom = 36.0
 custom_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="SpaceLeft" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
-margin_bottom = 40.0
+margin_bottom = 32.0
 
 [node name="ControlView" type="TextureRect" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
 margin_left = 5.0
-margin_top = 4.0
 margin_right = 37.0
-margin_bottom = 35.0
+margin_bottom = 31.0
 size_flags_vertical = 4
-texture = SubResource( 6 )
+texture = SubResource( 5 )
 
 [node name="Preview3DUI" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer" instance=ExtResource( 5 )]
 anchor_right = 0.0
 margin_left = 42.0
-margin_top = 8.0
+margin_top = 4.0
 margin_right = 221.0
-margin_bottom = 32.0
+margin_bottom = 28.0
 size_flags_vertical = 4
 
 [node name="SpaceRight" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel/HBoxContainer"]
 margin_left = 226.0
 margin_right = 226.0
-margin_bottom = 40.0
+margin_bottom = 32.0
 
 [node name="Right" type="VSplitContainer" parent="VBoxContainer/Layout/SplitRight"]
 margin_left = 989.0

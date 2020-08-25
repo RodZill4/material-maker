@@ -17,7 +17,7 @@ func _draw() -> void:
 	if preview_index >= 0:
 		var conn_pos = get_connection_output_position(preview_index)
 		conn_pos /= get_global_transform().get_scale()
-		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8))
+		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_color("title_color"))
 
 func set_generator(g : MMGenBase) -> void:
 	.set_generator(g)

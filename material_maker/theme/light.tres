@@ -135,8 +135,7 @@ content_margin_left = 6.0
 content_margin_right = 6.0
 content_margin_top = 4.0
 content_margin_bottom = 4.0
-bg_color = Color( 0.92, 0.92, 0.92, 1 )
-draw_center = false
+bg_color = Color( 0.921569, 0.921569, 0.921569, 0.847059 )
 border_color = Color( 0.88, 0.88, 0.88, 1 )
 
 [sub_resource type="StyleBoxFlat" id=9]
@@ -573,13 +572,13 @@ content_margin_left = 1.0
 content_margin_right = 1.0
 content_margin_top = 1.0
 content_margin_bottom = 1.0
-bg_color = Color( 0, 0, 0, 0.9 )
+bg_color = Color( 1, 1, 1, 0.901961 )
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color( 0, 0, 0, 1 )
-shadow_color = Color( 0, 0, 0, 0.1 )
+border_color = Color( 0.729412, 0.729412, 0.729412, 1 )
+shadow_color = Color( 0.745098, 0.745098, 0.745098, 0.101961 )
 shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id=52]
@@ -981,7 +980,7 @@ ToolButton/styles/focus = SubResource( 8 )
 ToolButton/styles/hover = SubResource( 8 )
 ToolButton/styles/normal = SubResource( 8 )
 ToolButton/styles/pressed = SubResource( 8 )
-TooltipLabel/colors/font_color = Color( 1, 1, 1, 1 )
+TooltipLabel/colors/font_color = Color( 0, 0, 0, 1 )
 TooltipPanel/styles/panel = SubResource( 51 )
 Tree/colors/cursor_color = Color( 0, 0, 0, 1 )
 Tree/colors/custom_button_font_highlight = Color( 0.15, 0.15, 0.15, 1 )

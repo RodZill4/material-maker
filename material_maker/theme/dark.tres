@@ -135,9 +135,9 @@ content_margin_left = 6.0
 content_margin_right = 6.0
 content_margin_top = 4.0
 content_margin_bottom = 4.0
-bg_color = Color( 0.111765, 0.111765, 0.111765, 1 )
-draw_center = false
-border_color = Color( 0.0931373, 0.0931373, 0.0931373, 1 )
+bg_color = Color( 0.113725, 0.113725, 0.113725, 0.847059 )
+border_color = Color( 0.0941176, 0.0941176, 0.0941176, 1 )
+shadow_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="StyleBoxFlat" id=9]
 bg_color = Color( 0.768627, 0.768627, 0.768627, 1 )
