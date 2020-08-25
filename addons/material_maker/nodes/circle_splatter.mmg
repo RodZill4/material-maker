@@ -1,0 +1,167 @@
+{
+	"name": "circle_splatter",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"count": 16,
+		"i_rotate": 0,
+		"i_scale": 0,
+		"radius": 0.4,
+		"rings": 2,
+		"rotate": 0,
+		"scale": 0,
+		"select_inputs": 0,
+		"spiral": 0,
+		"value": 0
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), int($rings), vec2(float($seed)));",
+		"global": "",
+		"includes": [
+			""
+		],
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"name": "mask",
+				"type": "f"
+			}
+		],
+		"instance": "vec4 splatter_$(name)(vec2 uv, int count, int rings, vec2 seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\trc1 = rand3(seed);\n\t\tfloat mask = $mask(seed+vec2(0.5));\n\t\tif (mask > 0.01) {\n\t\t\tfloat a = 6.28*float(i)*$rings/float(count);\n\t\t\tfloat rings_distance = ceil(float(i+1)*float(rings)/float(count))/float(rings);\n\t\t\tfloat spiral_distance = float(i+1)/float(count);\n\t\t\tvec2 pv = uv-0.5+$radius*mix(rings_distance, spiral_distance, $spiral)*vec2(cos(a), sin(a));\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251 + a * $i_rotate;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv /= mix(1.0, float(i+1)/float(count+1), $i_scale);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv += vec2(0.5);\n\t\t\t$select_inputs\n\t\t\tseed = rand2(seed);\n\t\t\tfloat c1 = $in(pv)*mask*(1.0-$value*seed.x);\n\t\t\tc = max(c, c1);\n\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}\n",
+		"name": "Circle Splatter",
+		"outputs": [
+			{
+				"f": "$(name_uv)_rch.a",
+				"type": "f"
+			},
+			{
+				"rgb": "$(name_uv)_rch.rgb",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 10,
+				"label": "Count",
+				"max": 256,
+				"min": 1,
+				"name": "count",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Rings",
+				"max": 16,
+				"min": 1,
+				"name": "rings",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Inputs",
+				"name": "select_inputs",
+				"type": "enum",
+				"values": [
+					{
+						"name": "1",
+						"value": " "
+					},
+					{
+						"name": "4",
+						"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+					},
+					{
+						"name": "16",
+						"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Radius",
+				"max": 0.5,
+				"min": 0,
+				"name": "radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Spiral",
+				"max": 1,
+				"min": 0,
+				"name": "spiral",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rotate",
+				"max": 1,
+				"min": 0,
+				"name": "i_rotate",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Scale",
+				"max": 1,
+				"min": 0,
+				"name": "i_scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rnd Rotate",
+				"max": 180,
+				"min": 0,
+				"name": "rotate",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rnd Scale",
+				"max": 1,
+				"min": 0,
+				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Rnd Value",
+				"max": 1,
+				"min": 0,
+				"name": "value",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

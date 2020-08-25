@@ -5,18 +5,15 @@
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0,
-		"cx": 0,
-		"cy": 0,
-		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
 		"r": 0.1,
-		"w": 0.28
+		"ripples": 1
 	},
 	"shader_model": {
 		"code": "",
-		"global": "float sdSmoothUnion( float d1, float d2, float k ) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h); }\n\nfloat sdSmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );\n    return mix( d2, -d1, h ) + k*h*(1.0-h); }\n\nfloat sdSmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) + k*h*(1.0-h); }\n",
+		"global": "float sdRipples(float d, float w, int r) {\n\tfor (int i = 0; i < r; ++i) {\n\t\td = abs(d)-w;\n\t}\n\treturn d;\n}\n",
+		"includes": [
+			""
+		],
 		"inputs": [
 			{
 				"default": "0.0",
@@ -29,19 +26,29 @@
 		"name": "sdAnnularShape",
 		"outputs": [
 			{
-				"sdf2d": "abs($in($uv))-$r",
+				"sdf2d": "sdRipples($in($uv), $r, int($ripples))",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Radius1.x",
+				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Width",
 				"max": 1,
 				"min": 0,
 				"name": "r",
 				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Ripples",
+				"max": 16,
+				"min": 0,
+				"name": "ripples",
+				"step": 1,
 				"type": "float"
 			}
 		]
