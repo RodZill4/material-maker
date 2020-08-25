@@ -8,7 +8,6 @@
 		"cx": 0.5,
 		"cy": 0.5,
 		"cz": 0.5,
-		"r": 0.5,
 		"rx": 0,
 		"ry": 0,
 		"rz": 0,
@@ -27,88 +26,117 @@
 		"outputs": [
 			{
 				"f": "1.0-box($uv, vec3($cx, $cy, $cz), vec3($sx, $sy, $sz), 0.01745329251*vec3($rx, $ry, $rz))",
+				"longdesc": "A heightmap of the specified box",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Center X",
+				"longdesc": "X coordinate of the center of the box",
 				"max": 1,
 				"min": 0,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Center Y",
+				"longdesc": "Y coordinate of the center of the box",
 				"max": 1,
 				"min": 0,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Center Z",
+				"longdesc": "Z coordinate of the center of the box",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "cz",
+				"shortdesc": "Center.z",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Size X",
+				"longdesc": "Size along X axis",
 				"max": 1,
 				"min": 0,
 				"name": "sx",
+				"shortdesc": "Size.x",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Size Y",
+				"longdesc": "Size along Y axis",
 				"max": 1,
 				"min": 0,
 				"name": "sy",
+				"shortdesc": "Size.y",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Size Z",
+				"longdesc": "Size along Z axis",
 				"max": 1,
 				"min": 0,
 				"name": "sz",
+				"shortdesc": "Size.z",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Rot X",
+				"longdesc": "Rotation angle around X axis",
 				"max": 180,
 				"min": -180,
 				"name": "rx",
+				"shortdesc": "Rot.x",
 				"step": 0.1,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Rot Y",
+				"longdesc": "Rotation angle around Y axis",
 				"max": 180,
 				"min": -180,
 				"name": "ry",
+				"shortdesc": "Rot.y",
 				"step": 0.1,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Rot Z",
+				"longdesc": "Rotation angle around Y axis",
 				"max": 180,
 				"min": -180,
 				"name": "rz",
+				"shortdesc": "Rot.z",
 				"step": 0.1,
 				"type": "float"
 			}

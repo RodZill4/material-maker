@@ -20,34 +20,45 @@
 		"outputs": [
 			{
 				"f": "sphere($uv, vec2($cx, $cy), $r)",
+				"longdesc": "A heightmap of the specified sphere",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Center X",
+				"longdesc": "Position of the center along the X axis",
 				"max": 1,
 				"min": 0,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Center Y",
+				"longdesc": "Position of the center along the Y axis",
 				"max": 1,
 				"min": 0,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "Radius of the sphere",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			}

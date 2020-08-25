@@ -22,6 +22,8 @@
 		"outputs": [
 			{
 				"f": "$(name)_fct($(uv))",
+				"longdesc": "A greyscale image that combines the horizontal and vertical patterns",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -29,7 +31,9 @@
 			{
 				"default": 0,
 				"label": "Combiner",
+				"longdesc": "The operation used to combine the horizontal and the vertical patterns",
 				"name": "mix",
+				"shortdesc": "Combine",
 				"type": "enum",
 				"values": [
 					{
@@ -61,7 +65,9 @@
 			{
 				"default": 5,
 				"label": "X",
+				"longdesc": "Pattern generated along the X axis",
 				"name": "x_wave",
+				"shortdesc": "X Pattern",
 				"type": "enum",
 				"values": [
 					{
@@ -91,19 +97,23 @@
 				]
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "2:",
+				"longdesc": "Repetitions of the pattern along X axis",
 				"max": 32,
 				"min": 0,
 				"name": "x_scale",
+				"shortdesc": "X Repeat",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
 				"default": 5,
 				"label": "Y",
+				"longdesc": "Pattern generated along the Y axis",
 				"name": "y_wave",
+				"shortdesc": "Y Pattern",
 				"type": "enum",
 				"values": [
 					{
@@ -133,14 +143,16 @@
 				]
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "3:",
+				"longdesc": "Repetitions of the pattern along Y axis",
 				"max": 32,
 				"min": 0,
 				"name": "y_scale",
+				"shortdesc": "Y Repeat",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			}
 		]
 	},
