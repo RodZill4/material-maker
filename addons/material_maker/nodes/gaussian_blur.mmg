@@ -13,12 +13,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "switch_2",
-			"from_port": 0,
-			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
 			"from": "switch",
 			"from_port": 0,
 			"to": "switch_2",
@@ -65,6 +59,18 @@
 			"from_port": 1,
 			"to": "gaussian_blur_y",
 			"to_port": 1
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "switch_2",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
 		}
 	],
 	"label": "Gaussian Blur",
@@ -102,8 +108,8 @@
 		{
 			"name": "switch_2",
 			"node_position": {
-				"x": -298.452393,
-				"y": -131.666656
+				"x": -240.452393,
+				"y": -133.666656
 			},
 			"parameters": {
 				"choices": 2,
@@ -154,6 +160,10 @@
 						},
 						{
 							"node": "gaussian_blur_y",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
 							"widget": "size"
 						}
 					],
@@ -254,8 +264,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -23.452393,
-				"y": -190.392853
+				"x": 193.547607,
+				"y": -135.392853
 			},
 			"parameters": {
 
@@ -266,6 +276,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed_value": 77778,
 			"type": "ios"
 		},
 		{
@@ -292,6 +303,18 @@
 			},
 			"seed_value": 12279,
 			"type": "gaussian_blur_y"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -50.246796,
+				"y": -133.96936
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
 		}
 	],
 	"parameters": {
