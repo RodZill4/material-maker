@@ -77,13 +77,16 @@ func update_buffer() -> void:
 	if !updating:
 		updating = true
 		while update_again:
+			var renderer = mm_renderer.request(self)
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
 			update_again = false
-			var result = mm_renderer.render_material(material, pow(2, get_parameter("size")))
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
 			if !update_again:
-				result.copy_to_texture(texture)
-			result.release()
+				renderer.copy_to_texture(texture)
+			renderer.release(self)
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 

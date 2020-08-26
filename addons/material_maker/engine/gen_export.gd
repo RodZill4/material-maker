@@ -39,11 +39,11 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 		size = get_image_size()
 	var source = get_source(0)
 	if source != null:
-		var result = source.generator.render(source.output_index, size)
+		var result = source.generator.render(self, source.output_index, size)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if parameters.suffix != "":
 			result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix ])
 		else:
 			result.save_to_file("%s.png" % [ prefix ])
-		result.release()
+		result.release(self)

@@ -2,12 +2,9 @@ tool
 extends Viewport
 class_name MMGenRenderer
 
-export(String) var debug_path = ""
-var debug_file_index : int = 0
-
 var common_shader : String
 
-var rendering : bool = false
+var render_owner : Object = null
 
 signal done
 
@@ -48,11 +45,15 @@ func setup_material(shader_material, textures, shader_code) -> void:
 		shader_material.set_shader_param(k+"_tex", textures[k])
 	shader_material.shader.code = shader_code
 
-var current_font : String = ""
-func render_text(text : String, font_path : String, font_size : int, x : float, y : float) -> Object:
-	while rendering:
+func request(object : Object) -> Object:
+	while render_owner != null:
 		yield(self, "done")
-	rendering = true
+	render_owner = object
+	return self
+
+var current_font : String = ""
+func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float) -> Object:
+	assert(render_owner == object, "Invalid renderer use")
 	size = Vector2(2048, 2048)
 	$Font.visible = true
 	$Font.rect_position = Vector2(0, 0)
@@ -76,10 +77,8 @@ func render_text(text : String, font_path : String, font_size : int, x : float, 
 	$ColorRect.visible = true
 	return self
 
-func render_material(material, render_size, with_hdr = true) -> Object:
-	while rendering:
-		yield(self, "done")
-	rendering = true
+func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+	assert(render_owner == object, "Invalid renderer use")
 	var shader_material = $ColorRect.material
 	size = Vector2(render_size, render_size)
 	$ColorRect.rect_position = Vector2(0, 0)
@@ -93,18 +92,8 @@ func render_material(material, render_size, with_hdr = true) -> Object:
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(shader, textures, render_size) -> Object:
-	if debug_path != null and debug_path != "":
-		var file_name = debug_path+str(debug_file_index)+".shader"
-		var f = File.new()
-		f.open(debug_path+str(debug_file_index)+".shader", File.WRITE)
-		f.store_string(shader)
-		f.close()
-		debug_file_index += 1
-		print("shader saved as "+file_name)
-	while rendering:
-		yield(self, "done")
-	rendering = true
+func render_shader(object : Object, shader, textures, render_size) -> Object:
+	assert(render_owner == object, "Invalid renderer use")
 	size = Vector2(render_size, render_size)
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
@@ -129,15 +118,17 @@ func copy_to_texture(t : ImageTexture) -> void:
 
 func save_to_file(fn : String) -> void:
 	var image : Image = get_texture().get_data()
-	image.lock()
-	match fn.get_extension():
-		"png":
-			image.save_png(fn)
-		"exr":
-			image.save_exr(fn)
-	image.unlock()
+	if image != null:
+		image.lock()
+		match fn.get_extension():
+			"png":
+				image.save_png(fn)
+			"exr":
+				image.save_exr(fn)
+		image.unlock()
 
-func release() -> void:
-	rendering = false
+func release(object : Object) -> void:
+	assert(render_owner == object, "Invalid renderer release")
+	render_owner = null
 	hdr = false
 	emit_signal("done")

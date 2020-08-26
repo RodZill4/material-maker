@@ -32,11 +32,14 @@ func update_buffer() -> void:
 		updating = true
 		while update_again:
 			update_again = false
-			var result = mm_renderer.render_text(get_parameter("text"), get_parameter("font"), get_parameter("font_size"), get_parameter("x"), get_parameter("y"))
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+			var renderer = mm_renderer.request(self)
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
+			renderer = renderer.render_text(self, get_parameter("text"), get_parameter("font"), get_parameter("font_size"), get_parameter("x"), get_parameter("y"))
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
 			if !update_again:
-				result.copy_to_texture(texture)
-			result.release()
+				renderer.copy_to_texture(texture)
+			renderer.release(self)
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))

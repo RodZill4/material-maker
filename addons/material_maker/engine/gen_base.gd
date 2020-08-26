@@ -228,7 +228,7 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += main_fct
 	return code
 
-func render(output_index : int, size : int, preview : bool = false) -> Object:
+func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
 	while source is GDScriptFunctionState:
@@ -244,10 +244,13 @@ func render(output_index : int, size : int, preview : bool = false) -> Object:
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
-	var result = mm_renderer.render_shader(shader, source.textures, size)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	return result
+	var renderer = mm_renderer.request(object)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_shader(object, shader, source.textures, size)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	return renderer
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)

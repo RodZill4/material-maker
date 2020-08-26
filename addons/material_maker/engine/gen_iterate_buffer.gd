@@ -100,24 +100,25 @@ func update_buffer() -> void:
 	if !updating:
 		updating = true
 		while update_again:
+			var renderer = mm_renderer.request(self)
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
 			update_again = false
-			var result
 			if current_iteration == 0:
-				result = mm_renderer.render_material(material, pow(2, get_parameter("size")))
+				renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
 			else:
-				result = mm_renderer.render_material(loop_material, pow(2, get_parameter("size")))
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+				renderer = renderer.render_material(self, loop_material, pow(2, get_parameter("size")))
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
 			if !update_again:
-				result.copy_to_texture(texture)
+				renderer.copy_to_texture(texture)
 				texture.flags = 0
-			result.release()
+			renderer.release(self)
 		updating = false
 		if current_iteration < get_parameter("iterations"):
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
 		else:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
-
 		current_iteration += 1
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:

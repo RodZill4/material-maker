@@ -59,17 +59,17 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
 	if output >= preview:
 		return
-	var result = generator.render(output, 24, true)
+	var result = generator.render(self, output, 24, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if index == update_index:
 		var tex = ImageTexture.new()
 		result.copy_to_texture(tex)
-		result.release()
+		result.release(self)
 # warning-ignore:narrowing_conversion
 		item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
 	else:
-		result.release()
+		result.release(self)
 
 func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, name = null) -> void:
 	item.set_text(0, name if name != null else generator.get_type_name())

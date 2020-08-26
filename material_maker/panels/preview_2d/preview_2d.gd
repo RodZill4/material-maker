@@ -87,11 +87,14 @@ func export_as_image_file(file_name : String, size : int) -> void:
 	material.set_shader_param("margin", 0.0)
 	material.set_shader_param("show_tiling", false)
 	material.set_shader_param("export", true)
-	var result = mm_renderer.render_material(material, size, false)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	result.save_to_file(file_name)
-	result.release()
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_material(self, material, size, false)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer.save_to_file(file_name)
+	renderer.release(self)
 	material.set_shader_param("size", previous_size)
 	material.set_shader_param("margin", previous_margin)
 	material.set_shader_param("show_tiling", previous_show_tiling)

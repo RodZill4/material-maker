@@ -20,16 +20,18 @@ func gen(mesh: Mesh, map : String, file_name : String, map_size = 512) -> void:
 	yield(get_tree(), "idle_frame")
 	dilate_pass1.set_shader_param("tex", get_texture())
 	dilate_pass1.set_shader_param("size", map_size)
-	var result = mm_renderer.render_material(dilate_pass1, map_size)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_material(self, dilate_pass1, map_size)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
 	var t : ImageTexture = ImageTexture.new()
-	result.copy_to_texture(t)
-	result.release()
+	renderer.copy_to_texture(t)
 	dilate_pass2.set_shader_param("tex", t)
 	dilate_pass2.set_shader_param("size", map_size)
-	result = mm_renderer.render_material(dilate_pass2, map_size)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	result.save_to_file(file_name)
-	result.release()
+	renderer = renderer.render_material(self, dilate_pass2, map_size)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer.save_to_file(file_name)
+	renderer.release(self)

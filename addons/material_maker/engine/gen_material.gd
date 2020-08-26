@@ -90,7 +90,7 @@ func source_changed(input_index : int) -> void:
 
 func render_textures() -> void:
 	for t in TEXTURE_LIST:
-		var result
+		var renderer
 		if t.has("port"):
 			if !need_update[t.texture]:
 				continue
@@ -107,18 +107,21 @@ func render_textures() -> void:
 			if source.has("textures"):
 				for k in source.textures.keys():
 					shader_materials[t.texture].set_shader_param(k, source.textures[k])
-			result = mm_renderer.render_material(shader_materials[t.texture], get_image_size(), false)
 		else:
 			generated_textures[t.texture] = null
 			need_update[t.texture] = false
 			continue
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		renderer = mm_renderer.request(self)
+		while renderer is GDScriptFunctionState:
+			renderer = yield(renderer, "completed")
+		renderer = renderer.render_material(self, shader_materials[t.texture], get_image_size(), false)
+		while renderer is GDScriptFunctionState:
+			renderer = yield(renderer, "completed")
 		if generated_textures[t.texture] == null:
 			generated_textures[t.texture] = ImageTexture.new()
 		var texture = generated_textures[t.texture]
-		result.copy_to_texture(texture)
-		result.release()
+		renderer.copy_to_texture(texture)
+		renderer.release(self)
 		# To work, this must be set after calling `copy_to_texture()`
 		texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
 		# Disable filtering for small textures, as they're considered to be used
@@ -163,11 +166,14 @@ func update_textures() -> void:
 			update_again = false
 			for t in TEXTURE_LIST:
 				if need_render[t.texture]:
-					var result = mm_renderer.render_material(shader_materials[t.texture], image_size, false)
-					while result is GDScriptFunctionState:
-						result = yield(result, "completed")
-					result.copy_to_texture(generated_textures[t.texture])
-					result.release()
+					var renderer = mm_renderer.request(self)
+					while renderer is GDScriptFunctionState:
+						renderer = yield(renderer, "completed")
+					renderer = renderer.render_material(self, shader_materials[t.texture], image_size, false)
+					while renderer is GDScriptFunctionState:
+						renderer = yield(renderer, "completed")
+					renderer.copy_to_texture(generated_textures[t.texture])
+					renderer.release(self)
 		updating = false
 
 func update_materials(material_list) -> void:
@@ -317,7 +323,7 @@ func subst_string(s : String, export_context : Dictionary) -> String:
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	var in_file = File.new()
 	var out_file = File.new()
-	if in_file.open(mm_loader.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
+	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
 		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
 			print("Cannot find template file "+template)
 			return false
@@ -403,11 +409,11 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					yield(get_tree(), "idle_frame")
 					yield(get_tree(), "idle_frame")
 				var file_name = subst_string(f.file_name, export_context)
-				var result = render(f.output, size)
+				var result = render(self, f.output, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				result.save_to_file(file_name)
-				result.release()
+				result.release(self)
 			"template":
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
