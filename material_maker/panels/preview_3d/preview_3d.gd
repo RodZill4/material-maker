@@ -121,10 +121,13 @@ func on_gui_input(event) -> void:
 					CAMERA_DISTANCE_MAX
 				)
 			BUTTON_LEFT, BUTTON_RIGHT:
-				if event.pressed:
+				var mask := Input.get_mouse_button_mask()
+				var lpressed := mask & BUTTON_MASK_LEFT
+				var rpressed := mask & BUTTON_MASK_RIGHT
+				if event.pressed and ((lpressed and not rpressed) or (not lpressed and rpressed)): # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 					_mouse_start_position = event.global_position
-				else:
+				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
 					Input.warp_mouse_position(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
