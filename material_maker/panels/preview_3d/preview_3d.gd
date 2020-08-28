@@ -26,6 +26,9 @@ const MENU = [
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
+var _mouse_start_position := Vector2.ZERO
+
+
 func _ready() -> void:
 	for o in objects.get_children():
 		var m = o.get_surface_material(0)
@@ -117,6 +120,17 @@ func on_gui_input(event) -> void:
 					CAMERA_DISTANCE_MIN,
 					CAMERA_DISTANCE_MAX
 				)
+			BUTTON_LEFT, BUTTON_RIGHT:
+				var mask := Input.get_mouse_button_mask()
+				var lpressed := mask & BUTTON_MASK_LEFT
+				var rpressed := mask & BUTTON_MASK_RIGHT
+				if event.pressed and ((lpressed and not rpressed) or (not lpressed and rpressed)): # xor
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+					_mouse_start_position = event.global_position
+				elif not lpressed and not rpressed:
+					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
+					Input.warp_mouse_position(_mouse_start_position)
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
 		var motion = 0.01*event.relative
 		var camera_basis = camera.global_transform.basis
