@@ -5,6 +5,8 @@ var generator : MMGenBase = null setget set_generator
 var show_inputs : bool = false
 var show_outputs : bool = false
 
+var rendering_time : int = -1
+
 func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
@@ -37,7 +39,7 @@ func _draw() -> void:
 			var conn_pos2 = get_connection_output_position(min(i+outputs[i].group_size-1, outputs.size()-1))
 			conn_pos1 /= get_global_transform().get_scale()
 			conn_pos2 /= get_global_transform().get_scale()
-			draw_line(conn_pos1, conn_pos2, Color(1.0, 1.0, 1.0))
+			draw_line(conn_pos1, conn_pos2, color)
 		if show_outputs:
 			var string : String = outputs[i].shortdesc if outputs[i].has("shortdesc") else ("Output "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
@@ -45,6 +47,10 @@ func _draw() -> void:
 
 func set_generator(g) -> void:
 	generator = g
+	g.connect("rendering_time", self, "update_rendering_time")
+
+func update_rendering_time(t : int) -> void:
+	rendering_time = t
 
 func _on_offset_changed() -> void:
 	generator.set_position(offset)

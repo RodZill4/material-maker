@@ -178,6 +178,16 @@ func restore_preview_widget() -> void:
 		preview_timer.connect("timeout", self, "do_update_preview")
 	add_child(preview_timer)
 
+func update_rendering_time(t : int) -> void:
+	.update_rendering_time(t)
+	update_title()
+
+func update_title() -> void:
+	if rendering_time < 0:
+		title = generator.get_type_name()
+	else:
+		title = generator.get_type_name()+" ("+str(rendering_time)+"ms)"
+
 func update_node() -> void:
 	# Clean node
 	clear_all_slots()
@@ -189,7 +199,7 @@ func update_node() -> void:
 	# Show or hide the close button
 	show_close = generator.can_be_deleted()
 	# Rebuild node
-	title = generator.get_type_name()
+	update_title()
 	# Regex for labels
 	var regex = RegEx.new()
 	regex.compile("^(\\d+):(.*)")

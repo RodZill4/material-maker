@@ -7,6 +7,7 @@ Base class for texture generators, that defines their API
 """
 
 signal parameter_changed(n, v)
+signal rendering_time(t)
 
 const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
 

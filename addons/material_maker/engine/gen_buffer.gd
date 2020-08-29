@@ -81,11 +81,13 @@ func update_buffer() -> void:
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
 			update_again = false
+			var time = OS.get_ticks_msec()
 			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
 			if !update_again:
 				renderer.copy_to_texture(texture)
+			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
