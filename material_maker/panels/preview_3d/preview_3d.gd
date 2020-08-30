@@ -73,10 +73,11 @@ func do_load_custom_mesh(file_path) -> void:
 	get_node("/root/MainWindow").config_cache.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	var mesh = $ObjLoader.load_obj_file(file_path)
-	var object = objects.get_child(id) as MeshInstance
-	object.mesh = mesh
-	object.set_surface_material(0, SpatialMaterial.new())
-	select_object(id)
+	if mesh != null:
+		var object = objects.get_child(id) as MeshInstance
+		object.mesh = mesh
+		object.set_surface_material(0, SpatialMaterial.new())
+		select_object(id)
 
 func select_object(id) -> void:
 	current_object.visible = false

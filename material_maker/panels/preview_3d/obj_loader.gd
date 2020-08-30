@@ -10,12 +10,13 @@ func count(string, txt):
 			num += 1
 	return num
 
-func load_obj_file(path) -> Mesh:
+func load_obj_file(path : String) -> Mesh:
 	var st = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	#st.set_material(mat)
-	var mdlFile = File.new()
-	mdlFile.open(path, File.READ)
+	var mdlFile : File = File.new()
+	var error = mdlFile.open(path, File.READ)
+	if error != OK:
+		return null
 	
 	var mdlVerts = []
 	var mdlNorm = []
