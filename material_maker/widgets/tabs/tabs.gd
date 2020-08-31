@@ -31,7 +31,8 @@ func check_save_tabs() -> bool:
 
 func check_save_tab(tab) -> bool:
 	var tab_control = get_child(tab)
-	if tab_control.need_save:
+	var main_window = get_node("/root/MainWindow")
+	if tab_control.need_save and main_window.get_config("confirm_close_project"):
 		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
 		var save_path = tab_control.save_path
 		if save_path == null:
@@ -47,7 +48,6 @@ func check_save_tab(tab) -> bool:
 			result = yield(result, "completed")
 		match result:
 			"ok":
-				var main_window = get_node("/root/MainWindow")
 				var tab_node = get_child(tab)
 				var status = main_window.save_material(tab_node)
 				while status is GDScriptFunctionState:

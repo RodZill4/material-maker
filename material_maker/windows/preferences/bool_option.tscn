@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/windows/preferences/bool_option.gd" type="Script" id=1]
+
+[node name="ConfirmQuit" type="CheckBox"]
+margin_right = 308.0
+margin_bottom = 24.0
+text = "Confirm when quitting the application"
+script = ExtResource( 1 )

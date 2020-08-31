@@ -54,6 +54,7 @@ const MENU = [
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
 	{ menu="Edit", submenu="set_theme", description="Set theme" },
+	{ menu="Edit", command="edit_preferences", description="Preferences" },
 
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
@@ -77,6 +78,11 @@ const MENU = [
 	{ menu="Help", command="about", description="About" }
 ]
 
+const DEFAULT_CONFIG = {
+	confirm_quit = true,
+	confirm_close_project = true
+}
+
 # warning-ignore:unused_signal
 signal saved_material(material_name, success)
 signal quit
@@ -84,8 +90,13 @@ signal quit
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 	
-	# Restore the window position/size if values are present in the configuration cache
+	# Load and nitialize config
 	config_cache.load("user://cache.ini")
+	for k in DEFAULT_CONFIG.keys():
+		if ! config_cache.has_section_key("config", k):
+			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
+	
+	# Restore the window position/size if values are present in the configuration cache
 	if config_cache.has_section_key("window", "screen"):
 		OS.current_screen = config_cache.get_value("window", "screen")
 	if config_cache.has_section_key("window", "maximized"):
@@ -154,6 +165,11 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
+
+func get_config(key : String):
+	if ! config_cache.has_section_key("config", key):
+		return DEFAULT_CONFIG[key]
+	return config_cache.get_value("config", key)
 
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
@@ -478,17 +494,22 @@ func quit() -> void:
 	dialog.dialog_text = "Quit Material Maker?"
 	dialog.add_cancel("Cancel")
 	add_child(dialog)
-	var result = dialog.ask()
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	match result:
-		"ok":
-			result = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects.check_save_tabs()
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
-			if result:
-				dim_window()
-				get_tree().quit()
+	if get_config("confirm_quit"):
+		var result = dialog.ask()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		if result == "cancel":
+			quitting = false
+			return
+	if get_config("confirm_close_project"):
+		var result = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects.check_save_tabs()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		if !result:
+			quitting = false
+			return
+	dim_window()
+	get_tree().quit()
 	quitting = false
 
 
@@ -547,6 +568,11 @@ func edit_duplicate() -> void:
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
+
+func edit_preferences() -> void:
+	var dialog = preload("res://material_maker/windows/preferences/preferences.tscn").instance()
+	add_child(dialog)
+	dialog.edit_preferences(config_cache)
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

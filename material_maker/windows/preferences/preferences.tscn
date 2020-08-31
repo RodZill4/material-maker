@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/windows/preferences/bool_option.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/preferences/preferences.gd" type="Script" id=2]
+
+[node name="Preferences" type="WindowDialog"]
+visible = true
+anchor_left = 0.377
+anchor_top = 0.383
+anchor_right = 0.622
+anchor_bottom = 0.612
+margin_left = 0.269348
+margin_top = -0.186615
+margin_right = -0.330688
+margin_bottom = -0.0666504
+popup_exclusive = true
+window_title = "Preferences"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
+margin_right = 308.0
+margin_bottom = 132.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmQuit" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+config_variable = "confirm_quit"
+
+[node name="ConfirmCloseProject" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+margin_top = 28.0
+margin_bottom = 52.0
+text = "Confirm when closing a project"
+config_variable = "confirm_close_project"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 136.0
+margin_right = 308.0
+margin_bottom = 136.0
+custom_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 120.0
+margin_top = 140.0
+margin_right = 308.0
+margin_bottom = 160.0
+size_flags_horizontal = 8
+
+[node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_right = 60.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Apply"
+
+[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 64.0
+margin_right = 124.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 128.0
+margin_right = 188.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Cancel"
+[connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
