@@ -19,7 +19,7 @@ const TEXTURE_LIST = [
 	{ port=2, texture="emission", sources=[3] },
 	{ port=3, texture="normal", sources=[4] },
 	{ port=4, texture="depth", sources=[6] },
-	{ port=5, texture="sss", sources=[7] }
+	{ port=5, texture="sss", sources=[8] }
 ]
 
 const INPUT_ALBEDO    : int = 0
@@ -29,7 +29,7 @@ const INPUT_EMISSION  : int = 3
 const INPUT_NORMAL    : int = 4
 const INPUT_OCCLUSION : int = 5
 const INPUT_DEPTH     : int = 6
-const INPUT_SSS       : int = 7
+const INPUT_SSS       : int = 8
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_SIZE_MIN = 4  # 16x16
