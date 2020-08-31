@@ -2319,7 +2319,7 @@
 				"translate_y": 0
 			},
 			"tree_item": "Transform",
-			"type": "transform"
+			"type": "transform2"
 		},
 		{
 			"collapsed": true,

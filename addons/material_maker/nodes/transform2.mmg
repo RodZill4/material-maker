@@ -1,11 +1,11 @@
 {
-	"name": "transform",
+	"name": "transform2",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"repeat": false,
+		"mode": 0,
 		"rotate": 0,
 		"scale_x": 1,
 		"scale_y": 1,
@@ -15,7 +15,7 @@
 	"shader_model": {
 		"code": "",
 		"description": "A node that translates, rotates and scales its input",
-		"global": "vec2 transform(vec2 uv, vec2 translate, float rotate, vec2 scale, bool repeat) {\n \tvec2 rv;\n\tuv -= translate;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv /= scale;\n\trv += vec2(0.5);\n    if (repeat) {\n\t\treturn fract(rv);\n\t} else {\n\t\treturn clamp(rv, vec2(0.0), vec2(1.0));\n\t}\t\n}",
+		"global": "vec2 transform2_clamp(vec2 uv) {\n\treturn clamp(uv, vec2(0.0), vec2(1.0));\n}\n\nvec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {\n \tvec2 rv;\n\tuv -= translate;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv /= scale;\n\trv += vec2(0.5);\n\treturn rv;\t\n}",
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
@@ -71,7 +71,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the transformed image",
-				"rgba": "$i(transform($uv, vec2($translate_x*(2.0*$tx($uv)-1.0), $translate_y*(2.0*$ty($uv)-1.0)), $rotate*0.01745329251*(2.0*$r($uv)-1.0), vec2($scale_x*(2.0*$sx($uv)-1.0), $scale_y*(2.0*$sy($uv)-1.0)), $repeat))",
+				"rgba": "$i($mode(transform2($uv, vec2($translate_x*(2.0*$tx($uv)-1.0), $translate_y*(2.0*$ty($uv)-1.0)), $rotate*0.01745329251*(2.0*$r($uv)-1.0), vec2($scale_x*(2.0*$sx($uv)-1.0), $scale_y*(2.0*$sy($uv)-1.0)))))",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}
@@ -138,12 +138,26 @@
 				"type": "float"
 			},
 			{
-				"default": false,
-				"label": "Repeat:",
-				"longdesc": "Repeat the input if checked, clamps otherwise",
-				"name": "repeat",
-				"shortdesc": "Repeat",
-				"type": "boolean"
+				"default": 0,
+				"label": "Mode",
+				"longdesc": "Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Clamp",
+						"value": "transform2_clamp"
+					},
+					{
+						"name": "Repeat",
+						"value": "fract"
+					},
+					{
+						"name": "Extend",
+						"value": ""
+					}
+				]
 			}
 		]
 	},
