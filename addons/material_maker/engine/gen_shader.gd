@@ -22,6 +22,10 @@ func is_editable() -> bool:
 func has_randomness() -> bool:
 	return uses_seed
 
+func get_description() -> String:
+	if shader_model.has("description"):
+		return shader_model.description
+	return ""
 
 func get_type() -> String:
 	return "shader"

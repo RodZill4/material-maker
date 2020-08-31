@@ -65,8 +65,11 @@ func _on_gui_input(event) -> void:
 		get_parent().send_changed_signal()
 	elif event is InputEventMouseMotion:
 		var epos = event.position
-		if Rect2(0, 0, 16, 16).has_point(epos):
-			if generator.model != null:
+		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
+			var description = generator.get_description()
+			if description != "":
+				hint_tooltip = description
+			elif generator.model != null:
 				hint_tooltip = generator.model
 			return
 		elif Rect2(rect_size.x-48, 4, 16, 16).has_point(epos) and generator.has_randomness():

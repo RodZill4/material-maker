@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/windows/node_editor/node_editor_item_list.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
+[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -17,7 +18,7 @@ size = 12
 font_data = SubResource( 2 )
 
 [node name="NodeEditor" type="WindowDialog"]
-margin_right = 920.0
+margin_right = 950.0
 margin_bottom = 450.0
 popup_exclusive = true
 window_title = "Node Editor"
@@ -59,7 +60,11 @@ text = "Name:"
 margin_left = 46.0
 margin_right = 888.0
 margin_bottom = 24.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 200, 0 )
+
+[node name="Description" parent="Sizer/Tabs/General/Name" instance=ExtResource( 4 )]
+description_type = "Node"
+has_short_description = false
 
 [node name="LabelParameters" type="Label" parent="Sizer/Tabs/General"]
 margin_top = 28.0

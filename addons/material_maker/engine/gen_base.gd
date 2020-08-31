@@ -61,6 +61,8 @@ func get_template_name() -> bool:
 func is_editable() -> bool:
 	return false
 
+func get_description() -> String:
+	return ""
 
 func has_randomness() -> bool:
 	return false
