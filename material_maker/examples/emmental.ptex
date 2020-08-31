@@ -52,7 +52,7 @@
 			"from": "colorize_3",
 			"from_port": 0,
 			"to": "Material",
-			"to_port": 7
+			"to_port": 8
 		}
 	],
 	"label": "Graph",
@@ -63,6 +63,9 @@
 	},
 	"nodes": [
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 223,
@@ -76,14 +79,15 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 0.45,
 				"emission_energy": 0,
+				"flags_transparent": false,
 				"metallic": 0.3,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 0.75,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 1
 			},
 			"type": "material"
 		},
@@ -194,13 +198,10 @@
 				"y": -180
 			},
 			"parameters": {
-				"amount": 0.5,
 				"param0": 11,
 				"param1": 0.945,
 				"param2": 1,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param4": 1
 			},
 			"type": "normal_map"
 		},
