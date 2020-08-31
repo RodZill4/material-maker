@@ -5,16 +5,17 @@
 		"y": 0
 	},
 	"parameters": {
-		"angle": -1,
+		"angle": 0,
 		"layers": 5,
 		"length": 0.25,
-		"randomness": 0.44,
-		"waviness": 0.51,
+		"randomness": 0.3,
+		"waviness": 0.3,
 		"width": 0.4
 	},
 	"shader_model": {
 		"code": "",
-		"global": "float scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat subdivide = floor(1.0/size.x);\n\tfloat cut = size.x*subdivide;\n\tuv *= subdivide;\n\tvec2 r1 = rand2(floor(uv)+seed);\n\tvec2 r2 = rand2(r1);\n\tuv = fract(uv);\n\tuv = 2.0*uv-vec2(1.0);\n\tfloat a = 6.28*(angle+(r1.x-0.5)*randomness);\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\tuv = vec2(c*uv.x+s*uv.y, s*uv.x-c*uv.y);\n\tuv.y += 2.0*r1.y-1.0;\n\tuv.y += 0.5*waviness*cos(2.0*uv.x+6.28*r2.y);\n\tuv.x /= cut;\n\tuv.y /= subdivide*size.y;\n\treturn (1.0-uv.x*uv.x)*max(0.0, 1.0-1000.0*uv.y*uv.y);\n}\n\nfloat scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat v = 0.0;\n\tfor (int i = 0; i < layers; ++i) {\n\t\tv = max(v, scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));\n\t\tseed = rand2(seed);\n\t}\n\treturn v;\n}\n",
+		"description": "A node that draws white scratches on a black background",
+		"global": "float scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat subdivide = floor(1.0/size.x);\n\tfloat cut = size.x*subdivide;\n\tuv *= subdivide;\n\tvec2 r1 = rand2(floor(uv)+seed);\n\tvec2 r2 = rand2(r1);\n\tuv = fract(uv);\n\tvec2 border = 10.0*min(fract(uv), 1.0-fract(uv));\n\tuv = 2.0*uv-vec2(1.0);\n\tfloat a = 6.28318530718*(angle+(r1.x-0.5)*randomness);\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\tuv = vec2(c*uv.x+s*uv.y, s*uv.x-c*uv.y);\n\tuv.y += 2.0*r1.y-1.0;\n\tuv.y += 0.5*waviness*cos(2.0*uv.x+6.28318530718*r2.y);\n\tuv.x /= cut;\n\tuv.y /= subdivide*size.y;\n\treturn min(border.x, border.y)*(1.0-uv.x*uv.x)*max(0.0, 1.0-1000.0*uv.y*uv.y);\n}\n\nfloat scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat v = 0.0;\n\tfor (int i = 0; i < layers; ++i) {\n\t\tseed = rand2(seed);\n\t\tv = max(v, scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));\n\t}\n\treturn v;\n}\n",
 		"inputs": [
 
 		],
@@ -23,6 +24,8 @@
 		"outputs": [
 			{
 				"f": "scratches($uv, int($layers), vec2($length, $width), $waviness, $angle, $randomness, vec2(float($seed), 0.0))",
+				"longdesc": "Shows white scratches on a black background",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -31,9 +34,11 @@
 				"control": "None",
 				"default": 0.25,
 				"label": "Length",
+				"longdesc": "The length of scratches (the shorter the scratches,the more they will be)",
 				"max": 1,
 				"min": 0.1,
 				"name": "length",
+				"shortdesc": "Length",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -41,9 +46,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Width",
+				"longdesc": "The width of scratches",
 				"max": 1,
 				"min": 0.1,
 				"name": "width",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -51,9 +58,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Layers",
+				"longdesc": "The number of scratches layers",
 				"max": 10,
 				"min": 1,
 				"name": "layers",
+				"shortdesc": "Layers",
 				"step": 1,
 				"type": "float"
 			},
@@ -61,9 +70,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Waviness",
+				"longdesc": "The waviness of scratches",
 				"max": 1,
 				"min": 0,
 				"name": "waviness",
+				"shortdesc": "Waviness",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -71,9 +82,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Angle",
+				"longdesc": "The average angle of the scratches (0 generates horizontal scratches)",
 				"max": 180,
 				"min": -180,
 				"name": "angle",
+				"shortdesc": "Angle",
 				"step": 1,
 				"type": "float"
 			},
@@ -81,9 +94,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Randomness",
+				"longdesc": "The randomness of the scratches angles",
 				"max": 1,
 				"min": 0,
 				"name": "randomness",
+				"shortdesc": "Randomness",
 				"step": 0.01,
 				"type": "float"
 			}
