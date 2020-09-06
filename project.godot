@@ -74,11 +74,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_remote.gd"
 }, {
-"base": "Viewport",
-"class": "MMGenRenderer",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/renderer.gd"
-}, {
 "base": "MMGenBase",
 "class": "MMGenShader",
 "language": "GDScript",
@@ -163,7 +158,6 @@ _global_script_class_icons={
 "MMGenIterateBuffer": "",
 "MMGenMaterial": "",
 "MMGenRemote": "",
-"MMGenRenderer": "",
 "MMGenShader": "",
 "MMGenSwitch": "",
 "MMGenText": "",
@@ -202,7 +196,7 @@ driver="Dummy"
 
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
-mm_renderer="*res://addons/material_maker/engine/renderer.tscn"
+mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
 
 [debug]
 
@@ -216,6 +210,7 @@ gdscript/warnings/unsafe_call_argument=true
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
+window/vsync/use_vsync=false
 
 [editor_plugins]
 

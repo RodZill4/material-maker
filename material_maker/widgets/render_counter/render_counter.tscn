@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/widgets/render_counter/render_counter.gd" type="Script" id=1]
+
+[node name="RenderCounter" type="HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 22.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FpsCounter" type="Label" parent="."]
+margin_bottom = 22.0
+size_flags_vertical = 1
+valign = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = 4.0
+margin_right = 154.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 1
+max_value = 1.0
+value = 1.0
+percent_visible = false
+
+[node name="Label" type="Label" parent="ProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

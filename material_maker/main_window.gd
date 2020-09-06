@@ -154,13 +154,15 @@ func _ready() -> void:
 	load_recents()
 
 	# Create menus
-	create_menus(MENU, self, $VBoxContainer/Menu)
+	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 	
 	new_material()
 	
 	do_load_materials(OS.get_cmdline_args())
 	
 	get_tree().connect("files_dropped", self, "on_files_dropped")
+	
+	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):

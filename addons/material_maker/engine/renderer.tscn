@@ -46,7 +46,3 @@ color = Color( 0, 0, 0, 1 )
 margin_right = 40.0
 margin_bottom = 14.0
 custom_fonts/font = SubResource( 4 )
-
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.1
-one_shot = true
