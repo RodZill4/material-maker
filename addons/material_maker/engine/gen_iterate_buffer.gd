@@ -45,6 +45,11 @@ func source_changed(input_port_index : int) -> void:
 	current_iteration = 0
 	call_deferred("update_shader", input_port_index)
 
+func all_sources_changed() -> void:
+	current_iteration = 0
+	call_deferred("update_shader", 0)
+	call_deferred("update_shader", 1)
+
 func follow_input(input_index : int) -> Array:
 	if input_index == 1:
 		return [ OutputPort.new(self, 0) ]

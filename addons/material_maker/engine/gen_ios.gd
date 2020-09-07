@@ -95,6 +95,15 @@ func source_changed(input_index : int) -> void:
 	else:
 		notify_output_change(input_index)
 
+func all_sources_changed() -> void:
+	if name == "gen_outputs":
+		if get_parent() != null:
+			for i in ports.size():
+				get_parent().notify_output_change(i)
+	else:
+		for i in ports.size():
+			notify_output_change(i)
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(output_index)
 	if source != null:

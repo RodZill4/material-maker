@@ -429,6 +429,10 @@ func do_load_materials(filenames) -> void:
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> void:
+	var file = File.new()
+	file.open(filename, File.READ)
+	filename = file.get_path_absolute()
+	file.close()
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:

@@ -46,6 +46,11 @@ func _ready() -> void:
 func _post_load() -> void:
 	pass
 
+func get_hier_name() -> String:
+	if get_parent().is_class("MMGenBase"):
+		return get_parent().get_hier_name()+"/"+name
+	return name
+
 func can_be_deleted() -> bool:
 	return true
 
@@ -161,7 +166,7 @@ func set_parameter(n : String, v) -> void:
 								parameter_changes[parameter_name] = v.points[i][f]
 					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 					return
-		source_changed(0)
+		all_sources_changed()
 
 func notify_output_change(output_index : int) -> void:
 	var targets = get_targets(output_index)
@@ -171,6 +176,12 @@ func notify_output_change(output_index : int) -> void:
 
 func source_changed(input_index : int) -> void:
 	emit_signal("parameter_changed", "__input_changed__", input_index)
+	for i in range(get_output_defs().size()):
+		notify_output_change(i)
+
+func all_sources_changed() -> void:
+	for input_index in get_input_defs().size():
+		emit_signal("parameter_changed", "__input_changed__", input_index)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
@@ -320,7 +331,6 @@ func deserialize(data : Dictionary) -> void:
 	else:
 		seed_locked = false
 	_post_load()
-
 
 
 static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:

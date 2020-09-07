@@ -30,10 +30,13 @@ func generate_shader(src_code) -> String:
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
-	var shader_code = src_code.defs
+	var shader_code = ""
+	if src_code.has("defs"):
+		shader_code = src_code.defs
 	shader_code += "\nvoid fragment() {\n"
 	shader_code += "vec2 uv = UV;\n"
-	shader_code += src_code.code
+	if src_code.has("code"):
+		shader_code += src_code.code
 	if src_code.has("rgba"):
 		shader_code += "COLOR = "+src_code.rgba+";\n"
 	else:

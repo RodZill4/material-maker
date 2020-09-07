@@ -88,6 +88,11 @@ func source_changed(input_index : int) -> void:
 			need_update[t.texture] = true
 	update_preview()
 
+func all_sources_changed() -> void:
+	for t in TEXTURE_LIST:
+		need_update[t.texture] = true
+	update_preview()
+
 func render_textures() -> void:
 	for t in TEXTURE_LIST:
 		var renderer

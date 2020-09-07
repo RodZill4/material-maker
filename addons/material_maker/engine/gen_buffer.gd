@@ -39,6 +39,9 @@ func get_output_defs() -> Array:
 func source_changed(_input_port_index : int) -> void:
 	call_deferred("update_shader")
 
+func all_sources_changed() -> void:
+	call_deferred("update_shader")
+
 func update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
@@ -49,7 +52,11 @@ func update_shader() -> void:
 			source = yield(source, "completed")
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
-	material.shader.code = mm_renderer.generate_shader(source)
+	var shader_code = mm_renderer.generate_shader(source)
+	if shader_code.find("$") != -1:
+		print("Incorrect shader generated for "+get_hier_name())
+		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
+	material.shader.code = shader_code
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])

@@ -6,7 +6,6 @@ func _ready() -> void:
 	pass
 
 func init_from_config(config : ConfigFile) -> void:
-	print(config_variable)
 	if config.has_section_key("config", config_variable):
 		pressed = config.get_value("config", config_variable)
 

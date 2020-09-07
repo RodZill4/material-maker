@@ -18,7 +18,7 @@ class GradientCursor:
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
-		draw_polyline(polygon, Color(0.0, 0.0, 0.0) if color.gray() > 0.5 else Color(1.0, 1.0, 1.0))
+		draw_polyline(polygon, Color(0.0, 0.0, 0.0) if color.v > 0.5 else Color(1.0, 1.0, 1.0))
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseButton:

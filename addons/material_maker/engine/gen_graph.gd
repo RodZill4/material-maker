@@ -87,6 +87,12 @@ func source_changed(input_index : int) -> void:
 	if has_node("gen_inputs"):
 		get_node("gen_inputs").source_changed(input_index)
 
+func all_sources_changed() -> void:
+	if has_node("gen_inputs"):
+		var inputs = get_node("gen_inputs")
+		for i in inputs.get_input_defs().size():
+			inputs.source_changed(i)
+
 func get_port_source(gen_name: String, input_index: int) -> OutputPort:
 	var rv = null
 	if gen_name == "gen_inputs":

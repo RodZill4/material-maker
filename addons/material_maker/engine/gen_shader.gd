@@ -76,7 +76,7 @@ func set_shader_model(data: Dictionary) -> void:
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
 			uses_seed = true
-	source_changed(0)
+	all_sources_changed()
 
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
@@ -85,13 +85,28 @@ func find_keyword_call(string, keyword):
 		return null
 	var parenthesis_level = 0
 	var parameter_begin = position+search_string.length()
-	for i in range(parameter_begin, string.length()):
+	var i = parameter_begin
+	while i < string.length():
 		if string[i] == '(':
 			parenthesis_level += 1
 		elif string[i] == ')':
 			if parenthesis_level == 0:
 				return string.substr(parameter_begin, i-parameter_begin)
 			parenthesis_level -= 1
+		i += 1
+		var next_op = string.find("(", i)
+		var next_cp = string.find(")", i)
+		if next_op >= 0:
+			if next_cp > next_op or next_cp == -1:
+				i = next_op
+			else:
+				i = next_cp
+		elif next_cp > 0:
+			i = next_cp
+		else:
+			print(i)
+			print(string)
+			break
 	return ""
 
 func replace_input_with_function_call(string : String, input : String) -> String:
@@ -255,6 +270,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					for t in result.textures.keys():
 						required_textures[t] = result.textures[t]
 			cont = changed and new_pass_required
+			string = replace_variables(string, variables)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
