@@ -4,6 +4,7 @@ onready var selected_slot : Control = null
 
 var images : Array = []
 var current_image = -1
+var empty_image
 
 var dragging = false
 var gradient = null
@@ -12,6 +13,7 @@ var gradient_length : float = 0.0
 func _ready():
 	$VBoxContainer/Image.material.set_shader_param("image_size", Vector2(1.0, 1.0))
 	select_slot($VBoxContainer/Colors/ColorSlot1)
+	change_image(0)
 
 func on_drop_image_file(file_name : String) -> void:
 	var t : ImageTexture = ImageTexture.new()
@@ -32,6 +34,8 @@ func get_color_under_cursor() -> Color:
 	return c
 
 func _on_Image_gui_input(event) -> void:
+	if current_image < 0:
+		return
 	var m : ShaderMaterial = $VBoxContainer/Image.material
 	var canvas_size : Vector2 = $VBoxContainer/Image.get_size()
 	var image_size : Vector2 = m.get_shader_param("image_size")
@@ -94,7 +98,6 @@ func select_slot(s) -> void:
 func _on_Image_resized():
 	$VBoxContainer/Image.material.set_shader_param("canvas_size", $VBoxContainer/Image.get_size())
 
-
 func change_image(offset = 0):
 	current_image += offset
 	if current_image < 0:
@@ -103,9 +106,15 @@ func change_image(offset = 0):
 		current_image = images.size()-1
 	$VBoxContainer/Image/HBoxContainer/Prev.disabled = current_image <= 0
 	$VBoxContainer/Image/HBoxContainer/Next.disabled = current_image >= images.size()-1
+	var m : ShaderMaterial = $VBoxContainer/Image.material
+	if current_image < 0:
+		m.set_shader_param("image", null)
+		m.set_shader_param("image_size", Vector2(0, 0))
+		m.set_shader_param("scale", 1)
+		m.set_shader_param("center", Vector2(0, 0))
+		return
 	var i = images[current_image]
 	var t = i.texture
-	var m : ShaderMaterial = $VBoxContainer/Image.material
 	m.set_shader_param("image", t)
 	m.set_shader_param("image_size", t.get_data().get_size())
 	m.set_shader_param("scale", i.scale)

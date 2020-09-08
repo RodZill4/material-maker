@@ -51,7 +51,7 @@ __meta__ = {
 [node name="Image" type="ColorRect" parent="VBoxContainer"]
 material = SubResource( 3 )
 margin_right = 248.0
-margin_bottom = 291.0
+margin_bottom = 299.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Image"]
@@ -78,9 +78,9 @@ margin_bottom = 20.0
 text = ">"
 
 [node name="Colors" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 290.0
+margin_top = 298.0
 margin_right = 248.0
-margin_bottom = 322.0
+margin_bottom = 330.0
 custom_constants/separation = -1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -111,7 +111,7 @@ margin_right = 248.0
 size_flags_horizontal = 3
 
 [node name="GradientSlot" parent="VBoxContainer" instance=ExtResource( 3 )]
-margin_top = 321.0
+margin_top = 329.0
 margin_right = 248.0
 margin_bottom = 353.0
 [connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
