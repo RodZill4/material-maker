@@ -29,9 +29,10 @@ func update_node() -> void:
 	show_close = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
 	var i : int = 0
-	for c in grid.get_children():
-		c.queue_free()
 	yield(get_tree(), "idle_frame")
+	for c in grid.get_children():
+		grid.remove_child(c)
+		c.free()
 	title = generator.get_type_name()
 	controls = {}
 	for p in generator.get_parameter_defs():
@@ -57,6 +58,8 @@ func update_node() -> void:
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var widget = generator.get_widget(variable)
+	if !widget.has("type"):
+		return
 	if widget.type == "config_control":
 		var configuration_count = widget.configurations.size()
 		var control = controls[variable]
@@ -128,6 +131,8 @@ func on_parameter_changed(p, v) -> void:
 
 func on_enter_widget(widget) -> void:
 	var w = generator.get_widget(widget.name)
+	if !w.has("linked_widgets"):
+		return
 	var new_links = []
 	for l in w.linked_widgets:
 		var graph_node = get_parent().get_node("node_"+l.node)
