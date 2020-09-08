@@ -5,12 +5,15 @@
 		"y": 0
 	},
 	"parameters": {
+		"inputs": 0,
 		"rotate": 0,
-		"scale": 0
+		"scale": 0,
+		"sx": 1,
+		"sy": 1
 	},
 	"shader_model": {
-		"code": "vec3 $(name_uv)_map = $map($uv);",
-		"global": "vec2 custom_uv_transform(vec2 uv, float rotate, float scale, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (seed.x * 2.0 - 1.0) * rotate;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv *= (seed.y-0.5)*2.0*scale+1.0;\n\tuv += vec2(0.5);\n\treturn uv;\n}\n",
+		"code": "vec3 $(name_uv)_map = $map($uv);\nfloat $(name_uv)_rnd =  float($seed)+$map($uv).z;\n",
+		"global": "vec2 get_from_tileset(float count, float seed, vec2 uv) {\n\treturn clamp((uv+floor(rand2(vec2(seed))*count))/count, vec2(0.0), vec2(1.0));\n}\n\nvec2 custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (seed.x * 2.0 - 1.0) * rnd_rotate;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv *= (seed.y-0.5)*2.0*rnd_scale+1.0;\n\tuv /= cst_scale;\n\tuv += vec2(0.5);\n\treturn uv;\n}\n",
 		"inputs": [
 			{
 				"default": "vec4(1.0)",
@@ -29,15 +32,55 @@
 		"name": "Custom UV",
 		"outputs": [
 			{
-				"rgba": "$in(custom_uv_transform($(name_uv)_map.xy, $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed))))",
+				"rgba": "$in(get_from_tileset($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))))",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"default": 0,
+				"label": "Inputs",
+				"name": "inputs",
+				"type": "enum",
+				"values": [
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "4",
+						"value": "2.0"
+					},
+					{
+						"name": "16",
+						"value": "4.0"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale X",
+				"max": 5,
+				"min": 0,
+				"name": "sx",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale Y",
+				"max": 5,
+				"min": 0,
+				"name": "sy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
 				"control": "None",
 				"default": 0,
-				"label": "Rotate",
+				"label": "Rnd Rotate",
 				"max": 180,
 				"min": 0,
 				"name": "rotate",
@@ -47,11 +90,11 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "Scale",
+				"label": "Rnd Scale",
 				"max": 1,
 				"min": 0,
 				"name": "scale",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			}
 		]
