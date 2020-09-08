@@ -13,12 +13,6 @@
 			"to_port": 1
 		},
 		{
-			"from": "decompose",
-			"from_port": 1,
-			"to": "transform2",
-			"to_port": 2
-		},
-		{
 			"from": "transform2",
 			"from_port": 0,
 			"to": "bricks_2",
@@ -197,6 +191,12 @@
 			"from_port": 0,
 			"to": "blend",
 			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "transform2",
+			"to_port": 2
 		}
 	],
 	"label": "Graph",
@@ -292,8 +292,8 @@
 		{
 			"name": "decompose",
 			"node_position": {
-				"x": -263.5,
-				"y": 79
+				"x": -279.5,
+				"y": 75
 			},
 			"parameters": {
 
@@ -459,8 +459,8 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -495.121857,
-						"y": -355.904968
+						"x": -285.121857,
+						"y": -326.904968
 					},
 					"parameters": {
 
@@ -471,6 +471,7 @@
 							"type": "f"
 						}
 					],
+					"seed_value": -16144,
 					"type": "ios"
 				},
 				{
@@ -734,8 +735,8 @@
 						"iterations": 2,
 						"noise": 1,
 						"persistence": 0.38,
-						"scale_x": 16,
-						"scale_y": 16
+						"scale_x": 8,
+						"scale_y": 8
 					},
 					"type": "fbm"
 				},
@@ -768,8 +769,8 @@
 				{
 					"name": "tiler",
 					"node_position": {
-						"x": 697.828369,
-						"y": 146.949707
+						"x": 705.828369,
+						"y": 147.949707
 					},
 					"parameters": {
 						"fixed_offset": 0,
@@ -836,7 +837,7 @@
 						"y": 164.699707
 					},
 					"parameters": {
-						"param0": 0.55
+						"param0": 0.63
 					},
 					"type": "remote",
 					"widgets": [
@@ -874,7 +875,7 @@
 					"parameters": {
 						"clamp": false,
 						"default_in1": 0,
-						"default_in2": 0.55,
+						"default_in2": 0.63,
 						"op": 2
 					},
 					"type": "math"
@@ -919,7 +920,7 @@
 				}
 			],
 			"parameters": {
-				"param0": 0.55
+				"param0": 0.63
 			},
 			"type": "graph"
 		},

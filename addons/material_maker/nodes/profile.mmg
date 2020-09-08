@@ -40,13 +40,18 @@
 		"code": "",
 		"global": "float draw_profile_fill(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*(1.0-uv.y-y)/w, 0.0, 1.0);\n}\n\nfloat draw_profile_curve(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*abs(1.0-uv.y-y)/w, 0.0, 1.0);\n}",
 		"inputs": [
-
+			{
+				"default": "dot($gradient($uv.x).xyz, vec3(1.0/3.0))",
+				"label": "2:",
+				"name": "in",
+				"type": "f"
+			}
 		],
 		"instance": "",
 		"name": "Profile",
 		"outputs": [
 			{
-				"f": "draw_profile_$style($uv, dot($gradient($uv.x).xyz, vec3(1.0/3.0)), (dot($gradient($uv.x+0.001).xyz, vec3(1.0/3.0))-dot($gradient($uv.x-0.001).xyz, vec3(1.0/3.0)))/0.002, max(0.0001, $width))",
+				"f": "draw_profile_$style($uv, $in($uv), (dot($gradient($uv.x+0.001).xyz, vec3(1.0/3.0))-dot($gradient($uv.x-0.001).xyz, vec3(1.0/3.0)))/0.002, max(0.0001, $width))",
 				"longdesc": "An image showing the profile defined by the gradient",
 				"shortdesc": "Output",
 				"type": "f"
