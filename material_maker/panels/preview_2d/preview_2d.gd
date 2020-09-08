@@ -7,10 +7,13 @@ var output : int = 0
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
+	$ContextMenu/Reference.clear()
 	for i in range(7):
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
+		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
 	$ContextMenu.add_submenu_item("Export", "Export")
+	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	if is_instance_valid(generator):
@@ -60,7 +63,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 func on_resized() -> void:
 	material.set_shader_param("size", rect_size)
 
-func _on_Export_id_pressed(id):
+func _on_Export_id_pressed(id : int):
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -77,8 +80,9 @@ func _on_Export_id_pressed(id):
 	dialog.popup_centered()
 
 func export_as_image_file(file_name : String, size : int) -> void:
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
+	var main_window = get_node("/root/MainWindow")
+	if main_window != null:
+		var config_cache = main_window.config_cache
 		config_cache.set_value("path", "save_preview", file_name.get_base_dir())
 	var previous_size = material.get_shader_param("size")
 	var previous_margin = material.get_shader_param("margin")
@@ -99,3 +103,30 @@ func export_as_image_file(file_name : String, size : int) -> void:
 	material.set_shader_param("margin", previous_margin)
 	material.set_shader_param("show_tiling", previous_show_tiling)
 	material.set_shader_param("export", false)
+
+func _on_Reference_id_pressed(id : int):
+	var main_window = get_node("/root/MainWindow")
+	assert(main_window != null)
+	var size : int = 64 << id
+	var previous_size = material.get_shader_param("size")
+	var previous_margin = material.get_shader_param("margin")
+	var previous_show_tiling = material.get_shader_param("show_tiling")
+	material.set_shader_param("size", Vector2(size, size))
+	material.set_shader_param("margin", 0.0)
+	material.set_shader_param("show_tiling", false)
+	material.set_shader_param("export", true)
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_material(self, material, size, false)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	var texture : ImageTexture = ImageTexture.new()
+	renderer.copy_to_texture(texture)
+	renderer.release(self)
+	material.set_shader_param("size", previous_size)
+	material.set_shader_param("margin", previous_margin)
+	material.set_shader_param("show_tiling", previous_show_tiling)
+	material.set_shader_param("export", false)
+	main_window.get_panel("Reference").add_reference(texture)
+

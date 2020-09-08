@@ -258,11 +258,20 @@ func set_new_generator(new_generator) -> void:
 	center_view()
 	set_need_save(false)
 
+func find_buffers(g) -> int:
+	if g is MMGenBuffer:
+		return 1
+	var rv = 0
+	for c in g.get_children():
+		rv += find_buffers(c)
+	return rv
+
 func load_file(filename) -> bool:
 	var new_generator = mm_loader.load_gen(filename)
 	if new_generator != null:
 		set_save_path(filename)
 		set_new_generator(new_generator)
+		#print("Material has %d buffers" % find_buffers(new_generator))
 		return true
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()

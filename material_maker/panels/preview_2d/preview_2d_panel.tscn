@@ -5,8 +5,6 @@
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" type="Script" id=4]
 
-
-
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
@@ -193,7 +191,11 @@ items = [ "Show tiling", null, 1, false, false, 0, 0, null, "", false ]
 [node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "256x256", null, 0, false, false, 0, 0, null, "", false, "512x512", null, 0, false, false, 1, 0, null, "", false, "1024x1024", null, 0, false, false, 2, 0, null, "", false, "2048x2048", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="Reference" type="PopupMenu" parent="ContextMenu" index="2"]
+margin_right = 91.0
+margin_bottom = 88.0
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]

@@ -1,6 +1,10 @@
 extends Panel
 
 onready var selected_slot : Control = null
+
+var images : Array = []
+var current_image = -1
+
 var dragging = false
 var gradient = null
 var gradient_length : float = 0.0
@@ -10,12 +14,13 @@ func _ready():
 	select_slot($VBoxContainer/Colors/ColorSlot1)
 
 func on_drop_image_file(file_name : String) -> void:
-	var m : ShaderMaterial = $VBoxContainer/Image.material
-	var t : ImageTexture = m.get_shader_param("image")
+	var t : ImageTexture = ImageTexture.new()
 	t.load(file_name)
-	m.set_shader_param("image_size", t.get_data().get_size())
-	m.set_shader_param("scale", 1.0)
-	m.set_shader_param("center", Vector2(0.5, 0.5))
+	add_reference(t)
+
+func add_reference(t : Texture) -> void:
+	images.insert(current_image+1, { texture=t, scale=1.0, center=Vector2(0.5, 0.5) })
+	change_image(1)
 
 func get_color_under_cursor() -> Color:
 	var image : Image = get_viewport().get_texture().get_data()
@@ -57,6 +62,8 @@ func _on_Image_gui_input(event) -> void:
 			if new_scale != scale:
 				m.set_shader_param("scale", new_scale)
 				m.set_shader_param("center", center+offset_from_center*(scale-new_scale)/multiplier)
+				images[current_image].scale = new_scale
+				images[current_image].center = center+offset_from_center*(scale-new_scale)/multiplier
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
@@ -76,6 +83,7 @@ func _on_Image_gui_input(event) -> void:
 		new_center.x = clamp(new_center.x, 0.0, 1.0)
 		new_center.y = clamp(new_center.y, 0.0, 1.0)
 		m.set_shader_param("center", new_center)
+		images[current_image].center = new_center
 
 func select_slot(s) -> void:
 	if selected_slot != null:
@@ -85,3 +93,20 @@ func select_slot(s) -> void:
 
 func _on_Image_resized():
 	$VBoxContainer/Image.material.set_shader_param("canvas_size", $VBoxContainer/Image.get_size())
+
+
+func change_image(offset = 0):
+	current_image += offset
+	if current_image < 0:
+		current_image = 0
+	if current_image >= images.size():
+		current_image = images.size()-1
+	$VBoxContainer/Image/HBoxContainer/Prev.disabled = current_image <= 0
+	$VBoxContainer/Image/HBoxContainer/Next.disabled = current_image >= images.size()-1
+	var i = images[current_image]
+	var t = i.texture
+	var m : ShaderMaterial = $VBoxContainer/Image.material
+	m.set_shader_param("image", t)
+	m.set_shader_param("image_size", t.get_data().get_size())
+	m.set_shader_param("scale", i.scale)
+	m.set_shader_param("center", i.center)

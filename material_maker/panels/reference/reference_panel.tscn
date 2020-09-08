@@ -54,6 +54,29 @@ margin_right = 248.0
 margin_bottom = 291.0
 size_flags_vertical = 3
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Image"]
+anchor_right = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Prev" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
+margin_right = 20.0
+margin_bottom = 20.0
+text = "<"
+
+[node name="Control" type="Control" parent="VBoxContainer/Image/HBoxContainer"]
+margin_left = 24.0
+margin_right = 224.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Next" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
+margin_left = 228.0
+margin_right = 248.0
+margin_bottom = 20.0
+text = ">"
+
 [node name="Colors" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 290.0
 margin_right = 248.0
@@ -74,16 +97,16 @@ size_flags_horizontal = 3
 
 [node name="ColorSlot3" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
 margin_left = 98.0
-margin_right = 148.0
+margin_right = 149.0
 size_flags_horizontal = 3
 
 [node name="ColorSlot4" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 147.0
-margin_right = 197.0
+margin_left = 148.0
+margin_right = 198.0
 size_flags_horizontal = 3
 
 [node name="ColorSlot5" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 196.0
+margin_left = 197.0
 margin_right = 248.0
 size_flags_horizontal = 3
 
@@ -93,6 +116,8 @@ margin_right = 248.0
 margin_bottom = 353.0
 [connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
 [connection signal="resized" from="VBoxContainer/Image" to="." method="_on_Image_resized"]
+[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Prev" to="." method="change_image" binds= [ -1 ]]
+[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Next" to="." method="change_image" binds= [ 1 ]]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot1" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot2" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot3" to="." method="select_slot"]

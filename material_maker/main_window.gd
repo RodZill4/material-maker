@@ -142,12 +142,12 @@ func _ready() -> void:
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
 	layout.load_panes(config_cache)
-	library = layout.get_panel("Library")
-	preview_2d = layout.get_panel("Preview2D")
-	histogram = layout.get_panel("Histogram")
-	preview_3d = layout.get_panel("Preview3D")
+	library = get_panel("Library")
+	preview_2d = get_panel("Preview2D")
+	histogram = get_panel("Histogram")
+	preview_3d = get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
-	hierarchy = layout.get_panel("Hierarchy")
+	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
 
 	# Load recent projects
@@ -172,6 +172,9 @@ func get_config(key : String):
 	if ! config_cache.has_section_key("config", key):
 		return DEFAULT_CONFIG[key]
 	return config_cache.get_value("config", key)
+
+func get_panel(panel_name : String) -> Control:
+	return layout.get_panel(panel_name)
 
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
