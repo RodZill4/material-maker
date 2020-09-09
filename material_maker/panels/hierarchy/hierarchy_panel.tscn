@@ -1,28 +1,77 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/panels/hierarchy/hierarchy_panel.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
 
-[node name="Hierarchy" type="Tree"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 200, 150 )
-allow_reselect = true
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 32, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 16, 48, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 32, 16, 16 )
+
+[node name="Hierarchy" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-preview = 2
 
-[node name="ContextMenu" type="PopupMenu" parent="."]
-margin_right = 20.0
-margin_bottom = 20.0
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 200.0
+margin_bottom = 22.0
+
+[node name="Expand" type="Button" parent="HBoxContainer"]
+margin_right = 28.0
+margin_bottom = 22.0
+hint_tooltip = "Expand all"
+icon = SubResource( 1 )
+
+[node name="Collapse" type="Button" parent="HBoxContainer"]
+margin_left = 32.0
+margin_right = 60.0
+margin_bottom = 22.0
+hint_tooltip = "Collapse all"
+icon = SubResource( 2 )
+
+[node name="Space" type="Control" parent="HBoxContainer"]
+margin_left = 64.0
+margin_right = 74.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 10, 0 )
+
+[node name="PreviewMenu" type="MenuButton" parent="HBoxContainer"]
+margin_left = 78.0
+margin_right = 106.0
+margin_bottom = 22.0
+icon = SubResource( 3 )
 items = [ "No preview", null, 0, false, false, 0, 0, null, "", false, "1 preview", null, 0, false, false, 1, 0, null, "", false, "2 previews", null, 0, false, false, 2, 0, null, "", false, "3 previews", null, 0, false, false, 3, 0, null, "", false ]
+
+[node name="Tree" type="Tree" parent="."]
+margin_top = 26.0
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 200, 150 )
+size_flags_vertical = 3
+allow_reselect = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Delay" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
-[connection signal="gui_input" from="." to="." method="_on_Hierarchy_gui_input"]
-[connection signal="item_activated" from="." to="." method="_on_Hierarchy_item_double_clicked"]
-[connection signal="item_double_clicked" from="." to="." method="_on_Hierarchy_item_double_clicked"]
-[connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
+[connection signal="pressed" from="HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
+[connection signal="pressed" from="HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
+[connection signal="item_activated" from="Tree" to="." method="_on_Hierarchy_item_double_clicked"]
+[connection signal="item_double_clicked" from="Tree" to="." method="_on_Hierarchy_item_double_clicked"]
 [connection signal="timeout" from="Delay" to="." method="_on_Delay_timeout"]

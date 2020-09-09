@@ -1,6 +1,8 @@
-extends Tree
+extends VBoxContainer
 
 export(int, 0, 3) var preview : int = 0
+
+onready var tree = $Tree
 
 var config_cache : ConfigFile
 
@@ -22,6 +24,8 @@ func _ready() -> void:
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
 	default_texture = ImageTexture.new()
 	default_texture.create_from_image(default_image)
+	
+	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed", self, "_on_PreviewMenu_id_pressed")
 
 func update_from_graph_edit(graph_edit) -> void:
 	$Delay.stop()
@@ -31,12 +35,12 @@ func update_from_graph_edit(graph_edit) -> void:
 		if is_instance_valid(g):
 			g.disconnect("parameter_changed", self, "on_gen_parameter_changed")
 	item_from_gen = {}
-	set_column_expand(0, true)
-	columns = preview+1
-	for i in range(1, columns):
-		set_column_expand(i, false)
-		set_column_min_width(i, 28)
-	clear()
+	tree.set_column_expand(0, true)
+	tree.columns = preview+1
+	for i in range(1, tree.columns):
+		tree.set_column_expand(i, false)
+		tree.set_column_min_width(i, 28)
+	tree.clear()
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
 		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
@@ -53,7 +57,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	var file_name = "PTex"
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
-	fill_item(create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
+	fill_item(tree.create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
 
 func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
@@ -90,10 +94,10 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 		if c is MMGenGraph:
 			if c.is_template():
 				continue
-			fill_item(create_item(item), c, selected)
+			fill_item(tree.create_item(item), c, selected)
 
 func _on_Hierarchy_item_double_clicked() -> void:
-	emit_signal("group_selected", get_selected().get_metadata(0))
+	emit_signal("group_selected", tree.get_selected().get_metadata(0))
 
 func on_view_updated(generator) -> void:
 	if item_from_gen.has(current_generator):
@@ -124,12 +128,21 @@ func _on_Delay_timeout() -> void:
 		for index in pending_updates[generator]:
 			set_icon(item, generator, index)
 
-func _on_Hierarchy_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
-		$ContextMenu.rect_position = get_global_mouse_position()
-		$ContextMenu.popup()
 
-func _on_ContextMenu_id_pressed(id):
+func _on_PreviewMenu_id_pressed(id):
 	preview = id
 	config_cache.set_value("hierarchy", "previews", preview)
 	update_from_graph_edit(current_graph_edit)
+
+
+func expand_all(item : TreeItem, expand : bool) -> void:
+	item = item.get_children()
+	while item != null:
+		item.collapsed = !expand
+		item = item.get_next()
+
+func _on_Expand_pressed():
+	expand_all(tree.get_root(), true)
+
+func _on_Collapse_pressed():
+	expand_all(tree.get_root(), false)
