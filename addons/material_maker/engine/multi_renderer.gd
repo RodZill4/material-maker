@@ -9,16 +9,16 @@ var render_queue_size = 0
 signal free_renderer
 signal render_queue(count)
 
-func _ready():
+func _ready() -> void:
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	common_shader = file.get_as_text()
-	for i in 4:
+	for i in 8:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
 		add_child(renderer)
 		free_renderers.append(renderer)
 
-func generate_shader(src_code) -> String:
+func generate_shader(src_code : Dictionary) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"

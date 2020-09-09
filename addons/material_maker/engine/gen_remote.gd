@@ -11,7 +11,7 @@ var widgets = []
 func _enter_tree():
 	fix()
 	for p in parameters.keys():
-		set_parameter(p, MMType.serialize_value(parameters[p]))
+		set_parameter(p, MMType.deserialize_value(MMType.serialize_value(parameters[p])))
 
 func can_be_deleted() -> bool:
 	return name != "gen_parameters"
@@ -131,7 +131,7 @@ func set_parameter(p : String, v) -> void:
 						for w in widget.configurations[configurations[v]]:
 							var node = parent.get_node(w.node)
 							if node != null:
-								node.set_parameter(w.widget, w.value)
+								node.set_parameter(w.widget, MMType.deserialize_value(w.value))
 					else:
 						# incorrect configuration index
 						print("error: incorrect config control parameter value")

@@ -78,35 +78,36 @@ func set_shader_model(data: Dictionary) -> void:
 			uses_seed = true
 	all_sources_changed()
 
+func find_matching_parenthesis(string : String, i : int) -> int:
+	var parenthesis_level = 0
+	var length : int = string.length()
+	while i < length:
+		var c = string[i]
+		if c == '(':
+			parenthesis_level += 1
+		elif c == ')':
+			parenthesis_level -= 1
+			if parenthesis_level == 0:
+				return i
+		i += 1
+		var next_op = string.find("(", i)
+		var next_cp = string.find(")", i)
+		var max_p = max(next_op, next_cp)
+		if max_p < 0:
+			return length
+		var min_p = min(next_op, next_cp)
+		i = max_p if min_p < 0 else min_p
+	return i
+
 func find_keyword_call(string, keyword):
 	var search_string = "$%s(" % keyword
 	var position = string.find(search_string)
 	if position == -1:
 		return null
-	var parenthesis_level = 0
 	var parameter_begin = position+search_string.length()
-	var i = parameter_begin
-	while i < string.length():
-		if string[i] == '(':
-			parenthesis_level += 1
-		elif string[i] == ')':
-			if parenthesis_level == 0:
-				return string.substr(parameter_begin, i-parameter_begin)
-			parenthesis_level -= 1
-		i += 1
-		var next_op = string.find("(", i)
-		var next_cp = string.find(")", i)
-		if next_op >= 0:
-			if next_cp > next_op or next_cp == -1:
-				i = next_op
-			else:
-				i = next_cp
-		elif next_cp > 0:
-			i = next_cp
-		else:
-			print(i)
-			print(string)
-			break
+	var end = find_matching_parenthesis(string, parameter_begin-1)
+	if end < string.length():
+		return string.substr(parameter_begin, end-parameter_begin)
 	return ""
 
 func replace_input_with_function_call(string : String, input : String) -> String:
@@ -117,6 +118,7 @@ func replace_input_with_function_call(string : String, input : String) -> String
 			break
 		elif uv == "":
 			print("syntax error")
+			print(string)
 			break
 		string = string.replace("$%s(%s)" % [ input, uv ], "%s_input_%s(%s)" % [ genname, input, uv ])
 	return string
@@ -133,6 +135,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 			break
 		elif uv == "":
 			print("syntax error")
+			print(string)
 			break
 		elif uv.find("$") != -1:
 			new_pass_required = true
@@ -237,7 +240,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if value_string != null:
 				variables[p.name] = value_string
 	if uv != "":
-		variables["uv"] = "("+uv+")"
+		if uv[0] == "(" && find_matching_parenthesis(uv, 0) == uv.length()-1:
+			variables["uv"] = uv
+		else:
+			variables["uv"] = "("+uv+")"
 	variables["time"] = "elapsed_time"
 	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:

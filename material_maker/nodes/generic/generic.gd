@@ -108,7 +108,7 @@ func _on_file_changed(new_file, variable : String) -> void:
 
 func _on_gradient_changed(new_gradient, variable : String) -> void:
 	ignore_parameter_change = variable
-	generator.set_parameter(variable, MMType.serialize_value(new_gradient))
+	generator.set_parameter(variable, new_gradient.duplicate())
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 

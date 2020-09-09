@@ -1,11 +1,18 @@
 extends Object
 class_name MMGradient
 
+class Point:
+	var v : float
+	var c : Color
+	func _init(pos : float, color : Color):
+		v = pos
+		c = color
+
 class CustomSorter:
-	static func compare(a, b) -> bool:
+	static func compare(a : Point, b : Point) -> bool:
 		return a.v < b.v
 
-var points = [ { v=0.0, c=Color(0.0, 0.0, 0.0, 0.0) }, { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
+var points = [ Point.new(0.0, Color(0.0, 0.0, 0.0, 0.0)), { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
 var interpolation = 1
 var sorted = true
 
@@ -26,8 +33,8 @@ func clear() -> void:
 	points.clear()
 	sorted = true
 
-func add_point(v, c) -> void:
-	points.append({ v=v, c=c })
+func add_point(v : float, c : Color) -> void:
+	points.append(Point.new(v, c))
 	sorted = false
 
 func get_point_count() -> int:
