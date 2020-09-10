@@ -27,6 +27,7 @@ func duplicate() -> Object:
 	copy.clear()
 	for p in points:
 		copy.add_point(p.v, p.c)
+	copy.interpolation = interpolation
 	return copy
 
 func clear() -> void:
