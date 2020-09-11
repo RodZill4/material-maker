@@ -1,0 +1,89 @@
+{
+	"name": "pixelize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"c": 8,
+		"d": 1,
+		"x": 64,
+		"y": 64
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_uv = floor(($uv*vec2($x, $y)+vec2(0.5)));\nvec3 $(name_uv)_dither = fract(vec3(dot(vec2(171.0, 231.0), $(name_uv)_uv))/vec3(103.0, 71.0, 97.0));\n",
+		"description": "Creates a pixelated image from its input, and also quantifies the colors with optional dithering.",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The image to be pixelated",
+				"name": "i",
+				"shortdesc": "Input",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "Pixelize",
+		"outputs": [
+			{
+				"longdesc": "A pixelated version of the input image",
+				"rgb": "floor($i($(name_uv)_uv/vec2($x, $y))*$c+$d*($(name_uv)_dither-vec3(0.5)))/$c",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Columns:",
+				"longdesc": "Number of pixel columns of the output",
+				"max": 256,
+				"min": 1,
+				"name": "x",
+				"shortdesc": "Columns",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Rows:",
+				"longdesc": "Number of pixel rows of the output",
+				"max": 256,
+				"min": 1,
+				"name": "y",
+				"shortdesc": "Rows",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Levels:",
+				"longdesc": "Number of color levels for each channel",
+				"max": 32,
+				"min": 2,
+				"name": "c",
+				"shortdesc": "Levels",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Dither:",
+				"longdesc": "Amount of dithering in the output image",
+				"max": 1,
+				"min": 0,
+				"name": "d",
+				"shortdesc": "Dithering",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
