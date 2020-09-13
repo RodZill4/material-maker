@@ -162,7 +162,7 @@ func get_gradient_color(x) -> Color:
 
 func update_shader() -> void:
 	var shader
-	shader  = "shader_type canvas_item;\n"
+	shader = "shader_type canvas_item;\n"
 	var params = value.get_shader_params("")
 	for sp in params.keys():
 		shader += "uniform float "+sp+" = "+str(params[sp])+";\n"

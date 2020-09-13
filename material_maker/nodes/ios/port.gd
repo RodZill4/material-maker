@@ -9,6 +9,11 @@ func _ready() -> void:
 func set_model_data(data, remaining_group_size = 0) -> int:
 	$Name.set_text(data.name if data.has("name") else "")
 	$Type.select(mm_io_types.type_names.find(data.type))
+	if data.has("short_description"):
+		$Description.short_description = data.short_description
+	if data.has("long_description"):
+		$Description.long_description = data.long_description
+	$Description.update_tooltip()
 	if data.has("group_size") and data.group_size > 1:
 		$PortGroupButton.set_state(1)
 		return data.group_size-1
@@ -33,6 +38,9 @@ func _on_PortGroupButton_group_size_changed(s):
 	get_parent().generator.set_port_group_size(get_index(), s)
 	get_parent().update()
 
+func _on_Description_descriptions_changed(short_description, long_description):
+	get_parent().generator.set_port_descriptions(get_index(), short_description, long_description)
+
 func _on_Delete_pressed() -> void:
 	get_parent().generator.delete_port(get_index())
 
@@ -41,3 +49,4 @@ func _on_Up_pressed() -> void:
 
 func _on_Down_pressed() -> void:
 	get_parent().generator.swap_ports(get_index(), get_index()+1)
+

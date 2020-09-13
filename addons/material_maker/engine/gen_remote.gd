@@ -81,9 +81,10 @@ func get_type_name() -> String:
 func get_parameter_defs() -> Array:
 	var rv = []
 	for w in widgets:
+		var p : Dictionary
 		match w.type:
 			"config_control":
-				var p : Dictionary = { name=w.name, label=w.label, type="enum" }
+				p = { name=w.name, label=w.label, type="enum" }
 				var configurations = w.configurations.keys()
 				configurations.sort()
 				if configurations == [ "False", "True" ]:
@@ -92,10 +93,8 @@ func get_parameter_defs() -> Array:
 					p.values=[]
 					for c in configurations:
 						p.values.push_back({ name=c, value=c })
-				rv.append(p)
 			"linked_control":
 				var linked = w.linked_widgets[0]
-				var p : Dictionary
 				if linked != null && is_inside_tree():
 					var gen = get_parent().get_node(linked.node)
 					if gen != null:
@@ -106,9 +105,14 @@ func get_parameter_defs() -> Array:
 								break
 				p.name = w.name
 				p.label = w.label
-				rv.append(p)
 			_:
 				print("Unsupported widget of type "+str(w.type))
+				break
+		if w.has("shortdesc"):
+			p.shortdesc = w.shortdesc
+		if w.has("longdesc"):
+			p.longdesc = w.longdesc
+		rv.append(p)
 	return rv
 
 func set_parameter(p : String, v) -> void:

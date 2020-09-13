@@ -5,11 +5,16 @@ var links = {}
 
 onready var grid = $Controls
 
-func add_control(text, control) -> void:
+func add_control(text, control, short_description = "", long_description = "") -> void:
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
 	label.connect("label_changed", self, "on_label_changed", [ control.name ])
 	grid.add_child(label)
+	var description = preload("res://material_maker/widgets/desc_button/desc_button.tscn").instance()
+	description.short_description = short_description
+	description.long_description = long_description
+	description.connect("descriptions_changed", self, "_on_descriptions_changed", [ control.name ])
+	grid.add_child(description)
 	grid.add_child(control)
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
 	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
@@ -40,7 +45,9 @@ func update_node() -> void:
 		if control != null:
 			control.name = p.name
 			controls[control.name] = control
-			add_control(generator.get_widget(p.name).label, control)
+			var widget = generator.get_widget(p.name)
+			print(widget)
+			add_control(generator.get_widget(p.name).label, control, widget.shortdesc if widget.has("shortdesc") else "", widget.longdesc if widget.has("longdesc") else "")
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
 				if control.get_item_count() > 0 and generator.parameters.has(p.name):
@@ -95,6 +102,20 @@ func do_add_configuration(config_name : String, param_name : String) -> void:
 
 func on_label_changed(new_label, param_name) -> void:
 	generator.set_label(param_name, new_label)
+
+func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
+	var widget = generator.get_widget(param_name)
+	if widget != null:
+		print(widget)
+		if shortdesc == "":
+			widget.erase("shortdesc")
+		else:
+			widget.shortdesc = shortdesc
+		if longdesc == "":
+			widget.erase("longdesc")
+		else:
+			widget.longdesc = longdesc
+		print(widget)
 
 func _on_AddLink_pressed() -> void:
 	var control = generator.create_linked_control("Unnamed")

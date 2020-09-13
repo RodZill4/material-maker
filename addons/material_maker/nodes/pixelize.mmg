@@ -12,7 +12,7 @@
 	},
 	"shader_model": {
 		"code": "vec2 $(name_uv)_uv = floor(($uv*vec2($x, $y)+vec2(0.5)));\nvec3 $(name_uv)_dither = fract(vec3(dot(vec2(171.0, 231.0), $(name_uv)_uv))/vec3(103.0, 71.0, 97.0));\n",
-		"description": "Creates a pixelated image from its input, and also quantifies the colors with optional dithering.",
+		"longdesc": "Creates a pixelated image from its input, and also quantifies the colors with optional dithering.",
 		"global": "",
 		"inputs": [
 			{

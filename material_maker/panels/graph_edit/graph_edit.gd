@@ -177,6 +177,9 @@ func update_view(g) -> void:
 	update_graph(generator.get_children(), generator.connections)
 	subgraph_ui.visible = generator != top_generator
 	subgraph_ui.get_node("Label").text = generator.label
+	$GraphUI/SubGraphUI/Description.short_description = generator.shortdesc
+	$GraphUI/SubGraphUI/Description.long_description = generator.longdesc
+	$GraphUI/SubGraphUI/Description.update_tooltip()
 	center_view()
 	if generator.get_parent() is MMGenGraph:
 		button_transmits_seed.visible = true
@@ -491,3 +494,8 @@ func check_last_selected() -> void:
 
 func on_drop_image_file(file_name : String) -> void:
 	do_paste({type="image", image=file_name})
+
+
+func _on_Description_descriptions_changed(short_description, long_description):
+	generator.shortdesc = short_description
+	generator.longdesc = long_description

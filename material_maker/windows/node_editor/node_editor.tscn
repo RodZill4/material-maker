@@ -31,8 +31,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Tabs" type="TabContainer" parent="Sizer"]
-margin_right = 896.0
-margin_bottom = 374.0
+margin_right = 950.0
+margin_bottom = 426.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
@@ -46,7 +46,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Name" type="HBoxContainer" parent="Sizer/Tabs/General"]
-margin_right = 888.0
+margin_right = 942.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -58,30 +58,32 @@ text = "Name:"
 
 [node name="Name" type="LineEdit" parent="Sizer/Tabs/General/Name"]
 margin_left = 46.0
-margin_right = 888.0
+margin_right = 246.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 200, 0 )
 
 [node name="Description" parent="Sizer/Tabs/General/Name" instance=ExtResource( 4 )]
+margin_left = 250.0
+margin_right = 278.0
+margin_bottom = 24.0
 description_type = "Node"
-has_short_description = false
 
 [node name="LabelParameters" type="Label" parent="Sizer/Tabs/General"]
 margin_top = 28.0
-margin_right = 888.0
+margin_right = 942.0
 margin_bottom = 42.0
 text = "Parameters:"
 
 [node name="Parameters" type="ScrollContainer" parent="Sizer/Tabs/General"]
 margin_top = 46.0
-margin_right = 888.0
-margin_bottom = 181.0
+margin_right = 942.0
+margin_bottom = 207.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Parameters"]
-margin_right = 888.0
+margin_right = 942.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 script = ExtResource( 2 )
@@ -94,21 +96,21 @@ icon = SubResource( 1 )
 flat = true
 
 [node name="LabelInputs" type="Label" parent="Sizer/Tabs/General"]
-margin_top = 185.0
-margin_right = 888.0
-margin_bottom = 199.0
+margin_top = 211.0
+margin_right = 942.0
+margin_bottom = 225.0
 text = "Inputs:"
 
 [node name="Inputs" type="ScrollContainer" parent="Sizer/Tabs/General"]
-margin_top = 203.0
-margin_right = 888.0
-margin_bottom = 338.0
+margin_top = 229.0
+margin_right = 942.0
+margin_bottom = 390.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Inputs"]
-margin_right = 888.0
+margin_right = 942.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 script = ExtResource( 2 )
@@ -220,10 +222,10 @@ syntax_highlighting = true
 show_line_numbers = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
-margin_left = 339.0
-margin_top = 378.0
-margin_right = 557.0
-margin_bottom = 398.0
+margin_left = 366.0
+margin_top = 430.0
+margin_right = 584.0
+margin_bottom = 450.0
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="Sizer/HBoxContainer"]

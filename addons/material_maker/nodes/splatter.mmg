@@ -15,7 +15,7 @@
 	},
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), vec2(float($seed)));",
-		"description": "A node that spreads several occurences of an input image randomly.",
+		"longdesc": "A node that spreads several occurences of an input image randomly.",
 		"global": "",
 		"inputs": [
 			{

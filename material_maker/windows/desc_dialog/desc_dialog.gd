@@ -1,18 +1,10 @@
 extends WindowDialog
 
-
-export var has_short_description : bool = true
-
-
 signal close(apply)
-
 
 func edit_descriptions(type : String, short : String, long : String) -> Array:
 	window_title = type+" Description"
-	if has_short_description:
-		$VBoxContainer/HBoxContainer/ShortDesc.text = short
-	else:
-		$VBoxContainer/HBoxContainer.visible = false
+	$VBoxContainer/HBoxContainer/ShortDesc.text = short
 	$VBoxContainer/LongDesc.text = long
 	popup_centered()
 	if yield(self, "close"):

@@ -23,9 +23,12 @@ func has_randomness() -> bool:
 	return uses_seed
 
 func get_description() -> String:
-	if shader_model.has("description"):
-		return shader_model.description
-	return ""
+	var desc_list : PoolStringArray = PoolStringArray()
+	if shader_model.has("shortdesc"):
+		desc_list.push_back(shader_model.shortdesc)
+	if shader_model.has("longdesc"):
+		desc_list.push_back(shader_model.longdesc)
+	return desc_list.join("\n")
 
 func get_type() -> String:
 	return "shader"

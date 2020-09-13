@@ -1,3 +1,4 @@
+tool
 extends Node
 
 var common_shader : String

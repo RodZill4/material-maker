@@ -5,6 +5,11 @@ signal ok
 func set_value(v) -> void:
 	$VBoxContainer/LineEdit.text = v
 
+
+func popup_centered(size : Vector2 = Vector2(0, 0)) -> void:
+	.popup_centered(size)
+	$VBoxContainer/LineEdit.grab_focus()
+
 func set_texts(title, label) -> void:
 	window_title = title
 	$VBoxContainer/Label.text = label

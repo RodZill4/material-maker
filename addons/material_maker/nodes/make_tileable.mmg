@@ -9,7 +9,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"description": "Creates a tileable version of its input image by moving different parts around to hide seams.",
+		"longdesc": "Creates a tileable version of its input image by moving different parts around to hide seams.",
 		"global": "",
 		"inputs": [
 			{

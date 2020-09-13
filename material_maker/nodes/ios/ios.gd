@@ -28,23 +28,14 @@ func update_node() -> void:
 		color = mm_io_types.types[p.type].color
 		var slot_type = mm_io_types.types[p.type].slot_type
 		set_slot(get_child_count(), generator.name != "gen_inputs", slot_type, color, generator.name != "gen_outputs", slot_type, color)
-		var port : Control
-		if generator.is_editable():
-			port = preload("res://material_maker/nodes/ios/port.tscn").instance()
-			add_child(port)
-			if group_size > 1 && i == io_defs.size()-1:
-				group_size = 1
-			group_size = port.set_model_data(p, group_size)
-		else:
-			port = Label.new()
-			add_child(port)
-			port.text = p.name
-	if generator.is_editable():
-		PortGroupButton.update_groups(self)
-		
-		var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instance()
-		add_child(add_button)
-		add_button.connect("pressed", generator, "add_port")
-		set_slot(get_child_count()-1, false, 0, color, false, 0, color)
-		update_up_down_buttons()
+		var port : Control = preload("res://material_maker/nodes/ios/port.tscn").instance()
+		add_child(port)
+		if group_size > 1 && i == io_defs.size()-1:
+			group_size = 1
+		group_size = port.set_model_data(p, group_size)
 	PortGroupButton.update_groups(self)
+	var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instance()
+	add_child(add_button)
+	add_button.connect("pressed", generator, "add_port")
+	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
+	update_up_down_buttons()

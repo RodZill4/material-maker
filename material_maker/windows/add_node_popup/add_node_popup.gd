@@ -96,7 +96,7 @@ func update_list(filter : String = "") -> void:
 							break
 					if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != quick_connect:
 						continue
-				elif ref_obj.type == "comment" or ref_obj.type == "image" or ref_obj.type == "remote":
+				elif ref_obj.type == "comment" or ref_obj.type == "image" or ref_obj.type == "remote" or ref_obj.type == "text":
 					continue
 				elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
 					continue

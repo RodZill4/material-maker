@@ -3,6 +3,8 @@ extends MMGenBase
 class_name MMGenGraph
 
 var label : String = "Graph"
+var shortdesc = ""
+var longdesc = ""
 var connections = []
 
 var editable : bool = false
@@ -61,6 +63,16 @@ func toggle_editable() -> bool:
 
 func is_editable() -> bool:
 	return editable
+
+func get_description() -> String:
+	var desc : String
+	if shortdesc == "":
+		desc = longdesc
+	elif longdesc == "":
+		desc = shortdesc
+	else:
+		desc = shortdesc+"\n"+longdesc
+	return desc
 
 
 func get_parameter_defs() -> Array:
@@ -370,6 +382,8 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.label = label
+	data.shortdesc = shortdesc
+	data.longdesc = longdesc
 	data.nodes = []
 	for c in get_children():
 		data.nodes.append(c.serialize())
@@ -379,5 +393,7 @@ func _serialize(data: Dictionary) -> Dictionary:
 func _deserialize(data : Dictionary) -> void:
 	if data.has("label"):
 		label = data.label
+	shortdesc = data.shortdesc if data.has("shortdesc") else ""
+	longdesc = data.longdesc if data.has("longdesc") else ""
 	var nodes = data.nodes if data.has("nodes") else []
 	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])
