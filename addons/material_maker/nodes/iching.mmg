@@ -15,10 +15,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "This node generates a grid of random I Ching hexagrams.",
 		"name": "I Ching",
 		"outputs": [
 			{
 				"f": "IChing(vec2($columns, $rows)*$uv, float($seed))",
+				"longdesc": "A greyscale image showing random I Ching hexagrams.",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -27,9 +30,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Size X",
+				"longdesc": "The number of columns of the grid",
 				"max": 32,
 				"min": 2,
 				"name": "columns",
+				"shortdesc": "Size.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -37,13 +42,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Size Y",
+				"longdesc": "The number of rows of the grid",
 				"max": 32,
 				"min": 2,
 				"name": "rows",
+				"shortdesc": "Size.y",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "I Ching hexagrams generator"
 	},
 	"type": "shader"
 }

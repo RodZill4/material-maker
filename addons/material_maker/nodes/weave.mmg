@@ -7,7 +7,7 @@
 	"parameters": {
 		"columns": 4,
 		"rows": 4,
-		"width": 1
+		"width": 0.9
 	},
 	"shader_model": {
 		"code": "",
@@ -16,15 +16,20 @@
 			{
 				"default": "1.0",
 				"label": "3:",
+				"longdesc": "An input map that affects the width parameter",
 				"name": "width_map",
+				"shortdesc": "Width map",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "Generates a simple weave pattern",
 		"name": "Weave",
 		"outputs": [
 			{
 				"f": "weave($uv, vec2($columns, $rows), $width*$width_map($uv))",
+				"longdesc": "Shows the generated greyscale weave pattern.",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -33,9 +38,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Size X",
+				"longdesc": "The number of columns of the pattern",
 				"max": 32,
 				"min": 2,
 				"name": "columns",
+				"shortdesc": "Size.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -43,9 +50,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Size Y",
+				"longdesc": "The number of rows of the pattern",
 				"max": 32,
 				"min": 2,
 				"name": "rows",
+				"shortdesc": "Size.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -53,13 +62,16 @@
 				"control": "None",
 				"default": 0.8,
 				"label": "Width",
+				"longdesc": "The width of each row/column",
 				"max": 1,
 				"min": 0,
 				"name": "width",
+				"shortdesc": "Width",
 				"step": 0.05,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Weave pattern"
 	},
 	"type": "shader"
 }

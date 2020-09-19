@@ -15,18 +15,25 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that draws a greyscale hexagonal tiles pattern",
 		"name": "Beehive",
 		"outputs": [
 			{
 				"f": "1.0-2.0*beehive_dist($(name_uv)_center.xy)",
+				"longdesc": "Shows the greyscale pattern",
+				"shortdesc": "Output",
 				"type": "f"
 			},
 			{
+				"longdesc": "Shows a random color for each hexagonal tile",
 				"rgb": "rand3(fract($(name_uv)_center.zw/vec2($sx, $sy))+vec2(float($seed)))",
+				"shortdesc": "Random color",
 				"type": "rgb"
 			},
 			{
+				"longdesc": "Shows an UV map to be connected to the UV map port of the Custom UV node",
 				"rgb": "vec3(vec2(0.5)+$(name_uv)_center.xy, rand(fract($(name_uv)_center.zw/vec2($sx, $sy))+vec2(float($seed))))",
+				"shortdesc": "UV map",
 				"type": "rgb"
 			}
 		],
@@ -35,9 +42,11 @@
 				"control": "None",
 				"default": 2,
 				"label": "Size X",
+				"longdesc": "The number of columns of the pattern",
 				"max": 64,
 				"min": 1,
 				"name": "sx",
+				"shortdesc": "Size.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -45,13 +54,16 @@
 				"control": "None",
 				"default": 2,
 				"label": "Size Y",
+				"longdesc": "The number of rows of the pattern",
 				"max": 64,
 				"min": 1,
 				"name": "sy",
+				"shortdesc": "Size.y",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Hexagonal tiles pattern"
 	},
 	"type": "shader"
 }

@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"amplitude": 0.5,
-		"frequency": 2,
+		"amplitude": 0.25,
+		"frequency": 4,
 		"phase": 0
 	},
 	"shader_model": {
@@ -16,10 +16,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that draws a greyscale sine wave pattern",
 		"name": "Sine Wave",
 		"outputs": [
 			{
 				"f": "1.0-abs(2.0*($uv.y-0.5)-$amplitude*sin(($frequency*$uv.x+$phase)*6.28318530718))",
+				"longdesc": "Shows a greyscale image of a sine wave",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -28,9 +31,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Amplitude",
+				"longdesc": "The amplitude of the sine wave function",
 				"max": 1,
 				"min": 0,
 				"name": "amplitude",
+				"shortdesc": "Amplitude",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -38,9 +43,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Frequency",
+				"longdesc": "The frequency of the sine wave function (i.e. the number of oscillations shown in the generated image).",
 				"max": 16,
 				"min": 0,
 				"name": "frequency",
+				"shortdesc": "Frequency",
 				"step": 1,
 				"type": "float"
 			},
@@ -48,13 +55,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Phase",
+				"longdesc": "The phase of the sine wave function",
 				"max": 1,
 				"min": 0,
 				"name": "phase",
+				"shortdesc": "Phase",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Sine wave pattern"
 	},
 	"type": "shader"
 }

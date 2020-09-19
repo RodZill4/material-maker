@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"shape": 1,
+		"shape": 0,
 		"size": 4
 	},
 	"shader_model": {
@@ -15,10 +15,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a truchet pattern",
 		"name": "Truchet",
 		"outputs": [
 			{
 				"f": "truchet$shape($uv*$size, vec2(float($seed)))",
+				"longdesc": "Shows a greyscale image of the truchet pattern.",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -26,7 +29,9 @@
 			{
 				"default": 0,
 				"label": "Shape",
+				"longdesc": "The base shape of each tile of the truchet pattern",
 				"name": "shape",
+				"shortdesc": "Shape",
 				"type": "enum",
 				"values": [
 					{
@@ -43,13 +48,16 @@
 				"control": "None",
 				"default": 4,
 				"label": "Size",
+				"longdesc": "The number of rows and columns of the truchet pattern",
 				"max": 64,
 				"min": 2,
 				"name": "size",
+				"shortdesc": "Size",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Truchet pattern"
 	},
 	"type": "shader"
 }
