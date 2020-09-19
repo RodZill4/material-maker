@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  GODOT_VERSION: 3.2.2
+  GODOT_VERSION: 3.2.3
   EXPORT_NAME: material_maker
   MM_RELEASE: 0_93
 
@@ -16,7 +16,7 @@ jobs:
     name: Generate releases 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:3.2.2
+      image: docker://barichello/godot-ci:3.2.3
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
