@@ -53,6 +53,9 @@ const MENU = [
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
+	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
+	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
+	{ menu="Edit" },
 	{ menu="Edit", submenu="set_theme", description="Set theme" },
 	{ menu="Edit", command="edit_preferences", description="Preferences" },
 
@@ -578,6 +581,50 @@ func edit_duplicate() -> void:
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
+
+func edit_load_selection() -> void:
+	var graph_edit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.add_filter("*.mms;Material Maker Selection")
+	if config_cache.has_section_key("path", "selection"):
+		dialog.current_dir = config_cache.get_value("path", "selection")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		var file = File.new()
+		if file.open(files[0], File.READ) == OK:
+			graph_edit.do_paste(parse_json(file.get_as_text()))
+			file.close()
+
+func edit_save_selection() -> void:
+	var graph_edit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.mms;Material Maker Selection")
+	if config_cache.has_section_key("path", "selection"):
+		dialog.current_dir = config_cache.get_value("path", "selection")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		var file = File.new()
+		if file.open(files[0], File.WRITE) == OK:
+			file.store_string(to_json(graph_edit.serialize_selection()))
+			file.close()
 
 func edit_preferences() -> void:
 	var dialog = preload("res://material_maker/windows/preferences/preferences.tscn").instance()
