@@ -43,3 +43,4 @@ hide_root = true
 select_mode = 1
 script = ExtResource( 1 )
 [connection signal="text_changed" from="HBoxContainer/Filter" to="." method="_on_Filter_text_changed"]
+[connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]

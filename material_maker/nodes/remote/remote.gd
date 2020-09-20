@@ -46,7 +46,6 @@ func update_node() -> void:
 			control.name = p.name
 			controls[control.name] = control
 			var widget = generator.get_widget(p.name)
-			print(widget)
 			add_control(generator.get_widget(p.name).label, control, widget.shortdesc if widget.has("shortdesc") else "", widget.longdesc if widget.has("longdesc") else "")
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
@@ -106,7 +105,6 @@ func on_label_changed(new_label, param_name) -> void:
 func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
 	var widget = generator.get_widget(param_name)
 	if widget != null:
-		print(widget)
 		if shortdesc == "":
 			widget.erase("shortdesc")
 		else:
@@ -115,7 +113,6 @@ func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
 			widget.erase("longdesc")
 		else:
 			widget.longdesc = longdesc
-		print(widget)
 
 func _on_AddLink_pressed() -> void:
 	var control = generator.create_linked_control("Unnamed")

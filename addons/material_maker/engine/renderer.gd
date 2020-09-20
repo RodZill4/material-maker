@@ -88,6 +88,11 @@ func copy_to_texture(t : ImageTexture) -> void:
 		t.create_from_image(get_texture().get_data())
 		image.unlock()
 
+func get_image() -> Image:
+	var image : Image = Image.new()
+	image.copy_from(get_texture().get_data())
+	return image
+
 func save_to_file(fn : String) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:

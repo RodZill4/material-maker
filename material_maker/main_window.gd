@@ -69,6 +69,7 @@ const MENU = [
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
 	
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
+	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph" },
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -431,7 +432,7 @@ func do_load_materials(filenames) -> void:
 		do_load_material(f, false)
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func do_load_material(filename : String, update_hierarchy : bool = true) -> void:
+func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
 	var file = File.new()
 	file.open(filename, File.READ)
 	filename = file.get_path_absolute()
@@ -451,22 +452,20 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> void
 	add_recent(filename)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
+	return true
 
 func save_material(graph_edit : MMGraphEdit = null) -> bool:
+	var status = false
 	if graph_edit == null:
 		graph_edit = get_current_graph_edit()
 	if graph_edit != null:
 		if graph_edit.save_path != null:
-			var status = graph_edit.save_file(graph_edit.save_path)
-			if status:
-				add_recent(graph_edit.save_path)
-				return status
+			status = graph_edit.save_file(graph_edit.save_path)
 		else:
-			var status = save_material_as(graph_edit)
+			status = save_material_as(graph_edit)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
-			return status
-	return false
+	return status
 
 func save_material_as(graph_edit : MMGraphEdit = null) -> bool:
 	if graph_edit == null:
@@ -484,7 +483,9 @@ func save_material_as(graph_edit : MMGraphEdit = null) -> bool:
 		while files is GDScriptFunctionState:
 			files = yield(files, "completed")
 		if files.size() == 1:
-			return do_save_material(files[0], graph_edit)
+			if do_save_material(files[0], graph_edit):
+				add_recent(graph_edit.save_path)
+				return true
 	return false
 
 func do_save_material(filename : String, graph_edit : MMGraphEdit = null) -> bool:
@@ -630,18 +631,13 @@ func do_add_to_user_library(name, nodes) -> void:
 		data.erase("node_position")
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
-	var dir = Directory.new()
-	dir.make_dir("user://library")
-	dir.make_dir("user://library/user")
-	data.library = "user://library/user.json"
-	data.icon = library.get_icon_name(name)
+	# Create thumbnail
 	var result = nodes[0].generator.render(self, 0, 64, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	result.save_to_file("user://library/user/"+data.icon+".png")
+	var image : Image = result.get_image()
 	result.release(self)
-	library.add_item(data, name, library.get_preview_texture(data))
-	library.save_library("user://library/user.json")
+	library.add_to_user_library(data, name, image)
 
 func export_library() -> void:
 	var dialog : FileDialog = FileDialog.new()
@@ -810,6 +806,59 @@ func generate_screenshots():
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	print(result)
+
+func generate_graph_screenshot():
+	# Prompt for a target PNG file
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.png;PNG image file")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() != 1:
+		return
+	# Generate the image
+	var graph_edit : GraphEdit = get_current_graph_edit()
+	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
+	var save_zoom : float = graph_edit.zoom
+	graph_edit.zoom = 1
+	yield(get_tree(), "idle_frame")
+	var graph_edit_rect = graph_edit.get_global_rect()
+	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(30, 180))
+	var graph_rect = null
+	for c in graph_edit.get_children():
+		if c is GraphNode:
+			var node_rect = Rect2(c.rect_global_position, c.rect_size)
+			if graph_rect == null:
+				graph_rect = node_rect
+			else:
+				graph_rect = graph_rect.expand(node_rect.position)
+				graph_rect = graph_rect.expand(node_rect.end)
+	graph_rect = graph_rect.grow_individual(50, 20, 50, 80)
+	var image : Image = Image.new()
+	image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	var origin = graph_edit.scroll_offset+graph_rect.position-graph_edit_rect.position
+	var small_image : Image = Image.new()
+	small_image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	for x in range(0, graph_rect.size.x, graph_edit_rect.size.x):
+		for y in range(0, graph_rect.size.y, graph_edit_rect.size.y):
+			graph_edit.scroll_offset = origin+Vector2(x, y)
+			var timer : Timer = Timer.new()
+			add_child(timer)
+			timer.wait_time = 0.05
+			timer.one_shot = true
+			timer.start()
+			yield(timer, "timeout")
+			timer.queue_free()
+			small_image.blit_rect(get_viewport().get_texture().get_data(), graph_edit_rect, Vector2(0, 0))
+			small_image.flip_y()
+			image.blit_rect(small_image, Rect2(Vector2(0, 0), graph_edit_rect.size), Vector2(x, y))
+	graph_edit.scroll_offset = save_scroll_offset
+	graph_edit.zoom = save_zoom
+	image.save_png(files[0])
 
 # Handle dropped files
 
