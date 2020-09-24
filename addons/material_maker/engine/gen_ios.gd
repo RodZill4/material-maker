@@ -118,4 +118,4 @@ func _serialize(data: Dictionary) -> Dictionary:
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	ports = data.ports
+	ports = data.ports.duplicate(true)

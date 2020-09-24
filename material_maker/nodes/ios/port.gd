@@ -9,10 +9,10 @@ func _ready() -> void:
 func set_model_data(data, remaining_group_size = 0) -> int:
 	$Name.set_text(data.name if data.has("name") else "")
 	$Type.select(mm_io_types.type_names.find(data.type))
-	if data.has("short_description"):
-		$Description.short_description = data.short_description
-	if data.has("long_description"):
-		$Description.long_description = data.long_description
+	if data.has("shortdesc"):
+		$Description.short_description = data.shortdesc
+	if data.has("longdesc"):
+		$Description.long_description = data.longdesc
 	$Description.update_tooltip()
 	if data.has("group_size") and data.group_size > 1:
 		$PortGroupButton.set_state(1)

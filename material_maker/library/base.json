@@ -1,11 +1,6 @@
 {
 	"lib": [
 		{
-			"collapsed": false,
-			"tree_item": "Simple"
-		},
-		{
-			"collapsed": true,
 			"icon": "simple_uniform",
 			"name": "uniform",
 			"parameters": {
@@ -21,7 +16,6 @@
 			"type": "uniform"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_uniform_greyscale",
 			"name": "uniform_greyscale",
 			"parameters": {
@@ -31,7 +25,6 @@
 			"type": "uniform_greyscale"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_shape",
 			"name": "shape",
 			"parameters": {
@@ -44,7 +37,6 @@
 			"type": "shape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_shape_star",
 			"name": "shape",
 			"parameters": {
@@ -57,7 +49,6 @@
 			"type": "shape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_shape_curved_star",
 			"name": "shape",
 			"parameters": {
@@ -70,7 +61,6 @@
 			"type": "shape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_shape_rays",
 			"name": "shape",
 			"parameters": {
@@ -83,7 +73,6 @@
 			"type": "shape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_shape_circle",
 			"name": "shape",
 			"parameters": {
@@ -96,7 +85,6 @@
 			"type": "shape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_image",
 			"name": "image",
 			"parameters": {
@@ -107,19 +95,19 @@
 			"type": "image"
 		},
 		{
-			"name": "text",
 			"icon": "simple_text",
+			"name": "text",
 			"parameters": {
-				"font":"",
-				"font_size":64,
-				"text":"Text",
-				"x":-0.4,
-				"y":-0.4
+				"font": "",
+				"font_size": 64,
+				"text": "Text",
+				"x": -0.4,
+				"y": -0.4
 			},
 			"tree_item": "Simple/Text",
-			"type":"text"},
+			"type": "text"
+		},
 		{
-			"collapsed": false,
 			"icon": "simple_gradient",
 			"name": "gradient",
 			"parameters": {
@@ -150,7 +138,6 @@
 			"type": "gradient"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_gradient_radial",
 			"name": "radial_gradient",
 			"parameters": {
@@ -180,7 +167,6 @@
 			"type": "radial_gradient"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_gradient_circular",
 			"name": "circular_gradient",
 			"parameters": {
@@ -210,7 +196,6 @@
 			"type": "circular_gradient"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_sdshow",
 			"name": "sdshow",
 			"parameters": {
@@ -225,11 +210,6 @@
 			"type": "sdshow"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Simple/SDF/Shapes"
-		},
-		{
-			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdcircle",
 			"name": "sdcircle",
 			"parameters": {
@@ -241,7 +221,6 @@
 			"type": "sdcircle"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdbox",
 			"name": "sdbox",
 			"parameters": {
@@ -254,7 +233,6 @@
 			"type": "sdbox"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdline",
 			"name": "sdline",
 			"parameters": {
@@ -267,7 +245,6 @@
 			"type": "sdline"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdrhombus",
 			"name": "sdrhombus",
 			"parameters": {
@@ -280,7 +257,6 @@
 			"type": "sdrhombus"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_shapes_sdarc",
 			"name": "sdarc",
 			"parameters": {
@@ -296,11 +272,6 @@
 			"type": "sdarc"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Simple/SDF/Operators"
-		},
-		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdboolean",
 			"name": "sdboolean",
 			"parameters": {
@@ -316,7 +287,6 @@
 			"type": "sdboolean"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdsmoothboolean",
 			"name": "sdsmoothboolean",
 			"parameters": {
@@ -333,7 +303,6 @@
 			"type": "sdsmoothboolean"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdroundedshape",
 			"name": "sdroundedshape",
 			"parameters": {
@@ -350,7 +319,6 @@
 			"type": "sdroundedshape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdannularshape",
 			"name": "sdannularshape",
 			"parameters": {
@@ -367,7 +335,6 @@
 			"type": "sdannularshape"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdmorph",
 			"name": "sdmorph",
 			"parameters": {
@@ -384,7 +351,6 @@
 			"type": "sdmorph"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdrepeat",
 			"name": "sdrepeat",
 			"parameters": {
@@ -396,7 +362,6 @@
 			"type": "sdrepeat"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_operators_sdcirclerepeat",
 			"name": "sdcirclerepeat",
 			"parameters": {
@@ -406,11 +371,6 @@
 			"type": "sdcirclerepeat"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Simple/SDF/Transforms"
-		},
-		{
-			"collapsed": true,
 			"icon": "simple_sdf_transforms_translate",
 			"name": "sdtranslate",
 			"parameters": {
@@ -422,7 +382,6 @@
 			"type": "sdtranslate"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_transforms_rotate",
 			"name": "sdrotate",
 			"parameters": {
@@ -435,7 +394,6 @@
 			"type": "sdrotate"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_sdf_transforms_scale",
 			"name": "sdscale_2",
 			"parameters": {
@@ -449,7 +407,6 @@
 			"type": "sdscale"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_curve",
 			"name": "curve",
 			"parameters": {
@@ -466,7 +423,6 @@
 			"type": "curve"
 		},
 		{
-			"collapsed": true,
 			"icon": "simple_profile",
 			"name": "profile",
 			"parameters": {
@@ -504,11 +460,6 @@
 			"type": "profile"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "3D"
-		},
-		{
-			"collapsed": true,
 			"icon": "3d_box",
 			"name": "box",
 			"parameters": {
@@ -527,7 +478,6 @@
 			"type": "box"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sphere",
 			"name": "sphere",
 			"parameters": {
@@ -539,7 +489,6 @@
 			"type": "sphere"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_render",
 			"name": "raymarching",
 			"parameters": {
@@ -549,7 +498,6 @@
 			"type": "raymarching"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_color",
 			"name": "sdf3d_color",
 			"parameters": {
@@ -559,11 +507,6 @@
 			"type": "sdf3d_color"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "3D/SDF/Shapes"
-		},
-		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_sphere",
 			"name": "sdf3d_sphere",
 			"parameters": {
@@ -573,7 +516,6 @@
 			"type": "sdf3d_sphere"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_box",
 			"name": "sdf3d_box",
 			"parameters": {
@@ -586,7 +528,6 @@
 			"type": "sdf3d_box"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_cylinder",
 			"name": "sdf3d_cylinder",
 			"parameters": {
@@ -600,7 +541,6 @@
 			"type": "sdf3d_cylinder"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_capsule",
 			"name": "sdf3d_capsule",
 			"parameters": {
@@ -614,7 +554,6 @@
 			"type": "sdf3d_capsule"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_cone",
 			"name": "sdf3d_cone",
 			"parameters": {
@@ -628,7 +567,6 @@
 			"type": "sdf3d_cone"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_shapes_torus",
 			"name": "sdf3d_torus",
 			"parameters": {
@@ -642,11 +580,6 @@
 			"type": "sdf3d_torus"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "3D/SDF/Operators"
-		},
-		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_boolean",
 			"name": "sdf3d_boolean",
 			"parameters": {
@@ -662,7 +595,6 @@
 			"type": "sdf3d_boolean"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_smoothboolean",
 			"name": "sdf3d_smoothboolean",
 			"parameters": {
@@ -679,7 +611,6 @@
 			"type": "sdf3d_smoothboolean"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_rounded",
 			"name": "sdf3d_rounded",
 			"parameters": {
@@ -696,7 +627,6 @@
 			"type": "sdf3d_rounded"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_elongation",
 			"name": "sdf3d_elongation",
 			"parameters": {
@@ -708,7 +638,6 @@
 			"type": "sdf3d_elongation"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_repeat",
 			"name": "sdf3d_repeat",
 			"parameters": {
@@ -725,7 +654,6 @@
 			"type": "sdf3d_repeat"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_circlerepeat",
 			"name": "sdf3d_circle_repeat",
 			"parameters": {
@@ -743,7 +671,6 @@
 			"type": "sdf3d_circle_repeat"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_extrusion",
 			"name": "sdf3d_extrusion",
 			"parameters": {
@@ -758,7 +685,6 @@
 			"type": "sdf3d_extrusion"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_revolution",
 			"name": "sdf3d_revolution",
 			"parameters": {
@@ -773,7 +699,6 @@
 			"type": "sdf3d_revolution"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_operators_morph",
 			"name": "sdf3d_morph",
 			"parameters": {
@@ -791,11 +716,6 @@
 			"type": "sdf3d_morph"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "3D/SDF/Transforms"
-		},
-		{
-			"collapsed": true,
 			"icon": "3d_sdf_transforms_translate",
 			"name": "sdf3d_translate_3_2",
 			"parameters": {
@@ -807,7 +727,6 @@
 			"type": "sdf3d_translate"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_transforms_scale",
 			"name": "sdf3d_scale_2",
 			"parameters": {
@@ -821,7 +740,6 @@
 			"type": "sdf3d_scale"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_sdf_transforms_rotate",
 			"name": "sdf3d_rotate_2",
 			"parameters": {
@@ -837,11 +755,6 @@
 			"type": "sdf3d_rotate"
 		},
 		{
-			"collapsed": true,
-			"tree_item": "3D/Texture"
-		},
-		{
-			"collapsed": true,
 			"icon": "3d_texture_apply",
 			"name": "tex3d_apply",
 			"parameters": {
@@ -851,7 +764,6 @@
 			"type": "tex3d_apply"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_select",
 			"name": "tex3d_select",
 			"parameters": {
@@ -862,7 +774,6 @@
 			"type": "tex3d_select"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_from2d",
 			"name": "tex3d_from2d",
 			"parameters": {
@@ -872,7 +783,6 @@
 			"type": "tex3d_from2d"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_pattern",
 			"name": "tex3d_pattern_2",
 			"parameters": {
@@ -888,7 +798,6 @@
 			"type": "tex3d_pattern"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_fbm",
 			"name": "tex3d_fbm_4",
 			"parameters": {
@@ -903,7 +812,6 @@
 			"type": "tex3d_fbm"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_blend",
 			"name": "tex3d_blend_2",
 			"parameters": {
@@ -914,7 +822,6 @@
 			"type": "tex3d_blend"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_colorize",
 			"name": "tex3d_colorize_3",
 			"parameters": {
@@ -943,7 +850,6 @@
 			"type": "tex3d_colorize"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_rotate",
 			"name": "tex3d_rotate",
 			"parameters": {
@@ -955,7 +861,6 @@
 			"type": "tex3d_rotate"
 		},
 		{
-			"collapsed": true,
 			"icon": "3d_texture_distort",
 			"name": "tex3d_distort_2",
 			"parameters": {
@@ -965,11 +870,6 @@
 			"type": "tex3d_distort"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Pattern"
-		},
-		{
-			"collapsed": true,
 			"icon": "pattern_generic",
 			"parameters": {
 				"mix": 0,
@@ -982,7 +882,6 @@
 			"type": "pattern"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_generic_checkerboard",
 			"name": "pattern",
 			"parameters": {
@@ -996,7 +895,6 @@
 			"type": "pattern"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_bricks",
 			"parameters": {
 				"bevel": 0.1,
@@ -1009,7 +907,6 @@
 			"type": "bricks"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_bricks_tiles",
 			"parameters": {
 				"bevel": 0.05,
@@ -1022,7 +919,6 @@
 			"type": "bricks"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_bricks_basketweave",
 			"parameters": {
 				"bevel": 0.05,
@@ -1037,7 +933,6 @@
 			"type": "bricks"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_bricks_herringbone",
 			"parameters": {
 				"bevel": 0.05,
@@ -1052,7 +947,6 @@
 			"type": "bricks"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_bricks_spanishbond",
 			"parameters": {
 				"bevel": 0.05,
@@ -1067,7 +961,6 @@
 			"type": "bricks"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_weave",
 			"name": "weave",
 			"parameters": {
@@ -1078,7 +971,6 @@
 			"type": "weave"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_truchet",
 			"name": "truchet",
 			"parameters": {
@@ -1091,7 +983,6 @@
 			"type": "truchet"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_runes",
 			"name": "runes",
 			"parameters": {
@@ -1102,7 +993,6 @@
 			"type": "runes"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_runes_i_ching",
 			"name": "iching",
 			"parameters": {
@@ -1113,7 +1003,6 @@
 			"type": "iching"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "pattern",
@@ -1334,7 +1223,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_scratches",
 			"name": "scratches",
 			"parameters": {
@@ -1350,7 +1238,6 @@
 			"type": "scratches"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_beehive",
 			"name": "beehive",
 			"parameters": {
@@ -1361,7 +1248,6 @@
 			"type": "beehive"
 		},
 		{
-			"collapsed": true,
 			"icon": "pattern_sine_wave",
 			"name": "sine_wave",
 			"parameters": {
@@ -1373,7 +1259,6 @@
 			"type": "sine_wave"
 		},
 		{
-			"collapsed": false,
 			"icon": "noise",
 			"name": "noise",
 			"parameters": {
@@ -1384,7 +1269,6 @@
 			"type": "noise"
 		},
 		{
-			"collapsed": true,
 			"icon": "noise_perlin",
 			"parameters": {
 				"iterations": 3,
@@ -1396,7 +1280,6 @@
 			"type": "perlin"
 		},
 		{
-			"collapsed": true,
 			"icon": "noise_perlin_color",
 			"name": "perlin_color",
 			"parameters": {
@@ -1409,7 +1292,6 @@
 			"type": "perlin_color"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "perlin",
@@ -1598,7 +1480,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "perlin",
@@ -1827,7 +1708,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"icon": "noise_voronoi",
 			"parameters": {
 				"intensity": 1,
@@ -1838,7 +1718,6 @@
 			"type": "voronoi"
 		},
 		{
-			"collapsed": true,
 			"icon": "noise_color",
 			"name": "color_noise",
 			"parameters": {
@@ -1849,7 +1728,6 @@
 			"type": "color_noise"
 		},
 		{
-			"collapsed": true,
 			"icon": "noise_fbm",
 			"name": "fbm",
 			"parameters": {
@@ -1863,11 +1741,6 @@
 			"type": "fbm"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Filter"
-		},
-		{
-			"collapsed": true,
 			"icon": "filter_invert",
 			"name": "invert",
 			"parameters": {
@@ -1877,7 +1750,6 @@
 			"type": "invert"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_brightnesscontrast",
 			"name": "brightness_contrast",
 			"parameters": {
@@ -1889,7 +1761,6 @@
 			"type": "brightness_contrast"
 		},
 		{
-			"collapsed": true,
 			"parameters": {
 				"hue": 0,
 				"saturation": 1,
@@ -1899,7 +1770,6 @@
 			"type": "adjust_hsv"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_tones",
 			"name": "tones",
 			"parameters": {
@@ -1943,7 +1813,6 @@
 			"type": "tones"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_greyscale",
 			"name": "greyscale",
 			"parameters": {
@@ -1956,7 +1825,6 @@
 			"type": "greyscale"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_colorize",
 			"parameters": {
 				"gradient": [
@@ -1978,7 +1846,6 @@
 			"type": "colorize"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_colorize_invert",
 			"parameters": {
 				"gradient": [
@@ -2000,7 +1867,6 @@
 			"type": "colorize"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_colorize_rainbow",
 			"name": "colorize",
 			"parameters": {
@@ -2049,7 +1915,6 @@
 			"type": "colorize"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_blend",
 			"parameters": {
 				"amount": 0.5,
@@ -2059,17 +1924,14 @@
 			"type": "blend"
 		},
 		{
-			"collapsed": true,
 			"tree_item": "Filter/Combine",
 			"type": "combine"
 		},
 		{
-			"collapsed": true,
 			"tree_item": "Filter/Decompose",
 			"type": "decompose"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_swapchannels",
 			"name": "swap_channels",
 			"parameters": {
@@ -2082,7 +1944,6 @@
 			"type": "swap_channels"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_normal_map",
 			"parameters": {
 				"amount": 0.5
@@ -2091,7 +1952,6 @@
 			"type": "normal_map"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_blur",
 			"name": "gaussian_blur",
 			"parameters": {
@@ -2103,7 +1963,6 @@
 			"type": "gaussian_blur"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_blur_directional",
 			"name": "directional_blur",
 			"parameters": {
@@ -2115,7 +1974,6 @@
 			"type": "directional_blur"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_blur_slope",
 			"name": "slope_blur",
 			"parameters": {
@@ -2126,7 +1984,6 @@
 			"type": "slope_blur"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_edge_detect",
 			"name": "edge_detect_1",
 			"parameters": {
@@ -2136,7 +1993,6 @@
 			"type": "edge_detect_1"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_edge_detect_axis_aligned",
 			"name": "edge_detect_2",
 			"parameters": {
@@ -2146,7 +2002,6 @@
 			"type": "edge_detect_2"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_edge_detect_diagonal",
 			"name": "edge_detect_3",
 			"parameters": {
@@ -2156,7 +2011,6 @@
 			"type": "edge_detect_3"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_sharpen",
 			"name": "sharpen",
 			"parameters": {
@@ -2166,7 +2020,6 @@
 			"type": "sharpen"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_emboss",
 			"name": "emboss_2",
 			"parameters": {
@@ -2178,7 +2031,6 @@
 			"type": "emboss"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_occlusion",
 			"name": "occlusion",
 			"parameters": {
@@ -2190,7 +2042,6 @@
 			"type": "occlusion"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_quantize",
 			"name": "quantize",
 			"parameters": {
@@ -2200,7 +2051,6 @@
 			"type": "quantize"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_dilate",
 			"name": "dilate",
 			"parameters": {
@@ -2212,7 +2062,6 @@
 			"type": "dilate"
 		},
 		{
-			"collapsed": false,
 			"icon": "filter_fill",
 			"name": "fill_2",
 			"parameters": {
@@ -2223,7 +2072,6 @@
 			"type": "fill"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_position",
 			"name": "fill_to_position",
 			"parameters": {
@@ -2233,7 +2081,6 @@
 			"type": "fill_to_position"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_size",
 			"name": "fill_to_size",
 			"parameters": {
@@ -2244,7 +2091,6 @@
 			"type": "fill_to_size"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_color",
 			"name": "fill_to_color",
 			"parameters": {
@@ -2260,7 +2106,6 @@
 			"type": "fill_to_color"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_random_grey",
 			"name": "fill_to_random_grey",
 			"parameters": {
@@ -2270,7 +2115,6 @@
 			"type": "fill_to_random_grey"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_random_color",
 			"name": "fill_to_random_color",
 			"parameters": {
@@ -2286,7 +2130,6 @@
 			"type": "fill_to_random_color"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_fill_to_uv",
 			"name": "fill_to_uv",
 			"parameters": {
@@ -2296,7 +2139,6 @@
 			"type": "fill_to_uv"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_math",
 			"name": "math",
 			"parameters": {
@@ -2309,7 +2151,6 @@
 			"type": "math"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_maketileable",
 			"name": "make_tileable",
 			"parameters": {
@@ -2319,7 +2160,6 @@
 			"type": "make_tileable"
 		},
 		{
-			"collapsed": true,
 			"icon": "filter_pixelize",
 			"name": "pixelize",
 			"parameters": {
@@ -2332,7 +2172,6 @@
 			"type": "pixelize"
 		},
 		{
-			"collapsed": false,
 			"icon": "transform",
 			"parameters": {
 				"rotate": 0,
@@ -2345,7 +2184,6 @@
 			"type": "transform2"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_translate",
 			"name": "translate",
 			"parameters": {
@@ -2356,7 +2194,6 @@
 			"type": "translate"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_rotate",
 			"name": "rotate",
 			"parameters": {
@@ -2368,7 +2205,6 @@
 			"type": "rotate"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_scale",
 			"name": "scale",
 			"parameters": {
@@ -2381,7 +2217,6 @@
 			"type": "scale"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_shear",
 			"name": "shear",
 			"parameters": {
@@ -2392,7 +2227,6 @@
 			"type": "shear"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_mirror",
 			"name": "mirror",
 			"parameters": {
@@ -2403,7 +2237,6 @@
 			"type": "mirror"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_kaleidoscope",
 			"name": "kaleidoscope",
 			"parameters": {
@@ -2415,7 +2248,6 @@
 			"type": "kaleidoscope"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_warp",
 			"name": "warp",
 			"parameters": {
@@ -2427,7 +2259,6 @@
 			"type": "warp"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_circlemap",
 			"name": "circle_map",
 			"parameters": {
@@ -2437,7 +2268,6 @@
 			"type": "circle_map"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_customuv",
 			"name": "custom_uv",
 			"parameters": {
@@ -2447,7 +2277,6 @@
 			"type": "custom_uv"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_tile2x2",
 			"name": "tile2x2",
 			"parameters": {
@@ -2457,7 +2286,6 @@
 			"type": "tile2x2"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_splatter",
 			"name": "splatter",
 			"parameters": {
@@ -2470,7 +2298,6 @@
 			"type": "splatter"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_splatter_color",
 			"name": "splatter_color",
 			"parameters": {
@@ -2483,7 +2310,6 @@
 			"type": "splatter_color"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_tiler",
 			"name": "tiler",
 			"parameters": {
@@ -2499,7 +2325,6 @@
 			"type": "tiler"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_tiler_color",
 			"name": "tiler_color",
 			"parameters": {
@@ -2515,7 +2340,6 @@
 			"type": "tiler_color"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_circlesplatter",
 			"name": "circle_splatter",
 			"parameters": {
@@ -2536,7 +2360,6 @@
 			"type": "circle_splatter"
 		},
 		{
-			"collapsed": true,
 			"icon": "transform_circlesplatter_color",
 			"name": "circle_splatter_color",
 			"parameters": {
@@ -2557,11 +2380,6 @@
 			"type": "circle_splatter_color"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Workflow"
-		},
-		{
-			"collapsed": true,
 			"icon": "workflow_createmap",
 			"name": "mwf_create_map",
 			"parameters": {
@@ -2572,7 +2390,6 @@
 			"type": "mwf_create_map"
 		},
 		{
-			"collapsed": true,
 			"icon": "workflow_mixmap",
 			"name": "mwf_mix_maps",
 			"parameters": {
@@ -2583,7 +2400,6 @@
 			"type": "mwf_mix_maps"
 		},
 		{
-			"collapsed": true,
 			"icon": "workflow_applymap",
 			"name": "mwf_map",
 			"parameters": {
@@ -2593,7 +2409,6 @@
 			"type": "mwf_map"
 		},
 		{
-			"collapsed": true,
 			"icon": "workflow_mix",
 			"name": "mwf_mix",
 			"parameters": {
@@ -2603,7 +2418,6 @@
 			"type": "mwf_mix"
 		},
 		{
-			"collapsed": true,
 			"icon": "workflow_output",
 			"name": "mwf_output",
 			"parameters": {
@@ -2615,7 +2429,6 @@
 			"type": "mwf_output"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "colorize",
@@ -2926,9 +2739,9 @@
 					},
 					"ports": [
 						{
+							"group_size": 4,
 							"name": "Albedo",
-							"type": "rgb",
-							"group_size": 4
+							"type": "rgb"
 						},
 						{
 							"name": "ORM",
@@ -3291,7 +3104,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "uniform_2",
@@ -3450,9 +3262,9 @@
 					},
 					"ports": [
 						{
+							"group_size": 4,
 							"name": "Albedo",
-							"type": "rgb",
-							"group_size": 4
+							"type": "rgb"
 						},
 						{
 							"name": "ORM",
@@ -3663,7 +3475,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "scratches",
@@ -4153,9 +3964,9 @@
 					},
 					"ports": [
 						{
+							"group_size": 4,
 							"name": "Albedo",
-							"type": "rgb",
-							"group_size": 4
+							"type": "rgb"
 						},
 						{
 							"name": "ORM",
@@ -4454,7 +4265,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "uniform_2",
@@ -4613,9 +4423,9 @@
 					},
 					"ports": [
 						{
+							"group_size": 4,
 							"name": "Albedo",
-							"type": "rgb",
-							"group_size": 4
+							"type": "rgb"
 						},
 						{
 							"name": "ORM",
@@ -4737,7 +4547,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "fbm",
@@ -5022,11 +4831,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
-			"tree_item": "Workflow/Effects"
-		},
-		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "gen_inputs",
@@ -5380,7 +5184,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": true,
 			"connections": [
 				{
 					"from": "gen_inputs",
@@ -5739,11 +5542,6 @@
 			"type": "graph"
 		},
 		{
-			"collapsed": false,
-			"tree_item": "Miscellaneous"
-		},
-		{
-			"collapsed": true,
 			"icon": "miscellaneous_buffer",
 			"parameters": {
 				"size": 9
@@ -5752,7 +5550,6 @@
 			"type": "buffer"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_iterate_buffer",
 			"name": "iterate_buffer",
 			"parameters": {
@@ -5764,7 +5561,6 @@
 			"type": "iterate_buffer"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_custom_shader",
 			"shader_model": {
 
@@ -5773,13 +5569,11 @@
 			"type": "custom"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_switch",
 			"tree_item": "Miscellaneous/Switch",
 			"type": "switch"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_remote",
 			"tree_item": "Miscellaneous/Remote",
 			"type": "remote",
@@ -5788,13 +5582,11 @@
 			]
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_comment",
 			"tree_item": "Miscellaneous/Comment",
 			"type": "comment"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_export",
 			"parameters": {
 				"size": 10
@@ -5803,7 +5595,6 @@
 			"type": "export"
 		},
 		{
-			"collapsed": true,
 			"icon": "miscellaneous_debug",
 			"tree_item": "Miscellaneous/Debug",
 			"type": "debug"

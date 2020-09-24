@@ -393,7 +393,9 @@ func _serialize(data: Dictionary) -> Dictionary:
 func _deserialize(data : Dictionary) -> void:
 	if data.has("label"):
 		label = data.label
-	shortdesc = data.shortdesc if data.has("shortdesc") else ""
-	longdesc = data.longdesc if data.has("longdesc") else ""
+	if data.has("shortdesc"):
+		shortdesc = data.shortdesc
+	if data.has("longdesc"):
+		longdesc = data.longdesc 
 	var nodes = data.nodes if data.has("nodes") else []
 	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])
