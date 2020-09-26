@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount": 1,
+		"amount": 0.5,
 		"blend_type": 0
 	},
 	"shader_model": {
@@ -15,27 +15,36 @@
 			{
 				"default": "vec4($uv.x, 1.0, 1.0, 1.0)",
 				"label": "Source1",
+				"longdesc": "The foreground input",
 				"name": "s1",
+				"shortdesc": "Foreground",
 				"type": "rgba"
 			},
 			{
 				"default": "vec4(1.0, $uv.y, 1.0, 1.0)",
 				"label": "Source2",
+				"longdesc": "The background input",
 				"name": "s2",
+				"shortdesc": "Background",
 				"type": "rgba"
 			},
 			{
 				"default": "1.0",
 				"label": "Opacity",
+				"longdesc": "The optional opacity mask",
 				"name": "a",
+				"shortdesc": "Mask",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that blends its input, using an optional mask",
 		"name": "Blend",
 		"outputs": [
 			{
+				"longdesc": "Shows the result of the blend operation",
 				"rgba": "vec4(blend_$blend_type($uv, $(name_uv)_s1.rgb, $(name_uv)_s2.rgb, $(name_uv)_a*$(name_uv)_s1.a), min(1.0, $(name_uv)_s2.a+$(name_uv)_a*$(name_uv)_s1.a))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -43,7 +52,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "The algorithm used to blend the inputs",
 				"name": "blend_type",
+				"shortdesc": "Blend mode",
 				"type": "enum",
 				"values": [
 					{
@@ -100,13 +111,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "3:",
+				"longdesc": "The opacity of the blend operation",
 				"max": 1,
 				"min": 0,
 				"name": "amount",
+				"shortdesc": "Opacity",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Blend"
 	},
 	"type": "shader"
 }

@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"iterations": 6,
+		"iterations": 5,
 		"noise": 0,
 		"persistence": 0.5,
 		"scale_x": 2,
@@ -14,17 +14,17 @@
 	"shader_model": {
 		"code": "",
 		"global": "float fbm_value(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat p00 = rand(mod(o, size));\n\tfloat p01 = rand(mod(o + vec2(0.0, 1.0), size));\n\tfloat p10 = rand(mod(o + vec2(1.0, 0.0), size));\n\tfloat p11 = rand(mod(o + vec2(1.0, 1.0), size));\n\tvec2 t = f * f * (3.0 - 2.0 * f);\n\treturn mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_perlin(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat a00 = rand(mod(o, size)) * 6.28318530718;\n\tfloat a01 = rand(mod(o + vec2(0.0, 1.0), size)) * 6.28318530718;\n\tfloat a10 = rand(mod(o + vec2(1.0, 0.0), size)) * 6.28318530718;\n\tfloat a11 = rand(mod(o + vec2(1.0, 1.0), size)) * 6.28318530718;\n\tvec2 v00 = vec2(cos(a00), sin(a00));\n\tvec2 v01 = vec2(cos(a01), sin(a01));\n\tvec2 v10 = vec2(cos(a10), sin(a10));\n\tvec2 v11 = vec2(cos(a11), sin(a11));\n\tfloat p00 = dot(v00, f);\n\tfloat p01 = dot(v01, f - vec2(0.0, 1.0));\n\tfloat p10 = dot(v10, f - vec2(1.0, 0.0));\n\tfloat p11 = dot(v11, f - vec2(1.0, 1.0));\n\tvec2 t = f * f * (3.0 - 2.0 * f);\n\treturn 0.5 + mix(mix(p00, p10, t.x), mix(p01, p11, t.x), t.y);\n}\n\nfloat fbm_perlinabs(vec2 coord, vec2 size, float seed) {\n\treturn abs(2.0*fbm_perlin(coord, size, seed)-1.0);\n}\n\nfloat fbm_cellular(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tfloat dist = sqrt((f - node).x * (f - node).x + (f - node).y * (f - node).y);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_cellular2(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tfloat dist = sqrt((f - node).x * (f - node).x + (f - node).y * (f - node).y);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_cellular3(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size))*0.5 + vec2(x, y);\n\t\t\tfloat dist = abs((f - node).x) + abs((f - node).y);\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_cellular4(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size))*0.5 + vec2(x, y);\n\t\t\tfloat dist = abs((f - node).x) + abs((f - node).y);\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n\nfloat fbm_cellular5(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tfloat dist = max(abs((f - node).x), abs((f - node).y));\n\t\t\tmin_dist = min(min_dist, dist);\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat fbm_cellular6(vec2 coord, vec2 size, float seed) {\n\tvec2 o = floor(coord)+rand2(vec2(float(seed), 1.0-float(seed)))+size;\n\tvec2 f = fract(coord);\n\tfloat min_dist1 = 2.0;\n\tfloat min_dist2 = 2.0;\n\tfor(float x = -1.0; x <= 1.0; x++) {\n\t\tfor(float y = -1.0; y <= 1.0; y++) {\n\t\t\tvec2 node = rand2(mod(o + vec2(x, y), size)) + vec2(x, y);\n\t\t\tfloat dist = max(abs((f - node).x), abs((f - node).y));\n\t\t\tif (min_dist1 > dist) {\n\t\t\t\tmin_dist2 = min_dist1;\n\t\t\t\tmin_dist1 = dist;\n\t\t\t} else if (min_dist2 > dist) {\n\t\t\t\tmin_dist2 = dist;\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist2-min_dist1;\n}\n",
-		"includes": [
-			""
-		],
 		"inputs": [
 
 		],
 		"instance": "float $(name)_fbm(vec2 coord, vec2 size, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tvalue += fbm_$noise(coord*size, size, seed) * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
+		"longdesc": "A node that generates a noise made of several octaves of a simple noise",
 		"name": "FBM",
 		"outputs": [
 			{
 				"f": "$(name)_fbm($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), float($(seed)))",
+				"longdesc": "Shows a greyscale image of the generated noise",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -32,7 +32,9 @@
 			{
 				"default": 0,
 				"label": "Noise",
+				"longdesc": "The simple noise type",
 				"name": "noise",
+				"shortdesc": "Noise type",
 				"type": "enum",
 				"values": [
 					{
@@ -77,9 +79,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale X",
+				"longdesc": "The scale of the first octave along the X axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_x",
+				"shortdesc": "Scale.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -87,9 +91,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale Y",
+				"longdesc": "The scale of the first octave along the Y axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_y",
+				"shortdesc": "Scale.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -97,9 +103,11 @@
 				"control": "None",
 				"default": 3,
 				"label": "Iterations",
+				"longdesc": "The number of noise octaves",
 				"max": 10,
 				"min": 1,
 				"name": "iterations",
+				"shortdesc": "Octaves",
 				"step": 1,
 				"type": "float"
 			},
@@ -107,13 +115,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Persistence",
+				"longdesc": "The persistence between two consecutive octaves",
 				"max": 1,
 				"min": 0,
 				"name": "persistence",
+				"shortdesc": "Persistence",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Fractional Brownian Motion Noise"
 	},
 	"type": "shader"
 }

@@ -5,10 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"brightness": 0,
-		"contrast": 1,
-		"mode": 2,
-		"steps": 6
+		"mode": 2
 	},
 	"shader_model": {
 		"code": "",
@@ -17,15 +14,20 @@
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that converts its input into greyscale",
 		"name": "Greyscale",
 		"outputs": [
 			{
 				"f": "gs_$mode($in($uv))",
+				"longdesc": "Shows the image converted to greyscale",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -33,7 +35,9 @@
 			{
 				"default": 4,
 				"label": "",
+				"longdesc": "The algorithm used to convert the input into greyscale",
 				"name": "mode",
+				"shortdesc": "Mode",
 				"type": "enum",
 				"values": [
 					{
@@ -58,7 +62,8 @@
 					}
 				]
 			}
-		]
+		],
+		"shortdesc": "Greyscale"
 	},
 	"type": "shader"
 }

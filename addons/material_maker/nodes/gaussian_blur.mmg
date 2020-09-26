@@ -74,6 +74,7 @@
 		}
 	],
 	"label": "Gaussian Blur",
+	"longdesc": "A node that applys a gaussian blur on its input",
 	"name": "gaussian_blur",
 	"node_position": {
 		"x": 0,
@@ -167,7 +168,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the input image",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -182,7 +185,9 @@
 							"widget": "sigma"
 						}
 					],
+					"longdesc": "The strength of the blur filter",
 					"name": "param1",
+					"shortdesc": "Sigma",
 					"type": "linked_control"
 				},
 				{
@@ -235,7 +240,9 @@
 							"widget": "source"
 						}
 					],
+					"longdesc": "Apply the blur filter horisontally, vertically of in both directions",
 					"name": "param2",
+					"shortdesc": "Direction",
 					"type": "config_control"
 				}
 			]
@@ -243,19 +250,25 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -738.666626,
-				"y": -190.392853
+				"x": -928.666626,
+				"y": -188.392853
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input image",
 					"name": "input",
+					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "A map that controls the strength of the blur filter",
 					"name": "amount",
+					"shortdesc": "Strength map",
 					"type": "f"
 				}
 			],
@@ -272,7 +285,10 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
@@ -322,5 +338,6 @@
 		"param1": 50,
 		"param2": 0
 	},
+	"shortdesc": "Gaussian blur",
 	"type": "graph"
 }

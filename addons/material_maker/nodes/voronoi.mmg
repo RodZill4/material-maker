@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"intensity": 1,
-		"randomness": 0.75,
+		"randomness": 0.66,
 		"scale_x": 4,
 		"scale_y": 4,
 		"stretch_x": 1,
@@ -19,22 +19,31 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates several images from a tileable voronoi noise",
 		"name": "Voronoi",
 		"outputs": [
 			{
 				"f": "$(name_uv)_xyzw.z",
+				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"shortdesc": "Nodes",
 				"type": "f"
 			},
 			{
 				"f": "$(name_uv)_xyzw.w",
+				"longdesc": "A greyscale pattern based on the distance to borders",
+				"shortdesc": "Borders",
 				"type": "f"
 			},
 			{
+				"longdesc": "A color pattern that assigns a random color to each cell",
 				"rgb": "rand3(fract($(name_uv)_xyzw.xy))",
+				"shortdesc": "Random color",
 				"type": "rgb"
 			},
 			{
+				"longdesc": "An output that should be plugged into a Fill companion node",
 				"rgba": "vec4(fract(($(name_uv)_xyzw.xy-0.5)/vec2($scale_x, $scale_y)), vec2(1.0)/vec2($scale_x, $scale_y))",
+				"shortdesc": "Fill",
 				"type": "rgba"
 			}
 		],
@@ -43,9 +52,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_x",
+				"shortdesc": "Scale.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -53,9 +64,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_y",
+				"shortdesc": "Scale.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -63,9 +76,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Stretch X",
+				"longdesc": "The stretch factor along the X axis",
 				"max": 1,
 				"min": 0.01,
 				"name": "stretch_x",
+				"shortdesc": "Stretch.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -73,9 +88,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Stretch Y",
+				"longdesc": "The stretch factor along the Y axis",
 				"max": 1,
 				"min": 0.01,
 				"name": "stretch_y",
+				"shortdesc": "Stretch.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -83,9 +100,11 @@
 				"control": "None",
 				"default": 0.75,
 				"label": "Intensity",
+				"longdesc": "A value factor for greyscale outputs",
 				"max": 1,
 				"min": 0,
 				"name": "intensity",
+				"shortdesc": "Intensity",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -93,13 +112,16 @@
 				"control": "None",
 				"default": 1,
 				"label": "Randomness",
+				"longdesc": "The randomness of cell centers positions",
 				"max": 1,
 				"min": 0,
 				"name": "randomness",
+				"shortdesc": "Randomness",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Voronoi Noise"
 	},
 	"type": "shader"
 }

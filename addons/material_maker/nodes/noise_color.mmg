@@ -5,20 +5,22 @@
 		"y": 0
 	},
 	"parameters": {
-		"density": 0.5,
-		"size": 4
+		"size": 9
 	},
 	"shader_model": {
 		"code": "",
-		"global": "vec3 color_dots(vec2 uv, float size, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n    return rand3(seed2+point_pos);\n}\n",
+		"global": "vec3 color_dots(vec2 uv, float size, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\treturn rand3(seed2+point_pos);\n}",
 		"inputs": [
 
 		],
-		"instance": "vec3 $(name)_f(vec2 uv) {\n\treturn color_dots(uv, 1.0/$(size), $(seed));\n}\n",
+		"instance": "",
+		"longdesc": "A node that generates a grid made of random color squares",
 		"name": "Color Noise",
 		"outputs": [
 			{
-				"rgb": "$(name)_f($(uv))",
+				"longdesc": "Shows the noise pattern",
+				"rgb": "color_dots($(uv), 1.0/$(size), $(seed))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
@@ -28,10 +30,13 @@
 				"first": 2,
 				"label": "Grid Size:",
 				"last": 12,
+				"longdesc": "The grid size",
 				"name": "size",
+				"shortdesc": "Size",
 				"type": "size"
 			}
-		]
+		],
+		"shortdesc": "Color Noise"
 	},
 	"type": "shader"
 }

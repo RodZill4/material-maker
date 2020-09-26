@@ -6,6 +6,7 @@
 	},
 	"parameters": {
 		"gradient": {
+			"interpolation": 1,
 			"points": [
 				{
 					"a": 1,
@@ -26,25 +27,33 @@
 		}
 	},
 	"shader_model": {
+		"code": "",
 		"global": "",
 		"inputs": [
 			{
 				"default": "$uv.x",
 				"label": "",
+				"longdesc": "The input greyscale image",
 				"name": "input",
+				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that remaps a greyscale image to a custom gradient",
 		"name": "Colorize",
 		"outputs": [
 			{
-				"rgba": "$gradient($input($uv))"
+				"longdesc": "The remapped RGBA image",
+				"rgba": "$gradient($input($uv))",
+				"shortdesc": "Output",
+				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
 				"default": {
+					"interpolation": 1,
 					"points": [
 						{
 							"a": 1,
@@ -64,9 +73,13 @@
 					"type": "Gradient"
 				},
 				"label": "",
+				"longdesc": "The gradient to which the input is remapped",
 				"name": "gradient",
+				"shortdesc": "Gradient",
 				"type": "gradient"
 			}
-		]
-	}
+		],
+		"shortdesc": "Colorize"
+	},
+	"type": "shader"
 }

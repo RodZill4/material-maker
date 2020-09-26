@@ -6,8 +6,7 @@
 	},
 	"parameters": {
 		"brightness": 0,
-		"contrast": 1,
-		"steps": 6
+		"contrast": 1
 	},
 	"shader_model": {
 		"code": "",
@@ -16,38 +15,50 @@
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that adjusts the Brightness and Contrast of its input",
 		"name": "Brightness/Contrast",
 		"outputs": [
 			{
+				"longdesc": "Shows the image with modified Brightness and Contrast",
 				"rgba": "vec4(clamp($in($uv).rgb*$contrast+vec3($brightness)+0.5-$contrast*0.5, vec3(0.0), vec3(1.0)), $in($uv).a)",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Brightness",
+				"longdesc": "The Brightness adjustment",
 				"max": 1,
 				"min": -1,
 				"name": "brightness",
+				"shortdesc": "Brightness",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 1,
 				"label": "Contrast",
+				"longdesc": "The Contrast adjustment",
 				"max": 2,
 				"min": 0,
 				"name": "contrast",
+				"shortdesc": "Contrast",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Brightness/Contrast"
 	},
 	"type": "shader"
 }

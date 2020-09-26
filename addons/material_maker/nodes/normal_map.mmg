@@ -32,6 +32,7 @@
 		}
 	],
 	"label": "Normal Map",
+	"longdesc": "A node that generates a normal map from a height map",
 	"name": "normal_map",
 	"node_position": {
 		"x": 0,
@@ -72,7 +73,9 @@
 							"widget": "format"
 						}
 					],
+					"longdesc": "The format of the generated normal map\nIn most cases this should be set to default",
 					"name": "param2",
+					"shortdesc": "Format",
 					"type": "linked_control"
 				},
 				{
@@ -87,7 +90,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the generated normal map",
 					"name": "param0",
+					"shortdesc": "Resolution",
 					"type": "linked_control"
 				},
 				{
@@ -98,7 +103,9 @@
 							"widget": "amount"
 						}
 					],
+					"longdesc": "The strength of the normal map filter",
 					"name": "param1",
+					"shortdesc": "Strength",
 					"type": "linked_control"
 				},
 				{
@@ -125,7 +132,9 @@
 							"widget": "source"
 						}
 					],
+					"longdesc": "When set, a buffer is used to sample the input before the normal map filter",
 					"name": "param4",
+					"shortdesc": "Buffer",
 					"type": "config_control"
 				}
 			]
@@ -133,15 +142,18 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -415.663818,
-				"y": 78.047363
+				"x": -445.663818,
+				"y": 75.047363
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Shows the generated normal map",
 					"name": "Normal",
+					"shortdesc": "Output",
 					"type": "rgb"
 				}
 			],
@@ -150,15 +162,18 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -868.910156,
-				"y": 71.047363
+				"x": -1094.910156,
+				"y": 74.047363
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input height map",
 					"name": "Bump",
+					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
@@ -259,5 +274,6 @@
 		"param2": 0,
 		"param4": 1
 	},
+	"shortdesc": "Normal map",
 	"type": "graph"
 }

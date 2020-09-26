@@ -8,33 +8,51 @@
 
 	},
 	"shader_model": {
+		"code": "",
 		"global": "",
 		"inputs": [
 			{
 				"default": "vec4(1.0)",
 				"label": "",
+				"longdesc": "The RGBA input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that decomposes an RGBA input into 4 greyscale images",
 		"name": "Decompose",
 		"outputs": [
 			{
-				"f": "$i($uv).r"
+				"f": "$i($uv).r",
+				"longdesc": "Shows the Red channel of the input",
+				"shortdesc": "Red",
+				"type": "f"
 			},
 			{
-				"f": "$i($uv).g"
+				"f": "$i($uv).g",
+				"longdesc": "Shows the Green channel of the input",
+				"shortdesc": "Green",
+				"type": "f"
 			},
 			{
-				"f": "$i($uv).b"
+				"f": "$i($uv).b",
+				"longdesc": "Shows the Blue channel of the input",
+				"shortdesc": "Blue",
+				"type": "f"
 			},
 			{
-				"f": "$i($uv).a"
+				"f": "$i($uv).a",
+				"longdesc": "Shows the Alpha channel of the input",
+				"shortdesc": "Alpha",
+				"type": "f"
 			}
 		],
 		"parameters": [
 
-		]
-	}
+		],
+		"shortdesc": "Decompose"
+	},
+	"type": "shader"
 }

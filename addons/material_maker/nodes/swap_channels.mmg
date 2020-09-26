@@ -17,15 +17,20 @@
 			{
 				"default": "vec4(1.0)",
 				"label": "",
+				"longdesc": "The input RGBA image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that swaps the channels of its RGBA input",
 		"name": "Swap channels",
 		"outputs": [
 			{
+				"longdesc": "The output RGBA image",
 				"rgba": "vec4($out_r,$out_g,$out_b,$out_a)",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -33,7 +38,9 @@
 			{
 				"default": 2,
 				"label": "R",
+				"longdesc": "The input channel to be assigned to the Red channel",
 				"name": "out_r",
+				"shortdesc": "Red",
 				"type": "enum",
 				"values": [
 					{
@@ -81,7 +88,9 @@
 			{
 				"default": 4,
 				"label": "G",
+				"longdesc": "The input channel to be assigned to the Green channel",
 				"name": "out_g",
+				"shortdesc": "Green",
 				"type": "enum",
 				"values": [
 					{
@@ -129,7 +138,9 @@
 			{
 				"default": 6,
 				"label": "B",
+				"longdesc": "The input channel to be assigned to the Blue channel",
 				"name": "out_b",
+				"shortdesc": "Blue",
 				"type": "enum",
 				"values": [
 					{
@@ -177,7 +188,9 @@
 			{
 				"default": 8,
 				"label": "A",
+				"longdesc": "The input channel to be assigned to the Alpha channel",
 				"name": "out_a",
+				"shortdesc": "Alpha",
 				"type": "enum",
 				"values": [
 					{
@@ -222,7 +235,8 @@
 					}
 				]
 			}
-		]
+		],
+		"shortdesc": "Swap channels"
 	},
 	"type": "shader"
 }

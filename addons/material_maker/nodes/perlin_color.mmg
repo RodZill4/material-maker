@@ -17,51 +17,67 @@
 
 		],
 		"instance": "",
-		"name": "Color Perlin",
+		"longdesc": "A node that generates several octaves of color value noise",
+		"name": "Color Value Noise",
 		"outputs": [
 			{
+				"longdesc": "Shows a color value noise",
 				"rgb": "perlin_color($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), $(seed))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_x",
+				"shortdesc": "Scale.x",
 				"step": 1,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 4,
 				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_y",
+				"shortdesc": "Scale.y",
 				"step": 1,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 3,
 				"label": "Iterations",
+				"longdesc": "The number of octaves (higher values might affect performance)",
 				"max": 10,
 				"min": 1,
 				"name": "iterations",
+				"shortdesc": "Octaves",
 				"step": 1,
 				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0.5,
 				"label": "Persistence",
+				"longdesc": "The persistence between two consecutive octaves",
 				"max": 1,
 				"min": 0,
 				"name": "persistence",
+				"shortdesc": "Persistence",
 				"step": 0.05,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Color Value Noise"
 	},
 	"type": "shader"
 }
