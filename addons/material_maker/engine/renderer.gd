@@ -17,8 +17,7 @@ func setup_material(shader_material, textures, shader_code) -> void:
 	shader_material.shader.code = shader_code
 
 func request(object : Object) -> Object:
-	while render_owner != null:
-		yield(self, "done")
+	assert(render_owner == null)
 	render_owner = object
 	return self
 
@@ -84,9 +83,7 @@ func render_shader(object : Object, shader, textures, render_size) -> Object:
 func copy_to_texture(t : ImageTexture) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:
-		image.lock()
 		t.create_from_image(get_texture().get_data())
-		image.unlock()
 
 func get_image() -> Image:
 	var image : Image = Image.new()

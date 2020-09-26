@@ -9,7 +9,12 @@ This is useful when using generators that sample their inputs several times
 
 var material : ShaderMaterial = null
 var updating : bool = false
-var update_again : bool = false
+var update_again : bool = true
+
+var current_renderer = null
+var is_pending : bool = false
+
+var pending_textures = []
 
 func _ready() -> void:
 	material = ShaderMaterial.new()
@@ -17,6 +22,10 @@ func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 9
 	add_to_group("preview")
+
+func _exit_tree() -> void:
+	if current_renderer != null:
+		current_renderer.release(self)
 
 func get_type() -> String:
 	return "buffer"
@@ -48,6 +57,7 @@ func update_shader() -> void:
 	var source_output = get_source(0)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+		assert (!(source is GDScriptFunctionState))
 		while source is GDScriptFunctionState:
 			source = yield(source, "completed")
 	if source.empty():
@@ -57,10 +67,17 @@ func update_shader() -> void:
 		print("Incorrect shader generated for "+get_hier_name())
 		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
 	material.shader.code = shader_code
+	update_again = true
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])
-	update_buffer()
+	if source.has("pending_textures"):
+		pending_textures = source.pending_textures
+	if pending_textures.empty():
+		update_buffer()
+	elif ! is_pending:
+		mm_renderer.add_pending_request()
+		is_pending = true
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var do_update : bool = false
@@ -71,22 +88,32 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 				do_update = true
 				break
 	if do_update:
-		update_buffer()
+		update_again = true
+		if pending_textures.empty():
+			update_buffer()
 
 func on_texture_changed(n : String) -> void:
-	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-		if p.name == n:
-			update_buffer()
-			return
+	update_again = true
+	pending_textures.erase(n)
+	if pending_textures.empty():
+		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+			if p.name == n:
+				update_buffer()
+				return
 
 func update_buffer() -> void:
-	update_again = true
 	if !updating:
 		updating = true
 		while update_again:
+			if is_pending:
+				mm_renderer.remove_pending_request()
+				is_pending = false
 			var renderer = mm_renderer.request(self)
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
+			if renderer == null:
+				return
+			current_renderer = renderer
 			update_again = false
 			var time = OS.get_ticks_msec()
 			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
@@ -96,11 +123,15 @@ func update_buffer() -> void:
 				renderer.copy_to_texture(texture)
 			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
+			current_renderer = null
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	return _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
+	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
+	if updating or update_again or !pending_textures.empty():
+		shader_code.pending_textures = shader_code.textures.keys()
+	return shader_code
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"

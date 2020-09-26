@@ -63,6 +63,8 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
 	if output >= preview:
 		return
+	if mm_renderer.render_queue_size > 0:
+		yield(mm_renderer, "render_queue_empty")
 	var result = generator.render(self, output, 24, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
@@ -106,9 +108,10 @@ func on_view_updated(generator) -> void:
 	if item_from_gen.has(current_generator):
 		item_from_gen[current_generator].set_custom_color(0, Color(0.5, 0.5, 1))
 
-func on_gen_parameter_changed(param_name : String, index : int, generator) -> void:
+func on_gen_parameter_changed(param_name : String, value, generator) -> void:
 	if param_name == "__output_changed__":
-		on_gen_output_changed(index, generator)
+		for index in range(preview):
+			on_gen_output_changed(index, generator)
 
 func on_gen_output_changed(index : int, generator) -> void:
 	if item_from_gen.has(generator) and index < preview:

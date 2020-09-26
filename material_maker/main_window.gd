@@ -571,8 +571,7 @@ func edit_paste() -> void:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
-	var data = parse_json(OS.clipboard)
-	return data == null
+	return validate_json(OS.clipboard) == ""
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

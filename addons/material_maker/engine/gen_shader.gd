@@ -131,6 +131,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
+	var required_pending_textures = []
 	var new_pass_required = false
 	while true:
 		var uv = find_keyword_call(string, input)
@@ -148,6 +149,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 			src_code = subst(default, context, "(%s)" % uv)
 		else:
 			src_code = src.generator.get_shader_code(uv, src.output_index, context)
+			assert(! (src_code is GDScriptFunctionState))
 			while src_code is GDScriptFunctionState:
 				src_code = yield(src_code, "completed")
 			if src_code.has(type):
@@ -168,8 +170,10 @@ func replace_input(string : String, context, input : String, type : String, src 
 		# Add textures
 		if src_code.has("textures"):
 			required_textures = src_code.textures
+		if src_code.has("pending_textures"):
+			required_pending_textures = src_code.pending_textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, new_pass_required=new_pass_required }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, pending_textures=required_pending_textures, new_pass_required=new_pass_required }
 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -208,6 +212,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
+	var required_pending_textures = []
 	var variables = {}
 	variables["name"] = genname
 	if uv != "":
@@ -261,6 +266,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					string = replace_input_with_function_call(string, input.name)
 				else:
 					var result = replace_input(string, context, input.name, input.type, source, input.default)
+					assert(! (result is GDScriptFunctionState))
 					while result is GDScriptFunctionState:
 						result = yield(result, "completed")
 					if string != result.string:
@@ -278,13 +284,16 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					required_code += result.code
 					for t in result.textures.keys():
 						required_textures[t] = result.textures[t]
+					for t in result.pending_textures:
+						if required_pending_textures.find(t) == -1:
+							required_pending_textures.push_back(t)
 			cont = changed and new_pass_required
 			string = replace_variables(string, variables)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, pending_textures=required_pending_textures }
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var rv = { globals=[], defs="", code="", textures={} }
+	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
 		if !context.has_variant(self):
@@ -317,6 +326,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
 						var local_context = MMGenContext.new(context)
 						var result = replace_input(string, local_context, input.name, input.type, source, input.default)
+						assert(! (result is GDScriptFunctionState))
 						while result is GDScriptFunctionState:
 							result = yield(result, "completed")
 						# Add global definitions
@@ -328,23 +338,31 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 						# Add textures
 						for t in result.textures.keys():
 							rv.textures[t] = result.textures[t]
+						for t in result.pending_textures:
+							if rv.pending_textures.find(t) == -1:
+								rv.pending_textures.push_back(t)
 						rv.defs += "%s %s_input_%s(%s) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 						rv.defs += "%s\n" % result.code
 						rv.defs += "return %s;\n}\n" % result.string
 			if shader_model.has("instance"):
 				var subst_output = subst(shader_model.instance, context, "")
+				assert(! (subst_output is GDScriptFunctionState))
 				while subst_output is GDScriptFunctionState:
 					subst_output = yield(subst_output, "completed")
 				rv.defs += subst_output.string
 				# process textures
 				for t in subst_output.textures.keys():
 					rv.textures[t] = subst_output.textures[t]
+				for t in subst_output.pending_textures:
+					if rv.pending_textures.find(t) == -1:
+						rv.pending_textures.push_back(t)
 		# Add inline code
 		if shader_model.has("code"):
 			var variant_index = context.get_variant(self, uv)
 			if variant_index == -1:
 				variant_index = context.get_variant(self, uv)
 				var subst_code = subst(shader_model.code, context, uv)
+				assert(! (subst_code is GDScriptFunctionState))
 				while subst_code is GDScriptFunctionState:
 					subst_code = yield(subst_code, "completed")
 				# Add global definitions
@@ -359,6 +377,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				# process textures
 				for t in subst_code.textures.keys():
 					rv.textures[t] = subst_code.textures[t]
+				for t in subst_code.pending_textures:
+					if rv.pending_textures.find(t) == -1:
+						rv.pending_textures.push_back(t)
 		# Add output_code
 		var variant_string = uv+","+str(output_index)
 		var variant_index = context.get_variant(self, variant_string)
@@ -367,6 +388,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			for f in mm_io_types.types.keys():
 				if output.has(f):
 					var subst_output = subst(output[f], context, uv)
+					assert(! (subst_output is GDScriptFunctionState))
 					while subst_output is GDScriptFunctionState:
 						subst_output = yield(subst_output, "completed")
 					# Add global definitions
@@ -378,8 +400,12 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					# Add generated code
 					rv.code += subst_output.code
 					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
+					# Textures
 					for t in subst_output.textures.keys():
 						rv.textures[t] = subst_output.textures[t]
+					for t in subst_output.pending_textures:
+						if rv.pending_textures.find(t) == -1:
+							rv.pending_textures.push_back(t)
 		for f in mm_io_types.types.keys():
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]

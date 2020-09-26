@@ -76,7 +76,8 @@ func update_shader(input_port_index : int) -> void:
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
 	current_iteration = 0
-	update_buffer()
+	if is_inside_tree():
+		update_buffer()
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var do_update : bool = false
