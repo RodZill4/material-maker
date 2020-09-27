@@ -16,8 +16,12 @@ const PANELS = [
 ]
 
 var panels = {}
+var previous_width : int
 
-func load_panes(config_cache) -> void:
+func _ready() -> void:
+	previous_width = rect_size.x
+
+func load_panels(config_cache) -> void:
 	# Create panels
 	for panel_pos in PANEL_POSITIONS.keys():
 		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
@@ -120,3 +124,7 @@ func _on_Right_dragged(_offset : int) -> void:
 
 func _on_tab_changed(_tab):
 	update_panels()
+
+func _on_Layout_resized():
+	split_offset -= rect_size.x - previous_width
+	previous_width = rect_size.x

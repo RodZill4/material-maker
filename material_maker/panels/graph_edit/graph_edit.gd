@@ -389,7 +389,7 @@ func paste() -> void:
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = get_node("/root/MainWindow")
-			var graph_edit = main_window.new_pane()
+			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)

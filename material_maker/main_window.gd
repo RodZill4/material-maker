@@ -11,7 +11,7 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects
+onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
 var library
@@ -20,11 +20,11 @@ var histogram
 var preview_3d
 var hierarchy
 
-onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview2D
-onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview2DButton
-onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPane/Preview3D
-onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Preview3DButton
-onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPane/PreviewUI/Panel
+onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview2D
+onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
+onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D
+onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
+onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
 const RECENT_FILES_COUNT = 15
 
@@ -62,7 +62,7 @@ const MENU = [
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="View" },
-	{ menu="View", submenu="show_panes", description="Panes" },
+	{ menu="View", submenu="show_panels", description="Panels" },
 
 	{ menu="Tools", submenu="create", description="Create" },
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
@@ -145,7 +145,7 @@ func _ready() -> void:
 	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
 
-	layout.load_panes(config_cache)
+	layout.load_panels(config_cache)
 	library = get_panel("Library")
 	preview_2d = get_panel("Preview2D")
 	histogram = get_panel("Histogram")
@@ -373,19 +373,19 @@ func _on_SetTheme_id_pressed(id) -> void:
 	config_cache.set_value("window", "theme", theme_name)
 
 
-func create_menu_show_panes(menu : PopupMenu) -> void:
+func create_menu_show_panels(menu : PopupMenu) -> void:
 	menu.clear()
-	var panes = layout.get_panel_list()
-	for i in range(panes.size()):
-		menu.add_check_item(panes[i], i)
-		menu.set_item_checked(i, layout.is_pane_visible(panes[i]))
-	if !menu.is_connected("id_pressed", self, "_on_ShowPanes_id_pressed"):
-		menu.connect("id_pressed", self, "_on_ShowPanes_id_pressed")
+	var panels = layout.get_panel_list()
+	for i in range(panels.size()):
+		menu.add_check_item(panels[i], i)
+		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
+	if !menu.is_connected("id_pressed", self, "_on_ShowPanels_id_pressed"):
+		menu.connect("id_pressed", self, "_on_ShowPanels_id_pressed")
 
-func _on_ShowPanes_id_pressed(id) -> void:
-	var pane : String = layout.get_panel_list()[id]
-	layout.set_pane_visible(pane, !layout.is_pane_visible(pane))
-	print(pane)
+func _on_ShowPanels_id_pressed(id) -> void:
+	var panel : String = layout.get_panel_list()[id]
+	layout.set_panel_visible(panel, !layout.is_panel_visible(panel))
+
 
 func create_menu_create(menu) -> void:
 	var gens = mm_loader.get_generator_list()
@@ -402,7 +402,7 @@ func _on_Create_id_pressed(id) -> void:
 		graph_edit.create_gen_from_type(gens[id])
 
 
-func new_pane() -> GraphEdit:
+func new_panel() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
 	projects.add_child(graph_edit)
@@ -410,7 +410,7 @@ func new_pane() -> GraphEdit:
 	return graph_edit
 
 func new_material() -> void:
-	var graph_edit = new_pane()
+	var graph_edit = new_panel()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -450,7 +450,7 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 				if node_count > 1:
 					break
 	if node_count > 1:
-		graph_edit = new_pane()
+		graph_edit = new_panel()
 	graph_edit.load_file(filename)
 	add_recent(filename)
 	if update_hierarchy:
@@ -515,7 +515,7 @@ func quit() -> void:
 			quitting = false
 			return
 	if get_config("confirm_close_project"):
-		var result = $VBoxContainer/Layout/SplitRight/ProjectsPane/Projects.check_save_tabs()
+		var result = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if !result:

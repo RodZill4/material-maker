@@ -182,4 +182,4 @@ func deserialize(v) -> void:
 			add_point(p.v, p.c)
 		interpolation = v.interpolation
 	else:
-		print("Cannot deserialize gradient")
+		print("Cannot deserialize gradient "+str(v))
