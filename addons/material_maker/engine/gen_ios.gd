@@ -58,7 +58,6 @@ func set_port_type(i : int, t : String) -> void:
 func set_port_descriptions(i : int, short_description : String, long_description : String) -> void:
 	ports[i].shortdesc = short_description
 	ports[i].longdesc = long_description
-	print(ports[i])
 
 func set_port_group_size(i : int, s : int) -> void:
 	ports[i].group_size = s
