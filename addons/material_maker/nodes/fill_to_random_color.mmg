@@ -20,15 +20,20 @@
 			{
 				"default": "vec4(0.0)",
 				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a random color",
 		"name": "Fill to Random Color        ",
 		"outputs": [
 			{
+				"longdesc": "The generated output image",
 				"rgb": "mix($edgecolor.rgb, rand3(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
@@ -41,10 +46,13 @@
 					"r": 1
 				},
 				"label": "Edge Color",
+				"longdesc": "The color used for outlines",
 				"name": "edgecolor",
+				"shortdesc": "Outline color",
 				"type": "color"
 			}
-		]
+		],
+		"shortdesc": "Fill to random color"
 	},
 	"type": "shader"
 }

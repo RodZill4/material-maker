@@ -10,22 +10,24 @@
 	"shader_model": {
 		"code": "vec2 $(name_uv)_c = fract($in($uv).xy+0.5*$in($uv).zw);",
 		"global": "",
-		"includes": [
-			""
-		],
 		"inputs": [
 			{
 				"default": "vec4(0.0)",
 				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a greyscale value that depends on its position",
 		"name": "Fill to Position",
 		"outputs": [
 			{
 				"f": "$axis",
+				"longdesc": "The generated output image",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -33,7 +35,9 @@
 			{
 				"default": 2,
 				"label": "",
+				"longdesc": "The position value to be used:\n- X for horizontal axis\n- Y for vertical axis\n- Radial for distance to center",
 				"name": "axis",
+				"shortdesc": "Position",
 				"type": "enum",
 				"values": [
 					{
@@ -50,7 +54,8 @@
 					}
 				]
 			}
-		]
+		],
+		"shortdesc": "Fill to position"
 	},
 	"type": "shader"
 }

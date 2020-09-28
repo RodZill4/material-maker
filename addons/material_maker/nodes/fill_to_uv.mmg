@@ -14,21 +14,27 @@
 			{
 				"default": "vec4(0.0)",
 				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
-		"name": "Fill to UV            ",
+		"longdesc": "A fill companion node that generated an UV map that follows each filled area",
+		"name": "Fill to UV      ",
 		"outputs": [
 			{
+				"longdesc": "The generated output UV map, to be connected to a Custom UV node",
 				"rgb": "vec3((fract($uv-$(name_uv)_bb.xy)/$(name_uv)_bb.zw), rand(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "Fill to UV"
 	},
 	"type": "shader"
 }

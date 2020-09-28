@@ -32,6 +32,7 @@
 		}
 	],
 	"label": "Fill",
+	"longdesc": "A node that fills areas defined by white outlines of its input",
 	"name": "fill",
 	"node_position": {
 		"x": 0,
@@ -46,7 +47,7 @@
 			},
 			"parameters": {
 				"iterations": 10,
-				"size": 9
+				"size": 8
 			},
 			"seed_value": 29168,
 			"type": "iterate_buffer"
@@ -54,15 +55,18 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -427.307068,
-				"y": -362.662445
+				"x": -542.307068,
+				"y": -370.662445
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input image whose white outlines must be filled",
 					"name": "port0",
+					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
@@ -79,7 +83,10 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Generates fill data, to be connected to a fill companion node",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
@@ -92,7 +99,7 @@
 				"y": -541.509705
 			},
 			"parameters": {
-				"param0": 9,
+				"param0": 8,
 				"param1": 10
 			},
 			"type": "remote",
@@ -113,7 +120,9 @@
 							"widget": "s"
 						}
 					],
+					"longdesc": "The resolution of the inptu image",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -124,7 +133,9 @@
 							"widget": "iterations"
 						}
 					],
+					"longdesc": "The number of iterations of the algorithm. The optimal value depends a lot on the input image.",
 					"name": "param1",
+					"shortdesc": "Iterations",
 					"type": "linked_control"
 				}
 			]
@@ -153,8 +164,9 @@
 		}
 	],
 	"parameters": {
-		"param0": 9,
+		"param0": 8,
 		"param1": 10
 	},
+	"shortdesc": "Fill",
 	"type": "graph"
 }

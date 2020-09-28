@@ -8,7 +8,7 @@
 		"clamp": false,
 		"default_in1": 0,
 		"default_in2": 0,
-		"op": 19
+		"op": 0
 	},
 	"shader_model": {
 		"code": "float $(name_uv)_clamp_false = $op;\nfloat $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);\n",
@@ -17,21 +17,28 @@
 			{
 				"default": "$default_in1",
 				"label": "2:A",
+				"longdesc": "The A operand",
 				"name": "in1",
+				"shortdesc": "A",
 				"type": "f"
 			},
 			{
 				"default": "$default_in2",
 				"label": "B",
+				"longdesc": "The B operand",
 				"name": "in2",
+				"shortdesc": "B",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that performs a math operation using its inputs or parameter values",
 		"name": "Math",
 		"outputs": [
 			{
 				"f": "$(name_uv)_clamp_$clamp",
+				"longdesc": "Shows a greyscale image of the result",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -39,7 +46,9 @@
 			{
 				"default": 19,
 				"label": "",
+				"longdesc": "The operation to be performed",
 				"name": "op",
+				"shortdesc": "Operation",
 				"type": "enum",
 				"values": [
 					{
@@ -128,9 +137,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The default value for A, used if the corresponding input is not connected",
 				"max": 1,
 				"min": 0,
 				"name": "default_in1",
+				"shortdesc": "Default A",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -138,19 +149,24 @@
 				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The default value for B, used if the corresponding input is not connected",
 				"max": 1,
 				"min": 0,
 				"name": "default_in2",
+				"shortdesc": "Default B",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"default": false,
 				"label": "Clamp result",
+				"longdesc": "The result is clamped to [0, 1] if this option is checked",
 				"name": "clamp",
+				"shortdesc": "Clamp",
 				"type": "boolean"
 			}
-		]
+		],
+		"shortdesc": "Math"
 	},
 	"type": "shader"
 }

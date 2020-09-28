@@ -7,6 +7,7 @@
 	"parameters": {
 		"formula": 0
 	},
+	"seed_value": -52887,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
 		"global": "",
@@ -14,15 +15,20 @@
 			{
 				"default": "vec4(0.0)",
 				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a greyscale value that depends on its size",
 		"name": "Fill to Size",
 		"outputs": [
 			{
 				"f": "$formula",
+				"longdesc": "The generated output image",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -30,7 +36,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "The size value to be used (area, width, height or maximum between width and height)",
 				"name": "formula",
+				"shortdesc": "Size",
 				"type": "enum",
 				"values": [
 					{
@@ -51,7 +59,8 @@
 					}
 				]
 			}
-		]
+		],
+		"shortdesc": "Fill to size"
 	},
 	"type": "shader"
 }
