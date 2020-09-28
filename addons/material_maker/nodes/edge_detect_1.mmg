@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"size": 9
+		"size": 6
 	},
 	"shader_model": {
 		"code": "",
@@ -15,15 +15,20 @@
 				"default": "vec3(0.0)",
 				"function": true,
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgb"
 			}
 		],
 		"instance": "float $(name)_fct(vec2 uv) {\n\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);\n\tvec3 rv = 8.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.xx);\n\trv -= $in(uv-e.xx);\n\trv -= $in(uv+e.xz);\n\trv -= $in(uv-e.xz);\n\trv -= $in(uv+e.zx);\n\trv -= $in(uv-e.zx);\n\trv = abs(rv);\n\treturn max(rv.x, max(rv.y ,rv.z))*$size;\n}",
+		"longdesc": "An edge detect filter that detects edges along all directions and draws them in white on a black background",
 		"name": "Edge detect 1",
 		"outputs": [
 			{
 				"f": "clamp($(name)_fct($uv), 0.0, 1.0)",
+				"longdesc": "Shows the generated outlines",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -33,10 +38,13 @@
 				"first": 4,
 				"label": "Size",
 				"last": 12,
+				"longdesc": "The resolution of the input image",
 				"name": "size",
+				"shortdesc": "Size",
 				"type": "size"
 			}
-		]
+		],
+		"shortdesc": "Edge detect"
 	},
 	"type": "shader"
 }

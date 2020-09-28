@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"size": 9
+		"size": 6
 	},
 	"shader_model": {
 		"code": "",
@@ -15,15 +15,20 @@
 				"default": "vec3(0.0)",
 				"function": true,
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgb"
 			}
 		],
 		"instance": "vec3 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tvec3 rv = 5.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn rv;\n}",
+		"longdesc": "A node that sharpens it input image",
 		"name": "Sharpen",
 		"outputs": [
 			{
+				"longdesc": "Shows the generated sharpened image",
 				"rgb": "$(name)_fct($uv)",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
@@ -33,10 +38,13 @@
 				"first": 4,
 				"label": "Size",
 				"last": 12,
+				"longdesc": "The resolution of the input image",
 				"name": "size",
+				"shortdesc": "Size",
 				"type": "size"
 			}
-		]
+		],
+		"shortdesc": "Sharpen"
 	},
 	"type": "shader"
 }

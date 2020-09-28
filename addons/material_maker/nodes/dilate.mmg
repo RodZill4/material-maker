@@ -50,6 +50,7 @@
 		}
 	],
 	"label": "Dilate",
+	"longdesc": "A node that dilates the white areas of a mask, using the colors of an optional input",
 	"name": "dilate",
 	"node_position": {
 		"x": 0,
@@ -117,7 +118,9 @@
 							"widget": "s"
 						}
 					],
+					"longdesc": "The resolution of the input images",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -132,7 +135,9 @@
 							"widget": "d"
 						}
 					],
+					"longdesc": "The length of the dilate effect",
 					"name": "param1",
+					"shortdesc": "Length",
 					"type": "linked_control"
 				},
 				{
@@ -143,7 +148,9 @@
 							"widget": "amount"
 						}
 					],
+					"longdesc": "0 to generate a gradient to black while dilating, 1 to fill with input color",
 					"name": "param2",
+					"shortdesc": "Fill",
 					"type": "linked_control"
 				}
 			]
@@ -151,19 +158,25 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -621.306458,
-				"y": -196.4814
+				"x": -872.306458,
+				"y": -171.4814
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input mask whose white areas will be dilated",
 					"name": "mask",
+					"shortdesc": "Mask",
 					"type": "f"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "The optional source for colors",
 					"name": "source",
+					"shortdesc": "Source",
 					"type": "rgb"
 				}
 			],
@@ -172,15 +185,18 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 183.21106,
-				"y": 5.5186
+				"x": 216.21106,
+				"y": 23.5186
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Shows the dilated image",
 					"name": "out",
+					"shortdesc": "Output",
 					"type": "rgb"
 				}
 			],
@@ -242,5 +258,6 @@
 		"param1": 0.1,
 		"param2": 0
 	},
+	"shortdesc": "Dilate",
 	"type": "graph"
 }

@@ -20,6 +20,7 @@
 		}
 	],
 	"label": "Emboss",
+	"longdesc": "A node that creates highlights and shadows from an input heightmap",
 	"name": "emboss",
 	"node_position": {
 		"x": 0,
@@ -120,15 +121,18 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -377.57959,
-				"y": -569.119141
+				"x": -461.57959,
+				"y": -574.119141
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input height map",
 					"name": "port0",
+					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
@@ -137,15 +141,18 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 235.506226,
-				"y": -527.119141
+				"x": 187.506226,
+				"y": -557.119141
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The generated image",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
@@ -177,7 +184,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the input image",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -188,7 +197,9 @@
 							"widget": "angle"
 						}
 					],
+					"longdesc": "The angle of the simulated light",
 					"name": "param1",
+					"shortdesc": "Angle",
 					"type": "linked_control"
 				},
 				{
@@ -199,7 +210,9 @@
 							"widget": "amount"
 						}
 					],
+					"longdesc": "The strength of the emboss effect",
 					"name": "param2",
+					"shortdesc": "Strength",
 					"type": "linked_control"
 				},
 				{
@@ -210,7 +223,9 @@
 							"widget": "width"
 						}
 					],
+					"longdesc": "The width (in pixels) of the area sampled for each pixel",
 					"name": "param3",
+					"shortdesc": "Width",
 					"type": "linked_control"
 				}
 			]
@@ -222,6 +237,6 @@
 		"param2": 5,
 		"param3": 1
 	},
-	"seed_value": 7703,
+	"shortdesc": "Emboss",
 	"type": "graph"
 }

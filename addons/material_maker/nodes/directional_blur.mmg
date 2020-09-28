@@ -26,6 +26,7 @@
 		}
 	],
 	"label": "Directional Blur",
+	"longdesc": "A node that applies a directional gaussian blur to its input",
 	"name": "directional_blur",
 	"node_position": {
 		"x": 0,
@@ -35,8 +36,8 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -395.25,
-				"y": -274.75
+				"x": -381.25,
+				"y": -270.75
 			},
 			"parameters": {
 				"lod": 0,
@@ -69,7 +70,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the input",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -80,7 +83,9 @@
 							"widget": "sigma"
 						}
 					],
+					"longdesc": "The strength of the blur filter",
 					"name": "param1",
+					"shortdesc": "Sigma",
 					"type": "linked_control"
 				},
 				{
@@ -91,7 +96,9 @@
 							"widget": "angle"
 						}
 					],
+					"longdesc": "The angle of the directional blur effect",
 					"name": "param2",
+					"shortdesc": "Angle",
 					"type": "linked_control"
 				}
 			]
@@ -107,11 +114,17 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input image",
 					"name": "in",
+					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "A map that controls the strength of the blur filter",
 					"name": "amount",
+					"shortdesc": "Strength map",
 					"type": "f"
 				}
 			],
@@ -129,7 +142,10 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
@@ -138,8 +154,8 @@
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -420.725464,
-				"y": -191.178955
+				"x": -376.725464,
+				"y": -184.178955
 			},
 			"parameters": {
 				"angle": 45,
@@ -213,5 +229,6 @@
 		"param1": 50,
 		"param2": 45
 	},
+	"shortdesc": "Directional blur",
 	"type": "graph"
 }

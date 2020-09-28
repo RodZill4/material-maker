@@ -14,29 +14,38 @@
 			{
 				"default": "vec4(2.0*vec3(length($uv-vec2(0.5))), 1.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that quantizes the red, green and blue channels of its input",
 		"name": "Quantize",
 		"outputs": [
 			{
+				"longdesc": "The quantized image",
 				"rgba": "vec4(floor($in($uv).rgb*$steps)/$steps, $in($uv).a)",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 4,
 				"label": "",
+				"longdesc": "The number of quantization steps",
 				"max": 32,
 				"min": 2,
 				"name": "steps",
+				"shortdesc": "Steps",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Quantize"
 	},
 	"type": "shader"
 }

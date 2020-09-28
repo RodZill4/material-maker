@@ -26,6 +26,7 @@
 		}
 	],
 	"label": "Slope Blur",
+	"longdesc": "A node that applys a blur effect on its input, following slopes of an input height map",
 	"name": "slope_blur",
 	"node_position": {
 		"x": 0,
@@ -47,8 +48,8 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -445.666626,
-				"y": -390.666656
+				"x": -462.666626,
+				"y": -397.666656
 			},
 			"parameters": {
 				"param0": 9,
@@ -68,7 +69,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the input image",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -79,7 +82,9 @@
 							"widget": "sigma"
 						}
 					],
+					"longdesc": "The strength of the blur filter",
 					"name": "param1",
+					"shortdesc": "Sigma",
 					"type": "linked_control"
 				}
 			]
@@ -95,11 +100,17 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input image",
 					"name": "in",
+					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "A height map whose slopes control the strength and direction of the blur filter",
 					"name": "heightmap",
+					"shortdesc": "Height map",
 					"type": "f"
 				}
 			],
@@ -117,7 +128,10 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
@@ -126,8 +140,8 @@
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -408.725464,
-				"y": -184.178955
+				"x": -401.725464,
+				"y": -199.178955
 			},
 			"parameters": {
 				"sigma": 10,
@@ -189,5 +203,6 @@
 		"param0": 9,
 		"param1": 10
 	},
+	"shortdesc": "Slope blur",
 	"type": "graph"
 }

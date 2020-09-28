@@ -240,7 +240,7 @@
 							"widget": "source"
 						}
 					],
-					"longdesc": "Apply the blur filter horisontally, vertically of in both directions",
+					"longdesc": "Apply the blur filter horizontally, vertically of in both directions",
 					"name": "param2",
 					"shortdesc": "Direction",
 					"type": "config_control"

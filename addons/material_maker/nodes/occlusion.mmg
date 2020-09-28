@@ -56,6 +56,7 @@
 		}
 	],
 	"label": "Occlusion",
+	"longdesc": "A node that generates an ambient occlusion map from a height map",
 	"name": "occlusion",
 	"node_position": {
 		"x": 0,
@@ -91,8 +92,8 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -447.666626,
-				"y": -370.666656
+				"x": -463.666626,
+				"y": -384.666656
 			},
 			"parameters": {
 				"param0": 8,
@@ -120,7 +121,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution of the input height map",
 					"name": "param0",
+					"shortdesc": "Size",
 					"type": "linked_control"
 				},
 				{
@@ -131,7 +134,9 @@
 							"widget": "g"
 						}
 					],
+					"longdesc": "The strength of the occlusion map effect",
 					"name": "param2",
+					"shortdesc": "Strength",
 					"type": "linked_control"
 				}
 			]
@@ -139,15 +144,18 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -585.666626,
-				"y": -112.392853
+				"x": -824.666626,
+				"y": -116.392853
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The input heightmap",
 					"name": "port0",
+					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
@@ -164,7 +172,10 @@
 			},
 			"ports": [
 				{
+					"group_size": 0,
+					"longdesc": "The generated occlusion map",
 					"name": "port0",
+					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
@@ -284,5 +295,6 @@
 		"param0": 8,
 		"param2": 1.5
 	},
+	"shortdesc": "Occlusion",
 	"type": "graph"
 }
