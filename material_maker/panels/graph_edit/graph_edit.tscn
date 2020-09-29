@@ -41,10 +41,12 @@ one_shot = true
 [node name="GraphUI" type="HBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -262.0
-margin_right = -16.0
+margin_left = -294.0
 margin_bottom = 24.0
 alignment = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
 margin_right = 246.0
@@ -85,6 +87,12 @@ margin_right = 278.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 4 )
+
+[node name="Control" type="Control" parent="GraphUI"]
+margin_left = 282.0
+margin_right = 294.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 12, 0 )
 
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource( 3 )

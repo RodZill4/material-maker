@@ -2,7 +2,6 @@
 
 [ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.gd" type="Script" id=1]
 
-
 [node name="AddNodePopup" type="Popup"]
 margin_right = 275.0
 margin_bottom = 319.0

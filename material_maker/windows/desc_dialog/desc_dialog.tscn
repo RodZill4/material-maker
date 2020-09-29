@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/windows/desc_dialog/desc_dialog.gd" type="Script" id=1]
 
 [node name="WindowDialog" type="WindowDialog"]
-visible = true
 margin_right = 493.0
 margin_bottom = 275.0
 window_title = "Parameter description"
@@ -47,6 +46,7 @@ margin_right = 485.0
 margin_bottom = 241.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+wrap_enabled = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 247.0

@@ -63,7 +63,7 @@ margin_left = 1158.0
 margin_right = 1260.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 102, 0 )
-hint_tooltip = "Input flag"
+hint_tooltip = "Port type"
 text = "Greyscale"
 
 [node name="PortGroupButton" parent="." instance=ExtResource( 4 )]
