@@ -794,7 +794,6 @@ var selected_node = null
 func on_selected_node_change(node) -> void:
 	if node != selected_node:
 		selected_node = node
-		preview_2d.set_generator(node.generator if node != null else null)
 		update_preview_2d(node)
 
 func _on_Projects_tab_changed(_tab) -> void:

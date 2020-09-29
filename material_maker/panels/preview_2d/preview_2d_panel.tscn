@@ -33,7 +33,6 @@ void fragment() {
 		COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
 	}
 }"
-custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )

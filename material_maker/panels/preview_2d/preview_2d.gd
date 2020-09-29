@@ -5,6 +5,8 @@ export(String, MULTILINE) var shader : String = ""
 var generator : MMGenBase = null
 var output : int = 0
 
+var need_generate : bool = false
+
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
@@ -16,6 +18,12 @@ func update_export_menu() -> void:
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
+	if !is_visible_in_tree():
+		generator = g
+		output = o
+		need_generate = true
+		return
+	need_generate = false
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
@@ -27,14 +35,14 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			while source is GDScriptFunctionState:
-				source = yield(source, "completed")
+			assert(!(source is GDScriptFunctionState))
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	else:
 		generator = null
 	# Update shader
-	material.shader.code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	var code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	material.shader.code = code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(material.shader.code, material)
 	# Set texture params
@@ -130,3 +138,6 @@ func _on_Reference_id_pressed(id : int):
 	material.set_shader_param("export", false)
 	main_window.get_panel("Reference").add_reference(texture)
 
+func _on_Preview2D_visibility_changed():
+	if need_generate and is_visible_in_tree():
+		set_generator(generator, output)
