@@ -5,8 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount": 1,
-		"direction": 0
+		"amount": 0,
+		"center": 0,
+		"direction": 1
 	},
 	"shader_model": {
 		"code": "",
@@ -15,15 +16,20 @@
 			{
 				"default": "vec4(1.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that performs a shear stress transform on its input",
 		"name": "Shear",
 		"outputs": [
 			{
-				"rgba": "$in($uv+$amount*$uv.yx*vec2($direction))",
+				"longdesc": "Shows the transformed image",
+				"rgba": "$in($uv+$amount*($uv.yx-vec2($center))*vec2($direction))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -31,7 +37,9 @@
 			{
 				"default": 1,
 				"label": "",
+				"longdesc": "The direction of the shear transform (horizontal or vertical)",
 				"name": "direction",
+				"shortdesc": "Direction",
 				"type": "enum",
 				"values": [
 					{
@@ -48,13 +56,28 @@
 				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The amount of the transform",
 				"max": 1,
 				"min": -1,
 				"name": "amount",
+				"shortdesc": "Amount",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"longdesc": "The position of the shear center",
+				"max": 1,
+				"min": 0,
+				"name": "center",
+				"shortdesc": "Center",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Shear"
 	},
 	"type": "shader"
 }

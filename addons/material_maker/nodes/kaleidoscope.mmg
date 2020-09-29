@@ -5,8 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"count": 7,
-		"direction": 0,
+		"count": 5,
 		"offset": 0
 	},
 	"shader_model": {
@@ -16,40 +15,50 @@
 			{
 				"default": "vec4($uv, 0, 1)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that replicated an angle of the input image several times around the center.",
 		"name": "Kaleidoscope",
 		"outputs": [
 			{
+				"longdesc": "Shows the transformed image",
 				"rgba": "$i(kal_rotate($uv, $count, $offset))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The number of replications of an angle of the input",
 				"max": 10,
 				"min": 2,
 				"name": "count",
+				"shortdesc": "Count",
 				"step": 1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The angular offset of the replicated angle of the input",
 				"max": 180,
 				"min": -180,
 				"name": "offset",
+				"shortdesc": "Offset",
 				"step": 0.1,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Kaleidoscope"
 	},
 	"type": "shader"
 }

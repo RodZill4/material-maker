@@ -15,15 +15,20 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that translates its input",
 		"name": "Translate",
 		"outputs": [
 			{
+				"longdesc": "Shows the translated image",
 				"rgba": "$i($uv-vec2($translate_x, $translate_y))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -32,9 +37,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Translate X:",
+				"longdesc": "The translation along the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "translate_x",
+				"shortdesc": "Translate.x",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -42,13 +49,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Translate Y:",
+				"longdesc": "The translation along the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "translate_y",
+				"shortdesc": "Translate.y",
 				"step": 0.005,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Translate"
 	},
 	"type": "shader"
 }

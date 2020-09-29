@@ -17,15 +17,20 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that scales its input",
 		"name": "Scale",
 		"outputs": [
 			{
+				"longdesc": "Shows the scaled image",
 				"rgba": "$i(scale($uv, vec2(0.5+$cx, 0.5+$cy), vec2($scale_x, $scale_y)))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -34,9 +39,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X:",
+				"longdesc": "The position of the scale center",
 				"max": 1,
 				"min": -1,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -44,9 +51,11 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y:",
+				"longdesc": "The poisition of the scale center",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -54,9 +63,11 @@
 				"control": "Scale1.x",
 				"default": 1,
 				"label": "Scale X:",
+				"longdesc": "The scale amount along the X axis",
 				"max": 50,
 				"min": 0,
 				"name": "scale_x",
+				"shortdesc": "Scale.x",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -64,13 +75,16 @@
 				"control": "Scale1.y",
 				"default": 1,
 				"label": "Scale Y:",
+				"longdesc": "The scale amount along the Y axis",
 				"max": 50,
 				"min": 0,
 				"name": "scale_y",
+				"shortdesc": "Scale.y",
 				"step": 0.005,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Scale"
 	},
 	"type": "shader"
 }

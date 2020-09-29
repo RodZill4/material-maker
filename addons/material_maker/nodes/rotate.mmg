@@ -16,15 +16,20 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that rotates its input",
 		"name": "Rotate",
 		"outputs": [
 			{
+				"longdesc": "Shows the rotated image",
 				"rgba": "$i(rotate($uv, vec2(0.5+$cx, 0.5+$cy), $rotate*0.01745329251))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -33,9 +38,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X:",
+				"longdesc": "The position of the rotation center",
 				"max": 1,
 				"min": -1,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -43,9 +50,11 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y:",
+				"longdesc": "The position of the rotation center",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -53,13 +62,16 @@
 				"control": "Radius1.a",
 				"default": 0,
 				"label": "Rotate:",
+				"longdesc": "The angle of the rotation",
 				"max": 720,
 				"min": -720,
 				"name": "rotate",
+				"shortdesc": "Angle",
 				"step": 0.005,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Rotate"
 	},
 	"type": "shader"
 }

@@ -6,23 +6,29 @@
 	},
 	"parameters": {
 		"direction": 0,
-		"offset": 0.605
+		"offset": 0
 	},
 	"shader_model": {
+		"code": "",
 		"global": "vec2 uvmirror_h(vec2 uv, float offset) {\n\treturn vec2(max(0, abs(uv.x-0.5)-0.5*offset)+0.5, uv.y);\n}\nvec2 uvmirror_v(vec2 uv, float offset) {\n\treturn vec2(uv.x, max(0, abs(uv.y-0.5)-0.5*offset)+0.5);\n}",
 		"inputs": [
 			{
 				"default": "vec4($uv, 0, 1)",
 				"label": "",
+				"longdesc": "The input image",
 				"name": "i",
+				"shortdesc": "Input",
 				"type": "rgba"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that mirrors its input while applying an offset from the center",
 		"name": "Mirror",
 		"outputs": [
 			{
+				"longdesc": "Shows the mirrored image",
 				"rgba": "$i(uvmirror_$direction($uv, $offset))",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -30,7 +36,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "The mirror direction (horizontal or vertical)",
 				"name": "direction",
+				"shortdesc": "Direction",
 				"type": "enum",
 				"values": [
 					{
@@ -44,15 +52,19 @@
 				]
 			},
 			{
+				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The offset from the center",
 				"max": 1,
 				"min": 0,
 				"name": "offset",
+				"shortdesc": "Offset",
 				"step": 0.005,
-				"type": "float",
-				"widget": "spinbox"
+				"type": "float"
 			}
-		]
-	}
+		],
+		"shortdesc": "Mirror"
+	},
+	"type": "shader"
 }
