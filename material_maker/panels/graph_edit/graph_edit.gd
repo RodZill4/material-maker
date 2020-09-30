@@ -40,14 +40,12 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_DOWN and event.control:
+		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed() and event.control:
+			call_deferred("set_scroll_ofs", scroll_offset)
 			zoom *= 1.1
-			print(zoom)
-			get_tree().set_input_as_handled()
-		elif event.button_index == BUTTON_WHEEL_UP and event.control:
+		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed() and event.control:
+			call_deferred("set_scroll_ofs", scroll_offset)
 			zoom /= 1.1
-			print(zoom)
-			get_tree().set_input_as_handled()
 		else:
 			call_deferred("check_last_selected")
 	elif event is InputEventKey and event.pressed:
@@ -57,7 +55,9 @@ func _gui_input(event) -> void:
 	elif event is InputEventMouseMotion:
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
-				if c.get_global_rect().has_point(get_global_mouse_position()):
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
 					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
 				else:
 					c.clear_connection_labels()
