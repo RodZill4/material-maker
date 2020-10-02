@@ -4,7 +4,6 @@ onready var selected_slot : Control = null
 
 var images : Array = []
 var current_image = -1
-var empty_image
 
 var dragging = false
 var gradient = null

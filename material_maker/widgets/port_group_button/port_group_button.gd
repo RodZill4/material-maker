@@ -4,7 +4,6 @@ class_name PortGroupButton
 export var group_parent : int = 2
 
 var state : int = 0
-var group_size = 0
 const TEXTURES = [ 
 	preload("res://material_maker/icons/port_group_0.tres"),
 	preload("res://material_maker/icons/port_group_1.tres"),

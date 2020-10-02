@@ -9,7 +9,6 @@ void fragment() {
 	COLOR = vec4(1.0);
 }
 "
-custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
@@ -22,6 +21,7 @@ resource_local_to_scene = true
 font_data = SubResource( 3 )
 
 [node name="Renderer" type="Viewport"]
+size = Vector2( 256, 256 )
 own_world = true
 transparent_bg = true
 hdr = false

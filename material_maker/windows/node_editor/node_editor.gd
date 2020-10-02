@@ -1,7 +1,5 @@
 extends WindowDialog
 
-var model_data = null
-
 onready var parameter_list : VBoxContainer = $Sizer/Tabs/General/Parameters/Sizer
 onready var input_list : VBoxContainer = $Sizer/Tabs/General/Inputs/Sizer
 onready var output_list : VBoxContainer = $Sizer/Tabs/Outputs/Outputs/Sizer

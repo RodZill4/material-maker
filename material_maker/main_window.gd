@@ -87,10 +87,6 @@ const DEFAULT_CONFIG = {
 	confirm_close_project = true
 }
 
-# warning-ignore:unused_signal
-signal saved_material(material_name, success)
-signal quit
-
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 	

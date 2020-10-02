@@ -25,6 +25,7 @@ func _draw() -> void:
 	for i in range(inputs.size()):
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
 			var conn_pos1 = get_connection_input_position(i)
+# warning-ignore:narrowing_conversion
 			var conn_pos2 = get_connection_input_position(min(i+inputs[i].group_size-1, inputs.size()-1))
 			conn_pos1 /= scale
 			conn_pos2 /= scale
@@ -36,6 +37,7 @@ func _draw() -> void:
 	var outputs = generator.get_output_defs()
 	for i in range(outputs.size()):
 		if outputs[i].has("group_size") and outputs[i].group_size > 1:
+# warning-ignore:narrowing_conversion
 			var conn_pos1 = get_connection_output_position(i)
 			var conn_pos2 = get_connection_output_position(min(i+outputs[i].group_size-1, outputs.size()-1))
 			conn_pos1 /= scale

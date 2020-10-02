@@ -31,5 +31,5 @@ func on_counter_change(count : int, pending : int) -> void:
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ $ProgressBar.value, $ProgressBar.max_value ]
 	last_value = count
 
-func _process(delta):
+func _process(_delta):
 	$FpsCounter.text = "%.1f FPS " % Performance.get_monitor(Performance.TIME_FPS)

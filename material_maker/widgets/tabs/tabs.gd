@@ -60,7 +60,7 @@ func check_save_tab(tab) -> bool:
 				return false
 	return true
 
-func do_close_custom_action(action : String, tab : int, dialog : AcceptDialog) -> void:
+func do_close_custom_action(_action : String, _tab : int, dialog : AcceptDialog) -> void:
 	dialog.queue_free()
 
 

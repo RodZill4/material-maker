@@ -102,13 +102,14 @@ func _on_Hierarchy_item_double_clicked() -> void:
 	emit_signal("group_selected", tree.get_selected().get_metadata(0))
 
 func on_view_updated(generator) -> void:
+	assert(generator is MMGenGraph)
 	if item_from_gen.has(current_generator):
 		item_from_gen[current_generator].clear_custom_color(0)
 	current_generator = generator
 	if item_from_gen.has(current_generator):
 		item_from_gen[current_generator].set_custom_color(0, Color(0.5, 0.5, 1))
 
-func on_gen_parameter_changed(param_name : String, value, generator) -> void:
+func on_gen_parameter_changed(param_name : String, _value, generator) -> void:
 	if param_name == "__output_changed__":
 		for index in range(preview):
 			on_gen_output_changed(index, generator)

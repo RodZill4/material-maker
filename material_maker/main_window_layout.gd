@@ -16,7 +16,7 @@ const PANELS = [
 ]
 
 var panels = {}
-var previous_width : int
+var previous_width : float
 
 func _ready() -> void:
 	previous_width = rect_size.x
@@ -126,5 +126,6 @@ func _on_tab_changed(_tab):
 	update_panels()
 
 func _on_Layout_resized():
+# warning-ignore:narrowing_conversion
 	split_offset -= rect_size.x - previous_width
 	previous_width = rect_size.x

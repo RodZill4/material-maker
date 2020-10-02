@@ -12,8 +12,7 @@ var editable : bool = false
 var transmits_seed : bool = true
 
 signal connections_changed(removed_connections, added_connections)
-# warning-ignore:unused_signal
-signal hierarchy_changed
+signal hierarchy_changed()
 
 func emit_hierarchy_changed():
 	var top = self

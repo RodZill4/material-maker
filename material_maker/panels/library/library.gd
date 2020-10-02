@@ -73,18 +73,18 @@ func add_library(file_name : String, _filter : String = "") -> bool:
 	return false
 
 func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
-	var expanded_items : PoolStringArray = PoolStringArray()
+	var rv : PoolStringArray = PoolStringArray()
 	if item == null:
 		item = tree.get_root()
 		if item == null:
-			return expanded_items
+			return rv
 	elif !item.collapsed:
-		expanded_items.push_back(get_item_path(item))
+		rv.push_back(get_item_path(item))
 	var i = item.get_children()
 	while i != null:
-		expanded_items.append_array(get_expanded_items(i))
+		rv.append_array(get_expanded_items(i))
 		i = i.get_next()
-	return expanded_items
+	return rv
 
 func update_tree(filter : String = "") -> void:
 	filter = filter.to_lower()

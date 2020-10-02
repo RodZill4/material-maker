@@ -74,7 +74,7 @@ func do_load_custom_mesh(file_path) -> void:
 	var id = objects.get_child_count()-1
 	var mesh = $ObjLoader.load_obj_file(file_path)
 	if mesh != null:
-		var object = objects.get_child(id) as MeshInstance
+		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
 		object.set_surface_material(0, SpatialMaterial.new())
 		select_object(id)
@@ -134,6 +134,10 @@ func on_gui_input(event) -> void:
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
 		var motion = 0.01*event.relative
+		if abs(motion.y) > abs(motion.x):
+			motion.x = 0
+		else:
+			motion.y = 0
 		var camera_basis = camera.global_transform.basis
 		if event.shift:
 			if event.button_mask & BUTTON_MASK_LEFT:
@@ -167,7 +171,7 @@ func do_generate_map(file_name : String, map : String, size : int) -> void:
 	var mesh_normal_mapper = load("res://material_maker/panels/preview_3d/map_renderer.tscn").instance()
 	add_child(mesh_normal_mapper)
 	var id = objects.get_child_count()-1
-	var object = objects.get_child(id) as MeshInstance
+	var object : MeshInstance = objects.get_child(id)
 	var result = mesh_normal_mapper.gen(object.mesh, map, file_name, size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")

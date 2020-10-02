@@ -1,7 +1,5 @@
 extends Node
 
-var includes
-
 func create_node(model : String, type : String) -> Node:
 	var node_type = null
 	var node = null

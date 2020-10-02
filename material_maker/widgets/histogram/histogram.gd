@@ -24,8 +24,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 		if ! gen_output_defs.empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			while source is GDScriptFunctionState:
-				source = yield(source, "completed")
+			assert(!(source is GDScriptFunctionState))
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader

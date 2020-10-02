@@ -23,9 +23,9 @@ class Cursor:
 	func _draw() -> void:
 		var polygon : PoolVector2Array
 		if top:
-			polygon = PoolVector2Array([Vector2(0, 0), Vector2(WIDTH/2, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)])
+			polygon = PoolVector2Array([Vector2(0, 0), Vector2(WIDTH/2.0, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)])
 		else:
-			polygon = PoolVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
+			polygon = PoolVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2.0, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
@@ -75,7 +75,7 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
-func on_parameter_changed(p, v) -> void:
+func on_parameter_changed(p, _v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
 		if source != null:

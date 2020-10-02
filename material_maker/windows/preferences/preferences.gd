@@ -2,8 +2,6 @@ extends WindowDialog
 
 var config : ConfigFile
 
-signal config_modified()
-
 func _ready():
 	pass # Replace with function body.
 

@@ -83,7 +83,7 @@ func render_shader(object : Object, shader, textures, render_size) -> Object:
 func copy_to_texture(t : ImageTexture) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:
-		t.create_from_image(get_texture().get_data())
+		t.create_from_image(image)
 
 func get_image() -> Image:
 	var image : Image = Image.new()
