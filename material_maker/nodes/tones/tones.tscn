@@ -10,12 +10,10 @@ atlas = ExtResource( 3 )
 region = Rect2( 16, 80, 16, 16 )
 
 [node name="Tones" type="GraphNode"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 2.75074
-margin_top = 1.78928
-margin_right = -1053.25
-margin_bottom = -529.211
+margin_right = 192.0
+margin_bottom = 141.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 title = "Tones"
 show_close = true
 slot/0/left_enabled = true
@@ -50,14 +48,14 @@ __meta__ = {
 [node name="Bar" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 208.0
+margin_right = 176.0
 margin_bottom = 44.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Mode" type="OptionButton" parent="Bar"]
-margin_right = 172.0
+margin_right = 140.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Luminance"
@@ -65,9 +63,9 @@ items = [ "Luminance", null, false, 0, null, "Red", null, false, 1, null, "Green
 selected = 0
 
 [node name="Auto" type="TextureButton" parent="Bar"]
-margin_left = 176.0
+margin_left = 144.0
 margin_top = 2.0
-margin_right = 192.0
+margin_right = 160.0
 margin_bottom = 18.0
 hint_tooltip = "Set levels automatically"
 size_flags_vertical = 4
@@ -76,7 +74,7 @@ texture_normal = SubResource( 1 )
 [node name="Spacer1" type="Control" parent="."]
 margin_left = 16.0
 margin_top = 45.0
-margin_right = 208.0
+margin_right = 176.0
 margin_bottom = 49.0
 rect_min_size = Vector2( 0, 4 )
 __meta__ = {
@@ -86,15 +84,15 @@ __meta__ = {
 [node name="Histogram" parent="." instance=ExtResource( 1 )]
 margin_left = 16.0
 margin_top = 50.0
-margin_right = 208.0
-margin_bottom = 178.0
-rect_min_size = Vector2( 192, 128 )
+margin_right = 176.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 160, 80 )
 
 [node name="Spacer2" type="Control" parent="."]
 margin_left = 16.0
-margin_top = 179.0
-margin_right = 208.0
-margin_bottom = 183.0
+margin_top = 131.0
+margin_right = 176.0
+margin_bottom = 135.0
 rect_min_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
