@@ -16,22 +16,29 @@
 			{
 				"default": "vec4(sin($uv.x*20.0)*0.5+0.5, sin($uv.y*20.0)*0.5+0.5, 0, 1)",
 				"label": "",
+				"longdesc": "The input image to be warped",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgba"
 			},
 			{
 				"default": "0.0",
 				"function": true,
 				"label": "",
+				"longdesc": "The height map whose slopes are used to deform the input",
 				"name": "d",
+				"shortdesc": "Height map",
 				"type": "f"
 			}
 		],
 		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\treturn vec2($d(fract(uv+vec2(epsilon, 0.0)))-$d(fract(uv-vec2(epsilon, 0.0))), $d(fract(uv+vec2(0.0, epsilon)))-$d(fract(uv-vec2(0.0, epsilon))));\n}",
+		"longdesc": "A node that warps its input according to a heightmap",
 		"name": "Warp",
 		"outputs": [
 			{
+				"longdesc": "Shows the warped image",
 				"rgba": "$in($uv+$amount*$(name_uv)_warp)",
+				"shortdesc": "Output",
 				"type": "rgba"
 			}
 		],
@@ -39,7 +46,9 @@
 			{
 				"default": 0,
 				"label": "",
+				"longdesc": "Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.",
 				"name": "mode",
+				"shortdesc": "Mode",
 				"type": "enum",
 				"values": [
 					{
@@ -56,9 +65,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The strength of the warp effect",
 				"max": 1,
 				"min": 0,
 				"name": "amount",
+				"shortdesc": "Strength",
 				"step": 0.005,
 				"type": "float"
 			},
@@ -66,13 +77,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "",
+				"longdesc": "The offset used to measure slopes",
 				"max": 0.2,
 				"min": 0.005,
 				"name": "eps",
+				"shortdesc": "Epsilon",
 				"step": 0.005,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Warp"
 	},
 	"type": "shader"
 }

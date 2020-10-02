@@ -1,0 +1,40 @@
+{
+	"name": "tex3d_apply_invuvmap",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "Texture",
+				"name": "t",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(0.0)",
+				"label": "Inv. UV Map",
+				"name": "map",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "TEX3D Apply",
+		"outputs": [
+			{
+				"rgb": "$t(vec4($map($uv), 0.0))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}
