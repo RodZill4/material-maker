@@ -15,12 +15,7 @@ func set_texture(path) -> void:
 		generator.set_parameter("image", path)
 	$TextureButton.texture_normal = generator.texture
 
-func get_textures() -> Dictionary:
-	var list = {}
-	list[name] = $TextureButton.texture_normal
-	return list
-
-func on_parameter_changed(p, v) -> void:
+func on_parameter_changed(_p, _v) -> void:
 	$TextureButton.texture_normal = generator.texture
 
 func _on_TextureButton_pressed() -> void:

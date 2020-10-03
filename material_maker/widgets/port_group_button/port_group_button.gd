@@ -4,6 +4,8 @@ class_name PortGroupButton
 export var group_parent : int = 2
 
 var state : int = 0
+# warning-ignore:unused_class_variable
+var group_size : int = 0
 const TEXTURES = [ 
 	preload("res://material_maker/icons/port_group_0.tres"),
 	preload("res://material_maker/icons/port_group_1.tres"),
@@ -11,7 +13,10 @@ const TEXTURES = [
 	preload("res://material_maker/icons/port_group_3.tres")
 ]
 
+
+# warning-ignore:unused_signal
 signal group_size_changed(s)
+
 
 func _ready() -> void:
 	pass
@@ -23,7 +28,7 @@ func set_state(s) -> void:
 func get_group_parent() -> Dictionary:
 	var rv = self
 	var index = 0
-	for i in range(group_parent):
+	for _i in range(group_parent):
 		index = rv.get_index()
 		rv = rv.get_parent()
 	return { parent=rv, index=index }

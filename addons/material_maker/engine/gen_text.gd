@@ -24,7 +24,8 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
-	update_buffer()
+	if is_inside_tree():
+		update_buffer()
 
 func update_buffer() -> void:
 	update_again = true
