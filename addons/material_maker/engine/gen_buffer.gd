@@ -99,6 +99,7 @@ func on_texture_changed(n : String) -> void:
 	if pending_textures.empty():
 		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
 			if p.name == n:
+				update_again = true
 				update_buffer()
 				return
 
