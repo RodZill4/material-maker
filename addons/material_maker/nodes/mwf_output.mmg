@@ -86,6 +86,7 @@
 		}
 	],
 	"label": "Output",
+	"longdesc": "A node that converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node",
 	"name": "mwf_output",
 	"node_position": {
 		"x": 0,
@@ -123,7 +124,6 @@
 			"type": "colorize"
 		},
 		{
-			"label": "Occlusion",
 			"name": "occlusion",
 			"node_position": {
 				"x": -994.845825,
@@ -131,7 +131,6 @@
 			},
 			"parameters": {
 				"param0": 10,
-				"param1": 50,
 				"param2": 1
 			},
 			"type": "occlusion"
@@ -154,7 +153,7 @@
 				"y": 677.328491
 			},
 			"parameters": {
-				"amount": 0.5,
+				"amount": 1,
 				"blend_type": 4
 			},
 			"type": "blend"
@@ -162,31 +161,35 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1336.805542,
-				"y": 597.758606
+				"x": -1626.805542,
+				"y": 608.758606
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
+					"group_size": 5,
 					"name": "Height",
-					"type": "f",
-					"group_size": 5
+					"type": "f"
 				},
 				{
+					"group_size": 0,
 					"name": "Albedo",
 					"type": "rgb"
 				},
 				{
+					"group_size": 0,
 					"name": "ORM",
 					"type": "rgb"
 				},
 				{
+					"group_size": 0,
 					"name": "Emission",
 					"type": "rgb"
 				},
 				{
+					"group_size": 0,
 					"name": "Normal",
 					"type": "rgb"
 				}
@@ -204,32 +207,52 @@
 			},
 			"ports": [
 				{
+					"group_size": 7,
+					"longdesc": "",
 					"name": "Albedo",
-					"type": "rgb",
-					"group_size": 7
+					"shortdesc": "Albedo",
+					"type": "rgb"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Metallic",
+					"shortdesc": "Metallic",
 					"type": "f"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Roughness",
+					"shortdesc": "Roughness",
 					"type": "f"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Emission",
+					"shortdesc": "Emission",
 					"type": "rgb"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Normal",
+					"shortdesc": "Normal",
 					"type": "rgb"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Occlusion",
+					"shortdesc": "Occlusion",
 					"type": "f"
 				},
 				{
+					"group_size": 0,
+					"longdesc": "",
 					"name": "Depth",
+					"shortdesc": "Depth",
 					"type": "f"
 				}
 			],
@@ -238,12 +261,11 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -1100.881836,
-				"y": 438.25
+				"x": -1104.881836,
+				"y": 425.25
 			},
 			"parameters": {
-				"param0": 0.5,
-				"param1": 10,
+				"param0": 1,
 				"param2": 1
 			},
 			"type": "remote",
@@ -256,7 +278,9 @@
 							"widget": "param2"
 						}
 					],
+					"longdesc": "The strength of the calculated occlusion effect",
 					"name": "param2",
+					"shortdesc": "Occlusion",
 					"type": "linked_control"
 				},
 				{
@@ -267,7 +291,9 @@
 							"widget": "amount"
 						}
 					],
+					"longdesc": "The strength of  normals from the base materials (compared to the normal generated from height information))",
 					"name": "param0",
+					"shortdesc": "MatNormal",
 					"type": "linked_control"
 				}
 			]
@@ -280,8 +306,7 @@
 			},
 			"parameters": {
 				"brightness": 0,
-				"contrast": 1,
-				"steps": 6
+				"contrast": 1
 			},
 			"type": "brightness_contrast"
 		},
@@ -292,21 +317,18 @@
 				"y": 544.75
 			},
 			"parameters": {
-				"amount": 0.5,
 				"param0": 10,
 				"param1": 1.02,
 				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param4": 1
 			},
 			"type": "normal_map"
 		}
 	],
 	"parameters": {
-		"param0": 0.5,
-		"param1": 10,
+		"param0": 1,
 		"param2": 1
 	},
+	"shortdesc": "Output",
 	"type": "graph"
 }

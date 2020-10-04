@@ -14,63 +14,85 @@
 			{
 				"default": "vec3(1.0, 0.5, 0.0)",
 				"label": "Map",
+				"longdesc": "The input workflow map",
 				"name": "map",
+				"shortdesc": "Map",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
+				"group_size": 4,
 				"label": "Albedo",
+				"longdesc": "The Albedo channel of the input base material",
 				"name": "mat1",
-				"type": "rgb",
-                                "group_size": 4
+				"shortdesc": "Albedo",
+				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "ORM",
+				"longdesc": "The ambient occlusion, roughness and metallic channels of the input material",
 				"name": "mat2",
+				"shortdesc": "ORM",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "Emission",
+				"longdesc": "The emission channel of the input material",
 				"name": "mat3",
+				"shortdesc": "Emission",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.5, 0.5, 1.0)",
 				"label": "Normal",
+				"longdesc": "The normal map of the input material",
 				"name": "mat4",
+				"shortdesc": "Normal",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.",
 		"name": "Apply Map",
 		"outputs": [
 			{
 				"f": "$map($uv).x",
-				"type": "f",
-                                "group_size": 5
+				"group_size": 5,
+				"longdesc": "The height map of the result",
+				"shortdesc": "Height",
+				"type": "f"
 			},
 			{
+				"longdesc": "The albedo channel of the result",
 				"rgb": "$mat1($(name_uv)_uv)",
+				"shortdesc": "Albedo",
 				"type": "rgb"
 			},
 			{
+				"longdesc": "The ambient occlusion, roughness and metallic channels of the result",
 				"rgb": "$mat2($(name_uv)_uv)",
+				"shortdesc": "ORM",
 				"type": "rgb"
 			},
 			{
+				"longdesc": "The emission channel of the result",
 				"rgb": "$mat3($(name_uv)_uv)",
+				"shortdesc": "Emission",
 				"type": "rgb"
 			},
 			{
+				"longdesc": "The normal map of the result",
 				"rgb": "matmap_rotate_nm($mat4($(name_uv)_uv), -$(name_uv)_angle)",
+				"shortdesc": "Normal",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "Apply Map"
 	},
 	"type": "shader"
 }

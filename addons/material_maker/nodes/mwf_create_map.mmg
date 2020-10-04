@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"angle": 0,
-		"height": 1
+		"height": 0.5
 	},
 	"shader_model": {
 		"code": "",
@@ -15,21 +15,28 @@
 			{
 				"default": "1.0",
 				"label": "",
+				"longdesc": "The input height map",
 				"name": "h",
+				"shortdesc": "Height",
 				"type": "f"
 			},
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input offset seed map",
 				"name": "o",
+				"shortdesc": "Offset",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.",
 		"name": "Create Map",
 		"outputs": [
 			{
+				"longdesc": "The generated workflow map, to be connected to a MixMap or an ApplyMap node",
 				"rgb": "vec3($height*$h($uv), $angle*0.00277777777+0.5, rand(vec2(float($seed)+$o($uv))))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
@@ -38,9 +45,11 @@
 				"control": "None",
 				"default": 1,
 				"label": "Height",
+				"longdesc": "The maximum height of the workflow map, used as multiplier for the input height map",
 				"max": 1,
 				"min": 0,
 				"name": "height",
+				"shortdesc": "Height",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -48,13 +57,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Angle",
+				"longdesc": "The angle stored in the workflow map",
 				"max": 180,
 				"min": -180,
 				"name": "angle",
+				"shortdesc": "Angle",
 				"step": 0.1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Create map"
 	},
 	"type": "shader"
 }

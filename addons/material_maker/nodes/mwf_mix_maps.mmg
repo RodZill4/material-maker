@@ -5,8 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"angle": 45,
-		"height": 0.8
+
 	},
 	"shader_model": {
 		"code": "",
@@ -15,39 +14,51 @@
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The first workflow map",
 				"name": "in1",
+				"shortdesc": "Input1",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The second workflow map",
 				"name": "in2",
+				"shortdesc": "Input2",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The third input map",
 				"name": "in3",
+				"shortdesc": "Input3",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The fourth input map",
 				"name": "in4",
+				"shortdesc": "Input4",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that mixes up to 4 workflow maps, to be used with the same base material",
 		"name": "Mix maps",
 		"outputs": [
 			{
+				"longdesc": "Generates a merged workflow map",
 				"rgb": "matmap_mix(matmap_mix($in1($uv), $in2($uv)), matmap_mix($in3($uv), $in4($uv)))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "Mix maps"
 	},
 	"type": "shader"
 }
