@@ -1269,18 +1269,18 @@
 			"type": "noise"
 		},
 		{
-			"icon": "noise_perlin",
+			"icon": "noise_value",
 			"parameters": {
 				"iterations": 3,
 				"persistence": 0.5,
 				"scale_x": 4,
 				"scale_y": 4
 			},
-			"tree_item": "Noise/Perlin",
+			"tree_item": "Noise/Value",
 			"type": "perlin"
 		},
 		{
-			"icon": "noise_perlin_color",
+			"icon": "noise_value_color",
 			"name": "perlin_color",
 			"parameters": {
 				"iterations": 3,
@@ -1288,7 +1288,7 @@
 				"scale_x": 4,
 				"scale_y": 4
 			},
-			"tree_item": "Noise/Perlin/Color",
+			"tree_item": "Noise/Value/Color",
 			"type": "perlin_color"
 		},
 		{
@@ -1318,7 +1318,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "noise_perlin_warp1",
+			"icon": "noise_value_warp1",
 			"label": "Warp1",
 			"name": "graph",
 			"nodes": [
@@ -1476,7 +1476,7 @@
 				"param4": 0.5,
 				"param5": 0.5
 			},
-			"tree_item": "Noise/Perlin/Warp1",
+			"tree_item": "Noise/Value/Warp1",
 			"type": "graph"
 		},
 		{
@@ -1524,7 +1524,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "noise_perlin_warp2",
+			"icon": "noise_value_warp2",
 			"label": "Warp2",
 			"name": "graph",
 			"nodes": [
@@ -1704,7 +1704,7 @@
 				"param4": 0.5,
 				"param5": 0.5
 			},
-			"tree_item": "Noise/Perlin/Warp2",
+			"tree_item": "Noise/Value/Warp2",
 			"type": "graph"
 		},
 		{
@@ -1811,6 +1811,17 @@
 			},
 			"tree_item": "Filter/Tones",
 			"type": "tones"
+		},
+		{
+			"icon": "filter_tones_step",
+			"name": "tones_step",
+			"parameters": {
+				"invert": false,
+				"value": 0.5,
+				"width": 0.1
+			},
+			"tree_item": "Filter/Tones/Step",
+			"type": "tones_step"
 		},
 		{
 			"icon": "filter_greyscale",

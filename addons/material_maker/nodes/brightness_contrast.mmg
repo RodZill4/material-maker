@@ -13,7 +13,7 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
 				"label": "",
 				"longdesc": "The input image",
 				"name": "in",

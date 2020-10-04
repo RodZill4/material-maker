@@ -5,6 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
+		"folds": 0,
 		"iterations": 5,
 		"noise": 0,
 		"persistence": 0.5,
@@ -17,12 +18,12 @@
 		"inputs": [
 
 		],
-		"instance": "float $(name)_fbm(vec2 coord, vec2 size, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tvalue += fbm_$noise(coord*size, size, seed) * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
+		"instance": "float $(name)_fbm(vec2 coord, vec2 size, int folds, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = fbm_$noise(coord*size, size, seed);\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
 		"longdesc": "A node that generates a noise made of several octaves of a simple noise",
 		"name": "FBM",
 		"outputs": [
 			{
-				"f": "$(name)_fbm($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), float($(seed)))",
+				"f": "$(name)_fbm($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), float($(seed)))",
 				"longdesc": "Shows a greyscale image of the generated noise",
 				"shortdesc": "Output",
 				"type": "f"
@@ -44,10 +45,6 @@
 					{
 						"name": "Perlin",
 						"value": "perlin"
-					},
-					{
-						"name": "Perlin abs",
-						"value": "perlinabs"
 					},
 					{
 						"name": "Cellular",
@@ -96,6 +93,18 @@
 				"min": 1,
 				"name": "scale_y",
 				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Folds",
+				"longdesc": "The number of times the basic noise is folded",
+				"max": 5,
+				"min": 0,
+				"name": "folds",
+				"shortdesc": "Folds",
 				"step": 1,
 				"type": "float"
 			},
