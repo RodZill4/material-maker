@@ -7,6 +7,21 @@ var show_outputs : bool = false
 
 var rendering_time : int = -1
 
+static func wrap_string(s : String, l : int = 50) -> String:
+	var length = s.length()
+	var p = 0
+	while p + l < length:
+		var next_cr = s.find("\n", p)
+		var next_sp = s.find(" ", p+l)
+		if next_cr >= 0 and next_cr < next_sp:
+			p = next_cr+1
+		elif next_sp >= 0:
+			s[next_sp] = "\n"
+			p = next_sp+1
+		else:
+			break
+	return s
+
 func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
@@ -71,7 +86,7 @@ func _on_gui_input(event) -> void:
 		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
-				hint_tooltip = description
+				hint_tooltip = wrap_string(description)
 			elif generator.model != null:
 				hint_tooltip = generator.model
 			return
@@ -97,7 +112,7 @@ func get_slot_tooltip(pos : Vector2) -> String:
 				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
 					var input_def = generator.get_input_defs()[i]
 					if input_def.has("longdesc"):
-						return input_def.longdesc
+						return wrap_string(input_def.longdesc)
 			return ""
 	if get_connection_output_count() > 0:
 		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
@@ -111,7 +126,7 @@ func get_slot_tooltip(pos : Vector2) -> String:
 				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
 					var output_def = generator.get_output_defs()[i]
 					if output_def.has("longdesc"):
-						return output_def.longdesc
+						return wrap_string(output_def.longdesc)
 	return ""
 
 func clear_connection_labels() -> void:
