@@ -194,8 +194,8 @@ func get_source(input_index : int) -> OutputPort:
 
 func get_targets(output_index : int) -> Array:
 	var parent = get_parent()
-	if parent != null:
-		return get_parent().get_port_targets(name, output_index)
+	if parent != null and parent.has_method("get_port_targets"):
+		return parent.get_port_targets(name, output_index)
 	return []
 
 # get the list of outputs that depend on the input whose index is passed as parameter

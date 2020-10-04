@@ -73,6 +73,8 @@ func update_shader() -> void:
 			material.set_shader_param(k, source.textures[k])
 	if source.has("pending_textures"):
 		pending_textures = source.pending_textures
+	else:
+		pending_textures = []
 	if pending_textures.empty():
 		update_buffer()
 	elif ! is_pending:
@@ -93,7 +95,6 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 			update_buffer()
 
 func on_texture_changed(n : String) -> void:
-	update_again = true
 	pending_textures.erase(n)
 	if pending_textures.empty():
 		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
