@@ -914,7 +914,7 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
-			"bmp", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				var control : Control = get_control_at_position(get_global_mouse_position(), self)
 				while control != self:
 					if control.has_method("on_drop_image_file"):
