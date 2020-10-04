@@ -20,6 +20,7 @@ signal need_update(me)
 
 const MENU = [
 	{ menu="Model", submenu="model_list", description="Select" },
+	{ menu="Model", command="configure_model", description="Configure" },
 	{ menu="Model", command="rotate_model", description="Rotate", toggle=true },
 	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
 	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
@@ -30,9 +31,6 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
-	for o in objects.get_children():
-		var m = o.get_surface_material(0)
-		o.set_surface_material(0, m.duplicate())
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
@@ -91,6 +89,11 @@ func _on_Environment_item_selected(id) -> void:
 	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
 	current_environment.visible = true
 
+func configure_model() -> void:
+	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()
+	add_child(popup)
+	popup.configure_mesh(current_object)
+
 func rotate_model(button_pressed = null) -> bool:
 	var object_rotate = $MaterialPreview/Preview3d/ObjectRotate
 	if button_pressed is bool:
@@ -101,7 +104,7 @@ func rotate_model(button_pressed = null) -> bool:
 	return object_rotate.is_playing()
 
 func get_materials() -> Array:
-	if current_object != null:
+	if current_object != null and current_object.get_surface_material(0) != null:
 		return [ current_object.get_surface_material(0) ]
 	return []
 

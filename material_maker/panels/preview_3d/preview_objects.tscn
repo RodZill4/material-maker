@@ -1,172 +1,66 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=1]
-[ext_resource path="res://addons/material_maker/import_plugin/tesselated.shader" type="Shader" id=2]
+[ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="SpatialMaterial" id=2]
-albedo_texture = ExtResource( 1 )
-emission_enabled = true
-emission = Color( 0, 0, 0, 1 )
-emission_energy = 1.0
-emission_operator = 0
-emission_on_uv2 = false
-normal_enabled = true
-normal_scale = 1.0
-ao_enabled = true
-ao_light_affect = 0.0
-ao_on_uv2 = false
-ao_texture_channel = 0
-depth_enabled = true
-depth_scale = 0.05
-depth_deep_parallax = true
-depth_min_layers = 8
-depth_max_layers = 32
-depth_flip_tangent = false
-depth_flip_binormal = false
-uv1_scale = Vector3( 3, 2, 1 )
-
-[sub_resource type="CylinderMesh" id=3]
+[sub_resource type="CylinderMesh" id=2]
 radial_segments = 32
+rings = 1
 
-[sub_resource type="SpatialMaterial" id=4]
-albedo_texture = ExtResource( 1 )
-uv1_scale = Vector3( 2, 2, 2 )
-
-[sub_resource type="SphereMesh" id=5]
+[sub_resource type="SphereMesh" id=4]
 radius = 1.5
 height = 3.0
 radial_segments = 32
 rings = 16
 
-[sub_resource type="PrismMesh" id=6]
-
-[sub_resource type="SpatialMaterial" id=7]
-albedo_texture = ExtResource( 1 )
-uv1_scale = Vector3( 3, 2, 2 )
-
-[sub_resource type="PlaneMesh" id=8]
-material = SubResource( 4 )
-size = Vector2( 3, 3 )
-
-[sub_resource type="SpatialMaterial" id=9]
-albedo_texture = ExtResource( 1 )
-
-[sub_resource type="PlaneMesh" id=10]
-material = SubResource( 4 )
-size = Vector2( 4, 4 )
-
-[sub_resource type="SpatialMaterial" id=11]
-albedo_texture = ExtResource( 1 )
-uv1_scale = Vector3( 4, 4, 4 )
-
-[sub_resource type="ShaderMaterial" id=12]
-shader = ExtResource( 2 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/specular = 0.5
-shader_param/metallic = 0.0
-shader_param/roughness = 1.0
-shader_param/point_size = 1.0
-shader_param/emission = Color( 0, 0, 0, 1 )
-shader_param/emission_energy = 1.0
-shader_param/normal_scale = null
-shader_param/ao_texture_channel = null
-shader_param/ao_light_affect = null
-shader_param/depth_scale = 0.21
-shader_param/depth_min_layers = null
-shader_param/depth_max_layers = null
-shader_param/depth_flip = null
-shader_param/uv1_scale = Vector3( 1, 1, 1 )
-shader_param/uv1_offset = Vector3( 0, 0, 0 )
-shader_param/uv2_scale = Vector3( 1, 1, 1 )
-shader_param/uv2_offset = Vector3( 0, 0, 0 )
+[sub_resource type="PrismMesh" id=5]
 
 [sub_resource type="PlaneMesh" id=13]
-material = SubResource( 12 )
-size = Vector2( 3, 3 )
-subdivide_width = 128
-subdivide_depth = 128
+size = Vector2( 8, 8 )
 
-[sub_resource type="ShaderMaterial" id=14]
-shader = ExtResource( 2 )
-shader_param/albedo = Color( 1, 1, 1, 1 )
-shader_param/specular = 0.5
-shader_param/metallic = 0.0
-shader_param/roughness = 1.0
-shader_param/point_size = 1.0
-shader_param/emission = Color( 0, 0, 0, 1 )
-shader_param/emission_energy = 1.0
-shader_param/normal_scale = null
-shader_param/ao_texture_channel = null
-shader_param/ao_light_affect = null
-shader_param/depth_scale = 0.21
-shader_param/depth_min_layers = null
-shader_param/depth_max_layers = null
-shader_param/depth_flip = null
-shader_param/uv1_scale = Vector3( 1, 1, 1 )
-shader_param/uv1_offset = Vector3( 0, 0, 0 )
-shader_param/uv2_scale = Vector3( 1, 1, 1 )
-shader_param/uv2_offset = Vector3( 0, 0, 0 )
-
-[sub_resource type="SphereMesh" id=15]
-radius = 1.5
-height = 3.0
-radial_segments = 256
-rings = 128
-
-[sub_resource type="SphereMesh" id=16]
-
-[sub_resource type="SpatialMaterial" id=17]
+[sub_resource type="SphereMesh" id=11]
 
 [node name="Objects" type="Spatial"]
 transform = Transform( 0.999995, 0, 0, 0, 1, 0, 0, 0, 0.999995, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
-material/0 = SubResource( 2 )
+material/0 = null
+script = ExtResource( 3 )
+uv_scale = Vector2( 3, 2 )
 
 [node name="Cylinder" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 3 )
-material/0 = SubResource( 4 )
+mesh = SubResource( 2 )
+material/0 = null
+script = ExtResource( 3 )
+uv_scale = Vector2( 2, 2 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 5 )
-material/0 = SubResource( 4 )
-
-[node name="Sphere2" type="MeshInstance" parent="."]
-visible = false
-mesh = SubResource( 5 )
-material/0 = SubResource( 4 )
+mesh = SubResource( 4 )
+material/0 = null
+script = ExtResource( 3 )
+uv_scale = Vector2( 2, 2 )
 
 [node name="Prism" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 6 )
-material/0 = SubResource( 7 )
-
-[node name="Quad" type="MeshInstance" parent="."]
-visible = false
-mesh = SubResource( 8 )
-material/0 = SubResource( 9 )
+mesh = SubResource( 5 )
+material/0 = null
+script = ExtResource( 3 )
+uv_scale = Vector2( 3, 2 )
 
 [node name="Plane" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 10 )
-material/0 = SubResource( 11 )
-
-[node name="QuadTess" type="MeshInstance" parent="."]
-visible = false
 mesh = SubResource( 13 )
-material/0 = SubResource( 14 )
-
-[node name="SphereTess" type="MeshInstance" parent="."]
-visible = false
-mesh = SubResource( 15 )
-material/0 = SubResource( 12 )
+material/0 = null
+script = ExtResource( 3 )
+uv_scale = Vector2( 4, 4 )
 
 [node name="Custom" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 16 )
-material/0 = SubResource( 17 )
+mesh = SubResource( 11 )
+material/0 = null
+script = ExtResource( 3 )
+can_tesselate = false

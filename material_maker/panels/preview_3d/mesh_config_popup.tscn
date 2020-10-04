@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" type="Script" id=2]
+
+[node name="MeshConfiguration" type="PopupPanel"]
+margin_right = 284.0
+margin_bottom = 127.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = -4.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="VBoxContainer"]
+margin_right = 276.0
+margin_bottom = 28.0
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel"]
+margin_left = 77.0
+margin_top = 7.0
+margin_right = 199.0
+margin_bottom = 21.0
+size_flags_horizontal = 4
+text = "Mesh configuration"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UVScale" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 32.0
+margin_right = 276.0
+margin_bottom = 56.0
+
+[node name="Label" type="Label" parent="VBoxContainer/UVScale"]
+margin_top = 5.0
+margin_right = 59.0
+margin_bottom = 19.0
+text = "UV Scale:"
+
+[node name="X" parent="VBoxContainer/UVScale" instance=ExtResource( 1 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 63.0
+margin_right = 121.0
+margin_bottom = 24.0
+value = 1.0
+max_value = 5.0
+step = 0.01
+float_only = true
+
+[node name="Y" parent="VBoxContainer/UVScale" instance=ExtResource( 1 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 125.0
+margin_right = 183.0
+margin_bottom = 24.0
+value = 1.0
+max_value = 5.0
+step = 0.01
+float_only = true
+
+[node name="Tesselated" type="CheckBox" parent="VBoxContainer"]
+margin_top = 60.0
+margin_right = 276.0
+margin_bottom = 84.0
+text = "Tesselated"
+[connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]
+[connection signal="value_changed" from="VBoxContainer/UVScale/X" to="." method="_on_UV_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/UVScale/Y" to="." method="_on_UV_value_changed"]
+[connection signal="toggled" from="VBoxContainer/Tesselated" to="." method="_on_Tesselated_toggled"]

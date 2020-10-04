@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://addons/material_maker/import_plugin/tesselated.shader" type="Shader" id=1]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/specular = 0.5
+shader_param/metallic = 0.0
+shader_param/roughness = 1.0
+shader_param/point_size = 1.0
+shader_param/emission = Color( 0, 0, 0, 1 )
+shader_param/emission_energy = 1.0
+shader_param/normal_scale = null
+shader_param/ao_texture_channel = null
+shader_param/ao_light_affect = null
+shader_param/depth_scale = 0.21
+shader_param/depth_min_layers = null
+shader_param/depth_max_layers = null
+shader_param/depth_flip = null
+shader_param/uv1_scale = Vector3( 1, 1, 1 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/uv2_scale = Vector3( 1, 1, 1 )
+shader_param/uv2_offset = Vector3( 0, 0, 0 )
+shader_param/texture_albedo = ExtResource( 2 )

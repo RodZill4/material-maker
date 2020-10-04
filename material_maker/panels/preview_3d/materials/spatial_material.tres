@@ -1,0 +1,24 @@
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=1]
+
+[resource]
+albedo_texture = ExtResource( 1 )
+emission_enabled = true
+emission = Color( 0, 0, 0, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+normal_enabled = true
+normal_scale = 1.0
+ao_enabled = true
+ao_light_affect = 0.0
+ao_on_uv2 = false
+ao_texture_channel = 0
+depth_enabled = true
+depth_scale = 0.05
+depth_deep_parallax = true
+depth_min_layers = 8
+depth_max_layers = 32
+depth_flip_tangent = false
+depth_flip_binormal = false

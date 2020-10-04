@@ -9,7 +9,6 @@
 [node name="Preview3D" type="ViewportContainer" groups=[
 "preview",
 ]]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -22,6 +21,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MaterialPreview" type="Viewport" parent="."]
 size = Vector2( 1272, 684 )
@@ -30,7 +32,7 @@ world = SubResource( 1 )
 handle_input_locally = false
 msaa = 2
 render_target_clear_mode = 1
-render_target_update_mode = 0
+render_target_update_mode = 3
 physics_object_picking = true
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]

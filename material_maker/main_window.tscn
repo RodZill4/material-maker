@@ -129,6 +129,7 @@ margin_right = 0.0
 margin_bottom = 0.0
 
 [node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel" instance=ExtResource( 4 )]
+visible = false
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 0.0
