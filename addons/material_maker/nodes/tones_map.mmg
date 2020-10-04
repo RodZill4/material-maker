@@ -1,0 +1,90 @@
+{
+	"name": "tones_map",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"in_max": 1,
+		"in_min": 0,
+		"out_max": 1,
+		"out_min": 0
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "A node that maps linearly an input tones interval to an output tones interval.",
+		"name": "Tones map",
+		"outputs": [
+			{
+				"longdesc": "Shows the generated remapped image",
+				"rgba": "vec4(vec3($out_min)+($in($uv).rgb-vec3($in_min))*vec3(($out_max-$out_min)/($in_max-$in_min)), $in($uv).a)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Input min",
+				"longdesc": "The minimum value of the input interval",
+				"max": 1,
+				"min": 0,
+				"name": "in_min",
+				"shortdesc": "InputMin",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Input max",
+				"longdesc": "The maximum value of the input interval",
+				"max": 1,
+				"min": 0,
+				"name": "in_max",
+				"shortdesc": "InputMax",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Output min",
+				"longdesc": "The minimum value of the output interval",
+				"max": 1,
+				"min": 0,
+				"name": "out_min",
+				"shortdesc": "OutputMin",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Output max",
+				"longdesc": "The maximum value of the output interval",
+				"max": 1,
+				"min": 0,
+				"name": "out_max",
+				"shortdesc": "OutputMax",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tones map"
+	},
+	"type": "shader"
+}

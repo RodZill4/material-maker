@@ -1813,6 +1813,17 @@
 			"type": "tones"
 		},
 		{
+			"icon": "filter_tones_map",
+			"name": "tones_map",
+			"parameters": {
+				"invert": false,
+				"value": 0.5,
+				"width": 0.1
+			},
+			"tree_item": "Filter/Tones/Map",
+			"type": "tones_map"
+		},
+		{
 			"icon": "filter_tones_step",
 			"name": "tones_step",
 			"parameters": {
