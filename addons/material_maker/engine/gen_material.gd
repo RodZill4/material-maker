@@ -267,18 +267,16 @@ func update_material(m, file_prefix = null) -> void:
 	else:
 		m.set_shader_param("albedo", parameters.albedo_color)
 		m.set_shader_param("texture_albedo", get_generated_texture("albedo", file_prefix))
+		m.set_shader_param("texture_orm", get_generated_texture("orm", file_prefix))
 		m.set_shader_param("metallic", parameters.metallic)
-		m.set_shader_param("texture_metallic", get_generated_texture("orm", file_prefix))
-		m.set_shader_param("metallic_texture_channel", PoolRealArray([0.0, 0.0, 1.0, 0.0]))
 		m.set_shader_param("roughness", parameters.roughness)
-		m.set_shader_param("texture_roughness", get_generated_texture("orm", file_prefix))
-		m.set_shader_param("roughness_texture_channel", PoolRealArray([0.0, 1.0, 0.0, 0.0]))
 		m.set_shader_param("emission_energy", parameters.emission_energy)
 		m.set_shader_param("texture_emission", get_generated_texture("emission", file_prefix))
 		m.set_shader_param("normal_scale", parameters.normal)
 		m.set_shader_param("texture_normal", get_generated_texture("normal", file_prefix))
 		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
 		m.set_shader_param("texture_depth", get_generated_texture("depth", file_prefix))
+		m.set_shader_param("ao_light_affect", parameters.ao)
 
 # Export
 

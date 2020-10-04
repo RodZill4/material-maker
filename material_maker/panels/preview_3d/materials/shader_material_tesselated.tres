@@ -13,7 +13,6 @@ shader_param/point_size = 1.0
 shader_param/emission = Color( 0, 0, 0, 1 )
 shader_param/emission_energy = 1.0
 shader_param/normal_scale = null
-shader_param/ao_texture_channel = null
 shader_param/ao_light_affect = null
 shader_param/depth_scale = 0.21
 shader_param/depth_min_layers = null
