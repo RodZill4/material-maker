@@ -1,27 +1,27 @@
-Perlin noise node
+Value noise node
 ~~~~~~~~~~~~~~~~~
 
-The **Perlin** noise node outputs a texture generated as a sum of Perlin noise functions
-with increasing frequencies and decreasing amplitudes. Perlin noise has a wide range of
+The **Value** noise node outputs a texture generated as a sum of Value noise functions
+with increasing frequencies and decreasing amplitudes. Value noise has a wide range of
 applications, such as stains, wood, dust...
 
-.. image:: images/node_noise_perlin.png
+.. image:: images/node_noise_value.png
 	:align: center
 
 Inputs
 ++++++
 
-The **Perlin** noise node does not accept any input.
+The **Value** noise node does not accept any input.
 
 Outputs
 +++++++
 
-The **Perlin** noise node provides a greyscale Perlin noise texture.
+The **Value** noise node provides a greyscale Value noise texture.
 
 Parameters
 ++++++++++
 
-The **Perlin** noise node accepts the following parameters:
+The **Value** noise node accepts the following parameters:
 
 * *Scale X* and *Scale Y* are the subdivisions of the first iteration
 
@@ -40,15 +40,15 @@ are not changed.
 Example images
 ++++++++++++++
 
-.. image:: images/node_perlin_samples.png
+.. image:: images/node_value_samples.png
 	:align: center
 
 Variations
 ++++++++++
 
-* The **Color Perlin** node generates an RGB image made of 3 greyscale Perlin Noise images.
+* The **Color Value** node generates an RGB image made of 3 greyscale Value Noise images.
 
-* The **Perlin Warp1** and **Perlin Warp2** nodes generate Perlin noise with domain warping.
+* The **Value Warp1** and **Value Warp2** nodes generate Value noise with domain warping.
 
-.. image:: images/node_perlin_variations.png
+.. image:: images/node_value_variations.png
 	:align: center
