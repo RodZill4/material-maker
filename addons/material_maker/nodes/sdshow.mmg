@@ -5,12 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0.1,
-		"cx": 0,
-		"cy": 0,
-		"h": 0.08,
-		"r": 0.3,
-		"w": 0.28
+		"bevel": 0.1
 	},
 	"shader_model": {
 		"code": "",
@@ -19,29 +14,38 @@
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input shape",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf2d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that creates a greyscale image from a shape described as a 2D Signed Distance Function",
 		"name": "sdShow",
 		"outputs": [
 			{
 				"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+				"longdesc": "Shows the shape as a greyscale image",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0,
 				"label": "Bevel",
+				"longdesc": "The width of the gradient at the edges of the shape",
 				"max": 1,
 				"min": 0,
 				"name": "bevel",
+				"shortdesc": "Bevel",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdShow"
 	},
 	"type": "shader"
 }

@@ -16,21 +16,26 @@
 
 		],
 		"instance": "",
+		"longdesc": "A circle described as a signed distance function",
 		"name": "sdCircle",
 		"outputs": [
 			{
+				"longdesc": "The generated signed distance function",
 				"sdf2d": "length($uv-vec2($cx+0.5, $cy+0.5))-$r",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Radius1.x",
+				"control": "None",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "The radius of the circle",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -38,9 +43,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -48,13 +55,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdCircle"
 	},
 	"type": "shader"
 }

@@ -5,11 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": -0.19353,
-		"cy": -0.224011,
-		"h": 0.187815,
-		"r": 0.3,
-		"w": 0.393785
+		"cx": 0,
+		"cy": 0,
+		"h": 0.2,
+		"w": 0.3
 	},
 	"shader_model": {
 		"code": "",
@@ -18,10 +17,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A rhombus described as a signed distance function",
 		"name": "sdRhombus",
 		"outputs": [
 			{
+				"longdesc": "The rhombus as a signed distance function",
 				"sdf2d": "sdRhombus($uv-vec2($cx+0.5, $cy+0.5), vec2($w, $h))",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -30,9 +32,11 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
+				"longdesc": "The width of the rhombus",
 				"max": 1,
 				"min": 0,
 				"name": "w",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -40,9 +44,11 @@
 				"control": "Rect1.y",
 				"default": 1,
 				"label": "Height",
+				"longdesc": "The height of the rhombus",
 				"max": 1,
 				"min": 0,
 				"name": "h",
+				"shortdesc": "Height",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -50,9 +56,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -60,13 +68,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdRhombus"
 	},
 	"type": "shader"
 }

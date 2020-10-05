@@ -8,7 +8,6 @@
 		"cx": 0,
 		"cy": 0,
 		"h": 0.2,
-		"r": 0.3,
 		"w": 0.3
 	},
 	"shader_model": {
@@ -18,10 +17,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A rectangle described as a signed distance function",
 		"name": "sdBox",
 		"outputs": [
 			{
+				"longdesc": "The generated signed distance function",
 				"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -30,9 +32,11 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
+				"longdesc": "The width of the box",
 				"max": 1,
 				"min": 0,
 				"name": "w",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -40,9 +44,11 @@
 				"control": "Rect1.y",
 				"default": 1,
 				"label": "Height",
+				"longdesc": "The height of the box",
 				"max": 1,
 				"min": 0,
 				"name": "h",
+				"shortdesc": "Height",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -50,9 +56,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
+				"longdesc": "The position of the center of the box on the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -60,13 +68,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
+				"longdesc": "The position of the center of the box on the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdBox"
 	},
 	"type": "shader"
 }

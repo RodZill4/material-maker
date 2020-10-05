@@ -11,22 +11,24 @@
 	"shader_model": {
 		"code": "",
 		"global": "float sdRipples(float d, float w, int r) {\n\tfor (int i = 0; i < r; ++i) {\n\t\td = abs(d)-w;\n\t}\n\treturn d;\n}\n",
-		"includes": [
-			""
-		],
 		"inputs": [
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input shape, defined as a signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf2d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that creates an annular shape from a shape described as a signed distance function",
 		"name": "sdAnnularShape",
 		"outputs": [
 			{
+				"longdesc": "The generated layered shape",
 				"sdf2d": "sdRipples($in($uv), $r, int($ripples))",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -35,9 +37,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Width",
+				"longdesc": "The width of each generated ripple",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -45,13 +49,16 @@
 				"control": "None",
 				"default": 1,
 				"label": "Ripples",
+				"longdesc": "The number of generated ripples",
 				"max": 16,
 				"min": 0,
 				"name": "ripples",
+				"shortdesc": "Ripples",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdAnnularShape"
 	},
 	"type": "shader"
 }

@@ -5,10 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0,
-		"x": 0.35,
-		"y": 0,
-		"z": 0
+		"a": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -17,15 +14,20 @@
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input shape, defined as a signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf2d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that rotates its input shape described as a signed distance function",
 		"name": "Rotate",
 		"outputs": [
 			{
+				"longdesc": "The rotated shape",
 				"sdf2d": "$in(sdf2d_rotate($uv, $a*0.01745329251))",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -34,13 +36,16 @@
 				"control": "Radius1.a",
 				"default": 0,
 				"label": "",
+				"longdesc": "The rotation angle",
 				"max": 180,
 				"min": -180,
 				"name": "a",
+				"shortdesc": "Angle",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdRotate"
 	},
 	"type": "shader"
 }

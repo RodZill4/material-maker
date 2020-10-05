@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"a1": 0,
-		"a2": 0,
+		"a1": 30,
+		"a2": 150,
 		"r1": 0.3,
 		"r2": 0.1
 	},
@@ -17,10 +17,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "An arc as a signed distance function",
 		"name": "sdArc",
 		"outputs": [
 			{
+				"longdesc": "The arc as a signed distance function",
 				"sdf2d": "sdArc($uv-vec2(0.5), mod($a1, 360.0)*0.01745329251, mod($a2, 360.0)*0.01745329251, $r1, $r2)",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -29,9 +32,11 @@
 				"control": "Angle1.a",
 				"default": 0,
 				"label": "Angle 1",
+				"longdesc": "The first angle of the arc",
 				"max": 180,
 				"min": -180,
 				"name": "a1",
+				"shortdesc": "Angle1",
 				"step": 1,
 				"type": "float"
 			},
@@ -39,9 +44,11 @@
 				"control": "Angle2.a",
 				"default": 0,
 				"label": "Angle 2",
+				"longdesc": "The second angle of the arc",
 				"max": 180,
 				"min": -180,
 				"name": "a2",
+				"shortdesc": "Angle2",
 				"step": 1,
 				"type": "float"
 			},
@@ -49,9 +56,11 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "The radius of the arc",
 				"max": 1,
 				"min": 0,
 				"name": "r1",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -59,13 +68,16 @@
 				"control": "Radius11.r",
 				"default": 0.1,
 				"label": "Width",
+				"longdesc": "The width of the shape around the arc",
 				"max": 1,
 				"min": 0,
 				"name": "r2",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdArc"
 	},
 	"type": "shader"
 }

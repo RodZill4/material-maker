@@ -5,9 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"x": 0.024,
-		"y": 0.024,
-		"z": 0
+		"x": 0,
+		"y": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -16,15 +15,20 @@
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The input shape, defined as a signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf2d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that translates its input shape described as signed distance function",
 		"name": "Translate",
 		"outputs": [
 			{
+				"longdesc": "The translated shape",
 				"sdf2d": "$in($uv-vec2($x, $y))",
+				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
@@ -33,9 +37,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "X",
+				"longdesc": "The translation along the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "x",
+				"shortdesc": "Translate.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -43,13 +49,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Y",
+				"longdesc": "The translation along the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "y",
+				"shortdesc": "Translate.y",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "sdTranslate"
 	},
 	"type": "shader"
 }

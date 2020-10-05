@@ -260,8 +260,8 @@
 			"icon": "simple_sdf_shapes_sdarc",
 			"name": "sdarc",
 			"parameters": {
-				"a1": 0,
-				"a2": 0,
+				"a1": 30,
+				"a2": 150,
 				"cx": 0,
 				"cy": 0,
 				"r": 0.4,
