@@ -116,7 +116,7 @@ Instance functions are functions that are unique to an instance of the node.
 They will typically depend on parameters, and those could either be used as
 parameters when calling global functions, or to form global function names (as
 shown in the screenshot below: the blend_type parameter is an enum whose value
-is the suffix of one of the blend functions defined in the Global Functions pane).
+is the suffix of one of the blend functions defined in the Global Functions panel).
 
 Instance functions must also have a unique name, and the name implicit variable
 can be used to do this: whenever $name or $(name) is used, it will be replaced
