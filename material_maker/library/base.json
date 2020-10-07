@@ -961,6 +961,21 @@
 			"type": "bricks"
 		},
 		{
+			"icon": "pattern_unevenbricks",
+			"name": "bricks_uneven",
+			"parameters": {
+				"bevel": 0.01,
+				"corner": 0,
+				"iterations": 8,
+				"min_size": 0.3,
+				"mortar": 0.01,
+				"randomness": 0.5,
+				"round": 0
+			},
+			"tree_item": "Pattern/UnevenBricks",
+			"type": "bricks_uneven"
+		},
+		{
 			"icon": "pattern_weave",
 			"name": "weave",
 			"parameters": {
@@ -2192,6 +2207,17 @@
 			},
 			"tree_item": "Filter/Pixelize",
 			"type": "pixelize"
+		},
+		{
+			"icon": "filter_supersample",
+			"name": "supersample",
+			"parameters": {
+				"count": 2,
+				"size": 9,
+				"width": 1
+			},
+			"tree_item": "Filter/Supersample",
+			"type": "supersample"
 		},
 		{
 			"icon": "transform",
