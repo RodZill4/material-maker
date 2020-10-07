@@ -26,8 +26,6 @@ jobs:
         run: |
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux build/${EXPORT_NAME}_${MM_RELEASE}_macosx ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
-      - name: Install Sphinx theme
-        run: pip install sphinx_rtd_theme
       - name: Generate Documentation
         uses: ammaraskar/sphinx-action@master
         with:
