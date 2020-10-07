@@ -26,10 +26,10 @@ jobs:
         run: |
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux build/${EXPORT_NAME}_${MM_RELEASE}_macosx ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
-	  - name: Generate Documentation
-	    run: |
-		  cd material_maker/doc
-		  make
+      - name: Generate Documentation
+        run: |
+          cd material_maker/doc
+          make
       - name: Windows Build 🗔
         run: godot -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
