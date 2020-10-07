@@ -33,10 +33,12 @@ The **Tiler** node accepts the following parameters:
 * *Tile X* and *Tile Y*, the number of columns and rows of of the tile pattern.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
+* *Scale X and Scale Y* are the scale along X and Y axes applied to each instance.
 * *Fixed Offset* is an offset applied to all odd lines.
 * *Offset* is the maximum random offset applied to each instance (relative to tiles size).
-* *Rotate* is the maximum angle of the random rotation applied to each instance.
-* *Scale* is the amount of scaling applied to each instance.
+* *RndRotate* is the maximum angle of the random rotation applied to each instance.
+* *RndScale* is the amount of random scaling applied to each instance.
+* *RndValue* is the amount of random value applied to each instance.
 
 Example images
 ++++++++++++++
