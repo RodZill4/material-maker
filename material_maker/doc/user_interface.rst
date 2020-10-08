@@ -205,16 +205,32 @@ The 3D preview panel shows a 3D preview of the current material.
 .. image:: images/preview_3d.png
   :align: center
 
-The left select button can be used to select a model for the 3D preview, and the second
-one provides different environments. The **R** button can be used to start and stop the
-object's rotation animation.
+The *Model* menu can be used to:
 
-In the 3D view, the object can be rotated about the yaw and the pitch axes (from the
-camera's point of view) by holding the right mouse button and moving the mouse horizontally
+* select a model for the 3D preview
+
+* show a popup to configure its UV scale and specify if it should be tesselated or not
+
+* start and stop the object's rotation animation
+
+* generate a mesh normal or inverse UV map (this option is only available for custom meshes)
+
+Selecting the *Custom* option in the model list will show a file dialog to select a
+3D model in Wavefront (.obj) format. The model should have UV information to correctly
+display materials (normals will be generated if they are missing).
+
+When generating a map from a custom mesh, an image node for the generated map will
+be stored in the clipboard, and it is possible to directly paste that node into about
+a material graph.
+
+The *Environment* menu provides different environments.
+
+In the 3D view, the view can be rotated about the yaw and the pitch axes (from the
+camera's point of view) by holding the left mouse button and moving the mouse horizontally
 or vertically. The object can also be rotated about the roll axis by holding Shift and
 and the right mouse button and moving the mouse horizontally.
 
-Holding the left mouse button will rotate the camera while the object remains static.
+Holding the Shift key will rotate the object while the view remains static.
 
 Rotating the object or the camera will automatically disable the object's rotate animation.
 
