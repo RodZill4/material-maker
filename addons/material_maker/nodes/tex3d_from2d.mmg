@@ -14,21 +14,27 @@
 			{
 				"default": "vec3(0.5)",
 				"label": "",
+				"longdesc": "The input 2D texture",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that creates a 3D texture from a 2D texture",
 		"name": "TEX3D From2D",
 		"outputs": [
 			{
+				"longdesc": "The generated 3D texture",
+				"shortdesc": "Output",
 				"tex3d": "$in($uv.xy+vec2(0.5))",
 				"type": "tex3d"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "Tex3D From 2D"
 	},
 	"type": "shader"
 }

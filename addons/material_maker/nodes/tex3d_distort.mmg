@@ -5,29 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"Color": {
-			"a": 1,
-			"b": 0.145098,
-			"g": 0.443137,
-			"r": 0.92549,
-			"type": "Color"
-		},
-		"Distort": 0.3,
-		"bevel": 0,
-		"color": {
-			"a": 1,
-			"b": 0,
-			"g": 0,
-			"r": 1,
-			"type": "Color"
-		},
-		"cx": 0,
-		"cy": 0,
-		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
-		"r": 0.15,
-		"w": 0.28
+		"Distort": 0.3
 	},
 	"shader_model": {
 		"code": "",
@@ -36,20 +14,27 @@
 			{
 				"default": "vec3(1.0)",
 				"label": "",
+				"longdesc": "The 3D texture to be distorted",
 				"name": "in1",
+				"shortdesc": "Input1",
 				"type": "tex3d"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "",
+				"longdesc": "The 3D texture used to distort Input1",
 				"name": "in2",
+				"shortdesc": "Input2",
 				"type": "tex3d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that distorts its input 3D texture using another 3D texture",
 		"name": "TEX3D Distort",
 		"outputs": [
 			{
+				"longdesc": "The distorted 3D texture",
+				"shortdesc": "Output",
 				"tex3d": "$in1(vec4($uv.xyz+($in2($uv)*$Distort*0.5-0.5), 0.0))",
 				"type": "tex3d"
 			}
@@ -59,13 +44,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Distort",
+				"longdesc": "The strength of the distort effect",
 				"max": 1,
 				"min": 0,
 				"name": "Distort",
+				"shortdesc": "Strength",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Tex3D Distort"
 	},
 	"type": "shader"
 }

@@ -14,17 +14,22 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "vec2(0.0)",
+				"default": "vec2(100.0, 0.0)",
 				"label": "",
+				"longdesc": "The input object as a signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that translates its input 3D object described as a signed distance function.",
 		"name": "Translate",
 		"outputs": [
 			{
+				"longdesc": "The translated object",
 				"sdf3dc": "$in($uv-vec3($x, $y, $z))",
+				"shortdesc": "Output",
 				"type": "sdf3dc"
 			}
 		],
@@ -33,9 +38,11 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "X",
+				"longdesc": "The translation along the X axis",
 				"max": 1,
 				"min": -1,
 				"name": "x",
+				"shortdesc": "Translate.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -43,9 +50,11 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Y",
+				"longdesc": "The translation along the Y axis",
 				"max": 1,
 				"min": -1,
 				"name": "y",
+				"shortdesc": "Translate.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -53,13 +62,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Z",
+				"longdesc": "The translation along the Z axis",
 				"max": 1,
 				"min": -1,
 				"name": "z",
+				"shortdesc": "Translate.z",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Translate"
 	},
 	"type": "shader"
 }

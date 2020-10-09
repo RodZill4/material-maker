@@ -5,13 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0,
 		"ax": 0,
 		"ay": 0,
-		"az": 0,
-		"x": 0.35,
-		"y": 0,
-		"z": 0
+		"az": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -20,14 +16,19 @@
 			{
 				"default": "vec3(1.0)",
 				"label": "",
+				"longdesc": "The input 3D texture",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "tex3d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that rotates a 3D texture",
 		"name": "TEX3D Rotate",
 		"outputs": [
 			{
+				"longdesc": "The rotated 3D texture",
+				"shortdesc": "Output",
 				"tex3d": "$in(vec4(tex3d_rotate($uv.xyz, -vec3($ax, $ay, $az)*0.01745329251), $uv.w))",
 				"type": "tex3d"
 			}
@@ -37,9 +38,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "X",
+				"longdesc": "The rotation around the X axis",
 				"max": 180,
 				"min": -180,
 				"name": "ax",
+				"shortdesc": "Rotate.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -47,9 +50,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Y",
+				"longdesc": "The rotation around the Y axis",
 				"max": 180,
 				"min": -180,
 				"name": "ay",
+				"shortdesc": "Rotate.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -57,13 +62,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Z",
+				"longdesc": "The rotation around the Z axis",
 				"max": 180,
 				"min": -180,
 				"name": "az",
+				"shortdesc": "Rotate.z",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Tex3D Rotate"
 	},
 	"type": "shader"
 }
