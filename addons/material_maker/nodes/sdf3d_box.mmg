@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"r": 0.05,
+		"r": 0.01,
 		"sx": 0.3,
 		"sy": 0.25,
 		"sz": 0.25
@@ -17,10 +17,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a rounded box as a signed distance function",
 		"name": "Box",
 		"outputs": [
 			{
+				"longdesc": "Shows the rounded box",
 				"sdf3d": "length(max($(name_uv)_q,0.0))+min(max($(name_uv)_q.x,max($(name_uv)_q.y,$(name_uv)_q.z)),0.0)-$r",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
@@ -29,9 +32,11 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Size X",
+				"longdesc": "The size of the box along the X axis",
 				"max": 1,
 				"min": 0,
 				"name": "sx",
+				"shortdesc": "Size.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -39,9 +44,11 @@
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Size Y",
+				"longdesc": "The size of the box along the Y axis",
 				"max": 1,
 				"min": 0,
 				"name": "sy",
+				"shortdesc": "Size.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -49,9 +56,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Size Z",
+				"longdesc": "The size of the box along the Z axis",
 				"max": 1,
 				"min": 0,
 				"name": "sz",
+				"shortdesc": "Size.z",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -59,13 +68,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "The radius of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Box"
 	},
 	"type": "shader"
 }

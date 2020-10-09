@@ -16,10 +16,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a capsule as a signed distance functioni",
 		"name": "Capsule",
 		"outputs": [
 			{
+				"longdesc": "Shows the capsule",
 				"sdf3d": "length($(name_uv)_p)-$r",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
@@ -27,7 +30,9 @@
 			{
 				"default": 1,
 				"label": "Axis",
+				"longdesc": "The axis of the capsule",
 				"name": "axis",
+				"shortdesc": "Axis",
 				"type": "enum",
 				"values": [
 					{
@@ -48,9 +53,11 @@
 				"control": "Rect1.y",
 				"default": 0.25,
 				"label": "Length",
+				"longdesc": "The length of the capsule",
 				"max": 1,
 				"min": 0,
 				"name": "l",
+				"shortdesc": "Length",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -58,13 +65,16 @@
 				"control": "Rect1.x",
 				"default": 0.2,
 				"label": "Radius",
+				"longdesc": "The radius of the capsule",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "capsule"
 	},
 	"type": "shader"
 }

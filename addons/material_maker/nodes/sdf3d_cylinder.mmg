@@ -16,10 +16,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a cylinder as a signed distance function",
 		"name": "Cylinder",
 		"outputs": [
 			{
+				"longdesc": "Shows the cylinder",
 				"sdf3d": "min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0) + length(max($(name_uv)_d,0.0))",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
@@ -27,7 +30,9 @@
 			{
 				"default": 1,
 				"label": "Axis",
+				"longdesc": "The axis of the cylinder",
 				"name": "axis",
+				"shortdesc": "Axis",
 				"type": "enum",
 				"values": [
 					{
@@ -48,9 +53,11 @@
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Length",
+				"longdesc": "The length of the cylinder",
 				"max": 1,
 				"min": 0,
 				"name": "l",
+				"shortdesc": "Length",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -58,13 +65,16 @@
 				"control": "Rect1.x",
 				"default": 0.2,
 				"label": "Radius",
+				"longdesc": "The radius of the cylinder",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Cylinder"
 	},
 	"type": "shader"
 }
