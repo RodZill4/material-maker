@@ -27,6 +27,7 @@ const MENU = [
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
+
 var _mouse_start_position := Vector2.ZERO
 
 
@@ -34,12 +35,18 @@ func _ready() -> void:
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
+	
+	get_tree().create_timer(1.0).connect("timeout", self, "_on_Model_item_selected", [0])
+	# doing it now doesn't work
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
 		var o = objects.get_child(i)
-		menu.add_item(o.name, i)
+		if o.thumbnail:
+			menu.add_icon_item(o.thumbnail, "", i)
+		else:
+			menu.add_item(o.name, i)
 	if !menu.is_connected("id_pressed", self, "_on_Model_item_selected"):
 		menu.connect("id_pressed", self, "_on_Model_item_selected")
 
