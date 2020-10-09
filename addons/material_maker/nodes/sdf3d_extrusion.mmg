@@ -5,43 +5,47 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0,
-		"d": 0.5,
-		"s": 1,
-		"x": 0.35,
-		"y": 0,
-		"z": 0
+		"d": 0.3
 	},
 	"shader_model": {
 		"code": "vec2 $(name_uv)_w = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);\n",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "100.0",
 				"label": "",
+				"longdesc": "The input 2D shape as a signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf2d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that extrudes its 2D input shape along the Y axis",
 		"name": "Extrusion",
 		"outputs": [
 			{
+				"longdesc": "The extruded shape",
 				"sdf3d": "min(max($(name_uv)_w.x,$(name_uv)_w.y),0.0)+length(max($(name_uv)_w,0.0))",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
+				"control": "None",
 				"default": 0.25,
 				"label": "",
+				"longdesc": "The length of the extrusion operation",
 				"max": 1,
 				"min": 0,
 				"name": "d",
+				"shortdesc": "Length",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Extrusion"
 	},
 	"type": "shader"
 }
