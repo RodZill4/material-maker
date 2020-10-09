@@ -4,15 +4,14 @@
 [ext_resource path="res://material_maker/windows/preferences/preferences.gd" type="Script" id=2]
 
 [node name="Preferences" type="WindowDialog"]
-visible = true
 anchor_left = 0.377
 anchor_top = 0.383
 anchor_right = 0.622
 anchor_bottom = 0.612
-margin_left = 0.269348
-margin_top = -0.186615
-margin_right = -0.330688
-margin_bottom = -0.0666504
+margin_left = 0.440002
+margin_top = 0.240021
+margin_right = 0.840027
+margin_bottom = -26.64
 popup_exclusive = true
 window_title = "Preferences"
 script = ExtResource( 2 )
@@ -32,33 +31,48 @@ __meta__ = {
 }
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
-margin_right = 308.0
-margin_bottom = 132.0
+margin_right = 310.0
+margin_bottom = 106.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ConfirmQuit" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+margin_right = 310.0
 config_variable = "confirm_quit"
 
 [node name="ConfirmCloseProject" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
 margin_top = 28.0
+margin_right = 310.0
 margin_bottom = 52.0
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
+[node name="Control" type="Control" parent="VBoxContainer/VBoxContainer2"]
+margin_top = 56.0
+margin_right = 310.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="EnableVSync" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+margin_top = 70.0
+margin_right = 310.0
+margin_bottom = 94.0
+text = "Enable VSync"
+config_variable = "vsync"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 136.0
-margin_right = 308.0
-margin_bottom = 136.0
+margin_top = 110.0
+margin_right = 310.0
+margin_bottom = 110.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 120.0
-margin_top = 140.0
-margin_right = 308.0
-margin_bottom = 160.0
+margin_left = 122.0
+margin_top = 114.0
+margin_right = 310.0
+margin_bottom = 134.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]

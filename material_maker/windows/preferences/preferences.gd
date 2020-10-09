@@ -2,6 +2,10 @@ extends WindowDialog
 
 var config : ConfigFile
 
+
+signal config_changed()
+
+
 func _ready():
 	pass # Replace with function body.
 
@@ -24,9 +28,11 @@ func update_config(p : Node) -> void:
 
 func _on_Apply_pressed():
 	update_config(self)
+	emit_signal("config_changed")
 
 func _on_OK_pressed():
 	update_config(self)
+	emit_signal("config_changed")
 	queue_free()
 
 func _on_Cancel_pressed():

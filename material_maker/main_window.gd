@@ -84,7 +84,8 @@ const MENU = [
 
 const DEFAULT_CONFIG = {
 	confirm_quit = true,
-	confirm_close_project = true
+	confirm_close_project = true,
+	vsync = true
 }
 
 func _ready() -> void:
@@ -95,6 +96,7 @@ func _ready() -> void:
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
+	on_config_changed()
 	
 	# Restore the window position/size if values are present in the configuration cache
 	if config_cache.has_section_key("window", "screen"):
@@ -172,6 +174,9 @@ func get_config(key : String):
 	if ! config_cache.has_section_key("config", key):
 		return DEFAULT_CONFIG[key]
 	return config_cache.get_value("config", key)
+
+func on_config_changed() -> void:
+	OS.vsync_enabled = get_config("vsync")
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -624,6 +629,7 @@ func edit_save_selection() -> void:
 func edit_preferences() -> void:
 	var dialog = preload("res://material_maker/windows/preferences/preferences.tscn").instance()
 	add_child(dialog)
+	dialog.connect("config_changed", self, "on_config_changed")
 	dialog.edit_preferences(config_cache)
 
 func view_center() -> void:
