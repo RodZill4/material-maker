@@ -5,6 +5,9 @@ export var can_tesselate : bool = true
 export var uv_scale : Vector2 = Vector2(1, 1) setget set_uv_scale
 export var tesselated : bool = false setget set_tesselated
 
+var thumbnail: Texture = null
+
+
 func _ready():
 	update_material()
 
