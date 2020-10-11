@@ -33,8 +33,10 @@ The **Splatter** node accepts the following parameters:
 * *Count*, the number of instances of the source image in the result, including those canceled by the mask.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
-* *Rotate* is the maximum angle of the random rotation applied to each instance.
-* *Scale* is the amount of scaling applied to each instance.
+* *Scale X and Scale Y* are the scale along X and Y axes applied to each instance.
+* *RndRotate* is the maximum angle of the random rotation applied to each instance.
+* *RndScale* is the amount of random scaling applied to each instance.
+* *RndValue* is the amount of random value applied to each instance.
 
 Example images
 ++++++++++++++

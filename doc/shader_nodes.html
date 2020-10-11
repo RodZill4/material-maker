@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,43 +11,47 @@
   
 
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Texture nodes" href="texture_nodes.html" />
     <link rel="prev" title="Common properties of nodes" href="nodes_common.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html" class="icon icon-home"> Material Maker
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
           
 
           
@@ -58,7 +61,7 @@
             
             
               <div class="version">
-                0.92
+                0.93
               </div>
             
           
@@ -75,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -115,6 +119,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -153,7 +158,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="nodes.html">Nodes overview</a> &raquo;</li>
         
@@ -203,6 +208,7 @@ the new parameter. On this line:</p>
 <li><p>the first text field is the name of the parameter, that will be used in the shader code</p></li>
 <li><p>the second text field is an optional label that will be displayed in the user interface.
 There are a few tricks with this label that can help tweaking the UI.</p></li>
+<li><p>the yellow document button can be used to add a tooltip to the parameter.</p></li>
 <li><p>the option button can be used to select a type for the parameter. The available types
 are <strong>float</strong>, <strong>size</strong>, <strong>enum</strong>, <strong>boolean</strong>, <strong>color</strong> and <strong>gradient</strong></p></li>
 <li><p>on the right of the type selector, controls can be used to define a default value and
@@ -222,7 +228,8 @@ UV coordinates).</p>
 like parameters. they also have a type that can be <strong>Greyscale</strong>, <strong>Color</strong> or
 <strong>RGBA</strong>.
 Please note that Material Maker will convert automatically if you connect an input
-to an output of a different type.</p>
+to an output of a different but compatible type.</p>
+<p>The yellow document button can be used to define a name and add a tooltip to the input.</p>
 <p>On the right of the input type, you must define a default value that will be used
 if the input is not connected. The default value is a GLSL expression that must
 evaluate to a <strong>float</strong> for <strong>Greyscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a <strong>vec4</strong>
@@ -232,7 +239,7 @@ to see their effect without connecting the inputs (the screenshot above is the
 Blend filter and has a vertical and an horizontal gradient as default inputs).</p>
 <p>The “Function” checkbox changes the way the code is generated for this input.
 When set to true, the input is generated as a function and can be used in the <em>Instance
-functions</em> section. If the parameter is false, the input code is inlined. is is not advised
+functions</em> section. If the parameter is false, the input code is inlined. It is not advised
 to set this parameter to true when not required, because generating functions can have
 an impact on performance.</p>
 <p>In shader code, inputs are used as functions that take a single <strong>vec2</strong> parameter. For
@@ -248,6 +255,7 @@ inputs, main code, instance functions and global functions) except other outputs
 And generally, complex nodes mean complex output expressions. You may thus want to
 write simple expressions in the <strong>Outputs</strong> tab and keep complex code in the 3
 remaining tabs.</p>
+<p>The yellow document button can be used to define a name and add a tooltip to the input.</p>
 <img alt="_images/node_editor_outputs.png" class="align-center" src="_images/node_editor_outputs.png" />
 </div>
 </div>
@@ -269,7 +277,7 @@ typically where you will paste the code you prepared in Shadertoy.</p>
 They will typically depend on parameters, and those could either be used as
 parameters when calling global functions, or to form global function names (as
 shown in the screenshot below: the blend_type parameter is an enum whose value
-is the suffix of one of the blend functions defined in the Global Functions pane).</p>
+is the suffix of one of the blend functions defined in the Global Functions panel).</p>
 <p>Instance functions must also have a unique name, and the name implicit variable
 can be used to do this: whenever $name or $(name) is used, it will be replaced
 with a unique name that depends on the node instance.</p>
@@ -303,7 +311,7 @@ Maker provides the name_uv implicit variable for this.</p>
         <a href="texture_nodes.html" class="btn btn-neutral float-right" title="Texture nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="nodes_common.html" class="btn btn-neutral" title="Common properties of nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="nodes_common.html" class="btn btn-neutral float-left" title="Common properties of nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -312,11 +320,19 @@ Maker provides the name_uv implicit variable for this.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, Rodz Labs.
+        
+        &copy; Copyright 2018-2020, Rodz Labs
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -328,34 +344,16 @@ Maker provides the name_uv implicit variable for this.</p>
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/language_data.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

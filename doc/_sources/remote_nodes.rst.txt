@@ -9,7 +9,7 @@ Creating a remote node
 ^^^^^^^^^^^^^^^^^^^^^^
 
 Remote nodes can be created by dragging a Miscellaneous/Remote node from the library
-pane to a graph pane.
+panel to a graph panel.
 
 Configuring a remote node
 ^^^^^^^^^^^^^^^^^^^^^^^^^

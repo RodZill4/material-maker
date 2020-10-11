@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,43 +11,47 @@
   
 
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Nodes overview" href="nodes.html" />
     <link rel="prev" title="Introduction" href="intro.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html" class="icon icon-home"> Material Maker
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
           
 
           
@@ -58,7 +61,7 @@
             
             
               <div class="version">
-                0.92
+                0.93
               </div>
             
           
@@ -75,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -87,7 +91,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User interface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#first-steps-with-the-user-interface">First steps with the user interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#graph-pane">Graph pane</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graph-panel">Graph panel</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#grid-and-zoom">Grid and zoom</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#material-navigation">Material navigation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#selecting-and-copying-nodes">Selecting and copying nodes</a></li>
@@ -95,11 +99,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#background-3d-preview">Background 3D preview</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#library-pane">Library pane</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hierarchy-pane">Hierarchy pane</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#d-preview-pane">2D Preview pane</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id1">3D Preview pane</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#histogram-pane">Histogram pane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#library-panel">Library panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hierarchy-panel">Hierarchy panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#d-preview-panel">2D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#histogram-panel">Histogram panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference-panel">Reference panel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#main-menu">Main menu</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#file-menu">File menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#edit-menu">Edit menu</a></li>
@@ -119,6 +124,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -157,7 +163,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>User interface</li>
     
@@ -180,37 +186,39 @@
 <h1>User interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Material Maker mainly consists of 5 panes:</p>
+<p>Material Maker mainly consists of 7 panels:</p>
 <ul class="simple">
-<li><p>The Project pane (located in the center) contains the graph editors where materials are
+<li><p>The Project panel (located in the center) contains the graph editors where materials are
 described for current projects</p></li>
-<li><p>The Library pane (by default in the top left corner) contains all available nodes that can be used
+<li><p>The Library panel (by default in the top left corner) contains all available nodes that can be used
 to create materials. Library items are shown in a tree view</p></li>
-<li><p>The Hierarchy pane (by default in the bottom left corner) shows the hierarchy of node groups
+<li><p>The Hierarchy panel (by default in the bottom left corner) shows the hierarchy of node groups
 of the current material graph</p></li>
-<li><p>The 2D preview pane (by default in the top right corner) shows the first texture generated by the
+<li><p>The 2D preview panel (by default in the top right corner) shows the first texture generated by the
 currently selected node</p></li>
-<li><p>The 3D preview pane (by default in the bottom right corner) shows the current material
+<li><p>The 3D preview panel (by default in the bottom right corner) shows the current material
 applied to a sample mesh in a sample environment</p></li>
+<li><p>The histogram panel shows the tones histogram of the texture generated by the currently selected node</p></li>
+<li><p>The reference panel can be used to display images and generated textures, and pick colors and gradients</p></li>
 </ul>
-<p>The 4 panes on the sides of the user interface can be moved around by dragging their title to their
+<p>The 4 panels on the sides of the user interface can be moved around by dragging their title to their
 desired location and hidden using the <strong>View -&gt; Panes</strong></p>
 </div>
 <div class="section" id="first-steps-with-the-user-interface">
 <h2>First steps with the user interface<a class="headerlink" href="#first-steps-with-the-user-interface" title="Permalink to this headline">¶</a></h2>
-<p>When opening Material Maker, a new empty project is created and shown in the center pane.
+<p>When opening Material Maker, a new empty project is created and shown in the center panel.
 An empty project simply consists of a material node where textures for all elements of
 the material should be connected.</p>
 <p>To create a new node, simply choose one (for example “bricks”) from the library (the
-top left pane) and drag it into the graph editor. Depending on the selected library
+top left panel) and drag it into the graph editor. Depending on the selected library
 item, a preview or a simple description will be displayed while dragging.</p>
 <img alt="_images/create_node.gif" class="align-center" src="_images/create_node.gif" />
 <p>An alternate method to create a node is to show the library menu using the space bar
-in the Project pane, and select a node from the list. The library menu will also be
+in the Project panel, and select a node from the list. The library menu will also be
 shown when connecting a node output into an empty space in the graph (in this case,
 the newly created node will be connected automatically).</p>
 <img alt="_images/create_node_menu.gif" class="align-center" src="_images/create_node_menu.gif" />
-<p>Selecting this new node (by clicking on it) shows it in the 2D preview pane.</p>
+<p>Selecting this new node (by clicking on it) shows it in the 2D preview panel.</p>
 <p>To connect a node output to an input of another node, simply drag one to the other.
 For example we can drag the first output of the Bricks node to the albedo input of
 the Materials node. This will automatically assign the simple Bricks texture to the
@@ -222,14 +230,14 @@ automatically.</p>
 <p>Since each input can be connected to a single output, reconnecting an input will
 automatically remove the previous connection.</p>
 </div>
-<div class="section" id="graph-pane">
-<h2>Graph pane<a class="headerlink" href="#graph-pane" title="Permalink to this headline">¶</a></h2>
-<p>The graph pane is where materials can be edited, by adding and configuring nodes,
+<div class="section" id="graph-panel">
+<h2>Graph panel<a class="headerlink" href="#graph-panel" title="Permalink to this headline">¶</a></h2>
+<p>The graph panel is where materials can be edited, by adding and configuring nodes,
 and connecting them.</p>
 <img alt="_images/graph_pane.png" class="align-center" src="_images/graph_pane.png" />
 <div class="section" id="grid-and-zoom">
 <h3>Grid and zoom<a class="headerlink" href="#grid-and-zoom" title="Permalink to this headline">¶</a></h3>
-<p>In the top left corner of the graph pane, the following buttons can be used to modify
+<p>In the top left corner of the graph panel, the following buttons can be used to modify
 the zoom level and configure the grid:</p>
 <blockquote>
 <div><ul class="simple">
@@ -247,11 +255,11 @@ shortcut.</p>
 </div>
 <div class="section" id="material-navigation">
 <h3>Material navigation<a class="headerlink" href="#material-navigation" title="Permalink to this headline">¶</a></h3>
-<p>In the top right corner of the graph pane, the graph navigation button
+<p>In the top right corner of the graph panel, the graph navigation button
 <img alt="graph_navigation_button" src="_images/graph_navigation_button.png" /> can be used to show a tree view of the
-material (this is only useful when the Hierarchy pane is not visible).
+material (this is only useful when the Hierarchy panel is not visible).
 Double clicking on an item in this tree will show it in the graph view.</p>
-<p>When a subgraph is shown in the graph pane, additional items are visible in
+<p>When a subgraph is shown in the graph panel, additional items are visible in
 the top right corner:</p>
 <ul class="simple">
 <li><p>a text entry shows the name of the subgraph and can be used to modify it.</p></li>
@@ -288,9 +296,9 @@ of the graph view. The blue/red arrows icon is used to rotate the object or the 
 and other controls are similar to the 3D preview.</p>
 </div>
 </div>
-<div class="section" id="library-pane">
-<h2>Library pane<a class="headerlink" href="#library-pane" title="Permalink to this headline">¶</a></h2>
-<p>The library pane shows all nodes defined in both base and user libraries in a tree
+<div class="section" id="library-panel">
+<h2>Library panel<a class="headerlink" href="#library-panel" title="Permalink to this headline">¶</a></h2>
+<p>The library panel shows all nodes defined in both base and user libraries in a tree
 view. The base library is provided with Material Maker and the nodes it contains are
 documented in this manual. The user library contains all nodes that were added using
 the <strong>Tools -&gt; Add selected node to user library</strong> menu item.</p>
@@ -299,46 +307,81 @@ The tree will be updated whenever the filter string is modified. It is possible 
 give focus to the search field using the <strong>Control+F</strong> keyboard shortcut.</p>
 <img alt="_images/library_filter.gif" class="align-center" src="_images/library_filter.gif" />
 </div>
-<div class="section" id="hierarchy-pane">
-<h2>Hierarchy pane<a class="headerlink" href="#hierarchy-pane" title="Permalink to this headline">¶</a></h2>
-<p>The hierarchy pane shows the hierarchy of groups of the current material graph.
+<div class="section" id="hierarchy-panel">
+<h2>Hierarchy panel<a class="headerlink" href="#hierarchy-panel" title="Permalink to this headline">¶</a></h2>
+<p>The hierarchy panel shows the hierarchy of groups of the current material graph.
 It shows the name as well as a preview of a number of outputs (for 0 to 3),
-that can be configured by right clicking on the pane.</p>
+that can be configured by right clicking on the panel.</p>
 <img alt="_images/hierarchy_pane.png" class="align-center" src="_images/hierarchy_pane.png" />
 <p>Double clicking on a group in the hierarchy shows the contents of the corresponding group
-in the Graph pane.</p>
+in the Graph panel.</p>
 </div>
-<div class="section" id="d-preview-pane">
-<h2>2D Preview pane<a class="headerlink" href="#d-preview-pane" title="Permalink to this headline">¶</a></h2>
-<p>The 2D preview pane shows a tiled preview of the first output of the selected
+<div class="section" id="d-preview-panel">
+<h2>2D Preview panel<a class="headerlink" href="#d-preview-panel" title="Permalink to this headline">¶</a></h2>
+<p>The 2D preview panel shows a tiled preview of the first output of the selected
 node. The animated dashed lines show the bounds of the texture, so it is
 easy to check that the texture wraps correctly.</p>
 <img alt="_images/preview_2d.png" class="align-center" src="_images/preview_2d.png" />
 <p>Depending on the selected node, controls can be shown and they can me moved
 around to modify the associated parameters.</p>
-<p>The 2D preview pane has a context menu that can be used to select the preview
-settings and export the previewed texture.</p>
+<p>The 2D preview panel has a context menu that can be used to select the preview
+settings, export the previewed texture or render the previewed texture and add
+it to the References panel.</p>
 </div>
 <div class="section" id="id1">
-<h2>3D Preview pane<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>The 3D preview pane shows a 3D preview of the current material.</p>
+<h2>3D Preview panel<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The 3D preview panel shows a 3D preview of the current material.</p>
 <img alt="_images/preview_3d.png" class="align-center" src="_images/preview_3d.png" />
-<p>The left select button can be used to select a model for the 3D preview, and the second
-one provides different environments. The <strong>R</strong> button can be used to start and stop the
-object’s rotation animation.</p>
-<p>In the 3D view, the object can be rotated about the yaw and the pitch axes (from the
-camera’s point of view) by holding the right mouse button and moving the mouse horizontally
+<p>The <em>Model</em> menu can be used to:</p>
+<ul class="simple">
+<li><p>select a model for the 3D preview</p></li>
+<li><p>show a popup to configure its UV scale and specify if it should be tesselated or not</p></li>
+<li><p>start and stop the object’s rotation animation</p></li>
+<li><p>generate a mesh normal or inverse UV map (this option is only available for custom meshes)</p></li>
+</ul>
+<p>Selecting the <em>Custom</em> option in the model list will show a file dialog to select a
+3D model in Wavefront .obj format. The model should have UV information to correctly
+display materials (normals will be generated if they are missing).</p>
+<p>When generating a map from a custom mesh, an image node for the generated map will
+be stored in the clipboard, and it is possible to directly paste that node into about
+a material graph.</p>
+<p>The <em>Environment</em> menu provides different environments.</p>
+<p>In the 3D view, the view can be rotated about the yaw and the pitch axes (from the
+camera’s point of view) by holding the left mouse button and moving the mouse horizontally
 or vertically. The object can also be rotated about the roll axis by holding Shift and
 and the right mouse button and moving the mouse horizontally.</p>
-<p>Holding the left mouse button will rotate the camera while the object remains static.</p>
+<p>Holding the Shift key will rotate the object while the view remains static.</p>
 <p>Rotating the object or the camera will automatically disable the object’s rotate animation.</p>
 <p>The mouse wheel can be used to move the camera along its longitudinal axis (hense zooming
 forward or backward).</p>
 </div>
-<div class="section" id="histogram-pane">
-<h2>Histogram pane<a class="headerlink" href="#histogram-pane" title="Permalink to this headline">¶</a></h2>
-<p>The histogram pane shows an histogram of the texture generated by the selected node.</p>
+<div class="section" id="histogram-panel">
+<h2>Histogram panel<a class="headerlink" href="#histogram-panel" title="Permalink to this headline">¶</a></h2>
+<p>The histogram panel shows an histogram of the texture generated by the selected node.</p>
 <img alt="_images/histogram_pane.png" class="align-center" src="_images/histogram_pane.png" />
+</div>
+<div class="section" id="reference-panel">
+<h2>Reference panel<a class="headerlink" href="#reference-panel" title="Permalink to this headline">¶</a></h2>
+<p>The reference panel can be used to show images and generated textures, and pick colors and gradients.</p>
+<img alt="_images/reference_panel.png" class="align-center" src="_images/reference_panel.png" />
+<p>To add a reference, simply drag an image file from the filesystem into the reference panel (dragging
+an image from the web page can also work depending on the environment).</p>
+<p>Only one reference can be shown at a time and the buttons at the top of the panel can be used to
+show the previous or the next reference in the list.</p>
+<p>The mouse wheel can be used to zoom, and holding the middle mouse button makes it possible
+to pan across the image.</p>
+<p>The boxes under the reference image can be used to store 5 colors and a gradient. To store a color,
+first select one of the 5 color boxes by clicking on it, and click on the image with the left mouse
+button. To store a gradient, click on the gradient box, then click and drag on the image using the
+left mouse button.</p>
+<p>It is possible to drag and drop colors and gradients from the boxes into the graph panel:</p>
+<ul class="simple">
+<li><p>Dropping a color into the graph panel will create a Uniform node</p></li>
+<li><p>Dropping a gradient into the graph panel will create a Colorize node</p></li>
+<li><p>Dropping a color into a color parameter or into a cursor of a gradient parameter
+will modify the corresponding color</p></li>
+<li><p>Dropping a gradient into a gradient parameter will assign it</p></li>
+</ul>
 </div>
 <div class="section" id="main-menu">
 <h2>Main menu<a class="headerlink" href="#main-menu" title="Permalink to this headline">¶</a></h2>
@@ -353,9 +396,9 @@ forward or backward).</p>
 <div class="section" id="file-menu">
 <h3>File menu<a class="headerlink" href="#file-menu" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><em>New material</em> creates a new material and opens a tab in the center pane to edit it</p></li>
+<li><p><em>New material</em> creates a new material and opens a tab in the center panel to edit it</p></li>
 <li><p><em>Load material</em> opens a file dialog to select a procedural material (.ptex) file. If
-a material file is selected, it will be open in a new tab in the center pane. If the current
+a material file is selected, it will be open in a new tab in the center panel. If the current
 tab contains an empty material (about material that only consists of a Material node), the
 material will be loaded into this tab.</p></li>
 <li><p><em>Save material</em> saves the current material. If it was not previously saved, a file dialog
@@ -380,6 +423,10 @@ of the material. Exporting to one of those engines is described in the
 the center of the view, so it is advised to scroll to the correct location before pasting.
 Pasting also unselects all previously selected nodes and selects all newly created nodes,
 so they can easily be moved around.</p></li>
+<li><p><em>Load Selection</em> Loads a graph selection previously saved into a file</p></li>
+<li><p><em>Save Selection</em> Saves the current graph selection into a file</p></li>
+<li><p><em>Set Theme</em> is used to select the UI Theme</p></li>
+<li><p><em>Preferences</em> shows the <em>Preferences</em> dialog</p></li>
 </ul>
 </div>
 <div class="section" id="view-menu">
@@ -387,7 +434,7 @@ so they can easily be moved around.</p></li>
 <ul class="simple">
 <li><p><em>Center view</em> Centers the current material graph view</p></li>
 <li><p><em>Reset zoom</em> Resets the zoom level of the current material graph view</p></li>
-<li><p>the <em>Panes</em> submenu can be used to show or hide all side panes</p></li>
+<li><p>the <em>Panels</em> submenu can be used to show or hide all side panels</p></li>
 </ul>
 </div>
 <div class="section" id="tools-menu">
@@ -407,6 +454,9 @@ confirmed, the selected nodes in the current material will be added to the user 
 that name. The user library is saved automatically.</p></li>
 <li><p><em>Export the nodes library</em> will prompt for a location on the disk and
 save the whole node library.</p></li>
+<li><p><em>Create a screenshot of the current graph</em>  will prompt for an image file name
+on the disk and save a screenshot of the whole current graph (it will automatically
+pan the graph to create the screenshot).</p></li>
 </ul>
 </div>
 <div class="section" id="help-menu">
@@ -434,7 +484,7 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
         <a href="nodes.html" class="btn btn-neutral float-right" title="Nodes overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="intro.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -443,11 +493,19 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, Rodz Labs.
+        
+        &copy; Copyright 2018-2020, Rodz Labs
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -459,34 +517,16 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/language_data.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -54,7 +54,7 @@ To create a minimal material:
 * connect the RGB output of the normal *Texture Sample* node to the *Normal* input
   of the material node
 
-More complex materials with support for emission textures, depth maps, texture
+More complex materials can be created, with support for emission textures, depth maps, texture
 coordinate scaling...
 
 .. image:: images/unreal_export.png

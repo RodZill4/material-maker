@@ -44,6 +44,18 @@ Operators
 	node_simple_sdf_operators_sdroundedshape
 	node_simple_sdf_operators_sdannularshape
 	node_simple_sdf_operators_sdmorph
+	node_simple_sdf_operators_sdrepeat
+	node_simple_sdf_operators_sdcirclerepeat
+
+Transforms
+++++++++++
+
+.. toctree::
+	:maxdepth: 1
+
+	node_simple_sdf_transforms_translate
+	node_simple_sdf_transforms_rotate
+	node_simple_sdf_transforms_scale
 
 Example images
 ++++++++++++++

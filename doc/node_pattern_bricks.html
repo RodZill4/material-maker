@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,43 +11,47 @@
   
 
   
-  
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Weave node" href="node_pattern_weave.html" />
-    <link rel="prev" title="Pattern node" href="node_pattern_generic.html" /> 
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  
+  
+  
 
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Uneven Bricks node" href="node_pattern_unevenbricks.html" />
+    <link rel="prev" title="Pattern node" href="node_pattern_generic.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html" class="icon icon-home"> Material Maker
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
           
 
           
@@ -58,7 +61,7 @@
             
             
               <div class="version">
-                0.92
+                0.93
               </div>
             
           
@@ -75,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -99,6 +103,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_unevenbricks.html">Uneven Bricks node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_weave.html">Weave node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
@@ -122,6 +127,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -160,7 +166,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="base_library.html">Nodes library</a> &raquo;</li>
         
@@ -185,7 +191,7 @@
             
   <div class="section" id="bricks-node">
 <h1>Bricks node<a class="headerlink" href="#bricks-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>Bricks</strong> node outputs 4 related bricks pattern textures that can be used for walls
+<p>The <strong>Bricks</strong> node outputs several related bricks pattern textures that can be used for walls
 or pavement.</p>
 <img alt="_images/node_pattern_bricks.png" class="align-center" src="_images/node_pattern_bricks.png" />
 <div class="section" id="inputs">
@@ -246,10 +252,10 @@ are not changed.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="node_pattern_weave.html" class="btn btn-neutral float-right" title="Weave node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="node_pattern_unevenbricks.html" class="btn btn-neutral float-right" title="Uneven Bricks node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="node_pattern_generic.html" class="btn btn-neutral" title="Pattern node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="node_pattern_generic.html" class="btn btn-neutral float-left" title="Pattern node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -258,11 +264,19 @@ are not changed.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, Rodz Labs.
+        
+        &copy; Copyright 2018-2020, Rodz Labs
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -274,34 +288,16 @@ are not changed.</p>
   </div>
   
 
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/language_data.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

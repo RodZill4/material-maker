@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tones Step node &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Greyscale node" href="node_filter_greyscale.html" />
+    <link rel="prev" title="Tones Map node" href="node_filter_tones_map.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.93
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_filter.html">Filter nodes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_brightness_contrast.html">BrightnessContrast node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tones Step node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_occlusion.html">Occlusion node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_quantize.html">Quantize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_dilate.html">Dilate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill.html">Fill node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_position.html">Fill to Position node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_size.html">Fill to Size node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_color.html">Fill to Color node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_random_grey.html">Fill to random grey node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_random_color.html">Fill to random color node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_uv.html">Fill to UV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_math.html">Math node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_maketileable.html">Make Tileable node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_pixelize.html">Pixelize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_supersample.html">Supersample node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
+          <li><a href="nodes_filter.html">Filter nodes</a> &raquo;</li>
+        
+      <li>Tones Step node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tones-step-node">
+<h1>Tones Step node<a class="headerlink" href="#tones-step-node" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Tones Step</strong> node emphasizes the light and dark tones around a specified value.
+This node will not affect the alpha channel of the image.</p>
+<img alt="_images/node_filter_tones_step.png" class="align-center" src="_images/node_filter_tones_step.png" />
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Tones Step</strong> node requires an RGBA input texture.</p>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Tones Step</strong> node provides a single RGBA texture.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Tones Step</strong> node accepts 3 parameters:</p>
+<ul class="simple">
+<li><p>the <em>Value</em> around which the tones are emphasized</p></li>
+<li><p>the <em>Width</em> (in tones space) of the gradient between black and white areas</p></li>
+<li><p>the <em>Invert</em> option that will invert the result if checked</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="node_filter_greyscale.html" class="btn btn-neutral float-right" title="Greyscale node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="node_filter_tones_map.html" class="btn btn-neutral float-left" title="Tones Map node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2018-2020, Rodz Labs
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

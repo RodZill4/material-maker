@@ -9,6 +9,6 @@ made from random patterns.
 
 	node_noise
 	node_noise_color
-	node_noise_perlin
+	node_noise_value
 	node_noise_voronoi
 	node_noise_fbm
