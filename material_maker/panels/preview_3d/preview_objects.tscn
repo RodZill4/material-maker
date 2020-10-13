@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://material_maker/panels/preview_3d/meshes/Suzanne.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://material_maker/meshes/suzanne.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
