@@ -43,8 +43,9 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
 		var o = objects.get_child(i)
-		if o.thumbnail:
-			menu.add_icon_item(o.thumbnail, "", i)
+		var thumbnail := load("res://material_maker/thumbnails/meshes/%s.png" % o.name)
+		if thumbnail:
+			menu.add_icon_item(thumbnail, "", i)
 		else:
 			menu.add_item(o.name, i)
 	if !menu.is_connected("id_pressed", self, "_on_Model_item_selected"):
