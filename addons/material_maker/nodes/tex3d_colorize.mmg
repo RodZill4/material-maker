@@ -5,48 +5,26 @@
 		"y": 0
 	},
 	"parameters": {
-		"Color": {
-			"a": 1,
-			"b": 0,
-			"g": 0.381909,
-			"r": 1,
-			"type": "Color"
-		},
-		"bevel": 0,
-		"color": {
-			"a": 1,
-			"b": 0,
-			"g": 0,
-			"r": 1,
-			"type": "Color"
-		},
-		"cx": 0,
-		"cy": 0,
 		"g": {
 			"interpolation": 1,
 			"points": [
 				{
 					"a": 1,
-					"b": 0,
-					"g": 0.071126,
+					"b": 1,
+					"g": 0,
 					"pos": 0,
-					"r": 0.119792
+					"r": 0
 				},
 				{
 					"a": 1,
-					"b": 0.372549,
-					"g": 0.756863,
+					"b": 0,
+					"g": 0.46875,
 					"pos": 1,
 					"r": 1
 				}
 			],
 			"type": "Gradient"
-		},
-		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
-		"r": 0.15,
-		"w": 0.28
+		}
 	},
 	"shader_model": {
 		"code": "",
@@ -55,14 +33,19 @@
 			{
 				"default": "vec3($uv.x+0.5)",
 				"label": "",
+				"longdesc": "The input greyscale 3D texture",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "tex3d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that remaps a greyscale 3D texture to a custom gradient",
 		"name": "TEX3D Colorize",
 		"outputs": [
 			{
+				"longdesc": "The remapped color 3D texture ",
+				"shortdesc": "Output",
 				"tex3d": "$g(dot($in($uv), vec3(1.0))/3.0).rgb",
 				"type": "tex3d"
 			}
@@ -90,10 +73,13 @@
 					"type": "Gradient"
 				},
 				"label": "",
+				"longdesc": "The gradient to which the input is remapped",
 				"name": "g",
+				"shortdesc": "Gradient",
 				"type": "gradient"
 			}
-		]
+		],
+		"shortdesc": "Tex3D Colorize"
 	},
 	"type": "shader"
 }

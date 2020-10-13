@@ -1,0 +1,15 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/stylized_wall.ptex-bb9201a90ba59afcec1fc79fe857a0b6.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/stylized_wall.ptex"
+dest_files=[ "res://.import/stylized_wall.ptex-bb9201a90ba59afcec1fc79fe857a0b6.tres" ]
+
+[params]
+
+render=false
+scale=1.0

@@ -177,6 +177,9 @@
 			"type": "colorize"
 		},
 		{
+			"export_paths": {
+
+			},
 			"name": "Material",
 			"node_position": {
 				"x": 1238,
@@ -190,22 +193,23 @@
 					"r": 1,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1,
 				"depth_scale": 0,
 				"emission_energy": 1,
+				"flags_transparent": false,
 				"metallic": 1,
-				"normal_scale": 1,
+				"normal": 1,
 				"roughness": 1,
 				"size": 11,
-				"subsurf_scatter_strength": 0
+				"sss": 0
 			},
 			"type": "material"
 		},
 		{
 			"name": "blend_2",
 			"node_position": {
-				"x": 457,
-				"y": 319
+				"x": 456,
+				"y": 318
 			},
 			"parameters": {
 				"amount": 0.551223,
@@ -335,8 +339,8 @@
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": 711,
-				"y": 361
+				"x": 716,
+				"y": 363
 			},
 			"parameters": {
 				"gradient": {
@@ -454,7 +458,8 @@
 			},
 			"parameters": {
 				"amount": 0.04,
-				"eps": 0.045
+				"eps": 0.045,
+				"mode": 0
 			},
 			"type": "warp"
 		},
@@ -474,13 +479,13 @@
 		{
 			"name": "_2_2",
 			"node_position": {
-				"x": 243.467804,
-				"y": -299.036743
+				"x": 299.467804,
+				"y": -281.036743
 			},
 			"parameters": {
 				"param1": 0,
-				"param2": 0,
-				"param3": 0
+				"param2": 1,
+				"param3": 1
 			},
 			"type": "remote",
 			"widgets": [
@@ -951,8 +956,8 @@
 		{
 			"name": "normal_map_2",
 			"node_position": {
-				"x": 974.357788,
-				"y": 284.520294
+				"x": 909.357788,
+				"y": 318.520294
 			},
 			"parameters": {
 				"param0": 11,

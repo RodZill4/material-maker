@@ -19,9 +19,12 @@
 
 		],
 		"instance": "float $(name)_fbm(vec3 coord, vec3 size, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tvalue += tex3d_fbm_$noise(coord*size, size, seed) * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
+		"longdesc": "A node that generates a 3D noise made of several octaves of a simple noise",
 		"name": "TEX3D FBM",
 		"outputs": [
 			{
+				"longdesc": "Shows a greyscale 3D texture of the generated noise",
+				"shortdesc": "Output",
 				"tex3d": "vec3($(name)_fbm($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed))))",
 				"type": "tex3d"
 			}
@@ -30,7 +33,9 @@
 			{
 				"default": 2,
 				"label": "Noise",
+				"longdesc": "The simple noise type",
 				"name": "noise",
+				"shortdesc": "Noise type",
 				"type": "enum",
 				"values": [
 					{
@@ -51,9 +56,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale X",
+				"longdesc": "The scale of the first octave along the X axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_x",
+				"shortdesc": "Scale.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -61,9 +68,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale Y",
+				"longdesc": "The scale of the first octave along the Y axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_y",
+				"shortdesc": "Scale.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -71,9 +80,11 @@
 				"control": "None",
 				"default": 4,
 				"label": "Scale Z",
+				"longdesc": "The scale of the first octave along the Z axis",
 				"max": 32,
 				"min": 1,
 				"name": "scale_z",
+				"shortdesc": "Scale.z",
 				"step": 1,
 				"type": "float"
 			},
@@ -81,9 +92,11 @@
 				"control": "None",
 				"default": 3,
 				"label": "Iterations",
+				"longdesc": "The number of noise octaves",
 				"max": 10,
 				"min": 1,
 				"name": "iterations",
+				"shortdesc": "Octaves",
 				"step": 1,
 				"type": "float"
 			},
@@ -91,13 +104,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Persistence",
+				"longdesc": "The persistence between two consecutive octaves",
 				"max": 1,
 				"min": 0,
 				"name": "persistence",
+				"shortdesc": "Persistence",
 				"step": 0.05,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Tex3D FBM"
 	},
 	"type": "shader"
 }

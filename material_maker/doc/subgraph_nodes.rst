@@ -10,7 +10,8 @@ This will replace all selected nodes with a single subgraph node, without
 modifying the overall material description.
 
 When the subgraph is created, it is shown in the graph editor, and can be
-renamed using the top right text field.
+renamed using the top right text field. the yellow doc button next to this
+text field can be used to define the Group Node's tooltip.
 
 The subgraph node is not editable by default, but using the **Control+W**
 shortcut will make it possible to edit its contents using the pencil button.
@@ -25,9 +26,14 @@ The newly created subgraph contains:
   of the subgraph. Selecting them and using the **Control+W** shortcut makes them
   editable so the subgraph inputs and outputs can be added, removed, reordered,
   renamed or have their types modified.
+  Subgraph inputs and outputs can also be assigned tooltips (by clicking on the
+  yellow document button) and be associated to a port group (by clicking on the
+  blue circle button).
   Please note that all those operations will (when possible) keep connectivity
   inside and outside the subgraph.
 * A **Parameters** node that is a **remote** can be edited to expose selected
   parameters to the parent graph. When grouping nodes with a **remote**, the
   remote will automatically be used as **Parameters** node in the nealy created
   subgraph.
+  Remote parameters can also be assigned tooltips by clicking on the yellow
+  document button.

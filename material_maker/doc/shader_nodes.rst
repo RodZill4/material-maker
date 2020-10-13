@@ -38,6 +38,7 @@ the new parameter. On this line:
 * the first text field is the name of the parameter, that will be used in the shader code
 * the second text field is an optional label that will be displayed in the user interface.
   There are a few tricks with this label that can help tweaking the UI.
+* the yellow document button can be used to add a tooltip to the parameter.
 * the option button can be used to select a type for the parameter. The available types
   are **float**, **size**, **enum**, **boolean**, **color** and **gradient**
 * on the right of the type selector, controls can be used to define a default value and
@@ -58,7 +59,9 @@ Inputs can be added and removed, have a name and a label (but no label trick) ju
 like parameters. they also have a type that can be **Greyscale**, **Color** or
 **RGBA**.
 Please note that Material Maker will convert automatically if you connect an input
-to an output of a different type.
+to an output of a different but compatible type.
+
+The yellow document button can be used to define a name and add a tooltip to the input.
 
 On the right of the input type, you must define a default value that will be used
 if the input is not connected. The default value is a GLSL expression that must
@@ -70,7 +73,7 @@ Blend filter and has a vertical and an horizontal gradient as default inputs).
 
 The "Function" checkbox changes the way the code is generated for this input.
 When set to true, the input is generated as a function and can be used in the *Instance
-functions* section. If the parameter is false, the input code is inlined. is is not advised
+functions* section. If the parameter is false, the input code is inlined. It is not advised
 to set this parameter to true when not required, because generating functions can have
 an impact on performance.
 
@@ -88,6 +91,8 @@ inputs, main code, instance functions and global functions) except other outputs
 And generally, complex nodes mean complex output expressions. You may thus want to
 write simple expressions in the **Outputs** tab and keep complex code in the 3
 remaining tabs.
+
+The yellow document button can be used to define a name and add a tooltip to the input.
 
 .. image:: images/node_editor_outputs.png
 	:align: center

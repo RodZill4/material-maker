@@ -13,12 +13,6 @@
 			"to_port": 1
 		},
 		{
-			"from": "transform2",
-			"from_port": 0,
-			"to": "bricks_2",
-			"to_port": 2
-		},
-		{
 			"from": "bricks_2",
 			"from_port": 4,
 			"to": "graph_4",
@@ -40,12 +34,6 @@
 			"from": "colorize_2",
 			"from_port": 0,
 			"to": "transform2",
-			"to_port": 0
-		},
-		{
-			"from": "bricks_2",
-			"from_port": 0,
-			"to": "graph",
 			"to_port": 0
 		},
 		{
@@ -197,6 +185,18 @@
 			"from_port": 1,
 			"to": "transform2",
 			"to_port": 2
+		},
+		{
+			"from": "transform2",
+			"from_port": 0,
+			"to": "bricks_2",
+			"to_port": 2
+		},
+		{
+			"from": "bricks_2",
+			"from_port": 0,
+			"to": "graph",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -257,8 +257,8 @@
 		{
 			"name": "bricks_2",
 			"node_position": {
-				"x": -113.5,
-				"y": -215.5
+				"x": -197.5,
+				"y": -211.5
 			},
 			"parameters": {
 				"bevel": 0.39,
@@ -417,6 +417,12 @@
 				{
 					"from": "gen_inputs",
 					"from_port": 0,
+					"to": "math_3",
+					"to_port": 0
+				},
+				{
+					"from": "math_3",
+					"from_port": 0,
 					"to": "math_2",
 					"to_port": 1
 				}
@@ -424,8 +430,8 @@
 			"label": "Round edges",
 			"name": "graph",
 			"node_position": {
-				"x": 116.378174,
-				"y": -212.904968
+				"x": 68.378174,
+				"y": -213.904968
 			},
 			"nodes": [
 				{
@@ -459,8 +465,8 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -285.121857,
-						"y": -326.904968
+						"x": -504.121857,
+						"y": -323.904968
 					},
 					"parameters": {
 
@@ -494,21 +500,45 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -43.621857,
-						"y": -552.904968
+						"x": -74.621857,
+						"y": -497.904968
 					},
 					"parameters": {
-
+						"param0": 0.21
 					},
 					"seed_value": 22924,
 					"type": "remote",
 					"widgets": [
-
+						{
+							"label": "Width",
+							"linked_widgets": [
+								{
+									"node": "math_3",
+									"widget": "default_in2"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						}
 					]
+				},
+				{
+					"name": "math_3",
+					"node_position": {
+						"x": -371.089233,
+						"y": -366.204956
+					},
+					"parameters": {
+						"clamp": true,
+						"default_in1": 0,
+						"default_in2": 0.21,
+						"op": 3
+					},
+					"type": "math"
 				}
 			],
 			"parameters": {
-
+				"param0": 0.21
 			},
 			"seed_value": -27810,
 			"type": "graph"
@@ -539,17 +569,17 @@
 						},
 						{
 							"a": 1,
-							"b": 0.248291,
-							"g": 0.302246,
+							"b": 0.248442,
+							"g": 0.292969,
 							"pos": 0.745736,
-							"r": 0.044312
+							"r": 0.080109
 						},
 						{
 							"a": 1,
-							"b": 0.258545,
-							"g": 0.547852,
+							"b": 0.331268,
+							"g": 0.507813,
 							"pos": 1,
-							"r": 0.446289
+							"r": 0.445836
 						}
 					],
 					"type": "Gradient"
@@ -1614,7 +1644,7 @@
 						"y": -404.904968
 					},
 					"parameters": {
-						"iterations": 4,
+						"iterations": 3,
 						"noise": 1,
 						"persistence": 0.74,
 						"scale_x": 16,
@@ -1629,7 +1659,7 @@
 						"y": -241.904968
 					},
 					"parameters": {
-						"amount": 0.121575,
+						"amount": 0.2,
 						"blend_type": 11
 					},
 					"type": "blend"
@@ -1671,20 +1701,30 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": 375.65332,
-						"y": -704.904968
+						"x": 522.65332,
+						"y": -499.904968
 					},
 					"parameters": {
-
+						"param0": 0.2
 					},
 					"type": "remote",
 					"widgets": [
-
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "blend_2",
+									"widget": "amount"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						}
 					]
 				}
 			],
 			"parameters": {
-
+				"param0": 0.2
 			},
 			"type": "graph"
 		},
@@ -1773,7 +1813,7 @@
 			"name": "graph_5",
 			"node_position": {
 				"x": 692.502991,
-				"y": -234.014282
+				"y": -231.014282
 			},
 			"nodes": [
 				{
@@ -2699,17 +2739,17 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0.166992,
-									"g": 0.258316,
+									"b": 0.241501,
+									"g": 0.314785,
 									"pos": 0,
-									"r": 0.445313
+									"r": 0.464844
 								},
 								{
 									"a": 1,
-									"b": 0.234009,
-									"g": 0.444251,
+									"b": 0.355682,
+									"g": 0.519029,
 									"pos": 1,
-									"r": 0.832031
+									"r": 0.820313
 								}
 							],
 							"type": "Gradient"
@@ -2801,17 +2841,17 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 0.143555,
-									"g": 0.161855,
+									"b": 0.21553,
+									"g": 0.229593,
 									"pos": 0,
-									"r": 0.4375
+									"r": 0.441406
 								},
 								{
 									"a": 1,
-									"b": 0.383789,
-									"g": 0.395508,
+									"b": 0.407257,
+									"g": 0.417891,
 									"pos": 1,
-									"r": 0.61084
+									"r": 0.613281
 								}
 							],
 							"type": "Gradient"

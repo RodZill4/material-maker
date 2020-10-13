@@ -216,7 +216,7 @@ The *Model* menu can be used to:
 * generate a mesh normal or inverse UV map (this option is only available for custom meshes)
 
 Selecting the *Custom* option in the model list will show a file dialog to select a
-3D model in Wavefront (.obj) format. The model should have UV information to correctly
+3D model in Wavefront .obj format. The model should have UV information to correctly
 display materials (normals will be generated if they are missing).
 
 When generating a map from a custom mesh, an image node for the generated map will
@@ -328,6 +328,14 @@ Edit menu
   Pasting also unselects all previously selected nodes and selects all newly created nodes,
   so they can easily be moved around.
 
+* *Load Selection* Loads a graph selection previously saved into a file
+
+* *Save Selection* Saves the current graph selection into a file
+
+* *Set Theme* is used to select the UI Theme
+
+* *Preferences* shows the *Preferences* dialog
+
 View menu
 ^^^^^^^^^
 
@@ -335,7 +343,7 @@ View menu
 
 * *Reset zoom* Resets the zoom level of the current material graph view
 
-* the *Panes* submenu can be used to show or hide all side panels
+* the *Panels* submenu can be used to show or hide all side panels
 
 Tools menu
 ^^^^^^^^^^
@@ -358,6 +366,10 @@ Tools menu
 
 * *Export the nodes library* will prompt for a location on the disk and
   save the whole node library.
+
+* *Create a screenshot of the current graph*  will prompt for an image file name
+  on the disk and save a screenshot of the whole current graph (it will automatically
+  pan the graph to create the screenshot).
 
 Help menu
 ^^^^^^^^^

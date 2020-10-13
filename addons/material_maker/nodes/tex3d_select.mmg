@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"t": 0.01,
-		"v": 0.5
+		"v": 1
 	},
 	"shader_model": {
 		"code": "float $(name_uv)_d = ($uv.w-$v)/$t;",
@@ -15,20 +15,27 @@
 			{
 				"default": "vec3(0.5)",
 				"label": "",
+				"longdesc": "The 3D texture associated to the specified color index",
 				"name": "in1",
+				"shortdesc": "Input1",
 				"type": "tex3d"
 			},
 			{
 				"default": "vec3(0.5)",
 				"label": "",
+				"longdesc": "The 3D texture(s) associated to other color indices",
 				"name": "in2",
+				"shortdesc": "Input2",
 				"type": "tex3d"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.",
 		"name": "TEX3D Select",
 		"outputs": [
 			{
+				"longdesc": "The merged 3D texture",
+				"shortdesc": "Output",
 				"tex3d": "mix($in1($uv), $in2($uv), clamp(1.0-$(name_uv)_d*$(name_uv)_d, 0.0, 1.0))",
 				"type": "tex3d"
 			}
@@ -38,9 +45,11 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Value",
+				"longdesc": "The value of the selected color index",
 				"max": 1,
 				"min": 0,
 				"name": "v",
+				"shortdesc": "Value",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -48,13 +57,16 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Tolerance",
+				"longdesc": "The tolerance used when comparing color indices",
 				"max": 1,
 				"min": 0.01,
 				"name": "t",
+				"shortdesc": "Tolerance",
 				"step": 0.001,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Tex3D Select"
 	},
 	"type": "shader"
 }

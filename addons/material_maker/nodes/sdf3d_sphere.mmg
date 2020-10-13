@@ -14,10 +14,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a sphere as a signed distance function",
 		"name": "Sphere",
 		"outputs": [
 			{
+				"longdesc": "Shows the sphere",
 				"sdf3d": "length($uv)-$r",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
@@ -26,13 +29,16 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "",
+				"longdesc": "The radius of the sphere",
 				"max": 1,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Sphere"
 	},
 	"type": "shader"
 }

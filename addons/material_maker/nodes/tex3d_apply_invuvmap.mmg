@@ -14,27 +14,35 @@
 			{
 				"default": "vec3(1.0)",
 				"label": "Texture",
+				"longdesc": "The input 3D texture",
 				"name": "t",
+				"shortdesc": "Texture",
 				"type": "tex3d"
 			},
 			{
 				"default": "vec3(0.0)",
 				"label": "Inv. UV Map",
+				"longdesc": "The inverse UV map of the object",
 				"name": "map",
+				"shortdesc": "InvUVMap",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
+		"longdesc": "This node applies a 3D texture to an object using its inverse UV map.",
 		"name": "TEX3D Apply",
 		"outputs": [
 			{
+				"longdesc": "The generated texture",
 				"rgb": "$t(vec4($map($uv), 0.0))",
+				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "TEX3D Apply"
 	},
 	"type": "shader"
 }

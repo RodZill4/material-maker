@@ -20,9 +20,12 @@
 
 		],
 		"instance": "float $(name)_fct(vec3 uv) {\n\treturn mix3d_$(mix)(wave3d_$(x_wave)($(x_scale)*uv.x), wave3d_$(y_wave)($(y_scale)*uv.y), wave3d_$(z_wave)($(z_scale)*uv.z));\n}",
+		"longdesc": "A greyscale 3D texture that combines patterns along all 3 axes",
 		"name": "TEX3D Pattern",
 		"outputs": [
 			{
+				"longdesc": "The generated 3D texture",
+				"shortdesc": "Output",
 				"tex3d": "vec3($(name)_fct($(uv).xyz))",
 				"type": "tex3d"
 			}
@@ -31,7 +34,9 @@
 			{
 				"default": 0,
 				"label": "Combiner",
+				"longdesc": "The operation used to combine the X, Y and Z patterns",
 				"name": "mix",
+				"shortdesc": "Combine",
 				"type": "enum",
 				"values": [
 					{
@@ -63,7 +68,9 @@
 			{
 				"default": 0,
 				"label": "X",
+				"longdesc": "Pattern generated along the X axis",
 				"name": "x_wave",
+				"shortdesc": "Pattern.x",
 				"type": "enum",
 				"values": [
 					{
@@ -96,16 +103,20 @@
 				"control": "None",
 				"default": 4,
 				"label": "2:",
+				"longdesc": "Repetitions of the pattern along X axis",
 				"max": 32,
 				"min": 0,
 				"name": "x_scale",
+				"shortdesc": "Repeat.x",
 				"step": 1,
 				"type": "float"
 			},
 			{
 				"default": 0,
 				"label": "Y",
+				"longdesc": "Pattern generated along the Y axis",
 				"name": "y_wave",
+				"shortdesc": "Pattern.y",
 				"type": "enum",
 				"values": [
 					{
@@ -138,16 +149,20 @@
 				"control": "None",
 				"default": 4,
 				"label": "3:",
+				"longdesc": "Repetitions of the pattern along Y axis",
 				"max": 32,
 				"min": 0,
 				"name": "y_scale",
+				"shortdesc": "Repeat.y",
 				"step": 1,
 				"type": "float"
 			},
 			{
 				"default": 0,
 				"label": "Z",
+				"longdesc": "Pattern generated along the Z axis",
 				"name": "z_wave",
+				"shortdesc": "Pattern.z",
 				"type": "enum",
 				"values": [
 					{
@@ -180,13 +195,16 @@
 				"control": "None",
 				"default": 4,
 				"label": "4:",
+				"longdesc": "Repetitions of the pattern along Z axis",
 				"max": 32,
 				"min": 0,
 				"name": "z_scale",
+				"shortdesc": "Repeat.z",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Tex3D Pattern"
 	},
 	"type": "shader"
 }

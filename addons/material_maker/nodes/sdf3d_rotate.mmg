@@ -5,30 +5,31 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0,
 		"ax": 0,
 		"ay": 0,
-		"az": 0,
-		"x": 0.35,
-		"y": 0,
-		"z": 0
+		"az": 0
 	},
 	"shader_model": {
 		"code": "",
 		"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
 		"inputs": [
 			{
-				"default": "vec2(0.0)",
+				"default": "vec2(100.0, 0.0)",
 				"label": "",
+				"longdesc": "The input object as signed distance function",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "sdf3dc"
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that rotates its input 3D object described as a signed distance function.",
 		"name": "Rotate",
 		"outputs": [
 			{
+				"longdesc": "The rotated object",
 				"sdf3dc": "$in(rotate3d($uv, -vec3($ax, $ay, $az)*0.01745329251))",
+				"shortdesc": "Output",
 				"type": "sdf3dc"
 			}
 		],
@@ -37,9 +38,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "X",
+				"longdesc": "The rotation around the X axis",
 				"max": 180,
 				"min": -180,
 				"name": "ax",
+				"shortdesc": "Rotate.x",
 				"step": 1,
 				"type": "float"
 			},
@@ -47,9 +50,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Y",
+				"longdesc": "The rotation around the Y axis",
 				"max": 180,
 				"min": -180,
 				"name": "ay",
+				"shortdesc": "Rotate.y",
 				"step": 1,
 				"type": "float"
 			},
@@ -57,13 +62,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Z",
+				"longdesc": "The rotation around the Z axis",
 				"max": 180,
 				"min": -180,
 				"name": "az",
+				"shortdesc": "Rotate.z",
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Rotate"
 	},
 	"type": "shader"
 }

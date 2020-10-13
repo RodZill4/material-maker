@@ -16,10 +16,13 @@
 
 		],
 		"instance": "",
+		"longdesc": "A node that generates a torus as a signed distance function",
 		"name": "Torus",
 		"outputs": [
 			{
+				"longdesc": "Shows the torus",
 				"sdf3d": "length($(name_uv)_q)-$r",
+				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
@@ -27,7 +30,9 @@
 			{
 				"default": 0,
 				"label": "Axis",
+				"longdesc": "The axis of the torus",
 				"name": "axis",
+				"shortdesc": "Torus",
 				"type": "enum",
 				"values": [
 					{
@@ -48,9 +53,11 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "R",
+				"longdesc": "The major radius of the torus",
 				"max": 1,
 				"min": 0,
 				"name": "R",
+				"shortdesc": "Radius1",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -58,13 +65,16 @@
 				"control": "Radius11.r",
 				"default": 0.1,
 				"label": "r",
+				"longdesc": "The minor radius of the torus",
 				"max": 0.5,
 				"min": 0,
 				"name": "r",
+				"shortdesc": "Radius2",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Torus"
 	},
 	"type": "shader"
 }

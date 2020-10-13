@@ -12,32 +12,42 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0, 0.0)",
 				"function": true,
 				"label": "",
+				"longdesc": "The input object, described as 3D signed distance function with color index",
 				"name": "sdf",
+				"shortdesc": "Input",
 				"type": "sdf3dc"
 			}
 		],
 		"instance": "vec2 raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO = 0.0;\n\tfloat c = 0.0;\n    for (int i=0; i < 100; i++) {\n    \tvec3 p = ro + rd*dO;\n        vec2 dS = $sdf(p);\n        dO += dS.x;\n\n        if (dO >= 1.0) {\n\t\t\tbreak;\n\t\t} else if (dS.x < 0.0001) {\n\t\t\tc = dS.y;\n\t\t\tbreak;\n\t\t}\n    }\n    \n    return vec2(dO, c);\n}\n\nvec3 normal_$name(vec3 p) {\n\tif (p.z <= 0.0) {\n\t\treturn vec3(0.0, 0.0, 1.0);\n\t}\n\n\tfloat d = $sdf(p).x;\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        $sdf(p-vec3(e, 0.0, 0.0)).x,\n        $sdf(p-vec3(0.0, e, 0.0)).x,\n        $sdf(p-vec3(0.0, 0.0, e)).x);\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
-		"name": "Raymarching",
+		"longdesc": "A node that raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.",
+		"name": "Render",
 		"outputs": [
 			{
 				"f": "1.0-$(name_uv)_d.x",
+				"longdesc": "The generated height map",
+				"shortdesc": "HeightMap",
 				"type": "f"
 			},
 			{
+				"longdesc": "The generated normal map",
 				"rgb": "vec3(0.5)+0.5*normal_$name(vec3($uv-vec2(0.5), 1.0-$(name_uv)_d.x))",
+				"shortdesc": "NormalMap",
 				"type": "rgb"
 			},
 			{
 				"f": "$(name_uv)_d.y",
+				"longdesc": "The generated color index map",
+				"shortdesc": "ColorMap",
 				"type": "f"
 			}
 		],
 		"parameters": [
 
-		]
+		],
+		"shortdesc": "Render"
 	},
 	"type": "shader"
 }
