@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Plane.png-a8a411ff52ca87d5ba92ea8b16716344.stex"
+path="res://.import/Prism.png-48f4d784f8cb8ebef868253a0b55bb9b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/thumbnails/meshes/Plane.png"
-dest_files=[ "res://.import/Plane.png-a8a411ff52ca87d5ba92ea8b16716344.stex" ]
+source_file="res://material_maker/panels/preview_3d/thumbnails/meshes/Prism.png"
+dest_files=[ "res://.import/Prism.png-48f4d784f8cb8ebef868253a0b55bb9b.stex" ]
 
 [params]
 

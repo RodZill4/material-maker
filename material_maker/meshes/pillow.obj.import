@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/pillow.obj-833d60b6e8812961a8cb80f3b222db63.mesh"
+
+[deps]
+
+files=[ "res://.import/pillow.obj-833d60b6e8812961a8cb80f3b222db63.mesh" ]
+
+source_file="res://material_maker/meshes/pillow.obj"
+dest_files=[ "res://.import/pillow.obj-833d60b6e8812961a8cb80f3b222db63.mesh", "res://.import/pillow.obj-833d60b6e8812961a8cb80f3b222db63.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

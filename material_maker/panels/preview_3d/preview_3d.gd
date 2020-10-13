@@ -35,15 +35,12 @@ func _ready() -> void:
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
-	
-	get_tree().create_timer(1.0).connect("timeout", self, "_on_Model_item_selected", [0])
-	# doing it now doesn't work
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
 		var o = objects.get_child(i)
-		var thumbnail := load("res://material_maker/thumbnails/meshes/%s.png" % o.name)
+		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
 		if thumbnail:
 			menu.add_icon_item(thumbnail, "", i)
 		else:

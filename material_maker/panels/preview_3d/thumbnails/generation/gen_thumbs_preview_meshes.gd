@@ -3,15 +3,15 @@ extends Spatial
 signal generated_thumbnails
 
 
-export var thumb_size := 85
-export var show_names := false
+export var thumb_size := 32
+export var show_names := true
 
 
 func _ready() -> void:
 	yield(get_tree(), "idle_frame")
 	
 	var objects := $Objects
-	var material: Material = preload("res://material_maker/thumbnails/generation/thumbnail_mesh.material")
+	var material: Material = preload("res://material_maker/panels/preview_3d/thumbnails/generation/thumbnail_mesh.material")
 	var viewport: Viewport = $ThumbnailGeneration
 	var name_label := $ThumbnailGeneration/VBoxContainer/CenterContainer/Name
 	
@@ -29,7 +29,8 @@ func _ready() -> void:
 		
 		yield(get_tree(), "idle_frame") # render
 		
-		viewport.get_texture().get_data().save_png("res://material_maker/thumbnails/meshes/%s.png" % c.name)
+		viewport.get_texture().get_data().save_png("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % c.name)
+		print("Generated %s.png" % c.name)
 		
 #		c.thumbnail = ImageTexture.new()
 #		c.thumbnail.create_from_image(viewport.get_texture().get_data())
@@ -40,5 +41,6 @@ func _ready() -> void:
 		name_label.text = ""
 		if use_default_material:
 			c.material_override = null
-	emit_signal("generated_thumbnails")
-	queue_free()
+	#emit_signal("generated_thumbnails")
+	
+	get_tree().quit()

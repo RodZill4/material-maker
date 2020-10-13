@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/preview_objects.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/thumbnails/generation/gen_thumbs_preview_meshes.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/thumbnails/generation/thumbnail_ground.material" type="Material" id=3]
+[ext_resource path="res://material_maker/panels/preview_3d/thumbnails/generation/gen_thumbs_preview_meshes.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/panels/preview_3d/thumbnails/generation/thumbnail_ground.material" type="Material" id=3]
 
 [sub_resource type="ProceduralSky" id=1]
 
@@ -21,7 +21,7 @@ size = Vector2( 100, 100 )
 
 [node name="GenThumbs" type="Spatial"]
 script = ExtResource( 2 )
-thumb_size = 80
+thumb_size = 64
 
 [node name="Objects" parent="." instance=ExtResource( 1 )]
 
@@ -37,7 +37,7 @@ shadow_atlas_size = 1024
 transform = Transform( 0.928239, 0, 0.371984, 0, 1, 0, -0.371984, 0, 0.928239, 0, 0, 0 )
 
 [node name="Camera" type="Camera" parent="ThumbnailGeneration/CameraPivot"]
-transform = Transform( 0.933281, -0.242632, 0.264797, 0, 0.737291, 0.675575, -0.359148, -0.630502, 0.688099, 1.59357, 4.11103, 4.14103 )
+transform = Transform( 0.933281, -0.242632, 0.264797, 0, 0.737291, 0.675575, -0.359148, -0.630502, 0.688099, 1.41, 4.3, 3.798 )
 fov = 43.0
 
 [node name="DirectionalLight" type="DirectionalLight" parent="ThumbnailGeneration"]
@@ -64,28 +64,27 @@ __meta__ = {
 }
 
 [node name="HSeparator" type="HSeparator" parent="ThumbnailGeneration/VBoxContainer"]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
-margin_right = 1680.0
-margin_bottom = 4.0
 
 [node name="CenterContainer" type="CenterContainer" parent="ThumbnailGeneration/VBoxContainer"]
-margin_top = 8.0
-margin_right = 1680.0
-margin_bottom = 8.0
+margin_right = 1920.0
+margin_bottom = 14.0
 
 [node name="Name" type="Label" parent="ThumbnailGeneration/VBoxContainer/CenterContainer"]
-visible = false
-margin_left = 815.0
-margin_top = -7.0
-margin_right = 864.0
-margin_bottom = 7.0
-custom_colors/font_color = Color( 1, 1, 1, 1 )
+margin_left = 935.0
+margin_right = 984.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "Custom"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ColorRect" type="ColorRect" parent="ThumbnailGeneration/VBoxContainer/CenterContainer/Name"]
+visible = false
 show_behind_parent = true
 anchor_right = 1.0
 anchor_bottom = 1.0

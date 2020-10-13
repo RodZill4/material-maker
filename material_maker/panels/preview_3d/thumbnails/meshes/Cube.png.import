@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Sphere.png-cea4dcaabcb0b1883ddf9578b85df73a.stex"
+path="res://.import/Cube.png-d90c7a8c24c0acef0c715c05808013b1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/thumbnails/meshes/Sphere.png"
-dest_files=[ "res://.import/Sphere.png-cea4dcaabcb0b1883ddf9578b85df73a.stex" ]
+source_file="res://material_maker/panels/preview_3d/thumbnails/meshes/Cube.png"
+dest_files=[ "res://.import/Cube.png-d90c7a8c24c0acef0c715c05808013b1.stex" ]
 
 [params]
 

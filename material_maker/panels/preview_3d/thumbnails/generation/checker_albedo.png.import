@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/checker_albedo.png-627e9c1df7852ac2a6ca9870a455a1df.s3tc.stex"
-path.etc2="res://.import/checker_albedo.png-627e9c1df7852ac2a6ca9870a455a1df.etc2.stex"
+path.s3tc="res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.s3tc.stex"
+path.etc2="res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://material_maker/thumbnails/generation/checker_albedo.png"
-dest_files=[ "res://.import/checker_albedo.png-627e9c1df7852ac2a6ca9870a455a1df.s3tc.stex", "res://.import/checker_albedo.png-627e9c1df7852ac2a6ca9870a455a1df.etc2.stex" ]
+source_file="res://material_maker/panels/preview_3d/thumbnails/generation/checker_albedo.png"
+dest_files=[ "res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.s3tc.stex", "res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.etc2.stex" ]
 
 [params]
 

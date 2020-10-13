@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Cylinder.png-ccbe942f8354840488709e3765796338.stex"
+path="res://.import/Custom.png-41356797758d4bae89ddede284c1cd28.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/thumbnails/meshes/Cylinder.png"
-dest_files=[ "res://.import/Cylinder.png-ccbe942f8354840488709e3765796338.stex" ]
+source_file="res://material_maker/panels/preview_3d/thumbnails/meshes/Custom.png"
+dest_files=[ "res://.import/Custom.png-41356797758d4bae89ddede284c1cd28.stex" ]
 
 [params]
 
