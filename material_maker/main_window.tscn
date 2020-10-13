@@ -160,6 +160,10 @@ __meta__ = {
 
 [node name="AddNodePopup" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" instance=ExtResource( 7 )]
 
+[node name="CrashRecoveryTimer" type="Timer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects"]
+wait_time = 15.0
+autostart = true
+
 [node name="PreviewUI" type="HBoxContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -263,6 +267,7 @@ script = ExtResource( 9 )
 [connection signal="reposition_active_tab_request" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="move_active_tab_to"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="set_current_tab"]
 [connection signal="tab_close" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="close_tab"]
+[connection signal="timeout" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/CrashRecoveryTimer" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_CrashRecoveryTimer_timeout"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]
 [connection signal="gui_input" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D" method="on_gui_input"]
