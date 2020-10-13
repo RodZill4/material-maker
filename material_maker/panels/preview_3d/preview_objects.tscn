@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://material_maker/panels/preview_3d/meshes/Suzanne.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
@@ -18,6 +19,8 @@ rings = 16
 
 [sub_resource type="PlaneMesh" id=5]
 size = Vector2( 8, 8 )
+
+[sub_resource type="SpatialMaterial" id=6]
 
 [node name="Objects" type="Spatial"]
 
@@ -56,5 +59,9 @@ script = ExtResource( 3 )
 uv_scale = Vector2( 4, 4 )
 
 [node name="Custom" type="MeshInstance" parent="."]
+transform = Transform( 1.5, 0, 0, 0, 1.21178, 0.88407, 0, -0.88407, 1.21178, 0, -0.18884, 0 )
 visible = false
+material_override = SubResource( 6 )
+mesh = ExtResource( 1 )
+material/0 = null
 script = ExtResource( 3 )

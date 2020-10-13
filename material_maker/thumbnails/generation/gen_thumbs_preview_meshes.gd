@@ -23,7 +23,9 @@ func _ready() -> void:
 		viewport.add_child(c)
 		c.show()
 		name_label.text = " %s " % c.name
-		c.material_override = material
+		var use_default_material: bool = (c.material_override == null)
+		if use_default_material:
+			c.material_override = material
 		
 		yield(get_tree(), "idle_frame") # render
 		
@@ -36,6 +38,7 @@ func _ready() -> void:
 		objects.add_child(c)
 		c.hide()
 		name_label.text = ""
-		c.material_override = null
+		if use_default_material:
+			c.material_override = null
 	emit_signal("generated_thumbnails")
 	queue_free()
