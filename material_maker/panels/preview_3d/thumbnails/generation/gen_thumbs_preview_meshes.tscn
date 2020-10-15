@@ -63,10 +63,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSeparator" type="HSeparator" parent="ThumbnailGeneration/VBoxContainer"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-
 [node name="CenterContainer" type="CenterContainer" parent="ThumbnailGeneration/VBoxContainer"]
 margin_right = 1920.0
 margin_bottom = 14.0
@@ -79,16 +75,6 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
 text = "Custom"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="ThumbnailGeneration/VBoxContainer/CenterContainer/Name"]
-visible = false
-show_behind_parent = true
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.807843 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

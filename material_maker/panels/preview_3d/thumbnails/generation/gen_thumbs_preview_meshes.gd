@@ -1,7 +1,5 @@
 extends Spatial
 
-signal generated_thumbnails
-
 
 export var thumb_size := 32
 export var show_names := true
@@ -22,7 +20,7 @@ func _ready() -> void:
 		objects.remove_child(c)
 		viewport.add_child(c)
 		c.show()
-		name_label.text = " %s " % c.name
+		name_label.text = "%s" % c.name
 		var use_default_material: bool = (c.material_override == null)
 		if use_default_material:
 			c.material_override = material
@@ -32,15 +30,7 @@ func _ready() -> void:
 		viewport.get_texture().get_data().save_png("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % c.name)
 		print("Generated %s.png" % c.name)
 		
-#		c.thumbnail = ImageTexture.new()
-#		c.thumbnail.create_from_image(viewport.get_texture().get_data())
-		
 		viewport.remove_child(c)
-		objects.add_child(c)
-		c.hide()
-		name_label.text = ""
-		if use_default_material:
-			c.material_override = null
-	#emit_signal("generated_thumbnails")
+		c.queue_free()
 	
 	get_tree().quit()
