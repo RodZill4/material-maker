@@ -11,7 +11,7 @@ var generator = null
 
 var last_selected = null
 
-onready var node_popup = $"../AddNodePopup"
+onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
 
 onready var timer : Timer = $Timer
 
@@ -28,6 +28,9 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func get_graph_edit():
+	return self
 
 func _gui_input(event) -> void:
 	if event.is_action_pressed("ui_library_popup") && get_rect().has_point(get_local_mouse_position()):

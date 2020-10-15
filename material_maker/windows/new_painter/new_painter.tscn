@@ -1,0 +1,139 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/windows/new_painter/new_painter.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="Animation" id=2]
+resource_name = "rotate"
+length = 10.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("MeshInstance:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+}
+
+[node name="NewPainterWindow" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -760.0
+margin_bottom = -432.0
+window_title = "New paint project"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 520.0
+margin_bottom = 256.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_right = 183.0
+margin_bottom = 256.0
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 183.0
+margin_bottom = 44.0
+columns = 2
+
+[node name="ModelFileLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 3.0
+margin_right = 72.0
+margin_bottom = 17.0
+text = "Model:"
+
+[node name="ModelFile" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 76.0
+margin_right = 183.0
+margin_bottom = 20.0
+text = "Select a model"
+
+[node name="ResolutionLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 27.0
+margin_right = 72.0
+margin_bottom = 41.0
+text = "Resolution:"
+
+[node name="Resolution" type="OptionButton" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 76.0
+margin_top = 24.0
+margin_right = 183.0
+margin_bottom = 44.0
+script = ExtResource( 1 )
+
+[node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/HBoxContainer"]
+margin_left = 187.0
+margin_right = 520.0
+margin_bottom = 256.0
+size_flags_horizontal = 3
+
+[node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ViewportContainer"]
+size = Vector2( 100, 100 )
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
+transform = Transform( 1, 0, 0, 0, 0.865982, 0.500076, 0, -0.500076, 0.865982, 0, 2, 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
+autoplay = "rotate"
+anims/rotate = SubResource( 2 )
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 260.0
+margin_right = 520.0
+margin_bottom = 264.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 203.0
+margin_top = 268.0
+margin_right = 317.0
+margin_bottom = 288.0
+size_flags_horizontal = 4
+
+[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer2"]
+margin_right = 55.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 55, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer2"]
+margin_left = 59.0
+margin_right = 114.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 55, 0 )
+text = "Cancel"
+
+[node name="ObjLoader" type="Node" parent="."]
+script = ExtResource( 3 )
+[connection signal="popup_hide" from="." to="." method="_on_NewPainterWindow_popup_hide"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
+[connection signal="resized" from="VBoxContainer/HBoxContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Cancel" to="." method="_on_Cancel_pressed"]

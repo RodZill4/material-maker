@@ -1,0 +1,267 @@
+[gd_scene load_steps=31 format=2]
+
+[ext_resource path="res://addons/material_spray/environments/park.hdr" type="Texture" id=1]
+[ext_resource path="res://addons/material_spray/icons/eraser_s.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_spray/icons/line_strip.png" type="Texture" id=3]
+[ext_resource path="res://addons/material_spray/icons/color_picker.png" type="Texture" id=4]
+[ext_resource path="res://addons/material_spray/icons/eraser.png" type="Texture" id=5]
+[ext_resource path="res://addons/material_spray/icons/color_picker_s.png" type="Texture" id=6]
+[ext_resource path="res://addons/material_spray/icons/paint.png" type="Texture" id=7]
+[ext_resource path="res://addons/material_spray/icons/paint_s.png" type="Texture" id=8]
+[ext_resource path="res://addons/material_spray/icons/line_s.png" type="Texture" id=9]
+[ext_resource path="res://addons/material_spray/icons/line.png" type="Texture" id=10]
+[ext_resource path="res://addons/material_spray/icons/line_strip_s.png" type="Texture" id=11]
+[ext_resource path="res://material_maker/tools/painter/painter.tscn" type="PackedScene" id=12]
+[ext_resource path="res://addons/material_spray/layers/layers.tscn" type="PackedScene" id=13]
+[ext_resource path="res://addons/material_spray/brush_lib/brush_lib.tscn" type="PackedScene" id=14]
+[ext_resource path="res://addons/material_spray/brush/brush.tscn" type="PackedScene" id=15]
+[ext_resource path="res://material_maker/panels/paint/paint.gd" type="Script" id=16]
+[ext_resource path="res://material_maker/panels/graph_edit/graph_edit.tscn" type="PackedScene" id=17]
+
+[sub_resource type="PanoramaSky" id=1]
+panorama = ExtResource( 1 )
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+
+[sub_resource type="World" id=3]
+environment = SubResource( 2 )
+
+[sub_resource type="InputEventKey" id=4]
+pressed = true
+scancode = 16777244
+
+[sub_resource type="ShortCut" id=5]
+shortcut = SubResource( 4 )
+
+[sub_resource type="InputEventKey" id=6]
+pressed = true
+scancode = 16777245
+
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
+
+[sub_resource type="InputEventKey" id=8]
+pressed = true
+scancode = 16777246
+
+[sub_resource type="ShortCut" id=9]
+shortcut = SubResource( 8 )
+
+[sub_resource type="InputEventKey" id=10]
+pressed = true
+scancode = 16777247
+
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
+
+[sub_resource type="InputEventKey" id=12]
+pressed = true
+scancode = 69
+
+[sub_resource type="ShortCut" id=13]
+shortcut = SubResource( 12 )
+
+[node name="MaterialSpray" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="HBoxContainer" parent="."]
+margin_right = 1280.0
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+margin_top = 4.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_vertical = 3
+split_offset = 100
+
+[node name="View" type="ViewportContainer" parent="VSplitContainer"]
+margin_right = 1280.0
+margin_bottom = 452.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="MainView" type="Viewport" parent="VSplitContainer/View"]
+size = Vector2( 1280, 452 )
+world = SubResource( 3 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="CameraStand" type="Spatial" parent="VSplitContainer/View/MainView"]
+
+[node name="Camera" type="Camera" parent="VSplitContainer/View/MainView/CameraStand"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+current = true
+near = 1.0
+far = 4.0
+
+[node name="OmniLight" type="OmniLight" parent="VSplitContainer/View/MainView/CameraStand"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04372, 0, 1.98915 )
+
+[node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/View/MainView"]
+
+[node name="Painter" parent="VSplitContainer/View" instance=ExtResource( 12 )]
+
+[node name="Brush" parent="VSplitContainer/View" instance=ExtResource( 15 )]
+
+[node name="Layers" parent="VSplitContainer/View" instance=ExtResource( 13 )]
+painter = NodePath("../Painter")
+
+[node name="Tools" type="HBoxContainer" parent="VSplitContainer/View"]
+margin_right = 149.0
+margin_bottom = 32.0
+
+[node name="Free" type="TextureButton" parent="VSplitContainer/View/Tools"]
+margin_right = 32.0
+margin_bottom = 32.0
+hint_tooltip = "Freehand (F1)"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+pressed = true
+shortcut = SubResource( 5 )
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 8 )
+
+[node name="Line" type="TextureButton" parent="VSplitContainer/View/Tools"]
+margin_left = 36.0
+margin_right = 68.0
+margin_bottom = 32.0
+hint_tooltip = "Lines (F2)"
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 7 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 9 )
+
+[node name="Strip" type="TextureButton" parent="VSplitContainer/View/Tools"]
+margin_left = 72.0
+margin_right = 104.0
+margin_bottom = 32.0
+hint_tooltip = "Line Strip (F3)"
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 9 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 11 )
+
+[node name="ColorPicker" type="TextureButton" parent="VSplitContainer/View/Tools"]
+margin_left = 108.0
+margin_right = 140.0
+margin_bottom = 32.0
+hint_tooltip = "Color Picker (F4)"
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 11 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 6 )
+
+[node name="Space1" type="Control" parent="VSplitContainer/View/Tools"]
+margin_left = 144.0
+margin_right = 149.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 5, 0 )
+
+[node name="Eraser" type="TextureButton" parent="VSplitContainer/View/Tools"]
+margin_left = 153.0
+margin_right = 184.0
+margin_bottom = 32.0
+hint_tooltip = "Toggler Eraser Mode (E)"
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 13 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 2 )
+
+[node name="BrushLib" parent="VSplitContainer/View" instance=ExtResource( 14 )]
+
+[node name="Debug" type="Control" parent="VSplitContainer/View"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -600.0
+margin_right = 1024.0
+mouse_filter = 2
+
+[node name="Texture1" type="TextureRect" parent="VSplitContainer/View/Debug"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -352.462
+margin_top = -277.766
+margin_right = -96.4617
+margin_bottom = -21.766
+rect_min_size = Vector2( 256, 256 )
+expand = true
+
+[node name="Select1" type="OptionButton" parent="VSplitContainer/View/Debug"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -256.799
+margin_top = -20.0
+margin_right = -181.799
+size_flags_horizontal = 0
+text = "None"
+items = [ "None", null, false, 0, null, "View to texture", null, false, 1, null, "Texture to view", null, false, 2, null, "Seams", null, false, 3, null, "Albedo (current layer)", null, false, 4, null, "Metallic/Roughness (current layer)", null, false, 5, null, "Emission (current layer)", null, false, 6, null, "Depth (current layer)", null, false, 7, null, "Albedo", null, false, 8, null, "Metallic", null, false, 9, null, "Roughness", null, false, 10, null, "Metallic/Roughness", null, false, 11, null, "Emission", null, false, 12, null, "Normal map", null, false, 13, null, "Depth", null, false, 14, null ]
+selected = 0
+
+[node name="Texture2" type="TextureRect" parent="VSplitContainer/View/Debug"]
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -95.4758
+margin_top = -277.406
+margin_right = 160.524
+margin_bottom = -21.4056
+rect_min_size = Vector2( 256, 256 )
+expand = true
+
+[node name="Select2" type="OptionButton" parent="VSplitContainer/View/Debug"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -8.5202
+margin_top = -20.0
+margin_right = 66.4798
+size_flags_horizontal = 0
+text = "None"
+items = [ "None", null, false, 0, null, "View to texture", null, false, 1, null, "Texture to view", null, false, 2, null, "Seams", null, false, 3, null, "Albedo (current layer)", null, false, 4, null, "Metallic/Roughness (current layer)", null, false, 5, null, "Emission (current layer)", null, false, 6, null, "Depth (current layer)", null, false, 7, null, "Albedo", null, false, 8, null, "Metallic", null, false, 9, null, "Roughness", null, false, 10, null, "Metallic/Roughness", null, false, 11, null, "Emission", null, false, 12, null, "Normal map", null, false, 13, null, "Depth", null, false, 14, null ]
+selected = 0
+
+[node name="GraphEdit" parent="VSplitContainer" instance=ExtResource( 17 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 464.0
+margin_right = 1280.0
+margin_bottom = 716.0
+size_flags_vertical = 3
+scroll_offset = Vector2( 0, -87 )
+[connection signal="gui_input" from="VSplitContainer/View" to="." method="_on_View_gui_input"]
+[connection signal="resized" from="VSplitContainer/View" to="VSplitContainer/View" method="_on_resized"]
+[connection signal="colors_picked" from="VSplitContainer/View/Painter" to="VSplitContainer/View/Brush" method="brush_selected"]
+[connection signal="painted" from="VSplitContainer/View/Painter" to="VSplitContainer/View/Layers" method="_on_Painter_painted"]
+[connection signal="brush_changed" from="VSplitContainer/View/Brush" to="VSplitContainer/View/Painter" method="brush_changed"]
+[connection signal="brush_changed" from="VSplitContainer/View/Brush" to="VSplitContainer/View/BrushLib" method="brush_changed"]
+[connection signal="pressed" from="VSplitContainer/View/Tools/Free" to="." method="set_current_tool" binds= [ 0 ]]
+[connection signal="pressed" from="VSplitContainer/View/Tools/Line" to="." method="set_current_tool" binds= [ 1 ]]
+[connection signal="pressed" from="VSplitContainer/View/Tools/Strip" to="." method="set_current_tool" binds= [ 2 ]]
+[connection signal="pressed" from="VSplitContainer/View/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 3 ]]
+[connection signal="pressed" from="VSplitContainer/View/Tools/Eraser" to="." method="save"]
+[connection signal="brush_selected" from="VSplitContainer/View/BrushLib" to="VSplitContainer/View/Brush" method="brush_selected"]
+[connection signal="item_selected" from="VSplitContainer/View/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
+[connection signal="item_selected" from="VSplitContainer/View/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]

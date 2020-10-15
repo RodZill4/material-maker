@@ -1,0 +1,15 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/dots.ptex-ed8859a95fad3ef8e64bc078eed00be0.tres"
+
+[deps]
+
+source_file="res://addons/material_spray/materials/dots.ptex"
+dest_files=[ "res://.import/dots.ptex-ed8859a95fad3ef8e64bc078eed00be0.tres" ]
+
+[params]
+
+render=false
+scale=1.0

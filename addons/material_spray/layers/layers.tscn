@@ -1,0 +1,157 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://addons/material_spray/layers/layers.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_spray/layers/layers_tree.gd" type="Script" id=2]
+[ext_resource path="res://addons/material_spray/icons/add_layer.png" type="Texture" id=3]
+[ext_resource path="res://addons/material_spray/icons/remove_layer.png" type="Texture" id=4]
+[ext_resource path="res://addons/material_spray/icons/up.png" type="Texture" id=5]
+[ext_resource path="res://addons/material_spray/icons/down.png" type="Texture" id=6]
+[ext_resource path="res://addons/material_spray/shaders/normal_map.shader" type="Shader" id=7]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="ViewportTexture" id=7]
+
+[sub_resource type="ViewportTexture" id=8]
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 7 )
+shader_param/epsilon = 0.0078125
+shader_param/seams = SubResource( 7 )
+shader_param/tex = SubResource( 8 )
+
+[node name="Layers" type="VBoxContainer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -224.0
+margin_right = 150.0
+script = ExtResource( 1 )
+painter = null
+
+[node name="Tree" type="Tree" parent="."]
+margin_right = 150.0
+margin_bottom = 204.0
+rect_min_size = Vector2( 150, 200 )
+focus_mode = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+hide_root = true
+script = ExtResource( 2 )
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+margin_top = 208.0
+margin_right = 150.0
+margin_bottom = 224.0
+size_flags_horizontal = 3
+
+[node name="Add" type="TextureButton" parent="Buttons"]
+margin_right = 34.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+size_flags_horizontal = 3
+texture_normal = ExtResource( 3 )
+expand = true
+stretch_mode = 3
+
+[node name="Remove" type="TextureButton" parent="Buttons"]
+margin_left = 38.0
+margin_right = 72.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+size_flags_horizontal = 3
+texture_normal = ExtResource( 4 )
+expand = true
+stretch_mode = 3
+
+[node name="Up" type="TextureButton" parent="Buttons"]
+margin_left = 76.0
+margin_right = 110.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+size_flags_horizontal = 3
+texture_normal = ExtResource( 5 )
+expand = true
+stretch_mode = 3
+
+[node name="Down" type="TextureButton" parent="Buttons"]
+margin_left = 114.0
+margin_right = 150.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 16 )
+size_flags_horizontal = 3
+texture_normal = ExtResource( 6 )
+expand = true
+stretch_mode = 3
+
+[node name="Albedo" type="Viewport" parent="."]
+transparent_bg = true
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="Metallic" type="Viewport" parent="."]
+transparent_bg = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="Roughness" type="Viewport" parent="."]
+transparent_bg = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="MR" type="Viewport" parent="."]
+transparent_bg = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="Metallic" type="TextureRect" parent="MR"]
+material = SubResource( 1 )
+
+[node name="Roughness" type="TextureRect" parent="MR"]
+material = SubResource( 1 )
+
+[node name="Emission" type="Viewport" parent="."]
+transparent_bg = true
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="Depth" type="Viewport" parent="."]
+transparent_bg = true
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 1
+
+[node name="NormalMap" type="Viewport" parent="."]
+editor/display_folded = true
+size = Vector2( 2048, 2048 )
+own_world = true
+transparent_bg = true
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_clear_mode = 1
+render_target_update_mode = 1
+
+[node name="Rect" type="ColorRect" parent="NormalMap"]
+material = SubResource( 6 )
+margin_right = 2048.0
+margin_bottom = 2048.0
+[connection signal="button_pressed" from="Tree" to="Tree" method="_on_Tree_button_pressed"]
+[connection signal="cell_selected" from="Tree" to="Tree" method="_on_Tree_cell_selected"]
+[connection signal="gui_input" from="Tree" to="Tree" method="_on_Tree_gui_input"]
+[connection signal="layers_changed" from="Tree" to="." method="_on_Tree_layers_changed"]
+[connection signal="selection_changed" from="Tree" to="." method="_on_Tree_selection_changed"]
+[connection signal="pressed" from="Buttons/Add" to="Tree" method="create_layer"]
+[connection signal="pressed" from="Buttons/Remove" to="Tree" method="remove_current"]
+[connection signal="pressed" from="Buttons/Up" to="Tree" method="move_current_up"]
+[connection signal="pressed" from="Buttons/Down" to="Tree" method="move_current_down"]

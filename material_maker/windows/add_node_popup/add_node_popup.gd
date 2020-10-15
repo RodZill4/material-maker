@@ -8,7 +8,7 @@ var quick_connect : int = -1
 var insert_position : Vector2
 
 func get_current_graph():
-	return get_parent().get_current_tab_control()
+	return get_parent().get_current_graph_edit()
 
 func _ready() -> void:
 	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
@@ -65,7 +65,7 @@ func show_popup(qc : int = -1) -> void:
 	quick_connect = qc
 	update_list()
 	filter_line_edit.grab_focus()
-	var parent_rect = get_parent().get_parent().get_global_rect()
+	var parent_rect = get_current_graph().get_global_rect()
 	var clipped = parent_rect.clip(get_global_rect())
 	var offset =  (get_rect().size-clipped.size)
 	insert_position = rect_position

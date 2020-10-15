@@ -20,9 +20,9 @@ var histogram
 var preview_3d
 var hierarchy
 
-onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview2D
+onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
 onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
-onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D
+onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
@@ -32,7 +32,8 @@ const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
+	{ menu="File", command="new_paint_project", description="New paint project" },
+	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
 	{ menu="File", command="save_material", shortcut="Control+S", description="Save material" },
@@ -183,8 +184,8 @@ func get_panel(panel_name : String) -> Control:
 
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
-	if graph_edit != null and graph_edit is GraphEdit:
-		return graph_edit
+	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
+		return graph_edit.get_graph_edit()
 	return null
 
 func create_menus(menu_def, object, menu_bar) -> void:
@@ -258,6 +259,8 @@ func on_menu_id_pressed(id, menu_def, object) -> void:
 		if object.has_method(command):
 			if menu_def[id].has("toggle") and menu_def[id].toggle:
 				object.call(command, !object.call(command))
+			elif menu_def[id].has("command_parameter"):
+				object.call(command, menu_def[id].command_parameter)
 			else:
 				object.call(command)
 
@@ -403,7 +406,7 @@ func _on_Create_id_pressed(id) -> void:
 		graph_edit.create_gen_from_type(gens[id])
 
 
-func new_panel() -> GraphEdit:
+func new_graph_panel() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
 	projects.add_child(graph_edit)
@@ -411,18 +414,35 @@ func new_panel() -> GraphEdit:
 	return graph_edit
 
 func new_material() -> void:
-	var graph_edit = new_panel()
+	var graph_edit = new_graph_panel()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func load_material() -> void:
+func new_paint_project() -> void:
+	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
+	add_child(new_painter_dialog)
+	var result = new_painter_dialog.ask()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == null:
+		return
+	var paint_panel = preload("res://material_maker/panels/paint/paint.tscn").instance()
+	projects.add_child(paint_panel)
+	projects.current_tab = paint_panel.get_index()
+	var mi = MeshInstance.new()
+	mi.mesh = result.mesh
+	mi.set_surface_material(0, SpatialMaterial.new())
+	paint_panel.set_object(mi)
+
+func load_project() -> void:
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
+	dialog.add_filter("*.mpnt;Model Painting File")
 	if config_cache.has_section_key("path", "material"):
 		dialog.current_dir = config_cache.get_value("path", "material")
 	dialog.connect("files_selected", self, "do_load_materials")
@@ -451,7 +471,7 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 				if node_count > 1:
 					break
 	if node_count > 1:
-		graph_edit = new_panel()
+		graph_edit = new_graph_panel()
 	graph_edit.load_file(filename)
 	add_recent(filename)
 	if update_hierarchy:
@@ -801,16 +821,24 @@ func on_selected_node_change(node) -> void:
 func _on_Projects_tab_changed(_tab) -> void:
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
-		if new_tab != null:
+		if new_tab is GraphEdit:
 			for c in get_incoming_connections():
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
 			new_tab.connect("graph_changed", self, "update_preview")
 			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
 				new_tab.connect("node_selected", self, "on_selected_node_change")
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
+			layout.change_mode("material")
+		else:
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
+			layout.change_mode("paint")
 		current_tab = new_tab
-		update_preview()
-		hierarchy.update_from_graph_edit(get_current_graph_edit())
+		if new_tab is GraphEdit:
+			update_preview()
+			hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

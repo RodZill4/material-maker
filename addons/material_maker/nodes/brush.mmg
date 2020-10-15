@@ -1,0 +1,44 @@
+{
+	"name": "brush",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(vec3(1.0), 1.0-2.0*length($uv-vec2(0.5))",
+				"label": "Albedo",
+				"name": "albedo",
+				"type": "rgba"
+			},
+			{
+				"default": "$albedo($uv).a",
+				"label": "Alpha",
+				"name": "alpha",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Brush",
+		"outputs": [
+			{
+				"rgb": "$albedo($uv).rgb",
+				"type": "rgb"
+			},
+			{
+				"f": "$alpha($uv)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

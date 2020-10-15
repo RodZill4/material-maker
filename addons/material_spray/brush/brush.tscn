@@ -1,0 +1,249 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://addons/material_spray/brush/brush.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_spray/shaders/show_brush.shader" type="Shader" id=2]
+[ext_resource path="res://addons/material_spray/shaders/show_pattern.shader" type="Shader" id=3]
+[ext_resource path="res://addons/material_spray/materials/empty.png" type="Texture" id=4]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/brush_pos = Vector2( 0.87314, 0.205165 )
+shader_param/brush_ppos = Vector2( 0.87314, 0.205165 )
+shader_param/brush_size = Vector2( 0.0488281, 0.0833333 )
+shader_param/brush_strength = 0.5
+shader_param/pattern_scale = 10.0
+shader_param/texture_angle = 0.0
+shader_param/stamp_mode = 0
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 3 )
+shader_param/brush_size = Vector2( 0.0488281, 0.0833333 )
+shader_param/pattern_scale = 10.0
+shader_param/texture_angle = 0.0
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex : hint_albedo;
+
+void fragment() {
+	vec3 bg = vec3(vec3(2.0*fract(0.5*(floor(8.0*UV.x)+floor(8.0*UV.y)))));
+	vec4 fg = texture(tex, UV);
+	COLOR = vec4(bg*(1.0-fg.a) + fg.a*fg.xyz, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/tex = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 3 )
+shader_param/tex = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 3 )
+shader_param/tex = ExtResource( 4 )
+
+[node name="Brush" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+
+[node name="Brush" type="ColorRect" parent="."]
+material = SubResource( 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Pattern" type="ColorRect" parent="."]
+visible = false
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="BrushUI" type="VBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -222.0
+margin_top = -260.0
+alignment = 2
+
+[node name="AMR" type="VBoxContainer" parent="BrushUI"]
+editor/display_folded = true
+margin_left = 113.0
+margin_right = 222.0
+margin_bottom = 236.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Albedo" type="CheckBox" parent="BrushUI/AMR"]
+margin_right = 109.0
+margin_bottom = 24.0
+text = "Albedo"
+
+[node name="AlbedoColor" type="ColorPickerButton" parent="BrushUI/AMR"]
+margin_top = 28.0
+margin_right = 109.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 64, 0 )
+
+[node name="AlbedoTextureMode" type="OptionButton" parent="BrushUI/AMR"]
+margin_top = 52.0
+margin_right = 109.0
+margin_bottom = 72.0
+text = "No texture"
+items = [ "No texture", null, false, 0, null, "Stamp", null, false, -1, null, "Pattern", null, false, -1, null ]
+selected = 0
+
+[node name="AlbedoTexture" type="ColorRect" parent="BrushUI/AMR"]
+material = SubResource( 4 )
+margin_left = 22.0
+margin_top = 76.0
+margin_right = 86.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 4
+
+[node name="Metallic" type="CheckBox" parent="BrushUI/AMR"]
+margin_top = 144.0
+margin_right = 109.0
+margin_bottom = 168.0
+text = "Metallic"
+
+[node name="MetallicValue" type="HSlider" parent="BrushUI/AMR"]
+margin_top = 172.0
+margin_right = 109.0
+margin_bottom = 188.0
+focus_mode = 0
+max_value = 1.0
+step = 0.01
+ticks_on_borders = true
+focus_mode = 0
+
+[node name="Roughness" type="CheckBox" parent="BrushUI/AMR"]
+margin_top = 192.0
+margin_right = 109.0
+margin_bottom = 216.0
+text = "Roughness"
+
+[node name="RoughnessValue" type="HSlider" parent="BrushUI/AMR"]
+margin_top = 220.0
+margin_right = 109.0
+margin_bottom = 236.0
+focus_mode = 0
+max_value = 1.0
+step = 0.01
+ticks_on_borders = true
+focus_mode = 0
+
+[node name="Emission" type="VBoxContainer" parent="BrushUI"]
+editor/display_folded = true
+visible = false
+margin_left = 113.0
+margin_top = 96.0
+margin_right = 222.0
+margin_bottom = 236.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Emission" type="CheckBox" parent="BrushUI/Emission"]
+margin_right = 109.0
+margin_bottom = 24.0
+focus_mode = 0
+text = "Emission"
+
+[node name="EmissionColor" type="ColorPickerButton" parent="BrushUI/Emission"]
+margin_top = 28.0
+margin_right = 109.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 64, 0 )
+focus_mode = 0
+
+[node name="EmissionTextureMode" type="OptionButton" parent="BrushUI/Emission"]
+margin_top = 52.0
+margin_right = 109.0
+margin_bottom = 72.0
+focus_mode = 0
+text = "No texture"
+items = [ "No texture", null, false, 0, null, "Stamp", null, false, -1, null, "Pattern", null, false, -1, null ]
+selected = 0
+
+[node name="EmissionTexture" type="ColorRect" parent="BrushUI/Emission"]
+material = SubResource( 5 )
+margin_left = 22.0
+margin_top = 76.0
+margin_right = 86.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 4
+
+[node name="Depth" type="VBoxContainer" parent="BrushUI"]
+editor/display_folded = true
+visible = false
+margin_left = 113.0
+margin_top = 96.0
+margin_right = 222.0
+margin_bottom = 236.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="Depth" type="CheckBox" parent="BrushUI/Depth"]
+margin_right = 109.0
+margin_bottom = 24.0
+text = "Depth"
+
+[node name="DepthColor" type="ColorPickerButton" parent="BrushUI/Depth"]
+margin_top = 28.0
+margin_right = 109.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 64, 0 )
+
+[node name="DepthTextureMode" type="OptionButton" parent="BrushUI/Depth"]
+margin_top = 52.0
+margin_right = 109.0
+margin_bottom = 72.0
+text = "No texture"
+items = [ "No texture", null, false, 0, null, "Stamp", null, false, -1, null, "Pattern", null, false, -1, null ]
+selected = 0
+
+[node name="DepthTexture" type="ColorRect" parent="BrushUI/Depth"]
+material = SubResource( 6 )
+margin_left = 22.0
+margin_top = 76.0
+margin_right = 86.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 64, 64 )
+size_flags_horizontal = 4
+
+[node name="Parameters" type="OptionButton" parent="BrushUI"]
+margin_top = 240.0
+margin_right = 222.0
+margin_bottom = 260.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "Albedo, Metallic, Roughness"
+items = [ "Albedo, Metallic, Roughness", null, false, 0, null, "Emission", null, false, 1, null, "Depth", null, false, -1, null ]
+selected = 0
+
+[connection signal="resized" from="." to="." method="_on_Brush_resized"]
+[connection signal="pressed" from="BrushUI/AMR/Albedo" to="." method="_on_Checkbox_pressed"]
+[connection signal="color_changed" from="BrushUI/AMR/AlbedoColor" to="." method="_on_Color_color_changed"]
+[connection signal="item_selected" from="BrushUI/AMR/AlbedoTextureMode" to="." method="_on_OptionButton_item_selected"]
+[connection signal="gui_input" from="BrushUI/AMR/AlbedoTexture" to="." method="_on_Texture_gui_input" binds= [ "albedo" ]]
+[connection signal="pressed" from="BrushUI/AMR/Metallic" to="." method="_on_Checkbox_pressed"]
+[connection signal="value_changed" from="BrushUI/AMR/MetallicValue" to="." method="_on_HSlider_value_changed"]
+[connection signal="pressed" from="BrushUI/AMR/Roughness" to="." method="_on_Checkbox_pressed"]
+[connection signal="value_changed" from="BrushUI/AMR/RoughnessValue" to="." method="_on_HSlider_value_changed"]
+[connection signal="pressed" from="BrushUI/Emission/Emission" to="." method="_on_Checkbox_pressed"]
+[connection signal="color_changed" from="BrushUI/Emission/EmissionColor" to="." method="_on_Color_color_changed"]
+[connection signal="item_selected" from="BrushUI/Emission/EmissionTextureMode" to="." method="_on_OptionButton_item_selected"]
+[connection signal="gui_input" from="BrushUI/Emission/EmissionTexture" to="." method="_on_Texture_gui_input" binds= [ "emission" ]]
+[connection signal="pressed" from="BrushUI/Depth/Depth" to="." method="_on_Checkbox_pressed"]
+[connection signal="color_changed" from="BrushUI/Depth/DepthColor" to="." method="_on_Color_color_changed"]
+[connection signal="item_selected" from="BrushUI/Depth/DepthTextureMode" to="." method="_on_OptionButton_item_selected"]
+[connection signal="gui_input" from="BrushUI/Depth/DepthTexture" to="." method="_on_Texture_gui_input" binds= [ "depth" ]]
+[connection signal="item_selected" from="BrushUI/Parameters" to="." method="_on_Parameters_item_selected"]

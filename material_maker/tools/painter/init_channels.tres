@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/tools/painter/init_channels.shader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/r_mask = Plane( 1, 0, 0, 0 )
+shader_param/g_mask = Plane( 0, 1, 0, 0 )
+shader_param/b_mask = Plane( 0, 0, 1, 0 )
+shader_param/a_mask = Plane( 0, 0, 0, 1 )

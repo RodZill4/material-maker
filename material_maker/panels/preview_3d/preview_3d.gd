@@ -14,7 +14,7 @@ onready var current_environment = environments.get_child(0)
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 
-onready var ui = get_node(ui_path)
+var ui
 
 signal need_update(me)
 
@@ -31,6 +31,7 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
+	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)

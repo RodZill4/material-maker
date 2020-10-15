@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/line_strip.png-d0abc9ee40bcf7c8878ad486aed58b10.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://addons/material_spray/icons/line_strip.png"
+dest_files=[ "res://.import/line_strip.png-d0abc9ee40bcf7c8878ad486aed58b10.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

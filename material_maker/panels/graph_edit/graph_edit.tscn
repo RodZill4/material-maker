@@ -42,6 +42,7 @@ one_shot = true
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -294.0
+margin_top = 11.0
 margin_bottom = 24.0
 alignment = 2
 __meta__ = {
@@ -90,9 +91,9 @@ icon = SubResource( 4 )
 
 [node name="Control" type="Control" parent="GraphUI"]
 margin_left = 282.0
-margin_right = 294.0
+margin_right = 296.0
 margin_bottom = 24.0
-rect_min_size = Vector2( 12, 0 )
+rect_min_size = Vector2( 14, 0 )
 
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource( 3 )

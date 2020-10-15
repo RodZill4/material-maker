@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/material_spray/brush_lib/brush_lib.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_spray/brush_lib/brush_lib_tree.gd" type="Script" id=2]
+
+[node name="BrushLib" type="Control"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -150.0
+margin_bottom = 200.0
+
+[node name="Tree" type="Tree" parent="VBoxContainer"]
+margin_right = 150.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 150, 200 )
+focus_mode = 0
+hide_root = true
+script = ExtResource( 2 )
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 204.0
+margin_right = 150.0
+margin_bottom = 224.0
+size_flags_horizontal = 3
+
+[node name="Add" type="Button" parent="VBoxContainer/Buttons"]
+margin_right = 42.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="Update" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 46.0
+margin_right = 104.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Update"
+
+[node name="Save" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 108.0
+margin_right = 150.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Save"
+
+[connection signal="cell_selected" from="VBoxContainer/Tree" to="VBoxContainer/Tree" method="_on_Tree_cell_selected"]
+[connection signal="gui_input" from="VBoxContainer/Tree" to="VBoxContainer/Tree" method="_on_Tree_gui_input"]
+[connection signal="item_edited" from="VBoxContainer/Tree" to="." method="_on_Tree_item_edited"]
+[connection signal="item_selected" from="VBoxContainer/Tree" to="." method="_on_Tree_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Add" to="." method="_on_Add_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Update" to="." method="_on_Update_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Save" to="." method="_on_Save_pressed"]
