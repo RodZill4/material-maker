@@ -34,7 +34,9 @@ flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
 
-[node name="MainWindow" type="Panel"]
+[node name="MainWindow" type="Panel" groups=[
+"preview",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3

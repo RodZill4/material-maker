@@ -21,6 +21,8 @@ func _ready() -> void:
 		add_child(renderer)
 		free_renderers.append(renderer)
 
+# General_purpose shader functions
+
 func generate_shader(src_code : Dictionary) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
@@ -48,6 +50,19 @@ func generate_shader(src_code : Dictionary) -> String:
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	return code
+
+static func update_float_parameters(material : ShaderMaterial, parameter_changes : Dictionary) -> bool:
+	var updated : bool = false
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+			if p.name == n:
+				material.set_shader_param(n, parameter_changes[n])
+				updated = true
+				break
+	return updated
+
+
+# Renderer request and management
 
 func request(object : Object) -> Object:
 	render_queue_size += 1

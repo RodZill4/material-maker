@@ -215,9 +215,9 @@ func update_graph(generators, connections) -> Array:
 	
 	return rv
 
-func new_material() -> void:
+func new_material(init_nodes = {nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]}) -> void:
 	clear_material()
-	top_generator = mm_loader.create_gen({nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]})
+	top_generator = mm_loader.create_gen(init_nodes)
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)

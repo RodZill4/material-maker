@@ -21,6 +21,8 @@ var project_path = null
 
 var need_save = false
 
+var brush_node = null
+
 onready var view = $VSplitContainer/View
 onready var main_view = $VSplitContainer/View/MainView
 onready var camera = $VSplitContainer/View/MainView/CameraStand/Camera
@@ -31,6 +33,7 @@ onready var tools = $VSplitContainer/View/Tools
 onready var layers = $VSplitContainer/View/Layers
 onready var brush = $VSplitContainer/View/Brush
 onready var eraser_button = $VSplitContainer/View/Tools/Eraser
+onready var graph_edit = $VSplitContainer/GraphEdit
 
 signal update_material
 
@@ -55,17 +58,18 @@ func _ready():
 	# Updated Texture2View wrt current camera position
 	update_view()
 	# Set size of painted textures
-	layers.set_texture_size(1024)
+	layers.set_texture_size(2048)
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
 	set_current_tool(MODE_FREE)
 	get_node("/root/MainWindow").create_menus(MENU, self, $Menu)
 	initialize_debug_selects()
-	$VSplitContainer/GraphEdit.node_factory = get_node("/root/MainWindow/NodeFactory")
-	$VSplitContainer/GraphEdit.new_material()
+	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
+	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
+	brush.set_brush_node(graph_edit.generator.get_node("Brush"))
 
 func get_graph_edit():
-	return $VSplitContainer/GraphEdit
+	return graph_edit
 
 func create_menu(menu, menu_name):
 	menu.clear()
@@ -291,6 +295,7 @@ func paint(p):
 		paint(p)
 
 func update_view():
+	print(main_view.size)
 	var mesh_instance = painted_mesh
 	var mesh_aabb = mesh_instance.get_aabb()
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size

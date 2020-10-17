@@ -219,9 +219,7 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
 	code += "uniform float preview_size = 64;\n"
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
+	code += mm_renderer.common_shader
 	code += "\n"
 	if src_code.has("textures"):
 		for t in src_code.textures.keys():

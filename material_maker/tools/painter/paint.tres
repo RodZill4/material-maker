@@ -15,7 +15,6 @@ shader_param/brush_ppos = Vector2( 0.493344, 0.391123 )
 shader_param/erase = false
 shader_param/brush_size = Vector2( 0.0391543, 0.0693481 )
 shader_param/brush_strength = 0.5
-shader_param/brush_color = Color( 0, 0, 0, 1 )
 shader_param/brush_channelmask = Color( 1, 1, 1, 1 )
 shader_param/pattern_scale = 10.0
 shader_param/texture_angle = 0.0

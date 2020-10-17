@@ -24,7 +24,7 @@ func _on_Tree_item_edited():
 func _on_Tree_item_selected():
 	emit_signal("brush_selected", tree.get_selected().get_metadata(0).duplicate())
 
-func brush_changed(new_brush):
+func brush_changed(new_brush, _update_shader):
 	current_brush = new_brush
 
 func _on_Add_pressed():

@@ -5,39 +5,91 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"has_albedo": true,
+		"has_emission": false,
+		"has_metallic": true,
+		"has_roughness": true
 	},
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 			{
-				"default": "vec4(vec3(1.0), 1.0-2.0*length($uv-vec2(0.5))",
+				"default": "clamp(1.0-2.0*length($uv-vec2(0.5)), 0.0, 1.0)",
+				"label": "Brush",
+				"name": "brush",
+				"type": "f"
+			},
+			{
+				"default": "vec4(1.0)",
 				"label": "Albedo",
 				"name": "albedo",
 				"type": "rgba"
 			},
 			{
-				"default": "$albedo($uv).a",
-				"label": "Alpha",
-				"name": "alpha",
+				"default": "0.0",
+				"label": "Metallic",
+				"name": "metallic",
 				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "Roughness",
+				"name": "roughness",
+				"type": "f"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "Emission",
+				"name": "emission",
+				"type": "rgba"
 			}
 		],
 		"instance": "",
 		"name": "Brush",
 		"outputs": [
 			{
-				"rgb": "$albedo($uv).rgb",
-				"type": "rgb"
+				"f": "$brush($uv)",
+				"type": "f"
 			},
 			{
-				"f": "$alpha($uv)",
-				"type": "f"
+				"rgba": "$albedo($uv)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "vec4($metallic($uv), $roughness($uv), $has_metallic ? $brush($uv) : 0.0, $has_roughness ? $brush($uv) : 0.0)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "$emission($uv)",
+				"type": "rgba"
 			}
 		],
 		"parameters": [
-
+			{
+				"default": true,
+				"label": "2:",
+				"name": "has_albedo",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_metallic",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_roughness",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_emission",
+				"type": "boolean"
+			}
 		]
 	},
 	"type": "shader"

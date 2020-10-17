@@ -36,7 +36,9 @@ shader_param/texture_angle = 0.0
 shader = ExtResource( 3 )
 shader_param/tex = SubResource( 6 )
 
-[node name="Painter" type="Node"]
+[node name="Painter" type="Node" groups=[
+"preview",
+]]
 script = ExtResource( 6 )
 
 [node name="View2Texture" type="Viewport" parent="."]

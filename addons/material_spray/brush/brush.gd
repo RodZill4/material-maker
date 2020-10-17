@@ -1,4 +1,3 @@
-tool
 extends Control
 
 var current_brush = {
@@ -27,6 +26,7 @@ var current_brush = {
 	depth_texture_file_name = null,
 }
 
+var brush_node = null
 var albedo_texture_filename = null
 var albedo_texture = null
 var emission_texture_filename = null
@@ -37,7 +37,7 @@ var depth_texture = null
 onready var brush_material = $Brush.material
 onready var pattern_material = $Pattern.material
 
-signal brush_changed(new_brush)
+signal brush_changed(new_brush, update_shader)
 
 func _ready():
 	$BrushUI/AMR/AlbedoTexture.material = $BrushUI/AMR/AlbedoTexture.material.duplicate()
@@ -76,7 +76,58 @@ func edit_pattern(s):
 	current_brush.texture_angle += fmod(s.y*0.01, 2.0*PI)
 	update_brush()
 
-func update_brush():
+func set_brush_node(node) -> void:
+	brush_node = node
+	brush_node.connect("parameter_changed", self, "on_brush_changed")
+
+func get_output_code(index : int) -> String:
+	if brush_node == null:
+		return ""
+	var context : MMGenContext = MMGenContext.new()
+	var source_mask = brush_node.get_shader_code("uv", 0, context)
+	context = MMGenContext.new(context)
+	var source = brush_node.get_shader_code("uv", index, context)
+	var new_code : String = mm_renderer.common_shader
+	new_code += "\n"
+	for g in source.globals:
+		if source_mask.globals.find(g) == -1:
+			source_mask.globals.append(g)
+	for g in source_mask.globals:
+		new_code += g
+	new_code += source_mask.defs+"\n"
+	new_code += "\nfloat brush_function(vec2 uv) {\n"
+	new_code += source_mask.code+"\n"
+	new_code += "return "+source_mask.f+";\n"
+	new_code += "}\n"
+	new_code += source.defs+"\n"
+	new_code += "\nvec4 pattern_function(vec2 uv) {\n"
+	new_code += source.code+"\n"
+	new_code += "return "+source.rgba+";\n"
+	new_code += "}\n"
+	return new_code
+
+func on_brush_changed(p, v) -> void:
+	if p == "__input_changed__":
+		var code : String = get_output_code(0)
+		update_shader($Brush.material, code)
+		update_shader($Pattern.material, code)
+		update_brush(true)
+
+func update_shader(shader_material : ShaderMaterial, shader_code : String) -> void:
+	if shader_material == null:
+		print("no shader material")
+		return
+	var code = shader_material.shader.code
+	var new_code = code.left(code.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+code.right(code.find("// END_PATTERN"))
+	shader_material.shader.code = new_code
+	# Get parameter values from the shader code
+	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
+
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	mm_renderer.update_float_parameters($Brush.material, parameter_changes)
+	mm_renderer.update_float_parameters($Pattern.material, parameter_changes)
+
+func update_brush(update_shaders = false):
 	if current_brush.albedo_texture_mode != 2:
 		$Pattern.visible = false
 	var brush_size_vector = Vector2(current_brush.size, current_brush.size)/rect_size
@@ -99,11 +150,11 @@ func update_brush():
 				brush_material.set_shader_param("stamp_mode", current_brush.get(parameter+"_texture_mode") == 1)
 			if pattern_material != null:
 				pattern_material.set_shader_param("brush_texture", current_brush.get(parameter+"_texture"))
-	emit_signal("brush_changed", current_brush)
+	emit_signal("brush_changed", current_brush, update_shaders)
 
 func update_material():
 	# AMR
-	current_brush.has_albedo = $BrushUI/AMR/Albedo.pressed
+	current_brush.has_albedo = brush_node.get_parameter("has_albedo") if brush_node != null else false
 	current_brush.albedo_color = $BrushUI/AMR/AlbedoColor.color
 	current_brush.albedo_texture_mode = $BrushUI/AMR/AlbedoTextureMode.selected
 	if current_brush.albedo_texture_mode != 0:
@@ -112,12 +163,12 @@ func update_material():
 	else:
 		current_brush.albedo_texture = null
 		current_brush.albedo_texture_file_name = null
-	current_brush.has_metallic = $BrushUI/AMR/Metallic.pressed
+	current_brush.has_metallic = brush_node.get_parameter("has_metallic") if brush_node != null else false
 	current_brush.metallic = $BrushUI/AMR/MetallicValue.value
-	current_brush.has_roughness = $BrushUI/AMR/Roughness.pressed
+	current_brush.has_roughness = brush_node.get_parameter("has_roughness") if brush_node != null else false
 	current_brush.roughness = $BrushUI/AMR/RoughnessValue.value
 	# Emission
-	current_brush.has_emission = $BrushUI/Emission/Emission.pressed
+	current_brush.has_emission = brush_node.get_parameter("has_emission") if brush_node != null else false
 	current_brush.emission_color = $BrushUI/Emission/EmissionColor.color
 	current_brush.emission_texture_mode = $BrushUI/Emission/EmissionTextureMode.selected
 	if current_brush.emission_texture_mode != 0:

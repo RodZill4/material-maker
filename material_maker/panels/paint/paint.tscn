@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=2]
 
-[ext_resource path="res://addons/material_spray/environments/park.hdr" type="Texture" id=1]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=1]
 [ext_resource path="res://addons/material_spray/icons/eraser_s.png" type="Texture" id=2]
 [ext_resource path="res://addons/material_spray/icons/line_strip.png" type="Texture" id=3]
 [ext_resource path="res://addons/material_spray/icons/color_picker.png" type="Texture" id=4]
@@ -252,11 +252,11 @@ margin_bottom = 716.0
 size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )
 [connection signal="gui_input" from="VSplitContainer/View" to="." method="_on_View_gui_input"]
-[connection signal="resized" from="VSplitContainer/View" to="VSplitContainer/View" method="_on_resized"]
+[connection signal="resized" from="VSplitContainer/View" to="." method="_on_resized"]
 [connection signal="colors_picked" from="VSplitContainer/View/Painter" to="VSplitContainer/View/Brush" method="brush_selected"]
 [connection signal="painted" from="VSplitContainer/View/Painter" to="VSplitContainer/View/Layers" method="_on_Painter_painted"]
-[connection signal="brush_changed" from="VSplitContainer/View/Brush" to="VSplitContainer/View/Painter" method="brush_changed"]
 [connection signal="brush_changed" from="VSplitContainer/View/Brush" to="VSplitContainer/View/BrushLib" method="brush_changed"]
+[connection signal="brush_changed" from="VSplitContainer/View/Brush" to="VSplitContainer/View/Painter" method="brush_changed"]
 [connection signal="pressed" from="VSplitContainer/View/Tools/Free" to="." method="set_current_tool" binds= [ 0 ]]
 [connection signal="pressed" from="VSplitContainer/View/Tools/Line" to="." method="set_current_tool" binds= [ 1 ]]
 [connection signal="pressed" from="VSplitContainer/View/Tools/Strip" to="." method="set_current_tool" binds= [ 2 ]]
