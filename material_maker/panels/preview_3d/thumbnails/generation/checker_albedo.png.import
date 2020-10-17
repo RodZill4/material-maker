@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.stex"
-path.etc2="res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.etc2.stex"
+path.s3tc="res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.s3tc.stex"
+path.etc2="res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://rodz_labs_logo.png"
-dest_files=[ "res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.stex", "res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.etc2.stex" ]
+source_file="res://material_maker/panels/preview_3d/thumbnails/generation/checker_albedo.png"
+dest_files=[ "res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.s3tc.stex", "res://.import/checker_albedo.png-272c9c775c6f06b1b3213c995759cc27.etc2.stex" ]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=1
+flags/repeat=true
 flags/filter=true
 flags/mipmaps=true
 flags/anisotropic=false

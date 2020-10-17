@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://material_maker/meshes/suzanne.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=3]
 
 [sub_resource type="CubeMesh" id=1]
@@ -8,21 +9,20 @@
 radial_segments = 32
 rings = 1
 
-[sub_resource type="SphereMesh" id=4]
+[sub_resource type="SphereMesh" id=3]
 radius = 1.5
 height = 3.0
 radial_segments = 32
 rings = 16
 
-[sub_resource type="PrismMesh" id=5]
+[sub_resource type="PrismMesh" id=4]
 
-[sub_resource type="PlaneMesh" id=13]
+[sub_resource type="PlaneMesh" id=5]
 size = Vector2( 8, 8 )
 
-[sub_resource type="SphereMesh" id=11]
+[sub_resource type="SpatialMaterial" id=6]
 
 [node name="Objects" type="Spatial"]
-transform = Transform( 0.999995, 0, 0, 0, 1, 0, 0, 0, 0.999995, 0, 0, 0 )
 
 [node name="Cube" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
@@ -39,28 +39,29 @@ uv_scale = Vector2( 2, 2 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 4 )
+mesh = SubResource( 3 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 2, 2 )
 
 [node name="Prism" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 3, 2 )
 
 [node name="Plane" type="MeshInstance" parent="."]
 visible = false
-mesh = SubResource( 13 )
+mesh = SubResource( 5 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 4, 4 )
 
 [node name="Custom" type="MeshInstance" parent="."]
+transform = Transform( 1.5, 0, 0, 0, 1.21178, 0.88407, 0, -0.88407, 1.21178, 0, -0.18884, 0 )
 visible = false
-mesh = SubResource( 11 )
+material_override = SubResource( 6 )
+mesh = ExtResource( 1 )
 material/0 = null
 script = ExtResource( 3 )
-can_tesselate = false
