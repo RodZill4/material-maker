@@ -50,14 +50,16 @@ func check_save_tab(tab) -> bool:
 			result = yield(result, "completed")
 		match result:
 			"ok":
-				var tab_node = get_child(tab)
-				var status = main_window.save_material(tab_node)
+				var status = main_window.save_material(tab_control)
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 				if !status:
 					return false
 			"cancel":
 				return false
+			_:
+				if tab_control.has_method("remove_crash_recovery_file"):
+					tab_control.remove_crash_recovery_file()
 	return true
 
 func do_close_custom_action(_action : String, _tab : int, dialog : AcceptDialog) -> void:
@@ -107,3 +109,10 @@ func _on_Tabs_tab_changed(tab) -> void:
 
 func _on_Projects_resized() -> void:
 	$Tabs.rect_size.x = rect_size.x
+
+
+func _on_CrashRecoveryTimer_timeout():
+	for i in range($Tabs.get_tab_count()):
+		var tab_control = get_child(i)
+		if tab_control.has_method("crash_recovery_save"):
+			tab_control.crash_recovery_save()

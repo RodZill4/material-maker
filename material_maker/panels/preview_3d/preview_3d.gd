@@ -27,6 +27,7 @@ const MENU = [
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
+
 var _mouse_start_position := Vector2.ZERO
 
 
@@ -40,7 +41,11 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
 		var o = objects.get_child(i)
-		menu.add_item(o.name, i)
+		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
+		if thumbnail:
+			menu.add_icon_item(thumbnail, "", i)
+		else:
+			menu.add_item(o.name, i)
 	if !menu.is_connected("id_pressed", self, "_on_Model_item_selected"):
 		menu.connect("id_pressed", self, "_on_Model_item_selected")
 
@@ -48,7 +53,11 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in environments.get_child_count():
 		var e = environments.get_child(i)
-		menu.add_item(e.name, i)
+		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/environments/%s.png" % e.name)
+		if thumbnail:
+			menu.add_icon_item(thumbnail, "", i)
+		else:
+			menu.add_item(e.name, i)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
 

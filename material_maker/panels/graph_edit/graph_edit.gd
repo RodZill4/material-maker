@@ -5,6 +5,7 @@ var node_factory = null
 
 var save_path = null setget set_save_path
 var need_save = false
+var need_save_crash_recovery = false
 
 var top_generator = null
 var generator = null
@@ -141,9 +142,16 @@ func set_need_save(ns = true) -> void:
 	if ns != need_save:
 		need_save = ns
 		update_tab_title()
+	if save_path != null:
+		if ns:
+			need_save_crash_recovery = true
+		else:
+			need_save_crash_recovery = false
 
 func set_save_path(path) -> void:
 	if path != save_path:
+		remove_crash_recovery_file()
+		need_save_crash_recovery = false
 		save_path = path
 		update_tab_title()
 		emit_signal("save_path_changed", self, path)
@@ -156,6 +164,21 @@ func clear_view() -> void:
 				set_last_selected(null)
 			remove_child(c)
 			c.free()
+
+func crash_recovery_save() -> void:
+	if !need_save_crash_recovery:
+		return
+	var data = top_generator.serialize()
+	var file = File.new()
+	if file.open(save_path+".mmcr", File.WRITE) == OK:
+		file.store_string(JSON.print(data))
+		file.close()
+		need_save_crash_recovery = false
+
+func remove_crash_recovery_file() -> void:
+	if save_path != null:
+		var dir = Directory.new()
+		dir.remove(save_path+".mmcr")
 
 # Center view
 
@@ -212,7 +235,6 @@ func update_graph(generators, connections) -> Array:
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
-	
 	return rv
 
 func new_material(init_nodes = {nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]}) -> void:
@@ -273,10 +295,29 @@ func find_buffers(g) -> int:
 	return rv
 
 func load_file(filename) -> bool:
-	var new_generator = mm_loader.load_gen(filename)
+	var rescued = false
+	var new_generator = null
+	var file = File.new()
+	if filename != null and file.file_exists(filename+".mmcr"):
+		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		dialog.dialog_text = "Rescue file for "+filename.get_file()+" was found.\nLoad it?"
+		dialog.get_ok().text = "Rescue"
+		dialog.add_cancel("Load "+filename.get_file())
+		add_child(dialog)
+		var result = dialog.ask()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		if result == "ok":
+			new_generator = mm_loader.load_gen(filename+".mmcr")
+	if new_generator != null:
+		rescued = true
+	else:
+		new_generator = mm_loader.load_gen(filename)
 	if new_generator != null:
 		set_save_path(filename)
 		set_new_generator(new_generator)
+		if rescued:
+			set_need_save(true)
 		#print("Material has %d buffers" % find_buffers(new_generator))
 		return true
 	else:
@@ -298,6 +339,7 @@ func save_file(filename) -> bool:
 		return false
 	set_save_path(filename)
 	set_need_save(false)
+	remove_crash_recovery_file()
 	return true
 
 func get_material_node() -> MMGenMaterial:

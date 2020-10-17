@@ -28,6 +28,8 @@ func _ready() -> void:
 	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed", self, "_on_PreviewMenu_id_pressed")
 
 func update_from_graph_edit(graph_edit) -> void:
+	if tree == null:
+		return
 	$Delay.stop()
 	pending_updates = {}
 	update_index += 1

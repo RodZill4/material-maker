@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/vase.obj-be6738cfc355c34aac8fc908ba5c2b92.mesh"
+
+[deps]
+
+files=[ "res://.import/vase.obj-be6738cfc355c34aac8fc908ba5c2b92.mesh" ]
+
+source_file="res://material_maker/meshes/vase.obj"
+dest_files=[ "res://.import/vase.obj-be6738cfc355c34aac8fc908ba5c2b92.mesh", "res://.import/vase.obj-be6738cfc355c34aac8fc908ba5c2b92.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true
