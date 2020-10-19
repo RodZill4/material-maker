@@ -140,44 +140,35 @@ func brush_changed(new_brush, update_shaders = false):
 	current_brush = new_brush
 	# Albedo
 	var brush = $"../Brush"
-	if brush == null:
+	if brush == null || brush.brush_node == null:
 		return
+	# Mode
+	var mode : String = brush.brush_node.get_parameter_defs()[0].values[brush.brush_node.get_parameter("mode")].value
+	# Update shaders
 	if update_shaders:
-		brush.update_shader(albedo_viewport.get_paint_material(), brush.get_output_code(1))
-		brush.update_shader(mr_viewport.get_paint_material(), brush.get_output_code(2))
-		brush.update_shader(emission_viewport.get_paint_material(), brush.get_output_code(3))
+		brush.update_shader(albedo_viewport.get_paint_material(), albedo_viewport.get_paint_shader(mode), brush.get_output_code(1))
+		brush.update_shader(mr_viewport.get_paint_material(), mr_viewport.get_paint_shader(mode), brush.get_output_code(2))
+		brush.update_shader(emission_viewport.get_paint_material(), emission_viewport.get_paint_shader(mode), brush.get_output_code(3))
 	# Albedo
-	albedo_viewport.set_material(current_brush.albedo_color,
-								 current_brush.albedo_texture,
-								 Color(1.0, 1.0, 1.0, 1.0),
+	albedo_viewport.set_material(mode,
 								 current_brush.pattern_scale,
 								 current_brush.texture_angle,
-								 current_brush.albedo_texture_mode == 1,
-								 Color(1.0, 1.0, 1.0, 1.0))
+								 current_brush.albedo_texture_mode == 1)
 	# Metallic and roughness
-	mr_viewport.set_material(Color(current_brush.metallic, current_brush.roughness, 1.0 if current_brush.has_metallic else 0.0, 1.0 if current_brush.has_roughness else 0.0),
-							 current_brush.albedo_texture,
-							 Color(1.0, 1.0, 1.0, 1.0),
+	mr_viewport.set_material(mode,
 							 current_brush.pattern_scale,
 							 current_brush.texture_angle,
-							 current_brush.albedo_texture_mode == 1,
-							 Color(0.0, 0.0, 1.0, 1.0))
+							 current_brush.albedo_texture_mode == 1)
 	# Emission
-	emission_viewport.set_material(current_brush.emission_color,
-								   current_brush.emission_texture,
-								   Color(1.0, 1.0, 1.0, 1.0),
+	emission_viewport.set_material(mode,
 								   current_brush.pattern_scale,
 								   current_brush.texture_angle,
-								   current_brush.emission_texture_mode == 1,
-								   Color(1.0, 1.0, 1.0, 1.0))
+								   current_brush.emission_texture_mode == 1)
 	# Depth
-	depth_viewport.set_material(current_brush.depth_color,
-								current_brush.depth_texture,
-								Color(1.0, 1.0, 1.0, 1.0),
+	depth_viewport.set_material(mode,
 								current_brush.pattern_scale,
 								current_brush.texture_angle,
-								current_brush.depth_texture_mode == 1,
-								Color(1.0, 1.0, 1.0, 1.0))
+								current_brush.depth_texture_mode == 1)
 	if viewport_size != null:
 		albedo_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
 		mr_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
@@ -186,6 +177,9 @@ func brush_changed(new_brush, update_shaders = false):
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	mm_renderer.update_float_parameters(albedo_viewport.paint_material, parameter_changes)
+	mm_renderer.update_float_parameters(mr_viewport.paint_material, parameter_changes)
+	mm_renderer.update_float_parameters(emission_viewport.paint_material, parameter_changes)
+	mm_renderer.update_float_parameters(depth_viewport.paint_material, parameter_changes)
 
 func paint(position, prev_position, erase):
 	if current_brush.has_albedo:

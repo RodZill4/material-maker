@@ -1,12 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://addons/material_spray/shaders/texture2view.shader" type="Shader" id=1]
 [ext_resource path="res://addons/material_spray/shaders/show_pattern.shader" type="Shader" id=2]
 [ext_resource path="res://addons/material_spray/shaders/seams.shader" type="Shader" id=3]
-[ext_resource path="res://material_maker/tools/painter/paint_mr.tres" type="Material" id=4]
-[ext_resource path="res://material_maker/tools/painter/viewtotexture.tres" type="Material" id=5]
+[ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/tools/painter/paint_viewport.tscn" type="PackedScene" id=7]
+[ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -99,7 +98,7 @@ margin_bottom = 2048.0
 [node name="AlbedoPaint" parent="." instance=ExtResource( 7 )]
 
 [node name="MRPaint" parent="." instance=ExtResource( 7 )]
-paint = ExtResource( 4 )
+shader_prefix = "paint_mr"
 
 [node name="EmissionPaint" parent="." instance=ExtResource( 7 )]
 

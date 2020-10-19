@@ -97,7 +97,8 @@ func get_output_code(index : int) -> String:
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"
 	new_code += source_mask.code+"\n"
-	new_code += "return "+source_mask.f+";\n"
+	new_code += "vec2 __brush_box = abs(uv-vec2(0.5));\n"
+	new_code += "return (max(__brush_box.x, __brush_box.y) < 0.5) ? "+source_mask.f+" : 0.0;\n"
 	new_code += "}\n"
 	new_code += source.defs+"\n"
 	new_code += "\nvec4 pattern_function(vec2 uv) {\n"
@@ -106,19 +107,26 @@ func get_output_code(index : int) -> String:
 	new_code += "}\n"
 	return new_code
 
-func on_brush_changed(p, v) -> void:
-	if p == "__input_changed__":
-		var code : String = get_output_code(0)
-		update_shader($Brush.material, code)
-		update_shader($Pattern.material, code)
-		update_brush(true)
+var brush_changed_scheduled : bool = false
 
-func update_shader(shader_material : ShaderMaterial, shader_code : String) -> void:
+func on_brush_changed(p, v) -> void:
+	if !brush_changed_scheduled:
+		call_deferred("do_on_brush_changed")
+		brush_changed_scheduled = true
+
+func do_on_brush_changed():
+	var code : String = get_output_code(1)
+	update_shader($Brush.material, $Brush.material.shader.code, code)
+	update_shader($Pattern.material, $Pattern.material.shader.code, code)
+	update_material()
+	update_brush(true)
+	brush_changed_scheduled = false
+
+func update_shader(shader_material : ShaderMaterial, shader_template : String, shader_code : String) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
-	var code = shader_material.shader.code
-	var new_code = code.left(code.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+code.right(code.find("// END_PATTERN"))
+	var new_code = shader_template.left(shader_template.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+shader_template.right(shader_template.find("// END_PATTERN"))
 	shader_material.shader.code = new_code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)

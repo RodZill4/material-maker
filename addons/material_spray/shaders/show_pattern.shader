@@ -10,7 +10,7 @@ float brush_function(vec2 uv) {
 }
 
 vec4 pattern_function(vec2 uv) {
-	return vec4(vec3(fract(10.0*uv.x+length(uv-vec2(0.5))*10.0)), 1.0);
+	return vec4(fract(10.0*uv.x+length(uv-vec2(0.5))*10.0), 0.0, 0.0, 1.0);
 }
 // END_PATTERN
 
@@ -21,5 +21,5 @@ vec4 pattern_color(vec2 uv) {
 }
 
 void fragment() {
-	COLOR = pattern_color(UV) * vec4(1.0, 1.0, 1.0, 0.2);
+	COLOR = pattern_color(UV) * vec4(1.0, 1.0, 1.0, 0.5);
 }

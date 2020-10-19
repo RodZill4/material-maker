@@ -91,7 +91,7 @@ func set_panel_visible(panel_name : String, v : bool) -> void:
 	if v and HIDE_PANELS[current_mode].find(panel_name) == -1:
 		if ! panel.is_inside_tree():
 			panel.get_meta("parent_tab_container").add_child(panel)
-	else:
+	elif panel.is_inside_tree():
 		panel.get_parent().remove_child(panel)
 	update_panels()
 

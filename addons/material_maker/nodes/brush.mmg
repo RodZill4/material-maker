@@ -8,7 +8,8 @@
 		"has_albedo": true,
 		"has_emission": false,
 		"has_metallic": true,
-		"has_roughness": true
+		"has_roughness": true,
+		"mode": 1
 	},
 	"shader_model": {
 		"code": "",
@@ -57,7 +58,7 @@
 				"type": "rgba"
 			},
 			{
-				"rgba": "vec4($metallic($uv), $roughness($uv), $has_metallic ? $brush($uv) : 0.0, $has_roughness ? $brush($uv) : 0.0)",
+				"rgba": "vec4($metallic($uv), $roughness($uv), $has_metallic ? $albedo($uv).a : 0.0, $has_roughness ? $albedo($uv).a : 0.0)",
 				"type": "rgba"
 			},
 			{
@@ -67,8 +68,24 @@
 		],
 		"parameters": [
 			{
+				"default": 0,
+				"label": "",
+				"name": "mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Stamp",
+						"value": "stamp"
+					},
+					{
+						"name": "Pattern",
+						"value": "pattern"
+					}
+				]
+			},
+			{
 				"default": true,
-				"label": "2:",
+				"label": "",
 				"name": "has_albedo",
 				"type": "boolean"
 			},

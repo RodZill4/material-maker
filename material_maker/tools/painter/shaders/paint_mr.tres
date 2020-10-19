@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://material_maker/tools/painter/paint_mr.shader" type="Shader" id=1]
+[ext_resource path="res://material_maker/tools/painter/shaders/paint_mr.shader" type="Shader" id=1]
 
 [sub_resource type="ViewportTexture" id=1]
 

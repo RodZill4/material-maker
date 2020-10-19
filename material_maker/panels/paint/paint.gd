@@ -220,16 +220,6 @@ func _input(ev : InputEvent):
 				key_rotate = new_key_rotate
 				set_physics_process(key_rotate != Vector2(0.0, 0.0))
 				accept_event()
-	elif ev is InputEventMouseButton:
-		var zoom = 0.0
-		if ev.button_index == BUTTON_WHEEL_UP:
-			zoom -= 1.0
-		elif ev.button_index == BUTTON_WHEEL_DOWN:
-			zoom += 1.0
-		if zoom != 0.0:
-			camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
-			update_view()
-			accept_event()
 
 func _on_View_gui_input(ev : InputEvent):
 	if ev is InputEventMouseMotion:
@@ -272,6 +262,17 @@ func _on_View_gui_input(ev : InputEvent):
 					previous_position = null
 		if !ev.pressed and ev.button_index == BUTTON_RIGHT:
 			update_view()
+		# Mouse wheel
+		var zoom = 0.0
+		if ev.button_index == BUTTON_WHEEL_UP:
+			zoom -= 1.0
+		elif ev.button_index == BUTTON_WHEEL_DOWN:
+			zoom += 1.0
+		if zoom != 0.0:
+			camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
+			update_view()
+			accept_event()
+
 
 func paint(p):
 	if painting:

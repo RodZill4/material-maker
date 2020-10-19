@@ -12,7 +12,7 @@ shader_param/brush_ppos = Vector2( 0.822, 0.235 )
 shader_param/brush_size = Vector2( 0.069, 0.111 )
 shader_param/pattern_scale = 10.0
 shader_param/texture_angle = 0.0
-shader_param/stamp_mode = false
+shader_param/stamp_mode = true
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 3 )
