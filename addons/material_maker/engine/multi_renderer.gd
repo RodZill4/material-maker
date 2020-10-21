@@ -3,7 +3,10 @@ extends Node
 
 var common_shader : String
 
+const total_renderers = 8
 var free_renderers = []
+
+var max_renderers = 8
 
 var render_queue_size = 0
 var pending_requests = 0
@@ -16,7 +19,7 @@ func _ready() -> void:
 	var file = File.new()
 	file.open("res://addons/material_maker/common.shader", File.READ)
 	common_shader = file.get_as_text()
-	for i in 8:
+	for i in total_renderers:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
 		add_child(renderer)
 		free_renderers.append(renderer)
@@ -52,7 +55,7 @@ func generate_shader(src_code : Dictionary) -> String:
 func request(object : Object) -> Object:
 	render_queue_size += 1
 	emit_signal("render_queue", render_queue_size, pending_requests)
-	while free_renderers.empty():
+	while free_renderers.size() <= total_renderers - max_renderers:
 		yield(self, "free_renderer")
 	if !is_instance_valid(object) || !object.is_inside_tree():
 		render_queue_size -= 1

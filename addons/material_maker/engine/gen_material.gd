@@ -51,6 +51,9 @@ func _ready() -> void:
 	material = SpatialMaterial.new()
 	add_to_group("preview")
 
+func accept_float_expressions() -> bool:
+	return false
+
 func can_be_deleted() -> bool:
 	return false
 

@@ -102,6 +102,7 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 			set_value(v)
 			select(0, 0)
 			emit_signal("value_changed", value)
+			release_focus()
 	elif event is InputEventKey and !event.echo:
 		match event.scancode:
 			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
@@ -114,15 +115,21 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 		value = new_text.to_float()
 		do_update(false)
 
-func _on_LineEdit_text_entered(new_text : String) -> void:
+func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if new_text.is_valid_float():
 		value = new_text.to_float()
+		do_update()
+		emit_signal("value_changed", value)
+		$Slider.visible = true
+	elif float_only:
 		do_update()
 		emit_signal("value_changed", value)
 		$Slider.visible = true
 	else:
 		emit_signal("value_changed", new_text)
 		$Slider.visible = false
+	if release:
+		release_focus()
 
 func _on_LineEdit_focus_exited() -> void:
-	_on_LineEdit_text_entered(text)
+	_on_LineEdit_text_entered(text, false)

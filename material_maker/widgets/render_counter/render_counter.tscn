@@ -23,6 +23,7 @@ margin_left = 4.0
 margin_right = 154.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 150, 0 )
+mouse_filter = 2
 size_flags_vertical = 1
 max_value = 1.0
 value = 1.0
@@ -35,3 +36,9 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_right = 20.0
+margin_bottom = 20.0
+[connection signal="gui_input" from="." to="." method="_on_RenderCounter_gui_input"]
+[connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]

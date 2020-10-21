@@ -51,6 +51,9 @@ func get_hier_name() -> String:
 		return get_parent().get_hier_name()+"/"+name
 	return name
 
+func accept_float_expressions() -> bool:
+	return true
+
 func can_be_deleted() -> bool:
 	return true
 
