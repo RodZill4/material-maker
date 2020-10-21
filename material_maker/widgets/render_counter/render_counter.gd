@@ -5,7 +5,9 @@ var start_time : int = 0
 var max_render_queue_size : int = 0
 
 func _ready() -> void:
-	pass # Replace with function body.
+	for i in range(8):
+		$PopupMenu.add_radio_check_item("%d renderer%s" % [ i+1, "s" if i > 0 else "" ], i)
+	$PopupMenu.set_item_checked(mm_renderer.max_renderers-1, true)
 
 func on_counter_change(count : int, pending : int) -> void:
 	if count == 0 and pending == 0:
@@ -33,3 +35,13 @@ func on_counter_change(count : int, pending : int) -> void:
 
 func _process(_delta):
 	$FpsCounter.text = "%.1f FPS " % Performance.get_monitor(Performance.TIME_FPS)
+
+func _on_PopupMenu_id_pressed(id):
+	$PopupMenu.set_item_checked(mm_renderer.max_renderers-1, false)
+	mm_renderer.max_renderers = id+1
+	$PopupMenu.set_item_checked(mm_renderer.max_renderers-1, true)
+
+func _on_RenderCounter_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
+		$PopupMenu.rect_global_position = get_global_mouse_position()
+		$PopupMenu.popup()

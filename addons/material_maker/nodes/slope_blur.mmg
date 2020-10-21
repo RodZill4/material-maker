@@ -53,7 +53,7 @@
 			},
 			"parameters": {
 				"param0": 9,
-				"param1": 10
+				"param1": 20
 			},
 			"type": "remote",
 			"widgets": [
@@ -144,7 +144,7 @@
 				"y": -199.178955
 			},
 			"parameters": {
-				"sigma": 10,
+				"sigma": 20,
 				"size": 9
 			},
 			"seed_value": -47470,
@@ -167,7 +167,7 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tfloat dx = 1.0/$size;\n    float v = $heightmap(uv);\n\tvec2 slope = vec2($heightmap(uv+vec2(dx, 0.0))-v, $heightmap(uv+vec2(0.0, dx))-v);\n\tfloat slope_strength = length(slope)*$size;\n\tvec2 e = dx*normalize(slope);\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = max($sigma*slope_strength, 0.0001);\n\tfor (float i = 0.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tfloat dx = 1.0/$size;\n    float v = $heightmap(uv);\n\tvec2 slope = vec2($heightmap(uv+vec2(dx, 0.0))-v, $heightmap(uv+vec2(0.0, dx))-v);\n\tfloat slope_strength = length(slope)*$size;\n    vec2 norm_slope =  (slope_strength == 0.0) ? vec2(0.0, 1.0) : normalize(slope);\n    vec2 e = dx*norm_slope;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = max($sigma*slope_strength, 0.0001);\n\tfor (float i = 0.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
 				"name": "Slope Blur",
 				"outputs": [
 					{
@@ -201,7 +201,7 @@
 	],
 	"parameters": {
 		"param0": 9,
-		"param1": 10
+		"param1": 20
 	},
 	"shortdesc": "Slope blur",
 	"type": "graph"

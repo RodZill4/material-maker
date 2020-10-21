@@ -9,6 +9,7 @@ anchor_bottom = 1.0
 margin_left = -1280.0
 margin_right = -1222.0
 margin_bottom = -696.0
+focus_mode = 1
 text = "0.5"
 max_length = 100
 context_menu_enabled = false

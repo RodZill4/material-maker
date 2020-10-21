@@ -5,15 +5,14 @@
 		"y": 0
 	},
 	"parameters": {
-		"edge": 0.1,
+		"edge": 0.5,
 		"radius": 0.8,
 		"shape": 1,
 		"sides": 6
 	},
 	"shader_model": {
 		"code": "",
-		"longdesc": "A node that draws a white shape on a black background",
-		"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(1.5+angle/slice-2.0*step(0.5*slice, mod(angle, slice)))*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
+		"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(angle/slice-0.5+2.0*step(mod(angle, slice), 0.5*slice))*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((size-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv))/(edge*size), 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
 		"inputs": [
 			{
 				"default": "1.0",
@@ -33,6 +32,7 @@
 			}
 		],
 		"instance": "",
+		"longdesc": "A node that draws a white shape on a black background",
 		"name": "Shape",
 		"outputs": [
 			{

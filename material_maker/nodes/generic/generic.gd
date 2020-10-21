@@ -116,6 +116,8 @@ func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
 	if p.type == "float":
 		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
+		if ! generator.accept_float_expressions():
+			control.float_only = true
 		control.min_value = p.min
 		control.max_value = p.max
 		control.step = 0.005 if !p.has("step") else p.step
