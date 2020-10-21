@@ -21,6 +21,7 @@
 panorama = ExtResource( 1 )
 
 [sub_resource type="Environment" id=2]
+resource_local_to_scene = true
 background_mode = 2
 background_sky = SubResource( 1 )
 
@@ -92,6 +93,7 @@ stretch = true
 
 [node name="MainView" type="Viewport" parent="VSplitContainer/View"]
 size = Vector2( 1280, 452 )
+own_world = true
 world = SubResource( 3 )
 handle_input_locally = false
 render_target_update_mode = 3
@@ -248,6 +250,7 @@ anchor_bottom = 0.0
 margin_top = 464.0
 margin_right = 1280.0
 margin_bottom = 716.0
+focus_mode = 1
 size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )
 [connection signal="gui_input" from="VSplitContainer/View" to="." method="_on_View_gui_input"]
@@ -262,3 +265,4 @@ scroll_offset = Vector2( 0, -87 )
 [connection signal="pressed" from="VSplitContainer/View/Tools/Eraser" to="." method="save"]
 [connection signal="item_selected" from="VSplitContainer/View/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
 [connection signal="item_selected" from="VSplitContainer/View/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
+[connection signal="gui_input" from="VSplitContainer/GraphEdit" to="VSplitContainer/GraphEdit" method="_gui_input"]

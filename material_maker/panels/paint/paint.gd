@@ -201,7 +201,7 @@ func _physics_process(delta):
 	camera_stand.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
 	update_view()
 
-func _input(ev : InputEvent):
+func __input(ev : InputEvent):
 	if ev is InputEventKey:
 		if ev.scancode == KEY_CONTROL:
 			brush.show_pattern(ev.pressed)
@@ -272,7 +272,8 @@ func _on_View_gui_input(ev : InputEvent):
 			camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
 			update_view()
 			accept_event()
-
+	else:
+		__input(ev)
 
 func paint(p):
 	if painting:

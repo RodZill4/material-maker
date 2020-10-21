@@ -10,6 +10,7 @@ uniform bool      stamp_mode        = false;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform vec2      brush_size        = vec2(0.25, 0.25);
+uniform float     brush_strength    = 0.5;
 uniform float     pattern_scale     = 10.0;
 uniform float     texture_angle     = 0.0;
 

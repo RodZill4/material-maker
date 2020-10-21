@@ -2,6 +2,8 @@ extends WindowDialog
 
 signal return_status(status)
 
+var mesh_filename = null
+
 func _ready():
 	pass
 
@@ -21,14 +23,20 @@ func _on_ModelFile_pressed():
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		var mesh : Mesh = $ObjLoader.load_obj_file(files[0])
-		if mesh != null:
-			$VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh = mesh
-			$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile.text = files[0].get_file()
+		set_mesh(files[0])
+
+func set_mesh(file_name : String) -> void:
+	if file_name == mesh_filename:
+		return
+	mesh_filename = file_name
+	var mesh : Mesh = $ObjLoader.load_obj_file(mesh_filename)
+	if mesh != null:
+		$VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh = mesh
+		$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
 
 func _on_OK_pressed():
 	var mesh = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh
-	emit_signal("return_status", { mesh=mesh })
+	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename })
 
 func _on_Cancel_pressed():
 	emit_signal("return_status", null)
@@ -37,7 +45,9 @@ func _on_NewPainterWindow_popup_hide():
 	yield(get_tree(), "idle_frame")
 	emit_signal("return_status", null)
 
-func ask() -> String:
+func ask(obj_file_name = null) -> String:
+	if obj_file_name != null:
+		set_mesh(obj_file_name)
 	popup_centered()
 	_on_ViewportContainer_resized()
 	var result = yield(self, "return_status")

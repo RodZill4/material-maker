@@ -16,12 +16,18 @@ onready var albedo_viewport = $AlbedoPaint
 onready var mr_viewport = $MRPaint
 onready var emission_viewport = $EmissionPaint
 onready var depth_viewport = $DepthPaint
+onready var viewports = [ albedo_viewport, mr_viewport, emission_viewport, depth_viewport]
 
 var camera
 var transform
 var viewport_size
 
 var current_brush = null
+
+var has_albedo : bool = false
+var has_mr : bool = false
+var has_emission : bool = false
+var has_depth : bool = false
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
@@ -35,10 +41,8 @@ func _ready():
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
-	albedo_viewport.set_intermediate_textures(t2v_tex, seams_tex)
-	mr_viewport.set_intermediate_textures(t2v_tex, seams_tex)
-	emission_viewport.set_intermediate_textures(t2v_tex, seams_tex)
-	depth_viewport.set_intermediate_textures(t2v_tex, seams_tex)
+	for index in range(4):
+		viewports[index].set_intermediate_textures(t2v_tex, seams_tex)
 	# Add Texture2View as input to seams texture
 	seams_material.set_shader_param("tex", t2v_tex)
 
@@ -105,10 +109,8 @@ func init_textures(m : SpatialMaterial):
 
 func set_texture_size(s : float):
 	texture_to_view_viewport.size = Vector2(s, s)
-	albedo_viewport.set_texture_size(s)
-	mr_viewport.set_texture_size(s)
-	emission_viewport.set_texture_size(s)
-	depth_viewport.set_texture_size(s)
+	for index in range(4):
+		viewports[index].set_texture_size(s)
 
 func update_view(c, t, s):
 	camera = c
@@ -144,36 +146,19 @@ func brush_changed(new_brush, update_shaders = false):
 		return
 	# Mode
 	var mode : String = brush.brush_node.get_parameter_defs()[0].values[brush.brush_node.get_parameter("mode")].value
+	has_albedo = brush.brush_node.get_parameter("has_albedo")
+	has_mr = brush.brush_node.get_parameter("has_metallic") or brush.brush_node.get_parameter("has_roughness")
+	has_emission = brush.brush_node.get_parameter("has_emission")
+	has_depth = brush.brush_node.get_parameter("has_depth")
 	# Update shaders
 	if update_shaders:
-		brush.update_shader(albedo_viewport.get_paint_material(), albedo_viewport.get_paint_shader(mode), brush.get_output_code(1))
-		brush.update_shader(mr_viewport.get_paint_material(), mr_viewport.get_paint_shader(mode), brush.get_output_code(2))
-		brush.update_shader(emission_viewport.get_paint_material(), emission_viewport.get_paint_shader(mode), brush.get_output_code(3))
-	# Albedo
-	albedo_viewport.set_material(mode,
-								 current_brush.pattern_scale,
-								 current_brush.texture_angle,
-								 current_brush.albedo_texture_mode == 1)
-	# Metallic and roughness
-	mr_viewport.set_material(mode,
-							 current_brush.pattern_scale,
-							 current_brush.texture_angle,
-							 current_brush.albedo_texture_mode == 1)
-	# Emission
-	emission_viewport.set_material(mode,
-								   current_brush.pattern_scale,
-								   current_brush.texture_angle,
-								   current_brush.emission_texture_mode == 1)
-	# Depth
-	depth_viewport.set_material(mode,
-								current_brush.pattern_scale,
-								current_brush.texture_angle,
-								current_brush.depth_texture_mode == 1)
+		for index in range(4):
+			brush.update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), brush.get_output_code(index+1))
+	for index in range(4):
+		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.texture_angle, true)
 	if viewport_size != null:
-		albedo_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
-		mr_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
-		emission_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
-		depth_viewport.set_brush(current_brush.size, current_brush.strength, viewport_size)
+		for index in range(4):
+			viewports[index].set_brush(current_brush.size, current_brush.strength, viewport_size)
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	mm_renderer.update_float_parameters(albedo_viewport.paint_material, parameter_changes)
@@ -182,13 +167,13 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	mm_renderer.update_float_parameters(depth_viewport.paint_material, parameter_changes)
 
 func paint(position, prev_position, erase):
-	if current_brush.has_albedo:
+	if has_albedo:
 		albedo_viewport.do_paint(position, prev_position, erase)
-	if current_brush.has_metallic or current_brush.has_roughness:
+	if has_mr:
 		mr_viewport.do_paint(position, prev_position, erase)
-	if current_brush.has_emission:
+	if has_emission:
 		emission_viewport.do_paint(position, prev_position, erase)
-	if current_brush.has_depth:
+	if has_depth:
 		depth_viewport.do_paint(position, prev_position, erase)
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")

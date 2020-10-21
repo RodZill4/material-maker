@@ -24,7 +24,6 @@ tracks/0/keys = {
 }
 
 [node name="NewPainterWindow" type="WindowDialog"]
-visible = true
 margin_right = 520.0
 margin_bottom = 288.0
 size_flags_horizontal = 0
@@ -96,7 +95,7 @@ size_flags_horizontal = 3
 [node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ViewportContainer"]
 size = Vector2( 100, 100 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 
 [node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
 mesh = SubResource( 1 )

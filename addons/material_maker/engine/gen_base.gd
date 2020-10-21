@@ -125,7 +125,8 @@ func get_parameter(n : String):
 	if parameters.has(n):
 		return parameters[n]
 	else:
-		return get_parameter_def(n).default
+		var parameter_def = get_parameter_def(n)
+		return parameter_def.default
 
 class CustomGradientSorter:
 	static func compare(a, b) -> bool:

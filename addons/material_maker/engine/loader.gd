@@ -1,8 +1,6 @@
 tool
 extends Node
 
-
-
 var predefined_generators = {}
 
 func _ready()-> void:

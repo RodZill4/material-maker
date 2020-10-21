@@ -419,10 +419,10 @@ func new_material() -> void:
 	graph_edit.update_tab_title()
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func new_paint_project() -> void:
+func new_paint_project(obj_file_name = null) -> void:
 	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
 	add_child(new_painter_dialog)
-	var result = new_painter_dialog.ask()
+	var result = new_painter_dialog.ask(obj_file_name)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if result == null:
@@ -948,6 +948,10 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
+			"obj":
+				var result = new_paint_project(f)
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				var control : Control = get_control_at_position(get_global_mouse_position(), self)
 				while control != self:

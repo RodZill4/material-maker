@@ -6,6 +6,7 @@
 	},
 	"parameters": {
 		"has_albedo": true,
+		"has_depth": false,
 		"has_emission": false,
 		"has_metallic": true,
 		"has_roughness": true,
@@ -44,6 +45,12 @@
 				"label": "Emission",
 				"name": "emission",
 				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "Depth",
+				"name": "depth",
+				"type": "f"
 			}
 		],
 		"instance": "",
@@ -63,6 +70,10 @@
 			},
 			{
 				"rgba": "$emission($uv)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "vec4(vec3($depth($uv)), $albedo($uv).a)",
 				"type": "rgba"
 			}
 		],
@@ -105,6 +116,12 @@
 				"default": false,
 				"label": "",
 				"name": "has_emission",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_depth",
 				"type": "boolean"
 			}
 		]

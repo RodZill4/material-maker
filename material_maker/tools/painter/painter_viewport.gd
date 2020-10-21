@@ -11,6 +11,7 @@ onready var paint_material
 var param_tex2view : Texture
 var param_seams : Texture
 var param_brush_size : Vector2
+var param_brush_strength : float
 var param_pattern_scale : float
 var param_texture_angle : float
 var param_stamp_mode : bool
@@ -32,6 +33,7 @@ func set_paint_shader_params():
 	paint_material.set_shader_param("tex2view_tex", param_tex2view)
 	paint_material.set_shader_param("seams", param_seams)
 	paint_material.set_shader_param("brush_size", param_brush_size)
+	paint_material.set_shader_param("brush_strength", param_brush_strength)
 	paint_material.set_shader_param("pattern_scale", param_pattern_scale)
 	paint_material.set_shader_param("texture_angle", param_texture_angle)
 	paint_material.set_shader_param("stamp_mode", param_stamp_mode)
@@ -40,8 +42,9 @@ func set_texture_size(s : float):
 	size = Vector2(s, s)
 	rect.rect_size = size
 
-func set_brush(brush_size, _brush_strength, viewport_size):
+func set_brush(brush_size, brush_strength, viewport_size):
 	param_brush_size = Vector2(brush_size, brush_size)/viewport_size
+	param_brush_strength = brush_strength
 	set_paint_shader_params()
 
 func get_paint_shader(mode : String) -> String:
