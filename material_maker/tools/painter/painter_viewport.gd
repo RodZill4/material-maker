@@ -35,7 +35,7 @@ func set_paint_shader_params():
 	paint_material.set_shader_param("brush_size", param_brush_size)
 	paint_material.set_shader_param("brush_strength", param_brush_strength)
 	paint_material.set_shader_param("pattern_scale", param_pattern_scale)
-	paint_material.set_shader_param("texture_angle", param_texture_angle)
+	paint_material.set_shader_param("pattern_angle", param_texture_angle)
 	paint_material.set_shader_param("stamp_mode", param_stamp_mode)
 
 func set_texture_size(s : float):
@@ -52,9 +52,9 @@ func get_paint_shader(mode : String) -> String:
 	file.open("res://material_maker/tools/painter/shaders/%s_%s.shader" % [ shader_prefix, mode ], File.READ)
 	return file.get_as_text()
 
-func set_material(_mode, pattern_scale, texture_angle, stamp_mode):
+func set_material(_mode, pattern_scale, pattern_angle, stamp_mode):
 	param_pattern_scale = pattern_scale
-	param_texture_angle = texture_angle
+	param_texture_angle = pattern_angle
 	param_stamp_mode = _mode == "stamp"
 	set_paint_shader_params()
 

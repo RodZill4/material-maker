@@ -23,16 +23,16 @@ var need_save = false
 
 var brush_node = null
 
-onready var view = $VSplitContainer/View
-onready var main_view = $VSplitContainer/View/MainView
-onready var camera = $VSplitContainer/View/MainView/CameraStand/Camera
-onready var camera_stand = $VSplitContainer/View/MainView/CameraStand
-onready var painted_mesh = $VSplitContainer/View/MainView/PaintedMesh
-onready var painter = $VSplitContainer/View/Painter
-onready var tools = $VSplitContainer/View/Tools
-onready var layers = $VSplitContainer/View/Layers
-onready var brush = $VSplitContainer/View/Brush
-onready var eraser_button = $VSplitContainer/View/Tools/Eraser
+onready var view = $VSplitContainer/Painter/View
+onready var main_view = $VSplitContainer/Painter/View/MainView
+onready var camera = $VSplitContainer/Painter/View/MainView/CameraStand/Camera
+onready var camera_stand = $VSplitContainer/Painter/View/MainView/CameraStand
+onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
+onready var painter = $Painter
+onready var tools = $VSplitContainer/Painter/Tools
+onready var layers = $VSplitContainer/Painter/Layers
+onready var brush = $VSplitContainer/Painter/Brush
+onready var eraser_button = $VSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
 
 signal update_material
@@ -70,78 +70,6 @@ func _ready():
 
 func get_graph_edit():
 	return graph_edit
-
-func create_menu(menu, menu_name):
-	menu.clear()
-	menu.connect("id_pressed", self, "on_menu_item")
-	for i in MENU.size():
-		if MENU[i].has("standalone_only") and MENU[i].standalone_only and Engine.editor_hint:
-			continue
-		if MENU[i].menu != menu_name:
-			continue
-		if MENU[i].has("submenu"):
-			var submenu = PopupMenu.new()
-			submenu.name = MENU[i].submenu
-			print(submenu.name)
-			var submenu_function = "create_menu_"+MENU[i].submenu
-			if has_method(submenu_function):
-				call(submenu_function, submenu)
-			else:
-				create_menu(submenu, MENU[i].submenu)
-			menu.add_child(submenu)
-			menu.add_submenu_item(MENU[i].description, submenu.get_name())
-		elif MENU[i].has("description"):
-			var shortcut = 0
-			if MENU[i].has("shortcut"):
-				for s in MENU[i].shortcut.split("+"):
-					if s == "Alt":
-						shortcut |= KEY_MASK_ALT
-					elif s == "Control":
-						shortcut |= KEY_MASK_CTRL
-					elif s == "Shift":
-						shortcut |= KEY_MASK_SHIFT
-					else:
-						shortcut |= OS.find_scancode_from_string(s)
-			if has_method(MENU[i].command+"_is_checked"):
-				menu.add_check_item(MENU[i].description, i, shortcut)
-			else:
-				menu.add_item(MENU[i].description, i, shortcut)
-		else:
-			menu.add_separator()
-	return menu
-
-func on_menu_about_to_show(name, menu):
-	for i in MENU.size():
-		if MENU[i].menu != name:
-			continue
-		if MENU[i].has("submenu"):
-			on_menu_about_to_show(MENU[i].submenu, menu.get_node(MENU[i].submenu))
-		elif MENU[i].has("command"):
-			var command_name = MENU[i].command+"_is_disabled"
-			if has_method(command_name):
-				var is_disabled
-				if MENU[i].has("command_parameter"):
-					is_disabled = call(command_name, MENU[i].command_parameter)
-				else:
-					is_disabled = call(command_name)
-				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
-			command_name = MENU[i].command+"_is_checked"
-			if has_method(command_name):
-				var is_checked
-				if MENU[i].has("command_parameter"):
-					is_checked = call(command_name, MENU[i].command_parameter)
-				else:
-					is_checked = call(command_name)
-				menu.set_item_checked(menu.get_item_index(i), is_checked)
-
-func on_menu_item(id):
-	if MENU[id].has("command"):
-		var command_name = MENU[id].command
-		if has_method(command_name):
-			if MENU[id].has("command_parameter"):
-				call(command_name, MENU[id].command_parameter)
-			else:
-				call(command_name)
 
 func set_object(o):
 	object_name = o.name
@@ -297,7 +225,6 @@ func paint(p):
 		paint(p)
 
 func update_view():
-	print(main_view.size)
 	var mesh_instance = painted_mesh
 	var mesh_aabb = mesh_instance.get_aabb()
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
@@ -310,7 +237,7 @@ func update_view():
 		painter.update_view(camera, transform, main_view.size)
 
 func _on_resized():
-	update_view()
+	call_deferred("update_view")
 
 func dump_texture(texture, filename):
 	var image = texture.get_data()
@@ -383,17 +310,17 @@ func debug_get_texture(ID):
 	return null
 
 func initialize_debug_selects():
-	for s in [ $VSplitContainer/View/Debug/Select1, $VSplitContainer/View/Debug/Select2 ]:
+	for s in [ $VSplitContainer/Painter/Debug/Select1, $VSplitContainer/Painter/Debug/Select2 ]:
 		s.clear()
 		var index = 0
-		for p in [ self, $VSplitContainer/View/Painter, $VSplitContainer/View/Layers ]:
+		for p in [ self, $Painter, $VSplitContainer/Painter/Layers ]:
 			for i in p.debug_get_texture_names():
 				s.add_item(i, index)
 				index += 1
 
 func _on_DebugSelect_item_selected(ID, t):
-	var texture = [$VSplitContainer/View/Debug/Texture1, $VSplitContainer/View/Debug/Texture2][t]
-	for p in [ self, $VSplitContainer/View/Painter, $VSplitContainer/View/Layers ]:
+	var texture = [$VSplitContainer/Painter/Debug/Texture1, $VSplitContainer/Painter/Debug/Texture2][t]
+	for p in [ self, $Painter, $VSplitContainer/Painter/Layers ]:
 		var textures_count = p.debug_get_texture_names().size()
 		if ID < textures_count:
 			texture.texture = p.debug_get_texture(ID)

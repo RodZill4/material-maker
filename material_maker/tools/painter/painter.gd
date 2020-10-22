@@ -141,7 +141,7 @@ func update_tex2view():
 func brush_changed(new_brush, update_shaders = false):
 	current_brush = new_brush
 	# Albedo
-	var brush = $"../Brush"
+	var brush = $"../VSplitContainer/Painter/Brush"
 	if brush == null || brush.brush_node == null:
 		return
 	# Mode
@@ -155,7 +155,7 @@ func brush_changed(new_brush, update_shaders = false):
 		for index in range(4):
 			brush.update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), brush.get_output_code(index+1))
 	for index in range(4):
-		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.texture_angle, true)
+		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.pattern_angle, true)
 	if viewport_size != null:
 		for index in range(4):
 			viewports[index].set_brush(current_brush.size, current_brush.strength, viewport_size)

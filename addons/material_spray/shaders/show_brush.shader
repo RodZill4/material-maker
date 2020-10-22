@@ -5,7 +5,7 @@ uniform vec2      brush_ppos      = vec2(0.5, 0.5);
 uniform vec2      brush_size      = vec2(0.25, 0.25);
 uniform float     brush_strength  = 0.5;
 uniform float     pattern_scale   = 10.0;
-uniform float     texture_angle   = 0.0;
+uniform float     pattern_angle   = 0.0;
 uniform bool      stamp_mode      = false;
 
 // BEGIN_PATTERN
@@ -19,7 +19,7 @@ vec4 pattern_function(vec2 uv) {
 // END_PATTERN
 
 vec4 pattern_color(vec2 uv) {
-	mat2 texture_rotation = mat2(vec2(cos(texture_angle), sin(texture_angle)), vec2(-sin(texture_angle), cos(texture_angle)));
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(brush_size.y/brush_size.x, 1.0)*(uv - vec2(0.5, 0.5)));
 	return pattern_function(fract(pattern_uv));
 }
@@ -31,7 +31,7 @@ void fragment() {
 	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
 	vec2 local_uv = p-(b+x*bv);
 	if (stamp_mode) {
-		mat2 texture_rotation = mat2(vec2(cos(texture_angle), sin(texture_angle)), vec2(-sin(texture_angle), cos(texture_angle)));
+		mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 		local_uv = texture_rotation*local_uv;
 		vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 		float a = stamp_limit.x*stamp_limit.y;

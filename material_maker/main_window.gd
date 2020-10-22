@@ -429,11 +429,11 @@ func new_paint_project(obj_file_name = null) -> void:
 		return
 	var paint_panel = preload("res://material_maker/panels/paint/paint.tscn").instance()
 	projects.add_child(paint_panel)
-	projects.current_tab = paint_panel.get_index()
 	var mi = MeshInstance.new()
 	mi.mesh = result.mesh
 	mi.set_surface_material(0, SpatialMaterial.new())
 	paint_panel.set_object(mi)
+	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
 	var dialog = FileDialog.new()

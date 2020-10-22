@@ -4,16 +4,10 @@ var current_brush = {
 	size          = 50.0,
 	strength      = 0.5,
 	pattern_scale = 10.0,
-	texture_angle = 0.0
+	pattern_angle = 0.0
 }
 
 var brush_node = null
-var albedo_texture_filename = null
-var albedo_texture = null
-var emission_texture_filename = null
-var emission_texture = null
-var depth_texture_filename = null
-var depth_texture = null
 
 onready var brush_material = $Brush.material
 onready var pattern_material = $Pattern.material
@@ -39,19 +33,19 @@ func edit_brush(s):
 	current_brush.size += s.x*0.1
 	current_brush.size = clamp(current_brush.size, 0.0, 250.0)
 	if brush_node.get_parameter("mode") == 0:
-		current_brush.texture_angle += fmod(s.y*0.01, 2.0*PI)
+		current_brush.pattern_angle += fmod(s.y*0.01, 2.0*PI)
 	else:
 		current_brush.strength += s.y*0.01
 		current_brush.strength = clamp(current_brush.strength, 0.0, 0.99999)
 	update_brush()
 
 func show_pattern(b):
-	$Pattern.visible = b and ($BrushUI/AMR/AlbedoTextureMode.selected == 2)
+	$Pattern.visible = b and brush_node.get_parameter("mode") == 1
 
 func edit_pattern(s):
 	current_brush.pattern_scale += s.x*0.1
 	current_brush.pattern_scale = clamp(current_brush.pattern_scale, 0.1, 25.0)
-	current_brush.texture_angle += fmod(s.y*0.01, 2.0*PI)
+	current_brush.pattern_angle += fmod(s.y*0.01, 2.0*PI)
 	update_brush()
 
 func set_brush_node(node) -> void:
@@ -120,13 +114,13 @@ func update_brush(update_shaders = false):
 		brush_material.set_shader_param("brush_size", brush_size_vector)
 		brush_material.set_shader_param("brush_strength", current_brush.strength)
 		brush_material.set_shader_param("pattern_scale", current_brush.pattern_scale)
-		brush_material.set_shader_param("texture_angle", current_brush.texture_angle)
+		brush_material.set_shader_param("pattern_angle", current_brush.pattern_angle)
 		brush_material.set_shader_param("brush_texture", null)
 		brush_material.set_shader_param("stamp_mode", 0)
 	if pattern_material != null:
 		pattern_material.set_shader_param("brush_size", brush_size_vector)
 		pattern_material.set_shader_param("pattern_scale", current_brush.pattern_scale)
-		pattern_material.set_shader_param("texture_angle", current_brush.texture_angle)
+		pattern_material.set_shader_param("pattern_angle", current_brush.pattern_angle)
 		pattern_material.set_shader_param("brush_texture", null)
 	for parameter in [ "albedo", "emission", "depth" ]:
 		if current_brush.get("has_"+parameter):
@@ -144,6 +138,7 @@ func brush_selected(brush):
 	current_brush = brush
 	update_brush()
 
+"""
 func _on_Checkbox_pressed():
 	update_material()
 
@@ -158,6 +153,7 @@ func _on_OptionButton_item_selected(ID):
 
 func _on_Brush_resized():
 	update_brush()
+"""
 
 func _on_Parameters_item_selected(ID):
 	for i in range($BrushUI.get_children().size()-1):

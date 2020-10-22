@@ -11,7 +11,7 @@ uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform vec2      brush_size        = vec2(0.25, 0.25);
 uniform float     brush_strength    = 0.5;
 uniform float     pattern_scale     = 10.0;
-uniform float     texture_angle     = 0.0;
+uniform float     pattern_angle     = 0.0;
 
 // BEGIN_PATTERN
 float brush_function(vec2 uv) {
@@ -39,7 +39,7 @@ void fragment() {
 	// Get position in brush
 	vec2 local_uv = p-(b+x*bv);
 	
-	mat2 texture_rotation = mat2(vec2(cos(texture_angle), sin(texture_angle)), vec2(-sin(texture_angle), cos(texture_angle)));
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(brush_size.y/brush_size.x, 1.0)*(xy - vec2(0.5, 0.5)));
 	vec4 color = pattern_function(fract(pattern_uv));
 	float a = brush_function(0.5*local_uv+vec2(0.5));
