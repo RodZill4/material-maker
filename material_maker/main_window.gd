@@ -53,6 +53,8 @@ const MENU = [
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
+	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
+	{ menu="Edit" },
 	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
 	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
 	{ menu="Edit" },
@@ -578,6 +580,11 @@ func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.duplicate_selected()
+
+func edit_select_all() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_all()
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
