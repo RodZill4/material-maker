@@ -15,7 +15,7 @@
    viewBox="0 0 128 128"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="icons.svg">
   <defs
      id="defs2">
@@ -62,9 +62,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="20.229516"
-     inkscape:cx="66.606412"
-     inkscape:cy="45.498649"
+     inkscape:zoom="7.152214"
+     inkscape:cx="52.294289"
+     inkscape:cy="50.834513"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -876,5 +876,25 @@
        d="m 67.673393,309.51318 c 3.196649,1e-5 6.393299,0 9.589948,-3e-5"
        style="fill:none;fill-rule:evenodd;stroke:#b9b9b9;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 3.4954211,314.5653 9.9269969,6.01212 -9.78718,5.59267 z"
+       id="path933"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.75590551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect935"
+       width="4.3343225"
+       height="11.604798"
+       x="18.316008"
+       y="314.14584" />
+    <rect
+       y="314.14584"
+       x="25.726301"
+       height="11.604798"
+       width="4.3343225"
+       id="rect937"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.75590551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
   </g>
 </svg>
