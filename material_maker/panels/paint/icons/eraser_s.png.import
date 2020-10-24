@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/line_s.png-6303993d2885b106ce30d6ac529e2f2a.stex"
+path="res://.import/eraser_s.png-e04cbe02268441b04e693f358fda30cf.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/icons/line_s.png"
-dest_files=[ "res://.import/line_s.png-6303993d2885b106ce30d6ac529e2f2a.stex" ]
+source_file="res://material_maker/panels/paint/icons/eraser_s.png"
+dest_files=[ "res://.import/eraser_s.png-e04cbe02268441b04e693f358fda30cf.stex" ]
 
 [params]
 

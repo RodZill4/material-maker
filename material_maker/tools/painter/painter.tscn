@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://addons/material_spray/shaders/texture2view.shader" type="Shader" id=1]
-[ext_resource path="res://addons/material_spray/shaders/show_pattern.shader" type="Shader" id=2]
+[ext_resource path="res://material_maker/tools/painter/shaders/show_pattern.shader" type="Shader" id=2]
 [ext_resource path="res://addons/material_spray/shaders/seams.shader" type="Shader" id=3]
 [ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
@@ -27,7 +27,7 @@ shader_param/view2texture = SubResource( 3 )
 shader = ExtResource( 2 )
 shader_param/brush_size = Vector2( 0.25, 0.25 )
 shader_param/pattern_scale = 10.0
-shader_param/texture_angle = 0.0
+shader_param/pattern_angle = 0.0
 
 [sub_resource type="ViewportTexture" id=6]
 

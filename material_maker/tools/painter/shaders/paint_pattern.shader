@@ -6,6 +6,7 @@ uniform sampler2D tex2viewlsb_tex;
 uniform sampler2D seams : hint_white;
 
 uniform bool      erase             = false;
+uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform vec2      brush_size        = vec2(0.25, 0.25);

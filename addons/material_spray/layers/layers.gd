@@ -1,4 +1,3 @@
-tool
 extends VBoxContainer
 
 export(NodePath) var painter = null

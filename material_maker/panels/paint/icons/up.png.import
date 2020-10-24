@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/not_visible.png-d38d6701d40b37f569abdcf1e6439fd0.stex"
+path="res://.import/up.png-741ac8ccf782ec9f7cee4c0075ae285e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/icons/not_visible.png"
-dest_files=[ "res://.import/not_visible.png-d38d6701d40b37f569abdcf1e6439fd0.stex" ]
+source_file="res://material_maker/panels/paint/icons/up.png"
+dest_files=[ "res://.import/up.png-741ac8ccf782ec9f7cee4c0075ae285e.stex" ]
 
 [params]
 

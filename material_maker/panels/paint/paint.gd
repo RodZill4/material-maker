@@ -13,6 +13,7 @@ var preview_material = null
 var previous_position = null
 var painting = false
 var next_paint_to = null
+var next_pressure = null
 
 var key_rotate = Vector2(0.0, 0.0)
 
@@ -31,7 +32,7 @@ onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
 onready var painter = $Painter
 onready var tools = $VSplitContainer/Painter/Tools
 onready var layers = $VSplitContainer/Painter/Layers
-onready var brush = $VSplitContainer/Painter/Brush
+onready var brush_obsolete = $VSplitContainer/Painter/Brush
 onready var eraser_button = $VSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
 
@@ -66,7 +67,11 @@ func _ready():
 	initialize_debug_selects()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
-	brush.set_brush_node(graph_edit.generator.get_node("Brush"))
+	brush_node = graph_edit.generator.get_node("Brush")
+	brush_node.connect("parameter_changed", self, "on_brush_changed")
+	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
+	print($VSplitContainer/Painter/BrushView.material)
+	painter.call_deferred("set_brush_node", graph_edit.generator.get_node("Brush"))
 
 func get_graph_edit():
 	return graph_edit
@@ -87,8 +92,10 @@ func set_object(o):
 				break
 	preview_material = SpatialMaterial.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
+	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic = 1.0
 	preview_material.metallic_texture = layers.get_mr_texture()
+	preview_material.metallic_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	preview_material.roughness = 1.0
 	preview_material.roughness_texture = layers.get_mr_texture()
@@ -96,11 +103,14 @@ func set_object(o):
 	preview_material.emission_enabled = true
 	preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)
 	preview_material.emission_texture = layers.get_emission_texture()
+	preview_material.emission_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.normal_enabled = true
 	preview_material.normal_texture = layers.get_normal_map()
+	preview_material.normal_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.depth_enabled = true
 	preview_material.depth_deep_parallax = true
 	preview_material.depth_texture = layers.get_depth_texture()
+	preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_material(0, preview_material)
 	painter.set_mesh(o.mesh)
@@ -132,7 +142,7 @@ func _physics_process(delta):
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
 		if ev.scancode == KEY_CONTROL:
-			brush.show_pattern(ev.pressed)
+			painter.show_pattern(ev.pressed)
 			accept_event()
 		elif ev.scancode == KEY_LEFT or ev.scancode == KEY_RIGHT or ev.scancode == KEY_UP or ev.scancode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
@@ -149,12 +159,27 @@ func __input(ev : InputEvent):
 				set_physics_process(key_rotate != Vector2(0.0, 0.0))
 				accept_event()
 
+var is_pressure_supported : bool = false
+var last_pressure : float = 1.0
+func get_pressure(event : InputEventMouse) -> float:
+	if event is InputEventMouseMotion:
+		last_pressure = event.pressure
+		if !is_pressure_supported:
+			if last_pressure > 0.0:
+				is_pressure_supported = true
+			else:
+				last_pressure = 1.0
+	return last_pressure
+
 func _on_View_gui_input(ev : InputEvent):
 	if ev is InputEventMouseMotion:
 		if current_tool == MODE_COLOR_PICKER:
-			brush.show_brush(null, null)
+			show_brush(null, null)
 		else:
-			brush.show_brush(ev.position, previous_position)
+			if current_tool == MODE_LINE and previous_position != null:
+				var direction = ev.position-previous_position
+				painter.set_brush_angle(atan2(direction.y, direction.x))
+			show_brush(ev.position, previous_position)
 		if ev.button_mask & BUTTON_MASK_RIGHT != 0:
 			if ev.shift:
 				camera_stand.translate(-0.2*ev.relative.x*camera.transform.basis.x)
@@ -162,15 +187,17 @@ func _on_View_gui_input(ev : InputEvent):
 			else:
 				camera_stand.rotate(camera.global_transform.basis.x.normalized(), -0.01*ev.relative.y)
 				camera_stand.rotate(camera.global_transform.basis.y.normalized(), -0.01*ev.relative.x)
-		if ev.button_mask & BUTTON_MASK_LEFT != 0:
+		elif ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.control:
 				previous_position = null
-				brush.edit_pattern(ev.relative)
+				painter.edit_pattern(ev.relative)
 			elif ev.shift:
 				previous_position = null
-				brush.edit_brush(ev.relative)
+				painter.edit_brush(ev.relative)
 			elif current_tool == MODE_FREE:
-				paint(ev.position)
+				paint(ev.position, get_pressure(ev))
+			elif ev.relative.length_squared() > 50:
+				get_pressure(ev)
 		elif current_tool != MODE_LINE_STRIP:
 			previous_position = null
 	elif ev is InputEventMouseButton:
@@ -179,14 +206,17 @@ func _on_View_gui_input(ev : InputEvent):
 			if ev.button_index == BUTTON_LEFT:
 				if ev.pressed:
 					if current_tool == MODE_LINE_STRIP && previous_position != null:
-						paint(pos)
+						paint(pos, get_pressure(ev))
 						if ev.doubleclick:
 							pos = null
 					previous_position = pos
 				elif current_tool == MODE_COLOR_PICKER:
 					painter.pick_color(pos)
 				elif current_tool != MODE_LINE_STRIP:
-					paint(pos)
+					if current_tool == MODE_LINE and previous_position != null:
+						var direction = pos-previous_position
+						painter.set_brush_angle(atan2(direction.y, direction.x))
+					paint(pos, get_pressure(ev))
 					previous_position = null
 		if !ev.pressed and ev.button_index == BUTTON_RIGHT:
 			update_view()
@@ -203,26 +233,56 @@ func _on_View_gui_input(ev : InputEvent):
 	else:
 		__input(ev)
 
-func paint(p):
+
+var brush_changed_scheduled : bool = false
+
+func on_brush_changed(p, v) -> void:
+	if !brush_changed_scheduled:
+		call_deferred("do_on_brush_changed")
+		brush_changed_scheduled = true
+
+func do_on_brush_changed():
+	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
+	painter.do_on_brush_changed()
+	brush_changed_scheduled = false
+
+func edit_brush(v : Vector2) -> void:
+	painter.edit_brush(v)
+
+func show_brush(p, op = null):
+	if p == null:
+		$VSplitContainer/Painter/BrushView.hide()
+	else:
+		$VSplitContainer/Painter/BrushView.show()
+		if op == null:
+			op = p
+		var brush_preview_rect_size = $VSplitContainer/Painter/BrushView.rect_size
+		var position = p/brush_preview_rect_size
+		var old_position = op/brush_preview_rect_size
+		$VSplitContainer/Painter/BrushView.material.set_shader_param("brush_pos", position)
+		$VSplitContainer/Painter/BrushView.material.set_shader_param("brush_ppos", old_position)
+
+func paint(pos, pressure = 1.0):
 	if painting:
 		# if not available for painting, record a paint order
-		next_paint_to = p
+		next_paint_to = pos
+		next_pressure = pressure
 		return
 	painting = true
 	if previous_position == null:
-		previous_position = p
-	var position = p/view.rect_size
+		previous_position = pos
+	var position = pos/view.rect_size
 	var prev_position = previous_position/view.rect_size
-	painter.paint(position, prev_position, eraser_button.pressed)
-	previous_position = p
+	painter.paint(position, prev_position, eraser_button.pressed, pressure)
+	previous_position = pos
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	painting = false
 	# execute recorded paint order if any
 	if next_paint_to != null:
-		p = next_paint_to
+		pos = next_paint_to
 		next_paint_to = null
-		paint(p)
+		paint(pos, next_pressure)
 
 func update_view():
 	var mesh_instance = painted_mesh

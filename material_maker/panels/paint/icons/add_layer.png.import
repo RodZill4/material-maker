@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/t2v.png-dbdf36f6b8e871ca3e733baaaf5b1150.stex"
+path="res://.import/add_layer.png-5cbff5b304b1b7e9ac07b5994efe3c67.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/doc/t2v.png"
-dest_files=[ "res://.import/t2v.png-dbdf36f6b8e871ca3e733baaaf5b1150.stex" ]
+source_file="res://material_maker/panels/paint/icons/add_layer.png"
+dest_files=[ "res://.import/add_layer.png-5cbff5b304b1b7e9ac07b5994efe3c67.stex" ]
 
 [params]
 

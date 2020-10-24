@@ -2,11 +2,12 @@
 
 [ext_resource path="res://addons/material_spray/layers/layers.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_spray/layers/layers_tree.gd" type="Script" id=2]
-[ext_resource path="res://addons/material_spray/icons/add_layer.png" type="Texture" id=3]
-[ext_resource path="res://addons/material_spray/icons/remove_layer.png" type="Texture" id=4]
-[ext_resource path="res://addons/material_spray/icons/up.png" type="Texture" id=5]
-[ext_resource path="res://addons/material_spray/icons/down.png" type="Texture" id=6]
+[ext_resource path="res://material_maker/panels/paint/icons/add_layer.png" type="Texture" id=3]
+[ext_resource path="res://material_maker/panels/paint/icons/remove_layer.png" type="Texture" id=4]
+[ext_resource path="res://material_maker/panels/paint/icons/up.png" type="Texture" id=5]
+[ext_resource path="res://material_maker/panels/paint/icons/down.png" type="Texture" id=6]
 [ext_resource path="res://addons/material_spray/shaders/normal_map.shader" type="Shader" id=7]
+
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1

@@ -22,12 +22,20 @@ var camera
 var transform
 var viewport_size
 
-var current_brush = null
+var current_brush = {
+	node          = null,
+	size          = 50.0,
+	strength      = 0.5,
+	pattern_scale = 10.0,
+	pattern_angle = 0.0
+}
 
 var has_albedo : bool = false
 var has_mr : bool = false
 var has_emission : bool = false
 var has_depth : bool = false
+
+var brush_preview_material : ShaderMaterial
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
@@ -138,43 +146,135 @@ func update_tex2view():
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 
-func brush_changed(new_brush, update_shaders = false):
-	current_brush = new_brush
-	# Albedo
-	var brush = $"../VSplitContainer/Painter/Brush"
-	if brush == null || brush.brush_node == null:
+# Brush methods
+
+func get_brush_mode() -> String:
+	return current_brush.node.get_parameter_defs()[0].values[current_brush.node.get_parameter("mode")].value
+
+func set_brush_node(node) -> void:
+	current_brush.node = node
+	update_brush(true)
+
+func set_brush_preview_material(m : ShaderMaterial) -> void:
+	brush_preview_material = m
+
+func get_brush_preview_shader(mode : String) -> String:
+	var file = File.new()
+	file.open("res://material_maker/tools/painter/shaders/brush_%s.shader" % mode, File.READ)
+	return file.get_as_text()
+
+func edit_brush(s):
+	current_brush.size += s.x*0.1
+	current_brush.size = clamp(current_brush.size, 0.0, 250.0)
+	if get_brush_mode() == "stamp":
+		current_brush.pattern_angle += fmod(s.y*0.01, 2.0*PI)
+	else:
+		current_brush.strength += s.y*0.01
+		current_brush.strength = clamp(current_brush.strength, 0.0, 0.99999)
+	update_brush()
+
+func edit_pattern(s):
+	current_brush.pattern_scale += s.x*0.1
+	current_brush.pattern_scale = clamp(current_brush.pattern_scale, 0.1, 25.0)
+	current_brush.pattern_angle += fmod(s.y*0.01, 2.0*PI)
+	update_brush()
+
+func set_brush_angle(a) -> void:
+	current_brush.pattern_angle = a
+	update_brush()
+
+func show_pattern(b):
+	pass
+	# TODO: add parameter in shaders
+	#$Pattern.visible = b and brush_node.get_parameter("mode") == 1
+
+func update_brush(update_shaders = false):
+	#if current_brush.albedo_texture_mode != 2: $Pattern.visible = false
+	var brush_size_vector = Vector2(current_brush.size, current_brush.size)/viewport_size
+	if brush_preview_material != null:
+		brush_preview_material.set_shader_param("brush_size", brush_size_vector)
+		brush_preview_material.set_shader_param("brush_strength", current_brush.strength)
+		brush_preview_material.set_shader_param("pattern_scale", current_brush.pattern_scale)
+		brush_preview_material.set_shader_param("pattern_angle", current_brush.pattern_angle)
+		brush_preview_material.set_shader_param("brush_texture", null)
+	if update_shaders:
+		var code : String = get_output_code(1)
+		update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
+	if current_brush.node == null:
 		return
 	# Mode
-	var mode : String = brush.brush_node.get_parameter_defs()[0].values[brush.brush_node.get_parameter("mode")].value
-	has_albedo = brush.brush_node.get_parameter("has_albedo")
-	has_mr = brush.brush_node.get_parameter("has_metallic") or brush.brush_node.get_parameter("has_roughness")
-	has_emission = brush.brush_node.get_parameter("has_emission")
-	has_depth = brush.brush_node.get_parameter("has_depth")
+	var mode : String = get_brush_mode()
+	has_albedo = current_brush.node.get_parameter("has_albedo")
+	has_mr = current_brush.node.get_parameter("has_metallic") or current_brush.node.get_parameter("has_roughness")
+	has_emission = current_brush.node.get_parameter("has_emission")
+	has_depth = current_brush.node.get_parameter("has_depth")
 	# Update shaders
 	if update_shaders:
 		for index in range(4):
-			brush.update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), brush.get_output_code(index+1))
+			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
+		update_shader(brush_preview_material, get_brush_preview_shader(mode), get_output_code(1))
 	for index in range(4):
 		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.pattern_angle, true)
 	if viewport_size != null:
 		for index in range(4):
 			viewports[index].set_brush(current_brush.size, current_brush.strength, viewport_size)
+		brush_preview_material.set_shader_param("brush_size", Vector2(current_brush.size, current_brush.size)/viewport_size)
+		brush_preview_material.set_shader_param("brush_strength", current_brush.strength)
+
+func do_on_brush_changed():
+	update_brush(true)
+
+func get_output_code(index : int) -> String:
+	if current_brush.node == null:
+		return ""
+	var context : MMGenContext = MMGenContext.new()
+	var source_mask = current_brush.node.get_shader_code("uv", 0, context)
+	context = MMGenContext.new(context)
+	var source = current_brush.node.get_shader_code("uv", index, context)
+	var new_code : String = mm_renderer.common_shader
+	new_code += "\n"
+	for g in source.globals:
+		if source_mask.globals.find(g) == -1:
+			source_mask.globals.append(g)
+	for g in source_mask.globals:
+		new_code += g
+	new_code += source_mask.defs+"\n"
+	new_code += "\nfloat brush_function(vec2 uv) {\n"
+	new_code += source_mask.code+"\n"
+	new_code += "vec2 __brush_box = abs(uv-vec2(0.5));\n"
+	new_code += "return (max(__brush_box.x, __brush_box.y) < 0.5) ? "+source_mask.f+" : 0.0;\n"
+	new_code += "}\n"
+	new_code += source.defs+"\n"
+	new_code += "\nvec4 pattern_function(vec2 uv) {\n"
+	new_code += source.code+"\n"
+	new_code += "return "+source.rgba+";\n"
+	new_code += "}\n"
+	return new_code
+
+func update_shader(shader_material : ShaderMaterial, shader_template : String, shader_code : String) -> void:
+	if shader_material == null:
+		print("no shader material")
+		return
+	var new_code = shader_template.left(shader_template.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+shader_template.right(shader_template.find("// END_PATTERN"))
+	shader_material.shader.code = new_code
+	# Get parameter values from the shader code
+	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
+
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	mm_renderer.update_float_parameters(albedo_viewport.paint_material, parameter_changes)
-	mm_renderer.update_float_parameters(mr_viewport.paint_material, parameter_changes)
-	mm_renderer.update_float_parameters(emission_viewport.paint_material, parameter_changes)
-	mm_renderer.update_float_parameters(depth_viewport.paint_material, parameter_changes)
+	for index in range(4):
+		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
+	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 
-func paint(position, prev_position, erase):
+func paint(position, prev_position, erase, pressure):
 	if has_albedo:
-		albedo_viewport.do_paint(position, prev_position, erase)
+		albedo_viewport.do_paint(position, prev_position, erase, pressure)
 	if has_mr:
-		mr_viewport.do_paint(position, prev_position, erase)
+		mr_viewport.do_paint(position, prev_position, erase, pressure)
 	if has_emission:
-		emission_viewport.do_paint(position, prev_position, erase)
+		emission_viewport.do_paint(position, prev_position, erase, pressure)
 	if has_depth:
-		depth_viewport.do_paint(position, prev_position, erase)
+		depth_viewport.do_paint(position, prev_position, erase, pressure)
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")

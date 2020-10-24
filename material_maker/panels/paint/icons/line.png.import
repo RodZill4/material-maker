@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/visible.png-79e068e7481b7bbdbb222ce7e9027572.stex"
+path="res://.import/line.png-f943130edb073d399c858068b797b07a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/icons/visible.png"
-dest_files=[ "res://.import/visible.png-79e068e7481b7bbdbb222ce7e9027572.stex" ]
+source_file="res://material_maker/panels/paint/icons/line.png"
+dest_files=[ "res://.import/line.png-f943130edb073d399c858068b797b07a.stex" ]
 
 [params]
 

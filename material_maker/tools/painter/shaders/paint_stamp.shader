@@ -6,7 +6,7 @@ uniform sampler2D tex2viewlsb_tex;
 uniform sampler2D seams : hint_white;
 
 uniform bool      erase             = false;
-uniform bool      stamp_mode        = false;
+uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform vec2      brush_size        = vec2(0.25, 0.25);
@@ -42,8 +42,10 @@ void fragment() {
 
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	local_uv = texture_rotation*local_uv;
+	vec2 local_uv2 = p-b-bv;
+	local_uv2 = local_uv2*texture_rotation;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
-	vec4 color = pattern_function(0.5*local_uv+vec2(0.5));
+	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
 	float a = stamp_limit.x*stamp_limit.y*brush_function(0.5*local_uv+vec2(0.5));
 
 	a *= color.a*tex2view.z;

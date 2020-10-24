@@ -10,7 +10,7 @@
 		"has_emission": false,
 		"has_metallic": true,
 		"has_roughness": true,
-		"mode": 1
+		"mode": 0
 	},
 	"shader_model": {
 		"code": "",
@@ -24,6 +24,7 @@
 			},
 			{
 				"default": "vec4(1.0)",
+				"group_size": 5,
 				"label": "Albedo",
 				"name": "albedo",
 				"type": "rgba"

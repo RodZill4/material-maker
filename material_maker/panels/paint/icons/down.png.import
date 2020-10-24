@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/screenshot.png-921f46ac9d8d4e6c82da0b38b5716f3c.stex"
+path="res://.import/down.png-fa8e55f166e0ecfba0acdafe0d16d290.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/doc/screenshot.png"
-dest_files=[ "res://.import/screenshot.png-921f46ac9d8d4e6c82da0b38b5716f3c.stex" ]
+source_file="res://material_maker/panels/paint/icons/down.png"
+dest_files=[ "res://.import/down.png-fa8e55f166e0ecfba0acdafe0d16d290.stex" ]
 
 [params]
 

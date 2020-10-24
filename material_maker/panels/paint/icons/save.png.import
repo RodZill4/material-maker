@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/line_strip.png-d0abc9ee40bcf7c8878ad486aed58b10.stex"
+path="res://.import/save.png-7392c00d34b0309398e8a754c4cd195b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/icons/line_strip.png"
-dest_files=[ "res://.import/line_strip.png-d0abc9ee40bcf7c8878ad486aed58b10.stex" ]
+source_file="res://material_maker/panels/paint/icons/save.png"
+dest_files=[ "res://.import/save.png-7392c00d34b0309398e8a754c4cd195b.stex" ]
 
 [params]
 

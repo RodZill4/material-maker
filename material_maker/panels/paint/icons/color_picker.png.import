@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/paint.png-1bb7d0e7cc2ad1b0822b4d6c080a57ec.stex"
+path="res://.import/color_picker.png-f0524dc9549a1a743a01a5b5a3d36fad.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/material_spray/icons/paint.png"
-dest_files=[ "res://.import/paint.png-1bb7d0e7cc2ad1b0822b4d6c080a57ec.stex" ]
+source_file="res://material_maker/panels/paint/icons/color_picker.png"
+dest_files=[ "res://.import/color_picker.png-f0524dc9549a1a743a01a5b5a3d36fad.stex" ]
 
 [params]
 
