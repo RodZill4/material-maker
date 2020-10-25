@@ -125,6 +125,7 @@ func update_view(c, t, s):
 	transform = t
 	viewport_size = s
 	update_tex2view()
+	update_brush()
 
 func update_tex2view():
 	var aspect = viewport_size.x/viewport_size.y

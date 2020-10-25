@@ -19,6 +19,7 @@ var key_rotate = Vector2(0.0, 0.0)
 
 var object_name = null
 var project_path = null
+var model_path = null
 
 var need_save = false
 
@@ -59,7 +60,7 @@ func _ready():
 	# Updated Texture2View wrt current camera position
 	update_view()
 	# Set size of painted textures
-	layers.set_texture_size(2048)
+	layers.set_texture_size(512)
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
 	set_current_tool(MODE_FREE)
@@ -319,24 +320,43 @@ func set_project_path(p):
 	if parent.has_method("set_project_path"):
 		parent.set_project_path(p)
 
-func load_project():
-	show_file_dialog(FileDialog.MODE_OPEN_FILE, "*.masp;Material Spray project", "do_load_project")
-
-func do_load_project(file_name):
-	layers.load(file_name)
+func load_project(file_name) -> bool:
+	var f : File = File.new()
+	if f.open(file_name, File.READ) != OK:
+		return false
+	var data = parse_json(f.get_as_text())
+	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd").new()
+	add_child(obj_loader)
+	var mesh : Mesh = obj_loader.load_obj_file(data.model)
+	obj_loader.queue_free()
+	if mesh == null:
+		return false
+	model_path = data.model
+	var mi = MeshInstance.new()
+	mi.mesh = mesh
+	mi.set_surface_material(0, SpatialMaterial.new())
+	set_object(mi)
 	set_project_path(file_name)
+	layers.set_texture_size(data.texture_size)
+	layers.load(data, file_name)
+	return true
 
-func save_project():
+func save():
 	if project_path != null:
 		do_save_project(project_path)
 	else:
-		save_project_as()
+		save_as()
 
-func save_project_as():
-	show_file_dialog(FileDialog.MODE_SAVE_FILE, "*.masp;Material Spray project", "do_save_project")
+func save_as():
+	show_file_dialog(FileDialog.MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")
 
 func do_save_project(file_name):
-	layers.save(file_name)
+	var data = layers.save(file_name)
+	data.model = model_path
+	var file = File.new()
+	if file.open(file_name, File.WRITE) == OK:
+		file.store_string(to_json(data))
+		file.close()
 	set_project_path(file_name)
 
 func export_material():

@@ -379,7 +379,7 @@ func do_load_generator(file_name : String) -> void:
 		var parent_generator = generator.get_parent()
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator
-		update_node()
+		call_deferred("update_node")
 
 func save_generator() -> void:
 	var dialog = FileDialog.new()

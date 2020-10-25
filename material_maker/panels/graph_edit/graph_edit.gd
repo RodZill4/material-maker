@@ -165,6 +165,8 @@ func clear_view() -> void:
 			remove_child(c)
 			c.free()
 
+# crash_recovery
+
 func crash_recovery_save() -> void:
 	if !need_save_crash_recovery:
 		return
@@ -329,6 +331,37 @@ func load_file(filename) -> bool:
 		dialog.popup_centered()
 		return false
 
+# Save
+
+func save() -> bool:
+	var status = false
+	if save_path != null:
+		status = save_file(save_path)
+	else:
+		status = save_as()
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+	return status
+
+func save_as() -> bool:
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.ptex;Procedural Textures File")
+	var main_window = get_node("/root/MainWindow")
+	if main_window.config_cache.has_section_key("path", "project"):
+		dialog.current_dir = main_window.config_cache.get_value("path", "project")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		if save_file(files[0]):
+			main_window.add_recent(save_path)
+			return true
+	return false
+
 func save_file(filename) -> bool:
 	var data = top_generator.serialize()
 	var file = File.new()
@@ -341,6 +374,8 @@ func save_file(filename) -> bool:
 	set_need_save(false)
 	remove_crash_recovery_file()
 	return true
+
+#
 
 func get_material_node() -> MMGenMaterial:
 	for g in top_generator.get_children():

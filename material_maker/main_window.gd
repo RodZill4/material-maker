@@ -36,14 +36,14 @@ const MENU = [
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
-	{ menu="File", command="save_material", shortcut="Control+S", description="Save material" },
-	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
-	{ menu="File", command="save_all_materials", description="Save all materials..." },
+	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
+	{ menu="File", command="save_project_as", shortcut="Control+Shift+S", description="Save as..." },
+	{ menu="File", command="save_all_projects", description="Save all..." },
 	{ menu="File" },
 	{ menu="File", submenu="export_material", description="Export material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
-	{ menu="File", command="close_material", description="Close material" },
+	{ menu="File", command="close_project", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
 	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
@@ -161,7 +161,7 @@ func _ready() -> void:
 	
 	new_material()
 	
-	do_load_materials(OS.get_cmdline_args())
+	do_load_projects(OS.get_cmdline_args())
 	
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 	
@@ -181,6 +181,9 @@ func on_config_changed() -> void:
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
+
+func get_current_project() -> Control:
+	return projects.get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
@@ -292,7 +295,7 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	if !do_load_material(recent_files[id]):
+	if !do_load_project(recent_files[id]):
 		recent_files.remove(id)
 
 func load_recents() -> void:
@@ -427,7 +430,7 @@ func new_paint_project(obj_file_name = null) -> void:
 		result = yield(result, "completed")
 	if result == null:
 		return
-	var paint_panel = preload("res://material_maker/panels/paint/paint.tscn").instance()
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
 	projects.add_child(paint_panel)
 	var mi = MeshInstance.new()
 	mi.mesh = result.mesh
@@ -442,25 +445,37 @@ func load_project() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	dialog.add_filter("*.mpnt;Model Painting File")
-	if config_cache.has_section_key("path", "material"):
-		dialog.current_dir = config_cache.get_value("path", "material")
-	dialog.connect("files_selected", self, "do_load_materials")
+	dialog.add_filter("*.mmpp;Model Painting File")
+	if config_cache.has_section_key("path", "project"):
+		dialog.current_dir = config_cache.get_value("path", "project")
+	dialog.connect("files_selected", self, "do_load_projects")
 	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
-func do_load_materials(filenames) -> void:
-	if not filenames.empty():
-		config_cache.set_value("path", "material", filenames[0].get_base_dir())
+func do_load_projects(filenames) -> void:
+	var file_name : String = ""
 	for f in filenames:
-		do_load_material(f, false)
-	hierarchy.update_from_graph_edit(get_current_graph_edit())
+		var file = File.new()
+		if file.open(f, File.READ) != OK:
+			continue
+		file_name = file.get_path_absolute()
+		file.close()
+		do_load_project(file_name)
+	if filename != "":
+		config_cache.set_value("path", "project", filename.get_base_dir())
+
+func do_load_project(file_name) -> void:
+	var status : bool = false
+	match file_name.get_extension():
+		"ptex":
+			status = do_load_material(file_name, false)
+			hierarchy.update_from_graph_edit(get_current_graph_edit())
+		"mmpp":
+			status = do_load_painting(file_name)
+	if status:
+		add_recent(file_name)
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
-	var file = File.new()
-	file.open(filename, File.READ)
-	filename = file.get_path_absolute()
-	file.close()
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -473,51 +488,38 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 	if node_count > 1:
 		graph_edit = new_graph_panel()
 	graph_edit.load_file(filename)
-	add_recent(filename)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 	return true
 
-func save_material(graph_edit : MMGraphEdit = null) -> bool:
-	var status = false
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	if graph_edit != null:
-		if graph_edit.save_path != null:
-			status = graph_edit.save_file(graph_edit.save_path)
-		else:
-			status = save_material_as(graph_edit)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+func do_load_painting(filename : String) -> bool:
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
+	projects.add_child(paint_panel)
+	var status : bool = paint_panel.load_project(filename)
+	projects.current_tab = paint_panel.get_index()
 	return status
 
-func save_material_as(graph_edit : MMGraphEdit = null) -> bool:
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	if graph_edit != null:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-		add_child(dialog)
-		dialog.rect_min_size = Vector2(500, 500)
-		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_SAVE_FILE
-		dialog.add_filter("*.ptex;Procedural Textures File")
-		if config_cache.has_section_key("path", "material"):
-			dialog.current_dir = config_cache.get_value("path", "material")
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
-		if files.size() == 1:
-			if do_save_material(files[0], graph_edit):
-				add_recent(graph_edit.save_path)
-				return true
+func save_project(project : Control = null) -> bool:
+	if project == null:
+		project = get_current_project()
+	if project != null:
+		return project.save()
 	return false
 
-func do_save_material(filename : String, graph_edit : MMGraphEdit = null) -> bool:
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	return graph_edit.save_file(filename)
+func save_project_as(project : Control = null) -> bool:
+	if project == null:
+		project = get_current_project()
+	if project != null:
+		return project.save_as()
+	return false
 
-func close_material() -> void:
+func save_all_projects() -> void:
+	for i in range(projects.get_tab_count()):
+		var result = projects.get_tab(i).save()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+
+func close_project() -> void:
 	projects.close_tab()
 
 func quit() -> void:

@@ -131,25 +131,18 @@ func _on_Tree_layers_changed(layers : Array):
 		depth.add_child(texture_rect)
 	_on_Painter_painted()
 
-func load(file_name):
+func load(data : Dictionary, file_name : String):
 	var dir_name = file_name.left(file_name.rfind("."))
-	var file : File = File.new()
-	if file.open(file_name, File.READ) == OK:
-		var data = parse_json(file.get_as_text())
-		set_texture_size(data.texture_size)
-		tree.load_layers(data, dir_name, [ "albedo", "mr", "emission", "depth" ])
-		file.close()
+	tree.load_layers(data, dir_name, [ "albedo", "mr", "emission", "depth" ])
 
-func save(file_name):
+
+func save(file_name : String) -> Dictionary:
 	var dir_name = file_name.left(file_name.rfind("."))
 	var dir = Directory.new()
 	dir.make_dir(dir_name)
 	var data = { texture_size=texture_size }
 	tree.save_layers(data, tree.get_root(), 0, dir_name, [ "albedo", "mr", "emission", "depth" ])
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		file.store_string(to_json(data))
-		file.close()
+	return data
 
 func _on_Painter_painted():
 	for viewport in [ albedo, metallic, roughness, emission, depth ]:
