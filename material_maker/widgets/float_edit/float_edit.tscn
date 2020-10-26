@@ -2,7 +2,7 @@
 
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.gd" type="Script" id=1]
 
-[node name="LineEdit" type="LineEdit"]
+[node name="FloatEdit" type="LineEdit"]
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0

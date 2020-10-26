@@ -87,7 +87,8 @@ const MENU = [
 const DEFAULT_CONFIG = {
 	confirm_quit = true,
 	confirm_close_project = true,
-	vsync = true
+	vsync = true,
+	ui_scale = 0
 }
 
 func _ready() -> void:
@@ -134,11 +135,6 @@ func _ready() -> void:
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
 
-	# Upscale everything if the display requires it (crude hiDPI support).
-	# This prevents UI elements from being too small on hiDPI displays.
-	if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048:
-		get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), 2)
-
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
 	OS.min_window_size = Vector2(1024, 600)
 
@@ -179,6 +175,13 @@ func get_config(key : String):
 
 func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
+	var scale = get_config("ui_scale")
+	if scale <= 0:
+		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
+		# This prevents UI elements from being too small on hiDPI displays.
+		scale = 2 if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048 else 1
+	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
+
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -634,7 +637,7 @@ func edit_save_selection() -> void:
 			file.close()
 
 func edit_preferences() -> void:
-	var dialog = preload("res://material_maker/windows/preferences/preferences.tscn").instance()
+	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instance()
 	add_child(dialog)
 	dialog.connect("config_changed", self, "on_config_changed")
 	dialog.edit_preferences(config_cache)
