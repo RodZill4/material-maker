@@ -68,11 +68,18 @@ func _ready():
 	initialize_debug_selects()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
+	call_deferred("update_brush")
+#	brush_node = graph_edit.generator.get_node("Brush")
+#	brush_node.connect("parameter_changed", self, "on_brush_changed")
+#	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
+#	painter.call_deferred("set_brush_node", graph_edit.generator.get_node("Brush"))
+
+
+func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
 	brush_node.connect("parameter_changed", self, "on_brush_changed")
 	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
-	print($VSplitContainer/Painter/BrushView.material)
-	painter.call_deferred("set_brush_node", graph_edit.generator.get_node("Brush"))
+	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
 
 func get_graph_edit():
 	return graph_edit

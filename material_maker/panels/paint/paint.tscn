@@ -86,11 +86,11 @@ margin_top = 4.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
-split_offset = 519
+split_offset = 480
 
 [node name="Painter" type="Control" parent="VSplitContainer"]
 margin_right = 1280.0
-margin_bottom = 519.0
+margin_bottom = 480.0
 
 [node name="View" type="ViewportContainer" parent="VSplitContainer/Painter"]
 anchor_right = 1.0
@@ -100,9 +100,12 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MainView" type="Viewport" parent="VSplitContainer/Painter/View"]
-size = Vector2( 1280, 519 )
+size = Vector2( 1280, 480 )
 own_world = true
 world = SubResource( 3 )
 handle_input_locally = false
@@ -267,7 +270,7 @@ selected = 0
 [node name="GraphEdit" parent="VSplitContainer" instance=ExtResource( 17 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 531.0
+margin_top = 492.0
 margin_right = 1280.0
 margin_bottom = 716.0
 focus_mode = 1
@@ -280,7 +283,6 @@ scroll_offset = Vector2( 0, -87 )
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 1 ]]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Strip" to="." method="set_current_tool" binds= [ 2 ]]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 3 ]]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/Eraser" to="." method="save"]
 [connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
 [connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
 [connection signal="gui_input" from="VSplitContainer/GraphEdit" to="VSplitContainer/GraphEdit" method="_gui_input"]

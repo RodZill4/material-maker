@@ -1,5 +1,8 @@
 extends VBoxContainer
 
+export var base_library_name = "base.json"
+export var user_library_name = "user.json"
+
 var libraries = []
 var libraries_data = {}
 var current_filter = ""
@@ -12,10 +15,10 @@ func _ready() -> void:
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 32)
-	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
+	var lib_path = OS.get_executable_path().get_base_dir()+"/library/"+base_library_name
 	if !add_library(lib_path):
-		add_library("res://material_maker/library/base.json")
-	add_library("user://library/user.json")
+		add_library("res://material_maker/library/"+base_library_name)
+	add_library("user://library/"+user_library_name)
 	init_expanded_items()
 	update_tree()
 
@@ -200,7 +203,7 @@ func save_library(library_name : String, _item : TreeItem = null) -> void:
 func add_to_user_library(data : Dictionary, name : String, image : Image) -> void:
 	data.tree_item = name
 	data.icon = get_icon_name(name)
-	var library_path = "user://library/user.json"
+	var library_path = "user://library/"+user_library_name
 	var dir = Directory.new()
 	dir.make_dir_recursive(library_path.get_basename())
 	image.save_png(library_path.get_basename()+"/"+data.icon+".png")

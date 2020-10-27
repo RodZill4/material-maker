@@ -19,6 +19,7 @@ var preview_2d
 var histogram
 var preview_3d
 var hierarchy
+var brushes
 
 onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
 onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
@@ -69,9 +70,9 @@ const MENU = [
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
 	{ menu="Tools" },
-	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
+	{ menu="Tools", command="add_selection_to_user_library", description="Add selected node to user library", mode="material" },
+	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
 	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph" },
 
@@ -152,6 +153,7 @@ func _ready() -> void:
 	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
+	brushes = get_panel("Brushes")
 
 	# Load recent projects
 	load_recents()
@@ -190,6 +192,19 @@ func get_current_graph_edit() -> MMGraphEdit:
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
 	return null
+
+# Modes
+
+var current_mode : String = ""
+
+func get_current_mode() -> String:
+	return current_mode
+
+func set_current_mode(mode : String) -> void:
+	current_mode = mode
+	layout.change_mode(current_mode)
+
+# Menus
 
 func create_menus(menu_def, object, menu_bar) -> void:
 	for i in menu_def.size():
@@ -268,6 +283,9 @@ func on_menu_id_pressed(id, menu_def, object) -> void:
 				object.call(command)
 
 func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
+	var mode = ""
+	if object.has_method("get_current_mode"):
+		mode = object.get_current_mode()
 	for i in menu_def.size():
 		if menu_def[i].menu != name:
 			continue
@@ -278,6 +296,8 @@ func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) ->
 			if object.has_method(command):
 				var is_disabled = object.call(command)
 				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
+			if menu_def[i].has("mode"):
+				menu.set_item_disabled(menu.get_item_index(i), menu_def[i].mode != mode)
 			if menu_def[i].has("toggle") and menu_def[i].toggle:
 				command = menu_def[i].command
 				if object.has_method(command):
@@ -682,18 +702,18 @@ func make_selected_nodes_editable() -> void:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
-func add_to_user_library() -> void:
+func add_selection_to_user_library() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
 		dialog.set_value(library.get_selected_item_name())
 		dialog.set_texts("New library element", "Select a name for the new library element")
 		add_child(dialog)
-		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
+		dialog.connect("ok", self, "do_add_selection_to_user_library", [ selected_nodes ])
 		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 
-func do_add_to_user_library(name, nodes) -> void:
+func do_add_selection_to_user_library(name, nodes) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
 	if nodes.size() == 1:
@@ -708,6 +728,26 @@ func do_add_to_user_library(name, nodes) -> void:
 	var image : Image = result.get_image()
 	result.release(self)
 	library.add_to_user_library(data, name, image)
+
+func add_brush_to_user_library() -> void:
+	var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
+	dialog.set_value(brushes.get_selected_item_name())
+	dialog.set_texts("New library element", "Select a name for the new library element")
+	add_child(dialog)
+	dialog.connect("ok", self, "do_add_brush_to_user_library")
+	dialog.connect("popup_hide", dialog, "queue_free")
+	dialog.popup_centered()
+
+func do_add_brush_to_user_library(name) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var data = graph_edit.top_generator.serialize()
+	# Create thumbnail
+	var result = graph_edit.generator.get_node("Brush").render(self, 1, 64, true)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	var image : Image = result.get_image()
+	result.release(self)
+	brushes.add_to_user_library(data, name, image)
 
 func export_library() -> void:
 	var dialog : FileDialog = FileDialog.new()
@@ -832,10 +872,12 @@ func _on_Projects_tab_changed(_tab) -> void:
 				new_tab.connect("node_selected", self, "on_selected_node_change")
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
+			set_current_mode("material")
 			layout.change_mode("material")
 		else:
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
+			set_current_mode("paint")
 			layout.change_mode("paint")
 		current_tab = new_tab
 		if new_tab is GraphEdit:
