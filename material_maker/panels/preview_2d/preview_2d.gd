@@ -3,9 +3,10 @@ extends ColorRect
 export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
+var offset : Vector2 = Vector2.ZERO;
 var output : int = 0
-
 var need_generate : bool = false
+var zoom : float = 1.0
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
@@ -141,3 +142,18 @@ func _on_Reference_id_pressed(id : int):
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():
 		set_generator(generator, output)
+
+func _gui_input (event) -> void:
+	if event is InputEventMouseButton:
+		match event.button_index:
+			BUTTON_WHEEL_UP:
+				zoom -= 0.03
+			BUTTON_WHEEL_DOWN:
+				zoom += 0.03
+		zoom = max(zoom, 0.0001)
+		material.set_shader_param("zoom", zoom)
+	elif event is InputEventMouseMotion:
+		var motion = 0.001*event.relative
+		if event.button_mask & BUTTON_MASK_LEFT:
+			offset += motion
+			material.set_shader_param("offset", -offset)
