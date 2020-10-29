@@ -83,7 +83,7 @@ func do_load_custom_mesh(file_path) -> void:
 	if mesh != null:
 		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
-		object.set_surface_material(0, SpatialMaterial.new())
+		object.update_material()
 		select_object(id)
 
 func select_object(id) -> void:
