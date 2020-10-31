@@ -14,9 +14,10 @@ const PANELS = [
 	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },
 	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" },
 	{ name="Brushes", scene=preload("res://material_maker/panels/brushes/brushes.tscn"), position="TopLeft" },
+	{ name="Layers", scene=preload("res://material_maker/panels/layers/layers.tscn"), position="TopRight" },
 ]
 const HIDE_PANELS = {
-	material=[ "Brushes" ],
+	material=[ "Brushes", "Layers" ],
 	paint=[ "Preview2D", "Preview3D", "Histogram", "Hierarchy" ]
 }
 

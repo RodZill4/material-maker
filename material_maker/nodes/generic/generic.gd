@@ -33,6 +33,8 @@ func on_parameter_changed(p : String, v) -> void:
 		var o = controls[p]
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.value = v
+		elif o is HSlider:
+			o.value = v
 		elif o is LineEdit:
 			o.text = v
 		elif o is SizeOptionButton:

@@ -742,7 +742,7 @@ func do_add_brush_to_user_library(name) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data = graph_edit.top_generator.serialize()
 	# Create thumbnail
-	var result = graph_edit.generator.get_node("Brush").render(self, 1, 64, true)
+	var result = graph_edit.top_generator.get_node("Brush").render(self, 1, 64, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	var image : Image = result.get_image()

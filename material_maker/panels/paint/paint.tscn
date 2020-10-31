@@ -12,7 +12,7 @@
 [ext_resource path="res://material_maker/panels/paint/icons/line.png" type="Texture" id=10]
 [ext_resource path="res://material_maker/panels/paint/icons/line_strip_s.png" type="Texture" id=11]
 [ext_resource path="res://material_maker/tools/painter/painter.tscn" type="PackedScene" id=12]
-[ext_resource path="res://addons/material_spray/layers/layers.tscn" type="PackedScene" id=13]
+[ext_resource path="res://material_maker/panels/paint/paint_layers.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/panels/paint/paint.gd" type="Script" id=16]
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.tscn" type="PackedScene" id=17]
 
@@ -78,6 +78,9 @@ __meta__ = {
 
 [node name="Painter" parent="." instance=ExtResource( 12 )]
 
+[node name="PaintLayers" parent="." instance=ExtResource( 13 )]
+painter = NodePath("../Painter")
+
 [node name="Menu" type="HBoxContainer" parent="."]
 margin_right = 1280.0
 
@@ -132,10 +135,6 @@ mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Layers" parent="VSplitContainer/Painter" instance=ExtResource( 13 )]
-margin_top = -220.0
-painter = NodePath("../../../Painter")
 
 [node name="Tools" type="HBoxContainer" parent="VSplitContainer/Painter"]
 margin_right = 184.0
@@ -226,6 +225,7 @@ margin_top = -277.766
 margin_right = -96.4617
 margin_bottom = -21.766
 rect_min_size = Vector2( 256, 256 )
+mouse_filter = 2
 expand = true
 
 [node name="Select1" type="OptionButton" parent="VSplitContainer/Painter/Debug"]
@@ -252,6 +252,7 @@ margin_top = -277.406
 margin_right = 160.524
 margin_bottom = -21.4056
 rect_min_size = Vector2( 256, 256 )
+mouse_filter = 2
 expand = true
 
 [node name="Select2" type="OptionButton" parent="VSplitContainer/Painter/Debug"]
@@ -276,7 +277,7 @@ margin_bottom = 716.0
 focus_mode = 1
 size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )
-[connection signal="painted" from="Painter" to="VSplitContainer/Painter/Layers" method="_on_Painter_painted"]
+[connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="gui_input" from="VSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
 [connection signal="resized" from="VSplitContainer/Painter/View" to="." method="_on_resized"]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Free" to="." method="set_current_tool" binds= [ 0 ]]

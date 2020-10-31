@@ -32,7 +32,7 @@ onready var camera_stand = $VSplitContainer/Painter/View/MainView/CameraStand
 onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
 onready var painter = $Painter
 onready var tools = $VSplitContainer/Painter/Tools
-onready var layers = $VSplitContainer/Painter/Layers
+onready var layers = $PaintLayers
 onready var brush_obsolete = $VSplitContainer/Painter/Brush
 onready var eraser_button = $VSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
@@ -400,14 +400,14 @@ func initialize_debug_selects():
 	for s in [ $VSplitContainer/Painter/Debug/Select1, $VSplitContainer/Painter/Debug/Select2 ]:
 		s.clear()
 		var index = 0
-		for p in [ self, $Painter, $VSplitContainer/Painter/Layers ]:
+		for p in [ self, $Painter, $PaintLayers ]:
 			for i in p.debug_get_texture_names():
 				s.add_item(i, index)
 				index += 1
 
 func _on_DebugSelect_item_selected(ID, t):
 	var texture = [$VSplitContainer/Painter/Debug/Texture1, $VSplitContainer/Painter/Debug/Texture2][t]
-	for p in [ self, $Painter, $VSplitContainer/Painter/Layers ]:
+	for p in [ self, $Painter, $PaintLayers ]:
 		var textures_count = p.debug_get_texture_names().size()
 		if ID < textures_count:
 			texture.texture = p.debug_get_texture(ID)
