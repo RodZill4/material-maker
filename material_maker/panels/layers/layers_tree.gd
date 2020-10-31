@@ -126,7 +126,7 @@ func _on_Tree_item_edited():
 	selected_item.get_meta("layer").name = selected_item.get_text(0)
 
 func _on_layers_changed():
-	layers._on_Tree_layers_changed()
+	layers._on_layers_changed()
 
 # Update from layers data structure
 

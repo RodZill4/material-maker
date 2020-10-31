@@ -60,7 +60,7 @@ func _ready():
 	# Updated Texture2View wrt current camera position
 	update_view()
 	# Set size of painted textures
-	layers.set_texture_size(512)
+	#layers.set_texture_size(512)
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
 	set_current_tool(MODE_FREE)
@@ -83,6 +83,13 @@ func update_brush() -> void:
 
 func get_graph_edit():
 	return graph_edit
+
+func init_project(mesh : Mesh, mesh_path : String, resolution : int):
+	layers.set_texture_size(resolution)
+	var mi = MeshInstance.new()
+	mi.mesh = mesh
+	layers.add_layer()
+	set_object(mi)
 
 func set_object(o):
 	object_name = o.name

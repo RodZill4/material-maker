@@ -131,7 +131,7 @@ func select_layer(layer : Layer) -> void:
 	selected_layer = layer
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	_on_Tree_layers_changed()
+	_on_layers_changed()
 
 func get_unused_layer_name(layers_array : Array) -> String:
 	return "New layer"
@@ -173,7 +173,7 @@ func remove_layer(layer : Layer) -> void:
 		if !layers.empty():
 			select_layer(layers[0])
 			return
-	_on_Tree_layers_changed()
+	_on_layers_changed()
 
 func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> void:
 	var array : Array = find_parent_array(layer)
@@ -185,7 +185,7 @@ func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> v
 	elif array == target_array and index > orig_index:
 		index -= 1
 	target_array.insert(index, layer)
-	_on_Tree_layers_changed()
+	_on_layers_changed()
 
 func move_layer_up(layer : Layer) -> void:
 	var array : Array = find_parent_array(layer)
@@ -193,7 +193,7 @@ func move_layer_up(layer : Layer) -> void:
 	if orig_index > 0:
 		array.erase(layer)
 		array.insert(orig_index-1, layer)
-		_on_Tree_layers_changed()
+		_on_layers_changed()
 
 func move_layer_down(layer : Layer) -> void:
 	var array : Array = find_parent_array(layer)
@@ -201,9 +201,9 @@ func move_layer_down(layer : Layer) -> void:
 	if orig_index < array.size()-1:
 		array.erase(layer)
 		array.insert(orig_index+1, layer)
-		_on_Tree_layers_changed()
+		_on_layers_changed()
 
-func _on_Tree_layers_changed() -> void:
+func _on_layers_changed() -> void:
 	var list = []
 	get_visible_layers(list)
 	update_layers_renderer(list)
@@ -261,7 +261,7 @@ func load(data : Dictionary, file_name : String):
 	var dir_name = file_name.left(file_name.rfind("."))
 	layers.clear()
 	load_layers(data.layers, layers, dir_name)
-	_on_Tree_layers_changed()
+	_on_layers_changed()
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:
