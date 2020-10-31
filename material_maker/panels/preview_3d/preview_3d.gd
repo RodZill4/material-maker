@@ -84,7 +84,7 @@ func do_load_custom_mesh(file_path) -> void:
 	if mesh != null:
 		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
-		object.set_surface_material(0, SpatialMaterial.new())
+		object.update_material()
 		select_object(id)
 
 func select_object(id) -> void:
@@ -135,10 +135,10 @@ func on_gui_input(event) -> void:
 					CAMERA_DISTANCE_MAX
 				)
 			BUTTON_LEFT, BUTTON_RIGHT:
-				var mask := Input.get_mouse_button_mask()
-				var lpressed := mask & BUTTON_MASK_LEFT
-				var rpressed := mask & BUTTON_MASK_RIGHT
-				if event.pressed and ((lpressed and not rpressed) or (not lpressed and rpressed)): # xor
+				var mask : int = Input.get_mouse_button_mask()
+				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0
+				var rpressed : bool = (mask & BUTTON_MASK_RIGHT) != 0
+				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 					_mouse_start_position = event.global_position
 				elif not lpressed and not rpressed:
@@ -152,17 +152,16 @@ func on_gui_input(event) -> void:
 		else:
 			motion.y = 0
 		var camera_basis = camera.global_transform.basis
-		if event.shift:
-			if event.button_mask & BUTTON_MASK_LEFT:
-				objects.rotate(camera_basis.x.normalized(), motion.y)
-				objects.rotate(camera_basis.y.normalized(), motion.x)
-			elif event.button_mask & BUTTON_MASK_RIGHT:
-				objects.rotate(camera_basis.z.normalized(), motion.x)
-		else:
-			if event.button_mask & BUTTON_MASK_LEFT:
+		var objects_rotation : int = -1 if event.control else 1 if event.shift else 0
+		if event.button_mask & BUTTON_MASK_LEFT:
+			objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
+			objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
+			if objects_rotation != 1:
 				camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
 				camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
-			elif event.button_mask & BUTTON_MASK_RIGHT:
+		elif event.button_mask & BUTTON_MASK_RIGHT:
+			objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
+			if objects_rotation != 1:
 				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
 

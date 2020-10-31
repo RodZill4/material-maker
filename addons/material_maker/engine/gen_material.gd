@@ -57,6 +57,9 @@ func accept_float_expressions() -> bool:
 func can_be_deleted() -> bool:
 	return false
 
+func toggle_editable() -> bool:
+	return false
+
 func get_type() -> String:
 	return "material"
 

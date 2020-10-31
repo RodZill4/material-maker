@@ -4,17 +4,17 @@
 [ext_resource path="res://material_maker/panels/preview_3d/preview_objects.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/moonless_golf.hdr" type="Texture" id=5]
 
-[sub_resource type="PanoramaSky" id=5]
+[sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
 radiance_size = 4
 panorama = ExtResource( 5 )
 
-[sub_resource type="Environment" id=6]
+[sub_resource type="Environment" id=2]
 resource_local_to_scene = true
 background_mode = 2
-background_sky = SubResource( 5 )
+background_sky = SubResource( 1 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=3]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Objects:rotation_degrees")
@@ -40,10 +40,10 @@ transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0
 
 [node name="Camera" type="Camera" parent="CameraPivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5 )
-environment = SubResource( 6 )
+environment = SubResource( 2 )
 current = true
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"
 playback_speed = 0.1
-anims/rotate = SubResource( 7 )
+anims/rotate = SubResource( 3 )

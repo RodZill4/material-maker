@@ -13,16 +13,22 @@
 			"to_port": 0
 		},
 		{
-			"from": "edge_detect_3_3_2",
-			"from_port": 0,
-			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
 			"from": "gen_inputs",
 			"from_port": 1,
 			"to": "edge_detect_3_3_2",
 			"to_port": 1
+		},
+		{
+			"from": "edge_detect_3_3_2",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
 		}
 	],
 	"label": "Slope Blur",
@@ -41,7 +47,7 @@
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 10
 			},
 			"type": "buffer"
 		},
@@ -52,8 +58,8 @@
 				"y": -397.666656
 			},
 			"parameters": {
-				"param0": 9,
-				"param1": 20
+				"param0": 10,
+				"param1": 30
 			},
 			"type": "remote",
 			"widgets": [
@@ -66,6 +72,10 @@
 						},
 						{
 							"node": "edge_detect_3_3_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
 							"widget": "size"
 						}
 					],
@@ -144,8 +154,8 @@
 				"y": -199.178955
 			},
 			"parameters": {
-				"sigma": 20,
-				"size": 9
+				"sigma": 30,
+				"size": 10
 			},
 			"seed_value": -47470,
 			"shader_model": {
@@ -197,11 +207,23 @@
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -392.952209,
+				"y": -115.576294
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"type": "buffer"
 		}
 	],
 	"parameters": {
-		"param0": 9,
-		"param1": 20
+		"param0": 10,
+		"param1": 30
 	},
 	"shortdesc": "Slope blur",
 	"type": "graph"

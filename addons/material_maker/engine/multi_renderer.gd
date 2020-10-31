@@ -6,7 +6,8 @@ var common_shader : String
 const total_renderers = 8
 var free_renderers = []
 
-var max_renderers = 8
+var max_renderers : int = 8
+var renderers_enabled : bool = true
 
 var render_queue_size = 0
 var pending_requests = 0
@@ -64,13 +65,17 @@ static func update_float_parameters(material : ShaderMaterial, parameter_changes
 				break
 	return updated
 
-
 # Renderer request and management
+func enable_renderers(b : bool) -> void:
+	if b != renderers_enabled:
+		renderers_enabled = b
+		if renderers_enabled:
+			emit_signal("free_renderer")
 
 func request(object : Object) -> Object:
 	render_queue_size += 1
 	emit_signal("render_queue", render_queue_size, pending_requests)
-	while free_renderers.size() <= total_renderers - max_renderers:
+	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
 		yield(self, "free_renderer")
 	if !is_instance_valid(object) || !object.is_inside_tree():
 		render_queue_size -= 1

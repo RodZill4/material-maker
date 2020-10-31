@@ -45,3 +45,7 @@ func _on_RenderCounter_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
 		$PopupMenu.rect_global_position = get_global_mouse_position()
 		$PopupMenu.popup()
+
+
+func _on_Render_toggled(button_pressed):
+	mm_renderer.enable_renderers(button_pressed)

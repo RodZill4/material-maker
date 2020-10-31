@@ -158,7 +158,7 @@ func create_parameter_control(p : Dictionary) -> Control:
 		if p.has("longdesc"):
 			tooltip += "\n"+p.longdesc
 	elif p.has("longdesc"):
-			tooltip += p.longdesc
+		tooltip += p.longdesc
 	control.hint_tooltip = wrap_string(tooltip)
 	return control
 

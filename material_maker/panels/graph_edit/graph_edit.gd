@@ -482,6 +482,11 @@ func paste() -> void:
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())
 
+func select_all() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = true
+
 # Delay after graph update
 
 func send_changed_signal() -> void:
