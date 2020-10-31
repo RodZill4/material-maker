@@ -89,6 +89,7 @@ func init_project(mesh : Mesh, mesh_path : String, resolution : int):
 	var mi = MeshInstance.new()
 	mi.mesh = mesh
 	layers.add_layer()
+	model_path = mesh_path
 	set_object(mi)
 
 func set_object(o):
