@@ -30,6 +30,12 @@ func value_to_offset(value : Vector2) -> Vector2:
 func pos_to_value(pos : Vector2) -> Vector2:
 	return (pos - rect_size*0.5)*(1+shader_margin)/min(rect_size.x, rect_size.y)
 
+
+func _reset_zoom_pan():
+	material.set_shader_param("zoom", 1.0)
+	material.set_shader_param("offset", Vector2.ZERO)
+
+
 func update_shader_options() -> void:
 	if $ContextMenu == null:
 		return
@@ -37,10 +43,12 @@ func update_shader_options() -> void:
 		shader_margin = 0.2
 		material.set_shader_param("show_tiling", true)
 		material.set_shader_param("margin", 0.2)
+		_reset_zoom_pan()
 	else:
 		shader_margin = 0
 		material.set_shader_param("show_tiling", false)
 		material.set_shader_param("margin", 0)
+		_reset_zoom_pan()
 	setup_controls()
 
 func on_resized() -> void:

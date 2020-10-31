@@ -3,10 +3,8 @@ extends ColorRect
 export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
-var offset : Vector2 = Vector2.ZERO;
 var output : int = 0
 var need_generate : bool = false
-var zoom : float = 1.0
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
@@ -143,17 +141,34 @@ func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():
 		set_generator(generator, output)
 
+
+func _mouse_to_uv() -> Vector2:
+	var loc_uv: Vector2 = get_local_mouse_position()/rect_size
+	var strech = Vector2(
+		min(rect_size.y/rect_size.x, 1.0),
+		min(rect_size.x/rect_size.y, 1.0)
+	)
+	return (loc_uv-Vector2(0.5,0.5))/strech
+
+
+func _zoom(zoom: float, offset: Vector2, delta: float) -> void:
+	zoom += delta
+	zoom = max(zoom, 0.0001)
+	offset -=  _mouse_to_uv()*(-delta)
+	material.set_shader_param("offset", offset)
+	material.set_shader_param("zoom", zoom)
+
+
 func _gui_input (event) -> void:
+	var zoom = material.get_shader_param("zoom")
+	var offset  = material.get_shader_param("offset")
 	if event is InputEventMouseButton:
 		match event.button_index:
 			BUTTON_WHEEL_UP:
-				zoom -= 0.03
+				_zoom(zoom, offset,-0.03)
 			BUTTON_WHEEL_DOWN:
-				zoom += 0.03
-		zoom = max(zoom, 0.0001)
-		material.set_shader_param("zoom", zoom)
+				_zoom(zoom, offset, 0.03)
 	elif event is InputEventMouseMotion:
-		var motion = 0.001*event.relative
-		if event.button_mask & BUTTON_MASK_LEFT:
-			offset += motion
-			material.set_shader_param("offset", -offset)
+		if event.button_mask & BUTTON_MASK_MIDDLE:
+			offset += 0.001*event.relative
+			material.set_shader_param("offset", offset)
