@@ -32,33 +32,6 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 			selected_item = new_item
 		do_update_from_layers(l.layers, new_item, selected_layer)
 
-func init_item(new_item : TreeItem, src : TreeItem = null):
-	new_item.set_selectable(0, true)
-	if src != null:
-		new_item.set_text(0, src.get_text(0))
-		new_item.add_button(1, src.get_button(1, 0), 0)
-		new_item.set_meta("albedo", src.get_meta("albedo"))
-		new_item.set_editable(0, src.is_editable(0))
-		if selected_item == src:
-			selected_item = new_item
-			new_item.select(0)
-	else:
-		layer_count += 1
-		new_item.set_text(0, "New layer "+str(layer_count))
-		new_item.add_button(1, BUTTON_SHOWN, 0)
-		new_item.set_editable(0, false)
-
-func remove_current():
-	selected_item = null
-	var current_item = get_selected()
-	if current_item != null:
-		current_item.get_parent().remove_child(current_item)
-		current_item = get_root().get_children()
-		if current_item != null:
-			current_item.select(0)
-		_on_layers_changed()
-		update()
-
 func get_drag_data(position : Vector2):
 	var layer = get_selected().get_meta("layer")
 	var label : Label = Label.new()
@@ -98,12 +71,6 @@ func drop_data(position : Vector2, data):
 			1:
 				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
 		_on_layers_changed()
-		
-func move_item_before(item, target_item):
-	while target_item != item && target_item != null:
-		var next_item = target_item.get_next()
-		target_item.move_to_bottom()
-		target_item = next_item
 
 func _on_Tree_button_pressed(item : TreeItem, column : int, id : int):
 	var layer = item.get_meta("layer")
@@ -127,27 +94,3 @@ func _on_Tree_item_edited():
 
 func _on_layers_changed():
 	layers._on_layers_changed()
-
-# Update from layers data structure
-
-# load/save
-
-func load_layers(data : Dictionary, path : String, channels : Array):
-	selected_item = null
-	clear()
-	do_load_layers(data, create_item(), path, channels)
-	get_root().get_children().select(0)
-
-func do_load_layers(data : Dictionary, parent : TreeItem, path : String, channels : Array):
-	if data.has("layers"):
-		for l in data.layers:
-			var new_item = create_item(parent)
-			new_item.set_text(0, l.name)
-			new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
-			for c in channels:
-				if l.has(c):
-					var texture = ImageTexture.new()
-					texture.load(path+"/"+l[c])
-					new_item.set_meta(c, texture)
-			new_item.set_editable(0, false)
-			do_load_layers(l, new_item, path, channels)
