@@ -90,11 +90,12 @@ func init_channels(r_texture, r_mask, g_texture, g_mask, b_texture, b_mask, a_te
 	render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
 	update_worlds()
 
-func do_paint(position, prev_position, erase, pressure):
+func do_paint(position, prev_position, erase, pressure, fill = false):
 	rect.material = paint_material
 	paint_material.set_shader_param("brush_pos", position)
 	paint_material.set_shader_param("brush_ppos", prev_position)
 	paint_material.set_shader_param("erase", erase)
 	paint_material.set_shader_param("pressure", pressure)
+	paint_material.set_shader_param("fill", fill)
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()

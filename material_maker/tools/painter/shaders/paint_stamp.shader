@@ -5,6 +5,7 @@ uniform sampler2D tex2view_tex;
 uniform sampler2D seams : hint_white;
 
 uniform bool      erase             = false;
+uniform bool      fill              = false;
 uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
@@ -45,9 +46,9 @@ void fragment() {
 	local_uv2 = local_uv2*texture_rotation;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
-	float a = stamp_limit.x*stamp_limit.y*brush_function(0.5*local_uv+vec2(0.5));
-
-	a *= color.a*tex2view.z;
+	
+	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush_function(0.5*local_uv+vec2(0.5))*color.a*tex2view.z;
+	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (erase) {
 		COLOR = vec4(screen_color.xyz, max(screen_color.a-a, 0.0));

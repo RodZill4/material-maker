@@ -286,18 +286,21 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 
-func paint(position, prev_position, erase, pressure):
+func paint(position : Vector2, prev_position : Vector2, erase : bool, pressure : float, fill : bool = false) -> void:
 	if has_albedo:
-		albedo_viewport.do_paint(position, prev_position, erase, pressure)
+		albedo_viewport.do_paint(position, prev_position, erase, pressure, fill)
 	if has_mr:
-		mr_viewport.do_paint(position, prev_position, erase, pressure)
+		mr_viewport.do_paint(position, prev_position, erase, pressure, fill)
 	if has_emission:
-		emission_viewport.do_paint(position, prev_position, erase, pressure)
+		emission_viewport.do_paint(position, prev_position, erase, pressure, fill)
 	if has_depth:
-		depth_viewport.do_paint(position, prev_position, erase, pressure)
+		depth_viewport.do_paint(position, prev_position, erase, pressure, fill)
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")
+
+func fill(erase : bool) -> void:
+	paint(Vector2(0, 0), Vector2(0, 0), erase, 1.0, true)
 
 func pick_color(position):
 	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()

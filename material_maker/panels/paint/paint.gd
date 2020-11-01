@@ -4,6 +4,7 @@ const MODE_FREE         = 0
 const MODE_LINE         = 1
 const MODE_COLOR_PICKER = 2
 const MODE_COUNT        = 3
+const MODE_NAMES : Array = [ "Free", "Line", "ColorPicker" ]
 
 var current_tool = MODE_FREE
 
@@ -32,7 +33,6 @@ onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
 onready var painter = $Painter
 onready var tools = $VSplitContainer/Painter/Tools
 onready var layers = $PaintLayers
-onready var brush_obsolete = $VSplitContainer/Painter/Brush
 onready var eraser_button = $VSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
 
@@ -140,7 +140,10 @@ func set_texture_size_is_checked(s):
 func set_current_tool(m):
 	current_tool = m
 	for i in range(MODE_COUNT):
-		tools.get_child(i).pressed = (i == m)
+		tools.get_node(MODE_NAMES[i]).pressed = (i == m)
+
+func _on_Fill_pressed():
+	painter.fill(eraser_button.pressed)
 
 func _physics_process(delta):
 	camera_stand.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
@@ -247,7 +250,7 @@ func on_brush_changed(p, v) -> void:
 
 func do_on_brush_changed():
 	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
-	painter.do_on_brush_changed()
+	painter.update_brush(true)
 	brush_changed_scheduled = false
 
 func edit_brush(v : Vector2) -> void:
