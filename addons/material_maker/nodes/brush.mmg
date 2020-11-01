@@ -92,6 +92,10 @@
 					{
 						"name": "Pattern",
 						"value": "pattern"
+					},
+					{
+						"name": "UV Pattern",
+						"value": "uv_pattern"
 					}
 				]
 			},

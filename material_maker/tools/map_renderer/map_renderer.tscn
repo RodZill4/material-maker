@@ -1,6 +1,8 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://material_maker/panels/preview_3d/map_renderer.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
+
+
 
 [sub_resource type="World" id=1]
 
@@ -84,7 +86,6 @@ void fragment() {
 	COLOR = dilate_distance_h(UV);
 }
 "
-custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=7]
 shader = SubResource( 6 )
@@ -123,7 +124,6 @@ void fragment() {
 	COLOR = dilate_distance_v(UV);
 }
 "
-custom_defines = ""
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = SubResource( 8 )

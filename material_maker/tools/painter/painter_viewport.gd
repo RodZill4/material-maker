@@ -9,6 +9,8 @@ onready var init_channels_material = preload("res://material_maker/tools/painter
 onready var paint_material
 
 var param_tex2view : Texture
+var param_mesh_aabb : AABB
+var param_mesh_inv_uv_tex : Texture
 var param_seams : Texture
 var param_brush_size : Vector2
 var param_brush_strength : float
@@ -24,13 +26,21 @@ func get_paint_material() -> ShaderMaterial:
 	set_paint_shader_params()
 	return paint_material
 
-func set_intermediate_textures(tex2view, seams):
+func set_intermediate_textures(tex2view : Texture, seams : Texture):
 	param_tex2view = tex2view
 	param_seams = seams
 	set_paint_shader_params()
 
+func set_mesh_textures(mesh_aabb : AABB, mesh_inv_uv_tex : Texture):
+	param_mesh_aabb = mesh_aabb
+	param_mesh_inv_uv_tex = mesh_inv_uv_tex
+	set_paint_shader_params()
+
 func set_paint_shader_params():
 	paint_material.set_shader_param("tex2view_tex", param_tex2view)
+	paint_material.set_shader_param("mesh_aabb_position", param_mesh_aabb.position)
+	paint_material.set_shader_param("mesh_aabb_size", param_mesh_aabb.size)
+	paint_material.set_shader_param("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
 	paint_material.set_shader_param("seams", param_seams)
 	paint_material.set_shader_param("brush_size", param_brush_size)
 	paint_material.set_shader_param("brush_strength", param_brush_strength)

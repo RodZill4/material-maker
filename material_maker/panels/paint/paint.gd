@@ -2,9 +2,8 @@ extends VBoxContainer
 
 const MODE_FREE         = 0
 const MODE_LINE         = 1
-const MODE_LINE_STRIP   = 2
-const MODE_COLOR_PICKER = 3
-const MODE_COUNT        = 4
+const MODE_COLOR_PICKER = 2
+const MODE_COUNT        = 3
 
 var current_tool = MODE_FREE
 
@@ -59,8 +58,6 @@ func _ready():
 	painted_mesh.set_surface_material(0, SpatialMaterial.new())
 	# Updated Texture2View wrt current camera position
 	update_view()
-	# Set size of painted textures
-	#layers.set_texture_size(512)
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
 	set_current_tool(MODE_FREE)
@@ -69,11 +66,6 @@ func _ready():
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	call_deferred("update_brush")
-#	brush_node = graph_edit.generator.get_node("Brush")
-#	brush_node.connect("parameter_changed", self, "on_brush_changed")
-#	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
-#	painter.call_deferred("set_brush_node", graph_edit.generator.get_node("Brush"))
-
 
 func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
@@ -214,21 +206,17 @@ func _on_View_gui_input(ev : InputEvent):
 				paint(ev.position, get_pressure(ev))
 			elif ev.relative.length_squared() > 50:
 				get_pressure(ev)
-		elif current_tool != MODE_LINE_STRIP:
+		else:
 			previous_position = null
 	elif ev is InputEventMouseButton:
 		var pos = ev.position
 		if !ev.control and !ev.shift:
 			if ev.button_index == BUTTON_LEFT:
 				if ev.pressed:
-					if current_tool == MODE_LINE_STRIP && previous_position != null:
-						paint(pos, get_pressure(ev))
-						if ev.doubleclick:
-							pos = null
 					previous_position = pos
 				elif current_tool == MODE_COLOR_PICKER:
 					painter.pick_color(pos)
-				elif current_tool != MODE_LINE_STRIP:
+				else:
 					if current_tool == MODE_LINE and previous_position != null:
 						var direction = pos-previous_position
 						painter.set_brush_angle(atan2(direction.y, direction.x))

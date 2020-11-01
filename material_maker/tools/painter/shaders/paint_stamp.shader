@@ -2,7 +2,6 @@ shader_type canvas_item;
 render_mode blend_disabled, unshaded;
 
 uniform sampler2D tex2view_tex;
-uniform sampler2D tex2viewlsb_tex;
 uniform sampler2D seams : hint_white;
 
 uniform bool      erase             = false;

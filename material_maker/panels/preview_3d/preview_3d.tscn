@@ -4,7 +4,6 @@
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
 
-
 [sub_resource type="World" id=1]
 
 [node name="Preview3D" type="ViewportContainer" groups=[

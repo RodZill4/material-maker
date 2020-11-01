@@ -210,7 +210,16 @@ func add_to_user_library(data : Dictionary, name : String, image : Image) -> voi
 	if !libraries_data.has(library_path):
 		libraries.push_back(library_path)
 		libraries_data[library_path] = []
-	libraries_data[library_path].push_back(data)
+	var new_library = []
+	var inserted = false
+	for i in libraries_data[library_path]:
+		if i.tree_item != name:
+			new_library.push_back(i)
+		elif !inserted:
+			new_library.push_back(data)
+	if !inserted:
+		new_library.push_back(data)
+	libraries_data[library_path] = new_library
 	var file = File.new()
 	if file.open(library_path, File.WRITE) == OK:
 		file.store_string(JSON.print({lib=libraries_data[library_path]}, "\t", true))

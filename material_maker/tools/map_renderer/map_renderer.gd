@@ -8,7 +8,7 @@ export(ShaderMaterial) var dilate_pass2
 func _ready():
 	pass
 
-func gen(mesh: Mesh, map : String, file_name : String, map_size = 512) -> void:
+func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
 	size = Vector2(map_size, map_size)
 	$MeshInstance.mesh = mesh
 	$MeshInstance.set_surface_material(0, get(map+"_material"))
@@ -33,5 +33,5 @@ func gen(mesh: Mesh, map : String, file_name : String, map_size = 512) -> void:
 	renderer = renderer.render_material(self, dilate_pass2, map_size)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer.save_to_file(file_name)
+	renderer.callv(renderer_method, arguments)
 	renderer.release(self)

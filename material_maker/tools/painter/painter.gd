@@ -36,6 +36,10 @@ var has_emission : bool = false
 var has_depth : bool = false
 
 var brush_preview_material : ShaderMaterial
+var pattern_shown : bool = false
+
+var mesh_aabb : AABB
+var mesh_inv_uv_tex : ImageTexture = null
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
@@ -62,6 +66,17 @@ func update_seams_texture():
 	seams_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	seams_viewport.update_worlds()
 
+func update_inv_uv_texture(m : Mesh) -> void:
+	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
+	add_child(mesh_normal_mapper)
+	if mesh_inv_uv_tex == null:
+		mesh_inv_uv_tex = ImageTexture.new()
+	var result = mesh_normal_mapper.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_to_view_viewport.size.x)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	mesh_normal_mapper.queue_free()
+	mesh_aabb = m.get_aabb()
+
 func set_mesh(m : Mesh):
 	var mat : Material
 	mat = texture_to_view_mesh.get_surface_material(0)
@@ -74,6 +89,7 @@ func set_mesh(m : Mesh):
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_material(0, mat)
 	update_seams_texture()
+	update_inv_uv_texture(m)
 
 func calculate_mask(value : float, channel : int) -> Color:
 	if (channel == SpatialMaterial.TEXTURE_CHANNEL_RED):
@@ -185,22 +201,28 @@ func set_brush_angle(a) -> void:
 	update_brush()
 
 func show_pattern(b):
-	pass
-	# TODO: add parameter in shaders
-	#$Pattern.visible = b and brush_node.get_parameter("mode") == 1
+	if pattern_shown != b:
+		pattern_shown = b
+		update_brush()
 
 func update_brush(update_shaders = false):
 	#if current_brush.albedo_texture_mode != 2: $Pattern.visible = false
 	var brush_size_vector = Vector2(current_brush.size, current_brush.size)/viewport_size
 	if brush_preview_material != null:
+		if update_shaders:
+			var code : String = get_output_code(1)
+			update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
+		var v2t_tex = view_to_texture_viewport.get_texture()
+		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
+		brush_preview_material.set_shader_param("mesh_inv_uv_tex", mesh_inv_uv_tex)
+		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
+		brush_preview_material.set_shader_param("mesh_aabb_size", mesh_aabb.size)
 		brush_preview_material.set_shader_param("brush_size", brush_size_vector)
 		brush_preview_material.set_shader_param("brush_strength", current_brush.strength)
 		brush_preview_material.set_shader_param("pattern_scale", current_brush.pattern_scale)
 		brush_preview_material.set_shader_param("pattern_angle", current_brush.pattern_angle)
 		brush_preview_material.set_shader_param("brush_texture", null)
-	if update_shaders:
-		var code : String = get_output_code(1)
-		update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
+		brush_preview_material.set_shader_param("pattern_alpha", 0.25 if pattern_shown else 0.0)
 	if current_brush.node == null:
 		return
 	# Mode
@@ -213,7 +235,7 @@ func update_brush(update_shaders = false):
 	if update_shaders:
 		for index in range(4):
 			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
-		update_shader(brush_preview_material, get_brush_preview_shader(mode), get_output_code(1))
+			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex)
 	for index in range(4):
 		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.pattern_angle, true)
 	if viewport_size != null:
@@ -221,9 +243,6 @@ func update_brush(update_shaders = false):
 			viewports[index].set_brush(current_brush.size, current_brush.strength, viewport_size)
 		brush_preview_material.set_shader_param("brush_size", Vector2(current_brush.size, current_brush.size)/viewport_size)
 		brush_preview_material.set_shader_param("brush_strength", current_brush.strength)
-
-func do_on_brush_changed():
-	update_brush(true)
 
 func get_output_code(index : int) -> String:
 	if current_brush.node == null:
