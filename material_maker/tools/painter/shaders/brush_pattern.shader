@@ -9,6 +9,8 @@ uniform float     pattern_angle   = 0.0;
 uniform float     pattern_alpha   = 0.0;
 uniform float     pressure        = 1.0;
 
+uniform sampler2D mesh_normal_tex;
+
 // BEGIN_PATTERN
 float brush_function(vec2 uv) {
 	return clamp(max(0.0, 1.0-length(2.0*(uv-vec2(0.5)))) / 0.5, 0.0, 1.0);

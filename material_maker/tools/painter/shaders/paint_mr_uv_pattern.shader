@@ -3,6 +3,7 @@ render_mode blend_disabled, unshaded;
 
 uniform sampler2D tex2view_tex;
 uniform sampler2D seams : hint_white;
+uniform sampler2D mesh_normal_tex;
 
 uniform bool      erase             = false;
 uniform bool      fill              = false;
@@ -47,7 +48,8 @@ void fragment() {
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec4 color = pattern_function(fract(uv));
 	
-	vec2 a = fill ? vec2(1.0) : vec2(brush_function(0.5*local_uv+vec2(0.5)))*color.ba*tex2view.z;
+	vec2 a = fill ? vec2(1.0) : vec2(brush_function(0.5*local_uv+vec2(0.5)))*tex2view.z;
+	a *= color.ba;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (erase) {

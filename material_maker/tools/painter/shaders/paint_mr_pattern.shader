@@ -3,6 +3,7 @@ render_mode blend_disabled, unshaded;
 
 uniform sampler2D tex2view_tex;
 uniform sampler2D seams : hint_white;
+uniform sampler2D mesh_normal_tex;
 
 uniform bool      erase             = false;
 uniform bool      fill              = false;

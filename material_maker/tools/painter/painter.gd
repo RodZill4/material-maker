@@ -40,6 +40,7 @@ var pattern_shown : bool = false
 
 var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
+var mesh_normal_tex : ImageTexture = null
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
@@ -72,6 +73,11 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
 	var result = mesh_normal_mapper.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_to_view_viewport.size.x)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if mesh_normal_tex == null:
+		mesh_normal_tex = ImageTexture.new()
+	result = mesh_normal_mapper.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_to_view_viewport.size.x)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	mesh_normal_mapper.queue_free()
@@ -217,6 +223,7 @@ func update_brush(update_shaders = false):
 		brush_preview_material.set_shader_param("mesh_inv_uv_tex", mesh_inv_uv_tex)
 		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_param("mesh_aabb_size", mesh_aabb.size)
+		brush_preview_material.set_shader_param("mesh_normal_tex", mesh_normal_tex)
 		brush_preview_material.set_shader_param("brush_size", brush_size_vector)
 		brush_preview_material.set_shader_param("brush_strength", current_brush.strength)
 		brush_preview_material.set_shader_param("pattern_scale", current_brush.pattern_scale)
@@ -235,7 +242,7 @@ func update_brush(update_shaders = false):
 	if update_shaders:
 		for index in range(4):
 			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
-			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex)
+			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
 	for index in range(4):
 		viewports[index].set_material(mode, current_brush.pattern_scale, current_brush.pattern_angle, true)
 	if viewport_size != null:
