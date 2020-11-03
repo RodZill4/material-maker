@@ -31,5 +31,5 @@ void fragment() {
 	local_uv = texture_rotation*local_uv;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	float a = stamp_limit.x*stamp_limit.y;
-	COLOR = pattern_function(0.5*local_uv2*texture_rotation+vec2(0.5)) * vec4(vec3(1.0), brush_function(0.5*local_uv+vec2(0.5)));
+	COLOR = pattern_function(0.5*texture_rotation*local_uv2+vec2(0.5)) * vec4(vec3(1.0), brush_function(0.5*local_uv+vec2(0.5)));
 }

@@ -37,6 +37,7 @@ var has_depth : bool = false
 
 var brush_preview_material : ShaderMaterial
 var pattern_shown : bool = false
+var brush_textures : Dictionary = {}
 
 var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
@@ -265,6 +266,12 @@ func get_output_code(index : int) -> String:
 			source_mask.globals.append(g)
 	for g in source_mask.globals:
 		new_code += g
+	for t in source.textures.keys():
+		if !source_mask.textures.has(t):
+			source_mask.textures[t] = source.textures[t]
+	for t in source_mask.textures.keys():
+		new_code += "uniform sampler2D "+t+";\n"
+	brush_textures = source_mask.textures
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"
 	new_code += source_mask.code+"\n"
@@ -286,7 +293,8 @@ func update_shader(shader_material : ShaderMaterial, shader_template : String, s
 	shader_material.shader.code = new_code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
-
+	for t in brush_textures.keys():
+		shader_material.set_shader_param(t, brush_textures[t])
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	for index in range(4):
