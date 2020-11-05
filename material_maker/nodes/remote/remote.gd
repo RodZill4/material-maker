@@ -41,7 +41,7 @@ func update_node() -> void:
 	title = generator.get_type_name()
 	controls = {}
 	for p in generator.get_parameter_defs():
-		var control = create_parameter_control(p)
+		var control = create_parameter_control(p, false)
 		if control != null:
 			control.name = p.name
 			controls[control.name] = control

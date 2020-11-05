@@ -23,7 +23,9 @@ var model_path = null
 
 var need_save = false
 
+var brush_graph = null
 var brush_node = null
+var remote_node = null
 
 onready var view = $VSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/Painter/View/MainView
@@ -65,13 +67,46 @@ func _ready():
 	initialize_debug_selects()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
+	update_brush_graph()
 	call_deferred("update_brush")
+
+func get_remote():
+	for c in graph_edit.top_generator.get_children():
+		if c.get_type() == "remote":
+			return c
+	return null
+
+func update_brush_graph():
+	if brush_graph != graph_edit.top_generator:
+		brush_graph = graph_edit.top_generator
+		brush_graph.connect("graph_changed", self, "on_brush_graph_changed")
+		on_brush_graph_changed()
+
+func on_brush_graph_changed() -> void:
+	var new_remote = get_remote()
+	if new_remote != remote_node:
+		remote_node = new_remote
+		get_node("/root/MainWindow").get_panel("Parameters").set_generator(remote_node)
+
+# called when the project's tab is selected
+func project_selected() -> void:
+	var main_window = get_node("/root/MainWindow")
+	main_window.get_panel("Layers").set_layers($PaintLayers)
+	remote_node = get_remote()
+	main_window.get_panel("Parameters").set_generator(remote_node)
 
 func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
 	brush_node.connect("parameter_changed", self, "on_brush_changed")
 	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
 	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
+
+func set_brush(data) -> void:
+	var parameters_panel = get_node("/root/MainWindow").get_panel("Parameters")
+	parameters_panel.set_generator(null)
+	graph_edit.new_material(data)
+	update_brush()
+	update_brush_graph()
 
 func get_graph_edit():
 	return graph_edit
@@ -189,7 +224,7 @@ func _on_View_gui_input(ev : InputEvent):
 		else:
 			if current_tool == MODE_LINE and previous_position != null:
 				var direction = ev.position-previous_position
-				painter.set_brush_angle(atan2(direction.y, direction.x))
+				painter.set_brush_angle(-atan2(direction.y, direction.x))
 			show_brush(ev.position, previous_position)
 		if ev.button_mask & BUTTON_MASK_RIGHT != 0:
 			if ev.shift:
@@ -222,7 +257,7 @@ func _on_View_gui_input(ev : InputEvent):
 				else:
 					if current_tool == MODE_LINE and previous_position != null:
 						var direction = pos-previous_position
-						painter.set_brush_angle(atan2(direction.y, direction.x))
+						painter.set_brush_angle(-atan2(direction.y, direction.x))
 					paint(pos, get_pressure(ev))
 					previous_position = null
 		if !ev.pressed and ev.button_index == BUTTON_RIGHT:

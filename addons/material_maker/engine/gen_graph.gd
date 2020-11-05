@@ -11,6 +11,7 @@ var editable : bool = false
 
 var transmits_seed : bool = true
 
+signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
 signal hierarchy_changed()
 
@@ -160,6 +161,7 @@ func add_generator(generator : MMGenBase) -> bool:
 	add_child(generator)
 	if generator.get_script() == get_script():
 		emit_hierarchy_changed()
+	emit_signal("graph_changed")
 	return true
 
 func remove_generator(generator : MMGenBase) -> bool:
@@ -181,6 +183,7 @@ func remove_generator(generator : MMGenBase) -> bool:
 	if generator.get_script() == get_script():
 		emit_hierarchy_changed()
 	generator.queue_free()
+	emit_signal("graph_changed")
 	return true
 
 func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
@@ -191,6 +194,7 @@ func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	if old.get_script() == get_script() or new.get_script() == get_script():
 		emit_hierarchy_changed()
 	old.free()
+	emit_signal("graph_changed")
 
 func get_connected_inputs(generator) -> Array:
 	var rv : Array = []

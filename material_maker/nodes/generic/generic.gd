@@ -24,13 +24,9 @@ func set_generator(g : MMGenBase) -> void:
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
 
-func on_parameter_changed(p : String, v) -> void:
-	if ignore_parameter_change == p:
-		return
-	if p == "__update_all__":
-		update_node()
-	elif controls.has(p):
-		var o = controls[p]
+static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
+	if parameter_controls.has(p):
+		var o = parameter_controls[p]
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.value = v
 		elif o is HSlider:
@@ -53,36 +49,47 @@ func on_parameter_changed(p : String, v) -> void:
 			o.value = gradient
 		else:
 			print("unsupported widget "+str(o))
+
+func on_parameter_changed(p : String, v) -> void:
+	if ignore_parameter_change == p:
+		return
+	if p == "__update_all__":
+		update_node()
+	else:
+		update_control_from_parameter(controls, p, v)
 	get_parent().set_need_save()
 
-func initialize_properties() -> void:
+static func initialize_controls_from_generator(controls, generator, object) -> void:
 	var parameter_names = []
 	for p in generator.get_parameter_defs():
 		parameter_names.push_back(p.name)
-	for c in controls:
+	for c in controls.keys():
 		if parameter_names.find(c) == -1:
 			continue
 		var o = controls[c]
 		if generator.parameters.has(c):
-			on_parameter_changed(c, generator.parameters[c])
+			object.on_parameter_changed(c, generator.get_parameter(c))
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.connect("value_changed", self, "_on_value_changed", [ o.name ])
+			o.connect("value_changed", object, "_on_value_changed", [ o.name ])
 		elif o is LineEdit:
-			o.connect("text_changed", self, "_on_text_changed", [ o.name ])
+			o.connect("text_changed", object, "_on_text_changed", [ o.name ])
 		elif o is SizeOptionButton:
-			o.connect("size_value_changed", self, "_on_value_changed", [ o.name ])
+			o.connect("size_value_changed", object, "_on_value_changed", [ o.name ])
 		elif o is OptionButton:
-			o.connect("item_selected", self, "_on_value_changed", [ o.name ])
+			o.connect("item_selected", object, "_on_value_changed", [ o.name ])
 		elif o is CheckBox:
-			o.connect("toggled", self, "_on_value_changed", [ o.name ])
+			o.connect("toggled", object, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			o.connect("color_changed", self, "_on_color_changed", [ o.name ])
+			o.connect("color_changed", object, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
-			o.connect("on_file_selected", self, "_on_file_changed", [ o.name ])
+			o.connect("on_file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
-			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
+			o.connect("updated", object, "_on_gradient_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
+
+func initialize_properties() -> void:
+	initialize_controls_from_generator(controls, generator, self)
 
 func _on_text_changed(new_text, variable : String) -> void:
 	ignore_parameter_change = variable
@@ -114,11 +121,11 @@ func _on_gradient_changed(new_gradient, variable : String) -> void:
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
-func create_parameter_control(p : Dictionary) -> Control:
+static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null
 	if p.type == "float":
 		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
-		if ! generator.accept_float_expressions():
+		if ! accept_float_expressions:
 			control.float_only = true
 		control.min_value = p.min
 		control.max_value = p.max
@@ -267,7 +274,7 @@ func update_node() -> void:
 	for p in generator.get_parameter_defs():
 		if !p.has("name") or !p.has("type"):
 			continue
-		var control = create_parameter_control(p)
+		var control = create_parameter_control(p, generator.accept_float_expressions())
 		if control != null:
 			var label = p.name
 			control.name = label

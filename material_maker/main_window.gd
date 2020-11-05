@@ -868,6 +868,9 @@ func on_selected_node_change(node) -> void:
 		update_preview_2d(node)
 
 func _on_Projects_tab_changed(_tab) -> void:
+	var project = get_current_project()
+	if project.has_method("project_selected"):
+		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
 		if new_tab is GraphEdit:
