@@ -1,82 +1,71 @@
 extends Popup
 
+
+onready var list := $PanelContainer/VBoxContainer/ScrollContainer/List
+onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
+
 var libraries = []
-var data = []
-onready var itemlist : ItemList = $PanelContainer/VBoxContainer/ItemList 
-onready var filter_line_edit : LineEdit = $PanelContainer/VBoxContainer/Filter
 var quick_connect : int = -1
 var insert_position : Vector2
 
+
 func get_current_graph():
 	return get_parent().get_current_tab_control()
+
 
 func _ready() -> void:
 	var lib_path = OS.get_executable_path().get_base_dir()+"/library/base.json"
 	if !add_library(lib_path):
 		add_library("res://material_maker/library/base.json")
 	add_library("user://library/user.json")
-	filter_line_edit.connect("text_changed", self, "update_list")
-	filter_line_edit.connect("text_entered", self, "filter_entered")
-	itemlist.connect("item_selected", self, "item_selected")
-	itemlist.connect("item_activated", self, "item_selected")
+	filter.connect("text_changed", self, "update_list")
+	filter.connect("text_entered", self, "filter_entered")
+	list.connect("object_selected", self, "object_selected")
 	update_list()
 
+
 func filter_entered(_filter) -> void:
-	item_selected(0)
+	list.select_first()
+
 
 func add_node(node_data) -> void:
 	var node : GraphNode = get_current_graph().create_nodes(node_data, get_current_graph().offset_from_global_position(insert_position))[0]
-	# if this node created by dragging to an empty space
-	if quick_connect_node != null:
+	if quick_connect_node != null: # dragged from port
 #		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
 		for new_slot in node.get_connection_input_count():
 			#if type == node.get_connection_input_type(new_slot):
 				#connect the first two slots with the same type
 			get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
 			break 
-	quick_connect_node = null
 	hide()
 
-func item_selected(index) -> void:
-	# checks if mouse left | enter pressed. it prevents
-	# adding nodes just by using arrow keys as it selects the item 
-	if Input.is_mouse_button_pressed(BUTTON_LEFT) || Input.is_key_pressed(KEY_ENTER):
-		if (index>=itemlist.get_item_count()):
-			return
-		if (itemlist.is_item_selectable(index) == false):
-			item_selected(index+1)
-			return
-		add_node(data[index])
-		hide()
+
+func object_selected(obj) -> void:
+	add_node(obj)
+	hide()
+
 
 func hide() -> void:
 	.hide()
-	
-	# clearing the quick connect data after hiding to prevent unintended autoconnection
 	quick_connect_node = null
-	
-	# grabbing the focus for the graph again as creating popup removes the focus.
 	get_current_graph().grab_focus()
-	
-	clear()
+
 
 func show_popup(qc : int = -1) -> void:
-	show()
-	quick_connect = qc
-	update_list()
-	filter_line_edit.grab_focus()
-	var parent_rect = get_parent().get_parent().get_global_rect()
-	var clipped = parent_rect.clip(get_global_rect())
-	var offset =  (get_rect().size-clipped.size)
+	popup()
 	insert_position = rect_position
-	rect_position = rect_position - offset
+	quick_connect = qc
+	update_list(filter.text if qc == -1 else "")
+	filter.grab_focus()
+	filter.select_all()
+
 
 func update_list(filter : String = "") -> void:
-	clear_list()
-	data.clear()
+	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scrollbar().value = 0.0
+	list.clear()
 	for library in libraries:
 		for obj in library:
-			if !obj.has("type"):
+			if not obj.has("type"):
 				continue
 			if quick_connect != -1:
 				var ref_obj = obj
@@ -106,8 +95,14 @@ func update_list(filter : String = "") -> void:
 					show = false
 					break
 			if show:
-				data.append(obj)
-				itemlist.add_item(obj.tree_item, get_preview_texture(obj))
+				var icon := get_preview_texture(obj)
+				var split: Array = obj.tree_item.rsplit("/", true, 1)
+				match split:
+					[var name]:
+						list.add_item(obj, "", name, icon)
+					[var path, var name]:
+						list.add_item(obj, path, name, icon)
+
 
 func get_preview_texture(icon_data : Dictionary) -> ImageTexture:
 	if icon_data.has("icon") and icon_data.has("library"):
@@ -125,8 +120,6 @@ func get_preview_texture(icon_data : Dictionary) -> ImageTexture:
 		return t
 	return null
 
-func clear_list() -> void:
-	itemlist.clear()
 
 func add_library(file_name : String, _filter : String = "") -> bool:
 	var file = File.new()
@@ -141,7 +134,8 @@ func add_library(file_name : String, _filter : String = "") -> bool:
 		return true
 	return false
 
-# Quickly connecting when tried to connect to empty
+
+# Quickly connecting == dragging from port
 var quick_connect_node : GraphNode
 var quick_connect_slot = 0
 
@@ -149,22 +143,14 @@ func set_quick_connect(from, from_slot) -> void:
 	quick_connect_node = get_current_graph().get_node(from)
 	quick_connect_slot = from_slot
 
+
 func _input(event) -> void:
-	if event is InputEventMouseButton and event.is_pressed() and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.is_pressed():
 		if !get_rect().has_point(event.position):
-			clear()
 			hide()
+
 
 func _unhandled_input(event) -> void:
 	if event is InputEventKey and event.scancode == KEY_ESCAPE:
-		clear()
 		hide()
 
-func clear() -> void:
-	filter_line_edit.text = ""
-
-func _on_itemlist_focus_entered() -> void:
-	# if itemlist received focus and no item is yet selected
-	# select the first item
-	if itemlist.get_selected_items().size() == 0:
-		itemlist.select(0)
