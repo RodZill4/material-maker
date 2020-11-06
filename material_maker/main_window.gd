@@ -347,9 +347,9 @@ func add_recent(path) -> void:
 
 func create_menu_export_material(menu) -> void:
 	menu.clear()
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		var material_node = graph_edit.get_material_node()
+	var project = get_current_project()
+	if project != null:
+		var material_node = project.get_material_node()
 		for p in material_node.get_export_profiles():
 			menu.add_item(p)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
@@ -360,18 +360,18 @@ func export_profile_config_key(profile : String) -> String:
 	return key
 
 func export_material(file_path : String, profile : String) -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	var project = get_current_project()
+	if project == null:
 		return
 	config_cache.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
-	graph_edit.export_material(export_prefix, profile)
+	project.export_material(export_prefix, profile)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	var project = get_current_project()
+	if project == null:
 		return
-	var material_node = graph_edit.get_material_node()
+	var material_node = project.get_material_node()
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]

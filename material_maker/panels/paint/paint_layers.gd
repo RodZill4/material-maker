@@ -95,6 +95,12 @@ func resize_layers(size : int, layers_array : Array = layers):
 func get_albedo_texture():
 	return albedo.get_texture()
 
+func get_metallic_texture():
+	return metallic.get_texture()
+
+func get_roughness_texture():
+	return roughness.get_texture()
+
 func get_mr_texture():
 	return mr.get_texture()
 

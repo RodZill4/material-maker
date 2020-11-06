@@ -41,10 +41,6 @@ onready var graph_edit = $VSplitContainer/GraphEdit
 signal update_material
 
 const MENU = [
-	{ menu="File", command="load_project", shortcut="Control+O", description="Load project" },
-	{ menu="File", command="save_project", shortcut="Control+S", description="Save project" },
-	{ menu="File", command="save_project_as", shortcut="Control+Shift+S", description="Save project as..." },
-	{ menu="File" },
 	{ menu="File", command="export_material", shortcut="Control+E", description="Export textures" },
 	{ menu="Material", command="toggle_material_feature", description="Emission", command_parameter="emission_enabled" },
 	{ menu="Material", command="toggle_material_feature", description="Normal", command_parameter="normal_enabled" },
@@ -400,27 +396,22 @@ func do_save_project(file_name):
 		file.close()
 	set_project_path(file_name)
 
-func export_material():
-	show_file_dialog(FileDialog.MODE_SAVE_FILE, "*.tres;Spatial material", "do_export_material")
+# Export
 
-func do_export_material(file_name):
-	var prefix = file_name.replace(".tres", "")
-	var mat = painted_mesh.get_surface_material(0).duplicate()
-	var desc = { material=mat, material_file=file_name }
-	dump_texture(layers.get_albedo_texture(), prefix+"_albedo.png")
-	desc.albedo = prefix+"_albedo.png"
-	dump_texture(layers.get_mr_texture(), prefix+"_mr.png")
-	desc.mr = prefix+"_mr.png"
-	if mat.emission_enabled:
-		dump_texture(layers.get_emission_texture(), prefix+"_emission.png")
-		desc.emission = prefix+"_emission.png"
-	if mat.normal_enabled:
-		dump_texture(layers.get_normal_map(), prefix+"_nm.png")
-		desc.nm = prefix+"_nm.png"
-	if mat.depth_enabled:
-		dump_texture(layers.get_depth_texture(), prefix+"_depth.png")
-		desc.depth = prefix+"_depth.png"
-	emit_signal("update_material", desc)
+func get_material_node() -> MMGenMaterial:
+	return $Export.get_material_node()
+
+func export_material(export_prefix, profile) -> void:
+	var material_textures = {
+		albedo=layers.get_albedo_texture(),
+		metallic=layers.get_metallic_texture(),
+		roughness=layers.get_roughness_texture(),
+		emission=layers.get_emission_texture(),
+		normal=layers.get_normal_map(),
+		depth=layers.get_depth_texture()
+	}
+	$Export.setup_material(material_textures)
+	$Export.get_material_node().export_material(export_prefix, profile)
 
 # debug
 
@@ -450,3 +441,4 @@ func _on_DebugSelect_item_selected(ID, t):
 				print(texture.texture.get_size())
 			return
 		ID -= textures_count
+

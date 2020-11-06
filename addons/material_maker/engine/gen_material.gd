@@ -375,7 +375,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 		if parameters.has(p.name):
 			value = parameters[p.name]
 		match p.type:
-			"float", "size":
+			"float", "size", "boolean":
 				export_context["$(param:"+p.name+")"] = str(value)
 			"color":
 				export_context["$(param:"+p.name+".r)"] = str(value.r)
