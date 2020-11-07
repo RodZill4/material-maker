@@ -40,7 +40,7 @@ func add_node(node_data) -> void:
 func item_selected(index) -> void:
 	# checks if mouse left | enter pressed. it prevents
 	# adding nodes just by using arrow keys as it selects the item 
-	if Input.is_mouse_button_pressed(BUTTON_LEFT) || Input.is_key_pressed(KEY_ENTER):
+	if Input.is_mouse_button_pressed(BUTTON_LEFT) or Input.is_key_pressed(KEY_ENTER):
 		if (index>=itemlist.get_item_count()):
 			return
 		if (itemlist.is_item_selectable(index) == false):
@@ -102,7 +102,7 @@ func update_list(filter : String = "") -> void:
 					continue
 			var show : bool = true
 			for f in filter.to_lower().split(" ", false):
-				if f != "" && obj.tree_item.to_lower().find(f) == -1:
+				if f != "" and obj.tree_item.to_lower().find(f) == -1:
 					show = false
 					break
 			if show:
