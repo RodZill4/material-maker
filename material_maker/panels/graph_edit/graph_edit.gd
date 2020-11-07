@@ -510,8 +510,20 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
 		generator.transmits_seed = button_pressed
 
+# Node selection
+
+func highlight_connections() -> void:
+	yield(get_tree(), "idle_frame")
+	for c in get_connection_list():
+		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
+
 func _on_GraphEdit_node_selected(node) -> void:
 	set_last_selected(node)
+	highlight_connections()
+
+func _on_GraphEdit_node_unselected(node):
+	highlight_connections()
+
 
 func set_last_selected(node) -> void:
 	if node is GraphNode:
@@ -546,3 +558,4 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
+
