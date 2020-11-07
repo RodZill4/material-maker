@@ -44,13 +44,15 @@ func add_node(node_data) -> void:
 		var port_position : Vector2
 		if qc_is_output:
 			for new_slot in node.get_connection_output_count():
-				if qc_slot_type == mm_io_types.types[mm_io_types.type_names[node.get_connection_output_type(new_slot)]].slot_type:
+				var slot_type : int = node.get_connection_output_type(new_slot)
+				if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
 					current_graph.connect_node(node.name, new_slot, qc_node, qc_slot)
 					port_position = node.get_connection_output_position(new_slot)
 					break
 		else:
 			for new_slot in node.get_connection_input_count():
-				if qc_slot_type == mm_io_types.types[mm_io_types.type_names[node.get_connection_input_type(new_slot)]].slot_type:
+				var slot_type : int = node.get_connection_input_type(new_slot)
+				if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
 					current_graph.connect_node(qc_node, qc_slot, node.name, new_slot)
 					port_position = node.get_connection_input_position(new_slot)
 					break
@@ -210,4 +212,3 @@ func _input(event) -> void:
 func _unhandled_input(event) -> void:
 	if event is InputEventKey and event.scancode == KEY_ESCAPE:
 		hide()
-
