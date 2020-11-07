@@ -60,7 +60,7 @@ func show_popup(qc : int = -1) -> void:
 	filter.select_all()
 
 
-func update_list(filter : String = "") -> void:
+func update_list(filter_text : String = "") -> void:
 	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scrollbar().value = 0.0
 	list.clear()
 	for library in libraries:
@@ -90,8 +90,8 @@ func update_list(filter : String = "") -> void:
 				elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
 					continue
 			var show : bool = true
-			for f in filter.to_lower().split(" ", false):
-				if f != "" && obj.tree_item.to_lower().find(f) == -1:
+			for f in filter_text.to_lower().split(" ", false):
+				if f != "" and obj.tree_item.to_lower().find(f) == -1:
 					show = false
 					break
 			if show:

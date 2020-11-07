@@ -926,7 +926,11 @@ func get_control_at_position(pos : Vector2, parent : Control) -> Control:
 	return parent
 
 func on_files_dropped(files : PoolStringArray, _screen) -> void:
+	var file : File = File.new()
 	for f in files:
+		if file.open(f, File.READ) != OK:
+			continue
+		f = file.get_path_absolute()
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
