@@ -4,23 +4,10 @@
 [ext_resource path="res://material_maker/windows/add_node_popup/list.gd" type="Script" id=4]
 
 [node name="AddNodePopup" type="Popup"]
-visible = true
 margin_right = 282.0
 margin_bottom = 355.0
 mouse_filter = 1
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -2.0
-margin_top = -2.0
-margin_right = 2.0
-margin_bottom = 2.0
-color = Color( 1, 0.564706, 0.564706, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

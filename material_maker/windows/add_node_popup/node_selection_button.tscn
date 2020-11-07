@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/icons/remove.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/windows/add_node_popup/node_selection_button.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/arrow.png" type="Texture" id=3]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 97, 16, 16 )
 
 [node name="NodeSelectionButton" type="Button"]
 margin_right = 195.0
@@ -44,7 +49,7 @@ margin_left = 62.0
 margin_right = 72.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 10, 0 )
-texture = ExtResource( 3 )
+texture = SubResource( 1 )
 expand = true
 stretch_mode = 6
 flip_h = true
