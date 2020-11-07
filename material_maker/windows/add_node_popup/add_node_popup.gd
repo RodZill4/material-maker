@@ -4,9 +4,14 @@ extends Popup
 onready var list := $PanelContainer/VBoxContainer/ScrollContainer/List
 onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
 
+
 var libraries = []
-var quick_connect : int = -1
-var insert_position : Vector2
+
+
+var qc_node : String = ""
+var qc_slot : int
+var qc_slot_type : int
+var qc_is_output : bool
 
 
 func get_current_graph():
@@ -33,14 +38,23 @@ func filter_entered(_filter) -> void:
 
 
 func add_node(node_data) -> void:
-	var node : GraphNode = get_current_graph().create_nodes(node_data, get_current_graph().offset_from_global_position(insert_position))[0]
-	if quick_connect_node != null: # dragged from port
-#		var type = quick_connect_node.get_connection_output_type(quick_connect_slot)
-		for new_slot in node.get_connection_input_count():
-			#if type == node.get_connection_input_type(new_slot):
-				#connect the first two slots with the same type
-			get_current_graph().connect_node(quick_connect_node.name, quick_connect_slot, node.name, new_slot)
-			break 
+	var current_graph : GraphEdit = get_current_graph()
+	var node : GraphNode = current_graph.create_nodes(node_data, get_current_graph().offset_from_global_position(rect_position))[0]
+	if qc_node != "": # dragged from port
+		var port_position : Vector2
+		if qc_is_output:
+			for new_slot in node.get_connection_output_count():
+				if qc_slot_type == mm_io_types.types[mm_io_types.type_names[node.get_connection_output_type(new_slot)]].slot_type:
+					current_graph.connect_node(node.name, new_slot, qc_node, qc_slot)
+					port_position = node.get_connection_output_position(new_slot)
+					break
+		else:
+			for new_slot in node.get_connection_input_count():
+				if qc_slot_type == mm_io_types.types[mm_io_types.type_names[node.get_connection_input_type(new_slot)]].slot_type:
+					current_graph.connect_node(qc_node, qc_slot, node.name, new_slot)
+					port_position = node.get_connection_input_position(new_slot)
+					break
+		node.offset -= port_position/current_graph.zoom
 	hide()
 
 
@@ -51,15 +65,16 @@ func object_selected(obj) -> void:
 
 func hide() -> void:
 	.hide()
-	quick_connect_node = null
 	get_current_graph().grab_focus()
 
 
-func show_popup(qc : int = -1) -> void:
+func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
 	popup()
-	insert_position = rect_position
-	quick_connect = qc
-	update_list(filter.text if qc == -1 else "")
+	qc_node = node_name
+	qc_slot = slot
+	qc_slot_type = slot_type
+	qc_is_output = is_output
+	update_list(filter.text)
 	filter.grab_focus()
 	filter.select_all()
 
@@ -71,28 +86,75 @@ func update_list(filter_text : String = "") -> void:
 		for obj in library:
 			if not obj.has("type"):
 				continue
-			if quick_connect != -1:
+			if qc_slot_type != -1:
 				var ref_obj = obj
 				if mm_loader.predefined_generators.has(obj.type):
 					ref_obj = mm_loader.predefined_generators[obj.type]
-				if ref_obj.has("shader_model"):
-					if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
-						continue
-					elif mm_io_types.types[ref_obj.shader_model.inputs[0].type].slot_type != quick_connect:
-						continue
-				elif ref_obj.has("nodes"):
-					var input_ports = []
-					for n in ref_obj.nodes:
-						if n.name == "gen_inputs":
-							if n.has("ports"):
-								input_ports = n.ports
-							break
-					if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != quick_connect:
-						continue
-				elif ref_obj.type == "comment" or ref_obj.type == "image" or ref_obj.type == "remote" or ref_obj.type == "text":
+				# comment and remote nodes have neither input nor output
+				if ref_obj.type == "comment" or ref_obj.type == "remote":
 					continue
-				elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and quick_connect != 0:
-					continue
+				if qc_is_output:
+					if ref_obj.has("shader_model"):
+						if ! ref_obj.shader_model.has("outputs") or ref_obj.shader_model.outputs.empty():
+							continue
+						else:
+							var found : bool = false
+							for i in ref_obj.shader_model.outputs.size():
+								if mm_io_types.types[ref_obj.shader_model.outputs[i].type].slot_type == qc_slot_type:
+									found = true
+									break
+							if !found:
+								continue
+					elif ref_obj.has("nodes"):
+						var output_ports = []
+						for n in ref_obj.nodes:
+							if n.name == "gen_outputs":
+								if n.has("ports"):
+									output_ports = n.ports
+								break
+						var found : bool = false
+						for i in output_ports.size():
+							if mm_io_types.types[output_ports[i].type].slot_type == qc_slot_type:
+								found = true
+								break
+						if !found:
+							continue
+						if output_ports.empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
+							continue
+					elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer") and qc_slot_type != 0:
+						continue
+				else:
+					if ref_obj.has("shader_model"):
+						if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
+							continue
+						else:
+							var found : bool = false
+							for i in ref_obj.shader_model.inputs.size():
+								if mm_io_types.types[ref_obj.shader_model.inputs[i].type].slot_type == qc_slot_type:
+									found = true
+									break
+							if !found:
+								continue
+					elif ref_obj.has("nodes"):
+						var input_ports = []
+						for n in ref_obj.nodes:
+							if n.name == "gen_inputs":
+								if n.has("ports"):
+									input_ports = n.ports
+								break
+						var found : bool = false
+						for i in input_ports.size():
+							if mm_io_types.types[input_ports[i].type].slot_type == qc_slot_type:
+								found = true
+								break
+						if !found:
+							continue
+						if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
+							continue
+					elif ref_obj.type == "image" or ref_obj.type == "text":
+						continue
+					elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and qc_slot_type != 0:
+						continue
 			var show : bool = true
 			for f in filter_text.to_lower().split(" ", false):
 				if f != "" and obj.tree_item.to_lower().find(f) == -1:
@@ -137,15 +199,6 @@ func add_library(file_name : String, _filter : String = "") -> bool:
 		libraries.push_back(lib.lib)
 		return true
 	return false
-
-
-# Quickly connecting == dragging from port
-var quick_connect_node : GraphNode
-var quick_connect_slot = 0
-
-func set_quick_connect(from, from_slot) -> void:
-	quick_connect_node = get_current_graph().get_node(from)
-	quick_connect_slot = from_slot
 
 
 func _input(event) -> void:
