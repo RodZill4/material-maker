@@ -512,10 +512,17 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 
 # Node selection
 
+var highlighting_connections : bool = false
+
 func highlight_connections() -> void:
-	yield(get_tree(), "idle_frame")
+	if highlighting_connections:
+		return
+	highlighting_connections = true
+	while Input.is_mouse_button_pressed(BUTTON_LEFT):
+		yield(get_tree(), "idle_frame")
 	for c in get_connection_list():
 		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
+	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node) -> void:
 	set_last_selected(node)
