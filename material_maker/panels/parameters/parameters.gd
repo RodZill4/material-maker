@@ -31,7 +31,6 @@ func set_generator(g):
 			control.size_flags_horizontal = SIZE_FILL
 			add_child(control)
 			controls[p.name] = control
-			print(p.name+" = "+str(generator.get_parameter(p.name)))
 		GENERIC.initialize_controls_from_generator(controls, generator, self)
 
 func on_parameter_changed(p : String, v) -> void:

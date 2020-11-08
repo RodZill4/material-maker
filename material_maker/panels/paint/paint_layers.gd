@@ -9,6 +9,26 @@ class Layer:
 	var emission : Texture
 	var depth : Texture
 	var layers : Array = []
+	
+	var albedo_alpha : float = 1.0
+	var metallic_alpha : float = 1.0
+	var roughness_alpha : float = 1.0
+	var emission_alpha : float = 1.0
+	var depth_alpha : float = 1.0
+	
+	func set_alpha(channel : String, value : float) -> void:
+		set(channel+"_alpha", value)
+		var layers
+		for cr in get(channel+"_color_rects"):
+			cr.modulate.a = value
+			layers = cr.get_parent().get_parent()
+		layers._on_Painter_painted()
+	
+	var albedo_color_rects : Array = []
+	var metallic_color_rects : Array = []
+	var roughness_color_rects : Array = []
+	var emission_color_rects : Array = []
+	var depth_color_rects : Array = []
 
 export(NodePath) var painter = null
 
@@ -161,6 +181,18 @@ func add_layer() -> void:
 	layers.push_front(layer)
 	select_layer(layer)
 
+func duplicate_layer(source_layer : Layer) -> void:
+	var layer = Layer.new()
+	layer.name = source_layer.name+" (copy)"
+	layer.index = get_unused_layer_index()
+	layer.hidden = false
+	for c in CHANNELS:
+		var texture = ImageTexture.new()
+		texture.create_from_image(source_layer.get(c).get_data())
+		layer.set(c, texture)
+	layers.push_front(layer)
+	select_layer(layer)
+
 func remove_layer(layer : Layer) -> void:
 	var need_reselect : bool = (layer == selected_layer)
 	var layers_array : Array = find_parent_array(layer)
@@ -222,17 +254,23 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		var texture_rect : TextureRect
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.albedo
+		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.albedo_alpha)
 		texture_rect.rect_size = albedo.size
+		l.albedo_color_rects = [ texture_rect ]
 		albedo.add_child(texture_rect)
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.mr
+		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.metallic_alpha)
 		texture_rect.rect_size = mr.size
 		texture_rect.material = preload("res://material_maker/panels/paint/shaders/metallic_layer.tres")
+		l.metallic_color_rects = [ texture_rect ]
 		metallic.add_child(texture_rect)
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.mr
+		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.roughness_alpha)
 		texture_rect.rect_size = mr.size
 		texture_rect.material = preload("res://material_maker/panels/paint/shaders/roughness_layer.tres")
+		l.roughness_color_rects = [ texture_rect ]
 		roughness.add_child(texture_rect)
 #		var color_rect : ColorRect = ColorRect.new()
 #		color_rect.rect_size = mr.size
@@ -241,16 +279,21 @@ func update_layers_renderer(visible_layers : Array) -> void:
 #		mr.add_child(color_rect)
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.albedo
-		texture_rect.modulate = Color(0.0, 0.0, 0.0)
+		texture_rect.modulate = Color(0.0, 0.0, 0.0, l.albedo_alpha)
 		texture_rect.rect_size = emission.size
+		l.albedo_color_rects.push_back(texture_rect)
 		emission.add_child(texture_rect)
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.emission
+		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.emission_alpha)
 		texture_rect.rect_size = emission.size
+		l.emission_color_rects.push_back(texture_rect)
 		emission.add_child(texture_rect)
 		texture_rect = TextureRect.new()
 		texture_rect.texture = l.depth
+		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.depth_alpha)
 		texture_rect.rect_size = depth.size
+		l.depth_color_rects.push_back(texture_rect)
 		depth.add_child(texture_rect)
 	_on_Painter_painted()
 
@@ -275,6 +318,8 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 				var texture = ImageTexture.new()
 				texture.load(path+"/"+l[c])
 				layer.set(c, texture)
+		for c in [ "albedo", "metallic", "roughness", "emission", "depth" ]:
+			layer.set(c+"_alpha", l[c+"_alpha"] if l.has(c+"_alpha") else 1.0)
 		if l.has("layers"):
 			first_index = load_layers(l.layers, layer.layers, path, first_index)
 		layers_array.push_back(layer)
@@ -302,6 +347,8 @@ func save_layers(layers_array : Array, path : String) -> Array:
 				image.save_png(file_path)
 				image.unlock()
 				layer_data[c] = file_name
+		for c in [ "albedo", "metallic", "roughness", "emission", "depth" ]:
+			layer_data[c+"_alpha"] = l.get(c+"_alpha")
 		if !l.layers.empty():
 			layer_data.layers = save_layers(l.layers, path)
 		layers_data.push_back(layer_data)

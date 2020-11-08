@@ -21,6 +21,11 @@ func _on_Tree_selection_changed(old_selected : TreeItem, new_selected : TreeItem
 func _on_Add_pressed():
 	layers.add_layer()
 
+func _on_Duplicate_pressed():
+	var current = tree.get_selected()
+	if current != null:
+		layers.duplicate_layer(current.get_meta("layer"))
+
 func _on_Remove_pressed():
 	var current = tree.get_selected()
 	if current != null:
@@ -35,3 +40,10 @@ func _on_Down_pressed():
 	var current = tree.get_selected()
 	if current != null:
 		layers.move_layer_down(current.get_meta("layer"))
+
+func _on_Config_pressed():
+	var current = tree.get_selected()
+	if current != null:
+		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instance()
+		add_child(popup)
+		popup.configure_layer(current.get_meta("layer"))

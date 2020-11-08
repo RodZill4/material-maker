@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/panels/paint/paint_layers.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/painter/shaders/normal_map.shader" type="Shader" id=7]
 
-
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
 light_mode = 1

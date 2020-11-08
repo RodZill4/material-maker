@@ -15,7 +15,6 @@ func _ready():
 		node.name = CHANNELS[i]
 		graph.add_child(node)
 		graph.connect_children(node, 0, material, i)
-	print(graph.serialize())
 
 func setup_material(material_textures : Dictionary) -> void:
 	var graph = get_node("graph")

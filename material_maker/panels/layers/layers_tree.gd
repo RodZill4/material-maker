@@ -5,8 +5,8 @@ var selected_item : TreeItem = null
 var just_selected : bool = false
 var layer_count : int = 0
 
-const BUTTON_SHOWN = preload("res://material_maker/panels/paint/icons/visible.png")
-const BUTTON_HIDDEN = preload("res://material_maker/panels/paint/icons/not_visible.png")
+const BUTTON_SHOWN = preload("res://material_maker/panels/layers/icons/visible.tres")
+const BUTTON_HIDDEN = preload("res://material_maker/panels/layers/icons/not_visible.tres")
 
 signal layers_changed()
 signal selection_changed(old_selected, new_selected)
