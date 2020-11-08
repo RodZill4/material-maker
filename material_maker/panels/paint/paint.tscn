@@ -1,8 +1,9 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=1]
 [ext_resource path="res://material_maker/panels/paint/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/tools/painter/painter.tscn" type="PackedScene" id=12]
 [ext_resource path="res://material_maker/panels/paint/paint_layers.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/panels/paint/paint.gd" type="Script" id=16]
@@ -172,6 +173,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04372, 0, 1.98915 )
 [node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/Painter/View/MainView"]
 
 [node name="BrushView" type="ColorRect" parent="VSplitContainer/Painter"]
+visible = false
 material = SubResource( 5 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -181,7 +183,7 @@ __meta__ = {
 }
 
 [node name="Tools" type="HBoxContainer" parent="VSplitContainer/Painter"]
-margin_right = 239.0
+margin_right = 194.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -257,6 +259,122 @@ shortcut_in_tooltip = false
 shortcut = SubResource( 23 )
 texture_normal = SubResource( 24 )
 texture_pressed = SubResource( 25 )
+
+[node name="Options" type="PanelContainer" parent="VSplitContainer/Painter"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -170.0
+margin_bottom = 122.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Grid" type="GridContainer" parent="VSplitContainer/Painter/Options"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 163.0
+margin_bottom = 115.0
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BrushSizeLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+margin_left = 13.0
+margin_top = 5.0
+margin_right = 80.0
+margin_bottom = 19.0
+size_flags_horizontal = 4
+text = "Brush size"
+
+[node name="BrushSize" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 98.0
+margin_right = 156.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+value = 50.0
+max_value = 250.0
+step = 1.0
+float_only = true
+
+[node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+margin_top = 33.0
+margin_right = 94.0
+margin_bottom = 47.0
+size_flags_horizontal = 4
+text = "Brush strength"
+
+[node name="BrushHardness" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 98.0
+margin_top = 28.0
+margin_right = 156.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+margin_left = 3.0
+margin_top = 61.0
+margin_right = 90.0
+margin_bottom = 75.0
+size_flags_horizontal = 4
+text = "Brush opacity"
+
+[node name="BrushOpacity" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 98.0
+margin_top = 56.0
+margin_right = 156.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+margin_left = 2.0
+margin_top = 89.0
+margin_right = 91.0
+margin_bottom = 103.0
+size_flags_horizontal = 4
+text = "Brush spacing"
+
+[node name="BrushSpacing" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 98.0
+margin_top = 84.0
+margin_right = 156.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+value = 10.0
+min_value = 1.0
+max_value = 250.0
+step = 1.0
+float_only = true
+
+[node name="OptionsButton" type="Button" parent="VSplitContainer/Painter"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -20.0
+margin_top = 121.0
+margin_bottom = 20.0
+hint_tooltip = "Show brush options"
+text = "+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Debug" type="Control" parent="VSplitContainer/Painter"]
 anchor_right = 1.0
@@ -336,6 +454,10 @@ scroll_offset = Vector2( 0, -87 )
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 1 ]]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 2 ]]
+[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
+[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
+[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]
+[connection signal="pressed" from="VSplitContainer/Painter/OptionsButton" to="." method="_on_OptionsButton_pressed"]
 [connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
 [connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
 [connection signal="gui_input" from="VSplitContainer/GraphEdit" to="VSplitContainer/GraphEdit" method="_gui_input"]

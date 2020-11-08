@@ -15,7 +15,6 @@ export(NodePath) var painter = null
 var texture_size = 0
 var layers : Array = []
 var selected_layer : Layer
-var layers_pane
 
 onready var tree = $Tree
 onready var albedo = $Albedo
@@ -30,23 +29,21 @@ onready var nm_viewport = $NormalMap
 onready var nm_rect = $NormalMap/Rect
 onready var nm_material = $NormalMap/Rect.get_material()
 
+onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
+
 const CHANNELS : Array = [ "albedo", "mr", "emission", "depth" ]
 
 func _ready():
-	var main_window = get_node("/root/MainWindow")
-	layers_pane = main_window.layout.get_panel("Layers")
+	pass
 
 func set_texture_size(s : float):
 	if texture_size == s:
 		return
 	texture_size = s
-	if selected_layer != null:
-		for c in CHANNELS:
-			var old_texture : Texture = selected_layer.get(c)
-			var new_texture = ImageTexture.new()
-			if old_texture != null:
-				new_texture.create_from_image(old_texture.get_data())
-			selected_layer.set(c, new_texture)
+	var selected_layer_save = selected_layer
+	select_layer(null)
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	resize_layers(s)
 	albedo.size = Vector2(s, s)
 	metallic.size = Vector2(s, s)
@@ -62,13 +59,7 @@ func set_texture_size(s : float):
 	nm_material.set_shader_param("tex", depth.get_texture())
 	nm_material.set_shader_param("seams", painter_node.seams_viewport.get_texture())
 	painter_node.set_texture_size(s)
-	if selected_layer != null:
-		for c in CHANNELS:
-			if selected_layer.get(c) != null:
-				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), selected_layer.get(c))
-			else:
-				painter_node.call("init_"+c+"_texture")
-			selected_layer.set(c, painter_node.call("get_"+c+"_texture"))
+	select_layer(selected_layer_save)
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	_on_Painter_painted()
@@ -86,10 +77,11 @@ func resize_layers(size : int, layers_array : Array = layers):
 	for l in layers_array:
 		for c in CHANNELS:
 			if l.get(c) != null:
-				var texture = l.get(c)
-				var image = texture.get_data()
+				var texture : ImageTexture = l.get(c)
+				var image : Image = Image.new()
+				image.copy_from(texture.get_data())
 				image.resize(size, size)
-				texture.set_data(image)
+				texture.create_from_image(image)
 		resize_layers(size, l.layers)
 
 func get_albedo_texture():
@@ -152,7 +144,6 @@ func get_unused_layer_index() -> int:
 	var index : int = 0
 	while layer_index_is_used(index, layers):
 		index += 1
-	print(index)
 	return index
 
 func add_layer() -> void:

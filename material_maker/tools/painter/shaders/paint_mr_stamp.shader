@@ -11,7 +11,10 @@ uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform vec2      brush_size        = vec2(0.25, 0.25);
-uniform float     brush_strength    = 0.5;
+uniform float     brush_hardness    = 0.5;
+uniform float     brush_opacity     = 1.0;
+uniform float     stroke_length     = 0.0;
+uniform float     stroke_angle      = 0.0;
 uniform float     pattern_scale     = 10.0;
 uniform float     pattern_angle     = 0.0;
 
@@ -26,6 +29,9 @@ vec4 pattern_function(vec2 uv) {
 }
 // END_PATTERN
 
+float brush(vec2 uv) {
+	return clamp(brush_opacity*brush_function(uv)/(1.0-brush_hardness), 0.0, 1.0);
+}
 
 void fragment() {
 	// Get UV from seams texture
@@ -48,7 +54,7 @@ void fragment() {
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
 	
-	vec2 a = fill ? vec2(1.0) : vec2(stamp_limit.x*stamp_limit.y*brush_function(0.5*local_uv+vec2(0.5)))*color.ba*tex2view.z;
+	vec2 a = fill ? vec2(1.0) : vec2(stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5)))*color.ba*tex2view.z;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (erase) {

@@ -12,8 +12,6 @@ var preview_material = null
 
 var previous_position = null
 var painting = false
-var next_paint_to = null
-var next_pressure = null
 
 var key_rotate = Vector2(0.0, 0.0)
 
@@ -27,6 +25,11 @@ var brush_graph = null
 var brush_node = null
 var remote_node = null
 
+var brush_size : float = 50.0
+var brush_hardness : float = 0.5
+var pattern_scale : float = 10.0
+var pattern_angle : float = 0.0
+
 onready var view = $VSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/Painter/View/MainView
 onready var camera = $VSplitContainer/Painter/View/MainView/CameraStand/Camera
@@ -37,6 +40,16 @@ onready var tools = $VSplitContainer/Painter/Tools
 onready var layers = $PaintLayers
 onready var eraser_button = $VSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
+
+onready var brush_size_control : Control = $VSplitContainer/Painter/Options/Grid/BrushSize
+onready var brush_hardness_control : Control = $VSplitContainer/Painter/Options/Grid/BrushStrength
+onready var brush_opacity_control : Control = $VSplitContainer/Painter/Options/Grid/BrushOpacity
+onready var brush_spacing_control : Control = $VSplitContainer/Painter/Options/Grid/BrushSpacing
+
+var last_motion_position : Vector2
+var last_motion_vector : Vector2 = Vector2(0, 0)
+var stroke_length : float = 0.0
+var stroke_angle : float = 0.0
 
 signal update_material
 
@@ -49,6 +62,7 @@ const MENU = [
 	{ menu="Material/TextureSize", command="set_texture_size", description="512x512", command_parameter=512  },
 	{ menu="Material/TextureSize", command="set_texture_size", description="1024x1024", command_parameter=1024  },
 	{ menu="Material/TextureSize", command="set_texture_size", description="2048x2048", command_parameter=2048  },
+	{ menu="Material/TextureSize", command="set_texture_size", description="4096x4096", command_parameter=4096  },
 ]
 
 func _ready():
@@ -215,13 +229,23 @@ func get_pressure(event : InputEventMouse) -> float:
 
 func _on_View_gui_input(ev : InputEvent):
 	if ev is InputEventMouseMotion:
+		var pos_delta = ev.position-last_motion_position
+		stroke_length += pos_delta.length()
+		pos_delta = pos_delta*0.75+last_motion_vector*0.75
+		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
+		last_motion_position = ev.position
+		last_motion_vector = pos_delta
+		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle } )
 		if current_tool == MODE_COLOR_PICKER:
 			show_brush(null, null)
 		else:
-			if current_tool == MODE_LINE and previous_position != null:
-				var direction = ev.position-previous_position
-				painter.set_brush_angle(-atan2(direction.y, direction.x))
-			show_brush(ev.position, previous_position)
+			if current_tool == MODE_LINE:
+				if previous_position != null:
+					var direction = ev.position-previous_position
+					painter.set_brush_angle(-atan2(direction.y, direction.x))
+				show_brush(ev.position, previous_position)
+			else:
+				show_brush(ev.position, ev.position)
 		if ev.button_mask & BUTTON_MASK_RIGHT != 0:
 			if ev.shift:
 				camera_stand.translate(-0.2*ev.relative.x*camera.transform.basis.x)
@@ -230,32 +254,49 @@ func _on_View_gui_input(ev : InputEvent):
 				camera_stand.rotate(camera.global_transform.basis.x.normalized(), -0.01*ev.relative.y)
 				camera_stand.rotate(camera.global_transform.basis.y.normalized(), -0.01*ev.relative.x)
 		elif ev.button_mask & BUTTON_MASK_LEFT != 0:
-			if ev.control:
-				previous_position = null
-				painter.edit_pattern(ev.relative)
-			elif ev.shift:
-				previous_position = null
-				painter.edit_brush(ev.relative)
+			if ev.shift:
+				reset_stroke()
+				brush_size += ev.relative.x*0.1
+				brush_size = clamp(brush_size, 0.0, 250.0)
+				brush_hardness += ev.relative.y*0.01
+				brush_hardness = clamp(brush_hardness, 0.0, 1.0)
+				painter.update_brush_params( { brush_size=brush_size, brush_hardness=brush_hardness } )
+				$VSplitContainer/Painter/Options/Grid/BrushSize.set_value(brush_size)
+				$VSplitContainer/Painter/Options/Grid/BrushHardness.set_value(brush_hardness)
+			elif ev.control:
+				reset_stroke()
+				pattern_scale += ev.relative.x*0.1
+				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
+				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
+				painter.update_brush_params( { brush_size=brush_size, brush_hardness=brush_hardness } )
+				painter.update_brush()
 			elif current_tool == MODE_FREE:
 				paint(ev.position, get_pressure(ev))
 			elif ev.relative.length_squared() > 50:
 				get_pressure(ev)
 		else:
-			previous_position = null
+			reset_stroke()
+		painter.update_brush()
 	elif ev is InputEventMouseButton:
 		var pos = ev.position
 		if !ev.control and !ev.shift:
 			if ev.button_index == BUTTON_LEFT:
 				if ev.pressed:
+					stroke_length = 0.0
 					previous_position = pos
 				elif current_tool == MODE_COLOR_PICKER:
 					painter.pick_color(pos)
 				else:
-					if current_tool == MODE_LINE and previous_position != null:
-						var direction = pos-previous_position
-						painter.set_brush_angle(-atan2(direction.y, direction.x))
+					if current_tool == MODE_LINE:
+						var angle = 0
+						if previous_position != null:
+							var direction = pos-previous_position
+							angle = -atan2(direction.y, direction.x)
+						painter.set_brush_angle(angle)
+					else:
+						last_painted_position = pos+Vector2(brush_spacing_control.value, brush_spacing_control.value)
 					paint(pos, get_pressure(ev))
-					previous_position = null
+					reset_stroke()
 		if !ev.pressed and ev.button_index == BUTTON_RIGHT:
 			update_view()
 		# Mouse wheel
@@ -274,7 +315,7 @@ func _on_View_gui_input(ev : InputEvent):
 
 var brush_changed_scheduled : bool = false
 
-func on_brush_changed(p, v) -> void:
+func on_brush_changed(_p, _v) -> void:
 	if !brush_changed_scheduled:
 		call_deferred("do_on_brush_changed")
 		brush_changed_scheduled = true
@@ -300,7 +341,25 @@ func show_brush(p, op = null):
 		$VSplitContainer/Painter/BrushView.material.set_shader_param("brush_pos", position)
 		$VSplitContainer/Painter/BrushView.material.set_shader_param("brush_ppos", old_position)
 
+# Paint
+
+var last_painted_position : Vector2
+
+func reset_stroke() -> void:
+	stroke_length = 0.0
+	previous_position = null
+
 func paint(pos, pressure = 1.0):
+	if (pos-last_painted_position).length() >= brush_spacing_control.value:
+		if current_tool == MODE_FREE:
+			previous_position = null
+		do_paint(pos, pressure)
+		last_painted_position = pos
+
+var next_paint_to = null
+var next_pressure = null
+
+func do_paint(pos, pressure = 1.0):
 	if painting:
 		# if not available for painting, record a paint order
 		next_paint_to = pos
@@ -311,7 +370,17 @@ func paint(pos, pressure = 1.0):
 		previous_position = pos
 	var position = pos/view.rect_size
 	var prev_position = previous_position/view.rect_size
-	painter.paint(position, prev_position, eraser_button.pressed, pressure)
+	var paint_options : Dictionary = {
+		brush_pos=position,
+		brush_ppos=prev_position,
+		brush_opacity=$VSplitContainer/Painter/Options/Grid/BrushOpacity.value,
+		stroke_length=stroke_length,
+		stroke_angle=stroke_angle,
+		erase=eraser_button.pressed,
+		pressure=pressure,
+		fill=false
+	}
+	painter.paint(paint_options)
 	previous_position = pos
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
@@ -333,6 +402,8 @@ func update_view():
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
+	# Force recalculate brush size parameter
+	_on_BrushSize_value_changed(brush_size)
 
 func _on_resized():
 	call_deferred("update_view")
@@ -418,7 +489,7 @@ func export_material(export_prefix, profile) -> void:
 func debug_get_texture_names():
 	return [ "None" ]
 
-func debug_get_texture(ID):
+func debug_get_texture(_ID):
 	return null
 
 func initialize_debug_selects():
@@ -442,3 +513,24 @@ func _on_DebugSelect_item_selected(ID, t):
 			return
 		ID -= textures_count
 
+# Brush options UI
+
+func _on_BrushSize_value_changed(value) -> void:
+	brush_size = value
+	painter.update_brush_params( { brush_size=brush_size } )
+
+func _on_BrushHardness_value_changed(value) -> void:
+	brush_hardness = value
+	painter.update_brush_params( { brush_hardness=brush_hardness } )
+
+func replace_brush_options_button() -> void:
+	if $VSplitContainer/Painter/Options.visible:
+		$VSplitContainer/Painter/Options.rect_size = $VSplitContainer/Painter/Options.rect_min_size
+		$VSplitContainer/Painter/OptionsButton.margin_top = $VSplitContainer/Painter/Options.rect_size.y
+		print($VSplitContainer/Painter/Options.rect_size.y)
+	else:
+		$VSplitContainer/Painter/OptionsButton.margin_top = 0
+
+func _on_OptionsButton_pressed() -> void:
+	$VSplitContainer/Painter/Options.visible = !$VSplitContainer/Painter/Options.visible
+	replace_brush_options_button()
