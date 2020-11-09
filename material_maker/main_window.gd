@@ -457,7 +457,7 @@ func new_paint_project(obj_file_name = null) -> void:
 		return
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
 	projects.add_child(paint_panel)
-	paint_panel.init_project(result.mesh, result.mesh_filename, 2048)
+	paint_panel.init_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:

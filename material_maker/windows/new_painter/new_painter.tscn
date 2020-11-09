@@ -50,14 +50,12 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 187.0
+margin_right = 157.0
 margin_bottom = 256.0
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_right = 185.0
-margin_bottom = 44.0
+margin_right = 157.0
+margin_bottom = 68.0
 columns = 2
 
 [node name="ModelFileLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
@@ -68,9 +66,9 @@ text = "Model:"
 
 [node name="ModelFile" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 76.0
-margin_right = 183.0
+margin_right = 157.0
 margin_bottom = 20.0
-text = "Select a model"
+text = "Model file"
 
 [node name="ResolutionLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 27.0
@@ -81,15 +79,28 @@ text = "Resolution:"
 [node name="Resolution" type="OptionButton" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_left = 76.0
 margin_top = 24.0
-margin_right = 183.0
+margin_right = 157.0
 margin_bottom = 44.0
 script = ExtResource( 1 )
+min_size = 8
+
+[node name="ProjectFileLabel2" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_top = 51.0
+margin_right = 72.0
+margin_bottom = 65.0
+text = "Project:"
+
+[node name="ProjectFile" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+margin_left = 76.0
+margin_top = 48.0
+margin_right = 157.0
+margin_bottom = 68.0
+text = "Project file"
 
 [node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/HBoxContainer"]
-margin_left = 187.0
-margin_top = 3.0
-margin_right = 517.0
-margin_bottom = 257.0
+margin_left = 161.0
+margin_right = 520.0
+margin_bottom = 256.0
 size_flags_horizontal = 3
 
 [node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ViewportContainer"]
@@ -137,6 +148,7 @@ text = "Cancel"
 script = ExtResource( 3 )
 [connection signal="popup_hide" from="." to="." method="_on_NewPainterWindow_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ProjectFile" to="." method="_on_ProjectFile_pressed"]
 [connection signal="resized" from="VBoxContainer/HBoxContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Cancel" to="." method="_on_Cancel_pressed"]

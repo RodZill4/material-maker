@@ -128,7 +128,7 @@ func remove_node(node) -> void:
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
-		print("no set_tab_title method")
+		#print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
 	if save_path != null:

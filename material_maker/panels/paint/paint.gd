@@ -121,13 +121,14 @@ func set_brush(data) -> void:
 func get_graph_edit():
 	return graph_edit
 
-func init_project(mesh : Mesh, mesh_path : String, resolution : int):
+func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, project_file_path : String):
 	layers.set_texture_size(resolution)
 	var mi = MeshInstance.new()
 	mi.mesh = mesh
 	layers.add_layer()
-	model_path = mesh_path
+	model_path = mesh_file_path
 	set_object(mi)
+	project_path = project_file_path
 
 func set_object(o):
 	object_name = o.name
@@ -137,12 +138,14 @@ func set_object(o):
 		mat = o.mesh.surface_get_material(0)
 	if mat == null:
 		mat = SpatialMaterial.new()
+	"""
 	for t in [ "albedo_texture", "metallic_texture", "roughness_texture" ]:
 		if mat[t] != null:
 			var size = mat[t].get_size()
 			if size.x == size.y:
 				layers.set_texture_size(size.x)
 				break
+	"""
 	preview_material = SpatialMaterial.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT

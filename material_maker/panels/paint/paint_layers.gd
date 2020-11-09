@@ -60,28 +60,31 @@ func set_texture_size(s : float):
 	if texture_size == s:
 		return
 	texture_size = s
+	var size = Vector2(s, s)
 	var selected_layer_save = selected_layer
-	select_layer(null)
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	var result = select_layer(null)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
 	resize_layers(s)
-	albedo.size = Vector2(s, s)
-	metallic.size = Vector2(s, s)
-	roughness.size = Vector2(s, s)
-	mr.size = Vector2(s, s)
+	albedo.size = size
+	metallic.size = size
+	roughness.size = size
+	mr.size = size
 	$MR/Metallic.texture = metallic.get_texture()
+	$MR/Metallic.rect_size = size
 	$MR/Roughness.texture = roughness.get_texture()
-	emission.size = Vector2(s, s)
-	depth.size = Vector2(s, s)
-	nm_viewport.size = Vector2(s, s)
-	nm_rect.rect_size = Vector2(s, s)
+	$MR/Roughness.rect_size = size
+	emission.size = size
+	depth.size = size
+	nm_viewport.size = size
+	nm_rect.rect_size = size
 	nm_material.set_shader_param("epsilon", 1/s)
 	nm_material.set_shader_param("tex", depth.get_texture())
 	nm_material.set_shader_param("seams", painter_node.seams_viewport.get_texture())
 	painter_node.set_texture_size(s)
 	select_layer(selected_layer_save)
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
 	_on_Painter_painted()
 
 func find_parent_array(layer : Layer, layer_array : Array = layers):
