@@ -271,7 +271,7 @@ func _on_View_gui_input(ev : InputEvent):
 				pattern_scale += ev.relative.x*0.1
 				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
 				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
-				painter.update_brush_params( { brush_size=brush_size, brush_hardness=brush_hardness } )
+				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
 				painter.update_brush()
 			elif current_tool == MODE_FREE:
 				paint(ev.position, get_pressure(ev))
