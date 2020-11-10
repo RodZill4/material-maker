@@ -21,11 +21,16 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 20.0
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/HBoxContainer"]
 margin_right = 20.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 0 )
@@ -33,7 +38,7 @@ texture = ExtResource( 1 )
 expand = true
 stretch_mode = 6
 
-[node name="Name" type="Label" parent="HBoxContainer"]
+[node name="Name" type="Label" parent="HBoxContainer/HBoxContainer"]
 margin_left = 24.0
 margin_top = 3.0
 margin_right = 58.0
@@ -44,9 +49,9 @@ __meta__ = {
 }
 
 [node name="Arrow" type="TextureRect" parent="HBoxContainer"]
-modulate = Color( 0.603922, 0.603922, 0.603922, 1 )
-margin_left = 62.0
-margin_right = 72.0
+modulate = Color( 0.431373, 0.431373, 0.431373, 1 )
+margin_left = 58.0
+margin_right = 68.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 10, 0 )
 texture = SubResource( 1 )
@@ -55,9 +60,9 @@ stretch_mode = 6
 flip_h = true
 
 [node name="Path" type="Label" parent="HBoxContainer"]
-margin_left = 76.0
+margin_left = 68.0
 margin_top = 3.0
-margin_right = 159.0
+margin_right = 151.0
 margin_bottom = 17.0
 custom_colors/font_color = Color( 0.603922, 0.603922, 0.603922, 1 )
 text = "path/to/node"

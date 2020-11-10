@@ -2,7 +2,7 @@ extends Button
 
 
 func set_name(name: String) -> void:
-	$HBoxContainer/Name.text = name
+	$HBoxContainer/HBoxContainer/Name.text = name
 
 
 func set_path(path: String) -> void:
@@ -15,5 +15,5 @@ func set_path(path: String) -> void:
 
 
 func set_icon(icon: Texture) -> void:
-	$HBoxContainer/Icon.texture = icon
+	$HBoxContainer/HBoxContainer/Icon.texture = icon
 

@@ -76,6 +76,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	qc_slot = slot
 	qc_slot_type = slot_type
 	qc_is_output = is_output
+	filter.text = ""
 	update_list(filter.text)
 	filter.grab_focus()
 	filter.select_all()
