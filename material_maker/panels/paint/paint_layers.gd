@@ -18,12 +18,14 @@ class Layer:
 	
 	func set_alpha(channel : String, value : float) -> void:
 		set(channel+"_alpha", value)
-		var layers
-		for cr in get(channel+"_color_rects"):
-			cr.modulate.a = value
-			layers = cr.get_parent().get_parent()
-		layers._on_Painter_painted()
 	
+	func update_color_rects(channel : String, parent_alpha : float = 1.0) -> void:
+		var alpha = parent_alpha * get(channel+"_alpha")
+		for cr in get(channel+"_color_rects"):
+			cr.modulate.a = alpha
+		for l in layers:
+			l.update_color_rects(channel, alpha)
+
 	var albedo_color_rects : Array = []
 	var metallic_color_rects : Array = []
 	var roughness_color_rects : Array = []
@@ -235,10 +237,16 @@ func move_layer_down(layer : Layer) -> void:
 		array.insert(orig_index+1, layer)
 		_on_layers_changed()
 
+func update_alpha(channel : String) -> void:
+	for l in layers:
+		l.update_color_rects(channel)
+
 func _on_layers_changed() -> void:
 	var list = []
 	get_visible_layers(list)
 	update_layers_renderer(list)
+	for c in [ "albedo", "metallic", "roughness", "emission", "depth"]:
+		update_alpha(c)
 	layers_pane.call_deferred("set_layers", self)
 
 func get_visible_layers(list : Array, layers_array : Array = layers) -> void:

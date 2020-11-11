@@ -46,4 +46,4 @@ func _on_Config_pressed():
 	if current != null:
 		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instance()
 		add_child(popup)
-		popup.configure_layer(current.get_meta("layer"))
+		popup.configure_layer(layers, current.get_meta("layer"))
