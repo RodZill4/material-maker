@@ -538,20 +538,25 @@ func set_last_selected(node) -> void:
 	else:
 		last_selected = null
 
-func request_popup(from, from_slot, _release_position) -> void:
+func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually dragged
-	var node : GraphNode = get_node(from)
+	var node : GraphNode = get_node(node_name)
 	var node_transform : Transform2D = node.get_global_transform()
-	var output_position = node_transform.xform(node.get_connection_output_position(from_slot)/node_transform.get_scale())
+	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
+	# ignore if drag distance is too short
 	if (get_global_mouse_position()-output_position).length() < 20:
 		# Tell the node its connector was clicked
 		if node.has_method("on_clicked_output"):
-			node.on_clicked_output(from_slot)
+			node.on_clicked_output(slot_index)
+		return
+	# Request the popup
+	node_popup.rect_global_position = get_global_mouse_position()
+	var slot_type
+	if connect_output:
+		slot_type = mm_io_types.types[node.generator.get_input_defs()[slot_index].type].slot_type
 	else:
-		# Request the popup
-		node_popup.rect_global_position = get_global_mouse_position()
-		node_popup.show_popup(mm_io_types.types[node.generator.get_output_defs()[from_slot].type].slot_type)
-		node_popup.set_quick_connect(from, from_slot)
+		slot_type = mm_io_types.types[node.generator.get_output_defs()[slot_index].type].slot_type
+	node_popup.show_popup(node_name, slot_index, slot_type, connect_output)
 
 func check_last_selected() -> void:
 	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
