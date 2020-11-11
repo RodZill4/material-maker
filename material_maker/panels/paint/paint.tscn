@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=1]
 [ext_resource path="res://material_maker/panels/paint/icons/icons.svg" type="Texture" id=2]
@@ -42,70 +42,80 @@ flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=10]
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 32, 32, 32, 32 )
+
+[sub_resource type="InputEventKey" id=12]
 pressed = true
 scancode = 16777245
 
-[sub_resource type="ShortCut" id=11]
-shortcut = SubResource( 10 )
+[sub_resource type="ShortCut" id=13]
+shortcut = SubResource( 12 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=14]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 64, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=15]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=14]
+[sub_resource type="InputEventKey" id=16]
 pressed = true
 scancode = 16777246
 
-[sub_resource type="ShortCut" id=15]
-shortcut = SubResource( 14 )
+[sub_resource type="ShortCut" id=17]
+shortcut = SubResource( 16 )
 
-[sub_resource type="AtlasTexture" id=16]
+[sub_resource type="AtlasTexture" id=18]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 192, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=19]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 224, 32, 32, 32 )
 
-[sub_resource type="InputEventKey" id=18]
+[sub_resource type="InputEventKey" id=20]
 pressed = true
 scancode = 16777247
 
-[sub_resource type="ShortCut" id=19]
-shortcut = SubResource( 18 )
+[sub_resource type="ShortCut" id=21]
+shortcut = SubResource( 20 )
 
-[sub_resource type="AtlasTexture" id=20]
+[sub_resource type="AtlasTexture" id=22]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=21]
+[sub_resource type="AtlasTexture" id=23]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 160, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=22]
+[sub_resource type="InputEventKey" id=24]
 pressed = true
 scancode = 69
 
-[sub_resource type="ShortCut" id=23]
-shortcut = SubResource( 22 )
+[sub_resource type="ShortCut" id=25]
+shortcut = SubResource( 24 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=26]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 192, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=25]
+[sub_resource type="AtlasTexture" id=27]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 224, 0, 32, 32 )
@@ -189,7 +199,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Free" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+[node name="FreeDots" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
@@ -203,62 +213,76 @@ shortcut = SubResource( 7 )
 texture_normal = SubResource( 8 )
 texture_pressed = SubResource( 9 )
 
-[node name="Line" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+[node name="FreeLine" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 36.0
 margin_right = 68.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+hint_tooltip = "Freehand (F1)"
+size_flags_horizontal = 0
+size_flags_vertical = 0
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 7 )
+texture_normal = SubResource( 10 )
+texture_pressed = SubResource( 11 )
+
+[node name="Line" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+margin_left = 72.0
+margin_right = 104.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Lines (F2)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 11 )
-texture_normal = SubResource( 12 )
-texture_pressed = SubResource( 13 )
+shortcut = SubResource( 13 )
+texture_normal = SubResource( 14 )
+texture_pressed = SubResource( 15 )
 
 [node name="Fill" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 72.0
-margin_right = 104.0
+margin_left = 108.0
+margin_right = 140.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Fill (F3)"
 shortcut_in_tooltip = false
-shortcut = SubResource( 15 )
-texture_normal = SubResource( 16 )
-texture_pressed = SubResource( 17 )
+shortcut = SubResource( 17 )
+texture_normal = SubResource( 18 )
+texture_pressed = SubResource( 19 )
 
 [node name="Space1" type="Control" parent="VSplitContainer/Painter/Tools"]
-margin_left = 108.0
-margin_right = 113.0
+margin_left = 144.0
+margin_right = 149.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="ColorPicker" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 117.0
-margin_right = 149.0
+margin_left = 153.0
+margin_right = 185.0
 margin_bottom = 32.0
 hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 19 )
-texture_normal = SubResource( 20 )
-texture_pressed = SubResource( 21 )
+shortcut = SubResource( 21 )
+texture_normal = SubResource( 22 )
+texture_pressed = SubResource( 23 )
 
 [node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
-margin_left = 153.0
-margin_right = 158.0
+margin_left = 189.0
+margin_right = 194.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="Eraser" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 162.0
-margin_right = 194.0
+margin_left = 198.0
+margin_right = 230.0
 margin_bottom = 32.0
 hint_tooltip = "Toggler Eraser Mode (E)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 23 )
-texture_normal = SubResource( 24 )
-texture_pressed = SubResource( 25 )
+shortcut = SubResource( 25 )
+texture_normal = SubResource( 26 )
+texture_pressed = SubResource( 27 )
 
 [node name="Options" type="PanelContainer" parent="VSplitContainer/Painter"]
 anchor_left = 1.0
@@ -450,10 +474,11 @@ scroll_offset = Vector2( 0, -87 )
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="gui_input" from="VSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
 [connection signal="resized" from="VSplitContainer/Painter/View" to="." method="_on_resized"]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/Free" to="." method="set_current_tool" binds= [ 0 ]]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 1 ]]
+[connection signal="pressed" from="VSplitContainer/Painter/Tools/FreeDots" to="." method="set_current_tool" binds= [ 0 ]]
+[connection signal="pressed" from="VSplitContainer/Painter/Tools/FreeLine" to="." method="set_current_tool" binds= [ 1 ]]
+[connection signal="pressed" from="VSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 2 ]]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 2 ]]
+[connection signal="pressed" from="VSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 3 ]]
 [connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
 [connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
 [connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]

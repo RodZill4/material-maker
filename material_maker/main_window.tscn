@@ -65,7 +65,7 @@ margin_right = 1268.0
 margin_bottom = 22.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 1102.0
+margin_right = 1082.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 
@@ -77,8 +77,9 @@ items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load ma
 switch_on_hover = true
 
 [node name="RenderCounter" parent="VBoxContainer/TopBar" instance=ExtResource( 11 )]
-margin_left = 1106.0
+margin_left = 1086.0
 margin_right = 1268.0
+margin_bottom = 22.0
 
 [node name="Layout" type="HSplitContainer" parent="VBoxContainer"]
 margin_top = 26.0

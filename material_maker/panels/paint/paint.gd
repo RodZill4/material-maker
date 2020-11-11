@@ -1,12 +1,13 @@
 extends VBoxContainer
 
-const MODE_FREE         = 0
-const MODE_LINE         = 1
-const MODE_COLOR_PICKER = 2
-const MODE_COUNT        = 3
-const MODE_NAMES : Array = [ "Free", "Line", "ColorPicker" ]
+const MODE_FREEHAND_DOTS = 0
+const MODE_FREEHAND_LINE = 1
+const MODE_LINE          = 2
+const MODE_COLOR_PICKER  = 3
+const MODE_COUNT         = 4
+const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "ColorPicker" ]
 
-var current_tool = MODE_FREE
+var current_tool = MODE_FREEHAND_DOTS
 
 var preview_material = null
 
@@ -72,7 +73,7 @@ func _ready():
 	update_view()
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
-	set_current_tool(MODE_FREE)
+	set_current_tool(MODE_FREEHAND_DOTS)
 	get_node("/root/MainWindow").create_menus(MENU, self, $Menu)
 	initialize_debug_selects()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
@@ -273,7 +274,7 @@ func _on_View_gui_input(ev : InputEvent):
 				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
 				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
 				painter.update_brush()
-			elif current_tool == MODE_FREE:
+			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 				paint(ev.position, get_pressure(ev))
 			elif ev.relative.length_squared() > 50:
 				get_pressure(ev)
@@ -353,11 +354,13 @@ func reset_stroke() -> void:
 	previous_position = null
 
 func paint(pos, pressure = 1.0):
-	if (pos-last_painted_position).length() >= brush_spacing_control.value:
-		if current_tool == MODE_FREE:
+	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
+		if (pos-last_painted_position).length() < brush_spacing_control.value:
+			return
+		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-		do_paint(pos, pressure)
-		last_painted_position = pos
+	do_paint(pos, pressure)
+	last_painted_position = pos
 
 var next_paint_to = null
 var next_pressure = null

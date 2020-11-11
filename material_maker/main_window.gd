@@ -74,9 +74,9 @@ const MENU = [
 	{ menu="Tools" },
 	{ menu="Tools", command="add_selection_to_user_library", description="Add selected node to user library", mode="material" },
 	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
-	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
-	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph" },
+	{ menu="Tools", command="export_library", description="Export the nodes library", mode="material" },
+	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
+	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -208,6 +208,7 @@ func get_current_mode() -> String:
 func set_current_mode(mode : String) -> void:
 	current_mode = mode
 	layout.change_mode(current_mode)
+	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 # Menus
 
@@ -227,6 +228,9 @@ func create_menus(menu_def, object, menu_bar) -> void:
 		m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
 
 func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
+	var mode = ""
+	if object.has_method("get_current_mode"):
+		mode = object.get_current_mode()
 	var is_mac : bool = OS.get_name() == "OSX"
 	var submenus = {}
 	var menu_name_length = menu_name.length()
@@ -236,6 +240,8 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
 			continue
 		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
+			continue
+		if menu_def[i].has("mode") and menu_def[i].mode != mode:
 			continue
 		if menu_def[i].menu == menu_name:
 			if menu_def[i].has("submenu"):
@@ -883,12 +889,10 @@ func _on_Projects_tab_changed(_tab) -> void:
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
 			set_current_mode("material")
-			layout.change_mode("material")
 		else:
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
 			set_current_mode("paint")
-			layout.change_mode("paint")
 		current_tab = new_tab
 		if new_tab is GraphEdit:
 			update_preview()
