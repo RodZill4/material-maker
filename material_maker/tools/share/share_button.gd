@@ -47,11 +47,13 @@ func _on_client_connected(id: int, protocol: String) -> void:
 	print("connected "+str(id)+" "+protocol)
 	if websocket_id == -1:
 		websocket_id = id
+		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/link.tres")
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	print("disconnected "+str(id)+" "+str(was_clean_close))
 	if websocket_id == id:
 		websocket_id = -1
+		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
 
 func _on_data_received(id: int) -> void:
 	print("Received data "+str(id))

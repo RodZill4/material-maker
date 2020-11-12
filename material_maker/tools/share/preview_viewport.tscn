@@ -14,7 +14,7 @@ ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
 environment = SubResource( 2 )
 
 [node name="PreviewViewport" type="Viewport"]
-size = Vector2( 256, 256 )
+size = Vector2( 512, 512 )
 own_world = true
 world = SubResource( 3 )
 transparent_bg = true
