@@ -169,15 +169,17 @@ world = SubResource( 3 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="CameraStand" type="Spatial" parent="VSplitContainer/Painter/View/MainView"]
+[node name="CameraStand1" type="Spatial" parent="VSplitContainer/Painter/View/MainView"]
 
-[node name="Camera" type="Camera" parent="VSplitContainer/Painter/View/MainView/CameraStand"]
+[node name="CameraStand2" type="Spatial" parent="VSplitContainer/Painter/View/MainView/CameraStand1"]
+
+[node name="Camera" type="Camera" parent="VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
 current = true
 near = 1.0
 far = 4.0
 
-[node name="OmniLight" type="OmniLight" parent="VSplitContainer/Painter/View/MainView/CameraStand"]
+[node name="OmniLight" type="OmniLight" parent="VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04372, 0, 1.98915 )
 
 [node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/Painter/View/MainView"]

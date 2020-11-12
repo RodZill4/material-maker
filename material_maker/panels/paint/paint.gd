@@ -33,8 +33,9 @@ var pattern_angle : float = 0.0
 
 onready var view = $VSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/Painter/View/MainView
-onready var camera = $VSplitContainer/Painter/View/MainView/CameraStand/Camera
-onready var camera_stand = $VSplitContainer/Painter/View/MainView/CameraStand
+onready var camera = $VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2/Camera
+onready var camera_stand1 = $VSplitContainer/Painter/View/MainView/CameraStand1
+onready var camera_stand2 = $VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2
 onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
 onready var painter = $Painter
 onready var tools = $VSplitContainer/Painter/Tools
@@ -195,8 +196,8 @@ func _on_Fill_pressed():
 	painter.fill(eraser_button.pressed)
 
 func _physics_process(delta):
-	camera_stand.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
-	camera_stand.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
+	camera_stand1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
+	camera_stand2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
 	update_view()
 
 func __input(ev : InputEvent):
@@ -250,13 +251,13 @@ func _on_View_gui_input(ev : InputEvent):
 				show_brush(ev.position, previous_position)
 			else:
 				show_brush(ev.position, ev.position)
-		if ev.button_mask & BUTTON_MASK_RIGHT != 0:
+		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
-				camera_stand.translate(-0.2*ev.relative.x*camera.transform.basis.x)
-				camera_stand.translate(0.2*ev.relative.y*camera.transform.basis.y)
+				camera_stand1.translate(-0.02*ev.relative.x*camera.transform.basis.x)
+				camera_stand1.translate(0.02*ev.relative.y*camera.transform.basis.y)
 			else:
-				camera_stand.rotate(camera.global_transform.basis.x.normalized(), -0.01*ev.relative.y)
-				camera_stand.rotate(camera.global_transform.basis.y.normalized(), -0.01*ev.relative.x)
+				camera_stand2.rotate_x(-0.01*ev.relative.y)
+				camera_stand1.rotate_y(-0.01*ev.relative.x)
 		elif ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.shift:
 				reset_stroke()
@@ -301,7 +302,7 @@ func _on_View_gui_input(ev : InputEvent):
 						last_painted_position = pos+Vector2(brush_spacing_control.value, brush_spacing_control.value)
 					paint(pos, get_pressure(ev))
 					reset_stroke()
-		if !ev.pressed and ev.button_index == BUTTON_RIGHT:
+		if !ev.pressed and ev.button_index == BUTTON_MIDDLE:
 			update_view()
 		# Mouse wheel
 		var zoom = 0.0
