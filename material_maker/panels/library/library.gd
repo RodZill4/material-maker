@@ -217,6 +217,7 @@ func add_to_user_library(data : Dictionary, name : String, image : Image) -> voi
 			new_library.push_back(i)
 		elif !inserted:
 			new_library.push_back(data)
+			inserted = true
 	if !inserted:
 		new_library.push_back(data)
 	libraries_data[library_path] = new_library
