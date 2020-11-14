@@ -82,7 +82,7 @@ func set_texture_size(s : float):
 	nm_rect.rect_size = size
 	nm_material.set_shader_param("epsilon", 1/s)
 	nm_material.set_shader_param("tex", depth.get_texture())
-	nm_material.set_shader_param("seams", painter_node.seams_viewport.get_texture())
+	nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
 	painter_node.set_texture_size(s)
 	select_layer(selected_layer_save)
 	while result is GDScriptFunctionState:

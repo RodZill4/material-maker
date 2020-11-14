@@ -12,6 +12,10 @@ uniform float     pattern_angle   = 0.0;
 uniform float     pressure        = 1.0;
 
 uniform sampler2D mesh_normal_tex;
+uniform sampler2D layer_albedo_tex;
+uniform sampler2D layer_mr_tex;
+uniform sampler2D layer_emission_tex;
+uniform sampler2D layer_depth_tex;
 
 // BEGIN_PATTERN
 float brush_function(vec2 uv) {

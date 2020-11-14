@@ -70,8 +70,8 @@ func create_gen(data) -> MMGenBase:
 	var guess = [
 		{ keyword="export", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
-		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
+		{ keyword="is_brush", type=MMGenBrush },
 		{ keyword="shader_model", type=MMGenShader },
 		{ keyword="model_data", type=MMGenShader },
 		{ keyword="widgets", type=MMGenRemote }

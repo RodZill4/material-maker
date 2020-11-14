@@ -12,6 +12,7 @@
 		"has_roughness": true,
 		"mode": 0
 	},
+	"is_brush": true,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -131,5 +132,5 @@
 			}
 		]
 	},
-	"type": "shader"
+	"type": "brush_node"
 }

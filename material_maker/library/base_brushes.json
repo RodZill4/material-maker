@@ -3,52 +3,34 @@
 		{
 			"connections": [
 				{
-					"from": "shape",
+					"from": "uniform",
 					"from_port": 0,
 					"to": "Brush",
-					"to_port": 0
-				},
-				{
-					"from": "tex3d_fbm_4",
-					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
-					"from": "380",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
+					"to_port": 1
 				},
 				{
 					"from": "uniform_greyscale_2",
 					"from_port": 0,
 					"to": "Brush",
+					"to_port": 3
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "Brush",
 					"to_port": 2
 				},
 				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "brightness_contrast",
-					"to_port": 0
-				},
-				{
-					"from": "brightness_contrast",
+					"from": "shape",
 					"from_port": 0,
 					"to": "Brush",
-					"to_port": 1
+					"to_port": 0
 				}
 			],
-			"icon": "3dsnow",
+			"icon": "simple_uniform",
 			"label": "Graph",
 			"longdesc": "",
-			"name": "213",
+			"name": "219",
 			"node_position": {
 				"x": 0,
 				"y": 0
@@ -57,8 +39,8 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": 35,
-						"y": -5
+						"x": 41,
+						"y": -108
 					},
 					"parameters": {
 						"has_albedo": true,
@@ -66,53 +48,59 @@
 						"has_emission": false,
 						"has_metallic": true,
 						"has_roughness": true,
-						"mode": 2
+						"mode": 1
 					},
 					"type": "brush"
 				},
 				{
-					"name": "380",
+					"name": "uniform",
 					"node_position": {
-						"x": -702.5,
-						"y": 5.5
+						"x": -270.5,
+						"y": -88.5
 					},
 					"parameters": {
-
+						"color": {
+							"a": 1,
+							"b": 1,
+							"g": 0,
+							"r": 0,
+							"type": "Color"
+						}
 					},
-					"seed_value": -22277,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.5)",
-								"label": "",
-								"name": "in",
-								"type": "tex3d"
-							}
-						],
-						"instance": "",
-						"name": "3D Brush Map",
-						"outputs": [
-							{
-								"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
+					"type": "uniform"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -302.5,
+						"y": -35.5
 					},
-					"type": "shader"
+					"parameters": {
+						"color": 0
+					},
+					"seed_value": 46771,
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -302.5,
+						"y": 17.75
+					},
+					"parameters": {
+						"color": 1
+					},
+					"seed_value": -46721,
+					"type": "uniform_greyscale"
 				},
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
+						"x": -280.5,
+						"y": -210.643066
 					},
 					"parameters": {
-						"edge": 1,
+						"edge": "1.0-brush_hardness",
 						"radius": 1,
 						"shape": 0,
 						"sides": 6
@@ -120,143 +108,101 @@
 					"type": "shape"
 				},
 				{
-					"name": "tex3d_fbm_4",
+					"name": "324",
 					"node_position": {
-						"x": -745.535889,
-						"y": -162.299103
+						"x": -704,
+						"y": -171.478607
 					},
 					"parameters": {
-						"iterations": 4,
-						"noise": 2,
-						"persistence": 0.5,
-						"scale_x": 8,
-						"scale_y": 8,
-						"scale_z": 8
+						"param0": true,
+						"param1": {
+							"a": 1,
+							"b": 1,
+							"g": 0,
+							"r": 0,
+							"type": "Color"
+						},
+						"param2": true,
+						"param3": 0,
+						"param4": true,
+						"param5": 1
 					},
-					"type": "tex3d_fbm"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -476.306335,
-						"y": 116.837036
-					},
-					"parameters": {
-						"color": 1
-					},
-					"seed_value": -56792,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -463.222656,
-						"y": -11.162964
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Paint Albedo",
+							"linked_widgets": [
 								{
-									"a": 1,
-									"b": 1,
-									"g": 0.680298,
-									"pos": 0,
-									"r": 0.621094
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
+									"node": "Brush",
+									"widget": "has_albedo"
 								}
 							],
-							"type": "Gradient"
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Albedo",
+							"linked_widgets": [
+								{
+									"node": "uniform",
+									"widget": "color"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Metallic",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_metallic"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Metallic",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale",
+									"widget": "color"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Roughness",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_roughness"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Roughness",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_2",
+									"widget": "color"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
 						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -476.222656,
-						"y": 62.337036
-					},
-					"parameters": {
-						"color": 0
-					},
-					"seed_value": -56734,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "brightness_contrast",
-					"node_position": {
-						"x": -238.222656,
-						"y": 4.837036
-					},
-					"parameters": {
-						"max_angle": 20,
-						"width": 0.49
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
-								"label": "",
-								"longdesc": "The input image",
-								"name": "in",
-								"shortdesc": "Input",
-								"type": "rgba"
-							}
-						],
-						"instance": "",
-						"longdesc": "A node that adjusts the Brightness and Contrast of its input",
-						"name": "Filter Horizontal",
-						"outputs": [
-							{
-								"longdesc": "Shows the image with modified Brightness and Contrast",
-								"rgba": "$in($uv)*vec4(vec3(1.0), 1.0-clamp((cos($max_angle*0.01745329251)-(texture(mesh_normal_tex, $uv).y*2.0-1.0))/$width, 0.0, 1.0))",
-								"shortdesc": "Output",
-								"type": "rgba"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 45,
-								"label": "Max angle",
-								"longdesc": "The Brightness adjustment",
-								"max": 90,
-								"min": 0,
-								"name": "max_angle",
-								"shortdesc": "Brightness",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "Width",
-								"max": 1,
-								"min": 0,
-								"name": "width",
-								"step": 0.01,
-								"type": "float"
-							}
-						],
-						"shortdesc": "Brightness/Contrast"
-					},
-					"type": "shader"
+					]
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "3DSnow",
+			"tree_item": "Simple/Uniform",
 			"type": "graph"
 		},
 		{
@@ -280,19 +226,37 @@
 					"to_port": 0
 				},
 				{
-					"from": "image",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale",
+					"from": "colorize_2",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 0
+				},
+				{
+					"from": "uniform",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_2",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 2
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 1
 				}
 			],
-			"icon": "test",
+			"icon": "simple_text",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "1445",
@@ -320,12 +284,12 @@
 				{
 					"name": "text",
 					"node_position": {
-						"x": -540.5,
-						"y": -223.5
+						"x": -745.5,
+						"y": -235.5
 					},
 					"parameters": {
 						"font": "",
-						"font_size": 932,
+						"font_size": 500,
 						"text": "Text",
 						"x": -0.407,
 						"y": -0.283
@@ -335,12 +299,12 @@
 				{
 					"name": "dilate",
 					"node_position": {
-						"x": -518.5,
-						"y": -70
+						"x": -716.5,
+						"y": -80
 					},
 					"parameters": {
 						"param0": 9,
-						"param1": 0.05,
+						"param1": 0.1,
 						"param2": 0
 					},
 					"type": "dilate"
@@ -348,8 +312,8 @@
 				{
 					"name": "colorize",
 					"node_position": {
-						"x": -282.5,
-						"y": -72.25
+						"x": -528.5,
+						"y": -19.25
 					},
 					"parameters": {
 						"gradient": {
@@ -359,37 +323,7 @@
 									"a": 1,
 									"b": 0,
 									"g": 0,
-									"pos": 0.881818,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -290.5,
-						"y": -138.25
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
+									"pos": 0.936364,
 									"r": 0
 								},
 								{
@@ -403,178 +337,78 @@
 							"type": "Gradient"
 						}
 					},
+					"seed_value": 12285,
 					"type": "colorize"
 				},
 				{
-					"name": "image",
+					"name": "colorize_2",
 					"node_position": {
-						"x": -756.049194,
-						"y": -147.25
+						"x": -483.5,
+						"y": -227.25
 					},
 					"parameters": {
-						"image": "D:/Dev/Godot/material-maker-dev/icon.png"
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.827273,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
 					},
-					"type": "image"
+					"seed_value": 47006,
+					"type": "colorize"
 				},
 				{
-					"name": "uniform_greyscale",
+					"name": "5907",
 					"node_position": {
-						"x": -258.049194,
-						"y": -217.25
+						"x": -254.656921,
+						"y": -346.357147
 					},
 					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "Test",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "uniform",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				}
-			],
-			"icon": "simple",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "219",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 41,
-						"y": -108
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 1
-					},
-					"type": "brush"
-				},
-				{
-					"name": "uniform",
-					"node_position": {
-						"x": -270.5,
-						"y": -88.5
-					},
-					"parameters": {
-						"color": {
+						"param0": "Text",
+						"param1": {
 							"a": 1,
 							"b": 1,
+							"g": 1,
+							"r": 1,
+							"type": "Color"
+						},
+						"param2": {
+							"a": 1,
+							"b": 0,
 							"g": 0,
 							"r": 0,
 							"type": "Color"
 						}
 					},
-					"type": "uniform"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -302.5,
-						"y": -35.5
-					},
-					"parameters": {
-						"color": 0
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -302.5,
-						"y": 17.75
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -280.5,
-						"y": -210.643066
-					},
-					"parameters": {
-						"edge": "1.0-brush_hardness",
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "324",
-					"node_position": {
-						"x": -639,
-						"y": -177.478607
-					},
-					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
-					},
 					"type": "remote",
 					"widgets": [
 						{
-							"label": "Paint Albedo",
+							"label": "Text",
 							"linked_widgets": [
 								{
-									"node": "Brush",
-									"widget": "has_albedo"
+									"node": "text",
+									"widget": "text"
 								}
 							],
 							"name": "param0",
 							"type": "linked_control"
 						},
 						{
-							"label": "Albedo",
+							"label": "Color",
 							"linked_widgets": [
 								{
 									"node": "uniform",
@@ -585,121 +419,45 @@
 							"type": "linked_control"
 						},
 						{
-							"label": "Paint Metallic",
+							"label": "Outline color",
 							"linked_widgets": [
 								{
-									"node": "Brush",
-									"widget": "has_metallic"
+									"node": "uniform_2",
+									"widget": "color"
 								}
 							],
 							"name": "param2",
 							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
-							"type": "linked_control"
 						}
 					]
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "Simple",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "uniform",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				}
-			],
-			"icon": "simple",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "219",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 41,
-						"y": -108
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 1
-					},
-					"type": "brush"
 				},
 				{
 					"name": "uniform",
 					"node_position": {
-						"x": -270.5,
-						"y": -88.5
+						"x": -461.656921,
+						"y": -159.357147
 					},
 					"parameters": {
 						"color": {
 							"a": 1,
 							"b": 1,
+							"g": 1,
+							"r": 1,
+							"type": "Color"
+						}
+					},
+					"type": "uniform"
+				},
+				{
+					"name": "uniform_2",
+					"node_position": {
+						"x": -458.156921,
+						"y": -98.857147
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0,
 							"g": 0,
 							"r": 0,
 							"type": "Color"
@@ -708,137 +466,23 @@
 					"type": "uniform"
 				},
 				{
-					"name": "uniform_greyscale",
+					"name": "blend",
 					"node_position": {
-						"x": -302.5,
-						"y": -35.5
+						"x": -286.656921,
+						"y": -133.607147
 					},
 					"parameters": {
-						"color": 0
+						"amount": 1,
+						"blend_type": 0
 					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -302.5,
-						"y": 17.75
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -280.5,
-						"y": -210.643066
-					},
-					"parameters": {
-						"edge": "1.0-brush_hardness",
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "324",
-					"node_position": {
-						"x": -639,
-						"y": -177.478607
-					},
-					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Paint Albedo",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_albedo"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Albedo",
-							"linked_widgets": [
-								{
-									"node": "uniform",
-									"widget": "color"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Metallic",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_metallic"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
-							"type": "linked_control"
-						}
-					]
+					"type": "blend"
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "Simple",
+			"tree_item": "Simple/Text",
 			"type": "graph"
 		},
 		{
@@ -910,7 +554,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "screws",
+			"icon": "patterns_screws",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "219",
@@ -1889,7 +1533,7 @@
 
 			},
 			"shortdesc": "",
-			"tree_item": "Screws",
+			"tree_item": "Patterns/Screws",
 			"type": "graph"
 		},
 		{
@@ -1925,7 +1569,7 @@
 					"to_port": 0
 				}
 			],
-			"icon": "arrow",
+			"icon": "patterns_arrows",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "219",
@@ -2276,13 +1920,49 @@
 
 			},
 			"shortdesc": "",
-			"tree_item": "Arrow",
+			"tree_item": "Patterns/Arrows",
 			"type": "graph"
 		},
 		{
 			"connections": [
 				{
-					"from": "uniform",
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "tex3d_fbm_4",
+					"from_port": 0,
+					"to": "380",
+					"to_port": 0
+				},
+				{
+					"from": "380",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 3
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 2
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "brightness_contrast",
+					"to_port": 0
+				},
+				{
+					"from": "brightness_contrast",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 1
@@ -2291,25 +1971,13 @@
 					"from": "uniform_greyscale_2",
 					"from_port": 0,
 					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
+					"to_port": 5
 				}
 			],
-			"icon": "simple",
+			"icon": "3d_snow",
 			"label": "Graph",
 			"longdesc": "",
-			"name": "219",
+			"name": "213",
 			"node_position": {
 				"x": 0,
 				"y": 0
@@ -2318,66 +1986,62 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": 41,
-						"y": -108
+						"x": 35,
+						"y": -5
 					},
 					"parameters": {
 						"has_albedo": true,
-						"has_depth": false,
+						"has_depth": true,
 						"has_emission": false,
 						"has_metallic": true,
 						"has_roughness": true,
-						"mode": 1
+						"mode": 2
 					},
 					"type": "brush"
 				},
 				{
-					"name": "uniform",
+					"name": "380",
 					"node_position": {
-						"x": -270.5,
-						"y": -88.5
+						"x": -702.5,
+						"y": 5.5
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						}
+
 					},
-					"type": "uniform"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -302.5,
-						"y": -35.5
+					"seed_value": -22277,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec3(0.5)",
+								"label": "",
+								"name": "in",
+								"type": "tex3d"
+							}
+						],
+						"instance": "",
+						"name": "3D Brush Map",
+						"outputs": [
+							{
+								"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
+								"type": "rgb"
+							}
+						],
+						"parameters": [
+
+						]
 					},
-					"parameters": {
-						"color": 0
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -302.5,
-						"y": 17.75
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
+					"type": "shader"
 				},
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -280.5,
-						"y": -210.643066
+						"x": -206.149414,
+						"y": -147.830353
 					},
 					"parameters": {
-						"edge": "1.0-brush_hardness",
+						"edge": 1,
 						"radius": 1,
 						"shape": 0,
 						"sides": 6
@@ -2385,91 +2049,200 @@
 					"type": "shape"
 				},
 				{
-					"name": "324",
+					"name": "tex3d_fbm_4",
 					"node_position": {
-						"x": -639,
-						"y": -177.478607
+						"x": -745.535889,
+						"y": -162.299103
 					},
 					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
+						"iterations": 4,
+						"noise": 2,
+						"persistence": 0.5,
+						"scale_x": 8,
+						"scale_y": 8,
+						"scale_z": 8
+					},
+					"type": "tex3d_fbm"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -476.306335,
+						"y": 116.837036
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -463.222656,
+						"y": -11.162964
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 1,
+									"g": 0.680298,
+									"pos": 0,
+									"r": 0.621094
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 1,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed_value": 18714,
+					"type": "colorize"
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -476.222656,
+						"y": 62.337036
+					},
+					"parameters": {
+						"color": 0
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "brightness_contrast",
+					"node_position": {
+						"x": -238.222656,
+						"y": -5.162964
+					},
+					"parameters": {
+						"max_angle": 30,
+						"width": 0.3,
+						"x": 0,
+						"y": 1,
+						"z": 0
+					},
+					"shader_model": {
+						"code": "",
+						"global": "float filter_angle(vec3 input_normal, vec3 ref_vector, float max_angle, float smoothness) {\n\treturn 1.0-clamp((cos(max_angle*0.01745329251)-dot(normalize(input_normal), normalize(ref_vector)))/smoothness, 0.0, 1.0);\n}\n",
+						"inputs": [
+							{
+								"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
+								"label": "",
+								"longdesc": "The input image",
+								"name": "in",
+								"shortdesc": "Input",
+								"type": "rgba"
+							}
+						],
+						"instance": "",
+						"longdesc": "A node that adjusts the Brightness and Contrast of its input",
+						"name": "Normal filter",
+						"outputs": [
+							{
+								"longdesc": "Shows the image with modified Brightness and Contrast",
+								"rgba": "$in($uv)*vec4(vec3(1.0), filter_angle(2.0*texture(mesh_normal_tex, $uv).xyz-vec3(1.0), vec3($x, $y, $z), $max_angle, $width))",
+								"shortdesc": "Output",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0,
+								"label": "X",
+								"max": 1,
+								"min": -1,
+								"name": "x",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1,
+								"label": "Y",
+								"max": 1,
+								"min": -1,
+								"name": "y",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Z",
+								"max": 1,
+								"min": -1,
+								"name": "z",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 45,
+								"label": "Max angle",
+								"max": 90,
+								"min": 0,
+								"name": "max_angle",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "Width",
+								"max": 1,
+								"min": 0,
+								"name": "width",
+								"step": 0.01,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Brightness/Contrast"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "4155",
+					"node_position": {
+						"x": -489.113953,
+						"y": -134.847656
+					},
+					"parameters": {
+						"param0": 30,
+						"param1": 0.3
 					},
 					"type": "remote",
 					"widgets": [
 						{
-							"label": "Paint Albedo",
+							"label": "Angle",
 							"linked_widgets": [
 								{
-									"node": "Brush",
-									"widget": "has_albedo"
+									"node": "brightness_contrast",
+									"widget": "max_angle"
 								}
 							],
 							"name": "param0",
+							"shortdesc": "Angle",
 							"type": "linked_control"
 						},
 						{
-							"label": "Albedo",
+							"label": "Bevel",
 							"linked_widgets": [
 								{
-									"node": "uniform",
-									"widget": "color"
+									"node": "brightness_contrast",
+									"widget": "width"
 								}
 							],
 							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Metallic",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_metallic"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
 							"type": "linked_control"
 						}
 					]
@@ -2479,7 +2252,7 @@
 
 			},
 			"shortdesc": "",
-			"tree_item": "Simple",
+			"tree_item": "3D/Snow",
 			"type": "graph"
 		},
 		{
@@ -2521,19 +2294,25 @@
 					"to_port": 0
 				},
 				{
-					"from": "tex3d_rotate",
-					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
 					"from": "shape",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 0
+				},
+				{
+					"from": "tex3d_rotate",
+					"from_port": 0,
+					"to": "tex3d_rotate_2",
+					"to_port": 0
+				},
+				{
+					"from": "tex3d_rotate_2",
+					"from_port": 0,
+					"to": "380",
+					"to_port": 0
 				}
 			],
-			"icon": "3dwood",
+			"icon": "3d_wood",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "213",
@@ -2561,8 +2340,8 @@
 				{
 					"name": "380",
 					"node_position": {
-						"x": -414.5,
-						"y": 29.5
+						"x": -583.5,
+						"y": 103.5
 					},
 					"parameters": {
 
@@ -2648,7 +2427,6 @@
 							"type": "Gradient"
 						}
 					},
-					"seed_value": 16947,
 					"type": "colorize"
 				},
 				{
@@ -2730,8 +2508,8 @@
 					"longdesc": "",
 					"name": "graph",
 					"node_position": {
-						"x": -775.5,
-						"y": 15.25
+						"x": -564.5,
+						"y": -182.75
 					},
 					"nodes": [
 						{
@@ -3118,17 +2896,18 @@
 					"parameters": {
 
 					},
+					"seed_value": -14040,
 					"shortdesc": "",
 					"type": "graph"
 				},
 				{
 					"name": "tex3d_rotate",
 					"node_position": {
-						"x": -611.34198,
-						"y": 7.0625
+						"x": -577.34198,
+						"y": -134.9375
 					},
 					"parameters": {
-						"ax": -13,
+						"ax": 0,
 						"ay": 0,
 						"az": 0
 					},
@@ -3162,7 +2941,6 @@
 							"type": "Gradient"
 						}
 					},
-					"seed_value": -2717,
 					"type": "colorize"
 				},
 				{
@@ -3189,29 +2967,179 @@
 						"sides": 5
 					},
 					"type": "shape"
+				},
+				{
+					"name": "tex3d_rotate_2",
+					"node_position": {
+						"x": -582.149414,
+						"y": -34.799103
+					},
+					"parameters": {
+						"x": -0,
+						"y": 0,
+						"z": 0
+					},
+					"seed_value": 49240,
+					"shader_model": {
+						"code": "",
+						"global": "vec3 tex3d_rotate(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
+						"inputs": [
+							{
+								"default": "vec3(1.0)",
+								"label": "",
+								"longdesc": "The input 3D texture",
+								"name": "in",
+								"shortdesc": "Input",
+								"type": "tex3d"
+							}
+						],
+						"instance": "",
+						"longdesc": "A node that rotates a 3D texture",
+						"name": "TEX3D Translate",
+						"outputs": [
+							{
+								"longdesc": "The rotated 3D texture",
+								"shortdesc": "Output",
+								"tex3d": "$in(vec4($uv.xyz-vec3($x, $y, $z), $uv.w))",
+								"type": "tex3d"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0,
+								"label": "X",
+								"longdesc": "The translation along the X axis",
+								"max": 5,
+								"min": -5,
+								"name": "x",
+								"shortdesc": "Translate.x",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Y",
+								"longdesc": "The translation along the Y axis",
+								"max": 5,
+								"min": -5,
+								"name": "y",
+								"shortdesc": "Translate.y",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Z",
+								"longdesc": "The translation along the Z axis",
+								"max": 5,
+								"min": -5,
+								"name": "z",
+								"shortdesc": "Translate.z",
+								"step": 0.01,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Tex3D Rotate"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "1211",
+					"node_position": {
+						"x": -367.149414,
+						"y": -131.299103
+					},
+					"parameters": {
+						"param0": -0,
+						"param1": 0,
+						"param2": 0,
+						"param3": 0,
+						"param4": 0,
+						"param5": 0
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Translate X",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate_2",
+									"widget": "x"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Translate Y",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate_2",
+									"widget": "y"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Translate Z",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate_2",
+									"widget": "z"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rotate X",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate",
+									"widget": "ax"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rotate Y",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate",
+									"widget": "ay"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rotate Z",
+							"linked_widgets": [
+								{
+									"node": "tex3d_rotate",
+									"widget": "az"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "3DWood",
+			"tree_item": "3D/Wood",
 			"type": "graph"
 		},
 		{
 			"connections": [
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "colorize_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
 				{
 					"from": "uniform_greyscale",
 					"from_port": 0,
@@ -3231,1699 +3159,103 @@
 					"to_port": 0
 				},
 				{
-					"from": "380",
+					"from": "math_3",
 					"from_port": 0,
-					"to": "math",
+					"to": "math_2",
 					"to_port": 0
 				},
 				{
-					"from": "math",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "math",
-					"from_port": 0,
-					"to": "colorize_2",
-					"to_port": 0
-				}
-			],
-			"icon": "3drustyiron",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "213",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 35,
-						"y": -5
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 2
-					},
-					"type": "brush"
-				},
-				{
-					"name": "380",
-					"node_position": {
-						"x": -702.5,
-						"y": 5.5
-					},
-					"parameters": {
-
-					},
-					"seed_value": -22277,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.5)",
-								"label": "",
-								"name": "in",
-								"type": "tex3d"
-							}
-						],
-						"instance": "",
-						"name": "3D Brush Map",
-						"outputs": [
-							{
-								"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -216.5,
-						"y": -21.5
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.5,
-									"g": 0.5,
-									"pos": 0.467254,
-									"r": 0.5
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.5,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
-									"pos": 0.609091,
-									"r": 0.222656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.7,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
-									"pos": 0.781818,
-									"r": 0.222656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.881818,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
-									"pos": 1,
-									"r": 0.222656
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": 16947,
-					"type": "colorize"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -206.102112,
-						"y": 109.0625
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.003906,
-									"g": 0.003906,
-									"pos": 0,
-									"r": 0.003906
-								},
-								{
-									"a": 1,
-									"b": 0.257813,
-									"g": 0.257813,
-									"pos": 0.481818,
-									"r": 0.257813
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0.496057,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": -2717,
-					"type": "colorize"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -214.102112,
-						"y": 51.0625
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
-					},
-					"parameters": {
-						"edge": 1,
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "tex3d_fbm_4",
-					"node_position": {
-						"x": -745.535889,
-						"y": -162.299103
-					},
-					"parameters": {
-						"iterations": 4,
-						"noise": 2,
-						"persistence": 0.5,
-						"scale_x": 8,
-						"scale_y": 8,
-						"scale_z": 8
-					},
-					"type": "tex3d_fbm"
-				},
-				{
-					"name": "math",
-					"node_position": {
-						"x": -475.535889,
-						"y": -6.299103
-					},
-					"parameters": {
-						"clamp": false,
-						"default_in1": 0,
-						"default_in2": 1.44,
-						"op": 6
-					},
-					"type": "math"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "3DRustyIron",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "uniform",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				}
-			],
-			"icon": "simple",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "219",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 41,
-						"y": -108
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 1
-					},
-					"type": "brush"
-				},
-				{
-					"name": "uniform",
-					"node_position": {
-						"x": -270.5,
-						"y": -88.5
-					},
-					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						}
-					},
-					"type": "uniform"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -302.5,
-						"y": -35.5
-					},
-					"parameters": {
-						"color": 0
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -302.5,
-						"y": 17.75
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -280.5,
-						"y": -210.643066
-					},
-					"parameters": {
-						"edge": "1.0-brush_hardness",
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "324",
-					"node_position": {
-						"x": -639,
-						"y": -177.478607
-					},
-					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Paint Albedo",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_albedo"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Albedo",
-							"linked_widgets": [
-								{
-									"node": "uniform",
-									"widget": "color"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Metallic",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_metallic"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
-							"type": "linked_control"
-						}
-					]
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "Simple",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "graph_3",
-					"from_port": 0,
-					"to": "1652_2",
-					"to_port": 0
-				},
-				{
-					"from": "graph_3",
-					"from_port": 1,
-					"to": "1652_2",
-					"to_port": 1
-				},
-				{
-					"from": "graph_3",
-					"from_port": 2,
-					"to": "1652_2",
-					"to_port": 2
-				},
-				{
-					"from": "graph_3",
-					"from_port": 3,
-					"to": "1652_2",
-					"to_port": 3
-				},
-				{
-					"from": "graph_3",
-					"from_port": 4,
-					"to": "1652_2",
-					"to_port": 4
-				},
-				{
-					"from": "1652_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "1652_2",
-					"from_port": 1,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "1652_2",
-					"from_port": 2,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "1652_2",
-					"from_port": 3,
-					"to": "Brush",
-					"to_port": 4
-				},
-				{
-					"from": "1652_2",
-					"from_port": 4,
-					"to": "Brush",
-					"to_port": 5
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				}
-			],
-			"icon": "screws",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "219",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 41,
-						"y": -134
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": true,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 0
-					},
-					"type": "brush"
-				},
-				{
-					"name": "1652_2",
-					"node_position": {
-						"x": -165.166656,
-						"y": -51.768066
-					},
-					"parameters": {
-						"offset": 0.2
-					},
-					"shader_model": {
-						"code": "",
-						"global": "vec2 align_shapes_uv(vec2 uv, float offset, float seed) {\n\tfloat angle = rand(vec2(seed, floor(uv.x/(1.0+offset))));\n\tuv.x = mod(uv.x, 1.0+offset);\n\tuv = clamp(uv, vec2(0.0), vec2(1.0))-vec2(0.5);\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tmat2 rot = mat2(vec2(ca, sa), vec2(-sa, ca));\n\treturn rot*uv+vec2(0.5);\n}",
-						"inputs": [
-							{
-								"default": "vec4(1.0)",
-								"group_size": 5,
-								"label": "",
-								"name": "albedo",
-								"type": "rgba"
-							},
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "metallic",
-								"type": "f"
-							},
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "roughness",
-								"type": "f"
-							},
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "emission",
-								"type": "rgba"
-							},
-							{
-								"default": "0.0",
-								"label": "",
-								"name": "depth",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "Align",
-						"outputs": [
-							{
-								"group_size": 5,
-								"rgba": "$albedo(align_shapes_uv($uv, $offset, float($seed)))",
-								"type": "rgba"
-							},
-							{
-								"f": "$metallic(align_shapes_uv($uv, $offset, float($seed)))",
-								"type": "f"
-							},
-							{
-								"f": "$roughness(align_shapes_uv($uv, $offset, float($seed)))",
-								"type": "f"
-							},
-							{
-								"rgba": "$emission(align_shapes_uv($uv, $offset, float($seed)))",
-								"type": "rgba"
-							},
-							{
-								"f": "$depth(align_shapes_uv($uv, $offset, float($seed)))",
-								"type": "f"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 0,
-								"label": "",
-								"max": 10,
-								"min": 0,
-								"name": "offset",
-								"step": 0.01,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"connections": [
-						{
-							"from": "shape_2",
-							"from_port": 0,
-							"to": "mirror",
-							"to_port": 0
-						},
-						{
-							"from": "shape",
-							"from_port": 0,
-							"to": "combine",
-							"to_port": 3
-						},
-						{
-							"from": "combine",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						},
-						{
-							"from": "uniform_greyscale_2",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 1
-						},
-						{
-							"from": "decompose",
-							"from_port": 0,
-							"to": "combine",
-							"to_port": 0
-						},
-						{
-							"from": "decompose",
-							"from_port": 1,
-							"to": "combine",
-							"to_port": 1
-						},
-						{
-							"from": "decompose",
-							"from_port": 2,
-							"to": "combine",
-							"to_port": 2
-						},
-						{
-							"from": "uniform",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 3
-						},
-						{
-							"from": "colorize_2",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 4
-						},
-						{
-							"from": "colorize_3",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 2
-						},
-						{
-							"from": "mirror",
-							"from_port": 0,
-							"to": "switch",
-							"to_port": 0
-						},
-						{
-							"from": "switch",
-							"from_port": 0,
-							"to": "colorize",
-							"to_port": 0
-						},
-						{
-							"from": "switch",
-							"from_port": 0,
-							"to": "colorize_3",
-							"to_port": 0
-						},
-						{
-							"from": "shape_3",
-							"from_port": 0,
-							"to": "switch",
-							"to_port": 1
-						},
-						{
-							"from": "shape_3",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 0
-						},
-						{
-							"from": "shape_4",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 1
-						},
-						{
-							"from": "shape_5",
-							"from_port": 0,
-							"to": "blend_2",
-							"to_port": 1
-						},
-						{
-							"from": "shape_3",
-							"from_port": 0,
-							"to": "blend_2",
-							"to_port": 0
-						},
-						{
-							"from": "blend",
-							"from_port": 0,
-							"to": "blend_3",
-							"to_port": 0
-						},
-						{
-							"from": "blend_3",
-							"from_port": 0,
-							"to": "switch",
-							"to_port": 2
-						},
-						{
-							"from": "blend_2",
-							"from_port": 0,
-							"to": "switch",
-							"to_port": 3
-						},
-						{
-							"from": "shape_6",
-							"from_port": 0,
-							"to": "rotate",
-							"to_port": 0
-						},
-						{
-							"from": "rotate",
-							"from_port": 0,
-							"to": "blend_3",
-							"to_port": 1
-						},
-						{
-							"from": "switch",
-							"from_port": 0,
-							"to": "switch_2",
-							"to_port": 0
-						},
-						{
-							"from": "switch_2",
-							"from_port": 0,
-							"to": "colorize_2",
-							"to_port": 0
-						},
-						{
-							"from": "blend_4",
-							"from_port": 0,
-							"to": "switch_2",
-							"to_port": 1
-						},
-						{
-							"from": "switch",
-							"from_port": 0,
-							"to": "blend_4",
-							"to_port": 0
-						},
-						{
-							"from": "colorize_4",
-							"from_port": 0,
-							"to": "blend_4",
-							"to_port": 1
-						},
-						{
-							"from": "sphere",
-							"from_port": 0,
-							"to": "math",
-							"to_port": 0
-						},
-						{
-							"from": "math",
-							"from_port": 0,
-							"to": "colorize_4",
-							"to_port": 0
-						},
-						{
-							"from": "uniform_2",
-							"from_port": 0,
-							"to": "blend_5",
-							"to_port": 0
-						},
-						{
-							"from": "blend_5",
-							"from_port": 0,
-							"to": "decompose",
-							"to_port": 0
-						},
-						{
-							"from": "colorize",
-							"from_port": 0,
-							"to": "blend_5",
-							"to_port": 1
-						}
-					],
-					"label": "Screws",
-					"longdesc": "",
-					"name": "graph_3",
-					"node_position": {
-						"x": -379.333344,
-						"y": -45.518066
-					},
-					"nodes": [
-						{
-							"name": "shape",
-							"node_position": {
-								"x": -517.5,
-								"y": -31
-							},
-							"parameters": {
-								"edge": 0.03,
-								"radius": 0.8,
-								"shape": 0,
-								"sides": 6
-							},
-							"type": "shape"
-						},
-						{
-							"name": "combine",
-							"node_position": {
-								"x": -297.5,
-								"y": -123
-							},
-							"parameters": {
-
-							},
-							"type": "combine"
-						},
-						{
-							"name": "shape_2",
-							"node_position": {
-								"x": -1744.5,
-								"y": -131
-							},
-							"parameters": {
-								"edge": 0.3,
-								"radius": 0.1,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "uniform_greyscale_2",
-							"node_position": {
-								"x": -335.581329,
-								"y": 34
-							},
-							"parameters": {
-								"color": 1
-							},
-							"type": "uniform_greyscale"
-						},
-						{
-							"name": "mirror",
-							"node_position": {
-								"x": -1579.5,
-								"y": -132
-							},
-							"parameters": {
-								"direction": 1,
-								"offset": 0.8
-							},
-							"type": "mirror"
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -1807.5,
-								"y": -192.571426
-							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": -43.5,
-								"y": 13.428572
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"group_size": 5,
-									"name": "albedo",
-									"type": "rgba"
-								},
-								{
-									"group_size": 0,
-									"name": "metallic",
-									"type": "f"
-								},
-								{
-									"group_size": 0,
-									"name": "roughness",
-									"type": "f"
-								},
-								{
-									"group_size": 0,
-									"name": "emission",
-									"type": "rgba"
-								},
-								{
-									"group_size": 0,
-									"name": "depth",
-									"type": "f"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -794.237549,
-								"y": -326
-							},
-							"parameters": {
-								"param0": 2,
-								"param1": 1,
-								"param2": {
-									"a": 1,
-									"b": 0.484724,
-									"g": 0.484724,
-									"r": 0.484724,
-									"type": "Color"
-								}
-							},
-							"type": "remote",
-							"widgets": [
-								{
-									"configurations": {
-										"Cross": [
-											{
-												"node": "switch",
-												"value": 1,
-												"widget": "source"
-											}
-										],
-										"Frearson": [
-											{
-												"node": "switch",
-												"value": 3,
-												"widget": "source"
-											}
-										],
-										"Philips": [
-											{
-												"node": "switch",
-												"value": 2,
-												"widget": "source"
-											}
-										],
-										"Slot drive": [
-											{
-												"node": "switch",
-												"value": 0,
-												"widget": "source"
-											}
-										]
-									},
-									"label": "",
-									"linked_widgets": [
-										{
-											"node": "switch",
-											"widget": "source"
-										}
-									],
-									"name": "param0",
-									"type": "config_control"
-								},
-								{
-									"configurations": {
-										"Countersunk": [
-											{
-												"node": "switch_2",
-												"value": 0,
-												"widget": "source"
-											}
-										],
-										"Round": [
-											{
-												"node": "switch_2",
-												"value": 1,
-												"widget": "source"
-											}
-										]
-									},
-									"label": "",
-									"linked_widgets": [
-										{
-											"node": "switch_2",
-											"widget": "source"
-										}
-									],
-									"name": "param1",
-									"type": "config_control"
-								},
-								{
-									"label": "",
-									"linked_widgets": [
-										{
-											"node": "uniform_2",
-											"widget": "color"
-										}
-									],
-									"name": "param2",
-									"type": "linked_control"
-								}
-							]
-						},
-						{
-							"name": "colorize",
-							"node_position": {
-								"x": -1021.390015,
-								"y": -104.764282
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 1,
-											"g": 1,
-											"pos": 0,
-											"r": 1
-										},
-										{
-											"a": 1,
-											"b": 0.472656,
-											"g": 0.472656,
-											"pos": 1,
-											"r": 0.472656
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"seed_value": 12685,
-							"type": "colorize"
-						},
-						{
-							"name": "decompose",
-							"node_position": {
-								"x": -520.026367,
-								"y": -133.355225
-							},
-							"parameters": {
-
-							},
-							"type": "decompose"
-						},
-						{
-							"name": "uniform",
-							"node_position": {
-								"x": -312.364868,
-								"y": 155.688232
-							},
-							"parameters": {
-								"color": {
-									"a": 0,
-									"b": 0,
-									"g": 0,
-									"r": 0,
-									"type": "Color"
-								}
-							},
-							"type": "uniform"
-						},
-						{
-							"name": "colorize_2",
-							"node_position": {
-								"x": -336.3078,
-								"y": 213.669067
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0.03125,
-											"g": 0.03125,
-											"pos": 0,
-											"r": 0.03125
-										},
-										{
-											"a": 1,
-											"b": 0.125,
-											"g": 0.125,
-											"pos": 1,
-											"r": 0.125
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"seed_value": -50611,
-							"type": "colorize"
-						},
-						{
-							"name": "colorize_3",
-							"node_position": {
-								"x": -342.806885,
-								"y": 93.218842
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0.355469,
-											"g": 0.355469,
-											"pos": 0,
-											"r": 0.355469
-										},
-										{
-											"a": 1,
-											"b": 1,
-											"g": 1,
-											"pos": 1,
-											"r": 1
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "colorize"
-						},
-						{
-							"name": "switch",
-							"node_position": {
-								"x": -1329.266235,
-								"y": -36.610474
-							},
-							"parameters": {
-								"choices": 4,
-								"outputs": 1,
-								"source": 2
-							},
-							"type": "switch"
-						},
-						{
-							"name": "shape_3",
-							"node_position": {
-								"x": -1955.411377,
-								"y": -30.360474
-							},
-							"parameters": {
-								"edge": 0.3,
-								"radius": 0.1,
-								"shape": 2,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "blend",
-							"node_position": {
-								"x": -1800.057983,
-								"y": 21.889526
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 10
-							},
-							"type": "blend"
-						},
-						{
-							"name": "shape_4",
-							"node_position": {
-								"x": -1955.915894,
-								"y": 97.139526
-							},
-							"parameters": {
-								"edge": 0.1,
-								"radius": 0.6,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "blend_2",
-							"node_position": {
-								"x": -1651.986938,
-								"y": 272.764526
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 10
-							},
-							"type": "blend"
-						},
-						{
-							"name": "shape_5",
-							"node_position": {
-								"x": -1824.844849,
-								"y": 351.014526
-							},
-							"parameters": {
-								"edge": 0.1,
-								"radius": 0.4,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "blend_3",
-							"node_position": {
-								"x": -1582.036377,
-								"y": 58.139526
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 9
-							},
-							"type": "blend"
-						},
-						{
-							"name": "shape_6",
-							"node_position": {
-								"x": -1957.036377,
-								"y": 223.389526
-							},
-							"parameters": {
-								"edge": 0.1,
-								"radius": 0.23,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "rotate",
-							"node_position": {
-								"x": -1803.944702,
-								"y": 142.639526
-							},
-							"parameters": {
-								"cx": 0,
-								"cy": 0,
-								"rotate": 45
-							},
-							"type": "rotate"
-						},
-						{
-							"name": "switch_2",
-							"node_position": {
-								"x": -823.491333,
-								"y": 108.514526
-							},
-							"parameters": {
-								"choices": 2,
-								"outputs": 1,
-								"source": 1
-							},
-							"type": "switch"
-						},
-						{
-							"name": "blend_4",
-							"node_position": {
-								"x": -1079.099487,
-								"y": 143.514526
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 9
-							},
-							"type": "blend"
-						},
-						{
-							"name": "sphere",
-							"node_position": {
-								"x": -1348.099487,
-								"y": 107.514526
-							},
-							"parameters": {
-								"cx": 0.5,
-								"cy": 0.5,
-								"r": 0.5
-							},
-							"type": "sphere"
-						},
-						{
-							"name": "colorize_4",
-							"node_position": {
-								"x": -1336.099487,
-								"y": 338.514526
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 0.045455,
-											"r": 0
-										},
-										{
-											"a": 1,
-											"b": 0.230469,
-											"g": 0.230469,
-											"pos": 0.090909,
-											"r": 0.230469
-										},
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 1,
-											"r": 0
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "colorize"
-						},
-						{
-							"name": "math",
-							"node_position": {
-								"x": -1344.333374,
-								"y": 209.9953
-							},
-							"parameters": {
-								"clamp": false,
-								"default_in1": 0,
-								"default_in2": 0.46,
-								"op": 6
-							},
-							"type": "math"
-						},
-						{
-							"name": "uniform_2",
-							"node_position": {
-								"x": -970.510742,
-								"y": -161.5047
-							},
-							"parameters": {
-								"color": {
-									"a": 1,
-									"b": 0.484724,
-									"g": 0.484724,
-									"r": 0.484724,
-									"type": "Color"
-								}
-							},
-							"seed_value": 51622,
-							"type": "uniform"
-						},
-						{
-							"name": "blend_5",
-							"node_position": {
-								"x": -789.510742,
-								"y": -161.5047
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 2
-							},
-							"type": "blend"
-						}
-					],
-					"parameters": {
-						"param0": 2,
-						"param1": 1,
-						"param2": {
-							"a": 1,
-							"b": 0.484724,
-							"g": 0.484724,
-							"r": 0.484724,
-							"type": "Color"
-						}
-					},
-					"seed_value": 4808,
-					"shortdesc": "",
-					"type": "graph"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -166.5,
-						"y": -178.143066
-					},
-					"parameters": {
-						"edge": 0,
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "1328",
-					"node_position": {
-						"x": -531,
-						"y": -193.8573
-					},
-					"parameters": {
-						"param0": 2,
-						"param1": 1,
-						"param2": {
-							"a": 1,
-							"b": 0.484724,
-							"g": 0.484724,
-							"r": 0.484724,
-							"type": "Color"
-						}
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Type",
-							"linked_widgets": [
-								{
-									"node": "graph_3",
-									"widget": "param0"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Shape",
-							"linked_widgets": [
-								{
-									"node": "graph_3",
-									"widget": "param1"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Color",
-							"linked_widgets": [
-								{
-									"node": "graph_3",
-									"widget": "param2"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						}
-					]
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "Screws",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "tex3d_fbm_4",
+					"from": "tex3d_fbm_2",
 					"from_port": 0,
 					"to": "380_2",
 					"to_port": 0
 				},
 				{
+					"from": "380",
+					"from_port": 0,
+					"to": "math_3",
+					"to_port": 0
+				},
+				{
+					"from": "380",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
 					"from": "380_2",
 					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				}
-			],
-			"icon": "3dmat",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "213",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 54,
-						"y": -49
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 2
-					},
-					"type": "brush"
-				},
-				{
-					"name": "tex3d_fbm_4",
-					"node_position": {
-						"x": -667.5,
-						"y": -46.5
-					},
-					"parameters": {
-						"iterations": 2,
-						"noise": 2,
-						"persistence": 0.5,
-						"scale_x": 4,
-						"scale_y": 4,
-						"scale_z": 4
-					},
-					"type": "tex3d_fbm"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -200.5,
-						"y": -30.5
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0.236364,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0.454545,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0.663636,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": 20522,
-					"type": "colorize"
-				},
-				{
-					"name": "380_2",
-					"node_position": {
-						"x": -412.375,
-						"y": -33.125
-					},
-					"parameters": {
-
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.5)",
-								"label": "",
-								"name": "in",
-								"type": "tex3d"
-							}
-						],
-						"instance": "",
-						"name": "3D Brush Map",
-						"outputs": [
-							{
-								"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "3DMat",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "graph",
-					"from_port": 0,
-					"to": "tex3d_rotate",
+					"to": "colorize_3",
 					"to_port": 0
 				},
 				{
-					"from": "colorize_2",
+					"from": "blend",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 3
 				},
 				{
-					"from": "uniform_greyscale",
+					"from": "tex3d_fbm_3",
 					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "380",
-					"from_port": 0,
-					"to": "colorize",
+					"to": "380_3",
 					"to_port": 0
 				},
 				{
-					"from": "380",
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 1
+				},
+				{
+					"from": "tones_step",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 2
+				},
+				{
+					"from": "tones_step",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 2
+				},
+				{
+					"from": "colorize_3",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "math_2",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 1
+				},
+				{
+					"from": "380_3",
 					"from_port": 0,
 					"to": "colorize_2",
 					"to_port": 0
 				},
 				{
-					"from": "tex3d_rotate",
+					"from": "colorize_2",
 					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
+					"to": "tones_step",
 					"to_port": 0
 				}
 			],
-			"icon": "3dwood",
+			"icon": "3d_rustyiron",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "213",
@@ -4951,724 +3283,8 @@
 				{
 					"name": "380",
 					"node_position": {
-						"x": -414.5,
-						"y": 29.5
-					},
-					"parameters": {
-
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.5)",
-								"label": "",
-								"name": "in",
-								"type": "tex3d"
-							}
-						],
-						"instance": "",
-						"name": "3D Brush Map",
-						"outputs": [
-							{
-								"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -216.5,
-						"y": -21.5
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.138428,
-									"g": 0.429703,
-									"pos": 0.127273,
-									"r": 0.65625
-								},
-								{
-									"a": 1,
-									"b": 0.092125,
-									"g": 0.328731,
-									"pos": 0.267254,
-									"r": 0.492666
-								},
-								{
-									"a": 1,
-									"b": 0.117998,
-									"g": 0.385151,
-									"pos": 0.439981,
-									"r": 0.584072
-								},
-								{
-									"a": 1,
-									"b": 0.066252,
-									"g": 0.27231,
-									"pos": 0.558163,
-									"r": 0.40126
-								},
-								{
-									"a": 1,
-									"b": 0.092788,
-									"g": 0.330178,
-									"pos": 0.721799,
-									"r": 0.49501
-								},
-								{
-									"a": 1,
-									"b": 0.052185,
-									"g": 0.241635,
-									"pos": 0.881818,
-									"r": 0.351563
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": 16947,
-					"type": "colorize"
-				},
-				{
-					"connections": [
-						{
-							"from": "radial_gradient",
-							"from_port": 0,
-							"to": "tex3d_from2d",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_from2d",
-							"from_port": 0,
-							"to": "tex3d_distort_2",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_distort_2",
-							"from_port": 0,
-							"to": "tex3d_rotate",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_fbm_2",
-							"from_port": 0,
-							"to": "tex3d_colorize_2",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_fbm_4",
-							"from_port": 0,
-							"to": "tex3d_colorize_3",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_fbm_3",
-							"from_port": 0,
-							"to": "tex3d_colorize_4",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_colorize_3",
-							"from_port": 0,
-							"to": "tex3d_blend_2",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_colorize_2",
-							"from_port": 0,
-							"to": "tex3d_blend_2",
-							"to_port": 1
-						},
-						{
-							"from": "tex3d_blend_2",
-							"from_port": 0,
-							"to": "tex3d_blend_3",
-							"to_port": 0
-						},
-						{
-							"from": "tex3d_colorize_4",
-							"from_port": 0,
-							"to": "tex3d_blend_3",
-							"to_port": 1
-						},
-						{
-							"from": "tex3d_blend_3",
-							"from_port": 0,
-							"to": "tex3d_distort_2",
-							"to_port": 1
-						},
-						{
-							"from": "tex3d_rotate",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						}
-					],
-					"label": "Wood 3D",
-					"longdesc": "",
-					"name": "graph",
-					"node_position": {
-						"x": -775.5,
-						"y": 15.25
-					},
-					"nodes": [
-						{
-							"name": "tex3d_colorize_4",
-							"node_position": {
-								"x": -873.717285,
-								"y": 433.5
-							},
-							"parameters": {
-								"g": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 0,
-											"r": 0
-										},
-										{
-											"a": 1,
-											"b": 1,
-											"g": 0,
-											"pos": 1,
-											"r": 0
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "tex3d_colorize"
-						},
-						{
-							"name": "tex3d_colorize_2",
-							"node_position": {
-								"x": -879.717285,
-								"y": 198.25
-							},
-							"parameters": {
-								"g": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 0,
-											"r": 0
-										},
-										{
-											"a": 1,
-											"b": 0,
-											"g": 1,
-											"pos": 1,
-											"r": 0
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "tex3d_colorize"
-						},
-						{
-							"name": "tex3d_rotate",
-							"node_position": {
-								"x": -351.5,
-								"y": 210
-							},
-							"parameters": {
-								"ax": 0,
-								"ay": 0,
-								"az": 0
-							},
-							"type": "tex3d_rotate"
-						},
-						{
-							"name": "tex3d_from2d",
-							"node_position": {
-								"x": -351.5,
-								"y": 51
-							},
-							"parameters": {
-
-							},
-							"type": "tex3d_from2d"
-						},
-						{
-							"name": "tex3d_fbm_4",
-							"node_position": {
-								"x": -892.021301,
-								"y": -205
-							},
-							"parameters": {
-								"iterations": 3,
-								"noise": 0,
-								"persistence": 0.5,
-								"scale_x": 8,
-								"scale_y": 8,
-								"scale_z": 8
-							},
-							"type": "tex3d_fbm"
-						},
-						{
-							"name": "tex3d_colorize_3",
-							"node_position": {
-								"x": -875.021301,
-								"y": -37
-							},
-							"parameters": {
-								"g": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 0,
-											"r": 0
-										},
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 1,
-											"r": 1
-										}
-									],
-									"type": "Gradient"
-								}
-							},
-							"type": "tex3d_colorize"
-						},
-						{
-							"name": "tex3d_fbm_2",
-							"node_position": {
-								"x": -896.717285,
-								"y": 30.25
-							},
-							"parameters": {
-								"iterations": 3,
-								"noise": 0,
-								"persistence": 0.5,
-								"scale_x": 8,
-								"scale_y": 8,
-								"scale_z": 8
-							},
-							"type": "tex3d_fbm"
-						},
-						{
-							"name": "tex3d_fbm_3",
-							"node_position": {
-								"x": -890.717285,
-								"y": 265.5
-							},
-							"parameters": {
-								"iterations": 3,
-								"noise": 0,
-								"persistence": 0.5,
-								"scale_x": 8,
-								"scale_y": 8,
-								"scale_z": 8
-							},
-							"type": "tex3d_fbm"
-						},
-						{
-							"name": "tex3d_distort_2",
-							"node_position": {
-								"x": -367.236511,
-								"y": 107
-							},
-							"parameters": {
-								"Distort": 0.06
-							},
-							"shader_model": {
-								"code": "",
-								"global": "",
-								"inputs": [
-									{
-										"default": "vec3(1.0)",
-										"label": "",
-										"longdesc": "The 3D texture to be distorted",
-										"name": "in1",
-										"shortdesc": "Input1",
-										"type": "tex3d"
-									},
-									{
-										"default": "vec3(0.0)",
-										"label": "",
-										"longdesc": "The 3D texture used to distort Input1",
-										"name": "in2",
-										"shortdesc": "Input2",
-										"type": "tex3d"
-									}
-								],
-								"instance": "",
-								"longdesc": "A node that distorts its input 3D texture using another 3D texture",
-								"name": "TEX3D Distort",
-								"outputs": [
-									{
-										"longdesc": "The distorted 3D texture",
-										"shortdesc": "Output",
-										"tex3d": "$in1(vec4($uv.xyz+(($in2($uv)-vec3(0.5))*$Distort), 0.0))",
-										"type": "tex3d"
-									}
-								],
-								"parameters": [
-									{
-										"control": "None",
-										"default": 0.5,
-										"label": "Distort",
-										"longdesc": "The strength of the distort effect",
-										"max": 1,
-										"min": 0,
-										"name": "Distort",
-										"shortdesc": "Strength",
-										"step": 0.01,
-										"type": "float"
-									}
-								],
-								"shortdesc": "Tex3D Distort"
-							},
-							"type": "shader"
-						},
-						{
-							"name": "tex3d_blend_2",
-							"node_position": {
-								"x": -630.467285,
-								"y": 30.75
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 8
-							},
-							"type": "tex3d_blend"
-						},
-						{
-							"name": "tex3d_blend_3",
-							"node_position": {
-								"x": -631.190857,
-								"y": 150.75
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 8
-							},
-							"type": "tex3d_blend"
-						},
-						{
-							"name": "radial_gradient",
-							"node_position": {
-								"x": -395.5,
-								"y": -37
-							},
-							"parameters": {
-								"gradient": {
-									"interpolation": 1,
-									"points": [
-										{
-											"a": 1,
-											"b": 0,
-											"g": 0,
-											"pos": 0,
-											"r": 0
-										},
-										{
-											"a": 1,
-											"b": 1,
-											"g": 1,
-											"pos": 1,
-											"r": 1
-										}
-									],
-									"type": "Gradient"
-								},
-								"repeat": 10
-							},
-							"shader_model": {
-								"code": "",
-								"global": "",
-								"inputs": [
-
-								],
-								"instance": "",
-								"name": "Radial Gradient",
-								"outputs": [
-									{
-										"longdesc": "An image showing the gradient",
-										"rgba": "$gradient(fract($repeat*1.41421356237*length($uv-vec2(0.5, 0.5))))",
-										"shortdesc": "Output",
-										"type": "rgba"
-									}
-								],
-								"parameters": [
-									{
-										"control": "None",
-										"default": 1,
-										"label": "Repeat",
-										"longdesc": "Number of repetitions of the gradient",
-										"max": 32,
-										"min": 1,
-										"name": "repeat",
-										"shortdesc": "Repeat",
-										"step": 1,
-										"type": "float"
-									},
-									{
-										"default": {
-											"interpolation": 1,
-											"points": [
-												{
-													"a": 1,
-													"b": 0,
-													"g": 0,
-													"pos": 0,
-													"r": 0
-												},
-												{
-													"a": 1,
-													"b": 1,
-													"g": 1,
-													"pos": 1,
-													"r": 1
-												}
-											],
-											"type": "Gradient"
-										},
-										"label": "Gradient",
-										"longdesc": "Gradient to be spread on the image",
-										"name": "gradient",
-										"shortdesc": "Gradient",
-										"type": "gradient"
-									}
-								]
-							},
-							"type": "shader"
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -1196.717285,
-								"y": 99.833336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": -51.5,
-								"y": 99.833336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"group_size": 0,
-									"name": "port0",
-									"type": "tex3d"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -869.608826,
-								"y": -505
-							},
-							"parameters": {
-
-							},
-							"type": "remote",
-							"widgets": [
-
-							]
-						}
-					],
-					"parameters": {
-
-					},
-					"shortdesc": "",
-					"type": "graph"
-				},
-				{
-					"name": "tex3d_rotate",
-					"node_position": {
-						"x": -611.34198,
-						"y": 7.0625
-					},
-					"parameters": {
-						"ax": -13,
-						"ay": 0,
-						"az": 0
-					},
-					"type": "tex3d_rotate"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -206.102112,
-						"y": 109.0625
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.328125,
-									"g": 0.328125,
-									"pos": 0,
-									"r": 0.328125
-								},
-								{
-									"a": 1,
-									"b": 0.597656,
-									"g": 0.597656,
-									"pos": 1,
-									"r": 0.597656
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": -2717,
-					"type": "colorize"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -214.102112,
-						"y": 51.0625
-					},
-					"parameters": {
-						"color": 0
-					},
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "shape",
-					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
-					},
-					"parameters": {
-						"edge": 1,
-						"radius": 1,
-						"shape": 0,
-						"sides": 5
-					},
-					"type": "shape"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "3DWood",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				},
-				{
-					"from": "colorize_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				},
-				{
-					"from": "tex3d_fbm_4",
-					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
-					"from": "380",
-					"from_port": 0,
-					"to": "math",
-					"to_port": 0
-				},
-				{
-					"from": "math",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "math",
-					"from_port": 0,
-					"to": "colorize_2",
-					"to_port": 0
-				}
-			],
-			"icon": "3drustyiron",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "213",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 35,
-						"y": -5
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 2
-					},
-					"type": "brush"
-				},
-				{
-					"name": "380",
-					"node_position": {
-						"x": -702.5,
-						"y": 5.5
+						"x": -911.5,
+						"y": -29.5
 					},
 					"parameters": {
 
@@ -5702,8 +3318,8 @@
 				{
 					"name": "colorize",
 					"node_position": {
-						"x": -216.5,
-						"y": -21.5
+						"x": -471.5,
+						"y": -60.5
 					},
 					"parameters": {
 						"gradient": {
@@ -5713,101 +3329,27 @@
 									"a": 1,
 									"b": 0.5,
 									"g": 0.5,
-									"pos": 0.467254,
+									"pos": 0,
 									"r": 0.5
 								},
 								{
 									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.5,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
-									"pos": 0.609091,
-									"r": 0.222656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.7,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
-									"pos": 0.781818,
-									"r": 0.222656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.073334,
-									"pos": 0.881818,
-									"r": 0.347656
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0.046967,
+									"b": 0.300781,
+									"g": 0.300781,
 									"pos": 1,
-									"r": 0.222656
+									"r": 0.300781
 								}
 							],
 							"type": "Gradient"
 						}
 					},
-					"seed_value": 16947,
-					"type": "colorize"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -206.102112,
-						"y": 109.0625
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0.003906,
-									"g": 0.003906,
-									"pos": 0,
-									"r": 0.003906
-								},
-								{
-									"a": 1,
-									"b": 0.257813,
-									"g": 0.257813,
-									"pos": 0.481818,
-									"r": 0.257813
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0.496057,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed_value": -2717,
 					"type": "colorize"
 				},
 				{
 					"name": "uniform_greyscale",
 					"node_position": {
-						"x": -214.102112,
-						"y": 51.0625
+						"x": -259.102112,
+						"y": 70.0625
 					},
 					"parameters": {
 						"color": 1
@@ -5817,8 +3359,8 @@
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
+						"x": -196.149414,
+						"y": -170.830353
 					},
 					"parameters": {
 						"edge": 1,
@@ -5831,116 +3373,138 @@
 				{
 					"name": "tex3d_fbm_4",
 					"node_position": {
-						"x": -745.535889,
-						"y": -162.299103
+						"x": -948.535889,
+						"y": -202.299103
 					},
 					"parameters": {
 						"iterations": 4,
-						"noise": 2,
-						"persistence": 0.5,
-						"scale_x": 8,
-						"scale_y": 8,
-						"scale_z": 8
+						"noise": 1,
+						"persistence": 0.6,
+						"scale_x": 32,
+						"scale_y": 32,
+						"scale_z": 32
 					},
 					"type": "tex3d_fbm"
 				},
 				{
-					"name": "math",
+					"name": "colorize_3",
 					"node_position": {
-						"x": -475.535889,
-						"y": -6.299103
+						"x": -467.428162,
+						"y": 16.837059
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.032135,
+									"pos": 0,
+									"r": 0.152344
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.046967,
+									"pos": 0.227273,
+									"r": 0.222656
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.033783,
+									"pos": 0.436364,
+									"r": 0.160156
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.046967,
+									"pos": 0.645454,
+									"r": 0.222656
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.037903,
+									"pos": 0.790909,
+									"r": 0.179688
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.046967,
+									"pos": 1,
+									"r": 0.222656
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"type": "colorize"
+				},
+				{
+					"name": "math_2",
+					"node_position": {
+						"x": -546.428162,
+						"y": 213.419647
+					},
+					"parameters": {
+						"clamp": true,
+						"default_in1": 0,
+						"default_in2": 0.1,
+						"op": 0
+					},
+					"type": "math"
+				},
+				{
+					"name": "math_3",
+					"node_position": {
+						"x": -543.428162,
+						"y": 84.419678
 					},
 					"parameters": {
 						"clamp": false,
 						"default_in1": 0,
-						"default_in2": 1.44,
-						"op": 6
+						"default_in2": 0.2,
+						"op": 2
 					},
 					"type": "math"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "3DRustyIron",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
 				},
 				{
-					"from": "tex3d_fbm_4",
-					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
-					"from": "380",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "brightness_contrast",
-					"to_port": 0
-				},
-				{
-					"from": "brightness_contrast",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				}
-			],
-			"icon": "3dsnow",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "213",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
+					"name": "uniform_greyscale_2",
 					"node_position": {
-						"x": 35,
-						"y": -5
+						"x": -548.428162,
+						"y": 344.169678
 					},
 					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 2
+						"color": 1
 					},
-					"type": "brush"
+					"seed_value": -63686,
+					"type": "uniform_greyscale"
 				},
 				{
-					"name": "380",
+					"name": "tex3d_fbm_2",
 					"node_position": {
-						"x": -702.5,
-						"y": 5.5
+						"x": -980.619995,
+						"y": 24.770096
+					},
+					"parameters": {
+						"iterations": 5,
+						"noise": 1,
+						"persistence": 0.9,
+						"scale_x": 32,
+						"scale_y": 32,
+						"scale_z": 32
+					},
+					"type": "tex3d_fbm"
+				},
+				{
+					"name": "380_2",
+					"node_position": {
+						"x": -944.584106,
+						"y": 198.569199
 					},
 					"parameters": {
 
@@ -5972,234 +3536,22 @@
 					"type": "shader"
 				},
 				{
-					"name": "shape",
+					"name": "blend",
 					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
+						"x": -250.502197,
+						"y": 138.419678
 					},
 					"parameters": {
-						"edge": 1,
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
+						"amount": 1,
+						"blend_type": 0
 					},
-					"type": "shape"
+					"type": "blend"
 				},
 				{
-					"name": "tex3d_fbm_4",
+					"name": "380_3",
 					"node_position": {
-						"x": -745.535889,
-						"y": -162.299103
-					},
-					"parameters": {
-						"iterations": 4,
-						"noise": 2,
-						"persistence": 0.5,
-						"scale_x": 8,
-						"scale_y": 8,
-						"scale_z": 8
-					},
-					"type": "tex3d_fbm"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -476.306335,
-						"y": 116.837036
-					},
-					"parameters": {
-						"color": 1
-					},
-					"seed_value": -56792,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -463.222656,
-						"y": -11.162964
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 1,
-									"g": 0.680298,
-									"pos": 0,
-									"r": 0.621094
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "uniform_greyscale_2",
-					"node_position": {
-						"x": -476.222656,
-						"y": 62.337036
-					},
-					"parameters": {
-						"color": 0
-					},
-					"seed_value": -56734,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "brightness_contrast",
-					"node_position": {
-						"x": -238.222656,
-						"y": 4.837036
-					},
-					"parameters": {
-						"max_angle": 20,
-						"width": 0.49
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
-								"label": "",
-								"longdesc": "The input image",
-								"name": "in",
-								"shortdesc": "Input",
-								"type": "rgba"
-							}
-						],
-						"instance": "",
-						"longdesc": "A node that adjusts the Brightness and Contrast of its input",
-						"name": "Filter Horizontal",
-						"outputs": [
-							{
-								"longdesc": "Shows the image with modified Brightness and Contrast",
-								"rgba": "$in($uv)*vec4(vec3(1.0), 1.0-clamp((cos($max_angle*0.01745329251)-(texture(mesh_normal_tex, $uv).y*2.0-1.0))/$width, 0.0, 1.0))",
-								"shortdesc": "Output",
-								"type": "rgba"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 45,
-								"label": "Max angle",
-								"longdesc": "The Brightness adjustment",
-								"max": 90,
-								"min": 0,
-								"name": "max_angle",
-								"shortdesc": "Brightness",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "Width",
-								"max": 1,
-								"min": 0,
-								"name": "width",
-								"step": 0.01,
-								"type": "float"
-							}
-						],
-						"shortdesc": "Brightness/Contrast"
-					},
-					"type": "shader"
-				}
-			],
-			"parameters": {
-
-			},
-			"shortdesc": "",
-			"tree_item": "3DSnow",
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "shape",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				},
-				{
-					"from": "tex3d_fbm_4",
-					"from_port": 0,
-					"to": "380",
-					"to_port": 0
-				},
-				{
-					"from": "380",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "brightness_contrast",
-					"to_port": 0
-				},
-				{
-					"from": "brightness_contrast",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 1
-				}
-			],
-			"icon": "3dsnow",
-			"label": "Graph",
-			"longdesc": "",
-			"name": "213",
-			"node_position": {
-				"x": 0,
-				"y": 0
-			},
-			"nodes": [
-				{
-					"name": "Brush",
-					"node_position": {
-						"x": 35,
-						"y": -5
-					},
-					"parameters": {
-						"has_albedo": true,
-						"has_depth": false,
-						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 2
-					},
-					"type": "brush"
-				},
-				{
-					"name": "380",
-					"node_position": {
-						"x": -702.5,
-						"y": 5.5
+						"x": -908.682495,
+						"y": -254.430786
 					},
 					"parameters": {
 
@@ -6231,29 +3583,15 @@
 					"type": "shader"
 				},
 				{
-					"name": "shape",
+					"name": "tex3d_fbm_3",
 					"node_position": {
-						"x": -206.149414,
-						"y": -147.830353
-					},
-					"parameters": {
-						"edge": 1,
-						"radius": 1,
-						"shape": 0,
-						"sides": 6
-					},
-					"type": "shape"
-				},
-				{
-					"name": "tex3d_fbm_4",
-					"node_position": {
-						"x": -745.535889,
-						"y": -162.299103
+						"x": -945.718384,
+						"y": -427.229919
 					},
 					"parameters": {
 						"iterations": 4,
 						"noise": 2,
-						"persistence": 0.5,
+						"persistence": 0.8,
 						"scale_x": 8,
 						"scale_y": 8,
 						"scale_z": 8
@@ -6261,22 +3599,35 @@
 					"type": "tex3d_fbm"
 				},
 				{
-					"name": "uniform_greyscale",
+					"name": "tones_step",
 					"node_position": {
-						"x": -476.306335,
-						"y": 116.837036
+						"x": -619.700439,
+						"y": -170.580353
 					},
 					"parameters": {
-						"color": 1
+						"invert": false,
+						"value": 0.5,
+						"width": 0
 					},
-					"seed_value": -56792,
-					"type": "uniform_greyscale"
+					"type": "tones_step"
 				},
 				{
-					"name": "colorize",
+					"name": "blend_2",
 					"node_position": {
-						"x": -463.222656,
-						"y": -11.162964
+						"x": -267.086243,
+						"y": -41.830353
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 0
+					},
+					"type": "blend"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -600.436829,
+						"y": -252.330353
 					},
 					"parameters": {
 						"gradient": {
@@ -6284,143 +3635,94 @@
 							"points": [
 								{
 									"a": 1,
-									"b": 1,
-									"g": 0.680298,
-									"pos": 0,
-									"r": 0.621094
+									"b": 0,
+									"g": 0,
+									"pos": 0.190909,
+									"r": 0
 								},
 								{
 									"a": 1,
 									"b": 1,
 									"g": 1,
-									"pos": 1,
+									"pos": 0.818182,
 									"r": 1
 								}
 							],
 							"type": "Gradient"
 						}
 					},
+					"seed_value": 61532,
 					"type": "colorize"
 				},
 				{
-					"name": "uniform_greyscale_2",
+					"name": "5242",
 					"node_position": {
-						"x": -476.222656,
-						"y": 62.337036
+						"x": -573.379578,
+						"y": -370.353516
 					},
 					"parameters": {
-						"color": 0
+						"param0": 0.1,
+						"param1": 0.5
 					},
-					"seed_value": -56734,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "brightness_contrast",
-					"node_position": {
-						"x": -238.222656,
-						"y": 4.837036
-					},
-					"parameters": {
-						"max_angle": 20,
-						"width": 0.49
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
-								"label": "",
-								"longdesc": "The input image",
-								"name": "in",
-								"shortdesc": "Input",
-								"type": "rgba"
-							}
-						],
-						"instance": "",
-						"longdesc": "A node that adjusts the Brightness and Contrast of its input",
-						"name": "Filter Horizontal",
-						"outputs": [
-							{
-								"longdesc": "Shows the image with modified Brightness and Contrast",
-								"rgba": "$in($uv)*vec4(vec3(1.0), 1.0-clamp((cos($max_angle*0.01745329251)-(texture(mesh_normal_tex, $uv).y*2.0-1.0))/$width, 0.0, 1.0))",
-								"shortdesc": "Output",
-								"type": "rgba"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 45,
-								"label": "Max angle",
-								"longdesc": "The Brightness adjustment",
-								"max": 90,
-								"min": 0,
-								"name": "max_angle",
-								"shortdesc": "Brightness",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "Width",
-								"max": 1,
-								"min": 0,
-								"name": "width",
-								"step": 0.01,
-								"type": "float"
-							}
-						],
-						"shortdesc": "Brightness/Contrast"
-					},
-					"type": "shader"
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Polished",
+							"linked_widgets": [
+								{
+									"node": "math_2",
+									"widget": "default_in2"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Rust",
+							"linked_widgets": [
+								{
+									"node": "tones_step",
+									"widget": "value"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						}
+					]
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "3DSnow",
+			"tree_item": "3D/RustyIron",
 			"type": "graph"
 		},
 		{
 			"connections": [
 				{
-					"from": "text",
+					"from": "shape",
 					"from_port": 0,
-					"to": "dilate",
+					"to": "Brush",
 					"to_port": 0
 				},
 				{
-					"from": "dilate",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "dilate",
-					"from_port": 0,
-					"to": "colorize_2",
-					"to_port": 0
-				},
-				{
-					"from": "image",
+					"from": "colorize",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 1
 				},
 				{
-					"from": "uniform_greyscale",
+					"from": "540",
 					"from_port": 0,
-					"to": "Brush",
+					"to": "colorize",
 					"to_port": 0
 				}
 			],
-			"icon": "test",
+			"icon": "effects_greyscale",
 			"label": "Graph",
 			"longdesc": "",
-			"name": "1445",
+			"name": "219",
 			"node_position": {
 				"x": 0,
 				"y": 0
@@ -6429,8 +3731,8 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": -31,
-						"y": -167
+						"x": 41,
+						"y": -108
 					},
 					"parameters": {
 						"has_albedo": true,
@@ -6438,73 +3740,59 @@
 						"has_emission": false,
 						"has_metallic": false,
 						"has_roughness": false,
-						"mode": 0
+						"mode": 2
 					},
 					"type": "brush"
 				},
 				{
-					"name": "text",
+					"name": "shape",
 					"node_position": {
-						"x": -540.5,
-						"y": -223.5
+						"x": -265.5,
+						"y": -322.643066
 					},
 					"parameters": {
-						"font": "",
-						"font_size": 932,
-						"text": "Text",
-						"x": -0.407,
-						"y": -0.283
+						"edge": "1.0-brush_hardness",
+						"radius": 1,
+						"shape": 0,
+						"sides": 6
 					},
-					"type": "text"
+					"type": "shape"
 				},
 				{
-					"name": "dilate",
+					"name": "540",
 					"node_position": {
-						"x": -518.5,
-						"y": -70
+						"x": -467.901367,
+						"y": -177.811951
 					},
 					"parameters": {
-						"param0": 9,
-						"param1": 0.05,
-						"param2": 0
+
 					},
-					"type": "dilate"
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+
+						],
+						"instance": "",
+						"name": "Layers",
+						"outputs": [
+							{
+								"rgba": "texture(layer_albedo_tex, $uv)",
+								"shortdesc": "Albedo",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
 				},
 				{
 					"name": "colorize",
 					"node_position": {
-						"x": -282.5,
-						"y": -72.25
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0.881818,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "colorize_2",
-					"node_position": {
-						"x": -290.5,
-						"y": -138.25
+						"x": -230.901367,
+						"y": -130.811951
 					},
 					"parameters": {
 						"gradient": {
@@ -6528,72 +3816,39 @@
 							"type": "Gradient"
 						}
 					},
+					"seed_value": 62808,
 					"type": "colorize"
-				},
-				{
-					"name": "image",
-					"node_position": {
-						"x": -756.049194,
-						"y": -147.25
-					},
-					"parameters": {
-						"image": "D:/Dev/Godot/material-maker-dev/icon.png"
-					},
-					"type": "image"
-				},
-				{
-					"name": "uniform_greyscale",
-					"node_position": {
-						"x": -258.049194,
-						"y": -217.25
-					},
-					"parameters": {
-						"color": 1
-					},
-					"type": "uniform_greyscale"
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "Test",
+			"tree_item": "Effects/Greyscale",
 			"type": "graph"
 		},
 		{
 			"connections": [
 				{
-					"from": "uniform",
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "540",
+					"from_port": 0,
+					"to": "edge_detect_1",
+					"to_port": 0
+				},
+				{
+					"from": "edge_detect_1",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "graph",
-					"from_port": 0,
-					"to": "rotate",
-					"to_port": 0
-				},
-				{
-					"from": "rotate",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
 				}
 			],
-			"icon": "arrow",
+			"icon": "effects_blur",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "219",
@@ -6612,375 +3867,136 @@
 						"has_albedo": true,
 						"has_depth": false,
 						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 1
+						"has_metallic": false,
+						"has_roughness": false,
+						"mode": 2
 					},
 					"type": "brush"
 				},
 				{
-					"name": "uniform",
+					"name": "shape",
 					"node_position": {
-						"x": -270.5,
-						"y": -88.5
+						"x": -265.5,
+						"y": -322.643066
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 0.415686,
-							"r": 0,
-							"type": "Color"
-						}
+						"edge": "1.0-brush_hardness",
+						"radius": 1,
+						"shape": 0,
+						"sides": 6
 					},
-					"type": "uniform"
+					"type": "shape"
 				},
 				{
-					"name": "uniform_greyscale",
+					"name": "540",
 					"node_position": {
-						"x": -302.5,
-						"y": -35.5
+						"x": -467.901367,
+						"y": -177.811951
 					},
 					"parameters": {
-						"color": 0
+
 					},
-					"seed_value": 46771,
-					"type": "uniform_greyscale"
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+
+						],
+						"instance": "",
+						"name": "Layers",
+						"outputs": [
+							{
+								"rgba": "texture(layer_albedo_tex, $uv)",
+								"shortdesc": "Albedo",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
 				},
 				{
-					"name": "uniform_greyscale_2",
+					"name": "edge_detect_1",
 					"node_position": {
-						"x": -302.5,
-						"y": 17.75
+						"x": -258.825684,
+						"y": -116.316742
 					},
 					"parameters": {
-						"color": 1
+						"size": 11
 					},
-					"seed_value": -46721,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "324",
-					"node_position": {
-						"x": -639,
-						"y": -177.478607
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4(1.0)",
+								"function": true,
+								"label": "",
+								"longdesc": "The input image",
+								"name": "in",
+								"shortdesc": "Input",
+								"type": "rgba"
+							}
+						],
+						"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);\n\tvec4 rv = $in(uv);\n\trv += $in(uv+e.xy);\n\trv += $in(uv-e.xy);\n\trv += $in(uv+e.xx);\n\trv += $in(uv-e.xx);\n\trv += $in(uv+e.xz);\n\trv += $in(uv-e.xz);\n\trv += $in(uv+e.zx);\n\trv += $in(uv-e.zx);\n\treturn rv/9.0;\n}",
+						"longdesc": "A fast low range blur effect",
+						"name": "Blur",
+						"outputs": [
+							{
+								"longdesc": "Shows the generated outlines",
+								"rgba": "$(name)_fct($uv)",
+								"shortdesc": "Output",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"default": 11,
+								"first": 4,
+								"label": "Size",
+								"last": 12,
+								"longdesc": "The resolution of the input image",
+								"name": "size",
+								"shortdesc": "Size",
+								"type": "size"
+							}
+						],
+						"shortdesc": "Blur"
 					},
-					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0.415686,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Paint Albedo",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_albedo"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Albedo",
-							"linked_widgets": [
-								{
-									"node": "uniform",
-									"widget": "color"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Metallic",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_metallic"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"connections": [
-						{
-							"from": "shape",
-							"from_port": 0,
-							"to": "rotate",
-							"to_port": 0
-						},
-						{
-							"from": "rotate",
-							"from_port": 0,
-							"to": "translate",
-							"to_port": 0
-						},
-						{
-							"from": "shape_2",
-							"from_port": 0,
-							"to": "mirror",
-							"to_port": 0
-						},
-						{
-							"from": "translate",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 0
-						},
-						{
-							"from": "mirror",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 1
-						},
-						{
-							"from": "blend",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						}
-					],
-					"label": "Arrow",
-					"longdesc": "",
-					"name": "graph",
-					"node_position": {
-						"x": -221.333313,
-						"y": -274.561951
-					},
-					"nodes": [
-						{
-							"name": "shape_2",
-							"node_position": {
-								"x": -328.5,
-								"y": 138
-							},
-							"parameters": {
-								"edge": 0.24,
-								"radius": 0.2,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "shape",
-							"node_position": {
-								"x": -326.5,
-								"y": -158
-							},
-							"parameters": {
-								"edge": 0.25,
-								"radius": 0.26,
-								"shape": 1,
-								"sides": 3
-							},
-							"type": "shape"
-						},
-						{
-							"name": "mirror",
-							"node_position": {
-								"x": -335.5,
-								"y": 260.25
-							},
-							"parameters": {
-								"direction": 0,
-								"offset": 0.43
-							},
-							"type": "mirror"
-						},
-						{
-							"name": "rotate",
-							"node_position": {
-								"x": -361.5,
-								"y": -37
-							},
-							"parameters": {
-								"cx": 0,
-								"cy": 0,
-								"rotate": -90
-							},
-							"type": "rotate"
-						},
-						{
-							"name": "translate",
-							"node_position": {
-								"x": -370.5,
-								"y": 62
-							},
-							"parameters": {
-								"translate_x": 0.23,
-								"translate_y": 0
-							},
-							"type": "translate"
-						},
-						{
-							"name": "blend",
-							"node_position": {
-								"x": -131.5,
-								"y": 152.25
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 9
-							},
-							"type": "blend"
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -670.5,
-								"y": 69.583336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": 168.5,
-								"y": 69.583336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"group_size": 0,
-									"name": "port0",
-									"type": "rgba"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -509,
-								"y": -458
-							},
-							"parameters": {
-
-							},
-							"type": "remote",
-							"widgets": [
-
-							]
-						}
-					],
-					"parameters": {
-
-					},
-					"shortdesc": "",
-					"type": "graph"
-				},
-				{
-					"name": "rotate",
-					"node_position": {
-						"x": -262.333313,
-						"y": -221.061951
-					},
-					"parameters": {
-						"cx": 0,
-						"cy": 0,
-						"rotate": "stroke_angle"
-					},
-					"type": "rotate"
+					"type": "shader"
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "Arrow",
+			"tree_item": "Effects/Blur",
 			"type": "graph"
 		},
 		{
 			"connections": [
 				{
-					"from": "uniform",
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "540",
+					"from_port": 0,
+					"to": "brightness_contrast",
+					"to_port": 0
+				},
+				{
+					"from": "brightness_contrast",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 1
-				},
-				{
-					"from": "uniform_greyscale_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 3
-				},
-				{
-					"from": "uniform_greyscale",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 2
-				},
-				{
-					"from": "graph",
-					"from_port": 0,
-					"to": "rotate",
-					"to_port": 0
-				},
-				{
-					"from": "rotate",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
 				}
 			],
-			"icon": "arrow",
+			"icon": "effects_dribble",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "219",
@@ -6999,339 +4015,146 @@
 						"has_albedo": true,
 						"has_depth": false,
 						"has_emission": false,
-						"has_metallic": true,
-						"has_roughness": true,
-						"mode": 1
+						"has_metallic": false,
+						"has_roughness": false,
+						"mode": 2
 					},
 					"type": "brush"
 				},
 				{
-					"name": "uniform",
+					"name": "shape",
 					"node_position": {
-						"x": -270.5,
-						"y": -88.5
+						"x": -265.5,
+						"y": -322.643066
 					},
 					"parameters": {
-						"color": {
-							"a": 1,
-							"b": 1,
-							"g": 0.415686,
-							"r": 0,
-							"type": "Color"
-						}
+						"edge": "1.0-brush_hardness",
+						"radius": 1,
+						"shape": 0,
+						"sides": 6
 					},
-					"type": "uniform"
+					"type": "shape"
 				},
 				{
-					"name": "uniform_greyscale",
+					"name": "540",
 					"node_position": {
-						"x": -302.5,
-						"y": -35.5
+						"x": -662.901367,
+						"y": -112.811951
 					},
 					"parameters": {
-						"color": 0
+
 					},
-					"seed_value": 46771,
-					"type": "uniform_greyscale"
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+
+						],
+						"instance": "",
+						"name": "Layers",
+						"outputs": [
+							{
+								"rgba": "texture(layer_albedo_tex, $uv)",
+								"shortdesc": "Albedo",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+
+						]
+					},
+					"type": "shader"
 				},
 				{
-					"name": "uniform_greyscale_2",
+					"name": "brightness_contrast",
 					"node_position": {
-						"x": -302.5,
-						"y": 17.75
+						"x": -384.806763,
+						"y": -108.692932
 					},
 					"parameters": {
-						"color": 1
+						"distance": 1,
+						"x": 0,
+						"y": -1,
+						"z": 0
 					},
-					"seed_value": -46721,
-					"type": "uniform_greyscale"
-				},
-				{
-					"name": "324",
-					"node_position": {
-						"x": -639,
-						"y": -177.478607
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
+								"label": "",
+								"longdesc": "The input image",
+								"name": "in",
+								"shortdesc": "Input",
+								"type": "rgba"
+							}
+						],
+						"instance": "vec2 get_top_direction(vec2 uv, vec3 d) {\n\tvec2 epsilon = vec2(0.01, 0.0);\n\tvec2 mult = vec2(1.0);\n\tvec3 v1 = normalize(mesh_aabb_size*(texture(mesh_inv_uv_tex, uv+epsilon)-texture(mesh_inv_uv_tex, uv-epsilon)).xyz);\n\tif (dot(v1, d) < 0.0) {\n\t\tv1 = -v1;\n\t\tmult.x = -1.0;\n\t}\n\tvec3 v2 = normalize(mesh_aabb_size*(texture(mesh_inv_uv_tex, uv+epsilon.yx)-texture(mesh_inv_uv_tex, uv-epsilon.yx)).xyz);\n\tfloat best_dot = dot(v2, d);\n\tif (best_dot < 0.0) {\n\t\tv2 = -v2;\n\t\tmult.y = -1.0;\n\t\tbest_dot = -best_dot;\n\t}\n\tfloat best_x = 0.0;\n\tfloat x;\n\tfor (x = 0.0; x <= 1.0; x += 0.1) {\n\t\tfloat new_dot = dot(normalize(v1*x+v2*sqrt(1.0-x*x)), d);\n\t\tif (new_dot > best_dot) {\n\t\t\tbest_x = x;\n\t\t\tbest_dot = new_dot;\n\t\t}\n\t}\n\treturn vec2(best_x, sqrt(1.0-best_x*best_x))*mult;\n}",
+						"longdesc": "A node that adjusts the Brightness and Contrast of its input",
+						"name": "Dribble",
+						"outputs": [
+							{
+								"longdesc": "Shows the image with modified Brightness and Contrast",
+								"rgba": "$in($uv-$distance*0.001*get_top_direction($uv, vec3($x, $y, $z)))",
+								"shortdesc": "Output",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0,
+								"label": "X",
+								"longdesc": "The Brightness adjustment",
+								"max": 1,
+								"min": -1,
+								"name": "x",
+								"shortdesc": "Brightness",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Y",
+								"max": 1,
+								"min": -1,
+								"name": "y",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": -1,
+								"label": "Z",
+								"max": 1,
+								"min": -1,
+								"name": "z",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1,
+								"label": "Distance",
+								"max": 5,
+								"min": 0,
+								"name": "distance",
+								"step": 0.01,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Brightness/Contrast"
 					},
-					"parameters": {
-						"param0": true,
-						"param1": {
-							"a": 1,
-							"b": 1,
-							"g": 0.415686,
-							"r": 0,
-							"type": "Color"
-						},
-						"param2": true,
-						"param3": 0,
-						"param4": true,
-						"param5": 1
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Paint Albedo",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_albedo"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Albedo",
-							"linked_widgets": [
-								{
-									"node": "uniform",
-									"widget": "color"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Metallic",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_metallic"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						},
-						{
-							"label": "Metallic",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale",
-									"widget": "color"
-								}
-							],
-							"name": "param3",
-							"type": "linked_control"
-						},
-						{
-							"label": "Paint Roughness",
-							"linked_widgets": [
-								{
-									"node": "Brush",
-									"widget": "has_roughness"
-								}
-							],
-							"name": "param4",
-							"type": "linked_control"
-						},
-						{
-							"label": "Roughness",
-							"linked_widgets": [
-								{
-									"node": "uniform_greyscale_2",
-									"widget": "color"
-								}
-							],
-							"name": "param5",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"connections": [
-						{
-							"from": "shape",
-							"from_port": 0,
-							"to": "rotate",
-							"to_port": 0
-						},
-						{
-							"from": "rotate",
-							"from_port": 0,
-							"to": "translate",
-							"to_port": 0
-						},
-						{
-							"from": "shape_2",
-							"from_port": 0,
-							"to": "mirror",
-							"to_port": 0
-						},
-						{
-							"from": "translate",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 0
-						},
-						{
-							"from": "mirror",
-							"from_port": 0,
-							"to": "blend",
-							"to_port": 1
-						},
-						{
-							"from": "blend",
-							"from_port": 0,
-							"to": "gen_outputs",
-							"to_port": 0
-						}
-					],
-					"label": "Arrow",
-					"longdesc": "",
-					"name": "graph",
-					"node_position": {
-						"x": -221.333313,
-						"y": -274.561951
-					},
-					"nodes": [
-						{
-							"name": "shape_2",
-							"node_position": {
-								"x": -328.5,
-								"y": 138
-							},
-							"parameters": {
-								"edge": 0.24,
-								"radius": 0.2,
-								"shape": 1,
-								"sides": 4
-							},
-							"type": "shape"
-						},
-						{
-							"name": "shape",
-							"node_position": {
-								"x": -326.5,
-								"y": -158
-							},
-							"parameters": {
-								"edge": 0.25,
-								"radius": 0.26,
-								"shape": 1,
-								"sides": 3
-							},
-							"type": "shape"
-						},
-						{
-							"name": "mirror",
-							"node_position": {
-								"x": -335.5,
-								"y": 260.25
-							},
-							"parameters": {
-								"direction": 0,
-								"offset": 0.43
-							},
-							"type": "mirror"
-						},
-						{
-							"name": "rotate",
-							"node_position": {
-								"x": -361.5,
-								"y": -37
-							},
-							"parameters": {
-								"cx": 0,
-								"cy": 0,
-								"rotate": -90
-							},
-							"type": "rotate"
-						},
-						{
-							"name": "translate",
-							"node_position": {
-								"x": -370.5,
-								"y": 62
-							},
-							"parameters": {
-								"translate_x": 0.23,
-								"translate_y": 0
-							},
-							"type": "translate"
-						},
-						{
-							"name": "blend",
-							"node_position": {
-								"x": -131.5,
-								"y": 152.25
-							},
-							"parameters": {
-								"amount": 1,
-								"blend_type": 9
-							},
-							"type": "blend"
-						},
-						{
-							"name": "gen_inputs",
-							"node_position": {
-								"x": -670.5,
-								"y": 69.583336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_outputs",
-							"node_position": {
-								"x": 168.5,
-								"y": 69.583336
-							},
-							"parameters": {
-
-							},
-							"ports": [
-								{
-									"group_size": 0,
-									"name": "port0",
-									"type": "rgba"
-								}
-							],
-							"type": "ios"
-						},
-						{
-							"name": "gen_parameters",
-							"node_position": {
-								"x": -509,
-								"y": -458
-							},
-							"parameters": {
-
-							},
-							"type": "remote",
-							"widgets": [
-
-							]
-						}
-					],
-					"parameters": {
-
-					},
-					"shortdesc": "",
-					"type": "graph"
-				},
-				{
-					"name": "rotate",
-					"node_position": {
-						"x": -262.333313,
-						"y": -221.061951
-					},
-					"parameters": {
-						"cx": 0,
-						"cy": 0,
-						"rotate": "stroke_angle"
-					},
-					"type": "rotate"
+					"type": "shader"
 				}
 			],
 			"parameters": {
 
 			},
 			"shortdesc": "",
-			"tree_item": "Arrow",
+			"tree_item": "Effects/Dribble",
 			"type": "graph"
 		}
 	]

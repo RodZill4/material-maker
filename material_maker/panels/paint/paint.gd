@@ -3,9 +3,10 @@ extends VBoxContainer
 const MODE_FREEHAND_DOTS = 0
 const MODE_FREEHAND_LINE = 1
 const MODE_LINE          = 2
-const MODE_COLOR_PICKER  = 3
-const MODE_COUNT         = 4
-const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "ColorPicker" ]
+const MODE_FILL          = 3
+const MODE_COLOR_PICKER  = 4
+const MODE_COUNT         = 5
+const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Fill", "ColorPicker" ]
 
 var current_tool = MODE_FREEHAND_DOTS
 

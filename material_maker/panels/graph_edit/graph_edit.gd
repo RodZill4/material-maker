@@ -399,7 +399,7 @@ func get_selected_nodes() -> Array:
 
 func remove_selection() -> void:
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
 			remove_node(c)
 
 # Maybe move this to gen_graph...
@@ -407,7 +407,7 @@ func serialize_selection() -> Dictionary:
 	var data = { nodes = [], connections = [] }
 	var nodes = []
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
 			nodes.append(c)
 	if nodes.empty():
 		return {}
@@ -432,7 +432,7 @@ func serialize_selection() -> Dictionary:
 
 func can_copy() -> bool:
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material":
+		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
 			return true
 	return false
 

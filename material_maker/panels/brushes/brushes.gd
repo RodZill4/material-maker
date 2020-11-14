@@ -5,4 +5,6 @@ func _ready():
 
 func _on_Tree_item_activated():
 	var main_window = get_node("/root/MainWindow")
-	main_window.get_current_project().set_brush($Tree.get_selected().get_metadata(0))
+	var data = $Tree.get_selected().get_metadata(0)
+	if data != null:
+		main_window.get_current_project().set_brush(data)

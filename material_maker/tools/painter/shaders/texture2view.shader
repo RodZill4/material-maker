@@ -44,12 +44,9 @@ void vertex() {
 }
 
 float visibility(vec2 uv, vec3 view_pos) {
+	// Compare actual UV with uv from view
 	vec2 uv_delta = textureLod(view2texture, view_pos.xy, 0.0).xy-uv;
-	return step(dot(uv_delta, uv_delta), 0.0025);
-	/*
-	vec3 depth_delta = textureLod(view2texture, view_pos.xy, 0.0).xyz-vec3(cos(view_pos.z), sin(view_pos.z*7.0), sin(view_pos.z/7.0));
-	return step(dot(depth_delta, depth_delta), 0.1);
-	*/
+	return step(dot(uv_delta, uv_delta), 0.0001);
 }
 
 void fragment() {
@@ -58,7 +55,11 @@ void fragment() {
 	vec3 xyz = vec3(0.5-0.5*position.x, 0.5+0.5*position.y, z_near + (z_far - z_near)*position.z);
 	float visible = 0.0;
 	if (position.x > -1.0 && position.x < 1.0 && position.y > -1.0 && position.y < 1.0) {
-		float visibility_multiplier = max(visibility(UV.xy, xyz), max(max(visibility(UV.xy, xyz+vec3(0.001, 0.0, 0.0)), visibility(UV.xy, xyz+vec3(-0.0001, 0.0, 0.0))),  max(visibility(UV.xy, xyz+vec3(0.0, 0.001, 0.0)), visibility(UV.xy, xyz+vec3(0.0, -0.0001, 0.0)))));
+		float visibility_multiplier = max(visibility(UV.xy, xyz), 
+										  max(max(visibility(UV.xy, xyz+vec3(0.001, 0.0, 0.0)),
+												  visibility(UV.xy, xyz+vec3(-0.001, 0.0, 0.0))),  
+										  max(visibility(UV.xy, xyz+vec3(0.0, 0.001, 0.0)),
+												  visibility(UV.xy, xyz+vec3(0.0, -0.001, 0.0)))));
 		//float visibility_multiplier = visibility(UV.xy, xyz);
 		float normal_multiplier = clamp(dot(normalize(normal), vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
 		visible = normal_multiplier*visibility_multiplier;

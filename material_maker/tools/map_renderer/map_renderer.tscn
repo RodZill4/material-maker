@@ -1,8 +1,6 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
-
-
 
 [sub_resource type="World" id=1]
 
@@ -51,6 +49,27 @@ shader_param/position = Vector3( 0, 0, 0 )
 shader_param/size = Vector3( 1, 1, 1 )
 
 [sub_resource type="Shader" id=6]
+code = "shader_type spatial;
+render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+
+uniform vec3 position = vec3(0.0);
+uniform vec3 size = vec3(1.0);
+
+void vertex() {
+	VERTEX=vec3(UV, 0.5);
+}
+
+void fragment() {
+	ALBEDO = vec3(1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/position = Vector3( 0, 0, 0 )
+shader_param/size = Vector3( 1, 1, 1 )
+
+[sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -87,11 +106,11 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=7]
-shader = SubResource( 6 )
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
 shader_param/size = 512.0
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -125,11 +144,106 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=9]
-shader = SubResource( 8 )
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 10 )
 shader_param/size = 512.0
 
-[sub_resource type="PrismMesh" id=10]
+[sub_resource type="Shader" id=12]
+code = "shader_type canvas_item;
+render_mode blend_disabled;
+
+uniform sampler2D tex;
+uniform float size = 512.0;
+
+const int STEPS = 64;
+
+vec4 dilate_distance_h(vec2 uv) {
+	vec2 e = vec2(1.0/size, 0.0);
+	float d = size/float(STEPS);
+	float rv = 0.0;
+	float found = 0.0;
+	vec2 source_uv;
+	vec4 source_color;
+	int steps = min(STEPS, int(size)/2);
+	for (int i = 0; i < steps; ++i) {
+		source_uv = uv+float(i)*e;
+		source_color = texture(tex, source_uv);
+		if (source_color.a >= 0.5) {
+			rv = float(i);
+			found = 1.0;
+			break;
+		}
+		source_uv = uv-float(i)*e;
+		source_color = texture(tex, source_uv);
+		if (source_color.a >= 0.5) {
+			rv = -float(i);
+			found = 1.0;
+			break;
+		}
+	}
+	return vec4(vec3(0.5+0.5*rv*e.x*d), found);
+}
+
+void fragment() {
+	COLOR = dilate_distance_h(UV);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = SubResource( 12 )
+shader_param/size = 512.0
+
+[sub_resource type="Shader" id=14]
+code = "shader_type canvas_item;
+render_mode blend_disabled;
+
+uniform sampler2D tex;
+uniform float size = 512.0;
+
+const int STEPS = 64;
+
+vec4 best(vec4 last, vec2 uv, float dy) {
+	vec2 p = texture(tex, uv+dy).ar;
+	float d = size/float(STEPS);
+	float dx = (p.y-0.5)/d;
+	if (p.x > 0.5) {
+		float d_2 = dx*dx+dy*dy;
+		if (d_2 < last.y) {
+			last = vec4(1.0, d_2, p.y, dy);
+		}
+	}
+	return last;
+}
+
+vec4 dilate_distance_v(vec2 uv) {
+	float e = 1.0/size;
+	float d = size/float(STEPS);
+	vec4 p = vec4(texture(tex, uv).arr, 0.0);
+	if (p.x < 0.5) {
+		p.y = 1.0;
+	} else {
+		p.y = (p.y-0.5)/d;
+		p.y *= p.y;
+	}
+	int steps = min(STEPS, int(size)/2);
+	for (int i = 0; i < steps; ++i) {
+		float dy = float(i)*e;
+		p = best(p, uv, dy);
+		p = best(p, uv, -dy);
+	}
+	return vec4(p.z, 0.5+0.5*p.w*d, 0.0, p.x);
+}
+
+void fragment() {
+	COLOR = dilate_distance_v(UV);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 14 )
+shader_param/size = 512.0
+
+[sub_resource type="PrismMesh" id=16]
 
 [node name="MapRenderer" type="Viewport"]
 size = Vector2( 2048, 2048 )
@@ -141,11 +255,14 @@ render_target_update_mode = 0
 script = ExtResource( 2 )
 mesh_normal_material = SubResource( 3 )
 inv_uv_material = SubResource( 5 )
-dilate_pass1 = SubResource( 7 )
-dilate_pass2 = SubResource( 9 )
+white_material = SubResource( 7 )
+dilate_pass1 = SubResource( 9 )
+dilate_pass2 = SubResource( 11 )
+seams_pass1 = SubResource( 13 )
+seams_pass2 = SubResource( 15 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = SubResource( 10 )
+mesh = SubResource( 16 )
 material/0 = SubResource( 5 )
 __meta__ = {
 "_editor_description_": ""

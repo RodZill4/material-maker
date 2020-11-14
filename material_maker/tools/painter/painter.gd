@@ -8,9 +8,7 @@ onready var texture_to_view_viewport = $Texture2View
 onready var texture_to_view_mesh = $Texture2View/PaintedMesh
 onready var texture_to_view_mesh_white = $Texture2View/PaintedMeshWhite
 
-onready var seams_viewport = $Seams
-onready var seams_rect = $Seams/SeamsRect
-onready var seams_material = seams_rect.get_material()
+onready var mesh_seams_tex : ImageTexture = ImageTexture.new()
 
 onready var albedo_viewport = $AlbedoPaint
 onready var mr_viewport = $MRPaint
@@ -51,37 +49,38 @@ signal painted()
 func _ready():
 	var v2t_tex = view_to_texture_viewport.get_texture()
 	var t2v_tex = texture_to_view_viewport.get_texture()
-	var seams_tex = seams_viewport.get_texture()
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
 	for index in range(4):
-		viewports[index].set_intermediate_textures(t2v_tex, seams_tex)
-	# Add Texture2View as input to seams texture
-	seams_material.set_shader_param("tex", t2v_tex)
+		viewports[index].set_intermediate_textures(t2v_tex, mesh_seams_tex)
 
 func update_seams_texture():
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	seams_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-	seams_viewport.update_worlds()
+	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
+	add_child(map_renderer)
+	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], 2048)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	map_renderer.queue_free()
 
 func update_inv_uv_texture(m : Mesh) -> void:
-	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
-	add_child(mesh_normal_mapper)
+	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
+	add_child(map_renderer)
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
-	var result = mesh_normal_mapper.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_to_view_viewport.size.x)
+	var result = map_renderer.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_to_view_viewport.size.x)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
-	result = mesh_normal_mapper.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_to_view_viewport.size.x)
+	result = map_renderer.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_to_view_viewport.size.x)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	mesh_normal_mapper.queue_free()
+	map_renderer.queue_free()
 	mesh_aabb = m.get_aabb()
 
 func set_mesh(m : Mesh):
@@ -208,6 +207,10 @@ func update_brush(update_shaders = false):
 		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_param("mesh_aabb_size", mesh_aabb.size)
 		brush_preview_material.set_shader_param("mesh_normal_tex", mesh_normal_tex)
+		brush_preview_material.set_shader_param("layer_albedo_tex", get_albedo_texture())
+		brush_preview_material.set_shader_param("layer_mr_tex", get_mr_texture())
+		brush_preview_material.set_shader_param("layer_emission_tex", get_emission_texture())
+		brush_preview_material.set_shader_param("layer_depth_tex", get_depth_texture())
 		for p in brush_params.keys():
 			brush_preview_material.set_shader_param(p, brush_params[p])
 		brush_preview_material.set_shader_param("pattern_alpha", 0.5 if pattern_shown else 0.0)
@@ -224,11 +227,13 @@ func update_brush(update_shaders = false):
 		for index in range(4):
 			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
 			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
+			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), depth=get_depth_texture()} )
 	for index in range(4):
 		viewports[index].set_brush(brush_params)
 
 func get_output_code(index : int) -> String:
-	if brush_node == null:
+	if brush_node == null or !is_instance_valid(brush_node):
+		brush_node = null
 		return ""
 	var context : MMGenContext = MMGenContext.new()
 	var source_mask = brush_node.get_shader_code("uv", 0, context)
@@ -344,7 +349,7 @@ func debug_get_texture(ID):
 		1:
 			return texture_to_view_viewport.get_texture()
 		2:
-			return seams_viewport.get_texture()
+			return mesh_seams_tex
 		3:
 			return albedo_viewport.get_texture()
 		4:

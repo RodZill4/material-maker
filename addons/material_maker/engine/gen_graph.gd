@@ -135,8 +135,8 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 
 func add_generator(generator : MMGenBase) -> bool:
 	var name = generator.name
-	if generator.name == "Material":
-		if has_node("Material"):
+	if generator.name == "Material" or generator.name == "Brush" :
+		if has_node(generator.name):
 			# Cannot create a material if it exists already
 			return false
 		else:
@@ -302,7 +302,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	var count = 0
 	# Filter group nodes and calculate boundin box
 	for g in gens:
-		if g.name != "Material" and g.name != "gen_inputs" and g.name != "gen_outputs":
+		if g.name != "Material" and g.name != "Brush" and g.name != "gen_inputs" and g.name != "gen_outputs":
 			generators.push_back(g)
 			var p = g.position
 			center += p
