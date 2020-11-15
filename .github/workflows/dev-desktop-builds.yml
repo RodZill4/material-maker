@@ -9,7 +9,7 @@ on:
 env:
   GODOT_VERSION: 3.2.3
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_93
+  MM_RELEASE: 0_94a1
 
 jobs:
   generate_releases:
