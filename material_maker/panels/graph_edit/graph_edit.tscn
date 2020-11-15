@@ -97,12 +97,14 @@ rect_min_size = Vector2( 14, 0 )
 
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource( 3 )
+[connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [ true ]]
 [connection signal="connection_request" from="." to="." method="connect_node"]
-[connection signal="connection_to_empty" from="." to="." method="request_popup"]
+[connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [ false ]]
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]
+[connection signal="node_unselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="paste_nodes_request" from="." to="." method="paste"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]
 [connection signal="text_changed" from="GraphUI/SubGraphUI/Label" to="." method="_on_Label_text_changed"]
