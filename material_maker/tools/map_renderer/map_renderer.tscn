@@ -155,7 +155,7 @@ render_mode blend_disabled;
 uniform sampler2D tex;
 uniform float size = 512.0;
 
-const int STEPS = 64;
+const int STEPS = 125;
 
 vec4 dilate_distance_h(vec2 uv) {
 	vec2 e = vec2(1.0/size, 0.0);

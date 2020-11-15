@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/tools/painter/shaders/texture2view.shader" type="Shader" id=1]
-[ext_resource path="res://material_maker/tools/painter/shaders/show_pattern.shader" type="Shader" id=2]
 [ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
 [ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
@@ -15,18 +14,14 @@ size = Vector3( 1, 1, 1 )
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 1 )
+shader_param/seams_multiplier = 0.06125
 shader_param/model_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4 )
 shader_param/fovy_degrees = 70.0
 shader_param/z_near = 0.833974
 shader_param/z_far = 10.2641
 shader_param/aspect = 1.83214
+shader_param/uv_tolerance = 0.01
 shader_param/view2texture = SubResource( 3 )
-
-[sub_resource type="ShaderMaterial" id=5]
-shader = ExtResource( 2 )
-shader_param/brush_size = Vector2( 0.25, 0.25 )
-shader_param/pattern_scale = 10.0
-shader_param/pattern_angle = 0.0
 
 [node name="Painter" type="Node" groups=[
 "preview",
@@ -66,12 +61,6 @@ current = true
 transform = Transform( 1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 4 )
-
-[node name="PaintedMeshWhite" type="MeshInstance" parent="Texture2View"]
-transform = Transform( 1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0 )
-visible = false
-mesh = SubResource( 2 )
-material/0 = SubResource( 5 )
 
 [node name="AlbedoPaint" parent="." instance=ExtResource( 7 )]
 

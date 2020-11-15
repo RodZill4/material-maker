@@ -6,7 +6,6 @@ onready var view_to_texture_camera = $View2Texture/Camera
 
 onready var texture_to_view_viewport = $Texture2View
 onready var texture_to_view_mesh = $Texture2View/PaintedMesh
-onready var texture_to_view_mesh_white = $Texture2View/PaintedMeshWhite
 
 onready var mesh_seams_tex : ImageTexture = ImageTexture.new()
 
@@ -49,6 +48,7 @@ signal painted()
 func _ready():
 	var v2t_tex = view_to_texture_viewport.get_texture()
 	var t2v_tex = texture_to_view_viewport.get_texture()
+	# shader debug
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
@@ -62,7 +62,7 @@ func update_seams_texture():
 	yield(get_tree(), "idle_frame")
 	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
 	add_child(map_renderer)
-	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], 2048)
+	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_to_view_viewport.size.x)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	map_renderer.queue_free()
@@ -88,9 +88,6 @@ func set_mesh(m : Mesh):
 	mat = texture_to_view_mesh.get_surface_material(0)
 	texture_to_view_mesh.mesh = m
 	texture_to_view_mesh.set_surface_material(0, mat)
-	mat = texture_to_view_mesh_white.get_surface_material(0)
-	texture_to_view_mesh_white.mesh = m
-	texture_to_view_mesh_white.set_surface_material(0, mat)
 	mat = view_to_texture_mesh.get_surface_material(0)
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_material(0, mat)
@@ -138,9 +135,11 @@ func init_textures(m : SpatialMaterial):
 		init_depth_texture(Color(0.0, 0.0, 0.0), null)
 
 func set_texture_size(s : float):
-	texture_to_view_viewport.size = Vector2(s, s)
-	for index in range(4):
-		viewports[index].set_texture_size(s)
+	if texture_to_view_viewport.size.x != s:
+		texture_to_view_viewport.size = Vector2(s, s)
+		for index in range(4):
+			viewports[index].set_texture_size(s)
+		update_seams_texture()
 
 func update_view(c, t, s):
 	camera = c
@@ -161,6 +160,10 @@ func update_tex2view():
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	var material = texture_to_view_mesh.get_surface_material(0)
+	if true:
+		var shader_file = File.new()
+		shader_file.open("res://material_maker/tools/painter/shaders/texture2view.shader", File.READ)
+		material.shader.code = shader_file.get_as_text()
 	material.set_shader_param("model_transform", transform)
 	material.set_shader_param("fovy_degrees", camera.fov)
 	material.set_shader_param("z_near", camera.near)

@@ -2,11 +2,14 @@ shader_type spatial;
 render_mode unshaded, cull_front;
 
 uniform sampler2D view2texture;
+uniform sampler2D seams;
+uniform float     seams_multiplier = 0.06125;
 uniform mat4      model_transform;
 uniform float     fovy_degrees = 45;
 uniform float     z_near = 0.01;
 uniform float     z_far = 60.0;
 uniform float     aspect = 1.0;
+uniform float     uv_tolerance = 0.01;
 
 varying vec4 global_position;
 varying vec3 normal;
@@ -46,7 +49,7 @@ void vertex() {
 float visibility(vec2 uv, vec3 view_pos) {
 	// Compare actual UV with uv from view
 	vec2 uv_delta = textureLod(view2texture, view_pos.xy, 0.0).xy-uv;
-	return step(dot(uv_delta, uv_delta), 0.0001);
+	return step(dot(uv_delta, uv_delta), uv_tolerance*uv_tolerance);
 }
 
 void fragment() {
@@ -55,13 +58,14 @@ void fragment() {
 	vec3 xyz = vec3(0.5-0.5*position.x, 0.5+0.5*position.y, z_near + (z_far - z_near)*position.z);
 	float visible = 0.0;
 	if (position.x > -1.0 && position.x < 1.0 && position.y > -1.0 && position.y < 1.0) {
-		float visibility_multiplier = max(visibility(UV.xy, xyz), 
-										  max(max(visibility(UV.xy, xyz+vec3(0.001, 0.0, 0.0)),
-												  visibility(UV.xy, xyz+vec3(-0.001, 0.0, 0.0))),  
-										  max(visibility(UV.xy, xyz+vec3(0.0, 0.001, 0.0)),
-												  visibility(UV.xy, xyz+vec3(0.0, -0.001, 0.0)))));
-		//float visibility_multiplier = visibility(UV.xy, xyz);
-		float normal_multiplier = clamp(dot(normalize(normal), vec3(0.0, 0.0, 1.0)), 0.0, 1.0);
+		float visibility_multiplier = 0.0;
+		vec2 epsilon = vec2(0.005);
+		for (float dx = -2.0*epsilon.x; dx <= 2.0*epsilon.x; dx += epsilon.x) {
+			for (float dy = -2.0*epsilon.y; dy <= 2.0*epsilon.y; dy += epsilon.y) {
+				visibility_multiplier = max(visibility_multiplier, visibility(UV.xy, xyz+vec3(dx, dy, 0.0)));
+			}
+		}
+		float normal_multiplier = clamp((dot(normalize(normal), vec3(0.0, 0.0, 1.0))-0.1)*2.0, 0.0, 1.0);
 		visible = normal_multiplier*visibility_multiplier;
 	}
 	ALBEDO = vec3(xyz.xy, visible);

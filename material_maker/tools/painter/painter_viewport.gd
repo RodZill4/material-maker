@@ -47,6 +47,7 @@ func set_paint_shader_params():
 	paint_material.set_shader_param("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
 	paint_material.set_shader_param("mesh_normal_tex", param_mesh_normal_tex)
 	paint_material.set_shader_param("seams", param_seams)
+	paint_material.set_shader_param("texture_size", size.x)
 	for t in param_layer_textures.keys():
 		paint_material.set_shader_param("layer_"+t+"_tex", param_layer_textures[t])
 	for p in brush_params.keys():

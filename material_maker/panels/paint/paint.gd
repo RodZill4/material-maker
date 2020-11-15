@@ -516,8 +516,6 @@ func _on_DebugSelect_item_selected(ID, t):
 		if ID < textures_count:
 			texture.texture = p.debug_get_texture(ID)
 			texture.visible = (texture.texture != null)
-			if texture.texture != null:
-				print(texture.texture.get_size())
 			return
 		ID -= textures_count
 
@@ -535,9 +533,10 @@ func replace_brush_options_button() -> void:
 	if $VSplitContainer/Painter/Options.visible:
 		$VSplitContainer/Painter/Options.rect_size = $VSplitContainer/Painter/Options.rect_min_size
 		$VSplitContainer/Painter/OptionsButton.margin_top = $VSplitContainer/Painter/Options.rect_size.y
-		print($VSplitContainer/Painter/Options.rect_size.y)
+		$VSplitContainer/Painter/OptionsButton.text = "-"
 	else:
 		$VSplitContainer/Painter/OptionsButton.margin_top = 0
+		$VSplitContainer/Painter/OptionsButton.text = "+"
 
 func _on_OptionsButton_pressed() -> void:
 	$VSplitContainer/Painter/Options.visible = !$VSplitContainer/Painter/Options.visible

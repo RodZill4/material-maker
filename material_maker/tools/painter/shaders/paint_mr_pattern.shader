@@ -2,8 +2,9 @@ shader_type canvas_item;
 render_mode blend_disabled, unshaded;
 
 uniform sampler2D tex2view_tex;
+uniform float     texture_size = 512.0;
 uniform sampler2D seams : hint_white;
-uniform float     seams_multiplier = 0.0625;
+uniform float     seams_multiplier = 256.0;
 uniform sampler2D mesh_normal_tex;
 uniform sampler2D layer_albedo_tex;
 uniform sampler2D layer_mr_tex;
@@ -40,7 +41,8 @@ float brush(vec2 uv) {
 
 void fragment() {
 	// Get UV from seams texture
-	vec2 uv = UV+(texture(seams, UV).xy-vec2(0.5))*seams_multiplier;
+	vec2 seams_value = texture(seams, UV).xy-vec2(0.5);
+	vec2 uv = fract(UV+seams_value*seams_multiplier/texture_size);
 	// Get View position
 	vec4 tex2view = texture(tex2view_tex, uv);
 	vec2 xy = tex2view.xy;

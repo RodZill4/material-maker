@@ -25,12 +25,12 @@ environment = SubResource( 2 )
 [sub_resource type="ShaderMaterial" id=5]
 shader = SubResource( 4 )
 
-[sub_resource type="InputEventKey" id=28]
+[sub_resource type="InputEventKey" id=6]
 pressed = true
 scancode = 16777244
 
-[sub_resource type="ShortCut" id=29]
-shortcut = SubResource( 28 )
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
 
 [sub_resource type="AtlasTexture" id=8]
 flags = 4
@@ -42,87 +42,87 @@ flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=6]
+[sub_resource type="InputEventKey" id=10]
 pressed = true
 scancode = 16777245
 
-[sub_resource type="ShortCut" id=7]
-shortcut = SubResource( 6 )
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=12]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=13]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 32, 32, 32, 32 )
 
-[sub_resource type="InputEventKey" id=30]
+[sub_resource type="InputEventKey" id=14]
 pressed = true
 scancode = 16777246
 
-[sub_resource type="ShortCut" id=13]
-shortcut = SubResource( 30 )
+[sub_resource type="ShortCut" id=15]
+shortcut = SubResource( 14 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=16]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 64, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=17]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=31]
+[sub_resource type="InputEventKey" id=18]
 pressed = true
 scancode = 16777247
 
-[sub_resource type="ShortCut" id=17]
-shortcut = SubResource( 31 )
+[sub_resource type="ShortCut" id=19]
+shortcut = SubResource( 18 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=20]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 192, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=19]
+[sub_resource type="AtlasTexture" id=21]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 224, 32, 32, 32 )
 
-[sub_resource type="InputEventKey" id=32]
+[sub_resource type="InputEventKey" id=22]
 pressed = true
 scancode = 16777248
 
-[sub_resource type="ShortCut" id=21]
-shortcut = SubResource( 32 )
+[sub_resource type="ShortCut" id=23]
+shortcut = SubResource( 22 )
 
-[sub_resource type="AtlasTexture" id=22]
+[sub_resource type="AtlasTexture" id=24]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 128, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 160, 0, 32, 32 )
 
-[sub_resource type="InputEventKey" id=24]
+[sub_resource type="InputEventKey" id=26]
 pressed = true
 scancode = 69
 
-[sub_resource type="ShortCut" id=25]
-shortcut = SubResource( 24 )
+[sub_resource type="ShortCut" id=27]
+shortcut = SubResource( 26 )
 
-[sub_resource type="AtlasTexture" id=26]
+[sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 192, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=27]
+[sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 224, 0, 32, 32 )
@@ -218,7 +218,7 @@ size_flags_vertical = 0
 toggle_mode = true
 shortcut_in_tooltip = false
 pressed = true
-shortcut = SubResource( 29 )
+shortcut = SubResource( 7 )
 texture_normal = SubResource( 8 )
 texture_pressed = SubResource( 9 )
 
@@ -232,9 +232,9 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 7 )
-texture_normal = SubResource( 10 )
-texture_pressed = SubResource( 11 )
+shortcut = SubResource( 11 )
+texture_normal = SubResource( 12 )
+texture_pressed = SubResource( 13 )
 
 [node name="Line" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 72.0
@@ -244,9 +244,9 @@ rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Lines (F2)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 13 )
-texture_normal = SubResource( 14 )
-texture_pressed = SubResource( 15 )
+shortcut = SubResource( 15 )
+texture_normal = SubResource( 16 )
+texture_pressed = SubResource( 17 )
 
 [node name="Fill" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 108.0
@@ -255,9 +255,9 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Fill (F3)"
 shortcut_in_tooltip = false
-shortcut = SubResource( 17 )
-texture_normal = SubResource( 18 )
-texture_pressed = SubResource( 19 )
+shortcut = SubResource( 19 )
+texture_normal = SubResource( 20 )
+texture_pressed = SubResource( 21 )
 
 [node name="Space1" type="Control" parent="VSplitContainer/Painter/Tools"]
 margin_left = 144.0
@@ -272,9 +272,9 @@ margin_bottom = 32.0
 hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 21 )
-texture_normal = SubResource( 22 )
-texture_pressed = SubResource( 23 )
+shortcut = SubResource( 23 )
+texture_normal = SubResource( 24 )
+texture_pressed = SubResource( 25 )
 
 [node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
 margin_left = 189.0
@@ -289,14 +289,14 @@ margin_bottom = 32.0
 hint_tooltip = "Toggler Eraser Mode (E)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 25 )
-texture_normal = SubResource( 26 )
-texture_pressed = SubResource( 27 )
+shortcut = SubResource( 27 )
+texture_normal = SubResource( 28 )
+texture_pressed = SubResource( 29 )
 
 [node name="Options" type="PanelContainer" parent="VSplitContainer/Painter"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -170.0
+margin_left = -175.0
 margin_bottom = 122.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -305,7 +305,7 @@ __meta__ = {
 [node name="Grid" type="GridContainer" parent="VSplitContainer/Painter/Options"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 163.0
+margin_right = 168.0
 margin_bottom = 115.0
 columns = 2
 __meta__ = {
@@ -313,9 +313,9 @@ __meta__ = {
 }
 
 [node name="BrushSizeLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
-margin_left = 13.0
+margin_left = 16.0
 margin_top = 5.0
-margin_right = 80.0
+margin_right = 83.0
 margin_bottom = 19.0
 size_flags_horizontal = 4
 text = "Brush size"
@@ -324,8 +324,8 @@ text = "Brush size"
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 98.0
-margin_right = 156.0
+margin_left = 103.0
+margin_right = 161.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 value = 50.0
@@ -335,18 +335,18 @@ float_only = true
 
 [node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
 margin_top = 33.0
-margin_right = 94.0
+margin_right = 99.0
 margin_bottom = 47.0
 size_flags_horizontal = 4
-text = "Brush strength"
+text = "Brush hardness"
 
 [node name="BrushHardness" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 98.0
+margin_left = 103.0
 margin_top = 28.0
-margin_right = 156.0
+margin_right = 161.0
 margin_bottom = 52.0
 size_flags_horizontal = 3
 value = 1.0
@@ -354,9 +354,9 @@ step = 0.01
 float_only = true
 
 [node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
-margin_left = 3.0
+margin_left = 6.0
 margin_top = 61.0
-margin_right = 90.0
+margin_right = 93.0
 margin_bottom = 75.0
 size_flags_horizontal = 4
 text = "Brush opacity"
@@ -365,9 +365,9 @@ text = "Brush opacity"
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 98.0
+margin_left = 103.0
 margin_top = 56.0
-margin_right = 156.0
+margin_right = 161.0
 margin_bottom = 80.0
 size_flags_horizontal = 3
 value = 1.0
@@ -375,9 +375,9 @@ step = 0.01
 float_only = true
 
 [node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
-margin_left = 2.0
+margin_left = 5.0
 margin_top = 89.0
-margin_right = 91.0
+margin_right = 94.0
 margin_bottom = 103.0
 size_flags_horizontal = 4
 text = "Brush spacing"
@@ -386,9 +386,9 @@ text = "Brush spacing"
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 98.0
+margin_left = 103.0
 margin_top = 84.0
-margin_right = 156.0
+margin_right = 161.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
 value = 10.0
@@ -404,7 +404,7 @@ margin_left = -20.0
 margin_top = 121.0
 margin_bottom = 20.0
 hint_tooltip = "Show brush options"
-text = "+"
+text = "-"
 __meta__ = {
 "_edit_use_anchors_": false
 }
