@@ -86,7 +86,7 @@
 		}
 	],
 	"label": "Output",
-	"longdesc": "A node that converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node",
+	"longdesc": "Converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node",
 	"name": "mwf_output",
 	"node_position": {
 		"x": 0,

@@ -54,7 +54,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.",
+		"longdesc": "Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.",
 		"name": "Apply Map",
 		"outputs": [
 			{

@@ -30,7 +30,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that performs a smooth boolean operation (union, intersection or difference) between two shapes",
+		"longdesc": "Performs a smooth boolean operation (union, intersection or difference) between two shapes",
 		"name": "SmoothBoolean",
 		"outputs": [
 			{

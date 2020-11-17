@@ -38,7 +38,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that blends its input, using an optional mask",
+		"longdesc": "Blends its input, using an optional mask",
 		"name": "Blend",
 		"outputs": [
 			{

@@ -14,7 +14,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a grid made of random color squares",
+		"longdesc": "Generates a grid made of random color squares",
 		"name": "Color Noise",
 		"outputs": [
 			{

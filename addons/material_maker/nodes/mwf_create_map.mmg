@@ -30,7 +30,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.",
+		"longdesc": "Creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.",
 		"name": "Create Map",
 		"outputs": [
 			{

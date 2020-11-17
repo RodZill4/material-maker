@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that swaps the channels of its RGBA input",
+		"longdesc": "Swaps the channels of its RGBA input",
 		"name": "Swap channels",
 		"outputs": [
 			{

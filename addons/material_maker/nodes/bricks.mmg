@@ -45,7 +45,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that generates different bricks patterns, with many useful outputs.",
+		"longdesc": "Generates different bricks patterns, with many useful outputs.",
 		"name": "Bricks",
 		"outputs": [
 			{

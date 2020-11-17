@@ -32,7 +32,7 @@
 		}
 	],
 	"label": "Normal Map",
-	"longdesc": "A node that generates a normal map from a height map",
+	"longdesc": "Generates a normal map from a height map",
 	"name": "normal_map",
 	"node_position": {
 		"x": 0,

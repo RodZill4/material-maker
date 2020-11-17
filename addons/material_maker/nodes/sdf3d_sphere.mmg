@@ -14,7 +14,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a sphere as a signed distance function",
+		"longdesc": "Generates a sphere as a signed distance function",
 		"name": "Sphere",
 		"outputs": [
 			{

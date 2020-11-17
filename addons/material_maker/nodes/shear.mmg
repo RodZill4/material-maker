@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that performs a shear stress transform on its input",
+		"longdesc": "Performs a shear stress transform on its input",
 		"name": "Shear",
 		"outputs": [
 			{

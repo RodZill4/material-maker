@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that assigns a color index to a 3D object",
+		"longdesc": "Assigns a color index to a 3D object",
 		"name": "Color",
 		"outputs": [
 			{

@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that scales its input 3D object described as a signed distance function.",
+		"longdesc": "Scales its input 3D object described as a signed distance function.",
 		"name": "Scale",
 		"outputs": [
 			{

@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that scales its input",
+		"longdesc": "Scales its input",
 		"name": "Scale",
 		"outputs": [
 			{

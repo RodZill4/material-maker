@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "vec4 $(name)_f(vec4 c) {\n\tvec3 hsv = rgb_to_hsv(c.rgb);\n\treturn vec4(hsv_to_rgb(vec3(fract(hsv.x+$(hue)), clamp(hsv.y*$(saturation), 0.0, 1.0), clamp(hsv.z*$(value), 0.0, 1.0))), c.a);\n}",
-		"longdesc": "A node that adjusts the Hue, Saturation and Value of its input",
+		"longdesc": "Adjusts the Hue, Saturation and Value of its input",
 		"name": "AdjustHSV",
 		"outputs": [
 			{

@@ -29,7 +29,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that distorts its input 3D texture using another 3D texture",
+		"longdesc": "Distorts its input 3D texture using another 3D texture",
 		"name": "TEX3D Distort",
 		"outputs": [
 			{

@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that repeats its input shape on a grid.\nThis node does not support overlapping between instances.",
+		"longdesc": "Repeats its input shape on a grid.\nThis node does not support overlapping between instances.",
 		"name": "Repeat",
 		"outputs": [
 			{

@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that extrudes its 2D input shape along the Y axis",
+		"longdesc": "Extrudes its 2D input shape along the Y axis",
 		"name": "Extrusion",
 		"outputs": [
 			{

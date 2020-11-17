@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that creates a greyscale image from a shape described as a 2D Signed Distance Function",
+		"longdesc": "Creates a greyscale image from a shape described as a 2D Signed Distance Function",
 		"name": "sdShow",
 		"outputs": [
 			{

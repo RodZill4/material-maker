@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "vec3 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, 0.0);\n\tvec3 rv = 5.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.yx);\n\trv -= $in(uv-e.yx);\n\treturn rv;\n}",
-		"longdesc": "A node that sharpens it input image",
+		"longdesc": "Sharpens it input image",
 		"name": "Sharpen",
 		"outputs": [
 			{

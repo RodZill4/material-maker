@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that repeats its input shape around a circle",
+		"longdesc": "Repeats its input shape around a circle",
 		"name": "Circle Repeat",
 		"outputs": [
 			{
