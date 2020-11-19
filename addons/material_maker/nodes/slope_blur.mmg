@@ -32,7 +32,7 @@
 		}
 	],
 	"label": "Slope Blur",
-	"longdesc": "A node that applys a blur effect on its input, following slopes of an input height map",
+	"longdesc": "Applys a blur effect on its input, following slopes of an input height map",
 	"name": "slope_blur",
 	"node_position": {
 		"x": 0,

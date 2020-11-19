@@ -30,7 +30,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.",
+		"longdesc": "Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.",
 		"name": "TEX3D Select",
 		"outputs": [
 			{

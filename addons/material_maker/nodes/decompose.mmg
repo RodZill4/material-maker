@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that decomposes an RGBA input into 4 greyscale images",
+		"longdesc": "Decomposes an RGBA input into 4 greyscale images",
 		"name": "Decompose",
 		"outputs": [
 			{

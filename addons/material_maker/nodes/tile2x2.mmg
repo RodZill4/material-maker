@@ -45,7 +45,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.",
+		"longdesc": "Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.",
 		"name": "Tile2x2",
 		"outputs": [
 			{

@@ -26,7 +26,7 @@
 		}
 	],
 	"label": "Directional Blur",
-	"longdesc": "A node that applies a directional gaussian blur to its input",
+	"longdesc": "Applies a directional gaussian blur to its input",
 	"name": "directional_blur",
 	"node_position": {
 		"x": 0,

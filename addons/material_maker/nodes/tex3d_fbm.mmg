@@ -19,7 +19,7 @@
 
 		],
 		"instance": "float $(name)_fbm(vec3 coord, vec3 size, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tvalue += tex3d_fbm_$noise(coord*size, size, seed) * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
-		"longdesc": "A node that generates a 3D noise made of several octaves of a simple noise",
+		"longdesc": "Generates a 3D noise made of several octaves of a simple noise",
 		"name": "TEX3D FBM",
 		"outputs": [
 			{

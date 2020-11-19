@@ -32,7 +32,7 @@
 			}
 		],
 		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\treturn vec2($d(fract(uv+vec2(epsilon, 0.0)))-$d(fract(uv-vec2(epsilon, 0.0))), $d(fract(uv+vec2(0.0, epsilon)))-$d(fract(uv-vec2(0.0, epsilon))));\n}",
-		"longdesc": "A node that warps its input according to a heightmap",
+		"longdesc": "Warps its input according to a heightmap",
 		"name": "Warp",
 		"outputs": [
 			{

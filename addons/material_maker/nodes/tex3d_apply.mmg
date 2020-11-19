@@ -37,7 +37,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that applies 3D textures to a rendered 3D signed distance function scene.",
+		"longdesc": "Applies 3D textures to a rendered 3D signed distance function scene.",
 		"name": "TEX3D Apply",
 		"outputs": [
 			{

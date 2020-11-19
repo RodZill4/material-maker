@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that elongates its input",
+		"longdesc": "Elongates its input",
 		"name": "Elongation",
 		"outputs": [
 			{

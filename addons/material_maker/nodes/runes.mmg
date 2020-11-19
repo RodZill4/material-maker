@@ -15,7 +15,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a grid filled with random runes",
+		"longdesc": "Generates a grid filled with random runes",
 		"name": "Runes",
 		"outputs": [
 			{

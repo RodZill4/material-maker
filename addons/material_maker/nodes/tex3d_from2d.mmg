@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that creates a 3D texture from a 2D texture",
+		"longdesc": "Creates a 3D texture from a 2D texture",
 		"name": "TEX3D From2D",
 		"outputs": [
 			{

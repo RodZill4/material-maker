@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that creates an annular shape from a shape described as a signed distance function",
+		"longdesc": "Creates an annular shape from a shape described as a signed distance function",
 		"name": "sdAnnularShape",
 		"outputs": [
 			{
