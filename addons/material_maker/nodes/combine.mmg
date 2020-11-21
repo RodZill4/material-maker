@@ -45,7 +45,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that combines 4 greyscale inputs into an RGBA image",
+		"longdesc": "Combines 4 greyscale inputs into an RGBA image",
 		"name": "Combine",
 		"outputs": [
 			{

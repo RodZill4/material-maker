@@ -40,7 +40,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that remaps a greyscale image to a custom gradient",
+		"longdesc": "Remaps a greyscale image to a custom gradient",
 		"name": "Colorize",
 		"outputs": [
 			{

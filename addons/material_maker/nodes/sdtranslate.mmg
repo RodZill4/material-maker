@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that translates its input shape described as signed distance function",
+		"longdesc": "Translates its input shape described as signed distance function",
 		"name": "Translate",
 		"outputs": [
 			{

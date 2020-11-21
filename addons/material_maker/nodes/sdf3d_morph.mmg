@@ -29,7 +29,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that morphs between 2 input shapes",
+		"longdesc": "Morphs between 2 input shapes",
 		"name": "Morph",
 		"outputs": [
 			{

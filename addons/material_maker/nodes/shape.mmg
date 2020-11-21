@@ -32,7 +32,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that draws a white shape on a black background",
+		"longdesc": "Draws a white shape on a black background",
 		"name": "Shape",
 		"outputs": [
 			{

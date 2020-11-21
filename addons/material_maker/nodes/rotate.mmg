@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that rotates its input",
+		"longdesc": "Rotates its input",
 		"name": "Rotate",
 		"outputs": [
 			{

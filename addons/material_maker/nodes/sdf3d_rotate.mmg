@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that rotates its input 3D object described as a signed distance function.",
+		"longdesc": "Rotates its input 3D object described as a signed distance function.",
 		"name": "Rotate",
 		"outputs": [
 			{

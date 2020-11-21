@@ -15,7 +15,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that draws a greyscale hexagonal tiles pattern",
+		"longdesc": "Draws a greyscale hexagonal tiles pattern",
 		"name": "Beehive",
 		"outputs": [
 			{

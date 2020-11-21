@@ -46,7 +46,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that generates an uneven bricks pattern.",
+		"longdesc": "Generates an uneven bricks pattern.",
 		"name": "Uneven Bricks",
 		"outputs": [
 			{

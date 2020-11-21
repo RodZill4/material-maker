@@ -32,7 +32,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that performs a math operation using its inputs or parameter values",
+		"longdesc": "Performs a math operation using its inputs or parameter values",
 		"name": "Math",
 		"outputs": [
 			{

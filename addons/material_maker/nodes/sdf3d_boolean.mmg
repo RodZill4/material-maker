@@ -30,7 +30,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that performs a boolean operation (union, intersection or difference) between two shapes",
+		"longdesc": "Performs a boolean operation (union, intersection or difference) between two shapes",
 		"name": "Boolean",
 		"outputs": [
 			{

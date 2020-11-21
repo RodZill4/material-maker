@@ -33,7 +33,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that remaps an Input image using a custom UV map.",
+		"longdesc": "Remaps an Input image using a custom UV map.",
 		"name": "Custom UV",
 		"outputs": [
 			{

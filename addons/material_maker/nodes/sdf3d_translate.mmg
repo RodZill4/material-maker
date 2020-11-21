@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that translates its input 3D object described as a signed distance function.",
+		"longdesc": "Translates its input 3D object described as a signed distance function.",
 		"name": "Translate",
 		"outputs": [
 			{

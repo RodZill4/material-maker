@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that maps its input into a circle",
+		"longdesc": "Maps its input into a circle",
 		"name": "CircleMap",
 		"outputs": [
 			{

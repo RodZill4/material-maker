@@ -17,7 +17,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates several octaves of color value noise",
+		"longdesc": "Generates several octaves of color value noise",
 		"name": "Color Value Noise",
 		"outputs": [
 			{

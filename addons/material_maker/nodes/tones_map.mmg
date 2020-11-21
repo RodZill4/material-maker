@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that maps linearly an input tones interval to an output tones interval.",
+		"longdesc": "Maps linearly an input tones interval to an output tones interval.",
 		"name": "Tones map",
 		"outputs": [
 			{

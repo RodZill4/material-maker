@@ -74,7 +74,7 @@
 		}
 	],
 	"label": "Gaussian Blur",
-	"longdesc": "A node that applys a gaussian blur on its input",
+	"longdesc": "Applys a gaussian blur on its input",
 	"name": "gaussian_blur",
 	"node_position": {
 		"x": 0,

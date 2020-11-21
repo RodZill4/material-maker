@@ -14,7 +14,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"longdesc": "A node that translates, rotates and scales its input",
+		"longdesc": "Translates, rotates and scales its input",
 		"global": "vec2 transform(vec2 uv, vec2 translate, float rotate, vec2 scale, bool repeat) {\n \tvec2 rv;\n\tuv -= translate;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv /= scale;\n\trv += vec2(0.5);\n    if (repeat) {\n\t\treturn fract(rv);\n\t} else {\n\t\treturn clamp(rv, vec2(0.0), vec2(1.0));\n\t}\t\n}",
 		"inputs": [
 			{

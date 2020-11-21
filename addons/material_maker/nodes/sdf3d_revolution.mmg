@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that revolves its input 2D shape around the Z axis",
+		"longdesc": "Revolves its input 2D shape around the Z axis",
 		"name": "Revolution",
 		"outputs": [
 			{

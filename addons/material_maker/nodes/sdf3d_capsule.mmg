@@ -16,7 +16,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a capsule as a signed distance functioni",
+		"longdesc": "Generates a capsule as a signed distance functioni",
 		"name": "Capsule",
 		"outputs": [
 			{

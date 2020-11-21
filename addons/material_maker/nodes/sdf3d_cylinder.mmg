@@ -16,7 +16,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a cylinder as a signed distance function",
+		"longdesc": "Generates a cylinder as a signed distance function",
 		"name": "Cylinder",
 		"outputs": [
 			{

@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that quantizes the red, green and blue channels of its input",
+		"longdesc": "Quantizes the red, green and blue channels of its input",
 		"name": "Quantize",
 		"outputs": [
 			{

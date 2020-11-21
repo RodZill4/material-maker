@@ -32,7 +32,7 @@
 		}
 	],
 	"label": "Fill",
-	"longdesc": "A node that fills areas defined by white outlines of its input",
+	"longdesc": "Fills areas defined by white outlines of its input",
 	"name": "fill",
 	"node_position": {
 		"x": 0,

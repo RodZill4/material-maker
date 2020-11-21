@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that emphasizes dark and light tones around a specified value",
+		"longdesc": "Emphasizes dark and light tones around a specified value",
 		"name": "Tones step",
 		"outputs": [
 			{
