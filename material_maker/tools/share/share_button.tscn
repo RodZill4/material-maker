@@ -35,6 +35,7 @@ __meta__ = {
 }
 
 [node name="SendButton" type="TextureButton" parent="."]
+visible = false
 margin_left = 36.0
 margin_top = 12.0
 margin_right = 68.0
@@ -47,8 +48,8 @@ __meta__ = {
 }
 
 [node name="Space" type="Control" parent="."]
-margin_left = 72.0
-margin_right = 87.0
+margin_left = 36.0
+margin_right = 51.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 15, 0 )
 
