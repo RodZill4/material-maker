@@ -34,9 +34,10 @@ var pattern_angle : float = 0.0
 
 onready var view = $VSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/Painter/View/MainView
-onready var camera = $VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2/Camera
-onready var camera_stand1 = $VSplitContainer/Painter/View/MainView/CameraStand1
-onready var camera_stand2 = $VSplitContainer/Painter/View/MainView/CameraStand1/CameraStand2
+onready var camera = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera
+onready var camera_position = $VSplitContainer/Painter/View/MainView/CameraPosition
+onready var camera_rotation1 = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
+onready var camera_rotation2 = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
 onready var painted_mesh = $VSplitContainer/Painter/View/MainView/PaintedMesh
 onready var painter = $Painter
 onready var tools = $VSplitContainer/Painter/Tools
@@ -197,8 +198,8 @@ func _on_Fill_pressed():
 	painter.fill(eraser_button.pressed)
 
 func _physics_process(delta):
-	camera_stand1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
-	camera_stand2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
+	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
+	camera_rotation2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
 	update_view()
 
 func __input(ev : InputEvent):
@@ -254,11 +255,12 @@ func _on_View_gui_input(ev : InputEvent):
 				show_brush(ev.position, ev.position)
 		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
-				camera_stand1.translate(-0.02*ev.relative.x*camera.transform.basis.x)
-				camera_stand1.translate(0.02*ev.relative.y*camera.transform.basis.y)
+				var factor = 0.0025*camera.translation.z
+				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
+				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
 			else:
-				camera_stand2.rotate_x(-0.01*ev.relative.y)
-				camera_stand1.rotate_y(-0.01*ev.relative.x)
+				camera_rotation2.rotate_x(-0.01*ev.relative.y)
+				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 		elif ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.shift:
 				reset_stroke()
