@@ -49,23 +49,25 @@ func _on_client_connected(id: int, protocol: String) -> void:
 	if websocket_id == -1:
 		websocket_id = id
 		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/link.tres")
-		$SendButton.visible = false
+		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
+		$SendButton.disabled = true
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
 		websocket_id = -1
 		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
-		$SendButton.visible = false
+		$ConnectButton.hint_tooltip = "Disconnected. Click to connect to the web site."
+		$SendButton.disabled = true
 
 func _on_data_received(id: int) -> void:
-	print("Received data "+str(id))
 	var json = JSON.parse(websocket_server.get_peer(id).get_packet().get_string_from_utf8())
 	if json.error == OK:
 		var data = json.result
 		match data.action:
 			"logged_in":
 				$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
-				$SendButton.visible = true
+				$ConnectButton.hint_tooltip = "Connected and logged in.\nMaterials can be submitted."
+				$SendButton.disabled = false
 			"load_material":
 				var main_window = get_node("/root/MainWindow")
 				main_window.new_material()

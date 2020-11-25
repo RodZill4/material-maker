@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://material_maker/tools/share/icons.svg" type="Texture" id=1]
 [ext_resource path="res://material_maker/tools/share/share_button.gd" type="Script" id=2]
@@ -13,6 +13,11 @@ region = Rect2( 0, 0, 32, 16 )
 flags = 4
 atlas = ExtResource( 1 )
 region = Rect2( 96, 0, 32, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 96, 16, 32, 16 )
 
 [node name="Share" type="HBoxContainer"]
 margin_right = 40.0
@@ -35,21 +40,23 @@ __meta__ = {
 }
 
 [node name="SendButton" type="TextureButton" parent="."]
-visible = false
 margin_left = 36.0
 margin_top = 12.0
 margin_right = 68.0
 margin_bottom = 28.0
 hint_tooltip = "Send material to web site"
 size_flags_vertical = 4
+disabled = true
 texture_normal = SubResource( 2 )
+texture_disabled = SubResource( 3 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": false,
+"_editor_description_": "Send current material to web page"
 }
 
 [node name="Space" type="Control" parent="."]
-margin_left = 36.0
-margin_right = 51.0
+margin_left = 72.0
+margin_right = 87.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 15, 0 )
 
