@@ -125,7 +125,7 @@ func render_textures() -> void:
 		renderer = mm_renderer.request(self)
 		while renderer is GDScriptFunctionState:
 			renderer = yield(renderer, "completed")
-		renderer = renderer.render_material(self, shader_materials[t.texture], get_image_size(), false)
+		renderer = renderer.render_material(self, shader_materials[t.texture], get_image_size(), true)
 		while renderer is GDScriptFunctionState:
 			renderer = yield(renderer, "completed")
 		if generated_textures[t.texture] == null:
@@ -180,7 +180,7 @@ func update_textures() -> void:
 					var renderer = mm_renderer.request(self)
 					while renderer is GDScriptFunctionState:
 						renderer = yield(renderer, "completed")
-					renderer = renderer.render_material(self, shader_materials[t.texture], image_size, false)
+					renderer = renderer.render_material(self, shader_materials[t.texture], image_size, true)
 					while renderer is GDScriptFunctionState:
 						renderer = yield(renderer, "completed")
 					renderer.copy_to_texture(generated_textures[t.texture])
@@ -210,6 +210,7 @@ func update_material(m, file_prefix = null) -> void:
 		# Albedo
 		m.albedo_color = parameters.albedo_color
 		m.albedo_texture = get_generated_texture("albedo", file_prefix)
+		m.flags_albedo_tex_force_srgb = true
 		# Ambient occlusion
 		if get_source(INPUT_OCCLUSION) != null:
 			m.ao_enabled = true
