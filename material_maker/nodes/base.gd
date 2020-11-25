@@ -30,9 +30,11 @@ func _exit_tree() -> void:
 	get_parent().call_deferred("check_last_selected")
 
 func _draw() -> void:
+	var icon = preload("res://material_maker/icons/minimize.tres")
+	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
 	if generator != null and generator.has_randomness():
-		var icon = preload("res://material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://material_maker/icons/randomness_unlocked.tres")
-		draw_texture_rect(icon, Rect2(rect_size.x-48, 4, 16, 16), false)
+		icon = preload("res://material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://material_maker/icons/randomness_unlocked.tres")
+		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
 	var color : Color = get_color("title_color")
 	var inputs = generator.get_input_defs()
 	var font : Font = get_font("default_font")
@@ -63,6 +65,9 @@ func _draw() -> void:
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
 
+func update_node() -> void:
+	pass
+
 func set_generator(g) -> void:
 	generator = g
 	g.connect("rendering_time", self, "update_rendering_time")
@@ -77,10 +82,16 @@ func _input(event) -> void:
 	_on_gui_input(event)
 
 func _on_gui_input(event) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT and Rect2(rect_size.x-48, 4, 16, 16).has_point(event.position):
-		generator.toggle_lock_seed()
-		update()
-		get_parent().send_changed_signal()
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
+			generator.minimized = !generator.minimized
+			update_node()
+			accept_event();
+		elif Rect2(rect_size.x-48, 4, 16, 16).has_point(event.position):
+			generator.toggle_lock_seed()
+			update()
+			get_parent().send_changed_signal()
+			accept_event();
 	elif event is InputEventMouseMotion:
 		var epos = event.position
 		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
@@ -90,7 +101,7 @@ func _on_gui_input(event) -> void:
 			elif generator.model != null:
 				hint_tooltip = generator.model
 			return
-		elif Rect2(rect_size.x-48, 4, 16, 16).has_point(epos) and generator.has_randomness():
+		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(epos) and generator.has_randomness():
 			if generator.is_seed_locked():
 				hint_tooltip = "Unlock the random seed, so it can be modified by moving the node"
 			else:

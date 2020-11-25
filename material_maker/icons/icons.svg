@@ -62,9 +62,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.152214"
-     inkscape:cx="52.294289"
-     inkscape:cy="50.834513"
+     inkscape:zoom="14.304428"
+     inkscape:cx="47.621446"
+     inkscape:cy="25.618879"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -896,5 +896,19 @@
        width="4.3343225"
        id="rect937"
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.75590551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.98528463;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="rect936"
+       width="10.631071"
+       height="10.491231"
+       x="50.50634"
+       y="314.8075" />
+    <rect
+       y="323.62302"
+       x="51.056229"
+       height="0.7870273"
+       width="9.979825"
+       id="rect938"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.96370238;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke" />
   </g>
 </svg>
