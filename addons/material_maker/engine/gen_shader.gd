@@ -241,6 +241,8 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				value_string = "vec4(p_%s_%s_r, p_%s_%s_g, p_%s_%s_b, p_%s_%s_a)" % [ genname, p.name, genname, p.name, genname, p.name, genname, p.name ]
 			elif p.type == "gradient":
 				value_string = genname+"_"+p.name+"_gradient_fct"
+			elif p.type == "curve":
+				value_string = genname+"_"+p.name+"_curve_fct"
 			elif p.type == "boolean":
 				value_string = "true" if value else "false"
 			else:
@@ -312,6 +314,15 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					var g = parameters[p.name]
 					if !(g is MMGradient):
 						g = MMGradient.new()
+						g.deserialize(parameters[p.name])
+					var params = g.get_shader_params(genname+"_"+p.name)
+					for sp in params.keys():
+						rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
+					rv.defs += g.get_shader(genname+"_"+p.name)
+				elif p.type == "curve":
+					var g = parameters[p.name]
+					if !(g is MMCurve):
+						g = MMCurve.new()
 						g.deserialize(parameters[p.name])
 					var params = g.get_shader_params(genname+"_"+p.name)
 					for sp in params.keys():

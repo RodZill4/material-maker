@@ -46,6 +46,10 @@ func on_parameter_changed(p : String, v) -> void:
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
+		elif o is Button and o.filename == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
+			var curve : MMCurve = MMCurve.new()
+			curve.deserialize(v)
+			o.value = curve
 		else:
 			print("unsupported widget "+str(o))
 	get_parent().set_need_save()
@@ -76,6 +80,8 @@ func initialize_properties() -> void:
 			o.connect("on_file_selected", self, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
+		elif o is Button and o.filename == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
+			o.connect("updated", self, "_on_curve_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
 
@@ -106,6 +112,12 @@ func _on_file_changed(new_file, variable : String) -> void:
 func _on_gradient_changed(new_gradient, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_gradient.duplicate())
+	ignore_parameter_change = ""
+	get_parent().set_need_save()
+
+func _on_curve_changed(new_curve, variable : String) -> void:
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, new_curve.duplicate())
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
@@ -140,6 +152,8 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control.rect_min_size.x = 40
 	elif p.type == "gradient":
 		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instance()
+	elif p.type == "curve":
+		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "file":
