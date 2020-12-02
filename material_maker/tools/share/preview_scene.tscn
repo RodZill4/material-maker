@@ -23,11 +23,14 @@ uv1_scale = Vector3( 4, 2, 4 )
 uv1_offset = Vector3( 0, 0.5, 0 )
 
 [sub_resource type="ProceduralSky" id=5]
+radiance_size = 3
+sky_energy = 0.75
 
-[sub_resource type="Environment" id=6]
+[sub_resource type="Environment" id=4]
 background_mode = 2
 background_sky = SubResource( 5 )
-ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
+ambient_light_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
+tonemap_mode = 2
 
 [node name="Spatial" type="Spatial"]
 
@@ -42,8 +45,4 @@ shadow_enabled = true
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8 )
-environment = SubResource( 6 )
-
-[node name="GIProbe" type="GIProbe" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00136697, 0 )
-extents = Vector3( 2.00446, 1.83693, 2.0836 )
+environment = SubResource( 4 )
