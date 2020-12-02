@@ -95,7 +95,7 @@ func get_parameter_defs() -> Array:
 						p.values.push_back({ name=c, value=c })
 			"linked_control":
 				var linked = w.linked_widgets[0]
-				if linked != null && is_inside_tree():
+				if linked != null and is_inside_tree():
 					var gen = get_parent().get_node(linked.node)
 					if gen != null:
 						var gen_params = gen.get_parameter_defs()

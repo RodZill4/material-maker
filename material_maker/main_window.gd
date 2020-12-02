@@ -139,7 +139,7 @@ func _ready() -> void:
 	OS.min_window_size = Vector2(1024, 600)
 
 	# Set window title
-	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/release"))
+	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
 
 	layout.load_panels(config_cache)
 	library = get_panel("Library")
