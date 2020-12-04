@@ -40,7 +40,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that remaps a greyscale 3D texture to a custom gradient",
+		"longdesc": "Remaps a greyscale 3D texture to a custom gradient",
 		"name": "TEX3D Colorize",
 		"outputs": [
 			{

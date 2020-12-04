@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that mirrors its input while applying an offset from the center",
+		"longdesc": "Mirrors its input while applying an offset from the center",
 		"name": "Mirror",
 		"outputs": [
 			{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
 [ext_resource path="res://material_maker/widgets/render_counter/render_counter.tscn" type="PackedScene" id=11]
+[ext_resource path="res://material_maker/tools/share/share_button.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -75,6 +76,11 @@ margin_bottom = 22.0
 text = "File"
 items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 4, 268435539, null, "", false, "Save material as...", null, 0, false, false, 5, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 8, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 10, 0, null, "", false, "Quit", null, 0, false, false, 11, 268435537, null, "", false ]
 switch_on_hover = true
+
+[node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
+margin_left = 1050.0
+margin_right = 1082.0
+margin_bottom = 22.0
 
 [node name="RenderCounter" parent="VBoxContainer/TopBar" instance=ExtResource( 11 )]
 margin_left = 1086.0

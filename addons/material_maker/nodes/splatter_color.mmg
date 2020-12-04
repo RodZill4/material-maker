@@ -15,7 +15,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"longdesc": "A node that spreads several occurences of an input image randomly.",
+		"longdesc": "Spreads several occurences of an input image randomly.",
 		"global": "",
 		"inputs": [
 			{

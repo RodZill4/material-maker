@@ -16,7 +16,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that draws a greyscale sine wave pattern",
+		"longdesc": "Draws a greyscale sine wave pattern",
 		"name": "Sine Wave",
 		"outputs": [
 			{

@@ -50,7 +50,7 @@
 		}
 	],
 	"label": "Dilate",
-	"longdesc": "A node that dilates the white areas of a mask, using the colors of an optional input",
+	"longdesc": "Dilates the white areas of a mask, using the colors of an optional input",
 	"name": "dilate",
 	"node_position": {
 		"x": 0,

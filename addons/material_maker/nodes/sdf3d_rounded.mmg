@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that dilates an input shape into a rounded shape",
+		"longdesc": "Dilates an input shape into a rounded shape",
 		"name": "Rounded",
 		"outputs": [
 			{

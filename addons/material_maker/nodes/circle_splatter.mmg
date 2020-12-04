@@ -20,7 +20,7 @@
 	},
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), int($rings), vec2(float($seed)));",
-		"longdesc": "A node that spreads several occurences of an input image in a circle or spiral pattern.",
+		"longdesc": "Spreads several occurences of an input image in a circle or spiral pattern.",
 		"global": "",
 		"inputs": [
 			{

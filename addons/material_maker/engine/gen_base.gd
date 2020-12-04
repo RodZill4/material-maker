@@ -40,6 +40,9 @@ var parameters = {}
 var seed_locked : bool = false
 var seed_value : int = 0
 
+var preview : int = -1
+var minimized : bool = false
+
 func _ready() -> void:
 	init_parameters()
 
@@ -304,6 +307,10 @@ func serialize() -> Dictionary:
 			rv.parameters[p.name] = p.default
 	if seed_locked:
 		rv.seed_value = seed_value
+	if preview >= 0:
+		rv.preview = preview
+	if minimized:
+		rv.minimized = minimized
 	if model != null:
 		rv.type = model
 	else:
@@ -333,6 +340,8 @@ func deserialize(data : Dictionary) -> void:
 		seed_value = data.seed_value
 	else:
 		seed_locked = false
+	preview = data.preview if data.has("preview") else -1
+	minimized = data.has("minimized") and data.minimized
 	_post_load()
 
 

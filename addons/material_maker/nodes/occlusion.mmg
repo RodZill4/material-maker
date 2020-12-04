@@ -56,7 +56,7 @@
 		}
 	],
 	"label": "Occlusion",
-	"longdesc": "A node that generates an ambient occlusion map from a height map",
+	"longdesc": "Generates an ambient occlusion map from a height map",
 	"name": "occlusion",
 	"node_position": {
 		"x": 0,

@@ -95,7 +95,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that combines the outputs of 2 mapped base materials (keeping the \"highest\" material).",
+		"longdesc": "Combines the outputs of 2 mapped base materials (keeping the \"highest\" material).",
 		"name": "Mix",
 		"outputs": [
 			{

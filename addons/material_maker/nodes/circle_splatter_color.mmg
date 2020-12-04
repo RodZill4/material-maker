@@ -20,7 +20,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"longdesc": "A node that spreads several occurences of an input image in a circle or spiral pattern.",
+		"longdesc": "Spreads several occurences of an input image in a circle or spiral pattern.",
 		"global": "",
 		"inputs": [
 			{

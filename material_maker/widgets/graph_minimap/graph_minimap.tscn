@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material_maker/widgets/graph_minimap/graph_minimap.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0666667, 0.0666667, 0.0666667, 0.686275 )
+corner_radius_top_left = 4
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 64, 96, 32, 32 )
+
+[node name="Minimap" type="Panel"]
+modulate = Color( 1, 1, 1, 0.85 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -256.0
+margin_top = -176.0
+margin_right = -14.0
+margin_bottom = -14.0
+rect_min_size = Vector2( 240, 160 )
+size_flags_horizontal = 8
+size_flags_vertical = 8
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+toolbar_icon = SubResource( 2 )

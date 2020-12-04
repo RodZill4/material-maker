@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that replicated an angle of the input image several times around the center.",
+		"longdesc": "Replicated an angle of the input image several times around the center.",
 		"name": "Kaleidoscope",
 		"outputs": [
 			{

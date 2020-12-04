@@ -20,7 +20,7 @@
 		}
 	],
 	"label": "Emboss",
-	"longdesc": "A node that creates highlights and shadows from an input heightmap",
+	"longdesc": "Creates highlights and shadows from an input heightmap",
 	"name": "emboss",
 	"node_position": {
 		"x": 0,

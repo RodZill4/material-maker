@@ -21,7 +21,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A node that converts its input into greyscale",
+		"longdesc": "Converts its input into greyscale",
 		"name": "Greyscale",
 		"outputs": [
 			{

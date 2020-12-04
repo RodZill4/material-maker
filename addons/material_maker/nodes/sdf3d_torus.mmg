@@ -16,7 +16,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A node that generates a torus as a signed distance function",
+		"longdesc": "Generates a torus as a signed distance function",
 		"name": "Torus",
 		"outputs": [
 			{
