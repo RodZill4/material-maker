@@ -65,7 +65,8 @@ void fragment() {
 				visibility_multiplier = max(visibility_multiplier, visibility(UV.xy, xyz+vec3(dx, dy, 0.0)));
 			}
 		}
-		float normal_multiplier = clamp((dot(normalize(normal), vec3(0.0, 0.0, 1.0))-0.1)*2.0, 0.0, 1.0);
+		visibility_multiplier = clamp(visibility_multiplier, 0.0, 1.0);
+		float normal_multiplier = clamp((dot(normalize(normal), vec3(0.0, 0.0, 1.0))-0.2)*10.0, 0.0, 1.0);
 		visible = normal_multiplier*visibility_multiplier;
 	}
 	ALBEDO = vec3(xyz.xy, visible);
