@@ -156,6 +156,8 @@ func _update_map() -> void:
 		var child_color = child.get("minimap_color")
 		if (child_color):
 			node_data.node_color = child_color
+		elif !child.selected:
+			node_data.node_color *= 0.5
 
 		_graph_nodes.append(node_data)
 
