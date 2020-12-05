@@ -6,6 +6,7 @@
 [resource]
 shader = ExtResource( 1 )
 shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/transparent = null
 shader_param/specular = 0.5
 shader_param/metallic = 0.0
 shader_param/roughness = 1.0

@@ -31,12 +31,15 @@ own_world = true
 world = SubResource( 1 )
 handle_input_locally = false
 msaa = 2
+fxaa = true
 render_target_clear_mode = 1
 render_target_update_mode = 3
 physics_object_picking = true
+shadow_atlas_size = 4096
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
 
 [node name="ObjLoader" type="Node" parent="."]
 script = ExtResource( 3 )
+
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

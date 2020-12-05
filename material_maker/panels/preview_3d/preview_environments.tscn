@@ -3,21 +3,24 @@
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/environment.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/moonless_golf.hdr" type="Texture" id=3]
-[ext_resource path="res://material_maker/panels/preview_3d/panoramas/epping_forest_01.hdr" type="Texture" id=4]
+[ext_resource path="res://material_maker/panels/preview_3d/panoramas/urban_street_02_4k.hdr" type="Texture" id=4]
 
 [sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
-radiance_size = 4
+radiance_size = 6
 panorama = ExtResource( 4 )
 
 [sub_resource type="Environment" id=2]
-background_mode = 2
+background_mode = 3
 background_sky = SubResource( 1 )
-background_energy = 1.5
+background_sky_custom_fov = 35.0
+background_color = Color( 0.0509804, 0.0745098, 0.0980392, 1 )
+background_energy = 2.0
 ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 0.32
 tonemap_mode = 2
-tonemap_white = 16.0
+adjustment_enabled = true
+adjustment_contrast = 0.95
+adjustment_saturation = 0.95
 
 [sub_resource type="CylinderMesh" id=3]
 top_radius = 5.0
@@ -44,20 +47,27 @@ subdivide_depth = 10
 [node name="Environments" type="Spatial"]
 
 [node name="Epping Forest" type="Spatial" parent="."]
-visible = false
 script = ExtResource( 2 )
 environment = SubResource( 2 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="Epping Forest"]
-transform = Transform( 0.976272, -0.0494319, -0.21083, 0.216548, 0.222856, 0.950496, -8.69534e-09, -0.973597, 0.228272, -5.08826, 21.6274, 5.3744 )
-light_energy = 0.5
-shadow_enabled = true
-
 [node name="MeshInstance" type="MeshInstance" parent="Epping Forest"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.3343, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0 )
 visible = false
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Epping Forest"]
+transform = Transform( 0.853553, -0.146447, -0.5, 0.5, 0.5, 0.707107, 0.146447, -0.853553, 0.5, 0, 2.49951, 0 )
+light_energy = 2.0
+shadow_enabled = true
+shadow_contact = 0.2
+shadow_reverse_cull_face = true
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.3
+directional_shadow_split_2 = 0.4
+directional_shadow_blend_splits = true
+directional_shadow_depth_range = 1
+directional_shadow_max_distance = 20.0
 
 [node name="Moonless Golf" type="Spatial" parent="."]
 visible = false

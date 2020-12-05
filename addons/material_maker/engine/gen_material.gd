@@ -273,6 +273,7 @@ func update_material(m, file_prefix = null) -> void:
 			m.subsurf_scatter_enabled = false
 	else:
 		m.set_shader_param("albedo", parameters.albedo_color)
+		m.set_shader_param("transparent", parameters.flags_transparent)
 		m.set_shader_param("texture_albedo", get_generated_texture("albedo", file_prefix))
 		m.set_shader_param("texture_orm", get_generated_texture("orm", file_prefix))
 		m.set_shader_param("metallic", parameters.metallic)

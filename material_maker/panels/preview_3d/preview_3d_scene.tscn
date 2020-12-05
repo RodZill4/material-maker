@@ -42,6 +42,7 @@ transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5 )
 environment = SubResource( 2 )
 current = true
+fov = 35.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"

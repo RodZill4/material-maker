@@ -137,20 +137,38 @@ func load_obj_file(path : String) -> Mesh:
 				st.add_smooth_group(false)
 			else:
 				st.add_smooth_group(true)
+
+	var unique_uvs = {}
 	for i in mdlFaceIndex.size():
 		if mdlUV.size() > 0:
+			if unique_uvs.has(mdlFaceIndex[i][0]):
+				st.add_uv2(unique_uvs[mdlFaceIndex[i][0]])
+			else:
+				unique_uvs[mdlFaceIndex[i][0]] = mdlUV[mdlUVIndex[i][0]]
+				st.add_uv2(mdlUV[mdlUVIndex[i][0]])
 			st.add_uv(mdlUV[mdlUVIndex[i][0]])
+
 		if mdlNorm.size() > 0:
 			st.add_normal(mdlNorm[mdlNormIndex[i][0]])
 		st.add_vertex(mdlVerts[mdlFaceIndex[i][0]])
 		
 		if mdlUV.size() > 0:
+			if unique_uvs.has(mdlFaceIndex[i][1]):
+				st.add_uv2(unique_uvs[mdlFaceIndex[i][1]])
+			else:
+				unique_uvs[mdlFaceIndex[i][1]] = mdlUV[mdlUVIndex[i][1]]
+				st.add_uv2(mdlUV[mdlUVIndex[i][1]])
 			st.add_uv(mdlUV[mdlUVIndex[i][1]])
 		if mdlNorm.size() > 0:
 			st.add_normal(mdlNorm[mdlNormIndex[i][1]])
 		st.add_vertex(mdlVerts[mdlFaceIndex[i][1]])
 		
 		if mdlUV.size() > 0:
+			if unique_uvs.has(mdlFaceIndex[i][2]):
+				st.add_uv2(unique_uvs[mdlFaceIndex[i][2]])
+			else:
+				unique_uvs[mdlFaceIndex[i][2]] = mdlUV[mdlUVIndex[i][2]]
+				st.add_uv2(mdlUV[mdlUVIndex[i][2]])
 			st.add_uv(mdlUV[mdlUVIndex[i][2]])
 		if mdlNorm.size() > 0:
 			st.add_normal(mdlNorm[mdlNormIndex[i][2]])

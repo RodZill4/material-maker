@@ -1,6 +1,7 @@
 shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+render_mode blend_mix,depth_draw_alpha_prepass,cull_disabled,diffuse_burley,specular_schlick_ggx;
 uniform vec4 albedo : hint_color;
+uniform bool transparent;
 uniform sampler2D texture_albedo : hint_albedo;
 uniform float specular;
 uniform sampler2D texture_orm : hint_albedo;
@@ -25,7 +26,8 @@ uniform vec3 uv2_offset;
 
 void vertex() {
 	UV = UV*uv1_scale.xy+uv1_offset.xy;
-	VERTEX = VERTEX+NORMAL*depth_scale*(1.0-texture(texture_depth, UV).r);
+	UV2 = UV2*uv1_scale.xy+uv1_offset.xy;
+	VERTEX = VERTEX+NORMAL*depth_scale*(1.0-texture(texture_depth, UV2).r);
 }
 
 void fragment() {
@@ -33,6 +35,12 @@ void fragment() {
 	vec4 albedo_tex = texture(texture_albedo, base_uv);
 	albedo_tex.rgb = mix(pow((albedo_tex.rgb + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex.rgb.rgb * (1.0 / 12.92),lessThan(albedo_tex.rgb,vec3(0.04045)));
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	if(transparent)
+	{
+		ALPHA = albedo_tex.a;
+		ALPHA_SCISSOR = 0.98;
+	}
+
 	vec4 orm_tex = texture(texture_orm, base_uv);
 	METALLIC = metallic*orm_tex.b;
 	ROUGHNESS = roughness*orm_tex.g;
