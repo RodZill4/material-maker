@@ -31,10 +31,12 @@ func _on_ControlPoint_moved(index):
 	curve.points[index].p = reverse_transform_point(control_point.rect_position+control_point.OFFSET)
 	if control_point.has_node("LeftSlope"):
 		var slope_vector = control_point.get_node("LeftSlope").rect_position/rect_size
-		curve.points[index].ls = -slope_vector.y / slope_vector.x
+		if slope_vector.x != 0:
+			curve.points[index].ls = -slope_vector.y / slope_vector.x
 	if control_point.has_node("RightSlope"):
 		var slope_vector = control_point.get_node("RightSlope").rect_position/rect_size
-		curve.points[index].rs = -slope_vector.y / slope_vector.x
+		if slope_vector.x != 0:
+			curve.points[index].rs = -slope_vector.y / slope_vector.x
 	update()
 
 func _on_ControlPoint_removed(index):

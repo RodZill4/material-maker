@@ -1862,6 +1862,31 @@
 			"type": "greyscale"
 		},
 		{
+			"icon": "filter_tonality",
+			"name": "tonality",
+			"parameters": {
+				"curve": {
+					"points": [
+						{
+							"ls": 0,
+							"rs": 1,
+							"x": 0,
+							"y": 0
+						},
+						{
+							"ls": 1,
+							"rs": 0,
+							"x": 1,
+							"y": 1
+						}
+					],
+					"type": "Curve"
+				}
+			},
+			"tree_item": "Filter/Tonality",
+			"type": "tonality"
+		},
+		{
 			"icon": "filter_colorize",
 			"parameters": {
 				"gradient": [
