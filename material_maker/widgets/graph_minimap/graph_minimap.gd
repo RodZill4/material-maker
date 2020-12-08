@@ -80,6 +80,11 @@ func _draw() -> void:
 	var centering_offset = _convert_from_graph_position(_graph_padding)
 	var map_offset = _map_padding + centering_offset
 
+	for line in _graph_lines:
+		var from_position = _convert_from_graph_position(line.from_position) + map_offset
+		var to_position = _convert_from_graph_position(line.to_position) + map_offset
+		draw_line(from_position, to_position, Color(1.0, 1.0, 1.0, 0.1))
+
 	for node in _graph_nodes:
 		var position = _convert_from_graph_position(node.position) + map_offset
 		var size = _convert_from_graph_position(node.size)
@@ -91,11 +96,6 @@ func _draw() -> void:
 			draw_rect(node_shape, node.node_color, false)
 		else:
 			draw_rect(node_shape, node.node_color)
-
-	for line in _graph_lines:
-		var from_position = _convert_from_graph_position(line.from_position) + map_offset
-		var to_position = _convert_from_graph_position(line.to_position) + map_offset
-		draw_line(from_position, to_position, line.from_color)
 
 	var camera_center = _convert_from_graph_position(_camera_position + _camera_size / 2) + map_offset
 	var camera_viewport = _convert_from_graph_position(_camera_size)
