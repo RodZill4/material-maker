@@ -91,8 +91,12 @@ func set_mesh(m : Mesh):
 	mat = view_to_texture_mesh.get_surface_material(0)
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_material(0, mat)
-	update_seams_texture()
-	update_inv_uv_texture(m)
+	var result = update_seams_texture()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	result = update_inv_uv_texture(m)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
 
 func calculate_mask(value : float, channel : int) -> Color:
 	if (channel == SpatialMaterial.TEXTURE_CHANNEL_RED):

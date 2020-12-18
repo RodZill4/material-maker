@@ -84,6 +84,9 @@ func _ready():
 	update_brush_graph()
 	call_deferred("update_brush")
 
+func get_project_type() -> String:
+	return "paint"
+
 func get_remote():
 	for c in graph_edit.top_generator.get_children():
 		if c.get_type() == "remote":
@@ -121,6 +124,18 @@ func set_brush(data) -> void:
 	graph_edit.new_material(data)
 	update_brush()
 	update_brush_graph()
+
+func get_brush_preview() -> Texture:
+	var preview = get_tree().get_root().get_node("BrushPreviewGenerator")
+	if preview == null:
+		print("Create preview")
+		preview = load("res://material_maker/tools/painter/brush_preview.tscn").instance()
+		preview.name = "BrushPreviewGenerator"
+		get_tree().get_root().add_child(preview)
+	var status = preview.set_brush(graph_edit.generator.get_node("Brush"))
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	return status
 
 func get_graph_edit():
 	return graph_edit

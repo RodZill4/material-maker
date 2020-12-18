@@ -1,6 +1,8 @@
 extends GraphEdit
 class_name MMGraphEdit
 
+export(String, MULTILINE) var shader_context_defs : String = ""
+
 var node_factory = null
 
 var save_path = null setget set_save_path
@@ -29,6 +31,9 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func get_project_type() -> String:
+	return "material"
 
 func get_graph_edit():
 	return self

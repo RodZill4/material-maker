@@ -13,6 +13,7 @@ size = Vector3( 1, 1, 1 )
 [sub_resource type="ViewportTexture" id=3]
 
 [sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
 shader = ExtResource( 1 )
 shader_param/seams_multiplier = 0.06125
 shader_param/model_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4 )

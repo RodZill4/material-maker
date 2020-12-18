@@ -1,4 +1,6 @@
-extends GridContainer
+extends VBoxContainer
+
+onready var parameters : GridContainer = $Parameters
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
@@ -16,8 +18,8 @@ func set_generator(g):
 		generator = g
 		if generator != null:
 			generator.connect("parameter_changed", self, "on_parameter_changed")
-	for c in get_children():
-		remove_child(c)
+	for c in parameters.get_children():
+		parameters.remove_child(c)
 		c.free()
 	controls = {}
 	if generator != null:
@@ -25,11 +27,11 @@ func set_generator(g):
 			var label : Label = Label.new()
 			label.text = p.label if p.has("label") else ""
 			label.size_flags_horizontal = SIZE_EXPAND_FILL
-			add_child(label)
+			parameters.add_child(label)
 			var control = GENERIC.create_parameter_control(p, false)
 			control.name = p.name
 			control.size_flags_horizontal = SIZE_FILL
-			add_child(control)
+			parameters.add_child(control)
 			controls[p.name] = control
 		GENERIC.initialize_controls_from_generator(controls, generator, self)
 

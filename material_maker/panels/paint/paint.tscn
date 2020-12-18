@@ -474,6 +474,8 @@ margin_bottom = 716.0
 focus_mode = 1
 size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )
+shader_context_defs = "uniform sampler2D mesh_normal_tex;
+"
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="gui_input" from="VSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
 [connection signal="resized" from="VSplitContainer/Painter/View" to="." method="_on_resized"]

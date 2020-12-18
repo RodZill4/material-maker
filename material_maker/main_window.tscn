@@ -66,7 +66,7 @@ margin_right = 1268.0
 margin_bottom = 22.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 1082.0
+margin_right = 991.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 
@@ -78,7 +78,7 @@ items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load ma
 switch_on_hover = true
 
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
-margin_left = 1050.0
+margin_left = 995.0
 margin_right = 1082.0
 margin_bottom = 22.0
 

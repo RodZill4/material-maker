@@ -194,6 +194,7 @@ func restore_preview_widget() -> void:
 	else:
 		if preview == null:
 			preview = preload("res://material_maker/panels/preview_2d/preview_2d_node.tscn").instance()
+			preview.shader_context_defs = get_parent().shader_context_defs
 			preview_timer.one_shot = true
 			preview_timer.connect("timeout", self, "do_update_preview")
 			preview.add_child(preview_timer)
