@@ -22,7 +22,7 @@ func request(object : Object) -> Object:
 	return self
 
 var current_font : String = ""
-func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float) -> Object:
+func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	size = Vector2(2048, 2048)
 	$Font.visible = true
@@ -30,7 +30,9 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$Font.rect_size = size
 	$Font/Label.text = text
 	$Font/Label.rect_position = Vector2(2048*(0.5+x), 2048*(0.5+y))
-	var font = $Font/Label.get_font("font")
+	var font : Font = $Font/Label.get_font("font")
+	if center:
+		$Font/Label.rect_position -= 0.5*font.get_string_size(text)
 	if font_path != "" and font_path != current_font:
 		var font_data = load(font_path)
 		if font_data != null:

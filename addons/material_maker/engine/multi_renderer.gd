@@ -56,6 +56,8 @@ func generate_shader(src_code : Dictionary) -> String:
 	return code
 
 static func update_float_parameters(material : ShaderMaterial, parameter_changes : Dictionary) -> bool:
+	if material == null:
+		return false
 	var updated : bool = false
 	for n in parameter_changes.keys():
 		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
