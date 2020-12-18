@@ -73,6 +73,11 @@ func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 		$ConnectButton.hint_tooltip = "Disconnected. Click to connect to the web site."
 		$SendButton.disabled = true
 
+func bring_to_top() -> void:
+	var is_always_on_top = OS.is_window_always_on_top()
+	OS.set_window_always_on_top(true)
+	OS.set_window_always_on_top(is_always_on_top)
+
 func _on_data_received(id: int) -> void:
 	var json = JSON.parse(websocket_server.get_peer(id).get_packet().get_string_from_utf8())
 	if json.error == OK:
@@ -89,6 +94,7 @@ func _on_data_received(id: int) -> void:
 				var new_generator = mm_loader.create_gen(JSON.parse(data.json).result)
 				graph_edit.set_new_generator(new_generator)
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
+				bring_to_top()
 			"load_brush":
 				var main_window = get_node("/root/MainWindow")
 				var project_panel = main_window.get_current_project()
@@ -96,3 +102,4 @@ func _on_data_received(id: int) -> void:
 					print("Cannot load brush")
 					return
 				project_panel.set_brush(JSON.parse(data.json).result)
+				bring_to_top()
