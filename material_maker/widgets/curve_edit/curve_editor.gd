@@ -1,5 +1,7 @@
 extends "res://material_maker/widgets/curve_edit/curve_view.gd"
 
+signal value_changed(value)
+
 func _ready():
 	update_controls()
 
@@ -25,17 +27,21 @@ func update_controls() -> void:
 			control_point.set_constraint(min_x, max_x, -control_point.OFFSET.y, rect_size.y-control_point.OFFSET.y)
 		control_point.connect("moved", self, "_on_ControlPoint_moved")
 		control_point.connect("removed", self, "_on_ControlPoint_removed")
+	emit_signal("value_changed", curve)
 
 func _on_ControlPoint_moved(index):
 	var control_point = get_child(index)
 	curve.points[index].p = reverse_transform_point(control_point.rect_position+control_point.OFFSET)
 	if control_point.has_node("LeftSlope"):
 		var slope_vector = control_point.get_node("LeftSlope").rect_position/rect_size
-		curve.points[index].ls = -slope_vector.y / slope_vector.x
+		if slope_vector.x != 0:
+			curve.points[index].ls = -slope_vector.y / slope_vector.x
 	if control_point.has_node("RightSlope"):
 		var slope_vector = control_point.get_node("RightSlope").rect_position/rect_size
-		curve.points[index].rs = -slope_vector.y / slope_vector.x
+		if slope_vector.x != 0:
+			curve.points[index].rs = -slope_vector.y / slope_vector.x
 	update()
+	emit_signal("value_changed", curve)
 
 func _on_ControlPoint_removed(index):
 	if curve.remove_point(index):

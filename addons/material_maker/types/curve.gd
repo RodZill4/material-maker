@@ -76,7 +76,7 @@ func get_shader(name) -> String:
 		shader += "float t = dx/(p_"+name+"_"+str(i+1)+"_x - p_"+name+"_"+str(i)+"_x);"
 		shader += "float y1 = p_"+name+"_"+str(i)+"_y + dx*p_"+name+"_"+str(i)+"_rs;"
 		shader += "float y2 = p_"+name+"_"+str(i+1)+"_y + (x - p_"+name+"_"+str(i+1)+"_x)*p_"+name+"_"+str(i+1)+"_ls;"
-		shader += "return mix(y1, y2, 3.0*t*t-2.0*t*t*t);"
+		shader += "return mix(y1, y2, (3.0-2.0*t)*t*t);"
 		shader += "}\n"
 	shader += "}\n"
 	return shader

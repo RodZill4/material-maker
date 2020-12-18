@@ -7,6 +7,23 @@
 	"parameters": {
 		"axis": 1,
 		"l": 0.3,
+		"profile": {
+			"points": [
+				{
+					"ls": 0,
+					"rs": 0,
+					"x": 0,
+					"y": 1
+				},
+				{
+					"ls": 0,
+					"rs": 0,
+					"x": 1,
+					"y": 1
+				}
+			],
+			"type": "Curve"
+		},
 		"r": 0.2
 	},
 	"shader_model": {
@@ -21,7 +38,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the capsule",
-				"sdf3d": "length($(name_uv)_p)-$r",
+				"sdf3d": "length($(name_uv)_p)-$r*$profile(clamp(0.5+0.5*($uv).$axis/$l, 0.0, 1.0))",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
@@ -72,6 +89,28 @@
 				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": {
+					"points": [
+						{
+							"ls": 0,
+							"rs": 0,
+							"x": 0,
+							"y": 1
+						},
+						{
+							"ls": 0,
+							"rs": 0,
+							"x": 1,
+							"y": 1
+						}
+					],
+					"type": "Curve"
+				},
+				"label": "Profile",
+				"name": "profile",
+				"type": "curve"
 			}
 		],
 		"shortdesc": "capsule"

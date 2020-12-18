@@ -28,50 +28,54 @@ __meta__ = {
 }
 
 [node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
+margin_right = 616.0
+margin_bottom = 353.0
 rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
 
 [node name="CurveEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 612.0
+margin_bottom = 349.0
 size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 367.0
-margin_right = 626.0
-margin_bottom = 371.0
+margin_top = 357.0
+margin_right = 616.0
+margin_bottom = 361.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 375.0
-margin_right = 626.0
-margin_bottom = 395.0
+margin_top = 365.0
+margin_right = 616.0
+margin_bottom = 385.0
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_right = 488.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 4.0
-margin_right = 16.0
+margin_left = 492.0
+margin_right = 552.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 20.0
-margin_right = 32.0
+margin_left = 556.0
+margin_right = 616.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "Cancel"
 [connection signal="popup_hide" from="." to="." method="_on_CurveDialog_popup_hide"]
+[connection signal="value_changed" from="VBoxContainer/EditorContainer/CurveEditor" to="." method="_on_CurveEditor_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

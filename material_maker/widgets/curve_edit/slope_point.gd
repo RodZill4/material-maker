@@ -16,7 +16,6 @@ func _on_ControlPoint_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			if event.pressed:
-				print("slope point moving")
 				moving = true
 			else:
 				moving = false
