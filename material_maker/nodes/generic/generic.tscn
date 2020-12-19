@@ -2,7 +2,6 @@
 
 [ext_resource path="res://material_maker/nodes/generic/generic.gd" type="Script" id=1]
 
-
 [node name="Generic" type="GraphNode"]
 margin_right = 95.0
 margin_bottom = 29.0

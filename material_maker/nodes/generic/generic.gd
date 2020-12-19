@@ -40,6 +40,8 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.color = MMType.deserialize_value(v)
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.path = v
+		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+			o.do_set_image_path(v)
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
@@ -83,6 +85,8 @@ static func initialize_controls_from_generator(controls, generator, object) -> v
 		elif o is ColorPickerButton:
 			o.connect("color_changed", object, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
+			o.connect("on_file_selected", object, "_on_file_changed", [ o.name ])
+		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			o.connect("updated", object, "_on_gradient_changed", [ o.name ])
@@ -165,6 +169,8 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
 	elif p.type == "string":
 		control = LineEdit.new()
+	elif p.type == "image_path":
+		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instance()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instance()
 		if p.has("filters"):
