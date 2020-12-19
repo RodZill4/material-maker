@@ -23,7 +23,7 @@ func get_type_name() -> String:
 	return "Image"
 
 func get_parameter_defs() -> Array:
-	return [ { name="image", type="path" } ]
+	return [ { name="image", type="image_path", label="" } ]
 
 func get_filetime(file_path : String) -> int:
 	var f : File = File.new()
