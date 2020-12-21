@@ -35,13 +35,17 @@ func update_shader_options() -> void:
 		return
 	if $ContextMenu.is_item_checked(0):
 		shader_margin = 0.2
-		material.set_shader_param("show_tiling", true)
+		material.set_shader_param("show_tiling", false)
 		material.set_shader_param("margin", 0.2)
+		$Lines.visible = true
+		$Lines.update()
 	else:
 		shader_margin = 0
 		material.set_shader_param("show_tiling", false)
 		material.set_shader_param("margin", 0)
+		$Lines.visible = false
 	setup_controls()
+	update()
 
 func on_resized() -> void:
 	.on_resized()
@@ -61,3 +65,4 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			update_shader_options()
 		_:
 			print("unsupported id "+str(id))
+

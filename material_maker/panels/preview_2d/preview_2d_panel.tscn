@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=1]
 [ext_resource path="res://material_maker/panels/preview_2d/control_point.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" type="Script" id=4]
+[ext_resource path="res://material_maker/panels/preview_2d/lines.gd" type="Script" id=5]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -72,19 +73,21 @@ void fragment() {
 	} else {
 		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 		vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
-		if (show_tiling) {
-			vec2 m2 = min(fract(uv), 1.0-fract(uv));
-			float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
-			COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
-		} else {
-			vec2 outside = step(abs(uv-vec2(0.5)), vec2(0.5));
-			COLOR = vec4(mix(vec3(0.0), image_with_background, outside.x*outside.y), 1.0);
-		}
+		COLOR = vec4(image_with_background, 1.0);
 	}
 }
 "
 
-[node name="P1" parent="." index="0" instance=ExtResource( 2 )]
+[node name="Lines" type="Control" parent="." index="0"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="P1" parent="." index="1" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.466667, 0, 1 )
 margin_left = 5.0
@@ -93,7 +96,7 @@ margin_right = 37.0
 margin_bottom = 61.0
 texture = SubResource( 3 )
 
-[node name="P2" parent="." index="1" instance=ExtResource( 2 )]
+[node name="P2" parent="." index="2" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 0, 0.505882, 1, 1 )
 margin_left = 5.0
@@ -102,7 +105,7 @@ margin_right = 37.0
 margin_bottom = 61.0
 texture = SubResource( 3 )
 
-[node name="P3" parent="." index="2" instance=ExtResource( 2 )]
+[node name="P3" parent="." index="3" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 0, 1, 0.380392, 1 )
 margin_left = 5.0
@@ -111,7 +114,7 @@ margin_right = 37.0
 margin_bottom = 61.0
 texture = SubResource( 4 )
 
-[node name="Rect1" parent="." index="3" instance=ExtResource( 2 )]
+[node name="Rect1" parent="." index="4" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -122,7 +125,7 @@ texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 1
 
-[node name="Radius1" parent="." index="4" instance=ExtResource( 2 )]
+[node name="Radius1" parent="." index="5" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -134,7 +137,7 @@ texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 2
 
-[node name="Radius11" parent="." index="5" instance=ExtResource( 2 )]
+[node name="Radius11" parent="." index="6" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -146,7 +149,7 @@ texture = SubResource( 4 )
 parent_control = "Radius1"
 control_type = 2
 
-[node name="Scale1" parent="." index="6" instance=ExtResource( 2 )]
+[node name="Scale1" parent="." index="7" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -158,7 +161,7 @@ texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 3
 
-[node name="Angle1" parent="." index="7" instance=ExtResource( 2 )]
+[node name="Angle1" parent="." index="8" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -170,7 +173,7 @@ texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 2
 
-[node name="Angle2" parent="." index="8" instance=ExtResource( 2 )]
+[node name="Angle2" parent="." index="9" instance=ExtResource( 2 )]
 visible = false
 self_modulate = Color( 1, 0.631373, 0, 1 )
 margin_left = 5.0
@@ -182,7 +185,7 @@ texture = SubResource( 4 )
 parent_control = "P1"
 control_type = 2
 
-[node name="ContextMenu" type="PopupMenu" parent="." index="9"]
+[node name="ContextMenu" type="PopupMenu" parent="." index="10"]
 margin_right = 109.0
 margin_bottom = 52.0
 items = [ "Show tiling", null, 1, false, false, 0, 0, null, "", false ]
