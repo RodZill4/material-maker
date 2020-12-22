@@ -87,56 +87,46 @@ func _on_Export_id_pressed(id : int):
 	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
+func create_image(renderer_function : String, params : Array, size : int) -> void:
+	var source = MMGenBase.DEFAULT_GENERATED_SHADER
+	if generator != null:
+		var gen_output_defs = generator.get_output_defs()
+		if ! gen_output_defs.empty():
+			var context : MMGenContext = MMGenContext.new()
+			source = generator.get_shader_code("uv", output, context)
+			assert(!(source is GDScriptFunctionState))
+			if source.empty():
+				source = MMGenBase.DEFAULT_GENERATED_SHADER
+	# Update shader
+	var tmp_material = ShaderMaterial.new()
+	tmp_material.shader = Shader.new()
+	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
+	# Set texture params
+	if source.has("textures"):
+		for k in source.textures.keys():
+			tmp_material.set_shader_param(k, source.textures[k])
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_material(self, tmp_material, size, false)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer.callv(renderer_function, params)
+	renderer.release(self)
+
 func export_as_image_file(file_name : String, size : int) -> void:
 	var main_window = get_node("/root/MainWindow")
 	if main_window != null:
 		var config_cache = main_window.config_cache
 		config_cache.set_value("path", "save_preview", file_name.get_base_dir())
-	var previous_size = material.get_shader_param("size")
-	var previous_margin = material.get_shader_param("margin")
-	var previous_show_tiling = material.get_shader_param("show_tiling")
-	material.set_shader_param("size", Vector2(size, size))
-	material.set_shader_param("margin", 0.0)
-	material.set_shader_param("show_tiling", false)
-	material.set_shader_param("export", true)
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, material, size, false)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer.save_to_file(file_name)
-	renderer.release(self)
-	material.set_shader_param("size", previous_size)
-	material.set_shader_param("margin", previous_margin)
-	material.set_shader_param("show_tiling", previous_show_tiling)
-	material.set_shader_param("export", false)
+	create_image("save_to_file", [ file_name ], size)
 
 func _on_Reference_id_pressed(id : int):
-	var main_window = get_node("/root/MainWindow")
-	assert(main_window != null)
-	var size : int = 64 << id
-	var previous_size = material.get_shader_param("size")
-	var previous_margin = material.get_shader_param("margin")
-	var previous_show_tiling = material.get_shader_param("show_tiling")
-	material.set_shader_param("size", Vector2(size, size))
-	material.set_shader_param("margin", 0.0)
-	material.set_shader_param("show_tiling", false)
-	material.set_shader_param("export", true)
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, material, size, false)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
 	var texture : ImageTexture = ImageTexture.new()
-	renderer.copy_to_texture(texture)
-	renderer.release(self)
-	material.set_shader_param("size", previous_size)
-	material.set_shader_param("margin", previous_margin)
-	material.set_shader_param("show_tiling", previous_show_tiling)
-	material.set_shader_param("export", false)
-	main_window.get_panel("Reference").add_reference(texture)
+	var status = create_image("copy_to_texture", [ texture ], 64 << id)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	get_node("/root/MainWindow").get_panel("Reference").add_reference(texture)
 
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():
