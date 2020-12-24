@@ -49,6 +49,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])
+	on_resized()
 
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
