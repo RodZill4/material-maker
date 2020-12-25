@@ -173,7 +173,7 @@ control_type = 2
 [node name="ContextMenu" type="PopupMenu" parent="." index="10"]
 margin_right = 109.0
 margin_bottom = 52.0
-items = [ "Show tiling", null, 1, false, false, 0, 0, null, "", false ]
+items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 
 [node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
 margin_right = 91.0
