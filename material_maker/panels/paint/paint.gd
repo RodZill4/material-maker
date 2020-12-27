@@ -18,9 +18,9 @@ var painting = false
 var key_rotate = Vector2(0.0, 0.0)
 
 var object_name = null
-var project_path = null
 var model_path = null
 
+var save_path = null
 var need_save = false
 
 var brush_graph = null
@@ -83,6 +83,27 @@ func _ready():
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	update_brush_graph()
 	call_deferred("update_brush")
+
+func update_tab_title() -> void:
+	if !get_parent().has_method("set_tab_title"):
+		#print("no set_tab_title method")
+		return
+	var title = "[unnamed]"
+	if save_path != null:
+		title = save_path.right(save_path.rfind("/")+1)
+	if need_save:
+		title += " *"
+	if get_parent().has_method("set_tab_title"):
+		get_parent().set_tab_title(get_index(), title)
+
+func set_project_path(p):
+	save_path = p
+	update_tab_title()
+
+func set_need_save(b : bool = true) -> void:
+	if need_save != b:
+		need_save = b
+		update_tab_title()
 
 func get_project_type() -> String:
 	return "paint"
@@ -147,11 +168,11 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	layers.add_layer()
 	model_path = mesh_file_path
 	set_object(mi)
-	project_path = project_file_path
+	set_project_path(project_file_path)
 
 func set_object(o):
 	object_name = o.name
-	project_path = null
+	set_project_path(null)
 	var mat = o.get_surface_material(0)
 	if mat == null:
 		mat = o.mesh.surface_get_material(0)
@@ -211,6 +232,7 @@ func set_current_tool(m):
 
 func _on_Fill_pressed():
 	painter.fill(eraser_button.pressed)
+	set_need_save()
 
 func _physics_process(delta):
 	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
@@ -410,6 +432,7 @@ func do_paint(pos, pressure = 1.0):
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	painting = false
+	set_need_save()
 	# execute recorded paint order if any
 	if next_paint_to != null:
 		pos = next_paint_to
@@ -447,12 +470,6 @@ func show_file_dialog(mode, filter, callback):
 	dialog.connect("file_selected", self, callback)
 	dialog.popup_centered()
 
-func set_project_path(p):
-	project_path = p
-	var parent = get_parent()
-	if parent.has_method("set_project_path"):
-		parent.set_project_path(p)
-
 func load_project(file_name) -> bool:
 	var f : File = File.new()
 	if f.open(file_name, File.READ) != OK:
@@ -472,11 +489,12 @@ func load_project(file_name) -> bool:
 	set_project_path(file_name)
 	layers.set_texture_size(data.texture_size)
 	layers.load(data, file_name)
+	set_need_save(false)
 	return true
 
 func save():
-	if project_path != null:
-		do_save_project(project_path)
+	if save_path != null:
+		do_save_project(save_path)
 	else:
 		save_as()
 
@@ -491,6 +509,7 @@ func do_save_project(file_name):
 		file.store_string(to_json(data))
 		file.close()
 	set_project_path(file_name)
+	set_need_save(false)
 
 # Export
 
