@@ -1,10 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://material_maker/widgets/curve_edit/curve_editor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/widgets/polygon_edit/polygon_dialog.gd" type="Script" id=2]
 
 [node name="PolygonDialog" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 307.0
@@ -46,7 +45,6 @@ margin_left = 4.0
 margin_top = 4.0
 margin_right = 451.0
 margin_bottom = 453.0
-size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 461.0

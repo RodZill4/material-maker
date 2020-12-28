@@ -10,4 +10,4 @@ margin_right = -10.0
 margin_bottom = -10.0
 mouse_filter = 0
 script = ExtResource( 2 )
-[connection signal="gui_input" from="." to="." method="_on_CurveEditor_gui_input"]
+[connection signal="gui_input" from="." to="." method="_on_PolygonEditor_gui_input"]
