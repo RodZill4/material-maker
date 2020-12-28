@@ -1,0 +1,82 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/widgets/curve_edit/curve_editor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_dialog.gd" type="Script" id=2]
+
+[node name="PolygonDialog" type="WindowDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 307.0
+margin_top = 151.0
+margin_right = -508.0
+margin_bottom = -70.0
+window_title = "Edit polygon"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
+margin_right = 455.0
+margin_bottom = 457.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="PolygonEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 451.0
+margin_bottom = 453.0
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 461.0
+margin_right = 455.0
+margin_bottom = 465.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 469.0
+margin_right = 455.0
+margin_bottom = 489.0
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_right = 327.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 331.0
+margin_right = 391.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 395.0
+margin_right = 455.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Cancel"
+[connection signal="popup_hide" from="." to="." method="_on_CurveDialog_popup_hide"]
+[connection signal="value_changed" from="VBoxContainer/EditorContainer/PolygonEditor" to="." method="_on_PolygonEditor_value_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

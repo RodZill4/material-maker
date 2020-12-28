@@ -272,6 +272,31 @@
 			"type": "sdarc"
 		},
 		{
+			"icon": "simple_sdf_shapes_sdpolygon",
+			"name": "sdpolygon",
+			"parameters": {
+				"polygon": {
+					"points": [
+						{
+							"x": 0.2,
+							"y": 0.2
+						},
+						{
+							"x": 0.4,
+							"y": 0.7
+						},
+						{
+							"x": 0.7,
+							"y": 0.4
+						}
+					],
+					"type": "Polygon"
+				}
+			},
+			"tree_item": "Simple/SDF/Shapes/sdPolygon",
+			"type": "sdpolygon"
+		},
+		{
 			"icon": "simple_sdf_operators_sdboolean",
 			"name": "sdboolean",
 			"parameters": {

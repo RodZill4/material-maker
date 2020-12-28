@@ -243,6 +243,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				value_string = genname+"_"+p.name+"_gradient_fct"
 			elif p.type == "curve":
 				value_string = genname+"_"+p.name+"_curve_fct"
+			elif p.type == "polygon":
+				if !(value is MMPolygon):
+					value = MMPolygon.new()
+					value.deserialize(parameters[p.name])
+				value_string = value.get_shader()
 			elif p.type == "boolean":
 				value_string = "true" if value else "false"
 			else:

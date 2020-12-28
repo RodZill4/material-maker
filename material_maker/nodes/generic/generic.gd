@@ -52,6 +52,10 @@ func on_parameter_changed(p : String, v) -> void:
 			var curve : MMCurve = MMCurve.new()
 			curve.deserialize(v)
 			o.value = curve
+		elif o is Button and o.filename == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
+			var polygon : MMPolygon = MMPolygon.new()
+			polygon.deserialize(v)
+			o.value = polygon
 		else:
 			print("unsupported widget "+str(o))
 	get_parent().set_need_save()
@@ -86,6 +90,8 @@ func initialize_properties() -> void:
 			o.connect("updated", self, "_on_gradient_changed", [ o.name ])
 		elif o is Button and o.filename == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			o.connect("updated", self, "_on_curve_changed", [ o.name ])
+		elif o is Button and o.filename == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
+			o.connect("updated", self, "_on_polygon_changed", [ o.name ])
 		else:
 			print("unsupported widget "+str(o))
 
@@ -125,6 +131,12 @@ func _on_curve_changed(new_curve, variable : String) -> void:
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
+func _on_polygon_changed(new_polygon, variable : String) -> void:
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, new_polygon.duplicate())
+	ignore_parameter_change = ""
+	get_parent().set_need_save()
+
 func create_parameter_control(p : Dictionary) -> Control:
 	var control = null
 	if p.type == "float":
@@ -158,6 +170,8 @@ func create_parameter_control(p : Dictionary) -> Control:
 		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instance()
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
+	elif p.type == "polygon":
+		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "image_path":

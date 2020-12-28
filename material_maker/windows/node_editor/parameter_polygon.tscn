@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/windows/node_editor/parameter_polygon.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_edit.tscn" type="PackedScene" id=2]
+
+[node name="polygon" type="HBoxContainer"]
+margin_right = 148.0
+margin_bottom = 24.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LabelDefault" type="Label" parent="."]
+margin_top = 25.0
+margin_right = 50.0
+margin_bottom = 39.0
+text = "Default:"
+
+[node name="Default" parent="." instance=ExtResource( 2 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 54.0
+margin_right = 118.0
+margin_bottom = 64.0
