@@ -16,11 +16,27 @@ func _on_ControlPoint_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT:
 			if event.pressed:
-				moving = true
+				if event.doubleclick:
+					var parent = get_parent()
+					var vector : Vector2
+					if get_index() == 0:
+						vector = parent.rect_position-parent.get_parent().get_child(parent.get_index()-1).rect_position
+					else:
+						vector = parent.get_parent().get_child(parent.get_index()+1).rect_position-parent.rect_position
+					vector = distance*vector.normalized()
+					rect_position = vector-OFFSET
+					if event.control:
+						get_parent().get_child(1-get_index()).rect_position = -vector-OFFSET
+					get_parent().update_tangents()
+				else:
+					moving = true
 			else:
 				moving = false
 	elif moving and event is InputEventMouseMotion:
 		var vector = get_global_mouse_position()-get_parent().get_global_rect().position+OFFSET
 		vector *= sign(vector.x)
-		rect_position = distance*vector.normalized()-OFFSET
+		vector = distance*vector.normalized()
+		rect_position = vector-OFFSET
+		if event.control:
+			get_parent().get_child(1-get_index()).rect_position = -vector-OFFSET
 		get_parent().update_tangents()

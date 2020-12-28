@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/widgets/curve_edit/curve_view.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_editor.gd" type="Script" id=2]
+
+[node name="PolygonEditor" instance=ExtResource( 1 )]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+mouse_filter = 0
+script = ExtResource( 2 )
+[connection signal="gui_input" from="." to="." method="_on_PolygonEditor_gui_input"]

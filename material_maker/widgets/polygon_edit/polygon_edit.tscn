@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_edit.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_view.tscn" type="PackedScene" id=2]
+
+[node name="PolygonEdit" type="Button"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -1280.0
+margin_right = -1248.0
+margin_bottom = -688.0
+rect_min_size = Vector2( 32, 32 )
+focus_mode = 1
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PolygonView" parent="." instance=ExtResource( 2 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 0.0
+margin_bottom = 0.0
+[connection signal="pressed" from="." to="." method="_on_PolygonEdit_pressed"]

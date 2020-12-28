@@ -1,0 +1,66 @@
+{
+	"name": "sdpolygon",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"polygon": {
+			"points": [
+				{
+					"x": 0.2,
+					"y": 0.2
+				},
+				{
+					"x": 0.4,
+					"y": 0.7
+				},
+				{
+					"x": 0.7,
+					"y": 0.4
+				}
+			],
+			"type": "Polygon"
+		}
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "float sdPolygon_$(name)(vec2 p) {\n\tvec2 v[] = $polygon;\n\tint l = v.length();\n    float d = dot(p-v[0],p-v[0]);\n    float s = 1.0;\n\tint j = l-1;\n    for(int i=0; i<l; i++)\n    {\n        vec2 e = v[j] - v[i];\n        vec2 w =    p - v[i];\n        vec2 b = w - e*clamp( dot(w,e)/dot(e,e), 0.0, 1.0 );\n        d = min( d, dot(b,b) );\n        bvec3 c = bvec3(p.y>=v[i].y,p.y<v[j].y,e.x*w.y>e.y*w.x);\n        if( all(c) || all(not(c)) ) s*=-1.0;\n\t\tj=i;\n    }\n    return s*sqrt(d);\n}\n",
+		"name": "sdPolygon",
+		"outputs": [
+			{
+				"sdf2d": "sdPolygon_$(name)($uv)",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [
+						{
+							"x": 0.2,
+							"y": 0.2
+						},
+						{
+							"x": 0.4,
+							"y": 0.7
+						},
+						{
+							"x": 0.7,
+							"y": 0.4
+						}
+					],
+					"type": "Polygon"
+				},
+				"label": "",
+				"name": "polygon",
+				"type": "polygon"
+			}
+		]
+	},
+	"type": "shader"
+}

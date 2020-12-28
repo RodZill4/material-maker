@@ -49,14 +49,8 @@ func remove_point(index : int) -> bool:
 func get_point_count() -> int:
 	return points.size()
 
-func get_point(i : int) -> float:
-	return points[i]
-
 func set_point(i : int, v : Point) -> void:
 	points[i] = v
-
-func get_value(x) -> float:
-	return 0.0
 
 func get_shader_params(name) -> Dictionary:
 	var rv = {}
