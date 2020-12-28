@@ -17,7 +17,8 @@ func _ready():
 
 func _draw():
 	for c in get_children():
-		draw_line(OFFSET, c.rect_position+OFFSET, Color(0.5, 0.5, 0.5))
+		if c.visible:
+			draw_line(OFFSET, c.rect_position+OFFSET, Color(0.5, 0.5, 0.5))
 	draw_rect(Rect2(0, 0, 7, 7), Color(1.0, 1.0, 1.0))
 
 func initialize(p : MMCurve.Point) -> void:

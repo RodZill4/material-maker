@@ -21,6 +21,10 @@ func update_controls() -> void:
 		control_point.rect_position = transform_point(p.p)-control_point.OFFSET
 		if i == 0 or i == curve.points.size()-1:
 			control_point.set_constraint(control_point.rect_position.x, control_point.rect_position.x, -control_point.OFFSET.y, rect_size.y-control_point.OFFSET.y)
+			if i == 0:
+				control_point.get_child(0).visible = false
+			else:
+				control_point.get_child(1).visible = false
 		else:
 			var min_x = transform_point(curve.points[i-1].p).x+1
 			var max_x = transform_point(curve.points[i+1].p).x-1
