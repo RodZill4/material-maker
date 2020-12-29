@@ -27,26 +27,30 @@ func get_paint_material() -> ShaderMaterial:
 func set_intermediate_textures(tex2view : Texture, seams : Texture):
 	param_tex2view = tex2view
 	param_seams = seams
-	set_paint_shader_params()
+	paint_material.set_shader_param("tex2view_tex", param_tex2view)
+	paint_material.set_shader_param("seams", param_seams)
 
 func set_mesh_textures(mesh_aabb : AABB, mesh_inv_uv_tex : Texture, mesh_normal_tex : Texture):
 	param_mesh_aabb = mesh_aabb
 	param_mesh_inv_uv_tex = mesh_inv_uv_tex
 	param_mesh_normal_tex = mesh_normal_tex
-	set_paint_shader_params()
-
-func set_layer_textures(textures : Dictionary):
-	for t in textures.keys():
-		param_layer_textures[t] = textures[t]
-	set_paint_shader_params()
-
-func set_paint_shader_params():
-	paint_material.set_shader_param("tex2view_tex", param_tex2view)
 	paint_material.set_shader_param("mesh_aabb_position", param_mesh_aabb.position)
 	paint_material.set_shader_param("mesh_aabb_size", param_mesh_aabb.size)
 	paint_material.set_shader_param("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
 	paint_material.set_shader_param("mesh_normal_tex", param_mesh_normal_tex)
+
+func set_layer_textures(textures : Dictionary):
+	for t in textures.keys():
+		param_layer_textures[t] = textures[t]
+		paint_material.set_shader_param("layer_"+t+"_tex", param_layer_textures[t])
+
+func set_paint_shader_params():
+	paint_material.set_shader_param("tex2view_tex", param_tex2view)
 	paint_material.set_shader_param("seams", param_seams)
+	paint_material.set_shader_param("mesh_aabb_position", param_mesh_aabb.position)
+	paint_material.set_shader_param("mesh_aabb_size", param_mesh_aabb.size)
+	paint_material.set_shader_param("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
+	paint_material.set_shader_param("mesh_normal_tex", param_mesh_normal_tex)
 	paint_material.set_shader_param("texture_size", size.x)
 	for t in param_layer_textures.keys():
 		paint_material.set_shader_param("layer_"+t+"_tex", param_layer_textures[t])
@@ -59,7 +63,8 @@ func set_texture_size(s : float):
 
 func set_brush(parameters : Dictionary):
 	brush_params = parameters
-	set_paint_shader_params()
+	for p in brush_params.keys():
+		paint_material.set_shader_param(p, brush_params[p])
 
 func get_paint_shader(mode : String) -> String:
 	var file = File.new()

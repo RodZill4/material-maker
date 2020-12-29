@@ -135,11 +135,7 @@ painter = NodePath("../Painter")
 
 [node name="Export" parent="." instance=ExtResource( 3 )]
 
-[node name="Menu" type="HBoxContainer" parent="."]
-margin_right = 1280.0
-
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
-margin_top = 4.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_vertical = 3
@@ -470,7 +466,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 492.0
 margin_right = 1280.0
-margin_bottom = 716.0
+margin_bottom = 720.0
 focus_mode = 1
 size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )

@@ -55,19 +55,9 @@ var last_motion_vector : Vector2 = Vector2(0, 0)
 var stroke_length : float = 0.0
 var stroke_angle : float = 0.0
 
+
 signal update_material
 
-const MENU = [
-	{ menu="File", command="export_material", shortcut="Control+E", description="Export textures" },
-	{ menu="Material", command="toggle_material_feature", description="Emission", command_parameter="emission_enabled" },
-	{ menu="Material", command="toggle_material_feature", description="Normal", command_parameter="normal_enabled" },
-	{ menu="Material", command="toggle_material_feature", description="Depth", command_parameter="depth_enabled" },
-	{ menu="Material/TextureSize", command="set_texture_size", description="256x256", command_parameter=256  },
-	{ menu="Material/TextureSize", command="set_texture_size", description="512x512", command_parameter=512  },
-	{ menu="Material/TextureSize", command="set_texture_size", description="1024x1024", command_parameter=1024  },
-	{ menu="Material/TextureSize", command="set_texture_size", description="2048x2048", command_parameter=2048  },
-	{ menu="Material/TextureSize", command="set_texture_size", description="4096x4096", command_parameter=4096  },
-]
 
 func _ready():
 	# Assign all textures to painted mesh
@@ -77,7 +67,6 @@ func _ready():
 	# Disable physics process so we avoid useless updates of tex2view textures
 	set_physics_process(false)
 	set_current_tool(MODE_FREEHAND_DOTS)
-	get_node("/root/MainWindow").create_menus(MENU, self, $Menu)
 	initialize_debug_selects()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
@@ -213,17 +202,17 @@ func set_object(o):
 	update_view()
 	painter.init_textures(mat)
 
-func toggle_material_feature(variable):
-	preview_material[variable] = !preview_material[variable]
+func check_material_feature(variable : String, value : bool) -> void:
+	preview_material[variable] = value
 	
-func toggle_material_feature_is_checked(variable):
+func material_feature_is_checked(variable : String) -> bool:
 	return preview_material[variable]
 
 func set_texture_size(s):
 	layers.set_texture_size(s)
 
-func set_texture_size_is_checked(s):
-	return s == layers.texture_size
+func get_texture_size() -> int:
+	return layers.texture_size
 
 func set_current_tool(m):
 	current_tool = m

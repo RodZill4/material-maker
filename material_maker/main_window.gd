@@ -76,6 +76,14 @@ const MENU = [
 	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
 	{ menu="Tools", command="export_library", description="Export the nodes library", mode="material" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Depth", command_parameter="depth_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="256x256", command_parameter=256, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="512x512", command_parameter=512, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
@@ -225,7 +233,7 @@ func create_menus(menu_def, object, menu_bar) -> void:
 			continue
 		var menu = m.get_popup()
 		create_menu(menu_def, object, menu, m.name)
-		m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
+		#m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
 
 func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
 	var mode = ""
@@ -280,18 +288,19 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				menu.add_child(submenu)
 				menu.add_submenu_item(submenu_name, submenu.get_name())
 				submenus[submenu_name] = submenu
+	menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
 	return menu
 
 func on_menu_id_pressed(id, menu_def, object) -> void:
 	if menu_def[id].has("command"):
 		var command = menu_def[id].command
 		if object.has_method(command):
+			var parameters = []
+			if menu_def[id].has("command_parameter"):
+				parameters.append(menu_def[id].command_parameter)
 			if menu_def[id].has("toggle") and menu_def[id].toggle:
-				object.call(command, !object.call(command))
-			elif menu_def[id].has("command_parameter"):
-				object.call(command, menu_def[id].command_parameter)
-			else:
-				object.call(command)
+				parameters.append(!object.callv(command, parameters))
+			object.callv(command, parameters)
 
 func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
 	var mode = ""
@@ -303,16 +312,20 @@ func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) ->
 		if menu_def[i].has("submenu"):
 			pass
 		elif menu_def[i].has("command"):
+			var item : int = menu.get_item_index(i)
 			var command = menu_def[i].command+"_is_disabled"
 			if object.has_method(command):
 				var is_disabled = object.call(command)
-				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
+				menu.set_item_disabled(item, is_disabled)
 			if menu_def[i].has("mode"):
-				menu.set_item_disabled(menu.get_item_index(i), menu_def[i].mode != mode)
+				menu.set_item_disabled(item, menu_def[i].mode != mode)
 			if menu_def[i].has("toggle") and menu_def[i].toggle:
 				command = menu_def[i].command
+				var parameters = []
+				if menu_def[i].has("command_parameter"):
+					parameters.append(menu_def[i].command_parameter)
 				if object.has_method(command):
-					menu.set_item_checked(i, object.call(command))
+					menu.set_item_checked(item, object.callv(command, parameters))
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
@@ -775,6 +788,20 @@ func export_library() -> void:
 
 func do_export_library(path : String) -> void:
 	library.export_libraries(path)
+
+func toggle_paint_feature(channel : String, value = null) -> bool:
+	var paint = get_current_project()
+	if value == null:
+		return paint.material_feature_is_checked(channel)
+	paint.check_material_feature(channel, value)
+	return value
+
+func set_painting_texture_size(size : int, value = null) -> bool:
+	var paint = get_current_project()
+	if value == null:
+		return paint.get_texture_size() == size
+	paint.set_texture_size(size)
+	return true
 
 func get_doc_dir() -> String:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
