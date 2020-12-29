@@ -768,11 +768,12 @@ func do_add_brush_to_user_library(name) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data = graph_edit.top_generator.serialize()
 	# Create thumbnail
-	var result = graph_edit.top_generator.get_node("Brush").render(self, 1, 64, true)
+	var result = get_current_project().get_brush_preview()
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	var image : Image = result.get_image()
-	result.release(self)
+	var image : Image = Image.new()
+	image.copy_from(result.get_data())
+	image.resize(64, 64)
 	brushes.add_to_user_library(data, name, image)
 
 func export_library() -> void:
