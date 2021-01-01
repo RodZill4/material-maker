@@ -226,12 +226,6 @@
 					"to_port": 0
 				},
 				{
-					"from": "colorize_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				},
-				{
 					"from": "uniform",
 					"from_port": 0,
 					"to": "blend",
@@ -250,9 +244,87 @@
 					"to_port": 2
 				},
 				{
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_greyscale_3",
+					"from_port": 0,
+					"to": "blend_3",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale_4",
+					"from_port": 0,
+					"to": "blend_3",
+					"to_port": 1
+				},
+				{
+					"from": "blend_3",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 3
+				},
+				{
 					"from": "blend",
 					"from_port": 0,
 					"to": "Brush",
+					"to_port": 1
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "blend_3",
+					"to_port": 2
+				},
+				{
+					"from": "dilate",
+					"from_port": 0,
+					"to": "math",
+					"to_port": 1
+				},
+				{
+					"from": "math",
+					"from_port": 0,
+					"to": "math_3",
+					"to_port": 0
+				},
+				{
+					"from": "math_3",
+					"from_port": 0,
+					"to": "math_2",
+					"to_port": 1
+				},
+				{
+					"from": "math_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "math_4",
+					"from_port": 0,
+					"to": "math_3",
 					"to_port": 1
 				}
 			],
@@ -268,15 +340,15 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": -31,
-						"y": -167
+						"x": -36,
+						"y": -182
 					},
 					"parameters": {
 						"has_albedo": true,
 						"has_depth": false,
 						"has_emission": false,
-						"has_metallic": false,
-						"has_roughness": false,
+						"has_metallic": true,
+						"has_roughness": true,
 						"mode": 0
 					},
 					"type": "brush"
@@ -284,36 +356,38 @@
 				{
 					"name": "text",
 					"node_position": {
-						"x": -745.5,
-						"y": -235.5
+						"x": -819.5,
+						"y": -259.5
 					},
 					"parameters": {
+						"center": true,
 						"font": "",
 						"font_size": 500,
 						"text": "Text",
-						"x": -0.407,
-						"y": -0.283
+						"x": 0,
+						"y": 0
 					},
 					"type": "text"
 				},
 				{
 					"name": "dilate",
 					"node_position": {
-						"x": -716.5,
-						"y": -80
+						"x": -774.5,
+						"y": -61
 					},
 					"parameters": {
-						"param0": 9,
+						"param0": 11,
 						"param1": 0.1,
 						"param2": 0
 					},
 					"type": "dilate"
 				},
 				{
+					"minimized": true,
 					"name": "colorize",
 					"node_position": {
-						"x": -528.5,
-						"y": -19.25
+						"x": -602.5,
+						"y": -43.25
 					},
 					"parameters": {
 						"gradient": {
@@ -323,7 +397,7 @@
 									"a": 1,
 									"b": 0,
 									"g": 0,
-									"pos": 0.936364,
+									"pos": 0.990909,
 									"r": 0
 								},
 								{
@@ -341,10 +415,11 @@
 					"type": "colorize"
 				},
 				{
+					"minimized": true,
 					"name": "colorize_2",
 					"node_position": {
-						"x": -483.5,
-						"y": -227.25
+						"x": -470.5,
+						"y": -281.25
 					},
 					"parameters": {
 						"gradient": {
@@ -354,7 +429,7 @@
 									"a": 1,
 									"b": 0,
 									"g": 0,
-									"pos": 0.827273,
+									"pos": 0.554545,
 									"r": 0
 								},
 								{
@@ -368,31 +443,39 @@
 							"type": "Gradient"
 						}
 					},
+					"preview": 0,
 					"seed_value": 47006,
 					"type": "colorize"
 				},
 				{
 					"name": "5907",
 					"node_position": {
-						"x": -254.656921,
-						"y": -346.357147
+						"x": -114.656921,
+						"y": 13.642853
 					},
 					"parameters": {
 						"param0": "Text",
-						"param1": {
+						"param1": 0.2,
+						"param2": {
 							"a": 1,
 							"b": 1,
 							"g": 1,
 							"r": 1,
 							"type": "Color"
 						},
-						"param2": {
+						"param3": {
 							"a": 1,
 							"b": 0,
 							"g": 0,
 							"r": 0,
 							"type": "Color"
-						}
+						},
+						"param4": true,
+						"param5": 0,
+						"param6": 0,
+						"param7": true,
+						"param8": 1,
+						"param9": 1
 					},
 					"type": "remote",
 					"widgets": [
@@ -408,6 +491,17 @@
 							"type": "linked_control"
 						},
 						{
+							"label": "Outline width",
+							"linked_widgets": [
+								{
+									"node": "math_4",
+									"widget": "default_in1"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
 							"label": "Color",
 							"linked_widgets": [
 								{
@@ -415,7 +509,7 @@
 									"widget": "color"
 								}
 							],
-							"name": "param1",
+							"name": "param2",
 							"type": "linked_control"
 						},
 						{
@@ -426,7 +520,73 @@
 									"widget": "color"
 								}
 							],
-							"name": "param2",
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Metallic",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_metallic"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Metallic",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale",
+									"widget": "color"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						},
+						{
+							"label": "Outline Metallic",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_2",
+									"widget": "color"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Roughness",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_roughness"
+								}
+							],
+							"name": "param7",
+							"type": "linked_control"
+						},
+						{
+							"label": "Roughness",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_3",
+									"widget": "color"
+								}
+							],
+							"name": "param8",
+							"type": "linked_control"
+						},
+						{
+							"label": "Outline Roughness",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_4",
+									"widget": "color"
+								}
+							],
+							"name": "param9",
 							"type": "linked_control"
 						}
 					]
@@ -434,8 +594,8 @@
 				{
 					"name": "uniform",
 					"node_position": {
-						"x": -461.656921,
-						"y": -159.357147
+						"x": -535.656921,
+						"y": -183.357147
 					},
 					"parameters": {
 						"color": {
@@ -451,8 +611,8 @@
 				{
 					"name": "uniform_2",
 					"node_position": {
-						"x": -458.156921,
-						"y": -98.857147
+						"x": -532.156921,
+						"y": -122.857147
 					},
 					"parameters": {
 						"color": {
@@ -468,14 +628,138 @@
 				{
 					"name": "blend",
 					"node_position": {
-						"x": -286.656921,
-						"y": -133.607147
+						"x": -360.656921,
+						"y": -157.607147
 					},
 					"parameters": {
 						"amount": 1,
 						"blend_type": 0
 					},
 					"type": "blend"
+				},
+				{
+					"name": "blend_2",
+					"node_position": {
+						"x": -357.355927,
+						"y": -42.936523
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 0
+					},
+					"type": "blend"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -608.552734,
+						"y": 34.313477
+					},
+					"parameters": {
+						"color": 0
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -607.552734,
+						"y": 90.813477
+					},
+					"parameters": {
+						"color": 0
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "blend_3",
+					"node_position": {
+						"x": -358.754852,
+						"y": 83.313477
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 0
+					},
+					"type": "blend"
+				},
+				{
+					"name": "uniform_greyscale_3",
+					"node_position": {
+						"x": -609.95166,
+						"y": 160.563477
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_4",
+					"node_position": {
+						"x": -608.95166,
+						"y": 217.063477
+					},
+					"parameters": {
+						"color": 1
+					},
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "math",
+					"node_position": {
+						"x": -486.943909,
+						"y": -686.936523
+					},
+					"parameters": {
+						"clamp": false,
+						"default_in1": 1,
+						"default_in2": 0,
+						"op": 1
+					},
+					"type": "math"
+				},
+				{
+					"name": "math_2",
+					"node_position": {
+						"x": -491.443909,
+						"y": -417.936523
+					},
+					"parameters": {
+						"clamp": true,
+						"default_in1": 1,
+						"default_in2": 0,
+						"op": 1
+					},
+					"type": "math"
+				},
+				{
+					"name": "math_3",
+					"node_position": {
+						"x": -489.443909,
+						"y": -551.936523
+					},
+					"parameters": {
+						"clamp": false,
+						"default_in1": 0,
+						"default_in2": 0.01,
+						"op": 3
+					},
+					"type": "math"
+				},
+				{
+					"name": "math_4",
+					"node_position": {
+						"x": -723.209595,
+						"y": -545.936523
+					},
+					"parameters": {
+						"clamp": false,
+						"default_in1": 0.2,
+						"default_in2": 0.000001,
+						"op": 14
+					},
+					"type": "math"
 				}
 			],
 			"parameters": {
