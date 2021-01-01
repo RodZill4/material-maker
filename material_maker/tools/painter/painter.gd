@@ -153,6 +153,8 @@ func update_view(c, t, s):
 	update_brush()
 
 func update_tex2view():
+	if viewport_size.y <= 0:
+		return
 	var aspect = viewport_size.x/viewport_size.y
 	view_to_texture_viewport.size = VIEW_TO_TEXTURE_RATIO*viewport_size
 	view_to_texture_camera.transform = camera.global_transform
