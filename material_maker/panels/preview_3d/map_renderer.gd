@@ -1,6 +1,7 @@
 extends Viewport
 
 export(ShaderMaterial) var mesh_normal_material
+export(ShaderMaterial) var curvature_material
 export(ShaderMaterial) var inv_uv_material
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
@@ -10,7 +11,10 @@ func _ready():
 
 func gen(mesh: Mesh, map : String, file_name : String, map_size = 512) -> void:
 	size = Vector2(map_size, map_size)
-	$MeshInstance.mesh = mesh
+	if map == "curvature":
+		$MeshInstance.mesh = $CurvatureGenerator.generate(mesh)
+	else:
+		$MeshInstance.mesh = mesh
 	$MeshInstance.set_surface_material(0, get(map+"_material"))
 	var aabb = $MeshInstance.get_aabb()
 	inv_uv_material.set_shader_param("position", aabb.position)

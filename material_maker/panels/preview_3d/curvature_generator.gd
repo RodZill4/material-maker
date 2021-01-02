@@ -1,30 +1,19 @@
-tool
-extends Spatial
+# Code ported from:
+# https://github.com/blender/blender/blob/594f47ecd2d5367ca936cf6fc6ec8168c2b360d0/intern/cycles/blender/blender_mesh.cpp#L541
+extends Node
 
 const FLT_EPSILON = 1.192092896e-7
 
-export var generate := false setget set_generate
-
-var debug_position := []
-
-var debug_prev_data = null
-
-
-func set_generate(value: bool) -> void:
-	if value:
-		_generate()
-		print("Generated")
-
-func _generate() -> void:
-	for pos in $Positions.get_children():
-		pos.queue_free()
-	
+func generate(mesh: Mesh) -> Mesh:
 	var b_mesh := MeshDataTool.new()
-	b_mesh.create_from_surface($MeshInstance.mesh, 0)
+	if not mesh is ArrayMesh:
+		b_mesh.create_from_surface(mesh.create_outline(0.0), 0)
+	else:
+		b_mesh.create_from_surface(mesh, 0)
 	
 	var num_verts = b_mesh.get_vertex_count()
 	if (num_verts == 0):
-		return
+		return Mesh.new()
 	
 	var b_mesh_vertices := []
 	var b_mesh_normals := []
@@ -66,30 +55,12 @@ func _generate() -> void:
 		if not found:
 		  vert_orig_index[vert_index] = vert_index
 	
-	# DEBUG
-#	if debug_prev_data:
-#		for i in vert_orig_index.size():
-#			if vert_orig_index[i] != debug_prev_data[i]:
-#				printerr("Something's off! :- %s" % [vert_orig_index[i], debug_prev_data[i]])
-#				break
-#	debug_prev_data = vert_orig_index.duplicate()
-	# DEBUG
-	
 	# Make sure we always point to the very first orig vertex.
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		while orig_index != vert_orig_index[orig_index]:
 			orig_index = vert_orig_index[orig_index]
 		vert_orig_index[vert_index] = orig_index
-	
-	# DEBUG
-	for i in vert_orig_index.size():
-		var org_i: int = vert_orig_index[i]
-		if i != org_i:
-			var pos := Position3D.new()
-			pos.translation = b_mesh_vertices[i]
-			pos.name = "Verts_%s-%s" % [i, org_i]
-			$Positions.add_child(pos)
 	
 	# STEP 2: Calculate vertex normals taking into account their possible
 	#         duplicates which gets "welded" together.
@@ -134,7 +105,7 @@ func _generate() -> void:
 			continue
 		if counter[vert_index] > 0:
 			var normal: Vector3 = vert_normal[vert_index]
-			var angle = acos(clamp(normal.dot(edge_accum[vert_index] / counter[vert_index]), 0.0, 1.0))
+			var angle = acos(clamp(normal.dot(edge_accum[vert_index] / counter[vert_index]), -1.0, 1.0))
 			raw_data[vert_index] = angle / PI
 		else:
 			raw_data[vert_index] = 0.0
@@ -162,27 +133,14 @@ func _generate() -> void:
 		var orig_index: int = vert_orig_index[vert_index]
 		data[vert_index] = data[orig_index]
 	
-	# data should go into vertex color
+	# data gets transferred to mesh vertex colors.
 	for i in data.size():
 		var p: float = data[i] * 0.5 + 0.5
 		b_mesh.set_vertex_color(i, Color(p, p, p))
-		
-		# DEBUG
-#		b_mesh.set_vertex_color(i, Color(
-#			vert_normal[i].x * 0.5 + 0.5,
-#			vert_normal[i].y * 0.5 + 0.5,
-#			vert_normal[i].z * 0.5 + 0.5)
-#		)
 	
-	var mesh := ArrayMesh.new()
-	var err := b_mesh.commit_to_surface(mesh)
-	if err:
-		printerr("Error code: " + str(err))
-	$MeshInstance2.mesh = mesh
-	
-	for pos in $Positions.get_children():
-		pos.scale *= 0.2
-		pos.owner = get_tree().edited_scene_root
+	var new_mesh := ArrayMesh.new()
+	var err := b_mesh.commit_to_surface(new_mesh)
+	return new_mesh
 
 func new_filled_array(size: int, data = null) -> Array:
 	var array := []
@@ -225,3 +183,4 @@ class VertexAverageComparator:
 		var x1 := vert_a.x + vert_a.y + vert_a.z
 		var x2 := vert_b.x + vert_b.y + vert_b.z
 		return x1 < x2
+
