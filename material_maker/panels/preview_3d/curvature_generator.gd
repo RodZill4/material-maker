@@ -1,5 +1,6 @@
 # Code ported from:
 # https://github.com/blender/blender/blob/594f47ecd2d5367ca936cf6fc6ec8168c2b360d0/intern/cycles/blender/blender_mesh.cpp#L541
+tool
 extends Node
 
 const FLT_EPSILON = 1.192092896e-7
@@ -64,7 +65,6 @@ func generate(mesh: Mesh) -> Mesh:
 	
 	# STEP 2: Calculate vertex normals taking into account their possible
 	#         duplicates which gets "welded" together.
-	
 	var vert_normal := new_filled_array(num_verts, Vector3())
 	# First we accumulate all vertex normals in the original index. 
 	for vert_index in num_verts:
@@ -83,7 +83,6 @@ func generate(mesh: Mesh) -> Mesh:
 	var raw_data := new_filled_array(num_verts, 0.0)
 	var edge_accum := new_filled_array(num_verts, Vector3())
 	var visited_edges := EdgeMap.new()
-	
 	for edge_index in b_mesh_edges.size():
 		var v0: int = vert_orig_index[b_mesh_edges[edge_index][0]]
 		var v1: int = vert_orig_index[b_mesh_edges[edge_index][1]]
@@ -140,6 +139,7 @@ func generate(mesh: Mesh) -> Mesh:
 	
 	var new_mesh := ArrayMesh.new()
 	var err := b_mesh.commit_to_surface(new_mesh)
+	
 	return new_mesh
 
 func new_filled_array(size: int, data = null) -> Array:
@@ -151,19 +151,15 @@ func new_filled_array(size: int, data = null) -> Array:
 
 
 class EdgeMap:
-	var edges := []
-	
+	var edges := {}
+
 	func insert(v0: int, v1: int) -> void:
-		edges.append(v0)
-		edges.append(v1)
-	
+		edges[v0] = v1
+		edges[v1] = v0
+
 	func exists(v0: int, v1: int) -> bool:
-		for i in range(0, edges.size(), 2):
-			if (edges[i] == v0 and edges[i + 1] == v1) or \
-				(edges[i] == v1 and edges[i + 1] == v0):
-				return true
-		return false
-	
+		return edges.get(v0, -1) == v1 or edges.get(v1, -1) == v0
+
 	func clear() -> void:
 		edges.clear()
 
