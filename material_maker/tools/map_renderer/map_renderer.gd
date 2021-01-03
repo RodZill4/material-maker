@@ -3,28 +3,29 @@ extends Viewport
 export(ShaderMaterial) var mesh_normal_material
 export(ShaderMaterial) var inv_uv_material
 export(ShaderMaterial) var white_material
+export(ShaderMaterial) var curvature_material
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
 export(ShaderMaterial) var seams_pass1
 export(ShaderMaterial) var seams_pass2
 
-var passes = {
-	mesh_normal = { first=mesh_normal_material, second=dilate_pass1, third=dilate_pass2 },
-	inv_uv =      { first=inv_uv_material, second=dilate_pass1, third=dilate_pass2 },
-	seams =       { first=white_material, second=seams_pass1, third=seams_pass2 }
-}
 
 func _ready():
 	pass
 
 func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
-	var passes = {
+	var bake_passes = {
 		mesh_normal = { first=mesh_normal_material, second=dilate_pass1, third=dilate_pass2 },
 		inv_uv =      { first=inv_uv_material, second=dilate_pass1, third=dilate_pass2 },
+		curvature =       { first=curvature_material, second=dilate_pass1, third=dilate_pass2 },
 		seams =       { first=white_material, second=seams_pass1, third=seams_pass2 }
-	}[map]
+	}
+	var passes = bake_passes[map]
 	size = Vector2(map_size, map_size)
-	$MeshInstance.mesh = mesh
+	if map == "curvature":
+		$MeshInstance.mesh = $CurvatureGenerator.generate(mesh)
+	else:
+		$MeshInstance.mesh = mesh
 	$MeshInstance.set_surface_material(0, passes.first)
 	var aabb = $MeshInstance.get_aabb()
 	inv_uv_material.set_shader_param("position", aabb.position)

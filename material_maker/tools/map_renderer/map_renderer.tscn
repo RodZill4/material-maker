@@ -1,5 +1,6 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
+[ext_resource path="res://material_maker/tools/map_renderer/curvature_generator.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
 
 [sub_resource type="World" id=1]
@@ -68,6 +69,22 @@ void fragment() {
 shader = SubResource( 6 )
 shader_param/position = Vector3( 0, 0, 0 )
 shader_param/size = Vector3( 1, 1, 1 )
+
+[sub_resource type="Shader" id=17]
+code = "shader_type spatial;
+render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+
+void vertex() {
+	VERTEX=vec3(UV, 0.5);
+}
+
+void fragment() {
+	ALBEDO = COLOR.rgb;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 17 )
 
 [sub_resource type="Shader" id=8]
 code = "shader_type canvas_item;
@@ -256,6 +273,7 @@ script = ExtResource( 2 )
 mesh_normal_material = SubResource( 3 )
 inv_uv_material = SubResource( 5 )
 white_material = SubResource( 7 )
+curvature_material = SubResource( 18 )
 dilate_pass1 = SubResource( 9 )
 dilate_pass2 = SubResource( 11 )
 seams_pass1 = SubResource( 13 )
@@ -271,3 +289,6 @@ __meta__ = {
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 6 )
 projection = 1
+
+[node name="CurvatureGenerator" type="Node" parent="."]
+script = ExtResource( 1 )
