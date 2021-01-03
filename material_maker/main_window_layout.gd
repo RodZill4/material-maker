@@ -12,11 +12,19 @@ const PANELS = [
 	{ name="Preview3D", scene=preload("res://material_maker/panels/preview_3d/preview_3d_panel.tscn"), position="BottomLeft" },
 	{ name="Histogram", scene=preload("res://material_maker/widgets/histogram/histogram.tscn"), position="BottomLeft" },
 	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },
-	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" }
+	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" },
+	{ name="Brushes", scene=preload("res://material_maker/panels/brushes/brushes.tscn"), position="TopLeft" },
+	{ name="Layers", scene=preload("res://material_maker/panels/layers/layers.tscn"), position="BottomRight" },
+	{ name="Parameters", scene=preload("res://material_maker/panels/parameters/parameters.tscn"), position="TopRight" },
 ]
+const HIDE_PANELS = {
+	material=[ "Brushes", "Layers", "Parameters" ],
+	paint=[ "Preview2D", "Preview3D", "Histogram", "Hierarchy" ]
+}
 
 var panels = {}
 var previous_width : float
+var current_mode : String = "material"
 
 func _ready() -> void:
 	previous_width = rect_size.x
@@ -36,8 +44,10 @@ func load_panels(config_cache) -> void:
 			tab = get_node(PANEL_POSITIONS[config_cache.get_value("layout", panel.name+"_location")])
 		if config_cache.has_section_key("layout", panel.name+"_hidden") && config_cache.get_value("layout", panel.name+"_hidden"):
 			node.set_meta("parent_tab_container", tab)
+			node.set_meta("hidden", true)
 		else:
 			tab.add_child(node)
+			node.set_meta("hidden", false)
 	# Split positions
 	if config_cache.has_section_key("layout", "LeftVSplitOffset"):
 		split_offset = config_cache.get_value("layout", "LeftVSplitOffset")
@@ -54,7 +64,7 @@ func save_config(config_cache) -> void:
 		var location = panels[p].get_parent()
 		var hidden = false
 		if location == null:
-			hidden = true
+			hidden = panels[p].get_meta("hidden")
 			location = panels[p].get_meta("parent_tab_container")
 		config_cache.set_value("layout", p+"_hidden", hidden)
 		for l in PANEL_POSITIONS.keys():
@@ -78,11 +88,20 @@ func is_panel_visible(panel_name : String) -> bool:
 
 func set_panel_visible(panel_name : String, v : bool) -> void:
 	var panel = panels[panel_name]
-	if v:
-		panel.get_meta("parent_tab_container").add_child(panel)
-	else:
+	panel.set_meta("hidden", !v)
+	if panel.is_inside_tree():
 		panel.set_meta("parent_tab_container", panel.get_parent())
+	if v and HIDE_PANELS[current_mode].find(panel_name) == -1:
+		if ! panel.is_inside_tree():
+			panel.get_meta("parent_tab_container").add_child(panel)
+	elif panel.is_inside_tree():
 		panel.get_parent().remove_child(panel)
+	update_panels()
+
+func change_mode(m : String) -> void:
+	current_mode = m
+	for p in panels:
+		set_panel_visible(p, !panels[p].get_meta("hidden"))
 	update_panels()
 
 func update_panels() -> void:

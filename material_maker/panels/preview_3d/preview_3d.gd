@@ -14,7 +14,7 @@ onready var current_environment = environments.get_child(0)
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 
-onready var ui = get_node(ui_path)
+var ui
 
 signal need_update(me)
 
@@ -33,6 +33,7 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
+	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
@@ -180,11 +181,11 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.popup_centered()
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
-	var mesh_normal_mapper = load("res://material_maker/panels/preview_3d/map_renderer.tscn").instance()
+	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
 	add_child(mesh_normal_mapper)
 	var id = objects.get_child_count()-1
 	var object : MeshInstance = objects.get_child(id)
-	var result = mesh_normal_mapper.gen(object.mesh, map, file_name, size)
+	var result = mesh_normal_mapper.gen(object.mesh, map, "save_to_file", [ file_name ], size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	mesh_normal_mapper.queue_free()

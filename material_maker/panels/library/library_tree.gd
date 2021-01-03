@@ -1,6 +1,10 @@
 extends Tree
 
+export var supports_drag : bool = true
+
 func get_drag_data(_position):
+	if !supports_drag:
+		return null
 	var selected_item = get_selected()
 	if selected_item != null:
 		var data = selected_item.get_metadata(0)

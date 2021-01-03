@@ -1,7 +1,5 @@
 extends HBoxContainer
 
-var text setget set_text, get_text
-
 signal label_changed(new_label)
 
 func get_text() -> String:

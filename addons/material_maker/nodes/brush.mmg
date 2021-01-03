@@ -1,0 +1,136 @@
+{
+	"name": "brush",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"has_albedo": true,
+		"has_depth": false,
+		"has_emission": false,
+		"has_metallic": true,
+		"has_roughness": true,
+		"mode": 0
+	},
+	"is_brush": true,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "clamp(1.0-2.0*length($uv-vec2(0.5)), 0.0, 1.0)",
+				"label": "Brush",
+				"name": "brush",
+				"type": "f"
+			},
+			{
+				"default": "vec4(1.0)",
+				"group_size": 5,
+				"label": "Albedo",
+				"name": "albedo",
+				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "Metallic",
+				"name": "metallic",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "Roughness",
+				"name": "roughness",
+				"type": "f"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "Emission",
+				"name": "emission",
+				"type": "rgba"
+			},
+			{
+				"default": "0.0",
+				"label": "Depth",
+				"name": "depth",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Brush",
+		"outputs": [
+			{
+				"f": "$brush($uv)",
+				"type": "f"
+			},
+			{
+				"rgba": "$albedo($uv)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "vec4($metallic($uv), $roughness($uv), $has_metallic ? $albedo($uv).a : 0.0, $has_roughness ? $albedo($uv).a : 0.0)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "$emission($uv)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "vec4(vec3($depth($uv)), $albedo($uv).a)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"name": "mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Stamp",
+						"value": "stamp"
+					},
+					{
+						"name": "Pattern",
+						"value": "pattern"
+					},
+					{
+						"name": "UV Pattern",
+						"value": "uv_pattern"
+					}
+				]
+			},
+			{
+				"default": true,
+				"label": "",
+				"name": "has_albedo",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_metallic",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_roughness",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_emission",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_depth",
+				"type": "boolean"
+			}
+		]
+	},
+	"type": "brush_node"
+}

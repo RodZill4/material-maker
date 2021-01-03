@@ -7,9 +7,6 @@ const OFFSET : Vector2 = Vector2(3, 3)
 signal moved(index)
 signal removed(index)
 
-func _ready():
-	pass # Replace with function body.
-
 func _draw():
 	draw_rect(Rect2(0, 0, 7, 7), Color(1.0, 1.0, 1.0))
 
@@ -29,7 +26,3 @@ func _on_ControlPoint_gui_input(event):
 	elif moving and event is InputEventMouseMotion:
 		rect_position += event.relative
 		emit_signal("moved", get_index())
-
-func update_tangents() -> void:
-	update()
-	emit_signal("moved", get_index())

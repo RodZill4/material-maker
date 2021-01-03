@@ -19,10 +19,11 @@ var preview_2d
 var histogram
 var preview_3d
 var hierarchy
+var brushes
 
-onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview2D
+onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
 onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
-onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D
+onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
@@ -32,17 +33,18 @@ const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
 	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="load_material", shortcut="Control+O", description="Load material" },
+	{ menu="File", command="new_paint_project", description="New paint project" },
+	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
-	{ menu="File", command="save_material", shortcut="Control+S", description="Save material" },
-	{ menu="File", command="save_material_as", shortcut="Control+Shift+S", description="Save material as..." },
-	{ menu="File", command="save_all_materials", description="Save all materials..." },
+	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
+	{ menu="File", command="save_project_as", shortcut="Control+Shift+S", description="Save as..." },
+	{ menu="File", command="save_all_projects", description="Save all..." },
 	{ menu="File" },
 	{ menu="File", submenu="export_material", description="Export material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
-	{ menu="File", command="close_material", description="Close material" },
+	{ menu="File", command="close_project", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
 	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
@@ -70,11 +72,19 @@ const MENU = [
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
 	{ menu="Tools" },
-	{ menu="Tools", command="add_to_user_library", description="Add selected node to user library" },
-	{ menu="Tools", command="export_library", description="Export the nodes library" },
-	
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes" },
-	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph" },
+	{ menu="Tools", command="add_selection_to_user_library", description="Add selected node to user library", mode="material" },
+	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
+	{ menu="Tools", command="export_library", description="Export the nodes library", mode="material" },
+	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting", command="toggle_paint_feature", description="Depth", command_parameter="depth_enabled", mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="256x256", command_parameter=256, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="512x512", command_parameter=512, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
+	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
+	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
@@ -149,6 +159,7 @@ func _ready() -> void:
 	preview_3d.connect("need_update", self, "update_preview_3d")
 	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self, "on_group_selected")
+	brushes = get_panel("Brushes")
 
 	# Load recent projects
 	load_recents()
@@ -158,7 +169,7 @@ func _ready() -> void:
 	
 	new_material()
 	
-	do_load_materials(OS.get_cmdline_args())
+	do_load_projects(OS.get_cmdline_args())
 	
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 	
@@ -186,11 +197,28 @@ func on_config_changed() -> void:
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 
+func get_current_project() -> Control:
+	return projects.get_current_tab_control()
+
 func get_current_graph_edit() -> MMGraphEdit:
 	var graph_edit = projects.get_current_tab_control()
-	if graph_edit != null and graph_edit is GraphEdit:
-		return graph_edit
+	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
+		return graph_edit.get_graph_edit()
 	return null
+
+# Modes
+
+var current_mode : String = ""
+
+func get_current_mode() -> String:
+	return current_mode
+
+func set_current_mode(mode : String) -> void:
+	current_mode = mode
+	layout.change_mode(current_mode)
+	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
+
+# Menus
 
 func create_menus(menu_def, object, menu_bar) -> void:
 	for i in menu_def.size():
@@ -205,9 +233,12 @@ func create_menus(menu_def, object, menu_bar) -> void:
 			continue
 		var menu = m.get_popup()
 		create_menu(menu_def, object, menu, m.name)
-		m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
+		#m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
 
 func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
+	var mode = ""
+	if object.has_method("get_current_mode"):
+		mode = object.get_current_mode()
 	var is_mac : bool = OS.get_name() == "OSX"
 	var submenus = {}
 	var menu_name_length = menu_name.length()
@@ -217,6 +248,8 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
 			continue
 		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
+			continue
+		if menu_def[i].has("mode") and menu_def[i].mode != mode:
 			continue
 		if menu_def[i].menu == menu_name:
 			if menu_def[i].has("submenu"):
@@ -255,32 +288,44 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				menu.add_child(submenu)
 				menu.add_submenu_item(submenu_name, submenu.get_name())
 				submenus[submenu_name] = submenu
+	menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
 	return menu
 
 func on_menu_id_pressed(id, menu_def, object) -> void:
 	if menu_def[id].has("command"):
 		var command = menu_def[id].command
 		if object.has_method(command):
+			var parameters = []
+			if menu_def[id].has("command_parameter"):
+				parameters.append(menu_def[id].command_parameter)
 			if menu_def[id].has("toggle") and menu_def[id].toggle:
-				object.call(command, !object.call(command))
-			else:
-				object.call(command)
+				parameters.append(!object.callv(command, parameters))
+			object.callv(command, parameters)
 
 func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
+	var mode = ""
+	if object.has_method("get_current_mode"):
+		mode = object.get_current_mode()
 	for i in menu_def.size():
 		if menu_def[i].menu != name:
 			continue
 		if menu_def[i].has("submenu"):
 			pass
 		elif menu_def[i].has("command"):
+			var item : int = menu.get_item_index(i)
 			var command = menu_def[i].command+"_is_disabled"
 			if object.has_method(command):
 				var is_disabled = object.call(command)
-				menu.set_item_disabled(menu.get_item_index(i), is_disabled)
+				menu.set_item_disabled(item, is_disabled)
+			if menu_def[i].has("mode"):
+				menu.set_item_disabled(item, menu_def[i].mode != mode)
 			if menu_def[i].has("toggle") and menu_def[i].toggle:
 				command = menu_def[i].command
+				var parameters = []
+				if menu_def[i].has("command_parameter"):
+					parameters.append(menu_def[i].command_parameter)
 				if object.has_method(command):
-					menu.set_item_checked(i, object.call(command))
+					menu.set_item_checked(item, object.callv(command, parameters))
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
@@ -294,7 +339,7 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	if !do_load_material(recent_files[id]):
+	if !do_load_project(recent_files[id]):
 		recent_files.remove(id)
 
 func load_recents() -> void:
@@ -321,9 +366,9 @@ func add_recent(path) -> void:
 
 func create_menu_export_material(menu) -> void:
 	menu.clear()
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		var material_node = graph_edit.get_material_node()
+	var project = get_current_project()
+	if project != null:
+		var material_node = project.get_material_node()
 		for p in material_node.get_export_profiles():
 			menu.add_item(p)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
@@ -334,18 +379,18 @@ func export_profile_config_key(profile : String) -> String:
 	return key
 
 func export_material(file_path : String, profile : String) -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	var project = get_current_project()
+	if project == null:
 		return
 	config_cache.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
-	graph_edit.export_material(export_prefix, profile)
+	project.export_material(export_prefix, profile)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit == null:
+	var project = get_current_project()
+	if project == null:
 		return
-	var material_node = graph_edit.get_material_node()
+	var material_node = project.get_material_node()
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
@@ -408,7 +453,7 @@ func _on_Create_id_pressed(id) -> void:
 		graph_edit.create_gen_from_type(gens[id])
 
 
-func new_panel() -> GraphEdit:
+func new_graph_panel() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
 	graph_edit.node_factory = $NodeFactory
 	projects.add_child(graph_edit)
@@ -416,36 +461,62 @@ func new_panel() -> GraphEdit:
 	return graph_edit
 
 func new_material() -> void:
-	var graph_edit = new_panel()
+	var graph_edit = new_graph_panel()
 	graph_edit.new_material()
 	graph_edit.update_tab_title()
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
-func load_material() -> void:
+func new_paint_project(obj_file_name = null) -> void:
+	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
+	add_child(new_painter_dialog)
+	var result = new_painter_dialog.ask(obj_file_name)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == null:
+		return
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
+	projects.add_child(paint_panel)
+	paint_panel.init_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
+	projects.current_tab = paint_panel.get_index()
+
+func load_project() -> void:
 	var dialog = FileDialog.new()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	if config_cache.has_section_key("path", "material"):
-		dialog.current_dir = config_cache.get_value("path", "material")
-	dialog.connect("files_selected", self, "do_load_materials")
+	dialog.add_filter("*.mmpp;Model Painting File")
+	if config_cache.has_section_key("path", "project"):
+		dialog.current_dir = config_cache.get_value("path", "project")
+	dialog.connect("files_selected", self, "do_load_projects")
 	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
 
-func do_load_materials(filenames) -> void:
-	if not filenames.empty():
-		config_cache.set_value("path", "material", filenames[0].get_base_dir())
+func do_load_projects(filenames) -> void:
+	var file_name : String = ""
 	for f in filenames:
-		do_load_material(f, false)
-	hierarchy.update_from_graph_edit(get_current_graph_edit())
+		var file = File.new()
+		if file.open(f, File.READ) != OK:
+			continue
+		file_name = file.get_path_absolute()
+		file.close()
+		do_load_project(file_name)
+	if filename != "":
+		config_cache.set_value("path", "project", filename.get_base_dir())
+
+func do_load_project(file_name) -> void:
+	var status : bool = false
+	match file_name.get_extension():
+		"ptex":
+			status = do_load_material(file_name, false)
+			hierarchy.update_from_graph_edit(get_current_graph_edit())
+		"mmpp":
+			status = do_load_painting(file_name)
+	if status:
+		add_recent(file_name)
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
-	var file = File.new()
-	file.open(filename, File.READ)
-	filename = file.get_path_absolute()
-	file.close()
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -456,53 +527,40 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 				if node_count > 1:
 					break
 	if node_count > 1:
-		graph_edit = new_panel()
+		graph_edit = new_graph_panel()
 	graph_edit.load_file(filename)
-	add_recent(filename)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 	return true
 
-func save_material(graph_edit : MMGraphEdit = null) -> bool:
-	var status = false
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	if graph_edit != null:
-		if graph_edit.save_path != null:
-			status = graph_edit.save_file(graph_edit.save_path)
-		else:
-			status = save_material_as(graph_edit)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+func do_load_painting(filename : String) -> bool:
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
+	projects.add_child(paint_panel)
+	var status : bool = paint_panel.load_project(filename)
+	projects.current_tab = paint_panel.get_index()
 	return status
 
-func save_material_as(graph_edit : MMGraphEdit = null) -> bool:
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	if graph_edit != null:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-		add_child(dialog)
-		dialog.rect_min_size = Vector2(500, 500)
-		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_SAVE_FILE
-		dialog.add_filter("*.ptex;Procedural Textures File")
-		if config_cache.has_section_key("path", "material"):
-			dialog.current_dir = config_cache.get_value("path", "material")
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
-		if files.size() == 1:
-			if do_save_material(files[0], graph_edit):
-				add_recent(graph_edit.save_path)
-				return true
+func save_project(project : Control = null) -> bool:
+	if project == null:
+		project = get_current_project()
+	if project != null:
+		return project.save()
 	return false
 
-func do_save_material(filename : String, graph_edit : MMGraphEdit = null) -> bool:
-	if graph_edit == null:
-		graph_edit = get_current_graph_edit()
-	return graph_edit.save_file(filename)
+func save_project_as(project : Control = null) -> bool:
+	if project == null:
+		project = get_current_project()
+	if project != null:
+		return project.save_as()
+	return false
 
-func close_material() -> void:
+func save_all_projects() -> void:
+	for i in range(projects.get_tab_count()):
+		var result = projects.get_tab(i).save()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+
+func close_project() -> void:
 	projects.close_tab()
 
 func quit() -> void:
@@ -670,18 +728,18 @@ func make_selected_nodes_editable() -> void:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
-func add_to_user_library() -> void:
+func add_selection_to_user_library() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.empty():
 		var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
 		dialog.set_value(library.get_selected_item_name())
 		dialog.set_texts("New library element", "Select a name for the new library element")
 		add_child(dialog)
-		dialog.connect("ok", self, "do_add_to_user_library", [ selected_nodes ])
+		dialog.connect("ok", self, "do_add_selection_to_user_library", [ selected_nodes ])
 		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
 
-func do_add_to_user_library(name, nodes) -> void:
+func do_add_selection_to_user_library(name, nodes) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
 	if nodes.size() == 1:
@@ -697,6 +755,27 @@ func do_add_to_user_library(name, nodes) -> void:
 	result.release(self)
 	library.add_to_user_library(data, name, image)
 
+func add_brush_to_user_library() -> void:
+	var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
+	dialog.set_value(brushes.get_selected_item_name())
+	dialog.set_texts("New library element", "Select a name for the new library element")
+	add_child(dialog)
+	dialog.connect("ok", self, "do_add_brush_to_user_library")
+	dialog.connect("popup_hide", dialog, "queue_free")
+	dialog.popup_centered()
+
+func do_add_brush_to_user_library(name) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var data = graph_edit.top_generator.serialize()
+	# Create thumbnail
+	var result = get_current_project().get_brush_preview()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	var image : Image = Image.new()
+	image.copy_from(result.get_data())
+	image.resize(64, 64)
+	brushes.add_to_user_library(data, name, image)
+
 func export_library() -> void:
 	var dialog : FileDialog = FileDialog.new()
 	add_child(dialog)
@@ -710,6 +789,20 @@ func export_library() -> void:
 
 func do_export_library(path : String) -> void:
 	library.export_libraries(path)
+
+func toggle_paint_feature(channel : String, value = null) -> bool:
+	var paint = get_current_project()
+	if value == null:
+		return paint.material_feature_is_checked(channel)
+	paint.check_material_feature(channel, value)
+	return value
+
+func set_painting_texture_size(size : int, value = null) -> bool:
+	var paint = get_current_project()
+	if value == null:
+		return paint.get_texture_size() == size
+	paint.set_texture_size(size)
+	return true
 
 func get_doc_dir() -> String:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
@@ -809,18 +902,29 @@ func on_selected_node_change(node) -> void:
 		update_preview_2d(node)
 
 func _on_Projects_tab_changed(_tab) -> void:
+	var project = get_current_project()
+	if project.has_method("project_selected"):
+		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
-		if new_tab != null:
+		if new_tab is GraphEdit:
 			for c in get_incoming_connections():
 				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
 					c.source.disconnect(c.signal_name, self, c.method_name)
 			new_tab.connect("graph_changed", self, "update_preview")
 			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
 				new_tab.connect("node_selected", self, "on_selected_node_change")
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
+			set_current_mode("material")
+		else:
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
+			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
+			set_current_mode("paint")
 		current_tab = new_tab
-		update_preview()
-		hierarchy.update_from_graph_edit(get_current_graph_edit())
+		if new_tab is GraphEdit:
+			update_preview()
+			hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -934,6 +1038,10 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
+			"obj":
+				var result = new_paint_project(f)
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				var control : Control = get_control_at_position(get_global_mouse_position(), self)
 				while control != self:

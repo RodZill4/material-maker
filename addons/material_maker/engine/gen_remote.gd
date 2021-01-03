@@ -157,6 +157,7 @@ func create_config_control(label : String) -> String:
 
 func set_label(widget_name : String, new_label : String) -> void:
 	get_widget(widget_name).label = new_label
+	emit_signal("parameter_changed", "__update_all__", null)
 
 func can_link_parameter(widget_name : String, generator : MMGenBase, param : String) -> bool:
 	var widget : Dictionary = get_widget(widget_name)

@@ -20,6 +20,12 @@ func close_tab(tab = null) -> void:
 	if result:
 		do_close_tab(tab)
 
+func get_tab_count() -> int:
+	return $Tabs.get_tab_count()
+
+func get_tab(i : int) -> Control:
+	return $Tabs.get_child(i) as Control
+
 func check_save_tabs() -> bool:
 	for i in range($Tabs.get_tab_count()):
 		var result = check_save_tab(i)

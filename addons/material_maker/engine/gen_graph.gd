@@ -11,6 +11,7 @@ var editable : bool = false
 
 var transmits_seed : bool = true
 
+signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
 signal hierarchy_changed()
 
@@ -134,8 +135,8 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 
 func add_generator(generator : MMGenBase) -> bool:
 	var name = generator.name
-	if generator.name == "Material":
-		if has_node("Material"):
+	if generator.name == "Material" or generator.name == "Brush" :
+		if has_node(generator.name):
 			# Cannot create a material if it exists already
 			return false
 		else:
@@ -160,6 +161,7 @@ func add_generator(generator : MMGenBase) -> bool:
 	add_child(generator)
 	if generator.get_script() == get_script():
 		emit_hierarchy_changed()
+	emit_signal("graph_changed")
 	return true
 
 func remove_generator(generator : MMGenBase) -> bool:
@@ -181,6 +183,7 @@ func remove_generator(generator : MMGenBase) -> bool:
 	if generator.get_script() == get_script():
 		emit_hierarchy_changed()
 	generator.queue_free()
+	emit_signal("graph_changed")
 	return true
 
 func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
@@ -191,6 +194,7 @@ func replace_generator(old : MMGenBase, new : MMGenBase) -> void:
 	if old.get_script() == get_script() or new.get_script() == get_script():
 		emit_hierarchy_changed()
 	old.free()
+	emit_signal("graph_changed")
 
 func get_connected_inputs(generator) -> Array:
 	var rv : Array = []
@@ -298,7 +302,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	var count = 0
 	# Filter group nodes and calculate boundin box
 	for g in gens:
-		if g.name != "Material" and g.name != "gen_inputs" and g.name != "gen_outputs":
+		if g.name != "Material" and g.name != "Brush" and g.name != "gen_inputs" and g.name != "gen_outputs":
 			generators.push_back(g)
 			var p = g.position
 			center += p

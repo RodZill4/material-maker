@@ -1,5 +1,6 @@
 extends ColorRect
 
+export(String, MULTILINE) var shader_context_defs : String = ""
 export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
@@ -41,7 +42,7 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 	else:
 		generator = null
 	# Update shader
-	var code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	var code = MMGenBase.generate_preview_shader(source, source.type, shader_context_defs+shader)
 	material.shader.code = code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(material.shader.code, material)

@@ -131,7 +131,8 @@ func get_parameter(n : String):
 	if parameters.has(n):
 		return parameters[n]
 	else:
-		return get_parameter_def(n).default
+		var parameter_def = get_parameter_def(n)
+		return parameter_def.default
 
 class CustomGradientSorter:
 	static func compare(a, b) -> bool:
@@ -225,9 +226,10 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
 	code += "uniform float preview_size = 64;\n"
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	code += file.get_as_text()
+	code += "uniform sampler2D mesh_inv_uv_tex;\n"
+	code += "uniform vec3 mesh_aabb_position;\n"
+	code += "uniform vec3 mesh_aabb_size;\n"
+	code += mm_renderer.common_shader
 	code += "\n"
 	if src_code.has("textures"):
 		for t in src_code.textures.keys():

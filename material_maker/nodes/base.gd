@@ -78,9 +78,6 @@ func update_rendering_time(t : int) -> void:
 func _on_offset_changed() -> void:
 	generator.set_position(offset)
 
-func _input(event) -> void:
-	_on_gui_input(event)
-
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
