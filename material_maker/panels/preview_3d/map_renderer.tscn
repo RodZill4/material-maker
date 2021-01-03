@@ -28,12 +28,15 @@ shader = SubResource( 2 )
 code = "shader_type spatial;
 render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
+varying float curvature;
+
 void vertex() {
+	curvature = dot(COLOR, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/16581375.0));
 	VERTEX=vec3(UV, 0.5);
 }
 
 void fragment() {
-	ALBEDO = COLOR.rgb;
+	ALBEDO = vec3(curvature);
 }
 "
 

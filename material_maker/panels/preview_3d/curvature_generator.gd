@@ -132,10 +132,20 @@ func generate(mesh: Mesh) -> Mesh:
 		var orig_index: int = vert_orig_index[vert_index]
 		data[vert_index] = data[orig_index]
 	
-	# data gets transferred to mesh vertex colors.
+	# STEP 5: Data gets transferred to the mesh's vertex colors.
+	# Since the vertex colors are 8-bit per channel, then we'll have to
+	# pack the curvature in the 4 channels to maintain precision.
 	for i in data.size():
 		var p: float = data[i] * 0.5 + 0.5
-		b_mesh.set_vertex_color(i, Color(p, p, p))
+		var col := [p, p*255.0, p*255.0*255.0, p*255.0*255.0*255.0]
+		col[0] = col[0] - int(col[0])
+		col[1] = col[1] - int(col[1])
+		col[2] = col[2] - int(col[2])
+		col[3] = col[3] - int(col[3])
+		col[0] -= col[1] / 255.0
+		col[1] -= col[2] / 255.0
+		col[2] -= col[3] / 255.0
+		b_mesh.set_vertex_color(i, Color(col[0], col[1], col[2], col[3]))
 	
 	var new_mesh := ArrayMesh.new()
 	var err := b_mesh.commit_to_surface(new_mesh)
@@ -154,11 +164,10 @@ class EdgeMap:
 	var edges := {}
 
 	func insert(v0: int, v1: int) -> void:
-		edges[v0] = v1
-		edges[v1] = v0
+		edges[Vector2(v0, v1)] = true
 
 	func exists(v0: int, v1: int) -> bool:
-		return edges.get(v0, -1) == v1 or edges.get(v1, -1) == v0
+		return edges.has(Vector2(v0, v1)) or edges.has(Vector2(v1, v0))
 
 	func clear() -> void:
 		edges.clear()
