@@ -9,6 +9,9 @@ Texture generator from text
 var updating : bool = false
 var update_again : bool = false
 
+func _ready() -> void:
+	update_buffer()
+
 func get_type() -> String:
 	return "text"
 
