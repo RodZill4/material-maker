@@ -38,15 +38,16 @@ func _on_Image_gui_input(event) -> void:
 	var m : ShaderMaterial = $VBoxContainer/Image.material
 	var canvas_size : Vector2 = $VBoxContainer/Image.get_size()
 	var image_size : Vector2 = m.get_shader_param("image_size")
-	var scale = m.get_shader_param("scale")
+	var scale : float = m.get_shader_param("scale")
 	var center : Vector2 = m.get_shader_param("center")
 	var new_center : Vector2 = center
-	var multiplier : Vector2 = Vector2(canvas_size.x*min(image_size.x/image_size.y, 1.0), canvas_size.y*min(image_size.y/image_size.x, 1.0))
+	var ratio : Vector2 = canvas_size/image_size
+	var multiplier : Vector2 = image_size*min(ratio.x, ratio.y)
 	var image_rect : Rect2 = $VBoxContainer/Image.get_global_rect()
 	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
 	if event is InputEventMouseButton:
 		if event.pressed:
-			var new_scale = scale
+			var new_scale : float = scale
 			if event.button_index == BUTTON_LEFT and selected_slot != null:
 				if selected_slot.get_parent() == $VBoxContainer/Colors:
 					selected_slot.set_color(get_color_under_cursor())
@@ -63,17 +64,16 @@ func _on_Image_gui_input(event) -> void:
 			elif event.button_index == BUTTON_MIDDLE:
 				dragging = true
 			if new_scale != scale:
-				m.set_shader_param("scale", new_scale)
-				m.set_shader_param("center", center+offset_from_center*(scale-new_scale)/multiplier)
 				images[current_image].scale = new_scale
-				images[current_image].center = center+offset_from_center*(scale-new_scale)/multiplier
+				m.set_shader_param("scale", images[current_image].scale)
+				new_center = center+offset_from_center*(scale-new_scale)/multiplier
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
 			gradient = null
 	elif event is InputEventMouseMotion:
 		if dragging:
-			new_center = m.get_shader_param("center")-event.relative/multiplier*scale
+			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
 		elif gradient != null:
 			var new_gradient_length = gradient_length + event.relative.length()
 			if gradient_length > 0.0:

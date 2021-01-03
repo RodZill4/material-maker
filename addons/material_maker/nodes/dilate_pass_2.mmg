@@ -1,16 +1,18 @@
 {
-	"name": "distance_pass_2",
+	"name": "dilate_pass_2",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"d": 0.1,
+		"d": 0.25,
+		"distance": 0,
 		"s": 9
 	},
+	"seed_value": 44978,
 	"shader_model": {
 		"code": "",
-		"global": "",
+		"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
 		"inputs": [
 			{
 				"default": "vec3(0.0)",
@@ -20,7 +22,7 @@
 				"type": "rgb"
 			}
 		],
-		"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = $in(uv);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = $in(uv+dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = 1.0-sqrt((1.0-p2.x)*(1.0-p2.x)+dx.y*dx.y/$d/$d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = $in(uv-dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = 1.0-sqrt((1.0-p2.x)*(1.0-p2.x)+dx.y*dx.y/$d/$d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
+		"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = $in(uv);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = $in(uv+dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = $in(uv-dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
 		"name": "Distance pass 2",
 		"outputs": [
 			{
@@ -46,6 +48,26 @@
 				"name": "d",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": 2,
+				"label": "",
+				"name": "distance",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Euclidian",
+						"value": "euclidian"
+					},
+					{
+						"name": "Manhattan",
+						"value": "manhattan"
+					},
+					{
+						"name": "Chebyshev",
+						"value": "chebyshev"
+					}
+				]
 			}
 		]
 	},

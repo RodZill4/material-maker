@@ -19,18 +19,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2",
-			"from_port": 0,
-			"to": "dilate_pass_2",
-			"to_port": 0
-		},
-		{
-			"from": "dilate_pass_2",
-			"from_port": 0,
-			"to": "buffer_2_2",
-			"to_port": 0
-		},
-		{
 			"from": "buffer_2_2",
 			"from_port": 0,
 			"to": "dilate_pass_3",
@@ -46,6 +34,18 @@
 			"from": "dilate_pass_3",
 			"from_port": 0,
 			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "dilate_pass_4",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_4",
+			"from_port": 0,
+			"to": "buffer_2_2",
 			"to_port": 0
 		}
 	],
@@ -84,13 +84,14 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -175.306458,
-				"y": -342.953613
+				"x": -140.306458,
+				"y": -377.953613
 			},
 			"parameters": {
 				"param0": 9,
 				"param1": 0.1,
-				"param2": 0
+				"param2": 0,
+				"param3": 1
 			},
 			"type": "remote",
 			"widgets": [
@@ -114,7 +115,7 @@
 							"widget": "s"
 						},
 						{
-							"node": "dilate_pass_2",
+							"node": "dilate_pass_4",
 							"widget": "s"
 						}
 					],
@@ -131,7 +132,7 @@
 							"widget": "d"
 						},
 						{
-							"node": "dilate_pass_2",
+							"node": "dilate_pass_4",
 							"widget": "d"
 						}
 					],
@@ -151,6 +152,18 @@
 					"longdesc": "0 to generate a gradient to black while dilating, 1 to fill with input color",
 					"name": "param2",
 					"shortdesc": "Fill",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_4",
+							"widget": "distance"
+						}
+					],
+					"name": "param3",
+					"shortdesc": "Distance function",
 					"type": "linked_control"
 				}
 			]
@@ -206,8 +219,8 @@
 		{
 			"name": "buffer_2_2",
 			"node_position": {
-				"x": -31.323547,
-				"y": -88.695679
+				"x": -36.323547,
+				"y": -68.695679
 			},
 			"parameters": {
 				"lod": 0,
@@ -229,19 +242,6 @@
 			"type": "dilate_pass_1"
 		},
 		{
-			"name": "dilate_pass_2",
-			"node_position": {
-				"x": -33.698792,
-				"y": -203.368988
-			},
-			"parameters": {
-				"d": 0.1,
-				"s": 9
-			},
-			"seed_value": 44978,
-			"type": "dilate_pass_2"
-		},
-		{
 			"name": "dilate_pass_3",
 			"node_position": {
 				"x": -27.698792,
@@ -251,12 +251,26 @@
 				"amount": 0
 			},
 			"type": "dilate_pass_3"
+		},
+		{
+			"name": "dilate_pass_4",
+			"node_position": {
+				"x": -31.689392,
+				"y": -186.577301
+			},
+			"parameters": {
+				"d": 0.1,
+				"distance": 1,
+				"s": 9
+			},
+			"type": "dilate_pass_2"
 		}
 	],
 	"parameters": {
 		"param0": 9,
 		"param1": 0.1,
-		"param2": 0
+		"param2": 0,
+		"param3": 1
 	},
 	"shortdesc": "Dilate",
 	"type": "graph"

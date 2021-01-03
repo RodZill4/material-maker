@@ -24,6 +24,7 @@ const MENU = [
 	{ menu="Model", command="rotate_model", description="Rotate", toggle=true },
 	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
 	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
+	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
@@ -214,3 +215,12 @@ func generate_inverse_uv_map(i : int) -> void:
 
 func do_generate_inverse_uv_map(file_name : String, size : int) -> void:
 	do_generate_map(file_name, "inv_uv", size)
+
+func create_menu_generate_curvature_map(menu) -> void:
+	create_menu_map(menu, "generate_curvature_map")
+
+func generate_curvature_map(i : int) -> void:
+	generate_map("do_generate_curvature_map", 256 << i)
+
+func do_generate_curvature_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "curvature", size)
