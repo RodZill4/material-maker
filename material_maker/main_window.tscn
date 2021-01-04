@@ -35,7 +35,9 @@ flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
 
-[node name="MainWindow" type="Panel"]
+[node name="MainWindow" type="Panel" groups=[
+"preview",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
@@ -64,7 +66,7 @@ margin_right = 1268.0
 margin_bottom = 22.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 1046.0
+margin_right = 991.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 
@@ -76,7 +78,7 @@ items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load ma
 switch_on_hover = true
 
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
-margin_left = 1050.0
+margin_left = 995.0
 margin_right = 1082.0
 margin_bottom = 22.0
 
@@ -129,19 +131,40 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel" instance=ExtResource( 3 )]
+[node name="BackgroundPreviews" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 28.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource( 3 )]
 visible = false
 material = SubResource( 2 )
 margin_right = 0.0
 margin_bottom = 0.0
+shader = "uniform vec2 size = vec2(100.0, 100.0);
+const float scale = 1.2;
+const vec2 center = vec2(0.5);
 
-[node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel" instance=ExtResource( 4 )]
+void fragment() {
+	vec2 ratio = size;
+	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
+	vec4 image = preview_2d(uv);
+	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+	COLOR = vec4(image_with_background, 1.0);
+}
+"
+
+[node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource( 4 )]
 visible = false
 margin_left = 0.0
 margin_top = 0.0
 margin_right = 0.0
 margin_bottom = 0.0
-ui_path = "../PreviewUI/Panel/HBoxContainer/Preview3DUI"
+ui_path = "../../PreviewUI/Panel/HBoxContainer/Preview3DUI"
 
 [node name="Projects" type="Panel" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
 self_modulate = Color( 1, 1, 1, 0 )
@@ -165,8 +188,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AddNodePopup" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" instance=ExtResource( 7 )]
-
 [node name="CrashRecoveryTimer" type="Timer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects"]
 wait_time = 15.0
 autostart = true
@@ -178,6 +199,7 @@ margin_left = 1.0
 margin_top = -45.0
 margin_right = 331.0
 margin_bottom = -13.0
+mouse_filter = 2
 custom_constants/separation = 7
 __meta__ = {
 "_edit_use_anchors_": false
@@ -262,12 +284,18 @@ use_hidden_tabs_for_min_size = true
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 9 )
+
+[node name="AddNodePopup" parent="." instance=ExtResource( 7 )]
+margin_left = 138.0
+margin_top = 32.0
+margin_right = 413.0
+margin_bottom = 351.0
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Layout_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="dragged" from="VBoxContainer/Layout/SplitRight" to="VBoxContainer/Layout" method="_on_Right_dragged"]
-[connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D" to="." method="update_preview_3d"]
+[connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D" to="." method="update_preview_3d"]
 [connection signal="no_more_tabs" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="new_material"]
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_Projects_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="_on_Projects_tab_changed"]
@@ -277,6 +305,6 @@ script = ExtResource( 9 )
 [connection signal="timeout" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/CrashRecoveryTimer" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_CrashRecoveryTimer_timeout"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]
-[connection signal="gui_input" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Preview3D" method="on_gui_input"]
+[connection signal="gui_input" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D" method="on_gui_input"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]

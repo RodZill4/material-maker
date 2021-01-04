@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_base.gd"
 }, {
+"base": "MMGenShader",
+"class": "MMGenBrush",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_brush.gd"
+}, {
 "base": "MMGenTexture",
 "class": "MMGenBuffer",
 "language": "GDScript",
@@ -158,6 +163,7 @@ _global_script_class_icons={
 "FilePickerButton": "",
 "MMCurve": "",
 "MMGenBase": "",
+"MMGenBrush": "",
 "MMGenBuffer": "",
 "MMGenComment": "",
 "MMGenContext": "",
@@ -199,7 +205,7 @@ boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.93.99.0"
-config/actual_release="0.94a3"
+config/actual_release="0.94a4"
 
 [audio]
 

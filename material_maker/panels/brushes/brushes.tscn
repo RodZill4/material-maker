@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/panels/library/library.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/panels/brushes/brushes.gd" type="Script" id=2]
+
+[node name="Library" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+base_library_name = "base_brushes.json"
+user_library_name = "user_brushes.json"
+
+[node name="Tree" parent="." index="1"]
+supports_drag = false
+[connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_activated"]
+[connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

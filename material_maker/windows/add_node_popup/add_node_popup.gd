@@ -7,6 +7,7 @@ onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
 
 var libraries = []
 
+var insert_position : Vector2
 
 var qc_node : String = ""
 var qc_slot : int
@@ -15,7 +16,7 @@ var qc_is_output : bool
 
 
 func get_current_graph():
-	return get_parent().get_current_tab_control()
+	return get_parent().get_current_graph_edit()
 
 
 func _ready() -> void:
@@ -39,7 +40,7 @@ func filter_entered(_filter) -> void:
 
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
-	var node : GraphNode = current_graph.create_nodes(node_data, get_current_graph().offset_from_global_position(rect_position))[0]
+	var node : GraphNode = current_graph.create_nodes(node_data, insert_position)[0]
 	if qc_node != "": # dragged from port
 		var port_position : Vector2
 		if qc_is_output:
@@ -71,6 +72,7 @@ func hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
+	insert_position = get_current_graph().offset_from_global_position(get_global_mouse_position())
 	popup()
 	qc_node = node_name
 	qc_slot = slot

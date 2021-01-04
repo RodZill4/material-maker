@@ -89,7 +89,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 				material.set_shader_param(n, parameter_changes[n])
 				do_update = true
 				break
-	if do_update:
+	if mm_renderer.update_float_parameters(material, parameter_changes):
 		update_again = true
 		if pending_textures.empty():
 			update_buffer()

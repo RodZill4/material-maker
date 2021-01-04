@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://material_maker/tools/painter/shaders/texture2view.shader" type="Shader" id=1]
+[ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
+[ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
+[ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="CubeMesh" id=2]
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="ViewportTexture" id=3]
+
+[sub_resource type="ShaderMaterial" id=4]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/seams_multiplier = 0.06125
+shader_param/model_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4 )
+shader_param/fovy_degrees = 70.0
+shader_param/z_near = 0.833974
+shader_param/z_far = 10.2641
+shader_param/aspect = 1.83214
+shader_param/uv_tolerance = 0.01
+shader_param/view2texture = SubResource( 3 )
+
+[node name="Painter" type="Node" groups=[
+"preview",
+]]
+script = ExtResource( 6 )
+
+[node name="View2Texture" type="Viewport" parent="."]
+size = Vector2( 1024, 600 )
+own_world = true
+transparent_bg = true
+keep_3d_linear = true
+render_target_v_flip = true
+render_target_update_mode = 0
+
+[node name="Camera" type="Camera" parent="View2Texture"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+current = true
+far = 25.0
+
+[node name="PaintedMesh" type="MeshInstance" parent="View2Texture"]
+mesh = SubResource( 1 )
+material/0 = ExtResource( 5 )
+
+[node name="Texture2View" type="Viewport" parent="."]
+size = Vector2( 2048, 2048 )
+own_world = true
+transparent_bg = true
+keep_3d_linear = true
+render_target_update_mode = 0
+
+[node name="Camera" type="Camera" parent="Texture2View"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 20 )
+projection = 1
+current = true
+
+[node name="PaintedMesh" type="MeshInstance" parent="Texture2View"]
+transform = Transform( 1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 4 )
+
+[node name="AlbedoPaint" parent="." instance=ExtResource( 7 )]
+
+[node name="MRPaint" parent="." instance=ExtResource( 7 )]
+shader_prefix = "paint_mr"
+
+[node name="EmissionPaint" parent="." instance=ExtResource( 7 )]
+
+[node name="DepthPaint" parent="." instance=ExtResource( 7 )]

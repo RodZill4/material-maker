@@ -3,10 +3,7 @@ extends MMGraphNodeBase
 static func generate_debug_shader(src_code) -> String:
 	var code
 	code = ""
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
-	var file_contents = file.get_as_text()
-	code += file_contents.right(file_contents.find("//---"))
+	code += mm_renderer.common_shader.right(mm_renderer.common_shader.find("//---"))
 	code += "\n"
 	if src_code.has("textures"):
 		for t in src_code.textures.keys():

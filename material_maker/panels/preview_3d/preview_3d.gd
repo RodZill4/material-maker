@@ -14,7 +14,7 @@ onready var current_environment = environments.get_child(0)
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 
-onready var ui = get_node(ui_path)
+var ui
 
 signal need_update(me)
 
@@ -24,6 +24,7 @@ const MENU = [
 	{ menu="Model", command="rotate_model", description="Rotate", toggle=true },
 	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
 	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
+	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
@@ -32,6 +33,7 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
+	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
@@ -179,11 +181,11 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.popup_centered()
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
-	var mesh_normal_mapper = load("res://material_maker/panels/preview_3d/map_renderer.tscn").instance()
+	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
 	add_child(mesh_normal_mapper)
 	var id = objects.get_child_count()-1
 	var object : MeshInstance = objects.get_child(id)
-	var result = mesh_normal_mapper.gen(object.mesh, map, file_name, size)
+	var result = mesh_normal_mapper.gen(object.mesh, map, "save_to_file", [ file_name ], size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	mesh_normal_mapper.queue_free()
@@ -213,3 +215,12 @@ func generate_inverse_uv_map(i : int) -> void:
 
 func do_generate_inverse_uv_map(file_name : String, size : int) -> void:
 	do_generate_map(file_name, "inv_uv", size)
+
+func create_menu_generate_curvature_map(menu) -> void:
+	create_menu_map(menu, "generate_curvature_map")
+
+func generate_curvature_map(i : int) -> void:
+	generate_map("do_generate_curvature_map", 256 << i)
+
+func do_generate_curvature_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "curvature", size)
