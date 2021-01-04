@@ -54,10 +54,10 @@ func _ready() -> void:
 
 
 func _gui_input(event) -> void:
-	if (event is InputEventMouseButton && event.button_index == BUTTON_LEFT):
+	if event is InputEventMouseButton && (event.button_index == BUTTON_LEFT || event.button_index == BUTTON_MIDDLE):
 		if (event.is_pressed()):
 			_is_pressing = true
-			var click_location = _convert_to_graph_position(event.position - _map_padding) - _graph_padding
+			var click_location = _convert_to_graph_position(get_global_mouse_position() - get_global_rect().position - _map_padding) - _graph_padding
 
 			if (graph_edit):
 				var scroll_offset = get_scroll_offset()
@@ -67,7 +67,7 @@ func _gui_input(event) -> void:
 
 		accept_event()
 	elif (event is InputEventMouseMotion && _is_pressing):
-		var click_location = _convert_to_graph_position(event.position - _map_padding) - _graph_padding
+		var click_location = _convert_to_graph_position(get_global_mouse_position() - get_global_rect().position - _map_padding) - _graph_padding
 
 		if (graph_edit):
 			var scroll_offset = get_scroll_offset()
