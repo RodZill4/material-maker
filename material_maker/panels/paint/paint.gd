@@ -34,7 +34,7 @@ var pattern_angle : float = 0.0
 
 onready var view = $VSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/Painter/View/MainView
-onready var camera = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera
+onready var camera : Camera = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera
 onready var camera_position = $VSplitContainer/Painter/View/MainView/CameraPosition
 onready var camera_rotation1 = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
 onready var camera_rotation2 = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
@@ -334,15 +334,25 @@ func _on_View_gui_input(ev : InputEvent):
 		if !ev.pressed and ev.button_index == BUTTON_MIDDLE:
 			update_view()
 		# Mouse wheel
-		var zoom = 0.0
-		if ev.button_index == BUTTON_WHEEL_UP:
-			zoom -= 1.0
-		elif ev.button_index == BUTTON_WHEEL_DOWN:
-			zoom += 1.0
-		if zoom != 0.0:
-			camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
+		if ev.control:
+			if ev.button_index == BUTTON_WHEEL_UP:
+				camera.fov += 1
+			elif ev.button_index == BUTTON_WHEEL_DOWN:
+				camera.fov -= 1
+			else:
+				return
 			update_view()
 			accept_event()
+		else:
+			var zoom = 0.0
+			if ev.button_index == BUTTON_WHEEL_UP:
+				zoom -= 1.0
+			elif ev.button_index == BUTTON_WHEEL_DOWN:
+				zoom += 1.0
+			if zoom != 0.0:
+				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
+				update_view()
+				accept_event()
 	else:
 		__input(ev)
 
@@ -434,8 +444,8 @@ func update_view():
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
 	var mesh_size = 0.5*mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
-	camera.near = max(0.2, 0.5*(cam_to_center-mesh_size))
-	camera.far = 2.0*(cam_to_center+mesh_size)
+	camera.near = max(0.01, 0.9*(cam_to_center-mesh_size))
+	camera.far = 1.1*(cam_to_center+mesh_size)
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
