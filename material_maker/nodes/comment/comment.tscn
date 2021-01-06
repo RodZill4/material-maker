@@ -2,7 +2,6 @@
 
 [ext_resource path="res://material_maker/nodes/comment/comment.gd" type="Script" id=1]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 resource_local_to_scene = true
 content_margin_left = 28.0
@@ -67,6 +66,7 @@ visible = false
 margin_top = 18.0
 margin_right = 221.0
 margin_bottom = 18.0
+focus_mode = 1
 custom_styles/focus = SubResource( 2 )
 custom_styles/normal = SubResource( 2 )
 wrap_enabled = true
@@ -78,11 +78,12 @@ margin_right = 239.0
 margin_bottom = 39.0
 
 [node name="ColorPicker" type="ColorPicker" parent="Popup"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 4.0
-margin_bottom = 4.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 8.0
+margin_bottom = 8.0
 rect_scale = Vector2( 0.75, 0.75 )
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="gui_input" from="VBox/Label" to="." method="_on_Label_gui_input"]
+[connection signal="focus_entered" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_exited"]
