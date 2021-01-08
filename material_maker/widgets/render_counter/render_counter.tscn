@@ -1,17 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://material_maker/widgets/render_counter/render_counter.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
-
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 16, 96, 16, 16 )
-
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 96, 16, 16 )
 
 [node name="RenderCounter" type="HBoxContainer"]
 margin_right = 170.0
@@ -48,21 +37,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Render" type="TextureButton" parent="."]
-margin_left = 158.0
-margin_top = 2.0
-margin_right = 174.0
-margin_bottom = 18.0
-hint_tooltip = "Automated renderer"
-size_flags_vertical = 4
-toggle_mode = true
-pressed = true
-texture_normal = SubResource( 1 )
-texture_pressed = SubResource( 2 )
-
 [node name="PopupMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
 margin_bottom = 20.0
 [connection signal="gui_input" from="." to="." method="_on_RenderCounter_gui_input"]
-[connection signal="toggled" from="Render" to="." method="_on_Render_toggled"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
