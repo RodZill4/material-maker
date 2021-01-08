@@ -1,0 +1,50 @@
+{
+	"name": "default_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"default": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$default",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Default color",
+		"outputs": [
+			{
+				"rgba": "$in($uv)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"name": "default",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}

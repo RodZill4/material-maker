@@ -19,33 +19,45 @@
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2_2",
-			"from_port": 0,
-			"to": "dilate_pass_3",
-			"to_port": 0
-		},
-		{
-			"from": "gen_inputs",
-			"from_port": 1,
-			"to": "dilate_pass_3",
-			"to_port": 1
-		},
-		{
-			"from": "dilate_pass_3",
-			"from_port": 0,
-			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
 			"from": "buffer_2",
 			"from_port": 0,
 			"to": "dilate_pass_4",
 			"to_port": 0
 		},
 		{
+			"from": "dilate_pass_3",
+			"from_port": 0,
+			"to": "buffer_2_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2_2",
+			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 1
+		},
+		{
 			"from": "dilate_pass_4",
 			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 0
+		},
+		{
+			"from": "default_color",
+			"from_port": 0,
 			"to": "buffer_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "default_color",
 			"to_port": 0
 		}
 	],
@@ -72,8 +84,8 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -256.691315,
-				"y": -112.988342
+				"x": -255.691315,
+				"y": -123.988342
 			},
 			"parameters": {
 				"lod": 0,
@@ -91,7 +103,7 @@
 				"param0": 9,
 				"param1": 0.1,
 				"param2": 0,
-				"param3": 1
+				"param3": 0
 			},
 			"type": "remote",
 			"widgets": [
@@ -117,6 +129,10 @@
 						{
 							"node": "dilate_pass_4",
 							"widget": "s"
+						},
+						{
+							"node": "buffer_2_3",
+							"widget": "size"
 						}
 					],
 					"longdesc": "The resolution of the input images",
@@ -198,8 +214,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 216.21106,
-				"y": 23.5186
+				"x": 254.21106,
+				"y": -64.4814
 			},
 			"parameters": {
 
@@ -219,8 +235,8 @@
 		{
 			"name": "buffer_2_2",
 			"node_position": {
-				"x": -36.323547,
-				"y": -68.695679
+				"x": -255.323547,
+				"y": -44.695679
 			},
 			"parameters": {
 				"lod": 0,
@@ -244,8 +260,8 @@
 		{
 			"name": "dilate_pass_3",
 			"node_position": {
-				"x": -27.698792,
-				"y": 24.631012
+				"x": -31.698792,
+				"y": -72.368988
 			},
 			"parameters": {
 				"amount": 0
@@ -260,17 +276,46 @@
 			},
 			"parameters": {
 				"d": 0.1,
-				"distance": 1,
+				"distance": 0,
 				"s": 9
 			},
 			"type": "dilate_pass_2"
+		},
+		{
+			"name": "buffer_2_3",
+			"node_position": {
+				"x": -46.966125,
+				"y": -0.711548
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 9
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "default_color",
+			"node_position": {
+				"x": -469.868713,
+				"y": -98.02066
+			},
+			"parameters": {
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				}
+			},
+			"type": "default_color"
 		}
 	],
 	"parameters": {
 		"param0": 9,
 		"param1": 0.1,
 		"param2": 0,
-		"param3": 1
+		"param3": 0
 	},
 	"shortdesc": "Dilate",
 	"type": "graph"
