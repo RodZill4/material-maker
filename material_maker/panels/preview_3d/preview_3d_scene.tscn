@@ -6,7 +6,6 @@
 
 [sub_resource type="PanoramaSky" id=1]
 resource_local_to_scene = true
-radiance_size = 4
 panorama = ExtResource( 5 )
 
 [sub_resource type="Environment" id=2]

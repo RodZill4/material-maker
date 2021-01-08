@@ -39,7 +39,6 @@ uv1_scale = Vector3( 4, 2, 4 )
 uv1_offset = Vector3( 0, 0.5, 0 )
 
 [sub_resource type="ProceduralSky" id=7]
-radiance_size = 3
 sky_energy = 0.75
 
 [sub_resource type="Environment" id=8]
