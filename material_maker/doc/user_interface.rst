@@ -213,7 +213,13 @@ The *Model* menu can be used to:
 
 * start and stop the object's rotation animation
 
-* generate a mesh normal or inverse UV map (this option is only available for custom meshes)
+* generate the following mesh maps:
+  * Mesh Normal Map: Stores object space normals.
+  * Inverse UV Map: Stores object space positions.
+  * Curvature Map: Stores how curved parts of the object are.
+  * Ambient Occlusion Map: Stores how occluded parts of the object are from itself.
+  * Thickness Map: Stores how thick parts of the object are.
+  These options are only available for custom meshes.
 
 Selecting the *Custom* option in the model list will show a file dialog to select a
 3D model in Wavefront .obj format. The model should have UV information to correctly

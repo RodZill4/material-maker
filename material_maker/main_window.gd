@@ -98,7 +98,10 @@ const DEFAULT_CONFIG = {
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
-	ui_scale = 0
+	ui_scale = 0,
+	bake_ray_count = 64,
+	bake_ao_ray_dist = 128.0,
+	bake_denoise_radius = 3
 }
 
 func _ready() -> void:
