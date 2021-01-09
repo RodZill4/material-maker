@@ -37,3 +37,6 @@ func _on_ImagePicker_pressed():
 	dialog.connect("file_selected", self, "set_image_path")
 	dialog.connect("popup_hide", dialog, "queue_free")
 	dialog.popup_centered()
+
+func on_drop_image_file(file_name : String) -> void:
+	set_image_path(file_name)

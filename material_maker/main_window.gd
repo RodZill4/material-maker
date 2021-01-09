@@ -1026,11 +1026,15 @@ func generate_graph_screenshot():
 
 # Handle dropped files
 
-func get_control_at_position(pos : Vector2, parent : Control) -> Control:
+func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
+	var return_value = []
 	for c in parent.get_children():
 		if c is Control and c.visible and c.get_global_rect().has_point(pos):
-			return get_control_at_position(pos, c)
-	return parent
+			for n in get_controls_at_position(pos, c):
+				return_value.append(n)
+	if return_value.empty():
+		return_value.append(parent)
+	return return_value
 
 func on_files_dropped(files : PoolStringArray, _screen) -> void:
 	var file : File = File.new()
@@ -1046,13 +1050,16 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
-				var control : Control = get_control_at_position(get_global_mouse_position(), self)
-				while control != self:
-					if control.has_method("on_drop_image_file"):
-						control.on_drop_image_file(f)
-						break
-					control = control.get_parent()
-				# graph_edit.do_paste({type="image", image=f})
+				var controls : Array = get_controls_at_position(get_global_mouse_position(), self)
+				while ! controls.empty():
+					var next_controls = []
+					for control in controls:
+						if control.has_method("on_drop_image_file"):
+							control.on_drop_image_file(f)
+							return
+						if control.get_parent() != self:
+							next_controls.append(control.get_parent())
+					controls = next_controls
 
 # Use this to investigate the connect bug
 
