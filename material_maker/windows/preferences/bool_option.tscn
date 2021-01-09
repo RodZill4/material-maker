@@ -6,6 +6,7 @@
 margin_right = 308.0
 margin_bottom = 24.0
 text = "Confirm when quitting the application"
+flat = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

@@ -12,8 +12,9 @@ anchor_right = 0.601
 anchor_bottom = 0.619
 margin_left = 0.440002
 margin_top = 0.240021
-margin_right = -0.280029
-margin_bottom = 0.319977
+margin_right = 33.72
+margin_bottom = 50.32
+rect_min_size = Vector2( 320, 220 )
 popup_exclusive = true
 window_title = "Preferences"
 script = ExtResource( 2 )
@@ -24,47 +25,60 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -2.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
-margin_right = 286.0
-margin_bottom = 142.0
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+margin_right = 316.0
+margin_bottom = 188.0
+rect_min_size = Vector2( 289, 172 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfirmQuit" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
-margin_right = 286.0
+[node name="ConfirmQuit" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
 config_variable = "confirm_quit"
 
-[node name="ConfirmCloseProject" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+[node name="ConfirmCloseProject" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
 margin_top = 28.0
-margin_right = 286.0
 margin_bottom = 52.0
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
-[node name="Space1" type="Control" parent="VBoxContainer/VBoxContainer2"]
+[node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
 margin_top = 56.0
-margin_right = 286.0
+margin_right = 308.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2"]
+[node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 margin_top = 70.0
-margin_right = 286.0
+margin_right = 308.0
 margin_bottom = 94.0
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer2/GuiScale"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/GuiScale"]
 margin_top = 5.0
 margin_right = 116.0
 margin_bottom = 19.0
 text = " UI Scale (0=auto):"
 
-[node name="GuiScale" parent="VBoxContainer/VBoxContainer2/GuiScale" instance=ExtResource( 3 )]
+[node name="GuiScale" parent="VBoxContainer/TabContainer/General/GuiScale" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -77,30 +91,116 @@ step = 0.01
 float_only = true
 config_variable = "ui_scale"
 
-[node name="Space2" type="Control" parent="VBoxContainer/VBoxContainer2"]
+[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
 margin_top = 98.0
-margin_right = 286.0
+margin_right = 308.0
 margin_bottom = 108.0
 rect_min_size = Vector2( 0, 10 )
 
-[node name="EnableVSync" parent="VBoxContainer/VBoxContainer2" instance=ExtResource( 1 )]
+[node name="EnableVSync" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
 margin_top = 112.0
-margin_right = 286.0
 margin_bottom = 136.0
 text = "Enable VSync"
 config_variable = "vsync"
 
+[node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+columns = 2
+
+[node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+margin_top = 5.0
+margin_right = 100.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( -266.571, 61 )
+text = "Ray count:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RayCount" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 104.0
+margin_right = 162.0
+margin_bottom = 24.0
+rect_pivot_offset = Vector2( -336.571, 66 )
+value = 64.0
+min_value = 8.0
+max_value = 256.0
+step = 1.0
+float_only = true
+config_variable = "bake_ray_count"
+
+[node name="LabelRayLength" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+margin_top = 33.0
+margin_right = 100.0
+margin_bottom = 47.0
+rect_pivot_offset = Vector2( -266.571, 61 )
+text = "Ray length:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RayLength" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 104.0
+margin_top = 28.0
+margin_right = 162.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( -336.571, 66 )
+value = 128.0
+min_value = 32.0
+max_value = 1024.0
+step = 1.0
+float_only = true
+config_variable = "bake_ao_ray_dist"
+
+[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+margin_top = 61.0
+margin_right = 100.0
+margin_bottom = 75.0
+rect_pivot_offset = Vector2( -266.571, 61 )
+text = "Denoise radius:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DenoiseRadius" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 104.0
+margin_top = 56.0
+margin_right = 162.0
+margin_bottom = 80.0
+rect_pivot_offset = Vector2( -336.571, 66 )
+value = 3.0
+min_value = 1.0
+max_value = 10.0
+step = 1.0
+float_only = true
+config_variable = "bake_denoise_radius"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 146.0
-margin_right = 286.0
-margin_bottom = 146.0
+margin_top = 192.0
+margin_right = 316.0
+margin_bottom = 192.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 98.0
-margin_top = 150.0
-margin_right = 286.0
-margin_bottom = 170.0
+margin_left = 128.0
+margin_top = 196.0
+margin_right = 316.0
+margin_bottom = 216.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]
