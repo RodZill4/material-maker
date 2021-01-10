@@ -113,6 +113,11 @@ size_flags_horizontal = 3
 margin_top = 321.0
 margin_right = 248.0
 margin_bottom = 353.0
+
+[node name="ContextMenu" type="PopupMenu" parent="."]
+margin_right = 20.0
+margin_bottom = 20.0
+items = [ "Load Reference", null, 0, false, false, 0, 0, null, "", false, "Remove Reference", null, 0, false, false, 1, 0, null, "", false ]
 [connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
 [connection signal="resized" from="VBoxContainer/Image" to="." method="_on_Image_resized"]
 [connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Prev" to="." method="change_image" binds= [ -1 ]]
@@ -123,3 +128,5 @@ margin_bottom = 353.0
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot4" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot5" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/GradientSlot" to="." method="select_slot"]
+[connection signal="about_to_show" from="ContextMenu" to="." method="_on_ContextMenu_about_to_show"]
+[connection signal="index_pressed" from="ContextMenu" to="." method="_on_ContextMenu_index_pressed"]

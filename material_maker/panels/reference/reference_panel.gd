@@ -33,8 +33,6 @@ func get_color_under_cursor() -> Color:
 	return c
 
 func _on_Image_gui_input(event) -> void:
-	if current_image < 0:
-		return
 	var m : ShaderMaterial = $VBoxContainer/Image.material
 	var canvas_size : Vector2 = $VBoxContainer/Image.get_size()
 	var image_size : Vector2 = m.get_shader_param("image_size")
@@ -63,6 +61,8 @@ func _on_Image_gui_input(event) -> void:
 				new_scale = max(new_scale-0.05, 0.05)
 			elif event.button_index == BUTTON_MIDDLE:
 				dragging = true
+			elif event.button_index == BUTTON_RIGHT:
+				$ContextMenu.popup(Rect2(get_global_mouse_position(), $ContextMenu.get_minimum_size()))
 			if new_scale != scale:
 				images[current_image].scale = new_scale
 				m.set_shader_param("scale", images[current_image].scale)
@@ -118,3 +118,30 @@ func change_image(offset = 0):
 	m.set_shader_param("image_size", t.get_data().get_size())
 	m.set_shader_param("scale", i.scale)
 	m.set_shader_param("center", i.center)
+
+
+func _on_ContextMenu_about_to_show():
+	$ContextMenu.set_item_disabled(1, images.empty())
+
+func _on_ContextMenu_index_pressed(index):
+	match index:
+		0:
+			var dialog = FileDialog.new()
+			add_child(dialog)
+			dialog.rect_min_size = Vector2(500, 500)
+			dialog.access = FileDialog.ACCESS_FILESYSTEM
+			dialog.mode = FileDialog.MODE_OPEN_FILE
+			dialog.add_filter("*.bmp;BMP Image")
+			dialog.add_filter("*.exr;EXR Image")
+			dialog.add_filter("*.hdr;Radiance HDR Image")
+			dialog.add_filter("*.jpg,*.jpeg;JPEG Image")
+			dialog.add_filter("*.png;PNG Image")
+			dialog.add_filter("*.svg;SVG Image")
+			dialog.add_filter("*.tga;TGA Image")
+			dialog.add_filter("*.webp;WebP Image")
+			dialog.connect("file_selected", self, "on_drop_image_file")
+			dialog.connect("popup_hide", dialog, "queue_free")
+			dialog.popup_centered()
+		1:
+			images.remove(current_image)
+			change_image(0)
