@@ -39,4 +39,5 @@ physics_object_picking = true
 
 [node name="ObjLoader" type="Node" parent="."]
 script = ExtResource( 3 )
+
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

@@ -7,6 +7,7 @@ margin_right = 95.0
 margin_bottom = 58.0
 window_title = "Alerte !"
 script = ExtResource( 1 )
+
 [connection signal="confirmed" from="." to="." method="_on_AcceptDialog_confirmed"]
 [connection signal="custom_action" from="." to="." method="_on_AcceptDialog_custom_action"]
 [connection signal="popup_hide" from="." to="." method="_on_AcceptDialog_popup_hide"]
