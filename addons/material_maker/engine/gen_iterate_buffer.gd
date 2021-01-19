@@ -13,6 +13,11 @@ var updating : bool = false
 var update_again : bool = false
 var current_iteration : int = 0
 
+var current_renderer = null
+var is_pending : bool = false
+
+var pending_textures = [[], []]
+
 func _ready() -> void:
 	texture.flags = Texture.FLAG_REPEAT
 	material = ShaderMaterial.new()
@@ -22,6 +27,10 @@ func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 9
 	add_to_group("preview")
+
+func _exit_tree() -> void:
+	if current_renderer != null:
+		current_renderer.release(self)
 
 func get_type() -> String:
 	return "iterate_buffer"
@@ -71,7 +80,15 @@ func update_shader(input_port_index : int) -> void:
 	if source.has("textures"):
 		for k in source.textures.keys():
 			m.set_shader_param(k, source.textures[k])
-	update_buffer()
+	if source.has("pending_textures"):
+		pending_textures[input_port_index] = source.pending_textures
+	else:
+		pending_textures[input_port_index] = []
+	if pending_textures[input_port_index].empty():
+		update_buffer()
+	elif ! is_pending:
+		mm_renderer.add_pending_request()
+		is_pending = true
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
@@ -83,29 +100,35 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var do_update : bool = false
 	if parameter_changes.has("p_o%s_iterations" % str(get_instance_id())):
 		do_update = true
-	for m in [ material, loop_material ]:
-		for n in parameter_changes.keys():
-			for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-				if p.name == n:
-					m.set_shader_param(n, parameter_changes[n])
-					do_update = true
-					break
-	if do_update:
-		current_iteration = 0
-		update_buffer()
+	for i in range(2):
+		var m : Material = [ material, loop_material ][i]
+		if mm_renderer.update_float_parameters(m, parameter_changes):
+			update_again = true
+			if i == 0:
+				current_iteration = 0
+			if pending_textures[i].empty():
+				update_buffer()
 
 func on_texture_changed(n : String) -> void:
-	for m in [ material, loop_material ]:
-		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-			if p.name == n:
-				update_buffer()
-				return
+	for i in range(2):
+		pending_textures[i].erase(n)
+		if pending_textures[i].empty():
+			var m : Material = [ material, loop_material ][i]
+			for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
+				if p.name == n:
+					if i == 0:
+						current_iteration = 0
+					update_buffer()
+					return
 
 func update_buffer() -> void:
 	update_again = true
 	if !updating:
 		updating = true
 		while update_again:
+			if is_pending:
+				mm_renderer.remove_pending_request()
+				is_pending = false
 			var renderer = mm_renderer.request(self)
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
@@ -116,10 +139,14 @@ func update_buffer() -> void:
 				renderer = renderer.render_material(self, loop_material, pow(2, get_parameter("size")))
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
+			if renderer == null:
+				return
+			current_renderer = renderer
 			if !update_again:
 				renderer.copy_to_texture(texture)
 				texture.flags = 0
 			renderer.release(self)
+			current_renderer = null
 		updating = false
 		if current_iteration < get_parameter("iterations"):
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
@@ -128,7 +155,10 @@ func update_buffer() -> void:
 		current_iteration += 1
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
-	return _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
+	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
+	if updating or update_again:
+		shader_code.pending_textures = shader_code.textures.keys()
+	return shader_code
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "iterate_buffer"

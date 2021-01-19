@@ -82,13 +82,6 @@ func update_shader() -> void:
 		is_pending = true
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	var do_update : bool = false
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-			if p.name == n:
-				material.set_shader_param(n, parameter_changes[n])
-				do_update = true
-				break
 	if mm_renderer.update_float_parameters(material, parameter_changes):
 		update_again = true
 		if pending_textures.empty():
@@ -123,6 +116,7 @@ func update_buffer() -> void:
 				renderer = yield(renderer, "completed")
 			if !update_again:
 				renderer.copy_to_texture(texture)
+				texture.flags = Texture.FLAG_REPEAT
 			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
 			current_renderer = null

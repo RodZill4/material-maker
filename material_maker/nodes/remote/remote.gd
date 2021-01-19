@@ -146,6 +146,8 @@ func on_parameter_changed(p, v) -> void:
 		update_node()
 	else:
 		.on_parameter_changed(p, v)
+		if generator.name == "gen_parameter" and generator.get_parent() is MMGenBase:
+			generator.get_parent().set_parameter(p, v)
 
 func on_enter_widget(widget) -> void:
 	var w = generator.get_widget(widget.name)
