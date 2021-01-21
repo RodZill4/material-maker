@@ -86,7 +86,11 @@ func update_shader(input_port_index : int) -> void:
 		pending_textures[input_port_index] = []
 	if pending_textures[input_port_index].empty():
 		update_buffer()
-	elif ! is_pending:
+	else:
+		set_pending()
+
+func set_pending() -> void:
+	if ! is_pending:
 		mm_renderer.add_pending_request()
 		is_pending = true
 
@@ -104,8 +108,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 		var m : Material = [ material, loop_material ][i]
 		if mm_renderer.update_float_parameters(m, parameter_changes):
 			update_again = true
-			if i == 0:
-				current_iteration = 0
+			current_iteration = 0
 			if pending_textures[i].empty():
 				update_buffer()
 
@@ -120,6 +123,17 @@ func on_texture_changed(n : String) -> void:
 						current_iteration = 0
 					update_buffer()
 					return
+
+func on_texture_invalidated(n : String) -> void:
+	for i in range(2):
+		var m : Material = [ material, loop_material ][i]
+		if mm_renderer.material_has_parameter(m, n):
+			if pending_textures[i].empty():
+				get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+				get_tree().call_group("preview", "on_texture_invalidated", "o%s_loop_tex" % str(get_instance_id()))
+				set_pending()
+			if pending_textures[i].find(n) == -1:
+				pending_textures[i].push_back(n)
 
 func update_buffer() -> void:
 	update_again = true

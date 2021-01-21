@@ -77,24 +77,34 @@ func update_shader() -> void:
 		pending_textures = []
 	if pending_textures.empty():
 		update_buffer()
-	elif ! is_pending:
+	else:
+		set_pending()
+
+func set_pending() -> void:
+	if ! is_pending:
 		mm_renderer.add_pending_request()
 		is_pending = true
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	if mm_renderer.update_float_parameters(material, parameter_changes):
 		update_again = true
+		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
 		if pending_textures.empty():
 			update_buffer()
 
 func on_texture_changed(n : String) -> void:
 	pending_textures.erase(n)
-	if pending_textures.empty():
-		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-			if p.name == n:
-				update_again = true
-				update_buffer()
-				return
+	if pending_textures.empty() and mm_renderer.material_has_parameter(material, n):
+		update_again = true
+		update_buffer()
+
+func on_texture_invalidated(n : String) -> void:
+	if mm_renderer.material_has_parameter(material, n):
+		if pending_textures.empty():
+			get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+			set_pending()
+		if pending_textures.find(n) == -1:
+			pending_textures.push_back(n)
 
 func update_buffer() -> void:
 	if !updating:
@@ -116,7 +126,7 @@ func update_buffer() -> void:
 				renderer = yield(renderer, "completed")
 			if !update_again:
 				renderer.copy_to_texture(texture)
-				texture.flags = Texture.FLAG_REPEAT
+				#texture.flags = Texture.FLAG_REPEAT
 			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
 			current_renderer = null
