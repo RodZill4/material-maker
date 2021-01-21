@@ -10,7 +10,7 @@ corner_radius_top_left = 4
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 64, 96, 32, 32 )
+region = Rect2( 64, 96, 26, 26 )
 
 [node name="Minimap" type="Panel"]
 modulate = Color( 1, 1, 1, 0.85 )
