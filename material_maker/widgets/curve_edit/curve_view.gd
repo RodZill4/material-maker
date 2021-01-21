@@ -17,11 +17,16 @@ func reverse_transform_point(p : Vector2) -> Vector2:
 	return Vector2(0.0, 1.0)+Vector2(1.0, -1.0)*p/rect_size
 
 func _draw():
+	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var bg = current_theme.get_stylebox("panel", "Panel").bg_color
+	var fg = current_theme.get_color("font_color", "Label")
+	var axes_color : Color = bg.linear_interpolate(fg, 0.25)
+	var curve_color : Color = bg.linear_interpolate(fg, 0.75)
 	if show_axes:
 		for i in range(5):
 			var p = transform_point(0.25*Vector2(i, i))
-			draw_line(Vector2(p.x, 0), Vector2(p.x, rect_size.y-1), Color(0.25, 0.25, 0.25))
-			draw_line(Vector2(0, p.y), Vector2(rect_size.x-1, p.y), Color(0.25, 0.25, 0.25))
+			draw_line(Vector2(p.x, 0), Vector2(p.x, rect_size.y-1), axes_color)
+			draw_line(Vector2(0, p.y), Vector2(rect_size.x-1, p.y), axes_color)
 	for i in range(curve.points.size()-1):
 		var p1 = curve.points[i].p
 		var p2 = curve.points[i+1].p
@@ -39,7 +44,7 @@ func _draw():
 			var t3 = t2 * t
 			var x = p1.x+(p2.x-p1.x)*t
 			var np = transform_point(Vector2(x, p1.y*omt3 + yac*omt2*t*3.0 + ybc*omt*t2*3.0 + p2.y*t3))
-			draw_line(p, np, Color(1.0, 1.0, 1.0))
+			draw_line(p, np, curve_color)
 			p = np
 
 func _on_resize() -> void:

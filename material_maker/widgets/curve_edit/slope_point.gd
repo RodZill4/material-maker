@@ -10,7 +10,9 @@ func _ready():
 	pass # Replace with function body.
 
 func _draw():
-	draw_circle(Vector2(3.0, 3.0), 3.0, Color(1.0, 1.0, 1.0))
+	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var color : Color = current_theme.get_color("font_color", "Label")
+	draw_circle(Vector2(3.0, 3.0), 3.0, color)
 
 func _on_ControlPoint_gui_input(event):
 	if event is InputEventMouseButton:

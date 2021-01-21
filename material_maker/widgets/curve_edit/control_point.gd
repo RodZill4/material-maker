@@ -16,10 +16,12 @@ func _ready():
 	pass # Replace with function body.
 
 func _draw():
+	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var color : Color = current_theme.get_color("font_color", "Label")
 	for c in get_children():
 		if c.visible:
-			draw_line(OFFSET, c.rect_position+OFFSET, Color(0.5, 0.5, 0.5))
-	draw_rect(Rect2(0, 0, 7, 7), Color(1.0, 1.0, 1.0))
+			draw_line(OFFSET, c.rect_position+OFFSET, color)
+	draw_rect(Rect2(0, 0, 7, 7), color)
 
 func initialize(p : MMCurve.Point) -> void:
 	rect_position = get_parent().transform_point(p.p)-OFFSET
