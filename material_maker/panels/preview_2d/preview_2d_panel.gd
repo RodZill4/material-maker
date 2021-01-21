@@ -1,17 +1,15 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
-
 var center : Vector2 = Vector2(0.5, 0.5)
 var scale : float = 1.2
-
 
 func _ready():
 	update_shader_options()
 	update_export_menu()
  
 func set_generator(g : MMGenBase, o : int = 0) -> void:
-	center = Vector2(0.5, 0.5)
-	scale = 1.2
+	#center = Vector2(0.5, 0.5)
+	#scale = 1.2
 	.set_generator(g, o)
 	setup_controls()
 	update_shader_options()
