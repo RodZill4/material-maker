@@ -272,11 +272,6 @@ file_logging/log_path=""
 
 limits/message_queue/max_size_kb=16384
 
-[network]
-
-limits/websocket_server/max_in_buffer_kb=1024
-limits/websocket_server/max_out_buffer_kb=1024
-
 [rendering]
 
 environment/default_environment="res://default_env.tres"

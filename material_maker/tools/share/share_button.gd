@@ -4,6 +4,9 @@ var websocket_server : WebSocketServer
 var websocket_port : int
 var websocket_id : int = -1
 
+var is_multipart : bool = false
+var multipart_message : String = ""
+
 func _ready():
 	set_process(false)
 
@@ -65,6 +68,7 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/link.tres")
 		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
 		$SendButton.disabled = true
+		is_multipart = false
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
@@ -79,7 +83,22 @@ func bring_to_top() -> void:
 	OS.set_window_always_on_top(is_always_on_top)
 
 func _on_data_received(id: int) -> void:
-	var json = JSON.parse(websocket_server.get_peer(id).get_packet().get_string_from_utf8())
+	var message = websocket_server.get_peer(id).get_packet().get_string_from_utf8()
+	if is_multipart:
+		if message == "%MULTIPART_END%":
+			is_multipart = false
+			process_message(multipart_message)
+		else:
+			multipart_message += message
+	elif message == "%MULTIPART_BEGIN%":
+		is_multipart = true
+		multipart_message = ""
+	else:
+		process_message(message)
+
+func process_message(message : String) -> void:
+	print("received message (%d)" % message.length())
+	var json = JSON.parse(message)
 	if json.error == OK:
 		var data = json.result
 		match data.action:
@@ -103,3 +122,6 @@ func _on_data_received(id: int) -> void:
 					return
 				project_panel.set_brush(JSON.parse(data.json).result)
 				bring_to_top()
+	else:
+		print("Incorrect JSON")
+	
