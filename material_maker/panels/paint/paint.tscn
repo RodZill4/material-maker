@@ -217,7 +217,7 @@ margin_left = 36.0
 margin_right = 68.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Freehand (F1)"
+hint_tooltip = "Freehand line (F2)"
 size_flags_horizontal = 0
 size_flags_vertical = 0
 toggle_mode = true
@@ -231,7 +231,7 @@ margin_left = 72.0
 margin_right = 104.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Lines (F2)"
+hint_tooltip = "Lines (F3)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 13 )
@@ -243,7 +243,7 @@ margin_left = 108.0
 margin_right = 140.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Fill (F3)"
+hint_tooltip = "Fill (F4)"
 shortcut_in_tooltip = false
 shortcut = SubResource( 17 )
 texture_normal = SubResource( 18 )
@@ -256,6 +256,7 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="ColorPicker" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+visible = false
 margin_left = 153.0
 margin_right = 185.0
 margin_bottom = 32.0
@@ -267,14 +268,15 @@ texture_normal = SubResource( 22 )
 texture_pressed = SubResource( 23 )
 
 [node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
-margin_left = 189.0
-margin_right = 194.0
+visible = false
+margin_left = 153.0
+margin_right = 158.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
 [node name="Eraser" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 198.0
-margin_right = 230.0
+margin_left = 153.0
+margin_right = 185.0
 margin_bottom = 32.0
 hint_tooltip = "Toggler Eraser Mode (E)"
 toggle_mode = true
@@ -400,6 +402,7 @@ __meta__ = {
 }
 
 [node name="Debug" type="Control" parent="VSplitContainer/Painter"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
