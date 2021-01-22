@@ -246,7 +246,9 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
+	
+	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
+		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
 	for i in menu_def.size():
 		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
 			continue
@@ -291,7 +293,8 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				menu.add_child(submenu)
 				menu.add_submenu_item(submenu_name, submenu.get_name())
 				submenus[submenu_name] = submenu
-	menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
+	if !menu.is_connected("about_to_show", self, "on_menu_about_to_show"):
+		menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
 	return menu
 
 func on_menu_id_pressed(id, menu_def, object) -> void:
