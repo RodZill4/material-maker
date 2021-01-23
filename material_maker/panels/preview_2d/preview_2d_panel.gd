@@ -5,8 +5,17 @@ var scale : float = 1.2
 
 func _ready():
 	update_shader_options()
+	update_axes_menu()
 	update_export_menu()
  
+func update_axes_menu() -> void:
+	$ContextMenu/Axes.clear()
+	for s in $Axes.STYLES:
+		$ContextMenu/Axes.add_item(s)
+	$ContextMenu/Axes.add_separator()
+	$ContextMenu/Axes.add_item("Change color", 1000)
+	$ContextMenu.add_submenu_item("Axes", "Axes")
+
 func set_generator(g : MMGenBase, o : int = 0) -> void:
 	#center = Vector2(0.5, 0.5)
 	#scale = 1.2
@@ -37,7 +46,7 @@ func on_resized() -> void:
 	material.set_shader_param("center", center)
 	material.set_shader_param("scale", scale)
 	setup_controls()
-	$Lines.update()
+	$Axes.update()
 
 var dragging : bool = false
 
@@ -84,3 +93,15 @@ func _on_ContextMenu_id_pressed(id) -> void:
 		_:
 			print("unsupported id "+str(id))
 
+func _on_Axes_id_pressed(id):
+	if id == 1000:
+		var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instance()
+		add_child(color_picker_popup)
+		var color_picker = color_picker_popup.get_node("ColorPicker")
+		color_picker.color = $Axes.color
+		color_picker.connect("color_changed", $Axes, "set_color")
+		color_picker_popup.rect_position = get_global_mouse_position()
+		color_picker_popup.connect("popup_hide", color_picker_popup, "queue_free")
+		color_picker_popup.popup()
+	else:
+		$Axes.style = id
