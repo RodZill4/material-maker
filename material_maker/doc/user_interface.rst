@@ -18,3 +18,5 @@ User interface
    user_interface_layers_panel
    user_interface_parameters_panel
    user_interface_main_menu
+   user_interface_sharing
+   user_interface_performance

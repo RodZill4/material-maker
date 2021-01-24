@@ -18,6 +18,8 @@ The 2D preview panel has a context menu that can be used to:
 
 * reset the preview zoom and position
 
+* select the style and color of axes displayed on top of the preview
+
 * export the previewed texture to a file
 
 * render the previewed texture and add it to the References panel

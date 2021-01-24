@@ -98,7 +98,7 @@ Tools menu
   on the disk and save a screenshot of the whole current graph (it will automatically
   pan the graph to create the screenshot).
 
-* *Add selected node to user library* is only visible when the current
+* *Add current to user library* is only visible when the current
   project is a paint project. It first prompts for an item name. If a name is entered and
   confirmed, the current brush will be added to the user brush library under
   that name. The user library is saved automatically.

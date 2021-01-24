@@ -8,7 +8,7 @@ Each layer has Albedo, Metallic, Roughness, Emission and Depth information. The 
 material is a combination of all layers, applied from bottom to top.
 
 This panel has a tool bar that can be used to create, duplicate, delete, reorder and
-configure layers. Configuring a layer consists in defining an alpha value for each
+configure layers. Configuring a layer consists in defining a transparency level for each
 component of the layer.
 
 Layers can also be dragged and dropped in the tree view, and can also be hidden.

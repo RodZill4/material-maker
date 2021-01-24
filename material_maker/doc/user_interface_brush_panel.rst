@@ -11,3 +11,6 @@ give focus to the search field using the **Control+F** keyboard shortcut.
 
 .. image:: images/brush_panel.png
   :align: center
+
+The base library provides a minimal set of brushes that can be used as examples
+to create new brushes. Brushes can also be shared on the Material Maker website.
