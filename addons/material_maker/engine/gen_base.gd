@@ -50,9 +50,15 @@ func _post_load() -> void:
 	pass
 
 func get_hier_name() -> String:
-	if get_parent().is_class("MMGenBase"):
-		return get_parent().get_hier_name()+"/"+name
-	return name
+	var type = load("res://addons/material_maker/engine/gen_base.gd")
+	var rv = name
+	var object = get_parent()
+	print(object.get_script().resource_path)
+	while object is type:
+		rv = object.name+"/"+rv
+		object = object.get_parent()
+		print(object.get_script().resource_path)
+	return rv
 
 func accept_float_expressions() -> bool:
 	return true
@@ -73,7 +79,7 @@ func is_editable() -> bool:
 	return false
 
 func get_description() -> String:
-	return ""
+	return name
 
 func has_randomness() -> bool:
 	return false
@@ -107,6 +113,8 @@ func init_parameters() -> void:
 				print("No default value for parameter "+p.name)
 
 func set_position(p) -> void:
+	if position == p:
+		return
 	position = p
 	if has_randomness() and !is_seed_locked() and is_inside_tree():
 		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
