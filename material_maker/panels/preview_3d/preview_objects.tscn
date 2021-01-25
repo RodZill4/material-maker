@@ -40,7 +40,7 @@ visible = false
 mesh = SubResource( 3 )
 material/0 = null
 script = ExtResource( 3 )
-uv_scale = Vector2( 2, 2 )
+uv_scale = Vector2( 4, 2 )
 
 [node name="Prism" type="MeshInstance" parent="."]
 visible = false
