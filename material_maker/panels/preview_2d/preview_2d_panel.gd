@@ -43,8 +43,8 @@ func update_shader_options() -> void:
 
 func on_resized() -> void:
 	.on_resized()
-	material.set_shader_param("center", center)
-	material.set_shader_param("scale", scale)
+	material.set_shader_param("preview_2d_center", center)
+	material.set_shader_param("preview_2d_scale", scale)
 	setup_controls()
 	$Axes.update()
 

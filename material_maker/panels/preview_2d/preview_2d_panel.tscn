@@ -49,13 +49,13 @@ margin_right = -758.0
 margin_bottom = -267.0
 rect_min_size = Vector2( 200, 200 )
 script = ExtResource( 4 )
-shader = "uniform vec2 size = vec2(100.0, 100.0);
-uniform float scale = 1.2;
-uniform vec2 center = vec2(0.5);
+shader = "uniform vec2 preview_2d_size = vec2(100.0);
+uniform float preview_2d_scale = 1.2;
+uniform vec2 preview_2d_center = vec2(0.5);
 
 void fragment() {
-	vec2 ratio = size;
-	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	vec4 image = preview_2d(uv);
 	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);

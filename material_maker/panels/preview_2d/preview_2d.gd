@@ -71,7 +71,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 				break
 
 func on_resized() -> void:
-	material.set_shader_param("size", rect_size)
+	material.set_shader_param("preview_2d_size", rect_size)
 
 func _on_Export_id_pressed(id : int):
 	var dialog = FileDialog.new()

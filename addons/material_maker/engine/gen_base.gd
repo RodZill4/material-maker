@@ -112,8 +112,8 @@ func init_parameters() -> void:
 			else:
 				print("No default value for parameter "+p.name)
 
-func set_position(p) -> void:
-	if position == p:
+func set_position(p, force_recalc_seed = false) -> void:
+	if !force_recalc_seed && position == p:
 		return
 	position = p
 	if has_randomness() and !is_seed_locked() and is_inside_tree():
