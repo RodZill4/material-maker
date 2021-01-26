@@ -66,7 +66,7 @@ margin_right = 1268.0
 margin_bottom = 22.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 991.0
+margin_right = 1011.0
 margin_bottom = 22.0
 size_flags_horizontal = 3
 
@@ -78,12 +78,12 @@ items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load ma
 switch_on_hover = true
 
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
-margin_left = 995.0
-margin_right = 1082.0
+margin_left = 1015.0
+margin_right = 1102.0
 margin_bottom = 22.0
 
 [node name="RenderCounter" parent="VBoxContainer/TopBar" instance=ExtResource( 11 )]
-margin_left = 1086.0
+margin_left = 1106.0
 margin_right = 1268.0
 margin_bottom = 22.0
 
@@ -144,13 +144,13 @@ visible = false
 material = SubResource( 2 )
 margin_right = 0.0
 margin_bottom = 0.0
-shader = "uniform vec2 size = vec2(100.0, 100.0);
-const float scale = 1.2;
-const vec2 center = vec2(0.5);
+shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
+const float preview_2d_scale = 1.2;
+const vec2 preview_2d_center = vec2(0.5);
 
 void fragment() {
-	vec2 ratio = size;
-	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	vec4 image = preview_2d(uv);
 	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
