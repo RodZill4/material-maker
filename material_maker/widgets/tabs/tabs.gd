@@ -56,7 +56,7 @@ func check_save_tab(tab) -> bool:
 			result = yield(result, "completed")
 		match result:
 			"ok":
-				var status = main_window.save_material(tab_control)
+				var status = main_window.save_project(tab_control)
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 				if !status:
