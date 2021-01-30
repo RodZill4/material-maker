@@ -789,6 +789,14 @@
 			"type": "tex3d_apply"
 		},
 		{
+			"icon": "3d_texture_apply_toinvuvmap",
+			"name": "tex3d_apply_invuvmap",
+			"parameters": {
+			},
+			"tree_item": "3D/Texture/Apply/ToInvUvMap",
+			"type": "tex3d_apply_invuvmap"
+		},
+		{
 			"icon": "3d_texture_select",
 			"name": "tex3d_select",
 			"parameters": {
@@ -2476,6 +2484,18 @@
 			},
 			"tree_item": "Transform/CircleSplatter/Color",
 			"type": "circle_splatter_color"
+		},
+		{
+			"icon": "transform_warpdilation",
+			"name": "warp_dilation",
+			"parameters": {
+				"a": 0,
+				"d": 0.5,
+				"mode": 0,
+				"s": 9
+			},
+			"tree_item": "Transform/WarpDilation",
+			"type": "warp_dilation"
 		},
 		{
 			"icon": "workflow_createmap",

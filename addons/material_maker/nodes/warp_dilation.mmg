@@ -1,0 +1,108 @@
+{
+	"name": "warp_dilation",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 0,
+		"d": 0.5,
+		"mode": 0,
+		"s": 9
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The height map whose contours or slopes are followed",
+				"name": "hm",
+				"shortdesc": "Height map",
+				"type": "f"
+			}
+		],
+		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\tfloat dx = $hm(fract(uv+vec2(epsilon, 0.0)))-$hm(fract(uv-vec2(epsilon, 0.0)));\n\tfloat dy = $hm(fract(uv+vec2(0.0, epsilon)))-$hm(fract(uv-vec2(0.0, epsilon)));\n\treturn vec2($mode);\n}\n\nfloat $(name)_dilate(vec2 uv, vec2 slope) {\n\tfloat e = 1.0/$s;\n\tfloat v = 0.0;\n\tfor (float x = 0.0; x <= $d; x += e) {\n\t\tv = max(v, $in(fract(uv))*(1.0-x/$d*$a));\n\t\tuv += e*normalize($(name)_slope(uv, 0.0001));\n\t}\n\treturn v;\n}",
+		"longdesc": "Dilates its input following the contours or slope of an input heightmap",
+		"name": "Warp Dilation",
+		"outputs": [
+			{
+				"f": "$(name)_dilate($uv, normalize($(name)_slope($uv, 0.001)))",
+				"longdesc": "The dilated image",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "Mode",
+				"longdesc": "The dilate mode (clockwise contour, counter clockwise contour or slope)",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Contour (cw)",
+						"value": "-dy,dx"
+					},
+					{
+						"name": "Contour (ccw)",
+						"value": "dy, -dx"
+					},
+					{
+						"name": "Slope",
+						"value": "dx,dy"
+					}
+				]
+			},
+			{
+				"default": 9,
+				"first": 6,
+				"label": "Resolution",
+				"last": 12,
+				"longdesc": "The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher)",
+				"name": "s",
+				"shortdesc": "Resolution",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Distance",
+				"longdesc": "The distance along which the contours or slopes are followed",
+				"max": 0.5,
+				"min": 0,
+				"name": "d",
+				"shortdesc": "Distance",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Attenuation",
+				"longdesc": "The attenuation applied along the path",
+				"max": 1,
+				"min": 0,
+				"name": "a",
+				"shortdesc": "Attenuation",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Warp Dilation"
+	},
+	"type": "shader"
+}
