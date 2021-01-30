@@ -40,7 +40,7 @@ func _draw() -> void:
 	var inputs = generator.get_input_defs()
 	var font : Font = get_font("default_font")
 	var scale = get_global_transform().get_scale()
-	if generator != null and generator.model == null:
+	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		draw_texture_rect(preload("res://material_maker/icons/custom.png"), Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
