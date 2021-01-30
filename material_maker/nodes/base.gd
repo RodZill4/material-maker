@@ -29,16 +29,19 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	get_parent().call_deferred("check_last_selected")
 
+
 func _draw() -> void:
+	var color : Color = get_color("title_color")
 	var icon = preload("res://material_maker/icons/minimize.tres")
-	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
+	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
 	if generator != null and generator.has_randomness():
 		icon = preload("res://material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://material_maker/icons/randomness_unlocked.tres")
 		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
-	var color : Color = get_color("title_color")
 	var inputs = generator.get_input_defs()
 	var font : Font = get_font("default_font")
 	var scale = get_global_transform().get_scale()
+	if generator != null and generator.model == null:
+		draw_texture_rect(preload("res://material_maker/icons/custom.png"), Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
 			var conn_pos1 = get_connection_input_position(i)
