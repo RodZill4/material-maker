@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Common properties of nodes &mdash; Material Maker  documentation</title>
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -51,7 +54,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
+            <a href="index.html" class="icon icon-home"> Material Maker
           
 
           
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                0.93
+                0.94
               </div>
             
           
@@ -147,6 +150,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -160,7 +165,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
     
@@ -225,6 +230,7 @@ drop down list boxes.</p></li>
 <li><p><strong>gradient</strong> parameters are edited in dedicated editor widgets. Cursors can be added by
 double-clicking in the lower part of the widget, dragged left and right using the left
 mouse button, and removed using the right mouse button.</p>
+<img alt="_images/gradient_editor.png" class="align-center" src="_images/gradient_editor.png" />
 <p>The drop down list box can be used to select one of the 4 interpolation options.</p>
 <p>Double clicking in the upper part of the gradient editor will open a larger version of the
 widget to move cursors mode precisely.</p>
@@ -232,8 +238,24 @@ widget to move cursors mode precisely.</p>
 another to duplicate the gradient parameter, or from any <strong>Colorize</strong> node variant in the
 library to a gradient editor widget.</p>
 </li>
+<li><p><strong>curve</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
+the parameter.</p>
+<a class="reference internal image-reference" href="_images/curve_editor.png"><img alt="_images/curve_editor.png" class="align-center" src="_images/curve_editor.png" style="width: 314.0px; height: 210.5px;" /></a>
+<p>The curve is defined by its control points that define their value and left and right slopes
+for given abscissas. Control points (as well as slope control points) can be grabbed and moved
+using the left mouse button.</p>
+<p>New control points can be added by double-clicking in the editor, and control points can be
+removed using the right mouse button.</p>
+</li>
+<li><p><strong>polygon</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
+the parameter.</p>
+<a class="reference internal image-reference" href="_images/polygon_editor.png"><img alt="_images/polygon_editor.png" class="align-center" src="_images/polygon_editor.png" style="width: 233.5px; height: 262.5px;" /></a>
+<p>The polygon parameter is defined by its vertices that can be grabbed and moved using the left
+mouse button.</p>
+<p>New vertices can be created by double-clicking in the editor (when created, a new vertex will
+be used to split the closest edge), and deleted using the right mouse button.</p>
+</li>
 </ul>
-<img alt="_images/gradient_editor.png" class="align-center" src="_images/gradient_editor.png" />
 </div>
 <div class="section" id="randomness">
 <h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this headline">¶</a></h2>
@@ -275,37 +297,29 @@ outputs) may break existing materials, and should thus be avoided.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="shader_nodes.html" class="btn btn-neutral float-right" title="Shader nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="nodes.html" class="btn btn-neutral float-left" title="Nodes overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="shader_nodes.html" class="btn btn-neutral float-right" title="Shader nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="nodes.html" class="btn btn-neutral float-left" title="Nodes overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2018-2020, Rodz Labs
+        &#169; Copyright 2018-2021, Rodz Labs.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

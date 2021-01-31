@@ -67,6 +67,9 @@ Parameters are used to configure nodes. The following types are supported:
   double-clicking in the lower part of the widget, dragged left and right using the left
   mouse button, and removed using the right mouse button.
 
+  .. image:: images/gradient_editor.png
+    :align: center
+
   The drop down list box can be used to select one of the 4 interpolation options.
   
   Double clicking in the upper part of the gradient editor will open a larger version of the
@@ -76,8 +79,32 @@ Parameters are used to configure nodes. The following types are supported:
   another to duplicate the gradient parameter, or from any **Colorize** node variant in the
   library to a gradient editor widget.
 
-.. image:: images/gradient_editor.png
-	:align: center
+* **curve** parameters are edited using a dedicated dialog window that is shown when clicking on
+  the parameter.
+  
+  .. image:: images/curve_editor.png
+    :align: center
+    :scale: 50%
+
+  The curve is defined by its control points that define their value and left and right slopes
+  for given abscissas. Control points (as well as slope control points) can be grabbed and moved
+  using the left mouse button.
+
+  New control points can be added by double-clicking in the editor, and control points can be
+  removed using the right mouse button.
+
+* **polygon** parameters are edited using a dedicated dialog window that is shown when clicking on
+  the parameter.
+  
+  .. image:: images/polygon_editor.png
+    :align: center
+    :scale: 50%
+
+  The polygon parameter is defined by its vertices that can be grabbed and moved using the left
+  mouse button.
+  
+  New vertices can be created by double-clicking in the editor (when created, a new vertex will
+  be used to split the closest edge), and deleted using the right mouse button.
 
 Randomness
 ^^^^^^^^^^

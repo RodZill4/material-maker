@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Introduction &mdash; Material Maker  documentation</title>
   
@@ -16,7 +16,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -51,7 +54,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Material Maker
+            <a href="index.html" class="icon icon-home"> Material Maker
           
 
           
@@ -61,7 +64,7 @@
             
             
               <div class="version">
-                0.93
+                0.94
               </div>
             
           
@@ -133,6 +136,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -144,7 +149,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
     
@@ -158,21 +163,19 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>Material Maker is a procedural material editor based on the Godot Engine.</p>
-<p>It can be used to describe the textures that define a material by interconnecting basic
-nodes that generate, transform or combine seamless textures in a graph.</p>
-<ul class="simple">
-<li><p>Generator nodes describe configurable patterns that can be used to create the basic shapes
-and textures of the material.</p></li>
-<li><p>Transform nodes change the colors and shapes of their input images to create a more complex
-texture.</p></li>
-<li><p>Combine nodes use several input images to generate a new one.</p></li>
-</ul>
-<p>Many nodes in Material Maker are resolution independant, which makes it possible to use transforms
-to zoom on an image detail without affecting the generated texture quality. Only a few nodes such
-as the image generator and convolution filters (blur, emboss, normal map generation) will limit
-the resolution of their output.</p>
+<p>Material Maker is a PBR procedural material editor as well as a texture painting tool based on
+the Godot Engine.</p>
+<p>As a procedural procedural material authoring tool, it can be used to describe the textures
+that define a material by interconnecting basic nodes that generate, transform, filter or
+combine their input textures in a graph.</p>
 <img alt="_images/screenshot.png" src="_images/screenshot.png" />
+<p>As a texture painting tool, it provides a way to describe brushes using the same nodes,
+and paint directly on 3D models.</p>
+<img alt="_images/painting_screenshot.png" src="_images/painting_screenshot.png" />
+<p>Being based on the Physically Based Rendering approach, Material Maker can be used to
+describe the Albedo, Metallic, Roughness, and Emission channels of a material, as well
+as a normal and a Depth map. Those channels can also be painted on 3D models in the
+painting tool.</p>
 </div>
 
 
@@ -180,37 +183,29 @@ the resolution of their output.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="user_interface.html" class="btn btn-neutral float-right" title="User interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="Material Maker User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="user_interface.html" class="btn btn-neutral float-right" title="User interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Material Maker User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2018-2020, Rodz Labs
+        &#169; Copyright 2018-2021, Rodz Labs.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

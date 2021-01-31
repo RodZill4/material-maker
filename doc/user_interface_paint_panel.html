@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Paint panel &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Brush panel" href="user_interface_brush_panel.html" />
+    <link rel="prev" title="Reference panel" href="user_interface_reference_panel.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.94
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_interface.html">User interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="user_interface_overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_graph_panel.html">Graph panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_library_panel.html">Library panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_2d_preview_panel.html">2D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Paint panel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-paint-project">Creating a paint project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#painting-a-3d-model">Painting a 3D model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-and-modifying-brushes">Creating and modifying brushes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_layers_panel.html">Layers panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_parameters_panel.html">Parameters panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_main_menu.html">Main menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_sharing.html">Sharing materials and brushes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_performance.html">Performance meter and tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="user_interface.html">User interface</a> &raquo;</li>
+        
+      <li>Paint panel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="paint-panel">
+<h1>Paint panel<a class="headerlink" href="#paint-panel" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="creating-a-paint-project">
+<h2>Creating a paint project<a class="headerlink" href="#creating-a-paint-project" title="Permalink to this headline">¶</a></h2>
+<p>To start painting in Material Maker, just use the <em>File -&gt; New paint project</em> menu.
+This will show a dialog where a model file and a texture size can be specified.</p>
+<p>The model must be provided in Wavefront .OBJ format and have a single submesh.
+Of course, the model must have textures coordinates information.</p>
+<img alt="_images/new_paint_project.png" class="align-center" src="_images/new_paint_project.png" />
+<p>A project file name will be automatically selected, but it is possible to modify
+it before creating the paint project.</p>
+<p>Clicking on the OK button of the dialog will create the new project and show the
+Paint panel, which consists of two sub panels. The top subpanel shows the model
+to be painted, and the bottom subpanel shows the graph where the current brush is
+described.</p>
+<a class="reference internal image-reference" href="_images/paint_panel.png"><img alt="_images/paint_panel.png" class="align-center" src="_images/paint_panel.png" style="width: 419.5px; height: 344.5px;" /></a>
+</div>
+<div class="section" id="painting-a-3d-model">
+<h2>Painting a 3D model<a class="headerlink" href="#painting-a-3d-model" title="Permalink to this headline">¶</a></h2>
+<p>The paint subpanel is where the model is actually painted. It shows the model with its material
+in its current state, and a dynamic preview of the current brush.</p>
+<img alt="_images/paint_subpanel.png" class="align-center" src="_images/paint_subpanel.png" />
+<p>In the paint subpanel, the model can be rotated by holding the middle mouse button
+and translated by holding the middle mouse button and the Shift key.</p>
+<p>The mouse wheel can be used to modify the zoom level. If the Control key is held,
+the mouse wheel will adjust the camera’s field of view angle.</p>
+<p>The left mouse button (with no modifier) can be used to paint on the currently selected layer.
+Holding the Shift key and the left mouse button will modify the brush size (by moving
+left and right) and hardness (by moving up and down).
+Holding the Control key and the left mouse button will modify the pattern size and
+orientation (more about brushes and brush types below). Holding the Control key will
+also show the patten on the whole view (which can be useful with Pattern and UV pattern
+brushes).</p>
+<p>In the top left corner of the paint subpanel, buttons can be used to select a painting tool.
+The available tools are:</p>
+<ul class="simple">
+<li><p>A freehand painting tool, that directly applies the brush</p></li>
+<li><p>A freehand line tool, that draws line following the mouse cursors movement</p></li>
+<li><p>A line tool, that draws straight lines</p></li>
+<li><p>A fill tool (pressing this button will directly fill the current layer using
+the current brush, or erase it if the eraser mode is active)</p></li>
+<li><p>An eraser mode, that applies to all aforementionned tools</p></li>
+</ul>
+<p>In the top right corner, common brush parameters such as size, hardness, opacity and spacing
+can be modified.</p>
+<p>Note that before painting, it is necessary to select a brush (by double-clicking it in the
+Brushes panel) and a layer.</p>
+</div>
+<div class="section" id="creating-and-modifying-brushes">
+<h2>Creating and modifying brushes<a class="headerlink" href="#creating-and-modifying-brushes" title="Permalink to this headline">¶</a></h2>
+<p>The bottom subpanel is a graph that can be used to create brushes. This is very similar to
+creating materials, except the target node is the Brush node (instead of Material).</p>
+<img alt="_images/brush_subpanel.png" class="align-center" src="_images/brush_subpanel.png" />
+<p>The Brush node has 6 inputs:</p>
+<ul class="simple">
+<li><p>the brush input is a greyscale image that defines the shape of the brush. White pixels are painted,
+black pixels are not and grey values are used as alpha. The Brush input is implicitely modified using
+the Brush hardness and the Brush opacity parameters.</p></li>
+<li><p>the other channels are color (Albedo and Emission) and greyscale (Metallic, Roughness and Depth)
+images that define the patterns painted on each component of the model’s material. Albedo has its
+own alpha channel that is combined with the Brush value and used as transparency for all components.</p></li>
+</ul>
+<p>The Brush node’s parameters are the following:</p>
+<ul class="simple">
+<li><p>the Brush type defines how the pattern is applied on the model</p>
+<ul>
+<li><p>when <strong>Stamp</strong> is selected, the patterns are mapped on the brush itself. This mode is well suited
+to paint shapes on the model</p></li>
+<li><p>when <strong>Pattern</strong> is selected, the pattern repeats on the painting view space. It is useful to paint
+2D patterns directly on the object, but may be difficult to use when painting from different angles.</p></li>
+<li><p>when <strong>UV Pattern</strong> is selected, the pattern repeats in texture space. It is generally not used directly
+with 2D patterns, but using the <em>3D Brush Map</em> and <em>Triplanar Brush Map</em> nodes, it can be use to easily
+fill large portions of the model with a single material. It is also the most flexible mode as it can be
+used to apply 3D textures or effects that depend on the mesh geometry.</p></li>
+</ul>
+</li>
+<li><p>The other parameters (Albedo, Metallic, Roughness, Emission and Depth) are booleans that define if the
+corresponding component of the material will be painted.</p></li>
+</ul>
+<p>Brushes can have a Remote node whose parameters will be shown in the <strong>Parameters</strong> panel.</p>
+<p>Custom brushes can be saved into the user brush library using the <strong>Tools-&gt;Add current brush to the user
+library</strong> menu entry.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="user_interface_brush_panel.html" class="btn btn-neutral float-right" title="Brush panel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_interface_reference_panel.html" class="btn btn-neutral float-left" title="Reference panel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-2021, Rodz Labs.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Graph panel &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Library panel" href="user_interface_library_panel.html" />
+    <link rel="prev" title="First steps with the user interface" href="user_interface_first_steps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.94
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_interface.html">User interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="user_interface_overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Graph panel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#grid-zoom-and-minimap">Grid, zoom and minimap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#material-navigation">Material navigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-nodes">Creating nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selecting-and-copying-nodes">Selecting and copying nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-2d-preview">Background 2D preview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#background-3d-preview">Background 3D preview</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_library_panel.html">Library panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_2d_preview_panel.html">2D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_paint_panel.html">Paint panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_layers_panel.html">Layers panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_parameters_panel.html">Parameters panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_main_menu.html">Main menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_sharing.html">Sharing materials and brushes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_performance.html">Performance meter and tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="user_interface.html">User interface</a> &raquo;</li>
+        
+      <li>Graph panel</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="graph-panel">
+<h1>Graph panel<a class="headerlink" href="#graph-panel" title="Permalink to this headline">¶</a></h1>
+<p>The graph panel is where materials can be edited, by adding and configuring nodes,
+and connecting them.</p>
+<img alt="_images/graph_pane.png" class="align-center" src="_images/graph_pane.png" />
+<div class="section" id="grid-zoom-and-minimap">
+<h2>Grid, zoom and minimap<a class="headerlink" href="#grid-zoom-and-minimap" title="Permalink to this headline">¶</a></h2>
+<p>In the top left corner of the graph panel, the following buttons can be used to modify
+the zoom level and configure the grid:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the <img alt="zoom_out_button" src="_images/zoom_out_button.png" /> button zooms out.</p></li>
+<li><p>the <img alt="zoom_reset_button" src="_images/zoom_reset_button.png" /> button resets the zoom factor.</p></li>
+<li><p>the <img alt="zoom_in_button" src="_images/zoom_in_button.png" /> button zooms in.</p></li>
+<li><p>the <img alt="grid_button" src="_images/grid_button.png" /> button toggles the grid. When moved, nodes will
+stick to the grid when it is active. The grid size can be modified
+using the spinbox next to the grid button</p></li>
+<li><p>the <img alt="minimap_button" src="_images/minimap_button.png" /> button toggles the minimap that is shown in the bottom right
+corner of the graph view</p></li>
+</ul>
+</div></blockquote>
+<p>The view can be centered using the <strong>View -&gt; Center view</strong> menu item or the <strong>C</strong> shortcut,
+and the zoom factor can be reset using the <strong>View -&gt; Reset zoom</strong> menu item or the <strong>Alt-0</strong>
+shortcut.</p>
+<p>The minimap shows an overview of the whole graph. Clicking on it with the left or middle mouse
+button will center the graph view on the clicked location. While connecting nodes, it is thus
+possible to click on the minimap with the middle mouse button to make the target node visible.</p>
+</div>
+<div class="section" id="material-navigation">
+<h2>Material navigation<a class="headerlink" href="#material-navigation" title="Permalink to this headline">¶</a></h2>
+<p>In the top right corner of the graph panel, the graph navigation button
+<img alt="graph_navigation_button" src="_images/graph_navigation_button.png" /> can be used to show a tree view of the
+material (this is only useful when the Hierarchy panel is not visible).
+Double clicking on an item in this tree will show it in the graph view.</p>
+<p>When a subgraph is shown in the graph panel, additional items are visible in
+the top right corner:</p>
+<ul class="simple">
+<li><p>a text entry shows the name of the subgraph and can be used to modify it.</p></li>
+<li><p>a <img alt="group_randomness_button" src="_images/group_randomness_button.png" /> button to decide if the current subgraph transmits
+its random seed to its children.</p></li>
+<li><p>a <img alt="graph_up_button" src="_images/graph_up_button.png" /> button to move to the parent of the currently shown subgraph.</p></li>
+</ul>
+</div>
+<div class="section" id="creating-nodes">
+<h2>Creating nodes<a class="headerlink" href="#creating-nodes" title="Permalink to this headline">¶</a></h2>
+<p>There are several ways to create new nodes.</p>
+<p>They can be dragged and dropped from the <strong>Library</strong> panel to the graph panel.</p>
+<p>It is also possible to use the node menu that can be shown using the right mouse
+button. This menu has a filter field to quickly find the desired node.</p>
+<img alt="_images/node_menu.png" class="align-center" src="_images/node_menu.png" />
+<p>The node menu will also be shown when connecting a node’s input or output into
+an empty space of the graph. In this case, only compatible nodes will be shown,
+and the newly created node will automatically be connected.</p>
+</div>
+<div class="section" id="selecting-and-copying-nodes">
+<h2>Selecting and copying nodes<a class="headerlink" href="#selecting-and-copying-nodes" title="Permalink to this headline">¶</a></h2>
+<p>Clicking on the title bar of a node will select it. Selecting a node will show its
+first output (if any) in the 2D preview. It is possible to select several nodes
+by holding the <strong>Control</strong> key while selecting.</p>
+<p>Selected nodes can be copied using the <strong>Edit -&gt; Copy</strong> menu or the <strong>Control+C</strong>
+keyboard shortcut. They can also be cut using the <strong>Edit -&gt; Cut</strong> menu entry or the
+<strong>Control+X</strong> shortcut. Both operations store the selected nodes and their
+interconnections in the clipboard. Note that the format used is JSON, and nodes
+or group of nodes can easily be shared using this format.</p>
+<p>The contents of the clipboard can be pasted into a graph using the <strong>Edit -&gt; Paste</strong>
+menu or the <strong>Control+V</strong> keyboard shortcut.</p>
+<p>Selected items can also be duplicated using the <strong>Edit -&gt; Duplicate</strong>
+menu or the <strong>Control+D</strong> keyboard shortcut. This operation does not affect
+the clipboard.</p>
+</div>
+<div class="section" id="background-2d-preview">
+<h2>Background 2D preview<a class="headerlink" href="#background-2d-preview" title="Permalink to this headline">¶</a></h2>
+<p>The bottom left “bricks” button can be used to show a 2D preview in the background
+of the graph view.</p>
+</div>
+<div class="section" id="background-3d-preview">
+<h2>Background 3D preview<a class="headerlink" href="#background-3d-preview" title="Permalink to this headline">¶</a></h2>
+<p>The bottom left “cube” button can be used to show a 3D preview in the background
+of the graph view. The blue/red arrows icon is used to rotate the object or the view,
+and other controls are similar to the 3D preview.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="user_interface_library_panel.html" class="btn btn-neutral float-right" title="Library panel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_interface_first_steps.html" class="btn btn-neutral float-left" title="First steps with the user interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-2021, Rodz Labs.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
