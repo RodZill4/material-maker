@@ -1,10 +1,10 @@
 # Material Maker
 
 This is a tool based on [Godot Engine](https://godotengine.org/) that can
-be used to create textures procedurally.
+be used to create textures procedurally and paint 3D models.
 
-Its user interface is based on Godot's GraphEdit node: textures are described
-as interconnected nodes.
+Its user interface is based on Godot's GraphEdit node: textures and brushes are
+described as interconnected nodes.
 
 ## Download
 
@@ -29,6 +29,7 @@ Can't wait for next release? Automated builds from master branch are available (
 
 ## Community
 
+- **[Discord server](https://discord.gg/PF5V3mFwFM)**
 - **[Material Maker subreddit](https://www.reddit.com/r/MaterialMaker/)**
 
 ## Screenshot
@@ -37,7 +38,7 @@ Can't wait for next release? Automated builds from master branch are available (
 
 ## License
 
-Copyright (c) 2018-2020 Rodolphe Suescun and contributors
+Copyright (c) 2018-2021 Rodolphe Suescun and contributors
 
 Unless otherwise specified, files in this repository are licensed under the
 MIT license. See [LICENSE.md](LICENSE.md) for more information.
