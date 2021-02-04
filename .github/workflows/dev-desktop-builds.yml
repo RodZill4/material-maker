@@ -52,11 +52,11 @@ jobs:
           cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/meshes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/doc/_build/html ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/doc
-          cp -R ./addons/material_maker/nodes ./build/material_maker.app/Contents/Resources
-          cp -R ./material_maker/examples ./build/material_maker.app/Contents/Resources
-          cp -R ./material_maker/library ./build/material_maker.app/Contents/Resources
-          cp -R ./material_maker/meshes ./build/material_maker.app/Contents/Resources
-          cp -R ./material_maker/doc/_build/html ./build/material_maker.app/Contents/Resources/doc
+          cp -R ./addons/material_maker/nodes ./build/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/examples ./build/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/library ./build/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/meshes ./build/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/doc/_build/html ./build/material_maker.app/Contents/MacOS/doc
       - name: Create archives 📁
         run: |
           cd build
