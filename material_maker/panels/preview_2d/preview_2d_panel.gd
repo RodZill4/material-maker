@@ -90,6 +90,8 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			center = Vector2(0.5, 0.5)
 			scale = 1.2
 			update_shader_options()
+		MENU_EXPORT_AGAIN:
+			export_again()
 		_:
 			print("unsupported id "+str(id))
 

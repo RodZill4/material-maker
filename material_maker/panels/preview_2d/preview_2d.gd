@@ -16,14 +16,13 @@ const MENU_EXPORT_AGAIN : int = 1000
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
-	$ContextMenu/Export.add_item("again", MENU_EXPORT_AGAIN)
-	$ContextMenu/Export.set_item_disabled(0, true)
-	$ContextMenu/Export.add_separator()
 	for i in range(7):
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
 	$ContextMenu.add_submenu_item("Export", "Export")
+	$ContextMenu.add_item("Export again", MENU_EXPORT_AGAIN)
+	$ContextMenu.set_item_disabled(0, true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
@@ -81,41 +80,40 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 func on_resized() -> void:
 	material.set_shader_param("preview_2d_size", rect_size)
 
-func _on_Export_id_pressed(id : int):
-	match id:
-		MENU_EXPORT_AGAIN:
-			if last_export_filename == "":
-				return
-			var filename = last_export_filename
-			var extension = filename.get_extension()
-			var regex : RegEx = RegEx.new()
-			regex.compile("(.*)_(\\d+)$")
-			var file : File = File.new()
-			var re_match : RegExMatch = regex.search(filename.get_basename())
-			if re_match != null:
-				var value = re_match.strings[2].to_int()
-				var value_length = re_match.strings[2].length()
-				while true:
-					value += 1
-					filename = "%s_%0*d.%s" % [ re_match.strings[1], value_length, value, extension ]
-					if !file.file_exists(filename):
-						break
-				export_as_image_file(filename, last_export_size)
-		_:
-			var dialog = FileDialog.new()
-			add_child(dialog)
-			dialog.rect_min_size = Vector2(500, 500)
-			dialog.access = FileDialog.ACCESS_FILESYSTEM
-			dialog.mode = FileDialog.MODE_SAVE_FILE
-			dialog.add_filter("*.png;PNG image file")
-			dialog.add_filter("*.exr;EXR image file")
-			if get_node("/root/MainWindow") != null:
-				var config_cache = get_node("/root/MainWindow").config_cache
-				if config_cache.has_section_key("path", "save_preview"):
-					dialog.current_dir = config_cache.get_value("path", "save_preview")
-			dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
-			dialog.connect("popup_hide", dialog, "queue_free")
-			dialog.popup_centered()
+func export_again() -> void:
+	if last_export_filename == "":
+		return
+	var filename = last_export_filename
+	var extension = filename.get_extension()
+	var regex : RegEx = RegEx.new()
+	regex.compile("(.*)_(\\d+)$")
+	var file : File = File.new()
+	var re_match : RegExMatch = regex.search(filename.get_basename())
+	if re_match != null:
+		var value = re_match.strings[2].to_int()
+		var value_length = re_match.strings[2].length()
+		while true:
+			value += 1
+			filename = "%s_%0*d.%s" % [ re_match.strings[1], value_length, value, extension ]
+			if !file.file_exists(filename):
+				break
+	export_as_image_file(filename, last_export_size)
+
+func _on_Export_id_pressed(id : int) -> void:
+	var dialog = FileDialog.new()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.add_filter("*.png;PNG image file")
+	dialog.add_filter("*.exr;EXR image file")
+	if get_node("/root/MainWindow") != null:
+		var config_cache = get_node("/root/MainWindow").config_cache
+		if config_cache.has_section_key("path", "save_preview"):
+			dialog.current_dir = config_cache.get_value("path", "save_preview")
+	dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
+	dialog.connect("popup_hide", dialog, "queue_free")
+	dialog.popup_centered()
 
 func create_image(renderer_function : String, params : Array, size : int) -> void:
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
@@ -152,7 +150,7 @@ func export_as_image_file(file_name : String, size : int) -> void:
 	create_image("save_to_file", [ file_name ], size)
 	last_export_filename = file_name
 	last_export_size = size
-	$ContextMenu/Export.set_item_disabled(0, false)
+	$ContextMenu.set_item_disabled(0, false)
 
 func _on_Reference_id_pressed(id : int):
 	var texture : ImageTexture = ImageTexture.new()
