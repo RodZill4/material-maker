@@ -21,7 +21,7 @@ repeated pattern.
 Parameters
 ::::::::::
 
-The **sdCircleRepeat** node accepts accepts *the number of repetitions*
+The **sdCircleRepeat** node accepts *the number of repetitions*
 of the input as parameter.
 
 Example images

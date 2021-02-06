@@ -4,7 +4,7 @@ Tones node
 The **Tones** node provides an easy interface to adjust the tones of its input. It can be applied
 homogeneously to the R, G and B channels, or separately on R, G, B and A.
 
-The nodes shows an histogram of all channels of its input, and 3 cursors to modify the input
+The nodes shows a histogram of all channels of its input, and 3 cursors to modify the input
 adjustment at the top, and 2 cursors to modify the output adjustment.
 
 .. image:: images/node_filter_tones.png

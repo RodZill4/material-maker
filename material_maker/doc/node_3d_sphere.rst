@@ -9,7 +9,7 @@ The **Sphere** node outputs a greyscale image that represents the depth of a 3D 
 Inputs
 ++++++
 
-The **Sphere** node do not accept any input.
+The **Sphere** node does not accept any input.
 
 Outputs
 +++++++

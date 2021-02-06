@@ -20,4 +20,4 @@ rotated shape.
 Parameters
 ::::::::::
 
-The **Rotate** node accepts accepts *rotation angle* as parameter.
+The **Rotate** node accepts *rotation angle* as parameter.

@@ -26,7 +26,7 @@ Parameters
 The **Warp** node has three parameters:
 
 * *mode*, that defines how the warp node calculates the offset it applies. *Slope* offsets by
-  a distance calculated from the slope, and *Distance to top* offsets dy a distance calculated
+  a distance calculated from the slope, and *Distance to top* offsets by a distance calculated
   from the slope and the distance to the top (this mode makes it posible to make all points
   of a slope get their value from the top, hence generating mosaic-like patterns).
 

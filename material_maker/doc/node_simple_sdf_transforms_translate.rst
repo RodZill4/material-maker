@@ -20,4 +20,4 @@ translated shape.
 Parameters
 ::::::::::
 
-The **Translate** node accepts accepts *X and Y offsets* of the translation as parameters.
+The **Translate** node accepts *X and Y offsets* of the translation as parameters.

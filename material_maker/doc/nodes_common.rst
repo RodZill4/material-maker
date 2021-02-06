@@ -54,7 +54,7 @@ Parameters are used to configure nodes. The following types are supported:
 * **float** parameters are used whenever a real number is needed. Float parameters have
   bounds, but it is possible to ignore them (at your own risk). To modify a float parameter,
   click in the text field and enter a new value, or click and drag left or right to decrease
-  or decrease its value. When the lower or upper bound is reach, the value will stick to it,
+  or decrease its value. When the lower or upper bound is reached, the value will stick to it,
   but dragging again from there makes it possible to go beyond the limit.
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations

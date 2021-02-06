@@ -9,7 +9,7 @@ The **Blur** node applies a Gaussian blur algorithm to its input.
 Inputs
 ++++++
 
-The **Blur** node accepts a RGBA input to be blurred and an optional blur mask
+The **Blur** node accepts an RGBA input to be blurred and an optional blur mask
 that defines the intensity of the blur effect.
 
 Outputs

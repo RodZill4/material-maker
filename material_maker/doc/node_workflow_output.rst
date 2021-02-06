@@ -10,7 +10,7 @@ generate the normal and occlusion maps.
 Inputs
 ++++++
 
-The **Output** node accepts accepts the height, albedo, ORM, emission and normal channels
+The **Output** node accepts the height, albedo, ORM, emission and normal channels
 of the applied map inputs.
 
 Outputs

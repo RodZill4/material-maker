@@ -21,7 +21,7 @@ combination of its inputs.
 Parameters
 ::::::::::
 
-The **sdMorph** node accepts accepts *the mix factor* as parameter.
+The **sdMorph** node accepts *the mix factor* as parameter.
 
 Example images
 ::::::::::::::
