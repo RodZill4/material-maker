@@ -7,18 +7,18 @@ void vertex() {
 //---
 
 float rand(vec2 x) {
-    return fract(cos(dot(x, vec2(13.9898, 8.141))) * 43758.5453);
+    return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5453);
 }
 
 vec2 rand2(vec2 x) {
-    return fract(cos(vec2(dot(x, vec2(13.9898, 8.141)),
-						  dot(x, vec2(3.4562, 17.398)))) * 43758.5453);
+    return fract(cos(mod(vec2(dot(x, vec2(13.9898, 8.141)),
+						      dot(x, vec2(3.4562, 17.398))), vec2(3.14))) * 43758.5453);
 }
 
 vec3 rand3(vec2 x) {
-    return fract(cos(vec3(dot(x, vec2(13.9898, 8.141)),
-                          dot(x, vec2(3.4562, 17.398)),
-                          dot(x, vec2(13.254, 5.867)))) * 43758.5453);
+    return fract(cos(mod(vec3(dot(x, vec2(13.9898, 8.141)),
+							  dot(x, vec2(3.4562, 17.398)),
+                              dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);
 }
 
 vec3 rgb2hsv(vec3 c) {
