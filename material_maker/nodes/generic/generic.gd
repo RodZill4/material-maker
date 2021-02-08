@@ -338,6 +338,7 @@ func update_node() -> void:
 	if !generator.minimized:
 		controls = {}
 		index = -1
+		var previous_focus = null
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -371,6 +372,10 @@ func update_node() -> void:
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
 					hsizer.add_child(control)
+				if previous_focus != null:
+					previous_focus.focus_next = control.get_path()
+					control.focus_previous = previous_focus.get_path()
+				previous_focus = control
 		initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
