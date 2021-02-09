@@ -131,5 +131,10 @@ func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if release:
 		release_focus()
 
+func _on_FloatEdit_focus_entered():
+	select_all()
+
 func _on_LineEdit_focus_exited() -> void:
 	_on_LineEdit_text_entered(text, false)
+
+

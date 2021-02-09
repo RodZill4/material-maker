@@ -36,6 +36,7 @@ margin_right = 3.0
 margin_bottom = 1.0
 rect_min_size = Vector2( 3, 2 )
 mouse_filter = 2
+[connection signal="focus_entered" from="." to="." method="_on_FloatEdit_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_LineEdit_focus_exited"]
 [connection signal="gui_input" from="." to="." method="_on_LineEdit_gui_input"]
 [connection signal="resized" from="." to="." method="do_update"]
