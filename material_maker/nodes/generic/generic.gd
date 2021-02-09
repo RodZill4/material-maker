@@ -339,6 +339,7 @@ func update_node() -> void:
 		controls = {}
 		index = -1
 		var previous_focus = null
+		var first_focus = null
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -375,7 +376,12 @@ func update_node() -> void:
 				if previous_focus != null:
 					previous_focus.focus_next = control.get_path()
 					control.focus_previous = previous_focus.get_path()
+				else:
+					first_focus = control
 				previous_focus = control
+		if first_focus != null:
+			previous_focus.focus_next = first_focus.get_path()
+			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
