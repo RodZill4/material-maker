@@ -20,8 +20,10 @@ font_data = SubResource( 2 )
 [node name="NodeEditor" type="WindowDialog"]
 margin_right = 950.0
 margin_bottom = 450.0
+rect_min_size = Vector2( 950, 450 )
 popup_exclusive = true
 window_title = "Node Editor"
+resizable = true
 script = ExtResource( 1 )
 
 [node name="Sizer" type="VBoxContainer" parent="."]
