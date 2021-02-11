@@ -22,7 +22,7 @@ func update_export_menu() -> void:
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
 	$ContextMenu.add_submenu_item("Export", "Export")
 	$ContextMenu.add_item("Export again", MENU_EXPORT_AGAIN)
-	$ContextMenu.set_item_disabled(0, true)
+	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
@@ -150,7 +150,7 @@ func export_as_image_file(file_name : String, size : int) -> void:
 	create_image("save_to_file", [ file_name ], size)
 	last_export_filename = file_name
 	last_export_size = size
-	$ContextMenu.set_item_disabled(0, false)
+	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), false)
 
 func _on_Reference_id_pressed(id : int):
 	var texture : ImageTexture = ImageTexture.new()
