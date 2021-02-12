@@ -40,6 +40,11 @@ func _ready() -> void:
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 
+	# Required for supersampling to work.
+	$MaterialPreview.get_texture().flags = Texture.FLAG_FILTER
+
+	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
+
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
@@ -101,6 +106,10 @@ func _on_Environment_item_selected(id) -> void:
 	current_environment = environments.get_child(id)
 	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
 	current_environment.visible = true
+
+func _on_material_preview_size_changed() -> void:
+	# Apply supersampling to the new viewport size.
+	$MaterialPreview.size = rect_size * get_node("/root/MainWindow").preview_rendering_scale_factor
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()

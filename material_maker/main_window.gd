@@ -11,6 +11,12 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
+# The resolution scale to use for 3D previews.
+# Values above 1.0 enable supersampling. This has a significant performance cost
+# but greatly improves texture rendering quality, especially when using
+# specular/parallax mapping and when viewed at oblique angles.
+var preview_rendering_scale_factor := 2.0
+
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
@@ -99,6 +105,7 @@ const DEFAULT_CONFIG = {
 	confirm_close_project = true,
 	vsync = true,
 	ui_scale = 0,
+	ui_3d_preview_resolution = 2.0,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_denoise_radius = 3
@@ -196,6 +203,8 @@ func on_config_changed() -> void:
 		scale = 2 if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048 else 1
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
+	# Clamp to reasonable values to avoid crashes on startup.
+	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
