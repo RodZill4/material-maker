@@ -6,17 +6,13 @@ class GradientCursor:
 	var color : Color
 	var sliding : bool = false
 	
-	var label : Label = Label.new()
+	onready var label : Label = get_parent().get_node("Value")
 
 	const WIDTH : int = 10
 
 	func _ready() -> void:
 		rect_position = Vector2(0, 15)
 		rect_size = Vector2(WIDTH, 15)
-		label.rect_position = Vector2(-20, 20)
-		label.rect_min_size = Vector2(50, 20)
-		label.align = Label.ALIGN_LEFT
-		add_child(label)
 
 	func _draw() -> void:
 # warning-ignore:integer_division

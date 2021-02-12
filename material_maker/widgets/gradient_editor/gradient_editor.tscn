@@ -88,4 +88,18 @@ rect_scale = Vector2( 0.5, 0.5 )
 icon = SubResource( 6 )
 items = [ "", SubResource( 7 ), false, 0, null, "", SubResource( 6 ), false, 1, null, "", SubResource( 8 ), false, 2, null, "", SubResource( 9 ), false, 3, null ]
 selected = 1
+
+[node name="Value" type="Label" parent="."]
+anchor_right = 1.0
+margin_top = -1.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="item_selected" from="Interpolation" to="." method="_on_Interpolation_item_selected"]
