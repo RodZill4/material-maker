@@ -2,7 +2,7 @@
 
 [ext_resource path="res://material_maker/icons/remove.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/windows/add_node_popup/node_selection_button.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4

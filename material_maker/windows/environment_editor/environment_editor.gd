@@ -1,6 +1,6 @@
 extends WindowDialog
 
-onready var environment_manager = $EnvironmentManager
+onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 
 onready var environment_list : ItemList = $HSplitContainer/Environments
 onready var camera : Camera = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
@@ -25,7 +25,6 @@ func _ready():
 	read_environment_list()
 
 func connect_controls() -> void:
-	var e = {}
 	for c in ui.get_children():
 		if c is LineEdit:
 			if c.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
@@ -120,8 +119,8 @@ func _on_Environments_item_selected(index):
 	if index == environment_list.get_item_count()-1:
 		environment_list.remove_item(index)
 		environment_list.add_item("")
-		var newenv = environment_manager.new_environment(current_environment)
-		#environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
+		environment_manager.new_environment(current_environment)
 		environment_list.add_item("New...")
+		environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
 		environment_list.select(index)
 	set_current_environment(index)

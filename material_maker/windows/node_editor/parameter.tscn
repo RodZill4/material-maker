@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/parameter.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 [ext_resource path="res://material_maker/windows/node_editor/parameter_float.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/windows/node_editor/parameter_size.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/windows/node_editor/parameter_enum.tscn" type="PackedScene" id=5]

@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/windows/progress_window/progress_window.gd" type="Script" id=1]
 
 [node name="ProgressWindow" type="PopupDialog"]
-visible = true
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/windows/environment_editor/environment_editor_scene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/windows/environment_editor/environment_editor.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=4]
 
 [sub_resource type="PanoramaSky" id=1]
 
@@ -268,8 +267,6 @@ min_value = -90.0
 max_value = 90.0
 step = 0.1
 float_only = true
-
-[node name="EnvironmentManager" parent="." instance=ExtResource( 4 )]
 [connection signal="popup_hide" from="." to="." method="queue_free"]
 [connection signal="item_selected" from="HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
 [connection signal="gui_input" from="HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]

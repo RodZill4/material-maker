@@ -1,14 +1,14 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
+flags = 7
 atlas = ExtResource( 2 )
 region = Rect2( 48, 64, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
+flags = 7
 atlas = ExtResource( 2 )
 region = Rect2( 48, 80, 16, 16 )
 

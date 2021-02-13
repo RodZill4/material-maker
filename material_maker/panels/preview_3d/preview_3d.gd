@@ -8,9 +8,6 @@ export var ui_path : String = "UI/Preview3DUI"
 onready var objects = $MaterialPreview/Preview3d/Objects
 onready var current_object = objects.get_child(0)
 
-onready var environments = $MaterialPreview/Preview3d/Environments
-onready var current_environment = environments.get_child(0)
-
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 
@@ -53,14 +50,11 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 		menu.connect("id_pressed", self, "_on_Model_item_selected")
 
 func create_menu_environment_list(menu : PopupMenu) -> void:
+	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	menu.clear()
-	for i in environments.get_child_count():
-		var e = environments.get_child(i)
-		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/environments/%s.png" % e.name)
-		if thumbnail:
-			menu.add_icon_item(thumbnail, "", i)
-		else:
-			menu.add_item(e.name, i)
+	for e in environment_manager.get_environment_list():
+		print(e)
+		menu.add_icon_item(e.thumbnail, e.name)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
 
@@ -97,10 +91,10 @@ func select_object(id) -> void:
 	emit_signal("need_update", [ self ])
 
 func _on_Environment_item_selected(id) -> void:
-	current_environment.visible = false
-	current_environment = environments.get_child(id)
-	$MaterialPreview/Preview3d/CameraPivot/Camera.set_environment(current_environment.environment)
-	current_environment.visible = true
+	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
+	var sun = $MaterialPreview/Preview3d/Sun
+	environment_manager.apply_environment(id, environment, sun)
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()

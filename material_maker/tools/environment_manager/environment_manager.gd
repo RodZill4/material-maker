@@ -48,16 +48,13 @@ func _exit_tree() -> void:
 
 func get_environment_list() -> Array:
 	var list = []
-	for e in environments:
+	for i in environments.size():
+		var env = environments[i]
+		var env_textures = environment_textures[i]
 		var item = {
-			name = e.name if e.has("name") else "unnamed"
+			name = env.name if env.has("name") else "unnamed",
+			thumbnail = env_textures.thumbnail
 		}
-		if e.has("thumbnail"):
-			var texture : ImageTexture = ImageTexture.new()
-			var image : Image = Image.new()
-			image.load_png_from_buffer(Marshalls.base64_to_raw(e.thumbnail))
-			texture.create_from_image(image)
-			item.thumbnail = texture
 		list.push_back(item)
 	return list
 
@@ -66,7 +63,9 @@ func set_value(index, variable, value):
 	if environments[index][variable] != serialized_value:
 		environments[index][variable] = serialized_value
 		if variable == "hdri_url":
-			read_hdr(index, value)
+			var status = read_hdr(index, value)
+			while status is GDScriptFunctionState:
+				yield(status, "completed")
 		elif variable == "name":
 			emit_signal("name_updated", index, value)
 		else:
@@ -74,19 +73,20 @@ func set_value(index, variable, value):
 		update_thumbnail(index)
 
 func apply_environment(index : int, e : Environment, s : DirectionalLight) -> void:
+	if index < 0 || index >= environments.size():
+		return
 	var env : Dictionary = environments[index]
 	var env_textures : Dictionary = environment_textures[index]
 	e.background_mode = Environment.BG_COLOR_SKY if env.show_color else Environment.BG_SKY
 	e.background_color = MMType.deserialize_value(env.color)
-	if env_textures.has("hdri"):
-		if e.get_meta("hdri") != env.hdri_url:
-			e.background_sky.panorama = env_textures.hdri
-			e.set_meta("hdri", env.hdri_url)
-	elif progress_window == null:
-		read_hdr(index, env.hdri_url)
-		if env_textures.has("hdri") :
-			e.background_sky.panorama = env_textures.hdri
-			e.set_meta("hdri", env.hdri_url)
+	if !e.has_meta("hdri") or e.get_meta("hdri") != env.hdri_url:
+		if !env_textures.has("hdri"):
+			var status = read_hdr(index, env.hdri_url)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			print(status)
+		e.background_sky.panorama = env_textures.hdri
+		e.set_meta("hdri", env.hdri_url)
 	e.background_energy = env.sky_energy
 	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
 	e.ambient_light_energy = env.ambient_light_energy
@@ -99,7 +99,9 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight) -> vo
 
 var progress_window = null
 
-func read_hdr(index : int, url : String):
+func read_hdr(index : int, url : String) -> bool:
+	while progress_window != null:
+		yield(get_tree(), "idle_frame")
 	environment_textures[index].erase("hdri")
 	var dir : Directory = Directory.new()
 	dir.make_dir_recursive("user://hdris")
@@ -107,9 +109,7 @@ func read_hdr(index : int, url : String):
 	if dir.file_exists($HTTPRequest.download_file):
 		set_hdr(index, $HTTPRequest.download_file)
 	else:
-		if $HTTPRequest.is_connected("request_completed", self, "_on_HTTPRequest_request_completed"):
-			$HTTPRequest.disconnect("request_completed", self, "_on_HTTPRequest_request_completed")
-		$HTTPRequest.connect("request_completed", self, "_on_HTTPRequest_request_completed", [ index ])
+		print("Downloading "+url)
 		var error = $HTTPRequest.request(url)
 		if error == OK:
 			progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
@@ -117,16 +117,25 @@ func read_hdr(index : int, url : String):
 			progress_window.set_text("Downloading HDRI file")
 			progress_window.set_progress(0)
 			set_physics_process(true)
+			yield($HTTPRequest, "request_completed")
+			set_hdr(index, $HTTPRequest.download_file)
+			progress_window.queue_free()
+			progress_window = null
+			set_physics_process(false)
 		else:
-			push_error("An error occurred in the HTTP request.")
+			print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
+			return false
+	return true
 
-func _on_HTTPRequest_request_completed(result, response_code, headers, body, index):
+"""
+func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):
 	set_hdr(index, $HTTPRequest.download_file)
 	progress_window.queue_free()
 	progress_window = null
 	set_physics_process(false)
 	update_thumbnail(index)
 	emit_signal("environment_updated", index)
+"""
 
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
@@ -144,8 +153,8 @@ func new_environment(index : int) -> void:
 		new_environment = DEFAULT_ENVIRONMENT
 	environments.push_back(new_environment)
 	environment_textures.push_back({ thumbnail=ImageTexture.new() })
-	emit_signal("name_updated", index, new_environment.name)
-	emit_signal("environment_updated", index)
+	emit_signal("name_updated", environments.size()-1, new_environment.name)
+	emit_signal("environment_updated", environments.size()-1)
 	update_thumbnail(environments.size()-1)
 
 var thumbnail_update_list = []
@@ -166,12 +175,14 @@ onready var preview_generator : Viewport = $PreviewGenerator
 func do_update_thumbnail() -> void:
 	rendering = true
 	for index in thumbnail_update_list:
+		print(index)
 		apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
 		preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
 		preview_generator.update_worlds()
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		var t : ImageTexture = environment_textures[index].thumbnail
+		print(t)
 		var image : Image = preview_generator.get_texture().get_data()
 		if image != null:
 			t.create_from_image(image)

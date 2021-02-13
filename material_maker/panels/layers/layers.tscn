@@ -2,8 +2,9 @@
 
 [ext_resource path="res://material_maker/panels/layers/layers_tree.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/layers/layers.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=3]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
 [ext_resource path="res://material_maker/panels/layers/icons/icons.svg" type="Texture" id=7]
+
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4

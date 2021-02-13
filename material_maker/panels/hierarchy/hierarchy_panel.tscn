@@ -1,20 +1,20 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/panels/hierarchy/hierarchy_panel.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
+flags = 7
 atlas = ExtResource( 2 )
 region = Rect2( 32, 48, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
+flags = 7
 atlas = ExtResource( 2 )
 region = Rect2( 16, 48, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
+flags = 7
 atlas = ExtResource( 2 )
 region = Rect2( 0, 32, 16, 16 )
 

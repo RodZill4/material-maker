@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -7,11 +7,12 @@
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" type="PackedScene" id=5]
 [ext_resource path="res://material_maker/widgets/tabs/tabs.gd" type="Script" id=6]
 [ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" type="PackedScene" id=7]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=8]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=8]
 [ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
 [ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
 [ext_resource path="res://material_maker/widgets/render_counter/render_counter.tscn" type="PackedScene" id=11]
 [ext_resource path="res://material_maker/tools/share/share_button.tscn" type="PackedScene" id=12]
+[ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -21,17 +22,17 @@ resource_local_to_scene = true
 shader = SubResource( 1 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
+flags = 7
 atlas = ExtResource( 8 )
 region = Rect2( 96, 96, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 4
+flags = 7
 atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
-flags = 4
+flags = 7
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
 
@@ -47,6 +48,8 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="EnvironmentManager" parent="." instance=ExtResource( 13 )]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0

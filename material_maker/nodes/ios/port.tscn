@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/nodes/ios/port.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 [ext_resource path="res://material_maker/widgets/linked_widgets/editable_label.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=5]
