@@ -84,6 +84,8 @@ const MENU = [
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
+	{ menu="Tools" },
+	{ menu="Tools", command="environment_editor", description="Environment editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
@@ -809,6 +811,13 @@ func set_painting_texture_size(size : int, value = null) -> bool:
 		return paint.get_texture_size() == size
 	paint.set_texture_size(size)
 	return true
+
+func environment_editor() -> void:
+	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instance())
+
+# -----------------------------------------------------------------------
+#                             Help menu
+# -----------------------------------------------------------------------
 
 func get_doc_dir() -> String:
 	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()

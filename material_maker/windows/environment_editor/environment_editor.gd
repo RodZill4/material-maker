@@ -1,0 +1,127 @@
+extends WindowDialog
+
+onready var environment_manager = $EnvironmentManager
+
+onready var environment_list : ItemList = $HSplitContainer/Environments
+onready var camera : Camera = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
+onready var camera_position = $HSplitContainer/ViewportContainer/Viewport/CameraPosition
+onready var camera_rotation1 = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1
+onready var camera_rotation2 = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2
+onready var environment : Environment = camera.environment
+onready var sun : DirectionalLight = $HSplitContainer/ViewportContainer/Viewport/Sun
+onready var ui : GridContainer = $HSplitContainer/UI
+
+var new_environment_icon = preload("res://material_maker/windows/environment_editor/new_environment.png")
+
+var current_environment = -1
+
+func _ready():
+	popup_centered()
+	_on_ViewportContainer_resized()
+	connect_controls()
+	environment_manager.connect("environment_updated", self, "on_environment_updated")
+	environment_manager.connect("name_updated", self, "on_name_updated")
+	environment_manager.connect("thumbnail_updated", self, "on_thumbnail_updated")
+	read_environment_list()
+
+func connect_controls() -> void:
+	var e = {}
+	for c in ui.get_children():
+		if c is LineEdit:
+			if c.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
+				c.connect("value_changed", self, "set_environment_value", [ c.name ])
+			else:
+				c.connect("text_entered", self, "set_environment_value", [ c.name ])
+		elif c is ColorPickerButton:
+			c.connect("color_changed", self, "set_environment_value", [ c.name ])
+		elif c is CheckBox:
+			c.connect("toggled", self, "set_environment_value", [ c.name ])
+
+func set_environment_value(value, variable):
+	environment_manager.set_value(current_environment, variable, value)
+
+func on_environment_updated(index):
+	if index == current_environment:
+		environment_manager.apply_environment(current_environment, environment, sun)
+
+func on_name_updated(index, text):
+	environment_list.set_item_text(index, text)
+
+func on_thumbnail_updated(index, texture):
+	environment_list.set_item_icon(index, texture)
+
+func read_environment_list():
+	environment_list.clear()
+	for e in environment_manager.get_environment_list():
+		environment_list.add_item(e.name)
+		if e.has("thumbnail"):
+			environment_list.set_item_icon(environment_list.get_item_count()-1, e.thumbnail)
+	environment_list.add_item("New...")
+	environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
+	if environment_list.get_item_count() > 1:
+		environment_list.select(0)
+		set_current_environment(0)
+
+func _on_ViewportContainer_resized():
+	$HSplitContainer/ViewportContainer/Viewport.size = $HSplitContainer/ViewportContainer.rect_size
+
+func _on_name_text_entered(new_text : String):
+	environment_list.set_item_text(current_environment, new_text)
+
+func _on_ViewportContainer_gui_input(ev : InputEvent):
+	if ev is InputEventMouseMotion:
+		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
+			if ev.shift:
+				var factor = 0.0025*camera.translation.z
+				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
+				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
+			else:
+				camera_rotation2.rotate_x(-0.01*ev.relative.y)
+				camera_rotation1.rotate_y(-0.01*ev.relative.x)
+	elif ev is InputEventMouseButton:
+		if ev.control:
+			if ev.button_index == BUTTON_WHEEL_UP:
+				camera.fov += 1
+			elif ev.button_index == BUTTON_WHEEL_DOWN:
+				camera.fov -= 1
+			else:
+				return
+			accept_event()
+		else:
+			var zoom = 0.0
+			if ev.button_index == BUTTON_WHEEL_UP:
+				zoom -= 1.0
+			elif ev.button_index == BUTTON_WHEEL_DOWN:
+				zoom += 1.0
+			if zoom != 0.0:
+				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
+				accept_event()
+
+func _update_environment_variable(value, variable):
+	environment.set(variable, value)
+
+func set_current_environment(index : int) -> void:
+	current_environment = index
+	var env : Dictionary = environment_manager.environments[index]
+	for k in env.keys():
+		var control : Control = ui.get_node(k)
+		if control is LineEdit:
+			if control.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
+				control.set_value(env[k])
+			else:
+				control.text = env[k]
+		elif control is ColorPickerButton:
+			control.color = MMType.deserialize_value(env[k])
+		elif control is CheckBox:
+			control.pressed = env[k]
+	environment_manager.apply_environment(current_environment, environment, sun)
+
+func _on_Environments_item_selected(index):
+	if index == environment_list.get_item_count()-1:
+		environment_list.remove_item(index)
+		environment_list.add_item("")
+		var newenv = environment_manager.new_environment(current_environment)
+		#environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
+		environment_list.add_item("New...")
+		environment_list.select(index)
+	set_current_environment(index)

@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/new_environment.png-a8cc8f0a48c687f81a2a6758340b0e0f.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://material_maker/windows/environment_editor/new_environment.png"
+dest_files=[ "res://.import/new_environment.png-a8cc8f0a48c687f81a2a6758340b0e0f.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

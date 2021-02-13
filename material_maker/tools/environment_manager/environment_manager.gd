@@ -1,0 +1,181 @@
+extends Node
+
+var environments = []
+var environment_textures = []
+
+const DEFAULT_ENVIRONMENT = {
+	"name": "Wide Street",
+	"hdri_url": "https://hdrihaven.com/files/hdris/wide_street_01_2k.hdr",
+	"show_color": false,
+	"color": { "type": "Color", "r": 0, "g": 0, "b": 0, "a": 1 },
+	"sky_energy": 1.1,
+	"ambient_light_color": { "type": "Color", "r": 0, "g": 0, "b": 0, "a": 1 },
+	"ambient_light_energy": 1,
+	"ambient_light_sky_contribution": 1,
+	"sun_color": { "type": "Color", "r": 1, "g": 1, "b": 1, "a": 1 },
+	"sun_energy": 0,
+	"sun_direction": 0,
+	"sun_angle": 90
+}
+
+signal environment_updated(index)
+signal name_updated(index, text)
+signal thumbnail_updated(index, texture)
+
+func _ready():
+	set_physics_process(false)
+	if environments.empty():
+		var file = File.new()
+		if file.open("user://environments.json", File.READ) == OK:
+			environments = parse_json(file.get_as_text())
+			file.close()
+		for i in environments.size():
+			var texture : ImageTexture = ImageTexture.new()
+			if environments[i].has("thumbnail"):
+				var image : Image = Image.new()
+				image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail))
+				texture.create_from_image(image)
+			environment_textures.push_back({ thumbnail=texture })
+
+func _exit_tree() -> void:
+	for i in environments.size():
+		var image : Image = environment_textures[i].thumbnail.get_data()
+		environments[i].thumbnail = Marshalls.raw_to_base64(image.save_png_to_buffer())
+	var file = File.new()
+	file.open("user://environments.json", File.WRITE)
+	file.store_string(JSON.print(environments))
+	file.close()
+
+func get_environment_list() -> Array:
+	var list = []
+	for e in environments:
+		var item = {
+			name = e.name if e.has("name") else "unnamed"
+		}
+		if e.has("thumbnail"):
+			var texture : ImageTexture = ImageTexture.new()
+			var image : Image = Image.new()
+			image.load_png_from_buffer(Marshalls.base64_to_raw(e.thumbnail))
+			texture.create_from_image(image)
+			item.thumbnail = texture
+		list.push_back(item)
+	return list
+
+func set_value(index, variable, value):
+	var serialized_value = MMType.serialize_value(value)
+	if environments[index][variable] != serialized_value:
+		environments[index][variable] = serialized_value
+		if variable == "hdri_url":
+			read_hdr(index, value)
+		elif variable == "name":
+			emit_signal("name_updated", index, value)
+		else:
+			emit_signal("environment_updated", index)
+		update_thumbnail(index)
+
+func apply_environment(index : int, e : Environment, s : DirectionalLight) -> void:
+	var env : Dictionary = environments[index]
+	var env_textures : Dictionary = environment_textures[index]
+	e.background_mode = Environment.BG_COLOR_SKY if env.show_color else Environment.BG_SKY
+	e.background_color = MMType.deserialize_value(env.color)
+	if env_textures.has("hdri"):
+		if e.get_meta("hdri") != env.hdri_url:
+			e.background_sky.panorama = env_textures.hdri
+			e.set_meta("hdri", env.hdri_url)
+	elif progress_window == null:
+		read_hdr(index, env.hdri_url)
+		if env_textures.has("hdri") :
+			e.background_sky.panorama = env_textures.hdri
+			e.set_meta("hdri", env.hdri_url)
+	e.background_energy = env.sky_energy
+	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
+	e.ambient_light_energy = env.ambient_light_energy
+	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
+	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
+	s.light_color = MMType.deserialize_value(env.sun_color)
+	s.light_energy = env.sun_energy
+	s.rotation_degrees.y = env.sun_direction
+	s.rotation_degrees.x = -env.sun_angle
+
+var progress_window = null
+
+func read_hdr(index : int, url : String):
+	environment_textures[index].erase("hdri")
+	var dir : Directory = Directory.new()
+	dir.make_dir_recursive("user://hdris")
+	$HTTPRequest.download_file = "user://hdris/"+url.get_file()
+	if dir.file_exists($HTTPRequest.download_file):
+		set_hdr(index, $HTTPRequest.download_file)
+	else:
+		if $HTTPRequest.is_connected("request_completed", self, "_on_HTTPRequest_request_completed"):
+			$HTTPRequest.disconnect("request_completed", self, "_on_HTTPRequest_request_completed")
+		$HTTPRequest.connect("request_completed", self, "_on_HTTPRequest_request_completed", [ index ])
+		var error = $HTTPRequest.request(url)
+		if error == OK:
+			progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
+			add_child(progress_window)
+			progress_window.set_text("Downloading HDRI file")
+			progress_window.set_progress(0)
+			set_physics_process(true)
+		else:
+			push_error("An error occurred in the HTTP request.")
+
+func _on_HTTPRequest_request_completed(result, response_code, headers, body, index):
+	set_hdr(index, $HTTPRequest.download_file)
+	progress_window.queue_free()
+	progress_window = null
+	set_physics_process(false)
+	update_thumbnail(index)
+	emit_signal("environment_updated", index)
+
+func _physics_process(_delta) -> void:
+	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
+
+func set_hdr(index, hdr_path) -> void:
+	var hdr : ImageTexture = ImageTexture.new()
+	hdr.load(hdr_path)
+	environment_textures[index].hdri = hdr
+
+func new_environment(index : int) -> void:
+	var new_environment : Dictionary
+	if index >= 0:
+		new_environment = environments[index].duplicate()
+	else:
+		new_environment = DEFAULT_ENVIRONMENT
+	environments.push_back(new_environment)
+	environment_textures.push_back({ thumbnail=ImageTexture.new() })
+	emit_signal("name_updated", index, new_environment.name)
+	emit_signal("environment_updated", index)
+	update_thumbnail(environments.size()-1)
+
+var thumbnail_update_list = []
+var rendering = false
+
+func update_thumbnail(index) -> void:
+	while rendering:
+		yield(get_tree(), "idle_frame")
+	if thumbnail_update_list.find(index) == -1:
+		thumbnail_update_list.push_back(index)
+	$Timer.wait_time = 0.5
+	$Timer.one_shot = true
+	$Timer.stop()
+	$Timer.start()
+
+onready var preview_generator : Viewport = $PreviewGenerator
+
+func do_update_thumbnail() -> void:
+	rendering = true
+	for index in thumbnail_update_list:
+		apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
+		preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
+		preview_generator.update_worlds()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		var t : ImageTexture = environment_textures[index].thumbnail
+		var image : Image = preview_generator.get_texture().get_data()
+		if image != null:
+			t.create_from_image(image)
+			emit_signal("thumbnail_updated", index, t)
+	thumbnail_update_list = []
+	rendering = false
+
