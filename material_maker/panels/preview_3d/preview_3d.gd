@@ -122,7 +122,10 @@ func get_materials() -> Array:
 
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
+			# Don't stop rotating the preview on mouse wheel usage (zoom change).
+			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+
 		match event.button_index:
 			BUTTON_WHEEL_UP:
 				camera.translation.z = clamp(
