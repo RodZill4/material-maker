@@ -1,38 +1,36 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/panels/layers/layers_tree.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/layers/layers.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
-[ext_resource path="res://material_maker/panels/layers/icons/icons.svg" type="Texture" id=7]
-
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 32, 0, 16, 16 )
+flags = 7
+atlas = ExtResource( 3 )
+region = Rect2( 32, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 48, 0, 16, 16 )
+flags = 7
+atlas = ExtResource( 3 )
+region = Rect2( 48, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 64, 0, 16, 16 )
+flags = 7
+atlas = ExtResource( 3 )
+region = Rect2( 64, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 80, 0, 16, 16 )
+flags = 7
+atlas = ExtResource( 3 )
+region = Rect2( 80, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 96, 0, 16, 16 )
+flags = 7
+atlas = ExtResource( 3 )
+region = Rect2( 96, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=6]
-flags = 4
+flags = 7
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 

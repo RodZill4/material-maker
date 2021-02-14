@@ -1,8 +1,8 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=2]
 
-[ext_resource path="res://material_maker/tools/share/icons.svg" type="Texture" id=1]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
 
 [resource]
-flags = 4
+flags = 7
 atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 32, 16 )
+region = Rect2( 192, 0, 32, 16 )

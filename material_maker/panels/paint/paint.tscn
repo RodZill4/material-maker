@@ -1,9 +1,9 @@
 [gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=1]
-[ext_resource path="res://material_maker/panels/paint/icons/icons.svg" type="Texture" id=2]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.tscn" type="PackedScene" id=12]
 [ext_resource path="res://material_maker/panels/paint/paint_layers.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/panels/paint/paint.gd" type="Script" id=16]
@@ -25,14 +25,14 @@ scancode = 16777244
 shortcut = SubResource( 4 )
 
 [sub_resource type="AtlasTexture" id=6]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 0, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 32, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 32, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=8]
 pressed = true
@@ -42,14 +42,14 @@ scancode = 16777245
 shortcut = SubResource( 8 )
 
 [sub_resource type="AtlasTexture" id=10]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 32, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 0, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=11]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 32, 32, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 32, 224, 32, 32 )
 
 [sub_resource type="InputEventKey" id=12]
 pressed = true
@@ -59,14 +59,14 @@ scancode = 16777246
 shortcut = SubResource( 12 )
 
 [sub_resource type="AtlasTexture" id=14]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 64, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 64, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=15]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 96, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=16]
 pressed = true
@@ -76,14 +76,14 @@ scancode = 16777247
 shortcut = SubResource( 16 )
 
 [sub_resource type="AtlasTexture" id=18]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 192, 32, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 192, 224, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=19]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 224, 32, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 224, 224, 32, 32 )
 
 [sub_resource type="InputEventKey" id=20]
 pressed = true
@@ -93,14 +93,14 @@ scancode = 16777248
 shortcut = SubResource( 20 )
 
 [sub_resource type="AtlasTexture" id=22]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 128, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=23]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 160, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 160, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=24]
 pressed = true
@@ -110,14 +110,14 @@ scancode = 69
 shortcut = SubResource( 24 )
 
 [sub_resource type="AtlasTexture" id=26]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 192, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=27]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 224, 0, 32, 32 )
+flags = 7
+atlas = ExtResource( 5 )
+region = Rect2( 224, 192, 32, 32 )
 
 [node name="MaterialSpray" type="VBoxContainer"]
 anchor_right = 1.0
