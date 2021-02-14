@@ -59,6 +59,8 @@ func get_environment_list() -> Array:
 	return list
 
 func set_value(index, variable, value):
+	if index < 0 || index >= environments.size():
+		return
 	var serialized_value = MMType.serialize_value(value)
 	if environments[index][variable] != serialized_value:
 		environments[index][variable] = serialized_value
@@ -84,7 +86,6 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight) -> vo
 			var status = read_hdr(index, env.hdri_url)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
-			print(status)
 		e.background_sky.panorama = env_textures.hdri
 		e.set_meta("hdri", env.hdri_url)
 	e.background_energy = env.sky_energy
@@ -109,7 +110,6 @@ func read_hdr(index : int, url : String) -> bool:
 	if dir.file_exists($HTTPRequest.download_file):
 		set_hdr(index, $HTTPRequest.download_file)
 	else:
-		print("Downloading "+url)
 		var error = $HTTPRequest.request(url)
 		if error == OK:
 			progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
@@ -175,14 +175,12 @@ onready var preview_generator : Viewport = $PreviewGenerator
 func do_update_thumbnail() -> void:
 	rendering = true
 	for index in thumbnail_update_list:
-		print(index)
 		apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
 		preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
 		preview_generator.update_worlds()
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		var t : ImageTexture = environment_textures[index].thumbnail
-		print(t)
 		var image : Image = preview_generator.get_texture().get_data()
 		if image != null:
 			t.create_from_image(image)
