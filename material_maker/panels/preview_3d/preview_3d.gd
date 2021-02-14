@@ -55,11 +55,7 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 		menu.connect("id_pressed", self, "_on_Model_item_selected")
 
 func create_menu_environment_list(menu : PopupMenu) -> void:
-	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	menu.clear()
-	for e in environment_manager.get_environment_list():
-		print(e)
-		menu.add_icon_item(e.thumbnail, e.name)
+	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=1]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
@@ -12,110 +12,117 @@
 [sub_resource type="World" id=1]
 environment = ExtResource( 1 )
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="PanoramaSky" id=2]
+radiance_size = 4
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="Environment" id=3]
+background_mode = 2
+background_sky = SubResource( 2 )
 
-[sub_resource type="InputEventKey" id=4]
+[sub_resource type="Shader" id=4]
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+
+[sub_resource type="InputEventKey" id=6]
 pressed = true
 scancode = 16777244
 
-[sub_resource type="ShortCut" id=5]
-shortcut = SubResource( 4 )
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
 
-[sub_resource type="AtlasTexture" id=6]
-flags = 7
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 0, 192, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=7]
-flags = 7
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 32, 192, 32, 32 )
 
-[sub_resource type="InputEventKey" id=8]
+[sub_resource type="InputEventKey" id=10]
 pressed = true
 scancode = 16777245
 
-[sub_resource type="ShortCut" id=9]
-shortcut = SubResource( 8 )
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
 
-[sub_resource type="AtlasTexture" id=10]
-flags = 7
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 0, 224, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=11]
-flags = 7
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 32, 224, 32, 32 )
 
-[sub_resource type="InputEventKey" id=12]
+[sub_resource type="InputEventKey" id=14]
 pressed = true
 scancode = 16777246
 
-[sub_resource type="ShortCut" id=13]
-shortcut = SubResource( 12 )
+[sub_resource type="ShortCut" id=15]
+shortcut = SubResource( 14 )
 
-[sub_resource type="AtlasTexture" id=14]
-flags = 7
+[sub_resource type="AtlasTexture" id=16]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 64, 192, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=15]
-flags = 7
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 96, 192, 32, 32 )
 
-[sub_resource type="InputEventKey" id=16]
+[sub_resource type="InputEventKey" id=18]
 pressed = true
 scancode = 16777247
 
-[sub_resource type="ShortCut" id=17]
-shortcut = SubResource( 16 )
+[sub_resource type="ShortCut" id=19]
+shortcut = SubResource( 18 )
 
-[sub_resource type="AtlasTexture" id=18]
-flags = 7
+[sub_resource type="AtlasTexture" id=20]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 192, 224, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=19]
-flags = 7
+[sub_resource type="AtlasTexture" id=21]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 224, 224, 32, 32 )
 
-[sub_resource type="InputEventKey" id=20]
+[sub_resource type="InputEventKey" id=22]
 pressed = true
 scancode = 16777248
 
-[sub_resource type="ShortCut" id=21]
-shortcut = SubResource( 20 )
+[sub_resource type="ShortCut" id=23]
+shortcut = SubResource( 22 )
 
-[sub_resource type="AtlasTexture" id=22]
-flags = 7
+[sub_resource type="AtlasTexture" id=24]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 128, 192, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=23]
-flags = 7
+[sub_resource type="AtlasTexture" id=25]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 160, 192, 32, 32 )
 
-[sub_resource type="InputEventKey" id=24]
+[sub_resource type="InputEventKey" id=26]
 pressed = true
 scancode = 69
 
-[sub_resource type="ShortCut" id=25]
-shortcut = SubResource( 24 )
+[sub_resource type="ShortCut" id=27]
+shortcut = SubResource( 26 )
 
-[sub_resource type="AtlasTexture" id=26]
-flags = 7
+[sub_resource type="AtlasTexture" id=28]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 192, 192, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=27]
-flags = 7
+[sub_resource type="AtlasTexture" id=29]
+flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 224, 192, 32, 32 )
 
@@ -172,18 +179,18 @@ render_target_update_mode = 3
 
 [node name="Camera" type="Camera" parent="VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+environment = SubResource( 3 )
 current = true
 near = 1.0
 far = 4.0
 
-[node name="OmniLight" type="OmniLight" parent="VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.04372, 0, 1.98915 )
-
 [node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/Painter/View/MainView"]
+
+[node name="Sun" type="DirectionalLight" parent="VSplitContainer/Painter/View/MainView"]
 
 [node name="BrushView" type="ColorRect" parent="VSplitContainer/Painter"]
 visible = false
-material = SubResource( 3 )
+material = SubResource( 5 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -208,9 +215,9 @@ size_flags_vertical = 0
 toggle_mode = true
 shortcut_in_tooltip = false
 pressed = true
-shortcut = SubResource( 5 )
-texture_normal = SubResource( 6 )
-texture_pressed = SubResource( 7 )
+shortcut = SubResource( 7 )
+texture_normal = SubResource( 8 )
+texture_pressed = SubResource( 9 )
 
 [node name="FreeLine" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 36.0
@@ -222,9 +229,9 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 9 )
-texture_normal = SubResource( 10 )
-texture_pressed = SubResource( 11 )
+shortcut = SubResource( 11 )
+texture_normal = SubResource( 12 )
+texture_pressed = SubResource( 13 )
 
 [node name="Line" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 72.0
@@ -234,9 +241,9 @@ rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Lines (F3)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 13 )
-texture_normal = SubResource( 14 )
-texture_pressed = SubResource( 15 )
+shortcut = SubResource( 15 )
+texture_normal = SubResource( 16 )
+texture_pressed = SubResource( 17 )
 
 [node name="Fill" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 108.0
@@ -245,9 +252,9 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Fill"
 shortcut_in_tooltip = false
-shortcut = SubResource( 17 )
-texture_normal = SubResource( 18 )
-texture_pressed = SubResource( 19 )
+shortcut = SubResource( 19 )
+texture_normal = SubResource( 20 )
+texture_pressed = SubResource( 21 )
 
 [node name="Space1" type="Control" parent="VSplitContainer/Painter/Tools"]
 margin_left = 144.0
@@ -263,9 +270,9 @@ margin_bottom = 32.0
 hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 21 )
-texture_normal = SubResource( 22 )
-texture_pressed = SubResource( 23 )
+shortcut = SubResource( 23 )
+texture_normal = SubResource( 24 )
+texture_pressed = SubResource( 25 )
 
 [node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
 visible = false
@@ -281,9 +288,9 @@ margin_bottom = 32.0
 hint_tooltip = "Toggler Eraser Mode (E)"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 25 )
-texture_normal = SubResource( 26 )
-texture_pressed = SubResource( 27 )
+shortcut = SubResource( 27 )
+texture_normal = SubResource( 28 )
+texture_pressed = SubResource( 29 )
 
 [node name="Options" type="PanelContainer" parent="VSplitContainer/Painter"]
 anchor_left = 1.0

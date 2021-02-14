@@ -3,6 +3,8 @@ extends Node
 var environments = []
 var environment_textures = []
 
+onready var main_window : Control = get_node("/root/MainWindow")
+
 const DEFAULT_ENVIRONMENT = {
 	"name": "Wide Street",
 	"hdri_url": "https://hdrihaven.com/files/hdris/wide_street_01_2k.hdr",
@@ -57,6 +59,11 @@ func get_environment_list() -> Array:
 		}
 		list.push_back(item)
 	return list
+
+func create_environment_menu(menu : PopupMenu) -> void:
+	menu.clear()
+	for e in get_environment_list():
+		menu.add_icon_item(e.thumbnail, e.name)
 
 func set_value(index, variable, value):
 	if index < 0 || index >= environments.size():
@@ -113,7 +120,7 @@ func read_hdr(index : int, url : String) -> bool:
 		var error = $HTTPRequest.request(url)
 		if error == OK:
 			progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
-			add_child(progress_window)
+			main_window.add_child(progress_window)
 			progress_window.set_text("Downloading HDRI file")
 			progress_window.set_progress(0)
 			set_physics_process(true)

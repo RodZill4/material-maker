@@ -4,7 +4,7 @@
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
 
-[sub_resource type="World" id=2]
+[sub_resource type="World" id=1]
 
 [node name="Preview3D" type="ViewportContainer" groups=[
 "preview",
@@ -28,7 +28,7 @@ __meta__ = {
 [node name="MaterialPreview" type="Viewport" parent="."]
 size = Vector2( 1272, 684 )
 own_world = true
-world = SubResource( 2 )
+world = SubResource( 1 )
 handle_input_locally = false
 msaa = 1
 render_target_clear_mode = 1
@@ -39,5 +39,4 @@ physics_object_picking = true
 
 [node name="ObjLoader" type="Node" parent="."]
 script = ExtResource( 3 )
-
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

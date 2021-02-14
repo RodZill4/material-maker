@@ -90,6 +90,7 @@ const MENU = [
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
+	{ menu="Tools/Painting", submenu="environment", description="Set environment", mode="paint" },
 	{ menu="Tools" },
 	{ menu="Tools", command="environment_editor", description="Environment editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
@@ -820,6 +821,18 @@ func set_painting_texture_size(size : int, value = null) -> bool:
 		return paint.get_texture_size() == size
 	paint.set_texture_size(size)
 	return true
+
+
+func create_menu_environment(menu) -> void:
+	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
+	if !menu.is_connected("id_pressed", self, "_on_Environment_id_pressed"):
+		menu.connect("id_pressed", self, "_on_Environment_id_pressed")
+
+func _on_Environment_id_pressed(id) -> void:
+	var paint = get_current_project()
+	if paint != null:
+		paint.set_environment(id)
+
 
 func environment_editor() -> void:
 	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instance())

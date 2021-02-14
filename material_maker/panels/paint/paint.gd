@@ -72,6 +72,7 @@ func _ready():
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	update_brush_graph()
 	call_deferred("update_brush")
+	set_environment(0)
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -576,3 +577,9 @@ func replace_brush_options_button() -> void:
 func _on_OptionsButton_pressed() -> void:
 	$VSplitContainer/Painter/Options.visible = !$VSplitContainer/Painter/Options.visible
 	replace_brush_options_button()
+
+func set_environment(index) -> void:
+	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+	var environment = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
+	var sun = $VSplitContainer/Painter/View/MainView/Sun
+	environment_manager.apply_environment(index, environment, sun)
