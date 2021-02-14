@@ -39,28 +39,29 @@ func update_material() -> void:
 	if tesselated:
 		material = preload("res://material_maker/panels/preview_3d/materials/shader_material_tesselated.tres").duplicate()
 		material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
+		var tesselation_detail: int = get_node("/root/MainWindow").preview_tesselation_detail
 		match mesh.get_class():
-			"CubeMesh","PrismMesh":
-				mesh.subdivide_width = 128
-				mesh.subdivide_height = 128
-				mesh.subdivide_depth = 128
+			"CubeMesh", "PrismMesh":
+				mesh.subdivide_width = tesselation_detail
+				mesh.subdivide_height = tesselation_detail
+				mesh.subdivide_depth = tesselation_detail
 			"PlaneMesh":
-				mesh.subdivide_width = 128
-				mesh.subdivide_depth = 128
+				mesh.subdivide_width = tesselation_detail
+				mesh.subdivide_depth = tesselation_detail
 			"CylinderMesh":
-				mesh.radial_segments = 128
-				mesh.rings = 128
+				mesh.radial_segments = tesselation_detail
+				mesh.rings = tesselation_detail
 			"SphereMesh":
-				mesh.radial_segments = 128
-				mesh.rings = 64
+				mesh.radial_segments = tesselation_detail
+				mesh.rings = round(tesselation_detail * 0.5)
 			_:
-				print(mesh.get_class())
+				push_error("Unknown tesselated mesh type: %s" % mesh.get_class())
 	else:
 		material = preload("res://material_maker/panels/preview_3d/materials/spatial_material.tres").duplicate()
 		material.uv1_scale.x = uv_scale.x
 		material.uv1_scale.y = uv_scale.y
 		match mesh.get_class():
-			"CubeMesh","PrismMesh":
+			"CubeMesh", "PrismMesh":
 				mesh.subdivide_width = 0
 				mesh.subdivide_height = 0
 				mesh.subdivide_depth = 0
@@ -74,5 +75,5 @@ func update_material() -> void:
 				mesh.radial_segments = 64
 				mesh.rings = 32
 			_:
-				pass
+				push_error("Unknown non-tesselated mesh type: %s" % mesh.get_class())
 	set_surface_material(0, material)
