@@ -251,6 +251,8 @@ func update_material(m, file_prefix = null) -> void:
 		if get_source(INPUT_DEPTH) != null and parameters.depth_scale > 0:
 			m.depth_enabled = true
 			m.depth_deep_parallax = true
+			# Increase level of detail for parallax occlusion mapping (the default is 32).
+			m.depth_max_layers = 64
 			m.depth_scale = parameters.depth_scale * 0.2
 			m.depth_texture = get_generated_texture("depth", file_prefix)
 		else:
