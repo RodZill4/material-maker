@@ -32,6 +32,10 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
+	# Enable viewport debanding if running with Godot 3.2.4 or later.
+	# This mostly suppresses banding artifacts at a very small performance cost.
+	$MaterialPreview.set("debanding", true)
+
 	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
