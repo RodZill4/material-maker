@@ -68,12 +68,11 @@ func update_material() -> void:
 				mesh.subdivide_width = 0
 				mesh.subdivide_depth = 0
 			"CylinderMesh":
-				mesh.radial_segments = 32
+				mesh.radial_segments = 64
 				mesh.rings = 1
 			"SphereMesh":
-				mesh.radial_segments = 32
-				mesh.rings = 16
+				mesh.radial_segments = 64
+				mesh.rings = 32
 			_:
-				#print(mesh.get_class())
 				pass
 	set_surface_material(0, material)
