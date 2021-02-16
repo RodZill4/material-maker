@@ -41,6 +41,7 @@ func set_environment_value(value, variable):
 
 func on_environment_updated(index):
 	if index == current_environment:
+		print("environment_updated")
 		environment_manager.apply_environment(current_environment, environment, sun)
 
 func on_name_updated(index, text):
@@ -113,7 +114,13 @@ func set_current_environment(index : int) -> void:
 			control.color = MMType.deserialize_value(env[k])
 		elif control is CheckBox:
 			control.pressed = env[k]
-	environment_manager.apply_environment(current_environment, environment, sun)
+	environment_manager.apply_environment(index, environment, sun)
+	var read_only : bool = environment_manager.is_read_only(index)
+	for c in ui.get_children():
+		if c is LineEdit:
+			c.editable = !read_only
+		elif c is ColorPickerButton or c is CheckBox:
+			c.disabled = read_only
 
 func _on_Environments_item_selected(index):
 	if index == environment_list.get_item_count()-1:

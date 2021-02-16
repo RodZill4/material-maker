@@ -1,6 +1,5 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=37 format=2]
 
-[ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=1]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=5]
@@ -10,7 +9,6 @@
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.tscn" type="PackedScene" id=17]
 
 [sub_resource type="World" id=1]
-environment = ExtResource( 1 )
 
 [sub_resource type="PanoramaSky" id=2]
 radiance_size = 4
