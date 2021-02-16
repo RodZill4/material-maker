@@ -575,7 +575,7 @@ func _on_GraphEdit_node_selected(node) -> void:
 	set_last_selected(node)
 	highlight_connections()
 
-func _on_GraphEdit_node_unselected(node):
+func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 
 

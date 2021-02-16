@@ -6,7 +6,6 @@ var ignore_parameter_change = ""
 var output_count = 0
 
 var preview : ColorRect
-var preview_position : int
 var preview_timer : Timer = Timer.new()
 
 func _draw() -> void:
@@ -66,14 +65,14 @@ func on_parameter_changed(p : String, v) -> void:
 		update_control_from_parameter(controls, p, v)
 	get_parent().set_need_save()
 
-static func initialize_controls_from_generator(controls, generator, object) -> void:
+static func initialize_controls_from_generator(control_list, generator, object) -> void:
 	var parameter_names = []
 	for p in generator.get_parameter_defs():
 		parameter_names.push_back(p.name)
-	for c in controls.keys():
+	for c in control_list.keys():
 		if parameter_names.find(c) == -1:
 			continue
-		var o = controls[c]
+		var o = control_list[c]
 		if generator.parameters.has(c):
 			object.on_parameter_changed(c, generator.get_parameter(c))
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":

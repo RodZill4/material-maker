@@ -15,7 +15,7 @@ func set_layers(l) -> void:
 	tree.layers = l
 	tree.update_from_layers(layers.layers, layers.selected_layer)
 
-func _on_Tree_selection_changed(old_selected : TreeItem, new_selected : TreeItem) -> void:
+func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	layers.select_layer(new_selected.get_meta("layer"))
 
 func _on_Add_pressed():
