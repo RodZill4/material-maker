@@ -1,13 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://material_maker/examples/bricks.ptex" type="Material" id=1]
-[ext_resource path="res://material_maker/panels/preview_3d/panoramas/studio_sky.tres" type="Environment" id=2]
 [ext_resource path="res://demo/object.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/examples/marble.ptex" type="Material" id=4]
 [ext_resource path="res://material_maker/examples/medieval_wall.ptex" type="Material" id=5]
 [ext_resource path="res://material_maker/examples/floor1.ptex" type="Material" id=6]
 [ext_resource path="res://material_maker/examples/beehive.ptex" type="Material" id=7]
-
 
 [sub_resource type="Animation" id=1]
 resource_name = "rotate"
@@ -42,6 +40,12 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ) ]
 }
+
+[sub_resource type="ProceduralSky" id=3]
+
+[sub_resource type="Environment" id=4]
+background_mode = 2
+background_sky = SubResource( 3 )
 
 [node name="Spatial" type="Spatial"]
 
@@ -82,4 +86,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25 )
 material/0 = ExtResource( 7 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 2 )
+environment = SubResource( 4 )
