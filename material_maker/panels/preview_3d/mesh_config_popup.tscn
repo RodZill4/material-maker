@@ -77,6 +77,7 @@ margin_top = 60.0
 margin_right = 276.0
 margin_bottom = 84.0
 text = "Tesselated"
+
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]
 [connection signal="value_changed" from="VBoxContainer/UVScale/X" to="." method="_on_UV_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/UVScale/Y" to="." method="_on_UV_value_changed"]
