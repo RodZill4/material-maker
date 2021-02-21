@@ -2,8 +2,6 @@
 
 [ext_resource path="res://material_maker/nodes/debug/debug.gd" type="Script" id=1]
 
-
-
 [node name="Debug" type="GraphNode"]
 margin_right = 124.0
 margin_bottom = 49.0
@@ -16,6 +14,9 @@ slot/0/right_enabled = false
 slot/0/right_type = 0
 slot/0/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Button" type="Button" parent="."]
 margin_left = 16.0
