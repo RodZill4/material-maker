@@ -17,6 +17,8 @@ var need_update : bool = false
 # specular/parallax mapping and when viewed at oblique angles.
 var preview_rendering_scale_factor := 2.0
 
+onready var node_library_manager = $NodeLibraryManager
+onready var brush_library_manager = $BrushLibraryManager
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
@@ -78,8 +80,8 @@ const MENU = [
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
 	{ menu="Tools" },
-	{ menu="Tools", command="add_selection_to_user_library", description="Add selected node to user library", mode="material" },
-	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
+	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
+	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
 	{ menu="Tools", command="export_library", description="Export the nodes library", mode="material" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
 	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
@@ -746,43 +748,55 @@ func make_selected_nodes_editable() -> void:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
-func add_selection_to_user_library() -> void:
-	var selected_nodes = get_selected_nodes()
-	if !selected_nodes.empty():
-		var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
-		dialog.set_value(library.get_selected_item_name())
-		dialog.set_texts("New library element", "Select a name for the new library element")
-		add_child(dialog)
-		dialog.connect("ok", self, "do_add_selection_to_user_library", [ selected_nodes ])
-		dialog.connect("popup_hide", dialog, "queue_free")
-		dialog.popup_centered()
+func create_menu_add_to_library(menu, manager, function) -> void:
+	var gens = mm_loader.get_generator_list()
+	menu.clear()
+	for i in manager.libraries.size():
+		if ! manager.libraries[i].read_only:
+			menu.add_item(manager.libraries[i].library_name, i)
+	if !menu.is_connected("id_pressed", self, function):
+		menu.connect("id_pressed", self, function)
 
-func do_add_selection_to_user_library(name, nodes) -> void:
+func create_menu_add_selection_to_library(menu) -> void:
+	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
+
+func add_selection_to_library(index) -> void:
+	var selected_nodes = get_selected_nodes()
+	if selected_nodes.empty():
+		return
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	add_child(dialog)
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	if ! status.ok:
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
-	if nodes.size() == 1:
-		data = nodes[0].generator.serialize()
+	if selected_nodes.size() == 1:
+		data = selected_nodes[0].generator.serialize()
 		data.erase("node_position")
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	# Create thumbnail
-	var result = nodes[0].generator.render(self, 0, 64, true)
+	var result = selected_nodes[0].generator.render(self, 0, 64, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	var image : Image = result.get_image()
 	result.release(self)
-	library.add_to_user_library(data, name, image)
+	node_library_manager.libraries[index].add_item(status.text, image, data)
 
-func add_brush_to_user_library() -> void:
-	var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
-	dialog.set_value(brushes.get_selected_item_name())
-	dialog.set_texts("New library element", "Select a name for the new library element")
+func create_menu_add_brush_to_library(menu) -> void:
+	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
+
+func add_brush_to_library(index) -> void:
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	dialog.connect("ok", self, "do_add_brush_to_user_library")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
-
-func do_add_brush_to_user_library(name) -> void:
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	if ! status.ok:
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data = graph_edit.top_generator.serialize()
 	# Create thumbnail
@@ -791,8 +805,8 @@ func do_add_brush_to_user_library(name) -> void:
 		result = yield(result, "completed")
 	var image : Image = Image.new()
 	image.copy_from(result.get_data())
-	image.resize(64, 64)
-	brushes.add_to_user_library(data, name, image)
+	image.resize(32, 32)
+	brush_library_manager.libraries[index].add_item(status.text, image, data)
 
 func export_library() -> void:
 	var dialog : FileDialog = FileDialog.new()

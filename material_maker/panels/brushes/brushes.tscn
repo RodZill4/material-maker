@@ -5,10 +5,11 @@
 
 [node name="Library" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
+library_manager_name = "BrushLibraryManager"
 base_library_name = "base_brushes.json"
 user_library_name = "user_brushes.json"
 
-[node name="Tree" parent="." index="1"]
+[node name="Tree" parent="." index="3"]
 supports_drag = false
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_activated"]
 [connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

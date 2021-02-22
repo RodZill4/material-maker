@@ -1,26 +1,38 @@
 extends VBoxContainer
 
+export var library_manager_name = ""
 export var base_library_name = "base.json"
 export var user_library_name = "user.json"
 
-var libraries = []
-var libraries_data = {}
 var current_filter = ""
 var expanded_items : Array = []
 
+onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
+
+var category_buttons = {}
+
 onready var tree : Tree = $Tree
-onready var filter_line_edit : LineEdit = $HBoxContainer/Filter
+onready var filter_line_edit : LineEdit = $Filter/Filter
 
 func _ready() -> void:
+	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 32)
-	var lib_path = OS.get_executable_path().get_base_dir()+"/library/"+base_library_name
-	if !add_library(lib_path):
-		add_library("res://material_maker/library/"+base_library_name)
-	add_library("user://library/"+user_library_name)
 	init_expanded_items()
 	update_tree()
+	# Sectup section buttons
+	for s in library_manager.get_sections():
+		var button : TextureButton = TextureButton.new()
+		var texture : Texture = library_manager.get_section_icon(s)
+		button.name = s
+		button.texture_normal = texture
+		button.toggle_mode = true
+		button.hint_tooltip = s
+		$SectionButtons.add_child(button)
+		category_buttons[s] = button
+		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
+		button.connect("gui_input", self, "_on_Section_Button_event", [ s ])
 
 func init_expanded_items() -> void:
 	var f = File.new()
@@ -29,14 +41,13 @@ func init_expanded_items() -> void:
 		f.close()
 	else:
 		expanded_items = []
-		for l in libraries:
-			for m in libraries_data[l]:
-				var n : String = m.tree_item
-				var slash_position = n.find("/")
-				if slash_position != -1:
-					n = m.tree_item.left(slash_position)
-				if expanded_items.find(n) == -1:
-					expanded_items.push_back(n)
+		for m in library_manager.get_items(""):
+			var n : String = m.tree_item
+			var slash_position = n.find("/")
+			if slash_position != -1:
+				n = m.tree_item.left(slash_position)
+			if expanded_items.find(n) == -1:
+				expanded_items.push_back(n)
 
 func _exit_tree() -> void:
 	var f = File.new()
@@ -61,20 +72,6 @@ func get_selected_item_doc_name() -> String:
 		return ""
 	return m.icon
 
-func add_library(file_name : String, _filter : String = "") -> bool:
-	var file = File.new()
-	if file.open(file_name, File.READ) != OK:
-		return false
-	var lib = parse_json(file.get_as_text())
-	file.close()
-	if lib != null and lib.has("lib"):
-		for m in lib.lib:
-			m.library = file_name
-		libraries.push_back(file_name)
-		libraries_data[file_name] = lib.lib
-		return true
-	return false
-
 func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 	var rv : PoolStringArray = PoolStringArray()
 	if item == null:
@@ -94,30 +91,8 @@ func update_tree(filter : String = "") -> void:
 	current_filter = filter
 	tree.clear()
 	tree.create_item()
-	for l in libraries:
-		for m in libraries_data[l]:
-			if filter == "" or m.tree_item.to_lower().find(filter) != -1:
-				add_item(m, m.tree_item, get_preview_texture(m, l), null, filter != "")
-
-func get_preview_texture(data : Dictionary, library = null) -> ImageTexture:
-	if library == null:
-		if data.has("library"):
-			library = data.library
-		else:
-			return null
-	if !data.has("icon"):
-		return null
-	var image_path = library.get_basename()+"/"+data.icon+".png"
-	var t : ImageTexture
-	if image_path.left(6) == "res://":
-		image_path = ProjectSettings.globalize_path(image_path)
-	t = ImageTexture.new()
-	var image : Image = Image.new()
-	if image.load(image_path) == OK:
-		t.create_from_image(image)
-	else:
-		print("Cannot load image "+image_path)
-	return t
+	for i in library_manager.get_items(filter):
+		add_item(i.item, i.name, i.icon, null, filter != "")
 
 func add_item(item, item_name, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
@@ -200,6 +175,7 @@ func save_library(library_name : String, _item : TreeItem = null) -> void:
 		file.store_string(JSON.print({lib=array}, "\t", true))
 		file.close()
 
+"""
 func add_to_user_library(data : Dictionary, name : String, image : Image) -> void:
 	data.tree_item = name
 	data.icon = get_icon_name(name)
@@ -226,6 +202,7 @@ func add_to_user_library(data : Dictionary, name : String, image : Image) -> voi
 		file.store_string(JSON.print({lib=libraries_data[library_path]}, "\t", true))
 		file.close()
 	update_tree(current_filter)
+"""
 
 func _on_Filter_text_changed(filter : String) -> void:
 	update_tree(filter)
@@ -282,3 +259,42 @@ func _on_Tree_item_collapsed(item) -> void:
 			expanded_items.remove(index)
 	else:
 		expanded_items.push_back(path)
+
+
+func _on_SectionButtons_resized():
+	$SectionButtons.columns = $SectionButtons.rect_size.x / 33
+
+var current_category = ""
+
+func _on_Section_Button_pressed(category : String) -> void:
+	var item : TreeItem = $Tree.get_root().get_children()
+	while item != null:
+		if item.get_text(0) == category:
+			item.select(0)
+			$Tree.ensure_cursor_is_visible()
+			break
+		item = item.get_next()
+
+func _on_Section_Button_event(event : InputEvent, category : String) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_RIGHT:
+		if library_manager.toggle_section(category):
+			category_buttons[category].material = null
+		else:
+			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			if current_category == category:
+				current_category = ""
+	update_tree(current_filter)
+
+func _on_Timer_timeout() -> void:
+	var item : TreeItem = $Tree.get_item_at_position(Vector2(5, 5))
+	if item == null:
+		return
+	while item.get_parent() != $Tree.get_root():
+		item = item.get_parent()
+	if item.get_text(0) == current_category:
+		return
+	if category_buttons.has(current_category):
+		category_buttons[current_category].material = null
+	current_category = item.get_text(0)
+	if category_buttons.has(current_category):
+		category_buttons[current_category].material = preload("res://material_maker/panels/library/button_active.tres")

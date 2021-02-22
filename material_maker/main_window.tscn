@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://material_maker/widgets/render_counter/render_counter.tscn" type="PackedScene" id=11]
 [ext_resource path="res://material_maker/tools/share/share_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
+[ext_resource path="res://material_maker/tools/library_manager/library_manager.gd" type="Script" id=14]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -22,17 +23,17 @@ resource_local_to_scene = true
 shader = SubResource( 1 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 7
+flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 96, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 7
+flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
-flags = 7
+flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
 
@@ -48,6 +49,23 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="NodeLibraryManager" type="Node" parent="."]
+script = ExtResource( 14 )
+base_lib_name = "Base library"
+base_lib = "root://library/base.json"
+alt_base_lib = "res://material_maker/library/base.json"
+user_lib_name = "User library"
+user_lib = "user://library/user.json"
+sections = PoolStringArray( "Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous" )
+
+[node name="BrushLibraryManager" type="Node" parent="."]
+script = ExtResource( 14 )
+base_lib_name = "Base library"
+base_lib = "root://library/base_brushes.json"
+alt_base_lib = "res://material_maker/library/base_brushes.json"
+user_lib_name = "User library"
+user_lib = "user://library/user_brushes.json"
 
 [node name="EnvironmentManager" parent="." instance=ExtResource( 13 )]
 
