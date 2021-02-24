@@ -13,14 +13,18 @@ var category_buttons = {}
 onready var tree : Tree = $Tree
 onready var filter_line_edit : LineEdit = $Filter/Filter
 
+
+const MENU_CREATE_LIBRARY : int = 1000
+const MENU_LOAD_LIBRARY : int =   1001
+
+
 func _ready() -> void:
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 32)
-	init_expanded_items()
-	update_tree()
-	$Libraries.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
+	# Connect 
+	library_manager.connect("libraries_changed", self, "update_tree")
 	# Setup section buttons
 	for s in library_manager.get_sections():
 		var button : TextureButton = TextureButton.new()
@@ -33,7 +37,9 @@ func _ready() -> void:
 		category_buttons[s] = button
 		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
 		button.connect("gui_input", self, "_on_Section_Button_event", [ s ])
-	library_manager.connect("libraries_changed", self, "update_tree")
+	$Libraries.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
+	init_expanded_items()
+	update_tree()
 
 func init_expanded_items() -> void:
 	var f = File.new()
@@ -88,6 +94,15 @@ func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 	return rv
 
 func update_tree() -> void:
+	# update category buttons
+	for c in category_buttons.keys():
+		if library_manager.is_section_enabled(c):
+			category_buttons[c].material = null
+		else:
+			category_buttons[c].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			if current_category == c:
+				current_category = ""
+	# update tree
 	var filter : String = $Filter/Filter.text.to_lower()
 	tree.clear()
 	tree.create_item()
@@ -236,9 +251,34 @@ func _on_Libraries_about_to_show():
 	for i in library_manager.get_child_count():
 		popup.add_check_item(library_manager.get_child(i).library_name, i)
 		popup.set_item_checked(i, library_manager.is_library_enabled(i))
+	popup.add_separator()
+	popup.add_item("Create library", MENU_CREATE_LIBRARY)
+	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 
 func _on_Libraries_id_pressed(id : int) -> void:
-	library_manager.toggle_library(id)
+	match id:
+		MENU_CREATE_LIBRARY:
+			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_info()
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status.ok:
+				library_manager.create_library(status.path, status.name)
+		MENU_LOAD_LIBRARY:
+			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+			add_child(dialog)
+			dialog.rect_min_size = Vector2(500, 500)
+			dialog.access = FileDialog.ACCESS_FILESYSTEM
+			dialog.mode = FileDialog.MODE_OPEN_FILE
+			dialog.add_filter("*.json;Material Maker Library")
+			var files = dialog.select_files()
+			while files is GDScriptFunctionState:
+				files = yield(files, "completed")
+			if files.size() == 1:
+				library_manager.load_library(files[0])
+		_:
+			library_manager.toggle_library(id)
 
 var current_item : TreeItem
 

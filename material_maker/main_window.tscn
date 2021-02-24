@@ -58,6 +58,7 @@ alt_base_lib = "res://material_maker/library/base.json"
 user_lib_name = "User library"
 user_lib = "user://library/user.json"
 sections = PoolStringArray( "Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous" )
+config_section = "node_lib"
 
 [node name="BrushLibraryManager" type="Node" parent="."]
 script = ExtResource( 14 )
@@ -66,6 +67,7 @@ base_lib = "root://library/base_brushes.json"
 alt_base_lib = "res://material_maker/library/base_brushes.json"
 user_lib_name = "User library"
 user_lib = "user://library/user_brushes.json"
+config_section = "brush_lib"
 
 [node name="EnvironmentManager" parent="." instance=ExtResource( 13 )]
 

@@ -6,8 +6,10 @@ export var alt_base_lib : String = ""
 export var user_lib_name : String = ""
 export var user_lib : String = ""
 export var sections : PoolStringArray
+export var config_section : String = ""
 
 var section_icons : Dictionary = {}
+
 var disabled_libraries : Array = []
 var disabled_sections : Array = []
 
@@ -25,6 +27,7 @@ func _ready():
 # Libraries
 
 func init_libraries() -> void:
+	var config = get_config()
 	var library = LIBRARY.new()
 	if library.load_library(base_lib, true) or library.load_library(alt_base_lib):
 		if library.library_name == "":
@@ -38,6 +41,20 @@ func init_libraries() -> void:
 		library.create_library(user_lib, user_lib_name)
 	add_child(library)
 	init_section_icons()
+	yield(get_tree(), "idle_frame")
+	if config.has_section_key(config_section, "libraries"):
+		for p in config.get_value(config_section, "libraries"):
+			library = LIBRARY.new()
+			if library.load_library(p):
+				add_child(library)
+	if config.has_section_key(config_section, "disabled_libraries"):
+		disabled_libraries = config.get_value(config_section, "disabled_libraries")
+	if config.has_section_key(config_section, "disabled_sections"):
+		disabled_sections = config.get_value(config_section, "disabled_sections")
+	emit_signal("libraries_changed")
+
+func get_config() -> ConfigFile:
+	return get_node("/root/MainWindow").config_cache
 
 func get_items(filter : String) -> Array:
 	var array : Array = []
@@ -48,6 +65,27 @@ func get_items(filter : String) -> Array:
 				i.library_index = li
 				array.push_back(i)
 	return array
+
+func save_library_list() -> void:
+	var library_list = []
+	for i in range(2, get_child_count()):
+		library_list.push_back(get_child(i).library_path)
+	get_config().set_value(config_section, "libraries", library_list)
+
+func create_library(path : String, name : String) -> void:
+	var library = LIBRARY.new()
+	library.create_library(path, name)
+	add_child(library)
+	save_library_list()
+
+func load_library(path : String) -> void:
+	var library = LIBRARY.new()
+	library.load_library(path)
+	add_child(library)
+	if disabled_libraries.find(path) != -1:
+		disabled_libraries.erase(path)
+	emit_signal("libraries_changed")
+	save_library_list()
 
 func is_library_enabled(index : int) -> bool:
 	return disabled_libraries.find(get_child(index).library_path) == -1
@@ -61,6 +99,7 @@ func toggle_library(index : int) -> bool:
 		disabled_libraries.erase(lib)
 		enabled = true
 	emit_signal("libraries_changed")
+	get_config().set_value(config_section, "disabled_libraries", disabled_libraries)
 	return enabled
 
 func add_item_to_library(index : int, item_name : String, image : Image, data : Dictionary) -> void:
@@ -91,6 +130,9 @@ func get_sections() -> Array:
 func get_section_icon(section_name : String) -> Texture:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
+func is_section_enabled(section_name : String) -> bool:
+	return disabled_sections.find(section_name) == -1
+
 func toggle_section(section_name : String) -> bool:
 	var enabled : bool = false
 	if disabled_sections.find(section_name) == -1:
@@ -99,4 +141,5 @@ func toggle_section(section_name : String) -> bool:
 		disabled_sections.erase(section_name)
 		enabled = true
 	emit_signal("libraries_changed")
+	get_config().set_value(config_section, "disabled_sections", disabled_sections)
 	return enabled
