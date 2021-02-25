@@ -67,10 +67,10 @@ func deserialize(v) -> void:
 	clear()
 	if typeof(v) == TYPE_DICTIONARY and v.has("type") and v.type == "Polygon":
 		for p in v.points:
-			add_point(p.x, p.y)
+			points.push_back(Vector2(p.x, p.y))
 	elif typeof(v) == TYPE_OBJECT and v.get_script() == get_script():
 		clear()
 		for p in v.points:
-			add_point(p.x, p.y)
+			points.push_back(Vector2(p.x, p.y))
 	else:
 		print("Cannot deserialize polygon")
