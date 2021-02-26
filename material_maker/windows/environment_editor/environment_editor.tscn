@@ -11,6 +11,7 @@ background_mode = 2
 background_sky = SubResource( 1 )
 
 [node name="EnvironmentEditor" type="WindowDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 230.0
@@ -34,16 +35,21 @@ __meta__ = {
 }
 
 [node name="Environments" type="ItemList" parent="HSplitContainer"]
-margin_right = 96.0
+margin_right = 112.0
 margin_bottom = 350.0
-rect_min_size = Vector2( 96, 100 )
+rect_min_size = Vector2( 112, 100 )
 max_columns = 4
 same_column_width = true
 fixed_column_width = 96
 icon_mode = 0
 
+[node name="ContextMenu" type="PopupMenu" parent="HSplitContainer/Environments"]
+margin_right = 149.0
+margin_bottom = 34.0
+items = [ "Delete environment", null, 0, false, false, 0, 0, null, "", false ]
+
 [node name="ViewportContainer" type="ViewportContainer" parent="HSplitContainer"]
-margin_left = 100.0
+margin_left = 116.0
 margin_right = 596.0
 margin_bottom = 350.0
 size_flags_horizontal = 3
@@ -52,7 +58,7 @@ size_flags_horizontal = 3
 size = Vector2( 200, 200 )
 own_world = true
 handle_input_locally = false
-render_target_update_mode = 0
+render_target_update_mode = 3
 
 [node name="Objects" parent="HSplitContainer/ViewportContainer/Viewport" instance=ExtResource( 1 )]
 
@@ -267,7 +273,11 @@ min_value = -90.0
 max_value = 90.0
 step = 0.1
 float_only = true
+
 [connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="gui_input" from="HSplitContainer/Environments" to="." method="_on_Environments_gui_input"]
 [connection signal="item_selected" from="HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
+[connection signal="rmb_clicked" from="HSplitContainer/Environments" to="." method="_on_Environments_rmb_clicked"]
+[connection signal="id_pressed" from="HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="gui_input" from="HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
 [connection signal="resized" from="HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]

@@ -191,6 +191,9 @@ func new_environment(index : int) -> void:
 	emit_signal("environment_updated", environments.size()-1)
 	update_thumbnail(environments.size()-1)
 
+func delete_environment(index : int) -> void:
+	environments.remove(index)
+
 var thumbnail_update_list = []
 var rendering = false
 
