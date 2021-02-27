@@ -512,6 +512,8 @@ func can_drop_data(_position, data) -> bool:
 	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
 func drop_data(position, data) -> void:
+	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
+		get_node("/root/MainWindow/NodeLibraryManager").item_created(data.tree_item)
 	# The following mitigates the SpinBox problem (captures mouse while dragging)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

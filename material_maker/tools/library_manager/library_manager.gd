@@ -19,6 +19,8 @@ export var user_aliases_file_name : String = ""
 var base_item_aliases : Dictionary = {}
 var user_item_aliases : Dictionary = {}
 
+var item_usage : Dictionary
+export var item_usage_file : String = ""
 
 const LIBRARY = preload("res://material_maker/tools/library_manager/library.gd")
 
@@ -30,6 +32,16 @@ func _ready():
 	init_libraries()
 	init_section_icons()
 	init_aliases()
+	init_usage()
+
+func _exit_tree():
+	if item_usage_file == "":
+		return
+	Directory.new().make_dir_recursive(item_usage_file.get_base_dir())
+	var file = File.new()
+	if file.open(item_usage_file, File.WRITE) == OK:
+		file.store_string(JSON.print(item_usage, "\t", true))
+		file.close()
 
 # Libraries
 
@@ -63,7 +75,12 @@ func init_libraries() -> void:
 func get_config() -> ConfigFile:
 	return get_node("/root/MainWindow").config_cache
 
-func get_items(filter : String) -> Array:
+func compare_item_usage(i1, i2) -> int:
+	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0
+	var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
+	return u1 - u2
+
+func get_items(filter : String, sorted = false) -> Array:
 	var array : Array = []
 	var aliased_items = []
 	for al in [ base_item_aliases, user_item_aliases ]:
@@ -76,6 +93,21 @@ func get_items(filter : String) -> Array:
 			for i in l.get_items(filter, disabled_sections, aliased_items):
 				i.library_index = li
 				array.push_back(i)
+	if sorted:
+		var sorted_array : Array = []
+		for i in array:
+			var u1 = item_usage[i.name] if item_usage.has(i.name) else 0
+			var inserted = false
+			for p in sorted_array.size():
+				var i2 = sorted_array[p]
+				var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
+				if u1 > u2:
+					sorted_array.insert(p, i)
+					inserted = true
+					break
+			if !inserted:
+				sorted_array.push_back(i)
+		array = sorted_array
 	return array
 
 func save_library_list() -> void:
@@ -200,6 +232,7 @@ func load_aliases(path : String) -> Dictionary:
 func save_aliases() -> void:
 	if user_aliases_file_name == "":
 		return
+	Directory.new().make_dir_recursive(user_aliases_file_name.get_base_dir())
 	var file = File.new()
 	if file.open(user_aliases_file_name, File.WRITE) == OK:
 		file.store_string(JSON.print(user_item_aliases, "\t", true))
@@ -220,3 +253,17 @@ func set_aliases(item : String, aliases : String) -> void:
 	aliases = PoolStringArray(list).join(",")
 	user_item_aliases[item] = aliases
 	save_aliases()
+
+# Sort items by usage in item menu
+
+func init_usage() -> void:
+	var file = File.new()
+	if ! file.open(item_usage_file, File.READ) == OK:
+		return
+	item_usage = parse_json(file.get_as_text())
+
+func item_created(item : String) -> void:
+	if item_usage.has(item):
+		item_usage[item] += 1
+	else:
+		item_usage[item] = 1

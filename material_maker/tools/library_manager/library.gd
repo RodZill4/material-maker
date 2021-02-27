@@ -63,6 +63,7 @@ func get_sections() -> Array:
 	return Array(sections)
 
 func save_library() -> void:
+	Directory.new().make_dir_recursive(library_path.get_base_dir())
 	var file = File.new()
 	if file.open(library_path, File.WRITE) == OK:
 		file.store_string(JSON.print({name=library_name, lib=library_items}, "\t", true))

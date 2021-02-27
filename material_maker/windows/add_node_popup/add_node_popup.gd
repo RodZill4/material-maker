@@ -54,6 +54,7 @@ func add_node(node_data) -> void:
 					port_position = node.get_connection_input_position(new_slot)
 					break
 		node.offset -= port_position/current_graph.zoom
+	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
 
 
@@ -83,7 +84,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 func update_list(filter_text : String = "") -> void:
 	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scrollbar().value = 0.0
 	list.clear()
-	for i in library_manager.get_items(filter_text):
+	for i in library_manager.get_items(filter_text, true):
 		var obj = i.item
 		if not obj.has("type"):
 			continue

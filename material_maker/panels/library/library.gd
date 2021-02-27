@@ -249,7 +249,6 @@ func _on_Libraries_about_to_show():
 	var popup : PopupMenu = $Libraries.get_popup()
 	var unload : PopupMenu = null
 	for c in popup.get_children():
-		print(c)
 		if c is PopupMenu:
 			unload = c
 			break
