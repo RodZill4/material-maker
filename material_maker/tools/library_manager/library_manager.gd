@@ -13,6 +13,12 @@ var section_icons : Dictionary = {}
 var disabled_libraries : Array = []
 var disabled_sections : Array = []
 
+export var base_aliases_file_name : String = ""
+export var alt_base_aliases_file_name : String = ""
+export var user_aliases_file_name : String = ""
+var base_item_aliases : Dictionary = {}
+var user_item_aliases : Dictionary = {}
+
 
 const LIBRARY = preload("res://material_maker/tools/library_manager/library.gd")
 
@@ -23,6 +29,7 @@ signal libraries_changed
 func _ready():
 	init_libraries()
 	init_section_icons()
+	init_aliases()
 
 # Libraries
 
@@ -58,10 +65,15 @@ func get_config() -> ConfigFile:
 
 func get_items(filter : String) -> Array:
 	var array : Array = []
+	var aliased_items = []
+	for al in [ base_item_aliases, user_item_aliases ]:
+		for a in al.keys():
+			if al[a].find(filter) != -1 and aliased_items.find(a) == -1:
+				aliased_items.push_back(a)
 	for li in get_child_count():
 		var l = get_child(li)
 		if disabled_libraries.find(l.library_path) == -1:
-			for i in l.get_items(filter, disabled_sections):
+			for i in l.get_items(filter, disabled_sections, aliased_items):
 				i.library_index = li
 				array.push_back(i)
 	return array
@@ -72,18 +84,36 @@ func save_library_list() -> void:
 		library_list.push_back(get_child(i).library_path)
 	get_config().set_value(config_section, "libraries", library_list)
 
+func has_library(path : String) -> bool:
+	for c in get_children():
+		if c.library_path == path:
+			return true
+	return false
+
 func create_library(path : String, name : String) -> void:
+	if has_library(path):
+		return
 	var library = LIBRARY.new()
 	library.create_library(path, name)
 	add_child(library)
 	save_library_list()
 
 func load_library(path : String) -> void:
+	if has_library(path):
+		return
 	var library = LIBRARY.new()
 	library.load_library(path)
 	add_child(library)
 	if disabled_libraries.find(path) != -1:
 		disabled_libraries.erase(path)
+	emit_signal("libraries_changed")
+	save_library_list()
+
+func unload_library(index : int) -> void:
+	var lib = get_child(index).library_path
+	if disabled_libraries.find(lib) != -1:
+		disabled_libraries.erase(lib)
+	remove_child(get_child(index))
 	emit_signal("libraries_changed")
 	save_library_list()
 
@@ -108,6 +138,14 @@ func add_item_to_library(index : int, item_name : String, image : Image, data : 
 
 func remove_item_from_library(index : int, item_name : String) -> void:
 	get_child(index).remove_item(item_name)
+	emit_signal("libraries_changed")
+
+func rename_item_in_library(index : int, old_name : String, new_name : String) -> void:
+	get_child(index).rename_item(old_name, new_name)
+	emit_signal("libraries_changed")
+
+func update_item_icon_in_library(index : int, name : String, icon : Image) -> void:
+	get_child(index).update_item_icon(name, icon)
 	emit_signal("libraries_changed")
 
 # Section icons
@@ -143,3 +181,42 @@ func toggle_section(section_name : String) -> bool:
 	emit_signal("libraries_changed")
 	get_config().set_value(config_section, "disabled_sections", disabled_sections)
 	return enabled
+
+# Aliases
+
+func init_aliases() -> void:
+	base_item_aliases = load_aliases(base_aliases_file_name)
+	if base_item_aliases.empty():
+		base_item_aliases = load_aliases(alt_base_aliases_file_name)
+	user_item_aliases = load_aliases(user_aliases_file_name)
+
+func load_aliases(path : String) -> Dictionary:
+	path = path.replace("root://", OS.get_executable_path().get_base_dir()+"/")
+	var file = File.new()
+	if ! file.open(path, File.READ) == OK:
+		return {}
+	return parse_json(file.get_as_text())
+
+func save_aliases() -> void:
+	if user_aliases_file_name == "":
+		return
+	var file = File.new()
+	if file.open(user_aliases_file_name, File.WRITE) == OK:
+		file.store_string(JSON.print(user_item_aliases, "\t", true))
+		file.close()
+
+func get_aliases(item : String) -> String:
+	return user_item_aliases[item] if user_item_aliases.has(item) else base_item_aliases[item] if base_item_aliases.has(item) else ""
+
+func set_aliases(item : String, aliases : String) -> void:
+	aliases = aliases.to_lower()
+	var regex = RegEx.new()
+	regex.compile("[^\\w]+") # Negated whitespace character class.
+	aliases = regex.sub(aliases, ",", true)
+	var list = []
+	for i in aliases.split(",", false):
+		if list.find(i) == -1:
+			list.push_back(i)
+	aliases = PoolStringArray(list).join(",")
+	user_item_aliases[item] = aliases
+	save_aliases()

@@ -247,13 +247,28 @@ func _on_Timer_timeout() -> void:
 
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = $Libraries.get_popup()
+	var unload : PopupMenu = null
+	for c in popup.get_children():
+		print(c)
+		if c is PopupMenu:
+			unload = c
+			break
+	if unload == null:
+		unload = PopupMenu.new()
+		unload.name = "Unload"
+		popup.add_child(unload)
+		unload.connect("id_pressed", self, "_on_Libraries_Unload_id_pressed")
 	popup.clear()
+	unload.clear()
 	for i in library_manager.get_child_count():
 		popup.add_check_item(library_manager.get_child(i).library_name, i)
 		popup.set_item_checked(i, library_manager.is_library_enabled(i))
+		if i > 1:
+			unload.add_item(library_manager.get_child(i).library_name, i)
 	popup.add_separator()
 	popup.add_item("Create library", MENU_CREATE_LIBRARY)
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
+	popup.add_submenu_item("Unload", "Unload")
 
 func _on_Libraries_id_pressed(id : int) -> void:
 	match id:
@@ -280,6 +295,9 @@ func _on_Libraries_id_pressed(id : int) -> void:
 		_:
 			library_manager.toggle_library(id)
 
+func _on_Libraries_Unload_id_pressed(id : int) -> void:
+	library_manager.unload_library(id)
+
 var current_item : TreeItem
 
 func _on_Tree_item_rmb_selected(position):
@@ -287,8 +305,35 @@ func _on_Tree_item_rmb_selected(position):
 	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
 
 func _on_PopupMenu_index_pressed(index):
+	var library_index : int = current_item.get_metadata(1)
+	var item_path : String = get_item_path(current_item)
 	match index:
-		0:
-			var library_index : int = current_item.get_metadata(1)
-			var item_path : String = get_item_path(current_item)
+		0: # Rename
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status.ok:
+				library_manager.rename_item_in_library(library_index, item_path, status.text)
+		1: # Update thumbnail
+			var main_window = get_node("/root/MainWindow")
+			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
+			var result = current_node.generator.render(self, 0, 64, true)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			var image : Image = result.get_image()
+			result.release(self)
+			library_manager.update_item_icon_in_library(library_index, item_path, image)
+		2: # Define aliases
+			var aliases = library_manager.get_aliases(item_path)
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if ! status.ok:
+				return
+			library_manager.set_aliases(item_path, status.text)
+		3: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)

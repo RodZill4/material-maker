@@ -67,7 +67,7 @@ autostart = true
 [node name="PopupMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
 margin_bottom = 20.0
-items = [ "Remove item", null, 0, false, false, 0, 0, null, "", false ]
+items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Define aliases", null, 0, false, false, 2, 0, null, "", false, "Remove item", null, 0, false, false, 3, 0, null, "", false ]
 
 [connection signal="about_to_show" from="Libraries" to="." method="_on_Libraries_about_to_show"]
 [connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]

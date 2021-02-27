@@ -44,10 +44,10 @@ func load_library(path : String, ro : bool = false) -> bool:
 		library_icons[i.tree_item] = texture
 	return true
 
-func get_items(filter : String, disabled_sections : Array) -> Array:
+func get_items(filter : String, disabled_sections : Array, aliased_items : Array) -> Array:
 	var array : Array = []
 	for i in library_items:
-		if filter == "" or i.tree_item.to_lower().find(filter) != -1:
+		if filter == "" or i.tree_item.to_lower().find(filter) != -1 or aliased_items.find(i.tree_item) != -1:
 			var slash_pos = i.tree_item.find("/")
 			var section_name = i.tree_item.left(slash_pos) if slash_pos != -1 else i.tree_item
 			if disabled_sections.find(section_name) == -1:
@@ -91,10 +91,31 @@ func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 	save_library()
 
 func remove_item(item_name : String) -> void:
+	if read_only:
+		return
 	var new_library_items = []
 	for i in library_items:
 		if i.tree_item != item_name:
 			new_library_items.push_back(i)
 	library_items = new_library_items
 	library_items_by_name.erase(item_name)
+	library_icons.erase(item_name)
+	save_library()
+
+func rename_item(old_name : String, new_name : String) -> void:
+	if read_only or library_items_by_name.has(new_name):
+		return
+	library_items_by_name[new_name] = library_items_by_name[old_name]
+	library_icons[new_name] = library_icons[old_name]
+	library_items_by_name[new_name].tree_item = new_name
+	library_items_by_name.erase(old_name)
+	library_icons.erase(old_name)
+	save_library()
+
+func update_item_icon(name : String, icon : Image) -> void:
+	if read_only:
+		return
+	var data = library_items_by_name[name]
+	data.icon_data = Marshalls.raw_to_base64(icon.save_png_to_buffer())
+	library_icons[name].create_from_image(icon)
 	save_library()

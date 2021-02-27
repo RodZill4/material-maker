@@ -59,6 +59,9 @@ user_lib_name = "User library"
 user_lib = "user://library/user.json"
 sections = PoolStringArray( "Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous" )
 config_section = "node_lib"
+base_aliases_file_name = "root://library/aliases.json"
+alt_base_aliases_file_name = "res://material_maker/library/aliases.json"
+user_aliases_file_name = "user://library/aliases.json"
 
 [node name="BrushLibraryManager" type="Node" parent="."]
 script = ExtResource( 14 )

@@ -905,14 +905,17 @@ func update_preview() -> void:
 			status = yield(status, "completed")
 	updating = false
 
+func get_current_node(graph_edit : MMGraphEdit) -> Node:
+	for n in graph_edit.get_children():
+		if n is GraphNode and n.selected:
+			return n
+	return null
+
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if node == null:
-			for n in graph_edit.get_children():
-				if n is GraphNode and n.selected:
-					node = n
-					break
+			node = get_current_node(graph_edit)
 		if node != null:
 			preview_2d.set_generator(node.generator)
 			histogram.set_generator(node.generator)
