@@ -145,7 +145,7 @@ func on_gui_input(event) -> void:
 					_mouse_start_position = event.global_position
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
-					Input.warp_mouse_position(_mouse_start_position)
+					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
 		var motion = 0.01*event.relative
