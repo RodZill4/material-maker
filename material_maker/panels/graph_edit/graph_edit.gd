@@ -6,8 +6,8 @@ export(String, MULTILINE) var shader_context_defs : String = ""
 var node_factory = null
 
 var save_path = null setget set_save_path
-var need_save = false
-var need_save_crash_recovery = false
+var need_save : bool = false
+var need_save_crash_recovery : bool = false
 
 var top_generator = null
 var generator = null
@@ -368,6 +368,7 @@ func save_as() -> bool:
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
+			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
 			return true
 	return false
 

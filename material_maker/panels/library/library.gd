@@ -22,7 +22,7 @@ func _ready() -> void:
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
-	tree.set_column_min_width(1, 32)
+	tree.set_column_min_width(1, 36)
 	# Connect 
 	library_manager.connect("libraries_changed", self, "update_tree")
 	# Setup section buttons
@@ -303,6 +303,13 @@ func _on_Tree_item_rmb_selected(position):
 	current_item = $Tree.get_item_at_position(position)
 	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
 
+func _on_PopupMenu_about_to_show():
+	var library_index : int = current_item.get_metadata(1)
+	var read_only : bool = library_manager.get_child(library_index).read_only
+	$PopupMenu.set_item_disabled(0, read_only)
+	$PopupMenu.set_item_disabled(1, read_only)
+	$PopupMenu.set_item_disabled(2, read_only)
+
 func _on_PopupMenu_index_pressed(index):
 	var library_index : int = current_item.get_metadata(1)
 	var item_path : String = get_item_path(current_item)
@@ -324,7 +331,9 @@ func _on_PopupMenu_index_pressed(index):
 			var image : Image = result.get_image()
 			result.release(self)
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
-		2: # Define aliases
+		2: # Delete item
+			library_manager.remove_item_from_library(library_index, item_path)
+		3: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 			add_child(dialog)
@@ -334,5 +343,5 @@ func _on_PopupMenu_index_pressed(index):
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)
-		3: # Delete item
-			library_manager.remove_item_from_library(library_index, item_path)
+
+

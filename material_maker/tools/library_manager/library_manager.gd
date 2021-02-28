@@ -9,6 +9,7 @@ export var sections : PoolStringArray
 export var config_section : String = ""
 
 var section_icons : Dictionary = {}
+var section_colors : Dictionary = {}
 
 var disabled_libraries : Array = []
 var disabled_sections : Array = []
@@ -184,11 +185,19 @@ func update_item_icon_in_library(index : int, name : String, icon : Image) -> vo
 
 func init_section_icons() -> void:
 	var atlas = preload("res://material_maker/icons/icons.tres")
+	var atlas_image = atlas.get_data()
+	if atlas_image == null and atlas is ProxyTexture:
+		atlas_image = atlas.base.get_data()
+	atlas_image.lock()
 	for i in sections.size():
+		var x = 128+32*(i%4)
+		var y = 32+32*(i/4)
 		var texture : AtlasTexture = AtlasTexture.new()
 		texture.atlas = atlas
-		texture.region = Rect2(128+32*(i%4), 32+32*(i/4), 32, 32)
+		texture.region = Rect2(x, y, 32, 32)
 		section_icons[sections[i]] = texture
+		section_icons[sections[i]] = atlas_image.get_pixel(x, y)
+	atlas_image.unlock()
 
 func get_sections() -> Array:
 	var section_list : Array = Array()

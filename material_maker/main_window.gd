@@ -521,8 +521,8 @@ func do_load_projects(filenames) -> void:
 		file_name = file.get_path_absolute()
 		file.close()
 		do_load_project(file_name)
-	if filename != "":
-		config_cache.set_value("path", "project", filename.get_base_dir())
+	if file_name != "":
+		config_cache.set_value("path", "project", file_name.get_base_dir())
 
 func do_load_project(file_name) -> void:
 	var status : bool = false
