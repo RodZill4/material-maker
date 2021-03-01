@@ -325,6 +325,8 @@ func _on_PopupMenu_index_pressed(index):
 		1: # Update thumbnail
 			var main_window = get_node("/root/MainWindow")
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
+			if current_node == null:
+				return
 			var result = current_node.generator.render(self, 0, 64, true)
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
@@ -333,7 +335,7 @@ func _on_PopupMenu_index_pressed(index):
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
 		2: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)
-		3: # Define aliases
+		4: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 			add_child(dialog)

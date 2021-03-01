@@ -143,6 +143,7 @@ func read_hdr(index : int, url : String) -> bool:
 	if dir.file_exists(file_path):
 		set_hdr(index, file_path)
 		return true
+	Directory.new().make_dir_recursive("user://hdris")
 	$HTTPRequest.download_file = file_path
 	var error = $HTTPRequest.request(url)
 	if error == OK:

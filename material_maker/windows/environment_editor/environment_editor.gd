@@ -41,7 +41,6 @@ func set_environment_value(value, variable):
 
 func on_environment_updated(index):
 	if index == current_environment:
-		print("environment_updated")
 		environment_manager.apply_environment(current_environment, environment, sun)
 
 func on_name_updated(index, text):
