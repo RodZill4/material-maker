@@ -1,0 +1,86 @@
+{
+	"name": "tones_range",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"contrast": 0.5,
+		"invert": false,
+		"value": 0.5,
+		"width": 0.25
+	},
+	"shader_model": {
+		"code": "float $(name_uv)_step = clamp(($in($uv) - ($value))/max(0.0001, $width)+0.5, 0.0, 1.0);\nfloat $(name_uv)_false = clamp((min($(name_uv)_step, 1.0-$(name_uv)_step) * 2.0) / (1.0 - $contrast), 0.0, 1.0);\nfloat $(name_uv)_true = 1.0-$(name_uv)_false;",
+		"global": "",
+		"inputs": [
+			{
+				"default": "($uv.x + $uv.y) / 2.0",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Outputs the tone range around a specified value,",
+		"name": "Tones Range",
+		"outputs": [
+			{
+				"f": "$(name_uv)_$invert",
+				"longdesc": "Shows the generated high contrast image",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Value",
+				"longdesc": "The center value of the selection",
+				"max": 1,
+				"min": 0,
+				"name": "value",
+				"shortdesc": "Value",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Width",
+				"longdesc": "The width (in tones space) of the selection area",
+				"max": 1,
+				"min": 0,
+				"name": "width",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Contrast",
+				"longdesc": "Adjusts the falloff of the output",
+				"max": 1,
+				"min": 0,
+				"name": "contrast",
+				"shortdesc": "Contrast",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Invert",
+				"longdesc": "Invert the generated image if set",
+				"name": "invert",
+				"shortdesc": "Invert",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Tones Range"
+	},
+	"type": "shader"
+}
