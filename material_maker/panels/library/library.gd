@@ -108,6 +108,7 @@ func update_tree() -> void:
 	tree.create_item()
 	for i in library_manager.get_items(filter):
 		add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
+	$Tree.update()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
@@ -345,5 +346,3 @@ func _on_PopupMenu_index_pressed(index):
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)
-
-
