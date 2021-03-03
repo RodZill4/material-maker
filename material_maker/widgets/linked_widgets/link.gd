@@ -51,12 +51,12 @@ func _draw() -> void:
 	if target != null:
 		color = Color(0.5, 1, 0.5, 0.5)
 		rect = get_global_transform().xform_inv(target.get_global_transform().xform(Rect2(Vector2(0, 0), target.rect_size)))
-		draw_rect(rect, color, false)
+		draw_rect(rect, color, false, 2)
 		end = closest(rect, start)
 	rect = get_global_transform().xform_inv(source.get_global_transform().xform(Rect2(Vector2(0, 0), source.rect_size)))
-	draw_rect(rect, color, false)
+	draw_rect(rect, color, false, 2)
 	start = closest(rect, end)
-	draw_line(start, end, color, 1, true)
+	draw_line(start, end, color, 1.5, true)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:

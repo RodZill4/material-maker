@@ -32,6 +32,7 @@ margin_bottom = -1.49829
 custom_styles/bg = SubResource( 1 )
 right_disconnects = true
 use_snap = false
+minimap_enabled = false
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -102,6 +103,7 @@ rect_min_size = Vector2( 14, 0 )
 script = ExtResource( 3 )
 
 [node name="Minimap" parent="." instance=ExtResource( 5 )]
+
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [ true ]]
 [connection signal="connection_request" from="." to="." method="connect_node"]
 [connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [ false ]]

@@ -143,6 +143,7 @@ func read_hdr(index : int, url : String) -> bool:
 	if dir.file_exists(file_path):
 		set_hdr(index, file_path)
 		return true
+	Directory.new().make_dir_recursive("user://hdris")
 	$HTTPRequest.download_file = file_path
 	var error = $HTTPRequest.request(url)
 	if error == OK:
@@ -190,6 +191,9 @@ func new_environment(index : int) -> void:
 	emit_signal("name_updated", environments.size()-1, new_environment.name)
 	emit_signal("environment_updated", environments.size()-1)
 	update_thumbnail(environments.size()-1)
+
+func delete_environment(index : int) -> void:
+	environments.remove(index)
 
 var thumbnail_update_list = []
 var rendering = false

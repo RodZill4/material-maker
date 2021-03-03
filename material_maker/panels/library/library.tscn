@@ -13,19 +13,34 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+library_manager_name = "NodeLibraryManager"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Libraries" type="MenuButton" parent="."]
+margin_right = 1280.0
+margin_bottom = 20.0
+text = "Libraries"
+
+[node name="SectionButtons" type="GridContainer" parent="."]
+margin_top = 24.0
 margin_right = 1280.0
 margin_bottom = 24.0
+custom_constants/vseparation = 1
+custom_constants/hseparation = 1
+columns = 5
+
+[node name="Filter" type="HBoxContainer" parent="."]
+margin_top = 28.0
+margin_right = 1280.0
+margin_bottom = 52.0
 size_flags_horizontal = 3
 
-[node name="FilterLabel" type="Label" parent="HBoxContainer"]
+[node name="FilterLabel" type="Label" parent="Filter"]
 margin_top = 5.0
 margin_right = 37.0
 margin_bottom = 19.0
 text = "Filter:"
 
-[node name="Filter" type="LineEdit" parent="HBoxContainer"]
+[node name="Filter" type="LineEdit" parent="Filter"]
 margin_left = 41.0
 margin_right = 1280.0
 margin_bottom = 24.0
@@ -33,15 +48,32 @@ size_flags_horizontal = 3
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 28.0
+margin_top = 56.0
 margin_right = 1280.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
+allow_rmb_select = true
 hide_root = true
 select_mode = 1
 script = ExtResource( 1 )
-[connection signal="text_changed" from="HBoxContainer/Filter" to="." method="_on_Filter_text_changed"]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_right = 20.0
+margin_bottom = 20.0
+items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Remove item", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, false, 3, 0, null, "", true, "Define aliases", null, 0, false, false, 4, 0, null, "", false ]
+
+[connection signal="about_to_show" from="Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
+[connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
+[connection signal="item_rmb_selected" from="Tree" to="." method="_on_Tree_item_rmb_selected"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="about_to_show" from="PopupMenu" to="." method="_on_PopupMenu_about_to_show"]
+[connection signal="index_pressed" from="PopupMenu" to="." method="_on_PopupMenu_index_pressed"]

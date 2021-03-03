@@ -80,12 +80,13 @@ func _on_value_changed(new_value, variable : String) -> void:
 				var command = new_value - widget.configurations.size()
 				match command:
 					1:
-						var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
+						var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 						add_child(dialog)
-						dialog.set_texts("Configuration", "Enter a name for the new configuration")
-						dialog.connect("ok", self, "do_add_configuration", [ variable ])
-						dialog.connect("popup_hide", dialog, "queue_free")
-						dialog.popup_centered()
+						var status = dialog.enter_text("Configuration", "Enter a name for the new configuration", "")
+						while status is GDScriptFunctionState:
+							status = yield(status, "completed")
+						if status.ok:
+							generator.add_configuration(status.text, variable)
 					3:
 						generator.update_configuration(variable, current)
 					4:
@@ -95,9 +96,6 @@ func _on_value_changed(new_value, variable : String) -> void:
 						print(command)
 			return
 	._on_value_changed(new_value, variable)
-
-func do_add_configuration(config_name : String, param_name : String) -> void:
-	generator.add_configuration(param_name, config_name)
 
 func on_label_changed(new_label, param_name) -> void:
 	generator.set_label(param_name, new_label)

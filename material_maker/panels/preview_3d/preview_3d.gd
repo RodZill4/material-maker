@@ -32,6 +32,10 @@ var _mouse_start_position := Vector2.ZERO
 
 
 func _ready() -> void:
+	# Enable viewport debanding if running with Godot 3.2.4 or later.
+	# This mostly suppresses banding artifacts at a very small performance cost.
+	$MaterialPreview.set("debanding", true)
+
 	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
@@ -122,7 +126,10 @@ func get_materials() -> Array:
 
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
+			# Don't stop rotating the preview on mouse wheel usage (zoom change).
+			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+
 		match event.button_index:
 			BUTTON_WHEEL_UP:
 				camera.translation.z = clamp(
@@ -145,7 +152,7 @@ func on_gui_input(event) -> void:
 					_mouse_start_position = event.global_position
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
-					Input.warp_mouse_position(_mouse_start_position)
+					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
 		var motion = 0.01*event.relative

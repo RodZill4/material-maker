@@ -47,29 +47,27 @@ func _on_TextEdit_focus_exited() -> void:
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
+			accept_event()
 			$Popup/ColorPicker.color = generator.color
 			$Popup/ColorPicker.connect("color_changed", self, "set_color")
 			$Popup.rect_position = event.global_position
 			$Popup.popup()
-			accept_event()
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
-			var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
-			dialog.set_value(generator.title)
-			dialog.set_texts("Comment", "Enter the comment node title")
-			add_child(dialog)
-			dialog.connect("ok", self, "set_title")
-			dialog.connect("popup_hide", dialog, "queue_free")
-			dialog.popup_centered()
 			accept_event()
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_text("Comment", "Enter the comment node title", generator.title)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status.ok:
+				title = status.text
+				generator.title = status.text
+				get_parent().send_changed_signal()
+
 
 func set_color(c):
 	generator.color = c
 	var color = c
 	color.a = 0.3
 	get_stylebox("comment").bg_color = color
-	get_parent().send_changed_signal()
-
-func set_title(t):
-	title = t
-	generator.title = t
 	get_parent().send_changed_signal()

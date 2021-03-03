@@ -88,7 +88,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		elif o is ColorPickerButton:
 			o.connect("color_changed", object, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
-			o.connect("on_file_selected", object, "_on_file_changed", [ o.name ])
+			o.connect("file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":

@@ -41,7 +41,6 @@ func set_environment_value(value, variable):
 
 func on_environment_updated(index):
 	if index == current_environment:
-		print("environment_updated")
 		environment_manager.apply_environment(current_environment, environment, sun)
 
 func on_name_updated(index, text):
@@ -131,3 +130,19 @@ func _on_Environments_item_selected(index):
 		environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
 		environment_list.select(index)
 	set_current_environment(index)
+
+func _on_Environments_gui_input(event):
+	if ! (event is InputEventMouseButton) or event.button_index != BUTTON_RIGHT:
+		return
+	var context_menu = $HSplitContainer/Environments/ContextMenu
+	var index = $HSplitContainer/Environments.get_item_at_position(event.position)
+	if $HSplitContainer/Environments.is_selected(index) and ! environment_manager.is_read_only(index):
+		context_menu.popup(Rect2(get_global_mouse_position(), context_menu.get_minimum_size()))
+
+func _on_ContextMenu_id_pressed(id):
+	var index = $HSplitContainer/Environments.get_selected_items()[0]
+	environment_manager.delete_environment(index)
+	$HSplitContainer/Environments.remove_item(index)
+	$HSplitContainer/Environments.select(index-1)
+	_on_Environments_item_selected(index-1)
+

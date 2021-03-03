@@ -145,9 +145,72 @@
 				"desc":"11: unity HDRP maskmap",
 				"rgba": "vec4($metallic_tex($uv), $ao_tex($uv), 1.0, 1.0-$roughness_tex($uv))",
 				"type": "rgba"
+			},
+			{
+				"desc":"12: metallic",
+				"f": "$metallic_tex($uv)",
+				"type": "f"
+			},
+			{
+				"desc":"13: roughness",
+				"f": "$roughness_tex($uv)",
+				"type": "f"
 			}
 		],
 		"exports": {
+			"Blender": {
+				"export_extension":"tres",
+				"files": [
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_albedo.exr",
+						"output":0,
+						"conditions":"$(connected:albedo_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_rough.exr",
+						"output":13,
+						"conditions":"$(connected:roughness_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_metal.exr",
+						"output":12,
+						"conditions":"$(connected:metallic_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_normal.exr",
+						"output":10,
+						"conditions":"$(connected:normal_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_displace.exr",
+						"output":8,
+						"conditions":"$(connected:depth_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_sss.exr",
+						"output":5,
+						"conditions":"$(connected:sss_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_emission.exr",
+						"output":2,
+						"conditions":"$(connected:emission_tex)"
+					},
+					{
+						"type":"texture",
+						"file_name":"$(path_prefix)_occlusion.exr",
+						"output":9,
+						"conditions":"$(connected:ao_tex)"
+					}
+				]
+			},
 			"Godot": {
 				"export_extension":"tres",
 				"files": [
