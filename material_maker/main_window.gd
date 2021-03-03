@@ -11,6 +11,10 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
+# The previous FPS limit (defined in microseconds per frame).
+# Used to restore the FPS limit when the window is refocused.
+var previous_sleep_usec := OS.low_processor_usage_mode_sleep_usec
+
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
@@ -994,9 +998,18 @@ func _exit_tree() -> void:
 	config_cache.save("user://cache.ini")
 
 func _notification(what : int) -> void:
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		yield(get_tree(), "idle_frame")
-		quit()
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
+			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
+			OS.low_processor_usage_mode_sleep_usec = 50000
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			# Restore the previous FPS limit.
+			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
+		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+			yield(get_tree(), "idle_frame")
+			quit()
+
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting
