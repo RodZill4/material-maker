@@ -18,7 +18,10 @@ signal need_update(me)
 const MENU = [
 	{ menu="Model", submenu="model_list", description="Select" },
 	{ menu="Model", command="configure_model", description="Configure" },
-	{ menu="Model", command="rotate_model", description="Rotate", toggle=true },
+	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Off", command_parameter=0 },
+	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Slow", command_parameter=0.01 },
+	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Medium", command_parameter=0.05 },
+	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Fast", command_parameter=0.1 },
 	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
 	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
 	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
@@ -110,14 +113,13 @@ func configure_model() -> void:
 	add_child(popup)
 	popup.configure_mesh(current_object)
 
-func rotate_model(button_pressed = null) -> bool:
+func set_rotate_model_speed(speed: float) -> void:
 	var object_rotate = $MaterialPreview/Preview3d/ObjectRotate
-	if button_pressed is bool:
-		if button_pressed:
-			object_rotate.play("rotate")
-		else:
-			object_rotate.stop(false)
-	return object_rotate.is_playing()
+	object_rotate.playback_speed = speed
+	if speed == 0:
+		object_rotate.stop(false)
+	else:
+		object_rotate.play("rotate")
 
 func get_materials() -> Array:
 	if current_object != null and current_object.get_surface_material(0) != null:
