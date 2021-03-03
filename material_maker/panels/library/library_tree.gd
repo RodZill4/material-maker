@@ -21,13 +21,16 @@ func _draw():
 		if color != null:
 			var rect : Rect2 = get_item_area_rect(item)
 			var last_rect : Rect2 = rect
-			var last_item : TreeItem = item.get_children()
-			while last_item != null:
-				last_rect = get_item_area_rect(last_item)
-				if last_item.get_next_visible() != null:
-					last_item = last_item.get_next_visible()
-				else:
-					last_item = last_item.get_children()
+			if !item.collapsed:
+				var last_item : TreeItem = item.get_children()
+				while last_item != null:
+					last_rect = get_item_area_rect(last_item)
+					if last_item.get_next() != null:
+						last_item = last_item.get_next()
+					elif !last_item.collapsed:
+						last_item = last_item.get_children()
+					else:
+						break
 			draw_rect(Rect2(2, rect.position.y+6-scroll_position, 3, last_rect.position.y-rect.position.y+last_rect.size.y), color)
 		item = item.get_next()
 

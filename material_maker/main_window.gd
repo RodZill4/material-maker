@@ -1091,6 +1091,8 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 				while ! controls.empty():
 					var next_controls = []
 					for control in controls:
+						if control == null:
+							continue
 						if control.has_method("on_drop_image_file"):
 							control.on_drop_image_file(f)
 							return
