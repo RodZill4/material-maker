@@ -33,8 +33,8 @@ __meta__ = {
 }
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
-margin_right = 336.0
-margin_bottom = 234.0
+margin_right = 316.0
+margin_bottom = 228.0
 rect_min_size = Vector2( 289, 172 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -167,6 +167,37 @@ margin_bottom = 192.0
 text = "Enable VSync"
 config_variable = "vsync"
 
+[node name="FPSLimit" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+margin_top = 168.0
+margin_right = 308.0
+margin_bottom = 192.0
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+margin_top = 5.0
+margin_right = 60.0
+margin_bottom = 19.0
+hint_tooltip = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
+Higher values may increase power usage, leading to reduced battery life on laptops."
+mouse_filter = 1
+text = "FPS limit:"
+
+[node name="FPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 64.0
+margin_right = 122.0
+margin_bottom = 24.0
+hint_tooltip = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
+Higher values may increase power usage, leading to reduced battery life on laptops."
+text = "145"
+value = 145.0
+min_value = 20.0
+max_value = 200.0
+step = 1.0
+float_only = true
+config_variable = "fps_limit"
+
 [node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 anchor_right = 1.0
@@ -255,16 +286,16 @@ float_only = true
 config_variable = "bake_denoise_radius"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 238.0
-margin_right = 336.0
-margin_bottom = 238.0
+margin_top = 232.0
+margin_right = 316.0
+margin_bottom = 232.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 148.0
-margin_top = 242.0
-margin_right = 336.0
-margin_bottom = 262.0
+margin_left = 128.0
+margin_top = 236.0
+margin_right = 316.0
+margin_bottom = 256.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]

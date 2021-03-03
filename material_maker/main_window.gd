@@ -114,6 +114,7 @@ const DEFAULT_CONFIG = {
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
+	fps_limit = 145,
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
@@ -207,6 +208,10 @@ func get_config(key : String):
 
 func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
+	# Convert FPS to microseconds per frame.
+	# Clamp the FPS to reasonable values to avoid locking up the UI.
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 200)) * 1_000_000
+
 	var scale = get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
