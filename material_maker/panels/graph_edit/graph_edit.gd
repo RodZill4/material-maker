@@ -6,8 +6,8 @@ export(String, MULTILINE) var shader_context_defs : String = ""
 var node_factory = null
 
 var save_path = null setget set_save_path
-var need_save = false
-var need_save_crash_recovery = false
+var need_save : bool = false
+var need_save_crash_recovery : bool = false
 
 var top_generator = null
 var generator = null
@@ -368,6 +368,7 @@ func save_as() -> bool:
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
+			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
 			return true
 	return false
 
@@ -512,6 +513,8 @@ func can_drop_data(_position, data) -> bool:
 	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
 func drop_data(position, data) -> void:
+	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
+		get_node("/root/MainWindow/NodeLibraryManager").item_created(data.tree_item)
 	# The following mitigates the SpinBox problem (captures mouse while dragging)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -575,7 +578,7 @@ func _on_GraphEdit_node_selected(node) -> void:
 	set_last_selected(node)
 	highlight_connections()
 
-func _on_GraphEdit_node_unselected(node):
+func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 
 

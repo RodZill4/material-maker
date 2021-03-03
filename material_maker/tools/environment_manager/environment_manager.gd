@@ -4,6 +4,8 @@ var environments = []
 var environment_textures = []
 
 onready var main_window : Control = get_node("/root/MainWindow")
+onready var base_dir : String = OS.get_executable_path().get_base_dir()
+var ro_environments = 0
 
 const DEFAULT_ENVIRONMENT = {
 	"name": "Wide Street",
@@ -27,10 +29,11 @@ signal thumbnail_updated(index, texture)
 func _ready():
 	set_physics_process(false)
 	if environments.empty():
-		var file = File.new()
-		if file.open("user://environments.json", File.READ) == OK:
-			environments = parse_json(file.get_as_text())
-			file.close()
+		environments = load_environment(base_dir+"/environments/environments.json")
+		if environments.empty():
+			environments = load_environment("res://material_maker/environments/environments.json")
+		ro_environments = environments.size()
+		environments += load_environment("user://environments.json")
 		for i in environments.size():
 			var texture : ImageTexture = ImageTexture.new()
 			if environments[i].has("thumbnail"):
@@ -39,13 +42,21 @@ func _ready():
 				texture.create_from_image(image)
 			environment_textures.push_back({ thumbnail=texture })
 
+func load_environment(file_path : String) -> Array:
+	var array : Array = []
+	var file = File.new()
+	if file.open(file_path, File.READ) == OK:
+		array = parse_json(file.get_as_text())
+		file.close()
+	return array
+
 func _exit_tree() -> void:
 	for i in environments.size():
 		var image : Image = environment_textures[i].thumbnail.get_data()
 		environments[i].thumbnail = Marshalls.raw_to_base64(image.save_png_to_buffer())
 	var file = File.new()
 	file.open("user://environments.json", File.WRITE)
-	file.store_string(JSON.print(environments))
+	file.store_string(JSON.print(environments.slice(3, environments.size()-1)))
 	file.close()
 
 func get_environment_list() -> Array:
@@ -65,8 +76,11 @@ func create_environment_menu(menu : PopupMenu) -> void:
 	for e in get_environment_list():
 		menu.add_icon_item(e.thumbnail, e.name)
 
+func is_read_only(index) -> bool:
+	return index < ro_environments
+
 func set_value(index, variable, value):
-	if index < 0 || index >= environments.size():
+	if index < ro_environments || index >= environments.size():
 		return
 	var serialized_value = MMType.serialize_value(value)
 	if environments[index][variable] != serialized_value:
@@ -74,7 +88,8 @@ func set_value(index, variable, value):
 		if variable == "hdri_url":
 			var status = read_hdr(index, value)
 			while status is GDScriptFunctionState:
-				yield(status, "completed")
+				status = yield(status, "completed")
+			emit_signal("environment_updated", index)
 		elif variable == "name":
 			emit_signal("name_updated", index, value)
 		else:
@@ -93,7 +108,10 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight) -> vo
 			var status = read_hdr(index, env.hdri_url)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
-		e.background_sky.panorama = env_textures.hdri
+		if env_textures.has("hdri"):
+			e.background_sky.panorama = env_textures.hdri
+		else:
+			e.background_sky.panorama = null
 		e.set_meta("hdri", env.hdri_url)
 	e.background_energy = env.sky_energy
 	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
@@ -112,27 +130,37 @@ func read_hdr(index : int, url : String) -> bool:
 		yield(get_tree(), "idle_frame")
 	environment_textures[index].erase("hdri")
 	var dir : Directory = Directory.new()
-	dir.make_dir_recursive("user://hdris")
-	$HTTPRequest.download_file = "user://hdris/"+url.get_file()
-	if dir.file_exists($HTTPRequest.download_file):
-		set_hdr(index, $HTTPRequest.download_file)
-	else:
-		var error = $HTTPRequest.request(url)
-		if error == OK:
-			progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
-			main_window.add_child(progress_window)
-			progress_window.set_text("Downloading HDRI file")
-			progress_window.set_progress(0)
-			set_physics_process(true)
-			yield($HTTPRequest, "request_completed")
-			set_hdr(index, $HTTPRequest.download_file)
-			progress_window.queue_free()
-			progress_window = null
-			set_physics_process(false)
-		else:
-			print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
-			return false
-	return true
+	var file_path
+	file_path = base_dir+"/environments/hdris/"+url.get_file()
+	if dir.file_exists(file_path):
+		set_hdr(index, file_path)
+		return true
+	file_path = "res://material_maker/environments/hdris/"+url.get_file()
+	if dir.file_exists(file_path):
+		set_hdr(index, file_path)
+		return true
+	file_path = "user://hdris/"+url.get_file()
+	if dir.file_exists(file_path):
+		set_hdr(index, file_path)
+		return true
+	Directory.new().make_dir_recursive("user://hdris")
+	$HTTPRequest.download_file = file_path
+	var error = $HTTPRequest.request(url)
+	if error == OK:
+		progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
+		main_window.add_child(progress_window)
+		progress_window.set_text("Downloading HDRI file")
+		progress_window.set_progress(0)
+		set_physics_process(true)
+		yield($HTTPRequest, "request_completed")
+		set_hdr(index, file_path)
+		progress_window.queue_free()
+		progress_window = null
+		set_physics_process(false)
+		return true
+	print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
+	return false
+
 
 """
 func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):
@@ -163,6 +191,9 @@ func new_environment(index : int) -> void:
 	emit_signal("name_updated", environments.size()-1, new_environment.name)
 	emit_signal("environment_updated", environments.size()-1)
 	update_thumbnail(environments.size()-1)
+
+func delete_environment(index : int) -> void:
+	environments.remove(index)
 
 var thumbnail_update_list = []
 var rendering = false

@@ -22,6 +22,9 @@ var preview_rendering_scale_factor := 2.0
 # This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
 var preview_tesselation_detail := 256
 
+onready var node_library_manager = $NodeLibraryManager
+onready var brush_library_manager = $BrushLibraryManager
+
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
@@ -83,9 +86,8 @@ const MENU = [
 	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
 	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
 	{ menu="Tools" },
-	{ menu="Tools", command="add_selection_to_user_library", description="Add selected node to user library", mode="material" },
-	{ menu="Tools", command="add_brush_to_user_library", description="Add current brush to user library", mode="paint" },
-	{ menu="Tools", command="export_library", description="Export the nodes library", mode="material" },
+	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
+	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
 	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
 	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
@@ -527,8 +529,8 @@ func do_load_projects(filenames) -> void:
 		file_name = file.get_path_absolute()
 		file.close()
 		do_load_project(file_name)
-	if filename != "":
-		config_cache.set_value("path", "project", filename.get_base_dir())
+	if file_name != "":
+		config_cache.set_value("path", "project", file_name.get_base_dir())
 
 func do_load_project(file_name) -> void:
 	var status : bool = false
@@ -753,43 +755,56 @@ func make_selected_nodes_editable() -> void:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
-func add_selection_to_user_library() -> void:
-	var selected_nodes = get_selected_nodes()
-	if !selected_nodes.empty():
-		var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
-		dialog.set_value(library.get_selected_item_name())
-		dialog.set_texts("New library element", "Select a name for the new library element")
-		add_child(dialog)
-		dialog.connect("ok", self, "do_add_selection_to_user_library", [ selected_nodes ])
-		dialog.connect("popup_hide", dialog, "queue_free")
-		dialog.popup_centered()
+func create_menu_add_to_library(menu, manager, function) -> void:
+	var gens = mm_loader.get_generator_list()
+	menu.clear()
+	for i in manager.get_child_count():
+		var library = manager.get_child(i)
+		if ! library.read_only:
+			menu.add_item(library.library_name, i)
+	if !menu.is_connected("id_pressed", self, function):
+		menu.connect("id_pressed", self, function)
 
-func do_add_selection_to_user_library(name, nodes) -> void:
+func create_menu_add_selection_to_library(menu) -> void:
+	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
+
+func add_selection_to_library(index) -> void:
+	var selected_nodes = get_selected_nodes()
+	if selected_nodes.empty():
+		return
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	add_child(dialog)
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	if ! status.ok:
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data
-	if nodes.size() == 1:
-		data = nodes[0].generator.serialize()
+	if selected_nodes.size() == 1:
+		data = selected_nodes[0].generator.serialize()
 		data.erase("node_position")
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	# Create thumbnail
-	var result = nodes[0].generator.render(self, 0, 64, true)
+	var result = selected_nodes[0].generator.render(self, 0, 64, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	var image : Image = result.get_image()
 	result.release(self)
-	library.add_to_user_library(data, name, image)
+	node_library_manager.add_item_to_library(index, status.text, image, data)
 
-func add_brush_to_user_library() -> void:
-	var dialog = preload("res://material_maker/widgets/line_dialog/line_dialog.tscn").instance()
-	dialog.set_value(brushes.get_selected_item_name())
-	dialog.set_texts("New library element", "Select a name for the new library element")
+func create_menu_add_brush_to_library(menu) -> void:
+	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
+
+func add_brush_to_library(index) -> void:
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	dialog.connect("ok", self, "do_add_brush_to_user_library")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
-
-func do_add_brush_to_user_library(name) -> void:
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	if ! status.ok:
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data = graph_edit.top_generator.serialize()
 	# Create thumbnail
@@ -798,22 +813,8 @@ func do_add_brush_to_user_library(name) -> void:
 		result = yield(result, "completed")
 	var image : Image = Image.new()
 	image.copy_from(result.get_data())
-	image.resize(64, 64)
-	brushes.add_to_user_library(data, name, image)
-
-func export_library() -> void:
-	var dialog : FileDialog = FileDialog.new()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.json;JSON files")
-	dialog.connect("file_selected", self, "do_export_library")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
-
-func do_export_library(path : String) -> void:
-	library.export_libraries(path)
+	image.resize(32, 32)
+	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
 func toggle_paint_feature(channel : String, value = null) -> bool:
 	var paint = get_current_project()
@@ -912,14 +913,17 @@ func update_preview() -> void:
 			status = yield(status, "completed")
 	updating = false
 
+func get_current_node(graph_edit : MMGraphEdit) -> Node:
+	for n in graph_edit.get_children():
+		if n is GraphNode and n.selected:
+			return n
+	return null
+
 func update_preview_2d(node = null) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		if node == null:
-			for n in graph_edit.get_children():
-				if n is GraphNode and n.selected:
-					node = n
-					break
+			node = get_current_node(graph_edit)
 		if node != null:
 			preview_2d.set_generator(node.generator)
 			histogram.set_generator(node.generator)
@@ -1095,6 +1099,8 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 				while ! controls.empty():
 					var next_controls = []
 					for control in controls:
+						if control == null:
+							continue
 						if control.has_method("on_drop_image_file"):
 							control.on_drop_image_file(f)
 							return

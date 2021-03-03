@@ -1,24 +1,43 @@
 extends VBoxContainer
 
+export var library_manager_name = ""
 export var base_library_name = "base.json"
 export var user_library_name = "user.json"
 
-var libraries = []
-var libraries_data = {}
-var current_filter = ""
 var expanded_items : Array = []
 
+onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
+
+var category_buttons = {}
+
 onready var tree : Tree = $Tree
-onready var filter_line_edit : LineEdit = $HBoxContainer/Filter
+onready var filter_line_edit : LineEdit = $Filter/Filter
+
+
+const MENU_CREATE_LIBRARY : int = 1000
+const MENU_LOAD_LIBRARY : int =   1001
+
 
 func _ready() -> void:
+	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
-	tree.set_column_min_width(1, 32)
-	var lib_path = OS.get_executable_path().get_base_dir()+"/library/"+base_library_name
-	if !add_library(lib_path):
-		add_library("res://material_maker/library/"+base_library_name)
-	add_library("user://library/"+user_library_name)
+	tree.set_column_min_width(1, 36)
+	# Connect 
+	library_manager.connect("libraries_changed", self, "update_tree")
+	# Setup section buttons
+	for s in library_manager.get_sections():
+		var button : TextureButton = TextureButton.new()
+		var texture : Texture = library_manager.get_section_icon(s)
+		button.name = s
+		button.texture_normal = texture
+		button.toggle_mode = true
+		button.hint_tooltip = s
+		$SectionButtons.add_child(button)
+		category_buttons[s] = button
+		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
+		button.connect("gui_input", self, "_on_Section_Button_event", [ s ])
+	$Libraries.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
 	init_expanded_items()
 	update_tree()
 
@@ -29,14 +48,13 @@ func init_expanded_items() -> void:
 		f.close()
 	else:
 		expanded_items = []
-		for l in libraries:
-			for m in libraries_data[l]:
-				var n : String = m.tree_item
-				var slash_position = n.find("/")
-				if slash_position != -1:
-					n = m.tree_item.left(slash_position)
-				if expanded_items.find(n) == -1:
-					expanded_items.push_back(n)
+		for m in library_manager.get_items(""):
+			var n : String = m.tree_item
+			var slash_position = n.find("/")
+			if slash_position != -1:
+				n = m.tree_item.left(slash_position)
+			if expanded_items.find(n) == -1:
+				expanded_items.push_back(n)
 
 func _exit_tree() -> void:
 	var f = File.new()
@@ -61,20 +79,6 @@ func get_selected_item_doc_name() -> String:
 		return ""
 	return m.icon
 
-func add_library(file_name : String, _filter : String = "") -> bool:
-	var file = File.new()
-	if file.open(file_name, File.READ) != OK:
-		return false
-	var lib = parse_json(file.get_as_text())
-	file.close()
-	if lib != null and lib.has("lib"):
-		for m in lib.lib:
-			m.library = file_name
-		libraries.push_back(file_name)
-		libraries_data[file_name] = lib.lib
-		return true
-	return false
-
 func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 	var rv : PoolStringArray = PoolStringArray()
 	if item == null:
@@ -89,37 +93,24 @@ func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 		i = i.get_next()
 	return rv
 
-func update_tree(filter : String = "") -> void:
-	filter = filter.to_lower()
-	current_filter = filter
+func update_tree() -> void:
+	# update category buttons
+	for c in category_buttons.keys():
+		if library_manager.is_section_enabled(c):
+			category_buttons[c].material = null
+		else:
+			category_buttons[c].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			if current_category == c:
+				current_category = ""
+	# update tree
+	var filter : String = $Filter/Filter.text.to_lower()
 	tree.clear()
 	tree.create_item()
-	for l in libraries:
-		for m in libraries_data[l]:
-			if filter == "" or m.tree_item.to_lower().find(filter) != -1:
-				add_item(m, m.tree_item, get_preview_texture(m, l), null, filter != "")
+	for i in library_manager.get_items(filter):
+		add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
+	$Tree.update()
 
-func get_preview_texture(data : Dictionary, library = null) -> ImageTexture:
-	if library == null:
-		if data.has("library"):
-			library = data.library
-		else:
-			return null
-	if !data.has("icon"):
-		return null
-	var image_path = library.get_basename()+"/"+data.icon+".png"
-	var t : ImageTexture
-	if image_path.left(6) == "res://":
-		image_path = ProjectSettings.globalize_path(image_path)
-	t = ImageTexture.new()
-	var image : Image = Image.new()
-	if image.load(image_path) == OK:
-		t.create_from_image(image)
-	else:
-		print("Cannot load image "+image_path)
-	return t
-
-func add_item(item, item_name, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
+func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
 		item.tree_item = item_name
 		item_parent = tree.get_root()
@@ -140,6 +131,7 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 			new_item.set_icon_max_width(1, 32)
 		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
+			new_item.set_metadata(1, library_index)
 		return new_item
 	else:
 		var prefix = item_name.left(slash_position)
@@ -155,7 +147,7 @@ func add_item(item, item_name, item_icon = null, item_parent = null, force_expan
 			new_parent = tree.create_item(item_parent)
 			new_parent.set_text(0, prefix)
 			new_parent.collapsed = !force_expand and expanded_items.find(get_item_path(new_parent)) == -1
-		return add_item(item, suffix, item_icon, new_parent, force_expand)
+		return add_item(item, library_index, suffix, item_icon, new_parent, force_expand)
 
 func get_item_path(item : TreeItem) -> String:
 	if item == null:
@@ -170,78 +162,10 @@ func get_item_path(item : TreeItem) -> String:
 func get_icon_name(item_name : String) -> String:
 	return item_name.to_lower().replace("/", "_").replace(" ", "_")
 
-func serialize_library(array : Array, library_name : String = "", icon_dir : String = "", item : TreeItem = null) -> void:
-	if item == null:
-		item = tree.get_root()
-	item = item.get_children()
-	while item != null:
-		if item.get_metadata(0) != null:
-			var m : Dictionary = item.get_metadata(0)
-			if library_name == "" or (m.has("library") and m.library == library_name):
-				var copy : Dictionary = m.duplicate()
-				copy.erase("library")
-				if icon_dir != "" and m.has("icon"):
-					var src_path = m.library.get_basename()+"/"+m.icon+".png"
-					var icon_name : String = get_icon_name(get_item_path(item))
-					var icon_path = icon_dir+"/"+icon_name+".png"
-					var dir : Directory = Directory.new()
-					dir.copy(src_path, icon_path)
-					copy.icon = icon_name
-				array.append(copy)
-		serialize_library(array, library_name, icon_dir, item)
-		item = item.get_next()
+func _on_Filter_text_changed(_filter : String) -> void:
+	update_tree()
 
-func save_library(library_name : String, _item : TreeItem = null) -> void:
-	assert(current_filter == "")
-	var array : Array = []
-	serialize_library(array, library_name)
-	var file = File.new()
-	if file.open(library_name, File.WRITE) == OK:
-		file.store_string(JSON.print({lib=array}, "\t", true))
-		file.close()
-
-func add_to_user_library(data : Dictionary, name : String, image : Image) -> void:
-	data.tree_item = name
-	data.icon = get_icon_name(name)
-	var library_path = "user://library/"+user_library_name
-	var dir = Directory.new()
-	dir.make_dir_recursive(library_path.get_basename())
-	image.save_png(library_path.get_basename()+"/"+data.icon+".png")
-	if !libraries_data.has(library_path):
-		libraries.push_back(library_path)
-		libraries_data[library_path] = []
-	var new_library = []
-	var inserted = false
-	for i in libraries_data[library_path]:
-		if i.tree_item != name:
-			new_library.push_back(i)
-		elif !inserted:
-			new_library.push_back(data)
-			inserted = true
-	if !inserted:
-		new_library.push_back(data)
-	libraries_data[library_path] = new_library
-	var file = File.new()
-	if file.open(library_path, File.WRITE) == OK:
-		file.store_string(JSON.print({lib=libraries_data[library_path]}, "\t", true))
-		file.close()
-	update_tree(current_filter)
-
-func _on_Filter_text_changed(filter : String) -> void:
-	update_tree(filter)
-
-func export_libraries(path : String) -> void:
-	var dir : Directory = Directory.new()
-	var icon_path = path.get_basename()
-	dir.make_dir(icon_path)
-	var array = []
-	serialize_library(array, "", icon_path)
-	var file = File.new()
-	if file.open(path, File.WRITE) == OK:
-		file.store_string(JSON.print({lib=array}, "\t", true))
-		file.close()
-
-
+# Should be moved to library manager
 func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
 	var count : int = 0
 	if item == null:
@@ -282,3 +206,143 @@ func _on_Tree_item_collapsed(item) -> void:
 			expanded_items.remove(index)
 	else:
 		expanded_items.push_back(path)
+
+
+func _on_SectionButtons_resized():
+	$SectionButtons.columns = $SectionButtons.rect_size.x / 33
+
+var current_category = ""
+
+func _on_Section_Button_pressed(category : String) -> void:
+	var item : TreeItem = $Tree.get_root().get_children()
+	while item != null:
+		if item.get_text(0) == category:
+			item.select(0)
+			$Tree.ensure_cursor_is_visible()
+			break
+		item = item.get_next()
+
+func _on_Section_Button_event(event : InputEvent, category : String) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_RIGHT:
+		if library_manager.toggle_section(category):
+			category_buttons[category].material = null
+		else:
+			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			if current_category == category:
+				current_category = ""
+
+func _on_Timer_timeout() -> void:
+	var item : TreeItem = $Tree.get_item_at_position(Vector2(5, 5))
+	if item == null:
+		return
+	while item.get_parent() != $Tree.get_root():
+		item = item.get_parent()
+	if item.get_text(0) == current_category:
+		return
+	if category_buttons.has(current_category):
+		category_buttons[current_category].material = null
+	current_category = item.get_text(0)
+	if category_buttons.has(current_category):
+		category_buttons[current_category].material = preload("res://material_maker/panels/library/button_active.tres")
+
+
+func _on_Libraries_about_to_show():
+	var popup : PopupMenu = $Libraries.get_popup()
+	var unload : PopupMenu = null
+	for c in popup.get_children():
+		if c is PopupMenu:
+			unload = c
+			break
+	if unload == null:
+		unload = PopupMenu.new()
+		unload.name = "Unload"
+		popup.add_child(unload)
+		unload.connect("id_pressed", self, "_on_Libraries_Unload_id_pressed")
+	popup.clear()
+	unload.clear()
+	for i in library_manager.get_child_count():
+		popup.add_check_item(library_manager.get_child(i).library_name, i)
+		popup.set_item_checked(i, library_manager.is_library_enabled(i))
+		if i > 1:
+			unload.add_item(library_manager.get_child(i).library_name, i)
+	popup.add_separator()
+	popup.add_item("Create library", MENU_CREATE_LIBRARY)
+	popup.add_item("Load library", MENU_LOAD_LIBRARY)
+	popup.add_submenu_item("Unload", "Unload")
+
+func _on_Libraries_id_pressed(id : int) -> void:
+	match id:
+		MENU_CREATE_LIBRARY:
+			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_info()
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status.ok:
+				library_manager.create_library(status.path, status.name)
+		MENU_LOAD_LIBRARY:
+			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+			add_child(dialog)
+			dialog.rect_min_size = Vector2(500, 500)
+			dialog.access = FileDialog.ACCESS_FILESYSTEM
+			dialog.mode = FileDialog.MODE_OPEN_FILE
+			dialog.add_filter("*.json;Material Maker Library")
+			var files = dialog.select_files()
+			while files is GDScriptFunctionState:
+				files = yield(files, "completed")
+			if files.size() == 1:
+				library_manager.load_library(files[0])
+		_:
+			library_manager.toggle_library(id)
+
+func _on_Libraries_Unload_id_pressed(id : int) -> void:
+	library_manager.unload_library(id)
+
+var current_item : TreeItem
+
+func _on_Tree_item_rmb_selected(position):
+	current_item = $Tree.get_item_at_position(position)
+	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
+
+func _on_PopupMenu_about_to_show():
+	var library_index : int = current_item.get_metadata(1)
+	var read_only : bool = library_manager.get_child(library_index).read_only
+	$PopupMenu.set_item_disabled(0, read_only)
+	$PopupMenu.set_item_disabled(1, read_only)
+	$PopupMenu.set_item_disabled(2, read_only)
+
+func _on_PopupMenu_index_pressed(index):
+	var library_index : int = current_item.get_metadata(1)
+	var item_path : String = get_item_path(current_item)
+	match index:
+		0: # Rename
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if status.ok:
+				library_manager.rename_item_in_library(library_index, item_path, status.text)
+		1: # Update thumbnail
+			var main_window = get_node("/root/MainWindow")
+			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
+			if current_node == null:
+				return
+			var result = current_node.generator.render(self, 0, 64, true)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			var image : Image = result.get_image()
+			result.release(self)
+			library_manager.update_item_icon_in_library(library_index, item_path, image)
+		2: # Delete item
+			library_manager.remove_item_from_library(library_index, item_path)
+		4: # Define aliases
+			var aliases = library_manager.get_aliases(item_path)
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			add_child(dialog)
+			var status = dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
+			if ! status.ok:
+				return
+			library_manager.set_aliases(item_path, status.text)

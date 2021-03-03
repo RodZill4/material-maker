@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float amplitude = 0.1;
+uniform float frequency = 2.0;
+
+void fragment() {
+	vec3 color = texture(TEXTURE, UV).rgb;
+	COLOR = vec4(color*(1.0+amplitude*sin(TIME*6.28*frequency)), 1.0);
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/amplitude = 0.05
+shader_param/frequency = 2.0

@@ -3,7 +3,6 @@ extends Tree
 var layers = null
 var selected_item : TreeItem = null
 var just_selected : bool = false
-var layer_count : int = 0
 
 const BUTTON_SHOWN = preload("res://material_maker/panels/layers/icons/visible.tres")
 const BUTTON_HIDDEN = preload("res://material_maker/panels/layers/icons/not_visible.tres")
@@ -32,7 +31,7 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 			selected_item = new_item
 		do_update_from_layers(l.layers, new_item, selected_layer)
 
-func get_drag_data(position : Vector2):
+func get_drag_data(_position : Vector2):
 	var layer = get_selected().get_meta("layer")
 	var label : Label = Label.new()
 	label.text = layer.name
@@ -72,7 +71,7 @@ func drop_data(position : Vector2, data):
 				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
 		_on_layers_changed()
 
-func _on_Tree_button_pressed(item : TreeItem, column : int, id : int):
+func _on_Tree_button_pressed(item : TreeItem, _column : int, _id : int):
 	var layer = item.get_meta("layer")
 	layer.hidden = !layer.hidden
 	_on_layers_changed()

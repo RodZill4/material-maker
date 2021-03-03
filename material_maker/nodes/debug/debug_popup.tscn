@@ -2,16 +2,48 @@
 
 [ext_resource path="res://material_maker/nodes/debug/debug_popup.gd" type="Script" id=1]
 
-
-[node name="Popup" type="Popup"]
-margin_right = 500.0
-margin_bottom = 300.0
+[node name="GeneratedShaderWindow" type="WindowDialog"]
+margin_right = 600.0
+margin_bottom = 400.0
 rect_min_size = Vector2( 600, 400 )
+popup_exclusive = true
+window_title = "Generated shader"
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TextEdit" type="TextEdit" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_colors/background_color = Color( 0, 0.00392157, 0.203922, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 600.0
+margin_bottom = 20.0
+
+[node name="ShaderType" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+margin_right = 92.0
+margin_bottom = 20.0
+text = "Shadertoy"
+items = [ "Shadertoy", null, false, 0, null, "Godot Canvas item", null, false, 1, null, "Godot Spatial", null, false, 2, null ]
+selected = 0
+
+[node name="CopyToClipboard" type="Button" parent="VBoxContainer/HBoxContainer"]
+margin_left = 96.0
+margin_right = 219.0
+margin_bottom = 20.0
+text = "Copy to clipboard"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
+margin_top = 24.0
+margin_right = 600.0
+margin_bottom = 400.0
+size_flags_vertical = 3
 syntax_highlighting = true
 show_line_numbers = true
+[connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/ShaderType" to="." method="_on_ShaderType_item_selected"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/CopyToClipboard" to="." method="_on_CopyToClipboard_pressed"]
