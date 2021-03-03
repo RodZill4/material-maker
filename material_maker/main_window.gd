@@ -17,8 +17,14 @@ var need_update : bool = false
 # specular/parallax mapping and when viewed at oblique angles.
 var preview_rendering_scale_factor := 2.0
 
+# The number of subdivisions to use for tesselated 3D previews. Higher values
+# result in more detailed bumps but are more demanding to render.
+# This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
+var preview_tesselation_detail := 256
+
 onready var node_library_manager = $NodeLibraryManager
 onready var brush_library_manager = $BrushLibraryManager
+
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
@@ -110,6 +116,7 @@ const DEFAULT_CONFIG = {
 	vsync = true,
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
+	ui_3d_preview_tesselation_detail = 256,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_denoise_radius = 3
@@ -209,6 +216,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
