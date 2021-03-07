@@ -210,7 +210,7 @@ func get_section_icon(section_name : String) -> Texture:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
-	var color : Color = section_colors[section_name] if section_colors.has(section_name) else null
+	var color = section_colors[section_name] if section_colors.has(section_name) else null
 	return color
 
 func is_section_enabled(section_name : String) -> bool:
