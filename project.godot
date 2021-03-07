@@ -264,6 +264,10 @@ ui_hierarchy_down={
  ]
 }
 
+[locale]
+
+translations=PoolStringArray( "res://material_maker/locale/fr.po" )
+
 [logging]
 
 file_logging/log_path=""

@@ -1,0 +1,429 @@
+# Translations template for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-03-07 18:28+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: main_window.tscn:103
+msgid "File"
+msgstr ""
+
+#: nodes/comment/comment.tscn:61
+msgid "Double-click to write a comment"
+msgstr ""
+
+#: nodes/debug/debug.tscn:26
+msgid "Show shader"
+msgstr ""
+
+#: nodes/debug/debug_popup.tscn:30
+msgid "Shadertoy"
+msgstr ""
+
+#: nodes/debug/debug_popup.tscn:38
+msgid "Copy to clipboard"
+msgstr ""
+
+#: nodes/ios/port.tscn:67 windows/node_editor/input.tscn:79
+#: windows/node_editor/output.tscn:71
+msgid "Greyscale"
+msgstr ""
+
+#: nodes/switch/switch.tscn:51 nodes/switch/switch.tscn:74
+#: nodes/switch/switch.tscn:97
+msgid "A0"
+msgstr ""
+
+#: nodes/tones/tones.tscn:61
+msgid "Luminance"
+msgstr ""
+
+#: panels/layers/layer_config_popup.tscn:29
+msgid "Albedo alpha:"
+msgstr ""
+
+#: panels/layers/layer_config_popup.tscn:45
+msgid "Metallic alpha:"
+msgstr ""
+
+#: panels/layers/layer_config_popup.tscn:62
+msgid "Roughness alpha:"
+msgstr ""
+
+#: panels/layers/layer_config_popup.tscn:79
+msgid "Emission alpha:"
+msgstr ""
+
+#: panels/layers/layer_config_popup.tscn:96
+msgid "Depth alpha:"
+msgstr ""
+
+#: panels/library/create_lib_dialog.tscn:33
+msgid "Library name:"
+msgstr ""
+
+#: panels/library/create_lib_dialog.tscn:49
+msgid "Library file:"
+msgstr ""
+
+#: panels/library/create_lib_dialog.tscn:58
+msgid "Click to enter a path"
+msgstr ""
+
+#: panels/library/create_lib_dialog.tscn:73
+#: widgets/curve_edit/curve_dialog.tscn:70
+#: widgets/polygon_edit/polygon_dialog.tscn:69
+#: windows/desc_dialog/desc_dialog.tscn:67
+#: windows/line_dialog/line_dialog.tscn:37
+#: windows/new_painter/new_painter.tscn:139
+#: windows/node_editor/enum_editor.tscn:183
+#: windows/node_editor/node_editor.tscn:244
+#: windows/preferences/preferences.tscn:341
+msgid "OK"
+msgstr ""
+
+#: panels/library/create_lib_dialog.tscn:80
+#: widgets/curve_edit/curve_dialog.tscn:77
+#: widgets/polygon_edit/polygon_dialog.tscn:76
+#: windows/desc_dialog/desc_dialog.tscn:74
+#: windows/line_dialog/line_dialog.tscn:44
+#: windows/new_painter/new_painter.tscn:146
+#: windows/node_editor/enum_editor.tscn:209
+#: windows/node_editor/node_editor.tscn:251
+#: windows/preferences/preferences.tscn:348
+msgid "Cancel"
+msgstr ""
+
+#: panels/library/library.tscn:21
+msgid "Libraries"
+msgstr ""
+
+#: panels/library/library.tscn:41
+msgid "Filter:"
+msgstr ""
+
+#: panels/paint/paint.tscn:318
+msgid "Brush size"
+msgstr ""
+
+#: panels/paint/paint.tscn:338
+msgid "Brush hardness"
+msgstr ""
+
+#: panels/paint/paint.tscn:359
+msgid "Brush opacity"
+msgstr ""
+
+#: panels/paint/paint.tscn:380
+msgid "Brush spacing"
+msgstr ""
+
+#: panels/paint/paint.tscn:404
+msgid "-"
+msgstr ""
+
+#: panels/paint/paint.tscn:441 panels/paint/paint.tscn:468
+#: windows/node_editor/parameter_float.tscn:98
+msgid "None"
+msgstr ""
+
+#: panels/preview_3d/mesh_config_popup.tscn:35
+msgid "Mesh configuration"
+msgstr ""
+
+#: panels/preview_3d/mesh_config_popup.tscn:54
+msgid "UV Scale:"
+msgstr ""
+
+#: panels/preview_3d/mesh_config_popup.tscn:88
+msgid "Tesselated"
+msgstr ""
+
+#: panels/preview_3d/preview_3d_ui.tscn:26
+msgid "Model"
+msgstr ""
+
+#: panels/preview_3d/preview_3d_ui.tscn:33
+msgid "Environment"
+msgstr ""
+
+#: panels/preview_3d/thumbnails/generation/gen_thumbs_meshes.tscn:77
+msgid "Custom"
+msgstr ""
+
+#: panels/reference/reference_panel.tscn:65
+msgid "<"
+msgstr ""
+
+#: panels/reference/reference_panel.tscn:77
+msgid ">"
+msgstr ""
+
+#: widgets/file_picker_button/file_picker_button.tscn:8
+#: windows/node_editor/parameter_boolean.tscn:16
+msgid "Default"
+msgstr ""
+
+#: widgets/float_edit/float_edit.tscn:13
+msgid "0.5"
+msgstr ""
+
+#: windows/about/about.tscn:40
+msgid "Material Maker"
+msgstr ""
+
+#: windows/add_node_popup/add_node_popup.tscn:34
+msgid "Search..."
+msgstr ""
+
+#: windows/add_node_popup/node_selection_button.tscn:46
+msgid "Node"
+msgstr ""
+
+#: windows/add_node_popup/node_selection_button.tscn:68
+msgid "path/to/node"
+msgstr ""
+
+#: windows/desc_dialog/desc_dialog.tscn:35
+msgid "Short Description:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:94
+#: windows/node_editor/enum_editor.tscn:72
+#: windows/node_editor/node_editor.tscn:59
+msgid "Name:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:107
+msgid "HDRI URL:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:121
+msgid "Color:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:134
+msgid "Sky Energy:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:154
+msgid "Ambient color:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:167
+msgid "Ambient Energy:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:187
+msgid "Sky contribution:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:206
+msgid "Sun color:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:219
+msgid "Sun Energy:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:239
+msgid "Sun Direction:"
+msgstr ""
+
+#: windows/environment_editor/environment_editor.tscn:260
+msgid "Sun Angle:"
+msgstr ""
+
+#: windows/line_dialog/line_dialog.tscn:18
+msgid "blah"
+msgstr ""
+
+#: windows/new_painter/new_painter.tscn:65
+msgid "Model:"
+msgstr ""
+
+#: windows/new_painter/new_painter.tscn:71
+msgid "Model file"
+msgstr ""
+
+#: windows/new_painter/new_painter.tscn:77
+msgid "Resolution:"
+msgstr ""
+
+#: windows/new_painter/new_painter.tscn:91
+msgid "Project:"
+msgstr ""
+
+#: windows/new_painter/new_painter.tscn:98
+msgid "Project file"
+msgstr ""
+
+#: windows/node_editor/enum_editor.tscn:115
+msgid "Value:"
+msgstr ""
+
+#: windows/node_editor/input.tscn:57 windows/node_editor/parameter.tscn:60
+msgid "name"
+msgstr ""
+
+#: windows/node_editor/input.tscn:65 windows/node_editor/parameter.tscn:67
+msgid "Label"
+msgstr ""
+
+#: windows/node_editor/input.tscn:90 windows/node_editor/output.tscn:82
+msgid "0.0"
+msgstr ""
+
+#: windows/node_editor/input.tscn:98
+msgid "f(x)"
+msgstr ""
+
+#: windows/node_editor/node_editor.tscn:77
+msgid "Parameters:"
+msgstr ""
+
+#: windows/node_editor/node_editor.tscn:104
+msgid "Inputs:"
+msgstr ""
+
+#: windows/node_editor/node_editor.tscn:139
+msgid "Outputs:"
+msgstr ""
+
+#: windows/node_editor/node_editor.tscn:206
+msgid "Includes:"
+msgstr ""
+
+#: windows/node_editor/node_editor.tscn:237
+#: windows/preferences/preferences.tscn:334
+msgid "Apply"
+msgstr ""
+
+#: windows/node_editor/parameter.tscn:79
+msgid "float"
+msgstr ""
+
+#: windows/node_editor/parameter_curve.tscn:18
+#: windows/node_editor/parameter_float.tscn:76
+#: windows/node_editor/parameter_gradient.tscn:18
+#: windows/node_editor/parameter_polygon.tscn:18
+#: windows/node_editor/parameter_size.tscn:50
+msgid "Default:"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:17
+#: windows/node_editor/parameter_size.tscn:18
+msgid "Min:"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:26
+msgid "0"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:37
+#: windows/node_editor/parameter_size.tscn:34
+msgid "Max:"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:46
+msgid "1"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:57
+msgid "Step:"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:66
+msgid "0.1"
+msgstr ""
+
+#: windows/node_editor/parameter_float.tscn:92
+msgid "Control:"
+msgstr ""
+
+#: windows/node_editor/parameter_size.tscn:24
+msgid "1x1"
+msgstr ""
+
+#: windows/node_editor/parameter_size.tscn:40
+msgid "4096x4096"
+msgstr ""
+
+#: windows/node_editor/parameter_size.tscn:56
+msgid "1024x1024"
+msgstr ""
+
+#: windows/preferences/bool_option.tscn:8
+msgid "Confirm when quitting the application"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:62
+msgid "Confirm when closing a project"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:80
+msgid "UI scale (0 = auto):"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:106
+msgid "3D preview resolution:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:116
+msgid "2.0"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:137
+msgid "3D preview tesselation detail:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:149
+msgid "256"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:167
+msgid "Enable VSync"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:182
+msgid "FPS limit:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:193
+#: windows/preferences/preferences.tscn:222
+msgid "145"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:211
+msgid "Idle FPS limit:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:245
+msgid "Ray count:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:270
+msgid "Ray length:"
+msgstr ""
+
+#: windows/preferences/preferences.tscn:296
+msgid "Denoise radius:"
+msgstr ""
+
+#: windows/progress_window/progress_window.tscn:38
+msgid "Doing this, doing that"
+msgstr ""
+

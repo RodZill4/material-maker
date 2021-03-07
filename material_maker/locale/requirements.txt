@@ -1,0 +1,2 @@
+babel==2.9.0
+babel-godot==1.0
