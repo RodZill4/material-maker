@@ -119,6 +119,7 @@ const DEFAULT_CONFIG = {
 	confirm_close_project = true,
 	vsync = true,
 	fps_limit = 145,
+	idle_fps_limit = 20,
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
@@ -1002,7 +1003,7 @@ func _notification(what : int) -> void:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
 			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
-			OS.low_processor_usage_mode_sleep_usec = 50000
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 20)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
 			# Restore the previous FPS limit.
 			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
