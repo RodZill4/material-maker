@@ -82,6 +82,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 
 
 func update_list(filter_text : String = "") -> void:
+	filter_text = filter_text.to_lower()
 	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scrollbar().value = 0.0
 	list.clear()
 	for i in library_manager.get_items(filter_text, true):
