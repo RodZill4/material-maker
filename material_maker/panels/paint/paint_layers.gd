@@ -1,38 +1,9 @@
 extends Node
 
-class Layer:
-	var name : String
-	var index : int
-	var hidden : bool
-	var albedo : Texture
-	var mr : Texture
-	var emission : Texture
-	var depth : Texture
-	var layers : Array = []
-	
-	var albedo_alpha : float = 1.0
-	var metallic_alpha : float = 1.0
-	var roughness_alpha : float = 1.0
-	var emission_alpha : float = 1.0
-	var depth_alpha : float = 1.0
-	
-	func set_alpha(channel : String, value : float) -> void:
-		set(channel+"_alpha", value)
-	
-	func update_color_rects(channel : String, parent_alpha : float = 1.0) -> void:
-		var alpha = parent_alpha * get(channel+"_alpha")
-		for cr in get(channel+"_color_rects"):
-			cr.modulate.a = alpha
-		for l in layers:
-			l.update_color_rects(channel, alpha)
-
-	var albedo_color_rects : Array = []
-	var metallic_color_rects : Array = []
-	var roughness_color_rects : Array = []
-	var emission_color_rects : Array = []
-	var depth_color_rects : Array = []
 
 export(NodePath) var painter = null
+
+var shaders = []
 
 var texture_size = 0
 var layers : Array = []
@@ -53,7 +24,14 @@ onready var nm_material = $NormalMap/Rect.get_material()
 
 onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
 
+const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
+const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")
+const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/layer_procedural.gd")
+const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
+const LAYER_TYPES : Array = [ LayerPaint, LayerProcedural, LayerMask ]
+
 const CHANNELS : Array = [ "albedo", "mr", "emission", "depth" ]
+
 
 func _ready():
 	pass
@@ -138,14 +116,15 @@ func select_layer(layer : Layer) -> void:
 		return
 	if painter_node == null:
 		painter_node = get_node(painter)
-	for c in CHANNELS:
-		if selected_layer != null:
+	if selected_layer != null:
+		for c in selected_layer.get_channels():
 			var old_texture : Texture = selected_layer.get(c)
 			var new_texture = ImageTexture.new()
 			if old_texture != null:
 				new_texture.create_from_image(old_texture.get_data())
 			selected_layer.set(c, new_texture)
-		if layer != null:
+	if layer != null:
+		for c in layer.get_channels():
 			if layer.get(c) != null:
 				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
@@ -171,8 +150,11 @@ func get_unused_layer_index() -> int:
 		index += 1
 	return index
 
-func add_layer() -> void:
-	var layer = Layer.new()
+func add_layer(layer_type : int = 0) -> void:
+	if layer_type < 0 or layer_type > 2:
+		return
+	var layer_class = LAYER_TYPES[layer_type]
+	var layer = layer_class.new()
 	layer.name = get_unused_layer_name(layers)
 	layer.index = get_unused_layer_index()
 	layer.hidden = false
@@ -210,6 +192,7 @@ func remove_layer(layer : Layer) -> void:
 	_on_layers_changed()
 
 func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> void:
+	assert(layer != null and target_layer != null)
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
 	array.erase(layer)
@@ -239,7 +222,8 @@ func move_layer_down(layer : Layer) -> void:
 
 func update_alpha(channel : String) -> void:
 	for l in layers:
-		l.update_color_rects(channel)
+		if l.has_method("update_color_rects"):
+			l.update_color_rects(channel)
 
 func _on_layers_changed() -> void:
 	var list = []
@@ -249,63 +233,111 @@ func _on_layers_changed() -> void:
 		update_alpha(c)
 	layers_pane.call_deferred("set_layers", self)
 
-func get_visible_layers(list : Array, layers_array : Array = layers) -> void:
+func get_visible_layers(list : Array, layers_array : Array = layers, mask_array : Array = []) -> void:
 	for i in range(layers_array.size()-1, -1, -1):
 		var l = layers_array[i]
-		if l.hidden:
+		if l.hidden or l.get_layer_type() == Layer.LAYER_MASK:
 			continue
-		get_visible_layers(list, l.layers)
-		list.push_back(l)
+		var m = mask_array.duplicate()
+		for cl in l.layers:
+			if !cl.hidden and cl.get_layer_type() == Layer.LAYER_MASK:
+				m.push_back(cl.mask)
+		get_visible_layers(list, l.layers, m)
+		list.push_back({ layer=l, masks=m })
+
+func get_shaders(mask_count : int) -> Dictionary:
+	while shaders.size() <= mask_count:
+		var mc = shaders.size()
+		var albedo_shader : Shader = Shader.new()
+		var metallic_shader : Shader = Shader.new()
+		var roughness_shader : Shader = Shader.new()
+		var albedomask_shader : Shader = Shader.new()
+		var shader_prefix = "shader_type canvas_item;\nrender_mode blend_mix;\nuniform sampler2D input_tex : hint_albedo;\nuniform float modulate = 1.0;\n"
+		var shader_modulate = "modulate"
+		for i in mc:
+			shader_prefix += "uniform sampler2D mask%d_tex : hint_albedo;\n" % i;
+			shader_modulate += "*texture(mask%d_tex, UV).r" % i;
+		shader_prefix += "void fragment() {\n	vec4 tex = texture(input_tex, UV);\n"
+		albedo_shader.code = shader_prefix+"	COLOR=vec4(tex.rgb, tex.a*"+shader_modulate+");\n}"
+		metallic_shader.code = shader_prefix+"	COLOR=vec4(tex.r, 0.0, 0.0, tex.b*"+shader_modulate+");\n}"
+		roughness_shader.code = shader_prefix+"	COLOR=vec4(0.0, tex.g, 0.0, tex.a*"+shader_modulate+");\n}"
+		albedomask_shader.code = shader_prefix+"	COLOR=vec4(0.0, 0.0, 0.0, tex.a*"+shader_modulate+");\n}"
+		shaders.push_back( { albedo=albedo_shader, metallic=metallic_shader, roughness=roughness_shader, albedomask=albedomask_shader } )
+	return shaders[mask_count]
+
+func apply_masks(material : ShaderMaterial, masks : Array) -> void:
+	for i in range(masks.size()):
+		material.set_shader_param("mask%d_tex" % i, masks[i])
 
 func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, depth ]:
 		while viewport.get_child_count() > 0:
 			viewport.remove_child(viewport.get_child(0))
-	for l in visible_layers:
+	for lm in visible_layers:
+		var l = lm.layer
+		var m = lm.masks
+		var layer_shaders = get_shaders(m.size())
 		var texture_rect : TextureRect
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.albedo
-		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.albedo_alpha)
-		texture_rect.rect_size = albedo.size
-		l.albedo_color_rects = [ texture_rect ]
-		albedo.add_child(texture_rect)
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.mr
-		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.metallic_alpha)
-		texture_rect.rect_size = mr.size
-		texture_rect.material = preload("res://material_maker/panels/paint/shaders/metallic_layer.tres")
-		l.metallic_color_rects = [ texture_rect ]
-		metallic.add_child(texture_rect)
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.mr
-		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.roughness_alpha)
-		texture_rect.rect_size = mr.size
-		texture_rect.material = preload("res://material_maker/panels/paint/shaders/roughness_layer.tres")
-		l.roughness_color_rects = [ texture_rect ]
-		roughness.add_child(texture_rect)
-#		var color_rect : ColorRect = ColorRect.new()
-#		color_rect.rect_size = mr.size
-#		color_rect.material = preload("res://material_maker/panels/paint/shaders/mr_layer.tres").duplicate()
-#		color_rect.material.set_shader_param("mr", l.mr"))
-#		mr.add_child(color_rect)
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.albedo
-		texture_rect.modulate = Color(0.0, 0.0, 0.0, l.albedo_alpha)
-		texture_rect.rect_size = emission.size
-		l.albedo_color_rects.push_back(texture_rect)
-		emission.add_child(texture_rect)
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.emission
-		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.emission_alpha)
-		texture_rect.rect_size = emission.size
-		l.emission_color_rects.push_back(texture_rect)
-		emission.add_child(texture_rect)
-		texture_rect = TextureRect.new()
-		texture_rect.texture = l.depth
-		texture_rect.modulate = Color(1.0, 1.0, 1.0, l.depth_alpha)
-		texture_rect.rect_size = depth.size
-		l.depth_color_rects.push_back(texture_rect)
-		depth.add_child(texture_rect)
+		var color_rect : ColorRect
+		# albedo
+		color_rect = ColorRect.new()
+		color_rect.rect_size = albedo.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.albedo
+		color_rect.material.set_shader_param("input_tex", l.albedo)
+		color_rect.material.set_shader_param("modulate", l.albedo_alpha)
+		apply_masks(color_rect.material, m)
+		l.albedo_color_rects = [ color_rect ]
+		albedo.add_child(color_rect)
+		# metallic
+		color_rect = ColorRect.new()
+		color_rect.rect_size = metallic.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.metallic
+		color_rect.material.set_shader_param("input_tex", l.mr)
+		color_rect.material.set_shader_param("modulate", l.metallic_alpha)
+		apply_masks(color_rect.material, m)
+		l.metallic_color_rects = [ color_rect ]
+		metallic.add_child(color_rect)
+		# roughness
+		color_rect = ColorRect.new()
+		color_rect.rect_size = roughness.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.roughness
+		color_rect.material.set_shader_param("input_tex", l.mr)
+		color_rect.material.set_shader_param("modulate", l.roughness_alpha)
+		apply_masks(color_rect.material, m)
+		l.roughness_color_rects = [ color_rect ]
+		roughness.add_child(color_rect)
+		# emission
+		color_rect = ColorRect.new()
+		color_rect.rect_size = emission.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.albedomask
+		color_rect.material.set_shader_param("input_tex", l.albedo)
+		color_rect.material.set_shader_param("modulate", l.albedo_alpha)
+		apply_masks(color_rect.material, m)
+		l.albedo_color_rects.push_back(color_rect)
+		emission.add_child(color_rect)
+		color_rect = ColorRect.new()
+		color_rect.rect_size = emission.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.albedo
+		color_rect.material.set_shader_param("input_tex", l.emission)
+		color_rect.material.set_shader_param("modulate", l.emission_alpha)
+		apply_masks(color_rect.material, m)
+		l.emission_color_rects = [ color_rect ]
+		emission.add_child(color_rect)
+		# depth
+		color_rect = ColorRect.new()
+		color_rect.rect_size = depth.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.albedo
+		color_rect.material.set_shader_param("input_tex", l.depth)
+		color_rect.material.set_shader_param("modulate", l.depth_alpha)
+		apply_masks(color_rect.material, m)
+		l.depth_color_rects = [ color_rect ]
+		depth.add_child(color_rect)
 	_on_Painter_painted()
 
 func load(data : Dictionary, file_name : String):
@@ -316,7 +348,8 @@ func load(data : Dictionary, file_name : String):
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:
-		var layer : Layer = Layer.new()
+		var layer : Layer = LAYER_TYPES[l.type].new()
+		layer.load_layer(l, first_index, path) 
 		layer.name = l.name
 		if l.has("index"):
 			layer.index = l.index
@@ -342,28 +375,8 @@ func save(file_name : String) -> Dictionary:
 	dir.make_dir(dir_name)
 	var data = { texture_size=texture_size }
 	#tree.save_layers(data, tree.get_root(), 0, dir_name, [ "albedo", "mr", "emission", "depth" ])
-	data.layers = save_layers(layers, dir_name)
+	data.layers = Layer.save_layers(layers, dir_name)
 	return data
-
-func save_layers(layers_array : Array, path : String) -> Array:
-	var layers_data = []
-	for l in layers_array:
-		var layer_data = { name=l.name, index=l.index, hidden=l.hidden }
-		for c in CHANNELS:
-			if l.get(c) != null:
-				var file_name : String = "%s_%d.png" % [ c, l.index ]
-				var file_path : String = path.plus_file(file_name)
-				var image : Image = l.get(c).get_data()
-				image.lock()
-				image.save_png(file_path)
-				image.unlock()
-				layer_data[c] = file_name
-		for c in [ "albedo", "metallic", "roughness", "emission", "depth" ]:
-			layer_data[c+"_alpha"] = l.get(c+"_alpha")
-		if !l.layers.empty():
-			layer_data.layers = save_layers(l.layers, path)
-		layers_data.push_back(layer_data)
-	return layers_data
 
 func _on_Painter_painted():
 	for viewport in [ albedo, metallic, roughness, emission, depth ]:

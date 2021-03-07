@@ -4,6 +4,11 @@ var layers = null
 var selected_item : TreeItem = null
 var just_selected : bool = false
 
+const ICON_LAYER_PAINT = preload("res://material_maker/panels/layers/icons/layer_paint.tres")
+const ICON_LAYER_PROC = preload("res://material_maker/panels/layers/icons/layer_proc.tres")
+const ICON_LAYER_MASK = preload("res://material_maker/panels/layers/icons/layer_mask.tres")
+const ICONS = [ ICON_LAYER_PAINT, ICON_LAYER_PROC, ICON_LAYER_MASK ]
+
 const BUTTON_SHOWN = preload("res://material_maker/panels/layers/icons/visible.tres")
 const BUTTON_HIDDEN = preload("res://material_maker/panels/layers/icons/not_visible.tres")
 
@@ -23,6 +28,7 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 	for l in layers_array:
 		var new_item = create_item(item)
 		new_item.set_text(0, l.name)
+		new_item.set_icon(0, ICONS[l.get_layer_type()])
 		new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
 		new_item.set_editable(0, false)
 		new_item.set_meta("layer", l)

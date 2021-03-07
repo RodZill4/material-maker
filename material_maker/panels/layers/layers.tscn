@@ -5,32 +5,32 @@
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 64, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 80, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=5]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 96, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=6]
-flags = 7
+flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
@@ -117,6 +117,7 @@ size_flags_vertical = 3
 columns = 2
 hide_root = true
 script = ExtResource( 1 )
+
 [connection signal="pressed" from="Buttons/Add" to="." method="_on_Add_pressed"]
 [connection signal="pressed" from="Buttons/Duplicate" to="." method="_on_Duplicate_pressed"]
 [connection signal="pressed" from="Buttons/Remove" to="." method="_on_Remove_pressed"]
