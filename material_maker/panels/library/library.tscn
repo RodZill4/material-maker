@@ -60,10 +60,6 @@ hide_root = true
 select_mode = 1
 script = ExtResource( 1 )
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.2
-autostart = true
-
 [node name="PopupMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
 margin_bottom = 20.0
@@ -74,6 +70,5 @@ items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update t
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_rmb_selected" from="Tree" to="." method="_on_Tree_item_rmb_selected"]
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 [connection signal="about_to_show" from="PopupMenu" to="." method="_on_PopupMenu_about_to_show"]
 [connection signal="index_pressed" from="PopupMenu" to="." method="_on_PopupMenu_index_pressed"]

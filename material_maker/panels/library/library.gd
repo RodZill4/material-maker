@@ -31,8 +31,6 @@ func _ready() -> void:
 		var texture : Texture = library_manager.get_section_icon(s)
 		button.name = s
 		button.texture_normal = texture
-		button.toggle_mode = true
-		button.hint_tooltip = s
 		$SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
@@ -93,15 +91,18 @@ func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 		i = i.get_next()
 	return rv
 
+func update_category_button(category : String) -> void:
+	if library_manager.is_section_enabled(category):
+		category_buttons[category].material = null
+		category_buttons[category].hint_tooltip = category+"\nLeft click to show\nRight click to disable"
+	else:
+		category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+		category_buttons[category].hint_tooltip = category+"\nRight click to enable"
+
 func update_tree() -> void:
 	# update category buttons
 	for c in category_buttons.keys():
-		if library_manager.is_section_enabled(c):
-			category_buttons[c].material = null
-		else:
-			category_buttons[c].material = preload("res://material_maker/panels/library/button_greyed.tres")
-			if current_category == c:
-				current_category = ""
+		update_category_button(c)
 	# update tree
 	var filter : String = $Filter/Filter.text.to_lower()
 	tree.clear()
@@ -218,6 +219,7 @@ func _on_Section_Button_pressed(category : String) -> void:
 	while item != null:
 		if item.get_text(0) == category:
 			item.select(0)
+			item.collapsed = false
 			$Tree.ensure_cursor_is_visible()
 			break
 		item = item.get_next()
@@ -226,25 +228,12 @@ func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_RIGHT:
 		if library_manager.toggle_section(category):
 			category_buttons[category].material = null
+			category_buttons[category].hint_tooltip = category+"\nLeft click to show\nRight click to disable"
 		else:
 			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			category_buttons[category].hint_tooltip = category+"\nRight click to enable"
 			if current_category == category:
 				current_category = ""
-
-func _on_Timer_timeout() -> void:
-	var item : TreeItem = $Tree.get_item_at_position(Vector2(5, 5))
-	if item == null:
-		return
-	while item.get_parent() != $Tree.get_root():
-		item = item.get_parent()
-	if item.get_text(0) == current_category:
-		return
-	if category_buttons.has(current_category):
-		category_buttons[current_category].material = null
-	current_category = item.get_text(0)
-	if category_buttons.has(current_category):
-		category_buttons[current_category].material = preload("res://material_maker/panels/library/button_active.tres")
-
 
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = $Libraries.get_popup()
