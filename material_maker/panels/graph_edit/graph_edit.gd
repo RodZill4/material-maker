@@ -39,7 +39,13 @@ func get_graph_edit():
 	return self
 
 func _gui_input(event) -> void:
-	if event.is_action_pressed("ui_library_popup") && get_global_rect().has_point(get_global_mouse_position()):
+	if (
+		event.is_action_pressed("ui_library_popup")
+		and not Input.is_key_pressed(KEY_CONTROL)
+		and get_global_rect().has_point(get_global_mouse_position())
+	):
+		# Only popup the UI library if Ctrl is not pressed to avoid conflicting
+		# with the Ctrl + Space shortcut.
 		node_popup.rect_global_position = get_global_mouse_position()
 		node_popup.show_popup()
 	elif event.is_action_pressed("ui_hierarchy_up"):

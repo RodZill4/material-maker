@@ -29,6 +29,13 @@ var current_mode : String = "material"
 func _ready() -> void:
 	previous_width = rect_size.x
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_toggle_docks"):
+		# Toggle side docks' visibility to maximize the space available
+		# for the graph panel. This is useful on smaller displays.
+		$Left.visible = not $Left.visible
+		$SplitRight/Right.visible = not $SplitRight/Right.visible
+
 func load_panels(config_cache) -> void:
 	# Create panels
 	for panel_pos in PANEL_POSITIONS.keys():

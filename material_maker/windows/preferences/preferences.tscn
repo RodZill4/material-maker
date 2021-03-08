@@ -346,7 +346,6 @@ margin_right = 188.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "Cancel"
-
 [connection signal="popup_hide" from="." to="." method="queue_free"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
