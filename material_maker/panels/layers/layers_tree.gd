@@ -68,13 +68,20 @@ static func get_item_index(item : TreeItem) -> int:
 func drop_data(position : Vector2, data):
 	var target_item : TreeItem = get_item_at_position(position)
 	if data != null and target_item != null and !item_is_child(target_item, data):
+		var layer = data.get_meta("layer")
 		match get_drop_section_at_position(position):
 			0:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_meta("layer"))
+				layers.move_layer_into(layer, target_item.get_meta("layer"))
 			-1:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item))
+				if target_item.get_parent() != null:
+					layers.move_layer_into(layer, target_item.get_parent().get_meta("layer"), get_item_index(target_item))
+				else:
+					print("Cannot move item")
 			1:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
+				if target_item.get_parent() != null:
+					layers.move_layer_into(layer, target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
+				else:
+					print("Cannot move item")
 		_on_layers_changed()
 
 func _on_Tree_button_pressed(item : TreeItem, _column : int, _id : int):

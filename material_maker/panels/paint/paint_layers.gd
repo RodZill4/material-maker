@@ -33,6 +33,9 @@ const LAYER_TYPES : Array = [ LayerPaint, LayerProcedural, LayerMask ]
 const CHANNELS : Array = [ "albedo", "mr", "emission", "depth" ]
 
 
+signal layer_selected(l)
+
+
 func _ready():
 	pass
 
@@ -124,6 +127,7 @@ func select_layer(layer : Layer) -> void:
 				new_texture.create_from_image(old_texture.get_data())
 			selected_layer.set(c, new_texture)
 	if layer != null:
+		emit_signal("layer_selected", layer)
 		for c in layer.get_channels():
 			if layer.get(c) != null:
 				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
@@ -161,7 +165,7 @@ func add_layer(layer_type : int = 0) -> void:
 	var image : Image = Image.new()
 	image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
-	for c in CHANNELS:
+	for c in layer.get_channels():
 		var texture = ImageTexture.new()
 		texture.create_from_image(image)
 		layer.set(c, texture)
@@ -169,14 +173,7 @@ func add_layer(layer_type : int = 0) -> void:
 	select_layer(layer)
 
 func duplicate_layer(source_layer : Layer) -> void:
-	var layer = Layer.new()
-	layer.name = source_layer.name+" (copy)"
-	layer.index = get_unused_layer_index()
-	layer.hidden = false
-	for c in CHANNELS:
-		var texture = ImageTexture.new()
-		texture.create_from_image(source_layer.get(c).get_data())
-		layer.set(c, texture)
+	var layer = source_layer.duplicate()
 	layers.push_front(layer)
 	select_layer(layer)
 
@@ -192,7 +189,7 @@ func remove_layer(layer : Layer) -> void:
 	_on_layers_changed()
 
 func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> void:
-	assert(layer != null and target_layer != null)
+	assert(layer != null)
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
 	array.erase(layer)
@@ -348,7 +345,7 @@ func load(data : Dictionary, file_name : String):
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:
-		var layer : Layer = LAYER_TYPES[l.type].new()
+		var layer : Layer = LAYER_TYPES[l.type if l.has("type") else 0].new()
 		layer.load_layer(l, first_index, path) 
 		layer.name = l.name
 		if l.has("index"):

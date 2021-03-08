@@ -20,6 +20,13 @@ var depth_color_rects : Array = []
 func get_layer_type() -> int:
 	return LAYER_PAINT
 
+func duplicate():
+	var layer = .duplicate()
+	for c in [ "albedo", "metallic", "roughness", "emission", "depth" ]:
+		layer.set(c+"_alpha", get(c+"_alpha"))
+	return layer
+
+
 func get_channels() -> Array:
 	return [ "albedo", "mr", "emission", "depth" ]
 

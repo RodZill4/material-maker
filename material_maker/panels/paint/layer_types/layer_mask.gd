@@ -5,5 +5,9 @@ var mask : Texture
 func get_layer_type() -> int:
 	return LAYER_MASK
 
+func duplicate():
+	var layer = .duplicate()
+	return layer
+
 func get_channels() -> Array:
 	return [ "mask" ]
