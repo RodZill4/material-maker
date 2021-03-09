@@ -77,6 +77,10 @@
 			{
 				"rgba": "vec4(vec3($depth($uv)), $albedo($uv).a)",
 				"type": "rgba"
+			},
+			{
+				"rgba": "vec4(1.0)",
+				"type": "rgba"
 			}
 		],
 		"parameters": [
