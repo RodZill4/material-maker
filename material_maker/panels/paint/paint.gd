@@ -369,11 +369,13 @@ var procedural_update_changed_scheduled : bool = false
 func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and !procedural_update_changed_scheduled:
 		call_deferred("do_update_procedural_layer")
+		procedural_update_changed_scheduled = true
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false)
+	painter.fill(false, true)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
+	procedural_update_changed_scheduled = false
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	update_procedural_layer()

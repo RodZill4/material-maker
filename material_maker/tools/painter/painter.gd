@@ -322,8 +322,8 @@ func paint(shader_params : Dictionary) -> void:
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")
 
-func fill(erase : bool) -> void:
-	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true })
+func fill(erase : bool, reset : bool = false) -> void:
+	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset })
 
 func pick_color(position):
 	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()

@@ -13,6 +13,7 @@ uniform sampler2D layer_depth_tex;
 
 uniform bool      erase             = false;
 uniform bool      fill              = false;
+uniform bool      reset             = false;
 uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
@@ -66,6 +67,8 @@ void fragment() {
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (erase) {
 		COLOR = vec4(screen_color.rg, max(screen_color.ba-a, 0.0));
+	} else if (reset) {
+		COLOR = vec4(color.xy, a);
 	} else {
 		vec2 alpha_sum = min(vec2(1.0), a + screen_color.ba);
 		COLOR = vec4((color.rg*a+screen_color.rg*(alpha_sum-a))/alpha_sum, alpha_sum);
