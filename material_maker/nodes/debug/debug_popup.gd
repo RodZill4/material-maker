@@ -11,7 +11,14 @@ func show_code(s) -> void:
 	popup_centered()
 
 func _on_ShaderType_item_selected(index):
-	$VBoxContainer/TextEdit.text = call(GENFUNCTIONS[index])
+	if index < 3:
+		$VBoxContainer/TextEdit.visible = true
+		$VBoxContainer/TextEdit.text = call(GENFUNCTIONS[index])
+		$VBoxContainer/ColorRect.visible = false
+	else:
+		$VBoxContainer/TextEdit.visible = false
+		$VBoxContainer/ColorRect.visible = true
+		$VBoxContainer/ColorRect.material.shader.code = generate_godot_canvasitem()
 
 func _on_CopyToClipboard_pressed():
 	OS.set_clipboard($VBoxContainer/TextEdit.text)
