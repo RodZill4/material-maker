@@ -19,6 +19,14 @@ func _ready():
 	set_column_expand(1, false)
 	set_column_min_width(1, 30)
 
+func _make_custom_tooltip(for_text):
+	if for_text == "":
+		return null
+	var panel = preload("res://material_maker/panels/layers/layer_tooltip.tscn").instance()
+	var item : TreeItem = instance_from_id(int(for_text)) as TreeItem
+	panel.set_layer(item.get_meta("layer"))
+	return panel
+
 func update_from_layers(layers_array : Array, selected_layer) -> void:
 	selected_item = null
 	clear()
@@ -32,6 +40,7 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 		new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
 		new_item.set_editable(0, false)
 		new_item.set_meta("layer", l)
+		new_item.set_tooltip(0, str(new_item.get_instance_id()))
 		if l == selected_layer:
 			new_item.select(0)
 			selected_item = new_item
