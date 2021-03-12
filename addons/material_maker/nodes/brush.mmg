@@ -79,7 +79,7 @@
 				"type": "rgba"
 			},
 			{
-				"rgba": "vec4(1.0)",
+				"rgba": "vec4(vec3(1.0), $albedo($uv).a)",
 				"type": "rgba"
 			}
 		],
