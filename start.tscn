@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/fonts/vegur_regular.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://material_maker/icons/godot_logo.svg" type="Texture" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 72
@@ -42,43 +43,55 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 margin_left = -221.0
-margin_top = -360.0
 margin_right = 221.0
-margin_bottom = 360.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Space1" type="Control" parent="VBoxContainer"]
-margin_bottom = 281.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 0
-size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer"]
+margin_left = 93.0
+margin_top = 44.0
+margin_right = 349.0
+margin_bottom = 300.0
+size_flags_horizontal = 4
+texture = ExtResource( 4 )
+
+[node name="Space2" type="Control" parent="VBoxContainer"]
+margin_top = 304.0
+margin_bottom = 344.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 0
 size_flags_stretch_ratio = 2.0
 
 [node name="Title" type="Label" parent="VBoxContainer"]
-margin_top = 285.0
+margin_top = 348.0
 margin_right = 442.0
-margin_bottom = 372.0
+margin_bottom = 435.0
 custom_fonts/font = SubResource( 1 )
 text = "Material Maker"
 align = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_top = 376.0
+margin_top = 439.0
 margin_right = 442.0
-margin_bottom = 390.0
+margin_bottom = 453.0
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
 margin_left = 96.0
-margin_top = 394.0
+margin_top = 457.0
 margin_right = 346.0
-margin_bottom = 410.0
+margin_bottom = 473.0
 rect_min_size = Vector2( 250, 16 )
 size_flags_horizontal = 4
 custom_styles/fg = SubResource( 2 )
@@ -86,33 +99,33 @@ custom_styles/bg = SubResource( 3 )
 value = 50.0
 percent_visible = false
 
-[node name="Space2" type="Control" parent="VBoxContainer"]
-margin_top = 414.0
-margin_bottom = 519.0
+[node name="Space3" type="Control" parent="VBoxContainer"]
+margin_top = 477.0
+margin_bottom = 551.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
-margin_top = 523.0
+margin_top = 555.0
 margin_right = 442.0
-margin_bottom = 537.0
+margin_bottom = 569.0
 text = "Powered by"
 align = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 margin_left = 127.0
-margin_top = 541.0
+margin_top = 573.0
 margin_right = 314.0
-margin_bottom = 610.0
+margin_bottom = 642.0
 size_flags_horizontal = 4
 texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Space3" type="Control" parent="VBoxContainer"]
-margin_top = 614.0
+[node name="Space4" type="Control" parent="VBoxContainer"]
+margin_top = 646.0
 margin_bottom = 720.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
