@@ -155,8 +155,16 @@ func get_unused_layer_index() -> int:
 	return index
 
 func add_layer(layer_type : int = 0) -> void:
-	if layer_type < 0 or layer_type > 2:
+	if layer_type < 0 or layer_type >= LAYER_TYPES.size():
 		return
+	var layers_array : Array = layers
+	if layer_type == Layer.LAYER_MASK:
+		if selected_layer == null:
+			return
+		elif selected_layer.get_layer_type() == Layer.LAYER_MASK:
+			layers_array = find_parent_array(selected_layer)
+		else:
+			layers_array = selected_layer.layers
 	var layer_class = LAYER_TYPES[layer_type]
 	var layer = layer_class.new()
 	layer.name = get_unused_layer_name(layers)
@@ -169,12 +177,13 @@ func add_layer(layer_type : int = 0) -> void:
 		var texture = ImageTexture.new()
 		texture.create_from_image(image)
 		layer.set(c, texture)
-	layers.push_front(layer)
+	layers_array.push_front(layer)
 	select_layer(layer)
 
 func duplicate_layer(source_layer : Layer) -> void:
+	var layers_array : Array = find_parent_array(source_layer)
 	var layer = source_layer.duplicate()
-	layers.push_front(layer)
+	layers_array.push_front(layer)
 	select_layer(layer)
 
 func remove_layer(layer : Layer) -> void:
@@ -190,6 +199,8 @@ func remove_layer(layer : Layer) -> void:
 
 func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> void:
 	assert(layer != null)
+	if layer.get_layer_type() == Layer.LAYER_MASK and (target_layer == null or target_layer.get_layer_type() == Layer.LAYER_MASK):
+		return
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
 	array.erase(layer)
