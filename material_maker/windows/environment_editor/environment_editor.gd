@@ -24,6 +24,10 @@ func _ready():
 	environment_manager.connect("thumbnail_updated", self, "on_thumbnail_updated")
 	read_environment_list()
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
+
 func connect_controls() -> void:
 	for c in ui.get_children():
 		if c is LineEdit:

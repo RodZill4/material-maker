@@ -59,11 +59,11 @@ func _draw() -> void:
 	draw_line(start, end, color, 1.5, true)
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if event.scancode == KEY_ESCAPE:
-			set_process_input(false)
-			queue_free()
-	elif event is InputEventMouseMotion:
+	if event.is_action_pressed("ui_cancel"):
+		set_process_input(false)
+		queue_free()
+
+	if event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)
 		target = control.widget if control != null and !control.empty() and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
