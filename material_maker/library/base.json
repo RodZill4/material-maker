@@ -2190,7 +2190,7 @@
 			"parameters": {
 				"size": 6
 			},
-			"tree_item": "Filter/Edge detect",
+			"tree_item": "Filter/Edge detect/Simple",
 			"type": "edge_detect_1"
 		},
 		{
@@ -5902,6 +5902,17 @@
 			},
 			"tree_item": "Filter/Blur/Fast",
 			"type": "fast_blur"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAb1JREFUeJztWsGuwyAMC0/7/1/mnZAmBC2BOE7X+NoppI4dIF0RkSovxh87ATaSAHYCbHxOA9SKayGlFFjshiMCaq3QJNHxRdIC+wR4VKeUArWYyAMUENICHtXv10NBTYD3y4tgrRDeAmioCGBUvwGlglTA6g+Z1W9AqKBIXofvgT6MaGGZzy0BEaTfw9IKx7dBLSyr18faKdQlAdbVR8bbJdZtG0RbadcWUwIier+HRS9w2QY9ydSuNVRAtG3vDt/5aomG9wCGlTQFHBJgtc96vPxoDU3+eRmaPThVAav6Dav5XyrAYyi5CyuCIRaIcoZYKeDSOSDKCzVo87n6vbkColpmhiUCVnsBu/HNcJX/sgIiWcAS6qnw1bOI1W+YqUBFAHNbRBFs0gSj7RIzjAq4dR1mfBtETZLMFPAU9GRuEeDZC+CjNDGaCD2hD4xyPLLAySRGGx+FIwJ6K1jP/D1G8uZD0YhWcL0MPQ3mBEQbotwpMhWACBpFBSv9KP8ggQzOVEGI7wIsK2i24myC6AW8VWDydfhNcCHASwVbE2Nx3AYj3hN+xgK7CsuDEDsBNpIAdgJsJAHsBNh4PQH/wWYeXVLBU3EAAAAASUVORK5CYII=",
+			"name": "edge_detect",
+			"parameters": {
+				"size": 9,
+				"threshold": 0.4,
+				"width": 2
+			},
+			"tree_item": "Filter/Edge detect",
+			"type": "edge_detect"
 		}
 	],
 	"name": "Base library"
