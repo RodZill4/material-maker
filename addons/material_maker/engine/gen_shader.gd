@@ -260,6 +260,20 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 		else:
 			variables["uv"] = "("+uv+")"
 	variables["time"] = "elapsed_time"
+	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
+		for i in range(shader_model.inputs.size()):
+			var input = shader_model.inputs[i]
+			var source = get_source(i)
+			if source == null:
+				continue
+			var src_code = source.generator.get_shader_code("uv", source.output_index, MMGenContext.new())
+			assert(! (src_code is GDScriptFunctionState))
+			while src_code is GDScriptFunctionState:
+				src_code = yield(src_code, "completed")
+			if src_code.has("texture"):
+				variables[input.name+".texture"] = src_code.texture
+			if src_code.has("texture_size"):
+				variables[input.name+".size"] = str(src_code.texture_size)+".0"
 	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true
@@ -426,13 +440,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 		rv.type = output.type
-		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
-			rv.globals.push_back(shader_model.global)
 		if shader_model.has("includes"):
 			for i in shader_model.includes:
 				var g = mm_loader.get_predefined_global(i)
 				if g != "" and rv.globals.find(g) == -1:
 					rv.globals.push_back(g)
+		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
+			rv.globals.push_back(shader_model.global)
 	return rv
 
 
