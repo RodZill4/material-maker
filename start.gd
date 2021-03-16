@@ -61,7 +61,7 @@ func _ready():
 						dir.list_dir_begin()
 						var file_name = dir.get_next()
 						while file_name != "":
-							if regex.search(file_name) && file_name.get_extension() == "ptex":
+							if regex.search(file_name) and file_name.get_extension() == "ptex":
 								expanded_files.push_back(basedir+"/"+file_name)
 							file_name = dir.get_next()
 				else:
@@ -101,16 +101,17 @@ func export_files(files, output_dir, target, size) -> void:
 		if gen != null:
 			add_child(gen)
 			for c in gen.get_children():
-				if c.has_method("get_export_profiles"):
-					if c.get_export_profiles().find(target) == -1:
-						show_error("ERROR: Unsupported target %s"+target)
-						return
+				if c.has_method("export_material"):
+					if c.has_method("get_export_profiles"):
+						if c.get_export_profiles().find(target) == -1:
+							show_error("ERROR: Unsupported target %s"+target)
+							continue
 					$VBoxContainer/Label.text = "Exporting "+f.get_file()
 					var prefix : String = output_dir+"/"+f.get_file().get_basename()
+					print(prefix)
 					var result = c.export_material(prefix, target, size)
 					while result is GDScriptFunctionState:
 						result = yield(result, "completed")
-					break
 			gen.queue_free()
 		$VBoxContainer/ProgressBar.value += 1
 	get_tree().quit()
