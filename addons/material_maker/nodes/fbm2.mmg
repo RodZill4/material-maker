@@ -20,7 +20,7 @@
 		],
 		"instance": "float $(name)_fbm(vec2 coord, vec2 size, int folds, int octaves, float persistence, float seed) {\n\tfloat normalize_factor = 0.0;\n\tfloat value = 0.0;\n\tfloat scale = 1.0;\n\tfor (int i = 0; i < octaves; i++) {\n\t\tfloat noise = fbm_$noise(coord*size, size, seed);\n\t\tfor (int f = 0; f < folds; ++f) {\n\t\t\tnoise = abs(2.0*noise-1.0);\n\t\t}\n\t\tvalue += noise * scale;\n\t\tnormalize_factor += scale;\n\t\tsize *= 2.0;\n\t\tscale *= persistence;\n\t}\n\treturn value / normalize_factor;\n}\n",
 		"longdesc": "Generates a noise made of several octaves of a simple noise",
-		"name": "FBM",
+		"name": "FBM Noise",
 		"outputs": [
 			{
 				"f": "$(name)_fbm($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), float($(seed)))",
