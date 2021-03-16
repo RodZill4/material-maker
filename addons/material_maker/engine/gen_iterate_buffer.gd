@@ -175,15 +175,22 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if updating or update_again:
 		shader_code.pending_textures = shader_code.textures.keys()
 	match output_index:
-		0:
-			shader_code.texture = "o%s_tex" % str(get_instance_id())
-			shader_code.texture_size = pow(2, get_parameter("size"))
 		1:
-			shader_code.texture = "o%s_loop_tex" % str(get_instance_id())
-			shader_code.texture_size = pow(2, get_parameter("size"))
 			shader_code.global = [ "uniform int o%s_iteration = 0;" % str(get_instance_id()) ]
-			shader_code.iteration = "o%s_iteration" % str(get_instance_id())
 	return shader_code
+
+func get_output_attributes(output_index : int) -> Dictionary:
+	var attributes : Dictionary = {}
+	match output_index:
+		0:
+			attributes.texture = "o%s_tex" % str(get_instance_id())
+			attributes.texture_size = pow(2, get_parameter("size"))
+		1:
+			attributes.texture = "o%s_loop_tex" % str(get_instance_id())
+			attributes.texture_size = pow(2, get_parameter("size"))
+
+			attributes.iteration = "o%s_iteration" % str(get_instance_id())
+	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "iterate_buffer"

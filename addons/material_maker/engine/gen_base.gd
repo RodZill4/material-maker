@@ -295,6 +295,9 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		print(rv)
 	return rv
 
+func get_output_attributes(output_index : int) -> Dictionary:
+	return {}
+
 func _get_shader_code(_uv, _output_index, _context) -> Dictionary:
 	return {}
 

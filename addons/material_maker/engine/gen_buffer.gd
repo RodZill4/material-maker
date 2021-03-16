@@ -159,9 +159,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
 	if updating or update_again or !pending_textures.empty():
 		shader_code.pending_textures = shader_code.textures.keys()
-	shader_code.texture = "o%s_tex" % str(get_instance_id())
-	shader_code.texture_size = pow(2, get_parameter("size"))
 	return shader_code
+
+func get_output_attributes(output_index : int) -> Dictionary:
+	var attributes : Dictionary = {}
+	attributes.texture = "o%s_tex" % str(get_instance_id())
+	attributes.texture_size = pow(2, get_parameter("size"))
+	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"
