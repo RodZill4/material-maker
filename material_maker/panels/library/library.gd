@@ -127,9 +127,9 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
 			new_item.set_text(0, item_name)
-			new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
-			new_item.set_icon(1, item_icon)
-			new_item.set_icon_max_width(1, 32)
+		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
+		new_item.set_icon(1, item_icon)
+		new_item.set_icon_max_width(1, 32)
 		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
 			new_item.set_metadata(1, library_index)
