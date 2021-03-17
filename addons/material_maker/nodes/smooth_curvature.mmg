@@ -133,7 +133,7 @@
 			"to_port": 0
 		}
 	],
-	"label": "Smoothed Curvature",
+	"label": "Smooth Curvature",
 	"longdesc": "Creates a smooth curvature map from a height map",
 	"name": "smooth_curvature",
 	"node_position": {

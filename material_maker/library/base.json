@@ -5921,7 +5921,7 @@
 				"param0": 9,
 				"param2": 1
 			},
-			"tree_item": "Filter/SmoothedCurvature",
+			"tree_item": "Filter/SmoothCurvature",
 			"type": "smooth_curvature"
 		},
 		{
