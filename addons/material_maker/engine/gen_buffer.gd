@@ -64,6 +64,11 @@ func source_changed(_input_port_index : int) -> void:
 func all_sources_changed() -> void:
 	call_deferred("update_shader")
 
+func set_parameter(n : String, v) -> void:
+	if is_inside_tree():
+		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+	.set_parameter(n, v)
+
 func update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}

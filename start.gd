@@ -108,7 +108,6 @@ func export_files(files, output_dir, target, size) -> void:
 							continue
 					$VBoxContainer/Label.text = "Exporting "+f.get_file()
 					var prefix : String = output_dir+"/"+f.get_file().get_basename()
-					print(prefix)
 					var result = c.export_material(prefix, target, size)
 					while result is GDScriptFunctionState:
 						result = yield(result, "completed")
