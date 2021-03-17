@@ -7,6 +7,12 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times
 """
 
+const VERSION_OLD     : int = 0
+const VERSION_SIMPLE  : int = 1
+const VERSION_COMPLEX : int = 2
+
+var version : int = VERSION_OLD
+
 var material : ShaderMaterial = null
 var updating : bool = false
 var update_again : bool = true
@@ -34,22 +40,34 @@ func get_type_name() -> String:
 	return "Buffer"
 
 func get_parameter_defs() -> Array:
-	return [
-			{ name="size", type="size", first=4, last=12, default=4 },
-			{ name="lod", type="float", min=0, max=10.0, step=0.01, default=0 }
-		]
+	var parameter_defs : Array = [ { name="size", type="size", first=4, last=12, default=4 } ]
+	match version:
+		VERSION_OLD:
+			parameter_defs.push_back({ name="lod", type="float", min=0, max=10.0, step=0.01, default=0 })
+		VERSION_COMPLEX:
+			parameter_defs.push_back({ name="filter", type="boolean", default=true })
+			parameter_defs.push_back({ name="mipmap", type="boolean", default=true })
+	return parameter_defs
 
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
 func get_output_defs() -> Array:
-	return [ { type="rgba" }, { type="rgba" } ]
+	if version == VERSION_OLD:
+		return [ { type="rgba" }, { type="rgba" } ]
+	else:
+		return [ { type="rgba" } ]
 
 func source_changed(_input_port_index : int) -> void:
 	call_deferred("update_shader")
 
 func all_sources_changed() -> void:
 	call_deferred("update_shader")
+
+func set_parameter(n : String, v) -> void:
+	if is_inside_tree():
+		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+	.set_parameter(n, v)
 
 func update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
@@ -126,7 +144,16 @@ func update_buffer() -> void:
 				renderer = yield(renderer, "completed")
 			if !update_again:
 				renderer.copy_to_texture(texture)
-				#texture.flags = Texture.FLAG_REPEAT
+				match version:
+					VERSION_COMPLEX:
+						var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
+						if ! parameters.has("filter") or parameters.filter:
+							flags |= Texture.FLAG_FILTER
+						if ! parameters.has("mipmap") or parameters.mipmap:
+							flags |= Texture.FLAG_MIPMAPS
+						texture.flags = flags
+					_:
+						texture.flags = Texture.FLAGS_DEFAULT
 			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
 			current_renderer = null
@@ -139,6 +166,20 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		shader_code.pending_textures = shader_code.textures.keys()
 	return shader_code
 
+func get_output_attributes(output_index : int) -> Dictionary:
+	var attributes : Dictionary = {}
+	attributes.texture = "o%s_tex" % str(get_instance_id())
+	attributes.texture_size = pow(2, get_parameter("size"))
+	return attributes
+
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "buffer"
+	if version != VERSION_OLD:
+		data.version = version
 	return data
+
+func _deserialize(data : Dictionary) -> void:
+	if data.has("version"):
+		version = data.version
+	else:
+		version = VERSION_OLD

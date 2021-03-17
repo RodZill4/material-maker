@@ -1,0 +1,146 @@
+{
+	"connections": [
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "fast_blur_shader",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "fast_blur_shader",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Fast Blur",
+	"longdesc": "",
+	"name": "fast_blur",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "fast_blur_shader",
+			"node_position": {
+				"x": -168,
+				"y": 120
+			},
+			"parameters": {
+				"quality": 1,
+				"sigma": 100
+			},
+			"type": "fast_blur_shader"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -187,
+				"y": 61.5
+			},
+			"parameters": {
+				"size": 11
+			},
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -602,
+				"y": 91.75
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 88,
+				"y": 61.75
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -254.5,
+				"y": -122.5
+			},
+			"parameters": {
+				"param0": 11,
+				"param1": 100,
+				"param2": 1
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Resolution",
+					"linked_widgets": [
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				},
+				{
+					"label": "Sigma",
+					"linked_widgets": [
+						{
+							"node": "fast_blur_shader",
+							"widget": "sigma"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				},
+				{
+					"label": "Quality",
+					"linked_widgets": [
+						{
+							"node": "fast_blur_shader",
+							"widget": "quality"
+						}
+					],
+					"name": "param2",
+					"type": "linked_control"
+				}
+			]
+		}
+	],
+	"parameters": {
+		"param0": 11,
+		"param1": 100,
+		"param2": 1
+	},
+	"shortdesc": "",
+	"type": "graph"
+}

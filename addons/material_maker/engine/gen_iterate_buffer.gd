@@ -41,7 +41,9 @@ func get_type_name() -> String:
 func get_parameter_defs() -> Array:
 	return [
 			{ name="size", type="size", first=4, last=12, default=4 },
-			{ name="iterations", type="float", min=1, max=50, step=1, default=5 }
+			{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
+			{ name="filter", type="boolean", default=true },
+			{ name="mipmap", type="boolean", default=true }
 		]
 
 func get_input_defs() -> Array:
@@ -172,7 +174,23 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
 	if updating or update_again:
 		shader_code.pending_textures = shader_code.textures.keys()
+	match output_index:
+		1:
+			shader_code.global = [ "uniform int o%s_iteration = 0;" % str(get_instance_id()) ]
 	return shader_code
+
+func get_output_attributes(output_index : int) -> Dictionary:
+	var attributes : Dictionary = {}
+	match output_index:
+		0:
+			attributes.texture = "o%s_tex" % str(get_instance_id())
+			attributes.texture_size = pow(2, get_parameter("size"))
+		1:
+			attributes.texture = "o%s_loop_tex" % str(get_instance_id())
+			attributes.texture_size = pow(2, get_parameter("size"))
+
+			attributes.iteration = "o%s_iteration" % str(get_instance_id())
+	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "iterate_buffer"

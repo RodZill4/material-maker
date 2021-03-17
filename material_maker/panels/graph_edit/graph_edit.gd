@@ -591,6 +591,8 @@ func set_last_selected(node) -> void:
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(node_name)
+	if node == null:
+		return
 	var node_transform : Transform2D = node.get_global_transform()
 	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
 	# ignore if drag distance is too short

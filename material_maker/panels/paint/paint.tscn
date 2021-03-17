@@ -124,7 +124,9 @@ flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 224, 192, 32, 32 )
 
-[node name="MaterialSpray" type="VBoxContainer"]
+[node name="MaterialSpray" type="VBoxContainer" groups=[
+"preview",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -407,7 +409,6 @@ __meta__ = {
 }
 
 [node name="Debug" type="Control" parent="VSplitContainer/Painter"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -480,7 +481,9 @@ size_flags_vertical = 3
 scroll_offset = Vector2( 0, -87 )
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
+
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
+[connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="gui_input" from="VSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
 [connection signal="resized" from="VSplitContainer/Painter/View" to="." method="_on_resized"]
 [connection signal="pressed" from="VSplitContainer/Painter/Tools/FreeDots" to="." method="set_current_tool" binds= [ 0 ]]

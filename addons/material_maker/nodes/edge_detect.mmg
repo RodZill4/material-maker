@@ -1,0 +1,72 @@
+{
+	"name": "edge_detect",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 9,
+		"threshold": 0.4,
+		"width": 2
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgb"
+			}
+		],
+		"instance": "float $(name)_fct(vec2 uv) {\n\tvec3 e_base = vec3(1.0/$size, -1.0/$size, 0);\n\tvec3 ref = $in(uv);\n\tvec3 e = vec3(0);\n\tfloat rv = 0.0;\n\tfor (int i = 0; i < int($width); ++i) {\n\t\te += e_base;\n\t\trv += length($in(uv+e.xy)-ref);\n\t\trv += length($in(uv-e.xy)-ref);\n\t\trv += length($in(uv+e.xx)-ref);\n\t\trv += length($in(uv-e.xx)-ref);\n\t\trv += length($in(uv+e.xz)-ref);\n\t\trv += length($in(uv-e.xz)-ref);\n\t\trv += length($in(uv+e.zx)-ref);\n\t\trv += length($in(uv-e.zx)-ref);\n\t\trv *= 2.0;\n\t}\n\treturn rv*pow(2.0, -$width);\n}",
+		"longdesc": "An edge detect filter that detects edges along all directions and draws them in white on a black background",
+		"name": "Edge detect",
+		"outputs": [
+			{
+				"f": "clamp(100.0*($(name)_fct($uv)-$threshold), 0.0, 1.0)",
+				"longdesc": "Shows the generated outlines",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 4,
+				"label": "Size",
+				"last": 12,
+				"longdesc": "The resolution of the input image",
+				"name": "size",
+				"shortdesc": "Size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Width",
+				"max": 5,
+				"min": 1,
+				"name": "width",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Threshold",
+				"max": 1,
+				"min": 0,
+				"name": "threshold",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Edge detect"
+	},
+	"type": "shader"
+}

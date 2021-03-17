@@ -11,14 +11,24 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
+# The previous FPS limit (defined in microseconds per frame).
+# Used to restore the FPS limit when the window is refocused.
+var previous_sleep_usec := OS.low_processor_usage_mode_sleep_usec
+
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
 # specular/parallax mapping and when viewed at oblique angles.
 var preview_rendering_scale_factor := 2.0
 
+# The number of subdivisions to use for tesselated 3D previews. Higher values
+# result in more detailed bumps but are more demanding to render.
+# This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
+var preview_tesselation_detail := 256
+
 onready var node_library_manager = $NodeLibraryManager
 onready var brush_library_manager = $BrushLibraryManager
+
 onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
@@ -108,8 +118,11 @@ const DEFAULT_CONFIG = {
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
+	fps_limit = 145,
+	idle_fps_limit = 20,
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
+	ui_3d_preview_tesselation_detail = 256,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_denoise_radius = 3
@@ -200,6 +213,10 @@ func get_config(key : String):
 
 func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
+	# Convert FPS to microseconds per frame.
+	# Clamp the FPS to reasonable values to avoid locking up the UI.
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 200)) * 1_000_000
+
 	var scale = get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
@@ -209,6 +226,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -981,9 +999,18 @@ func _exit_tree() -> void:
 	config_cache.save("user://cache.ini")
 
 func _notification(what : int) -> void:
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		yield(get_tree(), "idle_frame")
-		quit()
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
+			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 20)) * 1_000_000
+		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+			# Restore the previous FPS limit.
+			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
+		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+			yield(get_tree(), "idle_frame")
+			quit()
+
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting

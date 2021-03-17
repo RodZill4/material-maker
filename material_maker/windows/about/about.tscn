@@ -5,11 +5,10 @@
 [ext_resource path="res://material_maker/windows/about/twitter.png" type="Texture" id=3]
 [ext_resource path="res://material_maker/windows/about/icon.png" type="Texture" id=4]
 [ext_resource path="res://material_maker/windows/about/itchio.png" type="Texture" id=5]
-[ext_resource path="res://material_maker/icons/icon.png" type="Texture" id=6]
+[ext_resource path="res://icon.png" type="Texture" id=6]
 [ext_resource path="res://material_maker/windows/about/youtube.png" type="Texture" id=7]
 [ext_resource path="res://rodz_labs_logo.png" type="Texture" id=8]
 [ext_resource path="res://material_maker/windows/about/facebook.png" type="Texture" id=9]
-
 
 [node name="About" type="WindowDialog"]
 margin_right = 200.0
@@ -22,14 +21,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
 margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
+margin_right = -9.0
+margin_bottom = -8.0
 custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer1" type="VBoxContainer" parent="VBoxContainer"]
-margin_left = 42.0
-margin_right = 137.0
-margin_bottom = 83.0
+margin_left = 43.0
+margin_right = 138.0
+margin_bottom = 99.0
 size_flags_horizontal = 4
 size_flags_vertical = 2
 custom_constants/separation = 5
@@ -41,17 +43,22 @@ text = "Material Maker"
 align = 1
 
 [node name="MMLogo" type="TextureRect" parent="VBoxContainer/VBoxContainer1"]
+margin_left = 7.0
 margin_top = 19.0
-margin_right = 95.0
-margin_bottom = 83.0
+margin_right = 87.0
+margin_bottom = 99.0
+rect_min_size = Vector2( 80, 80 )
+size_flags_horizontal = 4
+size_flags_vertical = 3
 texture = ExtResource( 6 )
-stretch_mode = 4
+expand = true
+stretch_mode = 1
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 29.0
-margin_top = 114.0
-margin_right = 150.0
-margin_bottom = 146.0
+margin_left = 30.0
+margin_top = 123.0
+margin_right = 151.0
+margin_bottom = 155.0
 size_flags_horizontal = 4
 size_flags_vertical = 6
 
@@ -74,9 +81,9 @@ align = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="VBoxContainer"]
 margin_left = 22.0
-margin_top = 177.0
+margin_top = 179.0
 margin_right = 158.0
-margin_bottom = 269.0
+margin_bottom = 271.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 custom_constants/separation = 4
@@ -150,6 +157,7 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource( 5 )
 expand = true
 stretch_mode = 4
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Godot" to="." method="open_url" binds= [ "https://godotengine.org/" ]]
 [connection signal="pressed" from="VBoxContainer/VBoxContainer3/HBoxContainer/Facebook" to="." method="open_url" binds= [ "https://www.facebook.com/RodzLabs" ]]
 [connection signal="pressed" from="VBoxContainer/VBoxContainer3/HBoxContainer/Twitter" to="." method="open_url" binds= [ "https://twitter.com/R0dZill4" ]]

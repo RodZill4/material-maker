@@ -231,10 +231,13 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					value_string = "p_%s_%s" % [ genname, p.name ]
 				elif parameters[p.name] is String:
 					value_string = "("+parameters[p.name]+")"
+				else:
+					print("Error in float parameter "+p.name)
+					value_string = "0.0"
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
-				if value >= p.values.size():
+				if value < 0 or value >= p.values.size():
 					value = 0
 				value_string = p.values[value].value
 			elif p.type == "color":
@@ -255,11 +258,22 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if value_string != null:
 				variables[p.name] = value_string
 	if uv != "":
-		if uv[0] == "(" && find_matching_parenthesis(uv, 0) == uv.length()-1:
+		if uv[0] == "(" and find_matching_parenthesis(uv, 0) == uv.length()-1:
 			variables["uv"] = uv
 		else:
 			variables["uv"] = "("+uv+")"
 	variables["time"] = "elapsed_time"
+	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
+		for i in range(shader_model.inputs.size()):
+			var input = shader_model.inputs[i]
+			var source = get_source(i)
+			if source == null:
+				continue
+			var src_attributes = source.generator.get_output_attributes(source.output_index)
+			if src_attributes.has("texture"):
+				variables[input.name+".texture"] = src_attributes.texture
+			if src_attributes.has("texture_size"):
+				variables[input.name+".size"] = str(src_attributes.texture_size)+".0"
 	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true
@@ -426,13 +440,13 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 		rv.type = output.type
-		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
-			rv.globals.push_back(shader_model.global)
 		if shader_model.has("includes"):
 			for i in shader_model.includes:
 				var g = mm_loader.get_predefined_global(i)
 				if g != "" and rv.globals.find(g) == -1:
 					rv.globals.push_back(g)
+		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
+			rv.globals.push_back(shader_model.global)
 	return rv
 
 

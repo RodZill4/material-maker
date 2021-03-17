@@ -1,0 +1,55 @@
+{
+	"name": "fast_blur_shader",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"quality": 1,
+		"sigma": 100
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {\n    vec4 O = vec4(0.0);\n\tfloat samples = sigma * 4.0; \n\tint LOD = max(0, int(log2(float(samples)))-quality-2);\n\tint sLOD = 1 << LOD;\n    int s = max(1, int(samples/float(sLOD)));\n\tfloat sum = 0.0;\n    for (int i = 0; i < s*s; i++) {\n        vec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);\n\t\tvec2 dd = d / sigma;\n\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);\n        O += g * textureLod($in.texture, uv + scale * d, float(LOD));\n\t\tsum += g;\n    }\n    \n    return O / sum;\n}\n",
+		"name": "Fast Blur",
+		"outputs": [
+			{
+				"rgba": "$(name)_blur($uv, vec2(1.0)/$in.size, max(1.0, floor($sigma*$in.size/2048.0)), int($quality))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"max": 256,
+				"min": 1,
+				"name": "sigma",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"max": 3,
+				"min": 0,
+				"name": "quality",
+				"step": 1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
