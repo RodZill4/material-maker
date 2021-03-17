@@ -25,4 +25,3 @@ func set_path(path: String) -> void:
 
 func set_icon(icon: Texture) -> void:
 	$HBoxContainer/HBoxContainer/Icon.texture = icon
-

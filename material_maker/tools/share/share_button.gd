@@ -124,4 +124,4 @@ func process_message(message : String) -> void:
 				bring_to_top()
 	else:
 		print("Incorrect JSON")
-	
+

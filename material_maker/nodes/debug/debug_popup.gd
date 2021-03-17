@@ -94,4 +94,3 @@ func generate_godot_spatial() -> String:
 	#print("GENERATED SHADER:\n"+shader_code)
 	code = code.replace("uniform", "const")
 	return code
-

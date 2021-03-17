@@ -208,7 +208,7 @@ func set_object(o):
 
 func check_material_feature(variable : String, value : bool) -> void:
 	preview_material[variable] = value
-	
+
 func material_feature_is_checked(variable : String) -> bool:
 	return preview_material[variable]
 
@@ -623,5 +623,3 @@ func set_environment(index) -> void:
 	var environment = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
 	var sun = $VSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
-
-

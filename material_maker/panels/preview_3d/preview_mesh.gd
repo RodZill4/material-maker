@@ -30,7 +30,7 @@ func set_tesselated(t : bool) -> void:
 	var parent = self
 	while ! (parent is ViewportContainer):
 		parent = parent.get_parent()
-	parent.emit_signal("need_update", [ parent ]) 
+	parent.emit_signal("need_update", [ parent ])
 
 func update_material() -> void:
 	if mesh == null:

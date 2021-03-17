@@ -145,4 +145,3 @@ func _on_ContextMenu_id_pressed(id):
 	$HSplitContainer/Environments.remove_item(index)
 	$HSplitContainer/Environments.select(index-1)
 	_on_Environments_item_selected(index-1)
-
