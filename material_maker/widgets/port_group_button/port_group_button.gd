@@ -6,7 +6,7 @@ export var group_parent : int = 2
 var state : int = 0
 # warning-ignore:unused_class_variable
 var group_size : int = 0
-const TEXTURES = [ 
+const TEXTURES = [
 	preload("res://material_maker/icons/port_group_0.tres"),
 	preload("res://material_maker/icons/port_group_1.tres"),
 	preload("res://material_maker/icons/port_group_2.tres"),
@@ -53,7 +53,7 @@ static func update_groups(parent : Control):
 	var current_group : int = -1
 	for i in range(buttons.size()):
 		var b = buttons[i].button
-		
+
 		if in_group:
 			b.set_state(b.state | 2)
 		else:

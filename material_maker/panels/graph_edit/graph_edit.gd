@@ -622,4 +622,3 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
-

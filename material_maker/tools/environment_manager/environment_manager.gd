@@ -225,4 +225,3 @@ func do_update_thumbnail() -> void:
 			emit_signal("thumbnail_updated", index, t)
 	thumbnail_update_list = []
 	rendering = false
-

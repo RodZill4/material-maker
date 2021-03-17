@@ -130,14 +130,14 @@ const DEFAULT_CONFIG = {
 
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
-	
+
 	# Load and nitialize config
 	config_cache.load("user://cache.ini")
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
 	on_config_changed()
-	
+
 	# Restore the window position/size if values are present in the configuration cache
 	if config_cache.has_section_key("window", "screen"):
 		OS.current_screen = config_cache.get_value("window", "screen")
@@ -149,7 +149,7 @@ func _ready() -> void:
 			OS.window_position = config_cache.get_value("window", "position")
 		if config_cache.has_section_key("window", "size"):
 			OS.window_size = config_cache.get_value("window", "size")
-	
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if config_cache.has_section_key("window", "theme"):
@@ -193,13 +193,13 @@ func _ready() -> void:
 
 	# Create menus
 	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
-	
+
 	new_material()
-	
+
 	do_load_projects(OS.get_cmdline_args())
-	
+
 	get_tree().connect("files_dropped", self, "on_files_dropped")
-	
+
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
 func _input(event: InputEvent) -> void:
@@ -277,7 +277,7 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	
+
 	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
 		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
 	for i in menu_def.size():

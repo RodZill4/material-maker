@@ -24,7 +24,7 @@ func _ready() -> void:
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
 	default_texture = ImageTexture.new()
 	default_texture.create_from_image(default_image)
-	
+
 	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed", self, "_on_PreviewMenu_id_pressed")
 
 func update_from_graph_edit(graph_edit) -> void:

@@ -23,7 +23,7 @@ func _ready() -> void:
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 36)
-	# Connect 
+	# Connect
 	library_manager.connect("libraries_changed", self, "update_tree")
 	# Setup section buttons
 	for s in library_manager.get_sections():

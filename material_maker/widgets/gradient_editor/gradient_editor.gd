@@ -5,7 +5,7 @@ class GradientCursor:
 
 	var color : Color
 	var sliding : bool = false
-	
+
 	onready var label : Label = get_parent().get_node("Value")
 
 	const WIDTH : int = 10
@@ -46,7 +46,7 @@ class GradientCursor:
 			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
 			get_parent().update_value()
 			label.text = "%.03f" % get_cursor_position()
-	
+
 	func get_cursor_position() -> float:
 		return rect_position.x / (get_parent().rect_size.x - WIDTH)
 

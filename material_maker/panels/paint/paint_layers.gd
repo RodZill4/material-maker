@@ -107,7 +107,7 @@ func get_emission_texture():
 
 func get_normal_map():
 	return nm_viewport.get_texture()
-	
+
 func get_depth_texture():
 	return depth.get_texture()
 
@@ -357,7 +357,7 @@ func load(data : Dictionary, file_name : String):
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:
 		var layer : Layer = LAYER_TYPES[l.type if l.has("type") else 0].new()
-		layer.load_layer(l, first_index, path) 
+		layer.load_layer(l, first_index, path)
 		layer.name = l.name
 		if l.has("index"):
 			layer.index = l.index

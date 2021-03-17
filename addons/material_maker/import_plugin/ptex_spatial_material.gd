@@ -25,4 +25,4 @@ func update_texture() -> void:
 		status = yield(status, "completed")
 	mm_material.update_material(self)
 	mm_graph.queue_free()
-	
+
