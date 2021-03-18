@@ -273,7 +273,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if src_attributes.has("texture"):
 				variables[input.name+".texture"] = src_attributes.texture
 			if src_attributes.has("texture_size"):
-				variables[input.name+".size"] = str(src_attributes.texture_size)+".0"
+				variables[input.name+".size"] = src_attributes.texture_size
 	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true

@@ -239,9 +239,6 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += "uniform vec3 mesh_aabb_size;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g

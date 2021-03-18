@@ -170,6 +170,10 @@ func update_buffer() -> void:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 		current_iteration += 1
 
+func get_globals(texture_name : String) -> Array:
+	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]
+	return [ texture_globals ]
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
 	if updating or update_again:
@@ -188,7 +192,6 @@ func get_output_attributes(output_index : int) -> Dictionary:
 		1:
 			attributes.texture = "o%s_loop_tex" % str(get_instance_id())
 			attributes.texture_size = pow(2, get_parameter("size"))
-
 			attributes.iteration = "o%s_iteration" % str(get_instance_id())
 	return attributes
 

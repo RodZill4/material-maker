@@ -27,9 +27,6 @@ func generate_shadertoy() -> String:
 	var code = ""
 	code += mm_renderer.common_shader.right(mm_renderer.common_shader.find("//---"))
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
@@ -53,9 +50,6 @@ func generate_godot_canvasitem() -> String:
 	var code = "shader_type canvas_item;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
@@ -76,9 +70,6 @@ func generate_godot_spatial() -> String:
 	var code = "shader_type spatial;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g

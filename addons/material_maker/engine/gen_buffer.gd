@@ -67,6 +67,10 @@ func all_sources_changed() -> void:
 func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+		if n == "size":
+			var param_name = "o%s_tex_size" % str(get_instance_id())
+			var param_value = pow(2, v)
+			get_tree().call_group("preview", "on_float_parameters_changed", { param_name:param_value })
 	.set_parameter(n, v)
 
 func update_shader() -> void:
@@ -160,6 +164,10 @@ func update_buffer() -> void:
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
+func get_globals(texture_name : String) -> Array:
+	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]
+	return [ texture_globals ]
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
 	if updating or update_again or !pending_textures.empty():
@@ -169,7 +177,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 func get_output_attributes(output_index : int) -> Dictionary:
 	var attributes : Dictionary = {}
 	attributes.texture = "o%s_tex" % str(get_instance_id())
-	attributes.texture_size = pow(2, get_parameter("size"))
+	attributes.texture_size = "o%s_tex_size" % str(get_instance_id())
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:
