@@ -51,6 +51,8 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 
 func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
+	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
+		render_size = mm_renderer.max_buffer_size
 	var shader_material = $ColorRect.material
 	size = Vector2(render_size, render_size)
 	$ColorRect.rect_position = Vector2(0, 0)
@@ -66,6 +68,8 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 
 func render_shader(object : Object, shader, textures, render_size) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
+	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
+		render_size = mm_renderer.max_buffer_size
 	size = Vector2(render_size, render_size)
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
