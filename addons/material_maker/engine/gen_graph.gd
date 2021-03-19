@@ -281,6 +281,22 @@ func reconnect_outputs(generator, reconnects : Dictionary) -> bool:
 		emit_signal("connections_changed", removed_connections, added_connections)
 	return true
 
+func get_named_parameters() -> Dictionary:
+	var named_parameters : Dictionary = {}
+	for c in get_children():
+		if c is MMGenRemote:
+			var remote_named_parameters = c.get_named_parameters()
+			for k in remote_named_parameters.keys():
+				named_parameters[k] = remote_named_parameters[k]
+	return named_parameters
+
+func get_globals() -> String:
+	var globals : String = ""
+	for c in get_children():
+		if c is MMGenRemote:
+			globals += c.get_globals()
+	return globals
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var outputs = get_node("gen_outputs")
 	if outputs != null:

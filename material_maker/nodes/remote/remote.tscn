@@ -42,14 +42,14 @@ __meta__ = {
 [node name="Controls" type="GridContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 79.0
+margin_right = 107.0
 margin_bottom = 24.0
-columns = 5
+columns = 7
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 25.0
-margin_right = 79.0
+margin_right = 107.0
 margin_bottom = 47.0
 
 [node name="AddLink" type="Button" parent="HBoxContainer"]
@@ -65,5 +65,14 @@ margin_right = 60.0
 margin_bottom = 22.0
 hint_tooltip = "Add configurations"
 icon = SubResource( 3 )
+
+[node name="AddNamed" type="Button" parent="HBoxContainer"]
+margin_left = 64.0
+margin_right = 91.0
+margin_bottom = 22.0
+hint_tooltip = "Add named parameter"
+text = "ab"
+
 [connection signal="pressed" from="HBoxContainer/AddLink" to="." method="_on_AddLink_pressed"]
 [connection signal="pressed" from="HBoxContainer/AddConfig" to="." method="_on_AddConfig_pressed"]
+[connection signal="pressed" from="HBoxContainer/AddNamed" to="." method="_on_AddNamed_pressed"]

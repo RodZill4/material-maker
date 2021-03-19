@@ -106,9 +106,12 @@ func get_parameter_defs() -> Array:
 									break
 				p.name = w.name
 				p.label = w.label
+			"named_parameter":
+				p = { name=w.name, label=w.label, type="float", min=w.min, max=w.max, step=w.step, default=w.default }
 			_:
 				print("Unsupported widget of type "+str(w.type))
 				break
+		p.widget_type = w.type
 		if w.has("shortdesc"):
 			p.shortdesc = w.shortdesc
 		if w.has("longdesc"):
@@ -141,9 +144,26 @@ func set_parameter(p : String, v) -> void:
 						# incorrect configuration index
 						print("error: incorrect config control parameter value")
 						return
+				"named_parameter":
+					var param_name : String = "o"+str(get_instance_id())+"_"+p
+					get_tree().call_group("preview", "on_float_parameters_changed", { param_name:v })
 	.set_parameter(p, v)
 	if parent != null and name == "gen_parameters":
 		parent.parameters[p] = v
+
+func get_named_parameters() -> Dictionary:
+	var named_parameters = {}
+	for w in widgets:
+		if w.type == "named_parameter":
+			named_parameters[w.name] = "o"+str(get_instance_id())+"_"+w.name
+	return named_parameters
+
+func get_globals() -> String:
+	var globals = ""
+	for w in widgets:
+		if w.type == "named_parameter":
+			globals += "uniform float o"+str(get_instance_id())+"_"+w.name+" = "+str(get_parameter(w.name))+";\n"
+	return globals
 
 func create_linked_control(label : String) -> String:
 	var n = get_next_widget_name()
@@ -154,6 +174,12 @@ func create_config_control(label : String) -> String:
 	var n = get_next_widget_name()
 	widgets.push_back({ name=n, label=label, type="config_control", linked_widgets=[], configurations={} })
 	return n
+
+func create_named_parameter(label : String, parameter_name : String = "", minimum : float = 0.0, maximum : float = 1.0, step : float = 0.01, default : float = 0.5) -> String:
+	if parameter_name == "":
+		parameter_name = get_next_widget_name()
+	widgets.push_back({ name=parameter_name, label=label, type="named_parameter", min=minimum, max=maximum, step=step, default=default  })
+	return parameter_name
 
 func set_label(widget_name : String, new_label : String) -> void:
 	get_widget(widget_name).label = new_label

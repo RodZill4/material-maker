@@ -5,7 +5,7 @@ var links = {}
 
 onready var grid = $Controls
 
-func add_control(text, control, short_description = "", long_description = "") -> void:
+func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "", is_first : bool = false, is_last : bool = false) -> void:
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
 	label.connect("label_changed", self, "on_label_changed", [ control.name ])
@@ -19,34 +19,61 @@ func add_control(text, control, short_description = "", long_description = "") -
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
 	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
 	var button = Button.new()
-	button.icon = preload("res://material_maker/icons/link.tres")
-	grid.add_child(button)
-	button.connect("pressed", self, "_on_Link_pressed", [ control.name ])
-	button.hint_tooltip = "Link another parameter"
+	if is_named_param:
+		button.icon = preload("res://material_maker/icons/edit.tres")
+		grid.add_child(button)
+		button.connect("pressed", self, "_on_Edit_pressed", [ control.name ])
+		button.hint_tooltip = "Configure named parameter "+control.name
+	else:
+		button.icon = preload("res://material_maker/icons/link.tres")
+		grid.add_child(button)
+		button.connect("pressed", self, "_on_Link_pressed", [ control.name ])
+		button.hint_tooltip = "Link another parameter"
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/remove.tres")
 	button.hint_tooltip = "Remove parameter"
 	grid.add_child(button)
 	button.connect("pressed", generator, "remove_parameter", [ control.name ])
+	button = Button.new()
+	button.icon = preload("res://material_maker/icons/up.tres")
+	button.hint_tooltip = "Move parameter up"
+	grid.add_child(button)
+	button.connect("pressed", generator, "move_parameter", [ control.name, -1 ])
+	if is_first:
+		button.disabled = true
+	else:
+		button.connect("pressed", generator, "move_parameter", [ control.name, 1 ])
+	button = Button.new()
+	button.icon = preload("res://material_maker/icons/down.tres")
+	button.hint_tooltip = "Move parameter down"
+	grid.add_child(button)
+	if is_last:
+		button.disabled = true
+	else:
+		button.connect("pressed", generator, "move_parameter", [ control.name, 1 ])
 
 func update_node() -> void:
 	# Show or hide the close button
 	show_close = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
-	var i : int = 0
 	yield(get_tree(), "idle_frame")
 	for c in grid.get_children():
 		grid.remove_child(c)
 		c.free()
 	title = generator.get_type_name()
 	controls = {}
-	for p in generator.get_parameter_defs():
+	var parameter_count : int = generator.get_parameter_defs().size()
+	for i in range(parameter_count):
+		var p = generator.get_parameter_defs()[i]
 		var control = create_parameter_control(p, false)
 		if control != null:
 			control.name = p.name
 			controls[control.name] = control
 			var widget = generator.get_widget(p.name)
-			add_control(generator.get_widget(p.name).label, control, widget.shortdesc if widget.has("shortdesc") else "", widget.longdesc if widget.has("longdesc") else "")
+			var shortdesc : String = widget.shortdesc if widget.has("shortdesc") else ""
+			var longdesc : String = widget.longdesc if widget.has("longdesc") else ""
+			var is_named_param : bool = ( p.widget_type == "named_parameter" )
+			add_control(generator.get_widget(p.name).label, control, is_named_param, shortdesc, longdesc, i == 0, i == parameter_count-1)
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
 				if control.get_item_count() > 0 and generator.parameters.has(p.name):
@@ -58,7 +85,6 @@ func update_node() -> void:
 					control.add_separator()
 					control.add_item("<update "+current+">")
 					control.add_item("<remove "+current+">")
-		i += 1
 	rect_size = Vector2(0, 0)
 	initialize_properties()
 
@@ -86,7 +112,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 						while status is GDScriptFunctionState:
 							status = yield(status, "completed")
 						if status.ok:
-							generator.add_configuration(status.text, variable)
+							generator.add_configuration(variable, status.text)
 					3:
 						generator.update_configuration(variable, current)
 					4:
@@ -116,7 +142,7 @@ func _on_AddLink_pressed() -> void:
 	var control = generator.create_linked_control("Unnamed")
 	var widget = Control.new()
 	widget.name = control
-	add_control("Unnamed", widget)
+	add_control("Unnamed", widget, false)
 	var link = MMNodeLink.new(get_parent())
 	link.pick(widget, generator, control, true)
 
@@ -124,9 +150,13 @@ func _on_AddConfig_pressed() -> void:
 	var control = generator.create_config_control("Unnamed")
 	var widget = Control.new()
 	widget.name = control
-	add_control("Unnamed", widget)
+	add_control("Unnamed", widget, false)
 	var link = MMNodeLink.new(get_parent())
 	link.pick(widget, generator, control, true)
+
+func _on_AddNamed_pressed():
+	var control = generator.create_named_parameter("Unnamed")
+	update_node()
 
 func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
@@ -170,3 +200,5 @@ func on_exit_widget(widget) -> void:
 		for l in links[widget]:
 			l.queue_free()
 		links.erase(widget)
+
+
