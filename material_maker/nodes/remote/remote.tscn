@@ -44,7 +44,7 @@ margin_left = 16.0
 margin_top = 24.0
 margin_right = 107.0
 margin_bottom = 24.0
-columns = 7
+columns = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 16.0

@@ -6,6 +6,12 @@ var links = {}
 onready var grid = $Controls
 
 func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "", is_first : bool = false, is_last : bool = false) -> void:
+	var line_edit : LineEdit = LineEdit.new()
+	line_edit.set_text(control.name)
+	grid.add_child(line_edit)
+	line_edit.connect("text_changed", self, "on_param_name_changed", [ control.name, line_edit ])
+	line_edit.connect("text_entered", self, "on_param_name_entered", [ control.name, line_edit ])
+	line_edit.connect("focus_exited", self, "on_param_name_entered2", [ control.name, line_edit ])
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instance()
 	label.set_text(text)
 	label.connect("label_changed", self, "on_label_changed", [ control.name ])
@@ -123,6 +129,18 @@ func _on_value_changed(new_value, variable : String) -> void:
 			return
 	._on_value_changed(new_value, variable)
 
+func on_param_name_changed(new_name : String, param_name : String, line_edit : LineEdit) -> void:
+	if generator.rename(param_name, new_name, true):
+		line_edit.add_color_override("font_color", get_node("/root/MainWindow").theme.get_color("font_color", "LineEdit"))
+	else:
+		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
+
+func on_param_name_entered(new_name : String, param_name : String, line_edit : LineEdit) -> void:
+	generator.rename(param_name, new_name)
+
+func on_param_name_entered2(param_name : String, line_edit : LineEdit) -> void:
+	on_param_name_entered(line_edit.text, param_name, line_edit)
+
 func on_label_changed(new_label, param_name) -> void:
 	generator.set_label(param_name, new_label)
 
@@ -162,6 +180,18 @@ func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
 	if controls.has(param_name):
 		link.pick(controls[param_name], generator, param_name)
+
+func _on_Edit_pressed(param_name) -> void:
+	for p in generator.get_parameter_defs():
+		if p.name == param_name:
+			var dialog = preload("res://material_maker/nodes/remote/named_parameter_dialog.tscn").instance()
+			add_child(dialog)
+			var result = dialog.configure_param(p.min, p.max, p.step, p.default)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result.keys().size() == 4:
+				generator.configure_named_parameter(param_name, result.min, result.max, result.step, result.default)
+			return
 
 func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize
