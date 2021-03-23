@@ -84,6 +84,7 @@ const MENU = [
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="View" },
+	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide side panels" },
 	{ menu="View", submenu="show_panels", description="Panels" },
 
 	{ menu="Tools", submenu="create", description="Create" },
@@ -744,6 +745,9 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func toggle_side_panels() -> void:
+	$VBoxContainer/Layout.toggle_side_panels()
 
 
 func get_selected_nodes() -> Array:

@@ -67,6 +67,10 @@ View menu
 
 * *Reset zoom* Resets the zoom level of the current material graph view
 
+* *Show/Hide side panels* (or the *Control+SpaceBar* keyboard shortcut) can
+  be used to hide the side panels so the space available for the main panel
+  is maximized (which can be useful on smaller displays).
+
 * the *Panels* submenu can be used to show or hide all side panels
 
 Tools menu
