@@ -171,5 +171,5 @@ func _input(event) -> void:
 			hide()
 
 func _unhandled_input(event) -> void:
-	if event is InputEventKey and event.scancode == KEY_ESCAPE:
+	if event.is_action_pressed("ui_cancel"):
 		hide()
