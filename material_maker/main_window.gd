@@ -84,7 +84,7 @@ const MENU = [
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="View" },
-	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide size panels" },
+	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide side panels" },
 	{ menu="View", submenu="show_panels", description="Panels" },
 
 	{ menu="Tools", submenu="create", description="Create" },
