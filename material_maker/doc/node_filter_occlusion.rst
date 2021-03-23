@@ -23,7 +23,11 @@ The **Normal map** node has the following parameters:
 
 * the *size* of the ambient occlusion map
 
-* the *strength* of the ambient occlusion
+* the *strength* of ambient occlusion (higher values generate darker shadows)
+
+* the *range* of the ambient occlusion shadows
+
+* the *quality* of the ambient occlusion effect
 
 Notes
 +++++
