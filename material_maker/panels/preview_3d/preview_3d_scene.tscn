@@ -43,3 +43,8 @@ playback_speed = 0.1
 anims/rotate = SubResource( 3 )
 
 [node name="Sun" type="DirectionalLight" parent="."]
+shadow_enabled = true
+shadow_bias = 0.03
+directional_shadow_mode = 0
+directional_shadow_normal_bias = 0.0
+directional_shadow_max_distance = 5.0

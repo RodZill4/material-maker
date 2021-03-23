@@ -10,6 +10,7 @@ onready var current_object = objects.get_child(0)
 
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
+onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
 
@@ -48,6 +49,11 @@ func _ready() -> void:
 	$MaterialPreview.get_texture().flags = Texture.FLAG_FILTER
 
 	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
+
+	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
+	# attempts to read the setting before the configuration file is loaded.
+	yield(get_tree(), "idle_frame")
+	sun.shadow_enabled = get_node("/root/MainWindow").get_config("ui_3d_preview_sun_shadow")
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
@@ -101,7 +107,6 @@ func select_object(id) -> void:
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
-	var sun = $MaterialPreview/Preview3d/Sun
 	environment_manager.apply_environment(id, environment, sun)
 
 func _on_material_preview_size_changed() -> void:
