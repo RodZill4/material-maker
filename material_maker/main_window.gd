@@ -84,6 +84,7 @@ const MENU = [
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="View" },
+	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide size panels" },
 	{ menu="View", submenu="show_panels", description="Panels" },
 
 	{ menu="Tools", submenu="create", description="Create" },
@@ -130,14 +131,14 @@ const DEFAULT_CONFIG = {
 
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
-	
+
 	# Load and nitialize config
 	config_cache.load("user://cache.ini")
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
 	on_config_changed()
-	
+
 	# Restore the window position/size if values are present in the configuration cache
 	if config_cache.has_section_key("window", "screen"):
 		OS.current_screen = config_cache.get_value("window", "screen")
@@ -149,7 +150,7 @@ func _ready() -> void:
 			OS.window_position = config_cache.get_value("window", "position")
 		if config_cache.has_section_key("window", "size"):
 			OS.window_size = config_cache.get_value("window", "size")
-	
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if config_cache.has_section_key("window", "theme"):
@@ -193,13 +194,13 @@ func _ready() -> void:
 
 	# Create menus
 	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
-	
+
 	new_material()
-	
+
 	do_load_projects(OS.get_cmdline_args())
-	
+
 	get_tree().connect("files_dropped", self, "on_files_dropped")
-	
+
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
 func _input(event: InputEvent) -> void:
@@ -277,7 +278,7 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	
+
 	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
 		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
 	for i in menu_def.size():
@@ -744,6 +745,9 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func toggle_side_panels() -> void:
+	$VBoxContainer/Layout.toggle_side_panels()
 
 
 func get_selected_nodes() -> Array:
