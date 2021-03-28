@@ -1,0 +1,83 @@
+{
+	"name": "noise_anisotropic",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"interpolation": 1,
+		"scale_x": 4,
+		"scale_y": 256,
+		"smoothness": 1
+	},
+	"shader_model": {
+		"code": "",
+		"global": "float anisotropic(vec2 uv, vec2 size, int seed, float smoothness, float interpolation) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\t\n\tvec2 xy = floor(uv*size);\n\tvec2 offset = vec2(rand(seed2 + xy.y), 0.0);\n\tvec2 xy_offset = floor(uv * size + offset );\n    float f0 = rand(seed2+mod(xy_offset, size));\n    float f1 = rand(seed2+mod(xy_offset+vec2(1.0, 0.0), size));\n\tfloat mixer = clamp( (fract(uv.x*size.x+offset.x) -.5) / smoothness + 0.5, 0.0, 1.0 );\n    float smooth_mix = smoothstep(0.0, 1.0, mixer);\n\tfloat linear = mix(f0, f1, mixer);\n\tfloat smoothed = mix(f0, f1, smooth_mix);\n\t\n    return mix(linear, smoothed, interpolation);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates x-axis interpolated value noise",
+		"name": "Anisotropic Noise",
+		"outputs": [
+			{
+				"f": "anisotropic($(uv), vec2($(scale_x), $(scale_y)), $(seed), $(smoothness), $(interpolation))",
+				"longdesc": "Shows a greyscale value noise",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 256,
+				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
+				"max": 1024,
+				"min": 1,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Smoothness",
+				"longdesc": "Controls how much the noise is blurred along the x-axis",
+				"max": 1,
+				"min": 0,
+				"name": "smoothness",
+				"shortdesc": "Smoothness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Interpolation",
+				"longdesc": "Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is smooth interpolation",
+				"max": 1,
+				"min": 0,
+				"name": "interpolation",
+				"shortdesc": "Interpolation",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Anisotropic Noise"
+	},
+	"type": "shader"
+}
