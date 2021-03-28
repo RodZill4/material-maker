@@ -7,7 +7,7 @@ func _ready():
 	update_shader_options()
 	update_axes_menu()
 	update_export_menu()
- 
+
 func update_axes_menu() -> void:
 	$ContextMenu/Axes.clear()
 	for s in $Axes.STYLES:

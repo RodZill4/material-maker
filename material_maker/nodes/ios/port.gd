@@ -49,4 +49,3 @@ func _on_Up_pressed() -> void:
 
 func _on_Down_pressed() -> void:
 	get_parent().generator.swap_ports(get_index(), get_index()+1)
-

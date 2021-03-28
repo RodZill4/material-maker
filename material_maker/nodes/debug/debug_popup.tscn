@@ -1,13 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/nodes/debug/debug_popup.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/fonts/hack.ttf" type="DynamicFontData" id=2]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="DynamicFont" id=1]
+size = 12
+font_data = ExtResource( 2 )
+
+[sub_resource type="Shader" id=2]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+shader = SubResource( 2 )
 
 [node name="GeneratedShaderWindow" type="WindowDialog"]
 margin_right = 600.0
@@ -50,17 +55,17 @@ margin_top = 24.0
 margin_right = 600.0
 margin_bottom = 400.0
 size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
 syntax_highlighting = true
 show_line_numbers = true
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer"]
 visible = false
-material = SubResource( 2 )
+material = SubResource( 3 )
 margin_top = 24.0
 margin_right = 40.0
 margin_bottom = 64.0
 size_flags_vertical = 3
-
 [connection signal="popup_hide" from="." to="." method="queue_free"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/ShaderType" to="." method="_on_ShaderType_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CopyToClipboard" to="." method="_on_CopyToClipboard_pressed"]

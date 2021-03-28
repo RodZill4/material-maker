@@ -117,13 +117,13 @@ func init_albedo_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Te
 
 func init_mr_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
 	mr_viewport.init(color, texture)
-	
+
 func init_mr_texture_channels(metallic : float = 1.0, metallic_texture : Texture = null, metallic_channel : int = SpatialMaterial.TEXTURE_CHANNEL_RED, roughness : float = 1.0, roughness_texture : Texture = null, roughness_channel : int = SpatialMaterial.TEXTURE_CHANNEL_GREEN):
 	mr_viewport.init_channels(metallic_texture, calculate_mask(metallic, metallic_channel), roughness_texture, calculate_mask(roughness, roughness_channel), null, Color(1.0, 0.0, 0.0, 0.0), null, Color(1.0, 0.0, 0.0, 0.0))
 
 func init_emission_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
 	emission_viewport.init(color, texture)
-	
+
 func init_depth_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
 	depth_viewport.init(color, texture)
 
@@ -266,8 +266,6 @@ func get_output_code(index : int) -> String:
 	for t in source.textures.keys():
 		if !source_mask.textures.has(t):
 			source_mask.textures[t] = source.textures[t]
-	for t in source_mask.textures.keys():
-		new_code += "uniform sampler2D "+t+";\n"
 	brush_textures = source_mask.textures
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"

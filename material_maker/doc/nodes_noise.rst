@@ -12,3 +12,4 @@ made from random patterns.
 	node_noise_value
 	node_noise_voronoi
 	node_noise_fbm
+	node_noise_anisotropic

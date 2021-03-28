@@ -9,6 +9,8 @@ var free_renderers = []
 var max_renderers : int = 8
 var renderers_enabled : bool = true
 
+var max_buffer_size = 0
+
 var render_queue_size = 0
 var pending_requests = 0
 
@@ -33,9 +35,6 @@ func generate_shader(src_code : Dictionary) -> String:
 	code += "render_mode blend_disabled;\n"
 	code += common_shader
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g

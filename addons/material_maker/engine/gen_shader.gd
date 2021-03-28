@@ -208,12 +208,14 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var required_globals = []
+	var required_globals = [ get_parent().get_globals() ]
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
 	var required_pending_textures = []
-	var variables = {}
+	# Named parameters from parent graph are specified first so they don't
+	# hide locals
+	var variables = get_parent().get_named_parameters()
 	variables["name"] = genname
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
@@ -273,7 +275,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if src_attributes.has("texture"):
 				variables[input.name+".texture"] = src_attributes.texture
 			if src_attributes.has("texture_size"):
-				variables[input.name+".size"] = str(src_attributes.texture_size)+".0"
+				variables[input.name+".size"] = src_attributes.texture_size
 	string = replace_variables(string, variables)
 	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
 		var cont = true

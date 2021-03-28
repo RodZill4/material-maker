@@ -69,6 +69,8 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
 		$SendButton.disabled = true
 		is_multipart = false
+		var data = { type="mm_release", release=ProjectSettings.get_setting("application/config/actual_release") }
+		websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
@@ -124,4 +126,4 @@ func process_message(message : String) -> void:
 				bring_to_top()
 	else:
 		print("Incorrect JSON")
-	
+

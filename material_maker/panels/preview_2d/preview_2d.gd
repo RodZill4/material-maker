@@ -136,7 +136,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	var renderer = mm_renderer.request(self)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, tmp_material, size, true)
+	renderer = renderer.render_material(self, tmp_material, size, false)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	renderer.callv(renderer_function, params)

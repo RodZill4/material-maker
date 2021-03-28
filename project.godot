@@ -205,7 +205,7 @@ boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.94.0.0"
-config/actual_release="0.94"
+config/actual_release="0.95a"
 
 [audio]
 
@@ -263,6 +263,11 @@ ui_hierarchy_down={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"unicode":0,"echo":false,"script":null)
  ]
 }
+ui_toggle_docks={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [logging]
 
@@ -274,5 +279,6 @@ limits/message_queue/max_size_kb=16384
 
 [rendering]
 
+quality/shadows/filter_mode=2
 quality/filters/anisotropic_filter_level=16
 environment/default_environment="res://default_env.tres"

@@ -30,7 +30,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 	else:
 		$MeshInstance.mesh = mesh
 	$MeshInstance.set_surface_material(0, passes.first)
-	
+
 	var aabb = $MeshInstance.get_aabb()
 	if map in ["ao", "thickness"]:
 		var main_window = get_node("/root/MainWindow")
@@ -65,7 +65,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		render_target_update_mode = Viewport.UPDATE_ONCE
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-	
+
 	passes.second.set_shader_param("tex", get_texture())
 	passes.second.set_shader_param("size", map_size)
 	var renderer = mm_renderer.request(self)

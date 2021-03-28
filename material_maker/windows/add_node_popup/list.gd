@@ -33,4 +33,3 @@ func _on_bt_pressed(obj) -> void:
 func select_first() -> void:
 	if get_child_count() != 0:
 		get_children()[0].emit_signal("pressed")
-

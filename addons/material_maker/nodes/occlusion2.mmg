@@ -1,0 +1,440 @@
+{
+	"connections": [
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "_2",
+			"to_port": 0
+		},
+		{
+			"from": "_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "fast_blur",
+			"to_port": 0
+		},
+		{
+			"from": "fast_blur",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		}
+	],
+	"label": "Occlusion",
+	"longdesc": "Generates an ambient occlusion map from a height map",
+	"name": "occlusion2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -522.866638,
+				"y": -383.867035
+			},
+			"parameters": {
+				"param0": 11,
+				"param1": 20,
+				"param2": 1.5,
+				"param3": 1
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Resolution",
+					"linked_widgets": [
+						{
+							"node": "fast_blur",
+							"widget": "param0"
+						}
+					],
+					"longdesc": "The resolution of the input height map",
+					"name": "param0",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "_2",
+							"widget": "g"
+						}
+					],
+					"longdesc": "The strength of the occlusion map effect",
+					"name": "param2",
+					"shortdesc": "Strength",
+					"type": "linked_control"
+				},
+				{
+					"label": "Radius",
+					"linked_widgets": [
+						{
+							"node": "fast_blur",
+							"widget": "param1"
+						}
+					],
+					"longdesc": "The radius of the blur used for the occlusion effect",
+					"name": "param1",
+					"shortdesc": "Radius",
+					"type": "linked_control"
+				},
+				{
+					"label": "Quality",
+					"linked_widgets": [
+						{
+							"node": "fast_blur",
+							"widget": "param2"
+						}
+					],
+					"longdesc": "The quality of the blur operation used for the occlusion effect",
+					"name": "param3",
+					"shortdesc": "Quality",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -842.266602,
+				"y": -108.396729
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The input heightmap",
+					"name": "port0",
+					"shortdesc": "Input",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 77.5476,
+				"y": -86.015305
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The generated occlusion map",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": -422.79895,
+				"y": 11.18788
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 11
+			},
+			"type": "blend"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -124.598953,
+				"y": -131.660126
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 0,
+							"r": 1
+						},
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 1,
+							"r": 0
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_value": 33856,
+			"type": "colorize"
+		},
+		{
+			"name": "_2",
+			"node_position": {
+				"x": -104.603699,
+				"y": -57.918201
+			},
+			"parameters": {
+				"g": 1.5
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "",
+				"outputs": [
+					{
+						"f": "pow($in(fract($uv)), $g)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 2,
+						"min": 0,
+						"name": "g",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"connections": [
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "fast_blur_shader",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				},
+				{
+					"from": "fast_blur_shader",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				}
+			],
+			"label": "Fast Blur",
+			"longdesc": "",
+			"name": "fast_blur",
+			"node_position": {
+				"x": -435.552002,
+				"y": -135.436234
+			},
+			"nodes": [
+				{
+					"name": "fast_blur_shader",
+					"node_position": {
+						"x": -161.600006,
+						"y": 143.188766
+					},
+					"parameters": {
+						"quality": 1,
+						"sigma": 20
+					},
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4(1.0)",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": "vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {\n    vec4 O = vec4(0.0);\n\tfloat samples = sigma * 4.0; \n\tint LOD = max(0, int(log2(float(samples)))-quality-2);\n\tint sLOD = 1 << LOD;\n    int s = max(1, int(samples/float(sLOD)));\n\tfloat sum = 0.0;\n    for (int i = 0; i < s*s; i++) {\n        vec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);\n\t\tvec2 dd = d / sigma;\n\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);\n        O += g * textureLod($in.texture, uv + scale * d, float(LOD));\n\t\tsum += g;\n    }\n    \n    return O / sum;\n}\n",
+						"name": "Fast Blur",
+						"outputs": [
+							{
+								"rgba": "$(name)_blur($uv, vec2(1.0)/$in.size, max(1.0, floor($sigma*$in.size/2048.0)), int($quality))",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 1,
+								"label": "",
+								"max": 256,
+								"min": 1,
+								"name": "sigma",
+								"step": 1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1,
+								"label": "",
+								"max": 3,
+								"min": 0,
+								"name": "quality",
+								"step": 1,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": -187,
+						"y": 61.5
+					},
+					"parameters": {
+						"size": 11
+					},
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -602,
+						"y": 91.75
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"name": "port0",
+							"type": "f"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 88,
+						"y": 61.75
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -254.5,
+						"y": -122.5
+					},
+					"parameters": {
+						"param0": 11,
+						"param1": 20,
+						"param2": 1
+					},
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Resolution",
+							"linked_widgets": [
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Sigma",
+							"linked_widgets": [
+								{
+									"node": "fast_blur_shader",
+									"widget": "sigma"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"label": "Quality",
+							"linked_widgets": [
+								{
+									"node": "fast_blur_shader",
+									"widget": "quality"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						}
+					]
+				}
+			],
+			"parameters": {
+				"param0": 11,
+				"param1": 20,
+				"param2": 1
+			},
+			"shortdesc": "",
+			"type": "graph"
+		}
+	],
+	"parameters": {
+		"param0": 11,
+		"param1": 20,
+		"param2": 1.5,
+		"param3": 1
+	},
+	"shortdesc": "Occlusion",
+	"type": "graph"
+}
