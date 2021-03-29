@@ -40,7 +40,7 @@ func get_type_name() -> String:
 	return "Buffer"
 
 func get_parameter_defs() -> Array:
-	var parameter_defs : Array = [ { name="size", type="size", first=4, last=12, default=4 } ]
+	var parameter_defs : Array = [ { name="size", type="size", first=4, last=13, default=4 } ]
 	match version:
 		VERSION_OLD:
 			parameter_defs.push_back({ name="lod", type="float", min=0, max=10.0, step=0.01, default=0 })

@@ -2,7 +2,7 @@ extends OptionButton
 class_name SizeOptionButton
 
 export var min_size : int = 4 setget set_min_size
-export var max_size : int = 12 setget set_max_size
+export var max_size : int = 13 setget set_max_size
 export var size_value : int = 10 setget set_size_value
 
 signal size_value_changed(s)

@@ -1,7 +1,7 @@
 extends HBoxContainer
 
 var size_first : int = 0
-var size_last : int = 12
+var size_last : int = 13
 var size_default : int = 10
 
 func _ready() -> void:
@@ -33,7 +33,7 @@ func update_size_configuration() -> void:
 	$First.max_size = size_last
 	$First.size_value = size_first
 	$Last.min_size = size_first
-	$Last.max_size = 12
+	$Last.max_size = 13
 	$Last.size_value = size_last
 	$Default.min_size = size_first
 	$Default.max_size = size_last

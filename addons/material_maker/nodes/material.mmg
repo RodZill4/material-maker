@@ -594,7 +594,7 @@
 				"default": 11,
 				"first": 6,
 				"label": "Size",
-				"last": 12,
+				"last": 13,
 				"name": "size",
 				"type": "size"
 			}
