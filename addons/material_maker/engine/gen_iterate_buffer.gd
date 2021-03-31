@@ -40,7 +40,7 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return [
-			{ name="size", type="size", first=4, last=12, default=4 },
+			{ name="size", type="size", first=4, last=13, default=4 },
 			{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
 			{ name="filter", type="boolean", default=true },
 			{ name="mipmap", type="boolean", default=true }

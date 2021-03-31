@@ -16,7 +16,7 @@ const MENU_EXPORT_AGAIN : int = 1000
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
-	for i in range(7):
+	for i in range(8):
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
