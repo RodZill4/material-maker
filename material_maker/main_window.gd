@@ -102,7 +102,6 @@ const MENU = [
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
 	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="8192x8192", command_parameter=8192, mode="paint", toggle=true },
 	{ menu="Tools/Painting", submenu="environment", description="Set environment", mode="paint" },
 	{ menu="Tools" },
 	{ menu="Tools", command="environment_editor", description="Environment editor" },
