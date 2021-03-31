@@ -19,42 +19,42 @@ text = "Min:"
 
 [node name="First" type="OptionButton" parent="."]
 margin_left = 32.0
-margin_right = 96.0
+margin_right = 84.0
 margin_bottom = 24.0
 text = "1x1"
-items = [ "1x1", null, false, -1, null, "2x2", null, false, -1, null, "4x4", null, false, -1, null, "8x8", null, false, -1, null, "16x16", null, false, -1, null, "32x32", null, false, -1, null, "64x64", null, false, -1, null, "128x128", null, false, -1, null, "256x256", null, false, -1, null, "512x512", null, false, -1, null, "1024x1024", null, false, -1, null, "2048x2048", null, false, -1, null, "4096x4096", null, false, -1, null ]
+items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
 selected = 0
 script = ExtResource( 2 )
 
 [node name="LabelLast" type="Label" parent="."]
-margin_left = 100.0
+margin_left = 88.0
 margin_top = 5.0
-margin_right = 130.0
+margin_right = 118.0
 margin_bottom = 19.0
 text = "Max:"
 
 [node name="Last" type="OptionButton" parent="."]
-margin_left = 134.0
-margin_right = 246.0
+margin_left = 122.0
+margin_right = 222.0
 margin_bottom = 24.0
-text = "4096x4096"
-items = [ "1x1", null, false, -1, null, "2x2", null, false, -1, null, "4x4", null, false, -1, null, "8x8", null, false, -1, null, "16x16", null, false, -1, null, "32x32", null, false, -1, null, "64x64", null, false, -1, null, "128x128", null, false, -1, null, "256x256", null, false, -1, null, "512x512", null, false, -1, null, "1024x1024", null, false, -1, null, "2048x2048", null, false, -1, null, "4096x4096", null, false, -1, null ]
-selected = 12
+text = "8192x8192"
+items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
+selected = 13
 script = ExtResource( 2 )
 
 [node name="LabelDefault" type="Label" parent="."]
-margin_left = 250.0
+margin_left = 226.0
 margin_top = 5.0
-margin_right = 300.0
+margin_right = 276.0
 margin_bottom = 19.0
 text = "Default:"
 
 [node name="Default" type="OptionButton" parent="."]
-margin_left = 304.0
-margin_right = 416.0
+margin_left = 280.0
+margin_right = 380.0
 margin_bottom = 24.0
 text = "1024x1024"
-items = [ "1x1", null, false, -1, null, "2x2", null, false, -1, null, "4x4", null, false, -1, null, "8x8", null, false, -1, null, "16x16", null, false, -1, null, "32x32", null, false, -1, null, "64x64", null, false, -1, null, "128x128", null, false, -1, null, "256x256", null, false, -1, null, "512x512", null, false, -1, null, "1024x1024", null, false, -1, null, "2048x2048", null, false, -1, null, "4096x4096", null, false, -1, null ]
+items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
 selected = 10
 script = ExtResource( 2 )
 [connection signal="size_value_changed" from="First" to="." method="_on_First_item_selected"]

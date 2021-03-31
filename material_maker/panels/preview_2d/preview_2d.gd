@@ -16,7 +16,7 @@ const MENU_EXPORT_AGAIN : int = 1000
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
-	for i in range(7):
+	for i in range(8):
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
@@ -136,7 +136,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	var renderer = mm_renderer.request(self)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, tmp_material, size, true)
+	renderer = renderer.render_material(self, tmp_material, size, false)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	renderer.callv(renderer_function, params)

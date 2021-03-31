@@ -205,7 +205,7 @@ boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.94.0.0"
-config/actual_release="0.94"
+config/actual_release="0.95a"
 
 [audio]
 
@@ -279,6 +279,6 @@ limits/message_queue/max_size_kb=16384
 
 [rendering]
 
-quality/filters/anisotropic_filter_level=16
 quality/shadows/filter_mode=2
+quality/filters/anisotropic_filter_level=16
 environment/default_environment="res://default_env.tres"

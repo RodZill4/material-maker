@@ -35,7 +35,7 @@ const INPUT_SSS       : int = 8
 const TEXTURE_SIZE_MIN = 4  # 16x16
 
 # The maximum allowed texture size as a power-of-two exponent
-const TEXTURE_SIZE_MAX = 12  # 4096x4096
+const TEXTURE_SIZE_MAX = 13  # 8192x8192
 
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024

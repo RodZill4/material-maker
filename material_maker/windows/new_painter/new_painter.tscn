@@ -83,6 +83,7 @@ margin_right = 157.0
 margin_bottom = 44.0
 script = ExtResource( 1 )
 min_size = 8
+max_size = 12
 
 [node name="ProjectFileLabel2" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
 margin_top = 51.0
@@ -147,6 +148,7 @@ text = "Cancel"
 
 [node name="ObjLoader" type="Node" parent="."]
 script = ExtResource( 3 )
+
 [connection signal="popup_hide" from="." to="." method="_on_NewPainterWindow_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ProjectFile" to="." method="_on_ProjectFile_pressed"]

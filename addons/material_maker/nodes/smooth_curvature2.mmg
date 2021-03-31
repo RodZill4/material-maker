@@ -1,0 +1,475 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "598",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 1
+		},
+		{
+			"from": "598",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 0
+		},
+		{
+			"from": "switch_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "598",
+			"to_port": 0
+		}
+	],
+	"label": "Smooth Curvature 2",
+	"longdesc": "",
+	"name": "smooth_curvature2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": 300.603302,
+				"y": -549.522034
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "598",
+			"node_position": {
+				"x": 286.999847,
+				"y": -359.903259
+			},
+			"parameters": {
+				"quality": 4,
+				"radius": 1,
+				"strength": 1
+			},
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.5",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "float $(name)_curve( vec2 p, vec2 o ){\n\tfloat a = $in(p+o);\n\tfloat b = $in(p-o);\n\tfloat c = $in(p+o*vec2(1.0,-1.0));\n\tfloat d = $in(p-o*vec2(1.0,-1.0));\n\treturn -a - b - c - d;\n}\n\nfloat $(name)_curvature_map(vec2 p, float r, float q){\n\tfloat s = r/q;\n\tfloat H = $in(p)*4.0;\n\tfloat v = 0.0;\n\tvec2 o;\n\tfor( o.x = 0.0; o.x < q; o.x++ ){\n\t\tfor( o.y = 0.0; o.y < q; o.y++ ){\n\t\t\tfloat c = $(name)_curve(p, o*s);\n\t\t\tv += (H + c) * ((r-length(o*s)) / r);\n\t\t}\n\t}\n\treturn v/(q*q);\n}\n\nfloat $(name)_curvature(vec2 uv, float quality, float strength, float radius) {\n\tfloat c = $(name)_curvature_map(uv, 0.050 * radius, quality)*strength / radius;\n\treturn 0.5 + c;\n}",
+				"name": "Smooth Curvature",
+				"outputs": [
+					{
+						"f": "$(name)_curvature($uv, $quality, $strength, $radius)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Quality",
+						"longdesc": "How many times the input is sampled to generate the curvature map",
+						"max": 16,
+						"min": 2,
+						"name": "quality",
+						"shortdesc": "Quality",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Strength",
+						"longdesc": "The intensity of the curvature map",
+						"max": 2,
+						"min": 0,
+						"name": "strength",
+						"shortdesc": "Strength",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Radius",
+						"longdesc": "The radius of the smoothing of the curvature effect",
+						"max": 2,
+						"min": 0,
+						"name": "radius",
+						"shortdesc": "Radius",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Smooth Curvature"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": 242.146149,
+				"y": -788.088806
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 4,
+				"param2": 1,
+				"param3": 1,
+				"param4": 1
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the curvature map if buffer is used",
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Quality",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "quality"
+						}
+					],
+					"longdesc": "How many times the input is sampled to generate the curvature map",
+					"name": "param1",
+					"shortdesc": "Quality",
+					"type": "linked_control"
+				},
+				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "strength"
+						}
+					],
+					"longdesc": "The intensity of the curvature map",
+					"name": "param2",
+					"shortdesc": "Strength",
+					"type": "linked_control"
+				},
+				{
+					"label": "Radius",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "radius"
+						}
+					],
+					"longdesc": "The radius of the smoothing of the curvature effect",
+					"name": "param3",
+					"shortdesc": "Radius",
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 1,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						},
+						{
+							"node": "switch_2",
+							"widget": "source"
+						}
+					],
+					"longdesc": "When set, a buffer is used to sample the input before the normal map filter",
+					"name": "param4",
+					"shortdesc": "Buffer",
+					"type": "config_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -135.453888,
+				"y": -518.927429
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The input height map",
+					"name": "Heightmap",
+					"shortdesc": "Input",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 586.203247,
+				"y": -534.919678
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Shows the generated curvature map",
+					"name": "Curvature",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"type": "ios"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": 310.739746,
+				"y": -451.658417
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 1
+			},
+			"type": "switch"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": 293.839874,
+				"y": -225.201691
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"type": "buffer"
+		},
+		{
+			"name": "switch_2",
+			"node_position": {
+				"x": 312.239838,
+				"y": -129.465912
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 1
+			},
+			"type": "switch"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": 802.064697,
+				"y": -277.727295
+			},
+			"parameters": {
+				"amount": 0.5,
+				"blend_type": 0
+			},
+			"shader_model": {
+				"code": "vec4 $(name_uv)_s1 = $s1($uv);\nvec4 $(name_uv)_s2 = $s2($uv);\nfloat $(name_uv)_a = $amount*$a($uv);\n",
+				"global": "vec3 blend_normal(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1 + (1.0-opacity)*c2;\n}\n\nvec3 blend_dissolve(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tif (rand(uv) < opacity) {\n\t\treturn c1;\n\t} else {\n\t\treturn c2;\n\t}\n}\n\nvec3 blend_multiply(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1*c2 + (1.0-opacity)*c2;\n}\n\nvec3 blend_screen(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*(1.0-(1.0-c1)*(1.0-c2)) + (1.0-opacity)*c2;\n}\n\nfloat blend_overlay_f(float c1, float c2) {\n\treturn (c1 < 0.5) ? (2.0*c1*c2) : (1.0-2.0*(1.0-c1)*(1.0-c2));\n}\n\nvec3 blend_overlay(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_overlay_f(c1.x, c2.x), blend_overlay_f(c1.y, c2.y), blend_overlay_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_hard_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*0.5*(c1*c2+blend_overlay(uv, c1, c2, 1.0)) + (1.0-opacity)*c2;\n}\n\nfloat blend_soft_light_f(float c1, float c2) {\n\treturn (c2 < 0.5) ? (2.0*c1*c2+c1*c1*(1.0-2.0*c2)) : 2.0*c1*(1.0-c2)+sqrt(c1)*(2.0*c2-1.0);\n}\n\nvec3 blend_soft_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_soft_light_f(c1.x, c2.x), blend_soft_light_f(c1.y, c2.y), blend_soft_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_burn_f(float c1, float c2) {\n\treturn (c1==0.0)?c1:max((1.0-((1.0-c2)/c1)),0.0);\n}\n\nvec3 blend_burn(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_burn_f(c1.x, c2.x), blend_burn_f(c1.y, c2.y), blend_burn_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_dodge_f(float c1, float c2) {\n\treturn (c1==1.0)?c1:min(c2/(1.0-c1),1.0);\n}\n\nvec3 blend_dodge(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_dodge_f(c1.x, c2.x), blend_dodge_f(c1.y, c2.y), blend_dodge_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_lighten(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*max(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*min(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_difference(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*clamp(c2-c1, vec3(0.0), vec3(1.0)) + (1.0-opacity)*c2;\n}\n",
+				"inputs": [
+					{
+						"default": "vec4(round($uv.x) , 1.0, 1.0, 1.0)",
+						"label": "Source1",
+						"longdesc": "The foreground input",
+						"name": "s1",
+						"shortdesc": "Foreground",
+						"type": "rgba"
+					},
+					{
+						"default": "vec4(1.0, $uv.y, 1.0, 1.0)",
+						"label": "Source2",
+						"longdesc": "The background input",
+						"name": "s2",
+						"shortdesc": "Background",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"label": "Opacity",
+						"longdesc": "The optional opacity mask",
+						"name": "a",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"longdesc": "Blends its input, using an optional mask",
+				"name": "Blend",
+				"outputs": [
+					{
+						"longdesc": "Shows the result of the blend operation",
+						"rgba": "vec4(blend_$blend_type($uv, $(name_uv)_s1.rgb, $(name_uv)_s2.rgb, $(name_uv)_a*$(name_uv)_s1.a), min(1.0, $(name_uv)_s2.a+$(name_uv)_a*$(name_uv)_s1.a))",
+						"shortdesc": "Output",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 0,
+						"label": "",
+						"longdesc": "The algorithm used to blend the inputs",
+						"name": "blend_type",
+						"shortdesc": "Blend mode",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Normal",
+								"value": "normal"
+							},
+							{
+								"name": "Dissolve",
+								"value": "dissolve"
+							},
+							{
+								"name": "Multiply",
+								"value": "multiply"
+							},
+							{
+								"name": "Screen",
+								"value": "screen"
+							},
+							{
+								"name": "Overlay",
+								"value": "overlay"
+							},
+							{
+								"name": "Hard Light",
+								"value": "hard_light"
+							},
+							{
+								"name": "Soft Light",
+								"value": "soft_light"
+							},
+							{
+								"name": "Burn",
+								"value": "burn"
+							},
+							{
+								"name": "Dodge",
+								"value": "dodge"
+							},
+							{
+								"name": "Lighten",
+								"value": "lighten"
+							},
+							{
+								"name": "Darken",
+								"value": "darken"
+							},
+							{
+								"name": "Difference",
+								"value": "difference"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "3:",
+						"longdesc": "The opacity of the blend operation",
+						"max": 1,
+						"min": 0,
+						"name": "amount",
+						"shortdesc": "Opacity",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Blend"
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"param0": 10,
+		"param1": 4,
+		"param2": 1,
+		"param3": 1,
+		"param4": 1
+	},
+	"shortdesc": "Smooth Curvature",
+	"type": "graph"
+}

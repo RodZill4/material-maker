@@ -266,8 +266,6 @@ func get_output_code(index : int) -> String:
 	for t in source.textures.keys():
 		if !source_mask.textures.has(t):
 			source_mask.textures[t] = source.textures[t]
-	for t in source_mask.textures.keys():
-		new_code += "uniform sampler2D "+t+";\n"
 	brush_textures = source_mask.textures
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"
