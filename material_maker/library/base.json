@@ -5925,6 +5925,18 @@
 			"type": "smooth_curvature"
 		},
 		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAWpJREFUeJzl201qwzAQgNGXXCS+/6mSk7ibUNLQNnH0NyMNeKGFwe9DGIPRCbvEs23b93W5XH6st217ef+5/SO2m1I8iQPUwJM0QC08CQPUxJMsQG08iQK0wJMkQCs8CQK0xBM8QGv89XqNG6AHPmyAXviQAXriwwXojb/dbnECjMCH2QGj8CECjMQPDzAaz8APoQh4BgWIgmdAgEh4OgeIhqdjgIh4OgWIiqdDgMh4GgeIjqdhgAx4GgXIgqdBgEx4KgfIhqdigIx4KgXIiqdCgMx4CgNkx1MQYAY8HwaYBc8HAWbCczDAbHgOBJgRz5sBZsXzRoCZ8bwIMDuefwKsgOePAKvg+SXASnieAqyG5yHAinjuAVbFw3llPA8BVsRzD7AqHs4r43l6B6yG5ylA6WTD8xCgdDLi4bTve/Gxuax4KvwXyIynMEB2PAUBZsDzYYBZ8HwQYCY8BwPMhudAgBnxvBlgVjx8AfCu3FPzpMjxAAAAAElFTkSuQmCC",
+			"name": "tones_range",
+			"parameters": {
+				"contrast": 0.5,
+				"invert": false,
+				"value": 0.5,
+				"width": 0.25
+			},
+			"tree_item": "Filter/Tones/Range",
+			"type": "tones_range"
+		},
+		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAuRJREFUeJztm8FupDAQRJ/BIHxgcJRb/v/bcovigQMWNngPWXs3kXKD6V3FJfkwEqKLGtwzVDUKSEophmGg6zq01jRNg1KKM5FS4jgOYoyEEPDek1Iqa11XYozEGDmOg5TSqfWVUjRNg9YarTXGGJRSaKUU4zhirWUYBowxtG1L0zSnEjiOg33fWdcV7z3OOZZlIaXEsiw45/Des64r+75zHMep9ZumoW1bjDEMw4C1lnEc0fnDy8sL4zhyu93o+/4SAbZtY55nlmUBIITAuq4453h9fWVZFu73OyGESwTouo5pmhjHEeDjbui6jmEYGMeRp6cnrLWXCtC2LUDZcjFGvPcsy8L7+zvOObZtu0SAvu/Leb33xBjReT/cbjestTw/P9P3/anFM7ZtA2Dfd4wxaK2JMbKuK/f7Heccb29v5bizka+raZrSc3TeG33fl9V13SVNKJPo+770mdwbQghs28a2bYQQLmnCQDl/7jM6d8e88sExxlMJaK0BPtVSSpVfh7zgQ6y8Vc7Cvu8An2qllDh3o/+HqAJIE5BGFUCagDSqANIEpFEFkCYgjSqANAFpVAGkCUijCiBNQBpVAGkC0qgCSBOQhv7Ok8se3lnIJudXT+47TzJ7eGchm6JfPUmdXdnsyF5lSQOfamRXNrvSXdcVx/gq/O16Z1daZ19+nufixF4ZjDjnmOf5jy//O5eYpqncgVcGI9ZapmkquYTOQWWOq/Z9f0g05r0nhIDWuiRTmegjorFhGD4EyEEl8PBw1HuPMQZrLcDDw1FjDIqfHo9LE8hL6gvQ0vm89HyCls7npecTtHQ+Lz2foMXzeeH5hPJPUCqfl55P+PZZ4FH5vPR8wo9/GqwCSBOQRhVAmoA0qgDSBKRRBZAmII0qgDQBaVQBpAlIowogTUAaVQBpAtKoAkgTkMa37ww9Kp+Xnk8ob41J5fPS8wlaOp//B+YTZPN58fkE6Xxeej5BpQ/82Hj8F36/meLO6O0eAAAAAElFTkSuQmCC",
 			"name": "smooth_curvature2",
 			"parameters": {
