@@ -1,0 +1,85 @@
+{
+	"name": "magnify",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"scale": 1.98
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image to be transformed",
+				"name": "i",
+				"shortdesc": "Input",
+				"type": "rgba"
+			},
+			{
+				"default": "max(1.0-2.0*length($uv-vec2(0.5)), 0.0)",
+				"label": "",
+				"longdesc": "The magnifying glass shape",
+				"name": "s",
+				"shortdesc": "Shape",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Magnifying glass effect",
+		"name": "Magnify",
+		"outputs": [
+			{
+				"longdesc": "Shows the transformed image",
+				"rgba": "$i(vec2($cx+0.5, $cy+0.5)+($uv-vec2($cx+0.5, $cy+0.5))/mix(1.0, $scale, $s($uv-vec2($cx, $cy))))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X:",
+				"longdesc": "X coordinate of the magnifying glass center",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y:",
+				"longdesc": "Y coordinate of the magnifying glass center",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "center.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale:",
+				"longdesc": "The maximum scaling factor for the magnifying glass",
+				"max": 10,
+				"min": 0,
+				"name": "scale",
+				"shortdesc": "Scale",
+				"step": 0.005,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Magnify"
+	},
+	"type": "shader"
+}
