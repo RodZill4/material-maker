@@ -217,7 +217,7 @@ func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 200)) * 1_000_000
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 500)) * 1_000_000
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -1008,7 +1008,7 @@ func _notification(what : int) -> void:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
 			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 20)) * 1_000_000
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 100)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
 			# Restore the previous FPS limit.
 			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
