@@ -47,10 +47,10 @@ func init_expanded_items() -> void:
 	else:
 		expanded_items = []
 		for m in library_manager.get_items(""):
-			var n : String = m.tree_item
+			var n : String = m.name
 			var slash_position = n.find("/")
 			if slash_position != -1:
-				n = m.tree_item.left(slash_position)
+				n = m.name.left(slash_position)
 			if expanded_items.find(n) == -1:
 				expanded_items.push_back(n)
 
