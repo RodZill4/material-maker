@@ -14,12 +14,12 @@ The **Occlusion** node accepts a single greyscale image as input, interpreted as
 Outputs
 +++++++
 
-The **Occlusion** node outputs the generated normal map.
+The **Occlusion** node outputs the generated oclussion map.
 
 Parameters
 ++++++++++
 
-The **Normal map** node has the following parameters:
+The **Occlusion** node has the following parameters:
 
 * the *size* of the ambient occlusion map
 

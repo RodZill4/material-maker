@@ -25,7 +25,7 @@ The **AdjustHSV** node has the following parameters:
 
 * *Saturation* defines how the colorfulness or the texture is affected.
 
-* *Value* defunes how the lightness is affected.
+* *Value* defines how the lightness is affected.
 
 Example images
 ++++++++++++++

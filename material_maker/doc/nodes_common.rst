@@ -44,7 +44,7 @@ Inputs
 ^^^^^^
 
 Inputs are images the node will transform (if any). An input is always connected to at most
-an output. Inputs generally have a default value that is used when it is not connected.
+one output. Inputs generally have a default value that is used when it is not connected.
 
 Parameters
 ^^^^^^^^^^
@@ -111,7 +111,7 @@ Randomness
 
 Nodes that provide random patterns have an implicit **seed** parameter. It is not possible
 to edit it directly, but moving the node in the graph will change its value. It is possible
-to freeze the seed value using the small dice button in the node's title bar in the graph.
+to freeze the seed value using the small die button in the node's title bar in the graph.
 
 .. image:: images/random_node.png
 	:align: center
