@@ -92,7 +92,7 @@ And generally, complex nodes mean complex output expressions. You may thus want 
 write simple expressions in the **Outputs** tab and keep complex code in the 3
 remaining tabs.
 
-The yellow document button can be used to define a name and add a tooltip to the input.
+The yellow document button can be used to define a name and add a tooltip to the output.
 
 .. image:: images/node_editor_outputs.png
 	:align: center

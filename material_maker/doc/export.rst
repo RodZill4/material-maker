@@ -7,7 +7,7 @@ When exporting a material, using either the Export submenu or the command line a
 Material Maker generates PNG image files for all elements of the material as well as
 specific files for the target game engine.
 
-In all cases, the generated PNG files (and especially the normal map) is generated in the
+In all cases, the generated PNG files (and especially the normal map) are generated in the
 correct format.
 
 Godot game engine

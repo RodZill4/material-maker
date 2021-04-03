@@ -1,7 +1,7 @@
 Warp Dilation node
 ~~~~~~~~~~~~~~~~~~
 
-The **Warp Dilation** node dilated its input image along the slope or contours of a
+The **Warp Dilation** node dilates its input image along the slope or contours of a
 heightmap. For each pixel, it samples the input image along that path and keeps the
 highest value (after the attenuation factor is applied).
 
