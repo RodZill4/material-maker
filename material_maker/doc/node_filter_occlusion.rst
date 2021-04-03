@@ -14,7 +14,7 @@ The **Occlusion** node accepts a single greyscale image as input, interpreted as
 Outputs
 +++++++
 
-The **Occlusion** node outputs the generated oclussion map.
+The **Occlusion** node outputs the generated oclusion map.
 
 Parameters
 ++++++++++
