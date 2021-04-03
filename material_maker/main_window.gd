@@ -50,8 +50,8 @@ const RECENT_FILES_COUNT = 15
 const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
-	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="new_paint_project", description="New paint project" },
+	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
+	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
@@ -62,7 +62,7 @@ const MENU = [
 	{ menu="File", submenu="export_material", description="Export material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
-	{ menu="File", command="close_project", description="Close" },
+	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
 	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
@@ -506,6 +506,10 @@ func new_material() -> void:
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func new_paint_project(obj_file_name = null) -> void:
+	# Prevent opening the New Paint Project dialog several times by pressing the keyboard shortcut.
+	if get_node_or_null("NewPainterWindow") != null:
+		return
+
 	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
 	add_child(new_painter_dialog)
 	var result = new_painter_dialog.ask(obj_file_name)
