@@ -37,7 +37,7 @@ func check_save_tabs() -> bool:
 
 func check_save_tab(tab) -> bool:
 	var tab_control = get_child(tab)
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.get_main_window()
 	if tab_control.need_save and main_window.get_config("confirm_close_project"):
 		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
 		var save_path = tab_control.save_path

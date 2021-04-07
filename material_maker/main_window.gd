@@ -130,6 +130,9 @@ const DEFAULT_CONFIG = {
 	bake_denoise_radius = 3
 }
 
+func _init():
+	mm_globals.set_main_window(self)
+
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 
@@ -847,7 +850,7 @@ func set_painting_texture_size(size : int, value = null) -> bool:
 
 
 func create_menu_environment(menu) -> void:
-	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
+	mm_globals.get_main_window().get_node("EnvironmentManager").create_environment_menu(menu)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_id_pressed"):
 		menu.connect("id_pressed", self, "_on_Environment_id_pressed")
 

@@ -14,7 +14,7 @@ var generator = null
 
 var last_selected = null
 
-onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
+onready var node_popup = mm_globals.get_main_window().get_node("AddNodePopup")
 
 onready var timer : Timer = $Timer
 
@@ -365,7 +365,7 @@ func save_as() -> bool:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.get_main_window()
 	if main_window.config_cache.has_section_key("path", "project"):
 		dialog.current_dir = main_window.config_cache.get_value("path", "project")
 	var files = dialog.select_files()
@@ -484,7 +484,7 @@ func paste() -> void:
 	var graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.get_main_window()
 			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
@@ -520,7 +520,7 @@ func can_drop_data(_position, data) -> bool:
 
 func drop_data(position, data) -> void:
 	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
-		get_node("/root/MainWindow/NodeLibraryManager").item_created(data.tree_item)
+		mm_globals.get_main_window().get_node("NodeLibraryManager").item_created(data.tree_item)
 	# The following mitigates the SpinBox problem (captures mouse while dragging)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

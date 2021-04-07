@@ -22,7 +22,7 @@ onready var nm_viewport = $NormalMap
 onready var nm_rect = $NormalMap/Rect
 onready var nm_material = $NormalMap/Rect.get_material()
 
-onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
+onready var layers_pane = mm_globals.get_main_window().layout.get_panel("Layers")
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
 const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")

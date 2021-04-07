@@ -12,7 +12,7 @@ var qc_slot : int
 var qc_slot_type : int
 var qc_is_output : bool
 
-onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
+onready var library_manager = mm_globals.get_main_window().get_node("NodeLibraryManager")
 
 
 func get_current_graph():
@@ -54,7 +54,7 @@ func add_node(node_data) -> void:
 					port_position = node.get_connection_input_position(new_slot)
 					break
 		node.offset -= port_position/current_graph.zoom
-	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
+	mm_globals.get_main_window().get_node("NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
 
 

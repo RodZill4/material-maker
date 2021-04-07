@@ -39,7 +39,7 @@ func update_material() -> void:
 	if tesselated:
 		material = preload("res://material_maker/panels/preview_3d/materials/shader_material_tesselated.tres").duplicate()
 		material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
-		var tesselation_detail: int = get_node("/root/MainWindow").preview_tesselation_detail
+		var tesselation_detail: int = mm_globals.get_main_window().preview_tesselation_detail
 		match mesh.get_class():
 			"CubeMesh", "PrismMesh":
 				mesh.subdivide_width = tesselation_detail

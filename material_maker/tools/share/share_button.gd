@@ -31,7 +31,7 @@ func _on_ConnectButton_pressed() -> void:
 		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
 
 func _on_SendButton_pressed():
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.get_main_window()
 	var material_type : String
 	var preview_texture : Texture
 	match main_window.get_current_project().get_project_type():
@@ -109,7 +109,7 @@ func process_message(message : String) -> void:
 				$ConnectButton.hint_tooltip = "Connected and logged in.\nMaterials can be submitted."
 				$SendButton.disabled = false
 			"load_material":
-				var main_window = get_node("/root/MainWindow")
+				var main_window = mm_globals.get_main_window()
 				main_window.new_material()
 				var graph_edit = main_window.get_current_graph_edit()
 				var new_generator = mm_loader.create_gen(JSON.parse(data.json).result)
@@ -117,7 +117,7 @@ func process_message(message : String) -> void:
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
 				bring_to_top()
 			"load_brush":
-				var main_window = get_node("/root/MainWindow")
+				var main_window = mm_globals.get_main_window()
 				var project_panel = main_window.get_current_project()
 				if not project_panel.has_method("set_brush"):
 					print("Cannot load brush")

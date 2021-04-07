@@ -18,7 +18,7 @@ func set_path(path: String) -> void:
 			section = path
 		else:
 			section = path.left(slash_position)
-		var color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
+		var color = mm_globals.get_main_window().get_node("NodeLibraryManager").get_section_color(section)
 		if color != null:
 			$HBoxContainer/Path.add_color_override("font_color", color)
 

@@ -1,6 +1,6 @@
 extends WindowDialog
 
-onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+onready var environment_manager = mm_globals.get_main_window().get_node("EnvironmentManager")
 
 onready var environment_list : ItemList = $HSplitContainer/Environments
 onready var camera : Camera = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera

@@ -206,6 +206,7 @@ config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.94.0.0"
 config/actual_release="0.95a"
+run/main_scene.Android="res://vr.tscn"
 
 [audio]
 
@@ -216,6 +217,7 @@ driver="Dummy"
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
+mm_globals="*res://material_maker/globals.gd"
 
 [debug]
 
@@ -233,6 +235,10 @@ window/dpi/allow_hidpi=true
 [editor_plugins]
 
 enabled=PoolStringArray( "material_maker" )
+
+[gdnative]
+
+singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
 
 [gui]
 

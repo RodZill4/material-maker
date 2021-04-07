@@ -74,7 +74,7 @@ func init_libraries() -> void:
 	emit_signal("libraries_changed")
 
 func get_config() -> ConfigFile:
-	return get_node("/root/MainWindow").config_cache
+	return mm_globals.get_main_window().config_cache
 
 func compare_item_usage(i1, i2) -> int:
 	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0

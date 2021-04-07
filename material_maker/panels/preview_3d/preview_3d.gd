@@ -41,7 +41,7 @@ func _ready() -> void:
 	$MaterialPreview.set("debanding", true)
 
 	ui = get_node(ui_path)
-	get_node("/root/MainWindow").create_menus(MENU, self, ui)
+	mm_globals.get_main_window().create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 
@@ -53,7 +53,7 @@ func _ready() -> void:
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
 	# attempts to read the setting before the configuration file is loaded.
 	yield(get_tree(), "idle_frame")
-	sun.shadow_enabled = get_node("/root/MainWindow").get_config("ui_3d_preview_sun_shadow")
+	sun.shadow_enabled = mm_globals.get_main_window().get_config("ui_3d_preview_sun_shadow")
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
@@ -68,7 +68,7 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 		menu.connect("id_pressed", self, "_on_Model_item_selected")
 
 func create_menu_environment_list(menu : PopupMenu) -> void:
-	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
+	mm_globals.get_main_window().get_node("EnvironmentManager").create_environment_menu(menu)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
 
@@ -80,8 +80,8 @@ func _on_Model_item_selected(id) -> void:
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.mode = FileDialog.MODE_OPEN_FILE
 		dialog.add_filter("*.obj;OBJ model File")
-		if get_node("/root/MainWindow").config_cache.has_section_key("path", "mesh"):
-			dialog.current_dir = get_node("/root/MainWindow").config_cache.get_value("path", "mesh")
+		if mm_globals.get_main_window().config_cache.has_section_key("path", "mesh"):
+			dialog.current_dir = mm_globals.get_main_window().config_cache.get_value("path", "mesh")
 		dialog.connect("file_selected", self, "do_load_custom_mesh")
 		dialog.connect("popup_hide", dialog, "queue_free")
 		dialog.popup_centered()
@@ -89,7 +89,7 @@ func _on_Model_item_selected(id) -> void:
 		select_object(id)
 
 func do_load_custom_mesh(file_path) -> void:
-	get_node("/root/MainWindow").config_cache.set_value("path", "mesh", file_path.get_base_dir())
+	mm_globals.get_main_window().config_cache.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	var mesh = $ObjLoader.load_obj_file(file_path)
 	if mesh != null:
@@ -105,13 +105,13 @@ func select_object(id) -> void:
 	emit_signal("need_update", [ self ])
 
 func _on_Environment_item_selected(id) -> void:
-	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+	var environment_manager = mm_globals.get_main_window().get_node("EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
 	environment_manager.apply_environment(id, environment, sun)
 
 func _on_material_preview_size_changed() -> void:
 	# Apply supersampling to the new viewport size.
-	$MaterialPreview.size = rect_size * get_node("/root/MainWindow").preview_rendering_scale_factor
+	$MaterialPreview.size = rect_size * mm_globals.get_main_window().preview_rendering_scale_factor
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()
@@ -189,7 +189,7 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image File")
 	dialog.add_filter("*.exr;EXR image File")
-	if get_node("/root/MainWindow").config_cache.has_section_key("path", "maps"):
+	if mm_globals.get_main_window().config_cache.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").config_cache.get_value("path", "maps")
 	dialog.connect("file_selected", self, generate_function, [ size ])
 	dialog.connect("popup_hide", dialog, "queue_free")

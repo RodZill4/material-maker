@@ -1,4 +1,3 @@
-
 # Godot-specific ignores
 .import/
 
@@ -21,3 +20,6 @@ addons/material_maker/library/base/*.png.import
 
 # Export
 build/
+
+addons/godot_ovrmobile/
+android/

@@ -6,7 +6,7 @@ export var user_library_name = "user.json"
 
 var expanded_items : Array = []
 
-onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
+onready var library_manager = mm_globals.get_main_window().get_node(""+library_manager_name)
 
 var category_buttons = {}
 
@@ -313,7 +313,7 @@ func _on_PopupMenu_index_pressed(index):
 			if status.ok:
 				library_manager.rename_item_in_library(library_index, item_path, status.text)
 		1: # Update thumbnail
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.get_main_window()
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return

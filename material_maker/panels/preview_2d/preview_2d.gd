@@ -107,8 +107,8 @@ func _on_Export_id_pressed(id : int) -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
 	dialog.add_filter("*.exr;EXR image file")
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
+	if mm_globals.get_main_window() != null:
+		var config_cache = mm_globals.get_main_window().config_cache
 		if config_cache.has_section_key("path", "save_preview"):
 			dialog.current_dir = config_cache.get_value("path", "save_preview")
 	dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
@@ -143,7 +143,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	renderer.release(self)
 
 func export_as_image_file(file_name : String, size : int) -> void:
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.get_main_window()
 	if main_window != null:
 		var config_cache = main_window.config_cache
 		config_cache.set_value("path", "save_preview", file_name.get_base_dir())
@@ -157,7 +157,7 @@ func _on_Reference_id_pressed(id : int):
 	var status = create_image("copy_to_texture", [ texture ], 64 << id)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
-	get_node("/root/MainWindow").get_panel("Reference").add_reference(texture)
+	mm_globals.get_main_window().get_panel("Reference").add_reference(texture)
 
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():

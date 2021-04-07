@@ -33,7 +33,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 
 	var aabb = $MeshInstance.get_aabb()
 	if map in ["ao", "thickness"]:
-		var main_window = get_node("/root/MainWindow")
+		var main_window = mm_globals.get_main_window()
 		var ray_count = main_window.get_config("bake_ray_count")
 		var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
 		var denoise_radius = main_window.get_config("bake_denoise_radius")

@@ -3,7 +3,7 @@ extends Node
 var environments = []
 var environment_textures = []
 
-onready var main_window : Control = get_node("/root/MainWindow")
+onready var main_window : Control = mm_globals.get_main_window()
 onready var base_dir : String = OS.get_executable_path().get_base_dir()
 var ro_environments = 0
 

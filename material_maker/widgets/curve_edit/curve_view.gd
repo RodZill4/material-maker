@@ -17,7 +17,7 @@ func reverse_transform_point(p : Vector2) -> Vector2:
 	return Vector2(0.0, 1.0)+Vector2(1.0, -1.0)*p/rect_size
 
 func _draw():
-	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var current_theme : Theme = mm_globals.get_main_window().theme
 	var bg = current_theme.get_stylebox("panel", "Panel").bg_color
 	var fg = current_theme.get_color("font_color", "Label")
 	var axes_color : Color = bg.linear_interpolate(fg, 0.25)

@@ -71,7 +71,7 @@ func _ready():
 	set_physics_process(false)
 	set_current_tool(MODE_FREEHAND_DOTS)
 	initialize_debug_selects()
-	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
+	graph_edit.node_factory = mm_globals.get_main_window().get_node("NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	update_brush_graph()
 	call_deferred("update_brush")
@@ -117,11 +117,11 @@ func on_brush_graph_changed() -> void:
 	var new_remote = get_remote()
 	if new_remote != remote_node:
 		remote_node = new_remote
-		get_node("/root/MainWindow").get_panel("Parameters").set_generator(remote_node)
+		mm_globals.get_main_window().get_panel("Parameters").set_generator(remote_node)
 
 # called when the project's tab is selected
 func project_selected() -> void:
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.get_main_window()
 	main_window.get_panel("Layers").set_layers($PaintLayers)
 	remote_node = get_remote()
 	main_window.get_panel("Parameters").set_generator(remote_node)
@@ -133,7 +133,7 @@ func update_brush() -> void:
 	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
 
 func set_brush(data) -> void:
-	var parameters_panel = get_node("/root/MainWindow").get_panel("Parameters")
+	var parameters_panel = mm_globals.get_main_window().get_panel("Parameters")
 	parameters_panel.set_generator(null)
 	graph_edit.new_material(data)
 	update_brush()
@@ -619,7 +619,7 @@ func _on_OptionsButton_pressed() -> void:
 	replace_brush_options_button()
 
 func set_environment(index) -> void:
-	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+	var environment_manager = mm_globals.get_main_window().get_node("EnvironmentManager")
 	var environment = $VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
 	var sun = $VSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
