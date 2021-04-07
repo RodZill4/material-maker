@@ -1,5 +1,5 @@
 Library panel
--------------
+^^^^^^^^^^^^^
 
 The library panel shows all nodes defined in both and user libraries.
 It consists of (from top to bottom):
@@ -13,7 +13,7 @@ It consists of (from top to bottom):
   :align: center
 
 Managing libraries
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 The **Manage library** menu can be used to create new libraries and load or unload
 existing libraries. Loaded libraries can also be enabled and disabled (their
@@ -29,7 +29,7 @@ The user libraries contain all nodes that were added using the
 cannot be unloaded.
 
 Nodes categories
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Nodes are organised in categories in the libraries. Each predefined category
 has a dedicated button at the top of the Library panel. Left clicking a
@@ -56,7 +56,7 @@ The predefined categories are:
 * **Miscellaneous**: Nodes that have a specific use but do not fit in other categories
 
 Filter and tree view
-^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~
 
 The library tree shows all nodes defined in all loaded and enabled libraries. The left
 margin shows the color of the corresponding category.

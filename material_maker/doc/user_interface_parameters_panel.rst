@@ -1,5 +1,5 @@
 Parameters panel
-----------------
+^^^^^^^^^^^^^^^^
 
 The parameters panel shows all parameters of the current brush,
 and can be used to modify them.

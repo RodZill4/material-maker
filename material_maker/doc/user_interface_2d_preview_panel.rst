@@ -1,5 +1,5 @@
 2D Preview panel
-----------------
+^^^^^^^^^^^^^^^^
 
 The 2D preview panel shows a tiled preview of the first output of the selected
 node. The corner lines show the bounds of the texture, so it is
