@@ -1,0 +1,65 @@
+{
+	"name": "remap",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"max": 1,
+		"min": -1,
+		"step": 0
+	},
+	"shader_model": {
+		"code": "float $(name_uv)_x = $in($uv)*($max-$min);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Remap",
+		"outputs": [
+			{
+				"f": "$min+$(name_uv)_x-mod($(name_uv)_x, max($step, 0.00000001))",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Min",
+				"max": 10,
+				"min": -10,
+				"name": "min",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Max",
+				"max": 10,
+				"min": -10,
+				"name": "max",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Step",
+				"max": 1,
+				"min": 0,
+				"name": "step",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
