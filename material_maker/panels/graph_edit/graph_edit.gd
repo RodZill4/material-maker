@@ -402,7 +402,10 @@ func get_material_node() -> MMGenMaterial:
 func export_material(export_prefix, profile) -> void:
 	for g in top_generator.get_children():
 		if g.has_method("export_material"):
-			g.export_material(export_prefix, profile)
+			var result = g.export_material(export_prefix, profile)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+
 
 # Cut / copy / paste / duplicate
 
