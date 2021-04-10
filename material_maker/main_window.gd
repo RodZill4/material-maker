@@ -895,7 +895,7 @@ func show_library_item_doc() -> void:
 			OS.shell_open(doc_path)
 
 func show_library_item_doc_is_disabled() -> bool:
-	return get_doc_dir() == "" or library.get_selected_item_doc_name() == ""
+	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
