@@ -890,10 +890,14 @@ func show_doc_is_disabled() -> bool:
 func show_library_item_doc() -> void:
 	var doc_dir : String = get_doc_dir()
 	if doc_dir != "":
+		var dir : Directory = Directory.new()
 		var doc_name = library.get_selected_item_doc_name()
-		if doc_name != "":
+		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			OS.shell_open(doc_path)
+			if dir.file_exists(doc_path):
+				OS.shell_open(doc_path)
+				break
+			doc_name = doc_name.left(doc_name.rfind("_"))
 
 func show_library_item_doc_is_disabled() -> bool:
 	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""

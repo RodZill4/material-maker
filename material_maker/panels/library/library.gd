@@ -69,13 +69,15 @@ func get_selected_item_name() -> String:
 	return get_item_path(tree.get_selected())
 
 func get_selected_item_doc_name() -> String:
+	var name : String = ""
 	var item : TreeItem = tree.get_selected()
-	if item == null:
-		return ""
-	var m : Dictionary = item.get_metadata(0)
-	if m == null or !m.has("icon"):
-		return ""
-	return m.icon
+	while item != tree.get_root():
+		if name == "":
+			name = item.get_text(0).to_lower()
+		else:
+			name = item.get_text(0).to_lower()+"_"+name
+		item = item.get_parent()
+	return name.replace(" ", "_")
 
 func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 	var rv : PoolStringArray = PoolStringArray()
