@@ -11,10 +11,6 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-# The previous FPS limit (defined in microseconds per frame).
-# Used to restore the FPS limit when the window is refocused.
-var previous_sleep_usec := OS.low_processor_usage_mode_sleep_usec
-
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
@@ -44,6 +40,11 @@ onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/Proj
 onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
+
+const FPS_LIMIT_MIN = 20
+const FPS_LIMIT_MAX = 500
+const IDLE_FPS_LIMIT_MIN = 1
+const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
@@ -217,7 +218,7 @@ func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 500)) * 1_000_000
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -1006,12 +1007,11 @@ func _exit_tree() -> void:
 func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
-			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 100)) * 1_000_000
+			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
-			# Restore the previous FPS limit.
-			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
+			# Return to the normal FPS limit when the window is focused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")
 			quit()
