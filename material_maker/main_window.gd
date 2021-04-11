@@ -75,6 +75,8 @@ const MENU = [
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
+	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
+	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
 	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
@@ -690,6 +692,16 @@ func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.select_all()
+
+func edit_select_none() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_none()
+
+func edit_select_invert() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_invert()
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()

@@ -506,6 +506,16 @@ func select_all() -> void:
 		if c is GraphNode:
 			c.selected = true
 
+func select_none() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = false
+
+func select_invert() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = not c.selected
+
 # Delay after graph update
 
 func send_changed_signal() -> void:
