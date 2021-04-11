@@ -20,6 +20,7 @@
 
 		],
 		"instance": "",
+		"longdesc": "Draws a uniform image",
 		"name": "Uniform",
 		"outputs": [
 			{
