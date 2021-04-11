@@ -1,7 +1,7 @@
 Export node
 ~~~~~~~~~~~
 
-The **Export** node defines a a texture that will be saved together with the
+The **Export** node defines a texture that will be saved together with the
 material textures when exporting the project.
 
 .. image:: images/node_miscellaneous_export.png
@@ -20,5 +20,8 @@ The **Export** node does not have any output.
 Parameters
 ++++++++++
 
-The **Export** node has a single parameter that defines the suffix of the PNG file
-that will be created.
+The **Export** node has two parameters:
+
+* the resolution size of the exported file
+
+* the suffix of the PNG file that will be created

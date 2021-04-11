@@ -402,7 +402,10 @@ func get_material_node() -> MMGenMaterial:
 func export_material(export_prefix, profile) -> void:
 	for g in top_generator.get_children():
 		if g.has_method("export_material"):
-			g.export_material(export_prefix, profile)
+			var result = g.export_material(export_prefix, profile)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+
 
 # Cut / copy / paste / duplicate
 
@@ -502,6 +505,16 @@ func select_all() -> void:
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = true
+
+func select_none() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = false
+
+func select_invert() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = not c.selected
 
 # Delay after graph update
 

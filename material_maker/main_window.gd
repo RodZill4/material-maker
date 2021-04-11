@@ -11,10 +11,6 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-# The previous FPS limit (defined in microseconds per frame).
-# Used to restore the FPS limit when the window is refocused.
-var previous_sleep_usec := OS.low_processor_usage_mode_sleep_usec
-
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
@@ -45,13 +41,18 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+const FPS_LIMIT_MIN = 20
+const FPS_LIMIT_MAX = 500
+const IDLE_FPS_LIMIT_MIN = 1
+const IDLE_FPS_LIMIT_MAX = 100
+
 const RECENT_FILES_COUNT = 15
 
 const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
-	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="new_paint_project", description="New paint project" },
+	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
+	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
@@ -62,7 +63,7 @@ const MENU = [
 	{ menu="File", submenu="export_material", description="Export material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
-	{ menu="File", command="close_project", description="Close" },
+	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
 	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
@@ -74,6 +75,8 @@ const MENU = [
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
+	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
+	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
 	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
@@ -220,7 +223,7 @@ func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 500)) * 1_000_000
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -509,6 +512,10 @@ func new_material() -> void:
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func new_paint_project(obj_file_name = null) -> void:
+	# Prevent opening the New Paint Project dialog several times by pressing the keyboard shortcut.
+	if get_node_or_null("NewPainterWindow") != null:
+		return
+
 	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
 	add_child(new_painter_dialog)
 	var result = new_painter_dialog.ask(obj_file_name)
@@ -688,6 +695,16 @@ func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.select_all()
+
+func edit_select_none() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_none()
+
+func edit_select_invert() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_invert()
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
@@ -892,13 +909,17 @@ func show_doc_is_disabled() -> bool:
 func show_library_item_doc() -> void:
 	var doc_dir : String = get_doc_dir()
 	if doc_dir != "":
+		var dir : Directory = Directory.new()
 		var doc_name = library.get_selected_item_doc_name()
-		if doc_name != "":
+		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			OS.shell_open(doc_path)
+			if dir.file_exists(doc_path):
+				OS.shell_open(doc_path)
+				break
+			doc_name = doc_name.left(doc_name.rfind("_"))
 
 func show_library_item_doc_is_disabled() -> bool:
-	return get_doc_dir() == "" or library.get_selected_item_doc_name() == ""
+	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
@@ -1009,12 +1030,11 @@ func _exit_tree() -> void:
 func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
-			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 100)) * 1_000_000
+			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
-			# Restore the previous FPS limit.
-			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
+			# Return to the normal FPS limit when the window is focused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")
 			quit()

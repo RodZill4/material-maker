@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/panels/library/library_tree.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/library/library.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
 
 [node name="Library" type="VBoxContainer"]
 anchor_right = 1.0
@@ -16,22 +22,25 @@ __meta__ = {
 library_manager_name = "NodeLibraryManager"
 
 [node name="Libraries" type="MenuButton" parent="."]
-margin_right = 1280.0
-margin_bottom = 20.0
-text = "Libraries"
+margin_left = 570.0
+margin_right = 709.0
+margin_bottom = 22.0
+size_flags_horizontal = 4
+text = "Manage Libraries"
+icon = SubResource( 1 )
 
 [node name="SectionButtons" type="GridContainer" parent="."]
-margin_top = 24.0
+margin_top = 26.0
 margin_right = 1280.0
-margin_bottom = 24.0
+margin_bottom = 26.0
 custom_constants/vseparation = 1
 custom_constants/hseparation = 1
 columns = 5
 
 [node name="Filter" type="HBoxContainer" parent="."]
-margin_top = 28.0
+margin_top = 30.0
 margin_right = 1280.0
-margin_bottom = 52.0
+margin_bottom = 54.0
 size_flags_horizontal = 3
 
 [node name="FilterLabel" type="Label" parent="Filter"]
@@ -48,7 +57,7 @@ size_flags_horizontal = 3
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 56.0
+margin_top = 58.0
 margin_right = 1280.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 100, 100 )

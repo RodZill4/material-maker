@@ -1,8 +1,8 @@
 Paint panel
------------
+^^^^^^^^^^^
 
 Creating a paint project
-^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 To start painting in Material Maker, just use the *File -> New paint project* menu.
 This will show a dialog where a model file and a texture size can be specified.
@@ -26,10 +26,13 @@ described.
   :scale: 50%
 
 Painting a 3D model
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 The paint subpanel is where the model is actually painted. It shows the model with its material
 in its current state, and a dynamic preview of the current brush.
+
+Note that for procedural layers, the layer brush is applied to the whole model, and consequently
+painting tools are not available. 
 
 .. image:: images/paint_subpanel.png
   :align: center
@@ -69,7 +72,7 @@ Note that before painting, it is necessary to select a brush (by double-clicking
 Brushes panel) and a layer.
 
 Creating and modifying brushes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The bottom subpanel is a graph that can be used to create brushes. This is very similar to
 creating materials, except the target node is the Brush node (instead of Material).

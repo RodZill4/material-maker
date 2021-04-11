@@ -1,5 +1,5 @@
 Graph panel
------------
+^^^^^^^^^^^
 
 The graph panel is where materials can be edited, by adding and configuring nodes,
 and connecting them.
@@ -8,7 +8,7 @@ and connecting them.
   :align: center
 
 Grid, zoom and minimap
-^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. |zoom_out_button| image:: images/zoom_out_button.png
 .. |zoom_reset_button| image:: images/zoom_reset_button.png
@@ -37,7 +37,7 @@ button will center the graph view on the clicked location. While connecting node
 possible to click on the minimap with the middle mouse button to make the target node visible.
 
 Material navigation
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 .. |graph_navigation_button| image:: images/graph_navigation_button.png
 .. |group_randomness_button| image:: images/group_randomness_button.png
@@ -57,7 +57,7 @@ the top right corner:
 * a |graph_up_button| button to move to the parent of the currently shown subgraph.
 
 Creating nodes
-^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~
 
 There are several ways to create new nodes.
 
@@ -74,7 +74,7 @@ an empty space of the graph. In this case, only compatible nodes will be shown,
 and the newly created node will automatically be connected.
 
 Selecting and copying nodes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Clicking on the title bar of a node will select it. Selecting a node will show its
 first output (if any) in the 2D preview. It is possible to select several nodes
@@ -94,13 +94,13 @@ menu or the **Control+D** keyboard shortcut. This operation does not affect
 the clipboard.
 
 Background 2D preview
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
 The bottom left "bricks" button can be used to show a 2D preview in the background
 of the graph view. 
 
 Background 3D preview
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
 The bottom left "cube" button can be used to show a 3D preview in the background
 of the graph view. The blue/red arrows icon is used to rotate the object or the view,

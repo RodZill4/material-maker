@@ -1,5 +1,5 @@
 Hierarchy panel
----------------
+^^^^^^^^^^^^^^^
 
 The hierarchy panel shows the hierarchy of groups of the current material graph.
 It shows the name as well as a preview of a number of outputs (for 0 to 3).

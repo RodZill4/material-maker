@@ -24,7 +24,9 @@ The **Weave** node accepts the following parameters:
 
 * the *Size X* and *Size Y* parameters define the number of patterns that will be generated.
 
-* the *Width* parameter is the width of stiches. 
+* the *Width X* and *Width Y* parameters define the width of stitches. 
+
+* the *Stitch* parameter sets the length of the stitch.
 
 Example images
 ++++++++++++++

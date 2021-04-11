@@ -114,10 +114,6 @@ func get_parameter_defs() -> Array:
 				print("Unsupported widget of type "+str(w.type))
 				break
 		p.widget_type = w.type
-		if w.has("shortdesc"):
-			p.shortdesc = w.shortdesc
-		if w.has("longdesc"):
-			p.longdesc = w.longdesc
 		rv.append(p)
 	return rv
 

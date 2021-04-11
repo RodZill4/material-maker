@@ -1,5 +1,5 @@
 3D Preview panel
-----------------
+^^^^^^^^^^^^^^^^
 
 The 3D preview panel shows a 3D preview of the current material.
 

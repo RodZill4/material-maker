@@ -93,23 +93,22 @@ Tools menu
   confirmed, the selected nodes in the current material will be added to the user library under
   that name. The user library is saved automatically.
 
-* *Export the nodes library* is only visible when the current
-  project is a procedural material. It will prompt for a location on the disk and
-  save the whole node library.
-
 * *Create a screenshot of the current graph*  is only visible when the current
   project is a procedural material. It will prompt for an image file name
   on the disk and save a screenshot of the whole current graph (it will automatically
   pan the graph to create the screenshot).
 
-* *Add current to user library* is only visible when the current
+* *Add current brush to library* is only visible when the current
   project is a paint project. It first prompts for an item name. If a name is entered and
   confirmed, the current brush will be added to the user brush library under
   that name. The user library is saved automatically.
 
-* the *Painting* submenu can be used to change the painted textures resolutions and
-  enable or disable different channels of the painted material.
+* the *Painting* submenu can be used to change the painted textures resolutions,
+  enable or disable different channels of the painted material or select the
+  environment of the Paint panel.
 
+* the *Environment editor* menu shows the *Environment editor* window that can be used
+  to create new environments for 3D views.
 
 Help menu
 ^^^^^^^^^
@@ -125,3 +124,4 @@ Help menu
 * *Material Maker on reddit* opens a web browser on Material Maker's subreddit.
 
 * *About* Shows the about dialog.
+
