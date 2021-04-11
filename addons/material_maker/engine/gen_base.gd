@@ -79,7 +79,7 @@ func is_editable() -> bool:
 	return false
 
 func get_description() -> String:
-	return name
+	return ""
 
 func has_randomness() -> bool:
 	return false

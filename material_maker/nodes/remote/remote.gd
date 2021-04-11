@@ -24,6 +24,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	grid.add_child(control)
 	control.connect("mouse_entered", self, "on_enter_widget", [ control ])
 	control.connect("mouse_exited", self, "on_exit_widget", [ control ])
+	control.hint_tooltip = ""
 	var button = Button.new()
 	if is_named_param:
 		button.icon = preload("res://material_maker/icons/edit.tres")

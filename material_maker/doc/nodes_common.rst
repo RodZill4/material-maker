@@ -56,6 +56,16 @@ Parameters are used to configure nodes. The following types are supported:
   click in the text field and enter a new value, or click and drag left or right to decrease
   or decrease its value. When the lower or upper bound is reached, the value will stick to it,
   but dragging again from there makes it possible to go beyond the limit.
+
+  In most cases, float parameters also support expressions (written in GLSL syntax),
+  where other parameters and named parameters are accepted and must be prefixed with
+  a dollar sign. This feature is useful when two parameters of the same node must
+  depend on each other, or when several parameters of several nodes of a subgraph
+  must be calculated from one or more named parameters.
+  
+  The *$time* variable can also be used in parameter expressions to define animations
+  in generated shaders, but generated PBR materials will still be static (this feature
+  could for example be used to export variations of the same material).
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations
   such as convolutions. They are shown as drop down list boxes.
