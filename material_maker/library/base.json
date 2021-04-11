@@ -1080,15 +1080,17 @@
 			"type": "bricks_uneven"
 		},
 		{
-			"icon": "pattern_weave",
-			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAM1JREFUWIXtlrEOQEAQRJecQqMQhY/2oQpRaBQa/YyYTFwj2e2Yu2ebJ9Ms8zyNQ9/FdR77tq6BI/JC5+EZb2BeHzDhC5ETYBQAzAkwCADmBOgFAHMCdAKAeSvOy6ENLnEBcwKcAoA5AQ4BwJwAuwBgToBNADAnAOv4nlcAoOLov8iLqy9t8Bng+o9TXP8J4PpPANd/Arj+43z/H7j+E8D1nwCu/wRw/SeA6z8BXH3rA1z/Mc9+kP3gcYPsB9kPnr6Q/SD7QUT2g4g/9IMbEeiHQpNHdl4AAAAASUVORK5CYII=",
-			"name": "weave",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAaZJREFUeJztmkGqg0AQRJ8/IwpjDpCz5AA5swfwLB4gDigi/lU2WdoNnWb67aerKUKg2mqAcxxHrvB6vQCYpunS++fzCYClfjNN03m/38k5k3Om73u6rqNtW263GwDHcbDvO9u2sa4rpRRKKbzfb5Zl4fF4XFpgnmeGYcBSP116+UXOWWOMiX4YoLFA3/caY0z0VQzouk5jjIm+igFt22qMMdFXMeDzb22FRP9PcQ+XqPwCjuPQGGOir2LAvu8aY0z0VQzYtk1jjIm+igHrumqMMdFXMaCUojHGRL96Axoqj8MJYBiGSwM+LMsiem+p34zjeHrO81L9BL7jrJQwAHzneSkJfOd5KQl853kpCXzneSlxDwDfeV5KAt95XkoC33leSgLfeV5KAt9xVkr1BjTA6TnPS/UT+M7zUv3oB1x6+YXnOB0GaCzg+Z4Q/QCNBTzfE6IfoLiHS6IfoLGA53tC9AM0FvB8T6j+83j1BkQ/AHzneal+9APAd5yVEgaA7zwvJfoB4DvPS4l+gJnyjxD9APCd56VEPwB853kp1X8er96A6vsB/yfswtgu8GDwAAAAAElFTkSuQmCC",
+			"name": "weave2",
 			"parameters": {
 				"columns": 4,
-				"rows": 4
+				"rows": 4,
+				"stitch": 1,
+				"width_x": 0.9,
+				"width_y": 0.9
 			},
 			"tree_item": "Pattern/Weave",
-			"type": "weave"
+			"type": "weave2"
 		},
 		{
 			"icon": "pattern_truchet",
