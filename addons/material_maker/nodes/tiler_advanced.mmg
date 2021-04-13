@@ -40,48 +40,62 @@
 			{
 				"default": "vec4(rand2($uv+vec2(float($seed))), rand2($uv-vec2(float($seed))))",
 				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 1 output",
 				"name": "color1",
+				"shortdesc": "Color map 1",
 				"type": "rgba"
 			},
 			{
 				"default": "vec4(rand2(-$uv+vec2(float($seed))), rand2(-$uv-vec2(float($seed))))",
 				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 2 output",
 				"name": "color2",
+				"shortdesc": "Color map 2",
 				"type": "rgba"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "5:",
+				"longdesc": "A map for translation along the X axis",
 				"name": "tr_x",
+				"shortdesc": "Translate map X",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for translation along the Y axis",
 				"name": "tr_y",
+				"shortdesc": "Translate map Y",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for rotation",
 				"name": "r",
+				"shortdesc": "Rotate map",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for scale along the X axis",
 				"name": "sc_x",
+				"shortdesc": "Scale map X",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for scale along the Y axis",
 				"name": "sc_y",
+				"shortdesc": "Scale map Y",
 				"type": "f"
 			}
 		],
@@ -96,13 +110,15 @@
 				"type": "f"
 			},
 			{
-				"longdesc": "Shows a random color for each instance of the input image",
+				"longdesc": "Shows a color for each instance of the input image",
 				"rgba": "$color1($(name_uv)_rch.rg)",
-				"shortdesc": "Instance map",
+				"shortdesc": "Instance map 1",
 				"type": "rgba"
 			},
 			{
+				"longdesc": "Shows a color for each instance of the input image",
 				"rgba": "$color2($(name_uv)_rch.rg)",
+				"shortdesc": "Instance map 2",
 				"type": "rgba"
 			}
 		],
@@ -169,9 +185,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Translate X",
+				"longdesc": "The translation along the X axis applied to the instances",
 				"max": 1,
 				"min": 0,
 				"name": "translate_x",
+				"shortdesc": "Translate.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -179,9 +197,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Translate Y",
+				"longdesc": "The translation along the Y axis applied to the instances",
 				"max": 1,
 				"min": 0,
 				"name": "translate_y",
+				"shortdesc": "Translate.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -189,9 +209,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Rotate",
+				"longdesc": "The angle of instances of the input",
 				"max": 180,
 				"min": 0,
 				"name": "rotate",
+				"shortdesc": "Rotate",
 				"step": 0.1,
 				"type": "float"
 			},
