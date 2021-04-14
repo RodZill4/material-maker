@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"intensity": 1,
-		"randomness": 0.66,
+		"randomness": 0.6,
 		"scale_x": 4,
 		"scale_y": 4,
 		"stretch_x": 1,
@@ -14,7 +14,7 @@
 	},
 	"shader_model": {
 		"code": "vec4 $(name_uv)_xyzw = voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y, $stretch_x), $intensity, $randomness, $seed);",
-		"global": "vec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n    uv *= size;\n    float best_distance0 = 1.0;\n    float best_distance1 = 1.0;\n    vec2 point0;\n    vec2 point1;\n    vec2 p0 = floor(uv);\n    for (int dx = -1; dx < 2; ++dx) {\n    \tfor (int dy = -1; dy < 2; ++dy) {\n            vec2 d = vec2(float(dx), float(dy));\n            vec2 p = p0+d;\n            p += randomness*rand2(seed2+mod(p, size));\n            float distance = length(stretch*(uv - p) / size);\n            if (best_distance0 > distance) {\n            \tbest_distance1 = best_distance0;\n            \tbest_distance0 = distance;\n                point1 = point0;\n                point0 = p;\n            } else if (best_distance1 > distance) {\n            \tbest_distance1 = distance;\n                point1 = p;\n            }\n        }\n    }\n    float edge_distance = dot(uv - 0.5*(point0+point1), normalize(point0-point1));\n    \n    return vec4(point0, best_distance0*length(size)*intensity, edge_distance);\n}\n",
+		"global": "// Based on https://www.shadertoy.com/view/ldl3W8\n// The MIT License\n// Copyright © 2013 Inigo Quilez\nvec3 iq_voronoi(vec2 x, vec2 size, vec2 stretch, float randomness, vec2 seed) {\n    vec2 n = floor(x);\n    vec2 f = fract(x);\n\n\tvec2 mg, mr, mc;\n\n    float md = 8.0;\n    for( int j=-1; j<=1; j++ )\n    for( int i=-1; i<=1; i++ ) {\n        vec2 g = vec2(float(i),float(j));\n\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));\n\t\tvec2 c = g + o;\n        vec2 r = c - f;\n\t\tvec2 rr = r*stretch;\n        float d = dot(rr,rr);\n\n        if(d<md) {\n\t\t\tmc = c;\n            md = d;\n            mr = r;\n            mg = g;\n        }\n    }\n\n    md = 8.0;\n    for( int j=-2; j<=2; j++ )\n    for( int i=-2; i<=2; i++ ) {\n        vec2 g = mg + vec2(float(i),float(j));\n\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));\n        vec2 r = g + o - f;\n\t\tvec2 rr = (mr-r)*stretch;\n        if( dot(rr,rr)>0.00001 )\n        md = min( md, dot( 0.5*(mr+r)*stretch, normalize((r-mr)*stretch) ) );\n    }\n\n    return vec3(md, mc+n);\n}\n\nvec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, int seed) {\n    uv *= size;\n\tvec3 v = iq_voronoi(uv, size, stretch, randomness, rand2(vec2(float(seed), 1.0-float(seed))));\n\treturn vec4(v.yz, intensity*length((uv-v.yz)*stretch), v.x);\n}\n",
 		"inputs": [
 
 		],
@@ -42,7 +42,7 @@
 			},
 			{
 				"longdesc": "An output that should be plugged into a Fill companion node",
-				"rgba": "vec4(fract(($(name_uv)_xyzw.xy-0.5)/vec2($scale_x, $scale_y)), vec2(1.0)/vec2($scale_x, $scale_y))",
+				"rgba": "vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y))",
 				"shortdesc": "Fill",
 				"type": "rgba"
 			}
