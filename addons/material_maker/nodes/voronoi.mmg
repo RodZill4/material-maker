@@ -6,9 +6,9 @@
 	},
 	"parameters": {
 		"intensity": 1,
-		"randomness": 0.6,
+		"randomness": 0.85,
 		"scale_x": 4,
-		"scale_y": 4,
+		"scale_y": 5,
 		"stretch_x": 1,
 		"stretch_y": 1
 	},
@@ -36,13 +36,13 @@
 			},
 			{
 				"longdesc": "A color pattern that assigns a random color to each cell",
-				"rgb": "rand3(floor($(name_uv)_xyzw.xy))",
+				"rgb": "rand3(fract(floor($(name_uv)_xyzw.xy)/vec2($scale_x, $scale_y)))",
 				"shortdesc": "Random color",
 				"type": "rgb"
 			},
 			{
 				"longdesc": "An output that should be plugged into a Fill companion node",
-				"rgba": "vec4($(name_uv)_xyzw.xy-1.0, vec2(2.0))/vec2($scale_x, $scale_y).xyxy",
+				"rgba": "vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y))",
 				"shortdesc": "Fill",
 				"type": "rgba"
 			}
