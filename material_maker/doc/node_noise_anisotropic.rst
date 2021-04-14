@@ -1,7 +1,7 @@
 Anisotropic noise node
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The **Anisotropic** noise node outputs a texture generated from x-axis interpolated value noise.
+The **Anisotropic noise** node outputs a texture generated from x-axis interpolated value noise.
 
 .. image:: images/node_noise_anisotropic.png
 	:align: center
@@ -9,17 +9,17 @@ The **Anisotropic** noise node outputs a texture generated from x-axis interpola
 Inputs
 ++++++
 
-The **Anisotropic** noise node does not accept any input.
+The **Anisotropic noise** node does not accept any input.
 
 Outputs
 +++++++
 
-The **Anisotropic** noise node provides a greyscale Anisotropic noise texture.
+The **Anisotropic noise** node provides a greyscale Anisotropic noise texture.
 
 Parameters
 ++++++++++
 
-The **Anisotropic** noise node accepts the following parameters:
+The **Anisotropic noise** node accepts the following parameters:
 
 * *Scale X* and *Scale Y* are the subdivisions of the noise
 
