@@ -63,8 +63,10 @@
 			"ports": [
 				{
 					"group_size": 0,
-					"name": "port0",
-					"type": "f"
+					"longdesc": "The input image",
+					"name": "input",
+					"shortdesc": "Input",
+					"type": "rgba"
 				}
 			],
 			"type": "ios"
@@ -81,7 +83,9 @@
 			"ports": [
 				{
 					"group_size": 0,
-					"name": "port0",
+					"longdesc": "The generated blurred image",
+					"name": "output",
+					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
@@ -108,7 +112,9 @@
 							"widget": "size"
 						}
 					],
+					"longdesc": "The resolution used to sample the input image",
 					"name": "param0",
+					"shortdesc": "Resolution",
 					"type": "linked_control"
 				},
 				{
@@ -119,7 +125,9 @@
 							"widget": "sigma"
 						}
 					],
+					"longdesc": "The standard deviation of the gaussian distribution",
 					"name": "param1",
+					"shortdesc": "Sigma",
 					"type": "linked_control"
 				},
 				{
@@ -130,7 +138,9 @@
 							"widget": "quality"
 						}
 					],
+					"longdesc": "The quality of the effect (increasing quality increases compute time)",
 					"name": "param2",
+					"shortdesc": "Quality",
 					"type": "linked_control"
 				}
 			]
