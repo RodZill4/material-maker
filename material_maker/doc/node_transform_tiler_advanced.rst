@@ -1,5 +1,5 @@
 Advanced Tiler node
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 The **Advanced Tiler** node tiles several instances of its input with optional scale and rotation variations.
 Overlapping instances are mixed with each other using a *lighten* filter.
