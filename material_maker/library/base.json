@@ -5994,7 +5994,7 @@
 				"tx": 4,
 				"ty": 4
 			},
-			"tree_item": "Transform/Tiler/AdvancedColor",
+			"tree_item": "Transform/Tiler/Advanced/Color",
 			"type": "tiler_advanced_color"
 		},
 		{
@@ -6005,7 +6005,7 @@
 				"min": -1,
 				"step": 0
 			},
-			"tree_item": "Transform/Tiler/Remap",
+			"tree_item": "Transform/Tiler/Advanced/Remap",
 			"type": "remap"
 		},
 		{
@@ -6014,7 +6014,7 @@
 			"parameters": {
 				"angle": 0
 			},
-			"tree_item": "Transform/Tiler/HeightToAngle",
+			"tree_item": "Transform/Tiler/Advanced/HeightToAngle",
 			"type": "height_to_angle"
 		}
 	],
