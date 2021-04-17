@@ -12,8 +12,8 @@
 		"width_y": 0.9
 	},
 	"shader_model": {
-		"code": "",
-		"global": "float weave(vec2 uv, vec2 count, float stitch, float width_x, float width_y) {\n    uv *= stitch;\n\tuv *= count;\n\tfloat c = ( sin( 3.1415926 / stitch * (uv.x + floor(uv.y) - (stitch - 1.0))) * 0.25 + 0.75 ) *step(abs(fract(uv.y)-0.5), width_x*0.5);\n\tc = max(c, (sin(3.1415926 / stitch * (1.0+uv.y+floor(uv.x) ))* 0.25 + 0.75 )*step(abs(fract(uv.x)-0.5), width_y*0.5));\n\treturn c;\n}",
+		"code": "vec3 $(name_uv) = weave($uv, vec2($columns, $rows), $stitch, $width_x*$width_map($uv), $width_y*$width_map($uv));",
+		"global": "vec3 weave(vec2 uv, vec2 count, float stitch, float width_x, float width_y) {\n    uv *= stitch;\n\tuv *= count;\n\tfloat c1 = (sin( 3.1415926 / stitch * (uv.x + floor(uv.y) - (stitch - 1.0))) * 0.25 + 0.75 ) *step(abs(fract(uv.y)-0.5), width_x*0.5);\n\tfloat c2 = (sin(3.1415926 / stitch * (1.0+uv.y+floor(uv.x) ))* 0.25 + 0.75 )*step(abs(fract(uv.x)-0.5), width_y*0.5);\n\treturn vec3(max(c1, c2), 1.0-step(c1, c2), 1.0-step(c2, c1));\n}",
 		"inputs": [
 			{
 				"default": "1.0",
@@ -29,9 +29,21 @@
 		"name": "Weave",
 		"outputs": [
 			{
-				"f": "weave($uv, vec2($columns, $rows), $stitch, $width_x*$width_map($uv), $width_y*$width_map($uv))",
+				"f": "$(name_uv).x",
 				"longdesc": "Shows the generated greyscale weave pattern.",
 				"shortdesc": "Output",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).y",
+				"longdesc": "Mask for horizontal stripes",
+				"shortdesc": "Horizontal mask",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).z",
+				"longdesc": "Mask for vertical stripes",
+				"shortdesc": "Vertical mask",
 				"type": "f"
 			}
 		],
