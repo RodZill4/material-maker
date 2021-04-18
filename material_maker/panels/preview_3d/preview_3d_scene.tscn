@@ -33,9 +33,10 @@ tracks/0/keys = {
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0 )
 
 [node name="Camera" type="Camera" parent="CameraPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4 )
 environment = SubResource( 2 )
 current = true
+fov = 50.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"

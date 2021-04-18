@@ -1,7 +1,9 @@
 extends ViewportContainer
 
 const CAMERA_DISTANCE_MIN = 1.0
-const CAMERA_DISTANCE_MAX = 10.0
+const CAMERA_DISTANCE_MAX = 15.0
+const CAMERA_FOV_MIN = 10
+const CAMERA_FOV_MAX = 90
 
 export var ui_path : String = "UI/Preview3DUI"
 
@@ -139,17 +141,23 @@ func on_gui_input(event) -> void:
 
 		match event.button_index:
 			BUTTON_WHEEL_UP:
-				camera.translation.z = clamp(
-					camera.translation.z / (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					camera.translation.z = clamp(
+						camera.translation.z / (1.01 if event.shift else 1.1),
+						CAMERA_DISTANCE_MIN,
+						CAMERA_DISTANCE_MAX
+					)
 			BUTTON_WHEEL_DOWN:
-				camera.translation.z = clamp(
-					camera.translation.z * (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					camera.translation.z = clamp(
+						camera.translation.z * (1.01 if event.shift else 1.1),
+						CAMERA_DISTANCE_MIN,
+						CAMERA_DISTANCE_MAX
+					)
 			BUTTON_LEFT, BUTTON_RIGHT:
 				var mask : int = Input.get_mouse_button_mask()
 				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0
