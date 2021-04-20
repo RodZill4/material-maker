@@ -71,6 +71,8 @@ func get_selected_item_name() -> String:
 func get_selected_item_doc_name() -> String:
 	var name : String = ""
 	var item : TreeItem = tree.get_selected()
+	if item == null:
+		return ""
 	while item != tree.get_root():
 		if name == "":
 			name = item.get_text(0).to_lower()
