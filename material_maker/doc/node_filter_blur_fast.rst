@@ -1,5 +1,5 @@
 Fast Blur node
-~~~~~~~~~
+~~~~~~~~~~~~~~
 
 The **Fast Blur** node applies an approximated Gaussian blur algorithm to its input.
 
