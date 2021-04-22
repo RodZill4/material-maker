@@ -947,7 +947,11 @@ func update_preview() -> void:
 		status = update_preview_2d()
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
-		status = update_preview_3d([ preview_3d, preview_3d_background ])
+		var previews = [ preview_3d, preview_3d_background ]
+		var mmvr = get_node_or_null("/root/MMVR")
+		if mmvr != null:
+			previews.push_back(mmvr)
+		status = update_preview_3d(previews)
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
 	updating = false

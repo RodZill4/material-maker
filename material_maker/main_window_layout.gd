@@ -40,6 +40,10 @@ func load_panels(config_cache) -> void:
 	for panel_pos in PANEL_POSITIONS.keys():
 		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
 	for panel in PANELS:
+		if get_node("/root/MMVR") != null:
+			match panel.name:
+				"Preview3D","Brushes","Layers","Parameters":
+					continue
 		var node = panel.scene.instance()
 		node.name = panel.name
 		if "config_cache" in node:

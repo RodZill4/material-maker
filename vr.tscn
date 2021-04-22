@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://vr.gd" type="Script" id=1]
 [ext_resource path="res://vr_screen.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/main_window.tscn" type="PackedScene" id=3]
+[ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=4]
 
 [sub_resource type="CylinderMesh" id=1]
 top_radius = 0.001
@@ -13,20 +14,28 @@ rings = 1
 
 [sub_resource type="SpatialMaterial" id=2]
 
-[sub_resource type="QuadMesh" id=4]
-size = Vector2( 1.28, 0.72 )
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 2.56, 1.44 )
 
-[sub_resource type="ViewportTexture" id=5]
+[sub_resource type="ViewportTexture" id=4]
 viewport_path = NodePath("Screen/Screen/Viewport")
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="SpatialMaterial" id=5]
 resource_local_to_scene = true
 flags_unshaded = true
-albedo_texture = SubResource( 5 )
+albedo_texture = SubResource( 4 )
 
-[sub_resource type="BoxShape" id=3]
+[sub_resource type="BoxShape" id=6]
 margin = 0.01
 extents = Vector3( 0.5, 0.5, 0.02 )
+
+[sub_resource type="CubeMesh" id=7]
+
+[sub_resource type="PanoramaSky" id=9]
+
+[sub_resource type="Environment" id=8]
+background_mode = 2
+background_sky = SubResource( 9 )
 
 [node name="MMVR" type="Spatial"]
 script = ExtResource( 1 )
@@ -52,16 +61,16 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
 
 [node name="Screen" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -1 )
-mesh = SubResource( 4 )
-material/0 = SubResource( 6 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 5 )
 
 [node name="Screen" type="Area" parent="Screen"]
-transform = Transform( 1.28, 2.09548e-11, -9.31322e-10, -3.72529e-11, 0.72, 1.86264e-09, 1.19209e-09, -1.3411e-09, 1, 0, 0, 0 )
+transform = Transform( 2.56, 4.19095e-11, -9.3132e-10, -7.45058e-11, 1.44, 1.86264e-09, 2.38418e-09, -2.6822e-09, 1, 0, 0, -0.02 )
 script = ExtResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Screen/Screen"]
-shape = SubResource( 3 )
+shape = SubResource( 6 )
 
 [node name="Viewport" type="Viewport" parent="Screen/Screen"]
 size = Vector2( 1280, 720 )
@@ -72,3 +81,15 @@ render_target_v_flip = true
 margin_right = -640.0
 margin_bottom = -297.0
 rect_min_size = Vector2( 1280, 720 )
+
+[node name="Cube" type="MeshInstance" parent="."]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -1.73113 )
+mesh = SubResource( 7 )
+material/0 = null
+script = ExtResource( 4 )
+uv_scale = Vector2( 3, 2 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 8 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]

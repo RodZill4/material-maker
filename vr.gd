@@ -16,6 +16,8 @@ func _ready():
 		ovr_performance.set_clock_levels(1, 1)
 		ovr_performance.set_extra_latency_mode(1)
 	set_process_unhandled_input(true)
+	yield(get_tree(), "idle_frame")
+	$Screen/Screen/Viewport/MainWindow/EnvironmentManager.apply_environment(0, $WorldEnvironment.environment, $DirectionalLight)
 
 var collider
 
@@ -27,7 +29,7 @@ func _process(delta):
 		distance = (collision_point-$ARVROrigin/RightHand/RayCast.global_transform.origin).length()
 		$ARVROrigin/RightHand/RayCast/Ray.get_surface_material(0).albedo_color = Color(1.0, 0.0, 0.0)
 		if collider.has_method("ui_raycast_hit_event"):
-			collider.ui_raycast_hit_event(collision_point, false, false)
+			collider.ui_raycast_hit_event(collision_point, 0, false)
 	else:
 		$ARVROrigin/RightHand/RayCast/Ray.get_surface_material(0).albedo_color = Color(1.0, 1.0, 1.0)
 	$ARVROrigin/RightHand/RayCast/Ray.translation.x = -0.5*distance
@@ -52,9 +54,12 @@ func _unhandled_input(event):
 						if collider != null:
 							var collision_point = $ARVROrigin/RightHand/RayCast.get_collision_point()
 							if collider.has_method("ui_raycast_hit_event"):
-								collider.ui_raycast_hit_event(collision_point, event.pressed, !event.pressed)
+								collider.ui_raycast_hit_event(collision_point, BUTTON_LEFT, event.pressed)
 					2:
-						pass
+						if collider != null:
+							var collision_point = $ARVROrigin/RightHand/RayCast.get_collision_point()
+							if collider.has_method("ui_raycast_hit_event"):
+								collider.ui_raycast_hit_event(collision_point, BUTTON_RIGHT, event.pressed)
 	elif event is InputEventJoypadMotion:
 		match event.device:
 			0:
@@ -69,3 +74,6 @@ func _unhandled_input(event):
 						pass
 					1:
 						pass
+
+func get_materials():
+	return [ $Cube.get_surface_material(0) ]
