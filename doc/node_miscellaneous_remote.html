@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -110,6 +115,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Remote node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#linked-control">Linked control</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#configuration-control">Configuration control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#named-parameters">Named parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_comment.html">Comment node</a></li>
@@ -195,12 +201,16 @@
 <p>The <strong>Remote</strong> node has no direct effect on the material but can be used to
 control key parameters of the material to configure it easily.</p>
 <img alt="_images/node_miscellaneous_remote.png" class="align-center" src="_images/node_miscellaneous_remote.png" />
-<p>When started, the Remote node only shows 2 buttons.</p>
+<p>When started, the Remote node only shows 3 buttons.</p>
 <p>The left button can be used to create a linked control, that can be used to
 mirror one or several similar parameters.
-The right button can be used to create a configuration control, that can be
+The middle button can be used to create a configuration control, that can be
 associated to several parameters and store several named configurations for
-those parameters.</p>
+those parameters.
+The right button can be used to create a named parameters, that can be
+used in expressions in other nodes parameters.</p>
+<p>Controls and parameters can be renamed, reordered and deleted using the
+Remote node user interface.</p>
 <div class="section" id="linked-control">
 <h2>Linked control<a class="headerlink" href="#linked-control" title="Permalink to this headline">¶</a></h2>
 <p>When creating a Linked control (using the “Create linked control” button),
@@ -208,6 +218,7 @@ it is necessary to first pick a parameter in the material graph. The newly
 created control will be a copy of the selected parameter control, and when
 changing the value of the Linked control, the associated control will be
 updated accordingly.</p>
+<img alt="_images/node_miscellaneous_remote_linked_control.png" class="align-center" src="_images/node_miscellaneous_remote_linked_control.png" />
 <p>A Linked control can also be associated to other parameters, provided they
 are of the same kind.</p>
 <p>When hovering on the Linked control, Material Maker will show the parameters
@@ -219,6 +230,7 @@ it controls.</p>
 button), it is necessary to first pick a parameter in the material graph.
 The newly created control will hold a list of configurations of the associated
 parameters.</p>
+<img alt="_images/node_miscellaneous_remote_configuration_control.png" class="align-center" src="_images/node_miscellaneous_remote_configuration_control.png" />
 <p>A Linked control can be associated to other parameters, and it is recommended to
 associate all relevant parameters before adding configurations.</p>
 <p>When hovering on the Linked control, Material Maker will show the parameters
@@ -228,6 +240,14 @@ and select the <strong>&lt;add configuration&gt;</strong> entry in the drop-down
 name for this configuration, and it will be added to the list.</p>
 <p>The drop-down list can be used to select a configuration, create new ones and
 update or delete the current configuration.</p>
+</div>
+<div class="section" id="named-parameters">
+<h2>Named parameters<a class="headerlink" href="#named-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Named parameters are float parameters that can be used in expressions in all
+float parameters of all nodes of the subgraph.</p>
+<img alt="_images/node_miscellaneous_remote_named_parameter.png" class="align-center" src="_images/node_miscellaneous_remote_named_parameter.png" />
+<p>Named parameters in parameter expressions must be prefixed with a dollar
+sign.</p>
 </div>
 </div>
 

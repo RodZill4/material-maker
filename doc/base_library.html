@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -173,7 +178,7 @@
             
   <div class="section" id="nodes-library">
 <h1>Nodes library<a class="headerlink" href="#nodes-library" title="Permalink to this headline">¶</a></h1>
-<p>This section describes all nodes that can are provided in the base library
+<p>This section describes all nodes that are provided in the base library
 to describe procedural materials.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -203,8 +208,9 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_runes.html">Runes node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_pattern_iching.html">I Ching node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_pattern_runes_i_ching.html">I Ching node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_scratches.html">Scratches node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_pattern_beehive.html">Beehive node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_pattern_sine_wave.html">Sine Wave node</a></li>
 </ul>
 </li>
@@ -214,15 +220,17 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_noise_value.html">Value noise node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_noise_voronoi.html">Voronoi noise node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_noise_fbm.html">FBM node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_noise_anisotropic.html">Anisotropic noise node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_filter.html">Filter nodes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_brightness_contrast.html">BrightnessContrast node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_tones_range.html">Tones Range node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_tonality.html">Tonality node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
@@ -232,8 +240,9 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_blur_fast.html">Fast Blur node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_blur_directional.html">Directional Blur node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_blur_slope.html">Slope Blur node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
@@ -251,6 +260,8 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_maketileable.html">Make Tileable node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_pixelize.html">Pixelize node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_supersample.html">Supersample node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_smoothcurvature.html">Smooth Curvature node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_smoothcurvature2.html">Smooth Curvature 2 node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul>
@@ -267,6 +278,7 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_tiler.html">Tiler node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_tiler_advanced.html">Advanced Tiler node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_circlesplatter.html">Circle Splatter node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_warpdilation.html">Warp Dilation node</a></li>
 </ul>

@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -94,20 +99,29 @@
 <li class="toctree-l1 current"><a class="reference internal" href="user_interface.html">User interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="user_interface_overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_graph_panel.html">Graph panel</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Library panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_2d_preview_panel.html">2D Preview panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_paint_panel.html">Paint panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_layers_panel.html">Layers panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_parameters_panel.html">Parameters panel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_main_menu.html">Main menu</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="user_interface_panels.html">Panels</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="user_interface_graph_panel.html">Graph panel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Library panel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#managing-libraries">Managing libraries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nodes-categories">Nodes categories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filter-and-tree-view">Filter and tree view</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_2d_preview_panel.html">2D Preview panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_paint_panel.html">Paint panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_layers_panel.html">Layers panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_interface_parameters_panel.html">Parameters panel</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_sharing.html">Sharing materials and brushes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_performance.html">Performance meter and tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_environment_editor.html">Environment editor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
@@ -164,6 +178,8 @@
         
           <li><a href="user_interface.html">User interface</a> &raquo;</li>
         
+          <li><a href="user_interface_panels.html">Panels</a> &raquo;</li>
+        
       <li>Library panel</li>
     
     
@@ -183,14 +199,61 @@
             
   <div class="section" id="library-panel">
 <h1>Library panel<a class="headerlink" href="#library-panel" title="Permalink to this headline">¶</a></h1>
-<p>The library panel shows all nodes defined in both base and user libraries in a tree
-view. The base library is provided with Material Maker and the nodes it contains are
-documented in this manual. The user library contains all nodes that were added using
-the <strong>Tools -&gt; Add selected node to user library</strong> menu item.</p>
+<p>The library panel shows all nodes defined in both and user libraries.
+It consists of (from top to bottom):</p>
+<ul class="simple">
+<li><p>a <strong>Manage Libraries</strong> menu</p></li>
+<li><p>buttons for all nodes categories</p></li>
+<li><p>a node filter</p></li>
+<li><p>a tree view where all available nodes are shown</p></li>
+</ul>
+<img alt="_images/library_panel.png" class="align-center" src="_images/library_panel.png" />
+<div class="section" id="managing-libraries">
+<h2>Managing libraries<a class="headerlink" href="#managing-libraries" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Manage library</strong> menu can be used to create new libraries and load or unload
+existing libraries. Loaded libraries can also be enabled and disabled (their
+items will not be shown in the library panel or in the <strong>Nodes menu</strong>).</p>
+<p>Each library is saved as a standalone JSON file.</p>
+<p>The base library is provided with Material Maker and the nodes it contains are
+documented in this manual. It cannot be unloaded or modified.</p>
+<p>The user libraries contain all nodes that were added using the
+<strong>Tools -&gt; Add selected node to library</strong> submenu. The default <strong>User</strong> library
+cannot be unloaded.</p>
+</div>
+<div class="section" id="nodes-categories">
+<h2>Nodes categories<a class="headerlink" href="#nodes-categories" title="Permalink to this headline">¶</a></h2>
+<p>Nodes are organised in categories in the libraries. Each predefined category
+has a dedicated button at the top of the Library panel. Left clicking a
+category will make the category visible in the tree view and the Nodes menu.</p>
+<p>The predefined categories are:</p>
+<ul class="simple">
+<li><p><strong>Simple</strong>: Nodes that define simple shapes (including the SDF subcategory that
+can be used to build more complex shapes)</p></li>
+<li><p><strong>3D</strong>: Nodes that can used to build 3D shapes and 3D textures</p></li>
+<li><p><strong>Pattern</strong>: Various non random 2D patterns</p></li>
+<li><p><strong>Noise</strong>: Nodes that provide random patterns</p></li>
+<li><p><strong>Filter</strong>: Nodes that alter the colors of their input, but not their overall shapes</p></li>
+<li><p><strong>Transform</strong>: Nodes that modify the shapes of their input</p></li>
+<li><p><strong>Workflow</strong>: Nodes that use PBR materials (with albedo, roughness, metallic, emission and
+normal maps) to generate more complex materials</p></li>
+<li><p><strong>Miscellaneous</strong>: Nodes that have a specific use but do not fit in other categories</p></li>
+</ul>
+</div>
+<div class="section" id="filter-and-tree-view">
+<h2>Filter and tree view<a class="headerlink" href="#filter-and-tree-view" title="Permalink to this headline">¶</a></h2>
+<p>The library tree shows all nodes defined in all loaded and enabled libraries. The left
+margin shows the color of the corresponding category.</p>
+<p>Nodes can be dragged and dropped from the tree view to a material or brush
+graph editor.</p>
 <p>The filter field above the library tree can be used to quickly find a specific node.
 The tree will be updated whenever the filter string is modified. It is possible to
 give focus to the search field using the <strong>Control+F</strong> keyboard shortcut.</p>
 <img alt="_images/library_filter.gif" class="align-center" src="_images/library_filter.gif" />
+<p>Each item in the tree view has a context menu that can be used to rename it, redefine
+its thumbnail (using the current 2D preview), or delete it. It is also possible to
+define name aliases that will be used by the filter (in the library panel and in the
+Nodes menu).</p>
+</div>
 </div>
 
 

@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,14 +34,15 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Sharing materials and brushes" href="user_interface_sharing.html" />
-    <link rel="prev" title="Parameters panel" href="user_interface_parameters_panel.html" /> 
+    <link rel="next" title="Panels" href="user_interface_panels.html" />
+    <link rel="prev" title="First steps with the user interface" href="user_interface_first_steps.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -94,17 +99,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="user_interface.html">User interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="user_interface_overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_graph_panel.html">Graph panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_library_panel.html">Library panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_2d_preview_panel.html">2D Preview panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_paint_panel.html">Paint panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_layers_panel.html">Layers panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_interface_parameters_panel.html">Parameters panel</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Main menu</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#file-menu">File menu</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#edit-menu">Edit menu</a></li>
@@ -113,8 +107,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#help-menu">Help menu</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_panels.html">Panels</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_sharing.html">Sharing materials and brushes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_performance.html">Performance meter and tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_environment_editor.html">Environment editor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
@@ -242,6 +238,9 @@ so they can easily be moved around.</p></li>
 <ul class="simple">
 <li><p><em>Center view</em> Centers the current material graph view</p></li>
 <li><p><em>Reset zoom</em> Resets the zoom level of the current material graph view</p></li>
+<li><p><em>Show/Hide side panels</em> (or the <em>Control+SpaceBar</em> keyboard shortcut) can
+be used to hide the side panels so the space available for the main panel
+is maximized (which can be useful on smaller displays).</p></li>
 <li><p>the <em>Panels</em> submenu can be used to show or hide all side panels</p></li>
 </ul>
 </div>
@@ -261,19 +260,19 @@ become editable.</p></li>
 project is a procedural material. It first prompts for an item name. If a name is entered and
 confirmed, the selected nodes in the current material will be added to the user library under
 that name. The user library is saved automatically.</p></li>
-<li><p><em>Export the nodes library</em> is only visible when the current
-project is a procedural material. It will prompt for a location on the disk and
-save the whole node library.</p></li>
 <li><p><em>Create a screenshot of the current graph</em>  is only visible when the current
 project is a procedural material. It will prompt for an image file name
 on the disk and save a screenshot of the whole current graph (it will automatically
 pan the graph to create the screenshot).</p></li>
-<li><p><em>Add current to user library</em> is only visible when the current
+<li><p><em>Add current brush to library</em> is only visible when the current
 project is a paint project. It first prompts for an item name. If a name is entered and
 confirmed, the current brush will be added to the user brush library under
 that name. The user library is saved automatically.</p></li>
-<li><p>the <em>Painting</em> submenu can be used to change the painted textures resolutions and
-enable or disable different channels of the painted material.</p></li>
+<li><p>the <em>Painting</em> submenu can be used to change the painted textures resolutions,
+enable or disable different channels of the painted material or select the
+environment of the Paint panel.</p></li>
+<li><p>the <em>Environment editor</em> menu shows the <em>Environment editor</em> window that can be used
+to create new environments for 3D views.</p></li>
 </ul>
 </div>
 <div class="section" id="help-menu">
@@ -296,8 +295,8 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="user_interface_sharing.html" class="btn btn-neutral float-right" title="Sharing materials and brushes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="user_interface_parameters_panel.html" class="btn btn-neutral float-left" title="Parameters panel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="user_interface_panels.html" class="btn btn-neutral float-right" title="Panels" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_interface_first_steps.html" class="btn btn-neutral float-left" title="First steps with the user interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

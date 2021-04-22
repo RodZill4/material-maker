@@ -1,8 +1,8 @@
 Performance meter and tools
 ---------------------------
 
-Material Maker relies on shader generation and rendering to generate texture.
-It sometimes creates very complex shader that can impact performance, while
+Material Maker relies on shader generation and rendering to generate textures.
+It sometimes creates very complex shaders that can impact performance, while
 trying to provide smooth user experience.
 
 In the top right corner of the user interface, a performance meter shows the

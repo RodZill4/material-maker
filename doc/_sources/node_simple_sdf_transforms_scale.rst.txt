@@ -20,4 +20,4 @@ scaled shape.
 Parameters
 ::::::::::
 
-The **Scale** node accepts accepts *scale factor* as parameter.
+The **Scale** node accepts *scale factor* as parameter.

@@ -15,7 +15,6 @@ Inputs
 The **Tiler** node accepts two inputs:
 
 * The *Source* inputs is the image to be splat into the output.
-
 * The *Mask* input is a greyscale image that is used as a mask and affects each instance's value.
 
 Outputs
@@ -31,6 +30,7 @@ Parameters
 The **Tiler** node accepts the following parameters:
 
 * *Tile X* and *Tile Y*, the number of columns and rows of of the tile pattern.
+* *Overlap* is the number of overlapping instances for each instance.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
 * *Scale X and Scale Y* are the scale along X and Y axes applied to each instance.

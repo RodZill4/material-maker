@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -209,7 +214,7 @@ output slot will have a circle around it, and clicking it again will hide the pr
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
 <p>Inputs are images the node will transform (if any). An input is always connected to at most
-an output. Inputs generally have a default value that is used when it is not connected.</p>
+one output. Inputs generally have a default value that is used when it is not connected.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -218,8 +223,17 @@ an output. Inputs generally have a default value that is used when it is not con
 <li><p><strong>float</strong> parameters are used whenever a real number is needed. Float parameters have
 bounds, but it is possible to ignore them (at your own risk). To modify a float parameter,
 click in the text field and enter a new value, or click and drag left or right to decrease
-or decrease its value. When the lower or upper bound is reach, the value will stick to it,
-but dragging again from there makes it possible to go beyond the limit.</p></li>
+or decrease its value. When the lower or upper bound is reached, the value will stick to it,
+but dragging again from there makes it possible to go beyond the limit.</p>
+<p>In most cases, float parameters also support expressions (written in GLSL syntax),
+where other parameters and named parameters are accepted and must be prefixed with
+a dollar sign. This feature is useful when two parameters of the same node must
+depend on each other, or when several parameters of several nodes of a subgraph
+must be calculated from one or more named parameters.</p>
+<p>The <em>$time</em> variable can also be used in parameter expressions to define animations
+in generated shaders, but generated PBR materials will still be static (this feature
+could for example be used to export variations of the same material).</p>
+</li>
 <li><p><strong>size</strong> parameters are power of two values for the image size. They are used when
 actually storing data in a texture, or when performing resolution dependent calculations
 such as convolutions. They are shown as drop down list boxes.</p></li>
@@ -261,7 +275,7 @@ be used to split the closest edge), and deleted using the right mouse button.</p
 <h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this headline">¶</a></h2>
 <p>Nodes that provide random patterns have an implicit <strong>seed</strong> parameter. It is not possible
 to edit it directly, but moving the node in the graph will change its value. It is possible
-to freeze the seed value using the small dice button in the node’s title bar in the graph.</p>
+to freeze the seed value using the small die button in the node’s title bar in the graph.</p>
 <img alt="_images/random_node.png" class="align-center" src="_images/random_node.png" />
 <p>Subgraphs also have their seed and transmit it to their children unless not configured to
 do so, or the children’s seeds are frozen.</p>

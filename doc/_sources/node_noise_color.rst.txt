@@ -1,7 +1,7 @@
 Color Noise node
 ~~~~~~~~~~~~~~~~
 
-The **Color Noise** node outputs a randomly generated black and white texture.
+The **Color Noise** node outputs a randomly generated color texture.
 
 .. image:: images/node_noise_color.png
 	:align: center
@@ -14,7 +14,7 @@ The **Color Noise** node does not accept any input.
 Outputs
 +++++++
 
-The **Color Noise** node provides a black and white noise texture.
+The **Color Noise** node provides a color noise texture.
 
 Parameters
 ++++++++++

@@ -21,7 +21,7 @@ repeated pattern.
 Parameters
 ::::::::::
 
-The **sdRepeat** node accepts accepts *the number of lines and columns*
+The **sdRepeat** node accepts *the number of lines and columns*
 of the repeat grid, as well as the *rotation randomness* as parameters.
 
 Example images

@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,13 +34,14 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Filter nodes" href="nodes_filter.html" />
+    <link rel="next" title="Anisotropic noise node" href="node_noise_anisotropic.html" />
     <link rel="prev" title="Voronoi noise node" href="node_noise_voronoi.html" /> 
 </head>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -110,6 +115,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_noise_anisotropic.html">Anisotropic noise node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
@@ -206,7 +212,7 @@ FBM is obtained by repeating a noise pattern with smaller and smaller details.</
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <p>The FBM node accepts the following parameters:</p>
 <ul class="simple">
-<li><p>the noise type: value noise, fractal noise or cellular noise</p></li>
+<li><p>the noise type: value, perlin, simplex or cellular noise</p></li>
 <li><p>the <em>X</em> and <em>Y</em> scale of the first octave noise</p></li>
 <li><p>the number of iterations</p></li>
 <li><p>the persistance, i.e. the strength of each subsequent iteration</p></li>
@@ -230,7 +236,7 @@ are not changed.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="nodes_filter.html" class="btn btn-neutral float-right" title="Filter nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_noise_anisotropic.html" class="btn btn-neutral float-right" title="Anisotropic noise node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="node_noise_voronoi.html" class="btn btn-neutral float-left" title="Voronoi noise node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

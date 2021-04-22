@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -119,6 +124,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_tiler.html">Tiler node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_tiler_advanced.html">Advanced Tiler node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_circlesplatter.html">Circle Splatter node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_warpdilation.html">Warp Dilation node</a></li>
 </ul>
@@ -219,7 +225,7 @@
 <p>The <strong>Warp</strong> node has three parameters:</p>
 <ul class="simple">
 <li><p><em>mode</em>, that defines how the warp node calculates the offset it applies. <em>Slope</em> offsets by
-a distance calculated from the slope, and <em>Distance to top</em> offsets dy a distance calculated
+a distance calculated from the slope, and <em>Distance to top</em> offsets by a distance calculated
 from the slope and the distance to the top (this mode makes it posible to make all points
 of a slope get their value from the top, hence generating mosaic-like patterns).</p></li>
 <li><p><em>strength</em> to scale the warp effect.</p></li>

@@ -1,8 +1,8 @@
 2D Preview panel
-----------------
+^^^^^^^^^^^^^^^^
 
 The 2D preview panel shows a tiled preview of the first output of the selected
-node. The animated dashed lines show the bounds of the texture, so it is
+node. The corner lines show the bounds of the texture, so it is
 easy to check that the texture wraps correctly.
 
 .. image:: images/preview_2d.png

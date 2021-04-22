@@ -1,7 +1,7 @@
 Nodes library
 =============
 
-This section describes all nodes that can are provided in the base library
+This section describes all nodes that are provided in the base library
 to describe procedural materials.
 
 .. toctree::

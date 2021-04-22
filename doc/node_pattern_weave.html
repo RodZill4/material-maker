@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,6 +34,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -110,8 +115,9 @@
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_runes.html">Runes node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_pattern_iching.html">I Ching node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_runes_i_ching.html">I Ching node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_scratches.html">Scratches node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_beehive.html">Beehive node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_sine_wave.html">Sine Wave node</a></li>
 </ul>
 </li>
@@ -204,14 +210,16 @@
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Weave</strong> generates a single greyscale output texture.</p>
+<p>The <strong>Weave</strong> generates a greyscale heightmap for the pattern as well as masks
+for the horizontal and vertical stripes.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>Weave</strong> node accepts the following parameters:</p>
 <ul class="simple">
 <li><p>the <em>Size X</em> and <em>Size Y</em> parameters define the number of patterns that will be generated.</p></li>
-<li><p>the <em>Width</em> parameter is the width of stiches.</p></li>
+<li><p>the <em>Width X</em> and <em>Width Y</em> parameters define the width of stitches.</p></li>
+<li><p>the <em>Stitch</em> parameter sets the length of the stitch.</p></li>
 </ul>
 </div>
 <div class="section" id="example-images">

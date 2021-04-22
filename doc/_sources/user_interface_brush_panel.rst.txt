@@ -1,5 +1,5 @@
 Brush panel
------------
+^^^^^^^^^^^
 
 The Brush panel shows all brushes that are available in the brush base library
 and user library in a tree view. The brush user library contains all brushes

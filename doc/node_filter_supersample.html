@@ -13,6 +13,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -33,13 +34,14 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Transform nodes" href="nodes_transform.html" />
+    <link rel="next" title="Smooth Curvature node" href="node_filter_smoothcurvature.html" />
     <link rel="prev" title="Pixelize node" href="node_filter_pixelize.html" /> 
 </head>
 
@@ -58,13 +60,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.95
               </div>
             
           
@@ -100,11 +105,12 @@
 <li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_filter.html">Filter nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_brightness_contrast.html">BrightnessContrast node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_tones_range.html">Tones Range node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tonality.html">Tonality node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
@@ -114,8 +120,9 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_fast.html">Fast Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_directional.html">Directional Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_slope.html">Slope Blur node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
@@ -138,6 +145,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_smoothcurvature.html">Smooth Curvature node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_smoothcurvature2.html">Smooth Curvature 2 node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -246,7 +255,7 @@ of the operation.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="nodes_transform.html" class="btn btn-neutral float-right" title="Transform nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_filter_smoothcurvature.html" class="btn btn-neutral float-right" title="Smooth Curvature node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="node_filter_pixelize.html" class="btn btn-neutral float-left" title="Pixelize node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

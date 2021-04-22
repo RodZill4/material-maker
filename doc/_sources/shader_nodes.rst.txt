@@ -2,7 +2,7 @@ Shader nodes
 ------------
 
 Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
-but as shader programs that calculates
+but as shader programs that calculate
 
 * the color of a pixel from its coordinates for greyscale, color and RGBA outputs
 
@@ -19,7 +19,7 @@ Defining a shader node interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A shader node will always have outputs that will be connected to the inputs of other
-nodes. It may also (and will probably) have parameters that can be modified in the
+nodes. It may also (and probably will) have parameters that can be modified in the
 user interface, and inputs to receive data from other nodes.
 
 .. image:: images/node_editor_general.png
@@ -92,7 +92,7 @@ And generally, complex nodes mean complex output expressions. You may thus want 
 write simple expressions in the **Outputs** tab and keep complex code in the 3
 remaining tabs.
 
-The yellow document button can be used to define a name and add a tooltip to the input.
+The yellow document button can be used to define a name and add a tooltip to the output.
 
 .. image:: images/node_editor_outputs.png
 	:align: center
@@ -100,7 +100,7 @@ The yellow document button can be used to define a name and add a tooltip to the
 Adding the actual GLSL code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now the parameters, inputs and outputs are defined, the code that will actually
+Now that parameters, inputs and outputs are defined, the code that will actually
 generate the texture will be in the 3 remaining tabs.
 
 Global functions
