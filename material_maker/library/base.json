@@ -6016,6 +6016,15 @@
 			},
 			"tree_item": "Transform/Tiler/Advanced/HeightToAngle",
 			"type": "height_to_angle"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAA4dJREFUeJzVW0uOwjAMTSvEhiUnQELcgRuwgBuw72eDkBAX4ADsWrgDN+BMLFm2mVVHmcRJncRJM0iVBtt1XNefN07I9vs9z7KMiVee50ym6ei+sjHXguizvu9ZnudM/EA0Hd1XNuZaEH3GOZ/csCmdMOOcJ2HYVE74dUAKhk3hhD8OSMGw2E5QHJCCYTHXArtACobFWkvbBaY2LNZaxi4wpWGx1hrtAlMZFmstVBeYwrBYa0WHwuv1ml2vVy1er+uabK0kofDlcmGmuhMbmEWHwmMpFxuY5ZxzNlx93zPxu47mKrvb7UZ1NU1DshZWNioUPhwOKF0xC2NUKIzFHDZ1ydeunDLETbTT6aTwi6JgRVEo9LZtrWzwsSsaFN5sNkqBG75DaWhbnJOHwpCjdQ6QaSGdMNoFKMLufr8r/KIo/vwt3yN3g1DpEAUKz+dz5Y3KkTcGimxsSA4KY0LclCIuNmCfIQ9RWUV60zQKvyxLRXZIgzFQRJ0OwaEwpJ9ClioSgk+FIf261msja2OD8f4QldUUwmLFl+8/n8+KLhMookiHoFAYU9hE/vf7BfmmNLWxF90FbBSYZLE5PcYfS1Mbe9FdwDcdhtAV+VCll+9/v98KHwOKXNMhp1Jqotvofb1eKF1UTgg2FfZBdi6p42IvugvYRsIQsiK/qiq03q7rFH7btkEAGzgPoHCCzO+6Dq1XdpbIp7Y3yFQYCnUorCl1uNqbrVYrTnku5/F4BD3jU9c16Tkicigc4i2JH2p7yafC1AZSzQh0dKUL+BSaGDN96jVIobBNQaUssj5rkE6Fofyvqsqr8D2fT0Un5Usjg8IQ9qfQC/F1oMglHcinwuJl+ucHqxfaOKG0l2wq7NIRsGEL2Qilm61exjRbY7aehbA/9n7MG4P4YjfwiQSSqTDEFzc+fJ1QlmUw55JMhW1D1CVsB8Ox4zWsXu8DEtDc3yUUXdIBC4pMesmmwuLf0MaHrxN002RfveitMV14iWE4yFAClbG1lssl+3w+znqtiqBMk8GPKEMFVMZS63a7eek1IkGX9iSGP7UToG1033RwKoIYNBbKCdC13W6d9ToXQR0Qoaz4EB3iH49HZ73ZYrFQfjb3n3725ivrPQ8IVfFjyZLMA1J8MKws2Smx1B4MK0u6NZbSg2FlyU+JpfJgWNkgp8RSeDCsbLAfTEz9YFjZoKfE/oMTfgAW51XqlUyIBQAAAABJRU5ErkJggg==",
+			"name": "auto_tones",
+			"parameters": {
+				"param0": 10
+			},
+			"tree_item": "Filter/Tones/Auto Tones",
+			"type": "auto_tones"
 		}
 	],
 	"name": "Base library"
