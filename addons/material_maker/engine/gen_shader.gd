@@ -314,68 +314,78 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			string = replace_variables(string, variables)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, pending_textures=required_pending_textures }
 
+func generate_parameter_declarations(rv : Dictionary):
+	var genname = "o"+str(get_instance_id())
+	if has_randomness():
+		rv.defs += "uniform int seed_%s = %d;\n" % [ genname, get_seed() ]
+	for p in shader_model.parameters:
+		if p.type == "float" and parameters[p.name] is float:
+			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
+		elif p.type == "color":
+			rv.defs += "uniform float p_%s_%s_r = %.9f;\n" % [ genname, p.name, parameters[p.name].r ]
+			rv.defs += "uniform float p_%s_%s_g = %.9f;\n" % [ genname, p.name, parameters[p.name].g ]
+			rv.defs += "uniform float p_%s_%s_b = %.9f;\n" % [ genname, p.name, parameters[p.name].b ]
+			rv.defs += "uniform float p_%s_%s_a = %.9f;\n" % [ genname, p.name, parameters[p.name].a ]
+		elif p.type == "gradient":
+			var g = parameters[p.name]
+			if !(g is MMGradient):
+				g = MMGradient.new()
+				g.deserialize(parameters[p.name])
+			var params = g.get_shader_params(genname+"_"+p.name)
+			for sp in params.keys():
+				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
+			rv.defs += g.get_shader(genname+"_"+p.name)
+		elif p.type == "curve":
+			var g = parameters[p.name]
+			if !(g is MMCurve):
+				g = MMCurve.new()
+				g.deserialize(parameters[p.name])
+			var params = g.get_shader_params(genname+"_"+p.name)
+			for sp in params.keys():
+				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
+			rv.defs += g.get_shader(genname+"_"+p.name)
+	return rv
+
+func generate_input_declarations(rv : Dictionary, context : MMGenContext):
+	var genname = "o"+str(get_instance_id())
+	if shader_model.has("inputs"):
+		for i in range(shader_model.inputs.size()):
+			var input = shader_model.inputs[i]
+			if input.has("function") and input.function:
+				var source = get_source(i)
+				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
+				var local_context = MMGenContext.new(context)
+				var result = replace_input(string, local_context, input.name, input.type, source, input.default)
+				assert(! (result is GDScriptFunctionState))
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
+				# Add global definitions
+				for d in result.globals:
+					if rv.globals.find(d) == -1:
+						rv.globals.push_back(d)
+				# Add generated definitions
+				rv.defs += result.defs
+				# Add textures
+				for t in result.textures.keys():
+					rv.textures[t] = result.textures[t]
+				for t in result.pending_textures:
+					if rv.pending_textures.find(t) == -1:
+						rv.pending_textures.push_back(t)
+				rv.defs += "%s %s_input_%s(%s) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+				rv.defs += "%s\n" % result.code
+				rv.defs += "return %s;\n}\n" % result.string
+	return rv
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
 	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
 		var output = shader_model.outputs[output_index]
 		if !context.has_variant(self):
-			# Generate functions for gradients
-			if has_randomness():
-				rv.defs += "uniform int seed_%s = %d;\n" % [ genname, get_seed() ]
-			for p in shader_model.parameters:
-				if p.type == "float" and parameters[p.name] is float:
-					rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
-				elif p.type == "color":
-					rv.defs += "uniform float p_%s_%s_r = %.9f;\n" % [ genname, p.name, parameters[p.name].r ]
-					rv.defs += "uniform float p_%s_%s_g = %.9f;\n" % [ genname, p.name, parameters[p.name].g ]
-					rv.defs += "uniform float p_%s_%s_b = %.9f;\n" % [ genname, p.name, parameters[p.name].b ]
-					rv.defs += "uniform float p_%s_%s_a = %.9f;\n" % [ genname, p.name, parameters[p.name].a ]
-				elif p.type == "gradient":
-					var g = parameters[p.name]
-					if !(g is MMGradient):
-						g = MMGradient.new()
-						g.deserialize(parameters[p.name])
-					var params = g.get_shader_params(genname+"_"+p.name)
-					for sp in params.keys():
-						rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
-					rv.defs += g.get_shader(genname+"_"+p.name)
-				elif p.type == "curve":
-					var g = parameters[p.name]
-					if !(g is MMCurve):
-						g = MMCurve.new()
-						g.deserialize(parameters[p.name])
-					var params = g.get_shader_params(genname+"_"+p.name)
-					for sp in params.keys():
-						rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
-					rv.defs += g.get_shader(genname+"_"+p.name)
+			# Generate parameter declarations
+			rv = generate_parameter_declarations(rv)
 			# Generate functions for inputs
-			if shader_model.has("inputs"):
-				for i in range(shader_model.inputs.size()):
-					var input = shader_model.inputs[i]
-					if input.has("function") and input.function:
-						var source = get_source(i)
-						var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
-						var local_context = MMGenContext.new(context)
-						var result = replace_input(string, local_context, input.name, input.type, source, input.default)
-						assert(! (result is GDScriptFunctionState))
-						while result is GDScriptFunctionState:
-							result = yield(result, "completed")
-						# Add global definitions
-						for d in result.globals:
-							if rv.globals.find(d) == -1:
-								rv.globals.push_back(d)
-						# Add generated definitions
-						rv.defs += result.defs
-						# Add textures
-						for t in result.textures.keys():
-							rv.textures[t] = result.textures[t]
-						for t in result.pending_textures:
-							if rv.pending_textures.find(t) == -1:
-								rv.pending_textures.push_back(t)
-						rv.defs += "%s %s_input_%s(%s) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
-						rv.defs += "%s\n" % result.code
-						rv.defs += "return %s;\n}\n" % result.string
+			rv = generate_input_declarations(rv, context)
 			if shader_model.has("instance"):
 				var subst_output = subst(shader_model.instance, context, "")
 				assert(! (subst_output is GDScriptFunctionState))

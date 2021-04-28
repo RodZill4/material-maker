@@ -58,8 +58,7 @@ func update_material() -> void:
 				push_error("Unknown tesselated mesh type: %s" % mesh.get_class())
 	else:
 		material = preload("res://material_maker/panels/preview_3d/materials/spatial_material.tres").duplicate()
-		material.uv1_scale.x = uv_scale.x
-		material.uv1_scale.y = uv_scale.y
+		material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 		match mesh.get_class():
 			"CubeMesh", "PrismMesh":
 				mesh.subdivide_width = 0

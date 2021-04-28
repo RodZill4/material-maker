@@ -4,32 +4,13 @@ class_name MMGenMaterial
 
 var export_paths = {}
 
-var material : SpatialMaterial
-var shader_materials = {}
-var need_update = {}
-var need_render = {}
-var generated_textures = {}
 var updating : bool = false
 var update_again : bool = false
 var render_not_ready : bool = false
 
-const TEXTURE_LIST = [
-	{ port=0, texture="albedo", sources=[0] },
-	{ port=1, texture="orm", sources=[1, 2, 5] },
-	{ port=2, texture="emission", sources=[3] },
-	{ port=3, texture="normal", sources=[4] },
-	{ port=4, texture="depth", sources=[6] },
-	{ port=5, texture="sss", sources=[8] }
-]
-
-const INPUT_ALBEDO    : int = 0
-const INPUT_METALLIC  : int = 1
-const INPUT_ROUGHNESS : int = 2
-const INPUT_EMISSION  : int = 3
-const INPUT_NORMAL    : int = 4
-const INPUT_OCCLUSION : int = 5
-const INPUT_DEPTH     : int = 6
-const INPUT_SSS       : int = 8
+var preview_shader_code : String = ""
+var preview_textures = {}
+var preview_texture_dependencies = {}
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_SIZE_MIN = 4  # 16x16
@@ -42,13 +23,6 @@ const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
 
 func _ready() -> void:
-	for t in TEXTURE_LIST:
-		generated_textures[t.texture] = null
-		need_update[t.texture] = true
-		need_render[t.texture] = true
-		shader_materials[t.texture] = ShaderMaterial.new()
-		shader_materials[t.texture].shader = Shader.new()
-	material = SpatialMaterial.new()
 	add_to_group("preview")
 
 func accept_float_expressions() -> bool:
@@ -57,13 +31,12 @@ func accept_float_expressions() -> bool:
 func can_be_deleted() -> bool:
 	return false
 
-func toggle_editable() -> bool:
-	return false
-
 func get_type() -> String:
-	return "material"
+	return "material_export"
 
 func get_type_name() -> String:
+	if shader_model.has("name"):
+		return shader_model.name
 	return "Material"
 
 func get_output_defs() -> Array:
@@ -83,209 +56,117 @@ func update_preview() -> void:
 		graph_edit = graph_edit.get_parent()
 	if graph_edit != null and graph_edit.has_method("send_changed_signal"):
 		graph_edit.send_changed_signal()
+	update_textures()
 
 func set_parameter(p, v) -> void:
 	.set_parameter(p, v)
 	update_preview()
 
 func source_changed(input_index : int) -> void:
-	for t in TEXTURE_LIST:
-		if t.has("sources") and t.sources.find(input_index) != -1:
-			need_update[t.texture] = true
 	update_preview()
 
 func all_sources_changed() -> void:
-	for t in TEXTURE_LIST:
-		need_update[t.texture] = true
 	update_preview()
 
-func render_textures() -> void:
-	for t in TEXTURE_LIST:
-		var renderer
-		if t.has("port"):
-			if !need_update[t.texture]:
-				continue
-			var context : MMGenContext = MMGenContext.new()
-			var source = get_shader_code("uv", t.port, context)
-			while source is GDScriptFunctionState:
-				source = yield(source, "completed")
-			if source.empty():
-				source = DEFAULT_GENERATED_SHADER
-			shader_materials[t.texture].shader.code = mm_renderer.generate_shader(source)
-			# Get parameter values from the shader code
-			define_shader_float_parameters(shader_materials[t.texture].shader.code, shader_materials[t.texture])
-			# Set texture params
-			if source.has("textures"):
-				for k in source.textures.keys():
-					shader_materials[t.texture].set_shader_param(k, source.textures[k])
-		else:
-			generated_textures[t.texture] = null
-			need_update[t.texture] = false
-			continue
-		renderer = mm_renderer.request(self)
-		while renderer is GDScriptFunctionState:
-			renderer = yield(renderer, "completed")
-		renderer = renderer.render_material(self, shader_materials[t.texture], get_image_size(), true)
-		while renderer is GDScriptFunctionState:
-			renderer = yield(renderer, "completed")
-		if generated_textures[t.texture] == null:
-			generated_textures[t.texture] = ImageTexture.new()
-		var texture = generated_textures[t.texture]
-		renderer.copy_to_texture(texture)
-		renderer.release(self)
-		# To work, this must be set after calling `copy_to_texture()`
-		texture.flags |= ImageTexture.FLAG_ANISOTROPIC_FILTER
-		# Disable filtering for small textures, as they're considered to be used
-		# for a pixel art style
-		if texture.get_size().x <= 128:
-			texture.flags ^= ImageTexture.FLAG_FILTER
-		need_update[t.texture] = false
-
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	var do_update : bool = false
-	for t in TEXTURE_LIST:
-		if generated_textures[t.texture] != null:
-			for n in parameter_changes.keys():
-				for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
-					if p.name == n:
-						shader_materials[t.texture].set_shader_param(n, parameter_changes[n])
-						need_render[t.texture] = true
-						do_update = true
-						break
-	if do_update:
-		update_textures()
+	update_textures()
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true
-	var do_update : bool = false
-	for t in TEXTURE_LIST:
-		if generated_textures[t.texture] != null:
-			for p in VisualServer.shader_get_param_list(shader_materials[t.texture].shader.get_rid()):
-				if p.name == n:
-					need_render[t.texture] = true
-					do_update = true
-					break
-	if do_update:
-		update_textures()
+	update_textures()
 
 func update_textures() -> void:
+	var size = get_image_size()
 	update_again = true
 	if !updating:
-		var image_size = get_image_size()
-		updating = true
 		while update_again:
 			update_again = false
-			for t in TEXTURE_LIST:
-				if need_render[t.texture]:
-					var renderer = mm_renderer.request(self)
-					while renderer is GDScriptFunctionState:
-						renderer = yield(renderer, "completed")
-					renderer = renderer.render_material(self, shader_materials[t.texture], image_size, true)
-					while renderer is GDScriptFunctionState:
-						renderer = yield(renderer, "completed")
-					renderer.copy_to_texture(generated_textures[t.texture])
-					renderer.release(self)
-		updating = false
+			var image_size = get_image_size()
+			updating = true
+			for t in preview_textures.keys():
+				var result = render(self, preview_textures[t].output, size)
+				while result is GDScriptFunctionState:
+					result = yield(result, "completed")
+				# Abort rendering if material changed
+				if ! preview_textures.has(t):
+					result.release(self)
+					break
+				result.copy_to_texture(preview_textures[t].texture)
+				result.release(self)
+			updating = false
 
 func update_materials(material_list) -> void:
-	render_textures()
 	for m in material_list:
 		update_material(m)
 
-func get_generated_texture(slot, file_prefix = null) -> ImageTexture:
-	if file_prefix != null:
-		var file_name = "%s_%s.png" % [ file_prefix, slot ]
-		if File.new().file_exists(file_name):
-			var texture = load(file_name)
-			return texture
-		else:
-			return null
-	else:
-		return generated_textures[slot]
-
-func update_material(m, file_prefix = null) -> void:
+func update_material(m) -> void:
 	if m is SpatialMaterial:
-		# Make the material double-sided for better visiblity in the preview
-		m.params_cull_mode = SpatialMaterial.CULL_DISABLED
-		# Albedo
-		m.albedo_color = parameters.albedo_color
-		m.albedo_texture = get_generated_texture("albedo", file_prefix)
-		m.flags_albedo_tex_force_srgb = true
-		# Ambient occlusion
-		if get_source(INPUT_OCCLUSION) != null:
-			m.ao_enabled = true
-			m.ao_light_affect = parameters.ao
-			m.ao_texture = get_generated_texture("orm", file_prefix)
-			m.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
-		else:
-			m.ao_enabled = false
-		# Roughness
-		m.roughness = parameters.roughness
-		if get_source(INPUT_ROUGHNESS) != null:
-			m.roughness_texture = get_generated_texture("orm", file_prefix)
-			m.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
-		else:
-			m.roughness_texture = null
-		# Metallic
-		m.metallic = parameters.metallic
-		if get_source(INPUT_METALLIC) != null:
-			m.metallic_texture = get_generated_texture("orm", file_prefix)
-			m.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_BLUE
-		else:
-			m.metallic_texture = null
-		# Emission
-		if get_source(INPUT_EMISSION) != null:
-			m.emission_enabled = true
-			m.emission_energy = parameters.emission_energy
-			m.emission_texture = get_generated_texture("emission", file_prefix)
-		else:
-			m.emission_enabled = false
-		# Normal map
-		if get_source(INPUT_NORMAL) != null:
-			m.normal_enabled = true
-			m.normal_texture = get_generated_texture("normal", file_prefix)
-			m.normal_scale = parameters.normal
-		else:
-			m.normal_enabled = false
-		# Depth
-		if get_source(INPUT_DEPTH) != null and parameters.depth_scale > 0:
-			m.depth_enabled = true
-			m.depth_deep_parallax = true
-			# Increase level of detail for parallax occlusion mapping (the default is 32).
-			m.depth_max_layers = 64
-			m.depth_scale = parameters.depth_scale * 0.2
-			m.depth_texture = get_generated_texture("depth", file_prefix)
-		else:
-			m.depth_enabled = false
-		# Transparency
-		if parameters.has("flags_transparent"):
-			m.flags_transparent = parameters.flags_transparent
-			if m.flags_transparent:
-				m.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_ALWAYS
-				m.params_use_alpha_scissor = true
+		pass
+	elif m is ShaderMaterial:
+		m.shader.code = preview_shader_code
+		for t in preview_texture_dependencies.keys():
+			m.set_shader_param(t, preview_texture_dependencies[t])
+		for t in preview_textures.keys():
+			m.set_shader_param(t, preview_textures[t].texture)
+		update_textures()
+
+func update() -> void:
+	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
+	preview_shader_code = ""
+	preview_textures = {}
+	var context : MMGenContext = MMGenContext.new()
+	var texture_regexp : RegEx = RegEx.new()
+	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d)\\)")
+	# Generate parameter declarations
+	rv = generate_parameter_declarations(rv)
+	# Generate functions for inputs
+	rv = generate_input_declarations(rv, context)
+	# Generate shader
+	var generating : bool = false
+	var gen_buffer : String = ""
+	for l in shader_model.preview_shader.split("\n"):
+		if generating:
+			if l == "$end_generate":
+				var subst_code = subst(gen_buffer, context, "UV")
+				# Add global definitions
+				for d in subst_code.globals:
+					if rv.globals.find(d) == -1:
+						rv.globals.push_back(d)
+				# Add generated definitions
+				rv.defs += subst_code.defs
+				# Add generated code
+				preview_shader_code += subst_code.code+"\n"
+				preview_shader_code += subst_code.string+"\n"
+				# process textures
+				for t in subst_code.textures.keys():
+					rv.textures[t] = subst_code.textures[t]
+				for t in subst_code.pending_textures:
+					if rv.pending_textures.find(t) == -1:
+						rv.pending_textures.push_back(t)
+				generating = false
 			else:
-				m.params_depth_draw_mode = SpatialMaterial.DEPTH_DRAW_OPAQUE_ONLY
-				m.params_use_alpha_scissor = false
-		# Subsurface scattering
-		if get_source(INPUT_SSS) != null:
-			m.subsurf_scatter_enabled = true
-			m.subsurf_scatter_strength = parameters.sss
-			m.subsurf_scatter_texture = get_generated_texture("sss", file_prefix)
+				gen_buffer += l+"\n"
+		elif l == "$begin_generate":
+			generating = true
+			gen_buffer = ""
 		else:
-			m.subsurf_scatter_enabled = false
-	else:
-		m.set_shader_param("albedo", parameters.albedo_color)
-		m.set_shader_param("texture_albedo", get_generated_texture("albedo", file_prefix))
-		m.set_shader_param("texture_orm", get_generated_texture("orm", file_prefix))
-		m.set_shader_param("metallic", parameters.metallic)
-		m.set_shader_param("roughness", parameters.roughness)
-		m.set_shader_param("emission_energy", parameters.emission_energy)
-		m.set_shader_param("texture_emission", get_generated_texture("emission", file_prefix))
-		m.set_shader_param("normal_scale", parameters.normal)
-		m.set_shader_param("texture_normal", get_generated_texture("normal", file_prefix))
-		m.set_shader_param("depth_scale", parameters.depth_scale * 0.2)
-		m.set_shader_param("texture_depth", get_generated_texture("depth", file_prefix))
-		m.set_shader_param("ao_light_affect", parameters.ao)
+			var result = texture_regexp.search(l)
+			if result:
+				preview_textures[result.strings[1]] = { output=result.strings[2].to_int(), texture=ImageTexture.new() }
+			preview_shader_code += l+"\n"
+	var definitions : String
+	for d in rv.globals:
+		definitions += d+"\n"
+	definitions += rv.defs+"\n"
+	preview_shader_code = preview_shader_code.replace("$definitions", definitions)
+	"""
+	var file : File = File.new()
+	file.open("d:/test.shader", File.WRITE)
+	file.store_string(preview_shader_code)
+	file.close()
+	"""
+
+	preview_texture_dependencies = rv.textures
 
 # Export
 
@@ -439,7 +320,21 @@ func _serialize_data(data: Dictionary) -> Dictionary:
 	data.export_paths = export_paths
 	return data
 
+func _serialize(data: Dictionary) -> Dictionary:
+	._serialize(data)
+	data.export = {}
+	return data
+
 func _deserialize(data : Dictionary) -> void:
 	._deserialize(data)
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
+
+func edit(node) -> void:
+	if shader_model != null:
+		var edit_window = load("res://material_maker/windows/material_editor/material_editor.tscn").instance()
+		node.get_parent().add_child(edit_window)
+		edit_window.set_model_data(shader_model)
+		edit_window.connect("node_changed", node, "update_generator")
+		edit_window.connect("popup_hide", edit_window, "queue_free")
+		edit_window.popup_centered()

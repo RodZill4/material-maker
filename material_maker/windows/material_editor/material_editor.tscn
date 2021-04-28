@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material_maker/windows/node_editor/node_editor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/material_editor/material_editor.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://material_maker/fonts/hack.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 12
+font_data = SubResource( 1 )
+
+[node name="MaterialEditor" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Preview" type="TextEdit" parent="Sizer/Tabs" index="5"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+mouse_default_cursor_shape = 0
+custom_fonts/font = SubResource( 2 )
+syntax_highlighting = true
+show_line_numbers = true
+__meta__ = {
+"_editor_description_": ""
+}

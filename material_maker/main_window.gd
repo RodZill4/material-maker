@@ -231,7 +231,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -973,9 +973,7 @@ func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.render_textures()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		var status = gen_material.update()
 		for p in previews:
 			gen_material.update_materials(p.get_materials())
 
