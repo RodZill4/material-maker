@@ -9,9 +9,7 @@ func get_material_nodes() -> Array:
 
 func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed == true:
-		# modify the event so it's not handled by the GraphEdit node
-		event.pressed = false
-		# puts
+		accept_event()
 		var menu = PopupMenu.new()
 		for n in get_material_nodes():
 			menu.add_item(n.label)

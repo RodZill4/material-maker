@@ -111,8 +111,23 @@ func update_material(m) -> void:
 		update_textures()
 
 func update() -> void:
+	var result = process_shader(shader_model.preview_shader)
+	preview_shader_code = result.shader_code
+	preview_texture_dependencies = result.texture_dependencies
+	"""
+	var file : File = File.new()
+	file.open("d:/test.shader", File.WRITE)
+	file.store_string(preview_shader_code)
+	file.close()
+	"""
+
+
+
+
+
+func process_shader(shader_text : String):
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
-	preview_shader_code = ""
+	var shader_code = ""
 	preview_textures = {}
 	var context : MMGenContext = MMGenContext.new()
 	var texture_regexp : RegEx = RegEx.new()
@@ -124,7 +139,7 @@ func update() -> void:
 	# Generate shader
 	var generating : bool = false
 	var gen_buffer : String = ""
-	for l in shader_model.preview_shader.split("\n"):
+	for l in shader_text.split("\n"):
 		if generating:
 			if l == "$end_generate":
 				var subst_code = subst(gen_buffer, context, "UV")
@@ -135,8 +150,8 @@ func update() -> void:
 				# Add generated definitions
 				rv.defs += subst_code.defs
 				# Add generated code
-				preview_shader_code += subst_code.code+"\n"
-				preview_shader_code += subst_code.string+"\n"
+				shader_code += subst_code.code+"\n"
+				shader_code += subst_code.string+"\n"
 				# process textures
 				for t in subst_code.textures.keys():
 					rv.textures[t] = subst_code.textures[t]
@@ -153,20 +168,13 @@ func update() -> void:
 			var result = texture_regexp.search(l)
 			if result:
 				preview_textures[result.strings[1]] = { output=result.strings[2].to_int(), texture=ImageTexture.new() }
-			preview_shader_code += l+"\n"
+			shader_code += l+"\n"
 	var definitions : String
 	for d in rv.globals:
 		definitions += d+"\n"
 	definitions += rv.defs+"\n"
-	preview_shader_code = preview_shader_code.replace("$definitions", definitions)
-	"""
-	var file : File = File.new()
-	file.open("d:/test.shader", File.WRITE)
-	file.store_string(preview_shader_code)
-	file.close()
-	"""
 
-	preview_texture_dependencies = rv.textures
+	return { shader_code = shader_code.replace("$definitions", definitions), texture_dependencies=rv.textures }
 
 # Export
 
@@ -181,7 +189,7 @@ func get_export_path(profile : String) -> String:
 		return export_paths[profile]
 	return ""
 
-func subst_string(s : String, export_context : Dictionary) -> String:
+static func subst_string(s : String, export_context : Dictionary) -> String:
 	var modified : bool = true
 	while modified:
 		modified = false
@@ -213,26 +221,25 @@ func subst_string(s : String, export_context : Dictionary) -> String:
 				parenthesis_level -= 1
 	return s
 
-func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+static func get_template_text(template : String) -> String:
 	var in_file = File.new()
-	var out_file = File.new()
 	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
 		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
-			print("Cannot find template file "+template)
-			return false
-	Directory.new().remove(file_name)
-	if out_file.open(file_name, File.WRITE) != OK:
-		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
-		return false
+			return template
+	return in_file.get_as_text()
+
+static func process_conditionals(template : String) -> String:
+	var processed : String = ""
 	var skip_state : Array = [ false ]
-	while ! in_file.eof_reached():
-		var l = in_file.get_line()
-		if l.left(4) == "$if ":
-			var condition = subst_string(l.right(4), export_context)
+	for l in template.split("\n"):
+		if l == "":
+			continue
+		elif l.left(4) == "$if ":
+			var condition = l.right(4)
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
-				print("Error in expression "+condition+": "+expr.get_error_text())
+				#print("Error in expression "+condition+": "+expr.get_error_text())
 				continue
 			skip_state.push_back(!expr.execute())
 		elif l.left(3) == "$fi":
@@ -240,7 +247,30 @@ func create_file_from_template(template : String, file_name : String, export_con
 		elif l.left(5) == "$else":
 			skip_state.push_back(!skip_state.pop_back())
 		elif ! skip_state.back():
-			out_file.store_line(subst_string(l, export_context))
+			processed += l
+			processed += "\n"
+	return processed
+
+static func process_template(template : String, export_context : Dictionary) -> String:
+	var processed : String = ""
+	var skip_state : Array = [ false ]
+	for l in template.split("\n"):
+		if l == "":
+			continue
+		processed += subst_string(l, export_context)
+		processed += "\n"
+	return processed
+
+func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+	template = get_template_text(template)
+	var out_file = File.new()
+	Directory.new().remove(file_name)
+	if out_file.open(file_name, File.WRITE) != OK:
+		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
+		return false
+	var processed_template = process_conditionals(process_template(template, export_context))
+	processed_template = process_shader(processed_template).shader_code
+	out_file.store_string(processed_template)
 	return true
 
 func export_material(prefix : String, profile : String, size : int = 0) -> void:
