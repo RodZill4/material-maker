@@ -37,9 +37,30 @@
 			{
 				"default": "0.0",
 				"function": true,
-				"label": "",
+				"label": "Distance",
 				"name": "distance",
-				"type": "sdf3d"
+				"type": "sdf3dc"
+			},
+			{
+				"default": "vec3(1.0)",
+				"function": true,
+				"label": "Albedo",
+				"name": "albedo",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(0.0)",
+				"function": true,
+				"label": "Metallic",
+				"name": "metallic",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(1.0)",
+				"function": true,
+				"label": "Roughness",
+				"name": "roughness",
+				"type": "tex3d"
 			}
 		],
 		"instance": "",
@@ -50,7 +71,7 @@
 		"parameters": [
 
 		],
-		"preview_shader": "shader_type spatial;\nrender_mode unshaded;\n//render_mode unshaded, world_vertex_coords; // to raymarch in world space\n\nvarying float elapsed_time;\n\n\n\n//---\n\nfloat rand(vec2 x) {\n    return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5453);\n}\n\nvec2 rand2(vec2 x) {\n    return fract(cos(mod(vec2(dot(x, vec2(13.9898, 8.141)),\n\t\t\t\t\t\t      dot(x, vec2(3.4562, 17.398))), vec2(3.14))) * 43758.5453);\n}\n\nvec3 rand3(vec2 x) {\n    return fract(cos(mod(vec3(dot(x, vec2(13.9898, 8.141)),\n\t\t\t\t\t\t\t  dot(x, vec2(3.4562, 17.398)),\n                              dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);\n}\n\nvec3 rgb2hsv(vec3 c) {\n\tvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n\tvec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);\n\tvec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);\n\n\tfloat d = q.x - min(q.w, q.y);\n\tfloat e = 1.0e-10;\n\treturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c) {\n\tvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n\tvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n\treturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\n\n\nvarying vec3 world_camera;\nvarying vec3 world_position;\n\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n\n$definitions\n\nfloat GetDist(vec3 p) {\n\n$begin_generate\n\tfloat d = $distance(p);\n$end_generate\n\n\treturn d;\n}\n\nfloat RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++)\n\t{\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS;\n\t\t\n\t\tif (dS < SURF_DIST || dO > MAX_DIST)\n\t\t\tbreak;\n\t}\n\treturn dO;\n}\n\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p) - vec3(\n\t\tGetDist(p - e.xyy),\n\t\tGetDist(p - e.yxy),\n\t\tGetDist(p - e.yyx)\n\t);\n\t\n\treturn normalize(n);\n}\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\n\nvoid fragment() {\n\t\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec3 col;\n\t\n\tfloat d = RayMarch(ro, rd);\n\n\tif (d >= MAX_DIST)\n\t\tdiscard;\n\telse\n\t{\n\t\tvec3 p = ro + rd * d;\n\t\tvec3 n = GetNormal(p);\n\t\tcol = n.rgb;\n\t}\n\t\n\tALBEDO = col;\n}\n"
+		"preview_shader": "shader_type spatial;\n//render_mode unshaded, world_vertex_coords; // to raymarch in world space\n\nvarying float elapsed_time;\n\n\n\n//---\n\nfloat rand(vec2 x) {\n    return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5453);\n}\n\nvec2 rand2(vec2 x) {\n    return fract(cos(mod(vec2(dot(x, vec2(13.9898, 8.141)),\n\t\t\t\t\t\t      dot(x, vec2(3.4562, 17.398))), vec2(3.14))) * 43758.5453);\n}\n\nvec3 rand3(vec2 x) {\n    return fract(cos(mod(vec3(dot(x, vec2(13.9898, 8.141)),\n\t\t\t\t\t\t\t  dot(x, vec2(3.4562, 17.398)),\n                              dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);\n}\n\nvec3 rgb2hsv(vec3 c) {\n\tvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n\tvec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);\n\tvec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);\n\n\tfloat d = q.x - min(q.w, q.y);\n\tfloat e = 1.0e-10;\n\treturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv2rgb(vec3 c) {\n\tvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n\tvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n\treturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n\n\n\nvarying vec3 world_camera;\nvarying vec3 world_position;\n\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n\n$definitions\n\nvec2 GetDist(vec3 p) {\n\n$begin_generate\n\tvec2 d = $distance(p);\n$end_generate\n\n\treturn d;\n}\n\nvec2 RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat color = 0.0;\n\tvec2 dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++)\n\t{\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS.x;\n\t\t\n\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {\n\t\t\tcolor = dS.y;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec2(dO, color);\n}\n\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p).x - vec3(\n\t\tGetDist(p - e.xyy).x,\n\t\tGetDist(p - e.yxy).x,\n\t\tGetDist(p - e.yyx).x\n\t);\n\t\n\treturn normalize(n);\n}\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\n\nvoid fragment() {\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec2 rm  = RayMarch(ro, rd);\n\tfloat d = rm.x;\n\n\tif (d >= MAX_DIST)\n\t\tdiscard;\n\telse\n\t{\n\t\tvec3 p = ro + rd * d;\n$begin_generate\n\t\tALBEDO = $albedo(vec4(p, rm.y));\n\t\tROUGHNESS = $roughness(vec4(p, rm.y)).x;\n\t\tMETALLIC = $metallic(vec4(p, rm.y)).x;\n$end_generate\n\t\tNORMAL = (vec4(GetNormal(p), 1.0)*CAMERA_MATRIX).xyz;\n\t}\n}\n"
 	},
 	"type": "material_export"
 }
