@@ -120,7 +120,7 @@ func set_model_data(data) -> void:
 	if data.has("preview_shader"):
 		$Sizer/Tabs/Preview.text = data.preview_shader
 	if data.has("exports"):
-		exports = data.exports.duplicate()
+		exports = data.exports.duplicate(true)
 		update_export_list()
 		select_export(0)
 
