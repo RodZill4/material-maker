@@ -139,6 +139,7 @@ func process_shader(shader_text : String):
 	# Generate shader
 	var generating : bool = false
 	var gen_buffer : String = ""
+	var gen_options : Array = []
 	for l in shader_text.split("\n"):
 		if generating:
 			if l == "$end_generate":
@@ -150,8 +151,12 @@ func process_shader(shader_text : String):
 				# Add generated definitions
 				rv.defs += subst_code.defs
 				# Add generated code
-				shader_code += subst_code.code+"\n"
-				shader_code += subst_code.string+"\n"
+				var new_code : String = subst_code.code+"\n"
+				new_code += subst_code.string+"\n"
+				for o in gen_options:
+					if has_method("process_option_"+o):
+						new_code = call("process_option_"+o, new_code)
+				shader_code += new_code
 				# process textures
 				for t in subst_code.textures.keys():
 					rv.textures[t] = subst_code.textures[t]
@@ -161,9 +166,10 @@ func process_shader(shader_text : String):
 				generating = false
 			else:
 				gen_buffer += l+"\n"
-		elif l == "$begin_generate":
+		elif l.find("$begin_generate") != -1:
 			generating = true
 			gen_buffer = ""
+			gen_options = l.replace(" ", "").replace("$begin_generate", "").split(",")
 		else:
 			var result = texture_regexp.search(l)
 			if result:
@@ -173,8 +179,47 @@ func process_shader(shader_text : String):
 	for d in rv.globals:
 		definitions += d+"\n"
 	definitions += rv.defs+"\n"
+	
+	shader_text = shader_code
+	shader_code = ""
+	for l in shader_text.split("\n"):
+		if l.find("$definitions") != -1:
+			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
+			print("gen options: "+str(gen_options))
+			for o in gen_options:
+				if has_method("process_option_"+o):
+					definitions = call("process_option_"+o, definitions)
+			shader_code += definitions
+			shader_code += "\n"
+		else:
+			shader_code += l
+			shader_code += "\n"
 
-	return { shader_code = shader_code.replace("$definitions", definitions), texture_dependencies=rv.textures }
+	return { shader_code = shader_code, texture_dependencies=rv.textures }
+
+# Export filters
+
+func process_option_hlsl(s : String) -> String:
+	s = s.replace("vec2(", "tofloat2(")
+	s = s.replace("vec3(", "tofloat3(")
+	s = s.replace("vec2", "float2")
+	s = s.replace("vec3", "float3")
+	s = s.replace("vec4", "float4")
+	s = s.replace("mat2(", "tofloat2x2(")
+	s = s.replace("mat2", "float2x2")
+	s = s.replace("mod", "fmod")
+	s = s.replace("mix", "lerp")
+	s = s.replace("fract", "frac")
+	s = s.replace("uniform", "static const")
+	s = s.replace("elapsed_time", "_Time.y")
+	var re : RegEx = RegEx.new()
+	re.compile("(\\w+)\\s*\\*=\\s*tofloat2x2([^;]+);")
+	while true:
+		var m : RegExMatch = re.search(s)
+		if m == null:
+			break
+		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
+	return s
 
 # Export
 
