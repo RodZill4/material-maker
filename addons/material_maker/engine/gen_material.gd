@@ -21,9 +21,13 @@ const TEXTURE_SIZE_MAX = 13  # 8192x8192
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
+var timer : Timer
 
 func _ready() -> void:
 	add_to_group("preview")
+	timer = Timer.new()
+	add_child(timer)
+	timer.connect("timeout", self, "update_textures")
 
 func accept_float_expressions() -> bool:
 	return false
@@ -56,7 +60,7 @@ func update_preview() -> void:
 		graph_edit = graph_edit.get_parent()
 	if graph_edit != null and graph_edit.has_method("send_changed_signal"):
 		graph_edit.send_changed_signal()
-	update_textures()
+	schedule_update_textures()
 
 func set_parameter(p, v) -> void:
 	.set_parameter(p, v)
@@ -69,11 +73,16 @@ func all_sources_changed() -> void:
 	update_preview()
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	update_textures()
+	schedule_update_textures()
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true
-	update_textures()
+	schedule_update_textures()
+
+func schedule_update_textures() -> void:
+	if timer != null:
+		timer.one_shot = true
+		timer.start(0.2)
 
 func update_textures() -> void:
 	var size = get_image_size()
