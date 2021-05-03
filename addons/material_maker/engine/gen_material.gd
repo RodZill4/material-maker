@@ -123,16 +123,6 @@ func update() -> void:
 	var result = process_shader(shader_model.preview_shader)
 	preview_shader_code = result.shader_code
 	preview_texture_dependencies = result.texture_dependencies
-	"""
-	var file : File = File.new()
-	file.open("d:/test.shader", File.WRITE)
-	file.store_string(preview_shader_code)
-	file.close()
-	"""
-
-
-
-
 
 func process_shader(shader_text : String):
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
@@ -184,7 +174,7 @@ func process_shader(shader_text : String):
 			if result:
 				preview_textures[result.strings[1]] = { output=result.strings[2].to_int(), texture=ImageTexture.new() }
 			shader_code += l+"\n"
-	var definitions : String
+	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
 	for d in rv.globals:
 		definitions += d+"\n"
 	definitions += rv.defs+"\n"
@@ -197,7 +187,7 @@ func process_shader(shader_text : String):
 			print("gen options: "+str(gen_options))
 			for o in gen_options:
 				if has_method("process_option_"+o):
-					definitions = call("process_option_"+o, definitions)
+					definitions = call("process_option_"+o, definitions, true)
 			shader_code += definitions
 			shader_code += "\n"
 		else:
@@ -208,7 +198,7 @@ func process_shader(shader_text : String):
 
 # Export filters
 
-func process_option_hlsl(s : String) -> String:
+func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
 	s = s.replace("vec2", "float2")
@@ -228,6 +218,8 @@ func process_option_hlsl(s : String) -> String:
 		if m == null:
 			break
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
+	if is_declaration:
+		s = get_template_text("hlsl_defs.tmpl")+"\n"+s
 	return s
 
 # Export
