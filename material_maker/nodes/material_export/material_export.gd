@@ -19,6 +19,7 @@ func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 		menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
 
 func _on_menu_id_pressed(id : int) -> void:
-	print(get_material_nodes()[id])
 	yield(get_tree(), "idle_frame")
-	update_generator(mm_loader.predefined_generators[get_material_nodes()[id].name].shader_model)
+	generator.model = get_material_nodes()[id].name
+	generator.editable = false
+	update_generator(mm_loader.predefined_generators[generator.model].shader_model)

@@ -78,6 +78,8 @@ func select_file(i : int) -> void:
 				if template != f.template:
 					f.template = template
 				$Sizer/Tabs/Export/Edit/File/template.text = template
+			"buffers":
+				$Sizer/Tabs/Export/Edit/File/Common/type.select(2)
 
 func _on_name_text_entered(new_text):
 	var e : String = export_target.get_item_text(export_target.selected)
@@ -101,6 +103,10 @@ func _on_type_item_selected(index):
 		1:
 			exports[e].files[i].type = "template"
 			exports[e].files[i].template = ""
+			exports[e].files[i].erase("output")
+		2:
+			exports[e].files[i].type = "buffers"
+			exports[e].files[i].erase("template")
 			exports[e].files[i].erase("output")
 	select_file(i)
 

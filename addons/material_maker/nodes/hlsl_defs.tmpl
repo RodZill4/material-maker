@@ -1,18 +1,18 @@
-float2 tofloat2(float x) {
+inline float2 tofloat2(float x) {
     return float2(x, x);
 }
-float2 tofloat2(float x, float y) {
+inline float2 tofloat2(float x, float y) {
     return float2(x, y);
 }
-float3 tofloat3(float x) {
+inline float3 tofloat3(float x) {
     return float3(x, x, x);
 }
-float3 tofloat3(float x, float y, float z) {
+inline float3 tofloat3(float x, float y, float z) {
     return float3(x, y, z);
 }
-float3 tofloat3(float x, float2 yz) {
+inline float3 tofloat3(float x, float2 yz) {
     return float3(x, yz.x, yz.y);
 }
-float2x2 tofloat2x2(float2 v1, float2 v2) {
+inline float2x2 tofloat2x2(float2 v1, float2 v2) {
     return float2x2(v1.x, v1.y, v2.x, v2.y);
 }

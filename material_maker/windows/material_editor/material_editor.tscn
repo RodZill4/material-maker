@@ -59,6 +59,7 @@ __meta__ = {
 }
 
 [node name="Export" type="VBoxContainer" parent="Sizer/Tabs" index="6"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -191,7 +192,7 @@ margin_right = 738.0
 margin_bottom = 76.0
 size_flags_horizontal = 3
 text = "Texture"
-items = [ "Texture", null, false, 0, null, "Template", null, false, 1, null ]
+items = [ "Texture", null, false, 0, null, "Template", null, false, 1, null, "Buffers", null, false, 2, null ]
 selected = 0
 
 [node name="LabelOutput" type="Label" parent="Sizer/Tabs/Export/Edit/File/Common" index="6"]

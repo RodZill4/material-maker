@@ -184,7 +184,6 @@ func process_shader(shader_text : String):
 	for l in shader_text.split("\n"):
 		if l.find("$definitions") != -1:
 			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
-			print("gen options: "+str(gen_options))
 			for o in gen_options:
 				if has_method("process_option_"+o):
 					definitions = call("process_option_"+o, definitions, true)
@@ -222,6 +221,17 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 		s = get_template_text("hlsl_defs.tmpl")+"\n"+s
 	return s
 
+func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
+	s = s.replace("uniform float", "const float")
+	return s
+
+func process_option_rename_buffers(s : String, is_declaration : bool = false) -> String:
+	var index : int = 1
+	for t in preview_texture_dependencies.keys():
+		s = s.replace(t, "texture_%d" % index)
+		index += 1
+	return s
+
 # Export
 
 func get_export_profiles() -> Array:
@@ -244,11 +254,13 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 			if new_s != s:
 				s = new_s
 				modified = true
+	var search_position = 0
 	while (true):
 		var search_string = "$(expr:"
-		var position = s.find(search_string)
+		var position = s.find(search_string, search_position)
 		if position == -1:
 			break
+		search_position = position+1
 		var parenthesis_level = 0
 		var expr_begin = position+search_string.length()
 		for i in range(expr_begin, s.length()):
@@ -261,7 +273,9 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 					var error = expr.parse(expression, [])
 					if error == OK:
 						s = s.replace(s.substr(position, i+1-position), str(expr.execute()))
-					else:
+					elif false:
+						print("EXPRESSION ERROR ("+expression+")")
+						print("error: "+str(error))
 						s = s.replace(s.substr(position, i+1-position), "EXPRESSION ERROR ("+expression+")")
 					break
 				parenthesis_level -= 1
@@ -307,6 +321,28 @@ static func process_template(template : String, export_context : Dictionary) -> 
 		processed += "\n"
 	return processed
 
+func process_buffers(template : String) -> String:
+	var processed : String = ""
+	var generating : bool = false
+	var gen_buffer : String = ""
+	var gen_options : Array = []
+	for l in template.split("\n"):
+		if generating:
+			if l == "$end_buffers":
+				var index : int = 1
+				for t in preview_texture_dependencies.keys():
+					processed += subst_string(gen_buffer, { "$(buffer_index)":str(index) })
+					index += 1
+				generating = false
+			else:
+				gen_buffer += l+"\n"
+		elif l == "$begin_buffers":
+			generating = true
+			gen_buffer = ""
+		else:
+			processed += l+"\n"
+	return processed
+
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	template = get_template_text(template)
 	var out_file = File.new()
@@ -314,7 +350,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	if out_file.open(file_name, File.WRITE) != OK:
 		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
 		return false
-	var processed_template = process_conditionals(process_template(template, export_context))
+	var processed_template = process_buffers(process_conditionals(process_template(template, export_context)))
 	processed_template = process_shader(processed_template).shader_code
 	out_file.store_string(processed_template)
 	return true
@@ -390,6 +426,13 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 				var file_name = subst_string(f.file_name, export_context)
 				create_file_from_template(f.template, file_name, file_export_context)
+			"buffers":
+				var index : int = 1
+				for t in preview_texture_dependencies.keys():
+					var file_name = subst_string(f.file_name, export_context)
+					file_name = file_name.replace("$(buffer_index)", str(index))
+					preview_texture_dependencies[t].get_data().save_png(file_name)
+					index += 1
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
