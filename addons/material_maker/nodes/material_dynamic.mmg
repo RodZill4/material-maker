@@ -3,7 +3,8 @@
 
 	},
 	"export_paths": {
-		"Godot": "D:/Dev/Godot/material-maker-dev/test"
+		"Godot": "D:/Dev/Godot/material-maker-dev/test",
+		"Unity": "D:/Dev/Unity/New Unity Project/Assets/test2"
 	},
 	"name": "material_dynamic",
 	"node_position": {
@@ -55,8 +56,12 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n\t\tfloat atan(float x, float y) {\n\t\t\treturn 3.141592-atan2(x, y);\n\t\t}\n\n$definitions hlsl\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
+						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n\t\tfloat atan(float x, float y) {\n\t\t\treturn 3.141592-atan2(x, y);\n\t\t}\n$definitions hlsl,rename_buffers\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl,rename_buffers\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n\t\t\to.Normal = $normal_tex(uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
 						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
 					}
 				]
 			}

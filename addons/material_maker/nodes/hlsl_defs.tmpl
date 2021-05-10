@@ -1,3 +1,6 @@
+inline float4 textureLod(sampler2D tex, float2 uv, float lod) {
+    return tex2D(tex, uv);
+}
 inline float2 tofloat2(float x) {
     return float2(x, x);
 }
