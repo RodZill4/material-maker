@@ -62,13 +62,13 @@ func select_file(i : int) -> void:
 		$Sizer/Tabs/Export/Edit/File/Common/conditions.text = f.conditions if f.has("conditions") else ""
 		$Sizer/Tabs/Export/Edit/File/Common/LabelOutput.visible = (f.type == "texture")
 		$Sizer/Tabs/Export/Edit/File/Common/output.visible = (f.type == "texture")
-		$Sizer/Tabs/Export/Edit/File/template.visible = (f.type == "template")
+		$Sizer/Tabs/Export/Edit/File/template.visible = (f.type == "template" || f.type == "buffer_templates")
 		match f.type:
 			"texture":
 				$Sizer/Tabs/Export/Edit/File/Common/type.select(0)
 				$Sizer/Tabs/Export/Edit/File/Common/output.value = f.output
-			"template":
-				$Sizer/Tabs/Export/Edit/File/Common/type.select(1)
+			"template","buffer_templates":
+				$Sizer/Tabs/Export/Edit/File/Common/type.select(1 if f.type == "template" else 3)
 				var file_export_context = {}
 				if f.has("file_params"):
 					for p in f.file_params.keys():
@@ -107,6 +107,10 @@ func _on_type_item_selected(index):
 		2:
 			exports[e].files[i].type = "buffers"
 			exports[e].files[i].erase("template")
+			exports[e].files[i].erase("output")
+		3:
+			exports[e].files[i].type = "buffer_templates"
+			exports[e].files[i].template = ""
 			exports[e].files[i].erase("output")
 	select_file(i)
 

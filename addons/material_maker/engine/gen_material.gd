@@ -3,6 +3,7 @@ extends MMGenShader
 class_name MMGenMaterial
 
 var export_paths = {}
+var uids = {}
 
 var updating : bool = false
 var update_again : bool = false
@@ -130,7 +131,7 @@ func process_shader(shader_text : String):
 	preview_textures = {}
 	var context : MMGenContext = MMGenContext.new()
 	var texture_regexp : RegEx = RegEx.new()
-	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d)\\)")
+	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d+)\\)")
 	# Generate parameter declarations
 	rv = generate_parameter_declarations(rv)
 	# Generate functions for inputs
@@ -343,6 +344,31 @@ func process_buffers(template : String) -> String:
 			processed += l+"\n"
 	return processed
 
+func get_uid(index : int) -> String:
+	if ! uids.has(index):
+		var uid : String = ""
+		var r = []
+		for _k in range(16):
+			r.append(randi() & 255)
+		r[6] = (r[6] & 0x0f) | 0x40
+		r[8] = (r[8] & 0x3f) | 0x80
+		for k in range(16):
+# warning-ignore:unassigned_variable_op_assign
+			uid += '%02x' % r[k]
+		uids[index] = uid
+	return uids[index]
+
+func process_uids(template : String) -> String:
+	var uid_regexp : RegEx = RegEx.new()
+	uid_regexp.compile("\\$uid\\((\\w+)\\)")
+	while true:
+		var result = uid_regexp.search(template)
+		if ! result:
+			break
+		var uid = get_uid(int(result.strings[1]))
+		template = template.replace(result.strings[0], uid)
+	return template
+
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	template = get_template_text(template)
 	var out_file = File.new()
@@ -350,7 +376,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	if out_file.open(file_name, File.WRITE) != OK:
 		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
 		return false
-	var processed_template = process_buffers(process_conditionals(process_template(template, export_context)))
+	var processed_template = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
 	processed_template = process_shader(processed_template).shader_code
 	out_file.store_string(processed_template)
 	return true
@@ -380,18 +406,6 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				export_context["$(param:"+p.name+".a)"] = str(value.a)
 			_:
 				print(p.type+" not supported in material")
-	if shader_model.exports[profile].has("uids"):
-		for i in range(shader_model.exports[profile].uids):
-			var uid : String
-			var r = []
-			for _k in range(16):
-				r.append(randi() & 255)
-			r[6] = (r[6] & 0x0f) | 0x40
-			r[8] = (r[8] & 0x3f) | 0x80
-			for k in range(16):
-# warning-ignore:unassigned_variable_op_assign
-				uid += '%02x' % r[k]
-			export_context["$(uid:"+str(i)+")"] = uid
 	for f in shader_model.exports[profile].files:
 		if f.has("conditions"):
 			var condition = subst_string(f.conditions, export_context)
@@ -433,10 +447,23 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					preview_texture_dependencies[t].get_data().save_png(file_name)
 					index += 1
+			"buffer_templates":
+				var index : int = 1
+				for t in preview_texture_dependencies.keys():
+					var file_export_context = export_context.duplicate()
+					file_export_context["$(buffer_index)"] = str(index)
+					if f.has("file_params"):
+						for p in f.file_params.keys():
+							file_export_context["$(file_param:"+p+")"] = f.file_params[p]
+					var file_name = subst_string(f.file_name, export_context)
+					file_name = file_name.replace("$(buffer_index)", str(index))
+					create_file_from_template(f.template, file_name, file_export_context)
+					index += 1
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
 	data.export_paths = export_paths
+	data.uids = uids
 	return data
 
 func _serialize(data: Dictionary) -> Dictionary:
@@ -448,6 +475,8 @@ func _deserialize(data : Dictionary) -> void:
 	._deserialize(data)
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
+	if data.has("uids"):
+		uids = data.uids.duplicate()
 
 func edit(node) -> void:
 	if shader_model != null:
