@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/tools/painter/shaders/texture2view.shader" type="Shader" id=1]
 [ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
@@ -7,12 +7,16 @@
 
 [sub_resource type="CubeMesh" id=1]
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.501961, 0.501961, 0, 1 )
+
+[sub_resource type="CubeMesh" id=3]
+material = SubResource( 2 )
 size = Vector3( 1, 1, 1 )
 
-[sub_resource type="ViewportTexture" id=3]
+[sub_resource type="ViewportTexture" id=4]
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=5]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
 shader_param/seams_multiplier = 0.06125
@@ -22,7 +26,7 @@ shader_param/z_near = 0.833974
 shader_param/z_far = 10.2641
 shader_param/aspect = 1.83214
 shader_param/uv_tolerance = 0.01
-shader_param/view2texture = SubResource( 3 )
+shader_param/view2texture = SubResource( 4 )
 
 [node name="Painter" type="Node" groups=[
 "preview",
@@ -60,8 +64,8 @@ current = true
 
 [node name="PaintedMesh" type="MeshInstance" parent="Texture2View"]
 transform = Transform( 1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0 )
-mesh = SubResource( 2 )
-material/0 = SubResource( 4 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 5 )
 
 [node name="AlbedoPaint" parent="." instance=ExtResource( 7 )]
 
@@ -69,6 +73,8 @@ material/0 = SubResource( 4 )
 shader_prefix = "paint_mr"
 
 [node name="EmissionPaint" parent="." instance=ExtResource( 7 )]
+
+[node name="NormalPaint" parent="." instance=ExtResource( 7 )]
 
 [node name="DepthPaint" parent="." instance=ExtResource( 7 )]
 
