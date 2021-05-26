@@ -3,25 +3,26 @@ extends Node
 
 export(NodePath) var painter = null
 
+
 var shaders = []
 
 var texture_size = 0
 var layers : Array = []
 var selected_layer : Layer
 
-onready var tree = $Tree
 onready var albedo = $Albedo
 onready var metallic = $Metallic
 onready var roughness = $Roughness
-onready var mr = $MR
 onready var emission = $Emission
 onready var normal = $Normal
 onready var depth = $Depth
 onready var painter_node = get_node(painter) if painter != null else null
 
+"""
 onready var nm_viewport = $NormalMap
 onready var nm_rect = $NormalMap/Rect
 onready var nm_material = $NormalMap/Rect.get_material()
+"""
 
 onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
 
@@ -31,7 +32,7 @@ const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/l
 const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
 const LAYER_TYPES : Array = [ LayerPaint, LayerProcedural, LayerMask ]
 
-const CHANNELS : Array = [ "albedo", "mr", "emission", "normal", "depth" ]
+const CHANNELS : Array = [ "albedo", "metallic", "roughness", "emission", "normal", "depth" ]
 
 
 signal layer_selected(l)
@@ -53,19 +54,16 @@ func set_texture_size(s : float):
 	albedo.size = size
 	metallic.size = size
 	roughness.size = size
-	mr.size = size
-	$MR/Metallic.texture = metallic.get_texture()
-	$MR/Metallic.rect_size = size
-	$MR/Roughness.texture = roughness.get_texture()
-	$MR/Roughness.rect_size = size
 	emission.size = size
 	normal.size = size
 	depth.size = size
+	"""
 	nm_viewport.size = size
 	nm_rect.rect_size = size
 	nm_material.set_shader_param("epsilon", 1/s)
 	nm_material.set_shader_param("tex", depth.get_texture())
 	nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
+	"""
 	painter_node.set_texture_size(s)
 	select_layer(selected_layer_save)
 	while result is GDScriptFunctionState:
@@ -100,9 +98,6 @@ func get_metallic_texture():
 
 func get_roughness_texture():
 	return roughness.get_texture()
-
-func get_mr_texture():
-	return mr.get_texture()
 
 func get_emission_texture():
 	return emission.get_texture()
@@ -344,8 +339,8 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect.rect_size = normal.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.albedo
-		color_rect.material.set_shader_param("input_tex", l.depth)
-		color_rect.material.set_shader_param("modulate", l.depth_alpha)
+		color_rect.material.set_shader_param("input_tex", l.normal)
+		color_rect.material.set_shader_param("modulate", l.normal_alpha)
 		apply_masks(color_rect.material, m)
 		l.normal_color_rects = [ color_rect ]
 		normal.add_child(color_rect)
@@ -407,8 +402,6 @@ func _on_Painter_painted():
 	"""
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	mr.render_target_update_mode = Viewport.UPDATE_ONCE
-	mr.update_worlds()
 	nm_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	nm_viewport.update_worlds()
 	"""
@@ -416,7 +409,7 @@ func _on_Painter_painted():
 # debug
 
 func debug_get_texture_names():
-	return [ "Albedo", "Metallic", "Roughness", "Metallic/Roughness", "Emission", "Normal map", "Depth" ]
+	return [ "Albedo", "Metallic", "Roughness", "Emission", "Normal map", "Depth" ]
 
 func debug_get_texture(ID):
 	if ID == 0:
@@ -426,10 +419,8 @@ func debug_get_texture(ID):
 	if ID == 2:
 		return $Roughness.get_texture()
 	elif ID == 3:
-		return get_mr_texture()
-	elif ID == 4:
 		return get_emission_texture()
-	elif ID == 5:
+	elif ID == 4:
 		return get_normal_map()
-	elif ID == 6:
+	elif ID == 5:
 		return get_depth_texture()

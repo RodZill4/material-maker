@@ -136,13 +136,13 @@
 			{
 				"default": false,
 				"label": "",
-				"name": "has_normal",
+				"name": "has_emission",
 				"type": "boolean"
 			},
 			{
 				"default": false,
 				"label": "",
-				"name": "has_emission",
+				"name": "has_normal",
 				"type": "boolean"
 			},
 			{

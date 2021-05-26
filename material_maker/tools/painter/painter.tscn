@@ -75,6 +75,7 @@ shader_prefix = "paint_mr"
 [node name="EmissionPaint" parent="." instance=ExtResource( 7 )]
 
 [node name="NormalPaint" parent="." instance=ExtResource( 7 )]
+shader_prefix = "paint_nm"
 
 [node name="DepthPaint" parent="." instance=ExtResource( 7 )]
 

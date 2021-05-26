@@ -3,6 +3,7 @@ extends "res://material_maker/panels/paint/layer_types/layer.gd"
 var albedo : Texture
 var mr : Texture
 var emission : Texture
+var normal : Texture
 var depth : Texture
 
 var albedo_alpha : float = 1.0
