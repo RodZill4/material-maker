@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/node_editor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/windows/material_editor/material_editor.gd" type="Script" id=2]
@@ -16,10 +16,15 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 48, 160, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
@@ -93,32 +98,38 @@ margin_bottom = 22.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_vertical = 4
 
-[node name="Edit" type="Button" parent="Sizer/Tabs/Export/Export" index="3"]
+[node name="Rename" type="Button" parent="Sizer/Tabs/Export/Export" index="3"]
+margin_left = 275.0
+margin_right = 303.0
+margin_bottom = 24.0
+icon = SubResource( 6 )
+
+[node name="Duplicate" type="Button" parent="Sizer/Tabs/Export/Export" index="4"]
 margin_left = 275.0
 margin_right = 303.0
 margin_bottom = 24.0
 icon = SubResource( 4 )
 
-[node name="Delete" type="Button" parent="Sizer/Tabs/Export/Export" index="4"]
+[node name="Delete" type="Button" parent="Sizer/Tabs/Export/Export" index="5"]
 margin_left = 307.0
 margin_right = 335.0
 margin_bottom = 24.0
 icon = SubResource( 5 )
 
-[node name="Space" type="Control" parent="Sizer/Tabs/Export/Export" index="5"]
+[node name="Space" type="Control" parent="Sizer/Tabs/Export/Export" index="6"]
 margin_left = 339.0
 margin_right = 359.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 20, 0 )
 
-[node name="ExtensionLabel" type="Label" parent="Sizer/Tabs/Export/Export" index="6"]
+[node name="ExtensionLabel" type="Label" parent="Sizer/Tabs/Export/Export" index="7"]
 margin_left = 363.0
 margin_top = 5.0
 margin_right = 429.0
 margin_bottom = 19.0
 text = "Extension:"
 
-[node name="ExtensionEdit" type="LineEdit" parent="Sizer/Tabs/Export/Export" index="7"]
+[node name="ExtensionEdit" type="LineEdit" parent="Sizer/Tabs/Export/Export" index="8"]
 margin_left = 433.0
 margin_right = 491.0
 margin_bottom = 24.0
@@ -222,9 +233,12 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[connection signal="pressed" from="Sizer/Tabs/Export/Export/Create" to="." method="_on_Create_pressed"]
+[connection signal="pressed" from="Sizer/Tabs/Export/Export/Create" to="." method="_on_Create_Export_pressed"]
 [connection signal="item_selected" from="Sizer/Tabs/Export/Export/Option" to="." method="select_export"]
-[connection signal="text_entered" from="Sizer/Tabs/Export/Export/ExtensionEdit" to="." method="_on_ExtensionEdit_text_entered"]
+[connection signal="pressed" from="Sizer/Tabs/Export/Export/Rename" to="." method="_on_Rename_Export_pressed"]
+[connection signal="pressed" from="Sizer/Tabs/Export/Export/Duplicate" to="." method="_on_Duplicate_Export_pressed"]
+[connection signal="pressed" from="Sizer/Tabs/Export/Export/Delete" to="." method="_on_Delete_Export_pressed"]
+[connection signal="text_entered" from="Sizer/Tabs/Export/Export/ExtensionEdit" to="." method="_on_ExportExtensionEdit_text_entered"]
 [connection signal="item_selected" from="Sizer/Tabs/Export/Edit/Files" to="." method="select_file"]
 [connection signal="text_entered" from="Sizer/Tabs/Export/Edit/File/Common/name" to="." method="_on_name_text_entered"]
 [connection signal="text_entered" from="Sizer/Tabs/Export/Edit/File/Common/conditions" to="." method="_on_conditions_text_entered"]

@@ -1,3 +1,5 @@
+#define hlsl_atan(x,y) atan2(x, y)
+#define mod(x,y) ((x)-(y)*floor((x)/(y)))
 inline float4 textureLod(sampler2D tex, float2 uv, float lod) {
     return tex2D(tex, uv);
 }

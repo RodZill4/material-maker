@@ -16,14 +16,13 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth_scale": 0.5,
+		"depth_scale": 0.1,
 		"emission_energy": 1,
 		"flags_transparent": false,
 		"metallic": 1,
 		"normal": 1,
 		"roughness": 1,
-		"size": 11,
-		"sss": 0
+		"size": 11
 	},
 	"shader_model": {
 		"code": "",
@@ -38,7 +37,7 @@
 					},
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "shader_type spatial;\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform int depth_min_layers = 8;\nuniform int depth_max_layers = 16;\nuniform vec2 depth_flip = vec2(1.0);\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n}\n$definitions float_uniform_to_const,rename_buffers\nvoid fragment() {\n\tvec2 uv = fract(UV*uv1_scale.xy);\n$if $(connected:depth_tex)\n$begin_generate rename_buffers\n\t{\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * $depth_scale;\n\t\tvec2 delta = P / num_layers;\n\t\tvec2  ofs = uv;\n\t\tfloat depth = $depth_tex(ofs);\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = $depth_tex(ofs);\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = $depth_tex(ofs) - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tuv = ofs;\n\t}\n$end_generate\n$fi\n$begin_generate rename_buffers\n\tvec3 albedo_tex = $albedo_tex(uv).rgb;\n\talbedo_tex = mix(pow((albedo_tex + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex * (1.0 / 12.92),lessThan(albedo_tex,vec3(0.04045)));\n\tALBEDO = albedo_tex*$albedo_color.rgb;\n\tMETALLIC = $metallic_tex(uv)*$metallic;\n\tROUGHNESS = $roughness_tex(uv)*$roughness;\n\tNORMALMAP = $normal_tex(uv);\n\tEMISSION = $emission_tex(uv)*$emission_energy;\n$end_generate\n}\n",
+						"template": "shader_type spatial;\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform int depth_min_layers = 8;\nuniform int depth_max_layers = 16;\nuniform vec2 depth_flip = vec2(1.0);\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n}\n$definitions float_uniform_to_const,rename_buffers\nvoid fragment() {\n\tvec2 uv = fract(UV*uv1_scale.xy);\n$if $(connected:depth_tex)\n$begin_generate rename_buffers\n\t{\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * $depth_scale;\n\t\tvec2 delta = P / num_layers;\n\t\tvec2  ofs = uv;\n\t\tfloat depth = $depth_tex(ofs);\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = $depth_tex(ofs);\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = $depth_tex(ofs) - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tuv = ofs;\n\t}\n$end_generate\n$fi\n$begin_generate rename_buffers\n\tvec3 albedo_tex = $albedo_tex(uv).rgb;\n\talbedo_tex = mix(pow((albedo_tex + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex * (1.0 / 12.92),lessThan(albedo_tex,vec3(0.04045)));\n\tALBEDO = albedo_tex*$albedo_color.rgb;\n\tMETALLIC = $metallic_tex(uv)*$metallic;\n\tROUGHNESS = $roughness_tex(uv)*$roughness;\n\tNORMALMAP = $normal_tex(uv);\n\tEMISSION = $emission_tex(uv)*$emission_energy;\n\tALPHA = $opacity_tex(uv);\n$end_generate\n}\n",
 						"type": "template"
 					},
 					{
@@ -52,7 +51,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n\t\tfloat atan(float x, float y) {\n\t\t\treturn 3.141592-atan2(x, y);\n\t\t}\n$definitions hlsl,rename_buffers\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl,rename_buffers\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n\t\t\to.Normal = $normal_tex(uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
+						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n$definitions hlsl,rename_buffers,unity\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl,rename_buffers,unity\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n\t\t\to.Normal = $normal_tex(uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
 						"type": "template"
 					},
 					{
@@ -127,12 +126,6 @@
 				"default": "1.0",
 				"label": "",
 				"name": "opacity_tex",
-				"type": "f"
-			},
-			{
-				"default": "0.0",
-				"label": "",
-				"name": "sss_tex",
 				"type": "f"
 			}
 		],
@@ -220,16 +213,6 @@
 				"type": "boolean"
 			},
 			{
-				"control": "None",
-				"default": 0,
-				"label": "Subsurf. scatter.",
-				"max": 1,
-				"min": 0,
-				"name": "sss",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
 				"default": 11,
 				"first": 6,
 				"label": "Size",
@@ -238,7 +221,7 @@
 				"type": "size"
 			}
 		],
-		"preview_shader": "shader_type spatial;\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform int depth_min_layers = 8;\nuniform int depth_max_layers = 16;\nuniform vec2 depth_flip = vec2(1.0);\n\nvarying float elapsed_time;\n\nvoid vertex() {\n\telapsed_time = TIME;\n}\n\n//---\n\n\n$definitions\n\nvoid fragment() {\n\tvec2 uv = fract(UV*uv1_scale.xy);\n$begin_generate\n\t{\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * $depth_scale;\n\t\tvec2 delta = P / num_layers;\n\t\tvec2  ofs = uv;\n\t\tfloat depth = $depth_tex(ofs);\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = $depth_tex(ofs);\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = $depth_tex(ofs) - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tuv = ofs;\n\t}\n$end_generate\n$begin_generate\n\tvec3 albedo_tex = $albedo_tex(uv).rgb;\n\talbedo_tex = mix(pow((albedo_tex + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex * (1.0 / 12.92),lessThan(albedo_tex,vec3(0.04045)));\n\tALBEDO = albedo_tex*$albedo_color.rgb;\n\tMETALLIC = $metallic_tex(uv)*$metallic;\n\tROUGHNESS = $roughness_tex(uv)*$roughness;\n\tNORMALMAP = $normal_tex(uv);\n\tEMISSION = $emission_tex(uv)*$emission_energy;\n$end_generate\n\n}\n"
+		"preview_shader": "shader_type spatial;\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform int depth_min_layers = 8;\nuniform int depth_max_layers = 16;\nuniform vec2 depth_flip = vec2(1.0);\n\nvarying float elapsed_time;\n\nvoid vertex() {\n\telapsed_time = TIME;\n}\n\n//---\n\n\n$definitions\n\nvoid fragment() {\n\tvec2 uv = fract(UV*uv1_scale.xy);\n$begin_generate\n\t{\n\t\tvec3 view_dir = normalize(normalize(-VERTEX)*mat3(TANGENT*depth_flip.x,-BINORMAL*depth_flip.y,NORMAL));\n\t\tfloat num_layers = mix(float(depth_max_layers),float(depth_min_layers), abs(dot(vec3(0.0, 0.0, 1.0), view_dir)));\n\t\tfloat layer_depth = 1.0 / num_layers;\n\t\tfloat current_layer_depth = 0.0;\n\t\tvec2 P = view_dir.xy * $depth_scale;\n\t\tvec2 delta = P / num_layers;\n\t\tvec2  ofs = uv;\n\t\tfloat depth = $depth_tex(ofs);\n\t\tfloat current_depth = 0.0;\n\t\twhile(current_depth < depth) {\n\t\t\tofs -= delta;\n\t\t\tdepth = $depth_tex(ofs);\n\t\t\tcurrent_depth += layer_depth;\n\t\t}\n\t\tvec2 prev_ofs = ofs + delta;\n\t\tfloat after_depth  = depth - current_depth;\n\t\tfloat before_depth = $depth_tex(ofs) - current_depth + layer_depth;\n\t\tfloat weight = after_depth / (after_depth - before_depth);\n\t\tofs = mix(ofs,prev_ofs,weight);\n\t\tuv = ofs;\n\t}\n$end_generate\n$begin_generate\n\tvec3 albedo_tex = $albedo_tex(uv);\n\talbedo_tex = mix(pow((albedo_tex + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex * (1.0 / 12.92),lessThan(albedo_tex,vec3(0.04045)));\n\tALBEDO = albedo_tex.rgb*$albedo_color.rgb;\n\tMETALLIC = $metallic_tex(uv)*$metallic;\n\tROUGHNESS = $roughness_tex(uv)*$roughness;\n\tNORMALMAP = $normal_tex(uv);\n\tEMISSION = $emission_tex(uv)*$emission_energy;\n\tALPHA = $opacity_tex(uv);\n$end_generate\n\n}\n"
 	},
 	"type": "material_export"
 }

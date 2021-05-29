@@ -206,11 +206,11 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("vec4", "float4")
 	s = s.replace("mat2(", "tofloat2x2(")
 	s = s.replace("mat2", "float2x2")
-	s = s.replace("mod", "fmod")
 	s = s.replace("mix", "lerp")
 	s = s.replace("fract", "frac")
+	s = s.replace("atan", "hlsl_atan")
 	s = s.replace("uniform float", "static const float")
-	s = s.replace("elapsed_time", "_Time.y")
+	s = s.replace("uniform int", "static const int")
 	var re : RegEx = RegEx.new()
 	re.compile("(\\w+)\\s*\\*=\\s*tofloat2x2([^;]+);")
 	while true:
@@ -231,6 +231,14 @@ func process_option_rename_buffers(s : String, is_declaration : bool = false) ->
 	for t in preview_texture_dependencies.keys():
 		s = s.replace(t, "texture_%d" % index)
 		index += 1
+	return s
+
+func process_option_unity(s : String, is_declaration : bool = false) -> String:
+	s = s.replace("elapsed_time", "_Time.y")
+	return s
+
+func process_option_unreal(s : String, is_declaration : bool = false) -> String:
+	s = s.replace("elapsed_time", "Time")
 	return s
 
 # Export
