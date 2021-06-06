@@ -105,11 +105,14 @@ func update_textures() -> void:
 				result.release(self)
 			updating = false
 
-func update_materials(material_list) -> void:
+func update_materials(material_list, sequential : bool = false) -> void:
 	for m in material_list:
-		update_material(m)
+		var status = update_material(m, sequential)
+		if sequential:
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
 
-func update_material(m) -> void:
+func update_material(m, sequential : bool = false) -> void:
 	if m is SpatialMaterial:
 		pass
 	elif m is ShaderMaterial:
@@ -118,7 +121,10 @@ func update_material(m) -> void:
 			m.set_shader_param(t, preview_texture_dependencies[t])
 		for t in preview_textures.keys():
 			m.set_shader_param(t, preview_textures[t].texture)
-		update_textures()
+		var status = update_textures()
+		if sequential:
+			while status is GDScriptFunctionState:
+				status = yield(status, "completed")
 
 func update() -> void:
 	var result = process_shader(shader_model.preview_shader)
@@ -247,7 +253,9 @@ func get_export_profiles() -> Array:
 	return shader_model.exports.keys()
 
 func get_export_extension(profile : String) -> String:
-	return shader_model.exports[profile].export_extension
+	if shader_model.exports[profile].has("export_extension"):
+		return shader_model.exports[profile].export_extension
+	return ""
 
 func get_export_path(profile : String) -> String:
 	if export_paths.has(profile):
@@ -352,6 +360,9 @@ func process_buffers(template : String) -> String:
 			processed += l+"\n"
 	return processed
 
+func reset_uids() -> void:
+	uids = {}
+
 func get_uid(index : int) -> String:
 	if ! uids.has(index):
 		var uid : String = ""
@@ -390,6 +401,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	return true
 
 func export_material(prefix : String, profile : String, size : int = 0) -> void:
+	reset_uids()
 	if size == 0:
 		size = get_image_size()
 	export_paths[profile] = prefix
@@ -471,7 +483,6 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
 	data.export_paths = export_paths
-	data.uids = uids
 	return data
 
 func _serialize(data: Dictionary) -> Dictionary:
@@ -483,8 +494,6 @@ func _deserialize(data : Dictionary) -> void:
 	._deserialize(data)
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
-	if data.has("uids"):
-		uids = data.uids.duplicate()
 
 func edit(node) -> void:
 	if shader_model != null:

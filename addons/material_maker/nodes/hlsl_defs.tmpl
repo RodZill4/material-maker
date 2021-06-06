@@ -15,8 +15,14 @@ inline float3 tofloat3(float x) {
 inline float3 tofloat3(float x, float y, float z) {
     return float3(x, y, z);
 }
+inline float3 tofloat3(float2 xy, float z) {
+    return float3(xy.x, xy.y, z);
+}
 inline float3 tofloat3(float x, float2 yz) {
     return float3(x, yz.x, yz.y);
+}
+inline float4 tofloat4(float3 xyz, float w) {
+    return float4(xyz.x, xyz.y, xyz.z, w);
 }
 inline float2x2 tofloat2x2(float2 v1, float2 v2) {
     return float2x2(v1.x, v1.y, v2.x, v2.y);
