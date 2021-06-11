@@ -2,9 +2,6 @@
 	"export": {
 
 	},
-	"export_paths": {
-		"Godot": "D:/Dev/Godot/material-maker-dev/test"
-	},
 	"name": "material_raymarching",
 	"node_position": {
 		"x": 0,
@@ -21,12 +18,45 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).tres",
-						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]\n[resource]\nshader = ExtResource( 1 )\n",
+						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"res://$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
 						"type": "template"
 					},
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "shader_type spatial;\n//render_mode unshaded, world_vertex_coords; // to raymarch in world space\nvarying float elapsed_time;\n//---\nvarying vec3 world_camera;\nvarying vec3 world_position;\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n$definitions\nvec2 GetDist(vec3 p) {\n$begin_generate\n\tvec2 d = $distance(p);\n$end_generate\n\treturn d;\n}\nvec2 RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat color = 0.0;\n\tvec2 dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++)\n\t{\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS.x;\n\t\t\n\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {\n\t\t\tcolor = dS.y;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec2(dO, color);\n}\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p).x - vec3(\n\t\tGetDist(p - e.xyy).x,\n\t\tGetDist(p - e.yxy).x,\n\t\tGetDist(p - e.yyx).x\n\t);\n\t\n\treturn normalize(n);\n}\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\nvoid fragment() {\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec2 rm  = RayMarch(ro, rd);\n\tfloat d = rm.x;\n\tif (d >= MAX_DIST)\n\t\tdiscard;\n\telse\n\t{\n\t\tvec3 p = ro + rd * d;\n$begin_generate\n\t\tALBEDO = $albedo(vec4(p, rm.y));\n\t\tROUGHNESS = $roughness(vec4(p, rm.y)).x;\n\t\tMETALLIC = $metallic(vec4(p, rm.y)).x;\n$end_generate\n\t\tNORMAL = (vec4(GetNormal(p), 1.0)*CAMERA_MATRIX).xyz;\n\t}\n}\n",
+						"template": "shader_type spatial;\nvarying float elapsed_time;\nvarying vec3 world_camera;\nvarying vec3 world_position;\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n$definitions float_uniform_to_const,rename_buffers\nvec2 GetDist(vec3 p) {\n$begin_generate rename_buffers\n\tvec2 d = $distance(p);\n$end_generate\n\treturn d;\n}\nvec2 RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat color = 0.0;\n\tvec2 dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++) {\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS.x;\n\t\t\n\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {\n\t\t\tcolor = dS.y;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec2(dO, color);\n}\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p).x - vec3(\n\t\tGetDist(p - e.xyy).x,\n\t\tGetDist(p - e.yxy).x,\n\t\tGetDist(p - e.yyx).x\n\t);\n\t\n\treturn normalize(n);\n}\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\nvoid fragment() {\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec2 rm  = RayMarch(ro, rd);\n\tfloat d = rm.x;\n\tif (d >= MAX_DIST) {\n\t\tdiscard;\n\t} else {\n\t\tvec3 p = ro + rd * d;\n$begin_generate rename_buffers\n\t\tALBEDO = $albedo(vec4(p, rm.y));\n\t\tROUGHNESS = $roughness(vec4(p, rm.y)).x;\n\t\tMETALLIC = $metallic(vec4(p, rm.y)).x;\n$end_generate\n\t\tNORMAL = (vec4(GetNormal(p), 1.0)*CAMERA_MATRIX).xyz;\n\t}\n}\n",
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					}
+				]
+			},
+			"Unity": {
+				"export_extension": "mat",
+				"files": [
+					{
+						"file_name": "$(path_prefix).shader",
+						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n    }\n    SubShader\n    {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        // Physically based Standard lighting model, and enable shadows on all light types\n        #pragma surface surf Standard fullforwardshadows\n        // Use shader model 3.0 target, to get nicer looking lighting\n        #pragma target 3.0\n        struct Input\n        {\n            float3 worldPos;\n            float3 viewDir;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n            // put more per-instance properties here\n        UNITY_INSTANCING_BUFFER_END(Props)\n$definitions hlsl,rename_buffers,unity\n        float2 sceneSDF(float3 p) {\n$begin_generate hlsl,rename_buffers,unity\n            return $distance(p);\n$end_generate\n        }\n#define MAX_STEPS 128\n#define SURF_DIST 0.001\n#define MAX_DIST 1000.0\n        float2 RayMarch(float3 ro, float3 rd) {\n            float dO = 0.0;\n            float color = 0.0;\n            float2 dS;\n            \n            for (int i = 0; i < MAX_STEPS; i++) {\n                float3 p = ro + dO * rd;\n                dS = sceneSDF(p);\n                dO += dS.x;\n                \n                if (dS.x < SURF_DIST || dO > MAX_DIST) {\n                    color = dS.y;\n                    break;\n                }\n            }\n            return float2(dO, color);\n        }\n        float3 GetNormal(float3 p) {\n            float2 e = float2(1e-2, 0);\n            \n            float3 n = sceneSDF(p).x - float3(\n                sceneSDF(p - e.xyy).x,\n                sceneSDF(p - e.yxy).x,\n                sceneSDF(p - e.yyx).x\n            );\n            \n            return normalize(n);\n        }\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n            float3 ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1.0));\n            float3 rd = normalize(mul(unity_WorldToObject, float4(IN.worldPos, 1.0))-ro);\n            float2 dist = RayMarch(ro, rd);\n            if (dist.x > 99.0) {\n                discard;\n            }\n            float3 p = ro+rd*dist.x;\n$begin_generate hlsl,rename_buffers,unity\n            o.Albedo = $albedo(vec4(p, dist.y));\n            o.Metallic = $metallic(vec4(p, dist.y)).x;\n            o.Smoothness = 1.0-$roughness(vec4(p, dist.y)).x;\n            o.Normal = GetNormal(p);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png.meta",
+						"template": "fileFormatVersion: 2\nguid: $uid(tex_$(buffer_index))\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 11\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  vTOnly: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  flipbookRows: 1\n  flipbookColumns: 1\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  ignorePngGamma: 0\n  applyGammaDecoding: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
+						"type": "buffer_templates"
+					},
+					{
+						"file_name": "$(path_prefix).mat",
+						"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: test2\n  m_Shader: {fileID: 4800000, guid: $uid(shader), type: 3}\n  m_ShaderKeywords: \n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses: []\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _MainTex:\n        m_Texture: {fileID: 2800000, guid: 6c5d2d4e94384751a0ce7d6619e0d49a, type: 3}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n$begin_buffers\n    - texture_$(buffer_index):\n        m_Texture: {fileID: 2800000, guid: $uid(tex_$(buffer_index)), type: 3}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n$end_buffers\n  m_BuildTextureStacks: []\n",
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix).shader.meta",
+						"template": "fileFormatVersion: 2\nguid: $uid(shader)\nShaderImporter:\n  externalObjects: {}\n  defaultTextures: []\n  nonModifiableTextures: []\n  preprocessorOverride: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					}
 				]
@@ -35,7 +65,7 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec2(0.0)",
 				"function": true,
 				"label": "Distance",
 				"name": "distance",
@@ -71,7 +101,7 @@
 		"parameters": [
 
 		],
-		"preview_shader": "shader_type spatial;\n//render_mode unshaded, world_vertex_coords; // to raymarch in world space\n\nvarying float elapsed_time;\n\nvarying vec3 world_camera;\nvarying vec3 world_position;\n\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n\n$definitions\n\nvec2 GetDist(vec3 p) {\n\n$begin_generate\n\tvec2 d = $distance(p);\n$end_generate\n\n\treturn d;\n}\n\nvec2 RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat color = 0.0;\n\tvec2 dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++)\n\t{\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS.x;\n\t\t\n\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {\n\t\t\tcolor = dS.y;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec2(dO, color);\n}\n\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p).x - vec3(\n\t\tGetDist(p - e.xyy).x,\n\t\tGetDist(p - e.yxy).x,\n\t\tGetDist(p - e.yyx).x\n\t);\n\t\n\treturn normalize(n);\n}\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\n\nvoid fragment() {\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec2 rm  = RayMarch(ro, rd);\n\tfloat d = rm.x;\n\n\tif (d >= MAX_DIST)\n\t\tdiscard;\n\telse\n\t{\n\t\tvec3 p = ro + rd * d;\n$begin_generate\n\t\tALBEDO = $albedo(vec4(p, rm.y));\n\t\tROUGHNESS = $roughness(vec4(p, rm.y)).x;\n\t\tMETALLIC = $metallic(vec4(p, rm.y)).x;\n$end_generate\n\t\tNORMAL = (vec4(GetNormal(p), 1.0)*CAMERA_MATRIX).xyz;\n\t}\n}\n"
+		"preview_shader": "shader_type spatial;\n\nvarying float elapsed_time;\n\nvarying vec3 world_camera;\nvarying vec3 world_position;\n\nconst int MAX_STEPS = 100;\nconst float MAX_DIST = 100.0;\nconst float SURF_DIST = 1e-3;\n\n$definitions\n\nvec2 GetDist(vec3 p) {\n\n$begin_generate\n\tvec2 d = $distance(p);\n$end_generate\n\n\treturn d;\n}\n\nvec2 RayMarch(vec3 ro, vec3 rd) {\n\tfloat dO = 0.0;\n\tfloat color = 0.0;\n\tvec2 dS;\n\t\n\tfor (int i = 0; i < MAX_STEPS; i++)\n\t{\n\t\tvec3 p = ro + dO * rd;\n\t\tdS = GetDist(p);\n\t\tdO += dS.x;\n\t\t\n\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {\n\t\t\tcolor = dS.y;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec2(dO, color);\n}\n\nvec3 GetNormal(vec3 p) {\n\tvec2 e = vec2(1e-2, 0);\n\t\n\tvec3 n = GetDist(p).x - vec3(\n\t\tGetDist(p - e.xyy).x,\n\t\tGetDist(p - e.yxy).x,\n\t\tGetDist(p - e.yyx).x\n\t);\n\t\n\treturn normalize(n);\n}\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tworld_position = VERTEX;\n\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space\n\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space\n}\n\nvoid fragment() {\n\tvec3 ro = world_camera;\n\tvec3 rd =  normalize(world_position - ro);\n\t\n\tvec2 rm  = RayMarch(ro, rd);\n\tfloat d = rm.x;\n\n\tif (d >= MAX_DIST)\n\t\tdiscard;\n\telse\n\t{\n\t\tvec3 p = ro + rd * d;\n$begin_generate\n\t\tALBEDO = $albedo(vec4(p, rm.y));\n\t\tROUGHNESS = $roughness(vec4(p, rm.y)).x;\n\t\tMETALLIC = $metallic(vec4(p, rm.y)).x;\n$end_generate\n\t\tNORMAL = (vec4(GetNormal(p), 1.0)*CAMERA_MATRIX).xyz;\n\t}\n}\n"
 	},
 	"type": "material_export"
 }

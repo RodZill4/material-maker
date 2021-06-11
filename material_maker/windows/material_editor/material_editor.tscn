@@ -16,26 +16,23 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 16, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 160, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 0, 16, 16 )
 
 [node name="MaterialEditor" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-
-[node name="General" parent="Sizer/Tabs" index="0"]
-visible = false
 
 [node name="LabelOutputs" parent="Sizer/Tabs/Outputs" index="0"]
 margin_right = 942.0
@@ -102,19 +99,19 @@ size_flags_vertical = 4
 margin_left = 275.0
 margin_right = 303.0
 margin_bottom = 24.0
-icon = SubResource( 6 )
+icon = SubResource( 4 )
 
 [node name="Duplicate" type="Button" parent="Sizer/Tabs/Export/Export" index="4"]
 margin_left = 275.0
 margin_right = 303.0
 margin_bottom = 24.0
-icon = SubResource( 4 )
+icon = SubResource( 5 )
 
 [node name="Delete" type="Button" parent="Sizer/Tabs/Export/Export" index="5"]
 margin_left = 307.0
 margin_right = 335.0
 margin_bottom = 24.0
-icon = SubResource( 5 )
+icon = SubResource( 6 )
 
 [node name="Space" type="Control" parent="Sizer/Tabs/Export/Export" index="6"]
 margin_left = 339.0
@@ -226,6 +223,22 @@ margin_bottom = 354.0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+syntax_highlighting = true
+show_line_numbers = true
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="Custom" type="TextEdit" parent="Sizer/Tabs" index="7"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+mouse_default_cursor_shape = 0
 custom_fonts/font = SubResource( 2 )
 syntax_highlighting = true
 show_line_numbers = true

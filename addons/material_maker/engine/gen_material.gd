@@ -131,7 +131,18 @@ func update() -> void:
 	preview_shader_code = result.shader_code
 	preview_texture_dependencies = result.texture_dependencies
 
+class CustomOptions:
+	extends Object
+	# empty
+
 func process_shader(shader_text : String):
+	var custom_options = CustomOptions.new()
+	if shader_model.has("custom"):
+		print(shader_model.custom)
+		var custom_options_script = GDScript.new()
+		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
+		custom_options_script.reload()
+		custom_options.set_script(custom_options_script)
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
 	var shader_code = ""
 	preview_textures = {}
@@ -162,6 +173,8 @@ func process_shader(shader_text : String):
 				for o in gen_options:
 					if has_method("process_option_"+o):
 						new_code = call("process_option_"+o, new_code)
+					elif custom_options.has_method("process_option_"+o):
+						new_code = custom_options.call("process_option_"+o, new_code)
 				shader_code += new_code
 				# process textures
 				for t in subst_code.textures.keys():
@@ -190,11 +203,14 @@ func process_shader(shader_text : String):
 	shader_code = ""
 	for l in shader_text.split("\n"):
 		if l.find("$definitions") != -1:
+			var processed_definitions = definitions
 			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
 			for o in gen_options:
 				if has_method("process_option_"+o):
-					definitions = call("process_option_"+o, definitions, true)
-			shader_code += definitions
+					processed_definitions = call("process_option_"+o, processed_definitions, true)
+				elif custom_options.has_method("process_option_"+o):
+					processed_definitions = custom_options.call("process_option_"+o, processed_definitions, true)
+			shader_code += processed_definitions
 			shader_code += "\n"
 		else:
 			shader_code += l
@@ -207,6 +223,7 @@ func process_shader(shader_text : String):
 func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
+	s = s.replace("vec4(", "tofloat4(")
 	s = s.replace("vec2", "float2")
 	s = s.replace("vec3", "float3")
 	s = s.replace("vec4", "float4")
@@ -230,6 +247,7 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 
 func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("uniform float", "const float")
+	s = s.replace("uniform int", "const int")
 	return s
 
 func process_option_rename_buffers(s : String, is_declaration : bool = false) -> String:
@@ -245,6 +263,7 @@ func process_option_unity(s : String, is_declaration : bool = false) -> String:
 
 func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("elapsed_time", "Time")
+	#s = s.replace("static const ", "const ")
 	return s
 
 # Export

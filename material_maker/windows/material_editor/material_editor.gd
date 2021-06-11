@@ -192,9 +192,12 @@ func set_model_data(data) -> void:
 		exports = data.exports.duplicate(true)
 		update_export_list()
 		select_export(0)
+	if data.has("custom"):
+		$Sizer/Tabs/Custom.text = data.custom
 
 func get_model_data() -> Dictionary:
 	var data = .get_model_data()
 	data.preview_shader = $Sizer/Tabs/Preview.text
 	data.exports = exports
+	data.custom = $Sizer/Tabs/Custom.text
 	return data

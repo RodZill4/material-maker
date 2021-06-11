@@ -165,7 +165,7 @@ func get_globals() -> String:
 	var globals = ""
 	for w in widgets:
 		if w.type == "named_parameter":
-			globals += "uniform float o"+str(get_instance_id())+"_"+w.name+" = "+str(get_parameter(w.name))+";\n"
+			globals += "uniform float o"+str(get_instance_id())+"_"+w.name+" = "+str(get_parameter(w.name))+"; // "+str(w)+"\n"
 	return globals
 
 func create_linked_control(label : String) -> String:
