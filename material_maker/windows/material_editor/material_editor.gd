@@ -85,6 +85,10 @@ func _on_ExportExtensionEdit_text_entered(new_text):
 	var e : String = export_target.get_item_text(export_target.selected)
 	exports[e].export_extension = new_text
 
+func _on_ExportExtensionEdit_focus_exited():
+	_on_ExportExtensionEdit_text_entered(export_extension_edit.text)
+
+
 func select_export(i : int) -> void:
 	if export_target.get_item_count() <= i:
 		export_files.clear()
@@ -146,10 +150,16 @@ func _on_name_text_entered(new_text):
 	exports[e].files[i].file_name = new_text
 	export_files.set_item_text(i, new_text)
 
+func _on_name_focus_exited():
+	_on_name_text_entered(export_file_name.text)
+
 func _on_conditions_text_entered(new_text):
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].conditions = new_text
+
+func _on_conditions_focus_exited():
+	_on_conditions_text_entered(export_file_conditions.text)
 
 func _on_type_item_selected(index):
 	var e : String = export_target.get_item_text(export_target.selected)
