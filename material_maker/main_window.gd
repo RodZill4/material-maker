@@ -406,13 +406,35 @@ func add_recent(path) -> void:
 	f.close()
 
 
-func create_menu_export_material(menu) -> void:
-	menu.clear()
+func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
+	if prefix == "":
+		menu.clear()
+		menu.set_size(Vector2(0, 0))
+		for sm in menu.get_children():
+			menu.remove_child(sm)
+			sm.free()
 	var project = get_current_project()
 	if project != null:
 		var material_node = project.get_material_node()
-		for p in material_node.get_export_profiles():
-			menu.add_item(p)
+		var prefix_len = prefix.length()
+		var submenus = []
+		for id in range(material_node.get_export_profiles().size()):
+			var p : String = material_node.get_export_profiles()[id]
+			if p.left(prefix_len) != prefix:
+				continue
+			p = p.right(prefix_len)
+			var slash_position = p.find("/")
+			if slash_position == -1:
+				menu.add_item(p, id)
+			else:
+				var submenu_name = p.left(slash_position)
+				if submenus.find(submenu_name) == -1:
+					var submenu = PopupMenu.new()
+					submenu.name = submenu_name
+					menu.add_child(submenu)
+					create_menu_export_material(submenu, p.left(slash_position+1))
+					menu.add_submenu_item(submenu_name, submenu_name, id)
+					submenus.push_back(submenu_name)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 

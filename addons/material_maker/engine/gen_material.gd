@@ -269,7 +269,9 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 # Export
 
 func get_export_profiles() -> Array:
-	return shader_model.exports.keys()
+	var export_profiles = shader_model.exports.keys()
+	export_profiles.sort()
+	return export_profiles
 
 func get_export_extension(profile : String) -> String:
 	if shader_model.exports[profile].has("export_extension"):

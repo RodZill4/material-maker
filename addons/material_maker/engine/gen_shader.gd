@@ -79,6 +79,8 @@ func set_shader_model(data: Dictionary) -> void:
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
 			uses_seed = true
+	if get_parent() != null:
+		get_parent().check_input_connects(self)
 	all_sources_changed()
 
 func find_matching_parenthesis(string : String, i : int) -> int:
