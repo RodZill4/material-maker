@@ -9,6 +9,7 @@ have parameters, inputs and outputs.
 
    nodes_common
    shader_nodes
+   material_nodes
    texture_nodes
    remote_nodes
    subgraph_nodes
