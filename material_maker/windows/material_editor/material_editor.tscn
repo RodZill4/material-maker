@@ -32,6 +32,7 @@ atlas = ExtResource( 3 )
 region = Rect2( 32, 0, 16, 16 )
 
 [node name="MaterialEditor" instance=ExtResource( 1 )]
+window_title = "Material Editor"
 script = ExtResource( 2 )
 
 [node name="LabelOutputs" parent="Sizer/Tabs/Outputs" index="0"]

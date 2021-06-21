@@ -27,6 +27,7 @@
 	},
 	"shader_model": {
 		"code": "",
+		"custom": "",
 		"exports": {
 			"Blender": {
 				"export_extension": "tres",
@@ -127,7 +128,7 @@
 					}
 				]
 			},
-			"Unity": {
+			"Unity/3D": {
 				"export_extension": "mat",
 				"files": [
 					{
@@ -210,7 +211,7 @@
 				],
 				"uids": 6
 			},
-			"UnityHDRP": {
+			"Unity/HDRP": {
 				"export_extension": "mat",
 				"files": [
 					{

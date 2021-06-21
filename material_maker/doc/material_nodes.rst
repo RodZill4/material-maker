@@ -13,7 +13,14 @@ Material nodes are a specific type of shader nodes, with the following differenc
 
 There can be only one material node in a material graph.
 
+.. image:: images/material_node.png
+	:align: center
+
+The type of material can be modified using the context menu. custom material nodes
+can also be copied and pasted using this menu.
+
 A material node can be made editable using the *Control+W* keyboard shortcut.
+This shows buttons to edit, load and save the node.
 
 Editing a material node will show the **Material Editor** window.
 
