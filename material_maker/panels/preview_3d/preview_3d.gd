@@ -133,6 +133,14 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var preview_material = current_object.get_surface_material(0)
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+			if p.name == n:
+				preview_material.set_shader_param(n, parameter_changes[n])
+				break
+
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:

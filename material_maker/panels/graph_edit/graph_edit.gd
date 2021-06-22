@@ -422,12 +422,12 @@ func remove_selection() -> void:
 			remove_node(c)
 
 # Maybe move this to gen_graph...
-func serialize_selection() -> Dictionary:
+func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
-	var nodes = []
-	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
-			nodes.append(c)
+	if nodes.empty():
+		for c in get_children():
+			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+				nodes.append(c)
 	if nodes.empty():
 		return {}
 	var center = Vector2(0, 0)

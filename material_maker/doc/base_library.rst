@@ -7,6 +7,7 @@ to describe procedural materials.
 .. toctree::
 	:maxdepth: 2
 
+	nodes_material
 	nodes_simple
 	nodes_3d
 	nodes_pattern

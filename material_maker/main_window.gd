@@ -231,7 +231,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -406,13 +406,35 @@ func add_recent(path) -> void:
 	f.close()
 
 
-func create_menu_export_material(menu) -> void:
-	menu.clear()
+func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
+	if prefix == "":
+		menu.clear()
+		menu.set_size(Vector2(0, 0))
+		for sm in menu.get_children():
+			menu.remove_child(sm)
+			sm.free()
 	var project = get_current_project()
 	if project != null:
 		var material_node = project.get_material_node()
-		for p in material_node.get_export_profiles():
-			menu.add_item(p)
+		var prefix_len = prefix.length()
+		var submenus = []
+		for id in range(material_node.get_export_profiles().size()):
+			var p : String = material_node.get_export_profiles()[id]
+			if p.left(prefix_len) != prefix:
+				continue
+			p = p.right(prefix_len)
+			var slash_position = p.find("/")
+			if slash_position == -1:
+				menu.add_item(p, id)
+			else:
+				var submenu_name = p.left(slash_position)
+				if submenus.find(submenu_name) == -1:
+					var submenu = PopupMenu.new()
+					submenu.name = submenu_name
+					menu.add_child(submenu)
+					create_menu_export_material(submenu, p.left(slash_position+1))
+					menu.add_submenu_item(submenu_name, submenu_name, id)
+					submenus.push_back(submenu_name)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
@@ -969,15 +991,19 @@ func update_preview_2d(node = null) -> void:
 			histogram.set_generator(null)
 			preview_2d_background.set_generator(null)
 
-func update_preview_3d(previews : Array) -> void:
+func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.render_textures()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		var status = gen_material.update()
+		if sequential:
+			while status is GDScriptFunctionState:
+				yield(status, "completed")
 		for p in previews:
-			gen_material.update_materials(p.get_materials())
+			status = gen_material.update_materials(p.get_materials(), sequential)
+			if sequential:
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
 
 var selected_node = null
 func on_selected_node_change(node) -> void:

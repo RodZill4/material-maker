@@ -493,6 +493,9 @@ func do_save_generator(file_name : String) -> void:
 		var data = generator.serialize()
 		data.name = file_name.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
+		for k in [ "uids", "export_paths" ]:
+			if data.has(k):
+				data.erase(k)
 		file.store_string(JSON.print(data, "\t", true))
 		file.close()
 		mm_loader.update_predefined_generators()
