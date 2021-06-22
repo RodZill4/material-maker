@@ -26,6 +26,15 @@ func update_predefined_generators()-> void:
 			file.store_string(to_json(predefined_generators))
 			file.close()
 
+func get_material_nodes() -> Array:
+	var rv : Array = Array()
+	for g in predefined_generators.keys():
+		var generator = predefined_generators[g]
+		if generator.has("type") and generator.type == "material_export":
+			if generator.has("shader_model") and generator.shader_model.has("name"):
+				rv.push_back({ name=g, label=generator.shader_model.name })
+	return rv
+
 func get_predefined_global(g : String) -> String:
 	if ! predefined_generators.has(g):
 		return ""
@@ -68,7 +77,7 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 
 func create_gen(data) -> MMGenBase:
 	var guess = [
-		{ keyword="export", type=MMGenMaterial },
+		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="is_brush", type=MMGenBrush },
@@ -90,7 +99,14 @@ func create_gen(data) -> MMGenBase:
 	}
 	var generator = null
 	for g in guess:
-		if data.has(g.keyword):
+		var guessed = true
+		var d = data
+		for k in g.keyword.split("/"):
+			if ! d.has(k):
+				guessed = false
+				break
+			d = d[k]
+		if guessed:
 			generator = g.type.new()
 			break
 	if generator == null and data.has("type"):

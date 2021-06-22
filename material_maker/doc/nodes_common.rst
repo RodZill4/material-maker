@@ -64,8 +64,10 @@ Parameters are used to configure nodes. The following types are supported:
   must be calculated from one or more named parameters.
   
   The *$time* variable can also be used in parameter expressions to define animations
-  in generated shaders, but generated PBR materials will still be static (this feature
-  could for example be used to export variations of the same material).
+  in generated shaders, but generated **Static PBR Materials** will still be
+  static (this feature could for example be used to export variations of the
+  same material). Other predefined material types can fully benefit from this
+  feature. 
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations
   such as convolutions. They are shown as drop down list boxes.

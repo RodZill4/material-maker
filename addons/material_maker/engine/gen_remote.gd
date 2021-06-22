@@ -148,7 +148,8 @@ func set_parameter(p : String, v) -> void:
 						return
 				"named_parameter":
 					var param_name : String = "o"+str(get_instance_id())+"_"+p
-					get_tree().call_group("preview", "on_float_parameters_changed", { param_name:v })
+					if is_inside_tree():
+						get_tree().call_group("preview", "on_float_parameters_changed", { param_name:v })
 	.set_parameter(p, v)
 	if parent != null and name == "gen_parameters":
 		parent.parameters[p] = v
@@ -164,7 +165,7 @@ func get_globals() -> String:
 	var globals = ""
 	for w in widgets:
 		if w.type == "named_parameter":
-			globals += "uniform float o"+str(get_instance_id())+"_"+w.name+" = "+str(get_parameter(w.name))+";\n"
+			globals += "uniform float o"+str(get_instance_id())+"_"+w.name+" = "+str(get_parameter(w.name))+"; // "+str(w)+"\n"
 	return globals
 
 func create_linked_control(label : String) -> String:

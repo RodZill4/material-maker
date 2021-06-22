@@ -204,8 +204,8 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="0.95.0.0"
-config/actual_release="0.95"
+config/release="0.96.0.0"
+config/actual_release="0.96pre-mats"
 
 [audio]
 
@@ -229,10 +229,6 @@ gdscript/warnings/unsafe_call_argument=true
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
-
-[editor_plugins]
-
-enabled=PoolStringArray( "material_maker" )
 
 [gui]
 
