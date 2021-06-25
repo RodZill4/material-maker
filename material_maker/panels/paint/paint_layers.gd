@@ -279,12 +279,16 @@ func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth ]:
 		while viewport.get_child_count() > 0:
 			viewport.remove_child(viewport.get_child(0))
+	var texture_rect : TextureRect
+	var color_rect : ColorRect
+	color_rect = ColorRect.new()
+	color_rect.rect_size = normal.size
+	color_rect.color = Color(0.5, 0.5, 0)
+	normal.add_child(color_rect)
 	for lm in visible_layers:
 		var l = lm.layer
 		var m = lm.masks
 		var layer_shaders = get_shaders(m.size())
-		var texture_rect : TextureRect
-		var color_rect : ColorRect
 		# albedo
 		color_rect = ColorRect.new()
 		color_rect.rect_size = albedo.size
