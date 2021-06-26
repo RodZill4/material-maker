@@ -230,6 +230,10 @@ window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/material_maker/plugin.cfg" )
+
 [gui]
 
 timers/tooltip_delay_sec=0.1
