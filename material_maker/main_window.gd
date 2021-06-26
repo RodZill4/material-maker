@@ -1017,23 +1017,28 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
+		for c in get_incoming_connections():
+			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+				c.source.disconnect(c.signal_name, self, c.method_name)
+		var new_graph_edit = null
 		if new_tab is GraphEdit:
-			for c in get_incoming_connections():
-				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-					c.source.disconnect(c.signal_name, self, c.method_name)
-			new_tab.connect("graph_changed", self, "update_preview")
-			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
-				new_tab.connect("node_selected", self, "on_selected_node_change")
+			new_graph_edit = new_tab
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
 			set_current_mode("material")
 		else:
+			if new_tab.has_method("get_graph_edit"):
+				new_graph_edit = new_tab.get_graph_edit()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
 			set_current_mode("paint")
 		current_tab = new_tab
-		if new_tab is GraphEdit:
+		if new_graph_edit != null:
+			new_graph_edit.connect("graph_changed", self, "update_preview")
+			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
+				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
 			update_preview()
+		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:
