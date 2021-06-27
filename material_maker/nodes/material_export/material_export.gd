@@ -16,7 +16,7 @@ func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 		var can_copy = ( generator.model == null )
 		var can_paste = false
 		var graph = parse_json(OS.clipboard)
-		if graph != null:
+		if graph != null and graph is Dictionary:
 			if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export" and graph.nodes[0].has("shader_model"):
 				can_paste = true
 		if can_copy:
