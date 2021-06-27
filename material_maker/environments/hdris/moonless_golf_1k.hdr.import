@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/moonless_golf_1k.hdr-aae68dbaacbeeb0e898680c5d57b14e7.stex"
+path="res://.import/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/environments/hdri/moonless_golf_1k.hdr"
-dest_files=[ "res://.import/moonless_golf_1k.hdr-aae68dbaacbeeb0e898680c5d57b14e7.stex" ]
+source_file="res://material_maker/environments/hdris/moonless_golf_1k.hdr"
+dest_files=[ "res://.import/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.stex" ]
 
 [params]
 

@@ -229,6 +229,7 @@ gdscript/warnings/unsafe_call_argument=true
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
+window/handheld/orientation.Android="sensor_landscape"
 
 [editor_plugins]
 

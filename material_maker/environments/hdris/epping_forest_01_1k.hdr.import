@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/epping_forest_01_1k.hdr-b4857049d1a6731ea987a523fdcb737c.stex"
+path="res://.import/epping_forest_01_1k.hdr-deb5d85b1c0b655387fa44d4d061848a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/environments/hdri/epping_forest_01_1k.hdr"
-dest_files=[ "res://.import/epping_forest_01_1k.hdr-b4857049d1a6731ea987a523fdcb737c.stex" ]
+source_file="res://material_maker/environments/hdris/epping_forest_01_1k.hdr"
+dest_files=[ "res://.import/epping_forest_01_1k.hdr-deb5d85b1c0b655387fa44d4d061848a.stex" ]
 
 [params]
 

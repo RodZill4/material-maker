@@ -20,8 +20,12 @@ func create_library(path : String, name : String) -> void:
 
 func load_library(path : String, ro : bool = false) -> bool:
 	var file : File = File.new()
-	path = path.replace("root://", OS.get_executable_path().get_base_dir()+"/")
+	if OS.get_name() == "Android":
+		path = path.replace("root://", "res://material_maker/")
+	else:
+		path = path.replace("root://", OS.get_executable_path().get_base_dir()+"/")
 	if ! file.open(path, File.READ) == OK:
+		print("Failed to open "+path)
 		return false
 	var data = parse_json(file.get_as_text())
 	library_path = path
