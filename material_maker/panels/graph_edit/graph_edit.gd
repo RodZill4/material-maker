@@ -61,8 +61,6 @@ func _gui_input(event) -> void:
 		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed() and event.control:
 			call_deferred("set_scroll_ofs", scroll_offset)
 			zoom /= 1.1
-		elif event.button_index == BUTTON_MIDDLE and $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
 		else:
 			call_deferred("check_last_selected")
 	elif event is InputEventKey and event.pressed:
@@ -70,17 +68,14 @@ func _gui_input(event) -> void:
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
 	elif event is InputEventMouseMotion:
-		if $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
-		else:
-			for c in get_children():
-				if c.has_method("get_slot_tooltip"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
-						hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
-					else:
-						c.clear_connection_labels()
+		for c in get_children():
+			if c.has_method("get_slot_tooltip"):
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+				else:
+					c.clear_connection_labels()
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
