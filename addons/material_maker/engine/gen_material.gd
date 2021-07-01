@@ -242,7 +242,7 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 			break
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
 	if is_declaration:
-		s = get_template_text("hlsl_defs.tmpl")+"\n"+s
+		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
 	return s
 
 func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
@@ -263,7 +263,9 @@ func process_option_unity(s : String, is_declaration : bool = false) -> String:
 
 func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("elapsed_time", "Time")
-	#s = s.replace("static const ", "const ")
+	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
+	if is_declaration:
+		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
 	return s
 
 # Export
