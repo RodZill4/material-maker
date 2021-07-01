@@ -1,7 +1,9 @@
 tool
 extends Node
 
-var predefined_generators = {}
+var predefined_generators : Dictionary = {}
+
+var current_project_path : String = ""
 
 func _ready()-> void:
 	update_predefined_generators()
@@ -54,7 +56,10 @@ func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
-		return create_gen(data)
+		current_project_path = filename.get_base_dir()
+		var generator = create_gen(data)
+		current_project_path = ""
+		return generator
 	return null
 
 func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:

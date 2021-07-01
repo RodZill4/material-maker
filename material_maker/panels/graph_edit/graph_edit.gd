@@ -374,7 +374,9 @@ func save_as() -> bool:
 	return false
 
 func save_file(filename) -> bool:
+	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
+	mm_loader.current_project_path = ""
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(JSON.print(data, "\t", true))
