@@ -55,12 +55,20 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom *= 1.1
-		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom /= 1.1
+		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				call_deferred("set_scroll_ofs", scroll_offset)
+				zoom *= 1.1
+		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				call_deferred("set_scroll_ofs", scroll_offset)
+				zoom /= 1.1
 		else:
 			call_deferred("check_last_selected")
 	elif event is InputEventKey and event.pressed:
