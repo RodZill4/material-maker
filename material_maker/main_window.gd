@@ -54,6 +54,7 @@ const MENU = [
 	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
 	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
+	{ menu="File", command="load_material_from_website", description="Load material from website" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
 	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
@@ -607,6 +608,20 @@ func do_load_painting(filename : String) -> bool:
 	var status : bool = paint_panel.load_project(filename)
 	projects.current_tab = paint_panel.get_index()
 	return status
+
+func load_material_from_website() -> void:
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	add_child(dialog)
+	var result = dialog.select_material()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == "":
+		return
+	new_material()
+	var graph_edit = get_current_graph_edit()
+	var new_generator = mm_loader.create_gen(JSON.parse(result).result)
+	graph_edit.set_new_generator(new_generator)
+	hierarchy.update_from_graph_edit(graph_edit)
 
 func save_project(project : Control = null) -> bool:
 	if project == null:
