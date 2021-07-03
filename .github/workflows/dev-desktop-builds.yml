@@ -36,8 +36,6 @@ jobs:
         run: godot -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Mac OSX Build 🐧
         run: godot -v --export "Mac OSX" ./build/${EXPORT_NAME}_${MM_RELEASE}_macosx.zip
-      - name: Android Build 🐧
-        run: godot -v --export "Android" ./build/${EXPORT_NAME}_${MM_RELEASE}_android.apk
       - name: Unzip Mac OSX build 📁
         run: |
           cd build
@@ -83,8 +81,3 @@ jobs:
         with:
           name: Mac OSX snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_macosx.zip
-      - name: Upload Android Artifact 🚀
-        uses: actions/upload-artifact@v2
-        with:
-          name: Android experimental snapshot
-          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_android.apk
