@@ -149,6 +149,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/types/types.gd"
 }, {
+"base": "OculusTracker",
+"class": "OculusHandTracker",
+"language": "GDScript",
+"path": "res://addons/godot_ovrmobile/example_scenes/oculus_hand_tracker.gd"
+}, {
+"base": "OculusTracker",
+"class": "OculusTouchController",
+"language": "GDScript",
+"path": "res://addons/godot_ovrmobile/example_scenes/oculus_touch_controller.gd"
+}, {
+"base": "ARVRController",
+"class": "OculusTracker",
+"language": "GDScript",
+"path": "res://addons/godot_ovrmobile/example_scenes/oculus_tracker.gd"
+}, {
 "base": "TextureButton",
 "class": "PortGroupButton",
 "language": "GDScript",
@@ -188,6 +203,9 @@ _global_script_class_icons={
 "MMPaths": "",
 "MMPolygon": "",
 "MMType": "",
+"OculusHandTracker": "",
+"OculusTouchController": "",
+"OculusTracker": "",
 "PortGroupButton": "",
 "SizeOptionButton": ""
 }
@@ -206,7 +224,7 @@ config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="0.94.0.0"
 config/actual_release="0.95a"
-run/main_scene.Android="res://vr.tscn"
+run/main_scene.oculus_quest="res://vr.tscn"
 
 [audio]
 
