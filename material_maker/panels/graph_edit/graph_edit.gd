@@ -55,14 +55,20 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom *= 1.1
-		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom /= 1.1
-		elif event.button_index == BUTTON_MIDDLE and $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
+		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				call_deferred("set_scroll_ofs", scroll_offset)
+				zoom *= 1.1
+		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				call_deferred("set_scroll_ofs", scroll_offset)
+				zoom /= 1.1
 		else:
 			call_deferred("check_last_selected")
 	elif event is InputEventKey and event.pressed:
@@ -70,17 +76,14 @@ func _gui_input(event) -> void:
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
 	elif event is InputEventMouseMotion:
-		if $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
-		else:
-			for c in get_children():
-				if c.has_method("get_slot_tooltip"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
-						hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
-					else:
-						c.clear_connection_labels()
+		for c in get_children():
+			if c.has_method("get_slot_tooltip"):
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+				else:
+					c.clear_connection_labels()
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -379,7 +382,9 @@ func save_as() -> bool:
 	return false
 
 func save_file(filename) -> bool:
+	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
+	mm_loader.current_project_path = ""
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(JSON.print(data, "\t", true))
@@ -422,12 +427,12 @@ func remove_selection() -> void:
 			remove_node(c)
 
 # Maybe move this to gen_graph...
-func serialize_selection() -> Dictionary:
+func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
-	var nodes = []
-	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
-			nodes.append(c)
+	if nodes.empty():
+		for c in get_children():
+			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+				nodes.append(c)
 	if nodes.empty():
 		return {}
 	var center = Vector2(0, 0)

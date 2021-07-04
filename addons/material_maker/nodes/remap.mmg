@@ -16,15 +16,20 @@
 			{
 				"default": "0.0",
 				"label": "",
+				"longdesc": "The greyscale input map",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "Remaps a greyscale image for use as an input map for Advanced Tiler nodes",
 		"name": "Remap",
 		"outputs": [
 			{
 				"f": "$min+$(name_uv)_x-mod($(name_uv)_x, max($step, 0.00000001))",
+				"longdesc": "The remapped image map",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -33,9 +38,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Min",
+				"longdesc": "The value generated for black areas of the input",
 				"max": 10,
 				"min": -10,
 				"name": "min",
+				"shortdesc": "Min",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -43,9 +50,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Max",
+				"longdesc": "The value generated for white areas of the input",
 				"max": 10,
 				"min": -10,
 				"name": "max",
+				"shortdesc": "Max",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -53,13 +62,16 @@
 				"control": "None",
 				"default": 0,
 				"label": "Step",
+				"longdesc": "The step between generated values",
 				"max": 1,
 				"min": 0,
 				"name": "step",
+				"shortdesc": "Step",
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Remap"
 	},
 	"type": "shader"
 }

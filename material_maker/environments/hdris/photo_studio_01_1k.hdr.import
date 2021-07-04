@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/photo_studio_01_1k.hdr-62faf600128b5fd5973215435934cd61.stex"
+path="res://.import/photo_studio_01_1k.hdr-67066106c81aadd61efb3176d5af71b1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/environments/hdri/photo_studio_01_1k.hdr"
-dest_files=[ "res://.import/photo_studio_01_1k.hdr-62faf600128b5fd5973215435934cd61.stex" ]
+source_file="res://material_maker/environments/hdris/photo_studio_01_1k.hdr"
+dest_files=[ "res://.import/photo_studio_01_1k.hdr-67066106c81aadd61efb3176d5af71b1.stex" ]
 
 [params]
 

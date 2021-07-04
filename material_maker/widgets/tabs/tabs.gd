@@ -122,3 +122,23 @@ func _on_CrashRecoveryTimer_timeout():
 		var tab_control = get_child(i)
 		if tab_control.has_method("crash_recovery_save"):
 			tab_control.crash_recovery_save()
+
+func _input(event: InputEvent) -> void:
+	# Navigate between tabs using keyboard shortcuts.
+	if event.is_action_pressed("ui_previous_tab"):
+		set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
+	elif event.is_action_pressed("ui_next_tab"):
+		set_current_tab(wrapi(current_tab + 1, 0, $Tabs.get_tab_count()))
+
+func _gui_input(event: InputEvent) -> void:
+	# Navigate between tabs by hovering tabs then using the mouse wheel.
+	# Only take into account the mouse wheel scrolling on the tabs themselves,
+	# not their content.
+	var rect := get_global_rect()
+	# Roughly matches the height of the tabs bar itself (with some additional tolerance for better usability).
+	rect.size.y = 30
+	if event is InputEventMouseButton and event.pressed and rect.has_point(get_global_mouse_position()):
+		if event.button_index == BUTTON_WHEEL_UP:
+			set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
+		elif event.button_index == BUTTON_WHEEL_DOWN:
+			set_current_tab(wrapi(current_tab + 1, 0, $Tabs.get_tab_count()))

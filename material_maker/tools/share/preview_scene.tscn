@@ -1,33 +1,59 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[sub_resource type="SphereMesh" id=4]
+[sub_resource type="SphereMesh" id=1]
 
-[sub_resource type="SpatialMaterial" id=5]
-metallic = 1.0
-metallic_texture_channel = 2
-roughness_texture_channel = 1
-normal_enabled = true
-normal_scale = 1.0
-ao_enabled = true
-ao_light_affect = 1.0
-ao_on_uv2 = false
-ao_texture_channel = 0
-depth_enabled = true
-depth_scale = 0.04
-depth_deep_parallax = true
-depth_min_layers = 8
-depth_max_layers = 32
-depth_flip_tangent = false
-depth_flip_binormal = false
-uv1_scale = Vector3( 4, 2, 4 )
-uv1_offset = Vector3( 0, 0.5, 0 )
+[sub_resource type="Shader" id=2]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : hint_color;
+uniform sampler2D texture_albedo : hint_albedo;
+uniform float specular;
+uniform float metallic;
+uniform float roughness : hint_range(0,1);
+uniform float point_size : hint_range(0,128);
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
 
-[sub_resource type="ProceduralSky" id=6]
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	METALLIC = metallic;
+	ROUGHNESS = roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/albedo = Color( 0.396078, 0.419608, 0.776471, 1 )
+shader_param/specular = 0.5
+shader_param/metallic = 0.0
+shader_param/roughness = 0.0
+shader_param/point_size = 1.0
+shader_param/uv1_scale = Vector3( 1, 1, 1 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/uv2_scale = Vector3( 1, 1, 1 )
+shader_param/uv2_offset = Vector3( 0, 0, 0 )
+
+[sub_resource type="ProceduralSky" id=4]
 sky_energy = 0.75
+sun_latitude = 10.0
+sun_longitude = 125.0
 
-[sub_resource type="Environment" id=7]
+[sub_resource type="Environment" id=5]
 background_mode = 2
-background_sky = SubResource( 6 )
+background_sky = SubResource( 4 )
 ambient_light_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
 tonemap_mode = 2
 
@@ -35,8 +61,8 @@ tonemap_mode = 2
 
 [node name="Sphere" type="MeshInstance" parent="."]
 transform = Transform( 0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0 )
-mesh = SubResource( 4 )
-material/0 = SubResource( 5 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 3 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.5, -0.224144, 0.836516, 0, 0.965926, 0.258819, -0.866025, -0.12941, 0.482963, 0, 0, 0 )
@@ -44,4 +70,4 @@ shadow_enabled = true
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8 )
-environment = SubResource( 7 )
+environment = SubResource( 5 )

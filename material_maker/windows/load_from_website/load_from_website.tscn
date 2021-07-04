@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/windows/load_from_website/load_from_website.gd" type="Script" id=1]
+
+[node name="LoadFromWebsite" type="WindowDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 340.0
+margin_top = 188.0
+margin_right = -362.0
+margin_bottom = -134.0
+window_title = "Load from website"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+margin_right = 578.0
+margin_bottom = 366.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_columns = 5
+fixed_column_width = 128
+icon_mode = 0
+icon_scale = 0.5
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+margin_top = 370.0
+margin_right = 578.0
+margin_bottom = 374.0
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 207.0
+margin_top = 378.0
+margin_right = 371.0
+margin_bottom = 398.0
+size_flags_horizontal = 4
+
+[node name="OK" type="Button" parent="VBoxContainer/Buttons"]
+margin_right = 80.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 80, 0 )
+disabled = true
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 84.0
+margin_right = 164.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 80, 0 )
+text = "Cancel"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="popup_hide" from="." to="." method="_on_LoadFromWebsite_popup_hide"]
+[connection signal="item_activated" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_activated"]
+[connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_selected"]
+[connection signal="nothing_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_nothing_selected"]
+[connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]

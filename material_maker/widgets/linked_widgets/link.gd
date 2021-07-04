@@ -62,7 +62,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		set_process_input(false)
 		queue_free()
-
+		generator.remove_parameter(param_name)
 	if event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)

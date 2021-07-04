@@ -7,16 +7,16 @@ on:
     branches: [ master ]
 
 env:
-  GODOT_VERSION: 3.2.3
+  GODOT_VERSION: 3.3.2
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_94
+  MM_RELEASE: 0_96
 
 jobs:
   generate_releases:
     name: Generate releases 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:3.2.3
+      image: docker://barichello/godot-ci:3.3.2
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -81,4 +81,3 @@ jobs:
         with:
           name: Mac OSX snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_macosx.zip
-

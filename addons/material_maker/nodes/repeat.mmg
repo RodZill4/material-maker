@@ -1,0 +1,39 @@
+{
+	"name": "repeat",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image to be transformed",
+				"name": "i",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Translates, rotates and scales its input",
+		"name": "Repeat",
+		"outputs": [
+			{
+				"longdesc": "Shows the transformed image",
+				"rgba": "$i(fract($uv))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

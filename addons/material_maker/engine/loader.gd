@@ -1,7 +1,9 @@
 tool
 extends Node
 
-var predefined_generators = {}
+var predefined_generators : Dictionary = {}
+
+var current_project_path : String = ""
 
 func _ready()-> void:
 	update_predefined_generators()
@@ -26,6 +28,15 @@ func update_predefined_generators()-> void:
 			file.store_string(to_json(predefined_generators))
 			file.close()
 
+func get_material_nodes() -> Array:
+	var rv : Array = Array()
+	for g in predefined_generators.keys():
+		var generator = predefined_generators[g]
+		if generator.has("type") and generator.type == "material_export":
+			if generator.has("shader_model") and generator.shader_model.has("name"):
+				rv.push_back({ name=g, label=generator.shader_model.name })
+	return rv
+
 func get_predefined_global(g : String) -> String:
 	if ! predefined_generators.has(g):
 		return ""
@@ -45,7 +56,10 @@ func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
-		return create_gen(data)
+		current_project_path = filename.get_base_dir()
+		var generator = create_gen(data)
+		current_project_path = ""
+		return generator
 	return null
 
 func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
@@ -68,7 +82,7 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 
 func create_gen(data) -> MMGenBase:
 	var guess = [
-		{ keyword="export", type=MMGenMaterial },
+		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="is_brush", type=MMGenBrush },
@@ -90,7 +104,14 @@ func create_gen(data) -> MMGenBase:
 	}
 	var generator = null
 	for g in guess:
-		if data.has(g.keyword):
+		var guessed = true
+		var d = data
+		for k in g.keyword.split("/"):
+			if ! d.has(k):
+				guessed = false
+				break
+			d = d[k]
+		if guessed:
 			generator = g.type.new()
 			break
 	if generator == null and data.has("type"):

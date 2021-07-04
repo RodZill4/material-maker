@@ -7,7 +7,11 @@ export var tesselated : bool = false setget set_tesselated
 
 
 func _ready():
-	update_material()
+	var m : ShaderMaterial = ShaderMaterial.new()
+	m.shader = Shader.new()
+	set_surface_material(0, m)
+	m.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
+	update_mesh()
 
 func set_uv_scale(s : Vector2) -> void:
 	if s != uv_scale:
@@ -25,20 +29,17 @@ func set_tesselated(t : bool) -> void:
 	if new_tesselated == tesselated:
 		return
 	tesselated = new_tesselated
-	update_material()
+	update_mesh()
 	# Force material update (this is not need at startup)
 	var parent = self
 	while ! (parent is ViewportContainer):
 		parent = parent.get_parent()
 	parent.emit_signal("need_update", [ parent ])
 
-func update_material() -> void:
+func update_mesh() -> void:
 	if mesh == null:
 		return
-	var material
 	if tesselated:
-		material = preload("res://material_maker/panels/preview_3d/materials/shader_material_tesselated.tres").duplicate()
-		material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 		var tesselation_detail: int = mm_globals.get_main_window().preview_tesselation_detail
 		match mesh.get_class():
 			"CubeMesh", "PrismMesh":
@@ -57,9 +58,6 @@ func update_material() -> void:
 			_:
 				push_error("Unknown tesselated mesh type: %s" % mesh.get_class())
 	else:
-		material = preload("res://material_maker/panels/preview_3d/materials/spatial_material.tres").duplicate()
-		material.uv1_scale.x = uv_scale.x
-		material.uv1_scale.y = uv_scale.y
 		match mesh.get_class():
 			"CubeMesh", "PrismMesh":
 				mesh.subdivide_width = 0
@@ -76,4 +74,3 @@ func update_material() -> void:
 				mesh.rings = 32
 			_:
 				push_error("Unknown non-tesselated mesh type: %s" % mesh.get_class())
-	set_surface_material(0, material)

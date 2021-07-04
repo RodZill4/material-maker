@@ -16,7 +16,7 @@
 		"ty": 4
 	},
 	"shader_model": {
-		"code": "vec2 $(name_uv)_mapuv;\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_mapuv);",
+		"code": "vec2 $(name_uv)_mapuv;\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), float($seed), $(name_uv)_mapuv);",
 		"global": "",
 		"inputs": [
 			{
@@ -39,54 +39,67 @@
 			},
 			{
 				"default": "vec4(rand2($uv+vec2(float($seed))), rand2($uv-vec2(float($seed))))",
-				"function": true,
 				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 1 output",
 				"name": "color1",
+				"shortdesc": "Color map 1",
 				"type": "rgba"
 			},
 			{
 				"default": "vec4(rand2(-$uv+vec2(float($seed))), rand2(-$uv-vec2(float($seed))))",
 				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 2 output",
 				"name": "color2",
+				"shortdesc": "Color map 2",
 				"type": "rgba"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "5:",
+				"longdesc": "A map for translation along the X axis",
 				"name": "tr_x",
+				"shortdesc": "Translate map X",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for translation along the Y axis",
 				"name": "tr_y",
+				"shortdesc": "Translate map Y",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for rotation",
 				"name": "r",
+				"shortdesc": "Rotate map",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for scale along the X axis",
 				"name": "sc_x",
+				"shortdesc": "Scale map X",
 				"type": "f"
 			},
 			{
 				"default": "1.0",
 				"function": true,
 				"label": "",
+				"longdesc": "A map for scale along the Y axis",
 				"name": "sc_y",
+				"shortdesc": "Scale map Y",
 				"type": "f"
 			}
 		],
-		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, out vec2 outmapuv) {\n\t// $seed\n\tvec4 c = vec4(0.0);\n\toutmapuv = vec2(0.0);\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tpos = fract(pos+vec2(0.5));\n\t\t\t\tpv -= vec2($translate_x*$tr_x(pos), $translate_y*$tr_y(pos))/tile;\n\t\t\t\tfloat angle = $r(pos) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv /= vec2($scale_x*$sc_x(pos), $scale_y*$sc_y(pos));\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 seed = rand2(vec2(_seed)+pos);\n\t\t\t\t$select_inputs\n\t\t\t\tvec4 n = $in(pv);\n\t\t\t\tfloat na = n.a*mask;\n\t\t\t\toutmapuv = mix(outmapuv, pos, step(c.a, na));\n\t\t\t\tc = mix(c, n, na);\n\t\t\t}\n\t\t}\n\t}\n\treturn c;\n}\n",
+		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, float _seed, out vec2 outmapuv) {\n\t// $seed\n\tvec4 c = vec4(0.0);\n\toutmapuv = vec2(0.0);\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tpos = fract(pos+vec2(0.5));\n\t\t\t\tpv -= vec2($translate_x*$tr_x(pos), $translate_y*$tr_y(pos))/tile;\n\t\t\t\tfloat angle = $r(pos) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv /= vec2($scale_x*$sc_x(pos), $scale_y*$sc_y(pos));\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 seed = rand2(vec2(_seed)+pos);\n\t\t\t\t$select_inputs\n\t\t\t\tvec4 n = $in(pv);\n\t\t\t\tfloat na = n.a*mask;\n\t\t\t\toutmapuv = mix(outmapuv, pos, step(c.a, na));\n\t\t\t\tc = mix(c, n, na);\n\t\t\t}\n\t\t}\n\t}\n\treturn c;\n}\n",
 		"longdesc": "Tiles several occurences of an input image while adding randomness.",
 		"name": "Advanced Tiler Color",
 		"outputs": [
@@ -97,13 +110,15 @@
 				"type": "rgba"
 			},
 			{
-				"longdesc": "Shows a random color for each instance of the input image",
+				"longdesc": "Shows a color for each instance of the input image",
 				"rgba": "$color1($(name_uv)_mapuv)",
-				"shortdesc": "Instance map",
+				"shortdesc": "Instance map 1",
 				"type": "rgba"
 			},
 			{
+				"longdesc": "Shows a color for each instance of the input image",
 				"rgba": "$color2($(name_uv)_mapuv)",
+				"shortdesc": "Instance map 2",
 				"type": "rgba"
 			}
 		],
@@ -170,9 +185,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Translate X",
+				"longdesc": "The translation along the X axis applied to the instances",
 				"max": 1,
 				"min": 0,
 				"name": "translate_x",
+				"shortdesc": "Translate.x",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -180,9 +197,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Translate Y",
+				"longdesc": "The translation along the Y axis applied to the instances",
 				"max": 1,
 				"min": 0,
 				"name": "translate_y",
+				"shortdesc": "Translate.y",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -190,9 +209,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Rotate",
+				"longdesc": "The angle of instances of the input",
 				"max": 180,
 				"min": 0,
 				"name": "rotate",
+				"shortdesc": "Rotate",
 				"step": 0.1,
 				"type": "float"
 			},

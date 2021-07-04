@@ -19,7 +19,7 @@ const PANELS = [
 ]
 const HIDE_PANELS = {
 	material=[ "Brushes", "Layers", "Parameters" ],
-	paint=[ "Preview2D", "Preview3D", "Histogram", "Hierarchy" ]
+	paint=[ "Preview3D", "Histogram", "Hierarchy" ]
 }
 
 var panels = {}

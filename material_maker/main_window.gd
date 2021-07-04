@@ -54,6 +54,7 @@ const MENU = [
 	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
 	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
+	{ menu="File", command="load_material_from_website", description="Load material from website" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
 	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
@@ -234,7 +235,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -409,13 +410,35 @@ func add_recent(path) -> void:
 	f.close()
 
 
-func create_menu_export_material(menu) -> void:
-	menu.clear()
+func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
+	if prefix == "":
+		menu.clear()
+		menu.set_size(Vector2(0, 0))
+		for sm in menu.get_children():
+			menu.remove_child(sm)
+			sm.free()
 	var project = get_current_project()
 	if project != null:
 		var material_node = project.get_material_node()
-		for p in material_node.get_export_profiles():
-			menu.add_item(p)
+		var prefix_len = prefix.length()
+		var submenus = []
+		for id in range(material_node.get_export_profiles().size()):
+			var p : String = material_node.get_export_profiles()[id]
+			if p.left(prefix_len) != prefix:
+				continue
+			p = p.right(prefix_len)
+			var slash_position = p.find("/")
+			if slash_position == -1:
+				menu.add_item(p, id)
+			else:
+				var submenu_name = p.left(slash_position)
+				if submenus.find(submenu_name) == -1:
+					var submenu = PopupMenu.new()
+					submenu.name = submenu_name
+					menu.add_child(submenu)
+					create_menu_export_material(submenu, p.left(slash_position+1))
+					menu.add_submenu_item(submenu_name, submenu_name, id)
+					submenus.push_back(submenu_name)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
@@ -588,6 +611,20 @@ func do_load_painting(filename : String) -> bool:
 	var status : bool = paint_panel.load_project(filename)
 	projects.current_tab = paint_panel.get_index()
 	return status
+
+func load_material_from_website() -> void:
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	add_child(dialog)
+	var result = dialog.select_material()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == "":
+		return
+	new_material()
+	var graph_edit = get_current_graph_edit()
+	var new_generator = mm_loader.create_gen(JSON.parse(result).result)
+	graph_edit.set_new_generator(new_generator)
+	hierarchy.update_from_graph_edit(graph_edit)
 
 func save_project(project : Control = null) -> bool:
 	if project == null:
@@ -976,15 +1013,19 @@ func update_preview_2d(node = null) -> void:
 			histogram.set_generator(null)
 			preview_2d_background.set_generator(null)
 
-func update_preview_3d(previews : Array) -> void:
+func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.render_textures()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		var status = gen_material.update()
+		if sequential:
+			while status is GDScriptFunctionState:
+				yield(status, "completed")
 		for p in previews:
-			gen_material.update_materials(p.get_materials())
+			status = gen_material.update_materials(p.get_materials(), sequential)
+			if sequential:
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
 
 var selected_node = null
 func on_selected_node_change(node) -> void:
@@ -998,23 +1039,28 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
+		for c in get_incoming_connections():
+			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+				c.source.disconnect(c.signal_name, self, c.method_name)
+		var new_graph_edit = null
 		if new_tab is GraphEdit:
-			for c in get_incoming_connections():
-				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-					c.source.disconnect(c.signal_name, self, c.method_name)
-			new_tab.connect("graph_changed", self, "update_preview")
-			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
-				new_tab.connect("node_selected", self, "on_selected_node_change")
+			new_graph_edit = new_tab
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
 			set_current_mode("material")
 		else:
+			if new_tab.has_method("get_graph_edit"):
+				new_graph_edit = new_tab.get_graph_edit()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
 			set_current_mode("paint")
 		current_tab = new_tab
-		if new_tab is GraphEdit:
+		if new_graph_edit != null:
+			new_graph_edit.connect("graph_changed", self, "update_preview")
+			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
+				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
 			update_preview()
+		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:

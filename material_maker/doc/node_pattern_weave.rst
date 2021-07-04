@@ -15,7 +15,8 @@ The **Weave** node accepts an optional greyscale input map for the width paramet
 Outputs
 +++++++
 
-The **Weave** generates a single greyscale output texture.
+The **Weave** generates a greyscale heightmap for the pattern as well as masks
+for the horizontal and vertical stripes.
 
 Parameters
 ++++++++++

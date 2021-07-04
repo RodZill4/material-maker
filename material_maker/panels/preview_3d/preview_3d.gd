@@ -1,7 +1,9 @@
 extends ViewportContainer
 
 const CAMERA_DISTANCE_MIN = 1.0
-const CAMERA_DISTANCE_MAX = 10.0
+const CAMERA_DISTANCE_MAX = 15.0
+const CAMERA_FOV_MIN = 10
+const CAMERA_FOV_MAX = 90
 
 export var ui_path : String = "UI/Preview3DUI"
 
@@ -131,6 +133,14 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var preview_material = current_object.get_surface_material(0)
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+			if p.name == n:
+				preview_material.set_shader_param(n, parameter_changes[n])
+				break
+
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
@@ -139,17 +149,23 @@ func on_gui_input(event) -> void:
 
 		match event.button_index:
 			BUTTON_WHEEL_UP:
-				camera.translation.z = clamp(
-					camera.translation.z / (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					camera.translation.z = clamp(
+						camera.translation.z / (1.01 if event.shift else 1.1),
+						CAMERA_DISTANCE_MIN,
+						CAMERA_DISTANCE_MAX
+					)
 			BUTTON_WHEEL_DOWN:
-				camera.translation.z = clamp(
-					camera.translation.z * (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					camera.translation.z = clamp(
+						camera.translation.z * (1.01 if event.shift else 1.1),
+						CAMERA_DISTANCE_MIN,
+						CAMERA_DISTANCE_MAX
+					)
 			BUTTON_LEFT, BUTTON_RIGHT:
 				var mask : int = Input.get_mouse_button_mask()
 				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0

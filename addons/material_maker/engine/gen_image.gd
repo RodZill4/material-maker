@@ -23,7 +23,7 @@ func get_type_name() -> String:
 	return "Image"
 
 func get_parameter_defs() -> Array:
-	return [ { name="image", type="image_path", label="" } ]
+	return [ { name="image", type="image_path", label="", default="" } ]
 
 func get_filetime(file_path : String) -> int:
 	var f : File = File.new()
@@ -44,3 +44,12 @@ func _on_timeout() -> void:
 		filetime = new_filetime
 		texture.load(file_path)
 		.set_parameter("image", file_path)
+
+func _serialize_data(data: Dictionary) -> Dictionary:
+	var image_path : String = data.parameters.image
+	image_path = image_path.replace(mm_loader.current_project_path, "%PROJECT_PATH%")
+	data.parameters.image = image_path
+	return data
+
+func _deserialize(data : Dictionary) -> void:
+	data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)

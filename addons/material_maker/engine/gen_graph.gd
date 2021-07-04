@@ -310,6 +310,24 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
 
+func check_input_connects(node) -> void:
+	var new_connections : Array = []
+	var removed_connections : Array = []
+	for c in connections:
+		if c.to == node.name:
+			if c.to_port >= node.get_input_defs().size():
+				removed_connections.push_back(c.duplicate(true))
+				continue
+			var input_type = node.get_input_defs()[c.to_port].type
+			var output_type = get_node(c.from).get_output_defs()[c.from_port].type
+			if mm_io_types.types[input_type].slot_type != mm_io_types.types[output_type].slot_type and mm_io_types.types[output_type].slot_type != 42:
+				removed_connections.push_back(c.duplicate(true))
+				continue
+		new_connections.push_back(c)
+	if !removed_connections.empty():
+		emit_signal("connections_changed", removed_connections, [])
+		connections = new_connections
+
 func create_subgraph(gens : Array) -> MMGenGraph:
 	# Remove material, gen_inputs and gen_outputs nodes
 	var generators = []

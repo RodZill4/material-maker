@@ -183,11 +183,11 @@ func set_object(o):
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic = 1.0
-	preview_material.metallic_texture = layers.get_mr_texture()
+	preview_material.metallic_texture = layers.get_metallic_texture()
 	preview_material.metallic_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	preview_material.roughness = 1.0
-	preview_material.roughness_texture = layers.get_mr_texture()
+	preview_material.roughness_texture = layers.get_roughness_texture()
 	preview_material.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
 	preview_material.emission_enabled = true
 	preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)

@@ -8,6 +8,7 @@
 		"has_albedo": true,
 		"has_depth": false,
 		"has_emission": false,
+		"has_normal": false,
 		"has_metallic": true,
 		"has_roughness": true,
 		"mode": 0
@@ -49,6 +50,12 @@
 				"type": "rgba"
 			},
 			{
+				"default": "vec4(0.5, 0.5, 0.0, 0.0)",
+				"label": "Normal",
+				"name": "normal",
+				"type": "rgba"
+			},
+			{
 				"default": "0.0",
 				"label": "Depth",
 				"name": "depth",
@@ -72,6 +79,10 @@
 			},
 			{
 				"rgba": "$emission($uv)",
+				"type": "rgba"
+			},
+			{
+				"rgba": "$normal($uv)",
 				"type": "rgba"
 			},
 			{
@@ -126,6 +137,12 @@
 				"default": false,
 				"label": "",
 				"name": "has_emission",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_normal",
 				"type": "boolean"
 			},
 			{

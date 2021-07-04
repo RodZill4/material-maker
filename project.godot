@@ -222,8 +222,8 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="0.94.0.0"
-config/actual_release="0.95a"
+config/release="0.96.0.0"
+config/actual_release="0.96pre-mats"
 run/main_scene.oculus_quest="res://vr.tscn"
 
 [audio]
@@ -249,10 +249,11 @@ gdscript/warnings/unsafe_call_argument=true
 window/size/width=1280
 window/size/height=720
 window/dpi/allow_hidpi=true
+window/handheld/orientation.Android="sensor_landscape"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "material_maker" )
+enabled=PoolStringArray( "res://addons/material_maker/plugin.cfg" )
 
 [gdnative]
 
@@ -290,6 +291,16 @@ ui_hierarchy_down={
 ui_toggle_docks={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_previous_tab={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":true,"control":true,"meta":false,"command":true,"pressed":false,"scancode":16777218,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_next_tab={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":16777218,"unicode":0,"echo":false,"script":null)
  ]
 }
 
