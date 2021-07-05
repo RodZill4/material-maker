@@ -97,6 +97,9 @@ func select_export(i : int) -> void:
 	export_target.selected = i
 	var e : String = export_target.get_item_text(i)
 	export_extension_edit.text = exports[e].export_extension if exports[e].has("export_extension") else ""
+	update_files(e)
+
+func update_files(e : String):
 	export_files.clear()
 	if ! exports[e].files.empty():
 		for f in exports[e].files:
@@ -211,3 +214,11 @@ func get_model_data() -> Dictionary:
 	data.exports = exports
 	data.custom = $Sizer/Tabs/Custom.text
 	return data
+
+func _on_Files_gui_input(event):
+	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
+		if ! export_files.get_selected_items().empty():
+			var current_export = export_target.get_item_text(export_target.selected)
+			exports[current_export].files.remove(export_files.get_selected_items()[0])
+			update_files(current_export)
+			export_files.unselect_all()
