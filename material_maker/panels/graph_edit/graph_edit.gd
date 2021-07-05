@@ -60,14 +60,16 @@ func _gui_input(event) -> void:
 				event.control = false
 			elif !event.shift:
 				event.control = true
-				call_deferred("set_scroll_ofs", scroll_offset)
+				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+				call_deferred("set_scroll_ofs", scroll_offset+0.1*zoom*position)
 				zoom *= 1.1
 		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
 				event.control = true
-				call_deferred("set_scroll_ofs", scroll_offset)
+				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+				call_deferred("set_scroll_ofs", scroll_offset+(1.0/1.1-1.0)*zoom*position)
 				zoom /= 1.1
 		else:
 			call_deferred("check_last_selected")
