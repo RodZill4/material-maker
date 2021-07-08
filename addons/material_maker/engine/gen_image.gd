@@ -52,4 +52,7 @@ func _serialize_data(data: Dictionary) -> Dictionary:
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
+	if data.has("parameters") and data.parameters.has("image"):
+		data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
+	elif data.has("image"):
+		data.image = data.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
