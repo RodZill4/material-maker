@@ -549,7 +549,7 @@ func new_paint_project(obj_file_name = null) -> void:
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -558,9 +558,11 @@ func load_project() -> void:
 	dialog.add_filter("*.mmpp;Model Painting File")
 	if config_cache.has_section_key("path", "project"):
 		dialog.current_dir = config_cache.get_value("path", "project")
-	dialog.connect("files_selected", self, "do_load_projects")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_load_projects(files)
 
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
