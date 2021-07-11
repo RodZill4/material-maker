@@ -265,8 +265,8 @@ func get_shaders(mask_count : int) -> Dictionary:
 			shader_modulate += "*texture(mask%d_tex, UV).r" % i;
 		shader_prefix += "void fragment() {\n	vec4 tex = texture(input_tex, UV);\n"
 		albedo_shader.code = shader_prefix+"	COLOR=vec4(tex.rgb, tex.a*"+shader_modulate+");\n}"
-		metallic_shader.code = shader_prefix+"	COLOR=vec4(tex.r, 0.0, 0.0, tex.b*"+shader_modulate+");\n}"
-		roughness_shader.code = shader_prefix+"	COLOR=vec4(0.0, tex.g, 0.0, tex.a*"+shader_modulate+");\n}"
+		metallic_shader.code = shader_prefix+"	COLOR=vec4(tex.r, tex.r, tex.r, tex.b*"+shader_modulate+");\n}"
+		roughness_shader.code = shader_prefix+"	COLOR=vec4(tex.g, tex.g, tex.g, tex.a*"+shader_modulate+");\n}"
 		albedomask_shader.code = shader_prefix+"	COLOR=vec4(0.0, 0.0, 0.0, tex.a*"+shader_modulate+");\n}"
 		shaders.push_back( { albedo=albedo_shader, metallic=metallic_shader, roughness=roughness_shader, albedomask=albedomask_shader } )
 	return shaders[mask_count]
