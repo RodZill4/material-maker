@@ -459,7 +459,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
-	var dialog : FileDialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
@@ -468,9 +468,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if config_cache.has_section_key("path", config_key):
 		dialog.current_dir = config_cache.get_value("path", config_key)
 	add_child(dialog)
-	dialog.connect("file_selected", self, "export_material", [ profile ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		export_material(files[0], profile)
 
 
 func create_menu_set_theme(menu) -> void:

@@ -42,5 +42,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="gui_input" from="RecentList" to="." method="_on_RecentList_gui_input"]
 [connection signal="item_activated" from="RecentList" to="." method="_on_RecentList_item_activated"]
+[connection signal="gui_input" from="FavList" to="." method="_on_FavList_gui_input"]
 [connection signal="item_activated" from="FavList" to="." method="_on_FavList_item_activated"]

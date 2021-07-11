@@ -21,7 +21,7 @@ func set_image_path(path) -> void:
 	emit_signal("on_file_selected", path)
 
 func _on_ImagePicker_pressed():
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -34,9 +34,11 @@ func _on_ImagePicker_pressed():
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
-	dialog.connect("file_selected", self, "set_image_path")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		set_image_path(files[0])
 
 func on_drop_image_file(file_name : String) -> void:
 	set_image_path(file_name)
