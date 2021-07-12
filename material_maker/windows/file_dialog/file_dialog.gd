@@ -20,9 +20,10 @@ func _ready() -> void:
 	var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instance()
 	vbox.get_child(0).add_child(fav_button)
 	fav_button.connect("pressed", self, "add_favorite")
-	volume_option = vbox.get_child(0).get_child(3)
-	if ! volume_option is OptionButton:
-		volume_option = null
+	if OS.get_name() == "Windows":
+		volume_option = vbox.get_child(0).get_child(3)
+		if ! volume_option is OptionButton:
+			volume_option = null
 
 
 func get_full_current_dir() -> String:
