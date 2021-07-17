@@ -12,7 +12,6 @@
 [ext_resource path="res://material_maker/windows/about/discord.png" type="Texture" id=10]
 
 [node name="About" type="WindowDialog"]
-visible = true
 margin_right = 664.0
 margin_bottom = 377.0
 window_title = "About..."

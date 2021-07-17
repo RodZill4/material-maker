@@ -15,6 +15,7 @@ const CONTRIBUTORS = [
 	{ name="Paulo Falcao", contribution="Preview for v4v4 input/outputs and lots of ideas/feedback for SDF nodes" },
 	{ name="Jesse Dubay", contribution="3D preview and user interface improvements" },
 	{ name="escargot-sans-gluten", contribution="3D preview and user interface improvements" },
+	{ name="Tarox", contribution="Material Maker icon and lots of very useful feedback" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 
