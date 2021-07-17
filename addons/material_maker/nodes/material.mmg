@@ -16,10 +16,10 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth_scale": 0.5,
+		"depth_scale": 0.42,
 		"emission_energy": 1,
 		"flags_transparent": false,
-		"metallic": 1,
+		"metallic": 0,
 		"normal": 1,
 		"roughness": 1,
 		"size": 11,
@@ -283,7 +283,7 @@
 				"uids": 5
 			},
 			"Unreal": {
-				"export_extension": "tres",
+				"export_extension": "mm2ue",
 				"files": [
 					{
 						"conditions": "$(connected:albedo_tex)",
@@ -314,6 +314,11 @@
 						"file_name": "$(path_prefix)_height.png",
 						"output": 8,
 						"type": "texture"
+					},
+					{
+						"file_name": "$(path_prefix).mm2ue",
+						"template": "/*\nInstructions to setup this material:\n- copy material.uasset and open the copy\n- copy the shader code below and paste it into the Custom node\n$if $(connected:albedo_tex)\n- assign $(file_prefix)_albedo.png to the Albedo texture in the graph\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n- assign $(file_prefix)_orm.png to the ORM texture in the graph\n$fi\n$if $(connected:emission_tex)\n- assign $(file_prefix)_emission.png to the Emission texture in the graph\n$fi\n$if $(connected:normal_tex)\n- assign $(file_prefix)_normal.png to the Normal texture in the graph\n$fi\n$if $(connected:depth_tex)\n- assign $(file_prefix)_height.png to the Height texture in the graph\n$fi\n*/\n",
+						"type": "template"
 					}
 				]
 			}
