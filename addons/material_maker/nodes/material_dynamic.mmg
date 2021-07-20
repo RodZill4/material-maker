@@ -16,7 +16,7 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth_scale": 0.5,
+		"depth_scale": 0.2,
 		"emission_energy": 1,
 		"flags_transparent": false,
 		"metallic": 1,
@@ -80,7 +80,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).mm2ue",
-						"template": "/*\nInstructions to setup this material:\n- copy material_dynamic.uasset and open the copy\n- copy the shader code below and paste it into the Custom node\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv, out float metallic, out float roughness, out float3 normal) {\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n\t\tfixed4 rv = tofloat4($albedo_tex(uv), 1.0)*$albedo_color;\n\t\tmetallic = $metallic_tex(uv)*$metallic;\n\t\troughness = $roughness_tex(uv)*$roughness;\n\t\tnormal = $normal_tex(uv)*float3(-1.0, -1.0, -1.0)+float3(1.0, 1.0, 1.0);\n        return rv;\n$end_generate\n    }\n};\nFunctions f;\nfixed4 albedo = f.generated_shader(TexCoords, metallic, roughness, normal);\nreturn albedo;\n",
+						"template": "/*\nInstructions to setup this material:\n- copy material_dynamic.uasset and open the copy\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n- copy the shader code below and paste it into the Custom node\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv, out float metallic, out float roughness, out float3 normal) {\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n\t\tfixed4 rv = tofloat4($albedo_tex(uv), 1.0)*$albedo_color;\n\t\tmetallic = $metallic_tex(uv)*$metallic;\n\t\troughness = $roughness_tex(uv)*$roughness;\n\t\tnormal = $normal_tex(uv)*float3(-1.0, -1.0, -1.0)+float3(1.0, 1.0, 1.0);\n        return rv;\n$end_generate\n    }\n};\nFunctions f;\nfixed4 albedo = f.generated_shader(TexCoords, metallic, roughness, normal);\nreturn albedo;\n",
 						"type": "template"
 					},
 					{
