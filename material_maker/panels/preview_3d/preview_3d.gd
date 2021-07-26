@@ -76,7 +76,7 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
-		var dialog = FileDialog.new()
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 		add_child(dialog)
 		dialog.rect_min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -84,9 +84,11 @@ func _on_Model_item_selected(id) -> void:
 		dialog.add_filter("*.obj;OBJ model File")
 		if get_node("/root/MainWindow").config_cache.has_section_key("path", "mesh"):
 			dialog.current_dir = get_node("/root/MainWindow").config_cache.get_value("path", "mesh")
-		dialog.connect("file_selected", self, "do_load_custom_mesh")
-		dialog.connect("popup_hide", dialog, "queue_free")
-		dialog.popup_centered()
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() == 1:
+			do_load_custom_mesh(files[0])
 	else:
 		select_object(id)
 
@@ -97,7 +99,6 @@ func do_load_custom_mesh(file_path) -> void:
 	if mesh != null:
 		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
-		object.update_material()
 		select_object(id)
 
 func select_object(id) -> void:
@@ -198,7 +199,7 @@ func on_gui_input(event) -> void:
 
 
 func generate_map(generate_function : String, size : int) -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -207,9 +208,11 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.add_filter("*.exr;EXR image File")
 	if get_node("/root/MainWindow").config_cache.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").config_cache.get_value("path", "maps")
-	dialog.connect("file_selected", self, generate_function, [ size ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		call(generate_function, files[0], size)
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
 	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()

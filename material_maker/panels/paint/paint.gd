@@ -501,14 +501,17 @@ func dump_texture(texture, filename):
 	image.save_png(filename)
 
 func show_file_dialog(mode, filter, callback):
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = mode
 	dialog.add_filter(filter)
-	dialog.connect("file_selected", self, callback)
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		call(callback, files[0])
 
 func load_project(file_name) -> bool:
 	var f : File = File.new()

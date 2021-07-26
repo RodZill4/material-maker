@@ -126,7 +126,7 @@ func _on_ContextMenu_about_to_show():
 func _on_ContextMenu_index_pressed(index):
 	match index:
 		0:
-			var dialog = FileDialog.new()
+			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 			add_child(dialog)
 			dialog.rect_min_size = Vector2(500, 500)
 			dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -139,9 +139,11 @@ func _on_ContextMenu_index_pressed(index):
 			dialog.add_filter("*.svg;SVG Image")
 			dialog.add_filter("*.tga;TGA Image")
 			dialog.add_filter("*.webp;WebP Image")
-			dialog.connect("file_selected", self, "on_drop_image_file")
-			dialog.connect("popup_hide", dialog, "queue_free")
-			dialog.popup_centered()
+			var files = dialog.select_files()
+			while files is GDScriptFunctionState:
+				files = yield(files, "completed")
+			if files.size() == 1:
+				on_drop_image_file(files[0])
 		1:
 			images.remove(current_image)
 			change_image(0)
