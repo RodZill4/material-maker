@@ -16,7 +16,7 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth_scale": 0.2,
+		"depth_scale": 0.5,
 		"emission_energy": 1,
 		"flags_transparent": false,
 		"metallic": 1,
