@@ -148,12 +148,17 @@ When made editable, 3 buttons are shown at the bottom of the node:
 * A folder-like button to load an existing node template
 * A floppy disk button to save the node as a template
 
+Loading and saving templates are only useful when contributing new nodes
+for Material Maker. Modifying your Material Maker installation may break
+compatibility with existing materials, and is not recommended unless you
+know what you are doing.
+
 To be reusable directly, templates must be saved in the **generators** directory in
 the install dir (or the **addon/material_maker/nodes** directory when using Material
 Maker as a Godot addon). All nodes templates saved in this directory are shown in
 the **Tools -> Create** menu.
 
-It is absolutely not necessary to save newly created nodes as templates, but this
+It is not recommended to save newly created nodes as templates, but this
 makes them a lot easier to access and results in smaller material files (only
 references to the templates are saved and not the whole node description).
 Consequently, modifying a template without ensuring compatibility with the old
