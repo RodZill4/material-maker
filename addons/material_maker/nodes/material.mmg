@@ -128,7 +128,7 @@
 					}
 				]
 			},
-			"Unity/3D": {
+			"Unity - 3D": {
 				"export_extension": "mat",
 				"files": [
 					{
@@ -211,7 +211,7 @@
 				],
 				"uids": 6
 			},
-			"Unity/HDRP": {
+			"Unity - HDRP": {
 				"export_extension": "mat",
 				"files": [
 					{
