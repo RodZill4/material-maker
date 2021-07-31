@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,10 +32,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -69,7 +71,7 @@
             
             
               <div class="version">
-                0.95
+                0.96
               </div>
             
           
@@ -99,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_material.html">Material nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
@@ -111,6 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_range.html">Tones Range node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_auto_tones.html">Auto Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tonality.html">Tonality node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
@@ -248,9 +252,10 @@ box of each filled area.</p>
 <p>The <strong>Fill</strong> node accepts the following parameters:</p>
 <ul class="simple">
 <li><p><em>resolution</em> is the resolution of the effect and only influences how details
-of the mask (and not the source if any) is captured. It is not recommended to
-set this value too high, and completely useless to set it higher than the generated
-textures resolution.</p></li>
+of the mask (and not the source if any) is captured. It is advised to be careful
+with using high values here, as the computation time may become very long.
+Setting it higher than the input’s resolution will not yield any benefit - only
+increase the computation time.</p></li>
 <li><p><em>iterations</em> is the number of iterations of the fill algorithm. The optimal value
 for this parameter depends on the input image. Starting with 5 or 10, then increasing
 the value depending on the result is a good way of finding it.</p></li>

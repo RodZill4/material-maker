@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,10 +32,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -69,7 +71,7 @@
             
             
               <div class="version">
-                0.95
+                0.96
               </div>
             
           
@@ -182,9 +184,6 @@ correct format.</p>
 <h2>Godot game engine<a class="headerlink" href="#godot-game-engine" title="Permalink to this headline">¶</a></h2>
 <p>When exporting for the Godot game engine, Material Maker will generate a .tres file that
 describes a fully configured SpatialMaterial.</p>
-<p>Note that exporting for Godot is not necessary if you use the Material maker addon, that
-provides an import plugin. This import plugin can either generate a precomputed material,
-or a material that will be rendered at runtime.</p>
 </div>
 <div class="section" id="unity-game-engine">
 <h2>Unity game engine<a class="headerlink" href="#unity-game-engine" title="Permalink to this headline">¶</a></h2>
@@ -192,32 +191,24 @@ or a material that will be rendered at runtime.</p>
 describes a fully configured material. It is thus possible to export materials directly
 into one of your project assets directory, and Unity will automatically detect the newly
 exported materials.</p>
-<p>Two options are available when exporting for Unity: Unity and UnityHDRP.</p>
+<p>Depending one the Material node type, several Unity targets may be available.</p>
 </div>
 <div class="section" id="unreal-game-engine">
 <h2>Unreal game engine<a class="headerlink" href="#unreal-game-engine" title="Permalink to this headline">¶</a></h2>
-<p>When exporting for the Unreal game engine, Material Maker will only generate PNG image
-files, and it is necessary to create the material in Unreal.</p>
-<p>To create a minimal material:</p>
+<p>When exporting for the Unreal game engine, Material Maker will only generate PNG
+images and a .mm2ue file. The material must be built manually inside the Unreal
+Engine editor by following the instructions in this file.</p>
+<p>This will generally consist in:</p>
 <ul class="simple">
-<li><p>import all PNG files into unreal</p></li>
-<li><p>create a new material using the <strong>Add new -&gt; Material</strong> menu</p></li>
-<li><p>open the new material to edit it</p></li>
-<li><p>drag and drop all textures into the material graph to create a Texture Sample node
-for each texture</p></li>
-<li><p>connect the RGB output of the albedo <em>Texture Sample</em> node to the <em>Base Color</em> input
-of the material node</p></li>
-<li><p>connect the R output of the ORM <em>Texture Sample</em> node to the <em>Ambient Occlusion</em> input
-of the material node</p></li>
-<li><p>connect the G output of the ORM <em>Texture Sample</em> node to the <em>Roughness</em> input
-of the material node</p></li>
-<li><p>connect the B output of the ORM <em>Texture Sample</em> node to the <em>Metallic</em> input
-of the material node</p></li>
-<li><p>connect the RGB output of the normal <em>Texture Sample</em> node to the <em>Normal</em> input
-of the material node</p></li>
+<li><p>Copying a material file from the <strong>export</strong> directory in Material Maker installation</p></li>
+<li><p>in the newly created material:</p>
+<ul>
+<li><p>assigning generated textures</p></li>
+<li><p>copying the shader generated in the .mm2ue file into a Custom node</p></li>
+<li><p>creating new inputs in the custom node and TextureObject nodes, assigning the textures and connecting them</p></li>
 </ul>
-<p>More complex materials can be created, with support for emission textures, depth maps, texture
-coordinate scaling…</p>
+</li>
+</ul>
 <img alt="_images/unreal_export.png" class="align-center" src="_images/unreal_export.png" />
 </div>
 </div>

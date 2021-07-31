@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,10 +32,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
@@ -69,7 +71,7 @@
             
             
               <div class="version">
-                0.95
+                0.96
               </div>
             
           
@@ -107,6 +109,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="shader_nodes.html">Shader nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="material_nodes.html">Material nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="texture_nodes.html">Texture nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
@@ -231,8 +234,10 @@ a dollar sign. This feature is useful when two parameters of the same node must
 depend on each other, or when several parameters of several nodes of a subgraph
 must be calculated from one or more named parameters.</p>
 <p>The <em>$time</em> variable can also be used in parameter expressions to define animations
-in generated shaders, but generated PBR materials will still be static (this feature
-could for example be used to export variations of the same material).</p>
+in generated shaders, but generated <strong>Static PBR Materials</strong> will still be
+static (this feature could for example be used to export variations of the
+same material). Other predefined material types can fully benefit from this
+feature.</p>
 </li>
 <li><p><strong>size</strong> parameters are power of two values for the image size. They are used when
 actually storing data in a texture, or when performing resolution dependent calculations
@@ -293,11 +298,15 @@ on the node type)</p></li>
 <li><p>A folder-like button to load an existing node template</p></li>
 <li><p>A floppy disk button to save the node as a template</p></li>
 </ul>
+<p>Loading and saving templates are only useful when contributing new nodes
+for Material Maker. Modifying your Material Maker installation may break
+compatibility with existing materials, and is not recommended unless you
+know what you are doing.</p>
 <p>To be reusable directly, templates must be saved in the <strong>generators</strong> directory in
 the install dir (or the <strong>addon/material_maker/nodes</strong> directory when using Material
 Maker as a Godot addon). All nodes templates saved in this directory are shown in
 the <strong>Tools -&gt; Create</strong> menu.</p>
-<p>It is absolutely not necessary to save newly created nodes as templates, but this
+<p>It is not recommended to save newly created nodes as templates, but this
 makes them a lot easier to access and results in smaller material files (only
 references to the templates are saved and not the whole node description).
 Consequently, modifying a template without ensuring compatibility with the old

@@ -7,12 +7,15 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>BrightnessContrast node &mdash; Material Maker  documentation</title>
+  <title>Auto Tones node &mdash; Material Maker  documentation</title>
   
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
   
@@ -29,18 +32,19 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="AdjustHSV node" href="node_filter_adjust_hsv.html" />
-    <link rel="prev" title="Invert node" href="node_filter_invert.html" /> 
+    <link rel="next" title="Greyscale node" href="node_filter_greyscale.html" />
+    <link rel="prev" title="Tones Range node" href="node_filter_tones_range.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -58,13 +62,16 @@
           
 
           
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                0.94
+                0.96
               </div>
             
           
@@ -94,23 +101,25 @@
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_material.html">Material nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="nodes_filter.html">Filter nodes</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">BrightnessContrast node</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_adjust_hsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_tones_range.html">Tones Range node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Auto Tones node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_greyscale.html">Greyscale node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tonality.html">Tonality node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_colorize.html">Colorize node</a></li>
@@ -120,8 +129,9 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swapchannels.html">SwapChannels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blur.html">Blur node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_directional_blur.html">Directional Blur node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_slope_blur.html">Slope Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_fast.html">Fast Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_directional.html">Directional Blur node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_blur_slope.html">Slope Blur node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_edge_detect.html">Edge detect node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_sharpen.html">Sharpen node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_emboss.html">Emboss node</a></li>
@@ -139,6 +149,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_maketileable.html">Make Tileable node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_pixelize.html">Pixelize node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_supersample.html">Supersample node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_smoothcurvature.html">Smooth Curvature node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_smoothcurvature2.html">Smooth Curvature 2 node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -200,7 +212,7 @@
         
           <li><a href="nodes_filter.html">Filter nodes</a> &raquo;</li>
         
-      <li>BrightnessContrast node</li>
+      <li>Auto Tones node</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -217,29 +229,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="brightnesscontrast-node">
-<h1>BrightnessContrast node<a class="headerlink" href="#brightnesscontrast-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>BrightnessContrast</strong> node adjusts the brightness and contrast of the input image.</p>
-<img alt="_images/node_filter_brightnesscontrast.png" class="align-center" src="_images/node_filter_brightnesscontrast.png" />
+  <div class="section" id="auto-tones-node">
+<h1>Auto Tones node<a class="headerlink" href="#auto-tones-node" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Auto Tones</strong> node finds the minimum and maximum values in the input texture and tone maps it to the full 0.0 - 1.0 range.</p>
+<img alt="_images/node_filter_auto_tones.png" class="align-center" src="_images/node_filter_auto_tones.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>BrightnessContrast</strong> node accepts an RGBA input texture.</p>
+<p>The <strong>Auto Tones</strong> node requires a greyscale input texture.</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>BrightnessContrast</strong> node provides a single RGBA texture.</p>
+<p>The <strong>Auto Tones</strong> node provides a single greyscale texture.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>BrightnessContrast</strong> node has the following parameters:</p>
 <ul class="simple">
-<li><p><em>Brightness</em> defines how brightness is affected.</p></li>
-<li><p><em>Contrast</em> defines how the contrast is affected.</p></li>
+<li><p>The <em>Size</em> of the buffers used to find the mininum and maximum values for the input image.
+If the input has small details a higher resolution buffer might be needed to capture precise
+min and max values.</p></li>
 </ul>
-</div>
-<div class="section" id="example-images">
-<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
-<img alt="_images/node_brightness_contrast_samples.png" class="align-center" src="_images/node_brightness_contrast_samples.png" />
+<p>Note: The output itself will not be buffered.</p>
 </div>
 </div>
 
@@ -249,8 +258,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="node_filter_adjust_hsv.html" class="btn btn-neutral float-right" title="AdjustHSV node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="node_filter_invert.html" class="btn btn-neutral float-left" title="Invert node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="node_filter_greyscale.html" class="btn btn-neutral float-right" title="Greyscale node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_filter_tones_range.html" class="btn btn-neutral float-left" title="Tones Range node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
