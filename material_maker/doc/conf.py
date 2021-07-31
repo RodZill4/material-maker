@@ -24,7 +24,7 @@ copyright = '2018-2021, Rodz Labs'
 author = 'Rodz Labs'
 
 # The short X.Y version
-version = '0.95'
+version = '0.96'
 # The full version, including alpha/beta/rc tags
 release = ''
 
