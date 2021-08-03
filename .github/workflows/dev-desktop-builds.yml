@@ -109,9 +109,9 @@ jobs:
       - name: Fix application icon 🖼
         run: sips -s format icns ./build/mac/material_maker.app/Contents/Resources/icon.icns --out ./build/mac/material_maker.app/Contents/Resources/icon.icns
       - name: Get documentation 🚀
-        - uses: actions/download-artifact@v2
-          with:
-            name: Documentation
+        uses: actions/download-artifact@v2
+        with:
+          name: Documentation
       - name: Copy data folder 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/mac/material_maker.app/Contents/MacOS
