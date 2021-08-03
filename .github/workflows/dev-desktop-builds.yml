@@ -77,7 +77,7 @@ jobs:
       - name: Setup environment 🔧
         run: |
           export GODOT_VERSION=${GODOT_VERSION_MAC}
-          export EXPORT_NAME=MaterialMaker
+          export EXPORT_NAME=material_maker
       - name: Download and extract export templates 💾
         run: |
           mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
@@ -94,27 +94,27 @@ jobs:
         run: |
           chown runner ./Godot
           chmod +x ./Godot
-          ./Godot -v --export "Mac OSX" ./build/mac/MaterialMaker.zip
+          ./Godot -v --export "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
-          unzip -a ./build/mac/MaterialMaker.zip -d ./build/mac
-          chmod +x ./build/mac/MaterialMaker.app/Contents/MacOS/MaterialMaker
-          rm ./build/mac/MaterialMaker.zip
+          unzip -a ./build/mac/material_maker.zip -d ./build/mac
+          chmod +x ./build/mac/material_maker.app/Contents/MacOS/material_maker
+          rm ./build/mac/material_maker.zip
       - name: Fix application icon 🖼
-        run: sips -s format icns ./build/mac/MaterialMaker.app/Contents/Resources/icon.icns --out ./build/mac/MaterialMaker.app/Contents/Resources/icon.icns
+        run: sips -s format icns ./build/mac/material_maker.app/Contents/Resources/icon.icns --out ./build/mac/material_maker.app/Contents/Resources/icon.icns
       - name: Copy data folder 📁
         run: |
-          cp -R ./addons/material_maker/nodes ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/environments ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/examples ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/library ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/meshes ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/misc/export ./build/mac/MaterialMaker.app/Contents/MacOS
-          cp -R ./material_maker/doc/_build/html ./build/mac/MaterialMaker.app/Contents/MacOS/doc
+          cp -R ./addons/material_maker/nodes ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/environments ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/examples ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/library ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/meshes ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/doc/_build/html ./build/mac/material_maker.app/Contents/MacOS/doc
       - name: Create DMG archive 🔧
-        run: hdiutil create -srcfolder ./build/mac -volname MaterialMaker ./build/mac/MaterialMaker.dmg
+        run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
           name: Mac OSX snapshot
-          path: ./build/mac/MaterialMaker.dmg
+          path: ./build/mac/material_maker.dmg
