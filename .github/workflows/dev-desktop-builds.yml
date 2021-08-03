@@ -112,8 +112,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Documentation
-      - name: Display structure of downloaded files
-        run: ls -R
+          path: doc
       - name: Copy data folder 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/mac/material_maker.app/Contents/MacOS
@@ -122,7 +121,7 @@ jobs:
           cp -R ./material_maker/library ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./material_maker/meshes ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
-          cp -R ./Documentation/html ./build/mac/material_maker.app/Contents/MacOS/doc
+          cp -R ./doc/html ./build/mac/material_maker.app/Contents/MacOS/doc
       - name: Create DMG archive 🔧
         run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker.dmg
       - name: Upload Mac OSX Artifact 🚀
