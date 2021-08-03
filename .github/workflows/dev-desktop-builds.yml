@@ -13,8 +13,8 @@ env:
   MM_RELEASE: 0_96
 
 jobs:
-  generate_releases:
-    name: Generate releases 🗔
+  export_windows_linux:
+    name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
     container:
       image: docker://barichello/godot-ci:3.3.2
@@ -56,6 +56,11 @@ jobs:
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
+      - name: Upload Documentation 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: Documentation
+          path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
@@ -68,6 +73,7 @@ jobs:
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
   export-mac:
     name: Mac Export 🍎
+    needs: export_windows_linux
     runs-on: macos-latest
     steps:
       - name: Checkout 🛎️
@@ -102,6 +108,10 @@ jobs:
           rm ./build/mac/material_maker.zip
       - name: Fix application icon 🖼
         run: sips -s format icns ./build/mac/material_maker.app/Contents/Resources/icon.icns --out ./build/mac/material_maker.app/Contents/Resources/icon.icns
+      - name: Get documentation 🚀
+        - uses: actions/download-artifact@v2
+          with:
+            name: Documentation
       - name: Copy data folder 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/mac/material_maker.app/Contents/MacOS
@@ -110,7 +120,7 @@ jobs:
           cp -R ./material_maker/library ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./material_maker/meshes ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/doc/_build/html ./build/mac/material_maker.app/Contents/MacOS/doc
+          cp -R html ./build/mac/material_maker.app/Contents/MacOS/doc
       - name: Create DMG archive 🔧
         run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker.dmg
       - name: Upload Mac OSX Artifact 🚀
