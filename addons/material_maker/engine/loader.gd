@@ -62,7 +62,7 @@ func load_gen(filename: String) -> MMGenBase:
 		return generator
 	return null
 
-func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
+func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = Vector2(0, 0)) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
@@ -70,6 +70,7 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 		if g != null:
 			var orig_name = g.name
 			if gen_graph.add_generator(g):
+				g.position += position
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
 	for c in connections:

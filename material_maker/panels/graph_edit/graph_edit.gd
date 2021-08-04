@@ -287,15 +287,23 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
+		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
 		var actions : Array = []
 		for g in new_stuff.generators:
-			g.position += position
 			actions.append({ action="add_node", node=g.name })
 		for c in new_stuff.connections:
 			actions.append({ action="add_connection", connection=c })
+		var generator_hier_name : String = generator.get_hier_name()
+		var redo_actions = [ { type="add_to_graph", parent=generator_hier_name, position=position, generators=data.nodes, connections=data.connections } ]
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
-		print(return_value)
+		var new_generators = []
+		for n in return_value:
+			new_generators.push_back(n.generator.get_hier_name())
+		var undo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=data.connections },
+			{ type="remove_generators", parent=generator_hier_name, generators=new_generators }
+		]
+		undoredo.add("Add and connect nodes", undo_actions, redo_actions)
 		return return_value
 	return []
 
@@ -657,14 +665,41 @@ func _on_Description_descriptions_changed(short_description, long_description):
 
 func get_node_from_hier_path(hier_path : String):
 	var node : Node = top_generator
-	for n in hier_path.split("/"):
-		if not node.has_node(n):
-			return null
-		node = node.get_node(n)
+	if hier_path != "":
+		for n in hier_path.split("/"):
+			if not node.has_node(n):
+				print("cannot find node "+n)
+				return null
+			node = node.get_node(n)
 	return node
 
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
+		"add_to_graph":
+			var parent_generator = get_node_from_hier_path(command.parent)
+			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, command.generators, command.connections, command.position)
+			if generator == parent_generator:
+				var actions : Array = []
+				for g in new_stuff.generators:
+					actions.append({ action="add_node", node=g.name })
+				for c in new_stuff.connections:
+					actions.append({ action="add_connection", connection=c })
+				update_graph(new_stuff.generators, new_stuff.connections)
+		"remove_connections":
+			var parent_generator = get_node_from_hier_path(command.parent)
+			if generator == parent_generator:
+				pass
+			else:
+				pass
+		"remove_generators":
+			print(command.parent)
+			var parent_generator = get_node_from_hier_path(command.parent)
+			for n in command.generators:
+				var g = parent_generator.get_node(n)
+				if generator == parent_generator:
+					remove_node(get_node("node_"+g.name))
+				else:
+					parent_generator.remove_generator(g)
 		"setparam":
 			var node = get_node_from_hier_path(command.node)
 			node.set_parameter(command.param, MMType.deserialize_value(command.value))

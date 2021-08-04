@@ -51,6 +51,8 @@ func _post_load() -> void:
 
 func get_hier_name() -> String:
 	var type = load("res://addons/material_maker/engine/gen_base.gd")
+	if not get_parent() is type:
+		return ""
 	var rv = name
 	var node = self
 	while true:
