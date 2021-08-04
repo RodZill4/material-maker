@@ -87,14 +87,14 @@ func _on_gui_input(event) -> void:
 			generator.minimized = !generator.minimized
 			update_node()
 			accept_event();
-		elif Rect2(rect_size.x-48, 4, 16, 16).has_point(event.position):
+		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
 			generator.toggle_lock_seed()
 			update()
 			get_parent().send_changed_signal()
 			accept_event();
 	elif event is InputEventMouseMotion:
 		var epos = event.position
-		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
+		if Rect2(0, 0, rect_size.x-56, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
 				hint_tooltip = wrap_string(description)
