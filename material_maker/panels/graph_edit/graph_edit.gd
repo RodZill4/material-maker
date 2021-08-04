@@ -21,6 +21,8 @@ onready var timer : Timer = $Timer
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
+onready var undoredo = $UndoRedo
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -292,8 +294,9 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 			actions.append({ action="add_node", node=g.name })
 		for c in new_stuff.connections:
 			actions.append({ action="add_connection", connection=c })
-		$UndoRedo.add_action("Add nodes and connections", actions)
-		return update_graph(new_stuff.generators, new_stuff.connections)
+		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
+		print(return_value)
+		return return_value
 	return []
 
 func create_gen_from_type(gen_name) -> void:
@@ -648,3 +651,24 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
+
+
+# Undo/Redo
+
+func get_node_from_hier_path(hier_path : String):
+	var node : Node = top_generator
+	for n in hier_path.split("/"):
+		if not node.has_node(n):
+			return null
+		node = node.get_node(n)
+	return node
+
+func undoredo_command(command : Dictionary) -> void:
+	match command.type:
+		"setparam":
+			var node = get_node_from_hier_path(command.node)
+			node.set_parameter(command.param, MMType.deserialize_value(command.value))
+		_:
+			print("Unknown undo/redo command:")
+			print(command)
+

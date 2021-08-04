@@ -103,47 +103,38 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 func initialize_properties() -> void:
 	initialize_controls_from_generator(controls, generator, self)
 
-func _on_text_changed(new_text, variable : String) -> void:
+func set_generator_parameter(variable : String, value):
+	var old_value = MMType.serialize_value(generator.get_parameter(variable))
 	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_text)
+	generator.set_parameter(variable, value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
+	if get_parent().get("undoredo") != null:
+		var node_hier_name = generator.get_hier_name()
+		var undo_command = { type="setparam", node=node_hier_name, param=variable, value=old_value }
+		var redo_command = { type="setparam", node=node_hier_name, param=variable, value=MMType.serialize_value(generator.get_parameter(variable)) }
+		get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], true)
+
+func _on_text_changed(new_text, variable : String) -> void:
+	set_generator_parameter(variable, new_text)
 
 func _on_value_changed(new_value, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_value)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_value)
 
 func _on_color_changed(new_color, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_color)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_color)
 
 func _on_file_changed(new_file, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_file)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_file)
 
 func _on_gradient_changed(new_gradient, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_gradient.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_gradient.duplicate())
 
 func _on_curve_changed(new_curve, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_curve.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_curve.duplicate())
 
 func _on_polygon_changed(new_polygon, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_polygon.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_polygon.duplicate())
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null

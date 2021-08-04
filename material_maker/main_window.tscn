@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -36,6 +36,44 @@ region = Rect2( 96, 32, 32, 32 )
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 64, 32, 31 )
+
+[sub_resource type="GDScript" id=6]
+script/source = "extends Label
+
+func _ready():
+	pass # Replace with function body.
+
+func show():
+	$AnimationPlayer.stop()
+	$AnimationPlayer.play(\"show\")
+"
+
+[sub_resource type="Animation" id=7]
+resource_name = "show"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [node name="MainWindow" type="Panel" groups=[
 "preview",
@@ -317,6 +355,23 @@ margin_left = 138.0
 margin_top = 32.0
 margin_right = 413.0
 margin_bottom = 351.0
+
+[node name="UndoRedoLabel" type="Label" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -82.5
+margin_right = 82.5
+margin_bottom = 22.0
+text = "Undo/Redo action added"
+align = 1
+script = SubResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UndoRedoLabel"]
+anims/show = SubResource( 7 )
 
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Layout_resized"]
