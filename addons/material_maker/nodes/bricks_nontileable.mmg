@@ -128,7 +128,7 @@
 			{
 				"control": "None",
 				"default": 1,
-				"label": "Repeat:",
+				"label": "Repeat",
 				"longdesc": "The number of repetitions of the whole pattern",
 				"max": 8,
 				"min": 1,
@@ -140,7 +140,7 @@
 			{
 				"control": "None",
 				"default": 6,
-				"label": "Rows:",
+				"label": "Rows",
 				"longdesc": "The number of rows of a pattern",
 				"max": 64,
 				"min": 1,
@@ -152,7 +152,7 @@
 			{
 				"control": "None",
 				"default": 3,
-				"label": "Columns:",
+				"label": "Columns",
 				"longdesc": "The number of columns of a pattern",
 				"max": 64,
 				"min": 1,
@@ -164,7 +164,7 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "Offset:",
+				"label": "Offset",
 				"longdesc": "The offset of the pattern (not useful for all patterns)",
 				"max": 1,
 				"min": 0,
@@ -176,7 +176,7 @@
 			{
 				"control": "None",
 				"default": 0.1,
-				"label": "Mortar:",
+				"label": "Mortar",
 				"longdesc": "The width of the space between bricks",
 				"max": 0.5,
 				"min": 0,
@@ -188,7 +188,7 @@
 			{
 				"control": "None",
 				"default": 0.1,
-				"label": "Bevel:",
+				"label": "Bevel",
 				"longdesc": "The width of the edge of each brick",
 				"max": 0.5,
 				"min": 0,
@@ -200,7 +200,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "Round:",
+				"label": "Round",
 				"longdesc": "The radius of the round corners of bricks",
 				"max": 0.5,
 				"min": 0,
@@ -212,7 +212,7 @@
 			{
 				"control": "None",
 				"default": 0.1,
-				"label": "Corner:",
+				"label": "Corner",
 				"longdesc": "The size of the corner part of each brick (only used by the Corner UV output)",
 				"max": 0.5,
 				"min": 0,

@@ -37,7 +37,7 @@
 			{
 				"control": "P1.x",
 				"default": 0,
-				"label": "Center X:",
+				"label": "Center X",
 				"longdesc": "The position of the rotation center",
 				"max": 1,
 				"min": -1,
@@ -49,7 +49,7 @@
 			{
 				"control": "P1.y",
 				"default": 0,
-				"label": "Center Y:",
+				"label": "Center Y",
 				"longdesc": "The position of the rotation center",
 				"max": 1,
 				"min": -1,
@@ -61,7 +61,7 @@
 			{
 				"control": "Radius1.a",
 				"default": 0,
-				"label": "Rotate:",
+				"label": "Rotate",
 				"longdesc": "The angle of the rotation",
 				"max": 720,
 				"min": -720,

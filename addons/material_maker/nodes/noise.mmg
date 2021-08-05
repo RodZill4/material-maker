@@ -29,7 +29,7 @@
 			{
 				"default": 8,
 				"first": 2,
-				"label": "Grid Size:",
+				"label": "Grid Size",
 				"last": 12,
 				"longdesc": "The grid size",
 				"name": "size",
@@ -39,7 +39,7 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "Density:",
+				"label": "Density",
 				"longdesc": "The density of white squares",
 				"max": 1,
 				"min": 0,
