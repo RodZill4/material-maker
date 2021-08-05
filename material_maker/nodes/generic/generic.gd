@@ -384,7 +384,6 @@ func update_node() -> void:
 		initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
-	var button_width = 0
 	output_count = outputs.size()
 	for i in range(output_count):
 		var output = outputs[i]
@@ -406,12 +405,6 @@ func update_node() -> void:
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
 			hsizer.rect_min_size.y = 12
-	if !outputs.empty():
-		for i in range(output_count, get_child_count()):
-			var hsizer : HBoxContainer = get_child(i)
-			var empty_control : Control = Control.new()
-			empty_control.rect_min_size.x = button_width
-			hsizer.add_child(empty_control)
 	# Edit buttons
 	if generator.is_editable():
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
