@@ -56,7 +56,9 @@ func add_node(node_data) -> void:
 		node.offset -= port_position/current_graph.zoom
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
-
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_createnode")
 
 func object_selected(obj) -> void:
 	add_node(obj)

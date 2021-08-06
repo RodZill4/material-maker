@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://material_maker/tools/share/share_button.tscn" type="PackedScene" id=12]
 [ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/tools/library_manager/library_manager.gd" type="Script" id=14]
+[ext_resource path="res://material_maker/tools/achievements/achievements.gd" type="Script" id=15]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -317,6 +318,9 @@ margin_left = 138.0
 margin_top = 32.0
 margin_right = 413.0
 margin_bottom = 351.0
+
+[node name="Achievements" type="Node" parent="."]
+script = ExtResource( 15 )
 
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Layout_resized"]

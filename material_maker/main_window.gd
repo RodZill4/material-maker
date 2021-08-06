@@ -113,6 +113,7 @@ const MENU = [
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
+	{ menu="Help", command="show_achievements", description="Show achievements" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
 	{ menu="Help", command="show_reddit", description="Material Maker on reddit" },
 	{ menu="Help" },
@@ -207,6 +208,8 @@ func _ready() -> void:
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
+	
+	$Achievements.set_config(config_cache)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -958,6 +961,12 @@ func show_library_item_doc() -> void:
 
 func show_library_item_doc_is_disabled() -> bool:
 	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
+
+func show_achievements() -> void:
+	var dialog = load("res://material_maker/tools/achievements/achievements_window.tscn").instance()
+	dialog.set_achievements($Achievements.ACHIEVEMENTS, $Achievements.unlocked)
+	add_child(dialog)
+	dialog.popup_centered()
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")

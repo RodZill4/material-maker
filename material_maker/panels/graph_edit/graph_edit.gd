@@ -550,6 +550,9 @@ func drop_data(position, data) -> void:
 		do_paste({type="colorize", gradient=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_dropnode")
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator && generator.get_parent() is MMGenGraph:
