@@ -28,3 +28,12 @@ func edit_curve(curve : MMCurve) -> Array:
 
 func _on_CurveEditor_value_changed(value):
 	emit_signal("curve_changed", value)
+
+func _on_Invert_pressed() -> void:
+	var old_curve = $VBoxContainer/EditorContainer/CurveEditor.curve
+	var new_curve = MMCurve.new()
+	new_curve.clear()
+	for p in old_curve.points:
+		new_curve.add_point(p.p.x, 1.0 - p.p.y, -p.ls, -p.rs)
+	
+	$VBoxContainer/EditorContainer/CurveEditor.set_curve(new_curve)
