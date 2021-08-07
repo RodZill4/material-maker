@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=Material Maker
-GenericName=Procedural texture generation tool
-GenericName[fr]=Outil de génération de textures procédurales
-Comment=Generate textures procedurally for use in PBR engines
-Comment[fr]=Générez des textures procéduralement pour des moteurs de rendu PBR
+GenericName=Procedural texture generation and 3D model painting tool
+GenericName[fr]=Outil de génération de textures procédurales et permettant de peindre sur des modèles 3D
+Comment=Generate textures procedurally for use in PBR engines and paint 3D models
+Comment[fr]=Générez des textures procéduralement pour des moteurs de rendu PBR et peignez des modèles 3D
 Exec=material-maker
 Icon=material-maker
 Terminal=false
