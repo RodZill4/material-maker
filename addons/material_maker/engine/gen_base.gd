@@ -79,7 +79,7 @@ func is_editable() -> bool:
 	return false
 
 func get_description() -> String:
-	return name
+	return ""
 
 func has_randomness() -> bool:
 	return false
@@ -239,9 +239,6 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += "uniform vec3 mesh_aabb_size;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	if src_code.has("textures"):
-		for t in src_code.textures.keys():
-			code += "uniform sampler2D "+t+";\n"
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
@@ -294,6 +291,9 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		print("Missing type for node ")
 		print(rv)
 	return rv
+
+func get_output_attributes(output_index : int) -> Dictionary:
+	return {}
 
 func _get_shader_code(_uv, _output_index, _context) -> Dictionary:
 	return {}

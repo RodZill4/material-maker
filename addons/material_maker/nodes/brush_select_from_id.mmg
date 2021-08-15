@@ -1,0 +1,56 @@
+{
+	"name": "brush_select_from_id",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"id": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 0,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "ids",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Select From ID",
+		"outputs": [
+			{
+				"rgba": "$in($uv)*vec4(1.0, 1.0, 1.0, step(length($ids($uv)-$id), 0.01))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"name": "id",
+				"type": "color"
+			}
+		]
+	},
+	"type": "shader"
+}

@@ -5,11 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"mode": 0
 	},
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
-		"global": "",
+		"global": "vec3 fill_to_uv_stretch(vec2 coord, vec4 bb, float seed) {\n\tvec2 uv_islands = fract(coord-bb.xy)/bb.zw;\n\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);\n\treturn vec3(uv_islands, random_value);\n}\n\nvec3 fill_to_uv_square(vec2 coord, vec4 bb, float seed) {\n\tvec2 uv_islands;\n\tif (bb.z > bb.w) {\n\t\tvec2 adjusted_coord = coord + vec2(0.0, (bb.z - bb.w) / 2.0);\n\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.zz;\n\t} else {\n\t\tvec2 adjusted_coord = coord + vec2((bb.w - bb.z) / 2.0, 0.0);\n\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.ww;\n\t}\n\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);\n\treturn vec3(uv_islands, random_value);\n}",
 		"inputs": [
 			{
 				"default": "vec4(0.0)",
@@ -26,13 +26,30 @@
 		"outputs": [
 			{
 				"longdesc": "The generated output UV map, to be connected to a Custom UV node",
-				"rgb": "vec3((fract($uv-$(name_uv)_bb.xy)/$(name_uv)_bb.zw), rand(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))))",
+				"rgb": "fill_to_uv_$mode($uv, $(name_uv)_bb, float($seed))",
 				"shortdesc": "Output",
 				"type": "rgb"
 			}
 		],
 		"parameters": [
-
+			{
+				"default": 0,
+				"label": "",
+				"longdesc": "The mode decides how the UVs are layed out on each bounding box:\n- Stretch mode where the UV layout is stretched to the bounding box. \n- Square mode where the UV layout is even and centerered based on the longest axis of the bounding box.",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Stretch",
+						"value": "stretch"
+					},
+					{
+						"name": "Square",
+						"value": "square"
+					}
+				]
+			}
 		],
 		"shortdesc": "Fill to UV"
 	},

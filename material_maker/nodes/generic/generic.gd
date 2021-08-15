@@ -433,7 +433,7 @@ func update_generator(shader_model) -> void:
 	get_parent().set_need_save()
 
 func load_generator() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -443,9 +443,11 @@ func load_generator() -> void:
 		var config_cache = get_node("/root/MainWindow").config_cache
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
-	dialog.connect("file_selected", self, "do_load_generator")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_load_generator(files[0])
 
 func do_load_generator(file_name : String) -> void:
 	if get_node("/root/MainWindow") != null:
@@ -470,7 +472,7 @@ func do_load_generator(file_name : String) -> void:
 		call_deferred("update_node")
 
 func save_generator() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -480,9 +482,11 @@ func save_generator() -> void:
 		var config_cache = get_node("/root/MainWindow").config_cache
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
-	dialog.connect("file_selected", self, "do_save_generator")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_save_generator(files[0])
 
 func do_save_generator(file_name : String) -> void:
 	if get_node("/root/MainWindow") != null:
@@ -493,6 +497,9 @@ func do_save_generator(file_name : String) -> void:
 		var data = generator.serialize()
 		data.name = file_name.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
+		for k in [ "uids", "export_paths" ]:
+			if data.has(k):
+				data.erase(k)
 		file.store_string(JSON.print(data, "\t", true))
 		file.close()
 		mm_loader.update_predefined_generators()

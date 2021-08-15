@@ -5,14 +5,15 @@
 [ext_resource path="res://material_maker/windows/preferences/float_option.tscn" type="PackedScene" id=3]
 
 [node name="Preferences" type="WindowDialog"]
+visible = true
 anchor_left = 0.377
 anchor_top = 0.383
 anchor_right = 0.601
 anchor_bottom = 0.619
 margin_left = 0.440002
 margin_top = 0.240021
-margin_right = 83.72
-margin_bottom = 129.32
+margin_right = 98.72
+margin_bottom = 191.32
 rect_min_size = Vector2( 320, 220 )
 popup_exclusive = true
 window_title = "Preferences"
@@ -33,8 +34,8 @@ __meta__ = {
 }
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
-margin_right = 366.0
-margin_bottom = 267.0
+margin_right = 381.0
+margin_bottom = 329.0
 rect_min_size = Vector2( 289, 172 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -52,25 +53,25 @@ __meta__ = {
 }
 
 [node name="ConfirmQuit" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
-margin_right = 358.0
+margin_right = 373.0
 config_variable = "confirm_quit"
 
 [node name="ConfirmCloseProject" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
 margin_top = 28.0
-margin_right = 358.0
+margin_right = 373.0
 margin_bottom = 52.0
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
 [node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
 margin_top = 56.0
-margin_right = 358.0
+margin_right = 373.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 margin_top = 70.0
-margin_right = 358.0
+margin_right = 373.0
 margin_bottom = 94.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/GuiScale"]
@@ -94,7 +95,7 @@ config_variable = "ui_scale"
 
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 margin_top = 98.0
-margin_right = 358.0
+margin_right = 373.0
 margin_bottom = 122.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution"]
@@ -123,7 +124,7 @@ config_variable = "ui_3d_preview_resolution"
 
 [node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 margin_top = 126.0
-margin_right = 358.0
+margin_right = 373.0
 margin_bottom = 150.0
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewTesselationDetail"]
@@ -154,23 +155,33 @@ step = 1.0
 float_only = true
 config_variable = "ui_3d_preview_tesselation_detail"
 
-[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Gui3DPreviewSunShadow" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
 margin_top = 154.0
-margin_right = 358.0
-margin_bottom = 164.0
+margin_right = 373.0
+margin_bottom = 178.0
+hint_tooltip = "If enabled, the DirectionalLight will cast shadows in the 3D preview. This has a moderate performance cost.
+The effect of this shadow is only visible when using a tesselated mesh or a custom object.
+Changes to this setting are only applied on application restart."
+text = "3D preview sun shadow (requires restart)"
+config_variable = "ui_3d_preview_sun_shadow"
+
+[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
+margin_top = 182.0
+margin_right = 373.0
+margin_bottom = 192.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="EnableVSync" parent="VBoxContainer/TabContainer/General" instance=ExtResource( 1 )]
-margin_top = 168.0
-margin_right = 358.0
-margin_bottom = 192.0
+margin_top = 196.0
+margin_right = 373.0
+margin_bottom = 220.0
 text = "Enable VSync"
 config_variable = "vsync"
 
 [node name="FPSLimit" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
-margin_top = 196.0
-margin_right = 358.0
-margin_bottom = 220.0
+margin_top = 224.0
+margin_right = 373.0
+margin_bottom = 248.0
 
 [node name="Label1" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
 margin_top = 5.0
@@ -199,11 +210,15 @@ float_only = true
 config_variable = "fps_limit"
 
 [node name="Space" type="Control" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+margin_left = 126.0
+margin_right = 141.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 15, 0 )
 
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+margin_left = 145.0
 margin_top = 5.0
-margin_right = 60.0
+margin_right = 234.0
 margin_bottom = 19.0
 hint_tooltip = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
@@ -214,8 +229,8 @@ text = "Idle FPS limit:"
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 64.0
-margin_right = 122.0
+margin_left = 238.0
+margin_right = 296.0
 margin_bottom = 24.0
 hint_tooltip = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
@@ -315,16 +330,16 @@ float_only = true
 config_variable = "bake_denoise_radius"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 271.0
-margin_right = 366.0
-margin_bottom = 271.0
+margin_top = 333.0
+margin_right = 381.0
+margin_bottom = 333.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 178.0
-margin_top = 275.0
-margin_right = 366.0
-margin_bottom = 295.0
+margin_left = 193.0
+margin_top = 337.0
+margin_right = 381.0
+margin_bottom = 357.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]

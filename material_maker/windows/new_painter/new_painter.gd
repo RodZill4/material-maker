@@ -78,5 +78,3 @@ func ask(obj_file_name = null) -> String:
 	var result = yield(self, "return_status")
 	queue_free()
 	return result
-
-

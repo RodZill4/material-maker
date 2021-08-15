@@ -1,0 +1,673 @@
+{
+	"connections": [
+		{
+			"from": "shape",
+			"from_port": 0,
+			"to": "tones_range",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "mirror",
+			"to_port": 0
+		},
+		{
+			"from": "mirror",
+			"from_port": 0,
+			"to": "translate",
+			"to_port": 0
+		},
+		{
+			"from": "translate",
+			"from_port": 0,
+			"to": "rotate",
+			"to_port": 0
+		},
+		{
+			"from": "shape_3",
+			"from_port": 0,
+			"to": "mirror_2",
+			"to_port": 0
+		},
+		{
+			"from": "mirror_2",
+			"from_port": 0,
+			"to": "translate_2",
+			"to_port": 0
+		},
+		{
+			"from": "translate_2",
+			"from_port": 0,
+			"to": "rotate_2",
+			"to_port": 0
+		},
+		{
+			"from": "rotate_2",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "rotate",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 1
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 1
+		},
+		{
+			"from": "tones_range",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 0
+		},
+		{
+			"from": "perlin",
+			"from_port": 0,
+			"to": "transform2_2",
+			"to_port": 0
+		},
+		{
+			"from": "transform2_2",
+			"from_port": 0,
+			"to": "transform2_3",
+			"to_port": 1
+		},
+		{
+			"from": "transform2_2",
+			"from_port": 0,
+			"to": "transform2_3",
+			"to_port": 2
+		},
+		{
+			"from": "transform2",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "transform2_3",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "transform2_4",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 2
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "scale",
+			"to_port": 0
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "tiler",
+			"to_port": 0
+		},
+		{
+			"from": "scale",
+			"from_port": 0,
+			"to": "debug",
+			"to_port": 0
+		},
+		{
+			"from": "transform2_3",
+			"from_port": 0,
+			"to": "transform2_4",
+			"to_port": 0
+		},
+		{
+			"from": "transform2_3",
+			"from_port": 0,
+			"to": "transform2",
+			"to_port": 0
+		},
+		{
+			"from": "tiler",
+			"from_port": 0,
+			"to": "translate_3",
+			"to_port": 0
+		},
+		{
+			"from": "tiler",
+			"from_port": 0,
+			"to": "transform2_5",
+			"to_port": 0
+		},
+		{
+			"from": "transform2_5",
+			"from_port": 0,
+			"to": "math_5",
+			"to_port": 0
+		},
+		{
+			"from": "math_5",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 1
+		},
+		{
+			"from": "translate_3",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 0
+		},
+		{
+			"from": "math_4",
+			"from_port": 0,
+			"to": "transform2_3",
+			"to_port": 0
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 1
+		},
+		{
+			"from": "math_6",
+			"from_port": 0,
+			"to": "math_3",
+			"to_port": 0
+		},
+		{
+			"from": "shape_4",
+			"from_port": 0,
+			"to": "translate_4",
+			"to_port": 0
+		},
+		{
+			"from": "translate_4",
+			"from_port": 0,
+			"to": "kaleidoscope",
+			"to_port": 0
+		},
+		{
+			"from": "kaleidoscope",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 0
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "267",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 1295.727295,
+				"y": 10.363638
+			},
+			"parameters": {
+				"blend": 0
+			},
+			"type": "material_unlit"
+		},
+		{
+			"name": "shape",
+			"node_position": {
+				"x": -314,
+				"y": -132.5
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.96,
+				"shape": 0,
+				"sides": 6
+			},
+			"type": "shape"
+		},
+		{
+			"name": "tones_range",
+			"node_position": {
+				"x": -154,
+				"y": -132.5
+			},
+			"parameters": {
+				"contrast": 0,
+				"invert": false,
+				"value": 0.14,
+				"width": 0.27
+			},
+			"type": "tones_range"
+		},
+		{
+			"name": "shape_2",
+			"node_position": {
+				"x": -327,
+				"y": 62.5
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.1,
+				"shape": 1,
+				"sides": 4
+			},
+			"type": "shape"
+		},
+		{
+			"name": "mirror",
+			"node_position": {
+				"x": -332,
+				"y": 186.5
+			},
+			"parameters": {
+				"direction": 0,
+				"offset": 0.11
+			},
+			"type": "mirror"
+		},
+		{
+			"name": "translate",
+			"node_position": {
+				"x": -374,
+				"y": 261.5
+			},
+			"parameters": {
+				"translate_x": -0.055,
+				"translate_y": 0
+			},
+			"type": "translate"
+		},
+		{
+			"name": "rotate",
+			"node_position": {
+				"x": -364,
+				"y": 339.5
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": "$time*10.0"
+			},
+			"type": "rotate"
+		},
+		{
+			"name": "mirror_2",
+			"node_position": {
+				"x": -80.25,
+				"y": 120.875
+			},
+			"parameters": {
+				"direction": 0,
+				"offset": 0.28
+			},
+			"type": "mirror"
+		},
+		{
+			"name": "translate_2",
+			"node_position": {
+				"x": -122.25,
+				"y": 195.875
+			},
+			"parameters": {
+				"translate_x": 0.145,
+				"translate_y": 0
+			},
+			"type": "translate"
+		},
+		{
+			"name": "rotate_2",
+			"node_position": {
+				"x": -112.25,
+				"y": 273.875
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": "$time*120.0"
+			},
+			"type": "rotate"
+		},
+		{
+			"name": "shape_3",
+			"node_position": {
+				"x": -75.25,
+				"y": -3.125
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.09,
+				"shape": 1,
+				"sides": 4
+			},
+			"type": "shape"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": 114,
+				"y": 323.5
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 14
+			},
+			"type": "math"
+		},
+		{
+			"name": "math_2",
+			"node_position": {
+				"x": 137.5,
+				"y": 90.5
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 14
+			},
+			"type": "math"
+		},
+		{
+			"name": "tiler",
+			"node_position": {
+				"x": 381.376221,
+				"y": -178.598755
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 0.58,
+				"overlap": 1,
+				"rotate": 180,
+				"scale": 0.28,
+				"scale_x": 0.08,
+				"scale_y": 0.06,
+				"select_inputs": 0,
+				"tx": 16,
+				"ty": 16,
+				"value": 0.53
+			},
+			"type": "tiler"
+		},
+		{
+			"name": "transform2",
+			"node_position": {
+				"x": 743.25769,
+				"y": -237.5
+			},
+			"parameters": {
+				"mode": 2,
+				"rotate": 0,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": 0.005,
+				"translate_y": 0
+			},
+			"type": "transform2"
+		},
+		{
+			"name": "perlin",
+			"node_position": {
+				"x": 439.25769,
+				"y": -471.5
+			},
+			"parameters": {
+				"iterations": 5,
+				"persistence": 0.75,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"type": "perlin"
+		},
+		{
+			"name": "transform2_2",
+			"node_position": {
+				"x": 707.25769,
+				"y": -434.5
+			},
+			"parameters": {
+				"mode": 1,
+				"rotate": 0,
+				"scale_x": 0.1,
+				"scale_y": 0.1,
+				"translate_x": "$time*0.11",
+				"translate_y": "$time*0.01"
+			},
+			"type": "transform2"
+		},
+		{
+			"name": "transform2_3",
+			"node_position": {
+				"x": 738.984985,
+				"y": -51
+			},
+			"parameters": {
+				"mode": 2,
+				"rotate": 0,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": 0.005,
+				"translate_y": 0.005
+			},
+			"type": "transform2"
+		},
+		{
+			"name": "transform2_4",
+			"node_position": {
+				"x": 736.25769,
+				"y": 137
+			},
+			"parameters": {
+				"mode": 2,
+				"rotate": 0,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": -0.005,
+				"translate_y": 0
+			},
+			"type": "transform2"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": 1062.16687,
+				"y": -133.5
+			},
+			"parameters": {
+
+			},
+			"type": "combine"
+		},
+		{
+			"name": "scale",
+			"node_position": {
+				"x": 1273.530518,
+				"y": -192.681824
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"scale_x": 1,
+				"scale_y": "$ratio"
+			},
+			"type": "scale"
+		},
+		{
+			"name": "1537",
+			"node_position": {
+				"x": 1072.621338,
+				"y": -318.590942
+			},
+			"parameters": {
+				"ratio": 1.65
+			},
+			"type": "remote",
+			"widgets": [
+				{
+					"default": 0.5,
+					"label": "Aspect ratio",
+					"max": 1,
+					"min": 0,
+					"name": "ratio",
+					"step": 0.01,
+					"type": "named_parameter"
+				}
+			]
+		},
+		{
+			"name": "math_3",
+			"node_position": {
+				"x": 139.530441,
+				"y": -87.318192
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.66,
+				"op": 2
+			},
+			"type": "math"
+		},
+		{
+			"name": "debug",
+			"node_position": {
+				"x": 1516.646362,
+				"y": -196.162048
+			},
+			"parameters": {
+
+			},
+			"type": "debug"
+		},
+		{
+			"name": "translate_3",
+			"node_position": {
+				"x": 383.19696,
+				"y": 243.993866
+			},
+			"parameters": {
+				"translate_x": "0.1*$time",
+				"translate_y": 0
+			},
+			"type": "translate"
+		},
+		{
+			"name": "transform2_5",
+			"node_position": {
+				"x": 365.283813,
+				"y": 461.904266
+			},
+			"parameters": {
+				"mode": 2,
+				"rotate": 0,
+				"scale_x": 1.445,
+				"scale_y": 1.51,
+				"translate_x": "0.05*$time",
+				"translate_y": 0
+			},
+			"type": "transform2"
+		},
+		{
+			"name": "math_4",
+			"node_position": {
+				"x": 499.059418,
+				"y": 119.461998
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 0
+			},
+			"type": "math"
+		},
+		{
+			"name": "math_5",
+			"node_position": {
+				"x": 390.159424,
+				"y": 323.952026
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.43,
+				"op": 2
+			},
+			"type": "math"
+		},
+		{
+			"name": "math_6",
+			"node_position": {
+				"x": 93.100555,
+				"y": -277.220581
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 0
+			},
+			"type": "math"
+		},
+		{
+			"name": "shape_4",
+			"node_position": {
+				"x": -280.399445,
+				"y": -411.220581
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.07,
+				"shape": 0,
+				"sides": 6
+			},
+			"type": "shape"
+		},
+		{
+			"name": "translate_4",
+			"node_position": {
+				"x": -332.399445,
+				"y": -285.220581
+			},
+			"parameters": {
+				"translate_x": 0,
+				"translate_y": -0.335
+			},
+			"type": "translate"
+		},
+		{
+			"name": "kaleidoscope",
+			"node_position": {
+				"x": -104.399445,
+				"y": -363.220581
+			},
+			"parameters": {
+				"count": 12,
+				"offset": 0
+			},
+			"type": "kaleidoscope"
+		}
+	],
+	"parameters": {
+
+	},
+	"shortdesc": "",
+	"type": "graph"
+}

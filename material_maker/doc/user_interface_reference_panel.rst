@@ -1,5 +1,5 @@
 Reference panel
----------------
+^^^^^^^^^^^^^^^
 
 The reference panel can be used to show images and generated textures, and pick colors and gradients.
 

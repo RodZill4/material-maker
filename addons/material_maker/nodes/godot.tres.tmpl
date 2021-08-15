@@ -12,6 +12,10 @@ $fi
 $if $(connected:depth_tex)
 [ext_resource path="$(file_prefix)_depth.png" type="Texture" id=4]
 $fi
+$if $(connected:emission_tex)
+[ext_resource path="$(file_prefix)_emission.png" type="Texture" id=5]
+$fi
+
 
 [resource]
 albedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))
@@ -32,6 +36,14 @@ $if $(connected:normal_tex)
 normal_enabled = true
 normal_scale = $(param:normal)
 normal_texture = ExtResource( 3 )
+$fi
+$if $(connected:emission_tex)
+emission_enabled = true
+emission = Color( 0, 0, 0, 1 )
+emission_energy = $(param:emission_energy)
+emission_operator = 0
+emission_on_uv2 = false
+emission_texture = ExtResource( 5 )
 $fi
 $if $(connected:ao_tex)
 ao_enabled = true

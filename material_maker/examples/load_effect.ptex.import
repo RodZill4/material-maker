@@ -1,0 +1,15 @@
+[remap]
+
+importer="material_maker.import"
+type="SpatialMaterial"
+path="res://.import/load_effect.ptex-e7228823d63178f8d016c3b17d93c18c.tres"
+
+[deps]
+
+source_file="res://material_maker/examples/load_effect.ptex"
+dest_files=[ "res://.import/load_effect.ptex-e7228823d63178f8d016c3b17d93c18c.tres" ]
+
+[params]
+
+render=false
+scale=1.0

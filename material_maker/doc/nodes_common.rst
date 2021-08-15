@@ -44,7 +44,7 @@ Inputs
 ^^^^^^
 
 Inputs are images the node will transform (if any). An input is always connected to at most
-an output. Inputs generally have a default value that is used when it is not connected.
+one output. Inputs generally have a default value that is used when it is not connected.
 
 Parameters
 ^^^^^^^^^^
@@ -56,6 +56,18 @@ Parameters are used to configure nodes. The following types are supported:
   click in the text field and enter a new value, or click and drag left or right to decrease
   or decrease its value. When the lower or upper bound is reached, the value will stick to it,
   but dragging again from there makes it possible to go beyond the limit.
+
+  In most cases, float parameters also support expressions (written in GLSL syntax),
+  where other parameters and named parameters are accepted and must be prefixed with
+  a dollar sign. This feature is useful when two parameters of the same node must
+  depend on each other, or when several parameters of several nodes of a subgraph
+  must be calculated from one or more named parameters.
+  
+  The *$time* variable can also be used in parameter expressions to define animations
+  in generated shaders, but generated **Static PBR Materials** will still be
+  static (this feature could for example be used to export variations of the
+  same material). Other predefined material types can fully benefit from this
+  feature. 
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations
   such as convolutions. They are shown as drop down list boxes.
@@ -111,7 +123,7 @@ Randomness
 
 Nodes that provide random patterns have an implicit **seed** parameter. It is not possible
 to edit it directly, but moving the node in the graph will change its value. It is possible
-to freeze the seed value using the small dice button in the node's title bar in the graph.
+to freeze the seed value using the small die button in the node's title bar in the graph.
 
 .. image:: images/random_node.png
 	:align: center
@@ -136,12 +148,17 @@ When made editable, 3 buttons are shown at the bottom of the node:
 * A folder-like button to load an existing node template
 * A floppy disk button to save the node as a template
 
+Loading and saving templates are only useful when contributing new nodes
+for Material Maker. Modifying your Material Maker installation may break
+compatibility with existing materials, and is not recommended unless you
+know what you are doing.
+
 To be reusable directly, templates must be saved in the **generators** directory in
 the install dir (or the **addon/material_maker/nodes** directory when using Material
 Maker as a Godot addon). All nodes templates saved in this directory are shown in
 the **Tools -> Create** menu.
 
-It is absolutely not necessary to save newly created nodes as templates, but this
+It is not recommended to save newly created nodes as templates, but this
 makes them a lot easier to access and results in smaller material files (only
 references to the templates are saved and not the whole node description).
 Consequently, modifying a template without ensuring compatibility with the old

@@ -2,12 +2,11 @@ extends WindowDialog
 
 var config : ConfigFile
 
-
 signal config_changed()
 
-
-func _ready():
-	pass # Replace with function body.
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
 
 func edit_preferences(c : ConfigFile) -> void:
 	config = c

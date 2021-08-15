@@ -30,6 +30,21 @@ func _on_ConnectButton_pressed() -> void:
 		create_server()
 		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
 
+func update_preview_texture():
+	var status = get_node("/root/MainWindow").update_preview_3d([ $PreviewViewport ], true)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
+	$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
+	$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	$PreviewViewport.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+
+func get_preview_texture():
+	return $PreviewViewport.get_texture()
+
 func _on_SendButton_pressed():
 	var main_window = get_node("/root/MainWindow")
 	var material_type : String
@@ -37,11 +52,14 @@ func _on_SendButton_pressed():
 	match main_window.get_current_project().get_project_type():
 		"material":
 			material_type = "material"
-			var status = main_window.update_preview_3d([ $PreviewViewport ])
+			var status = main_window.update_preview_3d([ $PreviewViewport ], true)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
+			$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
+			$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
 			$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
 			$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
+			$PreviewViewport.update_worlds()
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
 			preview_texture = $PreviewViewport.get_texture()
@@ -69,6 +87,8 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
 		$SendButton.disabled = true
 		is_multipart = false
+		var data = { type="mm_release", release=ProjectSettings.get_setting("application/config/actual_release") }
+		websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
@@ -124,4 +144,4 @@ func process_message(message : String) -> void:
 				bring_to_top()
 	else:
 		print("Incorrect JSON")
-	
+

@@ -13,10 +13,12 @@ but as shader programs that calculate
 When shader nodes are connected, Material Maker will combine their shader programs.
 As a consequence, most shader nodes are resolution independant.
 
+Any shader node can be made editable using the *Control+W* keyboard shortcut.
+
 Editing a shader node will show the **Node Editor** window.
 
-Defining a shader node interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creating and editing shader nodes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A shader node will always have outputs that will be connected to the inputs of other
 nodes. It may also (and probably will) have parameters that can be modified in the
@@ -92,7 +94,7 @@ And generally, complex nodes mean complex output expressions. You may thus want 
 write simple expressions in the **Outputs** tab and keep complex code in the 3
 remaining tabs.
 
-The yellow document button can be used to define a name and add a tooltip to the input.
+The yellow document button can be used to define a name and add a tooltip to the output.
 
 .. image:: images/node_editor_outputs.png
 	:align: center

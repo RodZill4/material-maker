@@ -11,6 +11,19 @@ const LAYER_MASK  : int = 2
 func get_layer_type() -> int:
 	return LAYER_NONE
 
+
+func duplicate():
+	var layer = get_script().new()
+	print(layer.get_script().resource_path)
+	layer.name = name+" (copy)"
+	layer.hidden = false
+	for c in get_channels():
+		var texture = ImageTexture.new()
+		texture.create_from_image(get(c).get_data())
+		layer.set(c, texture)
+	return layer
+
+
 func get_channels() -> Array:
 	return []
 
@@ -29,6 +42,7 @@ func load_layer(data : Dictionary, first_index : int, path : String) -> void:
 			var texture = ImageTexture.new()
 			texture.load(path+"/"+data[c])
 			set(c, texture)
+	_load_layer(data)
 
 func _save_layer(data : Dictionary):
 	pass

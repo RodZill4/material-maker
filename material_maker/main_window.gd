@@ -11,10 +11,6 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
-# The previous FPS limit (defined in microseconds per frame).
-# Used to restore the FPS limit when the window is refocused.
-var previous_sleep_usec := OS.low_processor_usage_mode_sleep_usec
-
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
@@ -45,14 +41,20 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+const FPS_LIMIT_MIN = 20
+const FPS_LIMIT_MAX = 500
+const IDLE_FPS_LIMIT_MIN = 1
+const IDLE_FPS_LIMIT_MAX = 100
+
 const RECENT_FILES_COUNT = 15
 
 const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
-	{ menu="File", command="new_material", description="New material" },
-	{ menu="File", command="new_paint_project", description="New paint project" },
+	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
+	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
 	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
+	{ menu="File", command="load_material_from_website", description="Load material from website" },
 	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
 	{ menu="File" },
 	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
@@ -62,7 +64,7 @@ const MENU = [
 	{ menu="File", submenu="export_material", description="Export material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File" },
-	{ menu="File", command="close_project", description="Close" },
+	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
 	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
@@ -74,6 +76,8 @@ const MENU = [
 	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
+	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
+	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
 	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
@@ -84,6 +88,7 @@ const MENU = [
 	{ menu="View", command="view_center", shortcut="C", description="Center view" },
 	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
 	{ menu="View" },
+	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide side panels" },
 	{ menu="View", submenu="show_panels", description="Panels" },
 
 	{ menu="Tools", submenu="create", description="Create" },
@@ -123,6 +128,7 @@ const DEFAULT_CONFIG = {
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
+	ui_3d_preview_sun_shadow = false,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_denoise_radius = 3
@@ -130,14 +136,14 @@ const DEFAULT_CONFIG = {
 
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
-	
+
 	# Load and nitialize config
 	config_cache.load("user://cache.ini")
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
 	on_config_changed()
-	
+
 	# Restore the window position/size if values are present in the configuration cache
 	if config_cache.has_section_key("window", "screen"):
 		OS.current_screen = config_cache.get_value("window", "screen")
@@ -149,7 +155,7 @@ func _ready() -> void:
 			OS.window_position = config_cache.get_value("window", "position")
 		if config_cache.has_section_key("window", "size"):
 			OS.window_size = config_cache.get_value("window", "size")
-	
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if config_cache.has_section_key("window", "theme"):
@@ -193,13 +199,13 @@ func _ready() -> void:
 
 	# Create menus
 	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
-	
+
 	new_material()
-	
+
 	do_load_projects(OS.get_cmdline_args())
-	
+
 	get_tree().connect("files_dropped", self, "on_files_dropped")
-	
+
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
 func _input(event: InputEvent) -> void:
@@ -215,7 +221,7 @@ func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), 20, 200)) * 1_000_000
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -226,7 +232,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 256, 1024)
+	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -277,7 +283,7 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	
+
 	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
 		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
 	for i in menu_def.size():
@@ -401,13 +407,35 @@ func add_recent(path) -> void:
 	f.close()
 
 
-func create_menu_export_material(menu) -> void:
-	menu.clear()
+func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
+	if prefix == "":
+		menu.clear()
+		menu.set_size(Vector2(0, 0))
+		for sm in menu.get_children():
+			menu.remove_child(sm)
+			sm.free()
 	var project = get_current_project()
 	if project != null:
 		var material_node = project.get_material_node()
-		for p in material_node.get_export_profiles():
-			menu.add_item(p)
+		var prefix_len = prefix.length()
+		var submenus = []
+		for id in range(material_node.get_export_profiles().size()):
+			var p : String = material_node.get_export_profiles()[id]
+			if p.left(prefix_len) != prefix:
+				continue
+			p = p.right(prefix_len)
+			var slash_position = p.find("/")
+			if slash_position == -1:
+				menu.add_item(p, id)
+			else:
+				var submenu_name = p.left(slash_position)
+				if submenus.find(submenu_name) == -1:
+					var submenu = PopupMenu.new()
+					submenu.name = submenu_name
+					menu.add_child(submenu)
+					create_menu_export_material(submenu, p.left(slash_position+1))
+					menu.add_submenu_item(submenu_name, submenu_name, id)
+					submenus.push_back(submenu_name)
 		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
@@ -431,7 +459,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
-	var dialog : FileDialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
@@ -440,9 +468,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if config_cache.has_section_key("path", config_key):
 		dialog.current_dir = config_cache.get_value("path", config_key)
 	add_child(dialog)
-	dialog.connect("file_selected", self, "export_material", [ profile ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		export_material(files[0], profile)
 
 
 func create_menu_set_theme(menu) -> void:
@@ -504,6 +534,10 @@ func new_material() -> void:
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func new_paint_project(obj_file_name = null) -> void:
+	# Prevent opening the New Paint Project dialog several times by pressing the keyboard shortcut.
+	if get_node_or_null("NewPainterWindow") != null:
+		return
+
 	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
 	add_child(new_painter_dialog)
 	var result = new_painter_dialog.ask(obj_file_name)
@@ -517,7 +551,7 @@ func new_paint_project(obj_file_name = null) -> void:
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -526,9 +560,11 @@ func load_project() -> void:
 	dialog.add_filter("*.mmpp;Model Painting File")
 	if config_cache.has_section_key("path", "project"):
 		dialog.current_dir = config_cache.get_value("path", "project")
-	dialog.connect("files_selected", self, "do_load_projects")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_load_projects(files)
 
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
@@ -576,6 +612,20 @@ func do_load_painting(filename : String) -> bool:
 	var status : bool = paint_panel.load_project(filename)
 	projects.current_tab = paint_panel.get_index()
 	return status
+
+func load_material_from_website() -> void:
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	add_child(dialog)
+	var result = dialog.select_material()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == "":
+		return
+	new_material()
+	var graph_edit = get_current_graph_edit()
+	var new_generator = mm_loader.create_gen(JSON.parse(result).result)
+	graph_edit.set_new_generator(new_generator)
+	hierarchy.update_from_graph_edit(graph_edit)
 
 func save_project(project : Control = null) -> bool:
 	if project == null:
@@ -684,6 +734,16 @@ func edit_select_all() -> void:
 	if graph_edit != null:
 		graph_edit.select_all()
 
+func edit_select_none() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_none()
+
+func edit_select_invert() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.select_invert()
+
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
@@ -744,6 +804,9 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func toggle_side_panels() -> void:
+	$VBoxContainer/Layout.toggle_side_panels()
 
 
 func get_selected_nodes() -> Array:
@@ -884,13 +947,17 @@ func show_doc_is_disabled() -> bool:
 func show_library_item_doc() -> void:
 	var doc_dir : String = get_doc_dir()
 	if doc_dir != "":
+		var dir : Directory = Directory.new()
 		var doc_name = library.get_selected_item_doc_name()
-		if doc_name != "":
+		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			OS.shell_open(doc_path)
+			if dir.file_exists(doc_path):
+				OS.shell_open(doc_path)
+				break
+			doc_name = doc_name.left(doc_name.rfind("_"))
 
 func show_library_item_doc_is_disabled() -> bool:
-	return get_doc_dir() == "" or library.get_selected_item_doc_name() == ""
+	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
@@ -943,15 +1010,19 @@ func update_preview_2d(node = null) -> void:
 			histogram.set_generator(null)
 			preview_2d_background.set_generator(null)
 
-func update_preview_3d(previews : Array) -> void:
+func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.render_textures()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		var status = gen_material.update()
+		if sequential:
+			while status is GDScriptFunctionState:
+				yield(status, "completed")
 		for p in previews:
-			gen_material.update_materials(p.get_materials())
+			status = gen_material.update_materials(p.get_materials(), sequential)
+			if sequential:
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
 
 var selected_node = null
 func on_selected_node_change(node) -> void:
@@ -965,23 +1036,28 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
+		for c in get_incoming_connections():
+			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+				c.source.disconnect(c.signal_name, self, c.method_name)
+		var new_graph_edit = null
 		if new_tab is GraphEdit:
-			for c in get_incoming_connections():
-				if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-					c.source.disconnect(c.signal_name, self, c.method_name)
-			new_tab.connect("graph_changed", self, "update_preview")
-			if !new_tab.is_connected("node_selected", self, "on_selected_node_change"):
-				new_tab.connect("node_selected", self, "on_selected_node_change")
+			new_graph_edit = new_tab
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
 			set_current_mode("material")
 		else:
+			if new_tab.has_method("get_graph_edit"):
+				new_graph_edit = new_tab.get_graph_edit()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
 			set_current_mode("paint")
 		current_tab = new_tab
-		if new_tab is GraphEdit:
+		if new_graph_edit != null:
+			new_graph_edit.connect("graph_changed", self, "update_preview")
+			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
+				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
 			update_preview()
+		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func on_group_selected(generator) -> void:
@@ -1001,12 +1077,11 @@ func _exit_tree() -> void:
 func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-			# Limit to 20 FPS to decrease CPU/GPU usage while the window is unfocused.
-			previous_sleep_usec = OS.low_processor_usage_mode_sleep_usec
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), 1, 20)) * 1_000_000
+			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
-			# Restore the previous FPS limit.
-			OS.low_processor_usage_mode_sleep_usec = previous_sleep_usec
+			# Return to the normal FPS limit when the window is focused.
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")
 			quit()

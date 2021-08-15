@@ -1,14 +1,363 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/fonts/vegur_regular.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://material_maker/icons/godot_logo.svg" type="Texture" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode blend_add;
+
+
+varying float elapsed_time;
+
+void vertex() {
+	elapsed_time = TIME;
+}
+
+//---
+
+float rand(vec2 x) {
+    return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5453);
+}
+
+vec2 rand2(vec2 x) {
+    return fract(cos(mod(vec2(dot(x, vec2(13.9898, 8.141)),
+						      dot(x, vec2(3.4562, 17.398))), vec2(3.14))) * 43758.5453);
+}
+
+vec3 rand3(vec2 x) {
+    return fract(cos(mod(vec3(dot(x, vec2(13.9898, 8.141)),
+							  dot(x, vec2(3.4562, 17.398)),
+                              dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);
+}
+
+vec3 rgb2hsv(vec3 c) {
+	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+	vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+	vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+
+	float d = q.x - min(q.w, q.y);
+	float e = 1.0e-10;
+	return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c) {
+	vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+	vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+	return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+const float o6605_ratio = 1.65; // {default:0.5, label:Aspect ratio, max:1, min:0, name:ratio, step:0.01, type:named_parameter}
+float perlin(vec2 uv, vec2 size, int iterations, float persistence, int seed) {
+	vec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));
+    float rv = 0.0;
+    float coef = 1.0;
+    float acc = 0.0;
+    for (int i = 0; i < iterations; ++i) {
+    	vec2 step = vec2(1.0)/size;
+		vec2 xy = floor(uv*size);
+        float f0 = rand(seed2+mod(xy, size));
+        float f1 = rand(seed2+mod(xy+vec2(1.0, 0.0), size));
+        float f2 = rand(seed2+mod(xy+vec2(0.0, 1.0), size));
+        float f3 = rand(seed2+mod(xy+vec2(1.0, 1.0), size));
+        vec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));
+        rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);
+        acc += coef;
+        size *= 2.0;
+        coef *= persistence;
+    }
+    
+    return rv / acc;
+}
+vec2 transform2_clamp(vec2 uv) {
+	return clamp(uv, vec2(0.0), vec2(1.0));
+}
+
+vec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {
+ 	vec2 rv;
+	uv -= translate;
+	uv -= vec2(0.5);
+	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
+	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
+	rv /= scale;
+	rv += vec2(0.5);
+	return rv;	
+}float shape_circle(vec2 uv, float sides, float size, float edge) {
+    uv = 2.0*uv-1.0;
+	edge = max(edge, 1.0e-8);
+    float distance = length(uv);
+    return clamp((1.0-distance/size)/edge, 0.0, 1.0);
+}
+
+float shape_polygon(vec2 uv, float sides, float size, float edge) {
+    uv = 2.0*uv-1.0;
+	edge = max(edge, 1.0e-8);
+    float angle = atan(uv.x, uv.y)+3.14159265359;
+    float slice = 6.28318530718/sides;
+    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);
+}
+
+float shape_star(vec2 uv, float sides, float size, float edge) {
+    uv = 2.0*uv-1.0;
+	edge = max(edge, 1.0e-8);
+    float angle = atan(uv.x, uv.y);
+    float slice = 6.28318530718/sides;
+    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);
+}
+
+float shape_curved_star(vec2 uv, float sides, float size, float edge) {
+    uv = 2.0*uv-1.0;
+	edge = max(edge, 1.0e-8);
+    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);
+    float slice = 6.28318530718/sides;
+    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);
+}
+
+float shape_rays(vec2 uv, float sides, float size, float edge) {
+    uv = 2.0*uv-1.0;
+	edge = 0.5*max(edge, 1.0e-8)*size;
+	float slice = 6.28318530718/sides;
+    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;
+    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);
+}
+
+vec2 kal_rotate(vec2 uv, float count, float offset) {
+	float pi = 3.14159265359;
+	offset *= pi/180.0;
+	offset += pi*(1.0/count+0.5);
+	uv -= vec2(0.5);
+	float l = length(uv);
+	float a = mod(atan(uv.y, uv.x)+offset, 2.0*pi/count)-offset;
+	return vec2(0.5)+l*vec2(cos(a), sin(a));
+}vec2 uvmirror_h(vec2 uv, float offset) {
+	return vec2(max(0, abs(uv.x-0.5)-0.5*offset)+0.5, uv.y);
+}
+vec2 uvmirror_v(vec2 uv, float offset) {
+	return vec2(uv.x, max(0, abs(uv.y-0.5)-0.5*offset)+0.5);
+}vec2 rotate(vec2 uv, vec2 center, float rotate) {
+ 	vec2 rv;
+	uv -= center;
+	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
+	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
+	rv += center;
+    return rv;	
+}vec2 scale(vec2 uv, vec2 center, vec2 scale) {
+	uv -= center;
+	uv /= scale;
+	uv += center;
+    return uv;
+}const float p_o6604_cx = 0.000000000;
+const float p_o6604_cy = 0.000000000;
+const float p_o6604_scale_x = 1.000000000;
+const float p_o6598_translate_x = 0.005000000;
+const float p_o6598_translate_y = 0.000000000;
+const float p_o6598_rotate = 0.000000000;
+const float p_o6598_scale_x = 1.000000000;
+const float p_o6598_scale_y = 1.000000000;
+const float p_o6601_translate_x = 0.005000000;
+const float p_o6601_translate_y = 0.005000000;
+const float p_o6601_rotate = 0.000000000;
+const float p_o6601_scale_x = 1.000000000;
+const float p_o6601_scale_y = 1.000000000;
+const float p_o6600_rotate = 0.000000000;
+const float p_o6600_scale_x = 0.100000000;
+const float p_o6600_scale_y = 0.100000000;
+const int seed_o6599 = -24576;
+const float p_o6599_scale_x = 4.000000000;
+const float p_o6599_scale_y = 4.000000000;
+const float p_o6599_iterations = 5.000000000;
+const float p_o6599_persistence = 0.750000000;
+const float p_o6610_default_in1 = 0.000000000;
+const float p_o6610_default_in2 = 0.000000000;
+const float p_o6608_translate_y = 0.000000000;
+const int seed_o6597 = -20883;
+const float p_o6597_tx = 16.000000000;
+const float p_o6597_ty = 16.000000000;
+const float p_o6597_overlap = 1.000000000;
+const float p_o6597_scale_x = 0.080000000;
+const float p_o6597_scale_y = 0.060000000;
+const float p_o6597_fixed_offset = 0.000000000;
+const float p_o6597_offset = 0.580000000;
+const float p_o6597_rotate = 180.000000000;
+const float p_o6597_scale = 0.280000000;
+const float p_o6597_value = 0.530000000;
+const float p_o6606_default_in1 = 0.000000000;
+const float p_o6606_default_in2 = 0.660000000;
+const float p_o17213_default_in1 = 0.000000000;
+const float p_o17213_default_in2 = 0.000000000;
+const float p_o31155_count = 12.000000000;
+const float p_o31155_offset = 0.000000000;
+const float p_o29290_translate_x = 0.000000000;
+const float p_o29290_translate_y = -0.335000000;
+const float p_o27679_sides = 6.000000000;
+const float p_o27679_radius = 0.070000000;
+const float p_o27679_edge = 1.000000000;
+const float p_o6596_default_in1 = 0.000000000;
+const float p_o6596_default_in2 = 0.000000000;
+const float p_o6586_value = 0.140000000;
+const float p_o6586_width = 0.270000000;
+const float p_o6586_contrast = 0.000000000;
+const float p_o6585_sides = 6.000000000;
+const float p_o6585_radius = 0.960000000;
+const float p_o6585_edge = 1.000000000;
+const float p_o6595_default_in1 = 0.000000000;
+const float p_o6595_default_in2 = 0.000000000;
+const float p_o6593_cx = 0.000000000;
+const float p_o6593_cy = 0.000000000;
+const float p_o6592_translate_x = 0.145000000;
+const float p_o6592_translate_y = 0.000000000;
+const float p_o6591_offset = 0.280000000;
+const float p_o6594_sides = 4.000000000;
+const float p_o6594_radius = 0.090000000;
+const float p_o6594_edge = 1.000000000;
+const float p_o6590_cx = 0.000000000;
+const float p_o6590_cy = 0.000000000;
+const float p_o6589_translate_x = -0.055000000;
+const float p_o6589_translate_y = 0.000000000;
+const float p_o6588_offset = 0.110000000;
+const float p_o6587_sides = 4.000000000;
+const float p_o6587_radius = 0.100000000;
+const float p_o6587_edge = 1.000000000;
+float o6597_input_in(vec2 uv) {
+float o27679_0_1_f = shape_circle(((kal_rotate((uv), p_o31155_count, p_o31155_offset))-vec2(p_o29290_translate_x, p_o29290_translate_y)), p_o27679_sides, p_o27679_radius*1.0, p_o27679_edge*1.0);
+vec4 o29290_0_1_rgba = vec4(vec3(o27679_0_1_f), 1.0);
+vec4 o31155_0_1_rgba = o29290_0_1_rgba;
+float o6585_0_1_f = shape_circle((uv), p_o6585_sides, p_o6585_radius*1.0, p_o6585_edge*1.0);
+float o6586_0_step = clamp((o6585_0_1_f - (p_o6586_value))/max(0.0001, p_o6586_width)+0.5, 0.0, 1.0);
+float o6586_0_false = clamp((min(o6586_0_step, 1.0-o6586_0_step) * 2.0) / (1.0 - p_o6586_contrast), 0.0, 1.0);
+float o6586_0_true = 1.0-o6586_0_false;float o6586_0_1_f = o6586_0_false;
+float o6594_0_1_f = shape_polygon((uvmirror_h(((rotate((uv), vec2(0.5+p_o6593_cx, 0.5+p_o6593_cy), (elapsed_time*120.0)*0.01745329251))-vec2(p_o6592_translate_x, p_o6592_translate_y)), p_o6591_offset)), p_o6594_sides, p_o6594_radius*1.0, p_o6594_edge*1.0);
+vec4 o6591_0_1_rgba = vec4(vec3(o6594_0_1_f), 1.0);
+vec4 o6592_0_1_rgba = o6591_0_1_rgba;
+vec4 o6593_0_1_rgba = o6592_0_1_rgba;
+float o6587_0_1_f = shape_polygon((uvmirror_h(((rotate((uv), vec2(0.5+p_o6590_cx, 0.5+p_o6590_cy), (elapsed_time*10.0)*0.01745329251))-vec2(p_o6589_translate_x, p_o6589_translate_y)), p_o6588_offset)), p_o6587_sides, p_o6587_radius*1.0, p_o6587_edge*1.0);
+vec4 o6588_0_1_rgba = vec4(vec3(o6587_0_1_f), 1.0);
+vec4 o6589_0_1_rgba = o6588_0_1_rgba;
+vec4 o6590_0_1_rgba = o6589_0_1_rgba;
+float o6595_0_clamp_false = max((dot((o6593_0_1_rgba).rgb, vec3(1.0))/3.0),(dot((o6590_0_1_rgba).rgb, vec3(1.0))/3.0));
+float o6595_0_clamp_true = clamp(o6595_0_clamp_false, 0.0, 1.0);
+float o6595_0_1_f = o6595_0_clamp_false;
+float o6596_0_clamp_false = max(o6586_0_1_f,o6595_0_1_f);
+float o6596_0_clamp_true = clamp(o6596_0_clamp_false, 0.0, 1.0);
+float o6596_0_1_f = o6596_0_clamp_false;
+float o17213_0_clamp_false = (dot((o31155_0_1_rgba).rgb, vec3(1.0))/3.0)+o6596_0_1_f;
+float o17213_0_clamp_true = clamp(o17213_0_clamp_false, 0.0, 1.0);
+float o17213_0_1_f = o17213_0_clamp_false;
+float o6606_0_clamp_false = o17213_0_1_f*p_o6606_default_in2;
+float o6606_0_clamp_true = clamp(o6606_0_clamp_false, 0.0, 1.0);
+float o6606_0_2_f = o6606_0_clamp_false;
+
+return o6606_0_2_f;
+}
+float o6597_input_mask(vec2 uv) {
+
+return 1.0;
+}
+vec4 tiler_o6597(vec2 uv, vec2 tile, int overlap, vec2 _seed) {
+	float c = 0.0;
+	vec3 rc = vec3(0.0);
+	vec3 rc1;
+	for (int dx = -overlap; dx <= overlap; ++dx) {
+		for (int dy = -overlap; dy <= overlap; ++dy) {
+			vec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));
+			vec2 seed = rand2(pos+_seed);
+			rc1 = rand3(seed);
+			pos = fract(pos+vec2(p_o6597_fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+p_o6597_offset*seed/tile);
+			float mask = o6597_input_mask(fract(pos+vec2(0.5)));
+			if (mask > 0.01) {
+				vec2 pv = fract(uv - pos)-vec2(0.5);
+				seed = rand2(seed);
+				float angle = (seed.x * 2.0 - 1.0) * p_o6597_rotate * 0.01745329251;
+				float ca = cos(angle);
+				float sa = sin(angle);
+				pv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);
+				pv *= (seed.y-0.5)*2.0*p_o6597_scale+1.0;
+				pv /= vec2(p_o6597_scale_x, p_o6597_scale_y);
+				pv += vec2(0.5);
+				seed = rand2(seed);
+				vec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));
+				if (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {
+					continue;
+				}
+				 
+				float c1 = o6597_input_in(pv)*mask*(1.0-p_o6597_value*seed.x);
+				c = max(c, c1);
+				rc = mix(rc, rc1, step(c, c1));
+			}
+		}
+	}
+	return vec4(rc, c);
+}const float p_o6611_default_in1 = 0.000000000;
+const float p_o6611_default_in2 = 0.430000000;
+const float p_o6609_translate_y = 0.000000000;
+const float p_o6609_rotate = 0.000000000;
+const float p_o6609_scale_x = 1.445000000;
+const float p_o6609_scale_y = 1.510000000;
+const float p_o6602_translate_x = -0.005000000;
+const float p_o6602_translate_y = 0.000000000;
+const float p_o6602_rotate = 0.000000000;
+const float p_o6602_scale_x = 1.000000000;
+const float p_o6602_scale_y = 1.000000000;
+
+void fragment() {
+float o6599_0_1_f = perlin((fract(transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6598_translate_x*(2.0*1.0-1.0), p_o6598_translate_y*(2.0*1.0-1.0)), p_o6598_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6598_scale_x*(2.0*1.0-1.0), p_o6598_scale_y*(2.0*1.0-1.0)))), vec2((elapsed_time*0.11)*(2.0*1.0-1.0), (elapsed_time*0.01)*(2.0*1.0-1.0)), p_o6600_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6600_scale_x*(2.0*1.0-1.0), p_o6600_scale_y*(2.0*1.0-1.0))))), vec2(p_o6599_scale_x, p_o6599_scale_y), int(p_o6599_iterations), p_o6599_persistence, seed_o6599);
+vec4 o6600_0_1_rgba = vec4(vec3(o6599_0_1_f), 1.0);
+vec4 o6597_0_rch = tiler_o6597(((transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6598_translate_x*(2.0*1.0-1.0), p_o6598_translate_y*(2.0*1.0-1.0)), p_o6598_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6598_scale_x*(2.0*1.0-1.0), p_o6598_scale_y*(2.0*1.0-1.0)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_1_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_1_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0))))-vec2((0.1*elapsed_time), p_o6608_translate_y)), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_1_f = o6597_0_rch.a;
+vec4 o6608_0_1_rgba = vec4(vec3(o6597_0_1_f), 1.0);
+vec4 o6597_2_rch = tiler_o6597((transform2((transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6598_translate_x*(2.0*1.0-1.0), p_o6598_translate_y*(2.0*1.0-1.0)), p_o6598_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6598_scale_x*(2.0*1.0-1.0), p_o6598_scale_y*(2.0*1.0-1.0)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_1_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_1_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0)))), vec2((0.05*elapsed_time)*(2.0*1.0-1.0), p_o6609_translate_y*(2.0*1.0-1.0)), p_o6609_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6609_scale_x*(2.0*1.0-1.0), p_o6609_scale_y*(2.0*1.0-1.0)))), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_3_f = o6597_2_rch.a;
+vec4 o6609_0_1_rgba = vec4(vec3(o6597_0_3_f), 1.0);
+float o6611_0_clamp_false = (dot((o6609_0_1_rgba).rgb, vec3(1.0))/3.0)*p_o6611_default_in2;
+float o6611_0_clamp_true = clamp(o6611_0_clamp_false, 0.0, 1.0);
+float o6611_0_2_f = o6611_0_clamp_false;
+float o6610_0_clamp_false = (dot((o6608_0_1_rgba).rgb, vec3(1.0))/3.0)+o6611_0_2_f;
+float o6610_0_clamp_true = clamp(o6610_0_clamp_false, 0.0, 1.0);
+float o6610_0_1_f = o6610_0_clamp_false;
+vec4 o6601_0_1_rgba = vec4(vec3(o6610_0_1_f), 1.0);
+vec4 o6598_0_1_rgba = o6601_0_1_rgba;
+float o6599_0_3_f = perlin((fract(transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2((elapsed_time*0.11)*(2.0*1.0-1.0), (elapsed_time*0.01)*(2.0*1.0-1.0)), p_o6600_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6600_scale_x*(2.0*1.0-1.0), p_o6600_scale_y*(2.0*1.0-1.0))))), vec2(p_o6599_scale_x, p_o6599_scale_y), int(p_o6599_iterations), p_o6599_persistence, seed_o6599);
+vec4 o6600_0_4_rgba = vec4(vec3(o6599_0_3_f), 1.0);
+vec4 o6597_4_rch = tiler_o6597(((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_4_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_4_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0))))-vec2((0.1*elapsed_time), p_o6608_translate_y)), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_5_f = o6597_4_rch.a;
+vec4 o6608_0_3_rgba = vec4(vec3(o6597_0_5_f), 1.0);
+vec4 o6597_6_rch = tiler_o6597((transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_4_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_4_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0)))), vec2((0.05*elapsed_time)*(2.0*1.0-1.0), p_o6609_translate_y*(2.0*1.0-1.0)), p_o6609_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6609_scale_x*(2.0*1.0-1.0), p_o6609_scale_y*(2.0*1.0-1.0)))), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_7_f = o6597_6_rch.a;
+vec4 o6609_0_4_rgba = vec4(vec3(o6597_0_7_f), 1.0);
+float o6611_3_clamp_false = (dot((o6609_0_4_rgba).rgb, vec3(1.0))/3.0)*p_o6611_default_in2;
+float o6611_3_clamp_true = clamp(o6611_3_clamp_false, 0.0, 1.0);
+float o6611_0_5_f = o6611_3_clamp_false;
+float o6610_2_clamp_false = (dot((o6608_0_3_rgba).rgb, vec3(1.0))/3.0)+o6611_0_5_f;
+float o6610_2_clamp_true = clamp(o6610_2_clamp_false, 0.0, 1.0);
+float o6610_0_3_f = o6610_2_clamp_false;
+vec4 o6601_0_4_rgba = vec4(vec3(o6610_0_3_f), 1.0);
+float o6599_0_5_f = perlin((fract(transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6602_translate_x*(2.0*1.0-1.0), p_o6602_translate_y*(2.0*1.0-1.0)), p_o6602_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6602_scale_x*(2.0*1.0-1.0), p_o6602_scale_y*(2.0*1.0-1.0)))), vec2((elapsed_time*0.11)*(2.0*1.0-1.0), (elapsed_time*0.01)*(2.0*1.0-1.0)), p_o6600_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6600_scale_x*(2.0*1.0-1.0), p_o6600_scale_y*(2.0*1.0-1.0))))), vec2(p_o6599_scale_x, p_o6599_scale_y), int(p_o6599_iterations), p_o6599_persistence, seed_o6599);
+vec4 o6600_0_7_rgba = vec4(vec3(o6599_0_5_f), 1.0);
+vec4 o6597_8_rch = tiler_o6597(((transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6602_translate_x*(2.0*1.0-1.0), p_o6602_translate_y*(2.0*1.0-1.0)), p_o6602_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6602_scale_x*(2.0*1.0-1.0), p_o6602_scale_y*(2.0*1.0-1.0)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_7_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_7_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0))))-vec2((0.1*elapsed_time), p_o6608_translate_y)), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_9_f = o6597_8_rch.a;
+vec4 o6608_0_5_rgba = vec4(vec3(o6597_0_9_f), 1.0);
+vec4 o6597_10_rch = tiler_o6597((transform2((transform2((transform2((scale((UV), vec2(0.5+p_o6604_cx, 0.5+p_o6604_cy), vec2(p_o6604_scale_x, (o6605_ratio)))), vec2(p_o6602_translate_x*(2.0*1.0-1.0), p_o6602_translate_y*(2.0*1.0-1.0)), p_o6602_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6602_scale_x*(2.0*1.0-1.0), p_o6602_scale_y*(2.0*1.0-1.0)))), vec2(p_o6601_translate_x*(2.0*(dot((o6600_0_7_rgba).rgb, vec3(1.0))/3.0)-1.0), p_o6601_translate_y*(2.0*(dot((o6600_0_7_rgba).rgb, vec3(1.0))/3.0)-1.0)), p_o6601_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6601_scale_x*(2.0*1.0-1.0), p_o6601_scale_y*(2.0*1.0-1.0)))), vec2((0.05*elapsed_time)*(2.0*1.0-1.0), p_o6609_translate_y*(2.0*1.0-1.0)), p_o6609_rotate*0.01745329251*(2.0*1.0-1.0), vec2(p_o6609_scale_x*(2.0*1.0-1.0), p_o6609_scale_y*(2.0*1.0-1.0)))), vec2(p_o6597_tx, p_o6597_ty), int(p_o6597_overlap), vec2(float(seed_o6597)));float o6597_0_11_f = o6597_10_rch.a;
+vec4 o6609_0_7_rgba = vec4(vec3(o6597_0_11_f), 1.0);
+float o6611_6_clamp_false = (dot((o6609_0_7_rgba).rgb, vec3(1.0))/3.0)*p_o6611_default_in2;
+float o6611_6_clamp_true = clamp(o6611_6_clamp_false, 0.0, 1.0);
+float o6611_0_8_f = o6611_6_clamp_false;
+float o6610_4_clamp_false = (dot((o6608_0_5_rgba).rgb, vec3(1.0))/3.0)+o6611_0_8_f;
+float o6610_4_clamp_true = clamp(o6610_4_clamp_false, 0.0, 1.0);
+float o6610_0_5_f = o6610_4_clamp_false;
+vec4 o6601_0_7_rgba = vec4(vec3(o6610_0_5_f), 1.0);
+vec4 o6602_0_1_rgba = o6601_0_7_rgba;
+vec4 o6603_0_1_rgba = vec4((dot((o6598_0_1_rgba).rgb, vec3(1.0))/3.0), (dot((o6601_0_4_rgba).rgb, vec3(1.0))/3.0), (dot((o6602_0_1_rgba).rgb, vec3(1.0))/3.0), 1.0);
+vec4 o6604_0_1_rgba = o6603_0_1_rgba;
+COLOR = 0.7*o6604_0_1_rgba;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+render_priority = 10
+shader = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
 size = 72
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 1, 1, 1 )
 border_width_left = 2
 border_width_top = 2
@@ -16,7 +365,7 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0.380392, 0.388235, 0.486275, 1 )
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.380392, 0.388235, 0.486275, 1 )
 border_width_left = 3
 border_width_top = 3
@@ -24,7 +373,7 @@ border_width_right = 3
 border_width_bottom = 3
 border_color = Color( 0.380392, 0.388235, 0.486275, 1 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0.0235294, 0.0313726, 0.12549, 0.929412 )
 border_width_left = 3
 border_width_top = 3
@@ -40,79 +389,99 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Effect" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 margin_left = -221.0
-margin_top = -360.0
 margin_right = 221.0
-margin_bottom = 360.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Space1" type="Control" parent="VBoxContainer"]
-margin_bottom = 281.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 0
-size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer"]
+margin_left = 93.0
+margin_top = 44.0
+margin_right = 349.0
+margin_bottom = 300.0
+size_flags_horizontal = 4
+texture = ExtResource( 4 )
+stretch_mode = 1
+
+[node name="Space2" type="Control" parent="VBoxContainer"]
+margin_top = 304.0
+margin_bottom = 344.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 0
 size_flags_stretch_ratio = 2.0
 
 [node name="Title" type="Label" parent="VBoxContainer"]
-margin_top = 285.0
+margin_top = 348.0
 margin_right = 442.0
-margin_bottom = 372.0
-custom_fonts/font = SubResource( 1 )
+margin_bottom = 435.0
+custom_fonts/font = SubResource( 3 )
 text = "Material Maker"
 align = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_top = 376.0
+margin_top = 439.0
 margin_right = 442.0
-margin_bottom = 390.0
+margin_bottom = 453.0
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
 margin_left = 96.0
-margin_top = 394.0
+margin_top = 457.0
 margin_right = 346.0
-margin_bottom = 410.0
+margin_bottom = 473.0
 rect_min_size = Vector2( 250, 16 )
 size_flags_horizontal = 4
-custom_styles/fg = SubResource( 2 )
-custom_styles/bg = SubResource( 3 )
-value = 50.0
+custom_styles/fg = SubResource( 4 )
+custom_styles/bg = SubResource( 5 )
 percent_visible = false
 
-[node name="Space2" type="Control" parent="VBoxContainer"]
-margin_top = 414.0
-margin_bottom = 519.0
+[node name="Space3" type="Control" parent="VBoxContainer"]
+margin_top = 477.0
+margin_bottom = 551.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
-margin_top = 523.0
+margin_top = 555.0
 margin_right = 442.0
-margin_bottom = 537.0
+margin_bottom = 569.0
 text = "Powered by"
 align = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 margin_left = 127.0
-margin_top = 541.0
+margin_top = 573.0
 margin_right = 314.0
-margin_bottom = 610.0
+margin_bottom = 642.0
 size_flags_horizontal = 4
 texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Space3" type="Control" parent="VBoxContainer"]
-margin_top = 614.0
+[node name="Space4" type="Control" parent="VBoxContainer"]
+margin_top = 646.0
 margin_bottom = 720.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
@@ -129,7 +498,7 @@ margin_top = -76.0
 margin_right = 268.5
 margin_bottom = 76.0
 rect_pivot_offset = Vector2( 267.976, 75.7381 )
-custom_styles/panel = SubResource( 4 )
+custom_styles/panel = SubResource( 6 )
 
 [node name="Label" type="Label" parent="ErrorPanel"]
 anchor_right = 1.0

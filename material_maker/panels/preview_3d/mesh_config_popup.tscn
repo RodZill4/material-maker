@@ -81,10 +81,7 @@ float_only = true
 margin_top = 60.0
 margin_right = 276.0
 margin_bottom = 84.0
-hint_tooltip = "If tesselation is enabled, the mesh will be subdivided and its vertex coordinates will be moved
-thanks to a shader. For some kinds of materials, tesselation can result in a better appearance
-for the height map preview compared to parallax occlusion mapping.
-However, tesselation is more demanding to render compared to parallax occlusion mapping."
+hint_tooltip = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
 text = "Tesselated"
 
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]

@@ -19,7 +19,7 @@ const PANELS = [
 ]
 const HIDE_PANELS = {
 	material=[ "Brushes", "Layers", "Parameters" ],
-	paint=[ "Preview2D", "Preview3D", "Histogram", "Hierarchy" ]
+	paint=[ "Preview3D", "Histogram", "Hierarchy" ]
 }
 
 var panels = {}
@@ -28,6 +28,12 @@ var current_mode : String = "material"
 
 func _ready() -> void:
 	previous_width = rect_size.x
+
+func toggle_side_panels() -> void:
+	# Toggle side docks' visibility to maximize the space available
+	# for the graph panel. This is useful on smaller displays.
+	$Left.visible = not $Left.visible
+	$SplitRight/Right.visible = not $SplitRight/Right.visible
 
 func load_panels(config_cache) -> void:
 	# Create panels
@@ -49,6 +55,7 @@ func load_panels(config_cache) -> void:
 			tab.add_child(node)
 			node.set_meta("hidden", false)
 	# Split positions
+	yield(get_tree(), "idle_frame")
 	if config_cache.has_section_key("layout", "LeftVSplitOffset"):
 		split_offset = config_cache.get_value("layout", "LeftVSplitOffset")
 	if config_cache.has_section_key("layout", "LeftHSplitOffset"):
@@ -57,7 +64,6 @@ func load_panels(config_cache) -> void:
 		$SplitRight.split_offset = config_cache.get_value("layout", "RightVSplitOffset")
 	if config_cache.has_section_key("layout", "RightHSplitOffset"):
 		$SplitRight/Right.split_offset = config_cache.get_value("layout", "RightHSplitOffset")
-	update_panels()
 
 func save_config(config_cache) -> void:
 	for p in panels:

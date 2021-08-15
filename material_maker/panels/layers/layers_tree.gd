@@ -19,6 +19,14 @@ func _ready():
 	set_column_expand(1, false)
 	set_column_min_width(1, 30)
 
+func _make_custom_tooltip(for_text):
+	if for_text == "":
+		return null
+	var panel = preload("res://material_maker/panels/layers/layer_tooltip.tscn").instance()
+	var item : TreeItem = instance_from_id(int(for_text)) as TreeItem
+	panel.set_layer(item.get_meta("layer"))
+	return panel
+
 func update_from_layers(layers_array : Array, selected_layer) -> void:
 	selected_item = null
 	clear()
@@ -32,6 +40,7 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 		new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
 		new_item.set_editable(0, false)
 		new_item.set_meta("layer", l)
+		new_item.set_tooltip(0, str(new_item.get_instance_id()))
 		if l == selected_layer:
 			new_item.select(0)
 			selected_item = new_item
@@ -68,13 +77,20 @@ static func get_item_index(item : TreeItem) -> int:
 func drop_data(position : Vector2, data):
 	var target_item : TreeItem = get_item_at_position(position)
 	if data != null and target_item != null and !item_is_child(target_item, data):
+		var layer = data.get_meta("layer")
 		match get_drop_section_at_position(position):
 			0:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_meta("layer"))
+				layers.move_layer_into(layer, target_item.get_meta("layer"))
 			-1:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item))
+				if target_item.get_parent() != null:
+					layers.move_layer_into(layer, target_item.get_parent().get_meta("layer"), get_item_index(target_item))
+				else:
+					print("Cannot move item")
 			1:
-				layers.move_layer_into(data.get_meta("layer"), target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
+				if target_item.get_parent() != null:
+					layers.move_layer_into(layer, target_item.get_parent().get_meta("layer"), get_item_index(target_item)+1)
+				else:
+					print("Cannot move item")
 		_on_layers_changed()
 
 func _on_Tree_button_pressed(item : TreeItem, _column : int, _id : int):

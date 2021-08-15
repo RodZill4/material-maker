@@ -39,7 +39,13 @@ func get_graph_edit():
 	return self
 
 func _gui_input(event) -> void:
-	if event.is_action_pressed("ui_library_popup") && get_global_rect().has_point(get_global_mouse_position()):
+	if (
+		event.is_action_pressed("ui_library_popup")
+		and not Input.is_key_pressed(KEY_CONTROL)
+		and get_global_rect().has_point(get_global_mouse_position())
+	):
+		# Only popup the UI library if Ctrl is not pressed to avoid conflicting
+		# with the Ctrl + Space shortcut.
 		node_popup.rect_global_position = get_global_mouse_position()
 		node_popup.show_popup()
 	elif event.is_action_pressed("ui_hierarchy_up"):
@@ -49,14 +55,22 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom *= 1.1
-		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed() and event.control:
-			call_deferred("set_scroll_ofs", scroll_offset)
-			zoom /= 1.1
-		elif event.button_index == BUTTON_MIDDLE and $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
+		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+				call_deferred("set_scroll_ofs", scroll_offset+0.1*zoom*position)
+				zoom *= 1.1
+		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+			if event.control:
+				event.control = false
+			elif !event.shift:
+				event.control = true
+				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+				call_deferred("set_scroll_ofs", scroll_offset+(1.0/1.1-1.0)*zoom*position)
+				zoom /= 1.1
 		else:
 			call_deferred("check_last_selected")
 	elif event is InputEventKey and event.pressed:
@@ -64,17 +78,14 @@ func _gui_input(event) -> void:
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
 			remove_selection()
 	elif event is InputEventMouseMotion:
-		if $Minimap.visible and $Minimap.get_global_rect().has_point(get_global_mouse_position()):
-			$Minimap._gui_input(event)
-		else:
-			for c in get_children():
-				if c.has_method("get_slot_tooltip"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
-						hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
-					else:
-						c.clear_connection_labels()
+		for c in get_children():
+			if c.has_method("get_slot_tooltip"):
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+				else:
+					c.clear_connection_labels()
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -373,7 +384,9 @@ func save_as() -> bool:
 	return false
 
 func save_file(filename) -> bool:
+	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
+	mm_loader.current_project_path = ""
 	var file = File.new()
 	if file.open(filename, File.WRITE) == OK:
 		file.store_string(JSON.print(data, "\t", true))
@@ -396,7 +409,10 @@ func get_material_node() -> MMGenMaterial:
 func export_material(export_prefix, profile) -> void:
 	for g in top_generator.get_children():
 		if g.has_method("export_material"):
-			g.export_material(export_prefix, profile)
+			var result = g.export_material(export_prefix, profile)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+
 
 # Cut / copy / paste / duplicate
 
@@ -413,12 +429,12 @@ func remove_selection() -> void:
 			remove_node(c)
 
 # Maybe move this to gen_graph...
-func serialize_selection() -> Dictionary:
+func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
-	var nodes = []
-	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
-			nodes.append(c)
+	if nodes.empty():
+		for c in get_children():
+			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+				nodes.append(c)
 	if nodes.empty():
 		return {}
 	var center = Vector2(0, 0)
@@ -496,6 +512,16 @@ func select_all() -> void:
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = true
+
+func select_none() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = false
+
+func select_invert() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.selected = not c.selected
 
 # Delay after graph update
 
@@ -591,6 +617,8 @@ func set_last_selected(node) -> void:
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(node_name)
+	if node == null:
+		return
 	var node_transform : Transform2D = node.get_global_transform()
 	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
 	# ignore if drag distance is too short
@@ -620,4 +648,3 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
-

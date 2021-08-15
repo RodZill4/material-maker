@@ -1,7 +1,9 @@
 extends ViewportContainer
 
-const CAMERA_DISTANCE_MIN = 1.0
-const CAMERA_DISTANCE_MAX = 10.0
+const CAMERA_DISTANCE_MIN = 0.5
+const CAMERA_DISTANCE_MAX = 150.0
+const CAMERA_FOV_MIN = 10
+const CAMERA_FOV_MAX = 90
 
 export var ui_path : String = "UI/Preview3DUI"
 
@@ -10,6 +12,7 @@ onready var current_object = objects.get_child(0)
 
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
 onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
+onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
 
@@ -31,7 +34,7 @@ const MENU = [
 ]
 
 
-var _mouse_start_position := Vector2.ZERO
+var _mouse_start_position : Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -48,6 +51,11 @@ func _ready() -> void:
 	$MaterialPreview.get_texture().flags = Texture.FLAG_FILTER
 
 	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
+
+	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
+	# attempts to read the setting before the configuration file is loaded.
+	yield(get_tree(), "idle_frame")
+	sun.shadow_enabled = get_node("/root/MainWindow").get_config("ui_3d_preview_sun_shadow")
 
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
@@ -68,7 +76,7 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
-		var dialog = FileDialog.new()
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 		add_child(dialog)
 		dialog.rect_min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -76,9 +84,11 @@ func _on_Model_item_selected(id) -> void:
 		dialog.add_filter("*.obj;OBJ model File")
 		if get_node("/root/MainWindow").config_cache.has_section_key("path", "mesh"):
 			dialog.current_dir = get_node("/root/MainWindow").config_cache.get_value("path", "mesh")
-		dialog.connect("file_selected", self, "do_load_custom_mesh")
-		dialog.connect("popup_hide", dialog, "queue_free")
-		dialog.popup_centered()
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() == 1:
+			do_load_custom_mesh(files[0])
 	else:
 		select_object(id)
 
@@ -89,7 +99,6 @@ func do_load_custom_mesh(file_path) -> void:
 	if mesh != null:
 		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
-		object.update_material()
 		select_object(id)
 
 func select_object(id) -> void:
@@ -101,7 +110,6 @@ func select_object(id) -> void:
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
-	var sun = $MaterialPreview/Preview3d/Sun
 	environment_manager.apply_environment(id, environment, sun)
 
 func _on_material_preview_size_changed() -> void:
@@ -126,6 +134,17 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	var preview_material = current_object.get_surface_material(0)
+	for n in parameter_changes.keys():
+		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+			if p.name == n:
+				preview_material.set_shader_param(n, parameter_changes[n])
+				break
+
+func zoom(amount : float):
+	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
+
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
@@ -134,21 +153,20 @@ func on_gui_input(event) -> void:
 
 		match event.button_index:
 			BUTTON_WHEEL_UP:
-				camera.translation.z = clamp(
-					camera.translation.z / (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					zoom(1.0 / (1.01 if event.shift else 1.1))
 			BUTTON_WHEEL_DOWN:
-				camera.translation.z = clamp(
-					camera.translation.z * (1.01 if event.shift else 1.1),
-					CAMERA_DISTANCE_MIN,
-					CAMERA_DISTANCE_MAX
-				)
+				if event.command:
+					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+				else:
+					zoom(1.01 if event.shift else 1.1)
 			BUTTON_LEFT, BUTTON_RIGHT:
 				var mask : int = Input.get_mouse_button_mask()
 				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0
 				var rpressed : bool = (mask & BUTTON_MASK_RIGHT) != 0
+				
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 					_mouse_start_position = event.global_position
@@ -157,27 +175,33 @@ func on_gui_input(event) -> void:
 					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
-		var motion = 0.01*event.relative
-		if abs(motion.y) > abs(motion.x):
-			motion.x = 0
+		if event.pressure != 0.0:
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		var motion = event.relative
+		if event.alt:
+			zoom(1.0+motion.y*0.01)
 		else:
-			motion.y = 0
-		var camera_basis = camera.global_transform.basis
-		var objects_rotation : int = -1 if event.control else 1 if event.shift else 0
-		if event.button_mask & BUTTON_MASK_LEFT:
-			objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
-			objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
-			if objects_rotation != 1:
-				camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
-				camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
-		elif event.button_mask & BUTTON_MASK_RIGHT:
-			objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
-			if objects_rotation != 1:
-				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
+			motion *= 0.01
+			if abs(motion.y) > abs(motion.x):
+				motion.x = 0
+			else:
+				motion.y = 0
+			var camera_basis = camera.global_transform.basis
+			var objects_rotation : int = -1 if event.control else 1 if event.shift else 0
+			if event.button_mask & BUTTON_MASK_LEFT:
+				objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
+				objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
+				if objects_rotation != 1:
+					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
+					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
+			elif event.button_mask & BUTTON_MASK_RIGHT:
+				objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
+				if objects_rotation != 1:
+					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
 
 func generate_map(generate_function : String, size : int) -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -186,9 +210,11 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.add_filter("*.exr;EXR image File")
 	if get_node("/root/MainWindow").config_cache.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").config_cache.get_value("path", "maps")
-	dialog.connect("file_selected", self, generate_function, [ size ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		call(generate_function, files[0], size)
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
 	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()

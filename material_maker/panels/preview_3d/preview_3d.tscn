@@ -34,6 +34,7 @@ msaa = 1
 render_target_clear_mode = 1
 render_target_update_mode = 3
 physics_object_picking = true
+shadow_atlas_size = 4096
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
 

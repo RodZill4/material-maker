@@ -11,6 +11,9 @@ var texture : ImageTexture = ImageTexture.new()
 func get_output_defs() -> Array:
 	return [ { type="rgba" } ]
 
+func get_globals(texture_name : String) -> Array:
+	return [ "uniform sampler2D "+texture_name+";\n" ]
+
 func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenContext, lod : float = -1.0, texture_suffix : String = "_tex") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var rv = { globals=[], defs="", code="", type="rgba" }
@@ -24,6 +27,7 @@ func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenConte
 			rv.defs = "uniform float p_o%s_lod = %.09f;\n" % [ str(get_instance_id()), lod ]
 			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%s_lod);\n" % [ genname, variant_index, texture_name, uv, str(get_instance_id()) ]
 	rv.rgba = "%s_%d" % [ genname, variant_index ]
+	rv.globals = get_globals(texture_name)
 	rv.textures = { texture_name:texture }
 	return rv
 

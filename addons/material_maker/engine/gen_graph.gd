@@ -281,6 +281,22 @@ func reconnect_outputs(generator, reconnects : Dictionary) -> bool:
 		emit_signal("connections_changed", removed_connections, added_connections)
 	return true
 
+func get_named_parameters() -> Dictionary:
+	var named_parameters : Dictionary = {}
+	for c in get_children():
+		if c is MMGenRemote:
+			var remote_named_parameters = c.get_named_parameters()
+			for k in remote_named_parameters.keys():
+				named_parameters[k] = remote_named_parameters[k]
+	return named_parameters
+
+func get_globals() -> String:
+	var globals : String = ""
+	for c in get_children():
+		if c is MMGenRemote:
+			globals += c.get_globals()
+	return globals
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
@@ -293,6 +309,24 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
+
+func check_input_connects(node) -> void:
+	var new_connections : Array = []
+	var removed_connections : Array = []
+	for c in connections:
+		if c.to == node.name:
+			if c.to_port >= node.get_input_defs().size():
+				removed_connections.push_back(c.duplicate(true))
+				continue
+			var input_type = node.get_input_defs()[c.to_port].type
+			var output_type = get_node(c.from).get_output_defs()[c.from_port].type
+			if mm_io_types.types[input_type].slot_type != mm_io_types.types[output_type].slot_type and mm_io_types.types[output_type].slot_type != 42:
+				removed_connections.push_back(c.duplicate(true))
+				continue
+		new_connections.push_back(c)
+	if !removed_connections.empty():
+		emit_signal("connections_changed", removed_connections, [])
+		connections = new_connections
 
 func create_subgraph(gens : Array) -> MMGenGraph:
 	# Remove material, gen_inputs and gen_outputs nodes
@@ -401,6 +435,6 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("shortdesc"):
 		shortdesc = data.shortdesc
 	if data.has("longdesc"):
-		longdesc = data.longdesc 
+		longdesc = data.longdesc
 	var nodes = data.nodes if data.has("nodes") else []
 	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])

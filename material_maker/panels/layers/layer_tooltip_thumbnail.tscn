@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material_maker/panels/layers/layer_tooltip_thumbnail.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/layers/layer_tooltip_thumbnail.shader" type="Shader" id=2]
+
+[sub_resource type="ShaderMaterial" id=1]
+resource_local_to_scene = true
+shader = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 0.878431 )
+
+[node name="Thumbnail" type="ColorRect"]
+material = SubResource( 1 )
+margin_top = 18.0
+margin_right = 128.0
+margin_bottom = 146.0
+rect_min_size = Vector2( 128, 128 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -14.0
+custom_styles/normal = SubResource( 2 )
+text = "albedo"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

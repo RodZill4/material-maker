@@ -23,7 +23,7 @@ func _ready() -> void:
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
 	tree.set_column_min_width(1, 36)
-	# Connect 
+	# Connect
 	library_manager.connect("libraries_changed", self, "update_tree")
 	# Setup section buttons
 	for s in library_manager.get_sections():
@@ -47,10 +47,10 @@ func init_expanded_items() -> void:
 	else:
 		expanded_items = []
 		for m in library_manager.get_items(""):
-			var n : String = m.tree_item
+			var n : String = m.name
 			var slash_position = n.find("/")
 			if slash_position != -1:
-				n = m.tree_item.left(slash_position)
+				n = m.name.left(slash_position)
 			if expanded_items.find(n) == -1:
 				expanded_items.push_back(n)
 
@@ -69,13 +69,17 @@ func get_selected_item_name() -> String:
 	return get_item_path(tree.get_selected())
 
 func get_selected_item_doc_name() -> String:
+	var name : String = ""
 	var item : TreeItem = tree.get_selected()
 	if item == null:
 		return ""
-	var m : Dictionary = item.get_metadata(0)
-	if m == null or !m.has("icon"):
-		return ""
-	return m.icon
+	while item != tree.get_root():
+		if name == "":
+			name = item.get_text(0).to_lower()
+		else:
+			name = item.get_text(0).to_lower()+"_"+name
+		item = item.get_parent()
+	return name.replace(" ", "_")
 
 func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
 	var rv : PoolStringArray = PoolStringArray()
@@ -127,9 +131,9 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
 			new_item.set_text(0, item_name)
-			new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
-			new_item.set_icon(1, item_icon)
-			new_item.set_icon_max_width(1, 32)
+		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
+		new_item.set_icon(1, item_icon)
+		new_item.set_icon_max_width(1, 32)
 		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
 			new_item.set_metadata(1, library_index)

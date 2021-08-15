@@ -7,7 +7,7 @@ func _ready():
 	update_shader_options()
 	update_axes_menu()
 	update_export_menu()
- 
+
 func update_axes_menu() -> void:
 	$ContextMenu/Axes.clear()
 	for s in $Axes.STYLES:
@@ -49,6 +49,7 @@ func on_resized() -> void:
 	$Axes.update()
 
 var dragging : bool = false
+var zooming : bool = false
 
 func _on_gui_input(event):
 	var need_update : bool = false
@@ -56,24 +57,32 @@ func _on_gui_input(event):
 	var multiplier : float = min(rect_size.x, rect_size.y)
 	var image_rect : Rect2 = get_global_rect()
 	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
+	var new_scale : float = scale
 	if event is InputEventMouseButton:
 		if event.pressed:
-			var new_scale : float = scale
 			if event.button_index == BUTTON_WHEEL_DOWN:
-				new_scale = min(new_scale*1.05, 5)
+				new_scale = min(new_scale*1.05, 5.0)
 			elif event.button_index == BUTTON_WHEEL_UP:
 				new_scale = max(new_scale*0.95, 0.005)
 			elif event.button_index == BUTTON_MIDDLE:
 				dragging = true
-			if new_scale != scale:
-				new_center = center+offset_from_center*(scale-new_scale)/multiplier
-				scale = new_scale
-				need_update = true
-		elif event.button_index == BUTTON_MIDDLE:
+			elif event.button_index == BUTTON_LEFT:
+				if event.shift:
+					dragging = true
+				elif event.command:
+					zooming = true
+		else:
 			dragging = false
+			zooming = false
 	elif event is InputEventMouseMotion:
 		if dragging:
 			new_center = center-event.relative*scale/multiplier
+		elif zooming:
+			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
+	if new_scale != scale:
+		new_center = center+offset_from_center*(scale-new_scale)/multiplier
+		scale = new_scale
+		need_update = true
 	if new_center != center:
 		center.x = clamp(new_center.x, 0.0, 1.0)
 		center.y = clamp(new_center.y, 0.0, 1.0)

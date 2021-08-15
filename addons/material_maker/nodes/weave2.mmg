@@ -1,0 +1,113 @@
+{
+	"name": "weave2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"columns": 4,
+		"rows": 4,
+		"stitch": 1,
+		"width_x": 0.9,
+		"width_y": 0.9
+	},
+	"shader_model": {
+		"code": "vec3 $(name_uv) = weave($uv, vec2($columns, $rows), $stitch, $width_x*$width_map($uv), $width_y*$width_map($uv));",
+		"global": "vec3 weave(vec2 uv, vec2 count, float stitch, float width_x, float width_y) {\n    uv *= stitch;\n\tuv *= count;\n\tfloat c1 = (sin( 3.1415926 / stitch * (uv.x + floor(uv.y) - (stitch - 1.0))) * 0.25 + 0.75 ) *step(abs(fract(uv.y)-0.5), width_x*0.5);\n\tfloat c2 = (sin(3.1415926 / stitch * (1.0+uv.y+floor(uv.x) ))* 0.25 + 0.75 )*step(abs(fract(uv.x)-0.5), width_y*0.5);\n\treturn vec3(max(c1, c2), 1.0-step(c1, c2), 1.0-step(c2, c1));\n}",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "3:",
+				"longdesc": "An input map that affects the width parameter",
+				"name": "width_map",
+				"shortdesc": "Width map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates a simple weave pattern",
+		"name": "Weave",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"longdesc": "Shows the generated greyscale weave pattern.",
+				"shortdesc": "Output",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).y",
+				"longdesc": "Mask for horizontal stripes",
+				"shortdesc": "Horizontal mask",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).z",
+				"longdesc": "Mask for vertical stripes",
+				"shortdesc": "Vertical mask",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Size X",
+				"longdesc": "The number of columns of the pattern",
+				"max": 32,
+				"min": 2,
+				"name": "columns",
+				"shortdesc": "Size.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Size Y",
+				"longdesc": "The number of rows of the pattern",
+				"max": 32,
+				"min": 2,
+				"name": "rows",
+				"shortdesc": "Size.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.8,
+				"label": "Width X",
+				"longdesc": "The width of each row/column",
+				"max": 1,
+				"min": 0,
+				"name": "width_x",
+				"shortdesc": "Width",
+				"step": 0.05,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.8,
+				"label": "Width Y",
+				"max": 1,
+				"min": 0,
+				"name": "width_y",
+				"step": 0.05,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stitch",
+				"longdesc": "The length of each stitch",
+				"max": 10,
+				"min": 0,
+				"name": "stitch",
+				"shortdesc": "Stitch",
+				"step": 1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Weave pattern"
+	},
+	"type": "shader"
+}

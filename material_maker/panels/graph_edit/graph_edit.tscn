@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 [ext_resource path="res://material_maker/panels/graph_edit/undo_redo.gd" type="Script" id=3]
 [ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
-[ext_resource path="res://material_maker/widgets/graph_minimap/graph_minimap.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -101,8 +100,6 @@ rect_min_size = Vector2( 14, 0 )
 
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource( 3 )
-
-[node name="Minimap" parent="." instance=ExtResource( 5 )]
 
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [ true ]]
 [connection signal="connection_request" from="." to="." method="connect_node"]

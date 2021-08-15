@@ -16,7 +16,7 @@ const MENU_EXPORT_AGAIN : int = 1000
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
-	for i in range(7):
+	for i in range(8):
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
@@ -100,7 +100,7 @@ func export_again() -> void:
 	export_as_image_file(filename, last_export_size)
 
 func _on_Export_id_pressed(id : int) -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -111,9 +111,11 @@ func _on_Export_id_pressed(id : int) -> void:
 		var config_cache = get_node("/root/MainWindow").config_cache
 		if config_cache.has_section_key("path", "save_preview"):
 			dialog.current_dir = config_cache.get_value("path", "save_preview")
-	dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		export_as_image_file(files[0], 64 << id)
 
 func create_image(renderer_function : String, params : Array, size : int) -> void:
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
@@ -136,7 +138,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	var renderer = mm_renderer.request(self)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, tmp_material, size, true)
+	renderer = renderer.render_material(self, tmp_material, size, source.type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	renderer.callv(renderer_function, params)

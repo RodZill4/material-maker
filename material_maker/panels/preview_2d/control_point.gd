@@ -38,7 +38,7 @@ func _draw() -> void:
 			if parent_control_node == null:
 				ppos = get_parent().value_to_pos(Vector2(0, 0))
 			else:
-				ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size 
+				ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size
 			draw_rect(Rect2(0.5*rect_size, ppos-(rect_position+0.5*rect_size)), modulate, false)
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:

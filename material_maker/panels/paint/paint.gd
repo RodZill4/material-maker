@@ -56,6 +56,9 @@ var stroke_length : float = 0.0
 var stroke_angle : float = 0.0
 
 
+const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
+
+
 signal update_material
 
 
@@ -180,11 +183,11 @@ func set_object(o):
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic = 1.0
-	preview_material.metallic_texture = layers.get_mr_texture()
+	preview_material.metallic_texture = layers.get_metallic_texture()
 	preview_material.metallic_texture.flags = Texture.FLAGS_DEFAULT
 	preview_material.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	preview_material.roughness = 1.0
-	preview_material.roughness_texture = layers.get_mr_texture()
+	preview_material.roughness_texture = layers.get_roughness_texture()
 	preview_material.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
 	preview_material.emission_enabled = true
 	preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)
@@ -205,7 +208,7 @@ func set_object(o):
 
 func check_material_feature(variable : String, value : bool) -> void:
 	preview_material[variable] = value
-	
+
 func material_feature_is_checked(variable : String) -> bool:
 	return preview_material[variable]
 
@@ -221,6 +224,8 @@ func set_current_tool(m):
 		tools.get_node(MODE_NAMES[i]).pressed = (i == m)
 
 func _on_Fill_pressed():
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+		return
 	painter.fill(eraser_button.pressed)
 	set_need_save()
 
@@ -357,6 +362,38 @@ func _on_View_gui_input(ev : InputEvent):
 	else:
 		__input(ev)
 
+# Automatically apply brush to procedural layer
+
+var procedural_update_changed_scheduled : bool = false
+
+func update_procedural_layer() -> void:
+	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and !procedural_update_changed_scheduled:
+		call_deferred("do_update_procedural_layer")
+		procedural_update_changed_scheduled = true
+
+func do_update_procedural_layer() -> void:
+	painter.fill(false, true)
+	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
+	set_need_save()
+	procedural_update_changed_scheduled = false
+
+func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+	update_procedural_layer()
+
+func on_texture_changed(n : String) -> void:
+	update_procedural_layer()
+
+var saved_brush = null
+
+func _on_PaintLayers_layer_selected(layer):
+	if layer.get_layer_type() == Layer.LAYER_PROC:
+		if saved_brush == null:
+			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
+		if ! layer.material.empty():
+			set_brush(layer.material)
+	elif saved_brush != null:
+		set_brush(saved_brush)
+		saved_brush = null
 
 var brush_changed_scheduled : bool = false
 
@@ -369,6 +406,7 @@ func do_on_brush_changed():
 	painter.set_brush_preview_material($VSplitContainer/Painter/BrushView.material)
 	painter.update_brush(true)
 	brush_changed_scheduled = false
+	update_procedural_layer()
 
 func edit_brush(v : Vector2) -> void:
 	painter.edit_brush(v)
@@ -395,6 +433,8 @@ func reset_stroke() -> void:
 	previous_position = null
 
 func paint(pos, pressure = 1.0):
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 		if (pos-last_painted_position).length() < brush_spacing_control.value:
 			return
@@ -461,14 +501,17 @@ func dump_texture(texture, filename):
 	image.save_png(filename)
 
 func show_file_dialog(mode, filter, callback):
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = mode
 	dialog.add_filter(filter)
-	dialog.connect("file_selected", self, callback)
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		call(callback, files[0])
 
 func load_project(file_name) -> bool:
 	var f : File = File.new()

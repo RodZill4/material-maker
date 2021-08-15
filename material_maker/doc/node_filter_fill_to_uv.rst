@@ -23,7 +23,7 @@ channel is a random value that depends on the area.
 Parameters
 ++++++++++
 
-The **Fill to UV** node does not accept any parameter.
+The **Fill to UV** accepts a parameter that defines how the UV area is spread out on each UV island (strectch or square).
 
 Example images
 ++++++++++++++

@@ -1,0 +1,60 @@
+{
+	"name": "refract",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"refract": 1.2
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image to be transformed",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			},
+			{
+				"default": "max(1.0-2.0*length($uv-vec2(0.5)), 0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The magnifying glass shape",
+				"name": "s",
+				"shortdesc": "Shape",
+				"type": "f"
+			}
+		],
+		"instance": "vec2 $(name)_refract(vec2 uv, float refract) {\n\tvec2 eps = vec2(0.001, 0.0);\n\tvec3 n = normalize(vec3($s(uv+eps)-$s(uv-eps), $s(uv+eps.yx)-$s(uv-eps.yx), -10.0*eps.x));\n\tfloat h = $s(uv);\n    vec3 i = vec3(0.0, 0.0, -1.0);\n    float mu = 1.0/refract;\n    \n    float dot_n_i = dot(n, i);\n    vec3 t = sqrt(max(0.0, 1.0-mu*mu*(1.0-dot_n_i*dot_n_i)))*n+mu*(i-dot_n_i*n);\n    \n\treturn uv+h*t.xy/t.z;\n}",
+		"longdesc": "Magnifying glass effect",
+		"name": "Refract",
+		"outputs": [
+			{
+				"longdesc": "Shows the transformed image",
+				"rgba": "$in($(name)_refract($uv, $refract))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"longdesc": "The maximum scaling factor for the magnifying glass",
+				"max": 2,
+				"min": 0,
+				"name": "refract",
+				"shortdesc": "Scale",
+				"step": 0.005,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Magnify"
+	},
+	"type": "shader"
+}

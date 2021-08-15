@@ -13,6 +13,7 @@ The generator nodes are nodes that do not accept any input and generate one or s
 	node_pattern_truchet
 	node_pattern_fibers
 	node_pattern_runes
-	node_pattern_iching
+	node_pattern_runes_i_ching
 	node_pattern_scratches
+	node_pattern_beehive
 	node_pattern_sine_wave

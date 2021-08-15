@@ -47,6 +47,7 @@ Operators
 	node_simple_sdf_operators_sdmorph
 	node_simple_sdf_operators_sdrepeat
 	node_simple_sdf_operators_sdcirclerepeat
+	node_simple_sdf_operators_sd_mask_to_sdf
 
 Transforms
 ++++++++++

@@ -1,0 +1,248 @@
+{
+	"name": "tiler_advanced_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"overlap": 1,
+		"rotate": 0,
+		"scale_x": 1,
+		"scale_y": 1,
+		"select_inputs": 0,
+		"translate_x": 0,
+		"translate_y": 0,
+		"tx": 4,
+		"ty": 4
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_mapuv;\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), float($seed), $(name_uv)_mapuv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image or atlas of 4 or 16 input images",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The mask applied to the pattern",
+				"name": "mask",
+				"shortdesc": "Mask",
+				"type": "f"
+			},
+			{
+				"default": "vec4(rand2($uv+vec2(float($seed))), rand2($uv-vec2(float($seed))))",
+				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 1 output",
+				"name": "color1",
+				"shortdesc": "Color map 1",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(rand2(-$uv+vec2(float($seed))), rand2(-$uv-vec2(float($seed))))",
+				"label": "",
+				"longdesc": "An input color map used to generate the Instance map 2 output",
+				"name": "color2",
+				"shortdesc": "Color map 2",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "5:",
+				"longdesc": "A map for translation along the X axis",
+				"name": "tr_x",
+				"shortdesc": "Translate map X",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "A map for translation along the Y axis",
+				"name": "tr_y",
+				"shortdesc": "Translate map Y",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "A map for rotation",
+				"name": "r",
+				"shortdesc": "Rotate map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "A map for scale along the X axis",
+				"name": "sc_x",
+				"shortdesc": "Scale map X",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "A map for scale along the Y axis",
+				"name": "sc_y",
+				"shortdesc": "Scale map Y",
+				"type": "f"
+			}
+		],
+		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, float _seed, out vec2 outmapuv) {\n\t// $seed\n\tvec4 c = vec4(0.0);\n\toutmapuv = vec2(0.0);\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tpos = fract(pos+vec2(0.5));\n\t\t\t\tpv -= vec2($translate_x*$tr_x(pos), $translate_y*$tr_y(pos))/tile;\n\t\t\t\tfloat angle = $r(pos) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv /= vec2($scale_x*$sc_x(pos), $scale_y*$sc_y(pos));\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 seed = rand2(vec2(_seed)+pos);\n\t\t\t\t$select_inputs\n\t\t\t\tvec4 n = $in(pv);\n\t\t\t\tfloat na = n.a*mask;\n\t\t\t\toutmapuv = mix(outmapuv, pos, step(c.a, na));\n\t\t\t\tc = mix(c, n, na);\n\t\t\t}\n\t\t}\n\t}\n\treturn c;\n}\n",
+		"longdesc": "Tiles several occurences of an input image while adding randomness.",
+		"name": "Advanced Tiler Color",
+		"outputs": [
+			{
+				"longdesc": "Shows the generated pattern",
+				"rgba": "$(name_uv)_rch",
+				"shortdesc": "Output",
+				"type": "rgba"
+			},
+			{
+				"longdesc": "Shows a color for each instance of the input image",
+				"rgba": "$color1($(name_uv)_mapuv)",
+				"shortdesc": "Instance map 1",
+				"type": "rgba"
+			},
+			{
+				"longdesc": "Shows a color for each instance of the input image",
+				"rgba": "$color2($(name_uv)_mapuv)",
+				"shortdesc": "Instance map 2",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Tile X",
+				"longdesc": "The number of columns of the tiles pattern",
+				"max": 64,
+				"min": 1,
+				"name": "tx",
+				"shortdesc": "Tile.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Tile Y",
+				"longdesc": "The number of rows of the tiles pattern",
+				"max": 64,
+				"min": 1,
+				"name": "ty",
+				"shortdesc": "Tile.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Overlap",
+				"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+				"max": 5,
+				"min": 0,
+				"name": "overlap",
+				"shortdesc": "Overlap",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Inputs",
+				"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+				"name": "select_inputs",
+				"shortdesc": "Input",
+				"type": "enum",
+				"values": [
+					{
+						"name": "1",
+						"value": " "
+					},
+					{
+						"name": "4",
+						"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+					},
+					{
+						"name": "16",
+						"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Translate X",
+				"longdesc": "The translation along the X axis applied to the instances",
+				"max": 1,
+				"min": 0,
+				"name": "translate_x",
+				"shortdesc": "Translate.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Translate Y",
+				"longdesc": "The translation along the Y axis applied to the instances",
+				"max": 1,
+				"min": 0,
+				"name": "translate_y",
+				"shortdesc": "Translate.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rotate",
+				"longdesc": "The angle of instances of the input",
+				"max": 180,
+				"min": 0,
+				"name": "rotate",
+				"shortdesc": "Rotate",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale X",
+				"longdesc": "The scale of input images on the X axis",
+				"max": 2,
+				"min": 0,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale Y",
+				"longdesc": "The scale of input images on the Y axis",
+				"max": 2,
+				"min": 0,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tiler"
+	},
+	"type": "shader"
+}
