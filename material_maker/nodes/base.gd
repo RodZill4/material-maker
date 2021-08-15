@@ -1,11 +1,15 @@
 extends GraphNode
 class_name MMGraphNodeBase
 
+
 var generator : MMGenBase = null setget set_generator
 var show_inputs : bool = false
 var show_outputs : bool = false
 
 var rendering_time : int = -1
+
+var disable_undoredo_for_offset : bool = false
+
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -78,7 +82,14 @@ func set_generator(g) -> void:
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
 
+func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
+	offset = o
+	disable_undoredo_for_offset = false
+
 func _on_offset_changed() -> void:
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, offset)
 	generator.set_position(offset)
 
 func _on_gui_input(event) -> void:

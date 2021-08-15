@@ -22,10 +22,13 @@ onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
 onready var undoredo = $UndoRedo
+var undoredo_move_node_selection_changed : bool = true
+
 
 signal save_path_changed
 signal graph_changed
 signal view_updated
+
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -113,19 +116,44 @@ func connect_node(from, from_slot, to, to_slot):
 	var in_ports = to_node.generator.get_input_defs()
 	if out_ports[from_slot].has("group_size") and in_ports[to_slot].has("group_size") and out_ports[from_slot].group_size == in_ports[to_slot].group_size:
 		connect_count = out_ports[from_slot].group_size
+	var connect_list : Array = []
+	var disconnect_list : Array = []
 	for i in range(connect_count):
 		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
 			var disconnect = get_source(to, to_slot+i)
 			if !disconnect.empty():
 				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
+				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
 			.connect_node(from, from_slot+i, to, to_slot+i)
+			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})
 			connected = true
 	if connected:
+		var generator_hier_name : String = generator.get_hier_name()
+		var undo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=connect_list },
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=disconnect_list }
+		]
+		var redo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=disconnect_list },
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=connect_list }
+		]
+		undoredo.add("Connect nodes", undo_actions, redo_actions)
 		send_changed_signal()
 
 func disconnect_node(from, from_slot, to, to_slot) -> void:
-	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+	var from_gen = get_node(from).generator
+	var to_gen = get_node(to).generator
+	if generator.disconnect_children(from_gen, from_slot, to_gen, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
+		var generator_hier_name : String = generator.get_hier_name()
+		var connection = {from=from_gen.name, from_port=from_slot, to=to_gen.name, to_port=to_slot}
+		var undo_actions = [
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=[connection] }
+		]
+		var redo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=[connection] }
+		]
+		undoredo.add("Disconnect nodes", undo_actions, redo_actions)
 		send_changed_signal()
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
@@ -255,7 +283,7 @@ func update_graph(generators, connections) -> Array:
 			node.name = "node_"+g.name
 			add_node(node)
 			node.generator = g
-		node.offset = g.position
+		node.do_set_position(g.position)
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
@@ -614,10 +642,11 @@ func highlight_connections() -> void:
 func _on_GraphEdit_node_selected(node) -> void:
 	set_last_selected(node)
 	highlight_connections()
+	undoredo_move_node_selection_changed = true
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
-
+	undoredo_move_node_selection_changed = true
 
 func set_last_selected(node) -> void:
 	if node is GraphNode:
@@ -663,21 +692,30 @@ func _on_Description_descriptions_changed(short_description, long_description):
 
 # Undo/Redo
 
-func get_node_from_hier_path(hier_path : String):
+func get_node_from_hier_path(hier_path : String, return_closest = false):
 	var node : Node = top_generator
 	if hier_path != "":
 		for n in hier_path.split("/"):
 			if not node.has_node(n):
-				print("cannot find node "+n)
-				return null
+				if return_closest:
+					return node
+				else:
+					return null
 			node = node.get_node(n)
 	return node
+
+func undoredo_pre():
+	return generator.get_hier_name()
+
+func undoredo_post(pre_returnvalue) -> void:
+	var current_node = get_node_from_hier_path(pre_returnvalue, true)
 
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"add_to_graph":
 			var parent_generator = get_node_from_hier_path(command.parent)
-			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, command.generators, command.connections, command.position)
+			var position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
+			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, command.generators, command.connections, position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
@@ -687,12 +725,12 @@ func undoredo_command(command : Dictionary) -> void:
 				update_graph(new_stuff.generators, new_stuff.connections)
 		"remove_connections":
 			var parent_generator = get_node_from_hier_path(command.parent)
+			for c in command.connections:
+				parent_generator.disconnect_children_by_name(c.from, c.from_port, c.to, c.to_port)
 			if generator == parent_generator:
-				pass
-			else:
-				pass
+				for c in command.connections:
+					.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 		"remove_generators":
-			print(command.parent)
 			var parent_generator = get_node_from_hier_path(command.parent)
 			for n in command.generators:
 				var g = parent_generator.get_node(n)
@@ -703,7 +741,35 @@ func undoredo_command(command : Dictionary) -> void:
 		"setparam":
 			var node = get_node_from_hier_path(command.node)
 			node.set_parameter(command.param, MMType.deserialize_value(command.value))
+		"move_generators":
+			var parent_generator = get_node_from_hier_path(command.parent)
+			for k in command.positions.keys():
+				if parent_generator == generator:
+					get_node("node_"+k).do_set_position(command.positions[k])
+				else:
+					parent_generator.get_node(k).set_position(command.positions[k])
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
 
+func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2):
+	var undo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:old_pos } }
+	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
+	undoredo.add("Move nodes", [undo_action], [redo_action], true)
+
+func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
+	match action_name:
+		"Move nodes":
+			if action_name == last_action.name and ! undoredo_move_node_selection_changed:
+				var a = undo_actions[0]
+				for p in a.positions.keys():
+					if ! last_action.undo_actions[0].positions.has(p):
+						last_action.undo_actions[0].positions[p] = a.positions[p]
+				a = redo_actions[0]
+				for p in a.positions.keys():
+					if ! last_action.redo_actions[0].positions.has(p):
+						last_action.redo_actions[0].positions[p] = a.positions[p]
+				return true
+			print("undo/redo for move nodes reset")
+			undoredo_move_node_selection_changed = false
+	return false

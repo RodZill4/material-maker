@@ -74,11 +74,12 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
 	for c in connections:
-		if gennames.has(c.from) and gennames.has(c.to):
+		if gennames.has(c.from):
 			c.from = gennames[c.from]
+		if gennames.has(c.to):
 			c.to = gennames[c.to]
-			if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
-				rv.connections.append(c)
+		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+			rv.connections.append(c)
 	return rv
 
 func create_gen(data) -> MMGenBase:

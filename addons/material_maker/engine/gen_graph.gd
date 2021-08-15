@@ -237,15 +237,21 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	to.source_changed(to_port)
 	return true
 
-func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+func disconnect_children_ext(from_name : String, from_port : int, to_name : String, to, to_port : int) -> bool:
 	var new_connections : Array = []
 	for c in connections:
-		if c.from != from.name or c.from_port != from_port or c.to != to.name or c.to_port != to_port:
+		if c.from != from_name or c.from_port != from_port or c.to != to_name or c.to_port != to_port:
 			new_connections.push_back(c)
 		else:
 			to.source_changed(to_port)
 	connections = new_connections
 	return true
+
+func disconnect_children_by_name(from_name : String, from_port : int, to_name : String, to_port : int) -> bool:
+	return disconnect_children_ext(from_name, from_port, to_name, get_node(to_name), to_port)
+
+func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+	return disconnect_children_ext(from.name, from_port, to.name, to, to_port)
 
 func reconnect_inputs(generator, reconnects : Dictionary) -> bool:
 	var new_connections : Array = []
