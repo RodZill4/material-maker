@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/curve_preset_easeout.png-6798ecfb065813ed9238ac87e6d4e7a7.stex"
+path="res://.import/curve_presets.svg-98e67377f748efc842bad38cea1c58d2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://material_maker/theme/light/curve_preset_easeout.png"
-dest_files=[ "res://.import/curve_preset_easeout.png-6798ecfb065813ed9238ac87e6d4e7a7.stex" ]
+source_file="res://material_maker/theme/dark/curve_presets.svg"
+dest_files=[ "res://.import/curve_presets.svg-98e67377f748efc842bad38cea1c58d2.stex" ]
 
 [params]
 
@@ -31,4 +31,4 @@ process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=1.0
+svg/scale=0.75
