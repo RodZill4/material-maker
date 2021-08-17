@@ -36,3 +36,7 @@ func _on_OK_pressed():
 
 func _on_Cancel_pressed():
 	queue_free()
+
+
+func _on_VBoxContainer_minimum_size_changed():
+	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)

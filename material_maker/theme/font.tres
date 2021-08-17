@@ -1,0 +1,8 @@
+[gd_resource type="DynamicFont" load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/fonts/DroidSansFallback.ttf" type="DynamicFontData" id=1]
+
+[resource]
+size = 15
+extra_spacing_top = -3
+font_data = ExtResource( 1 )

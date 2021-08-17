@@ -75,6 +75,17 @@ func _ready():
 			resource_path = "res://material_maker/main_window.tscn"
 	else:
 		resource_path = "res://demo/demo.tscn"
+	
+	var dir = Directory.new()
+	if dir.open("user://locale") == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.get_extension() == "po":
+				var t : Translation = load("user://locale/"+file_name)
+				TranslationServer.add_translation(t)
+			file_name = dir.get_next()
+	
 	set_process(true)
 	var thread = Thread.new()
 	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
