@@ -229,8 +229,9 @@ func on_config_changed() -> void:
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 	# locale
 	var locale = get_config("locale")
-	if locale != "":
+	if locale != "" and locale != TranslationServer.get_locale():
 		TranslationServer.set_locale(locale)
+		get_tree().call_group("updated_from_locale", "update_from_locale")
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:

@@ -81,7 +81,7 @@ func _ready():
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if !dir.current_is_dir() and file_name.get_extension() == "po":
+			if !dir.current_is_dir() and file_name.get_extension() in [ "po", "translation" ]:
 				var t : Translation = load("user://locale/"+file_name)
 				TranslationServer.add_translation(t)
 			file_name = dir.get_next()
