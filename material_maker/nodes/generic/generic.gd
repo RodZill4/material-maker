@@ -194,11 +194,11 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 				control.add_filter(f)
 	var tooltip : String
 	if p.has("shortdesc"):
-		tooltip = p.shortdesc+" ("+p.name+")"
+		tooltip = TranslationServer.translate(p.shortdesc)+" ("+p.name+")"
 		if p.has("longdesc"):
-			tooltip += "\n"+p.longdesc
+			tooltip += "\n"+TranslationServer.translate(p.longdesc)
 	elif p.has("longdesc"):
-		tooltip += p.longdesc
+		tooltip += TranslationServer.translate(p.longdesc)
 	control.hint_tooltip = wrap_string(tooltip)
 	return control
 
