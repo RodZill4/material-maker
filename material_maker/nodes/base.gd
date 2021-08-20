@@ -97,7 +97,7 @@ func _on_gui_input(event) -> void:
 		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
-				hint_tooltip = wrap_string(TranslationServer.translate(description))
+				hint_tooltip = wrap_string(description)
 			elif generator.model != null:
 				hint_tooltip = TranslationServer.translate(generator.model)
 			return

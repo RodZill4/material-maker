@@ -102,12 +102,10 @@ func _ready():
 						if languages[i] == "en" or languages[i] in TranslationServer.get_loaded_locales():
 							languages[i] = null
 						else:
-							print("Adding translation for "+languages[i])
 							var translation : Translation = Translation.new()
 							translation.locale = languages[i]
 							languages[i] = translation
 							TranslationServer.add_translation(translation)
-					var stringcount : int = 0
 					while ! f.eof_reached():
 						l = f.get_line()
 						var strings : Array = l.split(separator)
@@ -115,8 +113,6 @@ func _ready():
 							for i in range(1, languages.size()):
 								if languages[i] != null:
 									languages[i].add_message(strings[0], strings[i])
-									stringcount += 1
-					print(stringcount)
 				f.close()
 	
 	set_process(true)
