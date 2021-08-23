@@ -112,7 +112,7 @@ func _ready():
 						if strings.size() == languages.size():
 							for i in range(1, languages.size()):
 								if languages[i] != null:
-									languages[i].add_message(strings[0], strings[i])
+									languages[i].add_message(strings[0].replace("\\n", "\n"), strings[i].replace("\\n", "\n"))
 				f.close()
 	
 	set_process(true)
