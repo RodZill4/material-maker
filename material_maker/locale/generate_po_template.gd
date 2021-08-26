@@ -27,7 +27,7 @@ class TranslationStrings:
 		tscn_regex = RegEx.new()
 		tscn_regex.compile("([a-z_]+)\\s*=\\s*\"(.*)\"")
 
-	func read_language_file(fn):
+	func read_language_file(fn : String):
 		var f : File = File.new()
 		if f.open(fn, File.READ) != OK:
 			return null
@@ -35,12 +35,25 @@ class TranslationStrings:
 		var count : int = 0
 		while !f.eof_reached():
 			var l : String = f.get_line()
-			var line = l.split(",")
+			var line
+			for sep in [ "\",\"", "\",", ",\"", "," ]:
+				line = l.split(sep)
+				if line.size() == 2:
+					if sep[0] == "\"":
+						line[0] = line[0].right(1)
+					if sep[sep.length()-1] == "\"":
+						line[1] = line[1].left(line[1].length()-1)
+					break
 			if line.size() == 2:
-				file_strings[line[0]] = line[1]
+				file_strings[line[0].replace("\\n", "\n")] = line[1].replace("\\n", "\n")
 				count += 1
+			else:
+				pass
+				#print(l)
+				#print(line)
+				#print(line.size())
 		f.close()
-		print(count)
+		print("Extracted %d strings from %s" % [ count, fn ])
 		
 		var translation : Translation = Translation.new()
 		var translated_string : Array = []
@@ -70,7 +83,7 @@ class TranslationStrings:
 						translation.add_message(s.string, t.join("\n"))
 					else:
 						pass
-						#print("no translation for '%s'" % s.string)
+						print("no translation for '%s'" % s.string)
 		return translation
 
 	func save_csv(fn : String, translation = null):

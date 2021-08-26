@@ -76,6 +76,13 @@ func _ready():
 	else:
 		resource_path = "res://demo/demo.tscn"
 	
+	read_translations()
+	
+	set_process(true)
+	var thread = Thread.new()
+	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
+
+func read_translations():
 	var dir = Directory.new()
 	if dir.open("user://locale") == OK:
 		var csv_files : Array = []
@@ -114,10 +121,6 @@ func _ready():
 								if languages[i] != null:
 									languages[i].add_message(strings[0].replace("\\n", "\n"), strings[i].replace("\\n", "\n"))
 				f.close()
-	
-	set_process(true)
-	var thread = Thread.new()
-	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
 
 func load_resource(resource_path : String):
 	var loader : ResourceInteractiveLoader = ResourceLoader.load_interactive(resource_path)
