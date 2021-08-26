@@ -33,10 +33,11 @@ class TranslationStrings:
 			return null
 		var file_strings : Dictionary = {}
 		var count : int = 0
+		var sep_char = f.get_line()[2]
 		while !f.eof_reached():
 			var l : String = f.get_line()
 			var line
-			for sep in [ "\",\"", "\",", ",\"", "," ]:
+			for sep in [ "\""+sep_char+"\"", "\""+sep_char, sep_char+"\"", sep_char ]:
 				line = l.split(sep)
 				if line.size() == 2:
 					if sep[0] == "\"":
