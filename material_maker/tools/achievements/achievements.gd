@@ -12,6 +12,11 @@ const ACHIEVEMENTS : Array = [
 				hint = "Start Material Maker for the first time",
 				description = "Welcome!"
 			},
+		]
+	},
+	{
+		name = "Materaial authoring",
+		achievements = [
 			{
 				id = "ui_dropnode",
 				name = "Add your first node",
@@ -23,6 +28,24 @@ const ACHIEVEMENTS : Array = [
 				name = "Add your second node",
 				hint = "Create a node using the add node menu",
 				description = "You did it again!"
+			},
+			{
+				id = "ui_group",
+				name = "Divide and Conquer",
+				hint = "Create a node group that contains at least 5 nodes",
+				description = "Keep your graphs organized"
+			},
+			{
+				id = "ui_warehousemanager",
+				name = "Warehouse Manager",
+				hint = "Store a few nodes in a user library",
+				description = "Why do it again if you did it already?"
+			},
+			{
+				id = "ui_loop",
+				name = "Chicken and egg",
+				hint = "Try to create a loop in your graph",
+				description = ""
 			}
 		]
 	}

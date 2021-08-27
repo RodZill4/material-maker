@@ -570,6 +570,10 @@ func create_subgraph() -> void:
 	var subgraph = generator.create_subgraph(generators)
 	if subgraph != null:
 		update_view(subgraph)
+	if generators.size() >= 5:
+		var achievements = get_node("/root/MainWindow/Achievements")
+		if achievements != null:
+			achievements.unlock("ui_group")
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instance()

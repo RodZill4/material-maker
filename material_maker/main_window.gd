@@ -41,6 +41,8 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+onready var achievements = $Achievements
+
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
 const IDLE_FPS_LIMIT_MIN = 1
@@ -869,6 +871,7 @@ func add_selection_to_library(index) -> void:
 	var image : Image = result.get_image()
 	result.release(self)
 	node_library_manager.add_item_to_library(index, status.text, image, data)
+	achievements.unlock("ui_warehousemanager")
 
 func create_menu_add_brush_to_library(menu) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
