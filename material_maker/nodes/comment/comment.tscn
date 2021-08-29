@@ -51,11 +51,11 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 239.0
+margin_right = 346.0
 margin_bottom = 38.0
 
 [node name="Label" type="Label" parent="VBox"]
-margin_right = 223.0
+margin_right = 330.0
 margin_bottom = 14.0
 mouse_filter = 0
 text = "Double-click to write a comment"
@@ -71,18 +71,22 @@ custom_styles/focus = SubResource( 2 )
 custom_styles/normal = SubResource( 2 )
 wrap_enabled = true
 
-[node name="Popup" type="Popup" parent="."]
+[node name="Popup" type="PopupPanel" parent="."]
+visible = true
 margin_left = 16.0
 margin_top = 39.0
-margin_right = 239.0
-margin_bottom = 39.0
+margin_right = 346.0
+margin_bottom = 509.0
 
 [node name="ColorPicker" type="ColorPicker" parent="Popup"]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 12.0
-margin_bottom = 12.0
-rect_scale = Vector2( 0.75, 0.75 )
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 326.0
+margin_bottom = 466.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="gui_input" from="VBox/Label" to="." method="_on_Label_gui_input"]
 [connection signal="focus_entered" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_entered"]
