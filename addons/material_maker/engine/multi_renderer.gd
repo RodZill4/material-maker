@@ -105,3 +105,4 @@ func add_pending_request() -> void:
 func remove_pending_request() -> void:
 	assert(pending_requests > 0)
 	pending_requests -= 1
+

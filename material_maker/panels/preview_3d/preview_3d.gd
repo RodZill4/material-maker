@@ -1,7 +1,7 @@
 extends ViewportContainer
 
-const CAMERA_DISTANCE_MIN = 1.0
-const CAMERA_DISTANCE_MAX = 15.0
+const CAMERA_DISTANCE_MIN = 0.5
+const CAMERA_DISTANCE_MAX = 150.0
 const CAMERA_FOV_MIN = 10
 const CAMERA_FOV_MAX = 90
 
@@ -34,7 +34,7 @@ const MENU = [
 ]
 
 
-var _mouse_start_position := Vector2.ZERO
+var _mouse_start_position : Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -142,6 +142,9 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 				preview_material.set_shader_param(n, parameter_changes[n])
 				break
 
+func zoom(amount : float):
+	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
+
 func on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
@@ -153,24 +156,17 @@ func on_gui_input(event) -> void:
 				if event.command:
 					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 				else:
-					camera.translation.z = clamp(
-						camera.translation.z / (1.01 if event.shift else 1.1),
-						CAMERA_DISTANCE_MIN,
-						CAMERA_DISTANCE_MAX
-					)
+					zoom(1.0 / (1.01 if event.shift else 1.1))
 			BUTTON_WHEEL_DOWN:
 				if event.command:
 					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 				else:
-					camera.translation.z = clamp(
-						camera.translation.z * (1.01 if event.shift else 1.1),
-						CAMERA_DISTANCE_MIN,
-						CAMERA_DISTANCE_MAX
-					)
+					zoom(1.01 if event.shift else 1.1)
 			BUTTON_LEFT, BUTTON_RIGHT:
 				var mask : int = Input.get_mouse_button_mask()
 				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0
 				var rpressed : bool = (mask & BUTTON_MASK_RIGHT) != 0
+				
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 					_mouse_start_position = event.global_position
@@ -179,23 +175,29 @@ func on_gui_input(event) -> void:
 					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	elif event is InputEventMouseMotion:
-		var motion = 0.01*event.relative
-		if abs(motion.y) > abs(motion.x):
-			motion.x = 0
+		if event.pressure != 0.0:
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		var motion = event.relative
+		if event.alt:
+			zoom(1.0+motion.y*0.01)
 		else:
-			motion.y = 0
-		var camera_basis = camera.global_transform.basis
-		var objects_rotation : int = -1 if event.control else 1 if event.shift else 0
-		if event.button_mask & BUTTON_MASK_LEFT:
-			objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
-			objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
-			if objects_rotation != 1:
-				camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
-				camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
-		elif event.button_mask & BUTTON_MASK_RIGHT:
-			objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
-			if objects_rotation != 1:
-				camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
+			motion *= 0.01
+			if abs(motion.y) > abs(motion.x):
+				motion.x = 0
+			else:
+				motion.y = 0
+			var camera_basis = camera.global_transform.basis
+			var objects_rotation : int = -1 if event.control else 1 if event.shift else 0
+			if event.button_mask & BUTTON_MASK_LEFT:
+				objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
+				objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
+				if objects_rotation != 1:
+					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
+					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
+			elif event.button_mask & BUTTON_MASK_RIGHT:
+				objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
+				if objects_rotation != 1:
+					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
 
 func generate_map(generate_function : String, size : int) -> void:

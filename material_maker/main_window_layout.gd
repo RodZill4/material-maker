@@ -55,6 +55,7 @@ func load_panels(config_cache) -> void:
 			tab.add_child(node)
 			node.set_meta("hidden", false)
 	# Split positions
+	yield(get_tree(), "idle_frame")
 	if config_cache.has_section_key("layout", "LeftVSplitOffset"):
 		split_offset = config_cache.get_value("layout", "LeftVSplitOffset")
 	if config_cache.has_section_key("layout", "LeftHSplitOffset"):
@@ -63,7 +64,6 @@ func load_panels(config_cache) -> void:
 		$SplitRight.split_offset = config_cache.get_value("layout", "RightVSplitOffset")
 	if config_cache.has_section_key("layout", "RightHSplitOffset"):
 		$SplitRight/Right.split_offset = config_cache.get_value("layout", "RightHSplitOffset")
-	update_panels()
 
 func save_config(config_cache) -> void:
 	for p in panels:

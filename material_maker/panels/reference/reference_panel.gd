@@ -6,6 +6,7 @@ var images : Array = []
 var current_image = -1
 
 var dragging = false
+var zooming = false
 var gradient = null
 var gradient_length : float = 0.0
 
@@ -39,15 +40,19 @@ func _on_Image_gui_input(event) -> void:
 	var scale : float = m.get_shader_param("scale")
 	var center : Vector2 = m.get_shader_param("center")
 	var new_center : Vector2 = center
+	var new_scale : float = scale
 	var ratio : Vector2 = canvas_size/image_size
 	var multiplier : Vector2 = image_size*min(ratio.x, ratio.y)
 	var image_rect : Rect2 = $VBoxContainer/Image.get_global_rect()
 	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
 	if event is InputEventMouseButton:
 		if event.pressed:
-			var new_scale : float = scale
 			if event.button_index == BUTTON_LEFT and selected_slot != null:
-				if selected_slot.get_parent() == $VBoxContainer/Colors:
+				if event.shift:
+					dragging = true
+				elif event.command:
+					zooming = true
+				elif selected_slot.get_parent() == $VBoxContainer/Colors:
 					selected_slot.set_color(get_color_under_cursor())
 				else:
 					gradient = selected_slot.gradient
@@ -63,17 +68,17 @@ func _on_Image_gui_input(event) -> void:
 				dragging = true
 			elif event.button_index == BUTTON_RIGHT:
 				$ContextMenu.popup(Rect2(get_global_mouse_position(), $ContextMenu.get_minimum_size()))
-			if new_scale != scale:
-				images[current_image].scale = new_scale
-				m.set_shader_param("scale", images[current_image].scale)
-				new_center = center+offset_from_center*(scale-new_scale)/multiplier
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
 			gradient = null
+			dragging = false
+			zooming = false
 	elif event is InputEventMouseMotion:
 		if dragging:
 			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
+		elif zooming:
+			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
 		elif gradient != null:
 			var new_gradient_length = gradient_length + event.relative.length()
 			if gradient_length > 0.0:
@@ -82,11 +87,17 @@ func _on_Image_gui_input(event) -> void:
 			gradient.add_point(1.0, get_color_under_cursor())
 			selected_slot.set_gradient(gradient)
 			gradient_length = new_gradient_length
+	if new_scale != scale:
+		m.set_shader_param("scale", new_scale)
+		new_center = center+offset_from_center*(scale-new_scale)/multiplier
+		if current_image >= 0:
+			images[current_image].scale = new_scale
 	if new_center != center:
 		new_center.x = clamp(new_center.x, 0.0, 1.0)
 		new_center.y = clamp(new_center.y, 0.0, 1.0)
 		m.set_shader_param("center", new_center)
-		images[current_image].center = new_center
+		if current_image >= 0:
+			images[current_image].center = new_center
 
 func select_slot(s) -> void:
 	if selected_slot != null:

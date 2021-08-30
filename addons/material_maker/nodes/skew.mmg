@@ -56,5 +56,6 @@
 				"widget": "spinbox"
 			}
 		]
-	}
+	},
+	"type": "shader"
 }
