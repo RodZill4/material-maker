@@ -17,6 +17,11 @@ scoop bucket add extras
 scoop install material-maker
 ```
 
+or [Chocolatey](https://chocolatey.org):
+```text
+choco install material-maker
+```
+
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 
 <a href="https://github.com/RodZill4/material-maker/actions">
