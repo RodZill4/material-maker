@@ -6,6 +6,7 @@ var images : Array = []
 var current_image = -1
 
 var dragging = false
+var zooming = false
 var gradient = null
 var gradient_length : float = 0.0
 
@@ -47,7 +48,11 @@ func _on_Image_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT and selected_slot != null:
-				if selected_slot.get_parent() == $VBoxContainer/Colors:
+				if event.shift:
+					dragging = true
+				elif event.command:
+					zooming = true
+				elif selected_slot.get_parent() == $VBoxContainer/Colors:
 					selected_slot.set_color(get_color_under_cursor())
 				else:
 					gradient = selected_slot.gradient
@@ -67,9 +72,13 @@ func _on_Image_gui_input(event) -> void:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
 			gradient = null
+			dragging = false
+			zooming = false
 	elif event is InputEventMouseMotion:
 		if dragging:
 			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
+		elif zooming:
+			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
 		elif gradient != null:
 			var new_gradient_length = gradient_length + event.relative.length()
 			if gradient_length > 0.0:
