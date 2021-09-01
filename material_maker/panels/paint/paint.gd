@@ -200,6 +200,10 @@ func set_object(o):
 	preview_material.depth_deep_parallax = true
 	preview_material.depth_texture = layers.get_depth_texture()
 	preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.ao_enabled = true
+	preview_material.ao_light_affect = 1.0
+	preview_material.ao_texture = layers.get_occlusion_texture()
+	preview_material.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_material(0, preview_material)
 	painter.set_mesh(o.mesh)

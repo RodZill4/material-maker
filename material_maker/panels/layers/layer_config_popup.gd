@@ -12,6 +12,7 @@ func configure_layer(layers : Node, l : Object) -> void:
 	$GridContainer/Emission.set_value(l.emission_alpha)
 	$GridContainer/Normal.set_value(l.normal_alpha)
 	$GridContainer/Depth.set_value(l.depth_alpha)
+	$GridContainer/Occlusion.set_value(l.occlusion_alpha)
 	popup(Rect2(get_global_mouse_position(), get_minimum_size()))
 
 func _on_LayerConfigPopup_popup_hide():
