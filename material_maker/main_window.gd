@@ -946,6 +946,7 @@ func show_doc() -> void:
 	var doc_dir = get_doc_dir()
 	if doc_dir != "":
 		OS.shell_open(doc_dir+"/index.html")
+		achievements.unlock("ui_doc")
 
 func show_doc_is_disabled() -> bool:
 	return get_doc_dir() == ""

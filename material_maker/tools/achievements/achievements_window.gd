@@ -5,6 +5,8 @@ func _ready():
 
 func set_achievements(achievements, unlocked):
 	var container = $VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer
+	var total : int = 0
+	var total_unlocked : int = 0
 	for s in achievements:
 		var label = load("res://material_maker/tools/achievements/achievement_section.tscn").instance()
 		label.text = s.name
@@ -17,7 +19,10 @@ func set_achievements(achievements, unlocked):
 			section.add_child(achievement)
 			if unlocked.find(a.id) != -1:
 				achievement.set_texts(a.name, a.description, true)
+				total_unlocked += 1
 			else:
 				achievement.set_texts("? ? ? ? ? ?", a.hint)
 				section.move_child(achievement, locked_count)
 				locked_count += 1
+			total += 1
+	$VBoxContainer/Label.text = "Total achievements completed: %d/%d" % [ total_unlocked, total ]

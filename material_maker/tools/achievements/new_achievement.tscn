@@ -1,10 +1,24 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://material_maker/tools/achievements/new_achievement.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/achievements/achievement.tscn" type="PackedScene" id=2]
 
-[sub_resource type="Animation" id=1]
-resource_name = "show"
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float c = 0.0;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25), color, c);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/c = 0.0
+
+[sub_resource type="Animation" id=3]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:visible")
@@ -69,7 +83,7 @@ tracks/4/keys = {
 } ]
 }
 
-[sub_resource type="ParticlesMaterial" id=2]
+[sub_resource type="ParticlesMaterial" id=4]
 flag_disable_z = true
 direction = Vector3( 0, -1, 0 )
 gravity = Vector3( 0, 98, 0 )
@@ -109,12 +123,13 @@ margin_right = 426.0
 margin_right = 426.0
 
 [node name="Icon" parent="HBoxContainer" index="1"]
+material = SubResource( 2 )
 margin_left = 436.0
 margin_right = 500.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
 autoplay = "show"
-anims/show = SubResource( 1 )
+anims/show = SubResource( 3 )
 
 [node name="Particles2D" type="Particles2D" parent="." index="2"]
 position = Vector2( 469.063, 6.02751 )
@@ -123,6 +138,6 @@ lifetime = 1.5
 one_shot = true
 explosiveness = 0.81
 randomness = 1.0
-process_material = SubResource( 2 )
+process_material = SubResource( 4 )
 
 [connection signal="gui_input" from="." to="." method="_on_Achievement_gui_input"]

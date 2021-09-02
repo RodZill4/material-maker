@@ -12,10 +12,16 @@ const ACHIEVEMENTS : Array = [
 				hint = "Start Material Maker for the first time",
 				description = "Welcome!"
 			},
+			{
+				id = "ui_doc",
+				name = "The Fine Manual",
+				hint = "Read the user manual",
+				description = "You read it all, haven't you?"
+			},
 		]
 	},
 	{
-		name = "Materaial authoring",
+		name = "Material authoring",
 		achievements = [
 			{
 				id = "ui_dropnode",
