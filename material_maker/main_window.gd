@@ -996,15 +996,14 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 			return n
 	return null
 
-func update_preview_2d(node = null) -> void:
+func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		if node == null:
-			node = get_current_node(graph_edit)
-		if node != null:
-			preview_2d.set_generator(node.generator)
-			histogram.set_generator(node.generator)
-			preview_2d_background.set_generator(node.generator)
+		var preview = graph_edit.get_current_preview()
+		if preview != null:
+			preview_2d.set_generator(preview.generator, preview.output_index)
+			histogram.set_generator(preview.generator, preview.output_index)
+			preview_2d_background.set_generator(preview.generator, preview.output_index)
 		else:
 			preview_2d.set_generator(null)
 			histogram.set_generator(null)
@@ -1024,11 +1023,9 @@ func update_preview_3d(previews : Array, sequential = false) -> void:
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 
-var selected_node = null
-func on_selected_node_change(node) -> void:
-	if node != selected_node:
-		selected_node = node
-		update_preview_2d(node)
+func on_preview_changed(graph) -> void:
+	if graph == get_current_graph_edit():
+		update_preview_2d()
 
 func _on_Projects_tab_changed(_tab) -> void:
 	var project = get_current_project()
@@ -1054,8 +1051,8 @@ func _on_Projects_tab_changed(_tab) -> void:
 		current_tab = new_tab
 		if new_graph_edit != null:
 			new_graph_edit.connect("graph_changed", self, "update_preview")
-			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
-				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
+			if !new_graph_edit.is_connected("preview_changed", self, "on_preview_changed"):
+				new_graph_edit.connect("preview_changed", self, "on_preview_changed")
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())

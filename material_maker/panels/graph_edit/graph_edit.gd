@@ -1,6 +1,16 @@
 extends GraphEdit
 class_name MMGraphEdit
 
+
+class Preview:
+	var generator
+	var output_index : int
+	
+	func _init(g, i : int = 0):
+		generator = g
+		output_index = i
+
+
 export(String, MULTILINE) var shader_context_defs : String = ""
 
 var node_factory = null
@@ -12,7 +22,8 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
-var last_selected = null
+var current_preview : Preview = null
+var locked_preview : Preview = null
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
 
@@ -21,9 +32,12 @@ onready var timer : Timer = $Timer
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
+signal preview_changed
+
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -71,8 +85,24 @@ func _gui_input(event) -> void:
 				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
 				call_deferred("set_scroll_ofs", scroll_offset+(1.0/1.1-1.0)*zoom*position)
 				zoom /= 1.1
+		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
+			for c in get_children():
+				if c.has_method("get_output_slot"):
+					var rect = c.get_global_rect()
+					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+					if rect.has_point(get_global_mouse_position()):
+						var slot = c.get_output_slot(get_global_mouse_position()-c.rect_global_position)
+						if slot != -1:
+							# Tell the node its connector was clicked
+							if c.has_method("on_clicked_output"):
+								c.on_clicked_output(slot)
+								return
+			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
+			# with the Ctrl + Space shortcut.
+			node_popup.rect_global_position = get_global_mouse_position()
+			node_popup.show_popup()
 		else:
-			call_deferred("check_last_selected")
+			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
 		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
@@ -138,8 +168,10 @@ func remove_node(node) -> void:
 		for c in get_connection_list():
 			if c.from == node_name or c.to == node_name:
 				disconnect_node(c.from, c.from_port, c.to, c.to_port)
-		if node == last_selected:
-			set_last_selected(null)
+		if current_preview != null and node.generator == current_preview.generator:
+			set_current_preview(null)
+		if locked_preview != null and node.generator == locked_preview.generator:
+			set_current_preview(null, 0, true)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
@@ -180,8 +212,6 @@ func clear_view() -> void:
 	clear_connections()
 	for c in get_children():
 		if c is GraphNode:
-			if c == last_selected:
-				set_last_selected(null)
 			remove_child(c)
 			c.free()
 
@@ -601,18 +631,41 @@ func highlight_connections() -> void:
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node) -> void:
-	set_last_selected(node)
+	set_current_preview(node)
 	highlight_connections()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 
+func get_current_preview():
+	if locked_preview != null:
+		return locked_preview
+	return current_preview
 
-func set_last_selected(node) -> void:
-	if node is GraphNode:
-		last_selected = node
+func set_current_preview(node, output_index : int = 0, locked = false) -> void:
+	var preview = null
+	var old_preview = null
+	var old_locked_preview = null
+	if node != null:
+		preview = Preview.new(node.generator, output_index)
+	if locked:
+		if locked_preview != null and locked_preview.generator != node.generator:
+			old_locked_preview = locked_preview.generator
+		if locked_preview != null and locked_preview.generator == preview.generator and locked_preview.output_index == preview.output_index:
+			locked_preview = null
+		else:
+			locked_preview = preview
 	else:
-		last_selected = null
+		if current_preview != null and current_preview.generator != node.generator:
+			old_preview = current_preview.generator
+		current_preview = preview
+	emit_signal("preview_changed", self)
+	node.update()
+	if old_preview != null or old_locked_preview != null:
+		for c in get_children():
+			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
+				c.update()
+				print("updating")
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually dragged
@@ -623,9 +676,7 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
 	# ignore if drag distance is too short
 	if (get_global_mouse_position()-output_position).length() < 20:
-		# Tell the node its connector was clicked
-		if node.has_method("on_clicked_output"):
-			node.on_clicked_output(slot_index)
+		set_current_preview(node, slot_index, Input.is_key_pressed(KEY_CONTROL))
 		return
 	# Request the popup
 	node_popup.rect_global_position = get_global_mouse_position()
@@ -636,10 +687,10 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 		slot_type = mm_io_types.types[node.generator.get_output_defs()[slot_index].type].slot_type
 	node_popup.show_popup(node_name, slot_index, slot_type, connect_output)
 
-func check_last_selected() -> void:
-	if last_selected != null and !(is_instance_valid(last_selected) and last_selected.selected):
-		last_selected = null
-		emit_signal("node_selected", null)
+func check_previews() -> void:
+	if current_preview != null and ! is_instance_valid(current_preview.generator):
+		current_preview = null
+		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:
 	do_paste({type="image", image=file_name})

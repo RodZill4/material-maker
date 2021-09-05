@@ -7,6 +7,13 @@ var show_outputs : bool = false
 
 var rendering_time : int = -1
 
+const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
+const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
+const RANDOMNESS_LOCKED_ICON : Texture = preload("res://material_maker/icons/randomness_locked.tres")
+const CUSTOM_ICON : Texture = preload("res://material_maker/icons/custom.png")
+const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
+const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
+
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
 	var p = 0
@@ -32,16 +39,16 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	var color : Color = get_color("title_color")
-	var icon = preload("res://material_maker/icons/minimize.tres")
+	var icon = MINIMIZE_ICON
 	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
 	if generator != null and generator.has_randomness():
-		icon = preload("res://material_maker/icons/randomness_locked.tres") if generator.is_seed_locked() else preload("res://material_maker/icons/randomness_unlocked.tres")
+		icon = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
 		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
 	var inputs = generator.get_input_defs()
 	var font : Font = get_font("default_font")
 	var scale = get_global_transform().get_scale()
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(preload("res://material_maker/icons/custom.png"), Rect2(3, 8, 7, 7), false, color)
+		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
 			var conn_pos1 = get_connection_input_position(i)
@@ -55,6 +62,13 @@ func _draw() -> void:
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, color)
 	var outputs = generator.get_output_defs()
+	var preview_port = -1
+	var preview_locked = false
+	if get_parent().locked_preview != null and get_parent().locked_preview.generator == generator:
+		preview_port = get_parent().locked_preview.output_index
+		preview_locked = true
+	elif get_parent().current_preview != null and get_parent().current_preview.generator == generator:
+		preview_port = get_parent().current_preview.output_index
 	for i in range(outputs.size()):
 		if outputs[i].has("group_size") and outputs[i].group_size > 1:
 # warning-ignore:narrowing_conversion
@@ -63,6 +77,10 @@ func _draw() -> void:
 			conn_pos1 /= scale
 			conn_pos2 /= scale
 			draw_line(conn_pos1, conn_pos2, color)
+		if i == preview_port:
+			var conn_pos = get_connection_output_position(i)
+			conn_pos /= scale
+			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
 		if show_outputs:
 			var string : String = outputs[i].shortdesc if outputs[i].has("shortdesc") else ("Output "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
@@ -108,6 +126,21 @@ func _on_gui_input(event) -> void:
 				hint_tooltip = "Lock the random seed to its current value"
 			return
 		hint_tooltip = ""
+
+func get_output_slot(pos : Vector2) -> int:
+	var scale = get_global_transform().get_scale()
+	if get_connection_output_count() > 0:
+		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
+		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
+		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+		if new_show_outputs != show_outputs:
+			show_outputs = new_show_outputs
+			update()
+		if new_show_outputs:
+			for i in range(get_connection_output_count()):
+				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
+					return i
+	return -1
 
 func get_slot_tooltip(pos : Vector2) -> String:
 	var scale = get_global_transform().get_scale()
