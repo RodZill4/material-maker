@@ -22,8 +22,9 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
-var current_preview : Preview = null
-var locked_preview : Preview = null
+const PREVIEW_COUNT = 2
+var current_preview : Array = [ null, null ]
+var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
 
@@ -163,15 +164,16 @@ func on_connections_changed(removed_connections : Array, added_connections : Arr
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 
 func remove_node(node) -> void:
+	for i in PREVIEW_COUNT:
+		if current_preview[i] != null and node.generator == current_preview[i].generator:
+			set_current_preview(i, null)
+		if locked_preview[i] != null and node.generator == locked_preview[i].generator:
+			set_current_preview(i, null, 0, true)
 	if generator.remove_generator(node.generator):
 		var node_name = node.name
 		for c in get_connection_list():
 			if c.from == node_name or c.to == node_name:
 				disconnect_node(c.from, c.from_port, c.to, c.to_port)
-		if current_preview != null and node.generator == current_preview.generator:
-			set_current_preview(null)
-		if locked_preview != null and node.generator == locked_preview.generator:
-			set_current_preview(null, 0, true)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
@@ -631,41 +633,41 @@ func highlight_connections() -> void:
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node) -> void:
-	set_current_preview(node)
+	set_current_preview(0, node)
 	highlight_connections()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 
-func get_current_preview():
-	if locked_preview != null:
-		return locked_preview
-	return current_preview
+func get_current_preview(slot : int = 0):
+	if locked_preview[slot] != null:
+		return locked_preview[slot]
+	return current_preview[slot]
 
-func set_current_preview(node, output_index : int = 0, locked = false) -> void:
+func set_current_preview(slot : int, node, output_index : int = 0, locked = false) -> void:
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
 	if node != null:
 		preview = Preview.new(node.generator, output_index)
 	if locked:
-		if locked_preview != null and locked_preview.generator != node.generator:
-			old_locked_preview = locked_preview.generator
-		if locked_preview != null and locked_preview.generator == preview.generator and locked_preview.output_index == preview.output_index:
-			locked_preview = null
+		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
+			old_locked_preview = locked_preview[slot].generator
+		if locked_preview[slot] != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
+			locked_preview[slot] = null
 		else:
-			locked_preview = preview
+			locked_preview[slot] = preview
 	else:
-		if current_preview != null and current_preview.generator != node.generator:
-			old_preview = current_preview.generator
-		current_preview = preview
+		if node != null and current_preview[slot] != null and current_preview[slot].generator != node.generator:
+			old_preview = current_preview[slot].generator
+		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
-	node.update()
+	if node != null:
+		node.update()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
 			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
 				c.update()
-				print("updating")
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually dragged
@@ -676,7 +678,7 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
 	# ignore if drag distance is too short
 	if (get_global_mouse_position()-output_position).length() < 20:
-		set_current_preview(node, slot_index, Input.is_key_pressed(KEY_CONTROL))
+		set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, node, slot_index, Input.is_key_pressed(KEY_CONTROL))
 		return
 	# Request the popup
 	node_popup.rect_global_position = get_global_mouse_position()
@@ -688,8 +690,15 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	node_popup.show_popup(node_name, slot_index, slot_type, connect_output)
 
 func check_previews() -> void:
-	if current_preview != null and ! is_instance_valid(current_preview.generator):
-		current_preview = null
+	var preview_changed : bool = false
+	for i in PREVIEW_COUNT:
+		if current_preview[i] != null and ! is_instance_valid(current_preview[i].generator):
+			current_preview[i] = null
+			preview_changed = true
+		if locked_preview[i] != null and ! is_instance_valid(locked_preview[i].generator):
+			locked_preview[i] = null
+			preview_changed = true
+	if preview_changed:
 		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:

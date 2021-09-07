@@ -62,13 +62,17 @@ func _draw() -> void:
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, color)
 	var outputs = generator.get_output_defs()
-	var preview_port = -1
-	var preview_locked = false
-	if get_parent().locked_preview != null and get_parent().locked_preview.generator == generator:
-		preview_port = get_parent().locked_preview.output_index
-		preview_locked = true
-	elif get_parent().current_preview != null and get_parent().current_preview.generator == generator:
-		preview_port = get_parent().current_preview.output_index
+	var preview_port : Array = [ -1, -1 ]
+	var preview_locked : Array = [ false, false ]
+	for i in range(2):
+		if get_parent().locked_preview[i] != null and get_parent().locked_preview[i].generator == generator:
+			preview_port[i] = get_parent().locked_preview[i].output_index
+			preview_locked[i] = true
+		elif get_parent().current_preview[i] != null and get_parent().current_preview[i].generator == generator:
+			preview_port[i] = get_parent().current_preview[i].output_index
+	if preview_port[0] == preview_port[1]:
+		preview_port[1] = -1
+		preview_locked[0] = preview_locked[0] || preview_locked[1]
 	for i in range(outputs.size()):
 		if outputs[i].has("group_size") and outputs[i].group_size > 1:
 # warning-ignore:narrowing_conversion
@@ -77,10 +81,15 @@ func _draw() -> void:
 			conn_pos1 /= scale
 			conn_pos2 /= scale
 			draw_line(conn_pos1, conn_pos2, color)
-		if i == preview_port:
+		var j = -1
+		if i == preview_port[0]:
+			j = 0
+		elif i == preview_port[1]:
+			j = 1
+		if j != -1:
 			var conn_pos = get_connection_output_position(i)
 			conn_pos /= scale
-			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
+			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
 		if show_outputs:
 			var string : String = outputs[i].shortdesc if outputs[i].has("shortdesc") else ("Output "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)

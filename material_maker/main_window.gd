@@ -29,7 +29,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
 var library
-var preview_2d
+var preview_2d : Array
 var histogram
 var preview_3d
 var hierarchy
@@ -186,7 +186,7 @@ func _ready() -> void:
 
 	layout.load_panels(config_cache)
 	library = get_panel("Library")
-	preview_2d = get_panel("Preview2D")
+	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
@@ -999,15 +999,18 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		var preview = graph_edit.get_current_preview()
-		if preview != null:
-			preview_2d.set_generator(preview.generator, preview.output_index)
-			histogram.set_generator(preview.generator, preview.output_index)
-			preview_2d_background.set_generator(preview.generator, preview.output_index)
-		else:
-			preview_2d.set_generator(null)
-			histogram.set_generator(null)
-			preview_2d_background.set_generator(null)
+		for i in range(2):
+			var preview = graph_edit.get_current_preview(i)
+			if preview != null:
+				preview_2d[i].set_generator(preview.generator, preview.output_index)
+				if i == 0:
+					histogram.set_generator(preview.generator, preview.output_index)
+					preview_2d_background.set_generator(preview.generator, preview.output_index)
+			else:
+				preview_2d[i].set_generator(null)
+				if i == 0:
+					histogram.set_generator(null)
+					preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
