@@ -5,6 +5,7 @@ class_name MMGenContext
 
 var variants : Dictionary = {}
 var parent_context : MMGenContext = null
+var seed_modifier : String = ""
 
 func _init(p = null) -> void:
 	parent_context = p

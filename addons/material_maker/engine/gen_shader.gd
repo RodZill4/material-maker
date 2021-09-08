@@ -115,17 +115,17 @@ func find_keyword_call(string, keyword):
 		return string.substr(parameter_begin, end-parameter_begin)
 	return ""
 
-func replace_input_with_function_call(string : String, input : String) -> String:
+func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", 0.0", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
 	while true:
-		var uv = find_keyword_call(string, input)
+		var uv = find_keyword_call(string, input+input_suffix)
 		if uv == null:
 			break
 		elif uv == "":
 			print("syntax error")
 			print(string)
 			break
-		string = string.replace("$%s(%s)" % [ input, uv ], "%s_input_%s(%s)" % [ genname, input, uv ])
+		string = string.replace("$%s(%s)" % [ input+input_suffix, uv ], "%s_input_%s(%s%s)" % [ genname, input, uv, seed_parameter ])
 	return string
 
 func replace_input(string : String, context, input : String, type : String, src : OutputPort, default : String) -> Dictionary:
@@ -222,7 +222,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
-	variables["seed"] = "seed_"+genname
+	if context.seed_modifier == "":
+		variables["seed"] = "seed_"+genname
+	else:
+		variables["seed"] = "(seed_"+genname+"+"+context.seed_modifier+")"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
 		for p in shader_model.parameters:
@@ -290,6 +293,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				var source = get_source(i)
 				if input.has("function") and input.function:
 					string = replace_input_with_function_call(string, input.name)
+					string = replace_input_with_function_call(string, input.name, "", ".variation")
 				else:
 					var result = replace_input(string, context, input.name, input.type, source, input.default)
 					assert(! (result is GDScriptFunctionState))
@@ -320,7 +324,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 func generate_parameter_declarations(rv : Dictionary):
 	var genname = "o"+str(get_instance_id())
 	if has_randomness():
-		rv.defs += "uniform int seed_%s = %d;\n" % [ genname, get_seed() ]
+		rv.defs += "uniform float seed_%s = %d.0;\n" % [ genname, get_seed() ]
 	for p in shader_model.parameters:
 		if p.type == "float" and parameters[p.name] is float:
 			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
@@ -358,6 +362,7 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				var source = get_source(i)
 				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
 				var local_context = MMGenContext.new(context)
+				local_context.seed_modifier = "variant_seed"
 				var result = replace_input(string, local_context, input.name, input.type, source, input.default)
 				assert(! (result is GDScriptFunctionState))
 				while result is GDScriptFunctionState:
@@ -374,7 +379,7 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				for t in result.pending_textures:
 					if rv.pending_textures.find(t) == -1:
 						rv.pending_textures.push_back(t)
-				rv.defs += "%s %s_input_%s(%s) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+				rv.defs += "%s %s_input_%s(%s, float variant_seed) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 				rv.defs += "%s\n" % result.code
 				rv.defs += "return %s;\n}\n" % result.string
 	return rv
