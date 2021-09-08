@@ -4,7 +4,8 @@ class_name MMGenShader
 
 
 var shader_model : Dictionary = {}
-var uses_seed = false
+var model_uses_seed = false
+var params_use_seed = false
 
 var editable = false
 
@@ -20,7 +21,7 @@ func is_editable() -> bool:
 
 
 func has_randomness() -> bool:
-	return uses_seed
+	return model_uses_seed or params_use_seed
 
 func get_description() -> String:
 	var desc_list : PoolStringArray = PoolStringArray()
@@ -44,6 +45,26 @@ func get_parameter_defs() -> Array:
 	else:
 		return shader_model.parameters
 
+func set_parameter(n : String, v) -> void:
+	var old_value = parameters[n] if parameters.has(n) else null
+	.set_parameter(n, v)
+	var had_rnd : bool = false
+	if old_value is String and old_value.find("$rnd(") != -1:
+		had_rnd = true
+	var has_rnd : bool = false
+	if v is String and v.find("$rnd(") != -1:
+		has_rnd = true
+	if had_rnd != has_rnd:
+		var use_seed : bool = false
+		for k in parameters.keys():
+			if parameters[k] is String and parameters[k].find("$rnd(") != -1:
+				use_seed = true
+				break
+		if params_use_seed != use_seed:
+			params_use_seed = use_seed
+			if is_inside_tree():
+				get_tree().call_group("generator_node", "on_generator_changed", self)
+
 func get_input_defs() -> Array:
 	if shader_model == null or !shader_model.has("inputs"):
 		return []
@@ -59,7 +80,7 @@ func get_output_defs() -> Array:
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
 	init_parameters()
-	uses_seed = false
+	model_uses_seed = false
 	if shader_model.has("outputs"):
 		for i in range(shader_model.outputs.size()):
 			var output = shader_model.outputs[i]
@@ -72,13 +93,13 @@ func set_shader_model(data: Dictionary) -> void:
 			if output_code == "":
 				print("Unsupported output type")
 			if output_code.find("$seed") != -1 or output_code.find("$(seed)") != -1:
-				uses_seed = true
+				model_uses_seed = true
 	if shader_model.has("code"):
 		if shader_model.code.find("$seed") != -1 or shader_model.code.find("$(seed)") != -1:
-			uses_seed = true
+			model_uses_seed = true
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
-			uses_seed = true
+			model_uses_seed = true
 	if get_parent() != null:
 		get_parent().check_input_connects(self)
 	all_sources_changed()
@@ -180,6 +201,17 @@ func replace_input(string : String, context, input : String, type : String, src 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
 
+func replace_rnd(string : String) -> String:
+	while true:
+		var params = find_keyword_call(string, "rnd")
+		if params == null:
+			break
+		var replace = "$rnd(%s)" % params
+		var with = "param_rnd(%s, $seed+%f)" % [ params, randf() ]
+		while string.find(replace) != -1:
+			string = string.replace(replace, with)
+	return string
+
 func replace_variables(string : String, variables : Dictionary) -> String:
 	while true:
 		var old_string = string
@@ -237,7 +269,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]
 				elif parameters[p.name] is String:
-					value_string = "("+parameters[p.name]+")"
+					value_string = "("+replace_rnd(parameters[p.name])+")"
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"

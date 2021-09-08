@@ -30,11 +30,17 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
+	add_to_group("generator_node")
 	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
 func _exit_tree() -> void:
 	get_parent().call_deferred("check_last_selected")
+
+
+func on_generator_changed(g):
+	if generator == g:
+		update()
 
 
 func _draw() -> void:
