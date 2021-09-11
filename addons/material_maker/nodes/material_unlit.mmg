@@ -24,7 +24,7 @@
 					},
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\n\nvarying float elapsed_time;\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n\n$definitions float_uniform_to_const,rename_buffers\n\nvoid fragment() {\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n}\n",
+						"template": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\n\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n\n$definitions float_uniform_to_const,rename_buffers\n\nvoid fragment() {\n\tfloat __seed_variation__ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n}\n",
 						"type": "template"
 					},
 					{
@@ -113,7 +113,7 @@
 				]
 			}
 		],
-		"preview_shader": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\n\nvarying float elapsed_time;\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n\n$definitions\n\nvoid fragment() {\n\tvec2 uv = fract(UV);\n$begin_generate\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n\n}\n"
+		"preview_shader": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\n\nvarying float elapsed_time;\n\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n\n$definitions\n\nvoid fragment() {\n\tfloat __seed_variation__ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n\n}\n"
 	},
 	"type": "material_export"
 }

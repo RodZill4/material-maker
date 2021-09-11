@@ -1,9 +1,12 @@
+uniform float variation = 0.0;
+
 float calcdist(vec3 p) {
     return length(p)-0.4;
 }
 
 vec3 calcColor(vec4 uv) {
-    $(code)
+    float __seed_variation__ = variation;
+	$(code)
     return $(value);
 }
 

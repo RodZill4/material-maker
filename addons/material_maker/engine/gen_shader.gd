@@ -4,11 +4,11 @@ class_name MMGenShader
 
 
 var shader_model : Dictionary = {}
+var shader_model_preprocessed : Dictionary = {}
 var model_uses_seed = false
 var params_use_seed = false
 
 var editable = false
-
 
 func toggle_editable() -> bool:
 	editable = !editable
@@ -77,8 +77,71 @@ func get_output_defs() -> Array:
 	else:
 		return shader_model.outputs
 
+
+func find_instance_functions(code : String):
+	var functions : Array = []
+	var regex : RegEx = RegEx.new()
+	regex.compile("(\\w+)\\s+(\\w*\\$\\(name\\)\\w*)\\s*\\((.*)\\)\\s*{")
+	var result : Array = regex.search_all(code)
+	for r in result:
+		if not r.strings[1] in [ "return" ]:
+			functions.push_back(r.strings[2]);
+			code = code.replace(r.strings[0], "%s %s(%s, float __seed_variation__) {" % [ r.strings[1], r.strings[2], r.strings[3] ])
+	return { code=code, functions=functions }
+
+func fix_instance_functions(code : String, instance_functions : Array):
+	var variation_parameter = ", __seed_variation__"
+	var variation_parameter_length = variation_parameter.length()
+	for f in instance_functions:
+		var location : int = 0
+		while true:
+			location = code.findn(f, location)
+			if location == -1:
+				break
+			var p : int = code.findn("(", location + f.length())
+			p = find_matching_parenthesis(code, p)
+			location = p
+			if code.substr(p-variation_parameter_length, variation_parameter_length) == variation_parameter:
+				continue
+			var replace : bool = true
+			var length = code.length()-1
+			var p2 = p
+			while p2 < length:
+				p2 += 1
+				match code[p2]:
+					" ", "\t", "\n", "\r":
+						pass
+					"{":
+						replace = false
+					_:
+						break
+			if replace:
+				code = code.insert(p, variation_parameter)
+	return code
+
+func preprocess_shader_model(data : Dictionary):
+	var preprocessed = {}
+	if data.has("instance"):
+		var instance_functions = find_instance_functions(data.instance)
+		preprocessed.instance = fix_instance_functions(instance_functions.code, instance_functions.functions)
+		if data.has("code"):
+			preprocessed.code = fix_instance_functions(data.code, instance_functions.functions)
+		if data.has("outputs"):
+			preprocessed.outputs = []
+			for o in data.outputs:
+				o = o.duplicate(true)
+				o[o.type] = fix_instance_functions(o[o.type], instance_functions.functions)
+				preprocessed.outputs.push_back(o)
+	else:
+		if data.has("code"):
+			preprocessed.code = data.code
+		if data.has("outputs"):
+			preprocessed.outputs = data.outputs
+	return preprocessed
+
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
+	shader_model_preprocessed = preprocess_shader_model(data)
 	init_parameters()
 	model_uses_seed = false
 	if shader_model.has("outputs"):
@@ -201,14 +264,17 @@ func replace_input(string : String, context, input : String, type : String, src 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
 
-func replace_rnd(string : String) -> String:
+func replace_rnd(string : String, offset : int = 0) -> String:
 	while true:
 		var params = find_keyword_call(string, "rnd")
 		if params == null:
 			break
 		var replace = "$rnd(%s)" % params
-		var with = "param_rnd(%s, $seed+%f)" % [ params, randf() ]
-		while string.find(replace) != -1:
+		while true:
+			var position : int = string.find(replace)
+			if position == -1:
+				break
+			var with = "param_rnd(%s, $seed+%f)" % [ params, sin(position)+offset ]
 			string = string.replace(replace, with)
 	return string
 
@@ -254,12 +320,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
-	if context.seed_modifier == "":
-		variables["seed"] = "seed_"+genname
-	else:
-		variables["seed"] = "(seed_"+genname+"+"+context.seed_modifier+")"
+	variables["seed"] = "(seed_"+genname+"+__seed_variation__)"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
+		var rnd_offset : int = 0
 		for p in shader_model.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -269,10 +333,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]
 				elif parameters[p.name] is String:
-					value_string = "("+replace_rnd(parameters[p.name])+")"
+					value_string = "("+replace_rnd(parameters[p.name], rnd_offset)+")"
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"
+				rnd_offset += 17
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
@@ -394,7 +459,6 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				var source = get_source(i)
 				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
 				var local_context = MMGenContext.new(context)
-				local_context.seed_modifier = "variant_seed"
 				var result = replace_input(string, local_context, input.name, input.type, source, input.default)
 				assert(! (result is GDScriptFunctionState))
 				while result is GDScriptFunctionState:
@@ -411,7 +475,7 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				for t in result.pending_textures:
 					if rv.pending_textures.find(t) == -1:
 						rv.pending_textures.push_back(t)
-				rv.defs += "%s %s_input_%s(%s, float variant_seed) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+				rv.defs += "%s %s_input_%s(%s, float __seed_variation__) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 				rv.defs += "%s\n" % result.code
 				rv.defs += "return %s;\n}\n" % result.string
 	return rv
@@ -419,15 +483,15 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
-	if shader_model != null and shader_model.has("outputs") and shader_model.outputs.size() > output_index:
-		var output = shader_model.outputs[output_index]
+	if shader_model_preprocessed != null and shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
+		var output = shader_model_preprocessed.outputs[output_index]
 		if !context.has_variant(self):
 			# Generate parameter declarations
 			rv = generate_parameter_declarations(rv)
 			# Generate functions for inputs
 			rv = generate_input_declarations(rv, context)
-			if shader_model.has("instance"):
-				var subst_output = subst(shader_model.instance, context, "")
+			if shader_model_preprocessed.has("instance"):
+				var subst_output = subst(shader_model_preprocessed.instance, context, "")
 				assert(! (subst_output is GDScriptFunctionState))
 				while subst_output is GDScriptFunctionState:
 					subst_output = yield(subst_output, "completed")
@@ -439,11 +503,11 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					if rv.pending_textures.find(t) == -1:
 						rv.pending_textures.push_back(t)
 		# Add inline code
-		if shader_model.has("code"):
+		if shader_model_preprocessed.has("code"):
 			var variant_index = context.get_variant(self, uv)
 			if variant_index == -1:
 				variant_index = context.get_variant(self, uv)
-				var subst_code = subst(shader_model.code, context, uv)
+				var subst_code = subst(shader_model_preprocessed.code, context, uv)
 				assert(! (subst_code is GDScriptFunctionState))
 				while subst_code is GDScriptFunctionState:
 					subst_code = yield(subst_code, "completed")
