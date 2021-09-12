@@ -98,28 +98,37 @@ func fix_instance_functions(code : String, instance_functions : Array):
 			location = code.findn(f, location)
 			if location == -1:
 				break
-			var p : int = code.findn("(", location + f.length())
-			p = find_matching_parenthesis(code, p)
-			location = p
-			var replace : bool = true
-			var length = code.length()-1
-			var p2 = p
-			while p2 < length:
-				p2 += 1
-				match code[p2]:
-					" ", "\t", "\n", "\r":
-						pass
-					"{":
-						replace = false
+			var p : int = location + f.length()
+			while true:
+				match code[p]:
+					'(':
+						p = find_matching_parenthesis(code, p)
+						location = p
+						var replace : bool = true
+						var length = code.length()-1
+						var p2 = p
+						while p2 < length:
+							p2 += 1
+							match code[p2]:
+								" ", "\t", "\n", "\r":
+									pass
+								"{":
+									replace = false
+								_:
+									break
+						if replace:
+							code = code.insert(p, variation_parameter)
+						break
+					' ', '\t', '\r', '\n':
+						p += 1
 					_:
 						break
-			if replace:
-				code = code.insert(p, variation_parameter)
+			location = p
 	return code
 
 func preprocess_shader_model(data : Dictionary):
 	var preprocessed = {}
-	if data.has("instance"):
+	if data.has("instance") and data.instance != "":
 		var instance_functions = find_instance_functions(data.instance)
 		preprocessed.instance = fix_instance_functions(instance_functions.code, instance_functions.functions)
 		if data.has("code"):
@@ -131,7 +140,7 @@ func preprocess_shader_model(data : Dictionary):
 				if o.has("type") and o.has(o.type):
 					o[o.type] = fix_instance_functions(o[o.type], instance_functions.functions)
 				else:
-					print("Bad output definition: "+str(o))
+					#print("Bad output definition: "+str(o))
 					for f in mm_io_types.types.keys():
 						if o.has(f):
 							o[f] = fix_instance_functions(o[f], instance_functions.functions)
