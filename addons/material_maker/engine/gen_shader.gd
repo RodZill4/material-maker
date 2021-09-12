@@ -101,8 +101,6 @@ func fix_instance_functions(code : String, instance_functions : Array):
 			var p : int = code.findn("(", location + f.length())
 			p = find_matching_parenthesis(code, p)
 			location = p
-			if code.substr(p-variation_parameter_length, variation_parameter_length) == variation_parameter:
-				continue
 			var replace : bool = true
 			var length = code.length()-1
 			var p2 = p
@@ -130,7 +128,14 @@ func preprocess_shader_model(data : Dictionary):
 			preprocessed.outputs = []
 			for o in data.outputs:
 				o = o.duplicate(true)
-				o[o.type] = fix_instance_functions(o[o.type], instance_functions.functions)
+				if o.has("type") and o.has(o.type):
+					o[o.type] = fix_instance_functions(o[o.type], instance_functions.functions)
+				else:
+					print("Bad output definition: "+str(o))
+					for f in mm_io_types.types.keys():
+						if o.has(f):
+							o[f] = fix_instance_functions(o[f], instance_functions.functions)
+							o.type = f
 				preprocessed.outputs.push_back(o)
 	else:
 		if data.has("code"):
