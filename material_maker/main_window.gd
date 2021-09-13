@@ -847,7 +847,10 @@ func add_selection_to_library(index) -> void:
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	var current_item_name = ""
+	if library.is_inside_tree():
+		current_item_name = library.get_selected_item_name()
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	if ! status.ok:
