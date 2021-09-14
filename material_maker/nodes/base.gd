@@ -111,23 +111,51 @@ func set_generator(g) -> void:
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
 
-func _on_offset_changed() -> void:
-	generator.set_position(offset)
+func reroll_generator_seed() -> void:
+	generator.reroll_seed()
 
-func _on_gui_input(event) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
-			generator.minimized = !generator.minimized
-			update_node()
-			accept_event();
-		elif Rect2(rect_size.x-48, 4, 16, 16).has_point(event.position):
+func _on_seed_menu(id):
+	match id:
+		0:
 			generator.toggle_lock_seed()
 			update()
 			get_parent().send_changed_signal()
-			accept_event();
+		1:
+			OS.clipboard = "seed=%.9f" % generator.seed_value
+		2:
+			if OS.clipboard.left(5) == "seed=":
+				generator.set_seed(OS.clipboard.right(5).to_float())
+
+func _on_offset_changed() -> void:
+	generator.set_position(offset)
+	reroll_generator_seed()
+
+func _on_gui_input(event) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
+			if event.button_index == BUTTON_LEFT:
+				generator.minimized = !generator.minimized
+				update_node()
+				accept_event();
+		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
+			match event.button_index:
+				BUTTON_LEFT:
+					reroll_generator_seed()
+				BUTTON_RIGHT:
+					var menu : PopupMenu = PopupMenu.new()
+					menu.add_item(tr("Unlock seed") if generator.is_seed_locked() else tr("Lock seed"), 0)
+					menu.add_separator()
+					menu.add_item(tr("Copy seed"), 1)
+					if ! generator.is_seed_locked() and OS.clipboard.left(5) == "seed=":
+						menu.add_item(tr("Paste seed"), 2)
+					add_child(menu)
+					menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+					menu.connect("popup_hide", menu, "queue_free")
+					menu.connect("id_pressed", self, "_on_seed_menu")
+					accept_event()
 	elif event is InputEventMouseMotion:
 		var epos = event.position
-		if Rect2(0, 0, rect_size.x-48, 16).has_point(epos):
+		if Rect2(0, 0, rect_size.x-56, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
 				hint_tooltip = wrap_string(description)
@@ -135,10 +163,7 @@ func _on_gui_input(event) -> void:
 				hint_tooltip = generator.model
 			return
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(epos) and generator.has_randomness():
-			if generator.is_seed_locked():
-				hint_tooltip = "Unlock the random seed, so it can be modified by moving the node"
-			else:
-				hint_tooltip = "Lock the random seed to its current value"
+			hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 			return
 		hint_tooltip = ""
 

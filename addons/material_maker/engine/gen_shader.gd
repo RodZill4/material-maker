@@ -435,7 +435,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 func generate_parameter_declarations(rv : Dictionary):
 	var genname = "o"+str(get_instance_id())
 	if has_randomness():
-		rv.defs += "uniform float seed_%s = %d.0;\n" % [ genname, get_seed() ]
+		rv.defs += "uniform float seed_%s = %.9f;\n" % [ genname, get_seed() ]
 	for p in shader_model.parameters:
 		if p.type == "float" and parameters[p.name] is float:
 			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
