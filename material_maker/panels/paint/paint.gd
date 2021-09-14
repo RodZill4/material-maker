@@ -570,6 +570,7 @@ func export_material(export_prefix, profile) -> void:
 		roughness=layers.get_roughness_texture(),
 		emission=layers.get_emission_texture(),
 		normal=layers.get_normal_map(),
+		occlusion=layers.get_occlusion_texture(),
 		depth=layers.get_depth_texture()
 	}
 	$Export.setup_material(material_textures)
