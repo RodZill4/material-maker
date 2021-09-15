@@ -334,7 +334,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
-	variables["seed"] = "(seed_"+genname+"+__seed_variation__)"
+	if seed_locked:
+		variables["seed"] = "seed_"+genname
+	else:
+		variables["seed"] = "(seed_"+genname+"+__seed_variation__)"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
