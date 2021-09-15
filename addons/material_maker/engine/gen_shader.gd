@@ -213,7 +213,7 @@ func find_keyword_call(string, keyword):
 		return string.substr(parameter_begin, end-parameter_begin)
 	return ""
 
-func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", 0.0", input_suffix : String = "") -> String:
+func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", __seed_variation__", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
 	while true:
 		var uv = find_keyword_call(string, input+input_suffix)
