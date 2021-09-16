@@ -98,6 +98,9 @@ func fix_instance_functions(code : String, instance_functions : Array):
 			location = code.findn(f, location)
 			if location == -1:
 				break
+			if location > 0 and ("a"+code[location-1]).is_valid_identifier():
+				location += f.length()
+				continue
 			var p : int = location + f.length()
 			while true:
 				match code[p]:
