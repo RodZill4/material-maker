@@ -81,16 +81,16 @@ func get_output_defs() -> Array:
 func find_instance_functions(code : String):
 	var functions : Array = []
 	var regex : RegEx = RegEx.new()
-	regex.compile("(\\w+)\\s+(\\w*\\$\\(name\\)\\w*)\\s*\\((.*)\\)\\s*{")
+	regex.compile("(\\w+)\\s+(\\w*\\$(?:\\(name\\)\\w*|name))\\s*\\((.*)\\)\\s*{")
 	var result : Array = regex.search_all(code)
 	for r in result:
 		if not r.strings[1] in [ "return" ]:
 			functions.push_back(r.strings[2]);
-			code = code.replace(r.strings[0], "%s %s(%s, float __seed_variation__) {" % [ r.strings[1], r.strings[2], r.strings[3] ])
+			code = code.replace(r.strings[0], "%s %s(%s, float _seed_variation_) {" % [ r.strings[1], r.strings[2], r.strings[3] ])
 	return { code=code, functions=functions }
 
 func fix_instance_functions(code : String, instance_functions : Array):
-	var variation_parameter = ", __seed_variation__"
+	var variation_parameter = ", _seed_variation_"
 	var variation_parameter_length = variation_parameter.length()
 	for f in instance_functions:
 		var location : int = 0
@@ -213,7 +213,7 @@ func find_keyword_call(string, keyword):
 		return string.substr(parameter_begin, end-parameter_begin)
 	return ""
 
-func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", __seed_variation__", input_suffix : String = "") -> String:
+func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
 	while true:
 		var uv = find_keyword_call(string, input+input_suffix)
@@ -337,7 +337,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
 	else:
-		variables["seed"] = "(seed_"+genname+"+__seed_variation__)"
+		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
@@ -492,7 +492,7 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				for t in result.pending_textures:
 					if rv.pending_textures.find(t) == -1:
 						rv.pending_textures.push_back(t)
-				rv.defs += "%s %s_input_%s(%s, float __seed_variation__) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+				rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 				rv.defs += "%s\n" % result.code
 				rv.defs += "return %s;\n}\n" % result.string
 	return rv

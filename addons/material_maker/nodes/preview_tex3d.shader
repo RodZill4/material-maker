@@ -5,7 +5,7 @@ float calcdist(vec3 p) {
 }
 
 vec3 calcColor(vec4 uv) {
-    float __seed_variation__ = variation;
+    float _seed_variation_ = variation;
 	$(code)
     return $(value);
 }

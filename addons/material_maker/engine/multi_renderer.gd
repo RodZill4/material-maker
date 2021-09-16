@@ -43,7 +43,7 @@ func generate_shader(src_code : Dictionary) -> String:
 		shader_code = src_code.defs
 	shader_code += "\nuniform float variation = 0.0;\n"
 	shader_code += "\nvoid fragment() {\n"
-	shader_code += "float __seed_variation__ = variation;\n"
+	shader_code += "float _seed_variation_ = variation;\n"
 	shader_code += "vec2 uv = UV;\n"
 	if src_code.has("code"):
 		shader_code += src_code.code
