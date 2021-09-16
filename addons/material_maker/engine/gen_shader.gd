@@ -136,6 +136,22 @@ func preprocess_shader_model(data : Dictionary):
 		preprocessed.instance = fix_instance_functions(instance_functions.code, instance_functions.functions)
 		if data.has("code"):
 			preprocessed.code = fix_instance_functions(data.code, instance_functions.functions)
+		if data.has("parameters"):
+			preprocessed.parameters = []
+			for p in data.parameters:
+				print(p)
+				if p.type == "enum":
+					var replace = false
+					var values = []
+					for i in p.values.size():
+						var v = fix_instance_functions(p.values[i].value, instance_functions.functions)
+						if v != p.values[i].value:
+							replace = true
+						values.push_back({ name=p.values[i].name, value=v })
+					if replace:
+						p = p.duplicate(true)
+						p.values = values
+				preprocessed.parameters.push_back(p)
 		if data.has("outputs"):
 			preprocessed.outputs = []
 			for o in data.outputs:
@@ -152,6 +168,8 @@ func preprocess_shader_model(data : Dictionary):
 	else:
 		if data.has("code"):
 			preprocessed.code = data.code
+		if data.has("parameters"):
+			preprocessed.parameters = data.parameters
 		if data.has("outputs"):
 			preprocessed.outputs = data.outputs
 	return preprocessed
@@ -342,9 +360,9 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	else:
 		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
 	variables["node_id"] = str(get_instance_id())
-	if shader_model.has("parameters") and typeof(shader_model.parameters) == TYPE_ARRAY:
+	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
-		for p in shader_model.parameters:
+		for p in shader_model_preprocessed.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
 			var value = parameters[p.name]
@@ -442,7 +460,7 @@ func generate_parameter_declarations(rv : Dictionary):
 	var genname = "o"+str(get_instance_id())
 	if has_randomness():
 		rv.defs += "uniform float seed_%s = %.9f;\n" % [ genname, get_seed() ]
-	for p in shader_model.parameters:
+	for p in shader_model_preprocessed.parameters:
 		if p.type == "float" and parameters[p.name] is float:
 			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
 		elif p.type == "color":
