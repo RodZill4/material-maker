@@ -9,6 +9,7 @@ const CONTRIBUTORS = [
 	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones and Mask to SDF) and node updates, and very nice video tutorials" },
 	{ name="Roujel Williams", contribution="Curvature, Ambient Occlusion and Thickness maps generation" },
 	{ name="Bonbonmiel", contribution="Many user interface improvements (in Nodes popup, 3D preview...)" },
+	{ name="GoldenThumbs", contribution="Wavefront (OBJ) model loader" },
 	{ name="Donald Mull Jr.", contribution="Export for Unity HDRP" },
 	{ name="Metin ÇETİN", contribution="Add node popup menu" },
 	{ name="Jack Perkins", contribution="User interface improvements" },
