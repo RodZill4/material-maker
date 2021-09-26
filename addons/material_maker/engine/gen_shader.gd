@@ -139,7 +139,6 @@ func preprocess_shader_model(data : Dictionary):
 		if data.has("parameters"):
 			preprocessed.parameters = []
 			for p in data.parameters:
-				print(p)
 				if p.type == "enum":
 					var replace = false
 					var values = []
