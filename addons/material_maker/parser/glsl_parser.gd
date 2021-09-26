@@ -4,8 +4,13 @@ const REGEXS : Array = [
 	{ type="ignore", regex="^[\\s\\r\\n]+" },
 	{ type="FLOATCONSTANT", regex="^(\\d*[.])?\\d+([eE][-+]?\\d+)?" },
 	{ type="IDENTIFIER", regex="^\\$?[\\w_]+" },
-	{ type="SYMBOLS", regex="^[+-/*)(,{}.]" },
+	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|==)" },
+	{ type="SYMBOLS", regex="^(<<|>>|&&|\\|\\||^^)=" },
+	{ type="SYMBOLS", regex="^[+-/*\\%<>!&|^]=" },
+	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|^]" },
 ]
+
+const KEYWORDS = [ "if", "else", "for", "while", "break", "continue", "return" ]
 
 const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"bvec2", "bvec3", "bvec4", "ivec2", "ivec3", "ivec4",
@@ -21,6 +26,12 @@ func create_token(type : String, value, pos_begin : int, pos_end : int) -> Token
 	match type:
 		"FLOATCONSTANT":
 			return .create_token(type, value.to_float(), pos_begin, pos_end)
+		"IDENTIFIER":
+			if value in KEYWORDS:
+				return .create_token(value.to_upper(), null, pos_begin, pos_end)
+			if value in TYPES:
+				return .create_token("TYPE", value.to_upper(), pos_begin, pos_end)
+			return .create_token(type, value, pos_begin, pos_end)
 		"SYMBOLS":
 			return .create_token(value, null, pos_begin, pos_end)
 		_:
@@ -28,7 +39,7 @@ func create_token(type : String, value, pos_begin : int, pos_end : int) -> Token
 
 var selection_regex : RegEx
 
-func build_field_selection(t1):
+func build_field_selection_test(t1):
 	if selection_regex == null:
 		selection_regex = RegEx.new()
 		selection_regex.compile("[^rgbaxyzw]")

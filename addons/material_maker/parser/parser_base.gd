@@ -74,14 +74,14 @@ func parse(s : String):
 	var penultimate_nt : String
 	while true:
 		if ! actions[state].has(next_token.type):
-			return { status="ERROR", pos=next_token.pos_begin }
+			return { status="ERROR", msg="Unexpected token %s (state %d)" % [ next_token.type, state ], pos=next_token.pos_begin }
 		var action = actions[state][next_token.type]
 		match action[0]:
 			"s":
 				stack.push_back(StackElement.new(state, next_token))
 				state = action.right(1).to_int()
 				if tokens.empty():
-					return { status="ERROR", pos=next_token.pos_end+1 }
+					return { status="ERROR", msg="Reached end of file", pos=next_token.pos_end+1 }
 				next_token = tokens.pop_front()
 			"r":
 				var rule : Dictionary = rules[action.right(1).to_int()]
@@ -90,13 +90,16 @@ func parse(s : String):
 					var stack_element : StackElement = stack.pop_back()
 					state = stack_element.state
 					reduce_tokens.push_front(stack_element.token)
-				var pos_begin = reduce_tokens[0].pos_begin
-				var pos_end = reduce_tokens[reduce_tokens.size()-1].pos_end
+				var pos_begin = -1
+				var pos_end = -1
+				if ! reduce_tokens.empty():
+					pos_begin = reduce_tokens[0].pos_begin
+					pos_end = reduce_tokens[reduce_tokens.size()-1].pos_end
 				var new_token : Token
 				if has_method(rule.function):
 					var value = callv(rule.function, reduce_tokens)
 					if value == null:
-						return { status="ERROR", pos=next_token.pos_end+1 }
+						return { status="ERROR", msg="Error while building token", pos=next_token.pos_end+1 }
 					new_token = Token.new(rule.nonterm, value, pos_begin, pos_end)
 				elif reduce_tokens.size() == 1:
 					new_token = reduce_tokens[0]
