@@ -1,0 +1,102 @@
+{
+	"name": "sdngon",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"n": 5,
+		"r": 0.4,
+		"rot": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float sdNgon(vec2 p, float r, float n) {\n\tfloat PI = 3.1415926535;\n\tp = circle_repeat_transform_2d(p, n);\n\tvec2 d = abs(p)-vec2(r*tan(3.14159265359/n), r);\n\treturn p.y < r ? p.y-r : length(max(d,vec2(0)))+min(max(d.x,d.y),0.0);\n}",
+		"includes": [
+			"sdrotate",
+			"sdcirclerepeat"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "An n-gon described as a signed distance function",
+		"name": "sdNgon",
+		"outputs": [
+			{
+				"longdesc": "The n-gon as a signed distance function",
+				"sdf2d": "sdNgon(sdf2d_rotate($uv-vec2($cx, $cy), $rot*0.01745329251-1.57079632679)-vec2(0.5), $r, $n)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 3,
+				"label": "N",
+				"longdesc": "The number of sides of the n-gon",
+				"max": 12,
+				"min": 3,
+				"name": "n",
+				"shortdesc": "N",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Radius",
+				"longdesc": "The radius of the n-gon",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.a",
+				"default": 0,
+				"label": "Rotation",
+				"longdesc": "The rotation of the n-gon",
+				"max": 180,
+				"min": -180,
+				"name": "rot",
+				"shortdesc": "Rotation",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdNgon"
+	},
+	"type": "shader"
+}
