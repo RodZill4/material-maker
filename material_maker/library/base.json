@@ -6151,6 +6151,29 @@
 			"seed_locked": false,
 			"tree_item": "Simple/SDF/Shapes/sdNgon",
 			"type": "sdngon"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAiFJREFUeJzdW0GOwjAMnFT8hwfwgb3xiJX4/wOK2EMFdCFtEsceO53THmI7YyWDp9Gm6/X3gSLySx7FyHLq8/mCeZ5xv8+43X4216WUirkkcVNlmo3ksrhWWJEHqhtgi719WpIHgjRgC9bkAeAkqmAMBvEnGk6Azn0uViGSBxSugKYQssmnlOJogJBDd9PCNEACjRPT2AALHeAf+zVUTgBrIHrX02vacFdAWyhPKdXM9P5w9gK+COYFOAPRq9ooXsBCCBmD0bQEiOqoYKn9vQHWVBhIA94bD2qGOBjEDNncmeHNkMdEqGaGPIVQAinxz9iJ/buuAS3yQJcI+jROkzxg8CtgeZW0yQMfDeDoAFfpS7Hh5oAcrMgDr8/iCTXPWB4IboY07sx2DpoZ+h8sqtmVI7f+4GZof5NOZijGQDSIGbLBoGbI9+SYvAx5CKGsRv+JcXwe75s9JOQrvEAMISxBizwQTARroEkeUGtA78mpi9cmD+w0gCWEtXUsyAPZBjB1YP0pfGeVEXlgAA2wJA8Eb4A1eaDQgLZcukLIIA8QToBETFnkd7yA30DEJA8E0wA2eSBEA+w+eNbEFBvAFcKGSjZmyAba1phkhmI6w6BmiAOqGYoGohnKJWoq27K4LqOfGfLXgcOYoagjcVgNOIwZkiCAGcotbkrduJH13+HM0HjjbUsM9Qps75X3JmjyLzMeGMoMacPtZch7Ilz2oKsTf0coFB1e2e8hAAAAAElFTkSuQmCC",
+			"name": "sdf3d_plane",
+			"parameters": {
+				"axis": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "3D/SDF/Shapes/Plane",
+			"type": "sdf3d_plane"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAwNJREFUeJzVWsF12zAM/dTTANHBmSMLOBO0M8RJ7k3bQXrPIXN0uL489yA5FmRSBEgQgnAybADE/yJBglY4Hr+dMZOPjz/gSAiBZefdrwOowevr782S2cKvm0zJl2skeARR49fNXMgPMRK8gqjx66iaJsESRAjBzK+7/eqWBGvwVmMBUQKAJQkvL7/EgfcAPoSQIgCoIWEv4IHkDPgyIxqHhD2BB4AuH4NPwt7AA9MM0CBhj+CB2RKoIWGv4IFFDSghwQp8q7PBTRGUkvD8/FOckFQMeoGlYzY00bgkeAMPrGyD2iR4BA9kzgFaJHgFD2QPQvUkeAYPMAgYA2ctiHYhwTt4gEnAOEDWgmjS3WEcw1UzFHPIWhDtdHoTJSOV0rPBfDwRAaNj1oJoHBIsl8rSV0zAGCBrQbQ1ErYED0RuhfmBshZEi5GwNXggcSvMD5i1INqcBA/ggZVbYX7grAXRTqc3N+CB6K1wSXJZC6I9Pf0Qxm8DHigsgvGBshZE45JQs80Vd4NWyyFHwsbN0LbLwU0ztAUJ7pqh1iQ8Pn7H+/vfyc+2H+gFQwA4Z62IRwDOKy7DcMDDwxGfn/8me/tmSEAAoEHCMBymT7I46fh1pAkJAEpJuLs75A2lmSjMmAICAAkJaeByIom30mmyz63TlXBIAbhM87K4jJEVj9L9+KMOCdf13U60+4j+alRGwjDcT59qHjcPVIsmitSAiy2HCM7T5pDKxdSqg4wWwVTi+lP8muBari3b5+QuMCfBYm2n82h7d7C6DW4JHLC5NepvK/k90fmFsW5fXxZCq1uj/jJ4q6ddsrtYvnPQx4HXPs1ysQQPKF6JaYg1eMAFAe0uPDk+Cn+PE2thOuWiNVtMZkDFrXYint5SYb8q60W064SDGsCXFkVyNwS02iGUXpEh1hJjXsSG26PobfEtpPXZwGwJlOwEFgcjtzXA6lTokgDLI7Hia3LEWpjI/LO7Zmh/x1uJj+kSSOdq95+guBnyKrtqhrTFqBmKBRFZS4wFOejWif9jVljbW+K9owAAAABJRU5ErkJggg==",
+			"name": "sdf3d_angle",
+			"parameters": {
+				"angle": 135,
+				"axis": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "3D/SDF/Shapes/Angle",
+			"type": "sdf3d_angle"
 		}
 	],
 	"name": "Base library"
