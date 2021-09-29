@@ -6085,6 +6085,24 @@
 			"seed_locked": false,
 			"tree_item": "Pattern/Bricks/ArcPavement",
 			"type": "arc_pavement"
+		},
+		{
+			"icon_data": "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",
+			"name": "math_v3",
+			"parameters": {
+				"clamp": false,
+				"d_in1_x": 0,
+				"d_in1_y": 0,
+				"d_in1_z": 0,
+				"d_in2_x": 0,
+				"d_in2_y": 0,
+				"d_in2_z": 0,
+				"op": 19
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Math/Vec3",
+			"type": "math_v3"
 		}
 	],
 	"name": "Base library"
