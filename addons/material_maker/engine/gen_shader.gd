@@ -387,7 +387,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				value_string = genname+"_"+p.name+"_gradient_fct"
 			elif p.type == "curve":
 				value_string = genname+"_"+p.name+"_curve_fct"
-			elif p.type == "polygon":
+			elif p.type == "polygon" or p.type == "polyline":
 				if !(value is MMPolygon):
 					value = MMPolygon.new()
 					value.deserialize(parameters[p.name])

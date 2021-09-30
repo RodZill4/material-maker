@@ -204,6 +204,9 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
 	elif p.type == "polygon":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+	elif p.type == "polyline":
+		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+		control.set_closed(false)
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "image_path":

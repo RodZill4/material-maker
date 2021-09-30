@@ -5,6 +5,11 @@ var polygon : MMPolygon
 
 var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
+var closed : bool = true
+
+func set_closed(c : bool = true):
+	closed = c
+	update()
 
 func _ready() -> void:
 	polygon = MMPolygon.new()
@@ -24,7 +29,7 @@ func _draw():
 	var axes_color : Color = bg.linear_interpolate(fg, 0.25)
 	var curve_color : Color = bg.linear_interpolate(fg, 0.75)
 	draw_rect(Rect2(draw_offset, draw_size), axes_color, false)
-	var tp : Vector2 = transform_point(polygon.points[polygon.points.size()-1])
+	var tp : Vector2 = transform_point(polygon.points[polygon.points.size()-1 if closed else 0])
 	for p in polygon.points:
 		var tnp = transform_point(p)
 		draw_line(tp, tnp, curve_color)

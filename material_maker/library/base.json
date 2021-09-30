@@ -6174,6 +6174,52 @@
 			"seed_locked": false,
 			"tree_item": "3D/SDF/Shapes/Angle",
 			"type": "sdf3d_angle"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAadJREFUeJztmksOwyAMRE3V+1+ZriJFVQPG3zFltlUDPA8GA42IOv2xXtkdyNYBkN2BbB0A2R3I1gGQ3YFsiQH03qn3+luIt/YDdwitNe3nwiVywFPkKzpiGUDFQY60BGA2+K2nwG6Rv2S2DFaMPhETwI7WvzQFsPPgiZRToPrgiSYAdk18d4kdsEP0iU4xJK8FoqaHt9PUxZC3vIut4RRAm+cermvEuBdAXA2sgsNKgmhOILILCssBHg1bSRuc5SQY4YZIyMsOiBYHhiYo8Buh1pqr6+ABXBpB0EyZMgC8VAqAhwtKAfBQOQDWCbEcAGttBUCSB0Tl8EpDiHXEXUsAJIS//4MGhA3Aan+OdpvMAuBVnCC4YwogsjL71dY5E3ROuEMA0msxtEOTkcQOGNH+/g0ZiAjAqtUigEhzRUoOsAaiSZSPAELP5YRALFYIyFUgcj+wVTEk0QGQ3YFsHQDZHcgW5CrwJI9iaXg1NlqPrZcq6b4j/HL0EvdgA7kOIGJcjsIPQOmAv0+CUwAI53aeKvtExkqwT2SioItfiGhAIDkK/omMtz5k2JaQcaquyQAAAABJRU5ErkJggg==",
+			"name": "polycurve",
+			"parameters": {
+				"curve": {
+					"points": [
+						{
+							"x": 0.756152,
+							"y": 0.894855
+						},
+						{
+							"x": 0.205817,
+							"y": 0.917226
+						},
+						{
+							"x": 0.217897,
+							"y": 0.634004
+						},
+						{
+							"x": 0.720358,
+							"y": 0.693512
+						},
+						{
+							"x": 0.661969,
+							"y": 0.406712
+						},
+						{
+							"x": 0.181208,
+							"y": 0.355704
+						},
+						{
+							"x": 0.274721,
+							"y": 0.140716
+						}
+					],
+					"type": "Polygon"
+				},
+				"ends": true,
+				"repeat": 1,
+				"width": 0.1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Simple/PolyCurve",
+			"type": "polycurve"
 		}
 	],
 	"name": "Base library"
