@@ -1,0 +1,69 @@
+{
+	"name": "tex3d_select_shape",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"d": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"longdesc": "The 3D texture associated to the specified color index",
+				"name": "in1",
+				"shortdesc": "Input1",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"longdesc": "The 3D texture(s) associated to other color indices",
+				"name": "in2",
+				"shortdesc": "Input2",
+				"type": "tex3d"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"longdesc": "The shape in which input1 is applied",
+				"name": "shape",
+				"shortdesc": "Shape",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.",
+		"name": "TEX3D Shape Select",
+		"outputs": [
+			{
+				"longdesc": "The merged 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "mix($in1($uv), $in2($uv), clamp($shape($uv.xyz)/max($d, 0.0001), 0.0, 1.0))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Smoothness",
+				"longdesc": "The width of the transition area between both textures",
+				"max": 1,
+				"min": 0,
+				"name": "d",
+				"shortdesc": "Smoothness",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D Select"
+	},
+	"type": "shader"
+}
