@@ -39,7 +39,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.",
+		"longdesc": "Selects a 3D texture inside, and another outside a shape. This can be used to map several textures into a single 3D scene.",
 		"name": "TEX3D Shape Select",
 		"outputs": [
 			{
@@ -63,7 +63,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Tex3D Select"
+		"shortdesc": "Tex3D Shape Select"
 	},
 	"type": "shader"
 }
