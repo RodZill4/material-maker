@@ -22,7 +22,7 @@ The **Denoiser** node outputs the denoised image.
 Parameters
 ::::::::::
 
-The **Multi Warp** node has the following parameters:
+The **Denoiser** node has the following parameters:
 
 * the *Size* determines the resolution of the denoiser
 
