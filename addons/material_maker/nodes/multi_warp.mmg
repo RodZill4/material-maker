@@ -75,7 +75,7 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Inensity",
+					"label": "Intensity",
 					"linked_widgets": [
 						{
 							"node": "edge_detect_3_3_3",
