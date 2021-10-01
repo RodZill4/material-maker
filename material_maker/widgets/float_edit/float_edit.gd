@@ -22,14 +22,21 @@ signal value_changed(value)
 func _ready() -> void:
 	do_update()
 
-func set_value(v) -> void:
+func get_value() -> String:
+	return text
+	
+func set_value(v, notify = false) -> void:
 	if v is float:
 		value = v
 		do_update()
 		$Slider.visible = true
+		if notify:
+			emit_signal("value_changed", value)
 	elif v is String and !float_only:
 		text = v
 		$Slider.visible = false
+		if notify:
+			emit_signal("value_changed", v)
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -63,6 +70,11 @@ func get_modifiers(event):
 	return new_modifiers
 
 func _on_LineEdit_gui_input(event : InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed() and !float_only:
+		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
+		add_child(expression_editor)
+		expression_editor.edit_parameter(self)
+		get_tree().set_input_as_handled()
 	if !$Slider.visible or !editable:
 		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:

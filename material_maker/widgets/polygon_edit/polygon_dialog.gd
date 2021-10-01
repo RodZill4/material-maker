@@ -1,13 +1,15 @@
 extends WindowDialog
 
+export var closed : bool = true setget set_closed
 var previous_value
 
 signal polygon_changed(polygon)
 signal return_polygon(polygon)
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func set_closed(c : bool = true):
+	closed = c
+	window_title = "Edit polygon" if closed else "Edit polyline"
+	$VBoxContainer/EditorContainer/PolygonEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():
 	emit_signal("return_polygon", null)

@@ -10,7 +10,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"global": "float dots(vec2 uv, float size, float density, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = step(rand(seed2+point_pos), density);\n    return color;\n}",
+		"global": "float dots(vec2 uv, float size, float density, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = step(rand(seed2+point_pos), density);\n    return color;\n}",
 		"inputs": [
 
 		],

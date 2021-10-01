@@ -12,9 +12,9 @@ __meta__ = {
 }
 
 [node name="LabelDefault" type="Label" parent="."]
-margin_top = 25.0
+margin_top = 9.0
 margin_right = 50.0
-margin_bottom = 39.0
+margin_bottom = 23.0
 text = "Default:"
 
 [node name="Default" parent="." instance=ExtResource( 2 )]
@@ -22,5 +22,5 @@ anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 54.0
-margin_right = 118.0
-margin_bottom = 64.0
+margin_right = 86.0
+margin_bottom = 32.0

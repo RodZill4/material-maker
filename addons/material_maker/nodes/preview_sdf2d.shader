@@ -1,4 +1,7 @@
+uniform float variation = 0.0;
+
 vec4 preview_2d(vec2 uv) {
+	float _seed_variation_ = variation;
 	$(code)
 	float d = $(value);
 	vec3 col = vec3(cos(d*min(256, preview_size)));
