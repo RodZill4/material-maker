@@ -10,6 +10,7 @@ const PANELS = [
 	{ name="Library", scene=preload("res://material_maker/panels/library/library.tscn"), position="TopLeft" },
 	{ name="Preview2D", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft" },
 	{ name="Preview3D", scene=preload("res://material_maker/panels/preview_3d/preview_3d_panel.tscn"), position="BottomLeft" },
+	{ name="Preview2D (2)", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft" },
 	{ name="Histogram", scene=preload("res://material_maker/widgets/histogram/histogram.tscn"), position="BottomLeft" },
 	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },
 	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" },
@@ -46,9 +47,10 @@ func load_panels(config_cache) -> void:
 			node.config_cache = config_cache
 		panels[panel.name] = node
 		var tab = get_node(PANEL_POSITIONS[panel.position])
-		if config_cache.has_section_key("layout", panel.name+"_location"):
-			tab = get_node(PANEL_POSITIONS[config_cache.get_value("layout", panel.name+"_location")])
-		if config_cache.has_section_key("layout", panel.name+"_hidden") && config_cache.get_value("layout", panel.name+"_hidden"):
+		var config_panel_name = panel.name.replace(" ", "_").replace("(", "_").replace(")", "_")
+		if config_cache.has_section_key("layout", config_panel_name+"_location"):
+			tab = get_node(PANEL_POSITIONS[config_cache.get_value("layout", config_panel_name+"_location")])
+		if config_cache.has_section_key("layout", config_panel_name+"_hidden") && config_cache.get_value("layout", config_panel_name+"_hidden"):
 			node.set_meta("parent_tab_container", tab)
 			node.set_meta("hidden", true)
 		else:
@@ -67,15 +69,16 @@ func load_panels(config_cache) -> void:
 
 func save_config(config_cache) -> void:
 	for p in panels:
+		var config_panel_name = p.replace(" ", "_").replace("(", "_").replace(")", "_")
 		var location = panels[p].get_parent()
 		var hidden = false
 		if location == null:
 			hidden = panels[p].get_meta("hidden")
 			location = panels[p].get_meta("parent_tab_container")
-		config_cache.set_value("layout", p+"_hidden", hidden)
+		config_cache.set_value("layout", config_panel_name+"_hidden", hidden)
 		for l in PANEL_POSITIONS.keys():
 			if location == get_node(PANEL_POSITIONS[l]):
-				config_cache.set_value("layout", p+"_location", l)
+				config_cache.set_value("layout", config_panel_name+"_location", l)
 	config_cache.set_value("layout", "LeftVSplitOffset", split_offset)
 	config_cache.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
 	config_cache.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)

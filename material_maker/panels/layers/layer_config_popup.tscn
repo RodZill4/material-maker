@@ -123,6 +123,23 @@ margin_bottom = 136.0
 value = 1.0
 step = 0.01
 
+[node name="OcclusionLabel" type="Label" parent="GridContainer"]
+margin_top = 117.0
+margin_right = 111.0
+margin_bottom = 131.0
+text = "Occlusion alpha:"
+
+[node name="Occlusion" parent="GridContainer" instance=ExtResource( 1 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 115.0
+margin_top = 112.0
+margin_right = 173.0
+margin_bottom = 136.0
+value = 1.0
+step = 0.01
+
 [connection signal="popup_hide" from="." to="." method="_on_LayerConfigPopup_popup_hide"]
 [connection signal="value_changed" from="GridContainer/Albedo" to="." method="_on_value_changed" binds= [ "albedo" ]]
 [connection signal="value_changed" from="GridContainer/Metallic" to="." method="_on_value_changed" binds= [ "metallic" ]]
@@ -130,3 +147,4 @@ step = 0.01
 [connection signal="value_changed" from="GridContainer/Emission" to="." method="_on_value_changed" binds= [ "emission" ]]
 [connection signal="value_changed" from="GridContainer/Normal" to="." method="_on_value_changed" binds= [ "normal" ]]
 [connection signal="value_changed" from="GridContainer/Depth" to="." method="_on_value_changed" binds= [ "depth" ]]
+[connection signal="value_changed" from="GridContainer/Occlusion" to="." method="_on_value_changed" binds= [ "occlusion" ]]

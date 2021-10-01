@@ -1,4 +1,7 @@
+uniform float variation = 0.0;
+
 vec2 calcdist(vec3 uv) {
+	float _seed_variation_ = variation;
 	$(code)
 	vec2 v = $(value);
 	return vec2(min(v.x, uv.z), v.y);

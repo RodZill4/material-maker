@@ -17,7 +17,10 @@ func set_generator(g) -> void:
 	title = generator.title
 	set_color(generator.color)
 
-func _on_resize_request(new_size) -> void:
+func _on_resize_request(new_size : Vector2) -> void:
+	var parent : GraphEdit = get_parent()
+	if parent.use_snap:
+		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
 	rect_size = new_size
 	generator.size = new_size
 

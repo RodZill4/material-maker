@@ -13,9 +13,9 @@ onready var albedo_viewport = $AlbedoPaint
 onready var mr_viewport = $MRPaint
 onready var emission_viewport = $EmissionPaint
 onready var normal_viewport = $NormalPaint
-onready var depth_viewport = $DepthPaint
+onready var do_viewport = $DOPaint
 onready var mask_viewport = $MaskPaint
-onready var viewports = [ albedo_viewport, mr_viewport, emission_viewport, normal_viewport, depth_viewport, mask_viewport ]
+onready var viewports = [ albedo_viewport, mr_viewport, emission_viewport, normal_viewport, do_viewport, mask_viewport ]
 
 var camera
 var transform
@@ -33,7 +33,7 @@ var has_albedo   : bool = false
 var has_mr       : bool = false
 var has_emission : bool = false
 var has_normal   : bool = false
-var has_depth    : bool = false
+var has_do       : bool = false
 var has_mask     : bool = false
 
 var brush_preview_material : ShaderMaterial
@@ -129,8 +129,11 @@ func init_emission_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : 
 func init_normal_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
 	normal_viewport.init(color, texture)
 
-func init_depth_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
-	depth_viewport.init(color, texture)
+func init_do_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
+	do_viewport.init(color, texture)
+
+func init_do_texture_channels(depth : float = 1.0, depth_texture : Texture = null, occlusion : float = 1.0, occlusion_texture : Texture = null, occlusion_channel : int = SpatialMaterial.TEXTURE_CHANNEL_GREEN):
+	do_viewport.init_channels(depth_texture, calculate_mask(depth, SpatialMaterial.TEXTURE_CHANNEL_RED), occlusion_texture, calculate_mask(occlusion, occlusion_channel), null, Color(1.0, 0.0, 0.0, 0.0), null, Color(1.0, 0.0, 0.0, 0.0))
 
 func init_mask_texture(color : Color = Color(0.0, 0.0, 0.0, 1.0), texture : Texture = null):
 	mask_viewport.init(color, texture)
@@ -149,10 +152,10 @@ func init_textures(m : SpatialMaterial):
 		init_normal_texture(Color(1.0, 1.0, 1.0), m.n_texture)
 	else:
 		init_normal_texture(Color(0.5, 0.5, 0.0), null)
-	if m.depth_enabled:
-		init_depth_texture(Color(1.0, 1.0, 1.0), m.depth_texture)
+	if m.depth_enabled or m.ao_enabled:
+		init_do_texture_channels(m.depth_scale if m.depth_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
 	else:
-		init_depth_texture(Color(0.0, 0.0, 0.0), null)
+		init_do_texture(Color(0.0, 1.0, 0.0, 0.0), null)
 
 func set_texture_size(s : float):
 	if texture_to_view_viewport.size.x != s:
@@ -236,7 +239,7 @@ func update_brush(update_shaders = false):
 		brush_preview_material.set_shader_param("layer_mr_tex", get_mr_texture())
 		brush_preview_material.set_shader_param("layer_emission_tex", get_emission_texture())
 		brush_preview_material.set_shader_param("layer_normal_tex", get_normal_texture())
-		brush_preview_material.set_shader_param("layer_depth_tex", get_depth_texture())
+		brush_preview_material.set_shader_param("layer_do_tex", get_do_texture())
 		for p in brush_params.keys():
 			brush_preview_material.set_shader_param(p, brush_params[p])
 		brush_preview_material.set_shader_param("pattern_alpha", 0.5 if pattern_shown else 0.0)
@@ -248,14 +251,14 @@ func update_brush(update_shaders = false):
 	has_mr = brush_node.get_parameter("has_metallic") or brush_node.get_parameter("has_roughness")
 	has_emission = brush_node.get_parameter("has_emission")
 	has_normal = brush_node.get_parameter("has_normal")
-	has_depth = brush_node.get_parameter("has_depth")
+	has_do = brush_node.get_parameter("has_depth") or brush_node.get_parameter("has_ao")
 	has_mask = true #brush_node.get_parameter("has_mask")
 	# Update shaders
 	if update_shaders:
 		for index in range(viewports.size()):
 			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
 			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
-			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), depth=get_depth_texture(), mask=get_mask_texture()} )
+			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for index in range(viewports.size()):
 		viewports[index].set_brush(brush_params)
 
@@ -280,12 +283,14 @@ func get_output_code(index : int) -> String:
 	brush_textures = source_mask.textures
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"
+	new_code += "float _seed_variation_ = 0.0;\n"
 	new_code += source_mask.code+"\n"
 	new_code += "vec2 __brush_box = abs(uv-vec2(0.5));\n"
 	new_code += "return (max(__brush_box.x, __brush_box.y) < 0.5) ? "+source_mask.f+" : 0.0;\n"
 	new_code += "}\n"
 	new_code += source.defs+"\n"
 	new_code += "\nvec4 pattern_function(vec2 uv) {\n"
+	new_code += "float _seed_variation_ = 0.0;\n"
 	new_code += source.code+"\n"
 	new_code += "return "+source.rgba+";\n"
 	new_code += "}\n"
@@ -325,8 +330,8 @@ func paint(shader_params : Dictionary) -> void:
 		emission_viewport.do_paint(shader_params)
 	if has_normal:
 		normal_viewport.do_paint(shader_params)
-	if has_depth:
-		depth_viewport.do_paint(shader_params)
+	if has_do:
+		do_viewport.do_paint(shader_params)
 	if has_mask:
 		mask_viewport.do_paint(shader_params)
 	yield(get_tree(), "idle_frame")
@@ -366,8 +371,8 @@ func get_emission_texture():
 func get_normal_texture():
 	return normal_viewport.get_texture()
 
-func get_depth_texture():
-	return depth_viewport.get_texture()
+func get_do_texture():
+	return do_viewport.get_texture()
 
 func get_mask_texture():
 	return mask_viewport.get_texture()
@@ -376,7 +381,7 @@ func save_viewport(v : Viewport, f : String):
 	v.get_texture().get_data().save_png(f)
 
 func debug_get_texture_names():
-	return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth (current layer)", "Mask (current layer)" ]
+	return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
 
 func debug_get_texture(ID):
 	match ID:
@@ -395,7 +400,7 @@ func debug_get_texture(ID):
 		6:
 			return normal_viewport.get_texture()
 		7:
-			return depth_viewport.get_texture()
+			return do_viewport.get_texture()
 		8:
 			return mask_viewport.get_texture()
 	return null

@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://material_maker/widgets/float_edit/expression_editor.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/fonts/hack.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 14
+font_data = ExtResource( 2 )
+
+[node name="ExpressionEditor" type="WindowDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 345.0
+margin_top = 166.0
+margin_right = -365.0
+margin_bottom = -443.0
+popup_exclusive = true
+resizable = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 2.0
+margin_right = -2.0
+margin_bottom = -3.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 566.0
+margin_bottom = 106.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+margin_right = 566.0
+margin_bottom = 82.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+syntax_highlighting = true
+wrap_enabled = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_left = 189.0
+margin_top = 86.0
+margin_right = 377.0
+margin_bottom = 106.0
+size_flags_horizontal = 4
+
+[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 60.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Apply"
+
+[node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 64.0
+margin_right = 124.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 128.0
+margin_right = 188.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Cancel"
+
+[connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/TextEdit" to="." method="_on_TextEdit_gui_input"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
