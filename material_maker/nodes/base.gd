@@ -128,7 +128,8 @@ func _on_seed_menu(id):
 
 func _on_offset_changed() -> void:
 	generator.set_position(offset)
-	reroll_generator_seed()
+	# This is the old behavior
+	#reroll_generator_seed()
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
