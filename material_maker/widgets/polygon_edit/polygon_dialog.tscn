@@ -74,6 +74,7 @@ margin_right = 455.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "Cancel"
+
 [connection signal="popup_hide" from="." to="." method="_on_CurveDialog_popup_hide"]
 [connection signal="value_changed" from="VBoxContainer/EditorContainer/PolygonEditor" to="." method="_on_PolygonEditor_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]

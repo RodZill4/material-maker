@@ -1,0 +1,216 @@
+{
+	"name": "math_v3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"clamp": false,
+		"d_in1_x": 0,
+		"d_in1_y": 0,
+		"d_in1_z": 0,
+		"d_in2_x": 0,
+		"d_in2_y": 0,
+		"d_in2_z": 0,
+		"op": 19
+	},
+	"shader_model": {
+		"code": "vec3 $(name_uv)_clamp_false = $op;\nvec3 $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, vec3(0.0), vec3(1.0));\n",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3($d_in1_x, $d_in1_y, $d_in1_z)",
+				"label": "2:A",
+				"longdesc": "The A operand",
+				"name": "in1",
+				"shortdesc": "A",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3($d_in2_x, $d_in2_y, $d_in2_z)",
+				"label": "B",
+				"longdesc": "The B operand",
+				"name": "in2",
+				"shortdesc": "B",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"longdesc": "Performs a math operation using its inputs or parameter values",
+		"name": "Vec3 Math",
+		"outputs": [
+			{
+				"longdesc": "Shows a greyscale image of the result",
+				"rgb": "$(name_uv)_clamp_$clamp",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 19,
+				"label": "",
+				"longdesc": "The operation to be performed",
+				"name": "op",
+				"shortdesc": "Operation",
+				"type": "enum",
+				"values": [
+					{
+						"name": "A+B",
+						"value": "$in1($uv)+$in2($uv)"
+					},
+					{
+						"name": "A-B",
+						"value": "$in1($uv)-$in2($uv)"
+					},
+					{
+						"name": "A*B",
+						"value": "$in1($uv)*$in2($uv)"
+					},
+					{
+						"name": "A/B",
+						"value": "$in1($uv)/$in2($uv)"
+					},
+					{
+						"name": "log(A)",
+						"value": "log($in1($uv))"
+					},
+					{
+						"name": "log2(A)",
+						"value": "log2($in1($uv))"
+					},
+					{
+						"name": "pow(A, B)",
+						"value": "pow($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "abs(A)",
+						"value": "abs($in1($uv))"
+					},
+					{
+						"name": "round(A)",
+						"value": "round($in1($uv))"
+					},
+					{
+						"name": "floor(A)",
+						"value": "floor($in1($uv))"
+					},
+					{
+						"name": "ceil(A)",
+						"value": "ceil($in1($uv))"
+					},
+					{
+						"name": "trunc(A)",
+						"value": "trunc($in1($uv))"
+					},
+					{
+						"name": "fract(A)",
+						"value": "fract($in1($uv))"
+					},
+					{
+						"name": "min(A, B)",
+						"value": "min($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "max(A, B)",
+						"value": "max($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "A<B",
+						"value": "step($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "cos(A*B)",
+						"value": "cos($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sin(A*B)",
+						"value": "sin($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "tan(A*B)",
+						"value": "tan($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sqrt(1-A²)",
+						"value": "sqrt(vec3(1.0)-$in1($uv)*$in1($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"longdesc": "The default value for A, used if the corresponding input is not connected",
+				"max": 1,
+				"min": 0,
+				"name": "d_in1_x",
+				"shortdesc": "Default A",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "2:",
+				"longdesc": "The default value for B, used if the corresponding input is not connected",
+				"max": 1,
+				"min": 0,
+				"name": "d_in1_y",
+				"shortdesc": "Default B",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "2:",
+				"max": 1,
+				"min": 0,
+				"name": "d_in1_z",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "d_in2_x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "3:",
+				"max": 1,
+				"min": 0,
+				"name": "d_in2_y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "3:",
+				"max": 1,
+				"min": 0,
+				"name": "d_in2_z",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Clamp result",
+				"longdesc": "The result is clamped to [0, 1] if this option is checked",
+				"name": "clamp",
+				"shortdesc": "Clamp",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Math"
+	},
+	"type": "shader"
+}
