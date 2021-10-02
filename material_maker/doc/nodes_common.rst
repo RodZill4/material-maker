@@ -105,6 +105,10 @@ Parameters are used to configure nodes. The following types are supported:
   New control points can be added by double-clicking in the editor, and control points can be
   removed using the right mouse button.
 
+  The curve editor comes with a selection of presets available in the **Presets** menu and an
+  **Invert** button to invert the curve. Presets included are: Linear, EaseOut, EaseInOut,
+  EaseOut, SawTooth, Bounce and Bevel.
+
 * **polygon** parameters are edited using a dedicated dialog window that is shown when clicking on
   the parameter.
   
