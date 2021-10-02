@@ -80,7 +80,7 @@
 			{
 				"control": "P1.x",
 				"default": 0,
-				"label": "2:Translate X:",
+				"label": "2:Translate X",
 				"longdesc": "The translation along the X axis",
 				"max": 1,
 				"min": -1,
@@ -92,7 +92,7 @@
 			{
 				"control": "P1.y",
 				"default": 0,
-				"label": "Translate Y:",
+				"label": "Translate Y",
 				"longdesc": "The translation along the Y axis",
 				"max": 1,
 				"min": -1,
@@ -104,7 +104,7 @@
 			{
 				"control": "Radius1.a",
 				"default": 0,
-				"label": "Rotate:",
+				"label": "Rotate",
 				"longdesc": "The rotation angle",
 				"max": 720,
 				"min": -720,
@@ -116,7 +116,7 @@
 			{
 				"control": "Scale1.x",
 				"default": 1,
-				"label": "Scale X:",
+				"label": "Scale X",
 				"longdesc": "The scaling factor along the X axis",
 				"max": 50,
 				"min": 0,
@@ -128,7 +128,7 @@
 			{
 				"control": "Scale1.y",
 				"default": 1,
-				"label": "Scale Y:",
+				"label": "Scale Y",
 				"longdesc": "The scaling factor along the Y axis",
 				"max": 50,
 				"min": 0,
@@ -139,7 +139,7 @@
 			},
 			{
 				"default": false,
-				"label": "Repeat:",
+				"label": "Repeat",
 				"longdesc": "Repeat the input if checked, clamps otherwise",
 				"name": "repeat",
 				"shortdesc": "Repeat",

@@ -108,7 +108,7 @@
 			{
 				"control": "None",
 				"default": 0.3,
-				"label": "Min size:",
+				"label": "Min size",
 				"longdesc": "The minimum size of a brick",
 				"max": 0.5,
 				"min": 0,
@@ -132,7 +132,7 @@
 			{
 				"control": "None",
 				"default": 0.05,
-				"label": "Mortar:",
+				"label": "Mortar",
 				"longdesc": "The width of the space between bricks",
 				"max": 0.5,
 				"min": 0,
@@ -144,7 +144,7 @@
 			{
 				"control": "None",
 				"default": 0.05,
-				"label": "Bevel:",
+				"label": "Bevel",
 				"longdesc": "The width of the edge of each brick",
 				"max": 0.5,
 				"min": 0,
@@ -156,7 +156,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "Round:",
+				"label": "Round",
 				"longdesc": "The radius of the round corners of bricks",
 				"max": 0.5,
 				"min": 0,
@@ -168,7 +168,7 @@
 			{
 				"control": "None",
 				"default": 0.1,
-				"label": "Corner:",
+				"label": "Corner",
 				"longdesc": "The size of the corner part of each brick (only used by the Corner UV output)",
 				"max": 0.5,
 				"min": 0,
