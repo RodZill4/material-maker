@@ -63,6 +63,7 @@ func on_parameter_changed(p : String, v) -> void:
 		update_node()
 	else:
 		update_control_from_parameter(controls, p, v)
+		update_parameter_tooltip(p, v)
 	get_parent().set_need_save()
 
 static func initialize_controls_from_generator(control_list, generator, object) -> void:
@@ -103,21 +104,32 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 func initialize_properties() -> void:
 	initialize_controls_from_generator(controls, generator, self)
 
+func update_parameter_tooltip(p : String, v):
+	if ! controls.has(p):
+		return
+	for d in generator.get_parameter_defs():
+		if d.name == p:
+			controls[p].hint_tooltip = get_parameter_tooltip(d, v)
+			break
+
 func _on_text_changed(new_text, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
+	update_parameter_tooltip(variable, new_text)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
 func _on_value_changed(new_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
+	update_parameter_tooltip(variable, new_value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
 func _on_color_changed(new_color, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
+	update_parameter_tooltip(variable, new_color)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
@@ -144,6 +156,18 @@ func _on_polygon_changed(new_polygon, variable : String) -> void:
 	generator.set_parameter(variable, new_polygon.duplicate())
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
+
+static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
+	var tooltip : String
+	if p.has("shortdesc"):
+		tooltip = p.shortdesc+" ("+p.name+")"
+		if parameter_value != null:
+			tooltip += " = "+str(parameter_value)
+		if p.has("longdesc"):
+			tooltip += "\n"+p.longdesc
+	elif p.has("longdesc"):
+		tooltip += p.longdesc
+	return wrap_string(tooltip)
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null
@@ -180,6 +204,9 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
 	elif p.type == "polygon":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+	elif p.type == "polyline":
+		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+		control.set_closed(false)
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "image_path":
@@ -189,14 +216,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
-	var tooltip : String
-	if p.has("shortdesc"):
-		tooltip = p.shortdesc+" ("+p.name+")"
-		if p.has("longdesc"):
-			tooltip += "\n"+p.longdesc
-	elif p.has("longdesc"):
-		tooltip += p.longdesc
-	control.hint_tooltip = wrap_string(tooltip)
+	control.hint_tooltip = get_parameter_tooltip(p)
 	return control
 
 func save_preview_widget() -> void:
@@ -384,7 +404,6 @@ func update_node() -> void:
 		initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
-	var button_width = 0
 	output_count = outputs.size()
 	for i in range(output_count):
 		var output = outputs[i]
@@ -406,12 +425,6 @@ func update_node() -> void:
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
 			hsizer.rect_min_size.y = 12
-	if !outputs.empty():
-		for i in range(output_count, get_child_count()):
-			var hsizer : HBoxContainer = get_child(i)
-			var empty_control : Control = Control.new()
-			empty_control.rect_min_size.x = button_width
-			hsizer.add_child(empty_control)
 	# Edit buttons
 	if generator.is_editable():
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()

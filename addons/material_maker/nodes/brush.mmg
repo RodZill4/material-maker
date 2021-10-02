@@ -60,6 +60,12 @@
 				"label": "Depth",
 				"name": "depth",
 				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "Occlusion",
+				"name": "ao",
+				"type": "f"
 			}
 		],
 		"instance": "",
@@ -86,7 +92,7 @@
 				"type": "rgba"
 			},
 			{
-				"rgba": "vec4(vec3($depth($uv)), $albedo($uv).a)",
+				"rgba": "vec4($depth($uv), $ao($uv), $has_depth ? $albedo($uv).a : 0.0, $has_ao ? $albedo($uv).a : 0.0)",
 				"type": "rgba"
 			},
 			{
@@ -149,6 +155,12 @@
 				"default": false,
 				"label": "",
 				"name": "has_depth",
+				"type": "boolean"
+			},
+			{
+				"default": false,
+				"label": "",
+				"name": "has_ao",
 				"type": "boolean"
 			}
 		]

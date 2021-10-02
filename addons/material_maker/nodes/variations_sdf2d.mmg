@@ -1,0 +1,67 @@
+{
+	"name": "variations_sdf2d",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 0.660085,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "vec2 rotate(vec2 uv, vec2 center, float rotate) {\n \tvec2 rv;\n\tuv -= center;\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv += center;\n    return rv;\t\n}",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates variations for its input",
+		"name": "Variations",
+		"outputs": [
+			{
+				"longdesc": "Shows a variation of the input",
+				"sdf2d": "$in.variation($uv, $seed)",
+				"shortdesc": "Output1",
+				"type": "sdf2d"
+			},
+			{
+				"longdesc": "Shows a variation of the input",
+				"sdf2d": "$in.variation($uv, $seed+0.1)",
+				"shortdesc": "Output2",
+				"type": "sdf2d"
+			},
+			{
+				"longdesc": "Shows a variation of the input",
+				"sdf2d": "$in.variation($uv, $seed+0.2)",
+				"shortdesc": "Output3",
+				"type": "sdf2d"
+			},
+			{
+				"longdesc": "Shows a variation of the input",
+				"sdf2d": "$in.variation($uv, $seed+0.3)",
+				"shortdesc": "Output4",
+				"type": "sdf2d"
+			},
+			{
+				"longdesc": "Shows a variation of the input",
+				"sdf2d": "$in.variation($uv, $seed+0.4)",
+				"shortdesc": "Output5",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+
+		],
+		"shortdesc": "Variations"
+	},
+	"type": "shader"
+}

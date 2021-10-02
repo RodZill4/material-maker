@@ -9,7 +9,7 @@
 	},
 	"shader_model": {
 		"code": "",
-		"global": "vec3 color_dots(vec2 uv, float size, int seed) {\n\tvec2 seed2 = rand2(vec2(float(seed), 1.0-float(seed)));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\treturn rand3(seed2+point_pos);\n}",
+		"global": "vec3 color_dots(vec2 uv, float size, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\treturn rand3(seed2+point_pos);\n}",
 		"inputs": [
 
 		],
@@ -28,7 +28,7 @@
 			{
 				"default": 8,
 				"first": 2,
-				"label": "Grid Size:",
+				"label": "Grid Size",
 				"last": 12,
 				"longdesc": "The grid size",
 				"name": "size",

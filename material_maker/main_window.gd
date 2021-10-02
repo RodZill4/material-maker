@@ -29,7 +29,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
 var library
-var preview_2d
+var preview_2d : Array
 var histogram
 var preview_3d
 var hierarchy
@@ -189,7 +189,7 @@ func _ready() -> void:
 
 	layout.load_panels(config_cache)
 	library = get_panel("Library")
-	preview_2d = get_panel("Preview2D")
+	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
@@ -852,7 +852,10 @@ func add_selection_to_library(index) -> void:
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	var current_item_name = ""
+	if library.is_inside_tree():
+		current_item_name = library.get_selected_item_name()
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	if ! status.ok:
@@ -1009,19 +1012,21 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 			return n
 	return null
 
-func update_preview_2d(node = null) -> void:
+func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		if node == null:
-			node = get_current_node(graph_edit)
-		if node != null:
-			preview_2d.set_generator(node.generator)
-			histogram.set_generator(node.generator)
-			preview_2d_background.set_generator(node.generator)
-		else:
-			preview_2d.set_generator(null)
-			histogram.set_generator(null)
-			preview_2d_background.set_generator(null)
+		for i in range(2):
+			var preview = graph_edit.get_current_preview(i)
+			if preview != null:
+				preview_2d[i].set_generator(preview.generator, preview.output_index)
+				if i == 0:
+					histogram.set_generator(preview.generator, preview.output_index)
+					preview_2d_background.set_generator(preview.generator, preview.output_index)
+			else:
+				preview_2d[i].set_generator(null)
+				if i == 0:
+					histogram.set_generator(null)
+					preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1037,11 +1042,9 @@ func update_preview_3d(previews : Array, sequential = false) -> void:
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 
-var selected_node = null
-func on_selected_node_change(node) -> void:
-	if node != selected_node:
-		selected_node = node
-		update_preview_2d(node)
+func on_preview_changed(graph) -> void:
+	if graph == get_current_graph_edit():
+		update_preview_2d()
 
 func _on_Projects_tab_changed(_tab) -> void:
 	var project = get_current_project()
@@ -1067,8 +1070,8 @@ func _on_Projects_tab_changed(_tab) -> void:
 		current_tab = new_tab
 		if new_graph_edit != null:
 			new_graph_edit.connect("graph_changed", self, "update_preview")
-			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
-				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
+			if !new_graph_edit.is_connected("preview_changed", self, "on_preview_changed"):
+				new_graph_edit.connect("preview_changed", self, "on_preview_changed")
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())

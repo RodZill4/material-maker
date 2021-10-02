@@ -16,6 +16,7 @@ onready var roughness = $Roughness
 onready var emission = $Emission
 onready var normal = $Normal
 onready var depth = $Depth
+onready var occlusion = $Occlusion
 onready var painter_node = get_node(painter) if painter != null else null
 
 """
@@ -32,7 +33,7 @@ const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/l
 const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
 const LAYER_TYPES : Array = [ LayerPaint, LayerProcedural, LayerMask ]
 
-const CHANNELS : Array = [ "albedo", "metallic", "roughness", "emission", "normal", "depth" ]
+const CHANNELS : Array = [ "albedo", "metallic", "roughness", "emission", "normal", "depth", "occlusion" ]
 
 
 signal layer_selected(l)
@@ -57,6 +58,7 @@ func set_texture_size(s : float):
 	emission.size = size
 	normal.size = size
 	depth.size = size
+	occlusion.size = size
 	"""
 	nm_viewport.size = size
 	nm_rect.rect_size = size
@@ -108,6 +110,9 @@ func get_normal_map():
 
 func get_depth_texture():
 	return depth.get_texture()
+
+func get_occlusion_texture():
+	return occlusion.get_texture()
 
 func _on_Tree_selection_changed(old_selected : TreeItem, new_selected : TreeItem) -> void:
 	select_layer(new_selected.get_meta("layer"))
@@ -235,7 +240,7 @@ func _on_layers_changed() -> void:
 	var list = []
 	get_visible_layers(list)
 	update_layers_renderer(list)
-	for c in [ "albedo", "metallic", "roughness", "emission", "normal", "depth"]:
+	for c in CHANNELS:
 		update_alpha(c)
 	layers_pane.call_deferred("set_layers", self)
 
@@ -276,7 +281,7 @@ func apply_masks(material : ShaderMaterial, masks : Array) -> void:
 		material.set_shader_param("mask%d_tex" % i, masks[i])
 
 func update_layers_renderer(visible_layers : Array) -> void:
-	for viewport in [ albedo, metallic, roughness, emission, normal, depth ]:
+	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		while viewport.get_child_count() > 0:
 			viewport.remove_child(viewport.get_child(0))
 	var texture_rect : TextureRect
@@ -285,6 +290,10 @@ func update_layers_renderer(visible_layers : Array) -> void:
 	color_rect.rect_size = normal.size
 	color_rect.color = Color(0.5, 0.5, 0)
 	normal.add_child(color_rect)
+	color_rect = ColorRect.new()
+	color_rect.rect_size = normal.size
+	color_rect.color = Color(1.0, 1.0, 1.0)
+	occlusion.add_child(color_rect)
 	for lm in visible_layers:
 		var l = lm.layer
 		var m = lm.masks
@@ -352,12 +361,22 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.rect_size = depth.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.shader = layer_shaders.albedo
-		color_rect.material.set_shader_param("input_tex", l.depth)
+		color_rect.material.shader = layer_shaders.metallic
+		color_rect.material.set_shader_param("input_tex", l.do)
 		color_rect.material.set_shader_param("modulate", l.depth_alpha)
 		apply_masks(color_rect.material, m)
 		l.depth_color_rects = [ color_rect ]
 		depth.add_child(color_rect)
+		# occlusion
+		color_rect = ColorRect.new()
+		color_rect.rect_size = occlusion.size
+		color_rect.material = ShaderMaterial.new()
+		color_rect.material.shader = layer_shaders.roughness
+		color_rect.material.set_shader_param("input_tex", l.do)
+		color_rect.material.set_shader_param("modulate", l.occlusion_alpha)
+		apply_masks(color_rect.material, m)
+		l.occlusion_color_rects = [ color_rect ]
+		occlusion.add_child(color_rect)
 	_on_Painter_painted()
 
 func load(data : Dictionary, file_name : String):
@@ -382,7 +401,7 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 				var texture = ImageTexture.new()
 				texture.load(path+"/"+l[c])
 				layer.set(c, texture)
-		for c in [ "albedo", "metallic", "roughness", "emission", "normal", "depth" ]:
+		for c in CHANNELS:
 			layer.set(c+"_alpha", l[c+"_alpha"] if l.has(c+"_alpha") else 1.0)
 		if l.has("layers"):
 			first_index = load_layers(l.layers, layer.layers, path, first_index)
@@ -399,7 +418,7 @@ func save(file_name : String) -> Dictionary:
 	return data
 
 func _on_Painter_painted():
-	for viewport in [ albedo, metallic, roughness, emission, normal, depth ]:
+	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 		viewport.update_worlds()
 	# TODO: make the following optional (and mix with normal channel)
@@ -413,18 +432,21 @@ func _on_Painter_painted():
 # debug
 
 func debug_get_texture_names():
-	return [ "Albedo", "Metallic", "Roughness", "Emission", "Normal map", "Depth" ]
+	return [ "Albedo", "Metallic", "Roughness", "Emission", "Normal map", "Depth", "Occlusion" ]
 
 func debug_get_texture(ID):
-	if ID == 0:
-		return get_albedo_texture()
-	if ID == 1:
-		return $Metallic.get_texture()
-	if ID == 2:
-		return $Roughness.get_texture()
-	elif ID == 3:
-		return get_emission_texture()
-	elif ID == 4:
-		return get_normal_map()
-	elif ID == 5:
-		return get_depth_texture()
+	match ID:
+		0:
+			return get_albedo_texture()
+		1:
+			return $Metallic.get_texture()
+		2:
+			return $Roughness.get_texture()
+		3:
+			return get_emission_texture()
+		4:
+			return get_normal_map()
+		5:
+			return get_depth_texture()
+		6:
+			return get_occlusion_texture()

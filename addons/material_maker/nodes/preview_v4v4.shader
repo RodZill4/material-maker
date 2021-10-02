@@ -1,5 +1,8 @@
+uniform float variation = 0.0;
+
 vec4 mfield(vec4 uv) {
-    $(code)
+    float _seed_variation_ = variation;
+	$(code)
     return $(value);
 }
 

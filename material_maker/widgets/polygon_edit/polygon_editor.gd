@@ -1,6 +1,8 @@
 extends "res://material_maker/widgets/polygon_edit/polygon_view.gd"
 
+
 signal value_changed(value)
+
 
 func _ready():
 	update_controls()
@@ -38,7 +40,7 @@ func _on_PolygonEditor_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.doubleclick:
 			var new_point_position = reverse_transform_point(get_local_mouse_position())
-			polygon.add_point(new_point_position.x, new_point_position.y)
+			polygon.add_point(new_point_position.x, new_point_position.y, closed)
 			update_controls()
 
 func _on_resize() -> void:

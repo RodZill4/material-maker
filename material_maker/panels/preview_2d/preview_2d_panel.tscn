@@ -7,6 +7,7 @@
 [ext_resource path="res://material_maker/panels/preview_2d/lines.gd" type="Script" id=5]
 
 [sub_resource type="Shader" id=1]
+resource_local_to_scene = true
 code = "shader_type canvas_item;
 
 vec4 preview_2d(in vec2 uv) {
@@ -28,6 +29,7 @@ void fragment() {
 "
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/canvas_size = Vector2( 100, 100 )
 shader_param/scale = 1.2
@@ -186,6 +188,7 @@ margin_bottom = 88.0
 [node name="Reference" type="PopupMenu" parent="ContextMenu" index="3"]
 margin_right = 91.0
 margin_bottom = 88.0
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Axes" to="." method="_on_Axes_id_pressed"]

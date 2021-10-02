@@ -13,8 +13,11 @@
 		"translate_x": 0,
 		"translate_y": 0,
 		"tx": 4,
-		"ty": 4
+		"ty": 4,
+		"variations": false
 	},
+	"seed": 0.488938,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), float($seed));",
 		"global": "",
@@ -99,7 +102,7 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, float _seed) {\n\tfloat c = 0.0;\n\tvec2 map_uv = vec2(0.0);\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tpos = fract(pos+vec2(0.5));\n\t\t\t\tpv -= vec2($translate_x*$tr_x(pos), $translate_y*$tr_y(pos))/tile;\n\t\t\t\tfloat angle = $r(pos) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv /= vec2($scale_x*$sc_x(pos), $scale_y*$sc_y(pos));\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 seed = rand2(vec2(_seed)+pos);\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in(pv)*mask;\n\t\t\t\tc = max(c, c1);\n\t\t\t\tmap_uv = mix(map_uv, pos, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(map_uv, 0.0, c);\n}",
+		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, float _seed) {\n\tfloat c = 0.0;\n\tvec2 map_uv = vec2(0.0);\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tpos = fract(pos+vec2(0.5));\n\t\t\t\tpv -= vec2($translate_x*$tr_x(pos), $translate_y*$tr_y(pos))/tile;\n\t\t\t\tfloat angle = $r(pos) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv /= vec2($scale_x*$sc_x(pos), $scale_y*$sc_y(pos));\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 seed = rand2(vec2(_seed)+pos);\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask;\n\t\t\t\tc = max(c, c1);\n\t\t\t\tmap_uv = mix(map_uv, pos, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(map_uv, 0.0, c);\n}",
 		"longdesc": "Tiles several occurences of an input image while adding randomness.",
 		"name": "Advanced Tiler",
 		"outputs": [
@@ -240,6 +243,14 @@
 				"shortdesc": "Scale.y",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Variations",
+				"longdesc": "Check to tile variations of the input",
+				"name": "variations",
+				"shortdesc": "Variations",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Tiler"

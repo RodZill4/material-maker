@@ -4,7 +4,7 @@ var albedo : Texture
 var mr : Texture
 var emission : Texture
 var normal : Texture
-var depth : Texture
+var do : Texture
 
 var albedo_alpha : float = 1.0
 var metallic_alpha : float = 1.0
@@ -12,6 +12,7 @@ var roughness_alpha : float = 1.0
 var emission_alpha : float = 1.0
 var normal_alpha : float = 1.0
 var depth_alpha : float = 1.0
+var occlusion_alpha : float = 1.0
 
 var albedo_color_rects : Array = []
 var metallic_color_rects : Array = []
@@ -19,6 +20,7 @@ var roughness_color_rects : Array = []
 var emission_color_rects : Array = []
 var normal_color_rects : Array = []
 var depth_color_rects : Array = []
+var occlusion_color_rects : Array = []
 
 func get_layer_type() -> int:
 	return LAYER_PAINT
@@ -31,10 +33,10 @@ func duplicate():
 
 
 func get_channels() -> Array:
-	return [ "albedo", "mr", "emission", "normal", "depth" ]
+	return [ "albedo", "mr", "emission", "normal", "do" ]
 
 func get_expanded_channels() -> Array:
-	return [ "albedo", "metallic", "roughness", "emission", "normal", "depth" ]
+	return [ "albedo", "metallic", "roughness", "emission", "normal", "depth", "occlusion" ]
 
 
 func _load_layer(data : Dictionary) -> void:

@@ -16,6 +16,8 @@ onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
 
+var moving = false
+
 signal need_update(me)
 
 const MENU = [
@@ -170,11 +172,13 @@ func on_gui_input(event) -> void:
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 					_mouse_start_position = event.global_position
+					moving = true
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
 					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	elif event is InputEventMouseMotion:
+					moving = false
+	elif moving and event is InputEventMouseMotion:
 		if event.pressure != 0.0:
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		var motion = event.relative

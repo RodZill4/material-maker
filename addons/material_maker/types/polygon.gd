@@ -19,7 +19,7 @@ func duplicate() -> Object:
 func clear() -> void:
 	points.clear()
 
-func add_point(x : float, y : float) -> void:
+func add_point(x : float, y : float, closed : bool = true) -> void:
 	var p : Vector2 = Vector2(x, y)
 	var points_count = points.size()
 	if points_count < 3:
@@ -32,6 +32,8 @@ func add_point(x : float, y : float) -> void:
 		if length < min_length:
 			min_length = length
 			insert_point = i+1
+	if !closed and insert_point == 0 and (points[0]-p).length() > (points[points_count-1]-p).length():
+		insert_point = points_count
 	points.insert(insert_point, p)
 
 func remove_point(index : int) -> bool:
