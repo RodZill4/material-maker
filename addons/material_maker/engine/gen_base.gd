@@ -118,9 +118,7 @@ func init_parameters() -> void:
 			else:
 				print("No default value for parameter "+p.name)
 
-func set_position(p, force_recalc_seed = false) -> void:
-	if !force_recalc_seed && position == p:
-		return
+func set_position(p) -> void:
 	position = p
 
 func get_type() -> String:
