@@ -127,7 +127,8 @@ func update_material(m, sequential : bool = false) -> void:
 				status = yield(status, "completed")
 
 func update() -> void:
-	var result = process_shader(shader_model.preview_shader)
+	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
+	var result = process_shader(processed_preview_shader)
 	preview_shader_code = result.shader_code
 	preview_texture_dependencies = result.texture_dependencies
 
@@ -328,18 +329,19 @@ static func get_template_text(template : String) -> String:
 			return template
 	return in_file.get_as_text()
 
-static func process_conditionals(template : String) -> String:
+func process_conditionals(template : String) -> String:
+	var context = get_connections_and_parameters_context()
 	var processed : String = ""
 	var skip_state : Array = [ false ]
 	for l in template.split("\n"):
 		if l == "":
 			continue
 		elif l.left(4) == "$if ":
-			var condition = l.right(4)
+			var condition = subst_string(l.right(4), context)
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
-				#print("Error in expression "+condition+": "+expr.get_error_text())
+				print("Error in expression "+condition+": "+expr.get_error_text())
 				continue
 			skip_state.push_back(!expr.execute())
 		elif l.left(3) == "$fi":
@@ -423,32 +425,35 @@ func create_file_from_template(template : String, file_name : String, export_con
 	out_file.store_string(processed_template)
 	return true
 
-func export_material(prefix : String, profile : String, size : int = 0) -> void:
-	reset_uids()
-	if size == 0:
-		size = get_image_size()
-	export_paths[profile] = prefix
-	var export_context : Dictionary = {
-		"$(path_prefix)":prefix,
-		"$(file_prefix)":prefix.get_file()
-	}
+func get_connections_and_parameters_context() -> Dictionary:
+	var context : Dictionary = {}
 	for i in range(shader_model.inputs.size()):
 		var input = shader_model.inputs[i]
-		export_context["$(connected:"+input.name+")"] = "true" if get_source(i) != null else "false"
+		context["$(connected:"+input.name+")"] = "true" if get_source(i) != null else "false"
 	for p in shader_model.parameters:
 		var value = p.default
 		if parameters.has(p.name):
 			value = parameters[p.name]
 		match p.type:
-			"float", "size", "boolean":
-				export_context["$(param:"+p.name+")"] = str(value)
+			"float", "size":
+				context["$(param:"+p.name+")"] = str(value)
+			"boolean":
+				context["$(param:"+p.name+")"] = str(value).to_lower()
 			"color":
-				export_context["$(param:"+p.name+".r)"] = str(value.r)
-				export_context["$(param:"+p.name+".g)"] = str(value.g)
-				export_context["$(param:"+p.name+".b)"] = str(value.b)
-				export_context["$(param:"+p.name+".a)"] = str(value.a)
-			_:
-				print(p.type+" not supported in material")
+				context["$(param:"+p.name+".r)"] = str(value.r)
+				context["$(param:"+p.name+".g)"] = str(value.g)
+				context["$(param:"+p.name+".b)"] = str(value.b)
+				context["$(param:"+p.name+".a)"] = str(value.a)
+	return context
+
+func export_material(prefix : String, profile : String, size : int = 0) -> void:
+	reset_uids()
+	if size == 0:
+		size = get_image_size()
+	export_paths[profile] = prefix
+	var export_context : Dictionary = get_connections_and_parameters_context()
+	export_context["$(path_prefix)"] = prefix
+	export_context["$(file_prefix)"] = prefix.get_file()
 	for f in shader_model.exports[profile].files:
 		if f.has("conditions"):
 			var condition = subst_string(f.conditions, export_context)
