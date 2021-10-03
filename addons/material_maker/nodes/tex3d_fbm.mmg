@@ -12,9 +12,11 @@
 		"scale_y": 8,
 		"scale_z": 8
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float rand31(vec3 p) {\n\treturn fract(sin(dot(p,vec3(127.1,311.7, 74.7)))*43758.5453123);\n}\nvec3 rand33(vec3 p){\n\tp = vec3( dot(p,vec3(127.1,311.7, 74.7)),\n\t\t\t  dot(p,vec3(269.5,183.3,246.1)),\n\t\t\t  dot(p,vec3(113.5,271.9,124.6)));\n\n\treturn -1.0 + 2.0*fract(sin(p)*43758.5453123);\n}\n\nfloat tex3d_fbm_value(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat p000 = rand31(mod(o, size));\n\tfloat p001 = rand31(mod(o + vec3(0.0, 0.0, 1.0), size));\n\tfloat p010 = rand31(mod(o + vec3(0.0, 1.0, 0.0), size));\n\tfloat p011 = rand31(mod(o + vec3(0.0, 1.0, 1.0), size));\n\tfloat p100 = rand31(mod(o + vec3(1.0, 0.0, 0.0), size));\n\tfloat p101 = rand31(mod(o + vec3(1.0, 0.0, 1.0), size));\n\tfloat p110 = rand31(mod(o + vec3(1.0, 1.0, 0.0), size));\n\tfloat p111 = rand31(mod(o + vec3(1.0, 1.0, 1.0), size));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_perlin(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tvec3 v000 = normalize(rand33(mod(o, size))-vec3(0.5));\n\tvec3 v001 = normalize(rand33(mod(o + vec3(0.0, 0.0, 1.0), size))-vec3(0.5));\n\tvec3 v010 = normalize(rand33(mod(o + vec3(0.0, 1.0, 0.0), size))-vec3(0.5));\n\tvec3 v011 = normalize(rand33(mod(o + vec3(0.0, 1.0, 1.0), size))-vec3(0.5));\n\tvec3 v100 = normalize(rand33(mod(o + vec3(1.0, 0.0, 0.0), size))-vec3(0.5));\n\tvec3 v101 = normalize(rand33(mod(o + vec3(1.0, 0.0, 1.0), size))-vec3(0.5));\n\tvec3 v110 = normalize(rand33(mod(o + vec3(1.0, 1.0, 0.0), size))-vec3(0.5));\n\tvec3 v111 = normalize(rand33(mod(o + vec3(1.0, 1.0, 1.0), size))-vec3(0.5));\n\tfloat p000 = dot(v000, f);\n\tfloat p001 = dot(v001, f - vec3(0.0, 0.0, 1.0));\n\tfloat p010 = dot(v010, f - vec3(0.0, 1.0, 0.0));\n\tfloat p011 = dot(v011, f - vec3(0.0, 1.0, 1.0));\n\tfloat p100 = dot(v100, f - vec3(1.0, 0.0, 0.0));\n\tfloat p101 = dot(v101, f - vec3(1.0, 0.0, 1.0));\n\tfloat p110 = dot(v110, f - vec3(1.0, 1.0, 0.0));\n\tfloat p111 = dot(v111, f - vec3(1.0, 1.0, 1.0));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_cellular(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat min_dist = 3.0;\n\tfor (float x = -1.0; x <= 1.0; x++) {\n\t\tfor (float y = -1.0; y <= 1.0; y++) {\n\t\t\tfor (float z = -1.0; z <= 1.0; z++) {\n\t\t\t\tvec3 node = 0.4*rand33(mod(o + vec3(x, y, z), size)) + vec3(x, y, z);\n\t\t\t\tfloat dist = sqrt((f - node).x * (f - node).x + (f - node).y * (f - node).y + (f - node).z * (f - node).z);\n\t\t\t\tmin_dist = min(min_dist, dist);\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist;\n}\n",
+		"global": "float rand31(vec3 p) {\n\treturn fract(sin(dot(p,vec3(127.1,311.7, 74.7)))*43758.5453123);\n}\nvec3 rand33(vec3 p){\n\tp = vec3( dot(p,vec3(127.1,311.7, 74.7)),\n\t\t\t  dot(p,vec3(269.5,183.3,246.1)),\n\t\t\t  dot(p,vec3(113.5,271.9,124.6)));\n\n\treturn -1.0 + 2.0*fract(sin(p)*43758.5453123);\n}\n\nfloat tex3d_fbm_value(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat p000 = rand31(mod(o, size));\n\tfloat p001 = rand31(mod(o + vec3(0.0, 0.0, 1.0), size));\n\tfloat p010 = rand31(mod(o + vec3(0.0, 1.0, 0.0), size));\n\tfloat p011 = rand31(mod(o + vec3(0.0, 1.0, 1.0), size));\n\tfloat p100 = rand31(mod(o + vec3(1.0, 0.0, 0.0), size));\n\tfloat p101 = rand31(mod(o + vec3(1.0, 0.0, 1.0), size));\n\tfloat p110 = rand31(mod(o + vec3(1.0, 1.0, 0.0), size));\n\tfloat p111 = rand31(mod(o + vec3(1.0, 1.0, 1.0), size));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_value_nowrap(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat p000 = rand31(o);\n\tfloat p001 = rand31(o + vec3(0.0, 0.0, 1.0));\n\tfloat p010 = rand31(o + vec3(0.0, 1.0, 0.0));\n\tfloat p011 = rand31(o + vec3(0.0, 1.0, 1.0));\n\tfloat p100 = rand31(o + vec3(1.0, 0.0, 0.0));\n\tfloat p101 = rand31(o + vec3(1.0, 0.0, 1.0));\n\tfloat p110 = rand31(o + vec3(1.0, 1.0, 0.0));\n\tfloat p111 = rand31(o + vec3(1.0, 1.0, 1.0));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_perlin(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tvec3 v000 = normalize(rand33(mod(o, size))-vec3(0.5));\n\tvec3 v001 = normalize(rand33(mod(o + vec3(0.0, 0.0, 1.0), size))-vec3(0.5));\n\tvec3 v010 = normalize(rand33(mod(o + vec3(0.0, 1.0, 0.0), size))-vec3(0.5));\n\tvec3 v011 = normalize(rand33(mod(o + vec3(0.0, 1.0, 1.0), size))-vec3(0.5));\n\tvec3 v100 = normalize(rand33(mod(o + vec3(1.0, 0.0, 0.0), size))-vec3(0.5));\n\tvec3 v101 = normalize(rand33(mod(o + vec3(1.0, 0.0, 1.0), size))-vec3(0.5));\n\tvec3 v110 = normalize(rand33(mod(o + vec3(1.0, 1.0, 0.0), size))-vec3(0.5));\n\tvec3 v111 = normalize(rand33(mod(o + vec3(1.0, 1.0, 1.0), size))-vec3(0.5));\n\tfloat p000 = dot(v000, f);\n\tfloat p001 = dot(v001, f - vec3(0.0, 0.0, 1.0));\n\tfloat p010 = dot(v010, f - vec3(0.0, 1.0, 0.0));\n\tfloat p011 = dot(v011, f - vec3(0.0, 1.0, 1.0));\n\tfloat p100 = dot(v100, f - vec3(1.0, 0.0, 0.0));\n\tfloat p101 = dot(v101, f - vec3(1.0, 0.0, 1.0));\n\tfloat p110 = dot(v110, f - vec3(1.0, 1.0, 0.0));\n\tfloat p111 = dot(v111, f - vec3(1.0, 1.0, 1.0));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_perlin_nowrap(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tvec3 v000 = normalize(rand33(o)-vec3(0.5));\n\tvec3 v001 = normalize(rand33(o + vec3(0.0, 0.0, 1.0))-vec3(0.5));\n\tvec3 v010 = normalize(rand33(o + vec3(0.0, 1.0, 0.0))-vec3(0.5));\n\tvec3 v011 = normalize(rand33(o + vec3(0.0, 1.0, 1.0))-vec3(0.5));\n\tvec3 v100 = normalize(rand33(o + vec3(1.0, 0.0, 0.0))-vec3(0.5));\n\tvec3 v101 = normalize(rand33(o + vec3(1.0, 0.0, 1.0))-vec3(0.5));\n\tvec3 v110 = normalize(rand33(o + vec3(1.0, 1.0, 0.0))-vec3(0.5));\n\tvec3 v111 = normalize(rand33(o + vec3(1.0, 1.0, 1.0))-vec3(0.5));\n\tfloat p000 = dot(v000, f);\n\tfloat p001 = dot(v001, f - vec3(0.0, 0.0, 1.0));\n\tfloat p010 = dot(v010, f - vec3(0.0, 1.0, 0.0));\n\tfloat p011 = dot(v011, f - vec3(0.0, 1.0, 1.0));\n\tfloat p100 = dot(v100, f - vec3(1.0, 0.0, 0.0));\n\tfloat p101 = dot(v101, f - vec3(1.0, 0.0, 1.0));\n\tfloat p110 = dot(v110, f - vec3(1.0, 1.0, 0.0));\n\tfloat p111 = dot(v111, f - vec3(1.0, 1.0, 1.0));\n\tvec3 t = f * f * (3.0 - 2.0 * f);\n\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);\n}\n\nfloat tex3d_fbm_cellular(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat min_dist = 3.0;\n\tfor (float x = -1.0; x <= 1.0; x++) {\n\t\tfor (float y = -1.0; y <= 1.0; y++) {\n\t\t\tfor (float z = -1.0; z <= 1.0; z++) {\n\t\t\t\tvec3 node = 0.4*rand33(mod(o + vec3(x, y, z), size)) + vec3(x, y, z);\n\t\t\t\tfloat dist = sqrt((f - node).x * (f - node).x + (f - node).y * (f - node).y + (f - node).z * (f - node).z);\n\t\t\t\tmin_dist = min(min_dist, dist);\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist;\n}\n\nfloat tex3d_fbm_cellular_nowrap(vec3 coord, vec3 size, float seed) {\n\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;\n\tvec3 f = fract(coord);\n\tfloat min_dist = 3.0;\n\tfor (float x = -1.0; x <= 1.0; x++) {\n\t\tfor (float y = -1.0; y <= 1.0; y++) {\n\t\t\tfor (float z = -1.0; z <= 1.0; z++) {\n\t\t\t\tvec3 node = 0.4*rand33(o + vec3(x, y, z)) + vec3(x, y, z);\n\t\t\t\tfloat dist = sqrt((f - node).x * (f - node).x + (f - node).y * (f - node).y + (f - node).z * (f - node).z);\n\t\t\t\tmin_dist = min(min_dist, dist);\n\t\t\t}\n\t\t}\n\t}\n\treturn min_dist;\n}\n",
 		"inputs": [
 
 		],
@@ -25,13 +27,13 @@
 			{
 				"longdesc": "Shows a greyscale 3D texture of the generated noise",
 				"shortdesc": "Output",
-				"tex3d": "vec3($(name)_fbm($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed))))",
-				"type": "tex3d"
+				"tex3d_gs": "$(name)_fbm($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed)))",
+				"type": "tex3d_gs"
 			}
 		],
 		"parameters": [
 			{
-				"default": 2,
+				"default": 0,
 				"label": "Noise",
 				"longdesc": "The simple noise type",
 				"name": "noise",
@@ -49,6 +51,18 @@
 					{
 						"name": "Cellular",
 						"value": "cellular"
+					},
+					{
+						"name": "Value (no wrap)",
+						"value": "value_nowrap"
+					},
+					{
+						"name": "Perlin (no wrap)",
+						"value": "perlin_nowrap"
+					},
+					{
+						"name": "Cellular (no wrap)",
+						"value": "cellular_nowrap"
 					}
 				]
 			},
