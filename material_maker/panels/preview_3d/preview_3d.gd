@@ -47,7 +47,7 @@ func _ready() -> void:
 	ui = get_node(ui_path)
 	get_node("/root/MainWindow").create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
-	_on_Environment_item_selected(0)
+	set_environment(0)
 
 	# Required for supersampling to work.
 	$MaterialPreview.get_texture().flags = Texture.FLAG_FILTER
@@ -102,6 +102,7 @@ func do_load_custom_mesh(file_path) -> void:
 		var object : MeshInstance = objects.get_child(id)
 		object.mesh = mesh
 		select_object(id)
+		unlock_achievement("ui_3d_preview_custom_mesh")
 
 func select_object(id) -> void:
 	current_object.visible = false
@@ -109,7 +110,11 @@ func select_object(id) -> void:
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
 
-func _on_Environment_item_selected(id) -> void:
+func _on_Environment_item_selected(id : int) -> void:
+	set_environment(id)
+	unlock_achievement("ui_3d_preview_change_environment")
+
+func set_environment(id : int) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
 	environment_manager.apply_environment(id, environment, sun)
@@ -230,6 +235,7 @@ func do_generate_map(file_name : String, map : String, size : int) -> void:
 		result = yield(result, "completed")
 	mesh_normal_mapper.queue_free()
 	OS.clipboard = "{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name
+	unlock_achievement("ui_3d_preview_bake_texture")
 
 func create_menu_map(menu : PopupMenu, function : String) -> void:
 	menu.clear()
@@ -282,3 +288,8 @@ func generate_ao_map(i : int) -> void:
 
 func do_generate_ao_map(file_name : String, size : int) -> void:
 	do_generate_map(file_name, "ao", size)
+
+func unlock_achievement(achievement_name : String) -> void:
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock(achievement_name)

@@ -13,6 +13,48 @@ const ACHIEVEMENTS : Array = [
 				description = "Welcome!"
 			},
 			{
+				id = "ui_2d_preview_to_reference",
+				name = "",
+				hint = "Add a rendered preview to the reference panel",
+				description = ""
+			},
+			{
+				id = "ui_2d_preview_change_grid",
+				name = "",
+				hint = "Change the grid in the 2D preview",
+				description = ""
+			},
+			{
+				id = "ui_3d_preview_custom_mesh",
+				name = "",
+				hint = "Use a custom mesh in the 3D preview",
+				description = ""
+			},
+			{
+				id = "ui_3d_preview_bake_texture",
+				name = "",
+				hint = "Bake a texture from the 3D preview",
+				description = ""
+			},
+			{
+				id = "ui_3d_preview_change_environment",
+				name = "",
+				hint = "Select a new environment in the 3D preview",
+				description = ""
+			},
+			{
+				id = "ui_add_reference",
+				name = "",
+				hint = "Add an image to the reference panel",
+				description = ""
+			},
+			{
+				id = "ui_reference_sample gradient",
+				name = "",
+				hint = "Sample a gradient from the reference panel",
+				description = ""
+			},
+			{
 				id = "ui_doc",
 				name = "The Fine Manual",
 				hint = "Read the user manual",
@@ -51,7 +93,13 @@ const ACHIEVEMENTS : Array = [
 				id = "ui_loop",
 				name = "Chicken and egg",
 				hint = "Try to create a loop in your graph",
-				description = ""
+				description = "You tried to create a loop in the graph, and failed. You failed, didn't you? Well if you succeeded, it's a bug. Please report it."
+			},
+			{
+				id = "ui_math_circle",
+				name = "The inner circle",
+				hint = "Create a circle profile using the Math node",
+				description = "Pythagoras is proud of you (I guess)."
 			}
 		]
 	}

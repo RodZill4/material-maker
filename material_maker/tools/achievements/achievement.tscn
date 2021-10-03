@@ -21,7 +21,7 @@ shader_param/c = 0.0
 [node name="Achievement" type="Panel"]
 margin_right = 359.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 0, 64 )
+rect_min_size = Vector2( 0, 70 )
 size_flags_horizontal = 3
 script = ExtResource( 2 )
 __meta__ = {
@@ -31,6 +31,10 @@ __meta__ = {
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 3.0
+margin_right = -3.0
+margin_bottom = -3.0
 mouse_filter = 2
 custom_constants/separation = 4
 __meta__ = {
@@ -38,7 +42,7 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
-margin_right = 291.0
+margin_right = 285.0
 margin_bottom = 64.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -50,20 +54,20 @@ custom_constants/margin_bottom = 3
 [node name="Text" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 288.0
+margin_right = 282.0
 margin_bottom = 61.0
 mouse_filter = 2
 size_flags_horizontal = 3
-custom_constants/separation = 4
+custom_constants/separation = 0
 
 [node name="Title" type="Label" parent="HBoxContainer/MarginContainer/Text"]
-margin_right = 285.0
+margin_right = 279.0
 margin_bottom = 14.0
 
 [node name="Text" type="Label" parent="HBoxContainer/MarginContainer/Text"]
 modulate = Color( 1, 1, 1, 0.627451 )
-margin_top = 18.0
-margin_right = 285.0
+margin_top = 14.0
+margin_right = 279.0
 margin_bottom = 58.0
 size_flags_vertical = 3
 valign = 1
@@ -71,8 +75,8 @@ autowrap = true
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer"]
 material = SubResource( 2 )
-margin_left = 295.0
-margin_right = 359.0
+margin_left = 289.0
+margin_right = 353.0
 margin_bottom = 64.0
 mouse_filter = 2
 texture = ExtResource( 1 )

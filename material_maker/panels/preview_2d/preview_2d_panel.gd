@@ -116,3 +116,6 @@ func _on_Axes_id_pressed(id):
 		color_picker_popup.popup()
 	else:
 		$Axes.style = id
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_2d_preview_change_grid")

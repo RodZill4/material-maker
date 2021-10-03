@@ -8,6 +8,10 @@ var output_count = 0
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 
+const PARAM_ACHIEVEMENTS = {
+	"math/op/19": "ui_math_circle",
+}
+
 func _draw() -> void:
 	._draw()
 	if generator != null and generator.preview >= 0:
@@ -125,6 +129,10 @@ func _on_value_changed(new_value, variable : String) -> void:
 	update_parameter_tooltip(variable, new_value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
+	if generator.model != null:
+		var id = generator.model+"/"+variable+"/"+str(new_value)
+		if PARAM_ACHIEVEMENTS.has(id):
+			unlock_achievement(PARAM_ACHIEVEMENTS[id])
 
 func _on_color_changed(new_color, variable : String) -> void:
 	ignore_parameter_change = variable
@@ -537,3 +545,8 @@ func on_mouse_entered():
 func on_mouse_exited():
 	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
 		preview.visible = true
+
+func unlock_achievement(achievement_name : String) -> void:
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock(achievement_name)
