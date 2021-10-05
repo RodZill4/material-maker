@@ -3,7 +3,7 @@ extends "res://addons/material_maker/parser/glsl_parser_base.gd"
 const REGEXS : Array = [
 	{ type="ignore", regex="^[\\s\\r\\n]+" },
 	{ type="ignore", regex="^//.*?[\\r\\n]" },
-	{ type="ignore", regex="^/\\*.*?\\*/" },
+	{ type="ignore", regex="^/\\*(?:.|[\\r\\n])*?\\*/" },
 	{ type="FLOATCONSTANT", regex="^(\\d*[.])?\\d+([eE][-+]?\\d+)?" },
 	{ type="IDENTIFIER", regex="^\\$?[\\w_]+" },
 	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|==)" },

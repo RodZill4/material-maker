@@ -18,9 +18,9 @@ const OutputEditor = preload("res://material_maker/windows/node_editor/output.ts
 signal node_changed
 
 func _ready() -> void:
-	main_code_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-	instance_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-	global_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:
+		e.add_color_region("//", "", Color(0, 0.5, 0), true)
+		e.add_color_region("/*", "*/", Color(0, 0.5, 0), false)
 
 func add_item(parent, scene) -> Node:
 	var object = scene.instance()
@@ -116,16 +116,23 @@ var globals_error_line = -1
 
 func _on_Functions_text_changed():
 	var text : String = global_functions_editor.text
+	var error_label = $"Sizer/Tabs/Global Functions/ErrorLabel"
 	if globals_error_line != -1:
 		global_functions_editor.set_line_as_safe(globals_error_line, false)
+		error_label.visible = false
 	var result = parser.parse(global_functions_editor.text)
 	if result is Dictionary and result.has("status"):
 		match result.status:
 			"OK":
 				globals_error_line = -1
+				if result.non_terminal != "translation_unit":
+					error_label.visible = true
+					error_label.text = "GLSL translation unit expected (found %s)" % result.non_terminal
 			_:
 				globals_error_line = text.substr(0, result.pos).count("\n")
 				global_functions_editor.set_line_as_safe(globals_error_line, true)
+				error_label.visible = true
+				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 
 # OK/Apply/Cancel buttons
 
