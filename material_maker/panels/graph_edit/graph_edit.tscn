@@ -44,7 +44,7 @@ one_shot = true
 [node name="GraphUI" type="HBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -294.0
+margin_left = -698.0
 margin_top = 11.0
 margin_bottom = 24.0
 alignment = 2
@@ -92,6 +92,13 @@ margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 4 )
 
+[node name="ButtonRegenCopies" type="Button" parent="GraphUI"]
+margin_left = 551.0
+margin_right = 682.0
+margin_bottom = 24.0
+hint_tooltip = "Copies the contents of groups named X to any other groups named copy_X"
+text = "Regenerate Copies"
+
 [node name="Control" type="Control" parent="GraphUI"]
 margin_left = 282.0
 margin_right = 296.0
@@ -116,3 +123,4 @@ script = ExtResource( 3 )
 [connection signal="toggled" from="GraphUI/SubGraphUI/ButtonTransmitsSeed" to="." method="_on_ButtonTransmitsSeed_toggled"]
 [connection signal="pressed" from="GraphUI/SubGraphUI/ButtonUp" to="." method="on_ButtonUp_pressed"]
 [connection signal="pressed" from="GraphUI/ButtonShowTree" to="." method="_on_ButtonShowTree_pressed"]
+[connection signal="pressed" from="GraphUI/ButtonRegenCopies" to="." method="_on_ButtonRegenCopies_pressed"]

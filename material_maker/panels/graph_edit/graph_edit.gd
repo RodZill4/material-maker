@@ -708,3 +708,40 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
+
+
+func find_graph_with_label(label: String) -> GraphNode:
+	for c in get_children():
+		if c is GraphNode and c.generator is MMGenGraph && c.generator.get_type_name() == label:
+			return c
+	return null
+
+func _on_ButtonRegenCopies_pressed():
+	for c in get_children():
+		if c is GraphNode and c.generator is MMGenGraph and c.generator.get_type_name().begins_with("copy_"):
+			var gen = c.generator
+			var copy_from_label = gen.get_type_name().substr(5,-1)
+			var label = gen.get_type_name()
+
+			var copy_from = find_graph_with_label(copy_from_label)
+			
+			if copy_from == null:
+				continue
+			
+			var data = copy_from.generator._serialize({})
+			var param_data = copy_from.generator.get_node("gen_parameters")._serialize({})
+			
+			for n in gen.get_children():
+				gen.remove_child(n)
+				n.queue_free()
+			
+			data.label = label
+			gen._deserialize(data)
+			
+			var params = gen.get_node("gen_parameters")
+			params._deserialize(param_data)
+			gen.fix_remotes()
+	
+	var main_window = get_node("/root/MainWindow")
+	main_window.hierarchy.update_from_graph_edit(self)
+	update()
