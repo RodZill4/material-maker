@@ -728,20 +728,8 @@ func _on_ButtonRegenCopies_pressed():
 			if copy_from == null:
 				continue
 			
-			var data = copy_from.generator._serialize({})
-			var param_data = copy_from.generator.get_node("gen_parameters")._serialize({})
-			
-			for n in gen.get_children():
-				gen.remove_child(n)
-				n.queue_free()
-			
-			data.label = label
-			gen._deserialize(data)
-			
-			var params = gen.get_node("gen_parameters")
-			params._deserialize(param_data)
-			gen.fix_remotes()
-	
+			gen.apply_diff_from(copy_from.generator)
+#
 	var main_window = get_node("/root/MainWindow")
 	main_window.hierarchy.update_from_graph_edit(self)
-	update()
+	update_view(generator)
