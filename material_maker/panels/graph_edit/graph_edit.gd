@@ -53,6 +53,13 @@ func get_project_type() -> String:
 func get_graph_edit():
 	return self
 
+func do_zoom(factor : float):
+	accept_event()
+	var old_zoom : float = zoom
+	zoom *= factor
+	var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*position)
+
 func _gui_input(event) -> void:
 	if (
 		event.is_action_pressed("ui_library_popup")
@@ -75,17 +82,13 @@ func _gui_input(event) -> void:
 				event.control = false
 			elif !event.shift:
 				event.control = true
-				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
-				call_deferred("set_scroll_ofs", scroll_offset+0.1*zoom*position)
-				zoom *= 1.1
+				do_zoom(1.1)
 		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
 				event.control = true
-				var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
-				call_deferred("set_scroll_ofs", scroll_offset+(1.0/1.1-1.0)*zoom*position)
-				zoom /= 1.1
+				do_zoom(1.0/1.1)
 		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
 				if c.has_method("get_output_slot"):
