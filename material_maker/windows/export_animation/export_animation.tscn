@@ -1,0 +1,306 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://material_maker/windows/export_animation/export_animation.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=3]
+
+[sub_resource type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="Shader" id=3]
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+
+[sub_resource type="Shader" id=5]
+code = "shader_type canvas_item;
+
+uniform sampler2D begin;
+uniform sampler2D end;
+
+void fragment() {
+	vec2 uv = UV*vec2(1.0, -1.0)+vec2(0.0, 1.0);
+	COLOR = vec4(mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 0.0, 0.0), clamp(length(texture(begin, uv)-texture(end, uv)), 0.0, 1.0)), 1.0);
+}
+
+"
+
+[sub_resource type="ViewportTexture" id=6]
+viewport_path = NodePath("VBox/Images/HBox/Begin/Viewport")
+
+[sub_resource type="ViewportTexture" id=7]
+viewport_path = NodePath("VBox/Images/HBox/End/Viewport")
+
+[sub_resource type="ShaderMaterial" id=8]
+resource_local_to_scene = true
+shader = SubResource( 5 )
+shader_param/begin = SubResource( 6 )
+shader_param/end = SubResource( 7 )
+
+[sub_resource type="Animation" id=9]
+resource_name = "show"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Diff:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Diff:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.1, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Shader" id=10]
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 10 )
+
+[node name="ExportAnimation" type="WindowDialog"]
+anchor_left = 0.211
+anchor_top = 0.204
+anchor_right = 0.824
+anchor_bottom = 0.649
+margin_left = -0.0799866
+margin_top = 0.119995
+margin_right = 0.279907
+margin_bottom = -0.280029
+window_title = "Export animation"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+shader = "void fragment() {
+	COLOR = preview_2d(UV);
+}"
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -114.0
+margin_bottom = -81.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settings" type="HBoxContainer" parent="VBox"]
+margin_right = 786.0
+margin_bottom = 24.0
+
+[node name="SizeLabel" type="Label" parent="VBox/Settings"]
+margin_top = 5.0
+margin_right = 30.0
+margin_bottom = 19.0
+text = "Size:"
+
+[node name="Size" type="OptionButton" parent="VBox/Settings"]
+margin_left = 34.0
+margin_right = 134.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 100, 0 )
+script = ExtResource( 3 )
+size_value = 8
+
+[node name="Space1" type="Control" parent="VBox/Settings"]
+margin_left = 138.0
+margin_right = 158.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="BeginLabel" type="Label" parent="VBox/Settings"]
+margin_left = 162.0
+margin_top = 5.0
+margin_right = 202.0
+margin_bottom = 19.0
+text = "Begin:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Begin" parent="VBox/Settings" instance=ExtResource( 2 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 206.0
+margin_right = 264.0
+margin_bottom = 24.0
+value = 0.0
+max_value = 10.0
+float_only = true
+
+[node name="Space2" type="Control" parent="VBox/Settings"]
+margin_left = 268.0
+margin_right = 288.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="EndLabel" type="Label" parent="VBox/Settings"]
+margin_left = 292.0
+margin_top = 5.0
+margin_right = 319.0
+margin_bottom = 19.0
+text = "End:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="End" parent="VBox/Settings" instance=ExtResource( 2 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 323.0
+margin_right = 381.0
+margin_bottom = 24.0
+value = 1.0
+max_value = 10.0
+float_only = true
+
+[node name="Space3" type="Control" parent="VBox/Settings"]
+margin_left = 385.0
+margin_right = 405.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="ImagesLabel" type="Label" parent="VBox/Settings"]
+margin_left = 409.0
+margin_top = 5.0
+margin_right = 460.0
+margin_bottom = 19.0
+text = "Images:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Images" parent="VBox/Settings" instance=ExtResource( 2 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 464.0
+margin_right = 522.0
+margin_bottom = 24.0
+value = 10.0
+min_value = 1.0
+max_value = 100.0
+step = 1.0
+float_only = true
+
+[node name="Images" type="MarginContainer" parent="VBox"]
+margin_top = 28.0
+margin_right = 786.0
+margin_bottom = 292.0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+
+[node name="HBox" type="HBoxContainer" parent="VBox/Images"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 782.0
+margin_bottom = 260.0
+custom_constants/separation = 5
+
+[node name="Begin" type="ViewportContainer" parent="VBox/Images/HBox"]
+margin_right = 256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+
+[node name="Viewport" type="Viewport" parent="VBox/Images/HBox/Begin"]
+size = Vector2( 256, 256 )
+handle_input_locally = false
+render_target_update_mode = 0
+gui_disable_input = true
+
+[node name="Image" type="ColorRect" parent="VBox/Images/HBox/Begin/Viewport"]
+material = SubResource( 2 )
+margin_right = 256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+
+[node name="Animated" type="ColorRect" parent="VBox/Images/HBox"]
+material = SubResource( 4 )
+margin_left = 261.0
+margin_right = 517.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+
+[node name="Diff" type="ColorRect" parent="VBox/Images/HBox/Animated"]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 8 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBox/Images/HBox/Animated"]
+anims/show = SubResource( 9 )
+
+[node name="Timer" type="Timer" parent="VBox/Images/HBox/Animated"]
+one_shot = true
+
+[node name="End" type="ViewportContainer" parent="VBox/Images/HBox"]
+margin_left = 522.0
+margin_right = 778.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+mouse_filter = 2
+input_pass_on_modal_close_click = false
+
+[node name="Viewport" type="Viewport" parent="VBox/Images/HBox/End"]
+size = Vector2( 256, 256 )
+handle_input_locally = false
+render_target_update_mode = 0
+gui_disable_input = true
+
+[node name="Image" type="ColorRect" parent="VBox/Images/HBox/End/Viewport"]
+material = SubResource( 11 )
+margin_right = 256.0
+margin_bottom = 256.0
+rect_min_size = Vector2( 256, 256 )
+
+[node name="Buttons" type="HBoxContainer" parent="VBox"]
+margin_left = 311.0
+margin_top = 296.0
+margin_right = 475.0
+margin_bottom = 316.0
+size_flags_horizontal = 4
+
+[node name="Export" type="Button" parent="VBox/Buttons"]
+margin_right = 80.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 80, 0 )
+text = "Export"
+
+[node name="Close" type="Button" parent="VBox/Buttons"]
+margin_left = 84.0
+margin_right = 164.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 80, 0 )
+text = "Close"
+
+[connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="value_changed" from="VBox/Settings/Begin" to="." method="_on_Begin_value_changed"]
+[connection signal="value_changed" from="VBox/Settings/End" to="." method="_on_End_value_changed"]
+[connection signal="timeout" from="VBox/Images/HBox/Animated/Timer" to="." method="_on_Timer_timeout"]
+[connection signal="pressed" from="VBox/Buttons/Export" to="." method="_on_Export_pressed"]
+[connection signal="pressed" from="VBox/Buttons/Close" to="." method="queue_free"]

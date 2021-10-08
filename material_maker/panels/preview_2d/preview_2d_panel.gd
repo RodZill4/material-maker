@@ -101,6 +101,8 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			update_shader_options()
 		MENU_EXPORT_AGAIN:
 			export_again()
+		MENU_EXPORT_ANIMATION:
+			export_animation()
 		_:
 			print("unsupported id "+str(id))
 
