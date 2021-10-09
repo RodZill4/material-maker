@@ -9,6 +9,7 @@ onready var value_size = $VBox/Settings/Size
 onready var value_begin = $VBox/Settings/Begin
 onready var value_end = $VBox/Settings/End
 onready var value_images = $VBox/Settings/Images
+onready var value_spritesheet = $VBox/Settings/Spritesheet
 
 onready var image_begin = $VBox/Images/HBox/Begin/Viewport/Image
 onready var image_end = $VBox/Images/HBox/End/Viewport/Image
@@ -89,26 +90,32 @@ func _on_Export_pressed():
 		var begin : float = value_begin.value
 		var end : float = value_end.value
 		var images : int = value_images.value
+		var generate_spritesheet : bool = value_spritesheet.pressed
 		var renderer = mm_renderer.request(self)
 		while renderer is GDScriptFunctionState:
 			renderer = yield(renderer, "completed")
 		image_anim.material.set_shader_param("begin", begin)
 		image_anim.material.set_shader_param("end", begin)
-		renderer = renderer.render_material(self, image_anim.material, size, false)
-		while renderer is GDScriptFunctionState:
-			renderer = yield(renderer, "completed")
-		renderer.save_to_file(filename)
-		var regex : RegEx = RegEx.new()
-		regex.compile("#+")
-		var regex_match : Array = regex.search_all(filename)
+		var spritesheet : Image
 		var filename_fmt
-		if regex_match.size() > 1:
-			renderer.release(self)
-			return
-		elif regex_match.size() == 1:
-			filename_fmt = filename.replace(regex_match[0].strings[0], "%0"+str(regex_match[0].strings[0].length())+"d")
+		if generate_spritesheet:
+			spritesheet = Image.new()
+			spritesheet.create(size * images, size, false, Image.FORMAT_RGBA8)
 		else:
-			filename_fmt = filename.get_basename()+"_%d."+filename.get_extension()
+			renderer = renderer.render_material(self, image_anim.material, size, false)
+			while renderer is GDScriptFunctionState:
+				renderer = yield(renderer, "completed")
+			renderer.save_to_file(filename)
+			var regex : RegEx = RegEx.new()
+			regex.compile("#+")
+			var regex_match : Array = regex.search_all(filename)
+			if regex_match.size() > 1:
+				renderer.release(self)
+				return
+			elif regex_match.size() == 1:
+				filename_fmt = filename.replace(regex_match[0].strings[0], "%0"+str(regex_match[0].strings[0].length())+"d")
+			else:
+				filename_fmt = filename.get_basename()+"_%d."+filename.get_extension()
 		for i in range(0, images):
 			var time : float = begin+(end-begin)*float(i)/float(images)
 			image_anim.material.set_shader_param("begin", time)
@@ -116,7 +123,13 @@ func _on_Export_pressed():
 			renderer = renderer.render_material(self, image_anim.material, size, false)
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
-			renderer.save_to_file(filename_fmt % (i+1))
+			if generate_spritesheet:
+				var image : Image = renderer.get_image()
+				spritesheet.blit_rect(image, Rect2(0, 0, size, size), Vector2(size*i, 0))
+			else:
+				renderer.save_to_file(filename_fmt % (i+1))
 		renderer.release(self)
+		if generate_spritesheet:
+			spritesheet.save_png(filename)
 		image_anim.material.set_shader_param("begin", begin)
 		image_anim.material.set_shader_param("end", end)
