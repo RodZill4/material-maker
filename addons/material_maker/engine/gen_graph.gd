@@ -506,6 +506,7 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 		if node_serialized.hash() != other_node_serialized.hash():
 			node.deserialize(other_node_serialized)
 			node.seed_value = node_seed
+			node.get_tree().call_group("generator_node", "on_generator_changed", node)
 	
 	diff_connections(graph)
 	fix_remotes()
