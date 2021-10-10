@@ -102,10 +102,6 @@ func _on_Export_pressed():
 			spritesheet = Image.new()
 			spritesheet.create(size * images, size, false, Image.FORMAT_RGBA8)
 		else:
-			renderer = renderer.render_material(self, image_anim.material, size, false)
-			while renderer is GDScriptFunctionState:
-				renderer = yield(renderer, "completed")
-			renderer.save_to_file(filename)
 			var regex : RegEx = RegEx.new()
 			regex.compile("#+")
 			var regex_match : Array = regex.search_all(filename)
