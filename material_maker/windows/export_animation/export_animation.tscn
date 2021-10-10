@@ -73,7 +73,6 @@ tracks/1/keys = {
 shader = SubResource( 10 )
 
 [node name="ExportAnimation" type="WindowDialog"]
-visible = true
 anchor_left = 0.211
 anchor_top = 0.204
 anchor_right = 0.824
@@ -207,11 +206,13 @@ margin_right = 546.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 20, 0 )
 
-[node name="Spritesheet" type="CheckBox" parent="VBox/Settings"]
+[node name="Spritesheet" type="OptionButton" parent="VBox/Settings"]
 margin_left = 550.0
-margin_right = 714.0
+margin_right = 638.0
 margin_bottom = 24.0
-text = "Generate spritesheet"
+text = "PNG files"
+items = [ "PNG files", null, false, 0, null, "1 line spritesheet", null, false, 1, null, "2 lines spritesheet", null, false, 2, null, "4 lines spritesheet", null, false, 4, null ]
+selected = 0
 
 [node name="Images" type="MarginContainer" parent="VBox"]
 margin_top = 28.0
@@ -239,7 +240,7 @@ input_pass_on_modal_close_click = false
 [node name="Viewport" type="Viewport" parent="VBox/Images/HBox/Begin"]
 size = Vector2( 256, 256 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
 
 [node name="Image" type="ColorRect" parent="VBox/Images/HBox/Begin/Viewport"]
@@ -282,7 +283,7 @@ input_pass_on_modal_close_click = false
 [node name="Viewport" type="Viewport" parent="VBox/Images/HBox/End"]
 size = Vector2( 256, 256 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
 
 [node name="Image" type="ColorRect" parent="VBox/Images/HBox/End/Viewport"]

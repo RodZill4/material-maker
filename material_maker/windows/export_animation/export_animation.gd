@@ -9,7 +9,7 @@ onready var value_size = $VBox/Settings/Size
 onready var value_begin = $VBox/Settings/Begin
 onready var value_end = $VBox/Settings/End
 onready var value_images = $VBox/Settings/Images
-onready var value_spritesheet = $VBox/Settings/Spritesheet
+onready var value_spritesheet : OptionButton = $VBox/Settings/Spritesheet
 
 onready var image_begin = $VBox/Images/HBox/Begin/Viewport/Image
 onready var image_end = $VBox/Images/HBox/End/Viewport/Image
@@ -90,7 +90,8 @@ func _on_Export_pressed():
 		var begin : float = value_begin.value
 		var end : float = value_end.value
 		var images : int = value_images.value
-		var generate_spritesheet : bool = value_spritesheet.pressed
+		var spritesheet_lines : int = value_spritesheet.get_item_id(value_spritesheet.selected)
+		var spritesheet_columns : int
 		var renderer = mm_renderer.request(self)
 		while renderer is GDScriptFunctionState:
 			renderer = yield(renderer, "completed")
@@ -98,9 +99,10 @@ func _on_Export_pressed():
 		image_anim.material.set_shader_param("end", begin)
 		var spritesheet : Image
 		var filename_fmt
-		if generate_spritesheet:
+		if spritesheet_lines > 0:
+			spritesheet_columns = (images-1)/spritesheet_lines+1
 			spritesheet = Image.new()
-			spritesheet.create(size * images, size, false, Image.FORMAT_RGBA8)
+			spritesheet.create(size * spritesheet_columns, size * spritesheet_lines, false, Image.FORMAT_RGBA8)
 		else:
 			var regex : RegEx = RegEx.new()
 			regex.compile("#+")
@@ -119,13 +121,13 @@ func _on_Export_pressed():
 			renderer = renderer.render_material(self, image_anim.material, size, false)
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
-			if generate_spritesheet:
+			if spritesheet_lines > 0:
 				var image : Image = renderer.get_image()
-				spritesheet.blit_rect(image, Rect2(0, 0, size, size), Vector2(size*i, 0))
+				spritesheet.blit_rect(image, Rect2(0, 0, size, size), Vector2(size*(i%spritesheet_columns), size*(i/spritesheet_columns)))
 			else:
 				renderer.save_to_file(filename_fmt % (i+1))
 		renderer.release(self)
-		if generate_spritesheet:
+		if spritesheet_lines > 0:
 			spritesheet.save_png(filename)
 		image_anim.material.set_shader_param("begin", begin)
 		image_anim.material.set_shader_param("end", end)
