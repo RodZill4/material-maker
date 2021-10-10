@@ -716,20 +716,23 @@ func find_graph_with_label(label: String) -> GraphNode:
 			return c
 	return null
 
-func _on_ButtonRegenCopies_pressed():
-	for c in get_children():
-		if c is GraphNode and c.generator is MMGenGraph and c.generator.get_type_name().begins_with("copy_"):
-			var gen = c.generator
-			var copy_from_label = gen.get_type_name().substr(5,-1)
-			var label = gen.get_type_name()
+func get_propagation_targets(source : MMGenGraph, parent : MMGenGraph = null) -> Array:
+	if parent == null:
+		parent = top_generator
+	var rv : Array = []
+	for c in parent.get_children():
+		if c is MMGenGraph and c != source:
+			if c.get_type_name() == source.get_type_name():
+				rv.push_back(c)
+			else:
+				rv.append_array(get_propagation_targets(source, c))
+	return rv
 
-			var copy_from = find_graph_with_label(copy_from_label)
-			
-			if copy_from == null:
-				continue
-			
-			gen.apply_diff_from(copy_from.generator)
-#
+func propagate_node_changes(source : MMGenGraph) -> void:
+	for c in get_propagation_targets(source):
+		c.apply_diff_from(source)
+	
 	var main_window = get_node("/root/MainWindow")
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
+
