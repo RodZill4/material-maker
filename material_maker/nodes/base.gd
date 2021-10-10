@@ -238,4 +238,12 @@ func clear_connection_labels() -> void:
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
 		MENU_PROPAGATE_CHANGES:
-			get_parent().call_deferred("propagate_node_changes", generator)
+			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
+			dialog.add_cancel("Cancel");
+			add_child(dialog)
+			var result = dialog.ask()
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result == "ok":
+				get_parent().call_deferred("propagate_node_changes", generator)
