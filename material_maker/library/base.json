@@ -838,7 +838,7 @@
 
 			},
 			"tree_item": "3D/Texture/Apply",
-			"type": "tex3d_apply"
+			"type": "tex3d_apply2"
 		},
 		{
 			"icon": "3d_texture_apply_toinvuvmap",
