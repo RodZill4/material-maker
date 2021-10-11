@@ -27,13 +27,6 @@ The **Anisotropic noise** node accepts the following parameters:
 
 * *Interpolation* is the type of interpolation used for the smoothness, 0 is linear interpolation, 1 is hermite interpolation
 
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
-
 Example images
 ++++++++++++++
 

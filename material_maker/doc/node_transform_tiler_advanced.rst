@@ -24,6 +24,8 @@ The **Advanced Tiler** node accepts nine inputs:
 * The *Translate X* and *Translate Y* input maps are used to offset each instance.
 * The *Rotate* input map is used to rotate each instance.
 * The *Scale X* and *Scale Y* input maps are used to scale each instance.
+* *Variations*: if checked, the node will tile different variations of its input
+  (i.e. roll a different seed for each instance)
 
 The **Remap** node can be used to generate input maps (*Translate X*, *Translate Y*, *Rotate*,
 *Scale X* and *Scale Y*) easily. It takes a greyscale image as input and defines the

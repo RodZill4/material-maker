@@ -58,13 +58,6 @@ The **Uneven Bricks** node accepts the following parameters:
 
 * the *Corner* parameter defines the size of each corner (for the 6th output texture).
 
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
-
 Example images
 ++++++++++++++
 

@@ -9,7 +9,7 @@ The **Capsule** node generates a 3d signed distance function for a capsule.
 Inputs
 ::::::
 
-The **Capsule** node does not accept any input.
+The **Capsule** node accepts an optional profile as input (use a Tonality node to create it).
 
 Outputs
 :::::::

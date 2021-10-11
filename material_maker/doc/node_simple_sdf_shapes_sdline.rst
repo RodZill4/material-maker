@@ -11,7 +11,7 @@ is shown in the example image below).
 Inputs
 ::::::
 
-The **sdLine** node does not accept any input.
+The **sdLine** node accepts an optional profile as input (use a Tonality node to create it).
 
 Outputs
 :::::::

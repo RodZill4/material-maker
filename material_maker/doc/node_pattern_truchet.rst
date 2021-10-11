@@ -25,13 +25,6 @@ The **Truchet** node accepts the following parameters:
 
 * the *Size* parameter is the number of patterns (on both axes) in the generated image. 
 
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
-
 Example images
 ++++++++++++++
 
