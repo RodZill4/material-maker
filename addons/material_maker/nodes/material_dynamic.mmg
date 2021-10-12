@@ -16,14 +16,14 @@
 			"type": "Color"
 		},
 		"ao": 1,
-		"depth_scale": 0.5,
+		"depth_scale": 0.2,
 		"emission_energy": 1,
-		"flags_transparent": true,
-		"metallic": 0,
+		"flags_transparent": false,
+		"metallic": 1,
 		"normal": 1,
 		"roughness": 1
 	},
-	"seed": 0,
+	"seed": -34383,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
@@ -53,7 +53,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n$definitions hlsl,rename_buffers,unity\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl,rename_buffers,unity\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n\t\t\to.Normal = $normal_tex(uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
+						"template": "Shader \"Custom/NewSurfaceShader\"\n{\n    Properties {\n$begin_buffers\n\t    texture_$(buffer_index) (\"Texture $(buffer_index)\", 2D) = \"white\" {}\n$end_buffers\n\t    _MainTex (\"Foo\", 2D) = \"white\" {}\n    }\n    SubShader {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 200\n        CGPROGRAM\n        #pragma surface surf Standard fullforwardshadows\n        #pragma target 3.0\n\t\t\n        sampler2D _MainTex;\n        struct Input {\n            float2 uv_MainTex;\n        };\n        UNITY_INSTANCING_BUFFER_START(Props)\n        UNITY_INSTANCING_BUFFER_END(Props)\n\t\t\n$definitions hlsl,rename_buffers,unity\n\t\t\n        void surf (Input IN, inout SurfaceOutputStandard o) {\n      \t\tfloat _seed_variation_ = 0.0;\n\t\t\tfloat2 uv = IN.uv_MainTex;\n$begin_generate hlsl,rename_buffers,unity\n\t\t\to.Albedo = $albedo_tex(uv).rgb*$albedo_color.rgb;\n            o.Metallic = $metallic_tex(uv)*$metallic;\n            o.Smoothness = 1.0-$roughness_tex(uv)*$roughness;\n            o.Alpha = 1.0;\n\t\t\to.Normal = $normal_tex(uv)*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0);\n$end_generate\n        }\n        ENDCG\n    }\n    FallBack \"Diffuse\"\n}\n",
 						"type": "template"
 					},
 					{
@@ -82,7 +82,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).mm2ue",
-						"template": "/*\nInstructions to setup this material:\n- copy material_dynamic.uasset and open the copy\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n- copy the shader code below and paste it into the Custom node\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv, out float metallic, out float roughness, out float3 normal) {\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n\t\tfixed4 rv = tofloat4($albedo_tex(uv), 1.0)*$albedo_color;\n\t\tmetallic = $metallic_tex(uv)*$metallic;\n\t\troughness = $roughness_tex(uv)*$roughness;\n\t\tnormal = $normal_tex(uv)*float3(-1.0, -1.0, -1.0)+float3(1.0, 1.0, 1.0);\n        return rv;\n$end_generate\n    }\n};\nFunctions f;\nfixed4 albedo = f.generated_shader(TexCoords, metallic, roughness, normal);\nreturn albedo;\n",
+						"template": "/*\nInstructions to setup this material:\n- copy material_dynamic.uasset and open the copy\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n- copy the shader code below and paste it into the Custom node\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv, out float metallic, out float roughness, out float3 normal) {\n      \tfloat _seed_variation_ = 0.0;\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n\t\tfixed4 rv = tofloat4($albedo_tex(uv), 1.0)*$albedo_color;\n\t\tmetallic = $metallic_tex(uv)*$metallic;\n\t\troughness = $roughness_tex(uv)*$roughness;\n\t\tnormal = $normal_tex(uv)*float3(-1.0, -1.0, -1.0)+float3(1.0, 1.0, 1.0);\n        return rv;\n$end_generate\n    }\n};\nFunctions f;\nfixed4 albedo = f.generated_shader(TexCoords, metallic, roughness, normal);\nreturn albedo;\n",
 						"type": "template"
 					},
 					{
