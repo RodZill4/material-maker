@@ -281,7 +281,7 @@ ui_next_tab={
 
 [locale]
 
-translations=PoolStringArray( "res://material_maker/locale/fr.po" )
+translations=PoolStringArray(  )
 
 [logging]
 

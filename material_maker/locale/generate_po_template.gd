@@ -19,7 +19,7 @@ class TranslationStrings:
 		word_regex = RegEx.new()
 		word_regex.compile("[a-zA-Z]{2}")
 		tr_regex = RegEx.new()
-		tr_regex.compile("tr\\s*\\(\"(.*)\"\\)")
+		tr_regex.compile("tr\\s*\\(\"(.*?)\"\\)")
 		menu_regex = RegEx.new()
 		menu_regex.compile("menu=\"([^\"]*)\".*description=\"([^\"]*)")
 		panel_regex = RegEx.new()
@@ -28,14 +28,63 @@ class TranslationStrings:
 		tscn_regex.compile("([a-z_]+)\\s*=\\s*\"(.*)\"")
 
 	func read_language_file(fn : String):
+		var input_translation : Translation
+		match fn.get_extension():
+			"csv":
+				print("Reading %s" % fn)
+				input_translation = read_language_file_csv(fn)
+			"po":
+				print("Reading %s" % fn)
+				input_translation = load(fn)
+			_:
+				print("Unsupported translation file %s" % fn)
+				return
+		
+		var translation : Translation = Translation.new()
+		translation.locale = input_translation.locale
+		var translated_string : Array = []
+		for s in strings:
+			if input_translation.get_message(s.string) != "":
+				translated_string.push_back(s.string)
+				translation.add_message(s.string, input_translation.get_message(s.string))
+			else:
+				var found : bool = false
+				for k in input_translation.get_message_list():
+					if s.string.to_lower() == k.to_lower():
+						found = true
+						translated_string.push_back(k)
+						translation.add_message(s.string, input_translation.get_message(k))
+						break
+				if !found:
+					found = true
+					var t : PoolStringArray = PoolStringArray()
+					for subs in s.string.split("\n"):
+						if input_translation.get_message(subs) != "":
+							t.push_back(input_translation.get_message(subs))
+							translated_string.push_back(subs)
+						else:
+							found = false
+							break
+					if found:
+						translation.add_message(s.string, t.join("\n"))
+					else:
+						pass
+						#print("no translation for '%s'" % s.string)
+		return translation
+	
+	func read_language_file_csv(fn : String):
+		var input_translation : Translation = Translation.new()
 		var f : File = File.new()
 		if f.open(fn, File.READ) != OK:
-			return null
-		var file_strings : Dictionary = {}
+			print("Error")
+			return input_translation
 		var count : int = 0
-		var sep_char = f.get_line()[2]
+		var l = f.get_line()
+		var sep_char = l[2]
+		input_translation.locale = l.split(sep_char)[1]
+		print(input_translation.locale)
 		while !f.eof_reached():
-			var l : String = f.get_line()
+			l = f.get_line()
 			var line
 			for sep in [ "\""+sep_char+"\"", "\""+sep_char, sep_char+"\"", sep_char ]:
 				line = l.split(sep)
@@ -46,53 +95,22 @@ class TranslationStrings:
 						line[1] = line[1].left(line[1].length()-1)
 					break
 			if line.size() == 2:
-				file_strings[line[0].replace("\\n", "\n")] = line[1].replace("\\n", "\n")
+				input_translation.add_message(line[0].replace("\\n", "\n"), line[1].replace("\\n", "\n"))
 				count += 1
 			else:
 				pass
-				#print(l)
 				#print(line)
 				#print(line.size())
 		f.close()
 		print("Extracted %d strings from %s" % [ count, fn ])
-		
-		var translation : Translation = Translation.new()
-		var translated_string : Array = []
-		for s in strings:
-			if file_strings.has(s.string):
-				translated_string.push_back(s.string)
-				translation.add_message(s.string, file_strings[s.string])
-			else:
-				var found : bool = false
-				for k in file_strings.keys():
-					if s.string.to_lower() == k.to_lower():
-						found = true
-						translated_string.push_back(k)
-						translation.add_message(s.string, file_strings[k])
-						break
-				if !found:
-					found = true
-					var t : PoolStringArray = PoolStringArray()
-					for subs in s.string.split("\n"):
-						if file_strings.has(subs):
-							t.push_back(file_strings[subs])
-							translated_string.push_back(subs)
-						else:
-							found = false
-							break
-					if found:
-						translation.add_message(s.string, t.join("\n"))
-					else:
-						pass
-						print("no translation for '%s'" % s.string)
-		return translation
+		return input_translation
 
-	func save_csv(fn : String, translation = null):
+	func save_csv(fn : String, translation : Translation = null):
 		if translation == null:
 			return
 		var f : File = File.new()
 		if f.open(fn, File.WRITE) == OK:
-			f.store_line("id|zh")
+			f.store_line("id|"+translation.locale)
 			for s in strings:
 				f.store_line("%s|%s" % [ s.string.replace("\n", "\\n"), translation.get_message(s.string).replace("\n", "\\n") ])
 			f.close()
@@ -131,12 +149,6 @@ class TranslationStrings:
 				f.store_line("")
 			f.close()
 
-	func strings_to_clipboard():
-		var c : String = ""
-		for s in strings:
-			c += s.string+";"+"\n"
-		OS.clipboard = c
-
 	func add_string(s : String, r : String) -> bool:
 		if word_regex.search(s) == null:
 			return false
@@ -161,10 +173,11 @@ class TranslationStrings:
 			var line_number = 1
 			while ! f.eof_reached():
 				var l : String = f.get_line()
-				var result = tr_regex.search(l)
+				var result = tr_regex.search_all(l)
 				if result != null:
-					if add_string(result.strings[1], fn+":"+str(line_number)):
-						string_count += 1
+					for r in result:
+						if add_string(r.strings[1], fn+":"+str(line_number)):
+							string_count += 1
 				else:
 					# extract menus from code (Material Maker specific)
 					result = menu_regex.search(l)
@@ -310,6 +323,7 @@ func _run():
 	for f in find_files("res://material_maker/library", [ "json" ]):
 		string_count += ts.extract_strings_from_library(f)
 	ts.save("res://material_maker/locale/material-maker.pot")
-	ts.strings_to_clipboard()
-	ts.save_csv("user://locale/zh.csv", ts.read_language_file("user://locale/zh_translation_utf_8.csv"))
+	
+	ts.save_csv("res://material_maker/locale/fr.csv", ts.read_language_file("res://material_maker/locale/fr.csv"))
+	ts.save_csv("res://material_maker/locale/zh.csv", ts.read_language_file("res://material_maker/locale/zh.csv"))
 	
