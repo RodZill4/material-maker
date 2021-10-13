@@ -38,7 +38,7 @@
 			{
 				"control": "P1.x",
 				"default": 0,
-				"label": "Center X:",
+				"label": "Center X",
 				"longdesc": "The position of the scale center",
 				"max": 1,
 				"min": -1,
@@ -50,7 +50,7 @@
 			{
 				"control": "P1.y",
 				"default": 0,
-				"label": "Center Y:",
+				"label": "Center Y",
 				"longdesc": "The poisition of the scale center",
 				"max": 1,
 				"min": -1,
@@ -62,7 +62,7 @@
 			{
 				"control": "Scale1.x",
 				"default": 1,
-				"label": "Scale X:",
+				"label": "Scale X",
 				"longdesc": "The scale amount along the X axis",
 				"max": 50,
 				"min": 0,
@@ -74,7 +74,7 @@
 			{
 				"control": "Scale1.y",
 				"default": 1,
-				"label": "Scale Y:",
+				"label": "Scale Y",
 				"longdesc": "The scale amount along the Y axis",
 				"max": 50,
 				"min": 0,

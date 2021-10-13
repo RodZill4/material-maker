@@ -5,10 +5,15 @@ var predefined_generators : Dictionary = {}
 
 var current_project_path : String = ""
 
+const CHECK_PREDEFINED : bool = false
+
 func _ready()-> void:
 	update_predefined_generators()
 
 func update_predefined_generators()-> void:
+	var parser
+	if CHECK_PREDEFINED:
+		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	predefined_generators = {}
 	for path in MMPaths.get_nodes_paths():
 		var dir = Directory.new()
@@ -19,7 +24,13 @@ func update_predefined_generators()-> void:
 				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
 					var file : File = File.new()
 					if file.open(path+"/"+file_name, File.READ) == OK:
-						predefined_generators[file_name.get_basename()] = parse_json(file.get_as_text())
+						var generator = parse_json(file.get_as_text())
+						if CHECK_PREDEFINED:
+							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
+								var parse_result = parser.parse(generator.shader_model.global)
+								if parse_result.status != "OK":
+									print(file_name+" has errors in global")
+						predefined_generators[file_name.get_basename()] = generator
 						file.close()
 				file_name = dir.get_next()
 	if false:

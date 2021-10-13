@@ -36,13 +36,6 @@ The **Voronoi** noise node accepts the following parameters:
 
 * *Randomness* defines the location of feature points.
 
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
-
 Example images
 ++++++++++++++
 

@@ -13,6 +13,10 @@ vec3 rand3(vec2 x) {
                               dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);
 }
 
+float param_rnd(float minimum, float maximum, float seed) {
+	return minimum+(maximum-minimum)*rand(vec2(seed));
+}
+
 vec3 rgb2hsv(vec3 c) {
 	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
 	vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);

@@ -16,6 +16,13 @@ On Windows, you can also install Material Maker using [Scoop](https://scoop.sh):
 scoop bucket add extras
 scoop install material-maker
 ```
+... or [Chocolatey](https://chocolatey.org/) (default or portable install):
+```text
+choco install material-maker
+```
+```text
+choco install material-maker.portable
+```
 
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 

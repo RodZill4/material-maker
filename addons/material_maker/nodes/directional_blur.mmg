@@ -59,7 +59,7 @@
 			"type": "remote",
 			"widgets": [
 				{
-					"label": "Grid size:",
+					"label": "Grid size",
 					"linked_widgets": [
 						{
 							"node": "buffer",

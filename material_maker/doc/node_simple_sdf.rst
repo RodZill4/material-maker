@@ -33,6 +33,7 @@ Shapes
 	node_simple_sdf_shapes_sdrhombus
 	node_simple_sdf_shapes_sdarc
 	node_simple_sdf_shapes_sdpolygon
+	node_simple_sdf_shapes_sdngon
 
 Operators
 +++++++++
