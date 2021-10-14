@@ -70,6 +70,12 @@ rect_min_size = Vector2( 0, 10 )
 script = ExtResource( 4 )
 config_variable = "locale"
 
+[node name="InstallLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+margin_left = 100.0
+margin_right = 152.0
+margin_bottom = 20.0
+text = "Install"
+
 [node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
 margin_top = 24.0
 margin_right = 296.0
@@ -390,6 +396,7 @@ text = "Cancel"
 
 [connection signal="popup_hide" from="." to="." method="queue_free"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

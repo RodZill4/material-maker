@@ -21,9 +21,9 @@ class TranslationStrings:
 		tr_regex = RegEx.new()
 		tr_regex.compile("tr\\s*\\(\"(.*?)\"\\)")
 		menu_regex = RegEx.new()
-		menu_regex.compile("menu=\"([^\"]*)\".*description=\"([^\"]*)")
+		menu_regex.compile("menu=\"([^\"]*?)\".*description=\"([^\"]*)")
 		panel_regex = RegEx.new()
-		panel_regex.compile("name=\"([^\"]*)\".*scene=")
+		panel_regex.compile("name=\"([^\"]*?)\".*scene=")
 		tscn_regex = RegEx.new()
 		tscn_regex.compile("([a-z_]+)\\s*=\\s*\"(.*)\"")
 
@@ -174,7 +174,7 @@ class TranslationStrings:
 			while ! f.eof_reached():
 				var l : String = f.get_line()
 				var result = tr_regex.search_all(l)
-				if result != null:
+				if !result.empty():
 					for r in result:
 						if add_string(r.strings[1], fn+":"+str(line_number)):
 							string_count += 1
@@ -225,6 +225,8 @@ class TranslationStrings:
 				if json.has("type"):
 					match json.type:
 						"graph":
+							if json.has("label") and add_string(json.label, fn):
+								string_count += 1
 							if json.has("shortdesc") and add_string(json.shortdesc, fn):
 								string_count += 1
 							if json.has("longdesc") and add_string(json.longdesc, fn):
@@ -245,6 +247,8 @@ class TranslationStrings:
 														string_count += 1
 						"material_export","shader":
 							if json.has("shader_model"):
+								if json.shader_model.has("name") and add_string(json.shader_model.name, fn):
+									string_count += 1
 								if json.shader_model.has("shortdesc") and add_string(json.shader_model.shortdesc, fn):
 									string_count += 1
 								if json.shader_model.has("longdesc") and add_string(json.shader_model.longdesc, fn):
@@ -316,14 +320,30 @@ func _run():
 				string_count += ts.extract_strings_from_gd(f)
 			"tscn":
 				string_count += ts.extract_strings_from_tscn(f)
+	ts.save("res://material_maker/locale/material-maker.pot")
 	print("Extracting strings from predefined nodes")
 	for f in find_files("res://addons/material_maker", [ "mmg" ]):
 		string_count += ts.extract_strings_from_mmg(f)
 	print("Extracting strings from libraries")
 	for f in find_files("res://material_maker/library", [ "json" ]):
 		string_count += ts.extract_strings_from_library(f)
-	ts.save("res://material_maker/locale/material-maker.pot")
+	ts.save("res://material_maker/locale/material-maker-all.pot")
 	
-	ts.save_csv("res://material_maker/locale/fr.csv", ts.read_language_file("res://material_maker/locale/fr.csv"))
-	ts.save_csv("res://material_maker/locale/zh.csv", ts.read_language_file("res://material_maker/locale/zh.csv"))
+	var dir : Directory = Directory.new()
+	var path = "res://material_maker/locale/translations"
+	if dir.open("res://material_maker/locale/translations") == OK:
+		var languages : Dictionary = {}
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			var language = file_name.get_basename()
+			if ! languages.has(language) or file_name.get_extension() != "csv":
+				languages[language] = path.plus_file(file_name)
+			file_name = dir.get_next()
+		for l in languages.keys():
+			print("Processing %s" % l)
+			var in_file : String = languages[l]
+			var out_file : String = languages[l].get_basename()+".csv"
+			print("%s -> %s" % [ in_file, out_file ])
+			ts.save_csv(out_file, ts.read_language_file(in_file))
 	

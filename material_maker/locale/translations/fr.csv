@@ -1,0 +1,1544 @@
+id|fr
+Material Maker|Material Maker
+Powered by|
+File|Fichier
+New material|
+New paint project|
+Load|
+Load material from website|
+Load recent|
+Save|
+Save as...|
+Save all...|
+Export material|
+Close|
+Quit|
+Edit|
+Undo|
+Redo|
+Cut|
+Copy|
+Paste|
+Duplicate|
+Select All|
+Select None|
+Invert Selection|
+Load Selection|
+Save Selection|
+Set theme|
+Preferences|
+View|
+Center view|
+Reset zoom|
+Show/Hide side panels|
+Panels|
+Tools|
+Create|
+Create group|
+Make selected nodes editable|
+Add selected node to library|
+Add current brush to library|
+Create a screenshot of the current graph|
+Painting|
+Emission|
+Normal|
+Depth|
+Texture Size|
+Set environment|
+Environment editor|
+Generate screenshots for the library nodes|
+Help|
+User manual|
+Show selected library item documentation|
+Report a bug|
+Material Maker on reddit|
+About|
+Library|
+Preview2D|
+Preview3D|
+Preview2D (2)|
+Histogram|
+Hierarchy|
+Reference|
+Brushes|
+Layers|
+Parameters|
+Unlock seed|
+Lock seed|
+Copy seed|
+Paste seed|
+Change seed (left mouse button) / Show seed menu (right mouse button)|
+Double-click to write a comment|Double-cliquez pour écrire un commentaire
+Show shader|Afficher le shader
+Shadertoy|Shadertoy
+Copy to clipboard|Copier dans le presse-papiers
+Greyscale|Nuances de gris
+Min:|Min. :
+Max:|Max. :
+Step:|Pas :
+Default:|Par défaut :
+OK|OK
+Cancel|Annuler
+ab|
+Luminance|Luminosité
+Albedo alpha:|Opacité albedo :
+Metallic alpha:|Opacité métallique :
+Roughness alpha:|Opacité rugosité :
+Emission alpha:|Opacité émission :
+Normal map alpha:|
+Depth alpha:|Opacité profondeur :
+Occlusion alpha:|
+Layer name|
+albedo|
+Library name:|Nom de bibliothèque :
+Library file:|Fichier de bibliothèque :
+Click to enter a path|Cliquez pour entrer un chemin
+Manage Libraries|
+Filter:|Filtrer :
+Brush size|Taille de la brosse
+Brush hardness|Dureté de la brosse
+Brush opacity|Opacité de la brosse
+Brush spacing|Espacement de la brosse
+None|Aucun
+Mesh configuration|Configuration du maillage
+UV Scale:|Échelle UV :
+Tesselated|Tesselated
+Model|Modèle
+Select|
+Configure|
+Rotate|
+Off|
+Slow|
+Medium|
+Fast|
+Generate map|
+Mesh normal|
+Inverse UV|
+Curvature|
+Ambient Occlusion|
+Thickness|
+Environment|Environnement
+Custom|Personnalisé
+Presets|
+Invert|
+Default|Par défaut
+Apply|Appliquer
+© 2018-2021 Rodolphe Suescun and contributors|
+ Godot Engine|
+99% of Material Maker's code is the awesome Godot Engine|
+Node|Nœud
+path/to/node|chemin/vers/nœud
+Short Description:|Description courte :
+Name:|Nom :
+HDRI URL:|URL vers HDRI :
+Color:|Couleur :
+Sky Energy:|Énergie du ciel :
+Ambient color:|Couleur ambiante :
+Ambient Energy:|Énergie ambiante :
+Sky contribution:|Contribution du ciel :
+Sun color:|Couleur du soleil :
+Sun Energy:|Énergie du soleil :
+Sun Direction:|Direction du soleil :
+Sun Angle:|Angle du soleil :
+Size:|
+Begin:|
+End:|
+Images:|
+PNG files|
+Export|
+Recent|
+Favorite|
+blah|blah
+Export target:|
+Extension:|
+Condition:|
+Type:|
+Texture|
+Output:|
+Model:|Modèle :
+Model file|Fichier de modèle
+Resolution:|Résolution :
+Project:|Projet :
+Project file|Fichier de projet
+Value:|Valeur :
+name|nom
+Label|Label
+Parameters:|Paramètres :
+Inputs:|Entrées :
+Outputs:|Sorties :
+Includes:|Inclus :
+float|float
+Control:|Contrôle :
+Confirm when quitting the application|Demander confirmation lors de la fermeture de l'application
+Language:|
+Install|
+Confirm when closing a project|Demander confirmation lors de la fermeture d'un projet
+UI scale (0 = auto):|Échelle UI (0 = automatique) :
+3D preview resolution:|Résolution de l'aperçu 3D :
+3D preview tesselation detail:|Résolution de la tesselation dans l'aperçu 3D :
+3D preview sun shadow (requires restart)|
+Enable VSync|Activer la synchronisation verticale
+FPS limit:|Limite de FPS :
+Idle FPS limit:|Limite de FPS lorsque inactif :
+Ray count:|Nombre de rayons :
+Ray length:|Longueur des rayons :
+Denoise radius:|Rayon du débruitage :
+Doing this, doing that|Doing this, doing that
+AdjustHSV|
+Adjust HSV|
+Adjusts the Hue, Saturation and Value of its input|
+Hue|
+The Hue adjustment|
+Saturation|
+The Saturation adjustment|
+Value|
+The Value adjustment|
+Input|
+The input image|
+Output|
+Shows the image with adjusted Hue, Saturation and Value|
+Arc pavement|
+Draws a white shape on a black background|
+Repeat:|
+Repeat|
+The number of repetitions of the whole pattern|
+Rows:|
+Rows|
+The number of rows|
+Bricks:|
+Bricks|
+The number of bricks per row|
+Mortar:|
+Mortar|
+The width of the space between bricks|
+Bevel:|
+Bevel|
+The width of the edge of each brick|
+Bricks pattern|
+A greyscale image that shows the bricks pattern|
+Random color|
+A random color for each brick|
+Brick UV|
+An UV map output for each brick, to be connected to the Map input of a CustomUV node|
+Auto Tones|
+Finds the minimum and maximum values in the input texture and tone maps it to the full 0.0 - 1.0 range.|
+in|
+out|
+Shows the generated remapped image|
+param0|
+Size|
+Buffers are used to find the mininum and maximum values for the input image. If the input has small details a higher resolution buffer might be needed to capture precise min and max values.\n\nNote: The output itself will not be buffered.|
+Beehive|
+Hexagonal tiles pattern|
+Draws a greyscale hexagonal tiles pattern|
+Size X|
+Size.x|
+The number of columns of the pattern|
+Size Y|
+Size.y|
+The number of rows of the pattern|
+Shows the greyscale pattern|
+Shows a random color for each hexagonal tile|
+UV map|
+Shows an UV map to be connected to the UV map port of the Custom UV node|
+Blend|
+Blends its input, using an optional mask|
+Blend mode|
+The algorithm used to blend the inputs|
+Dissolve|
+Multiply|
+Screen|
+Overlay|
+Hard Light|
+Soft Light|
+Burn|
+Dodge|
+Lighten|
+Darken|
+Difference|
+Opacity|
+The opacity of the blend operation|
+Source1|
+Foreground|
+The foreground input|
+Source2|
+Background|
+The background input|
+Mask|
+The optional opacity mask|
+Shows the result of the blend operation|
+Box|
+Center X|
+Center.x|
+X coordinate of the center of the box|
+Center Y|
+Center.y|
+Y coordinate of the center of the box|
+Center Z|
+Center.z|
+Z coordinate of the center of the box|
+Size along X axis|
+Size along Y axis|
+Size Z|
+Size.z|
+Size along Z axis|
+Rot X|
+Rot.x|
+Rotation angle around X axis|
+Rot Y|
+Rot.y|
+Rotation angle around Y axis|
+Rot Z|
+Rot.z|
+A heightmap of the specified box|
+Simple bricks patterns|
+Generates different bricks patterns, with many useful outputs.|
+Pattern|
+The type of brick pattern|
+Running bond|
+Running bond (2)|
+HerringBone|
+Basket weave|
+Spanish bond|
+The number of rows of a pattern|
+Columns|
+The number of columns of a pattern|
+Offset|
+The offset of the pattern (not useful for all patterns)|
+Round|
+The radius of the round corners of bricks|
+Corner|
+The size of the corner part of each brick (only used by the Corner UV output)|
+Mortar map|
+A map that affects the Mortar parameter|
+Bevel map|
+A map that affects the Bevel parameter|
+Round map|
+A map that affects the Round parameter|
+Position.x|
+The position of each brick along the X axis|
+Position.y|
+The position of each brick along the Y axis|
+Corner UV|
+An UV map output for each brick corner, to be connected to the Map input of a CustomUV node|
+Direction|
+The direction of each brick (white: horizontal, black: vertical)|
+Bricks NonTileable|
+Uneven Bricks|
+Uneven bricks|
+Generates an uneven bricks pattern.|
+Iterations|
+The number of iterations of the brick split operation|
+Min size|
+Minimum size|
+The minimum size of a brick|
+Randomness|
+The randomness of the pattern|
+Brightness/Contrast|
+Adjusts the Brightness and Contrast of its input|
+Brightness|
+The Brightness adjustment|
+Contrast|
+The Contrast adjustment|
+Shows the image with modified Brightness and Contrast|
+Select From ID|
+CircleMap|
+Maps its input into a circle|
+Radius|
+The radius of the circle where the input is mapped|
+The number of repetitions of the input image around the circle|
+The input image to be remapped|
+Shows the remapped image|
+Circle Splatter|
+Spreads several occurences of an input image in a circle or spiral pattern.|
+Count|
+The number of occurences of the input image|
+Rings|
+The number of rings of the circle pattern|
+Inputs|
+The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.|
+Scale X|
+Scale.x|
+The scale of input images on the X axis|
+Scale Y|
+Scale.y|
+The scale of input images on the Y axis|
+The radius of the outer circle pattern|
+Spiral|
+The type of pattern:\n- 0: circles\n- 1: spiral|
+Inc Rotate|
+IncRotate|
+The rotate increment along the pattern|
+Inc Scale|
+IncScale|
+The scale increment of the pattern|
+Rnd Rotate|
+RndRotate|
+The random rotation applied to each image instance|
+Rnd Scale|
+RndScale|
+The random scale applied to each image instance|
+Rnd Value|
+RndValue|
+The random greyscale value applied to each image instance|
+The input image or atlas of 4 or 16 input images|
+The mask applied to the pattern|
+Shows the generated pattern|
+Instance map|
+Shows a random color for each instance of the input image|
+Color Circle Splatter|
+Rnd Opacity|
+RndOpacity|
+The random opacity applied to each image instance|
+Circular Gradient|
+Number of repetitions of the gradient|
+Gradient|
+Gradient to be spread on the image|
+Color Noise|
+Generates a grid made of random color squares|
+Grid Size|
+The grid size|
+Shows the noise pattern|
+Colorize|
+Remaps a greyscale image to a custom gradient|
+The gradient to which the input is remapped|
+The input greyscale image|
+The remapped RGBA image|
+Combine|
+Combines 4 greyscale inputs into an RGBA image|
+Red|
+The greyscale input for the red channel|
+Green|
+The greyscale input for the green channel|
+Blue|
+The greyscale input for the blue channel|
+Alpha|
+The greyscale input for the alpha channel|
+Shows the combined RGBA image|
+Compare|
+Curve|
+AX|
+Position on X axis of the first control point|
+AY|
+Position on Y axis of the first control point|
+BX|
+Position on X axis of the second control point|
+BY|
+Position on Y axis of the second control point|
+CX|
+Position on X axis of the third control point|
+CY|
+Position on Y axis of the third control point|
+Width|
+Width of the curve pattern|
+Number of repetitions of the input pattern|
+Input pattern to be drawn along the curve|
+An image showing the specified curve|
+Custom UV|
+Custom UV remapper|
+Remaps an Input image using a custom UV map.|
+The scale of the input image along the X axis.|
+The scale of the input image along the Y axis.|
+The random rotation applied to each remapped instance.|
+The random scale applied to each remapped instance.|
+The image or atlas of images to be remapped.|
+UV|
+Map|
+The custom UV map to be used for remapping.|
+Decompose|
+Decomposes an RGBA input into 4 greyscale images|
+The RGBA input image|
+Shows the Red channel of the input|
+Shows the Green channel of the input|
+Shows the Blue channel of the input|
+Shows the Alpha channel of the input|
+Default color|
+Denoiser|
+Fast  spatial deNoise filter, with circular gaussian kernel.|
+The input image to be denoised|
+The resolution of the denoiser|
+param1|
+Sigma|
+Standard Deviation sigma radius|
+param2|
+kSigma|
+K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma|
+param3|
+Sharpening|
+Edge sharpening threshold|
+Dilate|
+Dilates the white areas of a mask, using the colors of an optional input|
+The resolution of the input images|
+Length|
+The length of the dilate effect|
+Fill|
+0 to generate a gradient to black while dilating, 1 to fill with input color|
+Distance function|
+mask|
+The input mask whose white areas will be dilated|
+source|
+Source|
+The optional source for colors|
+Shows the dilated image|
+Distance pass 1|
+Distance pass 2|
+Euclidian|
+Manhattan|
+Chebyshev|
+Distance pass 3|
+Directional Blur|
+Directional blur|
+Applies a directional gaussian blur to its input|
+The resolution of the input|
+The strength of the blur filter|
+Angle|
+The angle of the directional blur effect|
+amount|
+Strength map|
+A map that controls the strength of the blur filter|
+port0|
+Shows the generated blurred image|
+Edge detect|
+An edge detect filter that detects edges along all directions and draws them in white on a black background|
+The resolution of the input image|
+Threshold|
+Shows the generated outlines|
+Edge detect 1|
+Edge detect 2|
+An edge detect filter that detects edges horizontally and vertically and draws them in white on a black background|
+Edge detect 3|
+An edge detect filter that detects edges along diagonals and draws them in white on a black background|
+Emboss|
+Creates highlights and shadows from an input heightmap|
+The input height map|
+The generated image|
+The angle of the simulated light|
+Strength|
+The strength of the emboss effect|
+The width (in pixels) of the area sampled for each pixel|
+Fast Blur|
+input|
+output|
+The generated blurred image|
+Resolution|
+The resolution used to sample the input image|
+The standard deviation of the gaussian distribution|
+Quality|
+The quality of the effect (increasing quality increases compute time)|
+FBM|
+Fractional Brownian Motion Noise|
+Generates a noise made of several octaves of a simple noise|
+Noise|
+Noise type|
+The simple noise type|
+Perlin|
+Cellular|
+Cellular2|
+Cellular3|
+Cellular4|
+Cellular5|
+Cellular6|
+The scale of the first octave along the X axis|
+The scale of the first octave along the Y axis|
+Folds|
+The number of times the basic noise is folded|
+Octaves|
+The number of noise octaves|
+Persistence|
+The persistence between two consecutive octaves|
+Shows a greyscale image of the generated noise|
+FBM Noise|
+Simplex|
+Fills areas defined by white outlines of its input|
+The input image whose white outlines must be filled|
+Generates fill data, to be connected to a fill companion node|
+The resolution of the inptu image|
+The number of iterations of the algorithm. The optimal value depends a lot on the input image.|
+Fill iterate|
+Fill preprocess|
+Fill to Color|
+Fill to color|
+A fill companion node that fills each area with a color taken from a color map image|
+Edge Color|
+Outline color|
+The color used to draw outlines|
+The input fill data, to be connected to the output of a Fill node|
+Color map|
+The image from which colors are taken|
+The generated output image|
+Fill to Position|
+Fill to position|
+A fill companion node that fills each area with a greyscale value that depends on its position|
+Position|
+The position value to be used:\n- X for horizontal axis\n- Y for vertical axis\n- Radial for distance to center|
+Radial|
+Fill to Random Color        |
+Fill to random color|
+A fill companion node that fills each area with a random color|
+The color used for outlines|
+Fill to Random Grey|
+Fill to random grey|
+A fill companion node that fills each area with a random greyscale value|
+Edge color|
+The value used for the outlines|
+Fill to Size|
+Fill to size|
+A fill companion node that fills each area with a greyscale value that depends on its size|
+The size value to be used (area, width, height or maximum between width and height)|
+Area|
+Height|
+max(W, H)|
+Fill to UV      |
+Fill to UV|
+A fill companion node that generated an UV map that follows each filled area|
+Mode|
+The mode decides how the UVs are layed out on each bounding box:\n- Stretch mode where the UV layout is stretched to the bounding box. \n- Square mode where the UV layout is even and centerered based on the longest axis of the bounding box.|
+Stretch|
+Square|
+The generated output UV map, to be connected to a Custom UV node|
+Gaussian Blur|
+Gaussian blur|
+Applys a gaussian blur on its input|
+Apply the blur filter horizontally, vertically of in both directions|
+Gaussian blur X|
+Gaussian blur Y|
+Angle of the gradient pattern|
+An image showing the gradient|
+Converts its input into greyscale|
+The algorithm used to convert the input into greyscale|
+Lightness|
+Average|
+Luminosity|
+Min|
+Max|
+Shows the image converted to greyscale|
+Height To Angle|
+Height to angle|
+Generates an angle map to be used by Advances Tiler nodes from a heightmap|
+The offset angle applied to the generated map|
+The input heightmap|
+The generated angle map. Values are between -1 and 1 and the corresponding Advanced Tiler parameter (Rotate) must be set to 180.|
+I Ching|
+I Ching hexagrams generator|
+This node generates a grid of random I Ching hexagrams.|
+The number of columns of the grid|
+The number of rows of the grid|
+A greyscale image showing random I Ching hexagrams.|
+Invert filter|
+A filter that inverts the R, G, and B channels of its input while keeping the A channel unchanged|
+Shows the inverted image|
+Kaleidoscope|
+Replicated an angle of the input image several times around the center.|
+The number of replications of an angle of the input|
+The angular offset of the replicated angle of the input|
+Shows the transformed image|
+Magnify|
+Magnifying glass effect|
+center.x|
+X coordinate of the magnifying glass center|
+center.y|
+Y coordinate of the magnifying glass center|
+Scale|
+The maximum scaling factor for the magnifying glass|
+The input image to be transformed|
+Shape|
+The magnifying glass shape|
+Make Tileable|
+Creates a tileable version of its input image by moving different parts around to hide seams.|
+Width of the transition areas between parts of the input image|
+The image to be made tileable|
+A tileable version of the input image|
+Static PBR Material|
+Albedo|
+Metallic|
+Roughness|
+Ambient occlusion|
+Transparency|
+Subsurf. scatter.|
+3D PBR Material|
+World|
+Dynamic PBR Material|
+Raymarching Material|
+Distance|
+Dynamic Unlit Material|
+Add|
+Mix|
+Mul|
+Sub|
+Math|
+Performs a math operation using its inputs or parameter values|
+Operation|
+The operation to be performed|
+log(A)|
+log2(A)|
+pow(A, B)|
+abs(A)|
+round(A)|
+floor(A)|
+ceil(A)|
+trunc(A)|
+fract(A)|
+min(A, B)|
+max(A, B)|
+cos(A*B)|
+sin(A*B)|
+tan(A*B)|
+sqrt(1-A²)|
+Default A|
+The default value for A, used if the corresponding input is not connected|
+Default B|
+The default value for B, used if the corresponding input is not connected|
+Clamp result|
+Clamp|
+The result is clamped to [0, 1] if this option is checked|
+The A operand|
+The B operand|
+Shows a greyscale image of the result|
+Vec3 Math|
+Mirror|
+Mirrors its input while applying an offset from the center|
+The mirror direction (horizontal or vertical)|
+Horizontal|
+Vertical|
+The offset from the center|
+Shows the mirrored image|
+Morphology Dilation|
+MulDetect|
+Tolerance|
+Multi Warp|
+The Multi Warp  node deforms an input image according to the derivative of the second input image. Unlike Warp  node, the derivative of the second texture is sampled at each iteration  producing more varied results at cost of the performance.|
+Grid size|
+The resolution of the operation|
+Intensity|
+The intensity of the warp effect|
+The quality of the Multi warp calculation|
+The blend mode, that can be one of the following: Min, Blur, Max|
+heightmap|
+Height map|
+The height map whose slopes are used to deform the input|
+MultiGradient|
+Create Map|
+Create map|
+Creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.|
+The maximum height of the workflow map, used as multiplier for the input height map|
+The angle stored in the workflow map|
+The input offset seed map|
+The generated workflow map, to be connected to a MixMap or an ApplyMap node|
+Apply Map|
+Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.|
+The input workflow map|
+The Albedo channel of the input base material|
+ORM|
+The ambient occlusion, roughness and metallic channels of the input material|
+The emission channel of the input material|
+The normal map of the input material|
+The height map of the result|
+The albedo channel of the result|
+The ambient occlusion, roughness and metallic channels of the result|
+The emission channel of the result|
+The normal map of the result|
+Combines the outputs of 2 mapped base materials (keeping the "highest" material).|
+Height 1|
+Height1|
+The height map of the first input|
+Albedo 1|
+Albedo1|
+The albedo channel of the first input|
+ORM 1|
+ORM1|
+The ambient occlusion, roughness and metallic channels of the first input|
+Emission 1|
+Emission1|
+The emission channel of the first input|
+Normal 1|
+Normal1|
+The normal map of the first input|
+Height 2|
+Height2|
+The height map of the second input|
+Albedo 2|
+Albedo2|
+The albedo channel of the second input|
+ORM 2|
+ORM2|
+The ambient occlusion, roughness and metallic channels of the second input|
+Emission 2|
+Emission2|
+The emission channel of the second input|
+Normal 2|
+Normal2|
+The normal map of the second input|
+Generates the height of the result|
+Shows the output albedo channel|
+Shows the output ambient occlusion, roughness and metallic channels|
+Shows the output emission channel|
+Shows the output normal map|
+Mix maps|
+Mixes up to 4 workflow maps, to be used with the same base material|
+Input1|
+The first workflow map|
+Input2|
+The second workflow map|
+Input3|
+The third input map|
+Input4|
+The fourth input map|
+Generates a merged workflow map|
+Converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node|
+Occlusion|
+The strength of the calculated occlusion effect|
+MatNormal|
+The strength of  normals from the base materials (compared to the normal generated from height information))|
+Noise pattern|
+Generates a grid made of black and white squares|
+Density|
+The density of white squares|
+Anisotropic Noise|
+Generates x-axis interpolated value noise|
+The scale along the X axis|
+The scale along the Y axis|
+Smoothness|
+Controls how much the noise is blurred along the x-axis|
+Interpolation|
+Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is smooth interpolation|
+Shows a greyscale value noise|
+Normal Map|
+Normal map|
+Generates a normal map from a height map|
+Format|
+The format of the generated normal map\nIn most cases this should be set to default|
+The resolution of the generated normal map|
+The strength of the normal map filter|
+param4|
+Buffer|
+When set, a buffer is used to sample the input before the normal map filter|
+Shows the generated normal map|
+Bump|
+Algorithm|
+The algorithm used to generate the normal map|
+size|
+strength|
+buffer|
+Convert Normal Map|
+Convert a normal map between OpenGL (default) and DirectX formats|
+Conversion|
+The conversion that should be performed|
+From/To OpenGL|
+From/To DirectX|
+Generates an ambient occlusion map from a height map|
+The resolution of the input height map|
+The strength of the occlusion map effect|
+The generated occlusion map|
+The radius of the blur used for the occlusion effect|
+The quality of the blur operation used for the occlusion effect|
+Optional|
+Combiner|
+The operation used to combine the horizontal and the vertical patterns|
+Xor|
+Pow|
+X Pattern|
+Pattern generated along the X axis|
+Sine|
+Triangle|
+Sawtooth|
+Constant|
+Bounce|
+X Repeat|
+Repetitions of the pattern along X axis|
+Y Pattern|
+Pattern generated along the Y axis|
+Y Repeat|
+Repetitions of the pattern along Y axis|
+A greyscale image that combines the horizontal and vertical patterns|
+Value Noise|
+Generates several octaves of greyscale value noise|
+The number of octaves (higher values might affect performance)|
+Color Value Noise|
+Generates several octaves of color value noise|
+Shows a color value noise|
+Pixelize|
+Creates a pixelated image from its input, and also quantifies the colors with optional dithering.|
+Number of pixel columns of the output|
+Number of pixel rows of the output|
+Levels|
+Number of color levels for each channel|
+Dither|
+Dithering|
+Amount of dithering in the output image|
+The image to be pixelated|
+A pixelated version of the input image|
+PolyCurve|
+Ends|
+If unset, end vertices of the curve are used only for orientation|
+Width map|
+A map that describes the width along the curve (use a Tonality node)|
+Profile|
+Style|
+Style of the output image (fill or curve)|
+Gradient that defines the profile to be shown|
+Width of the curve|
+An image showing the profile defined by the gradient|
+Quantize|
+Quantizes the red, green and blue channels of its input|
+Steps|
+The number of quantization steps|
+The quantized image|
+Radial Gradient|
+Render|
+Raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.|
+The input object, described as 3D signed distance function with color index|
+HeightMap|
+The generated height map|
+NormalMap|
+The generated normal map|
+ColorMap|
+The generated color index map|
+Preview|
+Refract|
+Remap|
+Remaps a greyscale image for use as an input map for Advanced Tiler nodes|
+The value generated for black areas of the input|
+The value generated for white areas of the input|
+Step|
+The step between generated values|
+The greyscale input map|
+The remapped image map|
+Translates, rotates and scales its input|
+Rotates its input|
+The position of the rotation center|
+The angle of the rotation|
+Shows the rotated image|
+Runes|
+Simple runes|
+Generates a grid filled with random runes|
+A greyscale image showing random runes.|
+Scales its input|
+The position of the scale center|
+The poisition of the scale center|
+The scale amount along the X axis|
+The scale amount along the Y axis|
+Shows the scaled image|
+Scratches|
+Draws white scratches on a black background|
+The length of scratches (the shorter the scratches,the more they will be)|
+The width of scratches|
+The number of scratches layers|
+Waviness|
+The waviness of scratches|
+The average angle of the scratches (0 generates horizontal scratches)|
+The randomness of the scratches angles|
+Shows white scratches on a black background|
+Mask to SDF|
+The greyscale mask to be converted|
+sdf|
+The genrated distance field|
+The resolution used for the operation|
+The number of iterations the jump flood algorithm performs to calculate the distances|
+Tiled|
+Controls whether the resulting ditance field will be tiled. Useful for patterns that extend over the texture bounds|
+sdAnnularShape|
+Creates an annular shape from a shape described as a signed distance function|
+The width of each generated ripple|
+Ripples|
+The number of generated ripples|
+The input shape, defined as a signed distance function|
+The generated layered shape|
+sdArc|
+An arc as a signed distance function|
+Angle 1|
+Angle1|
+The first angle of the arc|
+Angle 2|
+Angle2|
+The second angle of the arc|
+The radius of the arc|
+The width of the shape around the arc|
+The arc as a signed distance function|
+sdBoolean|
+Performs a boolean operation (union, intersection or difference) between two shapes|
+The operation performed by this node|
+Union|
+Subtraction|
+Intersection|
+The first shape, defined as a signed distance function|
+The second shape, defined as a signed distance function|
+The shape generated by the boolean operation|
+sdBox|
+A rectangle described as a signed distance function|
+The width of the box|
+The height of the box|
+The position of the center of the box on the X axis|
+The position of the center of the box on the Y axis|
+The generated signed distance function|
+sdCircle|
+A circle described as a signed distance function|
+The radius of the circle|
+The position of the center on the X axis|
+The position of the center on the Y axis|
+Circle Repeat|
+Repeats its input shape around a circle|
+The number of repetitions of the input shape around the circle|
+The shape generated by the repeat operation|
+sdElongation|
+Generates an angle formed by 2 planes that can be used to cut other shapes|
+Axis|
+The axis of the angle|
+The angle of the shape|
+Shows the angle|
+Boolean|
+Generates a rounded box as a signed distance function|
+The size of the box along the X axis|
+The size of the box along the Y axis|
+The size of the box along the Z axis|
+The radius of the rounded box|
+Shows the rounded box|
+Capsule|
+capsule|
+Generates a capsule as a signed distance functioni|
+The axis of the capsule|
+The length of the capsule|
+The radius of the capsule|
+Shows the capsule|
+An input gradient (generated, for example by a Tonality node) that defines a profile for the shape|
+Color|
+Assigns a color index to a 3D object|
+The color index to be assigned|
+The input 3D object|
+The colored 3D object|
+Cone|
+Cylinder|
+Generates a cylinder as a signed distance function|
+The axis of the cylinder|
+The length of the cylinder|
+The radius of the cylinder|
+Shows the cylinder|
+Elongation|
+Elongates its input|
+Length.x|
+The elongation along the X axis|
+Length.y|
+The elongation along the Y axis|
+Length.z|
+The elongation along the Z axis|
+The input object to be elongated|
+The shape generated by the operation|
+Extrusion|
+Extrudes its 2D input shape along the Y axis|
+The length of the extrusion operation|
+The input 2D shape as a signed distance function|
+The extruded shape|
+Morph|
+Morphs between 2 input shapes|
+Amount|
+The amount of the second input in the result|
+The generated hybrid shape|
+Plane|
+Generates a plane that can be used to cut other shapes|
+The axis of the plane|
+Shows the plane|
+Repeats its input shape on a grid.\nThis node does not support overlapping between instances.|
+The number of columns in the grid|
+Lines|
+The number of lines in the grid|
+Rotation|
+The amount of random rotation on each instance of the input shape|
+Revolution|
+Revolves its input 2D shape around the Z axis|
+The offset applied to the input shape during the revolution operation|
+The input shape|
+The generated 3D object|
+Rotates its input 3D object described as a signed distance function.|
+Rotate.x|
+The rotation around the X axis|
+Rotate.y|
+The rotation around the Y axis|
+Rotate.z|
+The rotation around the Z axis|
+The input object as signed distance function|
+The rotated object|
+Rounded|
+RoundedShape|
+Dilates an input shape into a rounded shape|
+The length of the dilate operation|
+Scales its input 3D object described as a signed distance function.|
+The scale factor|
+The input object as a signed distance function|
+The scaled object|
+SmoothBoolean|
+Performs a smooth boolean operation (union, intersection or difference) between two shapes|
+The smoothness of the boolean operation|
+Sphere|
+Generates a sphere as a signed distance function|
+The radius of the sphere|
+Shows the sphere|
+Torus|
+Generates a torus as a signed distance function|
+The axis of the torus|
+Radius1|
+The major radius of the torus|
+Radius2|
+The minor radius of the torus|
+Shows the torus|
+Translate|
+Translates its input 3D object described as a signed distance function.|
+Translate.x|
+The translation along the X axis|
+Translate.y|
+The translation along the Y axis|
+Translate.z|
+The translation along the Z axis|
+The translated object|
+sdLine|
+A line or a capsule shape described as a signed distance function|
+The position on the X axis of the first point of the line|
+The position on the Y axis of the first point of the line|
+The position on the X axis of the second point of the line|
+The position on the Y axis of the second point of the line|
+The width of the capsule shape around the line|
+The shape as signed distance function|
+A profile for the shape, generated (for example) by a Tonality node.|
+sdMorph|
+sdNgon|
+An n-gon described as a signed distance function|
+The number of sides of the n-gon|
+The radius of the n-gon|
+The rotation of the n-gon|
+The n-gon as a signed distance function|
+sdPolygon|
+A polygon as a signed distance function|
+Polygon|
+The polygon to be drawn|
+The polygon as a signed distance function|
+sdRepeat|
+sdRhombus|
+A rhombus described as a signed distance function|
+The width of the rhombus|
+The height of the rhombus|
+The rhombus as a signed distance function|
+sdRotate|
+Rotates its input shape described as a signed distance function|
+The rotation angle|
+The rotated shape|
+sdRoundedShape|
+sdScale|
+Scales its input shape described as a signed distance function|
+The scale of the transform|
+The generated scaled shape|
+sdShow|
+Creates a greyscale image from a shape described as a 2D Signed Distance Function|
+The width of the gradient at the edges of the shape|
+Base|
+The base value of the output|
+Shows the shape as a greyscale image|
+sdSmoothBoolean|
+sdTranslate|
+Translates its input shape described as signed distance function|
+The translated shape|
+The type of shape drawn by this node|
+Circle|
+Star|
+Curved star|
+Rays|
+Sides count|
+The number of sides of the generated shape (unused for Circle)|
+Shape size|
+The size of the generated shape|
+Edge width|
+The edge width of the generated shape|
+Size map|
+An input map that affects the shape size|
+Edge map|
+An input map that affects the edge width|
+Shows a white shape on a black background|
+Sharpen|
+Sharpens it input image|
+Shows the generated sharpened image|
+Shear|
+Performs a shear stress transform on its input|
+The direction of the shear transform (horizontal or vertical)|
+The amount of the transform|
+Center|
+The position of the shear center|
+Sine Wave|
+Sine wave pattern|
+Draws a greyscale sine wave pattern|
+Amplitude|
+The amplitude of the sine wave function|
+Frequency|
+The frequency of the sine wave function (i.e. the number of oscillations shown in the generated image).|
+Phase|
+The phase of the sine wave function|
+Shows a greyscale image of a sine wave|
+Skew|
+Slope Blur|
+Slope blur|
+Applys a blur effect on its input, following slopes of an input height map|
+A height map whose slopes control the strength and direction of the blur filter|
+Smooth Curvature|
+Creates a smooth curvature map from a height map|
+The generated curvature map|
+The buffer size for the filter|
+The contrast of the generated highlights|
+Smooth Curvature 2|
+The resolution of the curvature map if buffer is used|
+How many times the input is sampled to generate the curvature map|
+The intensity of the curvature map|
+The radius of the smoothing of the curvature effect|
+Heightmap|
+Shows the generated curvature map|
+Position of the center along the X axis|
+Position of the center along the Y axis|
+Radius of the sphere|
+A heightmap of the specified sphere|
+Splatter|
+Spreads several occurences of an input image randomly.|
+Variations|
+Check to splat variations of the input|
+Color Splatter|
+Supersample|
+A filter that samples sub-pixel details to make them visible|
+The resolution of the output|
+The number of samples on each axis. High values will badly impact performances.|
+The width of the sampled area. Setting this value higher than 1 will sample neighbouring pixels and antialias the result.|
+Shows the supersampled image. Due to the performance cost of this node, it is recommended to connect a buffer directly to this output.|
+Swap channels|
+Swaps the channels of its RGBA input|
+The input channel to be assigned to the Red channel|
+The input channel to be assigned to the Green channel|
+The input channel to be assigned to the Blue channel|
+The input channel to be assigned to the Alpha channel|
+The input RGBA image|
+The output RGBA image|
+TEX3D Apply|
+Tex3D Apply|
+Applies 3D textures to a rendered 3D signed distance function scene.|
+The height map generated by the Render node|
+The color map generated by the Render node|
+Tex3D|
+The 3D texture|
+The textured 3D scene|
+This node applies a 3D texture to an object using its inverse UV map.|
+The input 3D texture|
+Inv. UV Map|
+InvUVMap|
+The inverse UV map of the object|
+The generated texture|
+TEX3D Blend|
+Tex3D Blend|
+Blends its 3D texture inputs, using an optional mask|
+The 3D texture generated by the blend operation|
+TEX3D Colorize|
+Tex3D Colorize|
+Remaps a greyscale 3D texture to a custom gradient|
+The input greyscale 3D texture|
+The remapped color 3D texture |
+TEX3D Distort|
+Tex3D Distort|
+Distorts its input 3D texture using another 3D texture|
+Distort|
+The strength of the distort effect|
+The 3D texture to be distorted|
+The 3D texture used to distort Input1|
+The distorted 3D texture|
+TEX3D FBM|
+Tex3D FBM|
+Generates a 3D noise made of several octaves of a simple noise|
+Value (no wrap)|
+Perlin (no wrap)|
+Cellular (no wrap)|
+Scale Z|
+Scale.z|
+The scale of the first octave along the Z axis|
+Shows a greyscale 3D texture of the generated noise|
+TEX3D From2D|
+Tex3D From 2D|
+Creates a 3D texture from a 2D texture|
+The input 2D texture|
+The generated 3D texture|
+TEX3D Pattern|
+Tex3D Pattern|
+A greyscale 3D texture that combines patterns along all 3 axes|
+The operation used to combine the X, Y and Z patterns|
+Pattern.x|
+Repeat.x|
+Pattern.y|
+Repeat.y|
+Pattern.z|
+Pattern generated along the Z axis|
+Repeat.z|
+Repetitions of the pattern along Z axis|
+TEX3D Rotate|
+Tex3D Rotate|
+Rotates a 3D texture|
+The rotated 3D texture|
+TEX3D Select|
+Tex3D Select|
+Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.|
+The value of the selected color index|
+The tolerance used when comparing color indices|
+The 3D texture associated to the specified color index|
+The 3D texture(s) associated to other color indices|
+The merged 3D texture|
+TEX3D Shape Select|
+Tex3D Shape Select|
+Selects a 3D texture inside, and another outside a shape. This can be used to map several textures into a single 3D scene.|
+The width of the transition area between both textures|
+The shape in which input1 is applied|
+Tile2x2|
+Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.|
+The first input|
+The second input|
+The third input|
+The fourth input|
+Shows the generated atlas|
+Tile2x2 Variations|
+Tiler|
+Tiles several occurences of an input image while adding randomness.|
+Tile X|
+Tile.x|
+The number of columns of the tiles pattern|
+Tile Y|
+Tile.y|
+The number of rows of the tiles pattern|
+Overlap|
+The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.|
+Fixed Offset|
+FixedOffset|
+The relative offset of odd rows|
+Rnd Offset|
+Check to tile variations of the input|
+Advanced Tiler|
+Translate X|
+The translation along the X axis applied to the instances|
+Translate Y|
+The translation along the Y axis applied to the instances|
+The angle of instances of the input|
+Color map 1|
+An input color map used to generate the Instance map 1 output|
+Color map 2|
+An input color map used to generate the Instance map 2 output|
+Translate map X|
+A map for translation along the X axis|
+Translate map Y|
+A map for translation along the Y axis|
+Rotate map|
+A map for rotation|
+Scale map X|
+A map for scale along the X axis|
+Scale map Y|
+A map for scale along the Y axis|
+Instance map 1|
+Shows a color for each instance of the input image|
+Instance map 2|
+Advanced Tiler Color|
+Color Tiler|
+Instance Map|
+Tonality|
+Remaps a greyscale image tonality using a curve|
+The tonality curve to which the input is remapped|
+The remapped greyscale image|
+Tones map|
+Maps linearly an input tones interval to an output tones interval.|
+Input min|
+InputMin|
+The minimum value of the input interval|
+Input max|
+InputMax|
+The maximum value of the input interval|
+Output min|
+OutputMin|
+The minimum value of the output interval|
+Output max|
+OutputMax|
+The maximum value of the output interval|
+Tones Range|
+Outputs the tone range around a specified value,|
+The center value of the selection|
+The width (in tones space) of the selection area|
+Adjusts the falloff of the output|
+Invert the generated image if set|
+Shows the generated high contrast image|
+Tones step|
+Emphasizes dark and light tones around a specified value|
+The value of the input that separate dark and light zones of the result|
+width|
+The width (in tones space) of the transition area|
+Transform|
+2:Translate X|
+The scaling factor along the X axis|
+The scaling factor along the Y axis|
+Repeat the input if checked, clamps otherwise|
+TranslateMap.x|
+An optional map for translation along the X axis|
+TranslateMap.y|
+An optional map for translation along the Y axis|
+RotateMap|
+An optional map for rotation|
+ScaleMap.x|
+An optional map for scaling along the X axis|
+ScaleMap.y|
+An optional map for scaling along the Y axis|
+Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges|
+Extend|
+Translates its input|
+Shows the translated image|
+Truchet|
+Truchet pattern|
+Generates a truchet pattern|
+The base shape of each tile of the truchet pattern|
+Line|
+The number of rows and columns of the truchet pattern|
+Shows a greyscale image of the truchet pattern.|
+Generic Truchet|
+Uniform|
+Draws a uniform image|
+Color of the uniform image|
+A uniform image of the selected color|
+Greyscale Uniform|
+Draws a uniform greyscale image|
+The value of the uniform greyscale image|
+A uniform image of the selected value|
+Generates variations for its input|
+Output1|
+Shows a variation of the input|
+Output2|
+Output3|
+Output4|
+Output5|
+Voronoi|
+Voronoi Noise|
+Generates several images from a tileable voronoi noise|
+Stretch X|
+Stretch.x|
+The stretch factor along the X axis|
+Stretch Y|
+Stretch.y|
+The stretch factor along the Y axis|
+A value factor for greyscale outputs|
+The randomness of cell centers positions|
+Nodes|
+A greyscale pattern based on the distance to cell centers|
+Borders|
+A greyscale pattern based on the distance to borders|
+A color pattern that assigns a random color to each cell|
+An output that should be plugged into a Fill companion node|
+Warp|
+Warps its input according to a heightmap|
+Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.|
+Slope|
+Distance to top|
+The strength of the warp effect|
+Epsilon|
+The offset used to measure slopes|
+The input image to be warped|
+Shows the warped image|
+Warp Dilation|
+port1|
+mode|
+Dilates its input following the contours or slope of an input heightmap|
+The dilate mode (clockwise contour, counter clockwise contour or slope)|
+Contour (cw)|
+Contour (ccw)|
+The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher)|
+The distance along which the contours or slopes are followed|
+Attenuation|
+The attenuation applied along the path|
+The height map whose contours or slopes are followed|
+The dilated image|
+Weave|
+Weave pattern|
+Generates a simple weave pattern|
+The width of each row/column|
+An input map that affects the width parameter|
+Shows the generated greyscale weave pattern.|
+Width X|
+Width Y|
+Stitch|
+The length of each stitch|
+Horizontal mask|
+Mask for horizontal stripes|
+Vertical mask|
+Mask for vertical stripes|
+Base library|
+Simple|
+Curved Star|
+Image|
+Text|
+Circular|
+SDF|
+Shapes|
+Operators|
+sdCircleRepeat|
+Transforms|
+CircleRepeat|
+ToInvUvMap|
+From2D|
+Generic|
+Checkerboard|
+Tiles|
+BasketWeave|
+SpanishBond|
+UnevenBricks|
+Fibers|
+Warp1|
+Warp2|
+Filter|
+BrightnessContrast|
+Tones|
+Rainbow|
+SwapChannels|
+Blur|
+Directional|
+Axis aligned|
+Diagonal|
+To Position|
+To Size|
+To Color|
+To random grey|
+To random color|
+To UV|
+MakeTileable|
+CustomUV|
+CircleSplatter|
+WarpDilation|
+Workflow|
+CreateMap|
+MixMap|
+ApplyMap|
+Materials|
+Marble|
+Metal|
+Wood|
+Template|
+Splat|
+Effects|
+Paint1|
+Paint2|
+Miscellaneous|
+Iterate Buffer|
+Custom Shader|
+Switch|
+Remote|
+Comment|
+Debug|
+Advanced|
+SmoothCurvature|
+Range|
+SmoothCurvature2|
+Anisotropic|
+HeightToAngle|
+RGBA|
+ArcPavement|
+Vec3|
+SDF2D|
+SDF3D|
+TEX3D|
+Convert|
+Patterns|
+Screws|
+Arrows|
+Snow|
+RustyIron|
+Dribble|
+Zipper|
+Triplanar|

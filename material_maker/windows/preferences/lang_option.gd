@@ -5,8 +5,12 @@ export var config_variable : String
 var locales : Array = []
 
 func _ready() -> void:
+	init_from_locales()
+
+func init_from_locales():
 	locales = TranslationServer.get_loaded_locales()
 	locales.insert(0, "en")
+	clear()
 	for l in locales:
 		add_item(l+" - "+TranslationServer.get_locale_name(l))
 
