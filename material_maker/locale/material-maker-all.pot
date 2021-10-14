@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: rodzilla@free.fr\n"
-"POT-Creation-Date: 2021-10-14 08:19\n"
+"POT-Creation-Date: 2021-10-14 19:50\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,6 +296,169 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
+#: res:///material_maker/nodes/base.gd:100
+#: res://addons/material_maker/nodes/adjust_hsv.mmg
+#: res://addons/material_maker/nodes/auto_tones.mmg
+#: res://addons/material_maker/nodes/beehive.mmg
+#: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/box.mmg
+#: res://addons/material_maker/nodes/brightness_contrast.mmg
+#: res://addons/material_maker/nodes/circle_map.mmg
+#: res://addons/material_maker/nodes/circle_splatter.mmg
+#: res://addons/material_maker/nodes/circle_splatter_color.mmg
+#: res://addons/material_maker/nodes/color_noise.mmg
+#: res://addons/material_maker/nodes/colorize.mmg
+#: res://addons/material_maker/nodes/combine.mmg
+#: res://addons/material_maker/nodes/curve.mmg
+#: res://addons/material_maker/nodes/custom_uv.mmg
+#: res://addons/material_maker/nodes/denoiser.mmg
+#: res://addons/material_maker/nodes/dilate.mmg
+#: res://addons/material_maker/nodes/directional_blur.mmg
+#: res://addons/material_maker/nodes/edge_detect.mmg
+#: res://addons/material_maker/nodes/edge_detect_1.mmg
+#: res://addons/material_maker/nodes/edge_detect_2.mmg
+#: res://addons/material_maker/nodes/edge_detect_3.mmg
+#: res://addons/material_maker/nodes/emboss.mmg
+#: res://addons/material_maker/nodes/fast_blur.mmg
+#: res://addons/material_maker/nodes/fbm.mmg
+#: res://addons/material_maker/nodes/fbm2.mmg
+#: res://addons/material_maker/nodes/fill.mmg
+#: res://addons/material_maker/nodes/fill_to_color.mmg
+#: res://addons/material_maker/nodes/fill_to_position.mmg
+#: res://addons/material_maker/nodes/fill_to_random_color.mmg
+#: res://addons/material_maker/nodes/fill_to_random_grey.mmg
+#: res://addons/material_maker/nodes/fill_to_size.mmg
+#: res://addons/material_maker/nodes/fill_to_uv.mmg
+#: res://addons/material_maker/nodes/gaussian_blur.mmg
+#: res://addons/material_maker/nodes/gradient.mmg
+#: res://addons/material_maker/nodes/greyscale.mmg
+#: res://addons/material_maker/nodes/height_to_angle.mmg
+#: res://addons/material_maker/nodes/iching.mmg
+#: res://addons/material_maker/nodes/invert.mmg
+#: res://addons/material_maker/nodes/kaleidoscope.mmg
+#: res://addons/material_maker/nodes/magnify.mmg
+#: res://addons/material_maker/nodes/make_tileable.mmg
+#: res://addons/material_maker/nodes/math.mmg
+#: res://addons/material_maker/nodes/math_v3.mmg
+#: res://addons/material_maker/nodes/mirror.mmg
+#: res://addons/material_maker/nodes/multi_warp.mmg
+#: res://addons/material_maker/nodes/multigradient.mmg
+#: res://addons/material_maker/nodes/mwf_create_map.mmg
+#: res://addons/material_maker/nodes/mwf_mix_maps.mmg
+#: res://addons/material_maker/nodes/mwf_output.mmg
+#: res://addons/material_maker/nodes/noise.mmg
+#: res://addons/material_maker/nodes/noise_anisotropic.mmg
+#: res://addons/material_maker/nodes/noise_color.mmg
+#: res://addons/material_maker/nodes/normal_map.mmg
+#: res://addons/material_maker/nodes/normal_map2.mmg
+#: res://addons/material_maker/nodes/normal_map_convert.mmg
+#: res://addons/material_maker/nodes/occlusion.mmg
+#: res://addons/material_maker/nodes/occlusion2.mmg
+#: res://addons/material_maker/nodes/pattern.mmg
+#: res://addons/material_maker/nodes/perlin.mmg
+#: res://addons/material_maker/nodes/perlin_color.mmg
+#: res://addons/material_maker/nodes/pixelize.mmg
+#: res://addons/material_maker/nodes/polycurve.mmg
+#: res://addons/material_maker/nodes/profile.mmg
+#: res://addons/material_maker/nodes/quantize.mmg
+#: res://addons/material_maker/nodes/radial_gradient.mmg
+#: res://addons/material_maker/nodes/refract.mmg
+#: res://addons/material_maker/nodes/remap.mmg
+#: res://addons/material_maker/nodes/repeat.mmg
+#: res://addons/material_maker/nodes/rotate.mmg
+#: res://addons/material_maker/nodes/runes.mmg
+#: res://addons/material_maker/nodes/scale.mmg
+#: res://addons/material_maker/nodes/scratches.mmg
+#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
+#: res://addons/material_maker/nodes/sdannularshape.mmg
+#: res://addons/material_maker/nodes/sdarc.mmg
+#: res://addons/material_maker/nodes/sdboolean.mmg
+#: res://addons/material_maker/nodes/sdbox.mmg
+#: res://addons/material_maker/nodes/sdcircle.mmg
+#: res://addons/material_maker/nodes/sdcirclerepeat.mmg
+#: res://addons/material_maker/nodes/sdf3d_angle.mmg
+#: res://addons/material_maker/nodes/sdf3d_boolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_box.mmg
+#: res://addons/material_maker/nodes/sdf3d_capsule.mmg
+#: res://addons/material_maker/nodes/sdf3d_capsule2.mmg
+#: res://addons/material_maker/nodes/sdf3d_circle_repeat.mmg
+#: res://addons/material_maker/nodes/sdf3d_color.mmg
+#: res://addons/material_maker/nodes/sdf3d_cylinder.mmg
+#: res://addons/material_maker/nodes/sdf3d_elongation.mmg
+#: res://addons/material_maker/nodes/sdf3d_extrusion.mmg
+#: res://addons/material_maker/nodes/sdf3d_morph.mmg
+#: res://addons/material_maker/nodes/sdf3d_plane.mmg
+#: res://addons/material_maker/nodes/sdf3d_repeat.mmg
+#: res://addons/material_maker/nodes/sdf3d_revolution.mmg
+#: res://addons/material_maker/nodes/sdf3d_rotate.mmg
+#: res://addons/material_maker/nodes/sdf3d_rounded.mmg
+#: res://addons/material_maker/nodes/sdf3d_scale.mmg
+#: res://addons/material_maker/nodes/sdf3d_smoothboolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_sphere.mmg
+#: res://addons/material_maker/nodes/sdf3d_torus.mmg
+#: res://addons/material_maker/nodes/sdf3d_translate.mmg
+#: res://addons/material_maker/nodes/sdline.mmg
+#: res://addons/material_maker/nodes/sdline2.mmg
+#: res://addons/material_maker/nodes/sdmorph.mmg
+#: res://addons/material_maker/nodes/sdngon.mmg
+#: res://addons/material_maker/nodes/sdpolygon.mmg
+#: res://addons/material_maker/nodes/sdrepeat.mmg
+#: res://addons/material_maker/nodes/sdrhombus.mmg
+#: res://addons/material_maker/nodes/sdrotate.mmg
+#: res://addons/material_maker/nodes/sdroundedshape.mmg
+#: res://addons/material_maker/nodes/sdscale.mmg
+#: res://addons/material_maker/nodes/sdshow.mmg
+#: res://addons/material_maker/nodes/sdsmoothboolean.mmg
+#: res://addons/material_maker/nodes/sdtranslate.mmg
+#: res://addons/material_maker/nodes/shape.mmg
+#: res://addons/material_maker/nodes/sharpen.mmg
+#: res://addons/material_maker/nodes/shear.mmg
+#: res://addons/material_maker/nodes/sine_wave.mmg
+#: res://addons/material_maker/nodes/slope_blur.mmg
+#: res://addons/material_maker/nodes/smooth_curvature.mmg
+#: res://addons/material_maker/nodes/smooth_curvature2.mmg
+#: res://addons/material_maker/nodes/sphere.mmg
+#: res://addons/material_maker/nodes/splatter.mmg
+#: res://addons/material_maker/nodes/splatter_color.mmg
+#: res://addons/material_maker/nodes/supersample.mmg
+#: res://addons/material_maker/nodes/swap_channels.mmg
+#: res://addons/material_maker/nodes/tex3d_apply.mmg
+#: res://addons/material_maker/nodes/tex3d_apply2.mmg
+#: res://addons/material_maker/nodes/tex3d_apply_invuvmap.mmg
+#: res://addons/material_maker/nodes/tex3d_blend.mmg
+#: res://addons/material_maker/nodes/tex3d_colorize.mmg
+#: res://addons/material_maker/nodes/tex3d_distort.mmg
+#: res://addons/material_maker/nodes/tex3d_fbm.mmg
+#: res://addons/material_maker/nodes/tex3d_from2d.mmg
+#: res://addons/material_maker/nodes/tex3d_pattern.mmg
+#: res://addons/material_maker/nodes/tex3d_rotate.mmg
+#: res://addons/material_maker/nodes/tex3d_select.mmg
+#: res://addons/material_maker/nodes/tex3d_select_shape.mmg
+#: res://addons/material_maker/nodes/tile2x2.mmg
+#: res://addons/material_maker/nodes/tile2x2_variations.mmg
+#: res://addons/material_maker/nodes/tiler.mmg
+#: res://addons/material_maker/nodes/tiler_advanced.mmg
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+#: res://addons/material_maker/nodes/tiler_color.mmg
+#: res://addons/material_maker/nodes/tonality.mmg
+#: res://addons/material_maker/nodes/tones_map.mmg
+#: res://addons/material_maker/nodes/tones_range.mmg
+#: res://addons/material_maker/nodes/tones_step.mmg
+#: res://addons/material_maker/nodes/transform.mmg
+#: res://addons/material_maker/nodes/transform2.mmg
+#: res://addons/material_maker/nodes/translate.mmg
+#: res://addons/material_maker/nodes/truchet.mmg
+#: res://addons/material_maker/nodes/uniform.mmg
+#: res://addons/material_maker/nodes/uniform_greyscale.mmg
+#: res://addons/material_maker/nodes/warp.mmg
+#: res://addons/material_maker/nodes/warp2.mmg
+#: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
+#: res://addons/material_maker/nodes/weave.mmg
+#: res://addons/material_maker/nodes/weave2.mmg
+#: res://material_maker/library/base.json
+msgid "Output"
+msgstr ""
+
 #: res:///material_maker/nodes/base.gd:147
 msgid "Unlock seed"
 msgstr ""
@@ -439,6 +602,7 @@ msgid "Layer name"
 msgstr ""
 
 #: res:///material_maker/panels/layers/layer_tooltip_thumbnail.tscn:30
+#: res://addons/material_maker/nodes/material_raymarching.mmg
 msgid "albedo"
 msgstr ""
 
@@ -603,12 +767,20 @@ msgstr ""
 msgid "© 2018-2021 Rodolphe Suescun and contributors"
 msgstr ""
 
+#: res:///material_maker/windows/about/about.tscn:99
+msgid "Authors"
+msgstr ""
+
 #: res:///material_maker/windows/about/about.tscn:134
 msgid " Godot Engine"
 msgstr ""
 
 #: res:///material_maker/windows/about/about.tscn:143
 msgid "99% of Material Maker's code is the awesome Godot Engine"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:146
+msgid "License"
 msgstr ""
 
 #: res:///material_maker/windows/add_node_popup/node_selection_button.tscn:46
@@ -769,6 +941,11 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+#: res:///material_maker/windows/node_editor/node_editor.tscn:42
+#: res:///material_maker/windows/preferences/preferences.tscn:43
+msgid "General"
+msgstr ""
+
 #: res:///material_maker/windows/node_editor/node_editor.tscn:77
 msgid "Parameters:"
 msgstr ""
@@ -777,8 +954,24 @@ msgstr ""
 msgid "Inputs:"
 msgstr ""
 
+#: res:///material_maker/windows/node_editor/node_editor.tscn:127
+msgid "Outputs"
+msgstr ""
+
 #: res:///material_maker/windows/node_editor/node_editor.tscn:139
 msgid "Outputs:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:162
+msgid "Main Code"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:175
+msgid "Instance Functions"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:188
+msgid "Global Functions"
 msgstr ""
 
 #: res:///material_maker/windows/node_editor/node_editor.tscn:205
@@ -835,6 +1028,10 @@ msgstr ""
 
 #: res:///material_maker/windows/preferences/preferences.tscn:258
 msgid "Idle FPS limit:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:277
+msgid "Bake"
 msgstr ""
 
 #: res:///material_maker/windows/preferences/preferences.tscn:292
@@ -1035,168 +1232,6 @@ msgid "The input image"
 msgstr ""
 
 #: res://addons/material_maker/nodes/adjust_hsv.mmg
-#: res://addons/material_maker/nodes/auto_tones.mmg
-#: res://addons/material_maker/nodes/beehive.mmg
-#: res://addons/material_maker/nodes/blend.mmg
-#: res://addons/material_maker/nodes/box.mmg
-#: res://addons/material_maker/nodes/brightness_contrast.mmg
-#: res://addons/material_maker/nodes/circle_map.mmg
-#: res://addons/material_maker/nodes/circle_splatter.mmg
-#: res://addons/material_maker/nodes/circle_splatter_color.mmg
-#: res://addons/material_maker/nodes/color_noise.mmg
-#: res://addons/material_maker/nodes/colorize.mmg
-#: res://addons/material_maker/nodes/combine.mmg
-#: res://addons/material_maker/nodes/curve.mmg
-#: res://addons/material_maker/nodes/custom_uv.mmg
-#: res://addons/material_maker/nodes/denoiser.mmg
-#: res://addons/material_maker/nodes/dilate.mmg
-#: res://addons/material_maker/nodes/directional_blur.mmg
-#: res://addons/material_maker/nodes/edge_detect.mmg
-#: res://addons/material_maker/nodes/edge_detect_1.mmg
-#: res://addons/material_maker/nodes/edge_detect_2.mmg
-#: res://addons/material_maker/nodes/edge_detect_3.mmg
-#: res://addons/material_maker/nodes/emboss.mmg
-#: res://addons/material_maker/nodes/fast_blur.mmg
-#: res://addons/material_maker/nodes/fbm.mmg
-#: res://addons/material_maker/nodes/fbm2.mmg
-#: res://addons/material_maker/nodes/fill.mmg
-#: res://addons/material_maker/nodes/fill_to_color.mmg
-#: res://addons/material_maker/nodes/fill_to_position.mmg
-#: res://addons/material_maker/nodes/fill_to_random_color.mmg
-#: res://addons/material_maker/nodes/fill_to_random_grey.mmg
-#: res://addons/material_maker/nodes/fill_to_size.mmg
-#: res://addons/material_maker/nodes/fill_to_uv.mmg
-#: res://addons/material_maker/nodes/gaussian_blur.mmg
-#: res://addons/material_maker/nodes/gradient.mmg
-#: res://addons/material_maker/nodes/greyscale.mmg
-#: res://addons/material_maker/nodes/height_to_angle.mmg
-#: res://addons/material_maker/nodes/iching.mmg
-#: res://addons/material_maker/nodes/invert.mmg
-#: res://addons/material_maker/nodes/kaleidoscope.mmg
-#: res://addons/material_maker/nodes/magnify.mmg
-#: res://addons/material_maker/nodes/make_tileable.mmg
-#: res://addons/material_maker/nodes/math.mmg
-#: res://addons/material_maker/nodes/math_v3.mmg
-#: res://addons/material_maker/nodes/mirror.mmg
-#: res://addons/material_maker/nodes/multi_warp.mmg
-#: res://addons/material_maker/nodes/multigradient.mmg
-#: res://addons/material_maker/nodes/mwf_create_map.mmg
-#: res://addons/material_maker/nodes/mwf_mix_maps.mmg
-#: res://addons/material_maker/nodes/mwf_output.mmg
-#: res://addons/material_maker/nodes/noise.mmg
-#: res://addons/material_maker/nodes/noise_anisotropic.mmg
-#: res://addons/material_maker/nodes/noise_color.mmg
-#: res://addons/material_maker/nodes/normal_map.mmg
-#: res://addons/material_maker/nodes/normal_map2.mmg
-#: res://addons/material_maker/nodes/normal_map_convert.mmg
-#: res://addons/material_maker/nodes/occlusion.mmg
-#: res://addons/material_maker/nodes/occlusion2.mmg
-#: res://addons/material_maker/nodes/pattern.mmg
-#: res://addons/material_maker/nodes/perlin.mmg
-#: res://addons/material_maker/nodes/perlin_color.mmg
-#: res://addons/material_maker/nodes/pixelize.mmg
-#: res://addons/material_maker/nodes/polycurve.mmg
-#: res://addons/material_maker/nodes/profile.mmg
-#: res://addons/material_maker/nodes/quantize.mmg
-#: res://addons/material_maker/nodes/radial_gradient.mmg
-#: res://addons/material_maker/nodes/refract.mmg
-#: res://addons/material_maker/nodes/remap.mmg
-#: res://addons/material_maker/nodes/repeat.mmg
-#: res://addons/material_maker/nodes/rotate.mmg
-#: res://addons/material_maker/nodes/runes.mmg
-#: res://addons/material_maker/nodes/scale.mmg
-#: res://addons/material_maker/nodes/scratches.mmg
-#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
-#: res://addons/material_maker/nodes/sdannularshape.mmg
-#: res://addons/material_maker/nodes/sdarc.mmg
-#: res://addons/material_maker/nodes/sdboolean.mmg
-#: res://addons/material_maker/nodes/sdbox.mmg
-#: res://addons/material_maker/nodes/sdcircle.mmg
-#: res://addons/material_maker/nodes/sdcirclerepeat.mmg
-#: res://addons/material_maker/nodes/sdf3d_angle.mmg
-#: res://addons/material_maker/nodes/sdf3d_boolean.mmg
-#: res://addons/material_maker/nodes/sdf3d_box.mmg
-#: res://addons/material_maker/nodes/sdf3d_capsule.mmg
-#: res://addons/material_maker/nodes/sdf3d_capsule2.mmg
-#: res://addons/material_maker/nodes/sdf3d_circle_repeat.mmg
-#: res://addons/material_maker/nodes/sdf3d_color.mmg
-#: res://addons/material_maker/nodes/sdf3d_cylinder.mmg
-#: res://addons/material_maker/nodes/sdf3d_elongation.mmg
-#: res://addons/material_maker/nodes/sdf3d_extrusion.mmg
-#: res://addons/material_maker/nodes/sdf3d_morph.mmg
-#: res://addons/material_maker/nodes/sdf3d_plane.mmg
-#: res://addons/material_maker/nodes/sdf3d_repeat.mmg
-#: res://addons/material_maker/nodes/sdf3d_revolution.mmg
-#: res://addons/material_maker/nodes/sdf3d_rotate.mmg
-#: res://addons/material_maker/nodes/sdf3d_rounded.mmg
-#: res://addons/material_maker/nodes/sdf3d_scale.mmg
-#: res://addons/material_maker/nodes/sdf3d_smoothboolean.mmg
-#: res://addons/material_maker/nodes/sdf3d_sphere.mmg
-#: res://addons/material_maker/nodes/sdf3d_torus.mmg
-#: res://addons/material_maker/nodes/sdf3d_translate.mmg
-#: res://addons/material_maker/nodes/sdline.mmg
-#: res://addons/material_maker/nodes/sdline2.mmg
-#: res://addons/material_maker/nodes/sdmorph.mmg
-#: res://addons/material_maker/nodes/sdngon.mmg
-#: res://addons/material_maker/nodes/sdpolygon.mmg
-#: res://addons/material_maker/nodes/sdrepeat.mmg
-#: res://addons/material_maker/nodes/sdrhombus.mmg
-#: res://addons/material_maker/nodes/sdrotate.mmg
-#: res://addons/material_maker/nodes/sdroundedshape.mmg
-#: res://addons/material_maker/nodes/sdscale.mmg
-#: res://addons/material_maker/nodes/sdshow.mmg
-#: res://addons/material_maker/nodes/sdsmoothboolean.mmg
-#: res://addons/material_maker/nodes/sdtranslate.mmg
-#: res://addons/material_maker/nodes/shape.mmg
-#: res://addons/material_maker/nodes/sharpen.mmg
-#: res://addons/material_maker/nodes/shear.mmg
-#: res://addons/material_maker/nodes/sine_wave.mmg
-#: res://addons/material_maker/nodes/slope_blur.mmg
-#: res://addons/material_maker/nodes/smooth_curvature.mmg
-#: res://addons/material_maker/nodes/smooth_curvature2.mmg
-#: res://addons/material_maker/nodes/sphere.mmg
-#: res://addons/material_maker/nodes/splatter.mmg
-#: res://addons/material_maker/nodes/splatter_color.mmg
-#: res://addons/material_maker/nodes/supersample.mmg
-#: res://addons/material_maker/nodes/swap_channels.mmg
-#: res://addons/material_maker/nodes/tex3d_apply.mmg
-#: res://addons/material_maker/nodes/tex3d_apply2.mmg
-#: res://addons/material_maker/nodes/tex3d_apply_invuvmap.mmg
-#: res://addons/material_maker/nodes/tex3d_blend.mmg
-#: res://addons/material_maker/nodes/tex3d_colorize.mmg
-#: res://addons/material_maker/nodes/tex3d_distort.mmg
-#: res://addons/material_maker/nodes/tex3d_fbm.mmg
-#: res://addons/material_maker/nodes/tex3d_from2d.mmg
-#: res://addons/material_maker/nodes/tex3d_pattern.mmg
-#: res://addons/material_maker/nodes/tex3d_rotate.mmg
-#: res://addons/material_maker/nodes/tex3d_select.mmg
-#: res://addons/material_maker/nodes/tex3d_select_shape.mmg
-#: res://addons/material_maker/nodes/tile2x2.mmg
-#: res://addons/material_maker/nodes/tile2x2_variations.mmg
-#: res://addons/material_maker/nodes/tiler.mmg
-#: res://addons/material_maker/nodes/tiler_advanced.mmg
-#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
-#: res://addons/material_maker/nodes/tiler_color.mmg
-#: res://addons/material_maker/nodes/tonality.mmg
-#: res://addons/material_maker/nodes/tones_map.mmg
-#: res://addons/material_maker/nodes/tones_range.mmg
-#: res://addons/material_maker/nodes/tones_step.mmg
-#: res://addons/material_maker/nodes/transform.mmg
-#: res://addons/material_maker/nodes/transform2.mmg
-#: res://addons/material_maker/nodes/translate.mmg
-#: res://addons/material_maker/nodes/truchet.mmg
-#: res://addons/material_maker/nodes/uniform.mmg
-#: res://addons/material_maker/nodes/uniform_greyscale.mmg
-#: res://addons/material_maker/nodes/warp.mmg
-#: res://addons/material_maker/nodes/warp2.mmg
-#: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
-#: res://addons/material_maker/nodes/weave.mmg
-#: res://addons/material_maker/nodes/weave2.mmg
-#: res://material_maker/library/base.json
-msgid "Output"
-msgstr ""
-
-#: res://addons/material_maker/nodes/adjust_hsv.mmg
 #: res://addons/material_maker/nodes/normal_map_convert.mmg
 msgid "Shows the image with adjusted Hue, Saturation and Value"
 msgstr ""
@@ -1360,9 +1395,94 @@ msgid "Finds the minimum and maximum values in the input texture and tone maps i
 msgstr ""
 
 #: res://addons/material_maker/nodes/auto_tones.mmg
+#: res://addons/material_maker/nodes/brightness_contrast.mmg
+#: res://addons/material_maker/nodes/brush_select_from_id.mmg
+#: res://addons/material_maker/nodes/circle_map.mmg
+#: res://addons/material_maker/nodes/circle_splatter.mmg
+#: res://addons/material_maker/nodes/circle_splatter_color.mmg
+#: res://addons/material_maker/nodes/curve.mmg
+#: res://addons/material_maker/nodes/custom_uv.mmg
+#: res://addons/material_maker/nodes/default_color.mmg
+#: res://addons/material_maker/nodes/dilate_pass_1.mmg
+#: res://addons/material_maker/nodes/dilate_pass_2.mmg
 #: res://addons/material_maker/nodes/directional_blur.mmg
+#: res://addons/material_maker/nodes/edge_detect.mmg
+#: res://addons/material_maker/nodes/edge_detect_1.mmg
+#: res://addons/material_maker/nodes/edge_detect_2.mmg
+#: res://addons/material_maker/nodes/edge_detect_3.mmg
+#: res://addons/material_maker/nodes/fast_blur_shader.mmg
+#: res://addons/material_maker/nodes/fill_iterate.mmg
+#: res://addons/material_maker/nodes/fill_preprocess.mmg
+#: res://addons/material_maker/nodes/fill_to_color.mmg
+#: res://addons/material_maker/nodes/fill_to_position.mmg
+#: res://addons/material_maker/nodes/fill_to_random_color.mmg
+#: res://addons/material_maker/nodes/fill_to_random_grey.mmg
+#: res://addons/material_maker/nodes/fill_to_size.mmg
+#: res://addons/material_maker/nodes/fill_to_uv.mmg
+#: res://addons/material_maker/nodes/gaussian_blur_x.mmg
+#: res://addons/material_maker/nodes/gaussian_blur_y.mmg
+#: res://addons/material_maker/nodes/greyscale.mmg
+#: res://addons/material_maker/nodes/height_to_angle.mmg
+#: res://addons/material_maker/nodes/invert.mmg
+#: res://addons/material_maker/nodes/make_tileable.mmg
+#: res://addons/material_maker/nodes/morphology.mmg
+#: res://addons/material_maker/nodes/mul_detect.mmg
 #: res://addons/material_maker/nodes/multi_warp.mmg
+#: res://addons/material_maker/nodes/multigradient.mmg
+#: res://addons/material_maker/nodes/normal_map_convert.mmg
+#: res://addons/material_maker/nodes/optional.mmg
+#: res://addons/material_maker/nodes/polycurve.mmg
+#: res://addons/material_maker/nodes/profile.mmg
+#: res://addons/material_maker/nodes/quantize.mmg
+#: res://addons/material_maker/nodes/refract.mmg
+#: res://addons/material_maker/nodes/remap.mmg
+#: res://addons/material_maker/nodes/sdannularshape.mmg
+#: res://addons/material_maker/nodes/sdcirclerepeat.mmg
+#: res://addons/material_maker/nodes/sdelongation.mmg
+#: res://addons/material_maker/nodes/sdf3d_circle_repeat.mmg
+#: res://addons/material_maker/nodes/sdf3d_color.mmg
+#: res://addons/material_maker/nodes/sdf3d_elongation.mmg
+#: res://addons/material_maker/nodes/sdf3d_extrusion.mmg
+#: res://addons/material_maker/nodes/sdf3d_repeat.mmg
+#: res://addons/material_maker/nodes/sdf3d_revolution.mmg
+#: res://addons/material_maker/nodes/sdf3d_rotate.mmg
+#: res://addons/material_maker/nodes/sdf3d_rounded.mmg
+#: res://addons/material_maker/nodes/sdf3d_scale.mmg
+#: res://addons/material_maker/nodes/sdf3d_translate.mmg
+#: res://addons/material_maker/nodes/sdrepeat.mmg
+#: res://addons/material_maker/nodes/sdrotate.mmg
+#: res://addons/material_maker/nodes/sdroundedshape.mmg
+#: res://addons/material_maker/nodes/sdscale.mmg
+#: res://addons/material_maker/nodes/sdshow.mmg
+#: res://addons/material_maker/nodes/sdtranslate.mmg
+#: res://addons/material_maker/nodes/sharpen.mmg
+#: res://addons/material_maker/nodes/shear.mmg
 #: res://addons/material_maker/nodes/slope_blur.mmg
+#: res://addons/material_maker/nodes/splatter.mmg
+#: res://addons/material_maker/nodes/splatter_color.mmg
+#: res://addons/material_maker/nodes/supersample.mmg
+#: res://addons/material_maker/nodes/swap_channels.mmg
+#: res://addons/material_maker/nodes/tex3d_colorize.mmg
+#: res://addons/material_maker/nodes/tex3d_from2d.mmg
+#: res://addons/material_maker/nodes/tex3d_rotate.mmg
+#: res://addons/material_maker/nodes/tile2x2_variations.mmg
+#: res://addons/material_maker/nodes/tiler.mmg
+#: res://addons/material_maker/nodes/tiler_advanced.mmg
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+#: res://addons/material_maker/nodes/tiler_color.mmg
+#: res://addons/material_maker/nodes/tones_map.mmg
+#: res://addons/material_maker/nodes/tones_range.mmg
+#: res://addons/material_maker/nodes/tones_step.mmg
+#: res://addons/material_maker/nodes/truchet_generic.mmg
+#: res://addons/material_maker/nodes/variations_color.mmg
+#: res://addons/material_maker/nodes/variations_greyscale.mmg
+#: res://addons/material_maker/nodes/variations_rgba.mmg
+#: res://addons/material_maker/nodes/variations_sdf2d.mmg
+#: res://addons/material_maker/nodes/variations_sdf3dc.mmg
+#: res://addons/material_maker/nodes/variations_tex3d.mmg
+#: res://addons/material_maker/nodes/warp.mmg
+#: res://addons/material_maker/nodes/warp2.mmg
+#: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
 msgid "in"
 msgstr ""
 
@@ -1978,6 +2098,21 @@ msgstr ""
 msgid "Bricks NonTileable"
 msgstr ""
 
+#: res://addons/material_maker/nodes/bricks_nontileable.mmg
+#: res://addons/material_maker/nodes/bricks_uneven.mmg
+msgid "mortar_map"
+msgstr ""
+
+#: res://addons/material_maker/nodes/bricks_nontileable.mmg
+#: res://addons/material_maker/nodes/bricks_uneven.mmg
+msgid "bevel_map"
+msgstr ""
+
+#: res://addons/material_maker/nodes/bricks_nontileable.mmg
+#: res://addons/material_maker/nodes/bricks_uneven.mmg
+msgid "round_map"
+msgstr ""
+
 #: res://addons/material_maker/nodes/bricks_uneven.mmg
 msgid "Uneven Bricks"
 msgstr ""
@@ -2058,6 +2193,10 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/brush_select_from_id.mmg
 msgid "Select From ID"
+msgstr ""
+
+#: res://addons/material_maker/nodes/brush_select_from_id.mmg
+msgid "ids"
 msgstr ""
 
 #: res://addons/material_maker/nodes/circle_map.mmg
@@ -2410,6 +2549,19 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/circle_splatter.mmg
 #: res://addons/material_maker/nodes/circle_splatter_color.mmg
+#: res://addons/material_maker/nodes/dilate.mmg
+#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
+#: res://addons/material_maker/nodes/splatter.mmg
+#: res://addons/material_maker/nodes/splatter_color.mmg
+#: res://addons/material_maker/nodes/tiler.mmg
+#: res://addons/material_maker/nodes/tiler_advanced.mmg
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+#: res://addons/material_maker/nodes/tiler_color.mmg
+msgid "mask"
+msgstr ""
+
+#: res://addons/material_maker/nodes/circle_splatter.mmg
+#: res://addons/material_maker/nodes/circle_splatter_color.mmg
 #: res://addons/material_maker/nodes/splatter.mmg
 #: res://addons/material_maker/nodes/splatter_color.mmg
 #: res://addons/material_maker/nodes/tiler.mmg
@@ -2535,6 +2687,14 @@ msgid "The gradient to which the input is remapped"
 msgstr ""
 
 #: res://addons/material_maker/nodes/colorize.mmg
+#: res://addons/material_maker/nodes/fast_blur.mmg
+#: res://addons/material_maker/nodes/gaussian_blur.mmg
+#: res://addons/material_maker/nodes/tonality.mmg
+#: res://addons/material_maker/nodes/tones.mmg
+msgid "input"
+msgstr ""
+
+#: res://addons/material_maker/nodes/colorize.mmg
 #: res://addons/material_maker/nodes/tonality.mmg
 msgid "The input greyscale image"
 msgstr ""
@@ -2600,6 +2760,38 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/compare.mmg
 msgid "Compare"
+msgstr ""
+
+#: res://addons/material_maker/nodes/compare.mmg
+#: res://addons/material_maker/nodes/math.mmg
+#: res://addons/material_maker/nodes/math_v3.mmg
+#: res://addons/material_maker/nodes/sdboolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_boolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_morph.mmg
+#: res://addons/material_maker/nodes/sdf3d_smoothboolean.mmg
+#: res://addons/material_maker/nodes/sdmorph.mmg
+#: res://addons/material_maker/nodes/sdsmoothboolean.mmg
+#: res://addons/material_maker/nodes/tex3d_distort.mmg
+#: res://addons/material_maker/nodes/tex3d_select.mmg
+#: res://addons/material_maker/nodes/tex3d_select_shape.mmg
+#: res://addons/material_maker/nodes/tile2x2.mmg
+msgid "in1"
+msgstr ""
+
+#: res://addons/material_maker/nodes/compare.mmg
+#: res://addons/material_maker/nodes/math.mmg
+#: res://addons/material_maker/nodes/math_v3.mmg
+#: res://addons/material_maker/nodes/sdboolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_boolean.mmg
+#: res://addons/material_maker/nodes/sdf3d_morph.mmg
+#: res://addons/material_maker/nodes/sdf3d_smoothboolean.mmg
+#: res://addons/material_maker/nodes/sdmorph.mmg
+#: res://addons/material_maker/nodes/sdsmoothboolean.mmg
+#: res://addons/material_maker/nodes/tex3d_distort.mmg
+#: res://addons/material_maker/nodes/tex3d_select.mmg
+#: res://addons/material_maker/nodes/tex3d_select_shape.mmg
+#: res://addons/material_maker/nodes/tile2x2.mmg
+msgid "in2"
 msgstr ""
 
 #: res://addons/material_maker/nodes/curve.mmg
@@ -2913,15 +3105,11 @@ msgid "Distance function"
 msgstr ""
 
 #: res://addons/material_maker/nodes/dilate.mmg
-#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
-msgid "mask"
-msgstr ""
-
-#: res://addons/material_maker/nodes/dilate.mmg
 msgid "The input mask whose white areas will be dilated"
 msgstr ""
 
 #: res://addons/material_maker/nodes/dilate.mmg
+#: res://addons/material_maker/nodes/dilate_pass_3.mmg
 msgid "source"
 msgstr ""
 
@@ -2959,6 +3147,11 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/dilate_pass_3.mmg
 msgid "Distance pass 3"
+msgstr ""
+
+#: res://addons/material_maker/nodes/dilate_pass_3.mmg
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+msgid "distance"
 msgstr ""
 
 #: res://addons/material_maker/nodes/directional_blur.mmg
@@ -3002,6 +3195,8 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/directional_blur.mmg
 #: res://addons/material_maker/nodes/gaussian_blur.mmg
+#: res://addons/material_maker/nodes/gaussian_blur_x.mmg
+#: res://addons/material_maker/nodes/gaussian_blur_y.mmg
 msgid "amount"
 msgstr ""
 
@@ -3139,11 +3334,6 @@ msgstr ""
 #: res://addons/material_maker/nodes/fast_blur.mmg
 #: res://addons/material_maker/nodes/fast_blur_shader.mmg
 msgid "Fast Blur"
-msgstr ""
-
-#: res://addons/material_maker/nodes/fast_blur.mmg
-#: res://addons/material_maker/nodes/gaussian_blur.mmg
-msgid "input"
 msgstr ""
 
 #: res://addons/material_maker/nodes/fast_blur.mmg
@@ -3826,6 +4016,55 @@ msgstr ""
 msgid "Subsurf. scatter."
 msgstr ""
 
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "albedo_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "metallic_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "roughness_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "emission_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "normal_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "ao_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "depth_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+msgid "opacity_tex"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material.mmg
+msgid "sss_tex"
+msgstr ""
+
 #: res://addons/material_maker/nodes/material_3d.mmg
 msgid "3D PBR Material"
 msgstr ""
@@ -3845,6 +4084,14 @@ msgstr ""
 #: res://addons/material_maker/nodes/material_raymarching.mmg
 #: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
 msgid "Distance"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+msgid "metallic"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+msgid "roughness"
 msgstr ""
 
 #: res://addons/material_maker/nodes/material_unlit.mmg
@@ -3869,6 +4116,10 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/material_unlit.mmg
 msgid "Sub"
+msgstr ""
+
+#: res://addons/material_maker/nodes/material_unlit.mmg
+msgid "color_tex"
 msgstr ""
 
 #: res://addons/material_maker/nodes/math.mmg
@@ -4072,6 +4323,10 @@ msgstr ""
 msgid "Tolerance"
 msgstr ""
 
+#: res://addons/material_maker/nodes/mul_detect.mmg
+msgid "mul"
+msgstr ""
+
 #: res://addons/material_maker/nodes/multi_warp.mmg
 #: res://material_maker/library/base.json
 msgid "Multi Warp"
@@ -4168,7 +4423,15 @@ msgid "Applies a workflow map to a base material, and generates height informati
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_map.mmg
+msgid "map"
+msgstr ""
+
+#: res://addons/material_maker/nodes/mwf_map.mmg
 msgid "The input workflow map"
+msgstr ""
+
+#: res://addons/material_maker/nodes/mwf_map.mmg
+msgid "mat1"
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_map.mmg
@@ -4182,11 +4445,23 @@ msgid "ORM"
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_map.mmg
+msgid "mat2"
+msgstr ""
+
+#: res://addons/material_maker/nodes/mwf_map.mmg
 msgid "The ambient occlusion, roughness and metallic channels of the input material"
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_map.mmg
+msgid "mat3"
+msgstr ""
+
+#: res://addons/material_maker/nodes/mwf_map.mmg
 msgid "The emission channel of the input material"
+msgstr ""
+
+#: res://addons/material_maker/nodes/mwf_map.mmg
+msgid "mat4"
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_map.mmg
@@ -4889,6 +5164,12 @@ msgid "Raymarches a 3D object (described as signed distance function with option
 msgstr ""
 
 #: res://addons/material_maker/nodes/raymarching.mmg
+#: res://addons/material_maker/nodes/raymarching_preview.mmg
+#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
+msgid "sdf"
+msgstr ""
+
+#: res://addons/material_maker/nodes/raymarching.mmg
 msgid "The input object, described as 3D signed distance function with color index"
 msgstr ""
 
@@ -5074,10 +5355,6 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
 msgid "The greyscale mask to be converted"
-msgstr ""
-
-#: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
-msgid "sdf"
 msgstr ""
 
 #: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
@@ -5416,6 +5693,11 @@ msgstr ""
 #: res://addons/material_maker/nodes/sdf3d_capsule.mmg
 #: res://addons/material_maker/nodes/sdf3d_capsule2.mmg
 msgid "Shows the capsule"
+msgstr ""
+
+#: res://addons/material_maker/nodes/sdf3d_capsule2.mmg
+#: res://addons/material_maker/nodes/sdline2.mmg
+msgid "profile"
 msgstr ""
 
 #: res://addons/material_maker/nodes/sdf3d_capsule2.mmg
@@ -6679,6 +6961,10 @@ msgid "The width of the transition area between both textures"
 msgstr ""
 
 #: res://addons/material_maker/nodes/tex3d_select_shape.mmg
+msgid "shape"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tex3d_select_shape.mmg
 msgid "The shape in which input1 is applied"
 msgstr ""
 
@@ -6703,7 +6989,15 @@ msgid "The second input"
 msgstr ""
 
 #: res://addons/material_maker/nodes/tile2x2.mmg
+msgid "in3"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tile2x2.mmg
 msgid "The third input"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tile2x2.mmg
+msgid "in4"
 msgstr ""
 
 #: res://addons/material_maker/nodes/tile2x2.mmg
@@ -6938,6 +7232,30 @@ msgstr ""
 msgid "Advanced Tiler Color"
 msgstr ""
 
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "color1"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "color2"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "tr_x"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "tr_y"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "sc_x"
+msgstr ""
+
+#: res://addons/material_maker/nodes/tiler_advanced_color.mmg
+msgid "sc_y"
+msgstr ""
+
 #: res://addons/material_maker/nodes/tiler_color.mmg
 msgid "Color Tiler"
 msgstr ""
@@ -7150,6 +7468,22 @@ msgstr ""
 
 #: res://addons/material_maker/nodes/transform2.mmg
 msgid "Extend"
+msgstr ""
+
+#: res://addons/material_maker/nodes/transform2.mmg
+msgid "tx"
+msgstr ""
+
+#: res://addons/material_maker/nodes/transform2.mmg
+msgid "ty"
+msgstr ""
+
+#: res://addons/material_maker/nodes/transform2.mmg
+msgid "sx"
+msgstr ""
+
+#: res://addons/material_maker/nodes/transform2.mmg
+msgid "sy"
 msgstr ""
 
 #: res://addons/material_maker/nodes/translate.mmg
@@ -7456,6 +7790,10 @@ msgid "The attenuation applied along the path"
 msgstr ""
 
 #: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
+msgid "hm"
+msgstr ""
+
+#: res://addons/material_maker/nodes/warp_dilation_nobuf.mmg
 msgid "The height map whose contours or slopes are followed"
 msgstr ""
 
@@ -7482,6 +7820,11 @@ msgstr ""
 #: res://addons/material_maker/nodes/weave.mmg
 #: res://addons/material_maker/nodes/weave2.mmg
 msgid "The width of each row/column"
+msgstr ""
+
+#: res://addons/material_maker/nodes/weave.mmg
+#: res://addons/material_maker/nodes/weave2.mmg
+msgid "width_map"
 msgstr ""
 
 #: res://addons/material_maker/nodes/weave.mmg

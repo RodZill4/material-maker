@@ -63,6 +63,7 @@ Reference|
 Brushes|
 Layers|
 Parameters|
+Output|
 Unlock seed|
 Lock seed|
 Copy seed|
@@ -124,8 +125,10 @@ Invert|
 Default|Par défaut
 Apply|Appliquer
 © 2018-2021 Rodolphe Suescun and contributors|
+Authors|
  Godot Engine|
 99% of Material Maker's code is the awesome Godot Engine|
+License|
 Node|Nœud
 path/to/node|chemin/vers/nœud
 Short Description:|Description courte :
@@ -163,9 +166,14 @@ Project file|Fichier de projet
 Value:|Valeur :
 name|nom
 Label|Label
+General|
 Parameters:|Paramètres :
 Inputs:|Entrées :
+Outputs|
 Outputs:|Sorties :
+Main Code|
+Instance Functions|
+Global Functions|
 Includes:|Inclus :
 float|float
 Control:|Contrôle :
@@ -180,6 +188,7 @@ UI scale (0 = auto):|Échelle UI (0 = automatique) :
 Enable VSync|Activer la synchronisation verticale
 FPS limit:|Limite de FPS :
 Idle FPS limit:|Limite de FPS lorsque inactif :
+Bake|
 Ray count:|Nombre de rayons :
 Ray length:|Longueur des rayons :
 Denoise radius:|Rayon du débruitage :
@@ -195,7 +204,6 @@ Value|
 The Value adjustment|
 Input|
 The input image|
-Output|
 Shows the image with adjusted Hue, Saturation and Value|
 Arc pavement|
 Draws a white shape on a black background|
@@ -324,6 +332,9 @@ An UV map output for each brick corner, to be connected to the Map input of a Cu
 Direction|
 The direction of each brick (white: horizontal, black: vertical)|
 Bricks NonTileable|
+mortar_map|
+bevel_map|
+round_map|
 Uneven Bricks|
 Uneven bricks|
 Generates an uneven bricks pattern.|
@@ -342,6 +353,7 @@ Contrast|
 The Contrast adjustment|
 Shows the image with modified Brightness and Contrast|
 Select From ID|
+ids|
 CircleMap|
 Maps its input into a circle|
 Radius|
@@ -382,6 +394,7 @@ Rnd Value|
 RndValue|
 The random greyscale value applied to each image instance|
 The input image or atlas of 4 or 16 input images|
+mask|
 The mask applied to the pattern|
 Shows the generated pattern|
 Instance map|
@@ -402,6 +415,7 @@ Shows the noise pattern|
 Colorize|
 Remaps a greyscale image to a custom gradient|
 The gradient to which the input is remapped|
+input|
 The input greyscale image|
 The remapped RGBA image|
 Combine|
@@ -416,6 +430,8 @@ Alpha|
 The greyscale input for the alpha channel|
 Shows the combined RGBA image|
 Compare|
+in1|
+in2|
 Curve|
 AX|
 Position on X axis of the first control point|
@@ -474,7 +490,6 @@ The length of the dilate effect|
 Fill|
 0 to generate a gradient to black while dilating, 1 to fill with input color|
 Distance function|
-mask|
 The input mask whose white areas will be dilated|
 source|
 Source|
@@ -486,6 +501,7 @@ Euclidian|
 Manhattan|
 Chebyshev|
 Distance pass 3|
+distance|
 Directional Blur|
 Directional blur|
 Applies a directional gaussian blur to its input|
@@ -517,7 +533,6 @@ Strength|
 The strength of the emboss effect|
 The width (in pixels) of the area sampled for each pixel|
 Fast Blur|
-input|
 output|
 The generated blurred image|
 Resolution|
@@ -655,16 +670,28 @@ Roughness|
 Ambient occlusion|
 Transparency|
 Subsurf. scatter.|
+albedo_tex|
+metallic_tex|
+roughness_tex|
+emission_tex|
+normal_tex|
+ao_tex|
+depth_tex|
+opacity_tex|
+sss_tex|
 3D PBR Material|
 World|
 Dynamic PBR Material|
 Raymarching Material|
 Distance|
+metallic|
+roughness|
 Dynamic Unlit Material|
 Add|
 Mix|
 Mul|
 Sub|
+color_tex|
 Math|
 Performs a math operation using its inputs or parameter values|
 Operation|
@@ -705,6 +732,7 @@ Shows the mirrored image|
 Morphology Dilation|
 MulDetect|
 Tolerance|
+mul|
 Multi Warp|
 The Multi Warp  node deforms an input image according to the derivative of the second input image. Unlike Warp  node, the derivative of the second texture is sampled at each iteration  producing more varied results at cost of the performance.|
 Grid size|
@@ -726,11 +754,16 @@ The input offset seed map|
 The generated workflow map, to be connected to a MixMap or an ApplyMap node|
 Apply Map|
 Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.|
+map|
 The input workflow map|
+mat1|
 The Albedo channel of the input base material|
 ORM|
+mat2|
 The ambient occlusion, roughness and metallic channels of the input material|
+mat3|
 The emission channel of the input material|
+mat4|
 The normal map of the input material|
 The height map of the result|
 The albedo channel of the result|
@@ -886,6 +919,7 @@ The quantized image|
 Radial Gradient|
 Render|
 Raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.|
+sdf|
 The input object, described as 3D signed distance function with color index|
 HeightMap|
 The generated height map|
@@ -930,7 +964,6 @@ The randomness of the scratches angles|
 Shows white scratches on a black background|
 Mask to SDF|
 The greyscale mask to be converted|
-sdf|
 The genrated distance field|
 The resolution used for the operation|
 The number of iterations the jump flood algorithm performs to calculate the distances|
@@ -999,6 +1032,7 @@ The axis of the capsule|
 The length of the capsule|
 The radius of the capsule|
 Shows the capsule|
+profile|
 An input gradient (generated, for example by a Tonality node) that defines a profile for the shape|
 Color|
 Assigns a color index to a 3D object|
@@ -1283,12 +1317,15 @@ TEX3D Shape Select|
 Tex3D Shape Select|
 Selects a 3D texture inside, and another outside a shape. This can be used to map several textures into a single 3D scene.|
 The width of the transition area between both textures|
+shape|
 The shape in which input1 is applied|
 Tile2x2|
 Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.|
 The first input|
 The second input|
+in3|
 The third input|
+in4|
 The fourth input|
 Shows the generated atlas|
 Tile2x2 Variations|
@@ -1331,6 +1368,12 @@ Instance map 1|
 Shows a color for each instance of the input image|
 Instance map 2|
 Advanced Tiler Color|
+color1|
+color2|
+tr_x|
+tr_y|
+sc_x|
+sc_y|
 Color Tiler|
 Instance Map|
 Tonality|
@@ -1380,6 +1423,10 @@ ScaleMap.y|
 An optional map for scaling along the Y axis|
 Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges|
 Extend|
+tx|
+ty|
+sx|
+sy|
 Translates its input|
 Shows the translated image|
 Truchet|
@@ -1443,12 +1490,14 @@ The resolution at which the contours or slopes are followed (higher values will 
 The distance along which the contours or slopes are followed|
 Attenuation|
 The attenuation applied along the path|
+hm|
 The height map whose contours or slopes are followed|
 The dilated image|
 Weave|
 Weave pattern|
 Generates a simple weave pattern|
 The width of each row/column|
+width_map|
 An input map that affects the width parameter|
 Shows the generated greyscale weave pattern.|
 Width X|

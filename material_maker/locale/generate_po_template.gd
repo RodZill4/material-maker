@@ -11,6 +11,7 @@ class TranslationStrings:
 
 	var word_regex : RegEx
 	var tr_regex : RegEx
+	var node_regex : RegEx
 	var menu_regex : RegEx
 	var panel_regex : RegEx
 	var tscn_regex : RegEx
@@ -20,6 +21,8 @@ class TranslationStrings:
 		word_regex.compile("[a-zA-Z]{2}")
 		tr_regex = RegEx.new()
 		tr_regex.compile("tr\\s*\\(\"(.*?)\"\\)")
+		node_regex = RegEx.new()
+		node_regex.compile("\\[node name=\"(.*)\" type=\"(.*)\" parent=\"(.*)\"\\]")
 		menu_regex = RegEx.new()
 		menu_regex.compile("menu=\"([^\"]*?)\".*description=\"([^\"]*)")
 		panel_regex = RegEx.new()
@@ -82,7 +85,6 @@ class TranslationStrings:
 		var l = f.get_line()
 		var sep_char = l[2]
 		input_translation.locale = l.split(sep_char)[1]
-		print(input_translation.locale)
 		while !f.eof_reached():
 			l = f.get_line()
 			var line
@@ -200,18 +202,30 @@ class TranslationStrings:
 		var f : File = File.new()
 		if f.open(fn, File.READ) == OK:
 			var line_number = 1
+			var tab_containers : Array = []
 			while ! f.eof_reached():
 				var l : String = f.get_line()
 				var result = tscn_regex.search(l)
 				if result != null:
 					if result.strings[1] in [ "text", "tooltip_hint" ] and add_string(result.strings[2], fn+":"+str(line_number)):
 						string_count += 1
+				result = node_regex.search(l)
+				if result != null:
+					if result.strings[2] == "TabContainer":
+						var tab_container
+						if result.strings[3] == ".":
+							tab_container = result.strings[1]
+						else:
+							tab_container = "%s/%s" % [ result.strings[3], result.strings[1] ]
+						tab_containers.push_back(tab_container)
+					elif result.strings[3] in tab_containers and add_string(result.strings[1], fn+":"+str(line_number)):
+						string_count += 1
 				line_number += 1
 		return string_count
 
 	const FIELDS : Dictionary = {
 		"parameters": [ "label", "shortdesc", "longdesc" ],
-		"inputs": [ "label", "shortdesc", "longdesc" ],
+		"inputs": [ "label", [ "shortdesc", "name" ], "longdesc" ],
 		"outputs": [ "shortdesc", "longdesc" ]
 	}
 
@@ -253,12 +267,18 @@ class TranslationStrings:
 									string_count += 1
 								if json.shader_model.has("longdesc") and add_string(json.shader_model.longdesc, fn):
 									string_count += 1
-								for t in [ "parameters", "inputs", "outputs" ]:
+								for t in FIELDS.keys():
 									if json.shader_model.has(t):
 										for x in json.shader_model[t]:
 											for field in FIELDS[t]:
-												if x.has(field) and add_string(x[field], fn):
-													string_count += 1
+												if field is String:
+													if x.has(field) and add_string(x[field], fn):
+														string_count += 1
+												elif field is Array:
+													for field1 in field:
+														if x.has(field1) and add_string(x[field1], fn):
+															string_count += 1
+															break
 											if x.has("values"):
 												for v in x.values:
 													if v.has("name") and add_string(v.name, fn):
@@ -336,9 +356,11 @@ func _run():
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			var language = file_name.get_basename()
-			if ! languages.has(language) or file_name.get_extension() != "csv":
-				languages[language] = path.plus_file(file_name)
+			match file_name.get_extension():
+				"csv", "po", "translation":
+					var language = file_name.get_basename()
+					if ! languages.has(language) or file_name.get_extension() != "csv":
+						languages[language] = path.plus_file(file_name)
 			file_name = dir.get_next()
 		for l in languages.keys():
 			print("Processing %s" % l)
@@ -346,4 +368,3 @@ func _run():
 			var out_file : String = languages[l].get_basename()+".csv"
 			print("%s -> %s" % [ in_file, out_file ])
 			ts.save_csv(out_file, ts.read_language_file(in_file))
-	

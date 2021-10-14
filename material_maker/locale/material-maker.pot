@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: rodzilla@free.fr\n"
-"POT-Creation-Date: 2021-10-14 08:19\n"
+"POT-Creation-Date: 2021-10-14 19:50\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,6 +275,10 @@ msgstr ""
 
 #: res:///material_maker/main_window_layout.gd:19
 msgid "Parameters"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:100
+msgid "Output"
 msgstr ""
 
 #: res:///material_maker/nodes/base.gd:147
@@ -564,12 +568,20 @@ msgstr ""
 msgid "© 2018-2021 Rodolphe Suescun and contributors"
 msgstr ""
 
+#: res:///material_maker/windows/about/about.tscn:99
+msgid "Authors"
+msgstr ""
+
 #: res:///material_maker/windows/about/about.tscn:134
 msgid " Godot Engine"
 msgstr ""
 
 #: res:///material_maker/windows/about/about.tscn:143
 msgid "99% of Material Maker's code is the awesome Godot Engine"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:146
+msgid "License"
 msgstr ""
 
 #: res:///material_maker/windows/add_node_popup/node_selection_button.tscn:46
@@ -725,6 +737,11 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+#: res:///material_maker/windows/node_editor/node_editor.tscn:42
+#: res:///material_maker/windows/preferences/preferences.tscn:43
+msgid "General"
+msgstr ""
+
 #: res:///material_maker/windows/node_editor/node_editor.tscn:77
 msgid "Parameters:"
 msgstr ""
@@ -733,8 +750,24 @@ msgstr ""
 msgid "Inputs:"
 msgstr ""
 
+#: res:///material_maker/windows/node_editor/node_editor.tscn:127
+msgid "Outputs"
+msgstr ""
+
 #: res:///material_maker/windows/node_editor/node_editor.tscn:139
 msgid "Outputs:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:162
+msgid "Main Code"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:175
+msgid "Instance Functions"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:188
+msgid "Global Functions"
 msgstr ""
 
 #: res:///material_maker/windows/node_editor/node_editor.tscn:205
@@ -791,6 +824,10 @@ msgstr ""
 
 #: res:///material_maker/windows/preferences/preferences.tscn:258
 msgid "Idle FPS limit:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:277
+msgid "Bake"
 msgstr ""
 
 #: res:///material_maker/windows/preferences/preferences.tscn:292

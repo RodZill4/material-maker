@@ -258,6 +258,7 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 text = "Cancel"
 
+[connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
 [connection signal="pressed" from="Sizer/Tabs/Outputs/Outputs/Sizer/AddOutput" to="." method="_on_AddOutput_pressed"]

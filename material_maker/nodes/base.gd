@@ -64,7 +64,7 @@ func _draw() -> void:
 			conn_pos2 /= scale
 			draw_line(conn_pos1, conn_pos2, color)
 		if show_inputs:
-			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else inputs[i].name
+			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, color)
 	var outputs = generator.get_output_defs()
@@ -97,7 +97,7 @@ func _draw() -> void:
 			conn_pos /= scale
 			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
 		if show_outputs:
-			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else ("Output "+str(i))
+			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else (tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
 

@@ -134,6 +134,9 @@ func _on_Functions_text_changed():
 				error_label.visible = true
 				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 
+func _on_Sizer_minimum_size_changed():
+	rect_size = $Sizer.rect_size+Vector2(4, 4)
+
 # OK/Apply/Cancel buttons
 
 func _on_Apply_pressed() -> void:
@@ -145,5 +148,7 @@ func _on_OK_pressed() -> void:
 
 func _on_Cancel_pressed() -> void:
 	queue_free()
+
+
 
 
