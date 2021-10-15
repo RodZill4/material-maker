@@ -26,9 +26,9 @@ func has_randomness() -> bool:
 func get_description() -> String:
 	var desc_list : PoolStringArray = PoolStringArray()
 	if shader_model.has("shortdesc"):
-		desc_list.push_back(shader_model.shortdesc)
+		desc_list.push_back(TranslationServer.translate(shader_model.shortdesc))
 	if shader_model.has("longdesc"):
-		desc_list.push_back(shader_model.longdesc)
+		desc_list.push_back(TranslationServer.translate(shader_model.longdesc))
 	return desc_list.join("\n")
 
 func get_type() -> String:

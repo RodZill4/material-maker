@@ -1,0 +1,1872 @@
+id,zh
+ Godot Engine,Godot引擎
+- 0: circles,- 0：圆圈
+- 16: atlas of 16 images,- 16：16张图片的图集
+- 1: single image,- 1：单幅图像
+- 1: spiral,- 1：螺旋
+- 4: atlas of 4 images,- 4：4张图片的图集
+"0 to generate a gradient to black while dilating, 1 to fill with input color",0 在扩张时生成黑色渐变，1 用输入颜色填充
+1 preview,1个缩略图
+2 previews,2个缩略图
+2:Translate X:,2：位移X：
+3 previews,3个缩略图
+3D,3D
+3D preview resolution:,3D预览分辨率:
+3D preview sun shadow (requires restart),3D预览太阳阴影(需要重启)
+3D preview tesselation detail:,3D预览细分度(置换):
+3Dpreviewresolution,3D预览分辨率
+3Dpreviewsunshadow(requiresrestart),3D预览太阳阴影(需要重启)
+99% of Material Maker's code is the awesome Godot Engine,Material Maker 的 99% 的代码都是很棒的 Godot 引擎
+A,A
+A Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.,带有平移贴图的 Transform 节点可以产生类似于 Slope Warp 的效果'并且通常速度更快。
+A circle described as a signed distance function,描述为带符号距离函数的圆
+A color pattern that assigns a random color to each cell,为每个单元格分配随机颜色的颜色图案
+A fill companion node that fills each area with a color taken from a color map image,一个填充伴随节点'用从颜色图图像中获取的颜色填充的每个区域
+A fill companion node that fills each area with a greyscale value that depends on its position,一个填充伴随节点'用取决于其位置的灰度值填充每个区域
+A fill companion node that fills each area with a greyscale value that depends on its size,一个填充伴随节点'用取决于其大小的灰度值填充每个区域
+A fill companion node that fills each area with a random color,用随机颜色填充每个区域的填充伴随节点
+A fill companion node that fills each area with a random greyscale value,用随机灰度值填充每个区域的填充伴随节点
+A fill companion node that generated an UV map that follows each filled area,一个填充伴随节点'生成一个跟随每个填充区域的 UV 贴图
+A filter that inverts the R,"一种过滤器'它反转其输入的 R、G 和 B 通道,同时保持 A 通道不变"
+"A filter that inverts the R, G, and B channels of its input while keeping the A channel unchanged",一种滤波器，它反转其输入的 R、G 和 B 通道，同时保持 A 通道不变
+A filter that samples sub-pixel details to make them visible,对子像素细节进行采样以使其可见的过滤器
+A greyscale 3D texture that combines patterns along all 3 axes,沿所有 3 个轴组合图案的灰度 3D 纹理
+A greyscale image showing random I Ching hexagrams.,显示随机易经卦的灰度图像。
+A greyscale image showing random runes.,显示随机符文的灰度图像。
+A greyscale image that combines the horizontal and vertical patterns,合并水平和垂直图案的灰度图像
+A greyscale image that shows the bricks pattern,显示砖块图案的灰度图像
+A greyscale pattern based on the distance to borders,基于到边界距离的灰度图案
+A greyscale pattern based on the distance to cell centers,基于到细胞中心距离的灰度图案
+A height map whose slopes control the strength and direction of the blur filter,高度图，其斜率控制模糊过滤器的强度和方向
+A heightmap of the specified box,指定框的高度图
+A heightmap of the specified sphere,指定球体的高度图
+A line or a capsule shape described as a signed distance function,描述为有符号距离函数的线或胶囊形状
+A map for rotation,旋转贴图
+A map for scale along the X axis,沿 X 轴缩放的贴图
+A map for scale along the Y axis,沿 Y 轴缩放的贴图
+A map for translation along the X axis,沿 X 轴平移的贴图
+A map for translation along the Y axis,沿 Y 轴平移的贴图
+A map that affects the Bevel parameter,影响倒角参数的贴图
+A map that affects the Mortar parameter,影响砖缝参数的贴图
+A map that affects the Round parameter,影响 Round 参数的贴图
+A map that controls the strength of the blur filter,控制模糊滤镜强度的贴图
+A pixelated version of the input image,输入图像的像素化版本
+A polygon as a signed distance function,作为有符号距离函数的多边形
+A random color for each brick,每块砖的随机颜色
+A rectangle described as a signed distance function,描述为有符号距离函数的矩形
+A rhombus described as a signed distance function,描述为带符号距离函数的菱形
+A tileable version of the input image,输入图像的平铺版本
+A uniform image of the selected color,所选颜色的均色图像
+A uniform image of the selected value,所选值的均色图像
+A value factor for greyscale outputs,灰度输出的值因子
+A.x,A点的X
+A.y,A点的Y
+AX,AX
+AY,AY
+About,关于
+Add,添加
+Add configurations:,添加预设:
+Add current brush to library,添加当前笔刷到笔刷库
+Add linked control:,添加链接控制:
+Add selected node to library,将选定节点添加到库
+Adjust HSV,调整 HSV
+AdjustHSV,调整HSV
+Adjusts the Brightness and Contrast of its input,调整其输入的亮度和对比度
+Adjusts the Hue,调整其输入的色相、饱和度和值
+"Adjusts the Hue, Saturation and Value of its input",调整其输入的色相、饱和度和值
+Adjusts the falloff of the output,调整输出的衰减
+Advanced,先进
+Advanced Tiler,高级贴块器
+Advanced Tiler Color,高级彩色贴块器
+Affect children seeds,影响子级随机种子
+Albedo,漫反射
+Albedo (current layer),反照率(当前层)
+Albedo 1,基础色1
+Albedo 2, 基础色2
+Albedo alpha:,基本色透明度
+Albedo1,漫反射1
+Albedo2,漫反射2
+Alert,警告
+Alpha,Alpha
+Aluminum,铝
+Ambient Energy:,环境能量:
+Ambient Occlusion,环境光遮蔽
+Ambient color:,环境色
+Ambient occlusion,环境光遮蔽
+Amount,数量
+Amount of dithering in the output image,输出图像中的抖动量
+Amplitude,振幅
+An UV map output for each brick,每个砖块的 UV 贴图输出，连接到 自定义UV节点的 Map 输入
+An UV map output for each brick corner,每个砖角的 UV 贴图输出'连接到 自定义UV节点的 Map 输入
+"An UV map output for each brick corner, to be connected to the Map input of a CustomUV node",每个-砖角-的 UV 贴图输出，连接到 用户定义UV 节点的 贴图 输入
+"An UV map output for each brick, to be connected to the Map input of a CustomUV node",每个砖块的 UV 贴图输出，连接到 用户定义UV 节点的 贴图输入
+An arc as a signed distance function,作为有符号距离函数的弧
+An edge detect filter that detects edges along all directions and draws them in white on a black background,一个边缘检测过滤器'可检测所有方向的边缘并在黑色背景上以白色绘制它们
+An edge detect filter that detects edges along diagonals and draws them in white on a black background,边缘检测过滤器'可检测沿对角线的边缘并在黑色背景上以白色绘制它们
+An edge detect filter that detects edges horizontally and vertically and draws them in white on a black background,一个边缘检测过滤器’用于检测水平和垂直边缘'并在黑色背景上以白色绘制它们
+An image showing the gradient,显示渐变的图像
+An image showing the profile defined by the gradient,显示由渐变定义的轮廓的图像
+An image showing the specified curve,显示指定曲线的图像
+An input color map used to generate the Instance map 1 output,用于生成实例映射 1 输出的输入颜色贴图
+An input color map used to generate the Instance map 2 output,用于生成 实例映射 2 输出的输入颜色贴图
+An input map that affects the edge width,影响边缘宽度的输入图
+An input map that affects the shape size,影响形状大小的输入图
+An input map that affects the width parameter,影响宽度参数的输入映射
+An optional map for rotation,用于旋转的可选贴图
+An optional map for scaling along the X axis,用于沿 X 轴缩放的可选贴图
+An optional map for scaling along the Y axis,用于沿 Y 轴缩放的可选贴图
+An optional map for translation along the X axis,沿 X 轴平移的可选贴图
+An optional map for translation along the Y axis,沿 Y 轴平移的可选贴图
+An output that should be plugged into a Fill companion node,应插入 填充 节点对应的节点的输出
+Angle,角度
+Angle 1,角度1
+Angle 2,角度2
+Angle of the gradient pattern,渐变图案的角度
+Angle1,角度1
+Angle2,角度2
+Anisotropic,各向异性
+Anisotropic Noise,各向异性噪波
+Applies 3D textures to a rendered 3D signed distance function scene.,将 3D 纹理应用于渲染的 3D 有符号距离函数场景。
+Applies a directional gaussian blur to its input,将定向高斯模糊应用于其输入
+"Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.",将工作流贴图应用于基础材质，并为结果生成高度信息和 PBR 通道。\n高度输入必须连接到“创建贴图”或“混合贴图”节点。其他输入必须连接到基础材质。\n输出必须连接到 混合或 输出 节点，或者工作流过滤器节点。
+Apply,应用
+Apply Map,应用贴图
+"Apply the blur filter horizontally, vertically of in both directions",水平、垂直或双向应用模糊滤镜
+ApplyMap,应用贴图
+"Applys a blur effect on its input, following slopes of an input height map",按照输入高度图的斜率对其输入应用模糊效果
+Applys a gaussian blur on its input,对其输入应用高斯模糊
+Area,区域
+Arrows,箭头
+Assigns a color index to a 3D object,为 3D 对象分配颜色索引
+Atlases are used by remapping nodes such as CustomUV,图集用于重新映射节点'例如 CustomUV、Tiler 和 Splatter。
+Atlases can be created using the Tile2x2 node.,可以使用 Tile2x2 节点创建图集。
+Attenuation,衰减
+Auto Tones,自动定调
+AutoTones,自动色调
+Average,平均
+Axes,参考线
+Axis,轴
+Axis aligned,轴对齐
+Axisaligned,轴对齐
+B,B
+B.x,B点的X
+B.y,B点的Y
+B0X,立方
+BX,BX
+BY,BY
+Back  to present,退回父级
+Background,背景
+Bake,烘焙
+Base,基础
+Base library,基础库
+Basket weave,篮编织
+BasketWeave,篮子编织
+Beehive,蜂巢
+Bevel,倒角
+Bevel map,倒角贴图
+Bevel:,倒角
+Blend,混合
+Blend mode,混合模式
+Blends its 3D texture inputs,使用可选蒙版混合其 3D 纹理输入
+"Blends its 3D texture inputs, using an optional mask",使用可选蒙版混合其 3D 纹理输入
+Blends its input,使用可选掩码混合其输入
+"Blends its input, using an optional mask",使用可选遮罩混合其输入
+Blue,蓝色
+Blur,模糊
+Boolean,布尔值
+Borders,边框
+Both,两者
+"Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create ",两种扭曲模式都从高度图的斜率中提取它们的方向：\n- 斜率扭曲强度仅取决于斜率\n- 到顶部扭曲强度的距离取决于坡度和到顶部的距离，可用于创建 
+Bounce,弹跳
+Box,盒子
+Brick UV,砖UV
+Bricks,砖块
+Bricks NonTileable,砖块不可平铺
+Bricks pattern,砖块图案
+Brightness,亮度
+Brightness/Contrast,亮度/对比度
+BrightnessContrast,亮度对比
+Brush,笔刷
+Brush hardness,笔刷硬度
+Brush opacity,笔刷不透明度
+Brush size,刷子尺寸
+Brush spacing,笔刷间距
+Brushes,画笔
+Buffer,缓冲
+Buffers are used to find the mininum and maximum values for the input image. If the input has small details a higher resolution buffer might be needed to capture precise min and max values.\n\nNote: The output itself will not be buffered.,缓冲区用于查找输入图像的最小值和最大值。如果输入有小细节，可能需要更高分辨率的缓冲区来捕获精确的最小值和最大值。\n\n注意：输出本身不会被缓冲。
+Bump,凹凸
+Burn,加深
+C.x,C.x
+C.y,C.y
+CX,CX
+CY,CY
+Cancel,取消
+Capsule,胶囊
+Cellular,细胞格
+Cellular2,细胞格2
+Cellular3,细胞格3
+Cellular4,细胞格4
+Cellular5,细胞格5
+Cellular6,细胞格6
+Center,中心
+Center X,中心X
+Center X:,中心X
+Center Y,中心Y
+Center Y:,中心Y
+Center Z,中心Z
+Center view,视角归中
+Center.x,中心X
+Center.y,中心Y
+Center.z,中心.z
+Change color,改变颜色
+Chebyshev,切比雪夫
+Checkerboard,棋盘
+Choices count,选择计数
+Chromium,铬
+Circle,圆圈
+Circle Repeat,循环重复
+Circle Splatter,圆形散布
+CircleMap,圆形映射
+CircleRepeat,循环重复
+CircleSplatter,圆圈溅射
+Circleplatter,圆盘
+Circular,圆
+Circular Gradient,圆形渐变
+Clamp,钳制
+Clamp result,钳制
+Clear,清除
+Click to define port groups,点击定义输出组
+Click to enter a path,点击输入路径
+Close,关闭
+Cobalt,钴
+Collapse all,收起所有
+Color,颜色
+Color 1,颜色1
+Color 2,颜色2
+Color Circle Splatter,彩色圆环散布
+Color Noise,彩色噪波
+Color Splatter,彩色散布
+Color Tiler,彩色贴块器
+Color Value Noise,色值噪波
+Color map,彩色色图
+Color map 1,彩色图 1
+Color map 2,彩色图 2
+Color of the uniform image,均色图像的颜色
+Color:,颜色:
+ColorMap,颜色图
+Colorize,着色
+Columns,列
+Columns:,列
+Combine,结合
+Combiner,组合器
+Combines 4 greyscale inputs into an RGBA image,将 4 个灰度输入组合成一个 RGBA 图像
+"Combines the outputs of 2 mapped base materials (keeping the ""highest"" material).",组合 2 个贴图基础材质的输出(保持“最高”材质)。
+Comment,评论
+Compare,比较
+Condition:,条件：
+Cone,锥体
+Configure,配置
+Confirm when closing a project,关闭项目时确认
+Confirm when quitting the application,退出应用程序时确认
+Connect to web site,连接到网站
+Constant,常数
+Contour (CCW),轮廓(CCW)
+Contour (Cw),轮廓(CW)
+Contrast,对比
+Control:,控制：
+Controls how much the noise is blurred along the x-axis,控制噪波沿 x 轴的模糊程度
+"Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is\n smooth interpolation",控制用于平滑的插值类型。0 为线性插值，1 为平滑插值
+Controls whether the resulting ditance field will be tiled. Useful for patterns that extend over the texture bounds,控制是否平铺生成的距离。对于延伸超过纹理边界的图案很有用
+Converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node,为材质节点转换工作流映射材质(来自应用贴图或混合节点)
+Converts its input into greyscale,将其输入转换为灰度
+Copper,铜
+Copy,复制
+Copy to clipboard,复制到剪切板
+Corner,角落
+Corner UV,角落UV
+Corner:,角
+Corners,角
+Count,总数
+Create,创建
+Create Map,创建贴图
+Create a screen shot of the current graph,创建当前图形的屏幕截图
+Create a screenshot of the current graph,创建当前图形的屏幕截图
+Create group,创建组
+Create library,创建库
+CreateMap,创建贴图
+Creategroup,创建组
+Createlibrary,创建库
+Creates a 3D texture from a 2D texture,从 2D 纹理创建 3D 纹理
+Creates a greyscale image from a shape described as a 2D Signed Distance Function,从描述为 2D 有符号距离函数的形状创建灰度图像
+Creates a pixelated image from its input,从其输入创建像素化图像'并通过可选的抖动量化颜色。
+"Creates a pixelated image from its input, and also quantifies the colors with optional dithering.",从其输入创建像素化图像，并通过可选的抖动量化颜色。
+Creates a smooth curvature map from a height map,从高度图创建平滑曲率图
+Creates a tileable version of its input image by moving different parts around to hide seams.,通过移动不同部分来隐藏接缝'创建其输入图像的平铺版本。
+Creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.,使用高度图和可选的种子图创建工作流图。工作流图包含高度信息以及方向和将应用到的材料的随机偏移的种子。
+Creates an annular shape from a shape described as a signed distance function,从描述为有符号距离函数的形状创建环形形状
+Creates highlights and shadows from an input heightmap,从输入高度图创建高光和阴影
+Current choice,当前选择
+Currentchoice,当前选择
+Curvature,曲率
+Curve,曲线
+Curve Editor,曲线编辑器
+Curved Star,弯星
+Custom,用户定义
+Custom Shader,自定义着色器
+Custom UV,自定义UV
+Custom UV remapper,自定义 UV 重映射器
+CustomUV,自定义UV
+Cut,删除
+Cylinder,圆柱体
+Dark,黑暗
+Darken,变暗
+Debug,调试
+Decompose,分离
+Decomposes an RGBA input into 4 greyscale images,将 RGBA 输入分解为 4 个灰度图像
+Default,默认
+Default A,默认 A
+Default B,默认 B
+Default color,默认颜色
+Default:,默认:
+Define a description for this item,定义此项的说明
+Define aliases,定义别名
+Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges,定义超出限制或输入图像的行为：\n- 夹紧拉伸边缘\n- 重复平铺输入\n- 扩展显示超出边缘的输入部分
+Denoise radius,降噪半径
+Denoise radius:,降噪半径：
+Density,密度
+Density:,密度：
+Depth,深度
+Depth (current layer),深度(当前层)
+Depth alpha:,深度透明度
+Description,描述
+Description:,描述:
+Diagonal,对角线
+Difference,差值
+Dilate,膨胀
+Dilates an input shape into a rounded shape,将输入形状圆滑地膨胀
+Dilates its input following the contours or slope of an input heightmap,按照输入高度图的轮廓或斜率扩大其输入
+"Dilates the white areas of a mask, using the colors of an optional input",使用可选输入的颜色扩大蒙版的白色区域
+Direction,方向
+Direction & Files:,文件夹内详情:
+Direction:,方向：
+Directional,定向
+Directional blur,定向模糊
+Discard changes,丢弃更改
+Dissolve,溶解
+Distance,距离
+Distance function,距离函数
+Distance pass 1,距离值传递1
+Distance pass 2,距离值传递2
+Distance pass 3,距离值传递3
+Distance to top,到顶的距离
+Distort,扰动
+Distorts its input 3D texture using another 3D texture,使用另一个 3D 纹理扭曲其输入 3D 纹理
+Dither,抖动
+Dither:,抖动:
+Dithering,抖动
+Dodge,颜色减淡
+"Doing this, doing that",做这做那
+Double-click to write a comment,双击可写评论
+Draws a greyscale hexagonal tiles pattern,绘制灰度六边形贴块图案
+Draws a greyscale sine wave pattern,绘制灰度正弦波图案
+Draws a uniform greyscale image,绘制均色的灰度图像
+Draws a uniform image,绘制均色的图像
+Draws a white shape on a black background,在黑色背景上绘制白色形状
+Draws white scratches on a black background,在黑色背景上绘制白色划痕
+Dribble,液体流下
+Duplicate,复制
+Dynamic PBR Material,动态 PBR 材质
+Dynamic Unlit Material,动态无光材质
+Edge,边缘
+Edge Color,边缘颜色
+Edge color,边线颜色
+Edge detect,边缘检测
+Edge detect 1,边缘检测 1
+Edge detect 2,边缘检测 2
+Edge detect 3,边缘检测 3
+Edge map,边缘图
+Edge width,边宽
+Edgedetect,边缘检测
+Edit,编辑
+Edit curve,编辑曲线
+Edit polygon,编辑多边形
+Editor,编辑
+Efects,效果
+Effects,材质影响
+Elongates its input,延长其输入
+Elongation,伸长
+Emboss,浮雕
+Emission,自发光
+Emission (current layer),自发光(当前层)
+Emission 1,自发光1
+Emission 2,自发光2
+Emission alpha:,自发光透明度
+Emission1,自发光1
+Emission2,自发光2
+Emphasizes dark and light tones around a specified value,强调指定值周围的深色调和浅色调
+Enable VSync,启用垂直同步
+Enable grid minimap.,启用网格小地图(右下角)。
+Enable snap and show grid.,启用吸附并显示网格。
+EnableVSync,启用垂直同步
+Environment,环境
+Environment editor,环境编辑器
+Epping Forest,埃平森林
+Epsilon,厄普西隆
+Euclidean,欧几里得
+Euclidian,欧几里得
+Expand all,展开所有
+Explosiveness,爆发力
+Export,导出
+Export again,再次导出
+Export material,导出材料
+Export target:,导出目标：
+Extend,扩展
+Extension:,扩展：
+Extrudes its 2D input shape along the Y axis,沿 Y 轴挤出其 2D 输入形状
+Extrusion,挤出
+FBM,FBM
+FBM Noise,FBM 噪波
+FPS limit:,FPS限制:
+FPSlimit:,FPS限制:
+Fast,快速
+Fast Blur,快速模糊
+Favorite,喜爱
+Fbm2,Fbm2
+Fibers,纤维
+File,文件
+File:,文件:
+Fill,填充
+Fill iterate,填充迭代
+Fill preprocess,填充预处理
+Fill to Color,填充颜色
+Fill to Position,填充位置作色块
+Fill to Random Color,填充随机颜色       
+Fill to Random Grey,填充随机灰色
+Fill to Size,填充尺寸
+Fill to UV,填充UV
+Fill to size,填充大小作色块
+Fills areas defined by white outlines of its input,填充由其输入的白色轮廓定义的区域
+Filter,过滤器
+Filter:,搜索:
+Finds the minimum and maximum values in the input texture and tone maps it to the full 0.0 - 1.0 range.,查找输入纹理中的最小值和最大值，并将其色调映射到完整的 0.0 - 1.0 范围。
+Fixed Offset,固定偏移
+FixedOffset,固定偏移
+Folds,折叠
+Foreground,前景
+Format,格式
+Fractional Brownian Motion Noise,分形布朗运动噪波
+Freehand (F1),徒手 (F1)
+Freehand line (F2),徒手线(F2)
+Frequency,频率
+From2D,从二维
+Gaussian Blur,高斯模糊
+Gaussian blur,高斯模糊
+Gaussian blur X,高斯模糊 X
+Gaussian blur Y,高斯模糊 Y
+General,一般
+"Generate input as function (can be used in ""Instance Functions"" section)",作为函数生成输入(可在“实例函数”部分中使用)
+Generate map,生成贴图
+Generate screenshots for the library nodes,为库节点生成屏幕截图
+Generated shader,产生着色器代码
+Generates a 3D noise made of several octaves of a simple noise,生成由简易噪波的几个八度音程组成的 3D 噪波
+Generates a capsule as a signed distance functioni,生成1个胶囊作为有符号距离函数i
+Generates a cylinder as a signed distance function,生成圆柱体作为有符号距离函数
+Generates a grid filled with random runes,生成一个充满随机符文的网格
+Generates a grid made of black and white squares,生成由黑白方块组成的网格
+Generates a grid made of random color squares,生成由随机颜色方块组成的网格
+Generates a merged workflow map,生成合并的工作流图
+Generates a noise made of several octaves of a simple noise,产生由简易噪波的几个八度音程组成的噪波
+Generates a normal map from a height map,从高度图生成法线图
+Generates a rounded box as a signed distance function,生成一个圆滑盒子作为有符号距离函数
+Generates a simple weave pattern,生成简易编织图案
+Generates a sphere as a signed distance function,生成1个球体作为有符号距离函数
+Generates a torus as a signed distance function,生成环面作为有符号距离函数
+Generates a truchet pattern,生成 特鲁谢 图案
+Generates an ambient occlusion map from a height map,从高度图生成环境遮蔽图
+Generates an angle map to be used by Advances Tiler nodes from a heightmap,从高度图生成供 高级贴块器 节点使用的角度图
+Generates an uneven bricks pattern.,生成不均匀的砖块图案。
+Generates different bricks patterns,生成不同的砖块图案，具有许多有用的输出。
+"Generates different bricks patterns, with many useful outputs.",生成不同的砖块图案，具有许多有用的输出。
+"Generates fill data, to be connected to a fill companion node",生成填充数据，连接到填充伴随节点
+Generates several images from a tileable voronoi noise,从可平铺的-沃诺伊噪波-生成多个图像
+Generates several octaves of color value noise,产生几个倍频程的色值噪波
+Generates several octaves of greyscale value noise,产生几个八度的灰度值噪波
+Generates the height of the result,生成结果的高度
+Generates x-axis interpolated value noise,生成 x 轴插值噪波
+Generic,通用
+Generic Truchet,通用 特鲁谢纹
+Global Functions,全局函数
+GlobalFunctions,全局函数
+Gold,金
+Gradient,渐变
+Gradient that defines the profile to be shown,定义要显示的轮廓的渐变
+Gradient to be spread on the image,要在图像上传播的渐变
+Green,绿色
+Greyscale,灰度
+Greyscale Uniform,灰度
+Grid,网格
+Grid Size:,网格大小：
+Grid size:,网格尺寸:
+Grid16x16,16X16网格
+Grid4x4,4X4网格
+HDRI URL:,HDRI网址:
+HDRi URL:,HDRi网址
+Hard Light,强光
+Height,高度
+Height 1,高度1
+Height 2,高度2
+Height To Angle,高度到角度
+Height map,高度图
+Height1,高度1
+Height2,高度2
+HeightMap,高度图
+HeightToAngle,高度到角度
+Help,帮助
+HerringBone,鱼骨
+Hexagonal tiles pattern,六角贴块图案
+Hierarchy,层次
+Histogram,直方图
+Horizontal,水平
+Horizontal mask,水平遮罩
+How many times the input is sampled to generate the curvature map,对输入采样多少次以生成曲率图
+Hue,色调
+I Ching,易经
+I Ching hexagrams generator,易经八卦生成器
+IChing,易经
+Idle FPS limit:,空闲时FPS限制:
+IdleFPSlimit:,空闲时FPS限制:
+Image,图像
+Impact,影响
+Impact size,冲击尺寸
+Inc Rotate,Inc旋转
+Inc Scale,Inc规模
+IncRotate,旋转
+IncScale,缩放
+Includes,包括(<xxxx.h>)
+Includes:,包括:(<xxxx.h>)
+Input,输入
+Input Description,输入描述
+Input flag:,输入类型:
+Input max,最大输入
+Input min,最小输入
+Input pattern to be drawn along the curve,沿曲线绘制的输入图案
+Input1,输入1
+Input2,输入2
+Input3,输入 3
+Input4,输入4
+InputMax,最大输入
+InputMin,输入最小值
+Inputs,输入
+Inputs:,输入:
+Instance Functions,实例函数
+Instance map,实例图
+Instance map 1,实例图 1
+Instance map 2,实例图 2
+InstanceFunctions,实例函数
+Intensity,强度
+Interpolation,插值
+Intersection,交集
+Inv. UV Map,UV坐标
+Inv.UVMap,UV坐标
+InvUVMap,UV坐标
+Inverse UV,UV坐标
+Invert,反转
+Invert Selection,反选
+Invert filter,反转过滤器
+Invert the generated image if set,如果设置则反转生成的图像
+Iron,铁
+Iterate Buffer,迭代缓冲
+IterateBuffer,迭代缓冲
+Iterations,迭代次数
+Kaleidoscope,万花筒
+Label,标签
+Language:,语言:
+Layer,层
+Layer name,图层名称
+Layers,图层
+Left click to show,左键显示
+Length,长度
+Length.x,长度.X
+Length.y,长度Y
+Length.z,长度Z
+Levels,级别
+Levels:,级别:
+Library,库
+Library file:,库文件：
+Library item aliases,库项目别名
+Library name:,节点库名称：
+Light,明亮
+Lighten,变亮
+Lightness,亮度
+Line,线
+Lines,线
+Lines (F3),线(F3)
+Link another parameter:,链接其他参数:
+Load,加载
+Load Reference,负载基准
+Load Selection,加载选择项
+Load library,加载库
+Load material from website,从网站加载材质
+Load recent,最近加载
+Lock the random seed to its current value,将随机种子锁定为其当前值。
+Luminance,亮度
+Luminosity,亮度
+Magnify,放大
+Magnifying glass effect,放大镜效果
+Main Code,主要代码
+MainCode,主要代码
+Make Tileable,使平铺
+Make selected nodes editable,使选定节点可编辑
+MakeTileable,使能贴块
+Makelleable,重复组织
+Manage Libraries,管理库
+Manhattan,曼哈顿
+Map,贴图
+Maps its input into a circle,将其输入映射为一个圆圈
+Maps linearly an input tones interval to an output tones interval.,将输入色调间隔线性映射到输出色调间隔。
+Marble,大理石
+Mask,遮罩
+Mask (current laver),遮罩(当前层)
+Mask (current layer):,遮罩(当前层):
+Mask Layer:,遮罩层:
+Mask for horizontal stripes,横条纹遮罩
+Mask for vertical stripes,竖条纹遮罩
+Mask to SDF,遮罩转换为SDF
+Maskt to SDF,遮罩到SDF
+MasktoSDF,遮罩到SDF
+Mat,材质
+MatNormal,材质法线
+Material Maker,Material Maker
+Material Maker on reddit,在Reddit上的Material Maker
+Material template,材质模板
+Materials,材质
+Math,数学计算
+Max,最大
+Max:,最大值：
+Medium,中等
+Mesh configuration,网格配置
+Mesh normal,网格法线
+Metal,金属
+Metallic,金属度
+Metallic alpha:,金属度透明度
+Metallic/Roughness (current layer),金属/粗糙度(当前层)
+Min,最小
+Min size:,最小尺寸:
+Min:,最小值：
+Minimum size,最小尺寸
+Mirror,镜像
+Mirrors its input while applying an offset from the center,在应用与中心的偏移时使其输入得到对称图像
+Miscellaneous,杂项
+Mix,混合
+Mix maps,混合贴图
+MixMap,混合贴图
+"Mixes up to 4 workflow maps, to be used with the same base material",混合多达 4 个工作流图，与相同的基础材料一起使用
+Mode,模式
+Model,模型
+Model file,模型文件
+Model:,模型:
+Moonless Golf,无月高尔夫
+Morph,变形
+Morphology Dilation,形态学膨胀
+Morphs between 2 input shapes,在 2 个输入形状之间变形
+Mortar,砖缝
+Mortar map,砖缝图
+Mortar:,砖缝
+Mul,乘法
+MulDetect,多重检测
+MultiGradient,多重渐变
+Multiply,乘(正片叠底)
+Name,名称
+Name:,名称:
+Named parameter configuration:,已命名参数配置:
+New material,新建材质
+New paint project,新建绘制项目
+Nickel,镍
+No items found,找不到条目
+No preview,无缩略图
+Node,节点
+Node Description,节点描述
+Node Editor,节点编辑器
+Node_name,Node_name
+Nodes,节点
+Noise,噪波
+Noise pattern,噪波图案
+Noise type,噪波类型
+None,无
+Normal,法线
+Normal (current layer),法线(当前层)
+Normal 1,法线 1
+Normal 2,法线2
+Normal Map,法线贴图
+Normal map,法线贴图
+Normal map alpha:,法线贴图透明度
+Normal1,法线
+Normal2,法线2
+NormalMap,法线贴图
+Normalmap,法线贴图
+Note: The output itself will not be buffered.,注意：输出本身不会被缓冲。
+Number of color levels for each channel,每个通道的颜色级别数
+Number of pixel columns of the output,输出的像素列数
+Number of pixel rows of the output,输出的像素行数
+Number of repetitions of the gradient,渐变的重复次数
+Number of repetitions of the input pattern,输入图案的重复次数
+OK,确认
+ORM,通道合成图
+ORM 1,ORM 1
+ORM 2,ORM 2
+ORM1,通道合成图1
+ORM2,ORM2
+Occlusion,阻塞
+Octaves,八度
+Off,关闭
+Offset,偏移
+Offset:,偏移
+Opacity,不透明度
+Open,打开
+Operation,操作
+Operators,操作器
+Optional,可选的
+Outline color,轮廓颜色
+Output,输出
+Output 0,输出 0
+Output max,最大输出
+Output min,最小输出
+Output:,输出：
+OutputMax,最大输出
+OutputMin,输出最小值
+Outputs,输出
+Outputs count,输出计数
+"Outputs the tone range around a specified value,",输出指定值附近的色调范围，
+Outputs:,输出:
+Overlap,重叠
+Overlay,覆盖
+Paint,画
+Paint Layer:,绘制层:
+Paint1,材质上色1
+Paint2,材质上色2
+Painting,绘制
+Panels,面板
+Parameter Description,参数描述
+Parameters,参数
+Parameters:,参数:
+Paste,粘贴
+Path:,路径:
+Pattern,图案
+Pattern generated along the X axis,沿 X 轴生成的图案
+Pattern generated along the Y axis,沿 Y 轴生成的图案
+Pattern generated along the Z axis,沿 Z 轴生成的图案
+Pattern.x,图案.x
+Pattern.y,图案.y
+Pattern.z,图案.z
+Patterns,图案
+"Performs a boolean operation (union,  intersection or difference) between two shapes",在两个形状之间执行布尔运算（并、交或差）
+"Performs a boolean operation (union, intersection or difference) between two shapes",在两个形状之间执行布尔运算(并、交或差)
+Performs a math operation using its inputs or parameter values,使用其输入或参数值执行数学运算
+Performs a shear stress transform on its input,对其输入执行剪应力变换
+"Performs a smooth boolean operation (union, intersection or difference) between two shapes",在两个形状之间执行平滑的布尔运算(并集、交集或差集)
+Perlin,柏林
+Persistance,强连续
+Persistence,连续
+Phase,相位
+Pixelize,像素化
+"Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.",将 4 个输入图像放入单个输出中以创建 4 个图像的图集。链接 Tile2x2 节点可用于创建 16 个图像贴图集。\n贴图集用于重新映射节点，例如 用户自定义UV、贴块器和 散布。
+Platinum,白金
+Polygon,多边形
+Position,位置
+Position of the center along the X axis,沿 X 轴的中心位置
+Position of the center along the Y axis,沿 Y 轴的中心位置
+Position on X axis of the first control point,第一个控制点在 X 轴上的位置
+Position on X axis of the second control point,第二个控制点在 X 轴上的位置
+Position on X axis of the third control point,第三个控制点在 X 轴上的位置
+Position on Y axis of the first control point,第一个控制点在 Y 轴上的位置
+Position on Y axis of the second control point,第二个控制点在 Y 轴上的位置
+Position on Y axis of the third control point,第三个控制点在 Y 轴上的位置
+Position.x,位置.x
+Position.y,位置.y
+Pow,指数
+Powered by,技术支持
+Preferences,偏好设置
+Preview,预览
+Preview2D,预览2D
+Preview3D,预览3D
+Procedural,程序
+Procedural Layer:,程序化层:
+Profile,剖面(线)
+Project file,项目文件
+Project:,项目:
+Quality,质量
+Quantize,量化
+Quantizes the red,量化其输入的红色、绿色和蓝色通道
+"Quantizes the red, green and blue channels of its input",量化其输入的红色、绿色和蓝色通道
+Quit,退出
+Quit Material Maker?,退出Material Maker?
+Radial,径向
+Radial Gradient,径向渐变
+Radius,半径
+Radius of the sphere,球体的半径
+Radius1,半径1
+Radius2,半径2
+Rainbow,彩虹
+Random color,随机颜色
+Randomness,随机性
+Range,范围
+Ray count,射线数
+Ray count:,射线数量：
+Ray length,射线长度
+Ray length:,射线长度：
+"Raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.","使用光线步进算法得到一个 3D 对象（描述为带有可选颜色索引的有符号距离函数）以渲染高度图,法线贴图和一个颜色索引图"
+Raymarching Material,Raymarching 材质
+RaymarchingMaterial,射线发射材料
+Rays,射线
+Recent,最近
+Red,红色
+Redo,重做
+Reference,参考
+Refract,折射
+Remap,重新映射
+Remaps a greyscale 3D texture to a custom gradient,将灰度 3D 纹理重新映射到自定义渐变
+Remaps a greyscale image for use as an input map for Advanced Tiler nodes,重新映射灰度图像以用作高级平铺器节点的输入贴图
+Remaps a greyscale image to a custom gradient,将灰度图像重新映射到自定义渐变
+Remaps a greyscale image tonality using a curve,使用曲线重新映射灰度图像色调
+Remaps an Input image using a custom UV map.,使用自定义 UV 贴图重新映射输入图像。
+Remote,远程
+Remove Reference,移除参考
+Remove item,移除项目
+Remove parameter:,移除参数:
+Rename item,重命名项目
+Render,渲染
+Repeat,重复
+"Repeat the input if checked, clamps otherwise",如果选中则重复输入，否则钳制
+Repeat.x,重复.x
+Repeat.y,重复.y
+Repeat.z,图案.z
+Repeat:,重复
+Repeats its input shape around a circle,围绕圆形重复其输入形状
+Repeats its input shape on a grid.,在网格上重复其输入形状。
+Repetitions of the pattern along X axis,沿 X 轴重复图案
+Repetitions of the pattern along Y axis,沿 Y 轴重复图案
+Repetitions of the pattern along Z axis,沿 Z 轴重复图案
+Replicated an angle of the input image several times around the center.,围绕中心多次复制输入图像的一个角度。
+Report a bug,报告错误
+Reportabug,报告错误
+Reset view,复位视图
+Reset zoom,重置缩放
+Resolution,分辨率
+Resolution:,解算尺寸:
+Revolution,绕圆挤出
+Revolves its input 2D shape around the Z axis,围绕 Z 轴旋转其输入 2D 形状
+Right click to disable,右键隐藏
+Rings,环数
+Ripples,涟漪
+Rnd,随机
+Rnd Offset,随机偏移
+Rnd Opacity,随机不透明度
+Rnd Rotate,随机旋转
+Rnd Scale,随机缩放
+Rnd Value,随机值
+RndOpacity,不透明度
+RndRotate,随机旋转
+RndScale,随机缩放
+RndValue,随机值
+Rot,转
+Rot X,旋转X
+Rot Y,旋转Y
+Rot Z,旋转Z
+Rot.x,转轴.x
+Rot.y,转轴.y
+Rot.z,转轴.z
+Rotate,旋转
+Rotate map,旋转映射
+Rotate.x,旋转.x
+Rotate.y,旋转.y
+Rotate.z,旋转.z
+Rotate:,旋转
+RotateMap,旋转贴图
+Rotates a 3D texture,旋转 3D 纹理
+Rotates its input,旋转它的输入
+Rotates its input 3D object described as a signed distance function.,旋转其输入 3D 对象'描述为有符号距离函数。
+Rotates its input shape described as a signed distance function,旋转其输入形状'描述为有符号距离函数
+Rotation,旋转
+Rotation angle around X axis,绕X轴旋转角度
+Rotation angle around Y axis,绕Y轴旋转角度
+Roughness,粗糙度
+Roughness alpha:,糙度透明度
+Round,圆形的
+Round map,圆角贴图
+Round:,圆形的
+Rounded,圆角
+RoundedShape,圆形
+Rows,行
+Rows:,行
+Runes,符文
+Running bond,顺砖砌合
+Running bond (2),顺砖砌合(2)
+Runningbond,顺砖砌合
+Runningbond(2),顺砖砌合(2)
+RustyIron,锈铁
+SDF,SDF
+SSS_tex,次表明散射贴图
+Saturation,饱和
+Save,保存
+Save Selection,保存所选
+Save [] before closing?,在关闭前保存[]吗？
+Save all..,保存全部..
+Save all...,保存所有
+Save and close,保存并关闭
+Save as...,另存为...
+Save ll...,选择全部
+Saveall..,保存全部..
+Saveas...,另存为...
+Sawtooth,锯齿
+Scale,缩放
+Scale X,缩放X
+Scale X:,缩放X
+Scale Y,缩放Y
+Scale Y:,缩放Y
+Scale Z,缩放Z
+Scale map X,比例图 X
+Scale map Y,比例图 Y
+Scale.x,缩放.x
+Scale.y,缩放.y
+Scale.z,缩放.z
+Scale:,缩放：
+ScaleMap.x,缩放映射.x
+ScaleMap.y,缩放映射.y
+Scales its input,缩放其输入
+Scales its input 3D object described as a signed distance function.,缩放描述为有符号距离函数的输入 3D 对象。
+Scales its input shape described as a signed distance function,缩放描述为有符号距离函数的输入形状
+Scratches,划痕
+Screen,滤色
+Screws,螺丝
+Seams,接缝
+Search...,搜索
+Select,选择
+Select AIl,全选
+Select All,全选
+Select From ID,从 ID 中选择
+Select None,空选
+SelectAIl,全选
+SelectNone,空选
+Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.,为给定的颜色索引选择 3D 纹理。这可用于将多个纹理映射到单个 3D 场景中。
+Send material to web site,发送材质到网站
+Set environment,设置环境(HDRi)
+Set theme,设置主题
+Shadertoy,Shadertoy
+Shape,形状
+Shape size,形状尺寸
+Shapes,形状
+Sharpen,锐化
+Sharpens it input image,锐化输入的图像
+Shear,切变
+Short,短
+Short Description:,短描述
+Show 2D preview,显示2D预览
+Show 3D preview,显示3D预览
+Show brush options,显示刷子选项
+Show hierarchy,显示层次
+Show selected library item documentation,显示选定的库项目文档
+Show shader,显示着色器
+Show/Hide side panels,显示/隐藏侧面板
+Shows a color for each instance of the input image,显示输入图像的每个实例的颜色
+Shows a color value noise,显示颜色值噪波
+Shows a greyscale 3D texture of the generated noise,显示生成噪波的灰度 3D 纹理
+Shows a greyscale image of a sine wave,显示正弦波的灰度图像
+Shows a greyscale image of the generated noise,显示生成噪波的灰度图像
+Shows a greyscale image of the result,显示结果的灰度图像
+Shows a greyscale image of the truchet pattern.,显示 特鲁谢 图案的灰度图像。
+Shows a greyscale value noise,显示灰度值噪波
+Shows a random color for each hexagonal tile,显示每个六边形贴块的随机颜色
+Shows a random color for each instance of the input image,为输入图像的每个实例显示随机颜色
+Shows a white shape on a black background,在黑色背景上显示白色形状
+Shows an UV map to be connected to the UV map port of the Custom UV node,显示要连接到自定义 UV 节点的 UV 贴图端口的 UV 贴图
+Shows hader,显示着色器(代码)
+Shows the Alpha channel of the input,显示输入的透明度通道
+Shows the Blue channel of the input,显示输入的蓝色通道
+Shows the Green channel of the input,显示输入的绿色通道
+Shows the Red channel of the input,显示输入的红色通道
+Shows the capsule,显示胶囊
+Shows the combined RGBA image,显示组合的 RGBA 图像
+Shows the cylinder,显示圆柱体
+Shows the dilated image,显示膨胀的图像
+Shows the generated atlas,显示生成的图集
+Shows the generated blurred image,显示生成的模糊图像
+Shows the generated curvature map,显示生成的曲率图
+Shows the generated greyscale weave pattern.,显示生成的灰度编织图案。
+Shows the generated high contrast image,显示生成的高对比度图像
+Shows the generated normal map,显示生成的法线贴图
+Shows the generated outlines,显示生成的轮廓
+Shows the generated pattern,显示生成的图案
+Shows the generated remapped image,显示生成的重映射图像
+Shows the generated sharpened image,显示生成的锐化图像
+Shows the greyscale pattern,显示灰度图案
+Shows the image converted to greyscale,显示转换为灰度的图像
+Shows the image with adjusted Hue,显示调整了色相、饱和度和值的图像
+"Shows the image with adjusted Hue, Saturation and Value",显示调整了色相、饱和度和值的图像
+Shows the image with modified Brightness and Contrast,显示具有修改亮度和对比度的图像
+Shows the inverted image,显示反转图像
+Shows the mirrored image,显示镜像
+Shows the noise pattern,显示噪波图案
+Shows the output albedo channel,显示输出漫反射通道
+Shows the output ambient occlusion,显示输出环境光遮蔽通道
+"Shows the output ambient occlusion, roughness and metallic channels",显示输出环境光遮蔽、粗糙度和金属通道
+Shows the output emission channel,显示输出的自发光通道
+Shows the output normal map,显示输出法线贴图
+Shows the remapped image,显示重新映射的图像
+Shows the result of the blend operation,显示混合操作的结果
+Shows the rotated image,显示旋转后的图像
+Shows the rounded box,显示圆滑盒子
+Shows the scaled image,显示缩放的图像
+Shows the shape as a greyscale image,将形状显示为灰度图像
+Shows the sphere,显示球体
+"Shows the supersampled image. Due to the performance cost of this node, it is recommended to connect a buffer directly to this output.",显示超采样图像。由于此节点的性能成本，建议将缓冲区直接连接到此输出。
+Shows the torus,显示圆环
+Shows the transformed image,显示平移后的图像
+Shows the translated image,显示位移后的图像
+Shows the warped image,显示扭曲的图像
+Shows white scratches on a black background,在黑色背景上显示白色划痕
+Showshader,显示着色器(代码)
+Sides count,边数
+Sigma,西格玛
+Sigma:,西格玛：
+Silver,银
+Simple,基础元素
+Simple bricks patterns,简易的砖块图案
+Simple runes,简易的符文
+Simplex,单纯形
+Sine,正弦
+Sine Wave,正弦波
+Sine wave pattern,正弦波图案
+Size,尺寸
+Size X,尺寸X
+Size Y,尺寸Y
+Size Z,尺寸Z
+Size along X axis,沿 X 轴的尺寸
+Size along Y axis,沿 Y 轴的尺寸
+Size along Z axis,沿 Z 轴的尺寸
+Size map,尺寸图
+Size.x,尺寸.x
+Size.y,尺寸.y
+Size.z,尺寸Z
+Skew,倾斜
+Sky Energy:,天空能量:
+Sky contribution:,天空贡献:
+Slope,坡度
+Slope Blur,斜坡模糊
+Slope blur,坡度模糊
+Slow,缓慢
+Smooth Curvature,平滑曲率
+Smooth Curvature 2,光滑曲率2
+SmoothBoolean,平滑布尔值
+SmoothCurvature,平滑曲率
+SmoothCurvature2,平滑曲率2
+Smoothness,平滑度
+Snow,雪
+Soft Light,柔光
+Source,源
+Source1,源1
+Source2,源2
+Spanish bond,西班牙砌砖
+SpanishBond,西班牙砌砖
+Sphere,球
+Spiral,螺旋
+Splat,爆溅
+Splatter,散布
+Spreads several occurences of an input image in a circle or spiral pattern.,以圆形或螺旋图案传播输入图像的多个出现。
+Spreads several occurences of an input image randomly.,随机传播输入图像的多次出现。
+Square,方形
+Stamp,印章
+Star,星星
+Static PBR Material,静态 PBR 材质
+Step,阶梯
+Step:,阶梯化：
+Steps,步数
+Stitch,缝
+Strength,强度
+Strength map,强度图
+Stretch,拉伸
+Stretch X,拉伸X
+Stretch Y,拉伸Y
+Stretch.x,拉伸.x
+Stretch.y,拉伸.y
+Studio,工作室
+Style,风格
+Style of the output image (fill or curve),输出图像的样式（填充或曲线）
+Sub,减法
+Subsurf. scatter.,散射
+Subtraction,差
+Sun Angle:,太阳角:
+Sun Direction:,太阳方向:
+Sun Energy:,太阳光能量:
+Sun color:,太阳光色:
+Supersample,超采样
+Swap channels,通道交换
+SwapChannels,交换通道
+Swaps the channels of its RGBA input,交换其 RGBA 输入的通道
+Switch,开关
+TEX3D Apply,应用3D纹理
+TEX3D Blend,3D纹理 混合
+TEX3D Colorize,3D纹理 着色
+TEX3D Distort,3D纹理 扭曲
+TEX3D FBM,3D纹理 FBM
+TEX3D From2D,2D转3D纹理
+TEX3D Pattern,3D纹理 图案
+TEX3D Rotate,3D纹理 旋转
+TEX3D Select,3D纹理 选择
+Template,模板
+Tesselated,细分
+Tex3D,3D 纹理
+Tex3D From 2D,2D转3D纹理
+Text,文本
+Texture,纹理
+Texture Size,纹理尺寸
+Texture to view,纹理视图
+The 3D texture,3D 纹理
+The 3D texture associated to the specified color index,与指定颜色索引关联的 3D 纹理
+The 3D texture generated by the blend operation,混合操作生成的 3D 纹理
+The 3D texture to be distorted,要扭曲的 3D 纹理
+The 3D texture used to distort Input1,用于扭曲 Input1 的 3D 纹理
+The 3D texture(s) associated to other color indices,与其他颜色索引关联的 3D 纹理
+The A operand,A 操作数
+The Albedo channel of the input base material,输入基材的基础色通道
+The B operand,B 操作数
+The Brightness adjustment,亮度调节
+The Contrast adjustment,对比度调整
+The Hue adjustment,色调调整
+The RGBA input image,RGBA 输入图像
+The Saturation adjustment,饱和度调整
+The Value adjustment,数值调整
+The albedo channel of the first input,输入的第1个漫反射通道
+The albedo channel of the result,输出结果的漫反射通道
+The albedo channel of the second input,输入的第2个漫反射贴图
+The algorithm used to blend the inputs,用于混合输入的算法
+The algorithm used to convert the input into greyscale,用于将输入转换为灰度的算法
+The ambient occlusion,输入的第2个环境遮挡通道
+"The ambient occlusion, roughness and metallic channels of the first input",第一个输入的环境遮挡、粗糙度和金属通道
+"The ambient occlusion, roughness and metallic channels of the input material",输入材料的环境遮挡、粗糙度和金属通道
+"The ambient occlusion, roughness and metallic channels of the result",结果的环境遮挡、粗糙度和金属通道
+"The ambient occlusion, roughness and metallic channels of the second input",第二个输入的环境遮挡、粗糙度和金属通道
+The amount of random rotation on each instance of the input shape,输入形状的每个实例的随机旋转量
+The amount of the second input in the result,结果中第2个输入的数量
+The amount of the transform,变换量
+The amplitude of the sine wave function,正弦波函数的幅值
+The angle of instances of the input,输入实例的角度
+The angle of the directional blur effect,方向模糊效果的角度
+The angle of the rotation,旋转角度
+The angle of the simulated light,模拟光的角度
+The angle stored in the workflow map,工作流图中存储的角度
+The angular offset of the replicated angle of the input,输入的复制角度的角度偏移
+The arc as a signed distance function,弧作为有符号距离函数
+The attenuation applied along the path,沿路径应用衰减
+The average angle of the scratches (0 generates horizontal scratches),划痕的平均角度（0=水平划痕）
+The axis of the capsule,胶囊轴
+The axis of the cylinder,圆柱体轴线
+The axis of the torus,环面的轴
+The background input,后台输入
+The base shape of each tile of the truchet pattern,特鲁谢 图案的每个贴块的基础形状
+The base value of the output,要在图像上扩散的渐变
+The buffer size for the filter,过滤器的缓冲区大小
+The center value of the selection,选择的中心值
+The color index to be assigned,要分配的颜色索引
+The color map generated by the Render node,渲染节点生成的颜色图
+The color used for outlines,用于轮廓的颜色
+The color used to draw outlines,用于绘制轮廓的颜色
+The colored 3D object,彩色 3D 对象
+The contrast of the generated highlights,生成的高光对比
+The custom UV map to be used for remapping.,用于重新映射的自定义 UV 贴图。
+"The default value for A, used if the corresponding input is not connected",A 的默认值，在未连接相应输入时使用
+"The default value for B, used if the corresponding input is not connected",B 的默认值，在未连接相应输入时使用
+The density of white squares,白色方块的密度
+"The dilate mode (clockwise contour, counter clockwise contour or slope)",膨胀模式(顺时针等高线、逆时针等高线或斜率)
+The dilated image,扩大的图像
+"The direction of each brick (white: horizontal, black: vertical)",每块砖的方向(白色：水平，黑色：垂直)
+The direction of the shear transform (horizontal or vertical),剪切变换的方向（水平或垂直）
+The distance along which the contours or slopes are followed,遵循等高线或斜率的距离
+The distorted 3D texture,扭曲的 3D 纹理
+The edge width of the generated shape,生成形状的边缘宽度
+The elongation along the X axis,沿 X 轴的伸长率
+The elongation along the Y axis,沿 Y 轴的伸长率
+The elongation along the Z axis,沿 Z 轴的伸长率
+The emission channel of the first input,输入的第1个自发光通道
+The emission channel of the input material,输入材料的自发光通道
+The emission channel of the result,输出结果的自发光通道
+The emission channel of the second input,输入的第2个自发光通道
+The extruded shape,挤出的形状
+The first angle of the arc,圆弧的第1个角度
+The first input,第一个输入
+The first shape,第1个形状'定义为有符号距离函数
+"The first shape, defined as a signed distance function",第一个形状，定义为有符号距离函数
+The first workflow map,第1个工作流程图
+The foreground input,前台输入
+The format of the generated normal map\nIn most cases this should be set to default,生成的法线贴图的格式\n在大多数情况下，这应该设置为默认值
+The fourth input,第四个输入
+The fourth input map,第4个输入图
+The frequency of the sine wave function (i.e. the number of oscillations shown in the generated image).,正弦波函数的频率（即生成的图像中显示的振荡次数）。
+The generated 3D object,生成的 3D 对象
+The generated 3D texture,生成的 3D 纹理
+The generated angle map. Values are between -1 and 1 and the corresponding Advanced Tiler parameter (Rotate) must be set to 180.,生成的角度图。值介于 -1 和 1 之间'并且相应的 高级贴块器 参数（旋转）必须设置为 180。
+The generated blurred image,生成的模糊图像
+The generated color index map,生成颜色索引贴图
+The generated curvature map,生成的曲率图
+The generated height map,生成的高度贴图
+The generated hybrid shape,生成的混合形状
+The generated image,生成的图像
+The generated layered shape,生成的分层形状
+The generated normal map,生成法线贴图
+The generated occlusion map,生成的阻塞图
+The generated output UV map,生成的输出 UV 贴图'连接到自定义 UV 节点
+"The generated output UV map, to be connected to a Custom UV node",生成的输出 UV 贴图，连接到自定义 UV 节点
+The generated output image,生成的输出图像
+The generated scaled shape,生成的缩放形状
+The generated signed distance function,生成的有符号距离函数
+The generated texture,生成的纹理
+"The generated workflow map, to be connected to a MixMap or an ApplyMap node",生成的工作流图，连接到 混合贴图 或 应用 节点
+The genrated distance field,生成的距离场
+The gradient to which the input is remapped,输入重新映射到的梯度
+The greyscale input for the alpha channel,Alpha 通道的灰度输入
+The greyscale input for the blue channel,蓝色通道的灰度输入
+The greyscale input for the green channel,绿色通道的灰度输入
+The greyscale input for the red channel,红色通道的灰度输入
+The greyscale input map,灰度输入映射
+The greyscale mask to be converted,要转换的灰度蒙版
+The grid size,网格大小
+The height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.,高度输入必须连接到创建贴图或混合贴图节点。其他输入必须连接到基础材料。
+The height map generated by the Render node,渲染节点生成的高度图
+The height map of the first input,输入的第1个高度图
+The height map of the result,输出结果的高度图
+The height map of the second input,输入的第2个高度图
+The height map whose contours or slopes are followed,遵循等高线或斜率的高度图
+The height map whose slopes are used to deform the input,其斜率用于使输入变形的高度图
+The height of the box,盒子高度
+The height of the rhombus,菱形的高度
+The image from which colors are taken,用于从中获取颜色的图像
+The image or atlas of images to be remapped.,要重新映射的图像或图像集。
+The image to be made tileable,要平铺的图像
+The image to be pixelated,要像素化的图像
+The input 2D shape as a signed distance function,作为有符号距离函数的输入 2D 形状
+The input 2D texture,输入 2D 纹理
+The input 3D object,输入 3D 对象
+The input 3D texture,输入 3D 纹理
+The input RGBA image,输入的 RGBA 图像
+The input channel to be assigned to the Alpha channel,要分配给 Alpha 通道的输入通道
+The input channel to be assigned to the Blue channel,要分配给蓝色通道的输入通道
+The input channel to be assigned to the Green channel,要分配给绿色通道的输入通道
+The input channel to be assigned to the Red channel,要分配给红色通道的输入通道
+The input fill data,输入填充数据'连接到填充节点的输出
+"The input fill data, to be connected to the output of a Fill node",输入填充数据，连接到填充节点的输出
+The input greyscale 3D texture,输入灰度 3D 纹理
+The input greyscale image,输入灰度图像
+The input height map,输入高度图
+The input heightmap,输入高度图
+The input image,输入图像
+The input image or atlas of 4 or 16 input images,输入图像或 4 或 16 个输入图像的图集
+The input image to be remapped,要重新映射的输入图像
+The input image to be transformed,要转换的输入图像
+The input image to be warped,要变形的输入图像
+The input image whose white outlines must be filled,必须填充白色轮廓的输入图像
+The input mask whose white areas will be dilated,白色区域将被扩大的输入遮罩
+The input object,输入对象
+The input object as a signed distance function,输入对象作为有符号距离函数
+The input object as signed distance function,输入对象作为有符号距离函数
+The input object to be elongated,要拉长的输入对象
+"The input object, described as 3D signed distance function with color index",输入对象，描述为带有颜色索引的 3D 有符号距离函数
+The input offset seed map,输入偏移的随机种子图
+The input shape,输入形状'定义为有符号距离函数
+"The input shape, defined as a signed distance function",输入形状，定义为有符号距离函数
+The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.,节点的输入类型:\n- 1:单个图像\n- 4:包含4个图像的图集\n- 16:包含16个图像的图集\n图集可以使用2x2贴块节点创建。
+The input workflow map,输入工作流贴图
+The intensity of the curvature map,曲率图的强度
+The inverse UV map of the object,物体的逆UV贴图
+The length of each stitch,每条缝的长度
+The length of scratches (the shorter the scratches,划痕长度（划痕越短）
+"The length of scratches (the shorter the scratches,the more they will be)",划痕长度(划痕越短越多)
+The length of the capsule,胶囊长度
+The length of the cylinder,圆柱体长度
+The length of the dilate effect,膨胀效果的长度
+The length of the dilate operation,扩张操作的长度
+The length of the extrusion operation,挤出操作的长度
+The magnifying glass shape,放大镜的形状
+The major radius of the torus,环面的主半径
+The mask applied to the pattern,应用于图案的遮罩
+The maximum height of the workflow map,工作流图的最大高度'用作输入高度图的乘数
+"The maximum height of the workflow map, used as multiplier for the input height map",工作流图的最大高度，用作输入高度图的乘数
+The maximum scaling factor for the magnifying glass,放大镜的最大比例因子
+The maximum value of the input interval,输入区间的最大值
+The maximum value of the output interval,输出区间的最大值
+The merged 3D texture,合并的 3D 纹理
+The minimum size of a brick,一块砖的最小尺寸
+The minimum value of the input interval,输入区间的最小值
+The minimum value of the output interval,输出区间的最小值
+The minor radius of the torus,圆环的小半径
+The mirror direction (horizontal or vertical),镜像方向（水平或垂直）
+The mode decides how the UVs are layed out on each bounding box:,该模式决定了 UV 在每个边界框上的布局方式：
+The mode decides how the UVs are layed out on each bounding box:\n- Stretch mode where the UV layout is stretched ,该模式决定了 UV 在每个边界框上的布局方式：\n- 拉伸模式，其中 UV 布局被拉伸
+The normal map of the first input,输入的第1个法线贴图
+The normal map of the input material,输入材质的法线贴图
+The normal map of the result,输出结果的法线贴图
+The normal map of the second input,输入的第2个法线贴图
+The number of columns in the grid,网格中的列数
+The number of columns of a pattern,图案的列数
+The number of columns of the grid,网格的列数
+The number of columns of the pattern,图案的列数
+The number of columns of the tiles pattern,贴块图案的列数
+The number of generated ripples,产生的涟漪数
+The number of iterations of the algorithm. The optimal value depends a lot on the input image.,算法的迭代次数。最佳值很大程度上取决于输入图像。
+The number of iterations of the brick split operation,分砖操作的迭代次数
+The number of iterations the jump flood algorithm performs to calculate the distances,跳跃洪水算法为计算距离而执行的迭代次数
+The number of lines in the grid,网格中的行数
+The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.,输入图像的实例可以重叠的相邻图块的数量。将此参数设置为生成预期结果（其中所有实例完全可见）的最小值以提高性能。
+The number of noise octaves,噪波倍频程数
+The number of occurences of the input image,输入图像的出现次数
+The number of octaves (higher values might affect performance),八度数（较高的值可能会影响性能）
+The number of quantization steps,量化步数
+The number of repetitions of the input image around the circle,输入图像围绕圆圈的重复次数
+The number of repetitions of the input shape around the circle,输入形状围绕圆的重复次数
+The number of repetitions of the whole pattern,整个图案的重复次数
+The number of replications of an angle of the input,输入角度的重复次数
+The number of rings of the circle pattern,圆形花纹的环数
+The number of rows and columns of the truchet pattern,特鲁谢图案的行数和列数
+The number of rows of a pattern,图案的行数
+The number of rows of the grid,网格的行数
+The number of rows of the pattern,图案的行数
+The number of rows of the tiles pattern,贴块图案的行数
+The number of samples on each axis. High values will badly impact performances.,每个轴上的样本数。高值会严重影响性能。
+The number of scratches layers,划痕层数
+The number of sides of the generated shape (unused for Circle),生成的形状的边数（未用于 Circle）
+The number of times the basic noise is folded,基本噪波被折叠的次数
+The offset angle applied to the generated map,应用于生成贴图的偏移角度
+The offset applied to the input shape during the revolution operation,在旋转操作期间应用于输入形状的偏移量
+The offset from the center,从中心偏移
+The offset of the pattern (not useful for all patterns),图案的偏移量（不适用于所有图案）
+The offset used to measure slopes,用于测量斜率的偏移量
+The opacity of the blend operation,混合操作的不透明度
+The operation performed by this node,此节点执行的操作
+The operation to be performed,要执行的操作
+"The operation used to combine the X, Y and Z patterns",用于组合 X、Y 和 Z 模式的操作
+The operation used to combine the horizontal and the vertical patterns,用于组合水平和垂直图案的操作
+The optional opacity mask,可选的不透明蒙版
+The optional source for colors,颜色的可选来源
+The output RGBA image,输出RGBA图像
+The outputs must be connected to the Mix or the Output node'or a workflow filter node.,输出必须连接到 Mix 或 Output 节点'或工作流过滤器节点。
+The persistence between two consecutive octaves,两个连续八度之间的
+The phase of the sine wave function,正弦波函数的相位
+The poisition of the scale center,刻度中心的位置
+The polygon as a signed distance function,多边形作为有符号距离函数
+The polygon to be drawn,要绘制的多边形
+The position of each brick along the X axis,每块砖沿 X 轴的位置
+The position of each brick along the Y axis,每块砖沿 Y 轴的位置
+The position of the center of the box on the X axis,盒子中心在X轴上的位置
+The position of the center of the box on the Y axis,盒子的中心在 Y 轴上的位置
+The position of the center on the X axis,中心在 X 轴上的位置
+The position of the center on the Y axis,中心在 Y 轴上的位置
+The position of the rotation center,旋转中心位置
+The position of the scale center,刻度中心位置
+The position of the shear center,剪切中心位置
+The position on the X axis of the first point of the line,线的第一个点在 X 轴上的位置
+The position on the X axis of the second point of the line,线的第二个点在 X 轴上的位置
+The position on the Y axis of the first point of the line,线的第一个点在 Y 轴上的位置
+The position on the Y axis of the second point of the line,线的第二个点在 Y 轴上的位置
+The position value to be used:\n- X for horizontal axis\n- Y for vertical axis\n- Radial for distance to center   ,要使用的位置值：\n- X 代表水平轴\n- Y 代表垂直轴\n- 半径 代表到中心的距离
+The quality of the blur operation used for the occlusion effect,用于阻塞效果的模糊操作的质量
+The quality of the effect (increasing quality increases compute time),效果的质量（提高质量会增加计算时间）
+The quantized image,输出
+The radius of the arc,圆弧半径
+The radius of the blur used for the occlusion effect,用于效果的模糊半径
+The radius of the capsule,胶囊半径
+The radius of the circle,圆的半径
+The radius of the circle where the input is mapped,输入映射的圆的半径
+The radius of the cylinder,圆柱体半径
+The radius of the outer circle pattern,外圆形映射案的半径
+The radius of the round corners of bricks,砖的圆角半径
+The radius of the rounded box,圆滑盒子的半径
+The radius of the smoothing of the curvature effect,曲率效应的平滑半径
+The radius of the sphere,球体的半径
+The random greyscale value applied to each image instance,应用于每个图像实例的随机灰度值
+The random opacity applied to each image instance,应用于每个图像实例的随机不透明度
+The random rotation applied to each image instance,应用于每个图像实例的随机旋转
+The random rotation applied to each remapped instance.,应用于每个重新映射实例的随机旋转。
+The random scale applied to each image instance,应用于每个图像实例的随机比例
+The random scale applied to each remapped instance.,应用于每个重新映射实例的随机比例。
+The randomness of cell centers positions,细胞中心位置的随机性
+The randomness of the pattern,图案的随机性
+The randomness of the scratches angles,划痕角度的随机性
+The relative offset of odd rows,奇数行的相对偏移量
+The remapped RGBA image,重新映射的 RGBA 图像
+The remapped color 3D texture ,重新映射的彩色 3D 纹理
+The remapped greyscale image,重新映射的灰度图像
+The remapped image map,重新映射的图像映射
+The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher),遵循等高线或斜率的分辨率（值越高越精确'但渲染时间越长）
+The resolution of the curvature map if buffer is used,如果使用缓冲区，曲率贴图的分辨率
+The resolution of the generated normal map,生成的法线贴图的分辨率
+The resolution of the inptu image,输入图像的分辨率
+The resolution of the input,输入分辨率
+The resolution of the input height map,输入高度图的分辨率
+The resolution of the input image,输入图像的分辨率
+The resolution of the input images,输入图像的分辨率
+The resolution of the output,输出分辨率
+The resolution used for the operation,用于操作的分辨率
+The resolution used to sample the input image,用于对输入图像进行采样的分辨率
+"The result is clamped to [0, 1] if this option is checked","如果选中此选项，结果将被限制为 [0， 1]"""
+The rhombus as a signed distance function,菱形作为有符号距离函数
+The rotate increment along the pattern,沿图案的旋转增量
+The rotated 3D texture,旋转的 3D 纹理
+The rotated object,旋转的物体
+The rotated shape,旋转的形状
+The rotation angle,旋转角度
+The rotation around the X axis,绕X轴旋转
+The rotation around the Y axis,绕Y轴旋转
+The rotation around the Z axis,绕Z轴旋转
+The scale along the X axis,沿 X 轴的缩放
+The scale along the Y axis,沿 Y 轴的比例
+The scale amount along the X axis,沿 X 轴的缩放量
+The scale amount along the Y axis,沿 Y 轴的缩放量
+The scale factor,比例因子
+The scale increment of the pattern,图案的比例增量
+The scale of input images on the X axis,X 轴上输入图像的比例
+The scale of input images on the Y axis,Y轴上输入图像的比例
+The scale of the first octave along the X axis,沿 X 轴的第一个八度音阶的刻度
+The scale of the first octave along the Y axis,沿 Y 轴的第一个八度音阶的音阶
+The scale of the first octave along the Z axis,沿 Z 轴的第一个八度音阶的刻度
+The scale of the input image along the X axis.,输入图像沿 X 轴的比例。
+The scale of the input image along the Y axis.,输入图像沿 Y 轴的比例。
+The scale of the transform,缩放的变换
+The scaled object,缩放的对象
+The scaling factor along the X axis,沿 X 轴的缩放因子
+The scaling factor along the Y axis,沿 Y 轴的比例因子
+The second angle of the arc,圆弧的第2个角度
+The second input,第二个输入
+The second shape,第2个形状'定义为有符号距离函数
+"The second shape, defined as a signed distance function",第二个形状，定义为有符号距离函数
+The second workflow map,第2个工作流程图
+The shape as signed distance function,带符号距离函数的形状
+The shape generated by the boolean operation,布尔运算生成的形状
+The shape generated by the operation,操作生成的形状
+The shape generated by the repeat operation,重复操作生成的形状
+The simple noise type,简易噪波类型
+The size of the box along the X axis,盒子沿 X 轴的大小
+The size of the box along the Y axis,盒子沿 Y 轴的大小
+The size of the box along the Z axis,盒子沿 Z 轴的大小
+The size of the corner part of each brick (only used by the Corner UV output),每块砖的拐角部分的大小（仅由拐角 UV 输出使用）
+The size of the generated shape,生成形状的大小
+The size value to be used (area,要使用的尺寸值（面积、宽度、高度或宽度和高度之间的最大值）
+"The size value to be used (area, width, height or maximum between width and height)",要使用的尺寸值(面积、宽度、高度或宽度和高度之间的最大值)
+The smoothness of the boolean operation,布尔运算的平滑度
+The standard deviation of the gaussian distribution,高斯分布的标准偏差
+The step between generated values,生成的值之间的步骤
+The strength of  normals from the base materials (compared to the normal generated from height information))      ,来自基础材料的法线强度(与根据高度信息生成的法线相比))   
+The strength of the blur filter,模糊滤镜的强度
+The strength of the calculated occlusion effect,计算出的阻塞效果的强度
+The strength of the distort effect,扭曲效果的强度
+The strength of the emboss effect,浮雕效果的强度
+The strength of the normal map filter,法线贴图过滤器的强度
+The strength of the occlusion map effect,阻塞贴图效果的强弱
+The strength of the warp effect,扭曲效果的强度
+The stretch factor along the X axis,沿 X 轴的拉伸因子
+The stretch factor along the Y axis,沿 Y 轴的拉伸因子
+The textured 3D scene,带纹理的 3D 场景
+The third input,第三个输入
+The third input map,第3个输入图
+The tolerance used when comparing color indices,比较颜色指数时使用的容差
+The tonality curve to which the input is remapped,输入重新映射到的色调曲线
+The translated object,平移对象
+The translated shape,平移后的形状
+The translation along the X axis,沿 X 轴的平移
+The translation along the X axis applied to the instances,沿 X 轴的平移应用于实例
+The translation along the Y axis,沿 Y 轴的平移
+The translation along the Y axis applied to the instances,沿 Y 轴的平移应用于实例
+The translation along the Z axis,沿 Z 轴的平移
+The type of brick pattern,砖纹类型
+The type of pattern:,图案类型：
+The type of shape drawn by this node,此节点绘制的形状类型
+The value generated for black areas of the input,为输入的黑色区域生成的值
+The value generated for white areas of the input,为输入的白色区域生成的值
+The value of the input that separate dark and light zones of the result,分隔结果的暗区和亮区的输入值
+The value of the selected color index,所选颜色索引的值
+The value of the uniform greyscale image,均匀灰度图像的值
+The value used for the outlines,用于轮廓的值
+The waviness of scratches,划痕的波纹
+The width (in pixels) of the area sampled for each pixel,为每个像素采样的区域的宽度（以像素为单位）
+The width (in tones space) of the selection area,选择区域的宽度（在色调空间中）
+The width (in tones space) of the transition area,过渡区域的宽度（在色调空间中）
+The width of each generated ripple,每个产生的波纹的宽度
+The width of each row/column,每行/列的宽度
+The width of scratches,划痕宽度
+The width of the box,盒子宽度
+The width of the capsule shape around the line,围绕线的胶囊形状的宽度
+The width of the edge of each brick,每块砖边的宽度
+The width of the gradient at the edges of the shape,形状边缘渐变的宽度
+The width of the rhombus,菱形的宽度
+The width of the sampled area. Setting this value higher than 1 will sample neighbouring pixels and antialias the result.,采样区域的宽度。将此值设置为高于 1 将对相邻像素进行采样并对结果进行抗锯齿处理。
+The width of the shape around the arc,圆弧周围形状的宽度
+The width of the space between bricks,砖间隔
+Thickness,厚度
+This node applies a 3D texture to an object using its inverse UV map.,此节点使用其逆 UV 贴图将 3D 纹理应用于对象。
+This node generates a grid of random I Ching hexagrams.,该节点生成随机易经卦的网格。
+Threshold,临界(门限)
+Tile X,平铺X
+Tile Y,平铺Y
+Tile.x,平铺.x
+Tile.y,平铺.y
+Tile2x2,2x2贴块
+Tiled,平铺
+Tiler,贴块器
+Tiles,贴块
+Tiles several occurences of an input image while adding randomness.,在添加随机性的同时平铺输入图像的多次出现。
+Titanium,钛
+To Color,填充色彩块
+To Position,填充位置作色块
+To Size,填充尺寸作色块
+To UV,填充UV
+To random color,填充随机颜色
+To random grey,填充随机灰色
+To randomcolor,填充随机颜色
+To randomgrey,填充随机灰色
+To size,填充尺寸作色块
+ToColor,填充色彩
+ToInvUvMap,填充uv坐标
+ToPosition,填充位置作色块
+ToUV,到输入uv坐标上
+Toggler Eraser Mode (E),橡皮 (E)
+Tolerance,宽容度
+Tonality,曲线调整
+Tones,色调
+Tones Range,色调范围
+Tones map,色调图
+Tones step,色阶
+Tools,工具
+Top,顶部
+Torandomcolor,转随机颜色
+Torandomgrey,转随机灰色
+Torus,圆环
+Tosize,转尺寸
+Transform,变换
+Transforms,变换
+Translate,位移
+Translate X,位移X
+Translate X:,位移 X：
+Translate Y,位移Y
+Translate Y:,位移 Y：
+Translate map X,位移映射 X
+Translate map Y,位移映射 Y
+Translate.x,位移.x
+Translate.y,位移.y
+Translate.z,平移Z
+TranslateMap.x,位移映射.x
+TranslateMap.y,位移贴图.y
+Translates,位移
+Translates its input,移动它的输入
+Translates its input 3D object described as a signed distance function.,平移其输入 3D 对象'描述为有符号距离函数。
+Translates its input shape described as signed distance function,平移其输入形状'描述为有符号距离函数
+"Translates, rotates and scales its input",平移、旋转和缩放其输入
+Transparency,透明度
+Triangle,三角形
+Triplanar,三向映射
+Truchet,特鲁谢
+Truchet pattern,特鲁谢 图案
+Type:,类型：
+UI,用户界面
+UI scale (0 = auto):,UI缩放（0 = 自动:
+UV,UV
+UV Pattern:,UV 图案:
+UV Scale:,UV缩放
+UV map,UV贴图
+UVPattern,UV图案
+Undo,撤消
+Uneven Bricks,凹凸砖块
+UnevenBricks,凹凸不平的砖块
+Uniform,均色的
+Union,合并
+Unload,卸载
+"Unlock the random seed, so it can be modified by moving the node",解锁随机种子，因此可以通过移动节点进行修改
+Unnamed,未命名
+Update thumbnail,更新缩略图
+Updated aliases for,更新别名
+User library,用户库
+User manual,用户手册
+Userlibrary,用户库
+Usermanual,用户手册
+Value,值
+Value Noise,噪波值
+Value:,数值：
+Vertical,垂直
+Vertical mask,垂直遮罩
+View,视图
+View to texture,视图到纹理
+Voronoi,沃诺伊
+Voronoi Noise,沃诺伊噪波
+Warp,扭曲
+Warp Dilation,扭曲膨胀
+Warp X,曲率X
+Warp Y,曲率Y
+Warp1,扭曲1
+Warp2,扭曲2
+WarpDilation,扭曲膨胀
+Warps its input according to a heightmap,根据高度图扭曲其输入
+Waviness,波纹度
+Weave,编织
+Weave pattern,编织图案
+"When set, a buffer is used to sample the input before the normal map filter",设置后，缓冲区用于在法线贴图过滤器之前对输入进行采样
+Width,宽度
+Width X,X的宽度
+Width Y,Y的宽度
+Width map,宽度贴图
+Width of the curve,曲线宽度
+Width of the curve pattern,曲线图案的宽度
+Width of the transition areas between parts of the input image,输入图像各部分之间过渡区域的宽度
+Wood,木头
+Workflow,工作流
+Worklow,工作流
+X Pattern,X图案
+X Repeat,X 重复
+X coordinate of the center of the box,盒子中心的 X 坐标
+X coordinate of the magnifying glass center,放大镜中心的 X 坐标
+Xor,异或
+Y Pattern,Y图案
+Y Repeat,Y 重复
+Y coordinate of the center of the box,盒子中心的 Y 坐标
+Y coordinate of the magnifying glass center,放大镜中心的Y坐标
+Z coordinate of the center of the box,盒子中心的 Z 坐标
+Zipper,拉链
+Zoom In,放大
+Zoom Out,缩小
+Zoom Reset,缩放重置
+ab,AB
+abs(A),abs(A)
+add configuration,添加配置
+addconfiguration,添加配置
+adjust_hsv,调整HSV
+albedo_tex,基础色贴图
+ao_tex,环境光遮蔽贴图
+auto_tones,自动色调
+bake,烘培
+beehive,蜂巢
+blah,乏味
+boolean,布尔
+bricks_nontileable,不可拼贴砖
+bricks_uneven,不均匀砖
+brightness_contrast,亮度对比
+brush,笔刷
+brush_select_from_id,从ID中选择刷子
+ceil(A),ceil(A)
+center,中心
+circle_map,圆图
+circle_splatter,圆形散布器
+circle_splatter_color,彩色圆形散布器
+circular_gradient,圆形渐变
+color,颜色
+color_noise,彩色噪波
+compare,比较
+cos(A*B),cos(A*B)
+curve,曲线
+custom_uv,自定义UV
+default_color,默认颜色
+depth_tex,深度贴图
+dilate_pass_1,膨胀孔道1
+dilate_pass_2,膨胀通道2
+dilate_pass_3,膨胀通道3
+directional_blur,径向模糊
+edge_detect,边缘检测
+edge_detect_1,边缘检测1
+edge_detect_2,边缘检测2
+edge_detect_3,边缘检测3
+emboss,浮雕
+emission_tex,自发光贴图
+enum,枚举
+fast_blur,快速模糊
+fast_blur_shader,快速模糊着色器
+fbm,fbm
+fbm2,fbm2
+fill_iterate,填充迭代
+fill_preprocess,填充预处理
+fill_to_color,填色
+fill_to_position,填补位置
+fill_to_random_color,填充到随机颜色
+fill_to_random_grey,填充到随机灰色
+fill_to_size,填满大小
+fill_to_uv,填至UV
+filter,过滤器
+float,浮点数
+floor(A),floor(A)
+font,字体
+font_size,字体大小
+fract(A),fract(A)
+gaussian_blur,高斯模糊
+gaussian_blur_x,高斯模糊x
+gaussian_blur_y,高斯模糊y
+gradient,渐变
+hardness,硬度
+height_to_angle,高度转角度
+iching,易经
+in,输入
+input:,输入:
+iterations,迭代
+log(A),log(A)
+log2(A),log2(A)
+lron,锂
+magnify,增强
+map,贴图
+material,材质
+"max(A, B)","max(A, B)"
+"max(W, H)",最大值(宽，高)
+"max(W,H)",宽高最大值
+metallic_tex,金属度贴图
+"min(A, B)","min(A, B)"
+mipmap,纹理映射
+morphology,形态学
+mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.,类似马赛克的图案\n\n带有平移贴图的变换节点可以产生类似于坡度扭曲的效果，而且速度通常更快。
+mul_detect,多重检测
+multigradient,多重梯度
+mwf_create_map,材质流_创建贴图
+mwf_map,材质流贴图
+mwf_mix,材质流混合
+mwf_mix_maps,材质流混合贴图
+mwf_output,材质流输出
+noise,噪波
+noise_anisotropic,噪波各向异性
+noise_color,噪波色彩
+normal map and a color index map.,法线贴图和颜色索引贴图。
+normal_map,法线映射
+normal_tex,法线贴图
+occlusion,阻塞
+occlusion2,阻塞2
+onreddit,在Reddit上
+opacity_tex,透明系数贴图
+optional,设置
+out,出
+param0,参数0
+param1,参数 1
+param2,参数 2
+param3,参数 3
+param4,参数 4
+path/to/node,路径/到/节点
+perlin,柏林
+perlin_color,柏林色彩
+pixelize,像素化
+polygon,多边形
+port0,端口 0
+port1,端口 1
+"pow(A, B)","pow(A, B)"
+radial_gradient,径向渐变
+raymarching,光线步进
+raymarching_preview,光线步进预览
+refract,折射
+remove,移除
+repeat,重复
+result,结果
+rotate,旋转
+roughness_tex,糙度贴图
+round(A),round(A)
+runes,符文
+scale,比例
+scratches,刮痕
+sdAnnularShape,sd环形
+sdArc,sd圆弧
+sdBoolean,sd布尔值
+sdBox,sd盒子
+sdCircle,sd圆环
+sdCircleRepeat,sd圆形重复
+sdElongation,sd伸长率
+sdLine,sd线
+sdMorph,sd变形
+sdPolygon,多边形
+sdRepeat,sd重复
+sdRhombus,菱形
+sdRotate,sd旋转
+sdRoundedShape,sd圆形
+sdScale,sd缩放
+sdShow,sd显示
+sdSmoothBoolean,sd平滑布尔
+sdTranslate,sd平移
+sd_mask_to_sdf,sd遮罩到SDF
+sdelongation,sd拉长
+sdf3d_boolean,SDF3D布尔
+sdf3d_box,SDF3D立方
+sdf3d_capsule,SDF3D胶囊
+sdf3d_circle_repeat,SDF3D圆重复
+sdf3d_color,SDF3D颜色
+sdf3d_cone,SDF3D锥
+sdf3d_cylinder,SDF3D圆柱
+sdf3d_elongation,SDF3D伸长
+sdf3d_extrusion,SDF3D挤出
+sdf3d_morph,SDF3D变形
+sdf3d_repeat,SDF3D重复
+sdf3d_revolution,SDF3D绕圆挤出
+sdf3d_rotate,SDF3D旋转
+sdf3d_rounded,SDF3D圆滑膨胀
+sdf3d_scale,SDF3D缩放
+sdf3d_smoothboolean,SDF3D光滑布尔
+sdf3d_sphere,SDF3D球面
+sdf3d_torus,SDF3D圆环
+sdf3d_translate,SDF3D位移
+sdline,sd线
+sdmorph,sd变形
+sdpolygon,sd多边形
+sdrepeat,sd重复
+sdrhombus,sd菱形
+sdrotate,sd旋转
+sdroundedshape,sd圆滑膨胀
+sdscale,sd缩放
+sdshow,sd显示高度
+sdsmoothboolean,sd平滑布尔
+sdtranslate,sd位移
+shape,形状
+shapes,形状
+sharpen,锐化
+shear,切变
+simple,简易的
+sin(A*B),sin(A*B)
+sineWave,正弦波
+sine_wave,正弦波
+size,尺寸
+skew,偏斜
+slope,晃荡
+slope_blur,斜坡模糊
+smooth_curvature,光滑曲率
+smooth_curvature2,光滑曲线2
+spanish bond,西班式砌砖
+sphere,球体
+splatter,散布
+splatter_color,溅散布色彩
+sqrt(1-A²),sqrt(1-A²)
+suffix,后缀
+supersample,超彩样
+swap_channels,交换通道
+tan(A*B),tan(A*B)
+tex3d_apply,3D纹理应用
+tex3d_apply_invuvmap,3D纹理通过UV映射应用
+tex3d_blend,3D纹理混合
+tex3d_colorize,3D纹理上色
+tex3d_distort,3D纹理扰动
+tex3d_from2d,2D转3D纹理
+tex3d_pattern,2D图案
+tex3d_rotate,2D旋转
+tex3d_select,2D选择
+text,文本
+tile2X2,2X2贴块
+tiler,贴块器
+tiler_advanced,先进贴块器
+tiler_advanced_color,彩色先进贴块器
+tiler_color,贴块颜色
+to the bounding box. \n- Square mode where the UV layout is even and centerered based on the longest axis of the bounding box.,到边界框。\n- 方形模式，其中 UV 布局是基于边界框的最长轴均匀并居中的。
+tones_map,色调映射
+tones_range,色调范围
+tones_step,色阶
+transform,变换
+transform2,变换2
+translate,位移
+truchet,特鲁谢图形
+truchet_generic,特鲁谢图形生成器
+trunc(A),trunc(A)
+uniform,均色
+uniform_greyscale,均色灰度
+unnamed,未命名
+update,更新
+voronoi,沃诺依
+warp,扭曲
+warp2,扭曲2
+warp_dilation,扭曲膨胀
+warp_dilation_nobuf,扭曲膨胀不带缓存
+weave,编织
+weave2,编织2
+width,宽度
+zh - Chinese,zh - 中文
+© 2018-2021 Rodolphe Suescun and contributors,© 2018-2021 Rodolphe Suescun 和贡献者

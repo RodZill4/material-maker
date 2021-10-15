@@ -9,7 +9,9 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
-[node name="Library" type="VBoxContainer"]
+[node name="Library" type="VBoxContainer" groups=[
+"updated_from_locale",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 200 )

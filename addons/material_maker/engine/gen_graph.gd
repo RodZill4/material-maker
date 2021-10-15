@@ -62,14 +62,12 @@ func is_editable() -> bool:
 	return editable
 
 func get_description() -> String:
-	var desc : String
+	var desc_list : PoolStringArray = PoolStringArray()
 	if shortdesc == "":
-		desc = longdesc
-	elif longdesc == "":
-		desc = shortdesc
-	else:
-		desc = shortdesc+"\n"+longdesc
-	return desc
+		desc_list.push_back(TranslationServer.translate(shortdesc))
+	if longdesc == "":
+		desc_list.push_back(TranslationServer.translate(longdesc))
+	return desc_list.join("\n")
 
 
 func get_parameter_defs() -> Array:

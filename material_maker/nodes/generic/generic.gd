@@ -8,6 +8,9 @@ var output_count = 0
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 
+func _ready() -> void:
+	add_to_group("updated_from_locale")
+
 func _draw() -> void:
 	._draw()
 	if generator != null and generator.preview >= 0:
@@ -160,13 +163,13 @@ func _on_polygon_changed(new_polygon, variable : String) -> void:
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
 	if p.has("shortdesc"):
-		tooltip = p.shortdesc+" ("+p.name+")"
+		tooltip = TranslationServer.translate(p.shortdesc)+" ("+TranslationServer.translate(p.name)+")"
 		if parameter_value != null:
 			tooltip += " = "+str(parameter_value)
 		if p.has("longdesc"):
-			tooltip += "\n"+p.longdesc
+			tooltip += "\n"+TranslationServer.translate(p.longdesc)
 	elif p.has("longdesc"):
-		tooltip += p.longdesc
+		tooltip += TranslationServer.translate(p.longdesc)
 	return wrap_string(tooltip)
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
@@ -273,10 +276,9 @@ func update_rendering_time(t : int) -> void:
 	update_title()
 
 func update_title() -> void:
-	if rendering_time < 0:
-		title = generator.get_type_name()
-	else:
-		title = generator.get_type_name()+" ("+str(rendering_time)+"ms)"
+	title = TranslationServer.translate(generator.get_type_name())
+	if rendering_time > 0:
+		title += " ("+str(rendering_time)+"ms)"
 	if generator == null or generator.minimized:
 		var font : Font = get_font("default_font")
 		var max_title_width = 28
@@ -537,3 +539,7 @@ func on_mouse_entered():
 func on_mouse_exited():
 	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
 		preview.visible = true
+
+
+func update_from_locale() -> void:
+	update_title()

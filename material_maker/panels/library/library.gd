@@ -130,7 +130,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			c = c.get_next()
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
-			new_item.set_text(0, item_name)
+			new_item.set_text(0, TranslationServer.translate(item_name))
 		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
 		new_item.set_icon(1, item_icon)
 		new_item.set_icon_max_width(1, 32)
@@ -139,7 +139,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			new_item.set_metadata(1, library_index)
 		return new_item
 	else:
-		var prefix = item_name.left(slash_position)
+		var prefix = TranslationServer.translate(item_name.left(slash_position))
 		var suffix = item_name.right(slash_position+1)
 		var new_parent = null
 		var c = item_parent.get_children()
@@ -150,7 +150,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			c = c.get_next()
 		if new_parent == null:
 			new_parent = tree.create_item(item_parent)
-			new_parent.set_text(0, prefix)
+			new_parent.set_text(0, TranslationServer.translate(prefix))
 			new_parent.collapsed = !force_expand and expanded_items.find(get_item_path(new_parent)) == -1
 		return add_item(item, library_index, suffix, item_icon, new_parent, force_expand)
 
@@ -339,3 +339,7 @@ func _on_PopupMenu_index_pressed(index):
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)
+
+
+func update_from_locale() -> void:
+	update_tree()

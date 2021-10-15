@@ -210,7 +210,12 @@ func get_section_icon(section_name : String) -> Texture:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
-	var color = section_colors[section_name] if section_colors.has(section_name) else null
+	var color = null
+	if section_colors.has(section_name):
+		return section_colors[section_name]
+	for s in section_colors.keys():
+		if TranslationServer.translate(s) == section_name:
+			return section_colors[s]
 	return color
 
 func is_section_enabled(section_name : String) -> bool:

@@ -279,6 +279,10 @@ ui_next_tab={
  ]
 }
 
+[locale]
+
+translations=PoolStringArray(  )
+
 [logging]
 
 file_logging/log_path=""
