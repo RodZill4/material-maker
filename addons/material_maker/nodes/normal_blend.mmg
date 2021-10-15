@@ -1,0 +1,61 @@
+{
+	"name": "normal_blend",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "vec3 normal_blend(vec2 uv, vec3 n1, vec3 n2, float opacity) {\n\tn1.z = 1.0 - n1.z; // inverting z channel before calculations\n\tn2.z = 1.0 - n2.z; // inverting z channel before calculations\n\tvec3 t = n1*vec3( 2,  2, 2) + vec3(-1, -1,  0);\n\tvec3 u = n2*vec3(-2, -2, 2) + vec3( 1,  1, -1);\n\tvec3 r = mix(n2 * 2.0 - 1.0, t * dot(t, u) / t.z - u, opacity);\n\tr.z = r.z * -1.0; // inverting z channel after calculations\n\treturn r * 0.5 + 0.5;\n}",
+		"inputs": [
+			{
+				"default": "vec3(0.5, 0.5, 0.0)",
+				"label": "Source1",
+				"longdesc": "The foreground input",
+				"name": "s1",
+				"shortdesc": "Foreground",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.5, 0.5, 0.0)",
+				"label": "Source2",
+				"longdesc": "The background input",
+				"name": "s2",
+				"shortdesc": "Background",
+				"type": "rgb"
+			},
+			{
+				"default": "1.0",
+				"label": "Oppacity",
+				"longdesc": "The optional opacity mask",
+				"name": "a",
+				"shortdesc": "Mask",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Normal Blend",
+		"outputs": [
+			{
+				"rgb": "normal_blend($uv, $s1($uv), $s2($uv), $amount * $a($uv))",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "3:",
+				"max": 1,
+				"min": 0,
+				"name": "amount",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
