@@ -148,7 +148,3 @@ func _on_OK_pressed() -> void:
 
 func _on_Cancel_pressed() -> void:
 	queue_free()
-
-
-
-
