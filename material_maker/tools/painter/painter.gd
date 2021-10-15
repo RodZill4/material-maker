@@ -383,6 +383,17 @@ func save_viewport(v : Viewport, f : String):
 func debug_get_texture_names():
 	return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
 
+# Localization strings
+# tr("View to texture")
+# tr("Texture to view")
+# tr("Seams")
+# tr("Albedo (current layer)")
+# tr("Metallic/Roughness (current layer)")
+# tr("Emission (current layer)")
+# tr("Normal (current layer)")
+# tr("Depth/Occlusion (current layer)")
+# tr("Mask (current layer)")
+
 func debug_get_texture(ID):
 	match ID:
 		0:

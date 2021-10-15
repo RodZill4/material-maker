@@ -8,7 +8,12 @@ func install_translation(fn : String):
 	if dir.copy(fn, LOCALE_DIR.plus_file(fn.get_file())) == OK:
 		read_translations()
 
+func add_translations(dest : Translation, src : Translation):
+	for m in src.get_message_list():
+		dest.add_message(m, src.get_message(m))
+
 func read_translations():
+	var translations : Dictionary = {}
 	var dir = Directory.new()
 	if dir.open(LOCALE_DIR) == OK:
 		var csv_files : Array = []
@@ -19,7 +24,11 @@ func read_translations():
 				match file_name.get_extension():
 					"po", "translation":
 						var t : Translation = load(LOCALE_DIR.plus_file(file_name))
-						TranslationServer.add_translation(t)
+						if translations.has(t.locale):
+							add_translations(translations[t.locale], t)
+						else:
+							translations[t.locale] = t
+							TranslationServer.add_translation(t)
 					"csv":
 						csv_files.push_back(file_name)
 			file_name = dir.get_next()
@@ -32,13 +41,17 @@ func read_translations():
 					var languages : Array = l.split(separator)
 					languages[0] = null
 					for i in range(1, languages.size()):
-						if languages[i] == "en" or languages[i] in TranslationServer.get_loaded_locales():
+						if languages[i] == "en":
 							languages[i] = null
 						else:
-							var translation : Translation = Translation.new()
-							translation.locale = languages[i]
-							languages[i] = translation
-							TranslationServer.add_translation(translation)
+							if translations.has(languages[i]):
+								languages[i] = translations[languages[i]]
+							else:
+								var translation : Translation = Translation.new()
+								translation.locale = languages[i]
+								translations[languages[i]] = translation
+								languages[i] = translation
+								TranslationServer.add_translation(translation)
 					while ! f.eof_reached():
 						l = f.get_line()
 						var strings : Array = l.split(separator)

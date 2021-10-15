@@ -259,7 +259,7 @@ class TranslationStrings:
 												for field in [ "name", "shortdesc", "longdesc" ]:
 													if x.has(field) and add_string(x[field], fn):
 														string_count += 1
-						"material_export","shader":
+						"material_export","shader","brush":
 							if json.has("shader_model"):
 								if json.shader_model.has("name") and add_string(json.shader_model.name, fn):
 									string_count += 1

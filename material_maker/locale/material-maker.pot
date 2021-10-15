@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: rodzilla@free.fr\n"
-"POT-Creation-Date: 2021-10-14 19:50\n"
+"POT-Creation-Date: 2021-10-15 21:47\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: res:///start.tscn:438
+#: res:///start.tscn:440
 #: res:///material_maker/windows/about/about.tscn:74
 msgid "Material Maker"
 msgstr ""
 
-#: res:///start.tscn:469
+#: res:///start.tscn:471
 msgid "Powered by"
 msgstr ""
 
@@ -186,6 +186,7 @@ msgid "Painting"
 msgstr ""
 
 #: res:///material_maker/main_window.gd:101
+#: res:///material_maker/panels/paint/paint_layers.gd:441
 msgid "Emission"
 msgstr ""
 
@@ -194,6 +195,7 @@ msgid "Normal"
 msgstr ""
 
 #: res:///material_maker/main_window.gd:103
+#: res:///material_maker/panels/paint/paint_layers.gd:443
 msgid "Depth"
 msgstr ""
 
@@ -466,6 +468,26 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+#: res:///material_maker/panels/paint/paint_layers.gd:438
+msgid "Albedo"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:439
+msgid "Metallic"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:440
+msgid "Roughness"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:442
+msgid "Normal map"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:444
+msgid "Occlusion"
+msgstr ""
+
 #: res:///material_maker/panels/preview_3d/mesh_config_popup.tscn:35
 msgid "Mesh configuration"
 msgstr ""
@@ -543,6 +565,42 @@ msgstr ""
 
 #: res:///material_maker/panels/preview_3d/thumbnails/generation/gen_thumbs_meshes.tscn:77
 msgid "Custom"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:387
+msgid "View to texture"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:388
+msgid "Texture to view"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:389
+msgid "Seams"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:390
+msgid "Albedo (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:391
+msgid "Metallic/Roughness (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:392
+msgid "Emission (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:393
+msgid "Normal (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:394
+msgid "Depth/Occlusion (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:395
+msgid "Mask (current layer)"
 msgstr ""
 
 #: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:67

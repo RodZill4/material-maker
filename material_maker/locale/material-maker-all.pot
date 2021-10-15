@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: rodzilla@free.fr\n"
-"POT-Creation-Date: 2021-10-14 19:50\n"
+"POT-Creation-Date: 2021-10-15 21:47\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: res:///start.tscn:438
+#: res:///start.tscn:440
 #: res:///material_maker/windows/about/about.tscn:74
 msgid "Material Maker"
 msgstr ""
 
-#: res:///start.tscn:469
+#: res:///start.tscn:471
 msgid "Powered by"
 msgstr ""
 
@@ -186,6 +186,7 @@ msgid "Painting"
 msgstr ""
 
 #: res:///material_maker/main_window.gd:101
+#: res:///material_maker/panels/paint/paint_layers.gd:441
 #: res://addons/material_maker/nodes/material.mmg
 #: res://addons/material_maker/nodes/material_3d.mmg
 #: res://addons/material_maker/nodes/material_dynamic.mmg
@@ -209,6 +210,7 @@ msgid "Normal"
 msgstr ""
 
 #: res:///material_maker/main_window.gd:103
+#: res:///material_maker/panels/paint/paint_layers.gd:443
 #: res://addons/material_maker/nodes/material.mmg
 #: res://addons/material_maker/nodes/material_dynamic.mmg
 #: res://addons/material_maker/nodes/mwf_output.mmg
@@ -648,6 +650,50 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+#: res:///material_maker/panels/paint/paint_layers.gd:438
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+#: res://addons/material_maker/nodes/mwf_map.mmg
+#: res://addons/material_maker/nodes/mwf_mix.mmg
+#: res://addons/material_maker/nodes/mwf_output.mmg
+msgid "Albedo"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:439
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+#: res://addons/material_maker/nodes/mwf_output.mmg
+msgid "Metallic"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:440
+#: res://addons/material_maker/nodes/material.mmg
+#: res://addons/material_maker/nodes/material_3d.mmg
+#: res://addons/material_maker/nodes/material_dynamic.mmg
+#: res://addons/material_maker/nodes/material_raymarching.mmg
+#: res://addons/material_maker/nodes/mwf_output.mmg
+msgid "Roughness"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:442
+#: res://addons/material_maker/nodes/normal_map.mmg
+#: res://addons/material_maker/nodes/normal_map2.mmg
+#: res://material_maker/library/base.json
+msgid "Normal map"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:444
+#: res://addons/material_maker/nodes/mwf_output.mmg
+#: res://addons/material_maker/nodes/occlusion.mmg
+#: res://addons/material_maker/nodes/occlusion2.mmg
+#: res://material_maker/library/base.json
+msgid "Occlusion"
+msgstr ""
+
 #: res:///material_maker/panels/preview_3d/mesh_config_popup.tscn:35
 msgid "Mesh configuration"
 msgstr ""
@@ -737,6 +783,42 @@ msgstr ""
 
 #: res:///material_maker/panels/preview_3d/thumbnails/generation/gen_thumbs_meshes.tscn:77
 msgid "Custom"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:387
+msgid "View to texture"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:388
+msgid "Texture to view"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:389
+msgid "Seams"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:390
+msgid "Albedo (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:391
+msgid "Metallic/Roughness (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:392
+msgid "Emission (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:393
+msgid "Normal (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:394
+msgid "Depth/Occlusion (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:395
+msgid "Mask (current layer)"
 msgstr ""
 
 #: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:67
@@ -1708,6 +1790,7 @@ msgid "Difference"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "Opacity"
 msgstr ""
@@ -1718,31 +1801,37 @@ msgid "The opacity of the blend operation"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "Source1"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "Foreground"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "The foreground input"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "Source2"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "Background"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "The background input"
 msgstr ""
@@ -1751,6 +1840,7 @@ msgstr ""
 #: res://addons/material_maker/nodes/circle_splatter.mmg
 #: res://addons/material_maker/nodes/circle_splatter_color.mmg
 #: res://addons/material_maker/nodes/dilate.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/sd_mask_to_sdf.mmg
 #: res://addons/material_maker/nodes/splatter.mmg
 #: res://addons/material_maker/nodes/splatter_color.mmg
@@ -1763,6 +1853,7 @@ msgid "Mask"
 msgstr ""
 
 #: res://addons/material_maker/nodes/blend.mmg
+#: res://addons/material_maker/nodes/normal_blend.mmg
 #: res://addons/material_maker/nodes/tex3d_blend.mmg
 msgid "The optional opacity mask"
 msgstr ""
@@ -3978,32 +4069,6 @@ msgstr ""
 #: res://addons/material_maker/nodes/material.mmg
 #: res://addons/material_maker/nodes/material_3d.mmg
 #: res://addons/material_maker/nodes/material_dynamic.mmg
-#: res://addons/material_maker/nodes/material_raymarching.mmg
-#: res://addons/material_maker/nodes/mwf_map.mmg
-#: res://addons/material_maker/nodes/mwf_mix.mmg
-#: res://addons/material_maker/nodes/mwf_output.mmg
-msgid "Albedo"
-msgstr ""
-
-#: res://addons/material_maker/nodes/material.mmg
-#: res://addons/material_maker/nodes/material_3d.mmg
-#: res://addons/material_maker/nodes/material_dynamic.mmg
-#: res://addons/material_maker/nodes/material_raymarching.mmg
-#: res://addons/material_maker/nodes/mwf_output.mmg
-msgid "Metallic"
-msgstr ""
-
-#: res://addons/material_maker/nodes/material.mmg
-#: res://addons/material_maker/nodes/material_3d.mmg
-#: res://addons/material_maker/nodes/material_dynamic.mmg
-#: res://addons/material_maker/nodes/material_raymarching.mmg
-#: res://addons/material_maker/nodes/mwf_output.mmg
-msgid "Roughness"
-msgstr ""
-
-#: res://addons/material_maker/nodes/material.mmg
-#: res://addons/material_maker/nodes/material_3d.mmg
-#: res://addons/material_maker/nodes/material_dynamic.mmg
 msgid "Ambient occlusion"
 msgstr ""
 
@@ -4704,13 +4769,6 @@ msgid "Converts a workflow mapped material (from an Apply Map or a Mix node) for
 msgstr ""
 
 #: res://addons/material_maker/nodes/mwf_output.mmg
-#: res://addons/material_maker/nodes/occlusion.mmg
-#: res://addons/material_maker/nodes/occlusion2.mmg
-#: res://material_maker/library/base.json
-msgid "Occlusion"
-msgstr ""
-
-#: res://addons/material_maker/nodes/mwf_output.mmg
 msgid "The strength of the calculated occlusion effect"
 msgstr ""
 
@@ -4784,15 +4842,13 @@ msgstr ""
 msgid "Shows a greyscale value noise"
 msgstr ""
 
-#: res://addons/material_maker/nodes/normal_map.mmg
-#: res://addons/material_maker/nodes/normal_map2.mmg
-msgid "Normal Map"
+#: res://addons/material_maker/nodes/normal_blend.mmg
+msgid "Normal Blend"
 msgstr ""
 
 #: res://addons/material_maker/nodes/normal_map.mmg
 #: res://addons/material_maker/nodes/normal_map2.mmg
-#: res://material_maker/library/base.json
-msgid "Normal map"
+msgid "Normal Map"
 msgstr ""
 
 #: res://addons/material_maker/nodes/normal_map.mmg

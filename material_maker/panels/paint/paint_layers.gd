@@ -434,6 +434,15 @@ func _on_Painter_painted():
 func debug_get_texture_names():
 	return [ "Albedo", "Metallic", "Roughness", "Emission", "Normal map", "Depth", "Occlusion" ]
 
+# Localization strings
+# tr("Albedo")
+# tr("Metallic")
+# tr("Roughness")
+# tr("Emission")
+# tr("Normal map")
+# tr("Depth")
+# tr("Occlusion")
+
 func debug_get_texture(ID):
 	match ID:
 		0:

@@ -101,6 +101,11 @@ Brush hardness|Dureté de la brosse
 Brush opacity|Opacité de la brosse
 Brush spacing|Espacement de la brosse
 None|Aucun
+Albedo|
+Metallic|
+Roughness|
+Normal map|
+Occlusion|
 Mesh configuration|Configuration du maillage
 UV Scale:|Échelle UV :
 Tesselated|Tesselated
@@ -120,6 +125,15 @@ Ambient Occlusion|
 Thickness|
 Environment|Environnement
 Custom|Personnalisé
+View to texture|
+Texture to view|
+Seams|
+Albedo (current layer)|
+Metallic/Roughness (current layer)|
+Emission (current layer)|
+Normal (current layer)|
+Depth/Occlusion (current layer)|
+Mask (current layer)|
 Presets|
 Invert|
 Default|Par défaut
@@ -664,9 +678,6 @@ Width of the transition areas between parts of the input image|
 The image to be made tileable|
 A tileable version of the input image|
 Static PBR Material|
-Albedo|
-Metallic|
-Roughness|
 Ambient occlusion|
 Transparency|
 Subsurf. scatter.|
@@ -818,7 +829,6 @@ Input4|
 The fourth input map|
 Generates a merged workflow map|
 Converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node|
-Occlusion|
 The strength of the calculated occlusion effect|
 MatNormal|
 The strength of  normals from the base materials (compared to the normal generated from height information))|
@@ -835,8 +845,8 @@ Controls how much the noise is blurred along the x-axis|
 Interpolation|
 Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is smooth interpolation|
 Shows a greyscale value noise|
+Normal Blend|
 Normal Map|
-Normal map|
 Generates a normal map from a height map|
 Format|
 The format of the generated normal map\nIn most cases this should be set to default|
