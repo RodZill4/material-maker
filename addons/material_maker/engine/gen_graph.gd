@@ -431,3 +431,144 @@ func _deserialize(data : Dictionary) -> void:
 		longdesc = data.longdesc
 	var nodes = data.nodes if data.has("nodes") else []
 	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])
+
+
+func apply_diff_from(graph : MMGenGraph) -> void:
+	shortdesc = graph.shortdesc
+	longdesc = graph.longdesc
+	
+	var child_names = []
+	for c in get_children():
+		child_names.append([c.name, c.get_type()])
+	
+	child_names.sort_custom(self, "compare_name_and_type")
+	
+	var other_child_names = []
+	for c in graph.get_children():
+		other_child_names.append([c.name, c.get_type()])
+	
+	other_child_names.sort_custom(self, "compare_name_and_type")
+	
+	var added = []
+	var removed = []
+	var maybe_changed = []
+	
+	var idx1 = 0
+	var idx2 = 0
+	
+	while idx1 < child_names.size() && idx2 < other_child_names.size():
+		if child_names[idx1] == other_child_names[idx2]:
+			maybe_changed.append(child_names[idx1])
+			idx1 += 1
+			idx2 += 1
+		elif compare_name_and_type(child_names[idx1], other_child_names[idx2]):
+			remove_generator(get_node(child_names[idx1][0]))
+			idx1 += 1
+		else:
+			var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+			add_generator(mm_loader.create_gen(gen))
+			idx2 += 1
+	
+	while idx1 < child_names.size():
+		remove_generator(get_node(child_names[idx1][0]))
+		idx1 += 1
+	
+	while idx2 < other_child_names.size():
+		var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+		add_generator(mm_loader.create_gen(gen))
+		idx2 += 1
+		
+	for child in maybe_changed:
+		if child[1] == "graph":
+			var node = get_node(child[0])
+			var other_node = graph.get_node(child[0])
+
+			node.apply_diff_from(other_node)
+			continue
+		
+		var node = get_node(child[0])
+		var other_node = graph.get_node(child[0])
+		
+		node.position = other_node.position
+		if other_node.seed_locked:
+			node.seed_locked = true
+			node.seed_value = other_node.seed_value
+		
+		var node_seed = node.seed_value
+		
+		var node_serialized = node.serialize()
+		var other_node_serialized = other_node.serialize()
+		node_serialized.erase("seed")
+		other_node_serialized.erase("seed")
+		
+		if node_serialized.hash() != other_node_serialized.hash():
+			node.deserialize(other_node_serialized)
+			node.seed_value = node_seed
+			node.get_tree().call_group("generator_node", "on_generator_changed", node)
+	
+	diff_connections(graph)
+	fix_remotes()
+	
+func diff_connections(graph : MMGenGraph):
+	var cons = [] + connections
+	cons.sort_custom(self, "compare_connection")
+	var other_cons = [] + graph.connections
+	other_cons.sort_custom(self, "compare_connection")
+	
+	var new_connections : Array = []
+	var added_connections : Array = []
+	var removed_connections : Array = []
+	
+	var idx1 = 0
+	var idx2 = 0
+	
+	while idx1 < cons.size() && idx2 < other_cons.size():
+		if cons[idx1].hash() == other_cons[idx2].hash():
+			new_connections.append(cons[idx1])
+			idx1 += 1
+			idx2 += 1
+		elif compare_connection(cons[idx1], other_cons[idx2]):
+			removed_connections.append(cons[idx1])
+			idx1 += 1
+		else:
+			added_connections.append(other_cons[idx2])
+			new_connections.append(other_cons[idx2])
+			idx2 += 1
+	
+	while idx1 < cons.size():
+		removed_connections.append(cons[idx1])
+		idx1 += 1
+	
+	while idx2 < other_cons.size():
+		added_connections.append(other_cons[idx2])
+		new_connections.append(other_cons[idx2])
+		idx2 += 1
+		
+	connections = new_connections
+	emit_signal("connections_changed", removed_connections, added_connections)
+	
+func compare_name_and_type(a, b):
+	if a[0] < b[0]:
+		return true
+	elif a[0] > b[0]:
+		return false
+	
+	return a[1] < b[1]
+	
+func compare_connection(a, b):
+	if a.from < b.from:
+		return true
+	elif a.from > b.from:
+		return false
+		
+	if a.from_port < b.from_port:
+		return true
+	elif a.from_port > b.from_port:
+		return false
+		
+	if a.to < b.to:
+		return true
+	elif a.to > b.to:
+		return false
+		
+	return a.to_port < b.to_port

@@ -14,6 +14,8 @@ const CUSTOM_ICON : Texture = preload("res://material_maker/icons/custom.png")
 const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
 
+const MENU_PROPAGATE_CHANGES : int = 1000
+
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
 	var p = 0
@@ -154,6 +156,19 @@ func _on_gui_input(event) -> void:
 					menu.connect("popup_hide", menu, "queue_free")
 					menu.connect("id_pressed", self, "_on_seed_menu")
 					accept_event()
+		if event.button_index == BUTTON_RIGHT:
+			if generator is MMGenGraph:
+				accept_event()
+				var menu : PopupMenu = PopupMenu.new()
+				if !get_parent().get_propagation_targets(generator).empty():
+					menu.add_item("Propagate changes", MENU_PROPAGATE_CHANGES)
+				if menu.get_item_count() != 0:
+					add_child(menu)
+					menu.connect("modal_closed", menu, "queue_free")
+					menu.connect("id_pressed", self, "_on_menu_id_pressed")
+					menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+				else:
+					menu.free()
 	elif event is InputEventMouseMotion:
 		var epos = event.position
 		if Rect2(0, 0, rect_size.x-56, 16).has_point(epos):
@@ -219,3 +234,16 @@ func clear_connection_labels() -> void:
 		show_inputs = false
 		show_outputs = false
 		update()
+
+func _on_menu_id_pressed(id : int) -> void:
+	match id:
+		MENU_PROPAGATE_CHANGES:
+			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
+			dialog.add_cancel("Cancel");
+			add_child(dialog)
+			var result = dialog.ask()
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result == "ok":
+				get_parent().call_deferred("propagate_node_changes", generator)
