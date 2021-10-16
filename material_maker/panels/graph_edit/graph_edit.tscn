@@ -1,24 +1,41 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
 [ext_resource path="res://material_maker/panels/graph_edit/undo_redo.gd" type="Script" id=3]
 [ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
+[sub_resource type="Theme" id=1]
+GraphEdit/colors/activity = Color( 1, 1, 1, 1 )
+GraphEdit/colors/grid_major = Color( 1, 1, 1, 0.2 )
+GraphEdit/colors/grid_minor = Color( 1, 1, 1, 0.05 )
+GraphEdit/colors/selection_fill = Color( 1, 1, 1, 0.3 )
+GraphEdit/colors/selection_stroke = Color( 1, 1, 1, 0.8 )
+GraphEdit/constants/bezier_len_neg = 160
+GraphEdit/constants/bezier_len_pos = 80
+GraphEdit/constants/port_grab_distance_horizontal = 6
+GraphEdit/constants/port_grab_distance_vertical = 6
+GraphEdit/icons/minimap = null
+GraphEdit/icons/minus = null
+GraphEdit/icons/more = null
+GraphEdit/icons/reset = null
+GraphEdit/icons/snap = null
+GraphEdit/styles/bg = null
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 64, 32, 16, 16 )
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
+region = Rect2( 64, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
+
+[sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 48, 16, 16 )
@@ -28,7 +45,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -1.49829
 margin_bottom = -1.49829
-custom_styles/bg = SubResource( 1 )
+theme = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
 right_disconnects = true
 use_snap = false
 minimap_enabled = false
@@ -75,7 +93,7 @@ margin_bottom = 24.0
 hint_tooltip = "Affect children seeds"
 size_flags_horizontal = 9
 toggle_mode = true
-icon = SubResource( 2 )
+icon = SubResource( 3 )
 
 [node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
 margin_left = 218.0
@@ -83,14 +101,14 @@ margin_right = 246.0
 margin_bottom = 24.0
 hint_tooltip = "Back to parent"
 size_flags_horizontal = 9
-icon = SubResource( 3 )
+icon = SubResource( 4 )
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
 margin_left = 250.0
 margin_right = 278.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
-icon = SubResource( 4 )
+icon = SubResource( 5 )
 
 [node name="Control" type="Control" parent="GraphUI"]
 margin_left = 282.0

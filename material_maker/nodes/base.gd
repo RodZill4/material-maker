@@ -46,7 +46,7 @@ func on_generator_changed(g):
 func _draw() -> void:
 	var color : Color = get_color("title_color")
 	var icon = MINIMIZE_ICON
-	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
+	#draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
 	if generator != null and generator.has_randomness():
 		icon = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
 		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
