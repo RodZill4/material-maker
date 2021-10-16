@@ -706,7 +706,6 @@ GraphEdit/colors/selection_fill = Color( 0.41, 0.61, 0.91, 0.3 )
 GraphEdit/colors/selection_stroke = Color( 0.41, 0.61, 0.91, 0.8 )
 GraphEdit/constants/bezier_len_neg = 160
 GraphEdit/constants/bezier_len_pos = 80
-GraphEdit/constants/port_grab_distance_vertical = 12
 GraphEdit/icons/minus = ExtResource( 31 )
 GraphEdit/icons/more = ExtResource( 21 )
 GraphEdit/icons/reset = ExtResource( 25 )
