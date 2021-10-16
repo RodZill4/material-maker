@@ -90,7 +90,9 @@ func _on_Export_pressed():
 		var begin : float = value_begin.value
 		var end : float = value_end.value
 		var images : int = value_images.value
-		var spritesheet_lines : int = value_spritesheet.get_item_id(value_spritesheet.selected)
+		var spritesheet_lines : int = value_spritesheet.get_item_id(value_spritesheet.selected) 
+		if spritesheet_lines > 500:
+			spritesheet_lines = 1000-spritesheet_lines
 		var spritesheet_columns : int
 		var renderer = mm_renderer.request(self)
 		while renderer is GDScriptFunctionState:
@@ -99,8 +101,12 @@ func _on_Export_pressed():
 		image_anim.material.set_shader_param("end", begin)
 		var spritesheet : Image
 		var filename_fmt
-		if spritesheet_lines > 0:
-			spritesheet_columns = (images-1)/spritesheet_lines+1
+		if spritesheet_lines != 0:
+			if spritesheet_lines > 0:
+				spritesheet_columns = (images-1)/spritesheet_lines+1
+			else:
+				spritesheet_columns = -spritesheet_lines
+				spritesheet_lines = (images-1)/spritesheet_columns+1
 			spritesheet = Image.new()
 			spritesheet.create(size * spritesheet_columns, size * spritesheet_lines, false, Image.FORMAT_RGBA8)
 		else:
@@ -131,3 +137,7 @@ func _on_Export_pressed():
 			spritesheet.save_png(filename)
 		image_anim.material.set_shader_param("begin", begin)
 		image_anim.material.set_shader_param("end", end)
+
+
+func _on_VBox_minimum_size_changed():
+	rect_size = $VBox.rect_size+Vector2(4, 4)

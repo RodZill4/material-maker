@@ -211,7 +211,7 @@ margin_left = 550.0
 margin_right = 638.0
 margin_bottom = 24.0
 text = "PNG files"
-items = [ "PNG files", null, false, 0, null, "1 line spritesheet", null, false, 1, null, "2 lines spritesheet", null, false, 2, null, "4 lines spritesheet", null, false, 4, null ]
+items = [ "PNG files", null, false, 0, null, "1 line spritesheet", null, false, 1, null, "2 lines spritesheet", null, false, 2, null, "4 lines spritesheet", null, false, 4, null, "1 column spritesheet", null, false, 1001, null ]
 selected = 0
 
 [node name="Images" type="MarginContainer" parent="VBox"]
@@ -313,6 +313,7 @@ rect_min_size = Vector2( 80, 0 )
 text = "Close"
 
 [connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="minimum_size_changed" from="VBox" to="." method="_on_VBox_minimum_size_changed"]
 [connection signal="value_changed" from="VBox/Settings/Begin" to="." method="_on_Begin_value_changed"]
 [connection signal="value_changed" from="VBox/Settings/End" to="." method="_on_End_value_changed"]
 [connection signal="timeout" from="VBox/Images/HBox/Animated/Timer" to="." method="_on_Timer_timeout"]
