@@ -1,5 +1,5 @@
 Variations node
-~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 The **Variations** node can be used to generate several variations of its input.
 
