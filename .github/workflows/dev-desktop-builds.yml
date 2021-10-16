@@ -10,7 +10,7 @@ env:
   GODOT_VERSION: 3.3.2
   GODOT_VERSION_MAC: 3.3
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_96
+  MM_RELEASE: 0_97
 
 jobs:
   export_windows_linux:
