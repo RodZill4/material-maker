@@ -161,7 +161,7 @@ func _on_gui_input(event) -> void:
 				accept_event()
 				var menu : PopupMenu = PopupMenu.new()
 				if !get_parent().get_propagation_targets(generator).empty():
-					menu.add_item("Propagate changes", MENU_PROPAGATE_CHANGES)
+					menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
 				if menu.get_item_count() != 0:
 					add_child(menu)
 					menu.connect("modal_closed", menu, "queue_free")

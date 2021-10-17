@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: rodzilla@free.fr\n"
-"POT-Creation-Date: 2021-10-15 21:47\n"
+"POT-Creation-Date: 2021-10-17 16:02\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -279,27 +279,31 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:100
+#: res:///material_maker/nodes/base.gd:102
 msgid "Output"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:147
+#: res:///material_maker/nodes/base.gd:149
 msgid "Unlock seed"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:147
+#: res:///material_maker/nodes/base.gd:149
 msgid "Lock seed"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:149
+#: res:///material_maker/nodes/base.gd:151
 msgid "Copy seed"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:151
+#: res:///material_maker/nodes/base.gd:153
 msgid "Paste seed"
 msgstr ""
 
-#: res:///material_maker/nodes/base.gd:167
+#: res:///material_maker/nodes/base.gd:164
+msgid "Propagate changes"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:182
 msgid "Change seed (left mouse button) / Show seed menu (right mouse button)"
 msgstr ""
 
