@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.96
+                0.97
               </div>
             
           
@@ -105,7 +105,10 @@
 <li class="toctree-l2"><a class="reference internal" href="material_nodes.html">Material nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="texture_nodes.html">Texture nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Subgraph nodes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Subgraph nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#propagating-changes-from-a-graph-node">Propagating changes from a graph node</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -187,8 +190,10 @@ their own level of hierarchy.</p>
 This will replace all selected nodes with a single subgraph node, without
 modifying the overall material description.</p>
 <p>When the subgraph is created, it is shown in the graph editor, and can be
-renamed using the top right text field. the yellow doc button next to this
-text field can be used to define the Group Node’s tooltip.</p>
+renamed using the top right text field (which is recommended if you intend
+to use several instances of that subgraph in your project).
+The yellow doc button next to this text field can be used to define the
+Group Node’s tooltip.</p>
 <p>The subgraph node is not editable by default, but using the <strong>Control+W</strong>
 shortcut will make it possible to edit its contents using the pencil button.</p>
 <img alt="_images/subgraph.png" class="align-center" src="_images/subgraph.png" />
@@ -211,6 +216,15 @@ subgraph.
 Remote parameters can also be assigned tooltips by clicking on the yellow
 document button.</p></li>
 </ul>
+<div class="section" id="propagating-changes-from-a-graph-node">
+<h2>Propagating changes from a graph node<a class="headerlink" href="#propagating-changes-from-a-graph-node" title="Permalink to this headline">¶</a></h2>
+<p>When several instances of a subgraph node is used in a project, it is possible
+to make sure all of them are identical (except for their parameter values).
+To do this, right click the Subgraph node you wish to replicate, and select
+the <strong>Propagate changes</strong> menu entry. You will be prompted to confirm updating
+all subgraph nodes with the same name. Just click the <strong>OK</strong> button and the
+contents all those node will be updated.</p>
+</div>
 </div>
 
 

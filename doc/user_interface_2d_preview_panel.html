@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.96
+                0.97
               </div>
             
           
@@ -106,7 +106,10 @@
 <li class="toctree-l3"><a class="reference internal" href="user_interface_graph_panel.html">Graph panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_library_panel.html">Library panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_hierarchy_panel.html">Hierarchy panel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">2D Preview panel</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">2D Preview panel</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#exporting-animations">Exporting animations</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_3d_preview_panel.html">3D Preview panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_histogram_panel.html">Histogram panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_reference_panel.html">Reference panel</a></li>
@@ -196,8 +199,15 @@
             
   <div class="section" id="d-preview-panel">
 <h1>2D Preview panel<a class="headerlink" href="#d-preview-panel" title="Permalink to this headline">¶</a></h1>
-<p>The 2D preview panel shows a tiled preview of the first output of the selected
-node. The corner lines show the bounds of the texture, so it is
+<p>The 2D preview panels shows a preview of the selected node outputs. Selecting a node
+will always show its first output in the first 2D preview. Left clicking an output
+port will show it it the first 2D preview panel.</p>
+<p>Holding the <strong>Control</strong> key while clicking an output will lock that preview selection,
+so it will not be changed by node or output port selection. Control clicking the locked
+previewed output will cancel the lock.</p>
+<p>Holding the <strong>Shift</strong> key while clicking (or control clicking) an output port will show
+the preview in the second 2D preview panel.</p>
+<p>The corner lines (and outer lines of the grid) show the bounds of the texture, so it is
 easy to check that the texture wraps correctly.</p>
 <img alt="_images/preview_2d.png" class="align-center" src="_images/preview_2d.png" />
 <p>The mouse wheel can be used to zoom, and holding the middle mouse button makes it possible
@@ -208,9 +218,29 @@ around to modify the associated parameters.</p>
 <ul class="simple">
 <li><p>reset the preview zoom and position</p></li>
 <li><p>select the style and color of axes displayed on top of the preview</p></li>
-<li><p>export the previewed texture to a file</p></li>
-<li><p>render the previewed texture and add it to the References panel</p></li>
+<li><p>export the previewed node to a file</p></li>
+<li><p>export the previewed node’s animation to a set of files or a spritesheet</p></li>
+<li><p>render the previewed node and add it to the References panel</p></li>
 </ul>
+<div class="section" id="exporting-animations">
+<h2>Exporting animations<a class="headerlink" href="#exporting-animations" title="Permalink to this headline">¶</a></h2>
+<p>Selecting the <strong>Export animation</strong> item in a 2D preview’s context menu will show the
+Export Animation window.</p>
+<img alt="_images/export_animation.png" class="align-center" src="_images/export_animation.png" />
+<p>This window shows controls to select the export size, the beginning and end times of the
+animation, the number of frames and a choice for generating several PNG image files,
+or a single spritesheet (that can be generated as a single, 2 or 4 rows of images).</p>
+<p>The window also shows the beginning image, the animation (taking beginning and end times
+into account), and the end image.</p>
+<p>While modifying the beginning or end time, the center image shows a difference of both
+images (similar parts are shown in black, and differences in red), so it is easy to
+tune those values to generate a nice animation loop.</p>
+<p>Clicking the <strong>Export</strong> button will prompt for a file name. When generating a spritesheet,
+the name will be used as-is, but if several PNG files are generated, the file name will be
+suffixed with an underscore character followed by the frame index (starting with 1). It is
+possible to avoid that behavior by setting a name that contains consecutive sharp (#)
+characters that will be replaced with the frame index (prefixed with zeroes if necessary).</p>
+</div>
 </div>
 
 

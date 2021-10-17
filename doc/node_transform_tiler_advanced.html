@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.96
+                0.97
               </div>
             
           
@@ -130,6 +130,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_circlesplatter.html">Circle Splatter node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_warpdilation.html">Warp Dilation node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_multi_warp.html">Multi Warp node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
@@ -226,6 +227,8 @@ inputs are not connected</p>
 <li><p>The <em>Translate X</em> and <em>Translate Y</em> input maps are used to offset each instance.</p></li>
 <li><p>The <em>Rotate</em> input map is used to rotate each instance.</p></li>
 <li><p>The <em>Scale X</em> and <em>Scale Y</em> input maps are used to scale each instance.</p></li>
+<li><p><em>Variations</em>: if checked, the node will tile different variations of its input
+(i.e. roll a different seed for each instance)</p></li>
 </ul>
 <p>The <strong>Remap</strong> node can be used to generate input maps (<em>Translate X</em>, <em>Translate Y</em>, <em>Rotate</em>,
 <em>Scale X</em> and <em>Scale Y</em>) easily. It takes a greyscale image as input and defines the

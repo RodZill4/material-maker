@@ -43,7 +43,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Raymarching Material node" href="node_material_raymarching.html" />
+    <link rel="next" title="3D Material node" href="node_material_3d.html" />
     <link rel="prev" title="Static PBR Material node" href="node_material.html" /> 
 </head>
 
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.96
+                0.97
               </div>
             
           
@@ -110,6 +110,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_material_3d.html">3D Material node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_material_raymarching.html">Raymarching Material node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_material_unlit.html">Unlit Material node</a></li>
 </ul>
@@ -198,7 +199,8 @@
   <div class="section" id="dynamic-pbr-material-node">
 <h1>Dynamic PBR Material node<a class="headerlink" href="#dynamic-pbr-material-node" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>Dynamic PBR Material</strong> node describes a PBR material with Albedo, Metallic, Roughness,
-Emission, Depth and Normal Maps generated as static images.</p>
+Emission, Depth and Normal Maps generated using a shader, which makes it possible to create
+animated, resolution independent or non-repetitive materials.</p>
 <img alt="_images/node_material_dynamic.png" class="align-center" src="_images/node_material_dynamic.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
@@ -226,7 +228,7 @@ a shader is generated, to be used in a Custom node.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="node_material_raymarching.html" class="btn btn-neutral float-right" title="Raymarching Material node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_material_3d.html" class="btn btn-neutral float-right" title="3D Material node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="node_material.html" class="btn btn-neutral float-left" title="Static PBR Material node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

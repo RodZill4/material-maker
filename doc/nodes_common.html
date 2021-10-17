@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.96
+                0.97
               </div>
             
           
@@ -238,6 +238,13 @@ in generated shaders, but generated <strong>Static PBR Materials</strong> will s
 static (this feature could for example be used to export variations of the
 same material). Other predefined material types can fully benefit from this
 feature.</p>
+<p>Randomness can be added to any node by using the <em>$rnd(min, max)</em> function,
+that will generate a random number between <em>min</em> and <em>max</em>. The node’s seed
+can then be modified, copied or locked using the die button.</p>
+<p>Right clicking a float parameter field will show an expression editor, that
+checks the syntax of the expression. Whenever the expression is incorrect,
+the Apply and OK buttons will be disabled. You can still use the Enter key
+to apply the changes if necessary.</p>
 </li>
 <li><p><strong>size</strong> parameters are power of two values for the image size. They are used when
 actually storing data in a texture, or when performing resolution dependent calculations
@@ -259,12 +266,15 @@ library to a gradient editor widget.</p>
 </li>
 <li><p><strong>curve</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
 the parameter.</p>
-<a class="reference internal image-reference" href="_images/curve_editor.png"><img alt="_images/curve_editor.png" class="align-center" src="_images/curve_editor.png" style="width: 314.0px; height: 210.5px;" /></a>
+<a class="reference internal image-reference" href="_images/curve_editor.png"><img alt="_images/curve_editor.png" class="align-center" src="_images/curve_editor.png" style="width: 467.5px; height: 536.5px;" /></a>
 <p>The curve is defined by its control points that define their value and left and right slopes
 for given abscissas. Control points (as well as slope control points) can be grabbed and moved
 using the left mouse button.</p>
 <p>New control points can be added by double-clicking in the editor, and control points can be
 removed using the right mouse button.</p>
+<p>The curve editor comes with a selection of presets available in the <strong>Presets</strong> menu and an
+<strong>Invert</strong> button to invert the curve. Presets included are: Linear, EaseOut, EaseInOut,
+EaseOut, SawTooth, Bounce and Bevel.</p>
 </li>
 <li><p><strong>polygon</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
 the parameter.</p>
@@ -279,8 +289,11 @@ be used to split the closest edge), and deleted using the right mouse button.</p
 <div class="section" id="randomness">
 <h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this headline">¶</a></h2>
 <p>Nodes that provide random patterns have an implicit <strong>seed</strong> parameter. It is not possible
-to edit it directly, but moving the node in the graph will change its value. It is possible
-to freeze the seed value using the small die button in the node’s title bar in the graph.</p>
+to edit it directly, but clicking the small die button in the node’s title bar will change
+its value.
+Right clicking this button will show a context menu that can be used to copy and paste the
+seed as well as lock and unlock it. A node with locked seed will not be affected by its
+parents and will have the same seed in all variations.</p>
 <img alt="_images/random_node.png" class="align-center" src="_images/random_node.png" />
 <p>Subgraphs also have their seed and transmit it to their children unless not configured to
 do so, or the children’s seeds are frozen.</p>
