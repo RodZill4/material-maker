@@ -1,7 +1,6 @@
-extends GraphNode
+extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
-var generator : MMGenBase = null setget set_generator
 var show_inputs : bool = false
 var show_outputs : bool = false
 
@@ -30,7 +29,6 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
-	add_to_group("generator_node")
 	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
@@ -46,7 +44,7 @@ func on_generator_changed(g):
 func _draw() -> void:
 	var color : Color = get_color("title_color")
 	var icon = MINIMIZE_ICON
-	#draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
+	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
 	if generator != null and generator.has_randomness():
 		icon = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
 		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
@@ -101,11 +99,8 @@ func _draw() -> void:
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
 
-func update_node() -> void:
-	pass
-
 func set_generator(g) -> void:
-	generator = g
+	.set_generator(g)
 	g.connect("rendering_time", self, "update_rendering_time")
 
 func update_rendering_time(t : int) -> void:

@@ -137,8 +137,8 @@ func add_node(node) -> void:
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
-	var from_node : MMGraphNodeBase = get_node(from)
-	var to_node : MMGraphNodeBase = get_node(to)
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
 	var connect_count = 1
 	var connected : bool = false
 	var out_ports = from_node.generator.get_output_defs()

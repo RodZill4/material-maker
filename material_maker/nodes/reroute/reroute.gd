@@ -1,4 +1,4 @@
-extends MMGraphNodeBase
+extends MMGraphNodeMinimal
 
 func _on_Area2D_mouse_entered() -> void:
 	print("mouse entered reroute")
