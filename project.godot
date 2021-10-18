@@ -85,6 +85,11 @@ _global_script_classes=[ {
 "path": "res://addons/material_maker/engine/gen_remote.gd"
 }, {
 "base": "MMGenBase",
+"class": "MMGenReroute",
+"language": "GDScript",
+"path": "res://addons/material_maker/engine/gen_reroute.gd"
+}, {
+"base": "MMGenBase",
 "class": "MMGenShader",
 "language": "GDScript",
 "path": "res://addons/material_maker/engine/gen_shader.gd"
@@ -114,7 +119,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://material_maker/panels/graph_edit/graph_edit.gd"
 }, {
-"base": "GraphNode",
+"base": "MMGraphNodeMinimal",
 "class": "MMGraphNodeBase",
 "language": "GDScript",
 "path": "res://material_maker/nodes/base.gd"
@@ -123,6 +128,11 @@ _global_script_classes=[ {
 "class": "MMGraphNodeGeneric",
 "language": "GDScript",
 "path": "res://material_maker/nodes/generic/generic.gd"
+}, {
+"base": "GraphNode",
+"class": "MMGraphNodeMinimal",
+"language": "GDScript",
+"path": "res://material_maker/nodes/minimal.gd"
 }, {
 "base": "MMGraphNodeGeneric",
 "class": "MMGraphNodeRemote",
@@ -175,6 +185,7 @@ _global_script_class_icons={
 "MMGenIterateBuffer": "",
 "MMGenMaterial": "",
 "MMGenRemote": "",
+"MMGenReroute": "",
 "MMGenShader": "",
 "MMGenSwitch": "",
 "MMGenText": "",
@@ -183,6 +194,7 @@ _global_script_class_icons={
 "MMGraphEdit": "",
 "MMGraphNodeBase": "",
 "MMGraphNodeGeneric": "",
+"MMGraphNodeMinimal": "",
 "MMGraphNodeRemote": "",
 "MMNodeLink": "",
 "MMPaths": "",
