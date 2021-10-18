@@ -91,6 +91,8 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
+				if ! c is GraphNode:
+					continue
 				var rect = c.get_global_rect()
 				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
 				if rect.has_point(get_global_mouse_position()):
@@ -722,7 +724,50 @@ func _on_Description_descriptions_changed(short_description, long_description):
 # Adding/removing reroute nodes
 
 func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
-	pass
+	for c in get_connection_list():
+		if c.to == node.name and c.to_port == port_index:
+			var from_node = get_node(c.from)
+			if from_node.generator is MMGenReroute:
+				var source = null
+				for c2 in get_connection_list():
+					if c2.to == c.from:
+						source = {from=c2.from,from_port=c2.from_port}
+						disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+				if source != null:
+					for c2 in get_connection_list():
+						if c2.from == c.from:
+							disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+							connect_node(source.from, source.from_port, c2.to, c2.to_port)
+					remove_node(from_node)
+				return
+			break
+	var port_position = node.offset+node.get_connection_input_position(port_index)
+	var reroute_node = create_nodes({nodes=[{name="reroute",type="reroute",node_position={x=port_position.x-74,y=port_position.y-12}}],connections=[]})[0]
+	for c2 in get_connection_list():
+		if c2.to == node.name and c2.to_port == port_index:
+			disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+			connect_node(c2.from, c2.from_port, reroute_node.name, 0)
+			break
+	connect_node(reroute_node.name, 0, node.name, port_index)
 
 func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
-	pass
+	var reroutes : bool = false
+	var destinations = []
+	for c in get_connection_list():
+		if c.from == node.name and c.from_port == port_index:
+			var to_node = get_node(c.to)
+			if to_node.generator is MMGenReroute:
+				reroutes = true
+				for c2 in get_connection_list():
+					if c2.from == c.to:
+						disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+						connect_node(node.name, port_index, c2.to, c2.to_port)
+				remove_node(to_node)
+			else:
+				destinations.push_back({to=c.to, to_port=c.to_port})
+	if !reroutes:
+		var port_position = node.offset+node.get_connection_output_position(port_index)
+		var reroute_node = create_nodes({nodes=[{name="reroute",type="reroute",node_position={x=port_position.x+50,y=port_position.y-12}}],connections=[]})[0]
+		connect_node(node.name, port_index, reroute_node.name, 0)
+		for d in destinations:
+			connect_node(reroute_node.name, 0, d.to, d.to_port)

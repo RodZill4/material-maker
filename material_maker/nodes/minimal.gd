@@ -28,7 +28,7 @@ func get_input_slot(pos : Vector2) -> int:
 			for i in range(get_connection_input_count()):
 				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
 					return i
-		return -1
+			return -1
 	return -2
 
 func get_output_slot(pos : Vector2) -> int:
@@ -41,7 +41,7 @@ func get_output_slot(pos : Vector2) -> int:
 			for i in range(get_connection_output_count()):
 				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
 					return i
-		return -1
+			return -1
 	return -2
 
 func on_clicked_input(index : int, with_shift : bool) -> bool:
