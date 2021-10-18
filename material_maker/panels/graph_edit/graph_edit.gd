@@ -91,15 +91,22 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
-				if c.has_method("get_output_slot"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					if c.has_method("get_input_slot"):
+						var slot = c.get_input_slot(get_global_mouse_position()-c.rect_global_position)
+						if slot >= 0:
+							# Tell the node its connector was clicked
+							if c.has_method("on_clicked_input"):
+								c.on_clicked_input(slot, Input.is_key_pressed(KEY_SHIFT))
+								return
+					if c.has_method("get_output_slot"):
 						var slot = c.get_output_slot(get_global_mouse_position()-c.rect_global_position)
-						if slot != -1:
+						if slot >= 0:
 							# Tell the node its connector was clicked
 							if c.has_method("on_clicked_output"):
-								c.on_clicked_output(slot)
+								c.on_clicked_output(slot, Input.is_key_pressed(KEY_SHIFT))
 								return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
@@ -711,3 +718,11 @@ func on_drop_image_file(file_name : String) -> void:
 func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
+
+# Adding/removing reroute nodes
+
+func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
+	pass
+
+func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
+	pass

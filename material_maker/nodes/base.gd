@@ -163,20 +163,21 @@ func _on_gui_input(event) -> void:
 			return
 		hint_tooltip = ""
 
+func get_input_slot(pos : Vector2) -> int:
+	var return_value = .get_input_slot(pos)
+	var new_show_inputs : bool = (return_value != -2)
+	if new_show_inputs != show_inputs:
+		show_inputs = new_show_inputs
+		update()
+	return return_value
+
 func get_output_slot(pos : Vector2) -> int:
-	var scale = get_global_transform().get_scale()
-	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
-		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-		if new_show_outputs != show_outputs:
-			show_outputs = new_show_outputs
-			update()
-		if new_show_outputs:
-			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
-					return i
-	return -1
+	var return_value = .get_output_slot(pos)
+	var new_show_outputs : bool = (return_value != -2)
+	if new_show_outputs != show_outputs:
+		show_outputs = new_show_outputs
+		update()
+	return return_value
 
 func get_slot_tooltip(pos : Vector2) -> String:
 	var scale = get_global_transform().get_scale()
