@@ -3,12 +3,13 @@
 [ext_resource path="res://material_maker/nodes/reroute/reroute.gd" type="Script" id=1]
 
 [sub_resource type="StyleBoxFlat" id=1]
-corner_radius_top_left = 32
-corner_radius_top_right = 32
-corner_radius_bottom_right = 32
-corner_radius_bottom_left = 32
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+corner_detail = 4
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=2]
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -18,7 +19,7 @@ corner_radius_top_right = 32
 corner_radius_bottom_right = 32
 corner_radius_bottom_left = 32
 
-[sub_resource type="Theme" id=2]
+[sub_resource type="Theme" id=3]
 GraphNode/colors/close_color = Color( 0, 0, 0, 1 )
 GraphNode/colors/resizer_color = Color( 0, 0, 0, 1 )
 GraphNode/colors/title_color = Color( 0, 0, 0, 1 )
@@ -37,13 +38,13 @@ GraphNode/styles/defaultfocus = null
 GraphNode/styles/defaultframe = null
 GraphNode/styles/frame = SubResource( 1 )
 GraphNode/styles/position = null
-GraphNode/styles/selectedframe = SubResource( 3 )
+GraphNode/styles/selectedframe = SubResource( 2 )
 
 [node name="reroute" type="GraphNode"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-theme = SubResource( 2 )
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+theme = SubResource( 3 )
 custom_constants/port_offset = 0
 slot/0/left_enabled = true
 slot/0/left_type = 0
@@ -56,9 +57,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-align = 1
-valign = 1
+[node name="Foo" type="Control" parent="."]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+mouse_filter = 2
