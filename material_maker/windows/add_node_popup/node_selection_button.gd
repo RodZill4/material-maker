@@ -1,10 +1,12 @@
 extends Button
 
+var path : String
 
 func set_name(name: String) -> void:
 	$HBoxContainer/HBoxContainer/Name.text = name
 
-func set_path(path: String) -> void:
+func set_path(p: String) -> void:
+	path = p
 	if path == "":
 		$HBoxContainer/Arrow.hide()
 		$HBoxContainer/Path.hide()
@@ -26,6 +28,11 @@ func set_path(path: String) -> void:
 		if color != null:
 			$HBoxContainer/Path.add_color_override("font_color", color)
 
-
 func set_icon(icon: Texture) -> void:
 	$HBoxContainer/HBoxContainer/Icon.texture = icon
+
+func get_drag_data(position):
+	if path == "":
+		return $HBoxContainer/HBoxContainer/Name.text
+	else:
+		return path+"/"+$HBoxContainer/HBoxContainer/Name.text

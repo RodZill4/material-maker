@@ -48,6 +48,13 @@ func load_library(path : String, ro : bool = false) -> bool:
 		library_icons[i.tree_item] = texture
 	return true
 
+func get_item(name : String):
+	var array : Array = []
+	for i in library_items:
+		if name == i.tree_item:
+			return { name=i.tree_item, item=i, icon=library_icons[i.tree_item] }
+	return null
+
 func get_items(filter : String, disabled_sections : Array, aliased_items : Array) -> Array:
 	var array : Array = []
 	for i in library_items:
