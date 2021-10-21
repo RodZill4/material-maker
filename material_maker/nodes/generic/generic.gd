@@ -195,6 +195,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			var value = p.values[i]
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
+		control.rect_min_size.x = 80
 	elif p.type == "boolean":
 		control = CheckBox.new()
 	elif p.type == "color":
@@ -212,10 +213,12 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.set_closed(false)
 	elif p.type == "string":
 		control = LineEdit.new()
+		control.rect_min_size.x = 80
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instance()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instance()
+		control.rect_min_size.x = 80
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
