@@ -31,6 +31,8 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if current_renderer != null:
 		current_renderer.release(self)
+	if is_pending:
+		mm_renderer.remove_pending_request()
 
 func get_type() -> String:
 	return "iterate_buffer"
