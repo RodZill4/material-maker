@@ -82,12 +82,13 @@ func get_description() -> String:
 func has_randomness() -> bool:
 	return false
 
-func set_seed(s : float):
+func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
-		return
+		return false
 	seed_value = s
 	if is_inside_tree():
 		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	return true
 
 func reroll_seed():
 	set_seed(randf())

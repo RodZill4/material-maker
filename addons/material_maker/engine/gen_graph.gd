@@ -41,6 +41,14 @@ func has_randomness() -> bool:
 func set_position(p, force_recalc_seed = false) -> void:
 	position = p
 
+func set_seed(s : float) -> bool:
+	if .set_seed(s) and transmits_seed:
+		for c in get_children():
+			if c is MMGenBase:
+				c.set_seed(c.seed_value)
+		return true
+	return false
+
 func get_type() -> String:
 	return "graph"
 
