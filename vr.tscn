@@ -31,11 +31,11 @@ extents = Vector3( 0.5, 0.5, 0.02 )
 
 [sub_resource type="CubeMesh" id=7]
 
-[sub_resource type="PanoramaSky" id=9]
+[sub_resource type="PanoramaSky" id=8]
 
-[sub_resource type="Environment" id=8]
+[sub_resource type="Environment" id=9]
 background_mode = 2
-background_sky = SubResource( 9 )
+background_sky = SubResource( 8 )
 
 [node name="MMVR" type="Spatial"]
 script = ExtResource( 1 )
@@ -90,6 +90,6 @@ script = ExtResource( 4 )
 uv_scale = Vector2( 3, 2 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 8 )
+environment = SubResource( 9 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
