@@ -24,13 +24,15 @@ func set_brush(brush) -> Texture:
 		preview_material.emission_texture.flags = Texture.FLAGS_DEFAULT
 		preview_material.normal_enabled = true
 		$NormalMap/Rect.material.set_shader_param("epsilon", 1.0/512.0)
-		$NormalMap/Rect.material.set_shader_param("tex", painter.get_depth_texture())
+		# TODO: Fix this
+		#$NormalMap/Rect.material.set_shader_param("tex", painter.get_depth_texture())
 		preview_material.normal_texture = $NormalMap.get_texture()
 		preview_material.normal_texture.flags = Texture.FLAGS_DEFAULT
 		preview_material.depth_enabled = true
 		preview_material.depth_deep_parallax = true
-		preview_material.depth_texture = painter.get_depth_texture()
-		preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
+		# TODO: Fix this
+		#preview_material.depth_texture = painter.get_depth_texture()
+		#preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
 		$Viewport/Object.set_surface_material(0, preview_material)
 		var result = painter.set_mesh($Viewport/Object.mesh)
 		while result is GDScriptFunctionState:

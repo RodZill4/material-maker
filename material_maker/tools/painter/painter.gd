@@ -180,20 +180,27 @@ func update_tex2view():
 	view_to_texture_camera.fov = camera.fov
 	view_to_texture_camera.near = camera.near
 	view_to_texture_camera.far = camera.far
+	var mat : ShaderMaterial = view_to_texture_mesh.get_surface_material(0)
+	if true:
+		var shader_file = File.new()
+		shader_file.open("res://material_maker/tools/painter/shaders/view2texture.shader", File.READ)
+		mat.shader.code = shader_file.get_as_text()
+	mat.set_shader_param("near", camera.near)
+	mat.set_shader_param("far", camera.far)
 	view_to_texture_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	view_to_texture_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	var material = texture_to_view_mesh.get_surface_material(0)
+	mat = texture_to_view_mesh.get_surface_material(0)
 	if true:
 		var shader_file = File.new()
 		shader_file.open("res://material_maker/tools/painter/shaders/texture2view.shader", File.READ)
-		material.shader.code = shader_file.get_as_text()
-	material.set_shader_param("model_transform", transform)
-	material.set_shader_param("fovy_degrees", camera.fov)
-	material.set_shader_param("z_near", camera.near)
-	material.set_shader_param("z_far", camera.far)
-	material.set_shader_param("aspect", aspect)
+		mat.shader.code = shader_file.get_as_text()
+	mat.set_shader_param("model_transform", transform)
+	mat.set_shader_param("fovy_degrees", camera.fov)
+	mat.set_shader_param("z_near", camera.near)
+	mat.set_shader_param("z_far", camera.far)
+	mat.set_shader_param("aspect", aspect)
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 

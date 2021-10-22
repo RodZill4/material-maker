@@ -489,8 +489,8 @@ func update_view():
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
 	var mesh_size = 0.5*mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
-	camera.near = max(0.01, 0.9*(cam_to_center-mesh_size))
-	camera.far = 1.1*(cam_to_center+mesh_size)
+	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
+	camera.far = 1.01*(cam_to_center+mesh_size)
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
