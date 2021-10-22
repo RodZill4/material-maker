@@ -38,5 +38,6 @@ void fragment() {
 	float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
 	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
 }"
+
 [connection signal="resized" from="." to="." method="on_resized"]
 [connection signal="visibility_changed" from="." to="." method="_on_Preview2D_visibility_changed"]

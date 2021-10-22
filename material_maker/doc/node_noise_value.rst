@@ -30,13 +30,6 @@ The **Value** noise node accepts the following parameters:
 * *Persistance* is the ratio between the amplitude of subsequent iterations. Lower values
   of persistance generate smoother textures.
 
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
-
 Example images
 ++++++++++++++
 

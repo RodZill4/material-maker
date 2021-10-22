@@ -9,6 +9,8 @@ onready var instance_functions_editor : TextEdit = $"Sizer/Tabs/Instance Functio
 onready var includes_editor : LineEdit = $"Sizer/Tabs/Global Functions/Includes/Includes"
 onready var global_functions_editor : TextEdit = $"Sizer/Tabs/Global Functions/Functions"
 
+onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
+
 const ParameterEditor = preload("res://material_maker/windows/node_editor/parameter.tscn")
 const InputEditor = preload("res://material_maker/windows/node_editor/input.tscn")
 const OutputEditor = preload("res://material_maker/windows/node_editor/output.tscn")
@@ -16,9 +18,9 @@ const OutputEditor = preload("res://material_maker/windows/node_editor/output.ts
 signal node_changed
 
 func _ready() -> void:
-	main_code_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-	instance_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-	global_functions_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:
+		e.add_color_region("//", "", Color(0, 0.5, 0), true)
+		e.add_color_region("/*", "*/", Color(0, 0.5, 0), false)
 
 func add_item(parent, scene) -> Node:
 	var object = scene.instance()
@@ -60,10 +62,13 @@ func set_model_data(data) -> void:
 		includes_editor.text = PoolStringArray(data.includes).join(",")
 	if data.has("global"):
 		global_functions_editor.text = data.global
+		global_functions_editor.clear_undo_history()
 	if data.has("instance"):
 		instance_functions_editor.text = data.instance
+		instance_functions_editor.clear_undo_history()
 	if data.has("code"):
 		main_code_editor.text = data.code
+		main_code_editor.clear_undo_history()
 
 func get_model_data() -> Dictionary:
 	var data = {
@@ -104,6 +109,35 @@ func _on_AddInput_pressed() -> void:
 func _on_AddOutput_pressed() -> void:
 	add_item(output_list, OutputEditor)
 	output_list.update_up_down_buttons()
+
+# Global functions
+
+var globals_error_line = -1
+
+func _on_Functions_text_changed():
+	var text : String = global_functions_editor.text
+	var error_label = $"Sizer/Tabs/Global Functions/ErrorLabel"
+	if globals_error_line != -1:
+		global_functions_editor.set_line_as_safe(globals_error_line, false)
+		error_label.visible = false
+	var result = parser.parse(global_functions_editor.text)
+	if result is Dictionary and result.has("status"):
+		match result.status:
+			"OK":
+				globals_error_line = -1
+				if result.non_terminal != "translation_unit":
+					error_label.visible = true
+					error_label.text = "GLSL translation unit expected (found %s)" % result.non_terminal
+			_:
+				globals_error_line = text.substr(0, result.pos).count("\n")
+				global_functions_editor.set_line_as_safe(globals_error_line, true)
+				error_label.visible = true
+				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
+
+func _on_Sizer_minimum_size_changed():
+	rect_size = $Sizer.rect_size+Vector2(4, 4)
+
+# OK/Apply/Cancel buttons
 
 func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())

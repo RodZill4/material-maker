@@ -42,14 +42,28 @@ func _on_timeout() -> void:
 	var new_filetime : int = get_filetime(file_path)
 	if filetime != new_filetime:
 		filetime = new_filetime
-		texture.load(file_path)
+		var image : Image = Image.new()
+		image.load(file_path)
+		texture.create_from_image(image)
 		.set_parameter("image", file_path)
+
+func _serialize(data: Dictionary) -> Dictionary:
+	return data
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	var image_path : String = data.parameters.image
 	image_path = image_path.replace(mm_loader.current_project_path, "%PROJECT_PATH%")
+	image_path = image_path.replace(OS.get_user_data_dir(), "%USER_DATA_PATH%")
+	image_path = image_path.replace(OS.get_executable_path().get_base_dir(), "%MATERIAL_MAKER_PATH%")
 	data.parameters.image = image_path
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
+	if data.has("parameters") and data.parameters.has("image"):
+		data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
+		data.parameters.image = data.parameters.image.replace("%USER_DATA_PATH%", OS.get_user_data_dir())
+		data.parameters.image = data.parameters.image.replace("%MATERIAL_MAKER_PATH%", OS.get_executable_path().get_base_dir())
+	elif data.has("image"):
+		data.image = data.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
+		data.image = data.image.replace("%USER_DATA_PATH%", OS.get_user_data_dir())
+		data.image = data.image.replace("%MATERIAL_MAKER_PATH%", OS.get_executable_path().get_base_dir())

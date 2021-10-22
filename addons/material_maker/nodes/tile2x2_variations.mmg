@@ -1,0 +1,41 @@
+{
+	"name": "tile2x2_variations",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The first input",
+				"name": "in",
+				"shortdesc": "Input1",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.",
+		"name": "Tile2x2 Variations",
+		"outputs": [
+			{
+				"longdesc": "Shows the generated atlas",
+				"rgba": "($uv.y < 0.5) ? (($uv.x < 0.5) ? ($in.variation(2.0*$uv, $seed)) : ($in.variation(2.0*$uv-vec2(1.0, 0.0), $seed+0.1))) : (($uv.x < 0.5) ? ($in.variation(2.0*$uv-vec2(0.0, 1.0), $seed+0.2)) : ($in.variation(2.0*$uv-vec2(1.0, 1.0), $seed+0.3)))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		],
+		"shortdesc": "Tile2x2"
+	},
+	"type": "shader"
+}

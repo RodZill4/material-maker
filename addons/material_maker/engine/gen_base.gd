@@ -38,7 +38,7 @@ var model = null
 var parameters = {}
 
 var seed_locked : bool = false
-var seed_value : int = 0
+var seed_value : float = 0
 
 var preview : int = -1
 var minimized : bool = false
@@ -53,11 +53,9 @@ func get_hier_name() -> String:
 	var type = load("res://addons/material_maker/engine/gen_base.gd")
 	var rv = name
 	var object = get_parent()
-	print(object.get_script().resource_path)
 	while object is type:
 		rv = object.name+"/"+rv
 		object = object.get_parent()
-		print(object.get_script().resource_path)
 	return rv
 
 func accept_float_expressions() -> bool:
@@ -84,18 +82,27 @@ func get_description() -> String:
 func has_randomness() -> bool:
 	return false
 
-func get_seed() -> int:
-	if !seed_locked:
-		var s : int = ((int(position.x) * 0x1f1f1f1f) ^ int(position.y)) % 65536
-		if get_parent().get("transmits_seed") != null and get_parent().transmits_seed:
-			s += get_parent().get_seed()
-		return s
-	else:
-		return seed_value
+func set_seed(s : float) -> bool:
+	if !has_randomness() or is_seed_locked():
+		return false
+	seed_value = s
+	if is_inside_tree():
+		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	return true
+
+func reroll_seed():
+	set_seed(randf())
+
+func get_seed_from_position(p) -> int:
+	return ((int(p.x) * 0x1f1f1f1f) ^ int(p.y)) % 65536
+
+func get_seed() -> float:
+	var s : float = seed_value
+	if !seed_locked and get_parent().get("transmits_seed") != null and get_parent().transmits_seed:
+		s += get_parent().get_seed()
+	return s
 
 func toggle_lock_seed() -> bool:
-	if !seed_locked:
-		seed_value = get_seed()
 	seed_locked = !seed_locked
 	return seed_locked
 
@@ -112,12 +119,8 @@ func init_parameters() -> void:
 			else:
 				print("No default value for parameter "+p.name)
 
-func set_position(p, force_recalc_seed = false) -> void:
-	if !force_recalc_seed && position == p:
-		return
+func set_position(p) -> void:
 	position = p
-	if has_randomness() and !is_seed_locked() and is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
 
 func get_type() -> String:
 	return "generic"
@@ -313,8 +316,8 @@ func serialize() -> Dictionary:
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
 		elif p.has("default"):
 			rv.parameters[p.name] = p.default
-	if seed_locked:
-		rv.seed_value = seed_value
+	rv.seed = seed_value
+	rv.seed_locked = seed_locked
 	if preview >= 0:
 		rv.preview = preview
 	if minimized:
@@ -346,8 +349,12 @@ func deserialize(data : Dictionary) -> void:
 	if data.has("seed_value"):
 		seed_locked = true
 		seed_value = data.seed_value
+	elif data.has("seed"):
+		seed_value = data.seed
+		seed_locked = data.seed_locked
 	else:
 		seed_locked = false
+		seed_value = get_seed_from_position(position)
 	preview = data.preview if data.has("preview") else -1
 	minimized = data.has("minimized") and data.minimized
 	_post_load()

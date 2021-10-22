@@ -31,14 +31,14 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$Font/Label.text = text
 	$Font/Label.rect_position = Vector2(2048*(0.5+x), 2048*(0.5+y))
 	var font : Font = $Font/Label.get_font("font")
-	if center:
-		$Font/Label.rect_position -= 0.5*font.get_string_size(text)
 	if font_path != "" and font_path != current_font:
 		var font_data = load(font_path)
 		if font_data != null:
 			font.font_data = font_data
 			current_font = font_path
 	font.size = font_size
+	if center:
+		$Font/Label.rect_position -= 0.5*font.get_string_size(text)
 	$ColorRect.visible = false
 	hdr = true
 	render_target_update_mode = Viewport.UPDATE_ONCE

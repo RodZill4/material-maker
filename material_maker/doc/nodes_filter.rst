@@ -22,6 +22,8 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_decompose
 	node_filter_swapchannels
 	node_filter_normal_map
+	node_filter_normal_convert
+	node_filter_normal_blend
 	node_filter_blur
 	node_filter_blur_fast
 	node_filter_blur_directional
@@ -45,3 +47,4 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_supersample
 	node_filter_smoothcurvature
 	node_filter_smoothcurvature2
+	node_filter_denoiser

@@ -14,6 +14,7 @@ index.
 
 	node_3d_texture_apply
 	node_3d_texture_select
+	node_3d_texture_shape_select
 	node_3d_texture_from2d
 	node_3d_texture_pattern
 	node_3d_texture_fbm

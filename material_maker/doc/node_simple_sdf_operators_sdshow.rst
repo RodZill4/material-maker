@@ -22,4 +22,4 @@ Parameters
 ::::::::::
 
 The **sdShow** node accepts the *width of the gradient* (from white to black)
-around the input shape as parameter.
+around the input shape as well as the *base value of the output* as parameters.

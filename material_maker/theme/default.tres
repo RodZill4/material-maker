@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=111 format=2]
+[gd_resource type="Theme" load_steps=112 format=2]
 
 [ext_resource path="res://material_maker/theme/dark/textedit_space.png" type="Texture" id=1]
 [ext_resource path="res://material_maker/theme/dark/textedit_tab.png" type="Texture" id=2]
@@ -54,6 +54,7 @@
 [ext_resource path="res://material_maker/theme/dark/popupmenu_radio_unchecked.png" type="Texture" id=52]
 [ext_resource path="res://material_maker/theme/dark/tabcontainer_increment_highlight.png" type="Texture" id=53]
 [ext_resource path="res://material_maker/theme/dark/tabs_increment.png" type="Texture" id=54]
+[ext_resource path="res://material_maker/theme/font.tres" type="DynamicFont" id=55]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 6.0
@@ -607,6 +608,7 @@ shadow_color = Color( 0, 0, 0, 0.3 )
 shadow_size = 4
 
 [resource]
+default_font = ExtResource( 55 )
 Button/colors/font_color = Color( 0.8, 0.8075, 0.8275, 1 )
 Button/colors/font_color_disabled = Color( 1, 1, 1, 0.3 )
 Button/colors/font_color_hover = Color( 0.88, 0.8845, 0.8965, 1 )
@@ -704,7 +706,6 @@ GraphEdit/colors/selection_fill = Color( 0.41, 0.61, 0.91, 0.3 )
 GraphEdit/colors/selection_stroke = Color( 0.41, 0.61, 0.91, 0.8 )
 GraphEdit/constants/bezier_len_neg = 160
 GraphEdit/constants/bezier_len_pos = 80
-GraphEdit/constants/port_grab_distance_vertical = 12
 GraphEdit/icons/minus = ExtResource( 31 )
 GraphEdit/icons/more = ExtResource( 21 )
 GraphEdit/icons/reset = ExtResource( 25 )

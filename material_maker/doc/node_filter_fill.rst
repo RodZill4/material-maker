@@ -27,9 +27,10 @@ Parameters
 The **Fill** node accepts the following parameters:
 
 * *resolution* is the resolution of the effect and only influences how details
-  of the mask (and not the source if any) is captured. It is not recommended to
-  set this value too high, and completely useless to set it higher than the generated
-  textures resolution.
+  of the mask (and not the source if any) is captured. It is advised to be careful
+  with using high values here, as the computation time may become very long.
+  Setting it higher than the input's resolution will not yield any benefit - only
+  increase the computation time.
 * *iterations* is the number of iterations of the fill algorithm. The optimal value
   for this parameter depends on the input image. Starting with 5 or 10, then increasing
   the value depending on the result is a good way of finding it.

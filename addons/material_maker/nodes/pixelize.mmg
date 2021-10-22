@@ -38,7 +38,7 @@
 			{
 				"control": "None",
 				"default": 4,
-				"label": "Columns:",
+				"label": "Columns",
 				"longdesc": "Number of pixel columns of the output",
 				"max": 256,
 				"min": 1,
@@ -50,7 +50,7 @@
 			{
 				"control": "None",
 				"default": 4,
-				"label": "Rows:",
+				"label": "Rows",
 				"longdesc": "Number of pixel rows of the output",
 				"max": 256,
 				"min": 1,
@@ -62,7 +62,7 @@
 			{
 				"control": "None",
 				"default": 4,
-				"label": "Levels:",
+				"label": "Levels",
 				"longdesc": "Number of color levels for each channel",
 				"max": 32,
 				"min": 2,
@@ -74,7 +74,7 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "Dither:",
+				"label": "Dither",
 				"longdesc": "Amount of dithering in the output image",
 				"max": 1,
 				"min": 0,

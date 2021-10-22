@@ -12,6 +12,7 @@ var last_export_filename : String = ""
 var last_export_size : int = 0
 
 const MENU_EXPORT_AGAIN : int = 1000
+const MENU_EXPORT_ANIMATION : int = 1001
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
@@ -23,6 +24,8 @@ func update_export_menu() -> void:
 	$ContextMenu.add_submenu_item("Export", "Export")
 	$ContextMenu.add_item("Export again", MENU_EXPORT_AGAIN)
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), true)
+	$ContextMenu.add_item("Export animation", MENU_EXPORT_ANIMATION)
+	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func set_generator(g : MMGenBase, o : int = 0) -> void:
@@ -46,8 +49,10 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 			assert(!(source is GDScriptFunctionState))
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
+		$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), false)
 	else:
 		generator = null
+		$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	# Update shader
 	var code = MMGenBase.generate_preview_shader(source, source.type, shader_context_defs+shader)
 	material.shader.code = code
@@ -99,8 +104,14 @@ func export_again() -> void:
 				break
 	export_as_image_file(filename, last_export_size)
 
+func export_animation() -> void:
+	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instance()
+	add_child(window)
+	window.set_source(generator, output)
+	window.popup_centered()
+
 func _on_Export_id_pressed(id : int) -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -111,9 +122,11 @@ func _on_Export_id_pressed(id : int) -> void:
 		var config_cache = mm_globals.get_main_window().config_cache
 		if config_cache.has_section_key("path", "save_preview"):
 			dialog.current_dir = config_cache.get_value("path", "save_preview")
-	dialog.connect("file_selected", self, "export_as_image_file", [ 64 << id ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		export_as_image_file(files[0], 64 << id)
 
 func create_image(renderer_function : String, params : Array, size : int) -> void:
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER

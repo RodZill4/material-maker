@@ -29,7 +29,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
 var library
-var preview_2d
+var preview_2d : Array
 var histogram
 var preview_3d
 var hierarchy
@@ -120,6 +120,7 @@ const MENU = [
 ]
 
 const DEFAULT_CONFIG = {
+	locale = "",
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
@@ -145,6 +146,10 @@ func _ready() -> void:
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
+	
+	if get_config("locale") == "":
+		config_cache.set_value("config", "locale", TranslationServer.get_locale())
+	
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
@@ -189,7 +194,7 @@ func _ready() -> void:
 
 	layout.load_panels(config_cache)
 	library = get_panel("Library")
-	preview_2d = get_panel("Preview2D")
+	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
@@ -225,6 +230,11 @@ func on_config_changed() -> void:
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+	# locale
+	var locale = get_config("locale")
+	if locale != "" and locale != TranslationServer.get_locale():
+		TranslationServer.set_locale(locale)
+		get_tree().call_group("updated_from_locale", "update_from_locale")
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -462,7 +472,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
-	var dialog : FileDialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
@@ -471,9 +481,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if config_cache.has_section_key("path", config_key):
 		dialog.current_dir = config_cache.get_value("path", config_key)
 	add_child(dialog)
-	dialog.connect("file_selected", self, "export_material", [ profile ])
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		export_material(files[0], profile)
 
 
 func create_menu_set_theme(menu) -> void:
@@ -552,7 +564,7 @@ func new_paint_project(obj_file_name = null) -> void:
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -561,9 +573,11 @@ func load_project() -> void:
 	dialog.add_filter("*.mmpp;Model Painting File")
 	if config_cache.has_section_key("path", "project"):
 		dialog.current_dir = config_cache.get_value("path", "project")
-	dialog.connect("files_selected", self, "do_load_projects")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_load_projects(files)
 
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
@@ -846,7 +860,10 @@ func add_selection_to_library(index) -> void:
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	var current_item_name = ""
+	if library.is_inside_tree():
+		current_item_name = library.get_selected_item_name()
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	if ! status.ok:
@@ -999,19 +1016,21 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 			return n
 	return null
 
-func update_preview_2d(node = null) -> void:
+func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		if node == null:
-			node = get_current_node(graph_edit)
-		if node != null:
-			preview_2d.set_generator(node.generator)
-			histogram.set_generator(node.generator)
-			preview_2d_background.set_generator(node.generator)
-		else:
-			preview_2d.set_generator(null)
-			histogram.set_generator(null)
-			preview_2d_background.set_generator(null)
+		for i in range(2):
+			var preview = graph_edit.get_current_preview(i)
+			if preview != null:
+				preview_2d[i].set_generator(preview.generator, preview.output_index)
+				if i == 0:
+					histogram.set_generator(preview.generator, preview.output_index)
+					preview_2d_background.set_generator(preview.generator, preview.output_index)
+			else:
+				preview_2d[i].set_generator(null)
+				if i == 0:
+					histogram.set_generator(null)
+					preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1027,11 +1046,9 @@ func update_preview_3d(previews : Array, sequential = false) -> void:
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 
-var selected_node = null
-func on_selected_node_change(node) -> void:
-	if node != selected_node:
-		selected_node = node
-		update_preview_2d(node)
+func on_preview_changed(graph) -> void:
+	if graph == get_current_graph_edit():
+		update_preview_2d()
 
 func _on_Projects_tab_changed(_tab) -> void:
 	var project = get_current_project()
@@ -1057,8 +1074,8 @@ func _on_Projects_tab_changed(_tab) -> void:
 		current_tab = new_tab
 		if new_graph_edit != null:
 			new_graph_edit.connect("graph_changed", self, "update_preview")
-			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
-				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
+			if !new_graph_edit.is_connected("preview_changed", self, "on_preview_changed"):
+				new_graph_edit.connect("preview_changed", self, "on_preview_changed")
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())

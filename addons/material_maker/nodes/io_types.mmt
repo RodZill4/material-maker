@@ -72,12 +72,27 @@
         "color":{ "r":1.0, "g":0.0, "b":0.0, "a":1.0 }
     },
 	{
+        "name":"tex3d_gs",
+        "label":"Greyscale TEX3D",
+        "type":"float",
+        "paramdefs":"vec4 p",
+        "params":"p",
+        "slot_type":3,
+        "convert":[
+			{ "type":"tex3d", "expr":"vec3($(value))" }
+		],
+        "color":{ "r":0.8, "g":0.0, "b":1.0, "a":1.0 }
+    },
+	{
         "name":"tex3d",
         "label":"TEX3D",
         "type":"vec3",
         "paramdefs":"vec4 p",
         "params":"p",
         "slot_type":3,
+		"convert":[
+			{ "type":"tex3d_gs", "expr":"(dot($(value), vec3(1.0))/3.0)" }
+		],
         "color":{ "r":1.0, "g":0.0, "b":1.0, "a":1.0 }
     },
 	{

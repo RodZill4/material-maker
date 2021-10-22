@@ -200,6 +200,10 @@ func set_object(o):
 	preview_material.depth_deep_parallax = true
 	preview_material.depth_texture = layers.get_depth_texture()
 	preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.ao_enabled = true
+	preview_material.ao_light_affect = 1.0
+	preview_material.ao_texture = layers.get_occlusion_texture()
+	preview_material.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_material(0, preview_material)
 	painter.set_mesh(o.mesh)
@@ -485,8 +489,8 @@ func update_view():
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
 	var mesh_size = 0.5*mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
-	camera.near = max(0.01, 0.9*(cam_to_center-mesh_size))
-	camera.far = 1.1*(cam_to_center+mesh_size)
+	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
+	camera.far = 1.01*(cam_to_center+mesh_size)
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
@@ -501,14 +505,17 @@ func dump_texture(texture, filename):
 	image.save_png(filename)
 
 func show_file_dialog(mode, filter, callback):
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = mode
 	dialog.add_filter(filter)
-	dialog.connect("file_selected", self, callback)
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() == 1:
+		call(callback, files[0])
 
 func load_project(file_name) -> bool:
 	var f : File = File.new()
@@ -563,6 +570,7 @@ func export_material(export_prefix, profile) -> void:
 		roughness=layers.get_roughness_texture(),
 		emission=layers.get_emission_texture(),
 		normal=layers.get_normal_map(),
+		occlusion=layers.get_occlusion_texture(),
 		depth=layers.get_depth_texture()
 	}
 	$Export.setup_material(material_textures)

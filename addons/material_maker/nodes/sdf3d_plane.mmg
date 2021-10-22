@@ -1,0 +1,56 @@
+{
+	"name": "sdf3d_plane",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"axis": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a plane that can be used to cut other shapes",
+		"name": "Plane",
+		"outputs": [
+			{
+				"longdesc": "Shows the plane",
+				"sdf3d": "$uv.$axis",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 2,
+				"label": "",
+				"longdesc": "The axis of the plane",
+				"name": "axis",
+				"shortdesc": "Axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "x"
+					},
+					{
+						"name": "Y",
+						"value": "y"
+					},
+					{
+						"name": "Z",
+						"value": "z"
+					}
+				]
+			}
+		],
+		"shortdesc": "Plane"
+	},
+	"type": "shader"
+}

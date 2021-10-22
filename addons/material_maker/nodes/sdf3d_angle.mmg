@@ -1,0 +1,72 @@
+{
+	"name": "sdf3d_angle",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"angle": 135,
+		"axis": 2
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_uv = $uv.$axis;\nfloat $(name_uv)_rotated = rotate3d($(name_uv)_uv, vec3(($angle-180.0)*0.01745329251, 0.0, 0.0)).y;\nfloat $(name_uv)_d1 = max($(name_uv)_uv.y, $(name_uv)_rotated);\nfloat $(name_uv)_d2 = min($(name_uv)_uv.y, $(name_uv)_rotated);\nfloat $(name_uv)_d = (mod($angle, 360.0) < 180.0) ? $(name_uv)_d1 : $(name_uv)_d2;",
+		"global": "",
+		"includes": [
+			"sdf3d_rotate"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates an angle formed by 2 planes that can be used to cut other shapes",
+		"name": "Angle",
+		"outputs": [
+			{
+				"longdesc": "Shows the angle",
+				"sdf3d": "$(name_uv)_d",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"longdesc": "The axis of the angle",
+				"name": "axis",
+				"shortdesc": "Axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "xyz"
+					},
+					{
+						"name": "Y",
+						"value": "yzx"
+					},
+					{
+						"name": "Z",
+						"value": "zxy"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 180,
+				"label": "",
+				"longdesc": "The angle of the shape",
+				"max": 360,
+				"min": 0,
+				"name": "angle",
+				"shortdesc": "Angle",
+				"step": 0.1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Angle"
+	},
+	"type": "shader"
+}

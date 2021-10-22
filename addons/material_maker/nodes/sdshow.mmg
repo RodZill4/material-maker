@@ -5,6 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
+		"base": 0,
 		"bevel": 0.1
 	},
 	"shader_model": {
@@ -25,7 +26,7 @@
 		"name": "sdShow",
 		"outputs": [
 			{
-				"f": "clamp(-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+				"f": "clamp($base-$in($uv)/max($bevel, 0.00001), 0.0, 1.0)",
 				"longdesc": "Shows the shape as a greyscale image",
 				"shortdesc": "Output",
 				"type": "f"
@@ -41,6 +42,18 @@
 				"min": 0,
 				"name": "bevel",
 				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Base",
+				"longdesc": "The base value of the output",
+				"max": 1,
+				"min": 0,
+				"name": "base",
+				"shortdesc": "Base",
 				"step": 0.01,
 				"type": "float"
 			}

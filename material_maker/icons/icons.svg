@@ -17,7 +17,7 @@
    viewBox="0 0 256 256"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="icons.svg">
   <defs
      id="defs2">
@@ -192,9 +192,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.69998"
-     inkscape:cx="25.613667"
-     inkscape:cy="75.312672"
+     inkscape:zoom="7.84999"
+     inkscape:cx="85.31743"
+     inkscape:cy="172.86881"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -3501,5 +3501,22 @@
        id="rect1976"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccc" />
+    <path
+       sodipodi:type="star"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.9000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="path5692"
+       sodipodi:sides="5"
+       sodipodi:cx="88.092487"
+       sodipodi:cy="176.7461"
+       sodipodi:r1="8.0399284"
+       sodipodi:r2="2.9091349"
+       sodipodi:arg1="0.92687778"
+       sodipodi:arg2="1.5813483"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 92.919125,183.17602 -4.857338,-3.52095 -4.593015,3.66839 1.847628,-5.70764 -4.908169,-3.23462 5.999235,-0.007 1.5596,-5.6675 1.860103,5.70359 5.872054,-0.26809 -4.849628,3.53157 z"
+       inkscape:transform-center-x="0.51979845"
+       inkscape:transform-center-y="-0.62976945" />
   </g>
 </svg>

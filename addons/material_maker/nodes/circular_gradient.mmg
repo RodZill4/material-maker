@@ -77,7 +77,7 @@
 					],
 					"type": "Gradient"
 				},
-				"label": "Gradient",
+				"label": "",
 				"longdesc": "Gradient to be spread on the image",
 				"name": "gradient",
 				"shortdesc": "Gradient",

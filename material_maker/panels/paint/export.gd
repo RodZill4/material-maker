@@ -1,6 +1,6 @@
 extends Node
 
-const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", null, "depth" ]
+const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth" ]
 
 func _ready():
 	var graph = MMGenGraph.new()
@@ -24,7 +24,7 @@ func setup_material(material_textures : Dictionary) -> void:
 		var channel_node = graph.get_node(c)
 		channel_node.texture.create_from_image(material_textures[c].get_data())
 	graph.get_node("material").all_sources_changed()
-	graph.get_node("material").render_textures()
+
 
 func get_material_node() -> Node:
 	return get_node("graph/material")

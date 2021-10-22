@@ -8,6 +8,9 @@ var output_count = 0
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 
+func _ready() -> void:
+	add_to_group("updated_from_locale")
+
 func _draw() -> void:
 	._draw()
 	if generator != null and generator.preview >= 0:
@@ -63,6 +66,7 @@ func on_parameter_changed(p : String, v) -> void:
 		update_node()
 	else:
 		update_control_from_parameter(controls, p, v)
+		update_parameter_tooltip(p, v)
 	get_parent().set_need_save()
 
 static func initialize_controls_from_generator(control_list, generator, object) -> void:
@@ -103,21 +107,32 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 func initialize_properties() -> void:
 	initialize_controls_from_generator(controls, generator, self)
 
+func update_parameter_tooltip(p : String, v):
+	if ! controls.has(p):
+		return
+	for d in generator.get_parameter_defs():
+		if d.name == p:
+			controls[p].hint_tooltip = get_parameter_tooltip(d, v)
+			break
+
 func _on_text_changed(new_text, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
+	update_parameter_tooltip(variable, new_text)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
 func _on_value_changed(new_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
+	update_parameter_tooltip(variable, new_value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
 func _on_color_changed(new_color, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
+	update_parameter_tooltip(variable, new_color)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 
@@ -144,6 +159,18 @@ func _on_polygon_changed(new_polygon, variable : String) -> void:
 	generator.set_parameter(variable, new_polygon.duplicate())
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
+
+static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
+	var tooltip : String
+	if p.has("shortdesc"):
+		tooltip = TranslationServer.translate(p.shortdesc)+" ("+TranslationServer.translate(p.name)+")"
+		if parameter_value != null:
+			tooltip += " = "+str(parameter_value)
+		if p.has("longdesc"):
+			tooltip += "\n"+TranslationServer.translate(p.longdesc)
+	elif p.has("longdesc"):
+		tooltip += TranslationServer.translate(p.longdesc)
+	return wrap_string(tooltip)
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null
@@ -180,6 +207,9 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instance()
 	elif p.type == "polygon":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+	elif p.type == "polyline":
+		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instance()
+		control.set_closed(false)
 	elif p.type == "string":
 		control = LineEdit.new()
 	elif p.type == "image_path":
@@ -189,14 +219,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
-	var tooltip : String
-	if p.has("shortdesc"):
-		tooltip = p.shortdesc+" ("+p.name+")"
-		if p.has("longdesc"):
-			tooltip += "\n"+p.longdesc
-	elif p.has("longdesc"):
-		tooltip += p.longdesc
-	control.hint_tooltip = wrap_string(tooltip)
+	control.hint_tooltip = get_parameter_tooltip(p)
 	return control
 
 func save_preview_widget() -> void:
@@ -253,10 +276,9 @@ func update_rendering_time(t : int) -> void:
 	update_title()
 
 func update_title() -> void:
-	if rendering_time < 0:
-		title = generator.get_type_name()
-	else:
-		title = generator.get_type_name()+" ("+str(rendering_time)+"ms)"
+	title = TranslationServer.translate(generator.get_type_name())
+	if rendering_time > 0:
+		title += " ("+str(rendering_time)+"ms)"
 	if generator == null or generator.minimized:
 		var font : Font = get_font("default_font")
 		var max_title_width = 28
@@ -384,7 +406,6 @@ func update_node() -> void:
 		initialize_properties()
 	# Outputs
 	var outputs = generator.get_output_defs()
-	var button_width = 0
 	output_count = outputs.size()
 	for i in range(output_count):
 		var output = outputs[i]
@@ -406,12 +427,6 @@ func update_node() -> void:
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
 			hsizer.rect_min_size.y = 12
-	if !outputs.empty():
-		for i in range(output_count, get_child_count()):
-			var hsizer : HBoxContainer = get_child(i)
-			var empty_control : Control = Control.new()
-			empty_control.rect_min_size.x = button_width
-			hsizer.add_child(empty_control)
 	# Edit buttons
 	if generator.is_editable():
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
@@ -433,7 +448,7 @@ func update_generator(shader_model) -> void:
 	get_parent().set_need_save()
 
 func load_generator() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -443,9 +458,11 @@ func load_generator() -> void:
 		var config_cache = mm_globals.get_main_window().config_cache
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
-	dialog.connect("file_selected", self, "do_load_generator")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_load_generator(files[0])
 
 func do_load_generator(file_name : String) -> void:
 	if mm_globals.get_main_window() != null:
@@ -470,7 +487,7 @@ func do_load_generator(file_name : String) -> void:
 		call_deferred("update_node")
 
 func save_generator() -> void:
-	var dialog = FileDialog.new()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -480,9 +497,11 @@ func save_generator() -> void:
 		var config_cache = mm_globals.get_main_window().config_cache
 		if config_cache.has_section_key("path", "template"):
 			dialog.current_dir = config_cache.get_value("path", "template")
-	dialog.connect("file_selected", self, "do_save_generator")
-	dialog.connect("popup_hide", dialog, "queue_free")
-	dialog.popup_centered()
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		do_save_generator(files[0])
 
 func do_save_generator(file_name : String) -> void:
 	if mm_globals.get_main_window() != null:
@@ -520,3 +539,7 @@ func on_mouse_entered():
 func on_mouse_exited():
 	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
 		preview.visible = true
+
+
+func update_from_locale() -> void:
+	update_title()
