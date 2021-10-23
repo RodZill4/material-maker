@@ -34,6 +34,12 @@ Can't wait for next release? Automated builds from master branch are available (
 
 - **[User manual](https://rodzill4.github.io/material-maker/doc/)**
 
+## Translations
+
+Translation files can be installed using the **Install** button in the **Preferences** dialog.
+
+- [Chinese translation](https://raw.githubusercontent.com/RodZill4/material-maker/f1be50b21a0f4991ac39e12a5362f5c5eb4c83a0/material_maker/locale/translations/zh.csv) (Created by **free_king**)
+
 ## Community
 
 - **[Discord server](https://discord.gg/PF5V3mFwFM)**
