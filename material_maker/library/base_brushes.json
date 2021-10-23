@@ -25,9 +25,21 @@
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 0
+				},
+				{
+					"from": "uniform_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 4
+				},
+				{
+					"from": "uniform_greyscale_3",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 7
 				}
 			],
-			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABCVJREFUWIXFl8tvG0Ucxz/et9dvx1baCgolFZUK4sSfxEsQoaqlIKL2gHqhUgVUFS8hKlBLEe0BbtzggDj1AEIlohxCmziJHXttrx/rtdfr4eDXOnHapHXgK/20O7Oz8/nub2ZnZ+F/Vmg/jT//2haVSoiWo9DuSPh+CCF6hEI+itJB012i0Q5nF5/ec797avjBJw1RtsLUahKNOjgOuC74PggBkgSaDroOpukSidSJJepcWFp4aP8PbPDp1YbYWDcpWSGsElgl2MpDpdS/3tnWPpuBuTlIpiCZcognK8ylbd5797ldObteuHSlKTbWTfIFyK3Cyt3p0N30zDGYn/dJZy3mMkUuXXh+Kmtq5cWPWiK3ZrC2Cst/glPbOzioiAkLxwXzh4tksgUuv//CDt6OiktXmuL+PZN/VuD3248G3q6TJ7scOVIgO5/n8sUXJ5hSsPDZ1ZrYWDdZW50dHGB5WSG/maJUSnDm3C8ieE0JFjbWTQp5WL4zO/hQKysmupFA0xoT9aMMfPixLYolmdwaVOszpgNOCwr5KHY1yuunfx5lYWSgbIWxivDX3dnDh8rdM7CrJo16eFQnAXzxVcmzbRXLArHr7XuQT3/sdgvRo1Y1cByDxTM/eDCYA9WqrDQasFXYI+iRJ4igXNbIzmu4rqGMDDiOjOPAVukgoEP5QI96RaLtKnTa/fmvALTbEh13l/TP5HUQg+gBPTxPwvP6y4EE/Y+K1z0oOAOwPwrfE3R9xgaEmPLsM4UPDfTPe/RA9MYGpJCHLB8EfJh2n2AWZNmDkDc2oKoeqjoraBDuTw1FaiNJ7bEBXW9jGF0yKWY46abDwzEXVXeRJWdsIB7zuqbZJJs5CHh34jyVdNA0B69b6I4MvPnGghqLNkmle/vcJW7X5GyfNNGPaKyBrte4df20OjIAkEg0SCZtFo4/LnzyicfhkTlUJxKxUbXy6K6RgfNLJ0KpVJVDh5tEovsFB0E+4A2iX9fCQ9E6zM1VMc0K3117eZTniQ1JNlsnk7F49kTrEcDjJw2CW4PyE0ct4nELRc1N9LJjxJfO/yZyuTS5tTR3/gimIricbj9Ovuet0RB4gM+JYxaZTJF4YoObN16ZYE6dcmffuS3ymyk280nu/h2n7YQeAA+udEN4fyiiSocnnyqTTlvE4gVuffvSwzelYxO/iq2tOMVSjEI+ytr9cAC2Hd434OHTHRg5Ol8nla6SSFSIRIvcvPHq3rflQy2d+0kUiwbVagS7alKp6JTLGvWaTHBtH56HzTbJlEMs1iASrWGaNmGjyI3rp/b/YxLUqdM/Cts2aDZ1HEfFdWU6HQm/2/+0yCEPWemg6y6a5mDoTXSjxjfXXnu8X7Pteuvt70WjDq4r4XkSXV8Mfk67SFIHRW6jqk2ufrn4WMvZf6p/ARI5EpZ4u3beAAAAAElFTkSuQmCC",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABCdJREFUWIXFl9tv21Qcxz9xHDtxnGsTdZtgMFoxaSCe+JO4CfowbQxEtT2gvWxSBUwTV4kJNDbEQEI88QYPiKc9gNCoKA9la9M2aeIkzsVx7DiHh9ycNt3aLoWv9JN9jo/P5+vfOT4+hv9ZgYM0/vRLU1QqAVqWTNuR8LwAQnQJBDxk2UFRbXTd4cLC0/vud18N3/uoIcpGhFpNolEHywLbBs8DIUCSQFFBVUHTbKLROrFEncuLc4/s/6ENPr7REJsbGiUjgFECowTbeaiUetedHe2zGZiZgWQKkimLeLLCTNrk3Xee25Oz54Wl602xuaGRL0BuDVZXJkP30jOnYHbWI501mMkUWbr8/ETWxMqrH7REbj3M+hos/wlWbf9gv6IazM0LZo8XyWQLXLvywi7eroql603x4L7GP6vw+93DgXfqzJkOJ04UyM7muXb1xTGm5C98cqMmNjc01temBwdYXpbJb6UolRKcv/iL8F+T/YXNDY1CHpbvTQ8+0OqqhhpOoCiNsfphBt7/0BTFUpDcOlTrU6YDVgsKeR2zqvP6uZ+HWRgaKBsRjCL8tTJ9+EC5+2HMqkajHhnWSQCffWG4phnCMEDsefs+5NEbu71CdKlVw1hWmDfO/+BCfw6YVUluNGC7sE/QoSeIoFxWyM4qtG1VHhqwrCCWBdulo4AO5AFd6hWJti3jtHvzXwZotyUce4/0T+V1EP3oAl1cV8J1e8uBBL2Pits5Kjh9sDcMzxV0PEYGhJjw7FOFDwz0zrt0QXRHBqSASzB4FPBB2j38WQgGXQi4IwOhkEsoNC2oH+5NDFlqI0ntkQFVbRMOd8ikmOKkmwyPxGxCqk1QskYGdN2xNa1JNnMU8M7YeSppoSgWjlvoDA2cXZiPxPQmqXT3gLvEnRqf7eMmeqHHGqhqje9unQsNDQAkEg2SSZO5+ceFjz/xKFwyx+pEoyYhpTy8a2jg0uLpQCpV5djxJlH9oGA/yAPcfvTqWrjIisPMTBVNq/DNzZeHeR7bkGSzdTIZg2dPtw4BHj2pH9zql584aRCPG8ih3Fgvu0Z88dJvIpdLk1tPc+8Pfyr8y+nO4/h73hoOgQt4nD5lkMkUiSc2uXP7lTHmxCl34e27Ir+VYiufZOXvOG0r8BC4f6UbwHtDocsOTz5VJp02iMULfPv1S4/elI5M/Cq2t+MUSzEKeZ31BxEfbCe8Z8DFo9M3cnK2TipdJZGoENWL3Ln96v635QMtXvxJFIthqtUoZlWjUlEplxXqtSD+tX1wHtHaJFMWsViDqF5D00wi4SK3vzp78B8Tv86e+1GYZphmU8WyQth2EMeR8Dq9T0sw4BKUHVTVRlEswmoTNVzj1s3XHu/XbKfefOt70aiDbUu4rkTHE/2f0w6S5CAH24RCTW58vvBYy9l/qn8BDS8SlmynVzAAAAAASUVORK5CYII=",
 			"label": "Graph",
 			"longdesc": "",
 			"name": "219",
@@ -44,19 +56,23 @@
 					},
 					"parameters": {
 						"has_albedo": true,
+						"has_ao": false,
 						"has_depth": false,
 						"has_emission": false,
 						"has_metallic": true,
+						"has_normal": false,
 						"has_roughness": true,
 						"mode": 1
 					},
+					"seed": -64413,
+					"seed_locked": false,
 					"type": "brush"
 				},
 				{
 					"name": "uniform",
 					"node_position": {
-						"x": -270.5,
-						"y": -88.5
+						"x": -266.5,
+						"y": -148.5
 					},
 					"parameters": {
 						"color": {
@@ -67,37 +83,41 @@
 							"type": "Color"
 						}
 					},
+					"seed": 53990,
+					"seed_locked": false,
 					"type": "uniform"
 				},
 				{
 					"name": "uniform_greyscale",
 					"node_position": {
-						"x": -302.5,
-						"y": -35.5
+						"x": -297.5,
+						"y": -88.5
 					},
 					"parameters": {
 						"color": 0
 					},
-					"seed_value": 46771,
+					"seed": 46771,
+					"seed_locked": true,
 					"type": "uniform_greyscale"
 				},
 				{
 					"name": "uniform_greyscale_2",
 					"node_position": {
-						"x": -302.5,
-						"y": 17.75
+						"x": -298.5,
+						"y": -29.25
 					},
 					"parameters": {
 						"color": 1
 					},
-					"seed_value": -46721,
+					"seed": -46721,
+					"seed_locked": true,
 					"type": "uniform_greyscale"
 				},
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -280.5,
-						"y": -210.643066
+						"x": -274.5,
+						"y": -286.643066
 					},
 					"parameters": {
 						"edge": 1,
@@ -105,13 +125,15 @@
 						"shape": 0,
 						"sides": 6
 					},
+					"seed": 2358,
+					"seed_locked": false,
 					"type": "shape"
 				},
 				{
 					"name": "324",
 					"node_position": {
-						"x": -21,
-						"y": -350.478607
+						"x": 28,
+						"y": -473.478607
 					},
 					"parameters": {
 						"param0": true,
@@ -125,8 +147,20 @@
 						"param2": true,
 						"param3": 0,
 						"param4": true,
-						"param5": 1
+						"param5": 1,
+						"param6": false,
+						"param7": {
+							"a": 1,
+							"b": 0.498039,
+							"g": 0.992157,
+							"r": 1,
+							"type": "Color"
+						},
+						"param8": false,
+						"param9": 0.5
 					},
+					"seed": 36055,
+					"seed_locked": false,
 					"type": "remote",
 					"widgets": [
 						{
@@ -194,13 +228,91 @@
 							],
 							"name": "param5",
 							"type": "linked_control"
+						},
+						{
+							"label": "Paint Emission",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_emission"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						},
+						{
+							"label": "Emission",
+							"linked_widgets": [
+								{
+									"node": "uniform_2",
+									"widget": "color"
+								}
+							],
+							"name": "param7",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Occlusion",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_ao"
+								}
+							],
+							"name": "param8",
+							"type": "linked_control"
+						},
+						{
+							"label": "Occlusion",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_3",
+									"widget": "color"
+								}
+							],
+							"name": "param9",
+							"type": "linked_control"
 						}
 					]
+				},
+				{
+					"name": "uniform_2",
+					"node_position": {
+						"x": -265.833344,
+						"y": 29.021393
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0.498039,
+							"g": 0.992157,
+							"r": 1,
+							"type": "Color"
+						}
+					},
+					"seed": 53990,
+					"seed_locked": false,
+					"type": "uniform"
+				},
+				{
+					"name": "uniform_greyscale_3",
+					"node_position": {
+						"x": -298.333344,
+						"y": 90.021378
+					},
+					"parameters": {
+						"color": 0.5
+					},
+					"seed": -46721,
+					"seed_locked": true,
+					"type": "uniform_greyscale"
 				}
 			],
 			"parameters": {
 
 			},
+			"seed": 0,
+			"seed_locked": false,
 			"shortdesc": "",
 			"tree_item": "Simple/Uniform",
 			"type": "graph"
