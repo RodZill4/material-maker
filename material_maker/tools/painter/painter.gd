@@ -44,10 +44,12 @@ var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
 var mesh_normal_tex : ImageTexture = null
 
+
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
-signal colors_picked(brush)
+
 signal painted()
+
 
 func _ready():
 	var v2t_tex = view_to_texture_viewport.get_texture()
@@ -348,23 +350,12 @@ func paint(shader_params : Dictionary) -> void:
 func fill(erase : bool, reset : bool = false) -> void:
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset })
 
-func pick_color(position):
+func view_to_texture(position : Vector2) -> Vector2:
 	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
 	view_to_texture_image.lock()
 	var position_in_texture = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
 	position_in_texture = Vector2(position_in_texture.r, position_in_texture.g)
-	var albedo_image = get_albedo_texture().get_data()
-	albedo_image.lock()
-	brush_params.albedo_color = albedo_image.get_pixelv(position_in_texture*albedo_image.get_size())
-	var mr_image = get_mr_texture().get_data()
-	mr_image.lock()
-	var mr = mr_image.get_pixelv(position_in_texture*mr_image.get_size())
-	brush_params.metallic = mr.r
-	brush_params.roughness = mr.g
-	var emission_image = get_emission_texture().get_data()
-	emission_image.lock()
-	brush_params.emission_color = emission_image.get_pixelv(position_in_texture*emission_image.get_size())
-	emit_signal("colors_picked", brush_params)
+	return position_in_texture
 
 func get_albedo_texture():
 	return albedo_viewport.get_texture()

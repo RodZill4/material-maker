@@ -329,7 +329,7 @@ func _on_View_gui_input(ev : InputEvent):
 					stroke_length = 0.0
 					previous_position = pos
 				elif current_tool == MODE_COLOR_PICKER:
-					painter.pick_color(pos)
+					pick_color(pos)
 				else:
 					if current_tool == MODE_LINE:
 						var angle = 0
@@ -499,6 +499,42 @@ func update_view():
 
 func _on_resized():
 	call_deferred("update_view")
+
+# Pick color
+
+func pick_color(position : Vector2):
+	if remote_node == null:
+		return
+	
+	var uv = painter.view_to_texture(position)
+	var colors = {}
+	var albedo_image = layers.get_albedo_texture().get_data()
+	albedo_image.lock()
+	colors["Albedo"] = albedo_image.get_pixelv(uv*albedo_image.get_size())
+	albedo_image.unlock()
+	
+	var metallic_image = layers.get_metallic_texture().get_data()
+	metallic_image.lock()
+	colors["Metallic"] = metallic_image.get_pixelv(uv*metallic_image.get_size()).r
+	metallic_image.unlock()
+	
+	var roughness_image = layers.get_roughness_texture().get_data()
+	roughness_image.lock()
+	colors["Roughness"] = roughness_image.get_pixelv(uv*roughness_image.get_size()).r
+	roughness_image.unlock()
+
+	var emission_image = layers.get_emission_texture().get_data()
+	emission_image.lock()
+	colors["Emission"] = emission_image.get_pixelv(uv*emission_image.get_size())
+	emission_image.unlock()
+
+	for p in remote_node.get_parameter_defs():
+		if colors.has(p.label):
+			print(p.label)
+			print(colors[p.label])
+			remote_node.set_parameter(p.name, colors[p.label])
+
+# Load/save
 
 func dump_texture(texture, filename):
 	var image = texture.get_data()

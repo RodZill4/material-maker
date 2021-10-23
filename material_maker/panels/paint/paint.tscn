@@ -92,7 +92,7 @@ region = Rect2( 224, 224, 32, 32 )
 
 [sub_resource type="InputEventKey" id=22]
 pressed = true
-scancode = 16777248
+scancode = 69
 
 [sub_resource type="ShortCut" id=23]
 shortcut = SubResource( 22 )
@@ -100,16 +100,16 @@ shortcut = SubResource( 22 )
 [sub_resource type="AtlasTexture" id=24]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 128, 192, 32, 32 )
+region = Rect2( 192, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 160, 192, 32, 32 )
+region = Rect2( 224, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=26]
 pressed = true
-scancode = 69
+scancode = 16777248
 
 [sub_resource type="ShortCut" id=27]
 shortcut = SubResource( 26 )
@@ -117,12 +117,12 @@ shortcut = SubResource( 26 )
 [sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 192, 192, 32, 32 )
+region = Rect2( 128, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 224, 192, 32, 32 )
+region = Rect2( 160, 192, 32, 32 )
 
 [node name="MaterialSpray" type="VBoxContainer" groups=[
 "preview",
@@ -262,12 +262,11 @@ margin_right = 149.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
-[node name="ColorPicker" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-visible = false
+[node name="Eraser" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
 margin_left = 153.0
 margin_right = 185.0
 margin_bottom = 32.0
-hint_tooltip = "Color Picker (F4)"
+hint_tooltip = "Toggler Eraser Mode (E)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 23 )
@@ -275,17 +274,16 @@ texture_normal = SubResource( 24 )
 texture_pressed = SubResource( 25 )
 
 [node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
-visible = false
-margin_left = 153.0
-margin_right = 158.0
+margin_left = 189.0
+margin_right = 194.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 5, 0 )
 
-[node name="Eraser" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 153.0
-margin_right = 185.0
+[node name="ColorPicker" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+margin_left = 198.0
+margin_right = 230.0
 margin_bottom = 32.0
-hint_tooltip = "Toggler Eraser Mode (E)"
+hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 27 )
