@@ -6,7 +6,14 @@
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 250 )
+size_flags_horizontal = 3
+scroll_horizontal_enabled = false
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Parameters" type="GridContainer" parent="."]
+margin_right = 1280.0
+size_flags_horizontal = 3
 columns = 2
