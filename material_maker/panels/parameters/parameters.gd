@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends ScrollContainer
 
 onready var parameters : GridContainer = $Parameters
 
@@ -34,6 +34,8 @@ func set_generator(g):
 			parameters.add_child(control)
 			controls[p.name] = control
 		GENERIC.initialize_controls_from_generator(controls, generator, self)
+	set_size(get_size()-Vector2(1.0, 1.0))
+	set_size(get_size())
 
 func on_parameter_changed(p : String, v) -> void:
 	if ignore_parameter_change == p:

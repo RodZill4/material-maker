@@ -528,10 +528,18 @@ func pick_color(position : Vector2):
 	colors["Emission"] = emission_image.get_pixelv(uv*emission_image.get_size())
 	emission_image.unlock()
 
+	var depth_image = layers.get_depth_texture().get_data()
+	depth_image.lock()
+	colors["Depth"] = depth_image.get_pixelv(uv*depth_image.get_size()).r
+	depth_image.unlock()
+	
+	var occlusion_image = layers.get_occlusion_texture().get_data()
+	occlusion_image.lock()
+	colors["Occlusion"] = occlusion_image.get_pixelv(uv*occlusion_image.get_size()).r
+	occlusion_image.unlock()
+
 	for p in remote_node.get_parameter_defs():
 		if colors.has(p.label):
-			print(p.label)
-			print(colors[p.label])
 			remote_node.set_parameter(p.name, colors[p.label])
 
 # Load/save
