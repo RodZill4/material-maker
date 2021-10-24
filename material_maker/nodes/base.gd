@@ -37,8 +37,8 @@ func _ready() -> void:
 	connect("gui_input", self, "_on_gui_input")
 
 func _exit_tree() -> void:
-	get_parent().call_deferred("check_last_selected")
-
+	#get_parent().call_deferred("check_last_selected")
+	pass
 
 func on_generator_changed(g):
 	if generator == g:
