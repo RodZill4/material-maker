@@ -294,6 +294,10 @@ func _on_View_gui_input(ev : InputEvent):
 				var factor = 0.0025*camera.translation.z
 				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
 				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
+			elif ev.control:
+				camera.translate(Vector3(0.0, 0.0, -0.01*ev.relative.y*camera.transform.origin.z))
+				update_view()
+				accept_event()
 			else:
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
