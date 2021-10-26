@@ -60,6 +60,31 @@ func do_zoom(factor : float):
 	var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
 	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*position)
 
+var port_click_node : GraphNode
+var port_click_port_index : int = -1
+
+func process_port_click(pressed : bool):
+	for c in get_children():
+		if c is GraphNode:
+			var rect : Rect2 = c.get_global_rect()
+			var pos = get_global_mouse_position()-rect.position
+			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+			if rect.has_point(get_global_mouse_position()):
+				var scale = c.get_global_transform().get_scale()
+				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
+				var output_2 : Vector2 = c.get_connection_output_position(c.get_connection_output_count()-1)+5*scale
+				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+				if in_output:
+					for i in range(c.get_connection_output_count()):
+						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+							if pressed:
+								port_click_node = c
+								port_click_port_index = i
+							elif port_click_node == c and port_click_port_index == i:
+								set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+								port_click_port_index = -1
+							return
+
 func _gui_input(event) -> void:
 	if (
 		event.is_action_pressed("ui_library_popup")
@@ -106,6 +131,8 @@ func _gui_input(event) -> void:
 			node_popup.rect_global_position = get_global_mouse_position()
 			node_popup.show_popup()
 		else:
+			if event.button_index == BUTTON_LEFT:
+				process_port_click(event.is_pressed())
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
@@ -676,12 +703,6 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(node_name)
 	if node == null:
-		return
-	var node_transform : Transform2D = node.get_global_transform()
-	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
-	# ignore if drag distance is too short
-	if (get_global_mouse_position()-output_position).length() < 20:
-		set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, node, slot_index, Input.is_key_pressed(KEY_CONTROL))
 		return
 	# Request the popup
 	node_popup.rect_global_position = get_global_mouse_position()
