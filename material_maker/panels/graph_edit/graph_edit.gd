@@ -86,6 +86,10 @@ func process_port_click(pressed : bool):
 							return
 
 func _gui_input(event) -> void:
+	if (event.is_action_pressed("ui_undo") && not Input.is_key_pressed(KEY_SHIFT)):
+		$UndoRedo.undo()
+	if (event.is_action_pressed("ui_redo")):
+		$UndoRedo.redo()
 	if (
 		event.is_action_pressed("ui_library_popup")
 		and not Input.is_key_pressed(KEY_CONTROL)
@@ -162,6 +166,15 @@ func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
 	node.connect("close_request", self, "remove_node", [ node ])
+	node.connect("dragged",self, "on_node_dragged", [node])
+
+func on_node_dragged(from, to, node):
+
+	var action = MoveNodeUndoAction.new()
+	action.from_position = from
+	action.to_position = to
+	action.node = node
+	$UndoRedo.add_action(action)
 
 func connect_node(from, from_slot, to, to_slot):
 	var from_node : MMGraphNodeBase = get_node(from)
@@ -181,11 +194,25 @@ func connect_node(from, from_slot, to, to_slot):
 			connected = true
 	if connected:
 		send_changed_signal()
+		var action = ConnectNodeUndoAction.new()
+		action.graph_edit = self
+		action.from = from
+		action.from_slot = from_slot
+		action.to = to
+		action.to_slot = to_slot
+		$UndoRedo.add_action(action)
 
 func disconnect_node(from, from_slot, to, to_slot) -> void:
 	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
+		var action = DisconnectNodeUndoAction.new()
+		action.graph_edit = self
+		action.from = from
+		action.from_slot = from_slot
+		action.to = to
+		action.to_slot = to_slot
+		$UndoRedo.add_action(action)
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
@@ -193,20 +220,28 @@ func on_connections_changed(removed_connections : Array, added_connections : Arr
 	for c in added_connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 
+func destroy_node(node):
+	generator.remove_generator(node.generator)
+	node.queue_free()
+	send_changed_signal()
+
+	
 func remove_node(node) -> void:
 	for i in PREVIEW_COUNT:
 		if current_preview[i] != null and node.generator == current_preview[i].generator:
 			set_current_preview(i, null)
 		if locked_preview[i] != null and node.generator == locked_preview[i].generator:
 			set_current_preview(i, null, 0, true)
-	if generator.remove_generator(node.generator):
-		var node_name = node.name
-		for c in get_connection_list():
-			if c.from == node_name or c.to == node_name:
-				disconnect_node(c.from, c.from_port, c.to, c.to_port)
-		remove_child(node)
-		node.queue_free()
-		send_changed_signal()
+	var node_name = node.name
+	for c in get_connection_list():
+		if c.from == node_name or c.to == node_name:
+			disconnect_node(c.from, c.from_port, c.to, c.to_port)
+	remove_child(node)
+	
+	var action = RemoveNodeUndoAction.new()
+	action.graph_edit = self
+	action.node = node
+	$UndoRedo.add_action(action)
 
 # Global operations on graph
 
@@ -316,11 +351,31 @@ func update_graph(generators, connections) -> Array:
 			add_node(node)
 			node.generator = g
 		node.offset = g.position
+		
+		var action = AddNodeUndoAction.new()
+		action.graph_edit = self
+		action.node = node
+		
+		g.connect("parameter_changed", self, "_on_generator_parameter_changed", [g])
+		
+		$UndoRedo.add_action(action)
+		
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	return rv
+func _on_generator_parameter_changed(parameter_name, value, prev_value, generator):
+	if value == prev_value:	return
+	# this might need a way to figure out when change is applied
+	# color picker being closed e.g.
 
+	var action = ParameterChangeUndoAction.new()
+	action.parameter_name = parameter_name
+	action.new_value = value
+	action.previous_value = prev_value
+	action.generator = generator
+	$UndoRedo.add_action(action)
+	
 func new_material(init_nodes = {nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]}) -> void:
 	clear_material()
 	top_generator = mm_loader.create_gen(init_nodes)
@@ -354,7 +409,7 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 			actions.append({ action="add_node", node=g.name })
 		for c in new_stuff.connections:
 			actions.append({ action="add_connection", connection=c })
-		$UndoRedo.add_action("Add nodes and connections", actions)
+		#$UndoRedo.add_action("Add nodes and connections", actions)
 		return update_graph(new_stuff.generators, new_stuff.connections)
 	return []
 
@@ -759,4 +814,3 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	var main_window = get_node("/root/MainWindow")
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
-

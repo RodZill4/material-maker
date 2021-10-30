@@ -152,7 +152,7 @@ class CustomGradientSorter:
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
 	parameters[n] = v
-	emit_signal("parameter_changed", n, v)
+	emit_signal("parameter_changed", n, v, old_value)
 	if is_inside_tree():
 		var parameter_def : Dictionary = get_parameter_def(n)
 		if parameter_def.has("type"):

@@ -59,7 +59,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 		else:
 			print("unsupported widget "+str(o))
 
-func on_parameter_changed(p : String, v) -> void:
+func on_parameter_changed(p : String, v, o) -> void:
 	if ignore_parameter_change == p:
 		return
 	if p == "__update_all__":
@@ -78,7 +78,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 			continue
 		var o = control_list[c]
 		if generator.parameters.has(c):
-			object.on_parameter_changed(c, generator.get_parameter(c))
+			object.on_parameter_changed(c, generator.get_parameter(c), null)
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.connect("value_changed", object, "_on_value_changed", [ o.name ])
 		elif o is LineEdit:
