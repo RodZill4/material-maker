@@ -34,6 +34,8 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 		output = o
 		need_generate = true
 		return
+	if generator == g and output == o:
+		return
 	need_generate = false
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
