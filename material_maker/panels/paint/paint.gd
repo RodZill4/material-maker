@@ -1,5 +1,14 @@
 extends VBoxContainer
 
+var settings : Dictionary = {
+	texture_size=0,
+	paint_emission=true,
+	paint_normal=true,
+	paint_depth=true,
+	paint_depth_as_bump=true,
+	bump_strength=0.5
+}
+
 const MODE_FREEHAND_DOTS = 0
 const MODE_FREEHAND_LINE = 1
 const MODE_LINE          = 2
@@ -155,6 +164,7 @@ func get_graph_edit():
 	return graph_edit
 
 func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, project_file_path : String):
+	settings.texture_size = int(round(log(resolution)/log(2)))
 	layers.set_texture_size(resolution)
 	var mi = MeshInstance.new()
 	mi.mesh = mesh
@@ -210,6 +220,29 @@ func set_object(o):
 	update_view()
 	painter.init_textures(mat)
 
+func get_settings() -> Dictionary:
+	return settings
+
+func set_settings(s : Dictionary):
+	var settings_changed = false
+	if s.has("texture_size") and (s.texture_size is int or s.texture_size is float) and s.texture_size != settings.texture_size:
+		settings.texture_size = s.texture_size
+		layers.set_texture_size(1 << int(settings.texture_size))
+		settings_changed = true
+	for v in [ "paint_emission", "paint_normal", "paint_depth", "paint_depth_as_bump" ]:
+		if s.has(v) and s[v] is bool and s[v] != settings[v]:
+			settings[v] = s[v]
+			settings_changed = true
+	if s.has("bump_strength") and s.bump_strength is float and s.bump_strength != settings.bump_strength:
+		settings.bump_strength = s.bump_strength
+		settings_changed = true
+	if settings_changed:
+		preview_material.emission_enabled = settings.paint_emission
+		preview_material.normal_enabled = settings.paint_normal or settings.paint_depth_as_bump
+		layers.set_normal_options(settings.paint_normal, settings.paint_depth_as_bump, settings.bump_strength)
+		preview_material.depth_enabled = settings.paint_depth
+		set_need_save(true)
+
 func check_material_feature(variable : String, value : bool) -> void:
 	preview_material[variable] = value
 
@@ -217,10 +250,11 @@ func material_feature_is_checked(variable : String) -> bool:
 	return preview_material[variable]
 
 func set_texture_size(s):
+	settings.texture_size = int(round(log(s)/log(2)))
 	layers.set_texture_size(s)
 
 func get_texture_size() -> int:
-	return layers.texture_size
+	return 1 << settings.texture_size
 
 func set_current_tool(m):
 	current_tool = m
@@ -582,7 +616,10 @@ func load_project(file_name) -> bool:
 	mi.set_surface_material(0, SpatialMaterial.new())
 	set_object(mi)
 	set_project_path(file_name)
-	layers.set_texture_size(data.texture_size)
+	if data.has("settings"):
+		set_settings(data.settings)
+	elif data.has("texture_size"):
+		set_settings({ texture_size=int(round(log(data.texture_size)/log(2))) })
 	layers.load(data, file_name)
 	set_need_save(false)
 	return true
@@ -599,6 +636,7 @@ func save_as():
 func do_save_project(file_name):
 	var data = layers.save(file_name)
 	data.model = model_path
+	data.settings = get_settings()
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		file.store_string(to_json(data))

@@ -98,15 +98,8 @@ const MENU = [
 	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
 	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Depth", command_parameter="depth_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="256x256", command_parameter=256, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="512x512", command_parameter=512, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
-	{ menu="Tools/Painting", submenu="environment", description="Set environment", mode="paint" },
+	{ menu="Tools", command="paint_project_settings", description="Paint project settings", mode="paint" },
+	{ menu="Tools", submenu="paint_environment", description="Set painting environment", mode="paint" },
 	{ menu="Tools" },
 	{ menu="Tools", command="environment_editor", description="Environment editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
@@ -902,27 +895,17 @@ func add_brush_to_library(index) -> void:
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
-func toggle_paint_feature(channel : String, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.material_feature_is_checked(channel)
-	paint.check_material_feature(channel, value)
-	return value
+func paint_project_settings():
+	var dialog = load("res://material_maker/panels/paint/paint_project_settings.tscn").instance()
+	add_child(dialog)
+	dialog.edit_settings(get_current_project())
 
-func set_painting_texture_size(size : int, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.get_texture_size() == size
-	paint.set_texture_size(size)
-	return true
-
-
-func create_menu_environment(menu) -> void:
+func create_menu_paint_environment(menu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", self, "_on_Environment_id_pressed"):
-		menu.connect("id_pressed", self, "_on_Environment_id_pressed")
+	if !menu.is_connected("id_pressed", self, "_on_PaintEnvironment_id_pressed"):
+		menu.connect("id_pressed", self, "_on_PaintEnvironment_id_pressed")
 
-func _on_Environment_id_pressed(id) -> void:
+func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
 	if paint != null:
 		paint.set_environment(id)

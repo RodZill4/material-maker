@@ -124,9 +124,7 @@ flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 160, 192, 32, 32 )
 
-[node name="MaterialSpray" type="VBoxContainer" groups=[
-"preview",
-]]
+[node name="MaterialSpray" type="VBoxContainer" groups=["preview"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2

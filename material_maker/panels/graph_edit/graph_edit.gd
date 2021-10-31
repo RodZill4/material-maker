@@ -683,7 +683,7 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	if locked:
 		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
-		if locked_preview[slot] != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
+		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview

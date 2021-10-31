@@ -264,7 +264,7 @@ func update_preview() -> void:
 func do_update_preview() -> void:
 	if !preview.is_inside_tree():
 		restore_preview_widget()
-	preview.set_generator(generator, generator.preview)
+	preview.set_generator(generator, generator.preview, true)
 	var pos = Vector2(0, 0)
 	var parent = preview.get_parent()
 	while parent != self:

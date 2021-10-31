@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/tools/painter/shaders/texture2view.shader" type="Shader" id=1]
-[ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
+[ext_resource path="res://material_maker/tools/painter/shaders/view2texture.tres" type="Material" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
 [ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
 
