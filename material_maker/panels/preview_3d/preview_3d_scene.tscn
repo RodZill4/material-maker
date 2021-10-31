@@ -13,7 +13,7 @@ background_sky = SubResource( 1 )
 [sub_resource type="Animation" id=3]
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("Objects:rotation_degrees")
+tracks/0/path = NodePath("ObjectsPivot:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -27,7 +27,9 @@ tracks/0/keys = {
 
 [node name="Preview3dScene" type="Spatial"]
 
-[node name="Objects" parent="." instance=ExtResource( 2 )]
+[node name="ObjectsPivot" type="Spatial" parent="."]
+
+[node name="Objects" parent="ObjectsPivot" instance=ExtResource( 2 )]
 
 [node name="CameraPivot" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0 )
