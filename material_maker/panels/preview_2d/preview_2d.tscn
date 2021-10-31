@@ -9,9 +9,7 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 shader = SubResource( 1 )
 
-[node name="Preview2D" type="ColorRect" groups=[
-"preview",
-]]
+[node name="Preview2D" type="ColorRect" groups=["preview"]]
 material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -12,10 +12,12 @@ func get_image_texture() -> ImageTexture:
 func get_histogram_texture() -> ImageTexture:
 	return $Control.material.get_shader_param("tex")
 
-func set_generator(g : MMGenBase, o : int = 0) -> void:
+func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(generator):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
+	if !force and generator == g and output == o:
+		return
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -39,14 +41,14 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 
 func on_parameter_changed(n : String, _v) -> void:
 	if n == "__input_changed__":
-		set_generator(generator, output)
+		set_generator(generator, output, true)
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:
 			"float", "color", "gradient":
 				pass
 			_:
-				set_generator(generator, output)
+				set_generator(generator, output, true)
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	var need_update : bool = false

@@ -28,13 +28,13 @@ func update_export_menu() -> void:
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
-func set_generator(g : MMGenBase, o : int = 0) -> void:
+func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if !is_visible_in_tree():
 		generator = g
 		output = o
 		need_generate = true
 		return
-	if generator == g and output == o:
+	if !force and generator == g and output == o:
 		return
 	need_generate = false
 	if is_instance_valid(generator):
@@ -68,14 +68,14 @@ func set_generator(g : MMGenBase, o : int = 0) -> void:
 
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
-		set_generator(generator, output)
+		set_generator(generator, output, true)
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:
 			"float", "color", "gradient":
 				pass
 			_:
-				set_generator(generator, output)
+				set_generator(generator, output, true)
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 	for n in parameter_changes.keys():
@@ -176,4 +176,4 @@ func _on_Reference_id_pressed(id : int):
 
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():
-		set_generator(generator, output)
+		set_generator(generator, output, true)

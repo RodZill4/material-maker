@@ -16,10 +16,10 @@ func update_axes_menu() -> void:
 	$ContextMenu/Axes.add_item("Change color", 1000)
 	$ContextMenu.add_submenu_item("Axes", "Axes")
 
-func set_generator(g : MMGenBase, o : int = 0) -> void:
+func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	#center = Vector2(0.5, 0.5)
 	#scale = 1.2
-	.set_generator(g, o)
+	.set_generator(g, o, force)
 	setup_controls()
 	update_shader_options()
 
