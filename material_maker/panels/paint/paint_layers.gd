@@ -390,6 +390,8 @@ func load(data : Dictionary, file_name : String):
 	var dir_name = file_name.left(file_name.rfind("."))
 	layers.clear()
 	load_layers(data.layers, layers, dir_name)
+	if !layers.empty():
+		select_layer(layers[0])
 	_on_layers_changed()
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
