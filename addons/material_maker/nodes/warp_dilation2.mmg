@@ -1,0 +1,404 @@
+{
+	"connections": [
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "buffer_7",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 1,
+			"to": "buffer_6",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 2,
+			"to": "warp_dilation",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 3,
+			"to": "warp_dilation",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 4
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 5
+		},
+		{
+			"from": "buffer_7",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 6
+		},
+		{
+			"from": "buffer_6",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 7
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 2
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 3
+		},
+		{
+			"from": "switch_2",
+			"from_port": 0,
+			"to": "buffer_5",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 0
+		},
+		{
+			"from": "warp_dilation",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 1
+		},
+		{
+			"from": "switch_2",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "warp_dilation",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 2
+		},
+		{
+			"from": "buffer_5",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 3
+		}
+	],
+	"label": "Warp Dilation",
+	"longdesc": "Warp its input following a heightmap, pointing a given angle from the slope.",
+	"name": "warp_dilation2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer_5",
+			"node_position": {
+				"x": -360.832672,
+				"y": -27.909088
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"seed": 3065,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "buffer_6",
+			"node_position": {
+				"x": -678.916748,
+				"y": 101.060692
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"seed": 20826,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "buffer_7",
+			"node_position": {
+				"x": -679.734985,
+				"y": 13.878881
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 10
+			},
+			"seed": 12578,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1127.189453,
+				"y": -144.691238
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "port1",
+					"type": "f"
+				},
+				{
+					"group_size": 0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"seed": 503,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -70.923584,
+				"y": -122.691238
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"seed": 33280,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -383.67511,
+				"y": -437.666565
+			},
+			"parameters": {
+				"a": 0,
+				"angle": 0,
+				"d": 0.5,
+				"param0": 1,
+				"s": 10
+			},
+			"seed": 18589,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Angle",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "angle"
+						}
+					],
+					"longdesc": "The angle from the slope to be followed",
+					"name": "angle",
+					"shortdesc": "Angle",
+					"type": "linked_control"
+				},
+				{
+					"label": "Resolution",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_7",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_6",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_5",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the output",
+					"name": "s",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "Distance",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "d"
+						}
+					],
+					"longdesc": "The dilation distance",
+					"name": "d",
+					"shortdesc": "Distance",
+					"type": "linked_control"
+				},
+				{
+					"label": "Attenuation",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "a"
+						}
+					],
+					"longdesc": "the attenuation along the dilation",
+					"name": "a",
+					"shortdesc": "Attenuation",
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 1,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						},
+						{
+							"node": "switch_2",
+							"widget": "source"
+						}
+					],
+					"longdesc": "Use buffers to store inputs/outputs",
+					"name": "param0",
+					"shortdesc": "Buffer",
+					"type": "config_control"
+				}
+			]
+		},
+		{
+			"name": "warp_dilation",
+			"node_position": {
+				"x": -392.389465,
+				"y": -173.200409
+			},
+			"parameters": {
+				"a": 0,
+				"angle": 0,
+				"d": 0.5,
+				"s": 10
+			},
+			"seed": 7232,
+			"seed_locked": false,
+			"type": "warp_dilation2_nobuf"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -653.180054,
+				"y": -235.012421
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 4,
+				"source": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "switch"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": -946.973328,
+				"y": -248.096252
+			},
+			"parameters": {
+				"color": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "uniform_greyscale"
+		},
+		{
+			"name": "switch_2",
+			"node_position": {
+				"x": -344.824677,
+				"y": 61.920258
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 2,
+				"source": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "switch"
+		}
+	],
+	"parameters": {
+		"a": 0,
+		"angle": 0,
+		"d": 0.5,
+		"param0": 1,
+		"s": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Warp Dilation 2",
+	"type": "graph"
+}
