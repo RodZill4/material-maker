@@ -1121,6 +1121,8 @@ func generate_graph_screenshot():
 		return
 	# Generate the image
 	var graph_edit : GraphEdit = get_current_graph_edit()
+	var minimap_save : bool = graph_edit.minimap_enabled
+	graph_edit.minimap_enabled = false
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
@@ -1158,6 +1160,7 @@ func generate_graph_screenshot():
 	graph_edit.scroll_offset = save_scroll_offset
 	graph_edit.zoom = save_zoom
 	image.save_png(files[0])
+	graph_edit.minimap_enabled = minimap_save
 
 # Handle dropped files
 
