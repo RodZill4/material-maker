@@ -1,12 +1,20 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
+export(String, MULTILINE) var shader_accumulate : String = ""
+export(String, MULTILINE) var shader_divide : String = ""
+
 var center : Vector2 = Vector2(0.5, 0.5)
 var scale : float = 1.2
+
+var temporal_aa : bool = false
+var temporal_aa_current : bool = false
 
 func _ready():
 	update_shader_options()
 	update_axes_menu()
 	update_export_menu()
+	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
+	$ContextMenu.set_item_checked(MENU_TEMPORAL_AA, temporal_aa)
 
 func update_axes_menu() -> void:
 	$ContextMenu/Axes.clear()
@@ -22,6 +30,64 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	.set_generator(g, o, force)
 	setup_controls()
 	update_shader_options()
+
+func update_material(source):
+	temporal_aa_current = temporal_aa
+	# Here we could detect $time to disable temporal AA
+	if temporal_aa_current:
+		do_update_material(source, $Accumulate/Iteration.material, shader_context_defs+shader_accumulate)
+		material.shader.code = shader_divide
+		material.set_shader_param("sum", $Accumulate.get_texture())
+		start_accumulate()
+	else:
+		.update_material(source)
+
+var started : bool = false
+var divide : int = 0
+
+func set_temporal_aa(v : bool):
+	if v == temporal_aa:
+		return
+	temporal_aa = v
+	if ! temporal_aa:
+		# stop AA loop
+		started = false
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+	set_generator(generator, output, true)
+
+func start_accumulate():
+	started = false
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+
+	$Accumulate/Iteration.material.set_shader_param("sum", $Accumulate.get_texture())
+	$Accumulate/Iteration.material.set_shader_param("clear", true)
+	divide = 0
+	started = true
+	while started:
+		var next_divide = divide + 1
+		$Accumulate.render_target_update_mode = Viewport.UPDATE_ONCE
+		$Accumulate.update_worlds()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		$Accumulate/Iteration.material.set_shader_param("clear", false)
+		material.set_shader_param("divide", divide)
+		divide = next_divide
+		if divide > 1000:
+			started = false
+			break
+
+func get_preview_material():
+	return $Accumulate/Iteration.material if temporal_aa_current else material
+
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	if .on_float_parameters_changed(parameter_changes):
+		start_accumulate()
+		return true
+	return false
 
 func setup_controls() -> void:
 	var param_defs = generator.get_parameter_defs() if is_instance_valid(generator) else []
@@ -43,10 +109,17 @@ func update_shader_options() -> void:
 
 func on_resized() -> void:
 	.on_resized()
+	$Accumulate.size = rect_size
+	$Accumulate/Iteration.rect_position = Vector2(0, 0)
+	$Accumulate/Iteration.rect_size = rect_size
 	material.set_shader_param("preview_2d_center", center)
 	material.set_shader_param("preview_2d_scale", scale)
+	$Accumulate/Iteration.material.set_shader_param("preview_2d_center", center)
+	$Accumulate/Iteration.material.set_shader_param("preview_2d_scale", scale)
+	$Accumulate/Iteration.material.set_shader_param("preview_2d_size", rect_size)
 	setup_controls()
 	$Axes.update()
+	start_accumulate()
 
 var dragging : bool = false
 var zooming : bool = false
@@ -103,6 +176,11 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			export_again()
 		MENU_EXPORT_ANIMATION:
 			export_animation()
+		MENU_TEMPORAL_AA:
+			var index : int = $ContextMenu.get_item_index(id)
+			var v = ! $ContextMenu.is_item_checked(index)
+			$ContextMenu.set_item_checked(index, v)
+			set_temporal_aa(v)
 		_:
 			print("unsupported id "+str(id))
 

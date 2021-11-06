@@ -50,7 +50,7 @@ func on_parameter_changed(n : String, _v) -> void:
 			_:
 				set_generator(generator, output, true)
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	var need_update : bool = false
 	for n in parameter_changes.keys():
 		for p in VisualServer.shader_get_param_list($ViewportImage/ColorRect.material.shader.get_rid()):
@@ -60,6 +60,8 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
 				break
 	if need_update:
 		update_histogram()
+		return true
+	return false
 
 func update_histogram() -> void:
 	update_again = true

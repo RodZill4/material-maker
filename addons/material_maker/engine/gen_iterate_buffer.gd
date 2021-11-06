@@ -104,18 +104,18 @@ func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		update_buffer()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	var do_update : bool = false
-	if parameter_changes.has("p_o%s_iterations" % str(get_instance_id())):
-		do_update = true
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	var return_value = false
 	var not_just_iteration = parameter_changes.size() > 1 or not parameter_changes.has("o%s_iteration" % str(get_instance_id()))
 	for i in range(2):
 		var m : Material = [ material, loop_material ][i]
 		if mm_renderer.update_float_parameters(m, parameter_changes) and not_just_iteration:
 			update_again = true
+			return_value = true
 			set_current_iteration(0)
 			if pending_textures[i].empty():
 				update_buffer()
+	return return_value
 
 func on_texture_changed(n : String) -> void:
 	for i in range(2):

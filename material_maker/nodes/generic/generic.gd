@@ -174,6 +174,8 @@ static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> Str
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null
+	if !p.has("type"):
+		return null
 	if p.type == "float":
 		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
 		if ! accept_float_expressions:

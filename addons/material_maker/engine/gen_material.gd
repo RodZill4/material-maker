@@ -73,8 +73,9 @@ func source_changed(input_index : int) -> void:
 func all_sources_changed() -> void:
 	update_preview()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	schedule_update_textures()
+	return true
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true

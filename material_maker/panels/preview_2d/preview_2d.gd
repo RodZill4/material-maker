@@ -13,6 +13,7 @@ var last_export_size : int = 0
 
 const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
+const MENU_TEMPORAL_AA : int = 1002
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
@@ -27,6 +28,21 @@ func update_export_menu() -> void:
 	$ContextMenu.add_item("Export animation", MENU_EXPORT_ANIMATION)
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
+
+func do_update_material(source, target_material, template):
+	# Update shader
+	var code = MMGenBase.generate_preview_shader(source, source.type, template)
+	target_material.shader.code = code
+	# Get parameter values from the shader code
+	MMGenBase.define_shader_float_parameters(target_material.shader.code, target_material)
+	# Set texture params
+	if source.has("textures"):
+		for k in source.textures.keys():
+			target_material.set_shader_param(k, source.textures[k])
+	on_resized()
+
+func update_material(source):
+	do_update_material(source, material, shader_context_defs+shader)
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if !is_visible_in_tree():
@@ -55,16 +71,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	else:
 		generator = null
 		$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
-	# Update shader
-	var code = MMGenBase.generate_preview_shader(source, source.type, shader_context_defs+shader)
-	material.shader.code = code
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters(material.shader.code, material)
-	# Set texture params
-	if source.has("textures"):
-		for k in source.textures.keys():
-			material.set_shader_param(k, source.textures[k])
-	on_resized()
+	update_material(source)
 
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
@@ -77,12 +84,19 @@ func on_parameter_changed(n : String, v) -> void:
 			_:
 				set_generator(generator, output, true)
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func get_preview_material():
+	return material
+
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	var return_value : bool = false
+	var m : ShaderMaterial = get_preview_material()
 	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
 			if p.name == n:
-				material.set_shader_param(n, parameter_changes[n])
+				return_value = true
+				m.set_shader_param(n, parameter_changes[n])
 				break
+	return return_value
 
 func on_resized() -> void:
 	material.set_shader_param("preview_2d_size", rect_size)
@@ -107,6 +121,8 @@ func export_again() -> void:
 	export_as_image_file(filename, last_export_size)
 
 func export_animation() -> void:
+	if generator == null:
+		return
 	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instance()
 	add_child(window)
 	window.set_source(generator, output)

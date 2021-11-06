@@ -138,13 +138,16 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	var return_value : bool = false
 	var preview_material = current_object.get_surface_material(0)
 	for n in parameter_changes.keys():
 		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
 			if p.name == n:
+				return_value = true
 				preview_material.set_shader_param(n, parameter_changes[n])
 				break
+	return return_value
 
 func zoom(amount : float):
 	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
