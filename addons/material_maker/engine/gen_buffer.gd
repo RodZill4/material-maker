@@ -54,7 +54,7 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if version == VERSION_OLD:
 		return [ { type="rgba" }, { type="rgba" } ]
 	else:

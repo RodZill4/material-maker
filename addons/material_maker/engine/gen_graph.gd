@@ -93,7 +93,7 @@ func get_input_defs() -> Array:
 		return get_node("gen_inputs").get_output_defs()
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if has_node("gen_outputs"):
 		return get_node("gen_outputs").get_input_defs()
 	return []

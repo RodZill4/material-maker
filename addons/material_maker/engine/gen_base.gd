@@ -204,7 +204,7 @@ func all_sources_changed() -> void:
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func get_source(input_index : int) -> OutputPort:
@@ -264,18 +264,20 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader : String
+	var output_type = "rgba"
+	var outputs = get_output_defs(true)
+	print(outputs)
+	if outputs.size() > output_index:
+		output_type = outputs[output_index].type
+	print(output_type)
 	if preview:
-		var output_type = "rgba"
-		var outputs = get_output_defs()
-		if outputs.size() > output_index:
-			output_type = outputs[output_index].type
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, source.textures, size)
+	renderer = renderer.render_shader(object, shader, source.textures, size, output_type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer

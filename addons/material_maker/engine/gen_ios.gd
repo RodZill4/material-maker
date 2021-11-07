@@ -40,7 +40,7 @@ func get_io_defs() -> Array:
 func get_input_defs() -> Array:
 	return [] if name == "gen_inputs" else get_io_defs()
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [] if name == "gen_outputs" else get_io_defs()
 
 

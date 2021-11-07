@@ -66,7 +66,7 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(object : Object, shader, textures, render_size) -> Object:
+func render_shader(object : Object, shader, textures, render_size, with_hdr = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -79,7 +79,7 @@ func render_shader(object : Object, shader, textures, render_size) -> Object:
 		for k in textures.keys():
 			shader_material.set_shader_param(k, textures[k])
 	shader_material.set_shader_param("preview_size", render_size)
-	hdr = false
+	hdr = with_hdr
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
@@ -96,15 +96,22 @@ func get_image() -> Image:
 	image.copy_from(get_texture().get_data())
 	return image
 
-func save_to_file(fn : String) -> void:
+func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:
 		image.lock()
+		print("Image format: "+str(image.get_format()))
+		var export_image : Image = image
 		match fn.get_extension():
 			"png":
-				image.save_png(fn)
+				export_image.save_png(fn)
 			"exr":
-				image.save_exr(fn)
+				if is_greyscale:
+					export_image = Image.new()
+					export_image.copy_from(image)
+					export_image.convert(Image.FORMAT_RH)
+					print(export_image.get_format())
+				export_image.save_exr(fn)
 		image.unlock()
 
 func release(object : Object) -> void:

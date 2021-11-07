@@ -5,6 +5,7 @@ export(String, MULTILINE) var shader : String = ""
 
 var generator : MMGenBase = null
 var output : int = 0
+var is_greyscale : bool = false
 
 var need_generate : bool = false
 
@@ -30,6 +31,7 @@ func update_export_menu() -> void:
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func do_update_material(source, target_material, template):
+	is_greyscale = source.has("type") and source.type == "f"
 	# Update shader
 	var code = MMGenBase.generate_preview_shader(source, source.type, template)
 	target_material.shader.code = code
@@ -178,7 +180,7 @@ func export_as_image_file(file_name : String, size : int) -> void:
 	if main_window != null:
 		var config_cache = main_window.config_cache
 		config_cache.set_value("path", "save_preview", file_name.get_base_dir())
-	create_image("save_to_file", [ file_name ], size)
+	create_image("save_to_file", [ file_name, is_greyscale ], size)
 	last_export_filename = file_name
 	last_export_size = size
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), false)

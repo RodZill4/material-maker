@@ -51,7 +51,7 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" }, { name="loop_in", type="rgba" } ]
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(input_port_index : int) -> void:

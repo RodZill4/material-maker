@@ -71,7 +71,7 @@ func get_input_defs() -> Array:
 	else:
 		return shader_model.inputs
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if shader_model == null or !shader_model.has("outputs"):
 		return []
 	else:
