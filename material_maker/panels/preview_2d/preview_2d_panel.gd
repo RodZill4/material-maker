@@ -57,26 +57,33 @@ func set_temporal_aa(v : bool):
 		yield(get_tree(), "idle_frame")
 	set_generator(generator, output, true)
 
+var start_accumulate_trigger : bool = false
+
 func start_accumulate():
+	if !temporal_aa_current:
+		return
+	if !start_accumulate_trigger:
+		start_accumulate_trigger = true
+		call_deferred("do_start_accumulate")
+
+func do_start_accumulate():
 	started = false
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-
+	start_accumulate_trigger = false
 	$Accumulate/Iteration.material.set_shader_param("sum", $Accumulate.get_texture())
 	$Accumulate/Iteration.material.set_shader_param("clear", true)
-	divide = 0
+	divide = 1
 	started = true
 	while started:
-		var next_divide = divide + 1
 		$Accumulate.render_target_update_mode = Viewport.UPDATE_ONCE
 		$Accumulate.update_worlds()
+		material.set_shader_param("divide", divide)
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		$Accumulate/Iteration.material.set_shader_param("clear", false)
-		material.set_shader_param("divide", divide)
-		divide = next_divide
-		if divide > 1000:
+		divide += 1
+		if divide > 100000:
 			started = false
 			break
 

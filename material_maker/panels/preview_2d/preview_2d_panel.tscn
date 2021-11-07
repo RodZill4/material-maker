@@ -62,12 +62,12 @@ uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
 
 void fragment() {
+	vec2 ratio = preview_2d_size;
+	vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
+	vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	if (clear) {
-		COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+		COLOR = preview_2d(uv);
 	} else {
-		vec2 ratio = preview_2d_size;
-		vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
-		vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 		COLOR = textureLod(sum, UV, 0.0)+preview_2d(uv);
 	}
 }
