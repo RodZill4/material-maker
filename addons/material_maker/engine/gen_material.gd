@@ -140,7 +140,6 @@ class CustomOptions:
 func process_shader(shader_text : String):
 	var custom_options = CustomOptions.new()
 	if shader_model.has("custom"):
-		print(shader_model.custom)
 		var custom_options_script = GDScript.new()
 		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
 		custom_options_script.reload()

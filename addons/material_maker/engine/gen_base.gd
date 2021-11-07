@@ -266,10 +266,8 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	var shader : String
 	var output_type = "rgba"
 	var outputs = get_output_defs(true)
-	print(outputs)
 	if outputs.size() > output_index:
 		output_type = outputs[output_index].type
-	print(output_type)
 	if preview:
 		shader = generate_preview_shader(source, output_type)
 	else:
