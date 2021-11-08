@@ -61,10 +61,29 @@ uniform vec2 preview_2d_size = vec2(100.0);
 uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
 
+//Adapted from https://www.reedbeta.com/blog/hash-functions-for-gpu-rendering/
+uint viewport_rand_pcg(inout uint seed){
+    uint state = seed;
+    seed = seed * uint(747796405) + uint(2891336453);
+    uint word= ((state >> ((state >> uint(28) ) + uint(4) )) ^ state) * uint(277803737);
+    return (word >> uint(22) ) ^ word;
+}
+
+float viewport_RandomFloat01(inout uint state){
+    uint r=viewport_rand_pcg(state);
+    r &= uint(0x007FFFFF);
+    r |= uint(0x3F800000);
+    return uintBitsToFloat(r) - 1.0f;
+}
+
 void fragment() {
+	vec2 dxy = vec2(dFdx(UV.x), dFdy(UV.y));
+	vec2 exactXY = UV/dxy;
+	//Adapted from https://www.shadertoy.com/view/tsBBWW by demofox
+	uint rngState = uint(uint(exactXY.x) * uint(1973) + uint(exactXY.y) * uint(9277) + uint(TIME*1000.0) * uint(26699)) | uint(1);
+	vec2 rxy = vec2(viewport_RandomFloat01(rngState), viewport_RandomFloat01(rngState)) * dxy-dxy/2.0;
 	vec2 ratio = preview_2d_size;
-	vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
-	vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	vec2 uv = preview_2d_center+(UV+rxy-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	if (clear) {
 		COLOR = preview_2d(uv);
 	} else {
