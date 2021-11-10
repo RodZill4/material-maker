@@ -111,6 +111,13 @@ func get_items(filter : String, sorted = false) -> Array:
 		array = sorted_array
 	return array
 
+func get_item_section(item_name: String) -> String:
+	for li in get_child_count():
+		var l = get_child(li)
+		if disabled_libraries.find(l.library_path) == -1:
+			return l.get_item_section(item_name)
+	return ""
+
 func save_library_list() -> void:
 	var library_list = []
 	for i in range(2, get_child_count()):

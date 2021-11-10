@@ -27,12 +27,14 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-
+onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
+var theme_simple = preload("res://material_maker/theme/simple.tres")
+var theme_3d = preload("res://material_maker/theme/3d.tres")
 
 signal save_path_changed
 signal graph_changed
@@ -313,6 +315,15 @@ func update_graph(generators, connections) -> Array:
 		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
 		if node != null:
 			node.name = "node_"+g.name
+			# TODO TODO TODO
+			var section = library_manager.get_item_section(g.name)
+			
+			match section:
+				"Simple":
+					node.theme = theme_simple
+				"3D":
+					node.theme = theme_3d
+			
 			add_node(node)
 			node.generator = g
 		node.offset = g.position

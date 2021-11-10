@@ -70,7 +70,7 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
-func get_template_name() -> bool:
+func get_template_name() -> String:
 	return model
 
 func is_editable() -> bool:
