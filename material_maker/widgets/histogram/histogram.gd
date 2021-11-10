@@ -13,7 +13,7 @@ func get_histogram_texture() -> ImageTexture:
 	return $Control.material.get_shader_param("tex")
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
-	if is_instance_valid(generator):
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if !force and generator == g and output == o:
