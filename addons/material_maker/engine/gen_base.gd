@@ -35,6 +35,7 @@ class OutputPort:
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
+var orig_name = null
 var parameters = {}
 
 var seed_locked : bool = false

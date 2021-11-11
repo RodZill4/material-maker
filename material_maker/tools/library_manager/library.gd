@@ -63,6 +63,9 @@ func get_item_section(item_name : String) -> String:
 		if i.has("name"):
 			if i["name"] == item_name:
 				return i["tree_item"].rsplit("/")[0]
+		if i.has("type"):
+			if i["type"] == item_name:
+				return i["tree_item"].rsplit("/")[0]
 	return ""
 
 func get_sections() -> Array:

@@ -79,6 +79,7 @@ func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
 	for n in generators:
 		var g = create_gen(n)
 		if g != null:
+			g.orig_name = g.name
 			var orig_name = g.name
 			if gen_graph.add_generator(g):
 				rv.generators.append(g)
