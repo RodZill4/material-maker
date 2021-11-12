@@ -53,7 +53,7 @@ void fragment() {
 	vec2 ratio = preview_2d_size;
 	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
-		COLOR = vec4(0.5);
+		COLOR = vec4(0.0);
 	} else {
 		if (mode == 1) {
 			uv = fract(uv);

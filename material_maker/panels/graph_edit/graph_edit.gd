@@ -69,13 +69,14 @@ func process_port_click(pressed : bool):
 			var rect : Rect2 = c.get_global_rect()
 			var pos = get_global_mouse_position()-rect.position
 			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-			if rect.has_point(get_global_mouse_position()):
+			var output_count : int = c.get_connection_output_count()
+			if rect.has_point(get_global_mouse_position()) and output_count > 0:
 				var scale = c.get_global_transform().get_scale()
 				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-				var output_2 : Vector2 = c.get_connection_output_position(c.get_connection_output_count()-1)+5*scale
+				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
 				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 				if in_output:
-					for i in range(c.get_connection_output_count()):
+					for i in range(output_count):
 						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
 							if pressed:
 								port_click_node = c
@@ -662,9 +663,14 @@ func highlight_connections() -> void:
 		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
 	highlighting_connections = false
 
-func _on_GraphEdit_node_selected(node) -> void:
-	set_current_preview(0, node)
-	highlight_connections()
+func _on_GraphEdit_node_selected(node : GraphNode) -> void:
+	if node.comment:
+		for c in get_children():
+			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
+				c.selected = true
+	else:
+		set_current_preview(0, node)
+		highlight_connections()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
