@@ -1,0 +1,78 @@
+{
+	"name": "colormap",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"direction": 0,
+		"offset": 0.5
+	},
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$uv.x",
+				"label": "",
+				"longdesc": "The input greyscale image",
+				"name": "input",
+				"shortdesc": "Input",
+				"type": "f"
+			},
+			{
+				"default": "vec4(vec3($uv.x), 1.0)",
+				"label": "",
+				"longdesc": "The colormap image to use",
+				"name": "colormap",
+				"shortdesc": "Colormap",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Colorizes a greyscale image by sampling colors from a row or column in another image",
+		"name": "Colormap",
+		"outputs": [
+			{
+				"longdesc": "The remapped RGBA image",
+				"rgba": "$colormap($direction)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"longdesc": "The direction in which to sample the colormap",
+				"name": "direction",
+				"shortdesc": "Direction",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Horizontal",
+						"value": "vec2($input($uv), $offset)"
+					},
+					{
+						"name": "Vertical",
+						"value": "vec2($offset, $input($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"longdesc": "The position at which to sample the colormap",
+				"max": 1,
+				"min": 0,
+				"name": "offset",
+				"shortdesc": "Offset",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Colormap"
+	},
+	"type": "shader"
+}
