@@ -411,6 +411,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if source == null:
 				continue
 			var src_attributes = source.generator.get_output_attributes(source.output_index)
+			if src_attributes.has("texture"):
+				var source_globals = source.generator.get_globals(src_attributes.texture)
+				for sg in source_globals:
+					if required_globals.find(sg) == -1:
+						required_globals.push_back(sg)
 			for a in src_attributes.keys():
 				if a == "texture_size":
 					variables[input.name+".size"] = src_attributes.texture_size
