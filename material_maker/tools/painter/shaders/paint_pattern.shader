@@ -5,7 +5,7 @@ void fragment() {
 #include paint_fragment_common
 
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
-	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(brush_size.y/brush_size.x, 1.0)*(xy - vec2(0.5, 0.5)));
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(xy - vec2(0.5, 0.5)));
 	vec4 color = pattern_function(fract(pattern_uv));
 	
 	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5))*color.a*tex2view.z;

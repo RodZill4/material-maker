@@ -48,7 +48,6 @@ func set_brush(brush) -> Texture:
 		painter.update_view(camera, transform, $Viewport.size)
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		initialized = true
 	painter.set_texture_size(1024)
 	painter.set_brush_node(brush)
 	yield(get_tree(), "idle_frame")
@@ -59,9 +58,13 @@ func set_brush(brush) -> Texture:
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	var paint_parameters : Dictionary = {
-		brush_pos=Vector2(0.5, 0.5),
-		brush_ppos=Vector2(0.5, 0.5),
-		brush_size=Vector2(0.5, 0.5),
+		texture_space=false,
+		rect_size=Vector2(512, 512),
+		texture_center=Vector2(0.5, 0.5),
+		texture_scale=1.0,
+		brush_pos=Vector2(256, 256),
+		brush_ppos=Vector2(256, 256),
+		brush_size=256,
 		brush_opacity=1.0,
 		brush_hardness=0.8,
 		stroke_length=100.0,
@@ -79,4 +82,10 @@ func set_brush(brush) -> Texture:
 	$Viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	"""
+	for i in painter.debug_get_texture_names().size():
+		var t = painter.debug_get_texture(i)
+		t.get_data().save_png("d:/debug_brush_preview_%d.png" % i)
+	"""
+	initialized = true
 	return $Viewport.get_texture()
