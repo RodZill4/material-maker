@@ -68,6 +68,24 @@ func get_item_section(item_name : String) -> String:
 				return i["tree_item"].rsplit("/")[0]
 	return ""
 
+func get_node_sections(node_sections : Dictionary) -> void:
+	for i in library_items:
+		var slash_position = i.tree_item.find("/")
+		if slash_position == -1:
+			continue
+		var section = i.tree_item.left(slash_position)
+		if !i.has("type"):
+			continue
+		if mm_loader.predefined_generators.has(i.type):
+			i = mm_loader.predefined_generators[i.type]
+		if i.has("shader_model"):
+			if i.shader_model.has("name"):
+				node_sections[i.shader_model.name] = section
+		elif i.has("label"):
+			node_sections[i.label] = section
+		elif i.has("type"):
+			node_sections[i.type] = section
+
 func get_sections() -> Array:
 	var sections : Array = Array()
 	for i in library_items:

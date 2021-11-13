@@ -487,6 +487,7 @@ func create_menu_set_theme(menu) -> void:
 
 func set_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
+	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()

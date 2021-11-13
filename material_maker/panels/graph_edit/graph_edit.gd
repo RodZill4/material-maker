@@ -48,7 +48,7 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
-	generate_section_themes()
+	#generate_section_themes()
 
 func generate_section_themes() -> void:
 	# This should probably not be done in graph_edit?
@@ -332,14 +332,16 @@ func clear_material() -> void:
 func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
-		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
+		var node = node_factory.create_node(g)
 		if node != null:
 			node.name = "node_"+g.name
+			"""
 			# Set NodeGraph theme based on section
 			var section = library_manager.get_item_section(g.orig_name)
 			var section_index = sections.find(section)
 			if section_index != -1:
 				node.theme = section_themes[section_index]
+			"""
 			add_node(node)
 			node.generator = g
 		node.offset = g.position
