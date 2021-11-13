@@ -16,10 +16,6 @@ var param_seams : Texture
 var param_layer_textures : Dictionary
 var brush_params : Dictionary
 
-# shader filrs
-var shader_files : Dictionary = {}
-const CACHE_SHADER_FILES : bool = true
-
 func _ready() -> void:
 	paint_material = ShaderMaterial.new()
 	paint_material.shader = Shader.new()
@@ -70,27 +66,8 @@ func set_brush(parameters : Dictionary):
 	for p in brush_params.keys():
 		paint_material.set_shader_param(p, brush_params[p])
 
-func get_shader_file(file_name : String) -> String:
-	var shader_text = ""
-	if CACHE_SHADER_FILES and shader_files.has(file_name):
-		shader_text = shader_files[file_name]
-	else:
-		var file = File.new()
-		file.open("res://material_maker/tools/painter/shaders/"+file_name+".shader", File.READ)
-		shader_text = file.get_as_text()
-		shader_files[file_name] = shader_text
-	return shader_text
-
-func get_paint_shader(mode : String) -> String:
-	var shader_text : String = get_shader_file(shader_prefix+"_"+mode)
-	var regex : RegEx = RegEx.new()
-	regex.compile("#include\\s+(\\w+)")
-	while true:
-		var result : RegExMatch = regex.search(shader_text)
-		if result == null:
-			break
-		shader_text = shader_text.replace(result.strings[0], get_shader_file(result.strings[1]))
-	return shader_text
+func get_shader_prefix() -> String:
+	return shader_prefix
 
 func init(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture = null):
 	rect.material = init_material

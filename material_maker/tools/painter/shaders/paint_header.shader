@@ -1,6 +1,11 @@
 shader_type canvas_item;
 render_mode blend_disabled, unshaded;
 
+uniform bool      texture_space = false;
+uniform vec2      rect_size;
+uniform vec2      texture_center = vec2(0.5);
+uniform float     texture_scale = 1.0;
+
 uniform sampler2D tex2view_tex;
 uniform float     texture_size = 512.0;
 uniform sampler2D seams : hint_white;
@@ -17,7 +22,7 @@ uniform bool      reset             = false;
 uniform float     pressure          = 1.0;
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
-uniform vec2      brush_size        = vec2(0.25, 0.25);
+uniform float     brush_size        = 0.5;
 uniform float     brush_hardness    = 0.5;
 uniform float     stroke_length     = 0.0;
 uniform float     stroke_angle      = 0.0;

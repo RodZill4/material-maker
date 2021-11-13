@@ -55,7 +55,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if !force and generator == g and output == o:
 		return
 	need_generate = false
-	if is_instance_valid(generator):
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if is_instance_valid(g):

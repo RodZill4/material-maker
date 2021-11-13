@@ -23,7 +23,7 @@ var viewport_size
 
 var brush_node = null
 var brush_params = {
-	brush_size = Vector2(1.0, 1.0),
+	brush_size = 1.0,
 	brush_hardness = 0.5,
 	pattern_scale  = 10.0,
 	pattern_angle  = 0.0
@@ -47,6 +47,10 @@ var mesh_normal_tex : ImageTexture = null
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
+# shader files
+var shader_files : Dictionary = {}
+const CACHE_SHADER_FILES : bool = false
+
 
 signal painted()
 
@@ -61,7 +65,7 @@ func _ready():
 	for index in range(viewports.size()):
 		viewports[index].set_intermediate_textures(t2v_tex, mesh_seams_tex)
 
-func update_seams_texture():
+func update_seams_texture(_m : Mesh = null) -> void:
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
@@ -97,12 +101,10 @@ func set_mesh(m : Mesh):
 	mat = view_to_texture_mesh.get_surface_material(0)
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_material(0, mat)
-	var result = update_seams_texture()
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	result = update_inv_uv_texture(m)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	for init_fct in [ "update_seams_texture", "update_inv_uv_texture" ]:
+		var result = call(init_fct, m)
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
 
 func calculate_mask(value : float, channel : int) -> Color:
 	if (channel == SpatialMaterial.TEXTURE_CHANNEL_RED):
@@ -206,6 +208,29 @@ func update_tex2view():
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 
+# Shader methods
+
+func get_shader_file(file_name : String) -> String:
+	var shader_text = ""
+	if CACHE_SHADER_FILES and shader_files.has(file_name):
+		shader_text = shader_files[file_name]
+	else:
+		var file = File.new()
+		file.open("res://material_maker/tools/painter/shaders/"+file_name+".shader", File.READ)
+		shader_text = file.get_as_text()
+		shader_files[file_name] = shader_text
+	return shader_text
+
+func preprocess_shader(shader_text : String) -> String:
+	var regex : RegEx = RegEx.new()
+	regex.compile("#include\\s+(\\w+)")
+	while true:
+		var result : RegExMatch = regex.search(shader_text)
+		if result == null:
+			break
+		shader_text = shader_text.replace(result.strings[0], get_shader_file(result.strings[1]))
+	return shader_text
+
 # Brush methods
 
 func get_brush_mode() -> String:
@@ -219,9 +244,9 @@ func set_brush_preview_material(m : ShaderMaterial) -> void:
 	brush_preview_material = m
 
 func get_brush_preview_shader(mode : String) -> String:
-	var file = File.new()
-	file.open("res://material_maker/tools/painter/shaders/brush_%s.shader" % mode, File.READ)
-	return file.get_as_text()
+	var shader_text : String = get_shader_file("brush_%s" % mode)
+	shader_text = preprocess_shader(shader_text)
+	return shader_text
 
 func set_brush_angle(a) -> void:
 	brush_params.pattern_angle = a
@@ -232,13 +257,14 @@ func show_pattern(b):
 		pattern_shown = b
 		update_brush()
 
-func update_brush(update_shaders = false):
+func update_brush(update_shaders : bool = false):
 	#if brush_params.albedo_texture_mode != 2: $Pattern.visible = false
 	if brush_preview_material != null:
 		if update_shaders:
 			var code : String = get_output_code(1)
 			update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
 		var v2t_tex = view_to_texture_viewport.get_texture()
+		brush_preview_material.set_shader_param("rect_size", viewport_size)
 		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
 		brush_preview_material.set_shader_param("mesh_inv_uv_tex", mesh_inv_uv_tex)
 		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
@@ -265,7 +291,9 @@ func update_brush(update_shaders = false):
 	# Update shaders
 	if update_shaders:
 		for index in range(viewports.size()):
-			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
+			var shader_text = get_shader_file(viewports[index].get_shader_prefix()+"_"+mode)
+			shader_text = preprocess_shader(shader_text)
+			update_shader(viewports[index].get_paint_material(), shader_text, get_output_code(index+1))
 			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
 			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for index in range(viewports.size()):
@@ -316,17 +344,15 @@ func update_shader(shader_material : ShaderMaterial, shader_template : String, s
 	for t in brush_textures.keys():
 		shader_material.set_shader_param(t, brush_textures[t])
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	for index in range(viewports.size()):
 		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
+	return true
 
 func update_brush_params(shader_params : Dictionary) -> void:
 	for p in shader_params.keys():
-		if p == "brush_size":
-			brush_params[p] = Vector2(shader_params.brush_size, shader_params.brush_size)/viewport_size
-		else:
-			brush_params[p] = shader_params[p]
+		brush_params[p] = shader_params[p]
 		if brush_preview_material != null:
 			brush_preview_material.set_shader_param(p, brush_params[p])
 
@@ -353,9 +379,12 @@ func fill(erase : bool, reset : bool = false) -> void:
 func view_to_texture(position : Vector2) -> Vector2:
 	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
 	view_to_texture_image.lock()
-	var position_in_texture = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
-	position_in_texture = Vector2(position_in_texture.r, position_in_texture.g)
-	return position_in_texture
+	var position_in_texture : Color = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
+	view_to_texture_image.unlock()
+	if position_in_texture.r == position_in_texture.b && position_in_texture.g == position_in_texture.b:
+		return Vector2(-1, -1)
+	else:
+		return Vector2(position_in_texture.r, position_in_texture.g)
 
 func get_albedo_texture():
 	return albedo_viewport.get_texture()
@@ -379,7 +408,10 @@ func save_viewport(v : Viewport, f : String):
 	v.get_texture().get_data().save_png(f)
 
 func debug_get_texture_names():
-	return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
+	if OS.is_debug_build():
+		return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
+	else:
+		return [ "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
 
 # Localization strings
 # tr("View to texture")
@@ -393,6 +425,8 @@ func debug_get_texture_names():
 # tr("Mask (current layer)")
 
 func debug_get_texture(ID):
+	if ! OS.is_debug_build():
+		ID -= 3
 	match ID:
 		0:
 			return view_to_texture_viewport.get_texture()

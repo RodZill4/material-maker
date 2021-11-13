@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _draw() -> void:
 	._draw()
-	if generator != null and generator.preview >= 0:
+	if generator != null and generator.preview >= 0 and get_connection_output_count() > 0:
 		var conn_pos = get_connection_output_position(generator.preview)
 		conn_pos /= get_global_transform().get_scale()
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_color("title_color"))

@@ -13,7 +13,7 @@ func _ready():
 
 func set_generator(g):
 	if g != generator:
-		if generator != null:
+		if generator != null and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 			generator.disconnect("parameter_changed", self, "on_parameter_changed")
 		generator = g
 		if generator != null:

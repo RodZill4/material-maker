@@ -52,16 +52,22 @@ func select_material() -> String:
 	return result
 
 func update_thumbnails() -> void:
+	Directory.new().make_dir_recursive("user://website_cache")
 	for i in range(materials.size()):
 		var m = materials[i]
-		var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
-		if error == OK:
-			var data : PoolByteArray = yield($ImageHTTPRequest, "request_completed")[3]
-			var image : Image = Image.new()
-			image.load_webp_from_buffer(data)
-			var texture : ImageTexture = ImageTexture.new()
-			texture.create_from_image(image)
-			$VBoxContainer/ItemList.set_item_icon(i, texture)
+		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+		var image : Image = Image.new()
+		if image.load(cache_filename) != OK:
+			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
+			if error == OK:
+				var data : PoolByteArray = yield($ImageHTTPRequest, "request_completed")[3]
+				image.load_webp_from_buffer(data)
+				image.save_png(cache_filename)
+			else:
+				continue
+		var texture : ImageTexture = ImageTexture.new()
+		texture.create_from_image(image)
+		$VBoxContainer/ItemList.set_item_icon(i, texture)
 
 func _on_ItemList_item_selected(index):
 	$VBoxContainer/Buttons/OK.disabled = false

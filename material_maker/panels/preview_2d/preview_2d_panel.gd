@@ -6,15 +6,22 @@ export(String, MULTILINE) var shader_divide : String = ""
 var center : Vector2 = Vector2(0.5, 0.5)
 var scale : float = 1.2
 
+var view_mode : int = 0
+
 var temporal_aa : bool = false
 var temporal_aa_current : bool = false
 
+
 func _ready():
 	update_shader_options()
+	update_view_menu()
 	update_axes_menu()
 	update_export_menu()
 	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
 	$ContextMenu.set_item_checked(MENU_TEMPORAL_AA, temporal_aa)
+
+func update_view_menu() -> void:
+	$ContextMenu.add_submenu_item("View", "View")
 
 func update_axes_menu() -> void:
 	$ContextMenu/Axes.clear()
@@ -41,6 +48,9 @@ func update_material(source):
 		start_accumulate()
 	else:
 		.update_material(source)
+		material.set_shader_param("mode", view_mode)
+		material.set_shader_param("background_color_1", Color(0.4, 0.4, 0.4))
+		material.set_shader_param("background_color_2", Color(0.6, 0.6, 0.6))
 
 var started : bool = false
 var divide : int = 0
@@ -190,6 +200,10 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			set_temporal_aa(v)
 		_:
 			print("unsupported id "+str(id))
+
+func _on_View_id_pressed(id):
+	view_mode = id
+	material.set_shader_param("mode", view_mode)
 
 func _on_Axes_id_pressed(id):
 	if id == 1000:
