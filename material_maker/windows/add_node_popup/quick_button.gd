@@ -3,6 +3,7 @@ extends ColorRect
 export var default_library_item : String
 
 var library_item
+var disabled : bool = false
 
 onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
@@ -33,13 +34,22 @@ func drop_data(position, data):
 	main_window.config_cache.set_value("library", "quick_button_%d" % get_index(), data)
 
 func _on_gui_input(event):
-	if event is InputEventMouseButton:
+	if !disabled and event is InputEventMouseButton:
 		if event.pressed and event.button_index == BUTTON_LEFT:
 			emit_signal("object_selected", library_item.item)
 
+func enable() -> void:
+	disabled = false
+	material.set_shader_param("disabled", false)
+
+func disable() -> void:
+	disabled = true
+	material.set_shader_param("disabled", true)
 
 func _on_QuickButton_mouse_entered():
-	material.set_shader_param("brightness", 1.0)
+	if ! disabled:
+		material.set_shader_param("brightness", 1.0)
 
 func _on_QuickButton_mouse_exited():
-	material.set_shader_param("brightness", 0.8)
+	if ! disabled:
+		material.set_shader_param("brightness", 0.8)
