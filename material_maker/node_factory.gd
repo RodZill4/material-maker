@@ -27,7 +27,9 @@ func set_theme_overrides(node, generator : MMGenBase = null) -> void:
 		library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 		if library_manager == null:
 			return
-	var node_title = generator.get_type_name()
+	var node_title = generator.get_template_name()
+	if ! mm_loader.predefined_generators.has(node_title) or ! library_manager.node_sections.has(node_title):
+		node_title = generator.get_type_name()
 	if ! library_manager.node_sections.has(node_title):
 		node_title = generator.get_type()
 	if library_manager.node_sections.has(node_title):

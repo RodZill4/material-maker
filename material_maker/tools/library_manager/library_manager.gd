@@ -55,7 +55,7 @@ func init_libraries() -> void:
 		if library.library_name == "":
 			library.library_name = base_lib_name
 		add_child(library)
-		library.get_node_sections(node_sections)
+		library.generate_node_sections(node_sections)
 	library = LIBRARY.new()
 	if library.load_library(user_lib):
 		if library.library_name == "":
@@ -63,7 +63,7 @@ func init_libraries() -> void:
 	else:
 		library.create_library(user_lib, user_lib_name)
 	add_child(library)
-	library.get_node_sections(node_sections)
+	library.generate_node_sections(node_sections)
 	init_section_icons()
 	yield(get_tree(), "idle_frame")
 	if config.has_section_key(config_section, "libraries"):
@@ -71,7 +71,7 @@ func init_libraries() -> void:
 			library = LIBRARY.new()
 			if library.load_library(p):
 				add_child(library)
-				library.get_node_sections(node_sections)
+				library.generate_node_sections(node_sections)
 	if config.has_section_key(config_section, "disabled_libraries"):
 		disabled_libraries = config.get_value(config_section, "disabled_libraries")
 	if config.has_section_key(config_section, "disabled_sections"):
