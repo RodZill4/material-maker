@@ -2,17 +2,22 @@ tool
 extends MMGenBase
 class_name MMGenReroute
 
+var port_type : String = "any"
+
 func get_type() -> String:
 	return "reroute"
+
+func set_port_type(t : String) -> void:
+	port_type = t
 
 func get_type_name() -> String:
 	return "Reroute"
 
 func get_input_defs() -> Array:
-	return [ { name="in", type="rgba" } ]
+	return [ { name="in", type=port_type } ]
 
 func get_output_defs() -> Array:
-	return [ { type="rgba" } ]
+	return [ { type=port_type } ]
 
 func get_parameter_defs() -> Array:
 	return []

@@ -163,11 +163,19 @@ func connect_node(from, from_slot, to, to_slot):
 			connected = true
 	if connected:
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
 
 func disconnect_node(from, from_slot, to, to_slot) -> void:
-	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	if generator.disconnect_children(from_node.generator, from_slot, to_node.generator, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
