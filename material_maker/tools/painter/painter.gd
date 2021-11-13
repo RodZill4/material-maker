@@ -49,7 +49,7 @@ const VIEW_TO_TEXTURE_RATIO = 2.0
 
 # shader files
 var shader_files : Dictionary = {}
-const CACHE_SHADER_FILES : bool = false
+const CACHE_SHADER_FILES : bool = true
 
 
 signal painted()
