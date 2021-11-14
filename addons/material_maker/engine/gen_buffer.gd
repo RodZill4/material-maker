@@ -152,6 +152,7 @@ func update_buffer() -> void:
 				renderer = yield(renderer, "completed")
 			if !update_again:
 				renderer.copy_to_texture(texture)
+				
 				match version:
 					VERSION_COMPLEX:
 						var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
@@ -162,11 +163,15 @@ func update_buffer() -> void:
 						texture.flags = flags
 					_:
 						texture.flags = Texture.FLAGS_DEFAULT
+				_post_process()
 			emit_signal("rendering_time", OS.get_ticks_msec() - time)
 			renderer.release(self)
 			current_renderer = null
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+
+func _post_process():
+	pass
 
 func get_globals(texture_name : String) -> Array:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]

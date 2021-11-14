@@ -16,6 +16,7 @@
 	"Miscellaneous/Buffer": "pause,wait,optimize",
 	"Miscellaneous/Comment": "note,frame",
 	"Miscellaneous/Export": "save",
+	"Miscellaneous/Palettize": "palettize",
 	"Miscellaneous/Iterate Buffer": "pause,wait,optimize",
 	"Miscellaneous/Switch": "change,trigger,toggle,select",
 	"Noise": "pixel,static",
