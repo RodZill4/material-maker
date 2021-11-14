@@ -729,6 +729,33 @@ func _on_Description_descriptions_changed(short_description, long_description):
 	generator.shortdesc = short_description
 	generator.longdesc = long_description
 
+
+func find_graph_with_label(label: String) -> GraphNode:
+	for c in get_children():
+		if c is GraphNode and c.generator is MMGenGraph && c.generator.get_type_name() == label:
+			return c
+	return null
+
+func get_propagation_targets(source : MMGenGraph, parent : MMGenGraph = null) -> Array:
+	if parent == null:
+		parent = top_generator
+	var rv : Array = []
+	for c in parent.get_children():
+		if c is MMGenGraph and c != source:
+			if c.get_type_name() == source.get_type_name():
+				rv.push_back(c)
+			else:
+				rv.append_array(get_propagation_targets(source, c))
+	return rv
+
+func propagate_node_changes(source : MMGenGraph) -> void:
+	for c in get_propagation_targets(source):
+		c.apply_diff_from(source)
+	
+	var main_window = get_node("/root/MainWindow")
+	main_window.hierarchy.update_from_graph_edit(self)
+	update_view(generator)
+
 # Adding/removing reroute nodes
 
 func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
