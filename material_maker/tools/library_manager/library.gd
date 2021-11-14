@@ -58,16 +58,6 @@ func get_items(filter : String, disabled_sections : Array, aliased_items : Array
 				array.push_back({ name=i.tree_item, item=i, icon=library_icons[i.tree_item] })
 	return array
 
-func get_item_section(item_name : String) -> String:
-	for i in library_items:
-		if i.has("name"):
-			if i["name"] == item_name:
-				return i["tree_item"].rsplit("/")[0]
-		if i.has("type"):
-			if i["type"] == item_name:
-				return i["tree_item"].rsplit("/")[0]
-	return ""
-
 func generate_node_sections(node_sections : Dictionary) -> void:
 	for i in library_items:
 		var section = i.tree_item

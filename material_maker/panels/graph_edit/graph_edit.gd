@@ -48,26 +48,6 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
-	#generate_section_themes()
-
-func generate_section_themes() -> void:
-	# This should probably not be done in graph_edit?
-	# Also this needs to be rerun and the graph updated
-	# when the theme is changed this this to work correctly
-	var current_theme : Theme = get_node("/root/MainWindow").theme
-	var border_alpha = current_theme.get_stylebox("frame", "GraphNode").border_color.a
-	sections = library_manager.get_sections()
-	for section in sections:
-		var theme := Theme.new()
-		var frame := current_theme.get_stylebox("frame", "GraphNode").duplicate(true) as StyleBoxFlat
-		var selected_frame := current_theme.get_stylebox("selectedframe", "GraphNode").duplicate(true) as StyleBoxFlat
-		var section_color : Color = library_manager.get_section_color(section)
-		section_color.a = border_alpha
-		frame.border_color = section_color
-		selected_frame.border_color = section_color
-		theme.set_stylebox("frame", "GraphNode", frame)
-		theme.set_stylebox("selectedframe", "GraphNode", selected_frame)
-		section_themes.append(theme)
 
 func get_project_type() -> String:
 	return "material"
@@ -335,13 +315,6 @@ func update_graph(generators, connections) -> Array:
 		var node = node_factory.create_node(g)
 		if node != null:
 			node.name = "node_"+g.name
-			"""
-			# Set NodeGraph theme based on section
-			var section = library_manager.get_item_section(g.orig_name)
-			var section_index = sections.find(section)
-			if section_index != -1:
-				node.theme = section_themes[section_index]
-			"""
 			add_node(node)
 			node.generator = g
 		node.offset = g.position
