@@ -16,7 +16,7 @@ func get_type_name() -> String:
 func get_input_defs() -> Array:
 	return [ { name="in", type=port_type } ]
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type=port_type } ]
 
 func get_parameter_defs() -> Array:
