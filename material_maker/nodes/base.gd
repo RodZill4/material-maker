@@ -102,6 +102,8 @@ func _draw() -> void:
 			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else (tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
+	if (selected):
+		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, rect_size))
 
 func update_node() -> void:
 	pass

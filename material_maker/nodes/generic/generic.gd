@@ -434,6 +434,8 @@ func update_node() -> void:
 			hsizer.rect_min_size.y = 12
 	# Edit buttons
 	if generator.is_editable():
+		for theme in ["frame", "selectedframe"]:
+			add_stylebox_override(theme, null)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")

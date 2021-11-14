@@ -35,6 +35,7 @@ class OutputPort:
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
+var orig_name = null
 var parameters = {}
 
 var seed_locked : bool = false
@@ -70,7 +71,7 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
-func get_template_name() -> bool:
+func get_template_name() -> String:
 	return model
 
 func is_editable() -> bool:
