@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=120 format=2]
+[gd_resource type="Theme" load_steps=123 format=2]
 
 [ext_resource path="res://material_maker/theme/light/textedit_tab.png" type="Texture" id=1]
 [ext_resource path="res://material_maker/theme/light/checkbox_checked.png" type="Texture" id=2]
@@ -58,6 +58,7 @@
 [ext_resource path="res://material_maker/theme/light/tabcontainer_increment_highlight.png" type="Texture" id=56]
 [ext_resource path="res://material_maker/theme/light/tabs_decrement_highlight.png" type="Texture" id=57]
 [ext_resource path="res://material_maker/theme/font.tres" type="DynamicFont" id=58]
+[ext_resource path="res://material_maker/fonts/DroidSansFallback.ttf" type="DynamicFontData" id=59]
 
 [sub_resource type="StyleBoxFlat" id=58]
 content_margin_left = 6.0
@@ -328,6 +329,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0.84, 0.84, 0.84, 1 )
 
+[sub_resource type="DynamicFont" id=120]
+size = 15
+outline_size = 2
+outline_color = Color( 1, 1, 1, 0.117647 )
+extra_spacing_top = -3
+font_data = ExtResource( 59 )
+
 [sub_resource type="StyleBoxFlat" id=84]
 content_margin_left = 28.0
 content_margin_right = 28.0
@@ -373,11 +381,22 @@ content_margin_right = 28.0
 content_margin_top = 24.0
 content_margin_bottom = 5.0
 bg_color = Color( 1, 1, 1, 0.7 )
+border_width_top = 22
+border_color = Color( 0.745098, 0.745098, 0.745098, 0.701961 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color( 0, 0, 0, 0.101961 )
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id=119]
+draw_center = false
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color( 0, 0, 0, 0.9 )
+border_color = Color( 0.278431, 0.533333, 1, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -404,16 +423,13 @@ content_margin_right = 28.0
 content_margin_top = 24.0
 content_margin_bottom = 5.0
 bg_color = Color( 1, 1, 1, 0.9 )
-border_width_left = 1
 border_width_top = 22
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.278431, 0.533333, 1, 0.901961 )
+border_color = Color( 0.745098, 0.745098, 0.745098, 0.901961 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color( 0, 0, 0, 0.1 )
+shadow_color = Color( 0, 0, 0, 0.101961 )
 shadow_size = 8
 
 [sub_resource type="StyleBoxFlat" id=90]
@@ -769,7 +785,6 @@ GraphEdit/colors/selection_fill = Color( 0.13, 0.44, 1, 0.3 )
 GraphEdit/colors/selection_stroke = Color( 0.13, 0.44, 1, 0.8 )
 GraphEdit/constants/bezier_len_neg = 160
 GraphEdit/constants/bezier_len_pos = 80
-GraphEdit/constants/port_grab_distance_vertical = 12
 GraphEdit/icons/minus = ExtResource( 4 )
 GraphEdit/icons/more = ExtResource( 5 )
 GraphEdit/icons/reset = ExtResource( 16 )
@@ -784,6 +799,7 @@ GraphNode/constants/port_offset = 10
 GraphNode/constants/separation = 1
 GraphNode/constants/title_h_offset = -16
 GraphNode/constants/title_offset = 20
+GraphNode/fonts/title_font = SubResource( 120 )
 GraphNode/icons/close = ExtResource( 12 )
 GraphNode/icons/port = ExtResource( 7 )
 GraphNode/icons/resizer = ExtResource( 23 )
@@ -791,6 +807,7 @@ GraphNode/styles/breakpoint = SubResource( 84 )
 GraphNode/styles/comment = SubResource( 85 )
 GraphNode/styles/commentfocus = SubResource( 86 )
 GraphNode/styles/frame = SubResource( 87 )
+GraphNode/styles/node_highlight = SubResource( 119 )
 GraphNode/styles/position = SubResource( 88 )
 GraphNode/styles/selectedframe = SubResource( 89 )
 GraphNode/styles/state_machine_frame = SubResource( 90 )

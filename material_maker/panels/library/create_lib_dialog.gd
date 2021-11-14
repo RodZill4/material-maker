@@ -37,3 +37,6 @@ func enter_info(value : String = "") -> Dictionary:
 	var result = yield(self, "return_info")
 	queue_free()
 	return result
+
+func _on_VBoxContainer_minimum_size_changed():
+	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)

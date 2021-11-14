@@ -27,7 +27,7 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func _serialize(data: Dictionary) -> Dictionary:

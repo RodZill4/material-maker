@@ -37,7 +37,7 @@ func get_input_defs() -> Array:
 			rv.push_back({ name=n, label=n, type="any" })
 	return rv
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	var rv : Array = []
 	for o in range(get_parameter("outputs")):
 		var n = PoolByteArray([65+o]).get_string_from_ascii()

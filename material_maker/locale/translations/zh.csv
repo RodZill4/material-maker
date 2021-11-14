@@ -10,7 +10,7 @@ Load recent|最近加载
 Save|保存
 Save as...|另存为...
 Save all...|保存所有
-Export material|导出材料
+Export material|导出材质
 Close|关闭
 Quit|退出
 Edit|编辑
@@ -132,17 +132,13 @@ Albedo (current layer)|反照率(当前层)
 Metallic/Roughness (current layer)|金属/粗糙度(当前层)
 Emission (current layer)|自发光(当前层)
 Normal (current layer)|法线(当前层)
-Depth/Occlusion (current layer)|
-Mask (current layer)|
 Presets|预设
 Invert|反转
 Default|默认
 Apply|应用
 © 2018-2021 Rodolphe Suescun and contributors|© 2018-2021 Rodolphe Suescun 和贡献者
-Authors|
  Godot Engine|Godot引擎
 99% of Material Maker's code is the awesome Godot Engine|Material Maker 的 99% 的代码都是很棒的 Godot 引擎
-License|
 Node|节点
 path/to/node|路径/到/节点
 Short Description:|短描述
@@ -346,9 +342,6 @@ An UV map output for each brick corner, to be connected to the Map input of a Cu
 Direction|方向
 The direction of each brick (white: horizontal, black: vertical)|每块砖的方向(白色：水平，黑色：垂直)
 Bricks NonTileable|砖块不可平铺
-mortar_map|
-bevel_map|
-round_map|
 Uneven Bricks|凹凸砖块
 Uneven bricks|凹凸砖块
 Generates an uneven bricks pattern.|生成不均匀的砖块图案。
@@ -367,7 +360,6 @@ Contrast|对比
 The Contrast adjustment|对比度调整
 Shows the image with modified Brightness and Contrast|显示具有修改亮度和对比度的图像
 Select From ID|从 ID 中选择
-ids|
 CircleMap|圆形映射
 Maps its input into a circle|将其输入映射为一个圆圈
 Radius|半径
@@ -444,8 +436,6 @@ Alpha|Alpha
 The greyscale input for the alpha channel|Alpha 通道的灰度输入
 Shows the combined RGBA image|显示组合的 RGBA 图像
 Compare|比较
-in1|
-in2|
 Curve|曲线
 AX|AX
 Position on X axis of the first control point|第一个控制点在 X 轴上的位置
@@ -702,7 +692,6 @@ Add|添加
 Mix|混合
 Mul|乘法
 Sub|减法
-color_tex|
 Math|数学计算
 Performs a math operation using its inputs or parameter values|使用其输入或参数值执行数学运算
 Operation|操作
@@ -767,14 +756,10 @@ Apply Map|应用贴图
 Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.|将工作流贴图应用于基础材质，并为结果生成高度信息和 PBR 通道。\n高度输入必须连接到“创建贴图”或“混合贴图”节点。其他输入必须连接到基础材质。\n输出必须连接到 混合或 输出 节点，或者工作流过滤器节点。
 map|贴图
 The input workflow map|输入工作流贴图
-mat1|
 The Albedo channel of the input base material|输入基材的基础色通道
 ORM|通道合成图
-mat2|
 The ambient occlusion, roughness and metallic channels of the input material|输入材料的环境遮挡、粗糙度和金属通道
-mat3|
 The emission channel of the input material|输入材料的自发光通道
-mat4|
 The normal map of the input material|输入材质的法线贴图
 The height map of the result|输出结果的高度图
 The albedo channel of the result|输出结果的漫反射通道
@@ -845,7 +830,6 @@ Controls how much the noise is blurred along the x-axis|控制噪波沿 x 轴的
 Interpolation|插值
 Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is smooth interpolation|控制用于平滑的插值类型。0 为线性插值，1 为平滑插值
 Shows a greyscale value noise|显示灰度值噪波
-Normal Blend|
 Normal Map|法线贴图
 Generates a normal map from a height map|从高度图生成法线图
 Format|格式
@@ -910,7 +894,7 @@ Dithering|抖动
 Amount of dithering in the output image|输出图像中的抖动量
 The image to be pixelated|要像素化的图像
 A pixelated version of the input image|输入图像的像素化版本
-PolyCurve|多曲线
+PolyCurve|多段线曲线
 Ends|末端
 If unset, end vertices of the curve are used only for orientation|如果未设置，则曲线的端点仅用于定向
 Width map|宽度贴图
@@ -1333,9 +1317,7 @@ Tile2x2|2x2贴块
 Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.|将 4 个输入图像放入单个输出中以创建 4 个图像的图集。链接 Tile2x2 节点可用于创建 16 个图像贴图集。\n贴图集用于重新映射节点，例如 用户自定义UV、贴块器和 散布。
 The first input|第一个输入
 The second input|第二个输入
-in3|
 The third input|第三个输入
-in4|
 The fourth input|第四个输入
 Shows the generated atlas|显示生成的图集
 Tile2x2 Variations|贴块2x2 变化
@@ -1378,12 +1360,6 @@ Instance map 1|实例图 1
 Shows a color for each instance of the input image|显示输入图像的每个实例的颜色
 Instance map 2|实例图 2
 Advanced Tiler Color|高级彩色贴块器
-color1|
-color2|
-tr_x|
-tr_y|
-sc_x|
-sc_y|
 Color Tiler|彩色贴块器
 Instance Map|实例图
 Tonality|曲线调整
@@ -1433,10 +1409,6 @@ ScaleMap.y|缩放映射.y
 An optional map for scaling along the Y axis|用于沿 Y 轴缩放的可选贴图
 Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges|定义超出限制或输入图像的行为：\n- 夹紧拉伸边缘\n- 重复平铺输入\n- 扩展显示超出边缘的输入部分
 Extend|扩展
-tx|
-ty|
-sx|
-sy|
 Translates its input|移动它的输入
 Shows the translated image|显示位移后的图像
 Truchet|特鲁谢
@@ -1500,14 +1472,12 @@ The resolution at which the contours or slopes are followed (higher values will 
 The distance along which the contours or slopes are followed|遵循等高线或斜率的距离
 Attenuation|衰减
 The attenuation applied along the path|沿路径应用衰减
-hm|
 The height map whose contours or slopes are followed|遵循等高线或斜率的高度图
 The dilated image|扩大的图像
 Weave|编织
 Weave pattern|编织图案
 Generates a simple weave pattern|生成简易编织图案
 The width of each row/column|每行/列的宽度
-width_map|
 An input map that affects the width parameter|影响宽度参数的输入映射
 Shows the generated greyscale weave pattern.|显示生成的灰度编织图案。
 Width X|X的宽度
@@ -1601,3 +1571,175 @@ RustyIron|锈铁
 Dribble|液体流下
 Zipper|拉链
 Triplanar|三向映射
+Depth/Occlusion (current layer)|深度/遮挡（当前层）
+Mask (current layer)|蒙版（当前层）
+Authors|作者
+License|许可证
+mortar_map|接缝图
+bevel_map|倒角图
+round_map|圆形图
+ids|多个id
+in1|输入1
+in2|输入2
+color_tex|颜色_纹
+mat1|材质1
+mat2|材质2
+mat3|材质3
+mat4|材质4
+Normal Blend|正常混合
+in3|输入3
+in4|输入4
+color1|颜色1
+color2|颜色2
+tr_x|位移_x
+tr_y|位移_y
+sc_x|缩放_x
+sc_y|缩放_y
+tx|tx
+ty|ty
+sx|sx
+sy|sy
+hm|hm
+width_map|宽度_地图
+Dark|黑暗
+Light|明亮
+zh - Chinese|zh - 中文
+Higher values result in better antialiasing, but are more demanding to render.|值越高，抗锯齿效果越好，但对渲染的要求更高。
+Higher values result in better tesselation quality, but are more demanding to render and require more memory.\nDon't increase this setting above 256 on slower machines!\nThis only affects the 3D preview when using tesselation, not parallax occlusion mapping.|值越高，细分质量越好，但渲染要求更高，需要更多内存。\n不要在速度较慢的机器上将此设置增加到 256 以上！\n这仅影响使用细分时的 3D 预览，而不影响视差遮挡贴图。
+If enabled, the DirectionalLight will cast shadows in the 3D preview. This has a moderate performance cost.\nThe effect of this shadow is only visible when using a tesselated mesh or a custom object.\nChanges to this setting are only applied on application restart.|如果启用，DirectionalLight 将在 3D 预览中投射阴影。这具有中等性能成本。\n此阴影的效果仅在使用细分网格或自定义对象时可见。\n对此设置的更改仅在应用程序重新启动时应用。
+A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.\nHigher values may increase power usage, leading to reduced battery life on laptops.|较高的 FPS 限制可能会使操作更流畅，但可能会使用更多的 CPU/GPU 资源。\n较高的值可能会增加耗电量，甚至缩短笔记本电脑的电池寿命。
+material|材质
+User library|用户库
+Create library|创建库
+Load library|加载库
+Unload|卸载库
+Reset view|重置视图
+Axes|轴
+Export again|再次导出
+Export animation|导出动画
+Corners|角
+Grid4x4|网格4x4
+Grid16x16|网格16x16
+Change color|更改颜色
+Load Reference|加载参考
+Remove Reference|移除参考
+Save a File|保存文件
+Path:|路径：
+Create Folder|创建文件夹
+Directories & Files:|目录和文件：
+1 line spritesheet|1 行精灵表
+2 lines spritesheet|2 行精灵表
+4 lines spritesheet|4 行精灵表
+1 column spritesheet |1 列精灵表 
+Export animation|导出动画
+Open a File|打开文件
+File:|文件：
+Simple\nLeft click to show\nRight click to disable|基础元素\n左键单击显示\n右键单击禁用
+3D\nLeft click to show\nRight click to disable|3D\n左键单击显示\n右键单击禁用
+Pattern\nLeft click to show\nRight click to disable|图案\n左键单击显示\n右键单击禁用
+Noise\nLeft click to show\nRight click to disable|噪波\n左键单击显示\n右键单击禁用
+Filter\nLeft click to show\nRight click to disable|过滤器\n左键单击显示\n右键单击禁用
+Transform\nLeft click to show\nRight click to disable|变换\n左键单击显示\n右键单击禁用
+Workflow\nLeft click to show\nRight click to disable|工作流\n左键单击显示\n右键单击禁用
+Miscellaneous\nLeft click to show\nRight click to disable|杂项\n左键单击显示\n右键单击禁用
+Show 2D preview|显示 2D 预览
+Show 3D preview|显示 3D 预览
+Zoom Out|缩小
+Zoom In|放大
+Zoom Reset|缩放重置 
+Enable snap and show grid.|启用捕捉并显示网格。
+Enable grid minimap.|启用网格小地图。
+Connect to web site|连接到网站
+Send material to web site|将材质发送到网站
+polycurve|多段线曲线
+Edit polygon|编辑多边形
+Top|顶部
+Graph|图形
+Description|描述
+Affect children seeds|影响子级种子
+Back to parent|回到父级
+Show hierarchy|显示层次结构
+Define a description for this item|定义此项目的描述
+Link another parameter|链接另一个参数
+Remove parameter|删除参数
+Unnamed|未命名
+Parameters|参数
+Add linked control|添加链接控件
+Add configurations|添加配置
+Add named parameter|添加命名参数
+Inputs|输入
+Outputs|输出
+Port type|端口类型
+Click to define port groups|单击以定义端口组
+Greyscale TEX3D|灰度 TEX3D
+Expand all|展开全部
+Collapse all|全部收起
+No preview|无预览
+1 preview|1个预览
+2 previews|2个预览
+3 previews|3个预览
+About...|关于...
+Load from website|从网站加载
+Node Editor|节点编辑器
+brush|笔刷
+Brush|笔刷
+Stamp|印章
+UV Pattern|UV图案
+Show brush options|显示画笔选项
+Freehand (F1)|手绘 (F1)
+Freehand line (F2)|手绘线 (F2)
+Lines (F3)|线 (F3)
+Toggler Eraser Mode (E)|切换橡皮擦模式 (E)
+New layer|新建图层
+Paint Layer|绘制层 
+Procedural Layer|程序层
+Mask Layer|遮罩层
+Search...|搜索...
+Alert|警告
+Quit Material Maker?|退出 Material Maker？
+Save [] before closing?|关闭前保存[]？
+Save and close|保存并关闭 
+Discard changes|放弃更改
+Mat Normal|材质法线
+Configuration|配置
+Enter a name for the new configuration|为新配置命名
+<add configuration>|<添加新配置>
+Move parameter up|上移参数
+Move parameter down|下移参数
+Open Material Maker web site|打开Material Maker网站
+Add current color as a preset.|添加当前颜色作为预设。
+Pick a color from the editor window.|从编辑器拾取一个颜色。
+Wavefront OBJ file (*.obj)|Wavefront OBJ 文件 (*.obj)
+AlI Files (*)|全类型文件 (*)
+Go to parent folder.|前往父级文件夹
+Refresh files.|刷新文件
+Toggle the visibility of hidden files.|切换隐藏文件的可见性。
+Open|打开
+emission|自发光
+normal|法线
+depth|深度
+ao|环境光遮蔽
+occlusion|阻塞
+Simple\nRight click to enable|基础元素\n右键单击启用
+3D\nRight click to enable|3D\n右键单击启用
+Pattern\nRight click to enable|图案\n右键单击启用
+Noise\nRight click to enable|噪波\n右键单击启用
+Filte\nRight click to enable|过滤器\n右键单击启用
+Transform\nRight click to enable|变换\n右键单击启用
+Workflow\nRight click to enable|工作流\n右键单击启用
+Miscellaneous\nRight click to enable|杂项\n右键单击启用
+enum|枚举
+boolean|布尔值
+color|颜色
+gradient|灰度
+curve|曲线
+polygon|多边形
+polyline|折线
+Default value|默认值
+Input flag|输入标识
+Material Editor|材质编辑器
+Node Description|节点描述
+Parameter Description|参数描述
+Input name|输入名
+Output Description|输出描述
+Generate input as function (can be used in "Instance Functions" section)|生成作为函数的输入(可用于“实例函数”部分)

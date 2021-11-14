@@ -15,6 +15,7 @@ func do_set_image_path(path) -> void:
 		return
 	image_path = path
 	texture_normal.load(image_path)
+	hint_tooltip = path
 
 func set_image_path(path) -> void:
 	do_set_image_path(path)

@@ -27,12 +27,14 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-
+onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
+var sections = []
+var section_themes = []
 
 signal save_path_changed
 signal graph_changed
@@ -59,6 +61,32 @@ func do_zoom(factor : float):
 	zoom *= factor
 	var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
 	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*position)
+
+var port_click_node : GraphNode
+var port_click_port_index : int = -1
+
+func process_port_click(pressed : bool):
+	for c in get_children():
+		if c is GraphNode:
+			var rect : Rect2 = c.get_global_rect()
+			var pos = get_global_mouse_position()-rect.position
+			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+			var output_count : int = c.get_connection_output_count()
+			if rect.has_point(get_global_mouse_position()) and output_count > 0:
+				var scale = c.get_global_transform().get_scale()
+				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
+				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
+				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+				if in_output:
+					for i in range(output_count):
+						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+							if pressed:
+								port_click_node = c
+								port_click_port_index = i
+							elif port_click_node == c and port_click_port_index == i:
+								set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+								port_click_port_index = -1
+							return
 
 func _gui_input(event) -> void:
 	if (
@@ -115,6 +143,8 @@ func _gui_input(event) -> void:
 			node_popup.rect_global_position = get_global_mouse_position()
 			node_popup.show_popup()
 		else:
+			if event.button_index == BUTTON_LEFT:
+				process_port_click(event.is_pressed())
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
@@ -300,7 +330,7 @@ func clear_material() -> void:
 func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
-		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
+		var node = node_factory.create_node(g)
 		if node != null:
 			node.name = "node_"+g.name
 			add_node(node)
@@ -652,9 +682,14 @@ func highlight_connections() -> void:
 		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
 	highlighting_connections = false
 
-func _on_GraphEdit_node_selected(node) -> void:
-	set_current_preview(0, node)
-	highlight_connections()
+func _on_GraphEdit_node_selected(node : GraphNode) -> void:
+	if node.comment:
+		for c in get_children():
+			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
+				c.selected = true
+	else:
+		set_current_preview(0, node)
+		highlight_connections()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
@@ -673,7 +708,7 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	if locked:
 		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
-		if locked_preview[slot] != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
+		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
@@ -693,12 +728,6 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	# Check if the connector was actually dragged
 	var node : GraphNode = get_node(node_name)
 	if node == null:
-		return
-	var node_transform : Transform2D = node.get_global_transform()
-	var output_position = node_transform.xform(node.get_connection_output_position(slot_index)/node_transform.get_scale())
-	# ignore if drag distance is too short
-	if (get_global_mouse_position()-output_position).length() < 20:
-		set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, node, slot_index, Input.is_key_pressed(KEY_CONTROL))
 		return
 	# Request the popup
 	node_popup.rect_global_position = get_global_mouse_position()

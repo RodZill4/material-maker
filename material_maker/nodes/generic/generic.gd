@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _draw() -> void:
 	._draw()
-	if generator != null and generator.preview >= 0:
+	if generator != null and generator.preview >= 0 and get_connection_output_count() > 0:
 		var conn_pos = get_connection_output_position(generator.preview)
 		conn_pos /= get_global_transform().get_scale()
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_color("title_color"))
@@ -174,6 +174,8 @@ static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> Str
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
 	var control = null
+	if !p.has("type"):
+		return null
 	if p.type == "float":
 		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
 		if ! accept_float_expressions:
@@ -195,6 +197,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			var value = p.values[i]
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
+		control.rect_min_size.x = 80
 	elif p.type == "boolean":
 		control = CheckBox.new()
 	elif p.type == "color":
@@ -212,10 +215,12 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.set_closed(false)
 	elif p.type == "string":
 		control = LineEdit.new()
+		control.rect_min_size.x = 80
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instance()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instance()
+		control.rect_min_size.x = 80
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
@@ -261,7 +266,7 @@ func update_preview() -> void:
 func do_update_preview() -> void:
 	if !preview.is_inside_tree():
 		restore_preview_widget()
-	preview.set_generator(generator, generator.preview)
+	preview.set_generator(generator, generator.preview, true)
 	var pos = Vector2(0, 0)
 	var parent = preview.get_parent()
 	while parent != self:
@@ -429,6 +434,8 @@ func update_node() -> void:
 			hsizer.rect_min_size.y = 12
 	# Edit buttons
 	if generator.is_editable():
+		for theme in ["frame", "selectedframe"]:
+			add_stylebox_override(theme, null)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instance()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")

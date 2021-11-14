@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends ScrollContainer
 
 onready var parameters : GridContainer = $Parameters
 
@@ -13,7 +13,7 @@ func _ready():
 
 func set_generator(g):
 	if g != generator:
-		if generator != null:
+		if generator != null and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 			generator.disconnect("parameter_changed", self, "on_parameter_changed")
 		generator = g
 		if generator != null:
@@ -23,17 +23,37 @@ func set_generator(g):
 		c.free()
 	controls = {}
 	if generator != null:
+		var parameter_labels = {}
 		for p in generator.get_parameter_defs():
-			var label : Label = Label.new()
-			label.text = p.label if p.has("label") else ""
-			label.size_flags_horizontal = SIZE_EXPAND_FILL
-			parameters.add_child(label)
+			if p.has("label"):
+				parameter_labels[p.label] = p
+		for p in generator.get_parameter_defs():
+			if p.has("label"):
+				if p.label.left(6) == "Paint " and parameter_labels.has(p.label.right(6)):
+					continue
+				elif parameter_labels.has("Paint "+p.label):
+					var paint_parameter = parameter_labels["Paint "+p.label]
+					var control = GENERIC.create_parameter_control(paint_parameter, false)
+					control.name = paint_parameter.name
+					if control is CheckBox:
+						control.text = p.label
+					parameters.add_child(control)
+					controls[paint_parameter.name] = control
+				else:
+					var label : Label = Label.new()
+					label.text = p.label if p.has("label") else ""
+					label.size_flags_horizontal = SIZE_EXPAND_FILL
+					parameters.add_child(label)
+			else:
+				p.add_child(Control.new())
 			var control = GENERIC.create_parameter_control(p, false)
 			control.name = p.name
 			control.size_flags_horizontal = SIZE_FILL
 			parameters.add_child(control)
 			controls[p.name] = control
 		GENERIC.initialize_controls_from_generator(controls, generator, self)
+	set_size(get_size()-Vector2(1.0, 1.0))
+	set_size(get_size())
 
 func on_parameter_changed(p : String, v) -> void:
 	if ignore_parameter_change == p:

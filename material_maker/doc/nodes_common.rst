@@ -72,6 +72,11 @@ Parameters are used to configure nodes. The following types are supported:
   Randomness can be added to any node by using the *$rnd(min, max)* function,
   that will generate a random number between *min* and *max*. The node's seed
   can then be modified, copied or locked using the die button.
+
+  Right clicking a float parameter field will show an expression editor, that
+  checks the syntax of the expression. Whenever the expression is incorrect,
+  the Apply and OK buttons will be disabled. You can still use the Enter key
+  to apply the changes if necessary.
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations
   such as convolutions. They are shown as drop down list boxes.

@@ -4,3 +4,5 @@
 
 [resource]
 shader = ExtResource( 1 )
+shader_param/near = null
+shader_param/far = null

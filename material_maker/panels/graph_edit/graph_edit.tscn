@@ -49,7 +49,6 @@ theme = SubResource( 1 )
 custom_styles/bg = SubResource( 2 )
 right_disconnects = true
 use_snap = false
-minimap_enabled = false
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -62,7 +61,7 @@ one_shot = true
 [node name="GraphUI" type="HBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -294.0
+margin_left = -698.0
 margin_top = 11.0
 margin_bottom = 24.0
 alignment = 2
@@ -71,7 +70,8 @@ __meta__ = {
 }
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
-margin_right = 246.0
+margin_left = 402.0
+margin_right = 648.0
 margin_bottom = 24.0
 size_flags_horizontal = 9
 
@@ -104,15 +104,15 @@ size_flags_horizontal = 9
 icon = SubResource( 4 )
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
-margin_left = 250.0
-margin_right = 278.0
+margin_left = 652.0
+margin_right = 680.0
 margin_bottom = 24.0
 hint_tooltip = "Show hierarchy"
 icon = SubResource( 5 )
 
 [node name="Control" type="Control" parent="GraphUI"]
-margin_left = 282.0
-margin_right = 296.0
+margin_left = 684.0
+margin_right = 698.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 14, 0 )
 

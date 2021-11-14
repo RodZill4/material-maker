@@ -65,6 +65,32 @@ func get_items(filter : String, disabled_sections : Array, aliased_items : Array
 				array.push_back({ name=i.tree_item, item=i, icon=library_icons[i.tree_item] })
 	return array
 
+func generate_node_sections(node_sections : Dictionary) -> void:
+	for i in library_items:
+		var section = i.tree_item
+		var slash_position = section.find("/")
+		if slash_position != -1:
+			section = i.tree_item.left(slash_position)
+		if !i.has("type"):
+			continue
+		var node_name = ""
+		if mm_loader.predefined_generators.has(i.type):
+			node_name = i.type
+			i = mm_loader.predefined_generators[i.type]
+		elif i.has("shader_model"):
+			if i.shader_model.has("name"):
+				node_name = i.shader_model.name
+		elif i.has("label"):
+			node_name = i.label
+		elif i.has("type"):
+			node_name = i.type
+		if node_name != "":
+			if not node_sections.has(node_name):
+				node_sections[node_name] = section
+#			else:
+#				print(node_name+" already defined in "+section)
+
+
 func get_sections() -> Array:
 	var sections : Array = Array()
 	for i in library_items:

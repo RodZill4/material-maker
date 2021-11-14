@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
@@ -21,6 +21,23 @@ background_sky = SubResource( 2 )
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = SubResource( 4 )
+
+[sub_resource type="InputEventKey" id=22]
+pressed = true
+scancode = 69
+
+[sub_resource type="ShortCut" id=23]
+shortcut = SubResource( 22 )
+
+[sub_resource type="AtlasTexture" id=32]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 64, 224, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=33]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 96, 224, 32, 32 )
 
 [sub_resource type="InputEventKey" id=6]
 pressed = true
@@ -90,26 +107,19 @@ flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 224, 224, 32, 32 )
 
-[sub_resource type="InputEventKey" id=22]
-pressed = true
-scancode = 16777248
-
-[sub_resource type="ShortCut" id=23]
-shortcut = SubResource( 22 )
-
 [sub_resource type="AtlasTexture" id=24]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 128, 192, 32, 32 )
+region = Rect2( 192, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 160, 192, 32, 32 )
+region = Rect2( 224, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=26]
 pressed = true
-scancode = 69
+scancode = 16777248
 
 [sub_resource type="ShortCut" id=27]
 shortcut = SubResource( 26 )
@@ -117,16 +127,42 @@ shortcut = SubResource( 26 )
 [sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 192, 192, 32, 32 )
+region = Rect2( 128, 192, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 224, 192, 32, 32 )
+region = Rect2( 160, 192, 32, 32 )
 
-[node name="MaterialSpray" type="VBoxContainer" groups=[
-"preview",
-]]
+[sub_resource type="Shader" id=30]
+code = "shader_type canvas_item;
+
+uniform sampler2D tex;
+uniform vec2 preview_2d_size;
+uniform float preview_2d_scale = 1.0;
+uniform vec2 preview_2d_center = vec2(0.5);
+
+void fragment() {
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+		COLOR = vec4(0.0);
+	} else {
+		vec4 image = texture(tex, uv);
+		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+		COLOR = vec4(image_with_background, 1.0);
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id=31]
+shader = SubResource( 30 )
+shader_param/preview_2d_size = null
+shader_param/preview_2d_scale = 1.0
+shader_param/preview_2d_center = Vector2( 0.5, 0.5 )
+
+[node name="MaterialSpray" type="VBoxContainer" groups=["preview"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -148,11 +184,18 @@ margin_bottom = 720.0
 size_flags_vertical = 3
 split_offset = 480
 
-[node name="Painter" type="Control" parent="VSplitContainer"]
+[node name="HSplitContainer" type="HSplitContainer" parent="VSplitContainer"]
 margin_right = 1280.0
 margin_bottom = 480.0
+rect_clip_content = true
+split_offset = 800
 
-[node name="View" type="ViewportContainer" parent="VSplitContainer/Painter"]
+[node name="Painter" type="Control" parent="VSplitContainer/HSplitContainer"]
+margin_right = 800.0
+margin_bottom = 480.0
+rect_clip_content = true
+
+[node name="View" type="ViewportContainer" parent="VSplitContainer/HSplitContainer/Painter"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 focus_mode = 1
@@ -164,31 +207,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MainView" type="Viewport" parent="VSplitContainer/Painter/View"]
-size = Vector2( 1280, 480 )
+[node name="MainView" type="Viewport" parent="VSplitContainer/HSplitContainer/Painter/View"]
+size = Vector2( 800, 480 )
 own_world = true
 world = SubResource( 1 )
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="CameraPosition" type="Spatial" parent="VSplitContainer/Painter/View/MainView"]
+[node name="CameraPosition" type="Spatial" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
 
-[node name="CameraRotation1" type="Spatial" parent="VSplitContainer/Painter/View/MainView/CameraPosition"]
+[node name="CameraRotation1" type="Spatial" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition"]
 
-[node name="CameraRotation2" type="Spatial" parent="VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1"]
+[node name="CameraRotation2" type="Spatial" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1"]
 
-[node name="Camera" type="Camera" parent="VSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2"]
+[node name="Camera" type="Camera" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
 environment = SubResource( 3 )
 current = true
 near = 1.0
 far = 4.0
 
-[node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/Painter/View/MainView"]
+[node name="PaintedMesh" type="MeshInstance" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
 
-[node name="Sun" type="DirectionalLight" parent="VSplitContainer/Painter/View/MainView"]
+[node name="Sun" type="DirectionalLight" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
 
-[node name="BrushView" type="ColorRect" parent="VSplitContainer/Painter"]
+[node name="BrushView" type="ColorRect" parent="VSplitContainer/HSplitContainer/Painter"]
 visible = false
 material = SubResource( 5 )
 anchor_right = 1.0
@@ -198,15 +241,35 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Tools" type="HBoxContainer" parent="VSplitContainer/Painter"]
+[node name="Tools" type="HBoxContainer" parent="VSplitContainer/HSplitContainer/Painter"]
+margin_left = 2.0
+margin_top = 2.0
 margin_right = 194.0
 margin_bottom = 32.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FreeDots" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
+[node name="Engine" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
 margin_right = 32.0
+margin_bottom = 32.0
+hint_tooltip = "View space paint engine"
+toggle_mode = true
+shortcut_in_tooltip = false
+shortcut = SubResource( 23 )
+texture_normal = SubResource( 32 )
+texture_pressed = SubResource( 33 )
+
+[node name="Space1" type="Control" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 32.0
+margin_right = 36.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 4, 0 )
+
+[node name="FreeDots" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 36.0
+margin_right = 68.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Freehand (F1)"
@@ -219,9 +282,9 @@ shortcut = SubResource( 7 )
 texture_normal = SubResource( 8 )
 texture_pressed = SubResource( 9 )
 
-[node name="FreeLine" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 36.0
-margin_right = 68.0
+[node name="FreeLine" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 68.0
+margin_right = 100.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Freehand line (F2)"
@@ -233,9 +296,9 @@ shortcut = SubResource( 11 )
 texture_normal = SubResource( 12 )
 texture_pressed = SubResource( 13 )
 
-[node name="Line" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 72.0
-margin_right = 104.0
+[node name="Line" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 100.0
+margin_right = 132.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Lines (F3)"
@@ -245,9 +308,9 @@ shortcut = SubResource( 15 )
 texture_normal = SubResource( 16 )
 texture_pressed = SubResource( 17 )
 
-[node name="Fill" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 108.0
-margin_right = 140.0
+[node name="Fill" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 132.0
+margin_right = 164.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 hint_tooltip = "Fill"
@@ -256,43 +319,41 @@ shortcut = SubResource( 19 )
 texture_normal = SubResource( 20 )
 texture_pressed = SubResource( 21 )
 
-[node name="Space1" type="Control" parent="VSplitContainer/Painter/Tools"]
-margin_left = 144.0
-margin_right = 149.0
+[node name="Space2" type="Control" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 164.0
+margin_right = 168.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 5, 0 )
+rect_min_size = Vector2( 4, 0 )
 
-[node name="ColorPicker" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-visible = false
-margin_left = 153.0
-margin_right = 185.0
+[node name="Eraser" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 168.0
+margin_right = 200.0
 margin_bottom = 32.0
-hint_tooltip = "Color Picker (F4)"
+hint_tooltip = "Toggle Eraser Mode (E)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 23 )
 texture_normal = SubResource( 24 )
 texture_pressed = SubResource( 25 )
 
-[node name="Space2" type="Control" parent="VSplitContainer/Painter/Tools"]
-visible = false
-margin_left = 153.0
-margin_right = 158.0
+[node name="Space3" type="Control" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 200.0
+margin_right = 204.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 5, 0 )
+rect_min_size = Vector2( 4, 0 )
 
-[node name="Eraser" type="TextureButton" parent="VSplitContainer/Painter/Tools"]
-margin_left = 153.0
-margin_right = 185.0
+[node name="ColorPicker" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 204.0
+margin_right = 236.0
 margin_bottom = 32.0
-hint_tooltip = "Toggler Eraser Mode (E)"
+hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 27 )
 texture_normal = SubResource( 28 )
 texture_pressed = SubResource( 29 )
 
-[node name="Options" type="PanelContainer" parent="VSplitContainer/Painter"]
+[node name="Options" type="PanelContainer" parent="VSplitContainer/HSplitContainer/Painter"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -175.0
@@ -301,7 +362,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Grid" type="GridContainer" parent="VSplitContainer/Painter/Options"]
+[node name="Grid" type="GridContainer" parent="VSplitContainer/HSplitContainer/Painter/Options"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 168.0
@@ -311,7 +372,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BrushSizeLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+[node name="BrushSizeLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
 margin_left = 16.0
 margin_top = 5.0
 margin_right = 83.0
@@ -319,7 +380,7 @@ margin_bottom = 19.0
 size_flags_horizontal = 4
 text = "Brush size"
 
-[node name="BrushSize" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushSize" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -332,14 +393,14 @@ max_value = 250.0
 step = 1.0
 float_only = true
 
-[node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+[node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
 margin_top = 33.0
 margin_right = 99.0
 margin_bottom = 47.0
 size_flags_horizontal = 4
 text = "Brush hardness"
 
-[node name="BrushHardness" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushHardness" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -352,7 +413,7 @@ value = 1.0
 step = 0.01
 float_only = true
 
-[node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+[node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
 margin_left = 6.0
 margin_top = 61.0
 margin_right = 93.0
@@ -360,7 +421,7 @@ margin_bottom = 75.0
 size_flags_horizontal = 4
 text = "Brush opacity"
 
-[node name="BrushOpacity" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushOpacity" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -373,7 +434,7 @@ value = 1.0
 step = 0.01
 float_only = true
 
-[node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/Painter/Options/Grid"]
+[node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
 margin_left = 5.0
 margin_top = 89.0
 margin_right = 94.0
@@ -381,7 +442,7 @@ margin_bottom = 103.0
 size_flags_horizontal = 4
 text = "Brush spacing"
 
-[node name="BrushSpacing" parent="VSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushSpacing" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -396,7 +457,7 @@ max_value = 250.0
 step = 1.0
 float_only = true
 
-[node name="OptionsButton" type="Button" parent="VSplitContainer/Painter"]
+[node name="OptionsButton" type="Button" parent="VSplitContainer/HSplitContainer/Painter"]
 anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -20.0
@@ -408,7 +469,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Debug" type="Control" parent="VSplitContainer/Painter"]
+[node name="Debug" type="Control" parent="VSplitContainer/HSplitContainer/Painter"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -416,7 +478,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Texture1" type="TextureRect" parent="VSplitContainer/Painter/Debug"]
+[node name="Texture1" type="TextureRect" parent="VSplitContainer/HSplitContainer/Painter/Debug"]
 visible = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -430,7 +492,7 @@ rect_min_size = Vector2( 256, 256 )
 mouse_filter = 2
 expand = true
 
-[node name="Select1" type="OptionButton" parent="VSplitContainer/Painter/Debug"]
+[node name="Select1" type="OptionButton" parent="VSplitContainer/HSplitContainer/Painter/Debug"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -443,7 +505,7 @@ text = "None"
 items = [ "None", null, false, 0, null, "View to texture", null, false, 1, null, "Texture to view", null, false, 2, null, "Seams", null, false, 3, null, "Albedo (current layer)", null, false, 4, null, "Metallic/Roughness (current layer)", null, false, 5, null, "Emission (current layer)", null, false, 6, null, "Depth (current layer)", null, false, 7, null, "Albedo", null, false, 8, null, "Metallic", null, false, 9, null, "Roughness", null, false, 10, null, "Metallic/Roughness", null, false, 11, null, "Emission", null, false, 12, null, "Normal map", null, false, 13, null, "Depth", null, false, 14, null ]
 selected = 0
 
-[node name="Texture2" type="TextureRect" parent="VSplitContainer/Painter/Debug"]
+[node name="Texture2" type="TextureRect" parent="VSplitContainer/HSplitContainer/Painter/Debug"]
 visible = false
 anchor_left = 0.5
 anchor_top = 1.0
@@ -457,7 +519,7 @@ rect_min_size = Vector2( 256, 256 )
 mouse_filter = 2
 expand = true
 
-[node name="Select2" type="OptionButton" parent="VSplitContainer/Painter/Debug"]
+[node name="Select2" type="OptionButton" parent="VSplitContainer/HSplitContainer/Painter/Debug"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -469,6 +531,41 @@ size_flags_horizontal = 0
 text = "None"
 items = [ "None", null, false, 0, null, "View to texture", null, false, 1, null, "Texture to view", null, false, 2, null, "Seams", null, false, 3, null, "Albedo (current layer)", null, false, 4, null, "Metallic/Roughness (current layer)", null, false, 5, null, "Emission (current layer)", null, false, 6, null, "Depth (current layer)", null, false, 7, null, "Albedo", null, false, 8, null, "Metallic", null, false, 9, null, "Roughness", null, false, 10, null, "Metallic/Roughness", null, false, 11, null, "Emission", null, false, 12, null, "Normal map", null, false, 13, null, "Depth", null, false, 14, null ]
 selected = 0
+
+[node name="Painter2D" type="Control" parent="VSplitContainer/HSplitContainer"]
+margin_left = 812.0
+margin_right = 1280.0
+margin_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VSplitContainer/HSplitContainer/Painter2D"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChannelSelect" type="OptionButton" parent="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer"]
+margin_right = 468.0
+margin_bottom = 20.0
+
+[node name="Texture" type="ColorRect" parent="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer"]
+material = SubResource( 31 )
+margin_top = 24.0
+margin_right = 468.0
+margin_bottom = 480.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="BrushView" type="ColorRect" parent="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture"]
+visible = false
+material = SubResource( 5 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="GraphEdit" parent="VSplitContainer" instance=ExtResource( 17 )]
 anchor_right = 0.0
@@ -484,17 +581,23 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
-[connection signal="gui_input" from="VSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
-[connection signal="resized" from="VSplitContainer/Painter/View" to="." method="_on_resized"]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/FreeDots" to="." method="set_current_tool" binds= [ 0 ]]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/FreeLine" to="." method="set_current_tool" binds= [ 1 ]]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 2 ]]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
-[connection signal="pressed" from="VSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 4 ]]
-[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
-[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
-[connection signal="value_changed" from="VSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]
-[connection signal="pressed" from="VSplitContainer/Painter/OptionsButton" to="." method="_on_OptionsButton_pressed"]
-[connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
-[connection signal="item_selected" from="VSplitContainer/Painter/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
+[connection signal="gui_input" from="VSplitContainer/HSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
+[connection signal="mouse_entered" from="VSplitContainer/HSplitContainer/Painter/View" to="." method="_on_View_mouse_entered"]
+[connection signal="mouse_exited" from="VSplitContainer/HSplitContainer/Painter/View" to="." method="_on_View_mouse_exited"]
+[connection signal="resized" from="VSplitContainer/HSplitContainer/Painter/View" to="." method="_on_resized"]
+[connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Tools/Engine" to="." method="_on_Engine_toggled"]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/FreeDots" to="." method="set_current_tool" binds= [ 0 ]]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/FreeLine" to="." method="set_current_tool" binds= [ 1 ]]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 2 ]]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 4 ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
+[connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
+[connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/ChannelSelect" to="." method="_on_ChannelSelect_item_selected"]
+[connection signal="gui_input" from="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture" to="." method="_on_Texture_gui_input"]
+[connection signal="resized" from="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture" to="." method="_on_Texture_resized"]
 [connection signal="gui_input" from="VSplitContainer/GraphEdit" to="VSplitContainer/GraphEdit" method="_gui_input"]

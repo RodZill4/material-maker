@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://material_maker/tools/map_renderer/curvature_generator.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
@@ -24,6 +24,25 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 2 )
+
+[sub_resource type="Shader" id=24]
+code = "shader_type spatial;
+render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+
+varying vec3 p;
+
+void vertex() {
+	p = TANGENT;
+	VERTEX=vec3(UV, 0.5);
+}
+
+void fragment() {
+	ALBEDO = 0.5*normalize(p)+vec3(0.5);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=25]
+shader = SubResource( 24 )
 
 [sub_resource type="Shader" id=4]
 code = "shader_type spatial;
@@ -585,6 +604,7 @@ keep_3d_linear = true
 render_target_update_mode = 0
 script = ExtResource( 2 )
 mesh_normal_material = SubResource( 3 )
+mesh_tangent_material = SubResource( 25 )
 inv_uv_material = SubResource( 5 )
 white_material = SubResource( 7 )
 curvature_material = SubResource( 9 )

@@ -8,7 +8,8 @@ var filters : PoolStringArray = PoolStringArray()
 signal file_selected(f)
 
 func _ready() -> void:
-	connect("pressed", self, "_on_Control_pressed")
+	if ! is_connected("pressed", self, "_on_Control_pressed"):
+		connect("pressed", self, "_on_Control_pressed")
 
 func set_mode(m):
 	mode = m

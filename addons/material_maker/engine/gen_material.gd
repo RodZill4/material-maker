@@ -44,8 +44,8 @@ func get_type_name() -> String:
 		return shader_model.name
 	return "Material"
 
-func get_output_defs() -> Array:
-	return []
+func get_output_defs(show_hidden : bool = false) -> Array:
+	return .get_output_defs() if show_hidden else []
 
 func get_image_size() -> int:
 	var rv : int
@@ -73,8 +73,9 @@ func source_changed(input_index : int) -> void:
 func all_sources_changed() -> void:
 	update_preview()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	schedule_update_textures()
+	return true
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true
@@ -139,7 +140,6 @@ class CustomOptions:
 func process_shader(shader_text : String):
 	var custom_options = CustomOptions.new()
 	if shader_model.has("custom"):
-		print(shader_model.custom)
 		var custom_options_script = GDScript.new()
 		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
 		custom_options_script.reload()
@@ -479,7 +479,11 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				var result = render(self, f.output, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
-				result.save_to_file(file_name)
+				var is_greyscale : bool = false
+				if get_output_defs(true).size() > f.output:
+					var output : Dictionary = get_output_defs(true)[f.output]
+					is_greyscale = output.has("type") and output.type == "f"
+				result.save_to_file(file_name, is_greyscale)
 				result.release(self)
 			"template":
 				var file_export_context = export_context.duplicate()

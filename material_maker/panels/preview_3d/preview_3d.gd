@@ -7,7 +7,8 @@ const CAMERA_FOV_MAX = 90
 
 export var ui_path : String = "UI/Preview3DUI"
 
-onready var objects = $MaterialPreview/Preview3d/Objects
+onready var objects_pivot = $MaterialPreview/Preview3d/ObjectsPivot
+onready var objects = $MaterialPreview/Preview3d/ObjectsPivot/Objects
 onready var current_object = objects.get_child(0)
 
 onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
@@ -15,6 +16,7 @@ onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
 onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
+var trigger_on_right_click = true
 
 var moving = false
 
@@ -136,13 +138,16 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	var return_value : bool = false
 	var preview_material = current_object.get_surface_material(0)
 	for n in parameter_changes.keys():
 		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
 			if p.name == n:
+				return_value = true
 				preview_material.set_shader_param(n, parameter_changes[n])
 				break
+	return return_value
 
 func zoom(amount : float):
 	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
@@ -178,7 +183,14 @@ func on_gui_input(event) -> void:
 					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 					moving = false
+				if event.button_index == BUTTON_RIGHT:
+					if event.pressed:
+						trigger_on_right_click = true
+					elif trigger_on_right_click:
+						trigger_on_right_click = false
+						on_right_click()
 	elif moving and event is InputEventMouseMotion:
+		trigger_on_right_click = false
 		if event.pressure != 0.0:
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		var motion = event.relative
@@ -193,16 +205,18 @@ func on_gui_input(event) -> void:
 			var camera_basis = camera.global_transform.basis
 			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CONTROL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
 			if event.button_mask & BUTTON_MASK_LEFT:
-				objects.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
-				objects.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
+				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
+				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
 				if objects_rotation != 1:
 					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
 					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
 			elif event.button_mask & BUTTON_MASK_RIGHT:
-				objects.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
+				objects_pivot.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
 				if objects_rotation != 1:
 					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
+func on_right_click():
+	pass
 
 func generate_map(generate_function : String, size : int) -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()

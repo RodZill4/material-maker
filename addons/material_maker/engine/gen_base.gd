@@ -35,6 +35,7 @@ class OutputPort:
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
+var orig_name = null
 var parameters = {}
 
 var seed_locked : bool = false
@@ -70,7 +71,7 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
-func get_template_name() -> bool:
+func get_template_name() -> String:
 	return model
 
 func is_editable() -> bool:
@@ -82,12 +83,13 @@ func get_description() -> String:
 func has_randomness() -> bool:
 	return false
 
-func set_seed(s : float):
+func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
-		return
+		return false
 	seed_value = s
 	if is_inside_tree():
 		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	return true
 
 func reroll_seed():
 	set_seed(randf())
@@ -203,7 +205,7 @@ func all_sources_changed() -> void:
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func get_source(input_index : int) -> OutputPort:
@@ -263,18 +265,18 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader : String
+	var output_type = "rgba"
+	var outputs = get_output_defs(true)
+	if outputs.size() > output_index:
+		output_type = outputs[output_index].type
 	if preview:
-		var output_type = "rgba"
-		var outputs = get_output_defs()
-		if outputs.size() > output_index:
-			output_type = outputs[output_index].type
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, source.textures, size)
+	renderer = renderer.render_shader(object, shader, source.textures, size, output_type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer
