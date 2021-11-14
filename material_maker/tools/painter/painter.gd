@@ -43,13 +43,13 @@ var brush_textures : Dictionary = {}
 var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
 var mesh_normal_tex : ImageTexture = null
-
+var mesh_tangent_tex : ImageTexture = null
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
 # shader files
 var shader_files : Dictionary = {}
-const CACHE_SHADER_FILES : bool = true
+const CACHE_SHADER_FILES : bool = false
 
 
 signal painted()
@@ -88,6 +88,11 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
 	result = map_renderer.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_to_view_viewport.size.x)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if mesh_tangent_tex == null:
+		mesh_tangent_tex = ImageTexture.new()
+	result = map_renderer.gen(m, "mesh_tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_to_view_viewport.size.x)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	map_renderer.queue_free()
@@ -172,6 +177,7 @@ func update_view(c, t, s):
 	camera = c
 	transform = t
 	viewport_size = s
+	brush_params.view_vector = transform.basis.xform_inv(Vector3(0.0, 0.0, 1.0)).normalized()
 	update_tex2view()
 	update_brush()
 
@@ -270,6 +276,7 @@ func update_brush(update_shaders : bool = false):
 		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_param("mesh_aabb_size", mesh_aabb.size)
 		brush_preview_material.set_shader_param("mesh_normal_tex", mesh_normal_tex)
+		brush_preview_material.set_shader_param("mesh_tangent_tex", mesh_tangent_tex)
 		brush_preview_material.set_shader_param("layer_albedo_tex", get_albedo_texture())
 		brush_preview_material.set_shader_param("layer_mr_tex", get_mr_texture())
 		brush_preview_material.set_shader_param("layer_emission_tex", get_emission_texture())
@@ -294,7 +301,7 @@ func update_brush(update_shaders : bool = false):
 			var shader_text = get_shader_file(viewports[index].get_shader_prefix()+"_"+mode)
 			shader_text = preprocess_shader(shader_text)
 			update_shader(viewports[index].get_paint_material(), shader_text, get_output_code(index+1))
-			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
+			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
 			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for index in range(viewports.size()):
 		viewports[index].set_brush(brush_params)
