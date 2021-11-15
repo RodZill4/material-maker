@@ -8383,6 +8383,797 @@
 			"shortdesc": "",
 			"tree_item": "Effect/Flatten",
 			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "tex3d_scale",
+					"from_port": 0,
+					"to": "380_2",
+					"to_port": 0
+				},
+				{
+					"from": "tex3d_scale_2",
+					"from_port": 0,
+					"to": "380_3",
+					"to_port": 0
+				},
+				{
+					"from": "voronoi_0",
+					"from_port": 1,
+					"to": "tex3d_scale",
+					"to_port": 0
+				},
+				{
+					"from": "voronoi_0",
+					"from_port": 2,
+					"to": "tex3d_scale_2",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_0",
+					"from_port": 0,
+					"to": "blend_0",
+					"to_port": 0
+				},
+				{
+					"from": "colorize_1",
+					"from_port": 0,
+					"to": "normal_map_0",
+					"to_port": 0
+				},
+				{
+					"from": "normal_map_0",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 5
+				},
+				{
+					"from": "colorize_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 3
+				},
+				{
+					"from": "uniform_0",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 2
+				},
+				{
+					"from": "blend_0",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 1
+				},
+				{
+					"from": "380_3",
+					"from_port": 0,
+					"to": "blend_0",
+					"to_port": 1
+				},
+				{
+					"from": "380_2",
+					"from_port": 0,
+					"to": "colorize_0",
+					"to_port": 0
+				},
+				{
+					"from": "380_2",
+					"from_port": 0,
+					"to": "colorize_2",
+					"to_port": 0
+				},
+				{
+					"from": "380_2",
+					"from_port": 0,
+					"to": "colorize_1",
+					"to_port": 0
+				}
+			],
+			"icon_data": "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",
+			"label": "Graph",
+			"longdesc": "",
+			"name": "213",
+			"node_position": {
+				"x": 0,
+				"y": 0
+			},
+			"nodes": [
+				{
+					"name": "Brush",
+					"node_position": {
+						"x": 35,
+						"y": -5
+					},
+					"parameters": {
+						"has_albedo": true,
+						"has_ao": false,
+						"has_depth": false,
+						"has_emission": false,
+						"has_metallic": true,
+						"has_normal": true,
+						"has_roughness": true,
+						"mode": 2
+					},
+					"seed": -16698,
+					"seed_locked": false,
+					"type": "brush"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -280.149414,
+						"y": -179.830353
+					},
+					"parameters": {
+						"edge": 1,
+						"radius": 1,
+						"shape": 0,
+						"sides": 6
+					},
+					"seed": 54034,
+					"seed_locked": false,
+					"type": "shape"
+				},
+				{
+					"name": "5242",
+					"node_position": {
+						"x": -107.379578,
+						"y": -251.353516
+					},
+					"parameters": {
+						"param3": 1.67
+					},
+					"seed": 43283,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Scale",
+							"linked_widgets": [
+								{
+									"node": "tex3d_scale",
+									"widget": "s"
+								},
+								{
+									"node": "tex3d_scale_2",
+									"widget": "s"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "380_2",
+					"node_position": {
+						"x": -687.780396,
+						"y": 20.17971
+					},
+					"parameters": {
+
+					},
+					"seed": -57344,
+					"seed_locked": false,
+					"type": "brush_3d"
+				},
+				{
+					"name": "tex3d_scale",
+					"node_position": {
+						"x": -695.283691,
+						"y": -43.961624
+					},
+					"parameters": {
+						"s": 1.67
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "tex3d_scale"
+				},
+				{
+					"name": "tex3d_scale_2",
+					"node_position": {
+						"x": -693.87384,
+						"y": 92.675865
+					},
+					"parameters": {
+						"s": 1.67
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "tex3d_scale"
+				},
+				{
+					"name": "380_3",
+					"node_position": {
+						"x": -686.370544,
+						"y": 156.8172
+					},
+					"parameters": {
+
+					},
+					"seed": -57344,
+					"seed_locked": false,
+					"type": "brush_3d"
+				},
+				{
+					"name": "blend_0",
+					"node_position": {
+						"x": -362.322266,
+						"y": 39.113205
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 3
+					},
+					"seed": 48580,
+					"seed_locked": false,
+					"type": "blend"
+				},
+				{
+					"name": "colorize_2",
+					"node_position": {
+						"x": -374.322266,
+						"y": 173.113205
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0.109375,
+									"g": 0.109375,
+									"pos": 0.236364,
+									"r": 0.109375
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed": -13099,
+					"seed_locked": false,
+					"type": "colorize"
+				},
+				{
+					"name": "uniform_0",
+					"node_position": {
+						"x": -195.322266,
+						"y": 130.113205
+					},
+					"parameters": {
+						"color": {
+							"a": 1,
+							"b": 0.109375,
+							"g": 0.109375,
+							"r": 0.109375,
+							"type": "Color"
+						}
+					},
+					"seed": 28770,
+					"seed_locked": false,
+					"type": "uniform"
+				},
+				{
+					"name": "colorize_0",
+					"node_position": {
+						"x": -385.322266,
+						"y": -35.886795
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.063636,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.072727,
+									"r": 0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed": 35274,
+					"seed_locked": false,
+					"type": "colorize"
+				},
+				{
+					"name": "colorize_1",
+					"node_position": {
+						"x": -558.322266,
+						"y": 269.11322
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 0.054546,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0.127273,
+									"r": 1
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed": -37331,
+					"seed_locked": false,
+					"type": "colorize"
+				},
+				{
+					"name": "normal_map_0",
+					"node_position": {
+						"x": -328.322266,
+						"y": 262.11322
+					},
+					"parameters": {
+						"param0": 11,
+						"param1": 0.99,
+						"param2": 0,
+						"param4": 0
+					},
+					"seed": -39932,
+					"seed_locked": false,
+					"type": "normal_map"
+				},
+				{
+					"name": "voronoi_0",
+					"node_position": {
+						"x": -984.322266,
+						"y": -8.303471
+					},
+					"parameters": {
+						"intensity": 1,
+						"randomness": 1,
+						"scale_x": 8,
+						"scale_y": 8,
+						"scale_z": 8
+					},
+					"seed": 714,
+					"seed_locked": false,
+					"type": "tex3d_voronoi"
+				}
+			],
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shortdesc": "",
+			"tree_item": "Material/Mosaic",
+			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "shape_2",
+					"from_port": 0,
+					"to": "mirror",
+					"to_port": 0
+				},
+				{
+					"from": "mirror",
+					"from_port": 0,
+					"to": "translate",
+					"to_port": 0
+				},
+				{
+					"from": "colorize",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 1
+				},
+				{
+					"from": "rotate",
+					"from_port": 0,
+					"to": "colorize",
+					"to_port": 0
+				},
+				{
+					"from": "translate",
+					"from_port": 0,
+					"to": "rotate_2",
+					"to_port": 0
+				},
+				{
+					"from": "translate",
+					"from_port": 0,
+					"to": "math",
+					"to_port": 0
+				},
+				{
+					"from": "rotate_2",
+					"from_port": 0,
+					"to": "math",
+					"to_port": 1
+				},
+				{
+					"from": "math",
+					"from_port": 0,
+					"to": "mirror_2",
+					"to_port": 0
+				},
+				{
+					"from": "mirror_2",
+					"from_port": 0,
+					"to": "rotate",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 2
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 3
+				}
+			],
+			"icon_data": "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",
+			"label": "Graph",
+			"longdesc": "",
+			"name": "219",
+			"node_position": {
+				"x": 0,
+				"y": 0
+			},
+			"nodes": [
+				{
+					"name": "Brush",
+					"node_position": {
+						"x": 42.320503,
+						"y": -64.518204
+					},
+					"parameters": {
+						"has_albedo": true,
+						"has_ao": false,
+						"has_depth": false,
+						"has_emission": false,
+						"has_metallic": true,
+						"has_normal": false,
+						"has_roughness": true,
+						"mode": 0
+					},
+					"seed": -64413,
+					"seed_locked": false,
+					"type": "brush"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -274.5,
+						"y": -286.643066
+					},
+					"parameters": {
+						"edge": 1,
+						"radius": 1,
+						"shape": 0,
+						"sides": 6
+					},
+					"seed": 2358,
+					"seed_locked": false,
+					"type": "shape"
+				},
+				{
+					"name": "324",
+					"node_position": {
+						"x": 39,
+						"y": -471.478607
+					},
+					"parameters": {
+						"param0": true,
+						"param10": false,
+						"param2": true,
+						"param4": true,
+						"param6": false,
+						"param8": false
+					},
+					"seed": 36055,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Paint Albedo",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_albedo"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Metallic",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_metallic"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Roughness",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_roughness"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Emission",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_emission"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Occlusion",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_ao"
+								}
+							],
+							"name": "param8",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Depth",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_depth"
+								}
+							],
+							"name": "param10",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "shape_2",
+					"node_position": {
+						"x": -839.889954,
+						"y": -143.995911
+					},
+					"parameters": {
+						"edge": 0.47,
+						"radius": 0.64,
+						"shape": 0,
+						"sides": 6
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "shape"
+				},
+				{
+					"name": "mirror",
+					"node_position": {
+						"x": -848.889954,
+						"y": -10.995911
+					},
+					"parameters": {
+						"direction": 0,
+						"offset": -0.4
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "mirror"
+				},
+				{
+					"name": "translate",
+					"node_position": {
+						"x": -896.889954,
+						"y": 80.004089
+					},
+					"parameters": {
+						"translate_x": 0,
+						"translate_y": -0.27
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "translate"
+				},
+				{
+					"name": "colorize",
+					"node_position": {
+						"x": -159.889954,
+						"y": -40.995911
+					},
+					"parameters": {
+						"gradient": {
+							"interpolation": 1,
+							"points": [
+								{
+									"a": 0,
+									"b": 0.015686,
+									"g": 0.180392,
+									"pos": 0.054545,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0.008392,
+									"g": 0.097656,
+									"pos": 0.1,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0.027974,
+									"g": 0.325521,
+									"pos": 0.163636,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0.030212,
+									"g": 0.351563,
+									"pos": 0.536364,
+									"r": 0
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0.46875,
+									"pos": 1,
+									"r": 0.06958
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "colorize"
+				},
+				{
+					"name": "rotate",
+					"node_position": {
+						"x": -391.889954,
+						"y": -25.995911
+					},
+					"parameters": {
+						"cx": 0,
+						"cy": 0,
+						"rotate": "stroke_angle+90.0+90.0*sign(fract(968.1276*$time)-0.5) +60.0*(fract(978.1276*$time)-0.5)"
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "rotate"
+				},
+				{
+					"name": "rotate_2",
+					"node_position": {
+						"x": -892.389954,
+						"y": 164.004089
+					},
+					"parameters": {
+						"cx": 0,
+						"cy": 0,
+						"rotate": 49.28
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "rotate"
+				},
+				{
+					"name": "math",
+					"node_position": {
+						"x": -653.889954,
+						"y": 90.004089
+					},
+					"parameters": {
+						"clamp": false,
+						"default_in1": 0,
+						"default_in2": 0,
+						"op": 14
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "math"
+				},
+				{
+					"name": "mirror_2",
+					"node_position": {
+						"x": -623.889954,
+						"y": -4.995911
+					},
+					"parameters": {
+						"direction": 0,
+						"offset": 0
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "mirror"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -182.572632,
+						"y": 26.990265
+					},
+					"parameters": {
+						"color": 0
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -202.572632,
+						"y": 70.990234
+					},
+					"parameters": {
+						"color": 0.8
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "uniform_greyscale"
+				}
+			],
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shortdesc": "",
+			"tree_item": "Effect/Leaves",
+			"type": "graph"
 		}
 	],
 	"name": "Base library"
