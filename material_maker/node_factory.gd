@@ -22,7 +22,7 @@ func create_node(generator : MMGenBase) -> Node:
 
 func set_theme_overrides(node, generator : MMGenBase = null) -> void:
 	var theme : Theme = get_node("/root/MainWindow").theme
-	if node.theme != theme:
+	if node.theme != null && node.theme != theme:
 		return
 	if generator == null:
 		generator = node.generator
