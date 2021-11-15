@@ -1,5 +1,10 @@
 extends MMGraphNodeMinimal
 
+func _ready() -> void:
+	var theme : Theme = get_node("/root/MainWindow").theme
+	for stylebox in theme.get_stylebox_list("Reroute"):
+		add_stylebox_override(stylebox, theme.get_stylebox(stylebox, "Reroute"))
+
 func on_connections_changed():
 	var graph_edit = get_parent()
 	var color : Color = Color(1.0, 1.0, 1.0)
