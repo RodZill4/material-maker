@@ -65,6 +65,8 @@ func update_thumbnails() -> void:
 				image.save_png(cache_filename)
 			else:
 				continue
+		else:
+			yield(get_tree(), "idle_frame")
 		var texture : ImageTexture = ImageTexture.new()
 		texture.create_from_image(image)
 		$VBoxContainer/ItemList.set_item_icon(i, texture)
