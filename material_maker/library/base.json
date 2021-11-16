@@ -6308,6 +6308,17 @@
 			"seed_locked": false,
 			"tree_item": "Filter/Normal map/Convert",
 			"type": "normal_map_convert"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAVJJREFUeJztlltuhDAQBNvzgMBeK3fI/Y+xu+DJR9gcAFlqIboky/ADpRJY08ysIgKs5e60d0cEDDdHAdgCbBSALcBGAdgCbBSALcBGAdgCbBSALcBGAdgCbBSALcBGAdgCbBSALcBGAdgCbBSALcBGAdgCbBSALcBGAdgCbNp3/JRlok0TMCVaJjAlKgPIQKX/rx6GSkMPQ8+GHsfKhnJgP/aeQPeGnkA5UAH0zx5ARR33hYrPXoAXEB0WHeYFjx0RHek7MnZMvmOODbNv+PI3Zt+w+BuLb1j8idXeWP2F1V5Y7YmHPf/2dly3DQ/bsLTCoxkWS30B1wxQ4x51zQADUQC2wCnauEddM8BArhng9oegfoFxKABb4BS3PwMGogBsATYKwBZgc80AGoTGoQBsgVNoEBqHArAF2CgAW4DNNQNoEBqHArAFTnH7QUhnwDh+AQtyR2+DS7PCAAAAAElFTkSuQmCC",
+			"name": "colormap",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Colormap",
+			"type": "colormap"
 		}
 	],
 	"name": "Base library"
