@@ -7715,8 +7715,8 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": -190,
-						"y": 17
+						"x": -192,
+						"y": 55
 					},
 					"parameters": {
 						"has_albedo": false,
@@ -7735,19 +7735,18 @@
 				{
 					"name": "uniform_greyscale",
 					"node_position": {
-						"x": -421,
-						"y": 148
+						"x": -532,
+						"y": 265
 					},
 					"parameters": {
-						"x": 1,
-						"y": 1,
-						"z": -1
+						"angle_x": "$ax+$tilt*tilt.x",
+						"angle_y": "$ay+$tilt*tilt.y"
 					},
 					"seed": 0,
 					"seed_locked": false,
 					"shader_model": {
 						"code": "",
-						"global": "vec3 brush_flatten(vec2 uv, vec3 v) {\n\t//return texture(mesh_normal_tex, uv).rgb;\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(view_vector, mesh_tangent), dot(view_vector, mesh_bitangent), dot(view_vector, mesh_normal)));\n}\n",
+						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
 						"inputs": [
 
 						],
@@ -7757,7 +7756,7 @@
 						"outputs": [
 							{
 								"longdesc": "A uniform image of the selected value",
-								"rgb": "brush_flatten($uv, vec3($x, $y, $z))",
+								"rgb": "brush_flatten($uv, vec2($angle_x, $angle_y), vec3(1.0, 1.0, -1.0))",
 								"shortdesc": "Output",
 								"type": "rgb"
 							}
@@ -7765,31 +7764,21 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 1,
-								"label": "SX",
+								"default": 0,
+								"label": "Angle X",
 								"max": 1,
 								"min": -1,
-								"name": "x",
-								"step": 0.1,
+								"name": "angle_x",
+								"step": 0.01,
 								"type": "float"
 							},
 							{
 								"control": "None",
-								"default": 1,
-								"label": "SY",
+								"default": 0,
+								"label": "Angle Y",
 								"max": 1,
 								"min": -1,
-								"name": "y",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 1,
-								"label": "SZ",
-								"max": 1,
-								"min": -1,
-								"name": "z",
+								"name": "angle_y",
 								"step": 0.01,
 								"type": "float"
 							}
@@ -7800,8 +7789,8 @@
 				{
 					"name": "normal_map2",
 					"node_position": {
-						"x": -614,
-						"y": 115
+						"x": -762,
+						"y": 220
 					},
 					"parameters": {
 						"buffer": 0,
@@ -7816,8 +7805,8 @@
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -767.875,
-						"y": 117.75
+						"x": -760.875,
+						"y": 79.75
 					},
 					"parameters": {
 						"edge": 0.49,
@@ -7832,8 +7821,8 @@
 				{
 					"name": "uniform",
 					"node_position": {
-						"x": -392.172485,
-						"y": 36.684998
+						"x": -407.172485,
+						"y": -12.315002
 					},
 					"parameters": {
 						"color": {
@@ -7847,6 +7836,130 @@
 					"seed": 0,
 					"seed_locked": false,
 					"type": "uniform"
+				},
+				{
+					"name": "1205",
+					"node_position": {
+						"x": -259.809509,
+						"y": -98
+					},
+					"parameters": {
+						"ax": 0,
+						"ay": 0,
+						"tilt": 1
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"default": 0,
+							"label": "Angle X",
+							"max": 1,
+							"min": -1,
+							"name": "ax",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0,
+							"label": "Angle Y",
+							"max": 1,
+							"min": -1,
+							"name": "ay",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"default": 0.5,
+							"label": "Tilt",
+							"max": 1,
+							"min": 0,
+							"name": "tilt",
+							"step": 0.01,
+							"type": "named_parameter"
+						}
+					]
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -535.809509,
+						"y": 172
+					},
+					"parameters": {
+						"angle_x": "$ax-pressure*$tilt*cos(0.01745329251*stroke_angle)",
+						"angle_y": "$ay-pressure*$tilt*sin(0.01745329251*stroke_angle)"
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
+						"inputs": [
+
+						],
+						"instance": "",
+						"longdesc": "Draws a uniform greyscale image",
+						"name": "Flatten",
+						"outputs": [
+							{
+								"longdesc": "A uniform image of the selected value",
+								"rgb": "brush_flatten($uv, vec2($angle_x, $angle_y), vec3(1.0, 1.0, -1.0))",
+								"shortdesc": "Output",
+								"type": "rgb"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Angle X",
+								"max": 1,
+								"min": -1,
+								"name": "angle_x",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0,
+								"label": "Angle Y",
+								"max": 1,
+								"min": -1,
+								"name": "angle_y",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"color": {
+						"a": 1,
+						"b": 0,
+						"g": 0.5,
+						"r": 1,
+						"type": "Color"
+					},
+					"name": "comment",
+					"node_position": {
+						"x": -576.809509,
+						"y": 78
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"size": {
+						"x": 331,
+						"y": 177
+					},
+					"text": "This node shades depending on the stroke direction (draw clockwise circles to create bumps, ccw for holes).",
+					"title": "Comment",
+					"type": "comment"
 				}
 			],
 			"parameters": {

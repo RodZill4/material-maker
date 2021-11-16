@@ -177,7 +177,9 @@ func update_view(c, t, s):
 	camera = c
 	transform = t
 	viewport_size = s
-	brush_params.view_vector = transform.basis.xform_inv(Vector3(0.0, 0.0, 1.0)).normalized()
+	brush_params.view_back = transform.basis.xform_inv(Vector3(0.0, 0.0, 1.0)).normalized()
+	brush_params.view_right = transform.basis.xform_inv(Vector3(1.0, 0.0, 0.0)).normalized()
+	brush_params.view_up = transform.basis.xform_inv(Vector3(0.0, 1.0, 0.0)).normalized()
 	update_tex2view()
 	update_brush()
 

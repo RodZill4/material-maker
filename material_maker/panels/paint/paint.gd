@@ -319,6 +319,8 @@ func get_pressure(event : InputEventMouse) -> float:
 				last_pressure = 1.0
 	return last_pressure
 
+var last_tilt : Vector2 = Vector2(0, 0)
+
 # UI input for 3D view_3d
 
 const PAINTING_MODE_VIEW = 0
@@ -378,7 +380,8 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
 				painter.update_brush()
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-				paint(mouse_position, get_pressure(ev), painting_mode)
+				paint(mouse_position, get_pressure(ev), ev.tilt, painting_mode)
+				last_tilt = ev.tilt
 			elif ev.relative.length_squared() > 50:
 				get_pressure(ev)
 		else:
@@ -401,7 +404,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 						painter.set_brush_angle(angle)
 					else:
 						last_painted_position = mouse_position+Vector2(brush_spacing_control.value, brush_spacing_control.value)
-					paint(mouse_position, get_pressure(ev), painting_mode)
+					paint(mouse_position, get_pressure(ev), last_tilt, painting_mode)
 					reset_stroke()
 
 func _on_View_gui_input(ev : InputEvent):
@@ -575,7 +578,7 @@ func reset_stroke() -> void:
 	stroke_length = 0.0
 	previous_position = null
 
-func paint(pos, pressure = 1.0, painting_mode : int = PAINTING_MODE_VIEW):
+func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW):
 	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
 		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
@@ -583,13 +586,13 @@ func paint(pos, pressure = 1.0, painting_mode : int = PAINTING_MODE_VIEW):
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, painting_mode)
+	do_paint(pos, pressure, tilt, painting_mode)
 	last_painted_position = pos
 
 var next_paint_to = null
 var next_pressure = null
 
-func do_paint(pos, pressure = 1.0, painting_mode : int = PAINTING_MODE_VIEW):
+func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW):
 	if painting:
 		# if not available for painting, record a paint order
 		next_paint_to = pos
@@ -607,6 +610,7 @@ func do_paint(pos, pressure = 1.0, painting_mode : int = PAINTING_MODE_VIEW):
 		stroke_angle=stroke_angle,
 		erase=eraser_button.pressed,
 		pressure=pressure,
+		tilt=tilt,
 		fill=false
 	}
 	match painting_mode:
@@ -631,7 +635,7 @@ func do_paint(pos, pressure = 1.0, painting_mode : int = PAINTING_MODE_VIEW):
 	if next_paint_to != null:
 		pos = next_paint_to
 		next_paint_to = null
-		paint(pos, next_pressure, painting_mode)
+		paint(pos, next_pressure, tilt, painting_mode)
 
 func update_view():
 	var mesh_instance = painted_mesh

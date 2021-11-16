@@ -16,12 +16,15 @@ uniform sampler2D layer_albedo_tex;
 uniform sampler2D layer_mr_tex;
 uniform sampler2D layer_emission_tex;
 uniform sampler2D layer_depth_tex;
-uniform vec3      view_vector;
+uniform vec3      view_back;
+uniform vec3      view_right;
+uniform vec3      view_up;
 
 uniform bool      erase             = false;
 uniform bool      fill              = false;
 uniform bool      reset             = false;
 uniform float     pressure          = 1.0;
+uniform vec2      tilt              = vec2(0.0, 0.0);
 uniform vec2      brush_pos         = vec2(0.5, 0.5);
 uniform vec2      brush_ppos        = vec2(0.5, 0.5);
 uniform float     brush_size        = 0.5;
