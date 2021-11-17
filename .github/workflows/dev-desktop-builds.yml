@@ -98,9 +98,9 @@ jobs:
         run: mkdir -v -p ./build/mac
       - name: Mac Build 🔧
         run: |
-          chown runner ./Godot
-          chmod +x ./Godot
-          ./Godot -v --export "Mac OSX" ./build/mac/material_maker.zip
+          chown runner bin/godot
+          chmod +x bin/godot
+          bin/godot -v --export "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
