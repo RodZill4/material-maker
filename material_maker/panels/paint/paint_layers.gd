@@ -133,6 +133,10 @@ func select_layer(layer : Layer) -> void:
 	selected_layer = layer
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	_on_layers_changed()
 
 func get_unused_layer_name(layers_array : Array) -> String:

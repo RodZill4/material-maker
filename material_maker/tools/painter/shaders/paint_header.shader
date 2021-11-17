@@ -20,7 +20,6 @@ uniform vec3      view_back;
 uniform vec3      view_right;
 uniform vec3      view_up;
 
-uniform bool      erase             = false;
 uniform bool      fill              = false;
 uniform bool      reset             = false;
 uniform float     pressure          = 1.0;
@@ -31,6 +30,5 @@ uniform float     brush_size        = 0.5;
 uniform float     brush_hardness    = 0.5;
 uniform float     stroke_length     = 0.0;
 uniform float     stroke_angle      = 0.0;
-uniform float     brush_opacity     = 1.0;
 uniform float     pattern_scale     = 10.0;
 uniform float     pattern_angle     = 0.0;

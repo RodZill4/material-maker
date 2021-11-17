@@ -11,12 +11,10 @@ void fragment() {
 	a *= color.a;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
-	if (erase) {
-		COLOR = vec4(screen_color.xyz, max(screen_color.a-a, 0.0));
-	} else if (reset) {
+	if (reset) {
 		COLOR = vec4(color.xyz, a);
 	} else {
-		float alpha_sum = min(1.0, a + screen_color.a);
+		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
 		COLOR = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
 	}
 }

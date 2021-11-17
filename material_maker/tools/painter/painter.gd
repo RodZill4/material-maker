@@ -224,8 +224,10 @@ func get_shader_file(file_name : String) -> String:
 		shader_text = shader_files[file_name]
 	else:
 		var file = File.new()
-		file.open("res://material_maker/tools/painter/shaders/"+file_name+".shader", File.READ)
-		shader_text = file.get_as_text()
+		if file.open("res://material_maker/tools/painter/shaders/"+file_name+".shader", File.READ) == OK:
+			shader_text = file.get_as_text()
+		else:
+			print("Cannot open %s.shader" % file_name)
 		shader_files[file_name] = shader_text
 	return shader_text
 
@@ -365,25 +367,29 @@ func update_brush_params(shader_params : Dictionary) -> void:
 		if brush_preview_material != null:
 			brush_preview_material.set_shader_param(p, brush_params[p])
 
-func paint(shader_params : Dictionary) -> void:
+func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
 	if has_albedo:
-		albedo_viewport.do_paint(shader_params)
+		albedo_viewport.do_paint(shader_params, end_of_stroke)
 	if has_mr:
-		mr_viewport.do_paint(shader_params)
+		mr_viewport.do_paint(shader_params, end_of_stroke)
 	if has_emission:
-		emission_viewport.do_paint(shader_params)
+		emission_viewport.do_paint(shader_params, end_of_stroke)
 	if has_normal:
-		normal_viewport.do_paint(shader_params)
+		normal_viewport.do_paint(shader_params, end_of_stroke)
 	if has_do:
-		do_viewport.do_paint(shader_params)
+		do_viewport.do_paint(shader_params, end_of_stroke)
 	if has_mask:
-		mask_viewport.do_paint(shader_params)
+		mask_viewport.do_paint(shader_params, end_of_stroke)
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")
 
 func fill(erase : bool, reset : bool = false) -> void:
-	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset })
+	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true)
 
 func view_to_texture(position : Vector2) -> Vector2:
 	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()

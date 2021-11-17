@@ -404,7 +404,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 						painter.set_brush_angle(angle)
 					else:
 						last_painted_position = mouse_position+Vector2(brush_spacing_control.value, brush_spacing_control.value)
-					paint(mouse_position, get_pressure(ev), last_tilt, painting_mode)
+					paint(mouse_position, get_pressure(ev), last_tilt, painting_mode, true)
 					reset_stroke()
 
 func _on_View_gui_input(ev : InputEvent):
@@ -578,22 +578,22 @@ func reset_stroke() -> void:
 	stroke_length = 0.0
 	previous_position = null
 
-func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW):
+func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
 	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
 		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-		if (pos-last_painted_position).length() < brush_spacing_control.value:
+		if ! end_of_stroke and (pos-last_painted_position).length() < brush_spacing_control.value:
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode)
+	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke)
 	last_painted_position = pos
 
 var next_paint_to = null
 var next_pressure = null
 
-func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW):
-	if painting:
+func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
+	if !end_of_stroke and painting:
 		# if not available for painting, record a paint order
 		next_paint_to = pos
 		next_pressure = pressure
@@ -625,7 +625,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 			paint_options.rect_size = view_2d.rect_size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	painter.paint(paint_options)
+	painter.paint(paint_options, end_of_stroke)
 	previous_position = pos
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
@@ -635,7 +635,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 	if next_paint_to != null:
 		pos = next_paint_to
 		next_paint_to = null
-		paint(pos, next_pressure, tilt, painting_mode)
+		paint(pos, next_pressure, tilt, painting_mode, end_of_stroke)
 
 func update_view():
 	var mesh_instance = painted_mesh
