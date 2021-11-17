@@ -102,4 +102,6 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[connection signal="resized" from="." to="." method="_on_Control_resized"]
 [connection signal="item_selected" from="Interpolation" to="." method="_on_Interpolation_item_selected"]

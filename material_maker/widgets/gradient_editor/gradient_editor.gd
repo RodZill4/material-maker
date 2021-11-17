@@ -182,3 +182,7 @@ func update_shader() -> void:
 func _on_Interpolation_item_selected(ID) -> void:
 	value.interpolation = ID
 	update_shader()
+
+func _on_Control_resized():
+	if value != null:
+		set_value(value)
