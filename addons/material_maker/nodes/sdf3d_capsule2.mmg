@@ -1,0 +1,89 @@
+{
+	"name": "sdf3d_capsule2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"axis": 1,
+		"l": 0.3,
+		"r": 0.2
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);\n",
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "3:",
+				"longdesc": "An input gradient (generated, for example by a Tonality node) that defines a profile for the shape",
+				"name": "profile",
+				"shortdesc": "Profile",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates a capsule as a signed distance functioni",
+		"name": "Capsule",
+		"outputs": [
+			{
+				"longdesc": "Shows the capsule",
+				"sdf3d": "length($(name_uv)_p)-$r*$profile(vec2(clamp(0.5+0.5*($uv).$axis/$l, 0.0, 1.0), 0.5))",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "Axis",
+				"longdesc": "The axis of the capsule",
+				"name": "axis",
+				"shortdesc": "Axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "x"
+					},
+					{
+						"name": "Y",
+						"value": "y"
+					},
+					{
+						"name": "Z",
+						"value": "z"
+					}
+				]
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0.25,
+				"label": "Length",
+				"longdesc": "The length of the capsule",
+				"max": 1,
+				"min": 0,
+				"name": "l",
+				"shortdesc": "Length",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.x",
+				"default": 0.2,
+				"label": "Radius",
+				"longdesc": "The radius of the capsule",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "capsule"
+	},
+	"type": "shader"
+}

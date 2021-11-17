@@ -16,6 +16,13 @@ On Windows, you can also install Material Maker using [Scoop](https://scoop.sh):
 scoop bucket add extras
 scoop install material-maker
 ```
+... or [Chocolatey](https://chocolatey.org/) (default or portable install):
+```text
+choco install material-maker
+```
+```text
+choco install material-maker.portable
+```
 
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 
@@ -26,6 +33,12 @@ Can't wait for next release? Automated builds from master branch are available (
 ## Documentation
 
 - **[User manual](https://rodzill4.github.io/material-maker/doc/)**
+
+## Translations
+
+Translation files can be installed using the **Install** button in the **Preferences** dialog.
+
+- [Chinese translation](https://raw.githubusercontent.com/RodZill4/material-maker/f1be50b21a0f4991ac39e12a5362f5c5eb4c83a0/material_maker/locale/translations/zh.csv) (Created by **free_king**)
 
 ## Community
 

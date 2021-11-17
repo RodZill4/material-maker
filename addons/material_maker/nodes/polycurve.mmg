@@ -1,0 +1,137 @@
+{
+	"name": "polycurve",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"curve": {
+			"points": [
+				{
+					"x": 0.771812,
+					"y": 0.319911
+				},
+				{
+					"x": 0.838926,
+					"y": 0.550335
+				},
+				{
+					"x": 0.624161,
+					"y": 0.888143
+				},
+				{
+					"x": 0.288591,
+					"y": 0.856823
+				},
+				{
+					"x": 0.0783,
+					"y": 0.615213
+				},
+				{
+					"x": 0.114094,
+					"y": 0.346757
+				},
+				{
+					"x": 0.362416,
+					"y": 0.185682
+				}
+			],
+			"type": "Polygon"
+		},
+		"ends": true,
+		"repeat": 3,
+		"width": 0.2
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "vec2 curve(float t, vec2 a, vec2 b, vec2 c, vec2 d) {\n    vec2 bc = c-b;\n    vec2 da = a-d;\n    return (b+0.5*t*(bc+b-a+t*(a-b+bc+t*3.0*(bc*3.0+da+t*5.0/3.0*(-bc*3.0-da+t*0.4*(bc*3.0+da))))));\n}\n\nvec2 dcurve(float t, vec2 a, vec2 b, vec2 c, vec2 d) {\n\treturn (curve(t+0.0001, a, b, c, d)-curve(t, a, b, c, d))/0.0001;\n}\nvec2 solve_cubic(vec2 uv, vec2 a, vec2 b, vec2 c, vec2 d) {\n\tfloat t = 0.5;\n\tvec2 pos, dv;\n\tfloat current_sign = 0.0;\n\tfloat dt = 1.0;\n\tfor (int i = 0; i < 20; ++i) {\n\t\tpos = curve(t, a, b, c, d);\n\t\tdv = dcurve(t, a, b, c, d);\n\t\tfloat new_sign = sign(dot(normalize(uv - pos), dv));\n\t\tif (new_sign != current_sign) {\n\t\t\tcurrent_sign = new_sign;\n\t\t\tdt *= 0.5;\n\t\t}\n        t += dt*current_sign;\n\t}\n    t = clamp(t, 0.0, 1.0);\n\treturn vec2(t, length(uv-curve(t, a, b, c, d)));\n}\n",
+		"inputs": [
+			{
+				"default": "vec4(vec3(step(abs($uv.y-0.5), 0.4999)), 1.0)",
+				"label": "",
+				"longdesc": "Input pattern to be drawn along the curve",
+				"name": "in",
+				"shortdesc": "Pattern",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "A map that describes the width along the curve (use a Tonality node)",
+				"name": "width_map",
+				"shortdesc": "Width map",
+				"type": "f"
+			}
+		],
+		"instance": "vec2 bezier_uv_$name(vec2 uv, bool ends) {\t\n\tvec2 v[] = $curve;\n\tint l = v.length();\n\tvec2 best_bezier;\n\tif (ends) {\n\t\tbest_bezier = solve_cubic(uv, v[0], v[0], v[1], v[2]);\n\t} else {\n\t\tbest_bezier = vec2(0.0, 10000.0);\n\t}\n\tfloat offset = 0.0;\n\tint i;\n\tfor (i = 0; i < l-3; i++) {\n\t\tvec2 bezier = solve_cubic(uv, v[i], v[i+1], v[i+2], v[i+3]);\n\t\tif (abs(bezier.y) < abs(best_bezier).y) {\n\t\t\tbest_bezier = bezier;\n\t\t\toffset = float(i)+1.0;\n\t\t}\n\t}\n\tfloat width;\n\tif (ends) {\n\t\tvec2 bezier = solve_cubic(uv, v[i], v[i+1], v[i+2], v[i+2]);\n\t\tif (abs(bezier.y) < abs(best_bezier).y) {\n\t\t\tbest_bezier = bezier;\n\t\t\toffset = float(i)+1.0;\n\t\t}\n\t\twidth = $width*$width_map(vec2((best_bezier.x+offset)/float(l-1), 0.0));\n\t} else {\n\t\twidth = $width*$width_map(vec2((best_bezier.x+offset-1.0)/float(l-3), 0.0));\n\t}\n\tvec2 local_uv = vec2(best_bezier.x, best_bezier.y/width+0.5);\n\tvec2 uvtest = step(vec2(0.5), abs(local_uv-vec2(0.5)));\n\treturn mix(vec2(fract($repeat*local_uv.x), local_uv.y), vec2(0.0), max(uvtest.x, uvtest.y));\n}",
+		"name": "PolyCurve",
+		"outputs": [
+			{
+				"longdesc": "An image showing the specified curve",
+				"rgba": "$in(bezier_uv_$name($uv, $ends))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [
+						{
+							"x": 0.2,
+							"y": 0.2
+						},
+						{
+							"x": 0.7,
+							"y": 0.4
+						},
+						{
+							"x": 0.4,
+							"y": 0.7
+						}
+					],
+					"type": "Polygon"
+				},
+				"label": "",
+				"name": "curve",
+				"type": "polyline"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Width",
+				"longdesc": "Width of the curve pattern",
+				"max": 0.5,
+				"min": 0,
+				"name": "width",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"longdesc": "Number of repetitions of the input pattern",
+				"max": 16,
+				"min": 1,
+				"name": "repeat",
+				"shortdesc": "Repeat",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Ends",
+				"longdesc": "If unset, end vertices of the curve are used only for orientation",
+				"name": "ends",
+				"shortdesc": "Ends",
+				"type": "boolean"
+			}
+		]
+	},
+	"type": "shader"
+}

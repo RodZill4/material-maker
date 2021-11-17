@@ -36,3 +36,25 @@ func _on_OK_pressed():
 
 func _on_Cancel_pressed():
 	queue_free()
+
+
+func _on_VBoxContainer_minimum_size_changed():
+	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+
+
+func _on_InstallLanguage_pressed():
+	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.add_filter("*.po,*.translation,*.csv;Translation file")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		var locale = load("res://material_maker/locale/locale.gd").new()
+		locale.install_translation(files[0])
+		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
+		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
+		

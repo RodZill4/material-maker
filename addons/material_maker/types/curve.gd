@@ -65,7 +65,9 @@ func get_shader(name) -> String:
 	var shader
 	shader = "float "+name+"_curve_fct(float x) {\n"
 	for i in range(points.size()-1):
-		shader += "if (x <= p_"+name+"_"+str(i+1)+"_x) {\n"
+		if i < points.size()-2:
+			shader += "if (x <= p_"+name+"_"+str(i+1)+"_x) "
+		shader += "{\n"
 		shader += "float dx = x - p_"+name+"_"+str(i)+"_x;\n"
 		shader += "float d = p_"+name+"_"+str(i+1)+"_x - p_"+name+"_"+str(i)+"_x;\n"
 		shader += "float t = dx/d;\n"

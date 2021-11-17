@@ -1,21 +1,4 @@
-shader_type canvas_item;
-
-uniform vec2      brush_pos       = vec2(0.5, 0.5);
-uniform vec2      brush_ppos      = vec2(0.5, 0.5);
-uniform vec2      brush_size      = vec2(0.25, 0.25);
-uniform float     brush_hardness  = 0.5;
-const float       brush_opacity   = 1.0;
-uniform float     stroke_length   = 0.0;
-uniform float     stroke_angle    = 0.0;
-uniform float     pattern_scale   = 10.0;
-uniform float     pattern_angle   = 0.0;
-uniform float     pressure        = 1.0;
-
-uniform sampler2D mesh_normal_tex;
-uniform sampler2D layer_albedo_tex;
-uniform sampler2D layer_mr_tex;
-uniform sampler2D layer_emission_tex;
-uniform sampler2D layer_depth_tex;
+#include brush_common_decl
 
 // BEGIN_PATTERN
 float brush_function(vec2 uv) {
@@ -32,9 +15,24 @@ float brush(vec2 uv) {
 }
 
 void fragment() {
-	vec2 b = brush_pos/brush_size;
-	vec2 bv = (brush_ppos-brush_pos)/brush_size;
-	vec2 p = UV/brush_size;
+	vec2 bs;
+	vec2 bp;
+	vec2 bpp;
+	vec2 p;
+	if (texture_space) {
+		float min_size = min(rect_size.x, rect_size.y);
+		bs = vec2(brush_size)/min_size;
+		bp = brush_pos/min_size;
+		bpp = brush_ppos/min_size;
+		p = texture(view2tex_tex, UV).xy/bs;
+	} else {
+		bs = vec2(brush_size)/rect_size;
+		bp = brush_pos/rect_size;
+		bpp = brush_ppos/rect_size;
+		p = UV/bs;
+	}
+	vec2 b = bp/bs;
+	vec2 bv = (bpp-bp)/bs;
 	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
 	vec2 local_uv = p-(b+x*bv);
 	vec2 local_uv2 = p-b-bv;

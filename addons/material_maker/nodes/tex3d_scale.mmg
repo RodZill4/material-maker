@@ -1,0 +1,53 @@
+{
+	"name": "tex3d_scale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"s": 1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "vec3 tex3d_rotate(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "A node that scales a 3D texture",
+		"name": "TEX3D Scale",
+		"outputs": [
+			{
+				"longdesc": "The scaled 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "$in(vec4($uv.xyz/max($s, 0.00001), $uv.w))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale",
+				"longdesc": "The scale of the 3D texture",
+				"max": 10,
+				"min": 0.1,
+				"name": "s",
+				"shortdesc": "Scale",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D Scale"
+	},
+	"type": "shader"
+}

@@ -12,6 +12,8 @@ var category_buttons = {}
 
 onready var tree : Tree = $Tree
 onready var filter_line_edit : LineEdit = $Filter/Filter
+onready var item_menu : PopupMenu = $ItemMenu
+#onready var dir_menu : PopupMenu = $DirMenu
 
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -130,7 +132,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			c = c.get_next()
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
-			new_item.set_text(0, item_name)
+			new_item.set_text(0, TranslationServer.translate(item_name))
 		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
 		new_item.set_icon(1, item_icon)
 		new_item.set_icon_max_width(1, 32)
@@ -139,7 +141,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			new_item.set_metadata(1, library_index)
 		return new_item
 	else:
-		var prefix = item_name.left(slash_position)
+		var prefix = TranslationServer.translate(item_name.left(slash_position))
 		var suffix = item_name.right(slash_position+1)
 		var new_parent = null
 		var c = item_parent.get_children()
@@ -150,7 +152,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 			c = c.get_next()
 		if new_parent == null:
 			new_parent = tree.create_item(item_parent)
-			new_parent.set_text(0, prefix)
+			new_parent.set_text(0, TranslationServer.translate(prefix))
 			new_parent.collapsed = !force_expand and expanded_items.find(get_item_path(new_parent)) == -1
 		return add_item(item, library_index, suffix, item_icon, new_parent, force_expand)
 
@@ -295,14 +297,15 @@ var current_item : TreeItem
 
 func _on_Tree_item_rmb_selected(position):
 	current_item = $Tree.get_item_at_position(position)
-	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
+	if current_item.get_metadata(1) != null:
+		item_menu.popup(Rect2(get_global_mouse_position(), item_menu.get_minimum_size()))
 
 func _on_PopupMenu_about_to_show():
 	var library_index : int = current_item.get_metadata(1)
 	var read_only : bool = library_manager.get_child(library_index).read_only
-	$PopupMenu.set_item_disabled(0, read_only)
-	$PopupMenu.set_item_disabled(1, read_only)
-	$PopupMenu.set_item_disabled(2, read_only)
+	item_menu.set_item_disabled(0, read_only)
+	item_menu.set_item_disabled(1, read_only)
+	item_menu.set_item_disabled(2, read_only)
 
 func _on_PopupMenu_index_pressed(index):
 	var library_index : int = current_item.get_metadata(1)
@@ -339,3 +342,7 @@ func _on_PopupMenu_index_pressed(index):
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)
+
+
+func update_from_locale() -> void:
+	update_tree()

@@ -29,7 +29,7 @@ onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
 onready var layout = $VBoxContainer/Layout
 var library
-var preview_2d
+var preview_2d : Array
 var histogram
 var preview_3d
 var hierarchy
@@ -98,15 +98,8 @@ const MENU = [
 	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
 	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Depth", command_parameter="depth_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="256x256", command_parameter=256, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="512x512", command_parameter=512, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
-	{ menu="Tools/Painting", submenu="environment", description="Set environment", mode="paint" },
+	{ menu="Tools", command="paint_project_settings", description="Paint project settings", mode="paint" },
+	{ menu="Tools", submenu="paint_environment", description="Set painting environment", mode="paint" },
 	{ menu="Tools" },
 	{ menu="Tools", command="environment_editor", description="Environment editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
@@ -120,6 +113,7 @@ const MENU = [
 ]
 
 const DEFAULT_CONFIG = {
+	locale = "",
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
@@ -142,6 +136,10 @@ func _ready() -> void:
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
+	
+	if get_config("locale") == "":
+		config_cache.set_value("config", "locale", TranslationServer.get_locale())
+	
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
@@ -186,7 +184,7 @@ func _ready() -> void:
 
 	layout.load_panels(config_cache)
 	library = get_panel("Library")
-	preview_2d = get_panel("Preview2D")
+	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
 	preview_3d.connect("need_update", self, "update_preview_3d")
@@ -222,6 +220,11 @@ func on_config_changed() -> void:
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+	# locale
+	var locale = get_config("locale")
+	if locale != "" and locale != TranslationServer.get_locale():
+		TranslationServer.set_locale(locale)
+		get_tree().call_group("updated_from_locale", "update_from_locale")
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -484,6 +487,7 @@ func create_menu_set_theme(menu) -> void:
 
 func set_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
+	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
@@ -847,7 +851,10 @@ func add_selection_to_library(index) -> void:
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
 	add_child(dialog)
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", library.get_selected_item_name())
+	var current_item_name = ""
+	if library.is_inside_tree():
+		current_item_name = library.get_selected_item_name()
+	var status = dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	if ! status.ok:
@@ -889,27 +896,17 @@ func add_brush_to_library(index) -> void:
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
-func toggle_paint_feature(channel : String, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.material_feature_is_checked(channel)
-	paint.check_material_feature(channel, value)
-	return value
+func paint_project_settings():
+	var dialog = load("res://material_maker/panels/paint/paint_project_settings.tscn").instance()
+	add_child(dialog)
+	dialog.edit_settings(get_current_project())
 
-func set_painting_texture_size(size : int, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.get_texture_size() == size
-	paint.set_texture_size(size)
-	return true
-
-
-func create_menu_environment(menu) -> void:
+func create_menu_paint_environment(menu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", self, "_on_Environment_id_pressed"):
-		menu.connect("id_pressed", self, "_on_Environment_id_pressed")
+	if !menu.is_connected("id_pressed", self, "_on_PaintEnvironment_id_pressed"):
+		menu.connect("id_pressed", self, "_on_PaintEnvironment_id_pressed")
 
-func _on_Environment_id_pressed(id) -> void:
+func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
 	if paint != null:
 		paint.set_environment(id)
@@ -996,19 +993,21 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 			return n
 	return null
 
-func update_preview_2d(node = null) -> void:
+func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
-		if node == null:
-			node = get_current_node(graph_edit)
-		if node != null:
-			preview_2d.set_generator(node.generator)
-			histogram.set_generator(node.generator)
-			preview_2d_background.set_generator(node.generator)
-		else:
-			preview_2d.set_generator(null)
-			histogram.set_generator(null)
-			preview_2d_background.set_generator(null)
+		for i in range(2):
+			var preview = graph_edit.get_current_preview(i)
+			if preview != null:
+				preview_2d[i].set_generator(preview.generator, preview.output_index)
+				if i == 0:
+					histogram.set_generator(preview.generator, preview.output_index)
+					preview_2d_background.set_generator(preview.generator, preview.output_index)
+			else:
+				preview_2d[i].set_generator(null)
+				if i == 0:
+					histogram.set_generator(null)
+					preview_2d_background.set_generator(null)
 
 func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1024,11 +1023,9 @@ func update_preview_3d(previews : Array, sequential = false) -> void:
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 
-var selected_node = null
-func on_selected_node_change(node) -> void:
-	if node != selected_node:
-		selected_node = node
-		update_preview_2d(node)
+func on_preview_changed(graph) -> void:
+	if graph == get_current_graph_edit():
+		update_preview_2d()
 
 func _on_Projects_tab_changed(_tab) -> void:
 	var project = get_current_project()
@@ -1054,8 +1051,8 @@ func _on_Projects_tab_changed(_tab) -> void:
 		current_tab = new_tab
 		if new_graph_edit != null:
 			new_graph_edit.connect("graph_changed", self, "update_preview")
-			if !new_graph_edit.is_connected("node_selected", self, "on_selected_node_change"):
-				new_graph_edit.connect("node_selected", self, "on_selected_node_change")
+			if !new_graph_edit.is_connected("preview_changed", self, "on_preview_changed"):
+				new_graph_edit.connect("preview_changed", self, "on_preview_changed")
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -1125,6 +1122,8 @@ func generate_graph_screenshot():
 		return
 	# Generate the image
 	var graph_edit : GraphEdit = get_current_graph_edit()
+	var minimap_save : bool = graph_edit.minimap_enabled
+	graph_edit.minimap_enabled = false
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
@@ -1162,6 +1161,7 @@ func generate_graph_screenshot():
 	graph_edit.scroll_offset = save_scroll_offset
 	graph_edit.zoom = save_zoom
 	image.save_png(files[0])
+	graph_edit.minimap_enabled = minimap_save
 
 # Handle dropped files
 

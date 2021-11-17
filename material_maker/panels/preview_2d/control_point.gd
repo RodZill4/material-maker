@@ -43,7 +43,7 @@ func _draw() -> void:
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	hide()
-	if is_instance_valid(generator):
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	generator = g
 	parameter_x = ""

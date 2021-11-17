@@ -1,6 +1,6 @@
 extends Node
 
-const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", null, "depth" ]
+const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth" ]
 
 func _ready():
 	var graph = MMGenGraph.new()

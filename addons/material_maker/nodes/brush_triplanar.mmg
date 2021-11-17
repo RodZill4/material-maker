@@ -1,0 +1,46 @@
+{
+	"name": "brush_triplanar",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"k": 32
+	},
+	"seed": -42850,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			}
+		],
+		"instance": "vec4 triplanar_$(name)(vec2 uv, float k) {\n\tvec3 p = mesh_aabb_position+texture(mesh_inv_uv_tex, uv).xyz*mesh_aabb_size;\n\tvec3 n = 2.0*(texture(mesh_normal_tex, uv).xyz-vec3(0.5));\n\n\t// project+fetch\n    vec4 x = $in(p.zy);\n    vec4 y = $in(p.zx);\n    vec4 z = $in(p.xy);\n\n    // blend factors\n    vec3 w = pow(abs(n), vec3(k));\n    // blend and return\n    return (x*w.x + y*w.y + z*w.z) / (w.x + w.y + w.z);\n}\n",
+		"name": "Triplanar Brush Map",
+		"outputs": [
+			{
+				"rgba": "triplanar_$(name)($uv, $k)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"max": 32,
+				"min": 0,
+				"name": "k",
+				"step": 0.1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

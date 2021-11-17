@@ -39,6 +39,8 @@ The **Tiler** node accepts the following parameters:
 * *RndRotate* is the maximum angle of the random rotation applied to each instance.
 * *RndScale* is the amount of random scaling applied to each instance.
 * *RndValue* is the amount of random value applied to each instance.
+* *Variations*: if checked, the node will tile different variations of its input
+  (i.e. roll a different seed for each instance)
 
 Example images
 ++++++++++++++

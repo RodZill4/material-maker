@@ -45,11 +45,10 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	button.icon = preload("res://material_maker/icons/up.tres")
 	button.hint_tooltip = "Move parameter up"
 	grid.add_child(button)
-	button.connect("pressed", generator, "move_parameter", [ control.name, -1 ])
 	if is_first:
 		button.disabled = true
 	else:
-		button.connect("pressed", generator, "move_parameter", [ control.name, 1 ])
+		button.connect("pressed", generator, "move_parameter", [ control.name, -1 ])
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/down.tres")
 	button.hint_tooltip = "Move parameter down"

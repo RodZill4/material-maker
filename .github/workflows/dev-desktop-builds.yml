@@ -7,16 +7,17 @@ on:
     branches: [ master ]
 
 env:
-  GODOT_VERSION: 3.3.2
+  GODOT_VERSION: 3.4
+  GODOT_VERSION_MAC: 3.4
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_96
+  MM_RELEASE: 0_97
 
 jobs:
-  generate_releases:
-    name: Generate releases 🗔
+  export_windows_linux:
+    name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:3.3.2
+      image: docker://barichello/godot-ci:3.4
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -34,12 +35,6 @@ jobs:
         run: godot -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: godot -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
-      - name: Mac OSX Build 🐧
-        run: godot -v --export "Mac OSX" ./build/${EXPORT_NAME}_${MM_RELEASE}_macosx.zip
-      - name: Unzip Mac OSX build 📁
-        run: |
-          cd build
-          unzip ${EXPORT_NAME}_${MM_RELEASE}_macosx.zip
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -56,19 +51,16 @@ jobs:
           cp -R ./material_maker/meshes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/misc/export ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/doc/_build/html ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/doc
-          cp -R ./addons/material_maker/nodes ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/environments ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/examples ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/library ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/meshes ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/misc/export ./build/material_maker.app/Contents/MacOS
-          cp -R ./material_maker/doc/_build/html ./build/material_maker.app/Contents/MacOS/doc
       - name: Create archives 📁
         run: |
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
-          zip -r ${EXPORT_NAME}_${MM_RELEASE}_macosx.zip material_maker.app
+      - name: Upload Documentation 🚀
+        uses: actions/upload-artifact@v2
+        with:
+          name: Documentation
+          path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
@@ -79,8 +71,61 @@ jobs:
         with:
           name: Linux snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+  export-mac:
+    name: Mac Export 🍎
+    needs: export_windows_linux
+    runs-on: macos-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup environment 🔧
+        run: |
+          export GODOT_VERSION=${GODOT_VERSION_MAC}
+          export EXPORT_NAME=material_maker
+      - name: Download and extract export templates 💾
+        run: |
+          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
+          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_MAC}/Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
+          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
+      - name: Download Godot headless binary 🤖
+        run: |
+          wget https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
+          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
+      - name: Setup 💻
+        run: mkdir -v -p ./build/mac
+      - name: Mac Build 🔧
+        run: |
+          chown runner bin/godot
+          chmod +x bin/godot
+          bin/godot -v --export "Mac OSX" ./build/mac/material_maker.zip
+      - name: Make application executable 🔧
+        run: |
+          unzip -a ./build/mac/material_maker.zip -d ./build/mac
+          chmod +x ./build/mac/material_maker.app/Contents/MacOS/material_maker
+          rm ./build/mac/material_maker.zip
+      - name: Fix application icon 🖼
+        run: sips -s format icns ./build/mac/material_maker.app/Contents/Resources/icon.icns --out ./build/mac/material_maker.app/Contents/Resources/icon.icns
+      - name: Get documentation 🚀
+        uses: actions/download-artifact@v2
+        with:
+          name: Documentation
+          path: doc
+      - name: Copy data folder 📁
+        run: |
+          cp -R ./addons/material_maker/nodes ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/environments ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/examples ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/library ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/meshes ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
+          cp -R ./doc ./build/mac/material_maker.app/Contents/MacOS/doc
+      - name: Create DMG archive 🔧
+        run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
           name: Mac OSX snapshot
-          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_macosx.zip
+          path: ./build/mac/material_maker.dmg

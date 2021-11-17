@@ -9,6 +9,7 @@
 code = "shader_type canvas_item;
 render_mode blend_add;
 
+uniform float factor = 0.5;
 
 varying float elapsed_time;
 
@@ -345,13 +346,14 @@ vec4 o6601_0_7_rgba = vec4(vec3(o6610_0_5_f), 1.0);
 vec4 o6602_0_1_rgba = o6601_0_7_rgba;
 vec4 o6603_0_1_rgba = vec4((dot((o6598_0_1_rgba).rgb, vec3(1.0))/3.0), (dot((o6601_0_4_rgba).rgb, vec3(1.0))/3.0), (dot((o6602_0_1_rgba).rgb, vec3(1.0))/3.0), 1.0);
 vec4 o6604_0_1_rgba = o6603_0_1_rgba;
-COLOR = 0.7*o6604_0_1_rgba;
+COLOR = factor*o6604_0_1_rgba;
 }
 "
 
 [sub_resource type="ShaderMaterial" id=2]
 render_priority = 10
 shader = SubResource( 1 )
+shader_param/factor = 0.2
 
 [sub_resource type="DynamicFont" id=3]
 size = 72

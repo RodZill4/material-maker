@@ -144,6 +144,7 @@ func select_file(i : int) -> void:
 				if template != f.template:
 					f.template = template
 				export_file_template.text = template
+				export_file_template.clear_undo_history()
 			"buffers":
 				export_file_type.select(2)
 
@@ -200,7 +201,8 @@ func _on_template_focus_exited():
 func set_model_data(data) -> void:
 	.set_model_data(data)
 	if data.has("preview_shader"):
-		$Sizer/Tabs/Preview.text = data.preview_shader
+		preview_editor.text = data.preview_shader
+		preview_editor.clear_undo_history()
 	if data.has("exports"):
 		exports = data.exports.duplicate(true)
 		update_export_list()
@@ -210,7 +212,7 @@ func set_model_data(data) -> void:
 
 func get_model_data() -> Dictionary:
 	var data = .get_model_data()
-	data.preview_shader = $Sizer/Tabs/Preview.text
+	data.preview_shader = preview_editor.text
 	data.exports = exports
 	data.custom = $Sizer/Tabs/Custom.text
 	return data

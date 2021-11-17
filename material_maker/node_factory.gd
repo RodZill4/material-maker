@@ -1,6 +1,11 @@
 extends Node
 
-func create_node(model : String, type : String) -> Node:
+var theme_overrides = {}
+var library_manager = null
+
+func create_node(generator : MMGenBase) -> Node:
+	var model = generator.get_template_name() if generator.is_template() else ""
+	var type : String = generator.get_type()
 	var node_type = null
 	var node = null
 	var file_name = "res://material_maker/nodes/"+model+"/"+model+".tscn"
@@ -12,4 +17,37 @@ func create_node(model : String, type : String) -> Node:
 		node = node_type.instance()
 	if node == null:
 		node = preload("res://material_maker/nodes/generic/generic.tscn").instance()
+	set_theme_overrides(node, generator)
 	return node
+
+func set_theme_overrides(node, generator : MMGenBase = null) -> void:
+	if generator == null:
+		generator = node.generator
+	if library_manager == null:
+		library_manager = get_node("/root/MainWindow/NodeLibraryManager")
+		if library_manager == null:
+			return
+	var node_title = generator.get_template_name()
+	if ! mm_loader.predefined_generators.has(node_title) or ! library_manager.node_sections.has(node_title):
+		node_title = generator.get_type_name()
+	if ! library_manager.node_sections.has(node_title):
+		node_title = generator.get_type()
+	if library_manager.node_sections.has(node_title):
+		var section = library_manager.node_sections[node_title]
+		if ! theme_overrides.has(section):
+			theme_overrides[section] = {}
+			var color = library_manager.get_section_color(section)
+			if color != null:
+				var theme : Theme = get_node("/root/MainWindow").theme
+				for s in [ "frame", "selectedframe" ]:
+					var frame : StyleBoxFlat = theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
+					color.a = frame.border_color.a
+					frame.border_color = color
+					theme_overrides[section][s] = frame
+		for s in theme_overrides[section].keys():
+			node.add_stylebox_override(s, theme_overrides[section][s])
+
+func on_theme_changed():
+	theme_overrides = {}
+	for n in get_tree().get_nodes_in_group("generator_node"):
+		set_theme_overrides(n)
