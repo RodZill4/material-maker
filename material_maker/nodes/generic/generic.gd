@@ -121,7 +121,7 @@ func set_generator_parameter(variable : String, value):
 	generator.set_parameter(variable, value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
-	update_parameter_tooltip(variable, new_text)
+	update_parameter_tooltip(variable, str(value))
 	if get_parent().get("undoredo") != null:
 		var node_hier_name = generator.get_hier_name()
 		var undo_command = { type="setparam", node=node_hier_name, param=variable, value=old_value }

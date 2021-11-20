@@ -55,10 +55,12 @@ func get_hier_name() -> String:
 	if not get_parent() is type:
 		return ""
 	var rv = name
-	var object = get_parent()
-	while object is type:
-		rv = object.name+"/"+rv
-		object = object.get_parent()
+	var node = self
+	while true:
+		node = node.get_parent()
+		if not node.get_parent() is type:
+			break
+		rv = node.name+"/"+rv
 	return rv
 
 func accept_float_expressions() -> bool:

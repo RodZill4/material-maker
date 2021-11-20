@@ -1,9 +1,13 @@
 extends Node
 
-var stack = []
-var step = 0
 
-var group_level = 0
+const VERBOSE : bool = false
+
+
+var stack : Array = []
+var step : int = 0
+
+var group_level : int = 0
 var group = null
 
 func _ready():
@@ -20,6 +24,9 @@ func undo() -> void:
 		if parent.has_method("undoredo_pre"):
 			state = parent.undoredo_pre()
 		for a in stack[step].undo_actions:
+			if VERBOSE and OS.is_debug_build():
+				print("Executing undo action on %s:" % str(parent))
+				print(a)
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):
 			parent.undoredo_post(state)
@@ -34,6 +41,9 @@ func redo() -> void:
 		if parent.has_method("undoredo_pre"):
 			state = parent.undoredo_pre()
 		for a in stack[step].redo_actions:
+			if VERBOSE and OS.is_debug_build():
+				print("Executing undo action on %s:" % str(parent))
+				print(a)
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):
 			parent.undoredo_post(state)
