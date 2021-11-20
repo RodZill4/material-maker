@@ -58,7 +58,7 @@ void fragment() {
 		if (mode == 1) {
 			uv = fract(uv);
 		}
-		vec4 image = preview_2d(uv);
+		vec4 image = preview_2d_postprocessed(uv);
 		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
 		COLOR = vec4(image_with_background, 1.0);
@@ -220,6 +220,10 @@ margin_bottom = 88.0
 margin_right = 91.0
 margin_bottom = 88.0
 
+[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="5"]
+margin_right = 91.0
+margin_bottom = 88.0
+
 [node name="Accumulate" type="Viewport" parent="." index="11"]
 size = Vector2( 2, 2 )
 handle_input_locally = false
@@ -241,3 +245,4 @@ margin_bottom = 40.0
 [connection signal="id_pressed" from="ContextMenu/Axes" to="." method="_on_Axes_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]
