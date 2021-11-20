@@ -36,9 +36,6 @@ onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmits
 onready var undoredo = $UndoRedo
 var undoredo_move_node_selection_changed : bool = true
 
-var sections = []
-var section_themes = []
-
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -185,7 +182,7 @@ func connect_node(from, from_slot, to, to_slot):
 		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
 			var disconnect = get_source(to, to_slot+i)
 			if !disconnect.empty():
-				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
+				.do_disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
 				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
 			.connect_node(from, from_slot+i, to, to_slot+i)
 			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})
@@ -203,11 +200,19 @@ func connect_node(from, from_slot, to, to_slot):
 		undoredo.add("Connect nodes", undo_actions, redo_actions)
 		send_changed_signal()
 
-func disconnect_node(from, from_slot, to, to_slot) -> void:
+func do_disconnect_node(from, from_slot, to, to_slot) -> bool:
 	var from_gen = get_node(from).generator
 	var to_gen = get_node(to).generator
 	if generator.disconnect_children(from_gen, from_slot, to_gen, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
+		send_changed_signal()
+		return true
+	return false
+
+func disconnect_node(from, from_slot, to, to_slot) -> void:
+	var from_gen = get_node(from).generator
+	var to_gen = get_node(to).generator
+	if do_disconnect_node(from, from_slot, to, to_slot):
 		var generator_hier_name : String = generator.get_hier_name()
 		var connection = {from=from_gen.name, from_port=from_slot, to=to_gen.name, to_port=to_slot}
 		var undo_actions = [
@@ -217,7 +222,6 @@ func disconnect_node(from, from_slot, to, to_slot) -> void:
 			{ type="remove_connections", parent=generator_hier_name, connections=[connection] }
 		]
 		undoredo.add("Disconnect nodes", undo_actions, redo_actions)
-		send_changed_signal()
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
@@ -241,7 +245,7 @@ func do_remove_node(node) -> void:
 		var node_name = node.name
 		for c in get_connection_list():
 			if c.from == node_name or c.to == node_name:
-				disconnect_node(c.from, c.from_port, c.to, c.to_port)
+				do_disconnect_node(c.from, c.from_port, c.to, c.to_port)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
@@ -385,7 +389,9 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
+		var prev = generator.serialize()
 		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
+		"""
 		var actions : Array = []
 		for g in new_stuff.generators:
 			actions.append({ action="add_node", node=g.name })
@@ -393,7 +399,9 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 			actions.append({ action="add_connection", connection=c })
 		var generator_hier_name : String = generator.get_hier_name()
 		var redo_actions = [ { type="add_to_graph", parent=generator_hier_name, position=position, generators=data.nodes, connections=data.connections } ]
+		"""
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
+		"""
 		var new_generators = []
 		for n in return_value:
 			new_generators.push_back(n.generator.get_hier_name())
@@ -402,8 +410,16 @@ func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 			{ type="remove_generators", parent=generator_hier_name, generators=new_generators }
 		]
 		undoredo.add("Add and connect nodes", undo_actions, redo_actions)
+		"""
+		var next = generator.serialize()
+		undoredo_create_step("Add and connect nodes", generator.get_hier_name(), prev, next)
 		return return_value
 	return []
+
+
+
+
+
 
 func create_gen_from_type(gen_name) -> void:
 	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
@@ -538,7 +554,7 @@ func remove_selection() -> void:
 		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
 			do_remove_node(c)
 	var next = generator.serialize()
-	undoredo_create_step("Delete nodes", generator.get_node_path(), prev, next)
+	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = []) -> Dictionary:
@@ -761,7 +777,7 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 				c.update()
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
-	# Check if the connector was actually dragged
+	# Check if the connector was actually  dragged
 	var node : GraphNode = get_node(node_name)
 	if node == null:
 		return
@@ -840,7 +856,12 @@ func undoredo_command(command : Dictionary) -> void:
 			for n in command.generators:
 				var g = parent_generator.get_node(n)
 				if generator == parent_generator:
-					do_remove_node(get_node("node_"+g.name))
+					if has_node("node_"+g.name):
+						do_remove_node(get_node("node_"+g.name))
+					else:
+						print("Cannot find node_"+g.name)
+						for c in get_children():
+							print(c.name)
 				else:
 					parent_generator.remove_generator(g)
 		"setparam":
@@ -978,7 +999,8 @@ func undoredo_create_step(action_name : String, parent_path : String, prev : Dic
 		print("Incorrect call for undoredo_create_step")
 		return
 	var step_actions = undoredo_step_actions(parent_path, prev, next)
-	undoredo.add(action_name, step_actions.undo_actions, step_actions.redo_actions, false)
+	if ! step_actions.undo_actions.empty() and ! step_actions.redo_actions.empty():
+		undoredo.add(action_name, step_actions.undo_actions, step_actions.redo_actions, false)
 
 # Node change propagation
 

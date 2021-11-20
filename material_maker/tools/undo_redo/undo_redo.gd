@@ -1,7 +1,7 @@
 extends Node
 
 
-const VERBOSE : bool = false
+const VERBOSE : bool = true
 
 
 var stack : Array = []
@@ -10,6 +10,8 @@ var step : int = 0
 var group_level : int = 0
 var group = null
 
+var performing_action : bool = false
+
 func _ready():
 	pass # Replace with function body.
 
@@ -17,7 +19,8 @@ func can_undo() -> bool:
 	return step > 0
 
 func undo() -> void:
-	if step > 0:
+	if !performing_action and step > 0:
+		performing_action = true
 		step -= 1
 		var parent = get_parent()
 		var state = ""
@@ -30,12 +33,14 @@ func undo() -> void:
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):
 			parent.undoredo_post(state)
+		performing_action = false
 
 func can_redo() -> bool:
 	return step < stack.size()
 
 func redo() -> void:
-	if step < stack.size():
+	if !performing_action and step < stack.size():
+		performing_action = true
 		var parent = get_parent()
 		var state = ""
 		if parent.has_method("undoredo_pre"):
@@ -48,6 +53,7 @@ func redo() -> void:
 		if parent.has_method("undoredo_post"):
 			parent.undoredo_post(state)
 		step += 1
+		performing_action = false
 
 func compare_actions(a, b):
 	if a == b:
@@ -81,6 +87,9 @@ func end_group():
 		group = null
 
 func add(action_name : String, undo_actions : Array, redo_actions : Array, merge_with_previous : bool = false) -> void:
+	if performing_action:
+		print("ERROR: undo/redo action tries to register undo/redo action")
+		return
 	while stack.size() > step:
 		stack.pop_back()
 	if merge_with_previous and step > 0 and compare_actions(undo_actions, stack.back().redo_actions):

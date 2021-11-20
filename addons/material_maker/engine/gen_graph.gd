@@ -147,6 +147,8 @@ func add_generator(generator : MMGenBase) -> bool:
 			if parent != null and parent is Object and parent.get_script() == get_script():
 				# Material is always in top level graph
 				return false
+	elif name == "":
+		name = generator.get_type()+"_1"
 	if has_node(name):
 		var name_prefix : String
 		var regex = RegEx.new()
@@ -309,6 +311,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		while rv is GDScriptFunctionState:
+			print("This should never NEVER happen")
 			rv = yield(rv, "completed")
 		return rv
 	return { globals=[], defs="", code="", textures={} }
