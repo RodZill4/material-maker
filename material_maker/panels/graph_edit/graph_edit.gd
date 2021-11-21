@@ -713,7 +713,6 @@ func edit_subgraph(g : MMGenGraph) -> void:
 		g.toggle_editable()
 	update_view(g)
 
-
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
 		generator.transmits_seed = button_pressed
@@ -813,7 +812,7 @@ func _on_Description_descriptions_changed(short_description, long_description):
 
 # Undo/Redo
 
-func get_node_from_hier_path(hier_path : String, return_closest = false):
+func get_node_from_hier_name(hier_path : String, return_closest = false):
 	var node : Node = top_generator
 	if hier_path != "":
 		for n in hier_path.split("/"):
@@ -829,14 +828,16 @@ func undoredo_pre():
 	return generator.get_hier_name()
 
 func undoredo_post(pre_returnvalue) -> void:
-	var current_node = get_node_from_hier_path(pre_returnvalue, true)
+	var current_node = get_node_from_hier_name(pre_returnvalue, true)
 
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"add_to_graph":
-			var parent_generator = get_node_from_hier_path(command.parent)
+			var parent_generator = get_node_from_hier_name(command.parent)
 			var position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
-			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, command.generators, command.connections, position)
+			var generators = command.generators if command.has("generators") else []
+			var connections = command.connections if command.has("connections") else []
+			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
@@ -845,14 +846,14 @@ func undoredo_command(command : Dictionary) -> void:
 					actions.append({ action="add_connection", connection=c })
 				update_graph(new_stuff.generators, new_stuff.connections)
 		"remove_connections":
-			var parent_generator = get_node_from_hier_path(command.parent)
+			var parent_generator = get_node_from_hier_name(command.parent)
 			for c in command.connections:
 				parent_generator.disconnect_children_by_name(c.from, c.from_port, c.to, c.to_port)
 			if generator == parent_generator:
 				for c in command.connections:
 					.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 		"remove_generators":
-			var parent_generator = get_node_from_hier_path(command.parent)
+			var parent_generator = get_node_from_hier_name(command.parent)
 			for n in command.generators:
 				var g = parent_generator.get_node(n)
 				if generator == parent_generator:
@@ -865,10 +866,10 @@ func undoredo_command(command : Dictionary) -> void:
 				else:
 					parent_generator.remove_generator(g)
 		"setparam":
-			var node = get_node_from_hier_path(command.node)
+			var node = get_node_from_hier_name(command.node)
 			node.set_parameter(command.param, MMType.deserialize_value(command.value))
 		"move_generators":
-			var parent_generator = get_node_from_hier_path(command.parent)
+			var parent_generator = get_node_from_hier_name(command.parent)
 			for k in command.positions.keys():
 				if parent_generator == generator:
 					get_node("node_"+k).do_set_position(command.positions[k])
