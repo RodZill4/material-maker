@@ -25,6 +25,12 @@ The **CustomUV** node outputs the deformed image.
 Parameters
 ++++++++++
 
-The **CustomUV** node accepts a *scale* and a *rotate* parameters that define
-the strength of the random scale and rotate transforms applied locallly to
-the result.
+The **CustomUV** node accepts the following parameters:
+
+* *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
+  shapes can easily be created using the **Tile2x2** node.
+* *Scale X and Scale Y* are the scale along X and Y axes applied to each instance.
+* *Rnd Rotate* is the maximum angle of the random rotation applied to each instance.
+* *Rnd Scale* is the amount of random scaling applied to each instance.
+* *Variations*: if checked, the node will deform different variations of its input
+  (i.e. roll a different seed for each instance)
