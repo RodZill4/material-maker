@@ -9471,6 +9471,365 @@
 			"shortdesc": "",
 			"tree_item": "Effect/Leaves",
 			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 3
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 2
+				},
+				{
+					"from": "shape",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 0
+				},
+				{
+					"from": "combine",
+					"from_port": 0,
+					"to": "transform2",
+					"to_port": 0
+				},
+				{
+					"from": "decompose",
+					"from_port": 1,
+					"to": "combine",
+					"to_port": 1
+				},
+				{
+					"from": "decompose",
+					"from_port": 2,
+					"to": "combine",
+					"to_port": 2
+				},
+				{
+					"from": "decompose",
+					"from_port": 3,
+					"to": "math",
+					"to_port": 0
+				},
+				{
+					"from": "math",
+					"from_port": 0,
+					"to": "combine",
+					"to_port": 3
+				},
+				{
+					"from": "shape_2",
+					"from_port": 0,
+					"to": "math",
+					"to_port": 1
+				},
+				{
+					"from": "image",
+					"from_port": 0,
+					"to": "decompose",
+					"to_port": 0
+				},
+				{
+					"from": "transform2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 4
+				}
+			],
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABX1JREFUWIXFl1uIlVUUx3/7O2fOOKOjpqXYFPkSdIPIQCoqeqqXeiyCil5CqKhAoYJ8r6DCyh7MhIoIMS0UgsiM1JcuiLdq1LyM9+vYXJw5l2+vtXrY+7ucM5pKD21Y7O+yz1r//3+ttfd34H8e7moW//S3matBSrt5QAAxSJrw1Gx3xX6vaOG2UTM18BaCpUALSF00oOXiewdq4BQWzbw8kH9dsPO8WQUQLVjmzDuCZ6BaFGvVoMfDojmXBnLJF3uHzJwPsno6LCmBKAMoAUktmBrUDF6ee3EQF3148HQRXEqBxQWJfYcCZSCZCp0guhQW908GMenB4VNmlWYMbjEoIbDE2cfgEoO3OgDk6YgAPCAC3QqL57eDSMo3h06addchSSHxkEgxVwQSjZbdR6t4qGh4Vo3vMqsKdEkoyobC8v2plWNWyzfT6hG+gRHNQeKKOTfCXIlrVKHqQKNTAapR/sSFZ2MCY9bGuUjBmUGzah1MCumznJevc6N9rreMgR9WohimyvWPPU/LQho84BKY8NDyKT14ltzW69oUqDUCe5WCccZ64MhB9p/YChbUu/2OJ5g+q5ckKZTYs+kTDAMzzIxj6z9i3qMvUrGijRMz8ErTtL0Gjh+StNKCNdu/ZM2OL/hm+xqcgIv5P3B8Sx7czNi9a3VbfZw7fBKLgc1C8sysqAUFJ4BXnCgqysrtZ9McQJ9PqkkKpoqZkUqDRMKPLA21EJxqNGPz5k9wAtqEwYENGBqLJ4KwWJyxSG10mOH173Jhw/s4L0xoUs1T0NWCjQO/oGaYBgfOF8WGGUbmODPYuvnjNsaFUShAUGDox5XBvxmj236k964HihRUPZxs/RWDB4YuKlAx8md0BLAOYBn4zE/GPlEtfouhJ/7AqRZtWFGiI43kjETAkkBW1XCOSwafbErftbfgJBRe1TSkNxpAVaRQ4NyfWf4DW0zRBrk9fstzlw+esw9q3XTzw2jDo40mvt5ESmtVlL179hYAfENQtVBI0Rk+dEGWivv7nyyKEC2uTYvgMVV33/MKzgtOJFS+93Fd6ABVoVWvFwDSZoN+Pz/mqaiB7BRyHuZ297WzzY02IAvuXAQxeADhcT7KH9f57tmk4xMFgHp9jAenPAS5Q4M0KuDBohJtrK2ddVZ4taQWmIuCF0gFfBqkj0r1Xr+AxshQAeDI2f0N3/JFIaoy0mjmZ7HzsPbAqg7WZTUUzTolD+rDtRek2cQkK0LBT4xzenCPz7vg4bce6DmybNjoCo4VZd3QKsyMbnpp2Hg4mMpFWGpLjfKrGZZ6QINsJpikDGxbhaiiJghVWqPDbFq9rCtXAGBkbIjH5elQYGporOa6jgfpItOyaTQrzVt2fIClHvMeTVP+2vdd9CWoKlOvXcjwuZOTT0OAA2+fso1TvuOCjeW7lll5J+Qi7LO0FUpI6V58qHoxpdI1l9RmsfzNZ/O4bYfz4Ln9PNJ8tOjnmLMy00uxV1UkmsZ2C8E9ooqJ0l27gcMHd5VDTv4k+23pbps1bQ5fVb/M01Cccu01kG8ska3mwC0Ckdj3yqyZ93H4+D4+/fg1968AAH59Y6fNmDqbdZXVgU1Z9o5UmCmSbUQS1mpUTSKYOdPv5dipQ6xYseTyH6XZ2PLqzzZz2nVsqKxDTIpzosy81AEh53FHNUXEmFbpp7c6j6NnDrJi1etX/lmejbUvbLD+a26kVpvCeta2BQ57evGNoNlGo4rTLuZPXcj5C0PsPfo7q9e9d/V/TMrj65e+tb6emVRrNZJKlc317xmvjOW7oJoxQ+ZyQ8+tTKR1RusjnBg+xvLPl/63v2ad451nPrQ5ffOo1bqxJEGB1FKaljLemmCkMczg0CE+W7/sqvz+r+Mf2vrKvVYSUbMAAAAASUVORK5CYII=",
+			"label": "Graph",
+			"longdesc": "",
+			"name": "219",
+			"node_position": {
+				"x": 0,
+				"y": 0
+			},
+			"nodes": [
+				{
+					"name": "Brush",
+					"node_position": {
+						"x": 42.320503,
+						"y": -64.518204
+					},
+					"parameters": {
+						"has_albedo": true,
+						"has_ao": false,
+						"has_depth": false,
+						"has_emission": false,
+						"has_metallic": true,
+						"has_normal": false,
+						"has_roughness": true,
+						"mode": 0
+					},
+					"seed": -64413,
+					"seed_locked": false,
+					"type": "brush"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -360.889496,
+						"y": 149.898743
+					},
+					"parameters": {
+						"color": 0
+					},
+					"seed": 46771,
+					"seed_locked": true,
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -363.278992,
+						"y": 229.759262
+					},
+					"parameters": {
+						"color": 0
+					},
+					"seed": -46721,
+					"seed_locked": true,
+					"type": "uniform_greyscale"
+				},
+				{
+					"name": "shape",
+					"node_position": {
+						"x": -285.5,
+						"y": -223.643066
+					},
+					"parameters": {
+						"edge": 1,
+						"radius": 2,
+						"shape": 1,
+						"sides": 4
+					},
+					"seed": 2358,
+					"seed_locked": false,
+					"type": "shape"
+				},
+				{
+					"name": "324",
+					"node_position": {
+						"x": -26.454523,
+						"y": -452.387695
+					},
+					"parameters": {
+						"aspect_ratio": 1,
+						"param0": true,
+						"param1": "%MATERIAL_MAKER_PATH%/examples/mm_icon.png",
+						"param2": true,
+						"param3": 0,
+						"param4": true,
+						"param5": 0,
+						"param6": false
+					},
+					"seed": 36055,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Image",
+							"linked_widgets": [
+								{
+									"node": "image",
+									"widget": "image"
+								}
+							],
+							"name": "param1",
+							"type": "linked_control"
+						},
+						{
+							"default": 1,
+							"label": "Aspect Ratio",
+							"max": 2,
+							"min": 0,
+							"name": "aspect_ratio",
+							"step": 0.01,
+							"type": "named_parameter"
+						},
+						{
+							"label": "Paint Albedo",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_albedo"
+								}
+							],
+							"name": "param0",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Emission",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_emission"
+								}
+							],
+							"name": "param6",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Metallic",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_metallic"
+								}
+							],
+							"name": "param2",
+							"type": "linked_control"
+						},
+						{
+							"label": "Metallic",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale",
+									"widget": "color"
+								}
+							],
+							"name": "param3",
+							"type": "linked_control"
+						},
+						{
+							"label": "Paint Roughness",
+							"linked_widgets": [
+								{
+									"node": "Brush",
+									"widget": "has_roughness"
+								}
+							],
+							"name": "param4",
+							"type": "linked_control"
+						},
+						{
+							"label": "Roughness",
+							"linked_widgets": [
+								{
+									"node": "uniform_greyscale_2",
+									"widget": "color"
+								}
+							],
+							"name": "param5",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "transform2",
+					"node_position": {
+						"x": -309.211426,
+						"y": -80.399689
+					},
+					"parameters": {
+						"mode": 2,
+						"rotate": 0,
+						"scale_x": "$aspect_ratio",
+						"scale_y": 1,
+						"translate_x": 0,
+						"translate_y": 0
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "transform2"
+				},
+				{
+					"name": "decompose",
+					"node_position": {
+						"x": -737.211426,
+						"y": -66.399689
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "decompose"
+				},
+				{
+					"name": "combine",
+					"node_position": {
+						"x": -491.211426,
+						"y": -89.399689
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "combine"
+				},
+				{
+					"name": "math",
+					"node_position": {
+						"x": -710.211426,
+						"y": 39.600311
+					},
+					"parameters": {
+						"clamp": false,
+						"default_in1": 0,
+						"default_in2": 0,
+						"op": 2
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "math"
+				},
+				{
+					"name": "shape_2",
+					"node_position": {
+						"x": -962.211426,
+						"y": 117.600342
+					},
+					"parameters": {
+						"edge": 0,
+						"radius": 1,
+						"shape": 1,
+						"sides": 4
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "shape"
+				},
+				{
+					"name": "image",
+					"node_position": {
+						"x": -953.867065,
+						"y": -106.006271
+					},
+					"parameters": {
+						"image": "%MATERIAL_MAKER_PATH%/material-maker-bugfix/icon.png"
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "image"
+				}
+			],
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shortdesc": "",
+			"tree_item": "Simple/Stamp",
+			"type": "graph"
 		}
 	],
 	"name": "Base library"
