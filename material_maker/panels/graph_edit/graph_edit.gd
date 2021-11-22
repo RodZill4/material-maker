@@ -182,7 +182,7 @@ func connect_node(from, from_slot, to, to_slot):
 		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
 			var disconnect = get_source(to, to_slot+i)
 			if !disconnect.empty():
-				.do_disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
+				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
 				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
 			.connect_node(from, from_slot+i, to, to_slot+i)
 			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})

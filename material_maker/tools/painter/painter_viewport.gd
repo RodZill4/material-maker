@@ -23,6 +23,8 @@ var param_seams : Texture
 var param_layer_textures : Dictionary
 var brush_params : Dictionary
 
+var painting : int = 0
+
 func _ready() -> void:
 	paint_material = ShaderMaterial.new()
 	paint_material.shader = Shader.new()
@@ -142,6 +144,7 @@ func finish_init():
 	strokepaint_rect.visible = true
 
 func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
+	painting += 1
 	strokepaint_rect.material = paint_material
 	layerpaint_strokerect.visible = true
 	layerpaint_strokerect.material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
@@ -182,9 +185,13 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
 		strokepaint_rect.visible = true
+	painting -= 1
 
 func get_texture():
 	return layerpaint_viewport.get_texture()
-	
+
+func get_current_state():
+	return layerpaint_layerrect.material.get_shader_param("tex")
+
 func get_stroke_texture():
 	return strokepaint_viewport.get_texture()

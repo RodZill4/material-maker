@@ -54,6 +54,7 @@ onready var layers = $PaintLayers
 onready var paint_engine_button = $VSplitContainer/HSplitContainer/Painter/Tools/Engine
 onready var eraser_button = $VSplitContainer/HSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
+onready var undoredo = $UndoRedo
 
 onready var brush_view_3d = $VSplitContainer/HSplitContainer/Painter/BrushView
 var brush_view_3d_shown = false
@@ -181,6 +182,7 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	model_path = mesh_file_path
 	set_object(mi)
 	set_project_path(project_file_path)
+	initialize_layers_history()
 
 func set_object(o):
 	object_name = o.name
@@ -290,7 +292,8 @@ func _physics_process(delta):
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
 		if ev.scancode == KEY_CONTROL:
-			painter.show_pattern(ev.pressed)
+			#TODO: move this to another shortcut, this is too annoying
+			#painter.show_pattern(ev.pressed)
 			accept_event()
 		elif ev.scancode == KEY_LEFT or ev.scancode == KEY_RIGHT or ev.scancode == KEY_UP or ev.scancode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
@@ -625,7 +628,9 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 			paint_options.rect_size = view_2d.rect_size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	painter.paint(paint_options, end_of_stroke)
+	var result = painter.paint(paint_options, end_of_stroke)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
 	previous_position = pos
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
@@ -738,6 +743,7 @@ func load_project(file_name) -> bool:
 		set_settings({ texture_size=int(round(log(data.texture_size)/log(2))) })
 	layers.load(data, file_name)
 	set_need_save(false)
+	initialize_layers_history()
 	return true
 
 func save():
@@ -855,3 +861,58 @@ func set_environment(index) -> void:
 	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
 	var sun = $VSplitContainer/HSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
+
+# Undo/Redo
+
+var stroke_history = { layers={} }
+
+func undoredo_command(command : Dictionary) -> void:
+	match command.type:
+		"reload_layer_state":
+			var layer = command.layer
+			var state = stroke_history.layers[layer].history[command.index]
+			if layer == layers.selected_layer:
+				painter.set_state(state)
+			else:
+				layer.set_state(state)
+				layers._on_layers_changed()
+			stroke_history.layers[layer].current = command.index
+
+func initialize_layer_history(layer):
+	if stroke_history.layers.has(layer):
+		return
+	var channels = {}
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	for c in layer.get_channels():
+		var texture = layer.get_channel_texture(c)
+		if texture is ViewportTexture:
+			var image = texture.get_data()
+			image.lock()
+			texture = ImageTexture.new()
+			texture.create_from_image(image)
+			image.unlock()
+		channels[c] = texture
+	stroke_history.layers[layer] = { history=[channels], current=0 }
+
+func initialize_layers_history():
+	for l in layers.layers:
+		initialize_layer_history(l)
+
+func _on_Painter_end_of_stroke(stroke_state):
+	var layer = layers.selected_layer
+	var layer_history = stroke_history.layers[layer]
+	while layer_history.history.size() > layer_history.current+1:
+		layer_history.history.pop_back()
+	var new_history_item = layer_history.history.back().duplicate()
+	# Copy relevant channels into stroke state
+	for c in stroke_state.keys():
+		if c in layer.get_channels():
+			new_history_item[c] = stroke_state[c]
+	layer_history.history.push_back(new_history_item)
+	var undo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
+	layer_history.current += 1
+	var redo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
+	undoredo.add("Paint Stroke", [undo_command], [redo_command])
