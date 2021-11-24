@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
@@ -119,20 +119,33 @@ region = Rect2( 224, 192, 32, 32 )
 
 [sub_resource type="InputEventKey" id=26]
 pressed = true
-scancode = 16777248
+scancode = 16777249
 
 [sub_resource type="ShortCut" id=27]
+shortcut = SubResource( 26 )
+
+[sub_resource type="AtlasTexture" id=37]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 128, 192, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=38]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 160, 192, 32, 32 )
+
+[sub_resource type="ShortCut" id=39]
 shortcut = SubResource( 26 )
 
 [sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 128, 192, 32, 32 )
+region = Rect2( 128, 224, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=29]
+[sub_resource type="AtlasTexture" id=36]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 160, 192, 32, 32 )
+region = Rect2( 160, 224, 32, 32 )
 
 [sub_resource type="Shader" id=30]
 code = "shader_type canvas_item;
@@ -350,8 +363,18 @@ hint_tooltip = "Color Picker (F4)"
 toggle_mode = true
 shortcut_in_tooltip = false
 shortcut = SubResource( 27 )
+texture_normal = SubResource( 37 )
+texture_pressed = SubResource( 38 )
+
+[node name="MaskSelector" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Tools"]
+margin_left = 236.0
+margin_right = 268.0
+margin_bottom = 32.0
+hint_tooltip = "Mask Selector (F5)"
+shortcut_in_tooltip = false
+shortcut = SubResource( 39 )
 texture_normal = SubResource( 28 )
-texture_pressed = SubResource( 29 )
+texture_pressed = SubResource( 36 )
 
 [node name="Options" type="PanelContainer" parent="VSplitContainer/HSplitContainer/Painter"]
 anchor_left = 1.0
@@ -451,7 +474,7 @@ margin_top = 84.0
 margin_right = 161.0
 margin_bottom = 108.0
 size_flags_horizontal = 3
-value = 10.0
+value = 1.0
 min_value = 1.0
 max_value = 250.0
 step = 1.0
@@ -591,6 +614,7 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Line" to="." method="set_current_tool" binds= [ 2 ]]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 4 ]]
+[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/MaskSelector" to="." method="_on_MaskSelector_pressed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]

@@ -41,6 +41,6 @@ void fragment() {
 	vec2 bv = (bpp-bp)/bs;
 	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
 	vec2 local_uv = p-(b+x*bv);
-	float a = max(brush(0.5*local_uv+vec2(0.5)), pattern_alpha);
+	float a = (0.2+0.8*texture(mask_tex, texture(view2tex_tex, UV).xy).r)*max(brush(0.5*local_uv+vec2(0.5)), pattern_alpha);
 	COLOR = pattern_color(UV, bs) * vec4(vec3(1.0), a);
 }
