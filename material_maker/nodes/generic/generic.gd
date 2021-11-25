@@ -526,18 +526,23 @@ func do_save_generator(file_name : String) -> void:
 		file.close()
 		mm_loader.update_predefined_generators()
 
-func on_clicked_output(index : int) -> void:
-	if generator.preview == index:
-		generator.preview = -1
-		disconnect("mouse_entered", self, "on_mouse_entered")
-		disconnect("mouse_exited", self, "on_mouse_exited")
-	else:
-		generator.preview = index
-		connect("mouse_entered", self, "on_mouse_entered")
-		connect("mouse_exited", self, "on_mouse_exited")
-		update_preview()
-	restore_preview_widget()
-	update()
+func on_clicked_output(index : int, with_shift : bool) -> bool:
+	if .on_clicked_output(index, with_shift):
+		return true
+	if ! with_shift:
+		if generator.preview == index:
+			generator.preview = -1
+			disconnect("mouse_entered", self, "on_mouse_entered")
+			disconnect("mouse_exited", self, "on_mouse_exited")
+		else:
+			generator.preview = index
+			connect("mouse_entered", self, "on_mouse_entered")
+			connect("mouse_exited", self, "on_mouse_exited")
+			update_preview()
+		restore_preview_widget()
+		update()
+		return true
+	return false
 
 func on_mouse_entered():
 	if !generator.minimized:

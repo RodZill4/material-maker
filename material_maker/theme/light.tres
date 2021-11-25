@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=123 format=2]
+[gd_resource type="Theme" load_steps=125 format=2]
 
 [ext_resource path="res://material_maker/theme/light/textedit_tab.png" type="Texture" id=1]
 [ext_resource path="res://material_maker/theme/light/checkbox_checked.png" type="Texture" id=2]
@@ -558,6 +558,29 @@ color = Color( 0, 0, 0, 0.1 )
 grow_begin = 7.0
 grow_end = 7.0
 
+[sub_resource type="StyleBoxFlat" id=121]
+bg_color = Color( 0.745098, 0.745098, 0.745098, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color( 0, 0, 0, 0.101961 )
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id=122]
+bg_color = Color( 0.745098, 0.745098, 0.745098, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.278431, 0.533333, 1, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color( 0, 0, 0, 0.101961 )
+shadow_size = 8
+
 [sub_resource type="StyleBoxEmpty" id=105]
 
 [sub_resource type="StyleBoxFlat" id=106]
@@ -914,6 +937,8 @@ PopupMenu/styles/separator = SubResource( 104 )
 PopupPanel/styles/panel = SubResource( 100 )
 ProgressBar/colors/font_color = Color( 0.25, 0.25, 0.25, 1 )
 ProjectSettingsEditor/styles/panel = SubResource( 70 )
+Reroute/styles/frame = SubResource( 121 )
+Reroute/styles/selectedframe = SubResource( 122 )
 RichTextLabel/colors/default_color = Color( 0.25, 0.25, 0.25, 1 )
 RichTextLabel/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 RichTextLabel/constants/shadow_as_outline = 0

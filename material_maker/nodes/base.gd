@@ -1,7 +1,6 @@
-extends GraphNode
+extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
-var generator : MMGenBase = null setget set_generator
 var show_inputs : bool = false
 var show_outputs : bool = false
 
@@ -32,7 +31,6 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
-	add_to_group("generator_node")
 	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
@@ -105,11 +103,8 @@ func _draw() -> void:
 	if (selected):
 		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, rect_size))
 
-func update_node() -> void:
-	pass
-
 func set_generator(g) -> void:
-	generator = g
+	.set_generator(g)
 	g.connect("rendering_time", self, "update_rendering_time")
 
 func update_rendering_time(t : int) -> void:
@@ -185,20 +180,21 @@ func _on_gui_input(event) -> void:
 			return
 		hint_tooltip = ""
 
+func get_input_slot(pos : Vector2) -> int:
+	var return_value = .get_input_slot(pos)
+	var new_show_inputs : bool = (return_value != -2)
+	if new_show_inputs != show_inputs:
+		show_inputs = new_show_inputs
+		update()
+	return return_value
+
 func get_output_slot(pos : Vector2) -> int:
-	var scale = get_global_transform().get_scale()
-	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
-		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-		if new_show_outputs != show_outputs:
-			show_outputs = new_show_outputs
-			update()
-		if new_show_outputs:
-			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
-					return i
-	return -1
+	var return_value = .get_output_slot(pos)
+	var new_show_outputs : bool = (return_value != -2)
+	if new_show_outputs != show_outputs:
+		show_outputs = new_show_outputs
+		update()
+	return return_value
 
 func get_slot_tooltip(pos : Vector2) -> String:
 	var scale = get_global_transform().get_scale()
