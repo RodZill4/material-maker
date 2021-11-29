@@ -9,6 +9,7 @@ void fragment() {
 	vec4 color = pattern_function(fract(pattern_uv));
 	
 	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5))*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {

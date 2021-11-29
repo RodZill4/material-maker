@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material_maker/windows/add_node_popup/quick_button.gd" type="Script" id=1]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+
+uniform bool disabled = false;
+uniform float brightness = 0.8;
+uniform sampler2D tex;
+
+void fragment() {
+	vec4 color = texture(tex, UV);
+	if (disabled) {
+		color = vec4(vec3(0.4+dot(color.rgb, vec3(0.1))), color.a);
+	}
+	COLOR = vec4(vec3(1.0), brightness)*color;
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = SubResource( 11 )
+shader_param/disabled = false
+shader_param/brightness = 0.8
+shader_param/tex = ExtResource( 2 )
+
+[node name="QuickButton" type="ColorRect"]
+material = SubResource( 12 )
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+size_flags_horizontal = 5
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_QuickButton_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_QuickButton_mouse_exited"]

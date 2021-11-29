@@ -11,12 +11,22 @@ var view_mode : int = 0
 var temporal_aa : bool = false
 var temporal_aa_current : bool = false
 
+var current_postprocess_option = 0
+const POSTPROCESS_OPTIONS : Array = [
+	{ name="None", function="preview_2d(uv)" },
+	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
+	{ name="Lowres 64x64", function="preview_2d((floor(uv*64.0)+vec2(0.5))/64.0)" },
+	{ name="Lowres 128x128", function="preview_2d((floor(uv*128.0)+vec2(0.5))/128.0)" },
+	{ name="Lowres 256x256", function="preview_2d((floor(uv*256.0)+vec2(0.5))/256.0)" },
+	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
+]
 
 func _ready():
 	update_shader_options()
 	update_view_menu()
 	update_axes_menu()
 	update_export_menu()
+	update_postprocess_menu()
 	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
 	$ContextMenu.set_item_checked(MENU_TEMPORAL_AA, temporal_aa)
 
@@ -30,6 +40,15 @@ func update_axes_menu() -> void:
 	$ContextMenu/Axes.add_separator()
 	$ContextMenu/Axes.add_item("Change color", 1000)
 	$ContextMenu.add_submenu_item("Axes", "Axes")
+
+func update_postprocess_menu() -> void:
+	$ContextMenu/PostProcess.clear()
+	for o in POSTPROCESS_OPTIONS:
+		$ContextMenu/PostProcess.add_item(o.name)
+	$ContextMenu.add_submenu_item("Post Process", "PostProcess")
+
+func get_shader_custom_functions():
+	return "vec4 preview_2d_postprocessed(vec2 uv) { return %s; }\n" % POSTPROCESS_OPTIONS[current_postprocess_option].function
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	#center = Vector2(0.5, 0.5)
@@ -217,3 +236,7 @@ func _on_Axes_id_pressed(id):
 		color_picker_popup.popup()
 	else:
 		$Axes.style = id
+
+func _on_PostProcess_id_pressed(id):
+	current_postprocess_option = id
+	set_generator(generator, output, true)

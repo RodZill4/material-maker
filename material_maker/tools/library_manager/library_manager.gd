@@ -86,6 +86,16 @@ func compare_item_usage(i1, i2) -> int:
 	var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
 	return u1 - u2
 
+func get_item(name : String):
+	for skip_disabled in [ true, false ]:
+		for li in get_child_count():
+			var l = get_child(li)
+			if ! skip_disabled or disabled_libraries.find(l.library_path) == -1:
+				var item = l.get_item(name)
+				if item != null:
+					return item
+	return null
+
 func get_items(filter : String, sorted = false) -> Array:
 	var array : Array = []
 	var aliased_items = []

@@ -41,6 +41,9 @@ var brush_hardness : float = 0.5
 var pattern_scale : float = 10.0
 var pattern_angle : float = 0.0
 
+var idmap_filename : String = ""
+var mask : ImageTexture
+
 onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
 onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
 onready var camera : Camera = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera
@@ -95,6 +98,13 @@ func _ready():
 	update_brush_graph()
 	call_deferred("update_brush")
 	set_environment(0)
+	# Create white mask
+	mask = ImageTexture.new()
+	var image = Image.new()
+	image.create(16, 16, 0, Image.FORMAT_RGBA8)
+	image.fill(Color(1, 1, 1))
+	mask.create_from_image(image)
+
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -283,6 +293,15 @@ func _on_Fill_pressed():
 		return
 	painter.fill(eraser_button.pressed)
 	set_need_save()
+
+func _on_MaskSelector_pressed():
+	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instance()
+	add_child(dialog)
+	var result = dialog.ask({ mesh=painted_mesh.mesh, idmap_filename=idmap_filename, mask=mask })
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result != null and result.has("idmap_filename"):
+		idmap_filename = result.idmap_filename
 
 func _physics_process(delta):
 	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
@@ -565,6 +584,7 @@ func show_brush(p, op = null):
 		brush_view_3d.material.set_shader_param("texture_space", paint_engine_button.pressed)
 		brush_view_3d.material.set_shader_param("brush_pos", p)
 		brush_view_3d.material.set_shader_param("brush_ppos", op)
+		brush_view_3d.material.set_shader_param("mask_tex", mask)
 	update_brush_view_3d_visibility()
 
 func update_brush_view_3d_visibility():
@@ -614,6 +634,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		erase=eraser_button.pressed,
 		pressure=pressure,
 		tilt=tilt,
+		mask_tex=mask,
 		fill=false
 	}
 	match painting_mode:
@@ -741,6 +762,8 @@ func load_project(file_name) -> bool:
 		set_settings(data.settings)
 	elif data.has("texture_size"):
 		set_settings({ texture_size=int(round(log(data.texture_size)/log(2))) })
+	if data.has("idmap"):
+		idmap_filename = data.idmap
 	layers.load(data, file_name)
 	set_need_save(false)
 	initialize_layers_history()
@@ -759,6 +782,8 @@ func do_save_project(file_name):
 	var data = layers.save(file_name)
 	data.model = model_path
 	data.settings = get_settings()
+	if idmap_filename != "":
+		data.idmap = idmap_filename
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		file.store_string(to_json(data))

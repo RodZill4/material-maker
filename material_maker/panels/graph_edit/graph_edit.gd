@@ -106,13 +106,14 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+		# reverted to default GraphEdit behavior
+		if false and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
 				event.control = true
 				do_zoom(1.1)
-		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+		elif false and event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
@@ -120,15 +121,24 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
-				if c.has_method("get_output_slot"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
+				if ! c is GraphNode:
+					continue
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					if c.has_method("get_input_slot"):
+						var slot = c.get_input_slot(get_global_mouse_position()-c.rect_global_position)
+						if slot >= 0:
+							# Tell the node its connector was clicked
+							if c.has_method("on_clicked_input"):
+								c.on_clicked_input(slot, Input.is_key_pressed(KEY_SHIFT))
+								return
+					if c.has_method("get_output_slot"):
 						var slot = c.get_output_slot(get_global_mouse_position()-c.rect_global_position)
-						if slot != -1:
+						if slot >= 0:
 							# Tell the node its connector was clicked
 							if c.has_method("on_clicked_output"):
-								c.on_clicked_output(slot)
+								c.on_clicked_output(slot, Input.is_key_pressed(KEY_SHIFT))
 								return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
@@ -168,8 +178,8 @@ func add_node(node) -> void:
 	node.connect("close_request", self, "remove_node", [ node ])
 
 func connect_node(from, from_slot, to, to_slot):
-	var from_node : MMGraphNodeBase = get_node(from)
-	var to_node : MMGraphNodeBase = get_node(to)
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
 	var connect_count = 1
 	var connected : bool = false
 	var out_ports = from_node.generator.get_output_defs()
@@ -199,13 +209,21 @@ func connect_node(from, from_slot, to, to_slot):
 		]
 		undoredo.add("Connect nodes", undo_actions, redo_actions)
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
 
 func do_disconnect_node(from, from_slot, to, to_slot) -> bool:
-	var from_gen = get_node(from).generator
-	var to_gen = get_node(to).generator
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	var from_gen = from_node.generator
+	var to_gen = to_node.generator
 	if generator.disconnect_children(from_gen, from_slot, to_gen, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
 		return true
 	return false
 
@@ -1031,3 +1049,57 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 
+# Adding/removing reroute nodes
+
+func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
+	for c in get_connection_list():
+		if c.to == node.name and c.to_port == port_index:
+			var from_node = get_node(c.from)
+			if from_node.generator is MMGenReroute:
+				var source = null
+				for c2 in get_connection_list():
+					if c2.to == c.from:
+						source = {from=c2.from,from_port=c2.from_port}
+						disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+				if source != null:
+					for c2 in get_connection_list():
+						if c2.from == c.from:
+							disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+							connect_node(source.from, source.from_port, c2.to, c2.to_port)
+					remove_node(from_node)
+				return
+			break
+	var scale = node.get_global_transform().get_scale()
+	var port_position = node.offset+node.get_connection_input_position(port_index)/scale
+	var reroute_position = port_position+Vector2(-74, -12)
+	var reroute_node = create_nodes({nodes=[{name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}],connections=[]})[0]
+	for c2 in get_connection_list():
+		if c2.to == node.name and c2.to_port == port_index:
+			disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+			connect_node(c2.from, c2.from_port, reroute_node.name, 0)
+			break
+	connect_node(reroute_node.name, 0, node.name, port_index)
+
+func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
+	var reroutes : bool = false
+	var destinations = []
+	for c in get_connection_list():
+		if c.from == node.name and c.from_port == port_index:
+			var to_node = get_node(c.to)
+			if to_node.generator is MMGenReroute:
+				reroutes = true
+				for c2 in get_connection_list():
+					if c2.from == c.to:
+						disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+						connect_node(node.name, port_index, c2.to, c2.to_port)
+				remove_node(to_node)
+			else:
+				destinations.push_back({to=c.to, to_port=c.to_port})
+	if !reroutes:
+		var scale = node.get_global_transform().get_scale()
+		var port_position = node.offset+node.get_connection_output_position(port_index)/scale
+		var reroute_position = port_position+Vector2(50, -12)
+		var reroute_node = create_nodes({nodes=[{name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}],connections=[]})[0]
+		connect_node(node.name, port_index, reroute_node.name, 0)
+		for d in destinations:
+			connect_node(reroute_node.name, 0, d.to, d.to_port)

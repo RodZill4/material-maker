@@ -12,6 +12,7 @@ uniform sampler2D seams : hint_white;
 uniform float     seams_multiplier = 256.0;
 uniform sampler2D mesh_normal_tex;
 uniform sampler2D mesh_tangent_tex;
+uniform sampler2D mask_tex;
 uniform sampler2D layer_albedo_tex;
 uniform sampler2D layer_mr_tex;
 uniform sampler2D layer_emission_tex;

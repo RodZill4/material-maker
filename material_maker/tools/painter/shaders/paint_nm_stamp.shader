@@ -24,6 +24,7 @@ void fragment() {
 	color.xy = view_mat*(texture_rotation*(color.xy-vec2(0.5)))+vec2(0.5);
 	
 	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5))*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {

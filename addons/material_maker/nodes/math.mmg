@@ -5,11 +5,13 @@
 		"y": 0
 	},
 	"parameters": {
-		"clamp": false,
+		"clamp": true,
 		"default_in1": 0,
 		"default_in2": 0,
 		"op": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "float $(name_uv)_clamp_false = $op;\nfloat $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);\n",
 		"global": "",
@@ -44,7 +46,7 @@
 		],
 		"parameters": [
 			{
-				"default": 19,
+				"default": 0,
 				"label": "",
 				"longdesc": "The operation to be performed",
 				"name": "op",
@@ -113,7 +115,7 @@
 					},
 					{
 						"name": "A<B",
-						"value": "step($in1($uv),$in2($uv))"
+						"value": "(1.0-step($in2($uv),$in1($uv)))"
 					},
 					{
 						"name": "cos(A*B)",

@@ -9,6 +9,7 @@ void fragment() {
 	
 	vec2 a = fill ? vec2(1.0) : vec2(brush(0.5*local_uv+vec2(0.5)))*tex2view.z;
 	a *= color.ba;
+	a *= texture(mask_tex, UV).r;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {

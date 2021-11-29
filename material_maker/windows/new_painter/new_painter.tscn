@@ -11,7 +11,7 @@ resource_name = "rotate"
 length = 10.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("MeshInstance:rotation_degrees")
+tracks/0/path = NodePath("MeshPivot:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -109,16 +109,23 @@ size = Vector2( 100, 100 )
 handle_input_locally = false
 render_target_update_mode = 0
 
-[node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
-mesh = SubResource( 1 )
-material/0 = null
+[node name="MeshPivot" type="Spatial" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
 
-[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
-transform = Transform( 1, 0, 0, 0, 0.865982, 0.500076, 0, -0.500076, 0.865982, 0, 2, 4 )
+[node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshPivot"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = null
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
 autoplay = "rotate"
 anims/rotate = SubResource( 2 )
+
+[node name="CameraPivot" type="Spatial" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport/CameraPivot"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5 )
+far = 50.0
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 260.0

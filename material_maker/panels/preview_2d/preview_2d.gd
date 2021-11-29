@@ -44,7 +44,10 @@ func do_update_material(source, target_material, template):
 	on_resized()
 
 func update_material(source):
-	do_update_material(source, material, shader_context_defs+shader)
+	do_update_material(source, material, shader_context_defs+get_shader_custom_functions()+shader)
+
+func get_shader_custom_functions():
+	return ""
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if !is_visible_in_tree():

@@ -21,6 +21,9 @@ func create_node(generator : MMGenBase) -> Node:
 	return node
 
 func set_theme_overrides(node, generator : MMGenBase = null) -> void:
+	var theme : Theme = get_node("/root/MainWindow").theme
+	if node.theme != null && node.theme != theme:
+		return
 	if generator == null:
 		generator = node.generator
 	if library_manager == null:
@@ -38,7 +41,6 @@ func set_theme_overrides(node, generator : MMGenBase = null) -> void:
 			theme_overrides[section] = {}
 			var color = library_manager.get_section_color(section)
 			if color != null:
-				var theme : Theme = get_node("/root/MainWindow").theme
 				for s in [ "frame", "selectedframe" ]:
 					var frame : StyleBoxFlat = theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
 					color.a = frame.border_color.a

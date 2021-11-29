@@ -114,7 +114,8 @@ func create_gen(data) -> MMGenBase:
 		switch = MMGenSwitch,
 		export = MMGenExport,
 		comment = MMGenComment,
-		debug = MMGenDebug
+		debug = MMGenDebug,
+		reroute = MMGenReroute
 	}
 	var generator = null
 	for g in guess:
