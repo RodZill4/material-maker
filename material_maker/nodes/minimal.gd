@@ -1,7 +1,10 @@
 extends GraphNode
 class_name MMGraphNodeMinimal
 
+
 var generator : MMGenBase = null setget set_generator
+var disable_undoredo_for_offset : bool = false
+
 
 func _ready() -> void:
 	add_to_group("generator_node")
@@ -17,6 +20,11 @@ func update_node() -> void:
 
 func set_generator(g) -> void:
 	generator = g
+
+func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
+	offset = o
+	disable_undoredo_for_offset = false
 
 func get_input_slot(pos : Vector2) -> int:
 	var scale = get_global_transform().get_scale()

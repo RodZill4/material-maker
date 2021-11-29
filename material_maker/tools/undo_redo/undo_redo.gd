@@ -20,6 +20,7 @@ func can_undo() -> bool:
 
 func undo() -> void:
 	if !performing_action and step > 0:
+		print("Undo...")
 		performing_action = true
 		step -= 1
 		var parent = get_parent()
@@ -40,6 +41,7 @@ func can_redo() -> bool:
 
 func redo() -> void:
 	if !performing_action and step < stack.size():
+		print("Redo...")
 		performing_action = true
 		var parent = get_parent()
 		var state = ""
@@ -47,7 +49,7 @@ func redo() -> void:
 			state = parent.undoredo_pre()
 		for a in stack[step].redo_actions:
 			if VERBOSE and OS.is_debug_build():
-				print("Executing undo action on %s:" % str(parent))
+				print("Executing redo action on %s:" % str(parent))
 				print(a)
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):
@@ -106,4 +108,4 @@ func add(action_name : String, undo_actions : Array, redo_actions : Array, merge
 		step += 1
 		if group_level > 0:
 			group = undo_redo
-	get_node("/root/MainWindow/UndoRedoLabel").show()
+	get_node("/root/MainWindow/UndoRedoLabel").show_step(step)

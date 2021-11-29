@@ -2,13 +2,11 @@ extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
 
-var generator : MMGenBase = null setget set_generator
 var show_inputs : bool = false
 var show_outputs : bool = false
 
 var rendering_time : int = -1
 
-var disable_undoredo_for_offset : bool = false
 
 const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
 const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
@@ -18,6 +16,7 @@ const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
+
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -113,11 +112,6 @@ func set_generator(g) -> void:
 
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
-
-func do_set_position(o : Vector2) -> void:
-	disable_undoredo_for_offset = true
-	offset = o
-	disable_undoredo_for_offset = false
 
 func reroll_generator_seed() -> void:
 	generator.reroll_seed()

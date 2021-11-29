@@ -43,7 +43,8 @@ script/source = "extends Label
 func _ready():
 	pass # Replace with function body.
 
-func show():
+func show_step(step : int):
+	text = \"Undo/Redo action added (%d)\" % step
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play(\"show\")
 "
