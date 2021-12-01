@@ -36,6 +36,7 @@ func update_preview_texture():
 		status = yield(status, "completed")
 	$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
 	$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
+	$PreviewViewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
 	$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
 	$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	$PreviewViewport.update_worlds()
@@ -57,6 +58,7 @@ func _on_SendButton_pressed():
 				status = yield(status, "completed")
 			$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
 			$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
+			$PreviewViewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
 			$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
 			$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
 			$PreviewViewport.update_worlds()
