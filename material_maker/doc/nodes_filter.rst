@@ -35,6 +35,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_occlusion
 	node_filter_quantize
 	node_filter_dilate
+	node_filter_bevel
 	node_filter_fill
 	node_filter_fill_to_position
 	node_filter_fill_to_size
