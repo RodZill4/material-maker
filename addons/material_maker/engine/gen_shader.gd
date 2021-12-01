@@ -625,5 +625,5 @@ func edit(node) -> void:
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)
 		edit_window.connect("node_changed", node, "update_generator")
-		edit_window.connect("popup_hide", edit_window, "queue_free")
+		edit_window.connect("editor_window_closed", node, "finalize_generator_update")
 		edit_window.popup_centered()

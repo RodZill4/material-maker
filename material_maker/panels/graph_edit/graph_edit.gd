@@ -915,9 +915,6 @@ func simplify_graph(graph):
 
 func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dictionary) -> Dictionary:
 	assert(prev.type == next.type)
-	print(parent_path)
-	print(prev)
-	print(next)
 	var undo_actions : Array = []
 	var redo_actions : Array = []
 	match prev.type:
@@ -927,11 +924,24 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 			# Check all instances in prev
 			var undo_add_nodes : Array = []
 			var redo_add_nodes : Array = []
+			var undo_update_nodes : Array = []
+			var redo_update_nodes : Array = []
 			var undo_remove_nodes : Array = []
 			var redo_remove_nodes : Array = []
 			for pin in prev.nodes.keys():
 				if next.nodes.has(pin):
-					pass # node maybe changed
+					var pi = prev.nodes[pin]
+					var ni = next.nodes[pin]
+					if pi.hash() != ni.hash():
+						var step_actions = undoredo_step_actions(parent_path+"/"+pin, pi, ni)
+						if step_actions.empty():
+							undo_remove_nodes.push_back(pin)
+							undo_add_nodes.push_back(pi)
+							redo_remove_nodes.push_back(pin)
+							redo_add_nodes.push_back(ni)
+						else:
+							undo_update_nodes.append_array(step_actions.undo_actions)
+							redo_update_nodes.append_array(step_actions.redo_actions)
 				else:
 					undo_add_nodes.push_back(prev.nodes[pin])
 					redo_remove_nodes.push_back(pin)
@@ -988,12 +998,17 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 				undo_actions.push_back({ type="remove_generators", parent=parent_path, generators=undo_remove_nodes })
 			if ! redo_remove_nodes.empty():
 				redo_actions.push_back({ type="remove_generators", parent=parent_path, generators=redo_remove_nodes })
+			if ! undo_update_nodes.empty():
+				undo_actions.append_array(undo_update_nodes)
+			if ! redo_update_nodes.empty():
+				redo_actions.append_array(redo_update_nodes)
 			if ! undo_add_nodes.empty() or ! undo_add_connections.empty():
 				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
 			if ! redo_add_nodes.empty() or ! redo_add_connections.empty():
 				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
 		_:
 			print("ERROR: Unsupported node type in undoredo_step_actions")
+			return {}
 	print("Undo actions:")
 	print(undo_actions)
 	print("Redo actions:")

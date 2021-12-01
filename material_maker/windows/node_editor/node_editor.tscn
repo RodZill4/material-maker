@@ -216,10 +216,10 @@ margin_right = 942.0
 margin_bottom = 390.0
 mouse_default_cursor_shape = 0
 size_flags_vertical = 3
-custom_fonts/font = SubResource( 3 )
 custom_colors/safe_line_number_color = Color( 1, 0, 0, 1 )
 custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
 custom_colors/executing_line_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
 syntax_highlighting = true
 show_line_numbers = true
 minimap_draw = true
@@ -258,6 +258,7 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 text = "Cancel"
 
+[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
