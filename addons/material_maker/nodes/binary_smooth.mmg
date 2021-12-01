@@ -1,0 +1,226 @@
+{
+	"connections": [
+		{
+			"from": "tones_step_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "fast_blur",
+			"from_port": 0,
+			"to": "tones_step_3",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "1843",
+			"to_port": 0
+		},
+		{
+			"from": "1843",
+			"from_port": 0,
+			"to": "fast_blur",
+			"to_port": 0
+		}
+	],
+	"label": "Binary Smooth",
+	"longdesc": "Smoothes the outline of a mask",
+	"name": "binary_smooth",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "tones_step_3",
+			"node_position": {
+				"x": -400,
+				"y": -400
+			},
+			"parameters": {
+				"invert": false,
+				"value": 0.5,
+				"width": 0
+			},
+			"seed": 1071,
+			"seed_locked": false,
+			"type": "tones_step"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1400,
+				"y": -400
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "Height",
+					"type": "f"
+				}
+			],
+			"seed": 31266,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -120,
+				"y": -400
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Shows the generate smoothed mask",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"seed": 35961,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -800,
+				"y": -600
+			},
+			"parameters": {
+				"offset": 0.5,
+				"size": 10,
+				"smooth": 60
+			},
+			"seed": 18638,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "fast_blur",
+							"widget": "param0"
+						}
+					],
+					"longdesc": "The resolution of the generated mask",
+					"name": "size",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "Smooth",
+					"linked_widgets": [
+						{
+							"node": "fast_blur",
+							"widget": "param1"
+						}
+					],
+					"longdesc": "The amount of smoothing to the mask shape",
+					"name": "smooth",
+					"shortdesc": "Smooth",
+					"type": "linked_control"
+				},
+				{
+					"label": "Offset",
+					"linked_widgets": [
+						{
+							"node": "tones_step_3",
+							"widget": "value"
+						}
+					],
+					"longdesc": "Offset to expand or contract the smoothed shape",
+					"name": "offset",
+					"shortdesc": "Offset",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "fast_blur",
+			"node_position": {
+				"x": -720,
+				"y": -400
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 60,
+				"param2": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "fast_blur"
+		},
+		{
+			"name": "1843",
+			"node_position": {
+				"x": -920,
+				"y": -400
+			},
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "Mask",
+				"outputs": [
+					{
+						"f": "float($in($uv) > 0.5)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": -279,
+				"y": -144.333374
+			},
+			"parameters": {
+				"buffer": 1,
+				"param2": 0,
+				"size": 10,
+				"strength": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "normal_map2"
+		}
+	],
+	"parameters": {
+		"offset": 0.5,
+		"size": 10,
+		"smooth": 60
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Binary Smooth",
+	"type": "graph"
+}

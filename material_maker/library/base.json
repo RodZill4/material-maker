@@ -6325,6 +6325,19 @@
 			"seed_locked": false,
 			"tree_item": "Filter/Colormap",
 			"type": "colormap"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAQFJREFUaIHtmtsOwzAIQ5P9/z+zh0lTq6mBqhhnic97aY1DLjStCSHEupiZmUFf0XGhj5/eO+pFqLi/iQdpgAS9GjYIDa/0iMXkp2RctekmyIEzkUkz1wQ5cCC+ZiWakBbo7oqbpSEhypPNwnMZzvPonUyEscili3iG9H8YmKAhxMYRgNvHZzG7A24GQwlmVULE/9kdcIkO8XoTguW3jQOt1oT47LeTA63KhFuLz04OqAYgaB1go70QG18i91DmmjC7A276HAEznInHzO6Ai9oqeBZvq6ze3I3zx+31L5QfHJk1QGnjEYo4V6f+E7PRXQk2um5zTc2FJywFV86EEILLGwAkZkOhXJMpAAAAAElFTkSuQmCC",
+			"name": "binary_smooth_2",
+			"parameters": {
+				"offset": 0.5,
+				"size": 10,
+				"smooth": 60
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Binary Smooth",
+			"type": "binary_smooth"
 		}
 	],
 	"name": "Base library"
