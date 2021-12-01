@@ -49,3 +49,4 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_smoothcurvature
 	node_filter_smoothcurvature2
 	node_filter_denoiser
+	node_filter_binary_smooth

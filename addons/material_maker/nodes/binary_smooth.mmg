@@ -196,22 +196,6 @@
 				]
 			},
 			"type": "shader"
-		},
-		{
-			"name": "normal_map2",
-			"node_position": {
-				"x": -279,
-				"y": -144.333374
-			},
-			"parameters": {
-				"buffer": 1,
-				"param2": 0,
-				"size": 10,
-				"strength": 1
-			},
-			"seed": 0,
-			"seed_locked": false,
-			"type": "normal_map2"
 		}
 	],
 	"parameters": {
