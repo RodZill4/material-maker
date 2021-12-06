@@ -6,14 +6,18 @@
 	},
 	"parameters": {
 		"count": 5,
-		"offset": 0
+		"offset": 0,
+		"variations": false
 	},
+	"seed": 0.280488,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "",
-		"global": "vec2 kal_rotate(vec2 uv, float count, float offset) {\n\tfloat pi = 3.14159265359;\n\toffset *= pi/180.0;\n\toffset += pi*(1.0/count+0.5);\n\tuv -= vec2(0.5);\n\tfloat l = length(uv);\n\tfloat a = mod(atan(uv.y, uv.x)+offset, 2.0*pi/count)-offset;\n\treturn vec2(0.5)+l*vec2(cos(a), sin(a));\n}",
+		"code": "vec3 $(name_uv)_kal = kal_rotate($uv, $count, $offset, $seed);",
+		"global": "vec3 kal_rotate(vec2 uv, float count, float offset, float seed) {\n\tfloat pi = 3.14159265359;\n\toffset *= pi/180.0;\n\toffset += pi*(1.0/count+0.5);\n\tuv -= vec2(0.5);\n\tfloat l = length(uv);\n\tfloat angle = atan(uv.y, uv.x)+offset;\n\tangle += (1.0-sign(angle))*pi;\n\tfloat a = mod(angle, 2.0*pi/count)-offset;\n\treturn vec3(vec2(0.5)+l*vec2(cos(a), sin(a)), rand(vec2(seed))+floor(0.5*angle*count/pi));\n}",
 		"inputs": [
 			{
 				"default": "vec4($uv, 0, 1)",
+				"function": true,
 				"label": "",
 				"longdesc": "The input image",
 				"name": "i",
@@ -27,7 +31,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the transformed image",
-				"rgba": "$i(kal_rotate($uv, $count, $offset))",
+				"rgba": "$i.variation($(name_uv)_kal.xy, $variations ? $(name_uv)_kal.z : 0.0)",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}
@@ -56,6 +60,12 @@
 				"shortdesc": "Offset",
 				"step": 0.1,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Variations",
+				"name": "variations",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Kaleidoscope"
