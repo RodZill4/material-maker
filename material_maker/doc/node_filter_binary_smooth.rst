@@ -19,18 +19,16 @@ The **Binary Smooth** node outputs the result of the smoothing operation.
 Parameters
 ++++++++++
 
-The **Binary Smooth** node has three parameters:
+The **Binary Smooth** node has four parameters:
 
-* The *resolution* defines the size of the output image.
+* The *resolution* used for the blur effect. Note the output is not limited to this resolution.
 
 * The *smooth* parameter defines how much the mask will be smoothed.
 
 * The *offset* can be modified to expand or contract the smoothed shape.
 
-Notes
-+++++
+* The *bevel* parameter controls the width of the edge for a bevel effect. Note this bevel will not be linear.
 
-This node outputs an image that has a fixed size.
 
 Example images
 ++++++++++++++
