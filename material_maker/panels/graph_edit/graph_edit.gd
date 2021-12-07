@@ -338,7 +338,7 @@ func center_view() -> void:
 		scroll_offset = center - 0.5*rect_size
 
 func update_view(g) -> void:
-	if generator != null:
+	if generator != null and is_instance_valid(generator):
 		generator.disconnect("connections_changed", self, "on_connections_changed")
 	clear_view()
 	generator = g
@@ -827,7 +827,10 @@ func undoredo_pre():
 	return generator.get_hier_name()
 
 func undoredo_post(pre_returnvalue) -> void:
-	var current_node = get_node_from_hier_name(pre_returnvalue, true)
+	var current_node = get_node_from_hier_name(pre_returnvalue)
+	if current_node == null:
+		current_node = get_node_from_hier_name(pre_returnvalue, true)
+		update_view(current_node)
 
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
@@ -864,6 +867,16 @@ func undoredo_command(command : Dictionary) -> void:
 							print(c.name)
 				else:
 					parent_generator.remove_generator(g)
+		"update_generator":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			var g = parent_generator.get_node(command.name)
+			if g != null:
+				g.deserialize(command.data)
+				if generator == parent_generator:
+					if has_node("node_"+g.name):
+						var node = get_node("node_"+g.name)
+						if node.has_method("update_node"):
+							node.update_node()
 		"setparam":
 			var node = get_node_from_hier_name(command.node)
 			node.set_parameter(command.param, MMType.deserialize_value(command.value))
@@ -913,8 +926,9 @@ func simplify_graph(graph):
 	graph.connections = new_connections
 	return graph
 
-func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dictionary) -> Dictionary:
-	assert(prev.type == next.type)
+func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dictionary, top : bool = true) -> Dictionary:
+	if prev.type != next.type:
+		return {}
 	var undo_actions : Array = []
 	var redo_actions : Array = []
 	match prev.type:
@@ -933,7 +947,8 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 					var pi = prev.nodes[pin]
 					var ni = next.nodes[pin]
 					if pi.hash() != ni.hash():
-						var step_actions = undoredo_step_actions(parent_path+"/"+pin, pi, ni)
+						var child_path = pin if parent_path == "" else parent_path+"/"+pin
+						var step_actions = undoredo_step_actions(child_path, pi, ni, false)
 						if step_actions.empty():
 							undo_remove_nodes.push_back(pin)
 							undo_add_nodes.push_back(pi)
@@ -1006,13 +1021,18 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
 			if ! redo_add_nodes.empty() or ! redo_add_connections.empty():
 				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
+		"ios":
+			var generator_path = parent_path.left(parent_path.rfind("/"))
+			undo_actions.push_back({ type="update_generator", parent=generator_path, name=next.name, data=prev })
+			redo_actions.push_back({ type="update_generator", parent=generator_path, name=prev.name, data=next })
 		_:
-			print("ERROR: Unsupported node type in undoredo_step_actions")
+			print("ERROR: Unsupported node type %s in undoredo_step_actions" % prev.type)
 			return {}
-	print("Undo actions:")
-	print(undo_actions)
-	print("Redo actions:")
-	print(redo_actions)
+	if top:
+		print("Undo actions:")
+		print(undo_actions)
+		print("Redo actions:")
+		print(redo_actions)
 	return { undo_actions=undo_actions, redo_actions=redo_actions }
 
 func undoredo_create_step(action_name : String, parent_path : String, prev : Dictionary, next : Dictionary) -> void:

@@ -39,3 +39,16 @@ func update_node() -> void:
 	add_button.connect("pressed", generator, "add_port")
 	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
 	update_up_down_buttons()
+
+func command(command_name : String, command_parameters : Array, update_node : bool = false):
+	var parent_generator = generator.get_parent().get_parent()
+	var prev = null
+	if parent_generator is MMGenGraph:
+		prev = parent_generator.serialize().duplicate(true)
+	generator.callv(command_name, command_parameters)
+	if update_node:
+		update()
+	if prev != null:
+		var next = parent_generator.serialize().duplicate(true)
+		get_parent().undoredo_create_step("IO update", parent_generator.get_hier_name(), prev, next)
+			

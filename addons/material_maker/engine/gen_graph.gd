@@ -373,7 +373,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	# Create inputs and outputs generators
 	var gen_inputs = MMGenIOs.new()
 	gen_inputs.name = "gen_inputs"
-	gen_inputs.position = Vector2(left_bound-300, center.y)
+	gen_inputs.position = Vector2(left_bound-500, center.y)
 	new_graph.add_generator(gen_inputs)
 	var gen_outputs = MMGenIOs.new()
 	gen_outputs.name = "gen_outputs"
