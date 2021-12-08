@@ -14,6 +14,8 @@ func _exit_tree() -> void:
 	get_parent().call_deferred("check_last_selected")
 
 func _on_offset_changed() -> void:
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, offset)
 	generator.set_position(offset)
 	# This is the old behavior
 	#reroll_generator_seed()

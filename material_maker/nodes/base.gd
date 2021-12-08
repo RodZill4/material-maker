@@ -44,7 +44,6 @@ func on_generator_changed(g):
 	if generator == g:
 		update()
 
-
 func _draw() -> void:
 	var color : Color = get_color("title_color")
 	var icon = MINIMIZE_ICON
@@ -126,13 +125,6 @@ func _on_seed_menu(id):
 		2:
 			if OS.clipboard.left(5) == "seed=":
 				generator.set_seed(OS.clipboard.right(5).to_float())
-
-func _on_offset_changed() -> void:
-	if ! disable_undoredo_for_offset:
-		get_parent().undoredo_move_node(generator.name, generator.position, offset)
-	generator.set_position(offset)
-	# This is the old behavior
-	#reroll_generator_seed()
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
