@@ -32,9 +32,9 @@ func add_point(x : float, y : float, ls : float = INF, rs : float = INF) -> void
 	for i in points.size():
 		if x < points[i].p.x:
 			if ls == INF:
-				ls == 0
+				ls = 0
 			if rs == INF:
-				rs == 0
+				rs = 0
 			points.insert(i, Point.new(x, y, ls, rs))
 			return
 	points.append(Point.new(x, y, ls, rs))

@@ -34,7 +34,6 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
-	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
 func _exit_tree() -> void:

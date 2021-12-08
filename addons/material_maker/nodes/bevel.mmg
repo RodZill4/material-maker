@@ -1,0 +1,301 @@
+{
+	"connections": [
+		{
+			"from": "tonality",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "1536",
+			"to_port": 0
+		},
+		{
+			"from": "1536",
+			"from_port": 0,
+			"to": "dilate",
+			"to_port": 0
+		},
+		{
+			"from": "dilate",
+			"from_port": 0,
+			"to": "1536_2",
+			"to_port": 0
+		},
+		{
+			"from": "1536_2",
+			"from_port": 0,
+			"to": "tonality",
+			"to_port": 0
+		}
+	],
+	"label": "Bevel",
+	"longdesc": "Adds an edge bevel to the input mask based on a customizable curve",
+	"name": "bevel",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "dilate",
+			"node_position": {
+				"x": -399,
+				"y": 800
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 0.1,
+				"param2": 0,
+				"param3": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "dilate"
+		},
+		{
+			"name": "tonality",
+			"node_position": {
+				"x": -180,
+				"y": 900
+			},
+			"parameters": {
+				"curve": {
+					"points": [
+						{
+							"ls": 0,
+							"rs": 1,
+							"x": 0,
+							"y": 0
+						},
+						{
+							"ls": 1,
+							"rs": 0,
+							"x": 1,
+							"y": 1
+						}
+					],
+					"type": "Curve"
+				}
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "tonality"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1000,
+				"y": 800
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The input mask whose white areas will be beveled",
+					"name": "port0",
+					"shortdesc": "Mask",
+					"type": "f"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 0,
+				"y": 800
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Shows the beveled image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -540,
+				"y": 600
+			},
+			"parameters": {
+				"bevel": {
+					"points": [
+						{
+							"ls": 0,
+							"rs": 1,
+							"x": 0,
+							"y": 0
+						},
+						{
+							"ls": 1,
+							"rs": 0,
+							"x": 1,
+							"y": 1
+						}
+					],
+					"type": "Curve"
+				},
+				"distance": 0.1,
+				"size": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate",
+							"widget": "param0"
+						}
+					],
+					"longdesc": "The resolution of the generated texture",
+					"name": "size",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate",
+							"widget": "param1"
+						}
+					],
+					"longdesc": "The distance of the bevel effect",
+					"name": "distance",
+					"shortdesc": "Distance",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "tonality",
+							"widget": "curve"
+						}
+					],
+					"longdesc": "The profile of the bevel",
+					"name": "bevel",
+					"shortdesc": "Bevel",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "1536",
+			"node_position": {
+				"x": -600,
+				"y": 800
+			},
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "Inv",
+				"outputs": [
+					{
+						"f": "1.0 - $in($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "1536_2",
+			"node_position": {
+				"x": -180,
+				"y": 800
+			},
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "Inv",
+				"outputs": [
+					{
+						"f": "1.0 - $in($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"bevel": {
+			"points": [
+				{
+					"ls": 0,
+					"rs": 1,
+					"x": 0,
+					"y": 0
+				},
+				{
+					"ls": 1,
+					"rs": 0,
+					"x": 1,
+					"y": 1
+				}
+			],
+			"type": "Curve"
+		},
+		"distance": 0.1,
+		"size": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Bevel",
+	"type": "graph"
+}

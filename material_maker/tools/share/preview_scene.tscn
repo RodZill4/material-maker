@@ -1,6 +1,8 @@
 [gd_scene load_steps=6 format=2]
 
 [sub_resource type="SphereMesh" id=1]
+radial_segments = 256
+rings = 128
 
 [sub_resource type="Shader" id=2]
 code = "shader_type spatial;

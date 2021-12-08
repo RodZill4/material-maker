@@ -7,6 +7,8 @@
 	"parameters": {
 		"angle": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -15,18 +17,18 @@
 				"default": "0.0",
 				"function": true,
 				"label": "",
-				"longdesc": "The input heightmap",
+				"longdesc": "The input heightmap (it is recommended to use a buffer)",
 				"name": "in",
 				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
-		"instance": "float $(name)_fct(vec2 uv, float epsilon) {\n\tvec3 e = vec3(epsilon, -epsilon, 0);\n\tvec2 rv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\treturn atan(rv.y, rv.x)/3.141592;\n}",
+		"instance": "float $(name)_fct(vec2 uv, float epsilon) {\n\tvec3 e = vec3(epsilon, -epsilon, 0);\n\tfloat start = $in(uv);\n\tvec2 dh = vec2(1.0, 0.0)*$in(uv+e.xz);\n\tdh += vec2(0.0, 1.0)*$in(uv+e.zx);\n\tdh -= vec2(1.0, 0.0)*$in(uv-e.xz);\n\tdh -= vec2(0.0, 1.0)*$in(uv-e.zx);\n\treturn atan(dh.y, dh.x)/3.141592;\n}",
 		"longdesc": "Generates an angle map to be used by Advances Tiler nodes from a heightmap",
 		"name": "Height To Angle",
 		"outputs": [
 			{
-				"f": "$(name)_fct($uv, 0.0001)+$angle/180.0",
+				"f": "$(name)_fct($uv, 0.001)+$angle/180.0",
 				"longdesc": "The generated angle map. Values are between -1 and 1 and the corresponding Advanced Tiler parameter (Rotate) must be set to 180.",
 				"shortdesc": "Output",
 				"type": "f"
