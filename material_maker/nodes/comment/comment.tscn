@@ -1,41 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/nodes/comment/comment.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/nodes/comment/palette_button.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/icons/color_picker.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 1, 1, 1, 0.0627451 )
-
-[sub_resource type="Shader" id=4]
-code = "shader_type canvas_item;
-
-vec3 rainbow(float level)
-{	
-	float r = float(level <= 2.0) + float(level > 4.0) * 0.5;
-	float g = max(1.0 - abs(level - 2.0) * 0.5, 0.0);
-	float b = (1.0 - (level - 4.0) * 0.5) * float(level >= 4.0);
-	return vec3(r, g, b);
-}
-
-vec3 smoothRainbow (float x)
-{
-    float level1 = floor(x*6.0);
-    float level2 = min(6.0, floor(x*6.0) + 1.0);
-    
-    vec3 a = rainbow(level1);
-    vec3 b = rainbow(level2);
-    
-    return mix(a, b, fract(x*6.0));
-}
-
-void fragment() {
-	vec3 col = smoothRainbow(UV.x);
-	col = mix(col, vec3(0.0), UV.y);
-	COLOR = vec4(col, 1.0);
-}"
-
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
 
 [node name="GraphNode" type="GraphNode"]
 margin_left = 1.0
@@ -86,7 +56,7 @@ autowrap = true
 [node name="TextEdit" type="TextEdit" parent="VBox"]
 visible = false
 margin_top = 18.0
-margin_right = 330.0
+margin_right = 223.0
 margin_bottom = 18.0
 focus_mode = 1
 custom_styles/focus = SubResource( 2 )
@@ -94,82 +64,54 @@ custom_styles/normal = SubResource( 2 )
 wrap_enabled = true
 
 [node name="Popup" type="PopupPanel" parent="."]
+visible = true
 margin_left = 16.0
 margin_top = 39.0
-margin_right = 114.0
-margin_bottom = 117.0
+margin_right = 80.0
+margin_bottom = 103.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="Popup"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="GridContainer" type="GridContainer" parent="Popup"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
+margin_right = 60.0
+margin_bottom = 60.0
+columns = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Popup/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 83.0
-margin_bottom = 63.0
-
-[node name="GridContainer" type="GridContainer" parent="Popup/PanelContainer/VBoxContainer"]
-margin_right = 76.0
-margin_bottom = 36.0
-columns = 4
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Color1" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color1" type="ColorRect" parent="Popup/GridContainer"]
 margin_right = 16.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-color = Color( 0, 0, 0, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color2" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color2" type="ColorRect" parent="Popup/GridContainer"]
 margin_left = 20.0
 margin_right = 36.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-color = Color( 0.0431373, 0.192157, 0.176471, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color3" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color3" type="ColorRect" parent="Popup/GridContainer"]
 margin_left = 40.0
 margin_right = 56.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-color = Color( 0.231373, 0.0235294, 0.0470588, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color4" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
-margin_left = 60.0
-margin_right = 76.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-color = Color( 0.27451, 0.160784, 0, 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Color5" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color4" type="ColorRect" parent="Popup/GridContainer"]
 margin_top = 20.0
 margin_right = 16.0
 margin_bottom = 36.0
@@ -179,58 +121,61 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color6" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color5" type="ColorRect" parent="Popup/GridContainer"]
 margin_left = 20.0
 margin_top = 20.0
 margin_right = 36.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 16, 16 )
-color = Color( 0.572549, 0.898039, 0.866667, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color7" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+[node name="Color6" type="ColorRect" parent="Popup/GridContainer"]
 margin_left = 40.0
 margin_top = 20.0
 margin_right = 56.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 16, 16 )
-color = Color( 0.952941, 0.556863, 0.603922, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Color8" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
-margin_left = 60.0
-margin_top = 20.0
-margin_right = 76.0
-margin_bottom = 36.0
-rect_min_size = Vector2( 16, 16 )
-color = Color( 1, 0.811765, 0.54902, 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorChooser" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer"]
-material = SubResource( 5 )
+[node name="Color7" type="ColorRect" parent="Popup/GridContainer"]
 margin_top = 40.0
-margin_right = 76.0
+margin_right = 16.0
 margin_bottom = 56.0
 rect_min_size = Vector2( 16, 16 )
-mouse_filter = 1
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Color8" type="ColorRect" parent="Popup/GridContainer"]
+margin_left = 20.0
+margin_top = 40.0
+margin_right = 36.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 16, 16 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorChooser" type="TextureRect" parent="Popup/GridContainer"]
+margin_left = 40.0
+margin_top = 40.0
+margin_right = 56.0
+margin_bottom = 56.0
+texture = ExtResource( 3 )
 
 [node name="PopupSelector" type="PopupPanel" parent="."]
 margin_left = 16.0
-margin_top = 118.0
+margin_top = 104.0
 margin_right = 360.0
-margin_bottom = 602.0
+margin_bottom = 588.0
 
 [node name="PanelContainer" type="PanelContainer" parent="PopupSelector"]
 margin_left = 4.0
@@ -254,4 +199,4 @@ __meta__ = {
 [connection signal="gui_input" from="VBox/Label" to="." method="_on_Label_gui_input"]
 [connection signal="focus_entered" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_exited"]
-[connection signal="gui_input" from="Popup/PanelContainer/VBoxContainer/ColorChooser" to="." method="_on_ColorChooser_gui_input"]
+[connection signal="gui_input" from="Popup/GridContainer/ColorChooser" to="." method="_on_ColorChooser_gui_input"]

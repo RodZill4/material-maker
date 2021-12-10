@@ -18,7 +18,7 @@ func _ready():
 		add_stylebox_override(s, frame);
 
 func _draw() -> void:
-	var icon = preload("res://material_maker/icons/color_picker.png")
+	var icon = preload("res://material_maker/icons/color_palette.png")
 	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
 	if !is_connected("gui_input", self, "_on_gui_input"):
 		connect("gui_input", self, "_on_gui_input")
@@ -71,9 +71,10 @@ func _on_gui_input(event) -> void:
 			if !light_theme:
 				for i in corrected_color.size():
 					corrected_color[i] = corrected_color[i].darkened(0.5)
-			corrected_color.insert(3, Color.webgray)
+			corrected_color.push_front(Color.webgray)
 			corrected_color.push_front(Color.white if light_theme else Color.black)
-			var palette_rects = $Popup/PanelContainer/VBoxContainer/GridContainer.get_children()
+			var palette_rects = $Popup/GridContainer.get_children()
+			palette_rects.pop_back()
 			for i in palette_rects.size():
 				palette_rects[i].color = corrected_color[i]
 				if !palette_rects[i].is_connected("pressed", self, "set_color"):
