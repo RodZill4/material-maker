@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://material_maker/nodes/comment/comment.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/nodes/comment/palette_button.gd" type="Script" id=2]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=3]
 resource_local_to_scene = true
 content_margin_left = 28.0
 content_margin_right = 28.0
@@ -14,9 +15,55 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 1, 1, 1, 0.9 )
+shadow_color = Color( 0, 0, 0, 0.215686 )
+shadow_size = 7
+shadow_offset = Vector2( 0, 3 )
+
+[sub_resource type="StyleBoxFlat" id=1]
+resource_local_to_scene = true
+content_margin_left = 28.0
+content_margin_right = 28.0
+content_margin_top = 24.0
+content_margin_bottom = 5.0
+bg_color = Color( 0, 0, 0, 0.3 )
+border_color = Color( 1, 1, 1, 0.9 )
+shadow_color = Color( 0, 0, 0, 0.215686 )
+shadow_size = 7
+shadow_offset = Vector2( 0, 3 )
 
 [sub_resource type="StyleBoxFlat" id=2]
 bg_color = Color( 1, 1, 1, 0.0627451 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+vec3 rainbow(float level)
+{	
+	float r = float(level <= 2.0) + float(level > 4.0) * 0.5;
+	float g = max(1.0 - abs(level - 2.0) * 0.5, 0.0);
+	float b = (1.0 - (level - 4.0) * 0.5) * float(level >= 4.0);
+	return vec3(r, g, b);
+}
+
+vec3 smoothRainbow (float x)
+{
+    float level1 = floor(x*6.0);
+    float level2 = min(6.0, floor(x*6.0) + 1.0);
+    
+    vec3 a = rainbow(level1);
+    vec3 b = rainbow(level2);
+    
+    return mix(a, b, fract(x*6.0));
+}
+
+void fragment() {
+	vec3 col = smoothRainbow(UV.x);
+	col = mix(col, vec3(0.0), UV.y);
+	COLOR = vec4(col, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
 
 [node name="GraphNode" type="GraphNode"]
 margin_left = 1.0
@@ -25,7 +72,7 @@ margin_right = 256.0
 margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/commentfocus = SubResource( 1 )
+custom_styles/commentfocus = SubResource( 3 )
 custom_styles/comment = SubResource( 1 )
 title = "Comment"
 show_close = true
@@ -43,6 +90,12 @@ slot/1/left_color = Color( 1, 1, 1, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = false
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -51,20 +104,19 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 346.0
+margin_right = 239.0
 margin_bottom = 38.0
 
 [node name="Label" type="Label" parent="VBox"]
-margin_right = 330.0
+margin_right = 223.0
 margin_bottom = 14.0
 mouse_filter = 0
-text = "Double-click to write a comment"
 autowrap = true
 
 [node name="TextEdit" type="TextEdit" parent="VBox"]
 visible = false
 margin_top = 18.0
-margin_right = 221.0
+margin_right = 330.0
 margin_bottom = 18.0
 focus_mode = 1
 custom_styles/focus = SubResource( 2 )
@@ -72,16 +124,159 @@ custom_styles/normal = SubResource( 2 )
 wrap_enabled = true
 
 [node name="Popup" type="PopupPanel" parent="."]
+visible = true
 margin_left = 16.0
 margin_top = 39.0
-margin_right = 346.0
-margin_bottom = 509.0
+margin_right = 114.0
+margin_bottom = 117.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 
-[node name="ColorPicker" type="ColorPicker" parent="Popup"]
+[node name="PanelContainer" type="PanelContainer" parent="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 326.0
-margin_bottom = 466.0
+margin_right = -4.0
+margin_bottom = -4.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 83.0
+margin_bottom = 63.0
+
+[node name="GridContainer" type="GridContainer" parent="Popup/PanelContainer/VBoxContainer"]
+margin_right = 76.0
+margin_bottom = 36.0
+columns = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color1" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color2" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 20.0
+margin_right = 36.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0.0431373, 0.192157, 0.176471, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color3" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 40.0
+margin_right = 56.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0.231373, 0.0235294, 0.0470588, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color4" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 60.0
+margin_right = 76.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0.27451, 0.160784, 0, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color5" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_top = 20.0
+margin_right = 16.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 16 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color6" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 36.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0.572549, 0.898039, 0.866667, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color7" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 40.0
+margin_top = 20.0
+margin_right = 56.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 0.952941, 0.556863, 0.603922, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color8" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer/GridContainer"]
+margin_left = 60.0
+margin_top = 20.0
+margin_right = 76.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 16, 16 )
+color = Color( 1, 0.811765, 0.54902, 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorChooser" type="ColorRect" parent="Popup/PanelContainer/VBoxContainer"]
+material = SubResource( 5 )
+margin_top = 40.0
+margin_right = 76.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 16, 16 )
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopupSelector" type="PopupPanel" parent="."]
+margin_left = 16.0
+margin_top = 118.0
+margin_right = 360.0
+margin_bottom = 602.0
+
+[node name="PanelContainer" type="PanelContainer" parent="PopupSelector"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 340.0
+margin_bottom = 480.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorPicker" type="ColorPicker" parent="PopupSelector/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 329.0
+margin_bottom = 469.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -90,3 +285,4 @@ __meta__ = {
 [connection signal="gui_input" from="VBox/Label" to="." method="_on_Label_gui_input"]
 [connection signal="focus_entered" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_entered"]
 [connection signal="focus_exited" from="VBox/TextEdit" to="." method="_on_TextEdit_focus_exited"]
+[connection signal="gui_input" from="Popup/PanelContainer/VBoxContainer/ColorChooser" to="." method="_on_ColorChooser_gui_input"]
