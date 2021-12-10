@@ -12,6 +12,11 @@ var pallette_colors = [
 	Color("B1A7F0")
 ]
 
+func _ready():
+	for s in [ "comment", "commentfocus" ]:
+		var frame : StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
+		add_stylebox_override(s, frame);
+
 func _draw() -> void:
 	var icon = preload("res://material_maker/icons/color_picker.png")
 	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
