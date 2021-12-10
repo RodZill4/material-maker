@@ -64,7 +64,6 @@ custom_styles/normal = SubResource( 2 )
 wrap_enabled = true
 
 [node name="Popup" type="PopupPanel" parent="."]
-visible = true
 margin_left = 16.0
 margin_top = 39.0
 margin_right = 80.0
