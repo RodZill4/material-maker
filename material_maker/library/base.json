@@ -6369,6 +6369,17 @@
 			"seed_locked": false,
 			"tree_item": "Filter/Math/Smooth MinMax",
 			"type": "smooth_minmax"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAKBJREFUaIHt0aENhEAQQNHbM3RBUARJB1cIlhpQFEAjFINDEio4DQ0gqAAx/Gzyn96d3Z9J6/j/RCp/U+j8b+j0FxhAM4BmAM0AmgE0A2gG0AygGUDLPiAVx/noQrc3QV+5zfX26Hz2GzCAZgDNAJoBNANoBtAMoBlAM4BmAC317RD6wLhUofOz34ABNANoBtAMoBlAM4BmAM0AmgG07AMukj4K8izFPZ0AAAAASUVORK5CYII=",
+			"name": "randomize",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Miscellaneous/Randomize",
+			"type": "randomize"
 		}
 	],
 	"name": "Base library"
