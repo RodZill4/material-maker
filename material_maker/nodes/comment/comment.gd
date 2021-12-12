@@ -108,8 +108,7 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
-		$PopupSelector.popup()
-		$PopupSelector.rect_position = event.global_position
+		$PopupSelector.popup(Rect2(event.global_position, $PopupSelector.get_minimum_size()))
 		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
 		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed", self, "set_color"):
 			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed", self, "set_color")
