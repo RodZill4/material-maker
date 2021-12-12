@@ -5,7 +5,7 @@ export var color : Color = Color(0.5, 0.5, 0.5) setget set_color
 
 var snap : float = 0.0
 
-const STYLES : Array = [ "None", "Corners", "Lines", "Grid4x4", "Grid10x10", "Grid16x16" ]
+const STYLES : Array = [ "None", "Corners", "Lines", "Grid4x4", "Grid8x8", "Grid10x10", "Grid16x16" ]
 
 func draw_grid(size : int) -> void:
 	snap = size
@@ -19,7 +19,6 @@ func draw_grid(size : int) -> void:
 func _draw() -> void:
 	var parent = get_parent()
 	var p
-	snap = 0.0
 	match style:
 		1:
 			p = parent.value_to_pos(Vector2(-0.5, -0.52))
@@ -43,12 +42,22 @@ func _draw() -> void:
 		3:
 			draw_grid(4)
 		4:
+			draw_grid(8)
+		5:
 			draw_grid(10)
 		5:
 			draw_grid(16)
+		1000:
+			draw_grid(snap)
 
 func set_style(s : int) -> void:
+	snap = 0.0
 	style = s
+	update()
+
+func show_grid(value) -> void:
+	snap = value
+	style = 1000
 	update()
 
 func set_color(c : Color) -> void:
