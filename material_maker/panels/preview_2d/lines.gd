@@ -45,7 +45,7 @@ func _draw() -> void:
 			draw_grid(8)
 		5:
 			draw_grid(10)
-		5:
+		6:
 			draw_grid(16)
 		1000:
 			draw_grid(snap)

@@ -124,8 +124,8 @@ visible = false
 self_modulate = Color( 0, 1, 0.380392, 1 )
 margin_left = 5.0
 margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
+margin_right = 21.0
+margin_bottom = 45.0
 texture = SubResource( 4 )
 
 [node name="Rect1" parent="." index="4" instance=ExtResource( 2 )]
