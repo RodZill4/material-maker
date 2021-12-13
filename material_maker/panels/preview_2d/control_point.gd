@@ -125,14 +125,19 @@ func update_parameters(value : Vector2) -> void:
 			value.y = abs(value.y)
 		3: # Scale
 			value = 4.0*value
+	var parameters : Dictionary = {}
 	if parameter_x != "":
-		generator.set_parameter(parameter_x, value.x)
+		parameters[parameter_x] = value.x
 	if parameter_y != "":
-		generator.set_parameter(parameter_y, value.y)
+		parameters[parameter_y] = value.y
 	if parameter_r != "":
-		generator.set_parameter(parameter_r, value.length())
+		parameters[parameter_r] = value.length()
 	if parameter_a != "":
-		generator.set_parameter(parameter_a, atan2(value.y, value.x)*57.2957795131)
+		parameters[parameter_a] = atan2(value.y, value.x)*57.2957795131
+	if ! parameters.empty():
+		var main_window = get_node("/root/MainWindow")
+		var graph_edit = main_window.get_current_graph_edit()
+		graph_edit.set_node_parameters(generator, parameters)
 
 func update_position(pos : Vector2) -> void:
 	match control_type:

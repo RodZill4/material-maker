@@ -877,9 +877,10 @@ func undoredo_command(command : Dictionary) -> void:
 						var node = get_node("node_"+g.name)
 						if node.has_method("update_node"):
 							node.update_node()
-		"setparam":
+		"setparams":
 			var node = get_node_from_hier_name(command.node)
-			node.set_parameter(command.param, MMType.deserialize_value(command.value))
+			for p in command.params.keys():
+				node.set_parameter(p, MMType.deserialize_value(command.params[p]))
 		"move_generators":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for k in command.positions.keys():
@@ -892,9 +893,21 @@ func undoredo_command(command : Dictionary) -> void:
 			print(command)
 
 func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2):
+	if old_pos == new_pos:
+		return
 	var undo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:old_pos } }
 	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
 	undoredo.add("Move nodes", [undo_action], [redo_action], true)
+
+func set_node_parameters(generator, parameters : Dictionary):
+	var hier_name = generator.get_hier_name()
+	var prev_params : Dictionary = {}
+	for p in parameters.keys():
+		prev_params[p] = MMType.serialize_value(generator.get_parameter(p))
+		generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+	var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
+	var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
+	undoredo.add("Set parameters values", [undo_action], [redo_action], true)
 
 func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
 	match action_name:
