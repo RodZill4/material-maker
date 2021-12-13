@@ -31,7 +31,6 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
-	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
 func _exit_tree() -> void:
@@ -124,11 +123,6 @@ func _on_seed_menu(id):
 		2:
 			if OS.clipboard.left(5) == "seed=":
 				generator.set_seed(OS.clipboard.right(5).to_float())
-
-func _on_offset_changed() -> void:
-	generator.set_position(offset)
-	# This is the old behavior
-	#reroll_generator_seed()
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:

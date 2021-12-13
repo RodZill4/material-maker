@@ -1,0 +1,42 @@
+{
+	"name": "randomize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 0.6947,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_rand = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"longdesc": "Color ids",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"longdesc": "Takes a set of RGB color ids as  input and generates a new set of random values.",
+		"name": "Randomize",
+		"outputs": [
+			{
+				"longdesc": "The randomized set of color ids.",
+				"rgb": "rand3( vec2( float($seed) + $(name_uv)_rand.x, rand( $(name_uv)_rand.yz ) ) )",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		],
+		"shortdesc": "Randomize"
+	},
+	"type": "shader"
+}
