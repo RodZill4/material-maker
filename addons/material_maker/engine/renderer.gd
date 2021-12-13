@@ -12,9 +12,9 @@ func _ready() -> void:
 	$ColorRect.material = $ColorRect.material.duplicate(true)
 
 func setup_material(shader_material, textures, shader_code) -> void:
+	shader_material.shader.code = shader_code
 	for k in textures.keys():
 		shader_material.set_shader_param(k+"_tex", textures[k])
-	shader_material.shader.code = shader_code
 
 func request(object : Object) -> Object:
 	assert(render_owner == null)
@@ -100,7 +100,6 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 	var image : Image = get_texture().get_data()
 	if image != null:
 		image.lock()
-		print("Image format: "+str(image.get_format()))
 		var export_image : Image = image
 		match fn.get_extension():
 			"png":
@@ -110,8 +109,9 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 					export_image = Image.new()
 					export_image.copy_from(image)
 					export_image.convert(Image.FORMAT_RH)
-					print(export_image.get_format())
-				export_image.save_exr(fn)
+				else:
+					pass
+				export_image.save_exr(fn, is_greyscale)
 		image.unlock()
 
 func release(object : Object) -> void:
