@@ -7,14 +7,14 @@
 	"parameters": {
 
 	},
-	"seed": 0.6947,
+	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "vec3 $(name_uv)_rand = $in($uv);",
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "vec3(0.0)",
 				"label": "",
 				"longdesc": "Color ids",
 				"name": "in",
