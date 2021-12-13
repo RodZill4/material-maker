@@ -37,6 +37,7 @@ func update_axes_menu() -> void:
 	$ContextMenu/Axes.clear()
 	for s in $Axes.STYLES:
 		$ContextMenu/Axes.add_item(s)
+	$ContextMenu/Axes.add_submenu_item("Grid", "Grid")
 	$ContextMenu/Axes.add_separator()
 	$ContextMenu/Axes.add_item("Change color", 1000)
 	$ContextMenu.add_submenu_item("Axes", "Axes")
@@ -237,6 +238,11 @@ func _on_Axes_id_pressed(id):
 	else:
 		$Axes.style = id
 
+func _on_GridSize_value_changed(value):
+	$Axes.show_grid(value)
+
+
 func _on_PostProcess_id_pressed(id):
 	current_postprocess_option = id
 	set_generator(generator, output, true)
+

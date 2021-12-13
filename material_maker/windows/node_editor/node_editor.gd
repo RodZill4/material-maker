@@ -117,7 +117,7 @@ var globals_error_line = -1
 
 func _on_Functions_text_changed():
 	var text : String = global_functions_editor.text
-	var error_label = $"Sizer/Tabs/Global Functions/ErrorLabel"
+	var error_label = $"Sizer/Tabs/Global Functions/Functions/ErrorLabel"
 	if globals_error_line != -1:
 		global_functions_editor.set_line_as_safe(globals_error_line, false)
 		error_label.visible = false

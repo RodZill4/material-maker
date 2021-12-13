@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/windows/node_editor/node_editor_item_list.gd" type="Script" id=2]
@@ -17,7 +17,11 @@ font_path = "res://material_maker/fonts/hack.ttf"
 size = 12
 font_data = SubResource( 2 )
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.768627 )
+
 [node name="NodeEditor" type="WindowDialog"]
+visible = true
 margin_right = 950.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 950, 450 )
@@ -224,12 +228,21 @@ syntax_highlighting = true
 show_line_numbers = true
 minimap_draw = true
 
-[node name="ErrorLabel" type="Label" parent="Sizer/Tabs/Global Functions"]
+[node name="ErrorLabel" type="Label" parent="Sizer/Tabs/Global Functions/Functions"]
 visible = false
-margin_right = 40.0
-margin_bottom = 14.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = -17.0
+margin_right = -2.0
+margin_bottom = -7.0
 custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_styles/normal = SubResource( 4 )
 clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
 margin_left = 366.0

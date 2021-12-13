@@ -1,24 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "graph_2",
-			"from_port": 0,
-			"to": "blend_2",
-			"to_port": 0
-		},
-		{
-			"from": "blend",
-			"from_port": 0,
-			"to": "blend_2",
-			"to_port": 1
-		},
-		{
-			"from": "graph_3",
-			"from_port": 0,
-			"to": "blend",
-			"to_port": 2
-		},
-		{
 			"from": "tex3d_fbm_4",
 			"from_port": 0,
 			"to": "tex3d_distort_2",
@@ -133,49 +115,38 @@
 			"to_port": 0
 		},
 		{
-			"from": "splatter_2",
+			"from": "graph",
 			"from_port": 0,
-			"to": "fill_2",
+			"to": "shape_3",
 			"to_port": 0
 		},
 		{
-			"from": "fill_2",
+			"from": "colormap",
 			"from_port": 0,
-			"to": "fill_to_random_grey",
+			"to": "graph",
 			"to_port": 0
 		},
 		{
-			"from": "fill_2",
+			"from": "fbm2",
 			"from_port": 0,
-			"to": "fill_to_random_color",
+			"to": "colormap",
 			"to_port": 0
 		},
 		{
-			"from": "fill_2",
+			"from": "fbm2",
 			"from_port": 0,
-			"to": "fill_to_uv",
-			"to_port": 0
-		},
-		{
-			"from": "splatter_2",
-			"from_port": 0,
-			"to": "blend",
+			"to": "graph",
 			"to_port": 1
 		},
 		{
-			"from": "fill_2",
+			"from": "perlin_color",
 			"from_port": 0,
-			"to": "fill_to_position",
-			"to_port": 0
-		},
-		{
-			"from": "fill_2",
-			"from_port": 0,
-			"to": "fill_to_size",
-			"to_port": 0
+			"to": "colormap",
+			"to_port": 1
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "49",
 	"node_position": {
 		"x": 0,
@@ -188,8 +159,8 @@
 			},
 			"name": "Material",
 			"node_position": {
-				"x": 23.544006,
-				"y": 381.080017
+				"x": -119.455994,
+				"y": 403.080017
 			},
 			"parameters": {
 				"albedo_color": {
@@ -202,811 +173,16 @@
 				"ao": 1,
 				"depth_scale": 1,
 				"emission_energy": 1,
+				"flags_transparent": true,
 				"metallic": 1,
 				"normal": 1,
 				"roughness": 1,
 				"size": 8,
 				"sss": 0
 			},
+			"seed": 51892,
+			"seed_locked": false,
 			"type": "material"
-		},
-		{
-			"connections": [
-				{
-					"from": "transform",
-					"from_port": 0,
-					"to": "blend_3",
-					"to_port": 0
-				},
-				{
-					"from": "transform_2",
-					"from_port": 0,
-					"to": "blend_3",
-					"to_port": 1
-				},
-				{
-					"from": "blend_3",
-					"from_port": 0,
-					"to": "blend",
-					"to_port": 0
-				},
-				{
-					"from": "transform_3",
-					"from_port": 0,
-					"to": "blend_2",
-					"to_port": 0
-				},
-				{
-					"from": "transform_4",
-					"from_port": 0,
-					"to": "blend_2",
-					"to_port": 1
-				},
-				{
-					"from": "blend_2",
-					"from_port": 0,
-					"to": "blend",
-					"to_port": 1
-				},
-				{
-					"from": "shape_5",
-					"from_port": 0,
-					"to": "blend_4",
-					"to_port": 1
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 3,
-					"to": "blend_4",
-					"to_port": 0
-				},
-				{
-					"from": "blend_4",
-					"from_port": 0,
-					"to": "transform_4",
-					"to_port": 0
-				},
-				{
-					"from": "shape_5",
-					"from_port": 0,
-					"to": "blend_4_2",
-					"to_port": 1
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 2,
-					"to": "blend_4_2",
-					"to_port": 0
-				},
-				{
-					"from": "shape_5",
-					"from_port": 0,
-					"to": "blend_4_3",
-					"to_port": 1
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 1,
-					"to": "blend_4_3",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "blend_4_4",
-					"to_port": 0
-				},
-				{
-					"from": "shape_5",
-					"from_port": 0,
-					"to": "blend_4_4",
-					"to_port": 1
-				},
-				{
-					"from": "blend_4_4",
-					"from_port": 0,
-					"to": "transform",
-					"to_port": 0
-				},
-				{
-					"from": "blend_4_3",
-					"from_port": 0,
-					"to": "transform_2",
-					"to_port": 0
-				},
-				{
-					"from": "blend_4_2",
-					"from_port": 0,
-					"to": "transform_3",
-					"to_port": 0
-				},
-				{
-					"from": "blend",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
-			"label": "Tile Inputs",
-			"name": "graph",
-			"node_position": {
-				"x": 608.541992,
-				"y": 541.266541
-			},
-			"nodes": [
-				{
-					"name": "transform_4",
-					"node_position": {
-						"x": -144.5,
-						"y": 193
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 0,
-						"scale_x": 0.5,
-						"scale_y": 0.5,
-						"translate_x": 0.25,
-						"translate_y": 0.25
-					},
-					"type": "transform"
-				},
-				{
-					"name": "transform_3",
-					"node_position": {
-						"x": -141.5,
-						"y": -2
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 0,
-						"scale_x": 0.5,
-						"scale_y": 0.5,
-						"translate_x": -0.25,
-						"translate_y": 0.25
-					},
-					"type": "transform"
-				},
-				{
-					"name": "transform",
-					"node_position": {
-						"x": -136.5,
-						"y": -418
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 0,
-						"scale_x": 0.5,
-						"scale_y": 0.5,
-						"translate_x": -0.25,
-						"translate_y": -0.25
-					},
-					"type": "transform"
-				},
-				{
-					"name": "transform_2",
-					"node_position": {
-						"x": -135.5,
-						"y": -224
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 0,
-						"scale_x": 0.5,
-						"scale_y": 0.5,
-						"translate_x": 0.25,
-						"translate_y": -0.25
-					},
-					"type": "transform"
-				},
-				{
-					"name": "blend_2",
-					"node_position": {
-						"x": 113.5,
-						"y": -10
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 9
-					},
-					"type": "blend"
-				},
-				{
-					"name": "blend_3",
-					"node_position": {
-						"x": 114.5,
-						"y": -95
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 9
-					},
-					"type": "blend"
-				},
-				{
-					"name": "shape_5",
-					"node_position": {
-						"x": -392.29126,
-						"y": 349
-					},
-					"parameters": {
-						"edge": 0,
-						"radius": 0.99,
-						"shape": 1,
-						"sides": 4
-					},
-					"type": "shape"
-				},
-				{
-					"name": "blend_4",
-					"node_position": {
-						"x": -405.29126,
-						"y": 184.25
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 10
-					},
-					"type": "blend"
-				},
-				{
-					"name": "blend_4_2",
-					"node_position": {
-						"x": -404.79126,
-						"y": 12.25
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 10
-					},
-					"type": "blend"
-				},
-				{
-					"name": "blend_4_3",
-					"node_position": {
-						"x": -399.79126,
-						"y": -141.75
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 10
-					},
-					"type": "blend"
-				},
-				{
-					"name": "blend_4_4",
-					"node_position": {
-						"x": -393.79126,
-						"y": -293
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 10
-					},
-					"type": "blend"
-				},
-				{
-					"name": "blend",
-					"node_position": {
-						"x": 358.220001,
-						"y": -53.728001
-					},
-					"parameters": {
-						"amount": 1,
-						"blend_type": 9
-					},
-					"type": "blend"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -705.29126,
-						"y": -41.581501
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port3",
-							"type": "rgba"
-						},
-						{
-							"name": "port2",
-							"type": "rgba"
-						},
-						{
-							"name": "port1",
-							"type": "rgba"
-						},
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 658.219971,
-						"y": -41.581501
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -363.978027,
-						"y": -718
-					},
-					"parameters": {
-
-					},
-					"type": "remote",
-					"widgets": [
-
-					]
-				}
-			],
-			"parameters": {
-
-			},
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "sdbox_3",
-					"from_port": 0,
-					"to": "sdboolean_3",
-					"to_port": 1
-				},
-				{
-					"from": "sdboolean_3_2",
-					"from_port": 0,
-					"to": "sdboolean_3",
-					"to_port": 0
-				},
-				{
-					"from": "sdrhombus_2",
-					"from_port": 0,
-					"to": "sdboolean_3_2",
-					"to_port": 1
-				},
-				{
-					"from": "sdbox_3_2",
-					"from_port": 0,
-					"to": "sdboolean_3_2",
-					"to_port": 0
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "sdboolean_3",
-					"from_port": 0,
-					"to": "sdshow",
-					"to_port": 0
-				},
-				{
-					"from": "sdshow",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				}
-			],
-			"label": "Arrow",
-			"name": "graph_2",
-			"node_position": {
-				"x": 607.827515,
-				"y": 652.753479
-			},
-			"nodes": [
-				{
-					"name": "sdbox_3",
-					"node_position": {
-						"x": 368.648682,
-						"y": 387.121552
-					},
-					"parameters": {
-						"cx": -0.07,
-						"cy": 0,
-						"h": 0.04,
-						"w": 0.08
-					},
-					"type": "sdbox"
-				},
-				{
-					"name": "sdrhombus_2",
-					"node_position": {
-						"x": 235.398682,
-						"y": 252.121552
-					},
-					"parameters": {
-						"cx": -0.02,
-						"cy": 0,
-						"h": 0.12,
-						"w": 0.15
-					},
-					"type": "sdrhombus"
-				},
-				{
-					"name": "sdbox_3_2",
-					"node_position": {
-						"x": 220.086548,
-						"y": 108.972382
-					},
-					"parameters": {
-						"cx": -0.23,
-						"cy": 0,
-						"h": 0.35,
-						"w": 0.21
-					},
-					"type": "sdbox"
-				},
-				{
-					"name": "sdboolean_3_2",
-					"node_position": {
-						"x": 454.586548,
-						"y": 205.972443
-					},
-					"parameters": {
-						"op": 1
-					},
-					"type": "sdboolean"
-				},
-				{
-					"name": "sdboolean_3",
-					"node_position": {
-						"x": 614.648682,
-						"y": 282.510315
-					},
-					"parameters": {
-						"op": 0
-					},
-					"type": "sdboolean"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": 858.58667,
-						"y": 374.972534
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 0,
-									"b": 0,
-									"g": 0,
-									"pos": 0,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -64.601318,
-						"y": 285.753479
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 1158.58667,
-						"y": 285.753479
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": 281.827484,
-						"y": -178.027618
-					},
-					"parameters": {
-
-					},
-					"type": "remote",
-					"widgets": [
-
-					]
-				},
-				{
-					"name": "sdshow",
-					"node_position": {
-						"x": 631.060425,
-						"y": 365.52536
-					},
-					"parameters": {
-						"bevel": 0.01
-					},
-					"type": "sdshow"
-				}
-			],
-			"parameters": {
-
-			},
-			"type": "graph"
-		},
-		{
-			"connections": [
-				{
-					"from": "pattern",
-					"from_port": 0,
-					"to": "transform",
-					"to_port": 0
-				},
-				{
-					"from": "transform",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "colorize",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				}
-			],
-			"label": "Gradient",
-			"name": "graph_3",
-			"node_position": {
-				"x": -298.787903,
-				"y": 716.143799
-			},
-			"nodes": [
-				{
-					"name": "pattern",
-					"node_position": {
-						"x": -389.625,
-						"y": -359.458374
-					},
-					"parameters": {
-						"mix": 0,
-						"x_scale": 1,
-						"x_wave": 3,
-						"y_scale": 1,
-						"y_wave": 4
-					},
-					"type": "pattern"
-				},
-				{
-					"name": "transform",
-					"node_position": {
-						"x": -371.125,
-						"y": -262.458374
-					},
-					"parameters": {
-						"repeat": false,
-						"rotate": 180,
-						"scale_x": 1,
-						"scale_y": 1,
-						"translate_x": 0,
-						"translate_y": 0
-					},
-					"type": "transform"
-				},
-				{
-					"name": "colorize",
-					"node_position": {
-						"x": -352.125,
-						"y": -69.458374
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 0,
-							"points": [
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 0
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "colorize"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -406.125,
-						"y": -498.858337
-					},
-					"parameters": {
-						"param0": 1,
-						"param1": 180,
-						"param2": {
-							"interpolation": 0,
-							"points": [
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 0,
-									"r": 1
-								},
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 1,
-									"r": 0
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Repeat",
-							"linked_widgets": [
-								{
-									"node": "pattern",
-									"widget": "x_scale"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						},
-						{
-							"label": "Rotate",
-							"linked_widgets": [
-								{
-									"node": "transform",
-									"widget": "rotate"
-								}
-							],
-							"name": "param1",
-							"type": "linked_control"
-						},
-						{
-							"label": "Gradient",
-							"linked_widgets": [
-								{
-									"node": "colorize",
-									"widget": "gradient"
-								}
-							],
-							"name": "param2",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -706.125,
-						"y": -297.55835
-					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": -52.125,
-						"y": -297.55835
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"name": "port0",
-							"type": "rgba"
-						}
-					],
-					"type": "ios"
-				}
-			],
-			"parameters": {
-				"param0": 1,
-				"param1": 180,
-				"param2": {
-					"interpolation": 0,
-					"points": [
-						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
-						},
-						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
-						}
-					],
-					"type": "Gradient"
-				}
-			},
-			"type": "graph"
-		},
-		{
-			"name": "blend",
-			"node_position": {
-				"x": 549.235168,
-				"y": 820.099731
-			},
-			"parameters": {
-				"amount": 1,
-				"blend_type": 0
-			},
-			"type": "blend"
-		},
-		{
-			"name": "blend_2",
-			"node_position": {
-				"x": 548.235168,
-				"y": 710.099731
-			},
-			"parameters": {
-				"amount": 1,
-				"blend_type": 0
-			},
-			"type": "blend"
 		},
 		{
 			"name": "raymarching",
@@ -1017,6 +193,8 @@
 			"parameters": {
 
 			},
+			"seed": -17509,
+			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -1251,6 +429,7 @@
 				}
 			],
 			"label": "Skull",
+			"longdesc": "",
 			"name": "graph_3_2",
 			"node_position": {
 				"x": -184.234314,
@@ -1267,6 +446,8 @@
 						"k": 0.04,
 						"op": 0
 					},
+					"seed": -16253,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1280,6 +461,8 @@
 						"y": -0.22,
 						"z": 0
 					},
+					"seed": -9059,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1292,6 +475,8 @@
 						"k": 0.17,
 						"op": 1
 					},
+					"seed": -29764,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1303,6 +488,8 @@
 					"parameters": {
 						"r": 0.07
 					},
+					"seed": -58751,
+					"seed_locked": false,
 					"type": "sdf3d_sphere"
 				},
 				{
@@ -1316,6 +503,8 @@
 						"y": -0.04,
 						"z": 0.18
 					},
+					"seed": -26316,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1327,6 +516,8 @@
 					"parameters": {
 						"r": 0.08
 					},
+					"seed": -316,
+					"seed_locked": false,
 					"type": "sdf3d_sphere"
 				},
 				{
@@ -1338,6 +529,8 @@
 					"parameters": {
 						"r": 0.28
 					},
+					"seed": -44867,
+					"seed_locked": false,
 					"type": "sdf3d_sphere"
 				},
 				{
@@ -1352,6 +545,8 @@
 						"sy": 0.05,
 						"sz": 0.05
 					},
+					"seed": -62899,
+					"seed_locked": false,
 					"type": "sdf3d_box"
 				},
 				{
@@ -1365,6 +560,8 @@
 						"y": -0.03,
 						"z": 0.18
 					},
+					"seed": -26158,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1378,6 +575,8 @@
 						"ay": 45,
 						"az": 0
 					},
+					"seed": -64296,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -1440,6 +639,8 @@
 						"y": 0.11,
 						"z": 0.19
 					},
+					"seed": -7160,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1452,6 +653,8 @@
 						"k": 0.09,
 						"op": 1
 					},
+					"seed": -47269,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1464,6 +667,8 @@
 						"k": 0.15,
 						"op": 0
 					},
+					"seed": -39265,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1477,6 +682,8 @@
 						"y": 0.24,
 						"z": 0.01
 					},
+					"seed": -10118,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1489,6 +696,8 @@
 						"k": 0.03,
 						"op": 1
 					},
+					"seed": -11084,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1502,6 +711,8 @@
 						"y": 0.21,
 						"z": 0.08
 					},
+					"seed": -45317,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1513,6 +724,8 @@
 					"parameters": {
 
 					},
+					"seed": -9751,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1550,6 +763,8 @@
 					"ports": [
 
 					],
+					"seed": -9186,
+					"seed_locked": false,
 					"type": "ios"
 				},
 				{
@@ -1567,6 +782,8 @@
 							"type": "sdf3d"
 						}
 					],
+					"seed": -50256,
+					"seed_locked": false,
 					"type": "ios"
 				},
 				{
@@ -1578,6 +795,8 @@
 					"parameters": {
 
 					},
+					"seed": -63912,
+					"seed_locked": false,
 					"type": "remote",
 					"widgets": [
 
@@ -1594,6 +813,8 @@
 						"y": 0.14,
 						"z": 0
 					},
+					"seed": -32353,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1656,6 +877,8 @@
 						"ay": 0,
 						"az": 45
 					},
+					"seed": -32463,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -1716,6 +939,8 @@
 					"parameters": {
 						"c": 15
 					},
+					"seed": -47299,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 circle_repeat_transform(vec3 p, float count) {\n\tfloat r = 6.28/count;\n\tfloat pa = atan(p.x, p.y);\n\tfloat a = mod(pa+0.5*r, r)-0.5*r;\n\tvec3 rv;\n\tfloat c = cos(a-pa);\n\tfloat s = sin(a-pa);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -1760,6 +985,8 @@
 						"ay": 0,
 						"az": 0
 					},
+					"seed": -12172,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -1822,6 +1049,8 @@
 						"y": 0.315,
 						"z": 0.08
 					},
+					"seed": -52421,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1835,6 +1064,8 @@
 						"l": 0.06,
 						"r": 0.15
 					},
+					"seed": -8309,
+					"seed_locked": false,
 					"type": "sdf3d_cylinder"
 				},
 				{
@@ -1847,6 +1078,8 @@
 						"k": 0.1,
 						"op": 1
 					},
+					"seed": -13953,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1861,6 +1094,8 @@
 						"sy": 0.01,
 						"sz": 0.015
 					},
+					"seed": -44221,
+					"seed_locked": false,
 					"type": "sdf3d_box"
 				},
 				{
@@ -1873,6 +1108,8 @@
 						"k": 0.05,
 						"op": 0
 					},
+					"seed": -21741,
+					"seed_locked": false,
 					"type": "sdf3d_smoothboolean"
 				},
 				{
@@ -1884,6 +1121,8 @@
 					"parameters": {
 						"r": 0.28
 					},
+					"seed": -43151,
+					"seed_locked": false,
 					"type": "sdf3d_sphere"
 				},
 				{
@@ -1897,6 +1136,8 @@
 						"y": 0.28,
 						"z": 0
 					},
+					"seed": -57246,
+					"seed_locked": false,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -1908,6 +1149,8 @@
 					"parameters": {
 						"op": 2
 					},
+					"seed": -20990,
+					"seed_locked": false,
 					"type": "sdf3d_boolean"
 				},
 				{
@@ -1919,6 +1162,8 @@
 					"parameters": {
 						"r": 0.01
 					},
+					"seed": -36404,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1963,6 +1208,8 @@
 						"ay": 0,
 						"az": 11
 					},
+					"seed": -29135,
+					"seed_locked": false,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -2023,12 +1270,17 @@
 					"parameters": {
 						"s": 0.48
 					},
+					"seed": -18915,
+					"seed_locked": false,
 					"type": "sdf3d_scale"
 				}
 			],
 			"parameters": {
 
 			},
+			"seed": -24166,
+			"seed_locked": false,
+			"shortdesc": "",
 			"type": "graph"
 		},
 		{
@@ -2040,6 +1292,8 @@
 			"parameters": {
 				"d": -0.53
 			},
+			"seed": 25572,
+			"seed_locked": false,
 			"type": "sdf3d_extrusion"
 		},
 		{
@@ -2053,6 +1307,8 @@
 				"l": 0.25,
 				"r": 0.25
 			},
+			"seed": -14313,
+			"seed_locked": false,
 			"type": "sdf3d_cylinder"
 		},
 		{
@@ -2067,6 +1323,8 @@
 				"shape": 1,
 				"sides": 6
 			},
+			"seed": -11044,
+			"seed_locked": false,
 			"type": "shape"
 		},
 		{
@@ -2078,6 +1336,8 @@
 			"parameters": {
 
 			},
+			"seed": -11453,
+			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "float calcdist(vec3 p) {\n    return length(p)-0.4;\n}\n\nfloat raymarch(vec3 ro, vec3 rd) {\n    float d=0.0;\n    for (int i = 0; i < 250; i++) {\n        vec3 p = ro + rd*d;\n        float dstep = calcdist(p);\n        d += dstep;\n        if (dstep < 0.0000001) break;\n    }\n    return d;\n}\nvec3 normal(vec3 p) {\n    float d = calcdist(p);\n    float e = .0001;\n    vec3 n = d - vec3(calcdist(p-vec3(e, 0.0, 0.0)), calcdist(p-vec3(0.0, e, 0.0)), calcdist(p-vec3(0.0, 0.0, e)));\n    return normalize(n);\n}\n\n",
@@ -2119,6 +1379,8 @@
 				"z_scale": 2,
 				"z_wave": 2
 			},
+			"seed": -19169,
+			"seed_locked": false,
 			"type": "tex3d_pattern"
 		},
 		{
@@ -2135,6 +1397,8 @@
 				"scale_y": 8,
 				"scale_z": 8
 			},
+			"seed": -36712,
+			"seed_locked": false,
 			"type": "tex3d_fbm"
 		},
 		{
@@ -2146,6 +1410,8 @@
 			"parameters": {
 				"Distort": 0.3
 			},
+			"seed": -43695,
+			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -2197,6 +1463,8 @@
 				"y": 0,
 				"z": 0
 			},
+			"seed": -61329,
+			"seed_locked": false,
 			"type": "sdf3d_elongation"
 		},
 		{
@@ -2210,6 +1478,8 @@
 				"axis": 2,
 				"r": 0.097392
 			},
+			"seed": -25753,
+			"seed_locked": false,
 			"type": "sdf3d_torus"
 		},
 		{
@@ -2219,27 +1489,35 @@
 				"y": 128.516663
 			},
 			"parameters": {
+				"folds": 0,
 				"iterations": 6,
 				"noise": 2,
 				"persistence": 0.5,
 				"scale_x": 8,
 				"scale_y": 8
 			},
+			"seed": -6008,
+			"seed_locked": false,
 			"type": "fbm"
 		},
 		{
 			"name": "splatter",
 			"node_position": {
-				"x": -342.208618,
-				"y": 502.266663
+				"x": -408.208618,
+				"y": 540.266663
 			},
 			"parameters": {
 				"count": 25,
 				"rotate": 0,
 				"scale": 0,
+				"scale_x": 1,
+				"scale_y": 1,
 				"select_inputs": 0,
-				"value": 0
+				"value": 0,
+				"variations": false
 			},
+			"seed": -37536,
+			"seed_locked": false,
 			"type": "splatter"
 		},
 		{
@@ -2277,6 +1555,8 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -38050,
+			"seed_locked": false,
 			"type": "colorize"
 		},
 		{
@@ -2291,6 +1571,8 @@
 				"shape": 0,
 				"sides": 6
 			},
+			"seed": -34574,
+			"seed_locked": false,
 			"type": "shape"
 		},
 		{
@@ -2328,6 +1610,8 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -6579,
+			"seed_locked": false,
 			"type": "colorize"
 		},
 		{
@@ -2342,6 +1626,8 @@
 				"shape": 1,
 				"sides": 6
 			},
+			"seed": -58007,
+			"seed_locked": false,
 			"type": "shape"
 		},
 		{
@@ -2356,6 +1642,8 @@
 				"shape": 2,
 				"sides": 5
 			},
+			"seed": -15937,
+			"seed_locked": false,
 			"type": "shape"
 		},
 		{
@@ -2393,6 +1681,8 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -56325,
+			"seed_locked": false,
 			"type": "colorize"
 		},
 		{
@@ -2430,6 +1720,8 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -8028,
+			"seed_locked": false,
 			"type": "colorize"
 		},
 		{
@@ -2444,6 +1736,8 @@
 				"shape": 3,
 				"sides": 7
 			},
+			"seed": -34710,
+			"seed_locked": false,
 			"type": "shape"
 		},
 		{
@@ -2455,6 +1749,8 @@
 			"parameters": {
 
 			},
+			"seed": -55020,
+			"seed_locked": false,
 			"type": "tile2x2"
 		},
 		{
@@ -2468,15 +1764,20 @@
 				"opacity": 0,
 				"rotate": 0,
 				"scale": 0,
-				"select_inputs": 0
+				"scale_x": 1,
+				"scale_y": 1,
+				"select_inputs": 0,
+				"variations": false
 			},
+			"seed": -56231,
+			"seed_locked": false,
 			"type": "splatter_color"
 		},
 		{
 			"name": "tiler_color",
 			"node_position": {
-				"x": -598.862,
-				"y": 599.541748
+				"x": -664.862,
+				"y": 637.541748
 			},
 			"parameters": {
 				"fixed_offset": 0,
@@ -2485,10 +1786,15 @@
 				"overlap": 1,
 				"rotate": 45,
 				"scale": 0.2,
+				"scale_x": 1,
+				"scale_y": 1,
 				"select_inputs": 1,
 				"tx": 8,
-				"ty": 8
+				"ty": 8,
+				"variations": false
 			},
+			"seed": -45119,
+			"seed_locked": false,
 			"type": "tiler_color"
 		},
 		{
@@ -2501,9 +1807,14 @@
 				"count": 8,
 				"rotate": 0,
 				"scale": 0,
+				"scale_x": 1,
+				"scale_y": 1,
 				"select_inputs": 0,
-				"value": 0
+				"value": 0,
+				"variations": false
 			},
+			"seed": -24743,
+			"seed_locked": false,
 			"type": "splatter"
 		},
 		{
@@ -2541,19 +1852,9 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -11172,
+			"seed_locked": false,
 			"type": "colorize"
-		},
-		{
-			"name": "fill_2",
-			"node_position": {
-				"x": 139.928162,
-				"y": 873.827515
-			},
-			"parameters": {
-				"param0": 8,
-				"param1": 10
-			},
-			"type": "fill"
 		},
 		{
 			"name": "fill_to_random_grey",
@@ -2564,6 +1865,8 @@
 			"parameters": {
 				"edgecolor": 1
 			},
+			"seed": 27530,
+			"seed_locked": false,
 			"type": "fill_to_random_grey"
 		},
 		{
@@ -2581,6 +1884,8 @@
 					"type": "Color"
 				}
 			},
+			"seed": 43420,
+			"seed_locked": false,
 			"type": "fill_to_random_color"
 		},
 		{
@@ -2590,8 +1895,10 @@
 				"y": 1094.827515
 			},
 			"parameters": {
-
+				"mode": 0
 			},
+			"seed": 46042,
+			"seed_locked": false,
 			"type": "fill_to_uv"
 		},
 		{
@@ -2603,6 +1910,8 @@
 			"parameters": {
 
 			},
+			"seed": 16170,
+			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -2637,6 +1946,8 @@
 			"parameters": {
 				"axis": 0
 			},
+			"seed": 2420,
+			"seed_locked": false,
 			"type": "fill_to_position"
 		},
 		{
@@ -2648,12 +1959,701 @@
 			"parameters": {
 				"formula": 1
 			},
-			"seed_value": -52887,
+			"seed": -52887,
+			"seed_locked": true,
 			"type": "fill_to_size"
+		},
+		{
+			"name": "image",
+			"node_position": {
+				"x": 56.791626,
+				"y": 859.482544
+			},
+			"parameters": {
+				"image": "C:/Users/rodzi/Downloads/Qpalette.png"
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "image"
+		},
+		{
+			"name": "shape_3",
+			"node_position": {
+				"x": 1055.958252,
+				"y": 280.149109
+			},
+			"parameters": {
+				"edge": 0.1,
+				"radius": 0.85,
+				"shape": 1,
+				"sides": 6
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "shape"
+		},
+		{
+			"name": "colormap",
+			"node_position": {
+				"x": 487.958313,
+				"y": 392.149109
+			},
+			"parameters": {
+				"direction": 0,
+				"offset": 0.48
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "colormap"
+		},
+		{
+			"name": "fbm2",
+			"node_position": {
+				"x": 254.958313,
+				"y": 513.149109
+			},
+			"parameters": {
+				"folds": 0,
+				"iterations": 5,
+				"noise": 0,
+				"persistence": 0.5,
+				"scale_x": 2,
+				"scale_y": 2
+			},
+			"seed": 0.513607,
+			"seed_locked": false,
+			"type": "fbm2"
+		},
+		{
+			"name": "perlin_color",
+			"node_position": {
+				"x": 186.958313,
+				"y": 353.149109
+			},
+			"parameters": {
+				"iterations": 3,
+				"persistence": 0.5,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "perlin_color"
+		},
+		{
+			"connections": [
+				{
+					"from": "graph_2",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 0
+				},
+				{
+					"from": "blend",
+					"from_port": 0,
+					"to": "blend_2",
+					"to_port": 1
+				},
+				{
+					"from": "graph_3",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 2
+				},
+				{
+					"from": "blend_2",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "blend",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 1,
+					"to": "blend",
+					"to_port": 1
+				}
+			],
+			"label": "A to B",
+			"longdesc": "",
+			"name": "graph",
+			"node_position": {
+				"x": 753.377441,
+				"y": 377.7742
+			},
+			"nodes": [
+				{
+					"connections": [
+						{
+							"from": "sdbox_3",
+							"from_port": 0,
+							"to": "sdboolean_3",
+							"to_port": 1
+						},
+						{
+							"from": "sdboolean_3_2",
+							"from_port": 0,
+							"to": "sdboolean_3",
+							"to_port": 0
+						},
+						{
+							"from": "sdrhombus_2",
+							"from_port": 0,
+							"to": "sdboolean_3_2",
+							"to_port": 1
+						},
+						{
+							"from": "sdbox_3_2",
+							"from_port": 0,
+							"to": "sdboolean_3_2",
+							"to_port": 0
+						},
+						{
+							"from": "colorize",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						},
+						{
+							"from": "sdboolean_3",
+							"from_port": 0,
+							"to": "sdshow",
+							"to_port": 0
+						},
+						{
+							"from": "sdshow",
+							"from_port": 0,
+							"to": "colorize",
+							"to_port": 0
+						}
+					],
+					"label": "Arrow",
+					"longdesc": "",
+					"name": "graph_2",
+					"node_position": {
+						"x": 800.827515,
+						"y": 247.753479
+					},
+					"nodes": [
+						{
+							"name": "sdbox_3",
+							"node_position": {
+								"x": 368.648682,
+								"y": 387.121552
+							},
+							"parameters": {
+								"cx": -0.07,
+								"cy": 0,
+								"h": 0.04,
+								"w": 0.08
+							},
+							"seed": 48403,
+							"seed_locked": false,
+							"type": "sdbox"
+						},
+						{
+							"name": "sdrhombus_2",
+							"node_position": {
+								"x": 235.398682,
+								"y": 252.121552
+							},
+							"parameters": {
+								"cx": -0.02,
+								"cy": 0,
+								"h": 0.12,
+								"w": 0.15
+							},
+							"seed": 37257,
+							"seed_locked": false,
+							"type": "sdrhombus"
+						},
+						{
+							"name": "sdbox_3_2",
+							"node_position": {
+								"x": 220.086548,
+								"y": 108.972382
+							},
+							"parameters": {
+								"cx": -0.23,
+								"cy": 0,
+								"h": 0.35,
+								"w": 0.21
+							},
+							"seed": 48840,
+							"seed_locked": false,
+							"type": "sdbox"
+						},
+						{
+							"name": "sdboolean_3_2",
+							"node_position": {
+								"x": 454.586548,
+								"y": 205.972443
+							},
+							"parameters": {
+								"op": 1
+							},
+							"seed": 12343,
+							"seed_locked": false,
+							"type": "sdboolean"
+						},
+						{
+							"name": "sdboolean_3",
+							"node_position": {
+								"x": 614.648682,
+								"y": 282.510315
+							},
+							"parameters": {
+								"op": 0
+							},
+							"seed": 42304,
+							"seed_locked": false,
+							"type": "sdboolean"
+						},
+						{
+							"name": "colorize",
+							"node_position": {
+								"x": 858.58667,
+								"y": 374.972534
+							},
+							"parameters": {
+								"gradient": {
+									"interpolation": 1,
+									"points": [
+										{
+											"a": 0,
+											"b": 0,
+											"g": 0,
+											"pos": 0,
+											"r": 1
+										},
+										{
+											"a": 1,
+											"b": 0,
+											"g": 0,
+											"pos": 1,
+											"r": 1
+										}
+									],
+									"type": "Gradient"
+								}
+							},
+							"seed": 19600,
+							"seed_locked": false,
+							"type": "colorize"
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -64.601318,
+								"y": 285.753479
+							},
+							"parameters": {
+
+							},
+							"ports": [
+
+							],
+							"seed": -50851,
+							"seed_locked": false,
+							"type": "ios"
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": 1158.58667,
+								"y": 285.753479
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"seed": 50983,
+							"seed_locked": false,
+							"type": "ios"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": 281.827484,
+								"y": -178.027618
+							},
+							"parameters": {
+
+							},
+							"seed": -10679,
+							"seed_locked": false,
+							"type": "remote",
+							"widgets": [
+
+							]
+						},
+						{
+							"name": "sdshow",
+							"node_position": {
+								"x": 631.060425,
+								"y": 365.52536
+							},
+							"parameters": {
+								"base": 0,
+								"bevel": 0.01
+							},
+							"seed": 46084,
+							"seed_locked": false,
+							"type": "sdshow"
+						}
+					],
+					"parameters": {
+
+					},
+					"seed": 51213,
+					"seed_locked": false,
+					"shortdesc": "",
+					"type": "graph"
+				},
+				{
+					"connections": [
+						{
+							"from": "pattern",
+							"from_port": 0,
+							"to": "transform",
+							"to_port": 0
+						},
+						{
+							"from": "transform",
+							"from_port": 0,
+							"to": "colorize",
+							"to_port": 0
+						},
+						{
+							"from": "colorize",
+							"from_port": 0,
+							"to": "gen_outputs",
+							"to_port": 0
+						}
+					],
+					"label": "Gradient",
+					"longdesc": "",
+					"name": "graph_3",
+					"node_position": {
+						"x": 729.212097,
+						"y": 543.143799
+					},
+					"nodes": [
+						{
+							"name": "pattern",
+							"node_position": {
+								"x": -389.625,
+								"y": -359.458374
+							},
+							"parameters": {
+								"mix": 0,
+								"x_scale": 1,
+								"x_wave": 3,
+								"y_scale": 1,
+								"y_wave": 4
+							},
+							"seed": 19324,
+							"seed_locked": false,
+							"type": "pattern"
+						},
+						{
+							"name": "transform",
+							"node_position": {
+								"x": -371.125,
+								"y": -262.458374
+							},
+							"parameters": {
+								"repeat": false,
+								"rotate": 180,
+								"scale_x": 1,
+								"scale_y": 1,
+								"translate_x": 0,
+								"translate_y": 0
+							},
+							"seed": 6377,
+							"seed_locked": false,
+							"type": "transform"
+						},
+						{
+							"name": "colorize",
+							"node_position": {
+								"x": -352.125,
+								"y": -69.458374
+							},
+							"parameters": {
+								"gradient": {
+									"interpolation": 0,
+									"points": [
+										{
+											"a": 1,
+											"b": 1,
+											"g": 1,
+											"pos": 0,
+											"r": 1
+										},
+										{
+											"a": 1,
+											"b": 0,
+											"g": 0,
+											"pos": 1,
+											"r": 0
+										}
+									],
+									"type": "Gradient"
+								}
+							},
+							"seed": 51931,
+							"seed_locked": false,
+							"type": "colorize"
+						},
+						{
+							"name": "gen_parameters",
+							"node_position": {
+								"x": -406.125,
+								"y": -498.858337
+							},
+							"parameters": {
+								"param0": 1,
+								"param1": 180,
+								"param2": {
+									"interpolation": 0,
+									"points": [
+										{
+											"a": 1,
+											"b": 1,
+											"g": 1,
+											"pos": 0,
+											"r": 1
+										},
+										{
+											"a": 1,
+											"b": 0,
+											"g": 0,
+											"pos": 1,
+											"r": 0
+										}
+									],
+									"type": "Gradient"
+								}
+							},
+							"seed": 23256,
+							"seed_locked": false,
+							"type": "remote",
+							"widgets": [
+								{
+									"label": "Repeat",
+									"linked_widgets": [
+										{
+											"node": "pattern",
+											"widget": "x_scale"
+										}
+									],
+									"name": "param0",
+									"type": "linked_control"
+								},
+								{
+									"label": "Rotate",
+									"linked_widgets": [
+										{
+											"node": "transform",
+											"widget": "rotate"
+										}
+									],
+									"name": "param1",
+									"type": "linked_control"
+								},
+								{
+									"label": "Gradient",
+									"linked_widgets": [
+										{
+											"node": "colorize",
+											"widget": "gradient"
+										}
+									],
+									"name": "param2",
+									"type": "linked_control"
+								}
+							]
+						},
+						{
+							"name": "gen_inputs",
+							"node_position": {
+								"x": -706.125,
+								"y": -297.55835
+							},
+							"parameters": {
+
+							},
+							"ports": [
+
+							],
+							"seed": 53845,
+							"seed_locked": false,
+							"type": "ios"
+						},
+						{
+							"name": "gen_outputs",
+							"node_position": {
+								"x": -52.125,
+								"y": -297.55835
+							},
+							"parameters": {
+
+							},
+							"ports": [
+								{
+									"name": "port0",
+									"type": "rgba"
+								}
+							],
+							"seed": 21347,
+							"seed_locked": false,
+							"type": "ios"
+						}
+					],
+					"parameters": {
+						"param0": 1,
+						"param1": 180,
+						"param2": {
+							"interpolation": 0,
+							"points": [
+								{
+									"a": 1,
+									"b": 1,
+									"g": 1,
+									"pos": 0,
+									"r": 1
+								},
+								{
+									"a": 1,
+									"b": 0,
+									"g": 0,
+									"pos": 1,
+									"r": 0
+								}
+							],
+							"type": "Gradient"
+						}
+					},
+					"seed": -14554,
+					"seed_locked": false,
+					"shortdesc": "",
+					"type": "graph"
+				},
+				{
+					"name": "blend",
+					"node_position": {
+						"x": 742.235168,
+						"y": 415.099731
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 0
+					},
+					"seed": 48719,
+					"seed_locked": false,
+					"type": "blend"
+				},
+				{
+					"name": "blend_2",
+					"node_position": {
+						"x": 741.235168,
+						"y": 305.099731
+					},
+					"parameters": {
+						"amount": 1,
+						"blend_type": 0
+					},
+					"seed": 40090,
+					"seed_locked": false,
+					"type": "blend"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": 251.212097,
+						"y": 418.7742
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"name": "port0",
+							"type": "rgba"
+						},
+						{
+							"group_size": 0,
+							"name": "port1",
+							"type": "f"
+						}
+					],
+					"seed": 0,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 1100.827515,
+						"y": 377.7742
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"seed": 0,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": 553.377441,
+						"y": -52.246521
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+
+					]
+				}
+			],
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shortdesc": "",
+			"type": "graph"
 		}
 	],
 	"parameters": {
 
 	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "",
 	"type": "graph"
 }
