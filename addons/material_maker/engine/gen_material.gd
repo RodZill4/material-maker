@@ -73,7 +73,10 @@ func source_changed(input_index : int) -> void:
 func all_sources_changed() -> void:
 	update_preview()
 
+var new_parameter_values : Dictionary = {}
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	for p in parameter_changes.keys():
+		new_parameter_values[p] = parameter_changes[p]
 	schedule_update_textures()
 	return true
 
@@ -91,19 +94,38 @@ func update_textures() -> void:
 	update_again = true
 	if !updating:
 		while update_again:
+			var parameter_values : Dictionary = new_parameter_values
+			new_parameter_values = {}
 			update_again = false
 			var image_size = get_image_size()
 			updating = true
 			for t in preview_textures.keys():
-				var result = render(self, preview_textures[t].output, size)
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
+				if parameter_values.empty() or not preview_textures[t].has("material"):
+					var output_shader = generate_output_shader(preview_textures[t].output)
+					preview_textures[t].textures = output_shader.textures
+					preview_textures[t].output_type = output_shader.output_type
+					var material = ShaderMaterial.new()
+					material.shader = Shader.new()
+					material.shader.code = output_shader.shader
+					define_shader_float_parameters(output_shader.shader, material)
+					for k in output_shader.textures.keys():
+						material.set_shader_param(k, output_shader.textures[k])
+					preview_textures[t].material = material
+				else:
+					if ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
+						continue
+				var renderer = mm_renderer.request(self)
+				while renderer is GDScriptFunctionState:
+					renderer = yield(renderer, "completed")
+				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
 				# Abort rendering if material changed
 				if ! preview_textures.has(t):
-					result.release(self)
+					renderer.release(self)
 					break
-				result.copy_to_texture(preview_textures[t].texture)
-				result.release(self)
+				renderer.copy_to_texture(preview_textures[t].texture)
+				renderer.release(self)
 			updating = false
 
 func update_materials(material_list, sequential : bool = false) -> void:
