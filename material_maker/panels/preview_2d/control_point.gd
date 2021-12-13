@@ -148,7 +148,26 @@ func update_position(pos : Vector2) -> void:
 func _on_Point_gui_input(event : InputEvent):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var parent_value = get_parent_value()
-		var value = get_parent().pos_to_value(rect_position+0.5*rect_size+event.relative)-parent_value
+		var value = get_parent().pos_to_value(rect_position+event.position)-parent_value
+		if event.control:
+			var snap : float = 0.0
+			var grid = get_parent().get_node("Axes")
+			if grid != null and grid.visible:
+				snap = grid.snap
+			if is_xy:
+				if snap > 0.0:
+					value.x = round(value.x*snap)/snap
+					value.y = round(value.y*snap)/snap
+			elif parameter_a != "":
+				var l = value.length()
+				var a = value.angle()
+				snap = PI/12.0
+				a = round(a/snap)*snap
+				value = l*Vector2(cos(a), sin(a))
+		if event.shift:
+			if control_type == 3:
+				value.x = max(value.x, value.y)
+				value.y = value.x
 		if is_xy:
 			if parameter_x == "":
 				value.x = 0

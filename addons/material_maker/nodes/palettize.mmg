@@ -1,0 +1,62 @@
+{
+	"name": "palettize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 16
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "\n",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.0)",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The palette",
+				"name": "palette",
+				"shortdesc": "Palette",
+				"type": "rgb"
+			}
+		],
+		"instance": "vec3 find_color_from_palette_$name(vec3 color, int size) {\n\tfloat min_dist = 10.0;\n\tvec3 best_color = vec3(0.0);\n\tfor (int i = 0; i < size; ++i) {\n\t\tfloat x = (float(i)+0.5)/float(size);\n\t\tfor (int j = 0; j < size; ++j) {\n\t\t\tfloat y = (float(j)+0.5)/float(size);\n\t\t\tvec3 c = $palette(vec2(x, y));\n\t\t\tfloat l = length(color - c);\n\t\t\tif (l < min_dist) {\n\t\t\t\tmin_dist = l;\n\t\t\t\tbest_color = c;\n\t\t\t}\n\t\t}\n\t}\n\treturn best_color;\n}",
+		"longdesc": "Maps its input image to a palette",
+		"name": "Palettize",
+		"outputs": [
+			{
+				"longdesc": "The input image mapped to the palette",
+				"rgb": "find_color_from_palette_$name($in($uv), int(min($size, 32.0)))",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 16,
+				"label": "Size",
+				"longdesc": "The width and height in pixels of the palette",
+				"max": 32,
+				"min": 0,
+				"name": "size",
+				"shortdesc": "Size",
+				"step": 1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Palettize"
+	},
+	"type": "shader"
+}
