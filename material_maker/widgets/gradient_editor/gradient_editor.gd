@@ -117,6 +117,7 @@ func update_value() -> void:
 		if c is GradientCursor:
 			value.add_point(c.rect_position.x/(rect_size.x-GradientCursor.WIDTH), c.color)
 	update_shader()
+	emit_signal("updated", value)
 
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
@@ -177,11 +178,11 @@ func update_shader() -> void:
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
-	emit_signal("updated", value)
 
 func _on_Interpolation_item_selected(ID) -> void:
 	value.interpolation = ID
 	update_shader()
+	emit_signal("updated", value)
 
 func _on_Control_resized():
 	if value != null:
