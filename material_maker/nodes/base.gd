@@ -111,20 +111,31 @@ func set_generator(g) -> void:
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
 
+func set_generator_seed(s : float):
+	if generator.is_seed_locked():
+		return
+	var old_seed : float = generator.get_seed()
+	generator.set_seed(s)
+	var hier_name = generator.get_hier_name()
+	get_parent().undoredo.add("Set seed", [{ type="setseed", node=hier_name, seed=old_seed }], [{ type="setseed", node=hier_name, seed=s }], false)
+
 func reroll_generator_seed() -> void:
-	generator.reroll_seed()
+	set_generator_seed(randf())
 
 func _on_seed_menu(id):
 	match id:
 		0:
+			var old_seed_locked : bool = generator.is_seed_locked()
 			generator.toggle_lock_seed()
 			update()
 			get_parent().send_changed_signal()
+			var hier_name = generator.get_hier_name()
+			get_parent().undoredo.add("Lock/unlock seed", [{ type="setseedlocked", node=hier_name, seedlocked=old_seed_locked }], [{ type="setseedlocked", node=hier_name, seedlocked=!old_seed_locked }], false)
 		1:
 			OS.clipboard = "seed=%.9f" % generator.seed_value
 		2:
 			if OS.clipboard.left(5) == "seed=":
-				generator.set_seed(OS.clipboard.right(5).to_float())
+				set_generator_seed(OS.clipboard.right(5).to_float())
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
