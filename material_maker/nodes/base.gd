@@ -142,6 +142,8 @@ func _on_gui_input(event) -> void:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
 			if event.button_index == BUTTON_LEFT:
 				generator.minimized = !generator.minimized
+				var hier_name = generator.get_hier_name()
+				get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
 				update_node()
 				accept_event();
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
