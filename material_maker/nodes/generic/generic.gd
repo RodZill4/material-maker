@@ -125,7 +125,7 @@ func set_generator_parameter(variable : String, value):
 	if get_parent().get("undoredo") != null:
 		var node_hier_name = generator.get_hier_name()
 		var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
-		var redo_command = { type="setparams", node=node_hier_name, params={ variable:MMType.serialize_value(generator.get_parameter(variable)) } }
+		var redo_command = { type="setparams", node=node_hier_name, params={ variable:MMType.serialize_value(value) } }
 		get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], true)
 
 func _on_text_changed(new_text, variable : String) -> void:

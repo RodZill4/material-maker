@@ -878,9 +878,31 @@ func undoredo_command(command : Dictionary) -> void:
 						if node.has_method("update_node"):
 							node.update_node()
 		"setparams":
-			var node = get_node_from_hier_name(command.node)
+			var g = get_node_from_hier_name(command.node)
 			for p in command.params.keys():
-				node.set_parameter(p, MMType.deserialize_value(command.params[p]))
+				g.set_parameter(p, MMType.deserialize_value(command.params[p]))
+		"setseed":
+			var g = get_node_from_hier_name(command.node)
+			g.set_seed(command.seed)
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update()
+		"setseedlocked":
+			var g = get_node_from_hier_name(command.node)
+			if command.seedlocked != g.is_seed_locked():
+				g.toggle_lock_seed()
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update()
+		"setminimized":
+			var g = get_node_from_hier_name(command.node)
+			g.minimized = command.minimized
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		"move_generators":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for k in command.positions.keys():

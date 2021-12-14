@@ -28,6 +28,7 @@ func get_value() -> String:
 func set_value(v, notify = false) -> void:
 	if v is float:
 		value = v
+		text = str(v)
 		do_update()
 		$Slider.visible = true
 		if notify:

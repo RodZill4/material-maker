@@ -47,23 +47,28 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
+	var parameter_uses_seed : bool = (v is String and v.find("$rnd(") != -1)
+	var uses_seed_updated : bool = false
+	if parameter_uses_seed:
+		if ! params_use_seed:
+			uses_seed_updated = true
+		params_use_seed = true
+	elif old_value is String and old_value.find("$rnd(") != -1:
+		var new_params_use_seed : bool = false
+		for k in parameters.keys():
+			if k != n and parameters[k] is String and parameters[k].find("$rnd(") != -1:
+				new_params_use_seed = true
+				break
+		if params_use_seed != new_params_use_seed:
+			uses_seed_updated = true
+			params_use_seed = new_params_use_seed
 	.set_parameter(n, v)
 	var had_rnd : bool = false
 	if old_value is String and old_value.find("$rnd(") != -1:
 		had_rnd = true
 	var has_rnd : bool = false
-	if v is String and v.find("$rnd(") != -1:
-		has_rnd = true
-	if had_rnd != has_rnd:
-		var use_seed : bool = false
-		for k in parameters.keys():
-			if parameters[k] is String and parameters[k].find("$rnd(") != -1:
-				use_seed = true
-				break
-		if params_use_seed != use_seed:
-			params_use_seed = use_seed
-			if is_inside_tree():
-				get_tree().call_group("generator_node", "on_generator_changed", self)
+	if uses_seed_updated and is_inside_tree():
+		get_tree().call_group("generator_node", "on_generator_changed", self)
 
 func get_input_defs() -> Array:
 	if shader_model == null or !shader_model.has("inputs"):
