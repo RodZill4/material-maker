@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"clamp": true,
+		"clamp": false,
 		"default_in1": 0,
 		"default_in2": 0,
 		"op": 0
@@ -132,6 +132,10 @@
 					{
 						"name": "sqrt(1-A²)",
 						"value": "sqrt(1.0-$in1($uv)*$in1($uv))"
+					},
+					{
+						"name": "smoothstep(0.0, 1.0, A)",
+						"value": "smoothstep(0.0, 1.0, $in1($uv))"
 					}
 				]
 			},
