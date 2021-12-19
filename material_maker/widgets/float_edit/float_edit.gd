@@ -123,16 +123,19 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 				modifiers = get_modifiers(event)
 
 func _on_LineEdit_text_changed(new_text : String) -> void:
-	if new_text.is_valid_float():
-		value = new_text.to_float()
-		do_update(false)
+	pass
 
 func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if new_text.is_valid_float():
-		value = new_text.to_float()
-		do_update()
-		emit_signal("value_changed", value)
-		$Slider.visible = true
+		var new_value : float = new_text.to_float()
+		if value != new_value:
+			value = new_value
+			do_update()
+			emit_signal("value_changed", value)
+			$Slider.visible = true
+			print("value changed "+new_text)
+		else:
+			print("value didn't change "+new_text)
 	elif float_only:
 		do_update()
 		emit_signal("value_changed", value)
