@@ -126,6 +126,9 @@ func update_textures() -> void:
 				var renderer = mm_renderer.request(self)
 				while renderer is GDScriptFunctionState:
 					renderer = yield(renderer, "completed")
+				if ! preview_textures.has(t) or ! preview_textures[t].has("material"):
+					renderer.release(self)
+					break
 				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
