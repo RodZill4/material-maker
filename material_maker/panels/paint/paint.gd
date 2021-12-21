@@ -12,10 +12,10 @@ var settings : Dictionary = {
 const MODE_FREEHAND_DOTS = 0
 const MODE_FREEHAND_LINE = 1
 const MODE_LINE          = 2
-const MODE_FILL          = 3
+const MODE_STAMP         = 3
 const MODE_COLOR_PICKER  = 4
 const MODE_COUNT         = 5
-const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Fill", "ColorPicker" ]
+const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Stamp", "ColorPicker" ]
 
 var current_tool = MODE_FREEHAND_DOTS
 
@@ -349,6 +349,8 @@ const PAINTING_MODE_VIEW = 0
 const PAINTING_MODE_TEXTURE = 1
 const PAINTING_MODE_TEXTURE_FROM_VIEW = 2
 
+var stamp_center : Vector2
+
 func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VIEW):
 	var mouse_position : Vector2
 	var dont_paint : bool = false
@@ -370,20 +372,25 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle } )
 		if current_tool == MODE_COLOR_PICKER:
 			show_brush(null, null)
-		else:
-			if current_tool == MODE_LINE:
-				if previous_position != null:
-					var direction = mouse_position-previous_position
-					painter.set_brush_angle(-atan2(direction.y, direction.x))
-				if dont_paint:
-					show_brush(null, null)
-				else:
-					show_brush(mouse_position, previous_position)
+		elif current_tool == MODE_LINE:
+			if previous_position != null:
+				var direction = mouse_position-previous_position
+				painter.update_brush_params( { pattern_angle=-atan2(direction.y, direction.x) } )
+			if dont_paint:
+				show_brush(null, null)
 			else:
-				if dont_paint:
-					show_brush(null, null)
-				else:
-					show_brush(mouse_position, mouse_position)
+				show_brush(mouse_position, previous_position)
+		elif current_tool == MODE_STAMP and ev.button_mask & BUTTON_MASK_LEFT != 0:
+			var stamp_offset = mouse_position - stamp_center
+			var stamp_size = stamp_offset.length()
+			var stamp_angle = -stamp_offset.angle()
+			painter.update_brush_params( { brush_size=stamp_size, pattern_angle=stamp_angle } )
+			show_brush(stamp_center, stamp_center)
+		else:
+			if dont_paint:
+				show_brush(null, null)
+			else:
+				show_brush(mouse_position, mouse_position)
 		if ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.shift:
 				reset_stroke()
@@ -400,7 +407,6 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
 				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
 				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
-				painter.update_brush()
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 				paint(mouse_position, get_pressure(ev), ev.tilt, painting_mode)
 				last_tilt = ev.tilt
@@ -415,6 +421,12 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				if ev.pressed:
 					stroke_length = 0.0
 					previous_position = mouse_position
+					if current_tool == MODE_STAMP:
+						stamp_center = mouse_position
+						painter.update_brush_params( { brush_size=0 } )
+						show_brush(stamp_center, stamp_center)
+				elif current_tool == MODE_STAMP:
+					paint(stamp_center, get_pressure(ev), last_tilt, painting_mode, true)
 				elif current_tool == MODE_COLOR_PICKER:
 					pick_color(ev.position)
 				else:
@@ -423,7 +435,8 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 						if previous_position != null:
 							var direction = mouse_position-previous_position
 							angle = -atan2(direction.y, direction.x)
-						painter.set_brush_angle(angle)
+						painter.update_brush_params( { pattern_angle=angle } )
+						painter.update_brush()
 					else:
 						last_painted_position = mouse_position+Vector2(brush_spacing_control.value, brush_spacing_control.value)
 					paint(mouse_position, get_pressure(ev), last_tilt, painting_mode, true)

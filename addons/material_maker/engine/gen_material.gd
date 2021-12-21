@@ -74,6 +74,7 @@ func all_sources_changed() -> void:
 	update_preview()
 
 var new_parameter_values : Dictionary = {}
+var new_updated_textures : Array = []
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	for p in parameter_changes.keys():
 		new_parameter_values[p] = parameter_changes[p]
@@ -82,6 +83,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true
+	new_updated_textures.push_back(n)
 	schedule_update_textures()
 
 func schedule_update_textures() -> void:
@@ -96,6 +98,8 @@ func update_textures() -> void:
 		while update_again:
 			var parameter_values : Dictionary = new_parameter_values
 			new_parameter_values = {}
+			var updated_textures : Array = new_updated_textures
+			new_updated_textures = []
 			update_again = false
 			var image_size = get_image_size()
 			updating = true
@@ -111,12 +115,20 @@ func update_textures() -> void:
 					for k in output_shader.textures.keys():
 						material.set_shader_param(k, output_shader.textures[k])
 					preview_textures[t].material = material
-				else:
-					if ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
+				elif ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
+					var need_update : bool = false
+					for ut in updated_textures:
+						if preview_textures[t].textures.has(ut):
+							need_update = true
+							break
+					if !need_update:
 						continue
 				var renderer = mm_renderer.request(self)
 				while renderer is GDScriptFunctionState:
 					renderer = yield(renderer, "completed")
+				if ! preview_textures.has(t) or ! preview_textures[t].has("material"):
+					renderer.release(self)
+					break
 				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
