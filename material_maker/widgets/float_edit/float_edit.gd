@@ -152,3 +152,4 @@ func _on_FloatEdit_focus_entered():
 
 func _on_LineEdit_focus_exited() -> void:
 	_on_LineEdit_text_entered(text, false)
+	select(0, 0)
