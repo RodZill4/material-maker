@@ -262,6 +262,12 @@ func set_brush_angle(a) -> void:
 	brush_params.pattern_angle = a
 	update_brush()
 
+func update_brush_params(shader_params : Dictionary) -> void:
+	for p in shader_params.keys():
+		brush_params[p] = shader_params[p]
+		if brush_preview_material != null:
+			brush_preview_material.set_shader_param(p, brush_params[p])
+
 func show_pattern(b):
 	if pattern_shown != b:
 		pattern_shown = b
@@ -360,12 +366,6 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 	return true
-
-func update_brush_params(shader_params : Dictionary) -> void:
-	for p in shader_params.keys():
-		brush_params[p] = shader_params[p]
-		if brush_preview_material != null:
-			brush_preview_material.set_shader_param(p, brush_params[p])
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
 	if has_albedo:
