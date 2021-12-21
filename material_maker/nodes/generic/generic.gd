@@ -80,7 +80,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		if generator.parameters.has(c):
 			object.on_parameter_changed(c, generator.get_parameter(c))
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.connect("value_changed", object, "_on_value_changed", [ o.name ])
+			o.connect("value_changed", object, "_on_float_value_changed", [ o.name ])
 		elif o is LineEdit:
 			o.connect("text_changed", object, "_on_text_changed", [ o.name ])
 		elif o is SizeOptionButton:
@@ -115,24 +115,27 @@ func update_parameter_tooltip(p : String, v):
 			controls[p].hint_tooltip = get_parameter_tooltip(d, v)
 			break
 
-func set_generator_parameter(variable : String, value):
+func set_generator_parameter(variable : String, value, merge_undo : bool = false):
 	var old_value = MMType.serialize_value(generator.get_parameter(variable))
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 	update_parameter_tooltip(variable, str(value))
-	if get_parent().get("undoredo") != null:
+	if get_parent().get("undoredo") != null and old_value != MMType.serialize_value(value):
 		var node_hier_name = generator.get_hier_name()
 		var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
 		var redo_command = { type="setparams", node=node_hier_name, params={ variable:MMType.serialize_value(value) } }
-		get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], true)
+		get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
 
 func _on_text_changed(new_text, variable : String) -> void:
 	set_generator_parameter(variable, new_text)
 
 func _on_value_changed(new_value, variable : String) -> void:
 	set_generator_parameter(variable, new_value)
+
+func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
+	set_generator_parameter(variable, new_value, merge_undo)
 
 func _on_color_changed(new_color, variable : String) -> void:
 	set_generator_parameter(variable, new_color)

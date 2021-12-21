@@ -925,11 +925,16 @@ func set_node_parameters(generator, parameters : Dictionary):
 	var hier_name = generator.get_hier_name()
 	var prev_params : Dictionary = {}
 	for p in parameters.keys():
-		prev_params[p] = MMType.serialize_value(generator.get_parameter(p))
-		generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
-	var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
-	var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
-	undoredo.add("Set parameters values", [undo_action], [redo_action], true)
+		var prev_value = MMType.serialize_value(generator.get_parameter(p))
+		if parameters[p] != prev_value:
+			prev_params[p] = prev_value
+			generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+		else:
+			parameters.erase(p)
+	if ! prev_params.empty():
+		var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
+		var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
+		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
 
 func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
 	match action_name:

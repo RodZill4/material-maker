@@ -17,7 +17,7 @@ var from_upper_bound : bool = false
 onready var slider = $Slider
 onready var cursor = $Slider/Cursor
 
-signal value_changed(value)
+signal value_changed(value, merge_undo)
 
 func _ready() -> void:
 	do_update()
@@ -32,12 +32,12 @@ func set_value(v, notify = false) -> void:
 		do_update()
 		$Slider.visible = true
 		if notify:
-			emit_signal("value_changed", value)
+			emit_signal("value_changed", value, false)
 	elif v is String and !float_only:
 		text = v
 		$Slider.visible = false
 		if notify:
-			emit_signal("value_changed", v)
+			emit_signal("value_changed", v, false)
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -87,6 +87,8 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 			from_lower_bound = value <= min_value
 			from_upper_bound = value >= max_value
 			modifiers = get_modifiers(event)
+			emit_signal("value_changed", value+1, false)
+			emit_signal("value_changed", value, true)
 		else:
 			sliding = false
 	elif sliding and event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
@@ -114,7 +116,7 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 				v = max_value
 			set_value(v)
 			select(0, 0)
-			emit_signal("value_changed", value)
+			emit_signal("value_changed", value, true)
 			release_focus()
 	elif event is InputEventKey and !event.echo:
 		match event.scancode:
@@ -129,20 +131,17 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if new_text.is_valid_float():
 		var new_value : float = new_text.to_float()
-		if value != new_value:
+		if abs(value-new_value) > 0.00001:
 			value = new_value
 			do_update()
-			emit_signal("value_changed", value)
+			emit_signal("value_changed", value, false)
 			$Slider.visible = true
-			print("value changed "+new_text)
-		else:
-			print("value didn't change "+new_text)
 	elif float_only:
 		do_update()
-		emit_signal("value_changed", value)
+		emit_signal("value_changed", value, false)
 		$Slider.visible = true
 	else:
-		emit_signal("value_changed", new_text)
+		emit_signal("value_changed", new_text, false)
 		$Slider.visible = false
 	if release:
 		release_focus()
