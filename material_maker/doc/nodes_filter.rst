@@ -43,6 +43,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_fill_to_random_grey
 	node_filter_fill_to_random_color
 	node_filter_fill_to_uv
+	node_filter_fill_to_orientation
 	node_filter_math
 	node_filter_smooth_minmax
 	node_filter_maketileable
