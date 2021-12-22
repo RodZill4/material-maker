@@ -14,3 +14,4 @@ made from random patterns.
 	node_noise_fbm
 	node_noise_anisotropic
 	node_noise_wavelet
+	node_noise_crystal
