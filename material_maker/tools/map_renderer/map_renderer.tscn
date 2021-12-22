@@ -327,8 +327,8 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 vec3 random_hemi_point(vec3 rand, vec3 norm) {
 	const float PI = 3.141592653;
 
-	float ang1 = (rand.x + 1.0) * PI; // [-1..1) -> [0..2*PI)
-	float u = rand.y; // [-1..1), cos and acos(2v-1) cancel each other out, so we arrive at [-1..1)
+	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
+	float u = rand.y * 2.0 - 1.0; // [0..1), cos and acos(2v-1) cancel each other out, so we arrive at [-1..1)
 	float u2 = u * u;
 	float sqrt1MinusU2 = sqrt(1.0 - u2);
 	float x = sqrt1MinusU2 * cos(ang1);
