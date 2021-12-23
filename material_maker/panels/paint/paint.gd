@@ -935,9 +935,12 @@ func initialize_layer_history(layer):
 		channels[c] = texture
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 
-func initialize_layers_history():
-	for l in layers.layers:
+func initialize_layers_history(layer_list = null):
+	if layer_list == null:
+		layer_list = layers.layers
+	for l in layer_list:
 		initialize_layer_history(l)
+		initialize_layers_history(l.layers)
 
 func _on_Painter_end_of_stroke(stroke_state):
 	var layer = layers.selected_layer

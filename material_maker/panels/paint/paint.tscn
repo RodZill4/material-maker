@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://material_maker/tools/undo_redo/undo_redo.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
