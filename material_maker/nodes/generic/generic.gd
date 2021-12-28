@@ -556,10 +556,5 @@ func on_mouse_exited():
 	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
 		preview.visible = true
 
-func _gui_input(event):
-	if event is InputEventMouseButton and event.doubleclick:
-		if generator is MMGenGraph:
-			get_parent().call_deferred("update_view", generator)
-
 func update_from_locale() -> void:
 	update_title()
