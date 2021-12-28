@@ -16,6 +16,7 @@ const TEXTURES = [
 
 # warning-ignore:unused_signal
 signal group_size_changed(s)
+signal groups_updated(g)
 
 
 func _ready() -> void:
@@ -27,12 +28,9 @@ func set_state(s) -> void:
 
 func get_group_parent() -> Dictionary:
 	var rv = self
-	var index = 0
 	for _i in range(group_parent):
-		index = rv.get_index()
 		rv = rv.get_parent()
-	return { parent=rv, index=index }
-
+	return { parent=rv, index=rv.get_index() }
 
 class MyCustomSorter:
 	static func sort(a, b):
@@ -51,9 +49,9 @@ static func update_groups(parent : Control):
 	buttons.sort_custom(MyCustomSorter, "sort")
 	var in_group : bool = false
 	var current_group : int = -1
+	var group_sizes = {}
 	for i in range(buttons.size()):
 		var b = buttons[i].button
-
 		if in_group:
 			b.set_state(b.state | 2)
 		else:
@@ -64,15 +62,14 @@ static func update_groups(parent : Control):
 				current_group = i
 				continue
 			else:
-				buttons[current_group].button.group_size = i - current_group + 1
-				buttons[current_group].button.emit_signal("group_size_changed", buttons[current_group].button.group_size)
+				group_sizes[current_group] = i + 1 - current_group
 				current_group = -1
 		b.group_size = 0
 		b.emit_signal("group_size_changed", 0)
 	if current_group != -1:
-		buttons[current_group].button.group_size = buttons.size() - current_group
-		buttons[current_group].button.emit_signal("group_size_changed", buttons[current_group].button.group_size)
+		group_sizes[current_group] = buttons.size() - current_group
+	return group_sizes
 
 func _on_pressed() -> void:
 	set_state(state ^ 1)
-	update_groups(get_group_parent().parent)
+	emit_signal("groups_updated", update_groups(get_group_parent().parent))

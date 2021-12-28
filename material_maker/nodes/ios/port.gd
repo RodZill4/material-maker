@@ -34,8 +34,8 @@ func _on_Name_label_changed(new_label) -> void:
 func _on_Type_item_selected(ID) -> void:
 	get_parent().command("set_port_type", [get_index(), mm_io_types.type_names[ID]])
 
-func _on_PortGroupButton_group_size_changed(s):
-	get_parent().command("set_port_group_size", [get_index(), s])
+func _on_PortGroupButton_groups_updated(g):
+	get_parent().command("set_port_groups_sizes", [g], true)
 
 func _on_Description_descriptions_changed(short_description, long_description):
 	get_parent().command("set_port_descriptions", [get_index(), short_description, long_description])
@@ -48,3 +48,5 @@ func _on_Up_pressed() -> void:
 
 func _on_Down_pressed() -> void:
 	get_parent().command("swap_ports", [get_index(), get_index()+1])
+
+

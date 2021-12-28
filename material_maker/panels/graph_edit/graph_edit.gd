@@ -877,11 +877,16 @@ func undoredo_command(command : Dictionary) -> void:
 			var g = parent_generator.get_node(command.name)
 			if g != null:
 				g.deserialize(command.data)
-				if generator == parent_generator:
-					if has_node("node_"+g.name):
-						var node = get_node("node_"+g.name)
-						if node.has_method("update_node"):
-							node.update_node()
+				var updated_generators = [ g ]
+				match g.get_type_name():
+					"Inputs", "Outputs":
+						updated_generators.push_back(parent_generator)
+				for ug in updated_generators:
+					if generator == ug.get_parent():
+						if has_node("node_"+ug.name):
+							var node = get_node("node_"+ug.name)
+							if node.has_method("update_node"):
+								node.update_node()
 		"setparams":
 			var g = get_node_from_hier_name(command.node)
 			for p in command.params.keys():
