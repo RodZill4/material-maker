@@ -15,7 +15,6 @@ const TEXTURES = [
 
 
 # warning-ignore:unused_signal
-signal group_size_changed(s)
 signal groups_updated(g)
 
 
@@ -63,11 +62,12 @@ static func update_groups(parent : Control):
 				continue
 			else:
 				group_sizes[current_group] = i + 1 - current_group
+				buttons[current_group].button.group_size = group_sizes[current_group]
 				current_group = -1
 		b.group_size = 0
-		b.emit_signal("group_size_changed", 0)
 	if current_group != -1:
 		group_sizes[current_group] = buttons.size() - current_group
+		buttons[current_group].button.group_size = group_sizes[current_group]
 	return group_sizes
 
 func _on_pressed() -> void:
