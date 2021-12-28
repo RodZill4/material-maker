@@ -1061,7 +1061,7 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
 			if ! redo_add_nodes.empty() or ! redo_add_connections.empty():
 				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
-		"ios":
+		"remote","ios":
 			var generator_path = parent_path.left(parent_path.rfind("/"))
 			undo_actions.push_back({ type="update_generator", parent=generator_path, name=next.name, data=prev })
 			redo_actions.push_back({ type="update_generator", parent=generator_path, name=prev.name, data=next })

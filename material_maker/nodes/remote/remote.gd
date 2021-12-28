@@ -133,19 +133,9 @@ func _on_value_changed(new_value, variable : String) -> void:
 func undo_redo_register_change(action_name : String, old_state : Dictionary):
 	var new_state = generator.serialize().duplicate(true)
 	if new_state.hash() == old_state.hash():
-		print("No change, ignoring")
 		return
-	print("Registering undo action: "+action_name)
-	var parent_generator = generator.get_parent()
-	var parent_hier_name : String = parent_generator.get_hier_name()
-	var undo_actions : Array = []
-	undo_actions.push_back({ parent=parent_hier_name, type="remove_generators", generators=[generator.name] })
-	undo_actions.push_back({ parent=parent_hier_name, type="add_to_graph", generators=[old_state] })
-	var redo_actions : Array = []
-	redo_actions.push_back({ parent=parent_hier_name, type="remove_generators", generators=[generator.name] })
-	redo_actions.push_back({ parent=parent_hier_name, type="add_to_graph", generators=[new_state] })
-	get_parent().undoredo.add(action_name, undo_actions, redo_actions)
-
+	get_parent().undoredo_create_step(action_name, generator.get_hier_name(), old_state, new_state)
+		
 func move_parameter(widget_name : String, offset : int) -> void:
 	old_state = generator.serialize().duplicate(true)
 	generator.move_parameter(widget_name, offset)
