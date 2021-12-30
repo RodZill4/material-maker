@@ -143,8 +143,8 @@ func _on_color_changed(new_color, variable : String) -> void:
 func _on_file_changed(new_file, variable : String) -> void:
 	set_generator_parameter(variable, new_file)
 
-func _on_gradient_changed(new_gradient, variable : String) -> void:
-	set_generator_parameter(variable, new_gradient.duplicate())
+func _on_gradient_changed(new_gradient, merge_undo : bool = false, variable : String = "") -> void:
+	set_generator_parameter(variable, new_gradient.duplicate(), merge_undo)
 
 func _on_curve_changed(new_curve, variable : String) -> void:
 	set_generator_parameter(variable, new_curve.duplicate())
