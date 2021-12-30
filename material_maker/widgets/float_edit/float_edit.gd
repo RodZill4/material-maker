@@ -26,16 +26,18 @@ func get_value() -> String:
 	return text
 	
 func set_value(v, notify = false) -> void:
+	if ! is_inside_tree():
+		return
 	if v is float:
 		value = v
 		text = str(v)
 		do_update()
-		$Slider.visible = true
+		slider.visible = true
 		if notify:
 			emit_signal("value_changed", value, false)
 	elif v is String and !float_only:
 		text = v
-		$Slider.visible = false
+		slider.visible = false
 		if notify:
 			emit_signal("value_changed", v, false)
 
@@ -70,13 +72,13 @@ func get_modifiers(event):
 		new_modifiers |= 4
 	return new_modifiers
 
-func _on_LineEdit_gui_input(event : InputEvent) -> void:
+func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed() and !float_only:
 		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
 		add_child(expression_editor)
 		expression_editor.edit_parameter(self)
-		get_tree().set_input_as_handled()
-	if !$Slider.visible or !editable:
+		accept_event()
+	if !slider.visible or !sliding and !editable:
 		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.is_pressed():
@@ -89,8 +91,12 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 			modifiers = get_modifiers(event)
 			emit_signal("value_changed", value+1, false)
 			emit_signal("value_changed", value, true)
+			editable = false
+			selecting_enabled = false
 		else:
 			sliding = false
+			editable = true
+			selecting_enabled = true
 	elif sliding and event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var new_modifiers = get_modifiers(event)
 		if new_modifiers != modifiers:
@@ -115,9 +121,8 @@ func _on_LineEdit_gui_input(event : InputEvent) -> void:
 			if !from_upper_bound and v > max_value:
 				v = max_value
 			set_value(v)
-			select(0, 0)
 			emit_signal("value_changed", value, true)
-			release_focus()
+		accept_event()
 	elif event is InputEventKey and !event.echo:
 		match event.scancode:
 			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
