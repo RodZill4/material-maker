@@ -73,6 +73,11 @@ func _on_value_changed(new_value, variable : String) -> void:
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 
+func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, new_value)
+	ignore_parameter_change = ""
+
 func _on_color_changed(new_color, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)

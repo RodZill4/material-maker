@@ -80,7 +80,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		if generator.parameters.has(c):
 			object.on_parameter_changed(c, generator.get_parameter(c))
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.connect("value_changed", object, "_on_float_value_changed", [ o.name ])
+			o.connect("value_changed_undo", object, "_on_float_value_changed", [ o.name ])
 		elif o is LineEdit:
 			o.connect("text_changed", object, "_on_text_changed", [ o.name ])
 		elif o is SizeOptionButton:
