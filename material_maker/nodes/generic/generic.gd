@@ -115,18 +115,23 @@ func update_parameter_tooltip(p : String, v):
 			controls[p].hint_tooltip = get_parameter_tooltip(d, v)
 			break
 
-func set_generator_parameter(variable : String, value, merge_undo : bool = false):
-	var old_value = MMType.serialize_value(generator.get_parameter(variable))
+func set_generator_parameter_ext(variable : String, value, old_value, merge_undo : bool = false):
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
 	update_parameter_tooltip(variable, str(value))
-	if get_parent().get("undoredo") != null and old_value != MMType.serialize_value(value):
-		var node_hier_name = generator.get_hier_name()
-		var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
-		var redo_command = { type="setparams", node=node_hier_name, params={ variable:MMType.serialize_value(value) } }
-		get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
+	if old_value != null and get_parent().get("undoredo") != null:
+		var serialized_value = MMType.serialize_value(value)
+		if old_value != serialized_value:
+			var node_hier_name = generator.get_hier_name()
+			var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
+			var redo_command = { type="setparams", node=node_hier_name, params={ variable:serialized_value } }
+			get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
+
+func set_generator_parameter(variable : String, value, merge_undo : bool = false):
+	var old_value = MMType.serialize_value(generator.get_parameter(variable))
+	set_generator_parameter_ext(variable, value, old_value, merge_undo)
 
 func _on_text_changed(new_text, variable : String) -> void:
 	set_generator_parameter(variable, new_text)
@@ -146,11 +151,11 @@ func _on_file_changed(new_file, variable : String) -> void:
 func _on_gradient_changed(new_gradient, merge_undo : bool = false, variable : String = "") -> void:
 	set_generator_parameter(variable, new_gradient.duplicate(), merge_undo)
 
-func _on_curve_changed(new_curve, variable : String) -> void:
-	set_generator_parameter(variable, new_curve.duplicate())
+func _on_curve_changed(new_curve, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_curve, MMType.serialize_value(old_value))
 
-func _on_polygon_changed(new_polygon, variable : String) -> void:
-	set_generator_parameter(variable, new_polygon.duplicate())
+func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_polygon, MMType.serialize_value(old_value))
 
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
