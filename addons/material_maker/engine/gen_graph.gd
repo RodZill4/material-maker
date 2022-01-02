@@ -288,7 +288,7 @@ func get_named_parameters() -> Dictionary:
 		if c is MMGenRemote:
 			var remote_named_parameters = c.get_named_parameters()
 			for k in remote_named_parameters.keys():
-				named_parameters[k] = remote_named_parameters[k]
+				named_parameters[k] = { id=remote_named_parameters[k], value=c.get_parameter(k) }
 	return named_parameters
 
 func get_globals() -> String:
