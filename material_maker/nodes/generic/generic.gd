@@ -90,7 +90,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		elif o is CheckBox:
 			o.connect("toggled", object, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			o.connect("color_changed", object, "_on_color_changed", [ o.name ])
+			o.connect("color_changed_undo", object, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
@@ -142,8 +142,8 @@ func _on_value_changed(new_value, variable : String) -> void:
 func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
 	set_generator_parameter(variable, new_value, merge_undo)
 
-func _on_color_changed(new_color, variable : String) -> void:
-	set_generator_parameter(variable, new_color)
+func _on_color_changed(new_color, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
 
 func _on_file_changed(new_file, variable : String) -> void:
 	set_generator_parameter(variable, new_file)
