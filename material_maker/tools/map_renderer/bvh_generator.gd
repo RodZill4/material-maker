@@ -1,7 +1,7 @@
 tool
 extends Node
 
-func generate(mesh: Mesh) -> ImageTexture:
+func generate(mesh: Mesh, with_normals: bool = false) -> ImageTexture:
 	var b_mesh := MeshDataTool.new()
 	if not mesh is ArrayMesh:
 		b_mesh.create_from_surface(mesh.create_outline(0.0), 0)
@@ -13,8 +13,12 @@ func generate(mesh: Mesh) -> ImageTexture:
 
 	var triangles := []
 	var vertices := []
+	var normals := []
 	for i in b_mesh.get_vertex_count():
 		vertices.append(b_mesh.get_vertex(i))
+	if with_normals:
+		for i in b_mesh.get_vertex_count():
+			normals.append(b_mesh.get_vertex_normal(i))
 	for i in b_mesh.get_face_count():
 		triangles.append({
 			0: b_mesh.get_face_vertex(i, 0 if mesh is ArrayMesh else 2),
@@ -24,8 +28,10 @@ func generate(mesh: Mesh) -> ImageTexture:
 		})
 
 	var bvh := BVHNode.new()
+	bvh.with_normals = with_normals
 	bvh.vertices = vertices
 	bvh.triangles = triangles
+	bvh.normals = normals
 	print("Generating BVH...")
 	var time := OS.get_ticks_msec()
 	var max_node_level := bvh.generate()
@@ -44,6 +50,7 @@ class BVHNode:
 	const DATA_HEADER_SIZE = 1
 
 	var node_debug: Spatial
+	var with_normals := false
 
 	var aabb := AABB()
 	var center: Vector3
@@ -56,6 +63,7 @@ class BVHNode:
 
 	var triangles := []
 	var vertices := []
+	var normals := []
 
 	# The properties that follow are only made in the root node.
 	var image: Image
@@ -75,6 +83,22 @@ class BVHNode:
 			tris += left_node.get_triangles()
 			tris += right_node.get_triangles()
 		return tris
+
+
+	func _append_triangle(tri: Dictionary) -> void:
+		var vert_a: Vector3 = vertices[tri[0]]
+		var vert_b: Vector3 = vertices[tri[1]]
+		var vert_c: Vector3 = vertices[tri[2]]
+		_append_4(root._node_data, vert_a.x, vert_a.y, vert_a.z)
+		_append_4(root._node_data, vert_b.x, vert_b.y, vert_b.z)
+		_append_4(root._node_data, vert_c.x, vert_c.y, vert_c.z)
+		if root.with_normals:
+			var norm_a: Vector3 = normals[tri[0]]
+			var norm_b: Vector3 = normals[tri[1]]
+			var norm_c: Vector3 = normals[tri[2]]
+			_append_4(root._node_data, norm_a.x, norm_a.y, norm_a.z)
+			_append_4(root._node_data, norm_b.x, norm_b.y, norm_b.z)
+			_append_4(root._node_data, norm_c.x, norm_c.y, norm_c.z)
 
 	# Takes the triangles and splits itself into smaller nodes until
 	# each node has less than the maximum triangle count.
@@ -104,12 +128,7 @@ class BVHNode:
 		if triangles.size() <= MAX_TRIANGLES:
 			root._node_data[-1] = triangles.size()
 			for tri in triangles:
-				var vert_a: Vector3 = vertices[tri[0]]
-				var vert_b: Vector3 = vertices[tri[1]]
-				var vert_c: Vector3 = vertices[tri[2]]
-				_append_4(root._node_data, vert_a.x, vert_a.y, vert_a.z)
-				_append_4(root._node_data, vert_b.x, vert_b.y, vert_b.z)
-				_append_4(root._node_data, vert_c.x, vert_c.y, vert_c.z)
+				_append_triangle(tri)
 			if root == self:
 				_finalize_data()
 			return level
@@ -144,12 +163,7 @@ class BVHNode:
 		if split_failed[0] and split_failed[1] and split_failed[2]:
 			root._node_data[-1] = triangles.size()
 			for tri in triangles:
-				var vert_a: Vector3 = vertices[tri[0]]
-				var vert_b: Vector3 = vertices[tri[1]]
-				var vert_c: Vector3 = vertices[tri[2]]
-				_append_4(root._node_data, vert_a.x, vert_a.y, vert_a.z)
-				_append_4(root._node_data, vert_b.x, vert_b.y, vert_b.z)
-				_append_4(root._node_data, vert_c.x, vert_c.y, vert_c.z)
+				_append_triangle(tri)
 			if root == self:
 				_finalize_data()
 			return level
@@ -177,6 +191,7 @@ class BVHNode:
 		left_node.parent = self
 		left_node.level = level + 1
 		left_node.vertices = vertices
+		left_node.normals = normals
 		left_node.triangles = left_triangles
 		var left_max_level := left_node.generate()
 		root._node_data[data_offset + 8] = root._node_ids[left_node]
@@ -186,6 +201,7 @@ class BVHNode:
 		right_node.parent = self
 		right_node.level = level + 1
 		right_node.vertices = vertices
+		right_node.normals = normals
 		right_node.triangles = right_triangles
 		var right_max_level := right_node.generate()
 		root._node_data[data_offset + 9] = root._node_ids[right_node]
@@ -402,7 +418,7 @@ class BVHNode:
 		var data_size = _data.size() / 4
 		var img_width = min(data_size, 16384)
 		var img_height = data_size / 16384 + 1
-#		prints(data_size, img_width, img_height)
+		prints("BVH size:", data_size, img_width, img_height, "Capacity: ", float(img_width * img_height)/ (16384.0 * 16384.0) * 100.0, "%")
 
 		image = Image.new()
 		image.create(img_width, img_height, false, Image.FORMAT_RGBAF)
