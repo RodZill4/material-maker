@@ -8,6 +8,8 @@ export(ShaderMaterial) var curvature_material
 export(ShaderMaterial) var ao_material
 export(ShaderMaterial) var thickness_material
 export(ShaderMaterial) var normal_hp_lp_material
+export(ShaderMaterial) var depth_hp_lp_material
+export(ShaderMaterial) var worldnormal_hp_lp_material
 export(ShaderMaterial) var denoise_pass
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
@@ -121,7 +123,9 @@ func get_hp_model_path() -> String:
 
 func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
 	var bakers= {
-		hp_lp_normal = { baker=normal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Normal" }
+		hp_lp_normal = { baker=normal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Normal" },
+		hp_lp_depth = { baker=depth_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Depth" },
+		hp_lp_worldnormal = { baker=worldnormal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="World Normal" }
 	}
 	if hp_mesh_path == null or lp_mesh == null:
 		return

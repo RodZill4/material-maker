@@ -35,6 +35,8 @@ const MENU = [
 	{ menu="Model/Generate map", submenu="generate_ao_map", description="Ambient Occlusion" },
 	{ menu="Model/Generate map", submenu="generate_thickness_map", description="Thickness" },
 	{ menu="Model/Generate map", submenu="generate_hp_lp_normal_map", description="HP->LP normals" },
+	{ menu="Model/Generate map", submenu="generate_hp_lp_worldnormal_map", description="HP->LP world normals" },
+	{ menu="Model/Generate map", submenu="generate_hp_lp_depth_map", description="HP->LP depth" },
 	{ menu="Environment", submenu="environment_list", description="Select" }
 ]
 
@@ -286,17 +288,35 @@ func create_menu_generate_thickness_map(menu) -> void:
 func create_menu_generate_hp_lp_normal_map(menu) -> void:
 	create_menu_map(menu, "generate_hp_lp_normal_map")
 
+func create_menu_generate_hp_lp_worldnormal_map(menu) -> void:
+	create_menu_map(menu, "generate_hp_lp_worldnormal_map")
+
+func create_menu_generate_hp_lp_depth_map(menu) -> void:
+	create_menu_map(menu, "generate_hp_lp_depth_map")
+
 func generate_thickness_map(i : int) -> void:
 	generate_map("do_generate_thickness_map", 256 << i)
 
 func generate_hp_lp_normal_map(i : int) -> void:
 	generate_map("do_generate_hp_lp_normal_map", 256 << i)
 
+func generate_hp_lp_worldnormal_map(i : int) -> void:
+	generate_map("do_generate_hp_lp_worldnormal_map", 256 << i)
+
+func generate_hp_lp_depth_map(i : int) -> void:
+	generate_map("do_generate_hp_lp_depth_map", 256 << i)
+
 func do_generate_thickness_map(file_name : String, size : int) -> void:
 	do_generate_map(file_name, "thickness", size)
 
 func do_generate_hp_lp_normal_map(file_name : String, size : int) -> void:
 	do_generate_map(file_name, "hp_lp_normal", size)
+
+func do_generate_hp_lp_worldnormal_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "hp_lp_worldnormal", size)
+
+func do_generate_hp_lp_depth_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "hp_lp_depth", size)
 
 func create_menu_generate_ao_map(menu) -> void:
 	create_menu_map(menu, "generate_ao_map")
