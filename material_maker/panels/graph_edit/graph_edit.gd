@@ -937,10 +937,8 @@ func set_node_parameters(generator, parameters : Dictionary):
 	for p in parameters.keys():
 		var prev_value = MMType.serialize_value(generator.get_parameter(p))
 		if parameters[p] != prev_value:
-			prev_params[p] = prev_value
 			generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
-		else:
-			parameters.erase(p)
+		prev_params[p] = prev_value
 	if ! prev_params.empty():
 		var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
 		var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
