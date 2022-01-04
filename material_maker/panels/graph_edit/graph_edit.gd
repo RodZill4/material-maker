@@ -689,8 +689,13 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
 				c.selected = true
 	else:
-		set_current_preview(0, node)
 		highlight_connections()
+		yield(get_tree(), "idle_frame")
+		if current_preview[0] != null:
+			for n in get_selected_nodes():
+				if n.generator == current_preview[0].generator:
+					return
+		set_current_preview(0, node)
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()

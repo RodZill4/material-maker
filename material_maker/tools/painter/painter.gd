@@ -3,6 +3,7 @@ extends Node
 onready var view_to_texture_viewport = $View2Texture
 onready var view_to_texture_mesh = $View2Texture/PaintedMesh
 onready var view_to_texture_camera = $View2Texture/Camera
+var view_to_texture_image : Image
 
 onready var texture_to_view_viewport = $Texture2View
 onready var texture_to_view_mesh = $Texture2View/PaintedMesh
@@ -203,6 +204,8 @@ func update_tex2view():
 	view_to_texture_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
+	view_to_texture_image.lock()
 	mat = texture_to_view_mesh.get_surface_material(0)
 	if true:
 		var shader_file = File.new()
@@ -261,6 +264,12 @@ func get_brush_preview_shader(mode : String) -> String:
 func set_brush_angle(a) -> void:
 	brush_params.pattern_angle = a
 	update_brush()
+
+func update_brush_params(shader_params : Dictionary) -> void:
+	for p in shader_params.keys():
+		brush_params[p] = shader_params[p]
+		if brush_preview_material != null:
+			brush_preview_material.set_shader_param(p, brush_params[p])
 
 func show_pattern(b):
 	if pattern_shown != b:
@@ -361,12 +370,6 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 	return true
 
-func update_brush_params(shader_params : Dictionary) -> void:
-	for p in shader_params.keys():
-		brush_params[p] = shader_params[p]
-		if brush_preview_material != null:
-			brush_preview_material.set_shader_param(p, brush_params[p])
-
 func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
 	if has_albedo:
 		albedo_viewport.do_paint(shader_params, end_of_stroke)
@@ -392,10 +395,7 @@ func fill(erase : bool, reset : bool = false) -> void:
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true)
 
 func view_to_texture(position : Vector2) -> Vector2:
-	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
-	view_to_texture_image.lock()
 	var position_in_texture : Color = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
-	view_to_texture_image.unlock()
 	if position_in_texture.r == position_in_texture.b && position_in_texture.g == position_in_texture.b:
 		return Vector2(-1, -1)
 	else:

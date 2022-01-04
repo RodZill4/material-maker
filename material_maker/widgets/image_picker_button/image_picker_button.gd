@@ -8,12 +8,14 @@ signal on_file_selected(f)
 
 
 func _ready():
-	texture_normal = ImageTexture.new()
+	pass
 
 func do_set_image_path(path) -> void:
 	if path == null:
 		return
 	image_path = path
+	if texture_normal == null:
+		texture_normal = ImageTexture.new()
 	texture_normal.load(image_path)
 	hint_tooltip = path
 

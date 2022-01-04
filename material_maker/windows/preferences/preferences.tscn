@@ -6,7 +6,6 @@
 [ext_resource path="res://material_maker/windows/preferences/lang_option.gd" type="Script" id=4]
 
 [node name="Preferences" type="WindowDialog"]
-visible = true
 anchor_left = 0.323
 anchor_top = 0.283
 anchor_right = 0.799
@@ -34,13 +33,14 @@ __meta__ = {
 }
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
-margin_right = 304.0
-margin_bottom = 322.0
+margin_right = 302.0
+margin_bottom = 320.0
 rect_min_size = Vector2( 289, 172 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -275,7 +275,6 @@ float_only = true
 config_variable = "idle_fps_limit"
 
 [node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -335,10 +334,35 @@ step = 1.0
 float_only = true
 config_variable = "bake_ao_ray_dist"
 
-[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="LabelRayBias" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 margin_top = 61.0
 margin_right = 100.0
 margin_bottom = 75.0
+rect_pivot_offset = Vector2( -266.571, 61 )
+text = "Ray bias:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RayBias" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 3 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 104.0
+margin_top = 56.0
+margin_right = 162.0
+margin_bottom = 80.0
+rect_pivot_offset = Vector2( -336.571, 66 )
+value = 0.005
+max_value = 1024.0
+step = 0.001
+float_only = true
+config_variable = "bake_ao_ray_bias"
+
+[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+margin_top = 89.0
+margin_right = 100.0
+margin_bottom = 103.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Denoise radius:"
 __meta__ = {
@@ -350,9 +374,9 @@ anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 104.0
-margin_top = 56.0
+margin_top = 84.0
 margin_right = 162.0
-margin_bottom = 80.0
+margin_bottom = 108.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 3.0
 min_value = 1.0
@@ -362,16 +386,16 @@ float_only = true
 config_variable = "bake_denoise_radius"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 326.0
-margin_right = 304.0
-margin_bottom = 326.0
+margin_top = 324.0
+margin_right = 302.0
+margin_bottom = 324.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 116.0
-margin_top = 330.0
-margin_right = 304.0
-margin_bottom = 350.0
+margin_left = 114.0
+margin_top = 328.0
+margin_right = 302.0
+margin_bottom = 348.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]

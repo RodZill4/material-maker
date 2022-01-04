@@ -147,6 +147,10 @@ func _on_gui_input(event) -> void:
 					menu.connect("popup_hide", menu, "queue_free")
 					menu.connect("id_pressed", self, "_on_seed_menu")
 					accept_event()
+		elif event.doubleclick:
+			if generator is MMGenGraph:
+				get_parent().call_deferred("update_view", generator)
+				accept_event()
 		if event.button_index == BUTTON_RIGHT:
 			if generator is MMGenGraph:
 				accept_event()
