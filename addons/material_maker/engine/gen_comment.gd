@@ -10,12 +10,13 @@ var text : String = ""
 var size : Vector2 = Vector2(300, 200)
 var title : String = "Comment"
 
-var color : Color
+var color = null
 
 func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 4
-	color = Color.white if "light" in get_node("/root/MainWindow").theme.resource_path else Color.black
+	if color == null:
+		color = Color.white if "light" in get_node("/root/MainWindow").theme.resource_path else Color.black
 
 func get_type() -> String:
 	return "comment"
