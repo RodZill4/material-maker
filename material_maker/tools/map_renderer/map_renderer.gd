@@ -9,7 +9,9 @@ export(ShaderMaterial) var ao_material
 export(ShaderMaterial) var thickness_material
 export(ShaderMaterial) var normal_hp_lp_material
 export(ShaderMaterial) var depth_hp_lp_material
+export(ShaderMaterial) var depth_normals_hp_lp_material
 export(ShaderMaterial) var worldnormal_hp_lp_material
+export(ShaderMaterial) var ao_hp_lp_material
 export(ShaderMaterial) var denoise_pass
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
@@ -125,7 +127,8 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	var bakers= {
 		hp_lp_normal = { baker=normal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Normal" },
 		hp_lp_depth = { baker=depth_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Depth" },
-		hp_lp_worldnormal = { baker=worldnormal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="World Normal" }
+		hp_lp_worldnormal = { baker=worldnormal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="World Normal" },
+		hp_lp_ao = { baker=ao_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="AO", dn_prepass=true, iterative=true, denoise=true }
 	}
 	if hp_mesh_path == null or lp_mesh == null:
 		return
@@ -137,31 +140,60 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	var bvh_data: ImageTexture = get_bvh(hp_mesh_path)
 	var baker_data = bakers[map]
 	var local_lp_mesh := lp_mesh.duplicate()
+	var depth_prepass_texture: ImageTexture = ImageTexture.new()
 
 	#TODO those settngs should came from dedicated UI
 	var use_smooth_cage = main_window.get_config("bake_smooth_cage")
-	var cage_offset = main_window.get_config("bake_cage_distance")
+	var cage_offset = main_window.get_config("bake_cage_f_distance")
 	#notice "-" as we move form lp cage to hp
-	var ao_ray_dist = -main_window.get_config("bake_ao_ray_dist")
-	#var ray_count = main_window.get_config("bake_ray_count")
-	#var denoise_radius = main_window.get_config("bake_denoise_radius")
+	var cage_depth = -(cage_offset + main_window.get_config("bake_cage_r_distance"))
+	var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
+	var ray_count = main_window.get_config("bake_ray_count")
+	var denoise_radius = main_window.get_config("bake_denoise_radius")
+	if not baker_data.has("iterative"):
+		ray_count = 1
 
-	progress_dialog.set_text("Generating " + baker_data.map_name + " map")
 	if use_smooth_cage:
 		add_smooth_normals_in_color(local_lp_mesh)
 	else:
 		add_normals_in_color(local_lp_mesh)
 	$MeshInstance.mesh = local_lp_mesh
+
+	if baker_data.has("dn_prepass"):
+		progress_dialog.set_text("Generating depth pre-pass map")
+		$MeshInstance.set_surface_material(0, depth_normals_hp_lp_material)
+		depth_normals_hp_lp_material.set_shader_param("bvh_data", bvh_data)
+		depth_normals_hp_lp_material.set_shader_param("cage_depth", cage_depth)
+		depth_normals_hp_lp_material.set_shader_param("cage_offset", cage_offset)
+		render_target_update_mode = Viewport.UPDATE_ONCE
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		var image: Image = get_texture().get_data()
+		depth_prepass_texture.create_from_image(image)
+
+	progress_dialog.set_text("Generating " + baker_data.map_name + " map")
 	$MeshInstance.set_surface_material(0, baker_data.baker)
 	baker_data.baker.set_shader_param("bvh_data", bvh_data)
-	baker_data.baker.set_shader_param("max_dist", ao_ray_dist)
+	baker_data.baker.set_shader_param("cage_depth", cage_depth)
+	baker_data.baker.set_shader_param("ao_ray_dist", ao_ray_dist)
 	baker_data.baker.set_shader_param("cage_offset", cage_offset)
+	if baker_data.has("dn_prepass"):
+		baker_data.baker.set_shader_param("depth_texture", depth_prepass_texture)
 
-	render_target_update_mode = Viewport.UPDATE_ONCE
+	for i in ray_count:
+		progress_dialog.set_progress(float(i)/ray_count)
+		baker_data.baker.set_shader_param("iteration", i+1)
+		render_target_update_mode = Viewport.UPDATE_ONCE
+		yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	progress_dialog.set_progress(1.0)
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+
+	if baker_data.has("denoise"):
+		$MeshInstance.set_surface_material(0, denoise_pass)
+		denoise_pass.set_shader_param("size", map_size)
+		denoise_pass.set_shader_param("radius", denoise_radius)
+		render_target_update_mode = Viewport.UPDATE_ONCE
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
 
 	var temp_text: Texture = get_texture()
 	var renderer = mm_renderer.request(self)
@@ -220,7 +252,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 			ray_distance = -aabb.size.length()
 		var bvh_data: ImageTexture = $BVHGenerator.generate(mesh)
 		passes.first.set_shader_param("bvh_data", bvh_data)
-		passes.first.set_shader_param("max_dist", ray_distance)
+		passes.first.set_shader_param("ao_ray_dist", ray_distance)
 		passes.first.set_shader_param("bias_dist", ao_ray_bias)
 		for i in ray_count:
 			progress_dialog.set_progress(float(i)/ray_count)

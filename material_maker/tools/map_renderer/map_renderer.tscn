@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://material_maker/tools/map_renderer/curvature_generator.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
@@ -114,7 +114,7 @@ code = "shader_type spatial;
 render_mode cull_disabled, unshaded;
 
 uniform sampler2D bvh_data;
-uniform float max_dist;
+uniform float ao_ray_dist;
 uniform float bias_dist;
 uniform int iteration = 1;
 
@@ -345,10 +345,10 @@ float rand(vec2 co){
 }
 
 void fragment() {
-	vec3 model_norm = normalize(normal) * sign(max_dist);
+	vec3 model_norm = normalize(normal);
 	vec3 ddx_vert = dFdx(model_vert);
 	vec3 ddy_vert = dFdy(model_vert);
-	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(max_dist);
+	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert));
 
 	vec3 ray_start = model_vert + model_norm * bias_dist;
 
@@ -364,15 +364,14 @@ void fragment() {
 		}
 	}
 	float hit = intersects_bvh(ray_start, ray_dir, NORMAL);
-	if(hit == 65536.0 || hit < 0.0  || hit > max_dist) {
+	if(hit == 65536.0 || hit < 0.0  || hit > ao_ray_dist) {
 		hit = 1.0;
 	} else{
 		hit = 1.0 - clamp(dot(model_norm, ray_dir),0.0,1.0);
 	}
 
 	ALBEDO = mix(texture(prev_iteration_tex, SCREEN_UV).rgb, vec3(hit), 1.0/float(iteration));
-}
-"
+}"
 
 [sub_resource type="ViewportTexture" id=11]
 viewport_path = NodePath(".")
@@ -380,17 +379,17 @@ viewport_path = NodePath(".")
 [sub_resource type="ShaderMaterial" id=12]
 resource_local_to_scene = true
 shader = SubResource( 10 )
-shader_param/max_dist = -2.0
+shader_param/ao_ray_dist = null
 shader_param/bias_dist = null
 shader_param/iteration = 1
 shader_param/prev_iteration_tex = SubResource( 11 )
 
-[sub_resource type="Shader" id=26]
+[sub_resource type="Shader" id=37]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded;
 
 uniform sampler2D bvh_data;
-uniform float max_dist;
+uniform float ao_ray_dist;
 uniform float bias_dist;
 uniform int iteration = 1;
 
@@ -621,10 +620,10 @@ float rand(vec2 co){
 }
 
 void fragment() {
-	vec3 model_norm = normalize(normal) * sign(max_dist);
+	vec3 model_norm = -normalize(normal);
 	vec3 ddx_vert = dFdx(model_vert);
 	vec3 ddy_vert = dFdy(model_vert);
-	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(max_dist);
+	vec3 true_normal = -normalize(cross(ddy_vert, ddx_vert));
 
 	vec3 ray_start = model_vert + model_norm * bias_dist;
 
@@ -641,31 +640,26 @@ void fragment() {
 	}
 	float hit = intersects_bvh(ray_start, ray_dir, NORMAL);
 	if(hit == 65536.0 || hit < 0.0) {
-		hit = abs(max_dist);//ALPHA = 0.0;
+		hit = ao_ray_dist;//ALPHA = 0.0;
 	}
-	hit /= abs(max_dist);
+	hit /= ao_ray_dist;
 //	float weight = dot(model_norm, ray_dir);
 
 	ALBEDO = mix(texture(prev_iteration_tex, SCREEN_UV).rgb, vec3(hit), 1.0/float(iteration));
 }"
 
-[sub_resource type="ViewportTexture" id=27]
-viewport_path = NodePath(".")
-
-[sub_resource type="ShaderMaterial" id=28]
-resource_local_to_scene = true
-shader = SubResource( 26 )
-shader_param/max_dist = -2.0
+[sub_resource type="ShaderMaterial" id=38]
+shader = SubResource( 37 )
+shader_param/ao_ray_dist = null
 shader_param/bias_dist = null
 shader_param/iteration = 1
-shader_param/prev_iteration_tex = SubResource( 27 )
 
-[sub_resource type="Shader" id=32]
+[sub_resource type="Shader" id=26]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded,ensure_correct_normals;
 
 uniform sampler2D bvh_data;
-uniform float max_dist;
+uniform float cage_depth;
 uniform float cage_offset;
 
 varying vec3 model_n;
@@ -891,16 +885,16 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 }
 
 void fragment() {
-	vec3 model_norm = normalize(model_n) * sign(max_dist);
-	vec3 model_norm_s = normalize(model_n_smooth) * sign(max_dist);
+	vec3 model_norm = normalize(model_n) * sign(cage_depth);
+	vec3 model_norm_s = normalize(model_n_smooth) * sign(cage_depth);
 	//vec3 model_norm_s = model_norm;
 	vec3 ddx_vert = dFdx(model_vert);
 	vec3 ddy_vert = dFdy(model_vert);
-	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(max_dist);
+	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(cage_depth);
 	vec3 ray_start = model_vert - model_norm_s * cage_offset;
 	vec3 color = vec3(0);
 	float hit = intersects_bvh(ray_start, model_norm_s, color);
-	if(hit == 65536.0 || hit < 0.0 || hit > abs(max_dist)) {
+	if(hit == 65536.0 || hit < 0.0 || hit > abs(cage_depth)) {
 		ALBEDO = vec3(0.0,0.0,0.0);
 		ALPHA=0.0;
 	} else
@@ -922,19 +916,21 @@ void fragment() {
 		ALBEDO = clamp((color/2.0 + vec3(0.5)) * vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0),vec3(0),vec3(1));
 	}
 
-}"
+}
+"
 
-[sub_resource type="ShaderMaterial" id=33]
-shader = SubResource( 32 )
-shader_param/max_dist = null
-shader_param/cage_offset = null
+[sub_resource type="ShaderMaterial" id=27]
+resource_local_to_scene = true
+shader = SubResource( 26 )
+shader_param/cage_depth = null
+shader_param/cage_offset = 0.05
 
-[sub_resource type="Shader" id=34]
+[sub_resource type="Shader" id=28]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded,ensure_correct_normals;
 
 uniform sampler2D bvh_data;
-uniform float max_dist;
+uniform float cage_depth;
 uniform float cage_offset;
 
 varying vec3 model_n;
@@ -1160,36 +1156,37 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 }
 
 void fragment() {
-	vec3 model_norm = normalize(model_n) * sign(max_dist);
-	vec3 model_norm_s = normalize(model_n_smooth) * sign(max_dist);
+	vec3 model_norm = normalize(model_n) * sign(cage_depth);
+	vec3 model_norm_s = normalize(model_n_smooth) * sign(cage_depth);
 	//vec3 model_norm_s = model_norm;
 	vec3 ddx_vert = dFdx(model_vert);
 	vec3 ddy_vert = dFdy(model_vert);
-	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(max_dist);
+	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(cage_depth);
 	vec3 ray_start = model_vert - model_norm_s * cage_offset;
 	vec3 color = vec3(0);
 	float hit = intersects_bvh(ray_start, model_norm_s, color);
-	if(hit == 65536.0 || hit < 0.0 || hit > abs(max_dist)) {
+	if(hit == 65536.0 || hit < 0.0 || hit > abs(cage_depth)) {
 		ALBEDO = vec3(0.0,0.0,0.0);
-		ALPHA=0.0;
+		ALPHA = 0.0;
 	} else
 	{
-		ALBEDO = vec3(1.0) - vec3(clamp(hit/abs(max_dist),0.0,1.0));
+		ALBEDO = vec3(1.0) - vec3(clamp(hit/abs(cage_depth),0.0,1.0));
 	}
 
-}"
+}
+"
 
-[sub_resource type="ShaderMaterial" id=35]
-shader = SubResource( 34 )
-shader_param/max_dist = null
+[sub_resource type="ShaderMaterial" id=29]
+shader = SubResource( 28 )
+shader_param/cage_depth = null
 shader_param/cage_offset = null
 
-[sub_resource type="Shader" id=36]
+[sub_resource type="Shader" id=35]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded,ensure_correct_normals;
 
 uniform sampler2D bvh_data;
-uniform float max_dist;
+uniform float cage_depth;
 uniform float cage_offset;
 
 varying vec3 model_n;
@@ -1415,16 +1412,273 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 }
 
 void fragment() {
-	vec3 model_norm = normalize(model_n) * sign(max_dist);
-	vec3 model_norm_s = normalize(model_n_smooth) * sign(max_dist);
+	vec3 model_norm = normalize(model_n) * sign(cage_depth);
+	vec3 model_norm_s = normalize(model_n_smooth) * sign(cage_depth);
 	//vec3 model_norm_s = model_norm;
 	vec3 ddx_vert = dFdx(model_vert);
 	vec3 ddy_vert = dFdy(model_vert);
-	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(max_dist);
+	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(cage_depth);
 	vec3 ray_start = model_vert - model_norm_s * cage_offset;
 	vec3 color = vec3(0);
 	float hit = intersects_bvh(ray_start, model_norm_s, color);
-	if(hit == 65536.0 || hit < 0.0 || hit > abs(max_dist)) {
+	if(hit == 65536.0 || hit < 0.0 || hit > abs(cage_depth)) {
+		ALBEDO = vec3(0.0,0.0,0.0);
+		ALPHA = 0.0;
+	} else
+	{
+		ALBEDO = color/vec3(2.0) + vec3(0.5);
+		ALPHA = 1.0 - clamp(hit/abs(cage_depth),0.0,1.0);
+	}
+
+}
+"
+
+[sub_resource type="ShaderMaterial" id=36]
+shader = SubResource( 35 )
+shader_param/cage_depth = null
+shader_param/cage_offset = null
+
+[sub_resource type="Shader" id=30]
+code = "shader_type spatial;
+render_mode cull_disabled, unshaded,ensure_correct_normals;
+
+uniform sampler2D bvh_data;
+uniform float cage_depth;
+uniform float cage_offset;
+
+varying vec3 model_n;
+varying vec3 model_n_smooth;
+varying vec3 model_b;
+varying vec3 model_t;
+varying vec3 model_vert;
+
+void vertex() {
+	model_vert = VERTEX;
+	model_n = NORMAL;
+	model_n_smooth = COLOR.xyz * 2.0 - vec3(1.0);
+	model_b = BINORMAL;
+	model_t = TANGENT;
+	VERTEX = vec3(UV, 0.5);
+}
+
+float intersect_aabb(vec3 ray_origin, vec3 ray_dir, vec3 box_min, vec3 box_max, bool solid) {
+	vec3 tMin = (box_min - ray_origin) / ray_dir;
+	vec3 tMax = (box_max - ray_origin) / ray_dir;
+	vec3 t1 = min(tMin, tMax);
+	vec3 t2 = max(tMin, tMax);
+	float tNear = max(max(t1.x, t1.y), t1.z);
+	float tFar = min(min(t2.x, t2.y), t2.z);
+
+	if(tNear > tFar || (tFar < 0.0 && tNear < 0.0)) {
+		return -1.0;
+	}
+	if(tNear < 0.0) {
+		float temp = tNear;
+		tNear = tFar;
+		tFar = temp;
+		tNear *= float(!solid);
+	}
+
+	return tNear;
+}
+
+// returns distance of intersection from ray_start
+// uvw contains barycentric coords of intersection
+float intersects_triangle(vec3 ray_start, vec3 ray_dir, vec3 v0, vec3 v1, vec3 v2, out vec3 uvw) {
+	vec3 e1 = v1 - v0;
+	vec3 e2 = v2 - v0;
+	vec3 h = cross(ray_dir, e2);
+	float a = dot(e1, h);
+	if (-a < 0.000001) { // Parallel tesnorm_model_t.
+		return -1.0;
+	}
+
+	float f = 1.0 / a;
+
+	vec3 s = ray_start - v0;
+	float u = f * dot(s, h);
+
+	if (u < 0.0 || u > 1.0) {
+		return -1.0;
+	}
+
+	vec3 q = cross(s, e1);
+	float v = f * dot(ray_dir, q);
+
+	if (v < 0.0 || u + v > 1.0) {
+		return -1.0;
+	}
+
+	uvw = vec3(1.0 - u - v, u, v);
+
+	// At this stage we can compute t to find out where
+	// the intersection point is on the line.
+	float t = f * dot(e2, q);
+	return t > 0.0000001 ? t : -1.0;
+}
+
+vec4 get_data(int index) {
+	ivec2 data_size = textureSize(bvh_data, 0);
+	return texelFetch(bvh_data, ivec2(
+		index % data_size.x,
+		index / data_size.x
+	), 0);
+}
+
+float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
+	int offset_to_nodes = int(get_data(0)[0]);
+	vec4 root_data_0 = get_data(int(get_data(1)[0]) + offset_to_nodes);
+	vec4 root_data_1 = get_data(int(get_data(1)[0]) + offset_to_nodes + 1);
+
+	float t = intersect_aabb(ray_start, ray_dir, root_data_0.xyz, root_data_1.xyz, false);
+	if(t == -1.0) {
+		return 65536.0;
+	}
+
+	float prev_hit = t;
+	t = 65536.0; // Set to large number
+	vec3 tri[3] = vec3[];
+	vec3 norm_calc = vec3(0);
+	int min_node_idx = 0;
+
+	int stack_point = 0;
+	ivec3 node_stack[128] = ivec3[]; // ivec3
+
+	int curr_node_idx = 0;
+	bool moving_up = false;
+
+	for(int i = 0; i < 256; i++) {
+		if(moving_up && stack_point <= 0) {
+			break;
+		}
+		int node_data_off = int(get_data(1 + curr_node_idx)[0]) + offset_to_nodes;
+		vec4 node_data_0 = get_data(node_data_off);
+		vec4 node_data_1 = get_data(node_data_off + 1);
+		int level = int(node_data_0[3]);
+
+		if(!moving_up) { // Moving down node hierarchy
+			if(node_data_1[3] > 0.0) { // Is a leaf node
+				for(int j = node_data_off + 2; j < node_data_off + 2 + int(node_data_1[3]) * 6; j+=6) {
+					vec3 tri_a = get_data(j).xyz;
+					vec3 tri_b = get_data(j + 1).xyz;
+					vec3 tri_c = get_data(j + 2).xyz;
+					vec3 uvw = vec3(0);
+						float tri_t = intersects_triangle(ray_start, ray_dir,
+						tri_a, tri_b, tri_c, uvw
+					);
+					if(tri_t != -1.0) {
+						if(tri_t < t) {
+							tri[0] = tri_a;
+							tri[1] = tri_b;
+							tri[2] = tri_c;
+							vec3 norm_a = get_data(j + 3).xyz;
+							vec3 norm_b = get_data(j + 4).xyz;
+							vec3 norm_c = get_data(j + 5).xyz;
+							norm_calc = uvw.x * norm_a + uvw.y * norm_b + uvw.z * norm_c;
+//							print(curr_node_idx)
+							min_node_idx = curr_node_idx;
+						}
+						t = min(t, tri_t);
+					}
+				}
+
+				stack_point -= 1;
+				if(stack_point <= 0) {
+					break;
+				}
+				if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+					if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+						stack_point -= 1;
+						moving_up = true;
+					}
+				} else {
+					moving_up = true;
+				}
+				prev_hit = intBitsToFloat(node_stack[stack_point][0]);
+				curr_node_idx = node_stack[stack_point][2];
+			} else {
+
+				// Push self onto stack
+				node_stack[stack_point] = ivec3(floatBitsToInt(prev_hit), level, curr_node_idx);
+				stack_point += 1;
+
+				ivec2 child_indices = ivec2(get_data(node_data_off + 2).xy);
+				int left_data_off = int(get_data(1 + child_indices[0])[0]) + offset_to_nodes;
+				vec4 left_data_0 = get_data(left_data_off);
+				vec4 left_data_1 = get_data(left_data_off + 1);
+				int right_data_off = int(get_data(1 + child_indices[1])[0]) + offset_to_nodes;
+				vec4 right_data_0 = get_data(right_data_off);
+				vec4 right_data_1 = get_data(right_data_off + 1);
+
+				float t_left = intersect_aabb(ray_start, ray_dir, left_data_0.xyz, left_data_1.xyz, true);
+				float t_right = intersect_aabb(ray_start, ray_dir, right_data_0.xyz, right_data_1.xyz, true);
+
+				if(t_right == -1.0 && t_left != -1.0) { // only left node hit
+					prev_hit = t_left;
+					curr_node_idx = child_indices[0];
+				} else if(t_left == -1.0 && t_right != -1.0) { // only right node hit
+					prev_hit = t_right;
+					curr_node_idx = child_indices[1];
+				} else if(t_left < t_right && t_left != -1.0) { // left node hits closer
+					node_stack[stack_point] = ivec3(floatBitsToInt(t_right), int(right_data_0[3]), child_indices[1]);
+					stack_point += 1;
+					prev_hit = t_left;
+					curr_node_idx = child_indices[0];
+				} else if(t_right <= t_left && t_right != -1.0) { // right node hits closer
+					node_stack[stack_point] = ivec3(floatBitsToInt(t_left), int(left_data_0[3]), child_indices[0]);
+					stack_point += 1;
+					prev_hit = t_right;
+					curr_node_idx = child_indices[1];
+				} else { // no hit
+					stack_point -= 2;
+					if(stack_point <= 0) {
+						break;
+					}
+					if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+						if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+							stack_point -= 1;
+							moving_up = true;
+						}
+					} else {
+						moving_up = true;
+					}
+					prev_hit = intBitsToFloat(node_stack[max(stack_point, 0)][0]);
+					curr_node_idx = node_stack[max(stack_point, 0)][2];
+				}
+			}
+		} else { // Moving up hierarchy
+			stack_point -= 1;
+			if(stack_point <= 0) {
+				break;
+			}
+			if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+				if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+					stack_point -= 1;
+				} else {
+					moving_up = false;
+				}
+			}
+			prev_hit = intBitsToFloat(node_stack[max(stack_point, 0)][0]);
+			curr_node_idx = node_stack[max(stack_point, 0)][2];
+		}
+	}
+
+	normal_hit = norm_calc;
+	//normal_hit = normalize(cross(tri[2] - tri[0], tri[1] - tri[0]));
+	return t;
+}
+
+void fragment() {
+	vec3 model_norm = normalize(model_n) * sign(cage_depth);
+	vec3 model_norm_s = normalize(model_n_smooth) * sign(cage_depth);
+	//vec3 model_norm_s = model_norm;
+	vec3 ddx_vert = dFdx(model_vert);
+	vec3 ddy_vert = dFdy(model_vert);
+	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert)) * sign(cage_depth);
+	vec3 ray_start = model_vert - model_norm_s * cage_offset;
+	vec3 color = vec3(0);
+	float hit = intersects_bvh(ray_start, model_norm_s, color);
+	if(hit == 65536.0 || hit < 0.0 || hit > abs(cage_depth)) {
 		ALBEDO = vec3(0.0,0.0,0.0);
 		ALPHA=0.0;
 	} else
@@ -1433,12 +1687,302 @@ void fragment() {
 		ALBEDO = clamp((color/2.0 + vec3(0.5)),vec3(0),vec3(1));
 	}
 
-}"
+}
+"
 
 [sub_resource type="ShaderMaterial" id=31]
-shader = SubResource( 36 )
-shader_param/max_dist = null
+shader = SubResource( 30 )
+shader_param/cage_depth = null
 shader_param/cage_offset = null
+
+[sub_resource type="Shader" id=32]
+code = "shader_type spatial;
+render_mode cull_disabled, unshaded,ensure_correct_normals;
+
+uniform sampler2D bvh_data;
+uniform sampler2D depth_texture;
+uniform sampler2D prev_iteration_tex;
+uniform float ao_ray_dist;
+uniform float cage_offset;
+uniform float cage_depth;
+uniform int iteration = 1;
+
+
+varying vec3 model_n_smooth;
+varying vec3 model_vert;
+
+void vertex() {
+	model_vert = VERTEX;
+	model_n_smooth = COLOR.xyz * 2.0 - vec3(1.0);
+	VERTEX = vec3(UV, 0.5);
+}
+
+float intersect_aabb(vec3 ray_origin, vec3 ray_dir, vec3 box_min, vec3 box_max, bool solid) {
+	vec3 tMin = (box_min - ray_origin) / ray_dir;
+	vec3 tMax = (box_max - ray_origin) / ray_dir;
+	vec3 t1 = min(tMin, tMax);
+	vec3 t2 = max(tMin, tMax);
+	float tNear = max(max(t1.x, t1.y), t1.z);
+	float tFar = min(min(t2.x, t2.y), t2.z);
+
+	if(tNear > tFar || (tFar < 0.0 && tNear < 0.0)) {
+		return -1.0;
+	}
+	if(tNear < 0.0) {
+		float temp = tNear;
+		tNear = tFar;
+		tFar = temp;
+		tNear *= float(!solid);
+	}
+
+	return tNear;
+}
+
+// returns distance of intersection from ray_start
+// uvw contains barycentric coords of intersection
+float intersects_triangle(vec3 ray_start, vec3 ray_dir, vec3 v0, vec3 v1, vec3 v2, out vec3 uvw) {
+	vec3 e1 = v1 - v0;
+	vec3 e2 = v2 - v0;
+	vec3 h = cross(ray_dir, e2);
+	float a = dot(e1, h);
+	if (-a < 0.000001) { // Parallel tesnorm_model_t.
+		return -1.0;
+	}
+
+	float f = 1.0 / a;
+
+	vec3 s = ray_start - v0;
+	float u = f * dot(s, h);
+
+	if (u < 0.0 || u > 1.0) {
+		return -1.0;
+	}
+
+	vec3 q = cross(s, e1);
+	float v = f * dot(ray_dir, q);
+
+	if (v < 0.0 || u + v > 1.0) {
+		return -1.0;
+	}
+
+	uvw = vec3(1.0 - u - v, u, v);
+
+	// At this stage we can compute t to find out where
+	// the intersection point is on the line.
+	float t = f * dot(e2, q);
+	return t > 0.0000001 ? t : -1.0;
+}
+
+vec4 get_data(int index) {
+	ivec2 data_size = textureSize(bvh_data, 0);
+	return texelFetch(bvh_data, ivec2(
+		index % data_size.x,
+		index / data_size.x
+	), 0);
+}
+
+float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
+	int offset_to_nodes = int(get_data(0)[0]);
+	vec4 root_data_0 = get_data(int(get_data(1)[0]) + offset_to_nodes);
+	vec4 root_data_1 = get_data(int(get_data(1)[0]) + offset_to_nodes + 1);
+
+	float t = intersect_aabb(ray_start, ray_dir, root_data_0.xyz, root_data_1.xyz, false);
+	if(t == -1.0) {
+		return 65536.0;
+	}
+
+	float prev_hit = t;
+	t = 65536.0; // Set to large number
+	vec3 tri[3] = vec3[];
+	vec3 norm_calc = vec3(0);
+	int min_node_idx = 0;
+
+	int stack_point = 0;
+	ivec3 node_stack[128] = ivec3[]; // ivec3
+
+	int curr_node_idx = 0;
+	bool moving_up = false;
+
+	for(int i = 0; i < 256; i++) {
+		if(moving_up && stack_point <= 0) {
+			break;
+		}
+		int node_data_off = int(get_data(1 + curr_node_idx)[0]) + offset_to_nodes;
+		vec4 node_data_0 = get_data(node_data_off);
+		vec4 node_data_1 = get_data(node_data_off + 1);
+		int level = int(node_data_0[3]);
+
+		if(!moving_up) { // Moving down node hierarchy
+			if(node_data_1[3] > 0.0) { // Is a leaf node
+				for(int j = node_data_off + 2; j < node_data_off + 2 + int(node_data_1[3]) * 6; j+=6) {
+					vec3 tri_a = get_data(j).xyz;
+					vec3 tri_b = get_data(j + 1).xyz;
+					vec3 tri_c = get_data(j + 2).xyz;
+					vec3 uvw = vec3(0);
+						float tri_t = intersects_triangle(ray_start, ray_dir,
+						tri_a, tri_b, tri_c, uvw
+					);
+					if(tri_t != -1.0) {
+						if(tri_t < t) {
+							tri[0] = tri_a;
+							tri[1] = tri_b;
+							tri[2] = tri_c;
+							vec3 norm_a = get_data(j + 3).xyz;
+							vec3 norm_b = get_data(j + 4).xyz;
+							vec3 norm_c = get_data(j + 5).xyz;
+							norm_calc = uvw.x * norm_a + uvw.y * norm_b + uvw.z * norm_c;
+//							print(curr_node_idx)
+							min_node_idx = curr_node_idx;
+						}
+						t = min(t, tri_t);
+					}
+				}
+
+				stack_point -= 1;
+				if(stack_point <= 0) {
+					break;
+				}
+				if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+					if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+						stack_point -= 1;
+						moving_up = true;
+					}
+				} else {
+					moving_up = true;
+				}
+				prev_hit = intBitsToFloat(node_stack[stack_point][0]);
+				curr_node_idx = node_stack[stack_point][2];
+			} else {
+
+				// Push self onto stack
+				node_stack[stack_point] = ivec3(floatBitsToInt(prev_hit), level, curr_node_idx);
+				stack_point += 1;
+
+				ivec2 child_indices = ivec2(get_data(node_data_off + 2).xy);
+				int left_data_off = int(get_data(1 + child_indices[0])[0]) + offset_to_nodes;
+				vec4 left_data_0 = get_data(left_data_off);
+				vec4 left_data_1 = get_data(left_data_off + 1);
+				int right_data_off = int(get_data(1 + child_indices[1])[0]) + offset_to_nodes;
+				vec4 right_data_0 = get_data(right_data_off);
+				vec4 right_data_1 = get_data(right_data_off + 1);
+
+				float t_left = intersect_aabb(ray_start, ray_dir, left_data_0.xyz, left_data_1.xyz, true);
+				float t_right = intersect_aabb(ray_start, ray_dir, right_data_0.xyz, right_data_1.xyz, true);
+
+				if(t_right == -1.0 && t_left != -1.0) { // only left node hit
+					prev_hit = t_left;
+					curr_node_idx = child_indices[0];
+				} else if(t_left == -1.0 && t_right != -1.0) { // only right node hit
+					prev_hit = t_right;
+					curr_node_idx = child_indices[1];
+				} else if(t_left < t_right && t_left != -1.0) { // left node hits closer
+					node_stack[stack_point] = ivec3(floatBitsToInt(t_right), int(right_data_0[3]), child_indices[1]);
+					stack_point += 1;
+					prev_hit = t_left;
+					curr_node_idx = child_indices[0];
+				} else if(t_right <= t_left && t_right != -1.0) { // right node hits closer
+					node_stack[stack_point] = ivec3(floatBitsToInt(t_left), int(left_data_0[3]), child_indices[0]);
+					stack_point += 1;
+					prev_hit = t_right;
+					curr_node_idx = child_indices[1];
+				} else { // no hit
+					stack_point -= 2;
+					if(stack_point <= 0) {
+						break;
+					}
+					if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+						if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+							stack_point -= 1;
+							moving_up = true;
+						}
+					} else {
+						moving_up = true;
+					}
+					prev_hit = intBitsToFloat(node_stack[max(stack_point, 0)][0]);
+					curr_node_idx = node_stack[max(stack_point, 0)][2];
+				}
+			}
+		} else { // Moving up hierarchy
+			stack_point -= 1;
+			if(stack_point <= 0) {
+				break;
+			}
+			if(node_stack[stack_point][1] == level) { // next node in stack is sibling
+				if(t < intBitsToFloat(node_stack[stack_point][0])) { // no chance to get better hit from sibling
+					stack_point -= 1;
+				} else {
+					moving_up = false;
+				}
+			}
+			prev_hit = intBitsToFloat(node_stack[max(stack_point, 0)][0]);
+			curr_node_idx = node_stack[max(stack_point, 0)][2];
+		}
+	}
+
+	normal_hit = norm_calc;
+	//normal_hit = normalize(cross(tri[2] - tri[0], tri[1] - tri[0]));
+	return t;
+}
+
+vec3 random_hemi_point(vec3 rand, vec3 norm) {
+	const float PI = 3.141592653;
+
+	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
+	float u = rand.y * 2.0 - 1.0; // [0..1), cos and acos(2v-1) cancel each other out, so we arrive at [-1..1)
+	float u2 = u * u;
+	float sqrt1MinusU2 = sqrt(1.0 - u2);
+	float x = sqrt1MinusU2 * cos(ang1);
+	float y = sqrt1MinusU2 * sin(ang1);
+	float z = u;
+	vec3 v = vec3(x, y, z);
+
+	return v * sign(dot(v, norm));
+}
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void fragment() {
+	vec3 model_norm_s = normalize(model_n_smooth);
+	vec4 n_d_tex = texture(depth_texture, SCREEN_UV);
+	vec3 hp_norms = n_d_tex.xyz * 2.0 - 1.0;
+
+	float depth_ray = (1.0 - n_d_tex.a) * abs(cage_depth);
+	vec3 ray_start = model_vert + model_norm_s * (cage_offset - depth_ray) + model_norm_s * 0.01;
+	vec3 ray_dir;
+	for(int i = 0; i < 5; i++) {
+		ray_dir = random_hemi_point(vec3(
+			rand(SCREEN_UV + float(iteration)),
+			rand(-SCREEN_UV.yx + float(iteration)),
+			0.0
+		), hp_norms);
+		if(dot(ray_dir, hp_norms) > 0.0) {
+			break;
+		}
+	}
+	float hit = intersects_bvh(ray_start, ray_dir, NORMAL);
+	if(hit == 65536.0 || hit < 0.0  || hit > ao_ray_dist) {
+		hit = 1.0;
+	} else{
+		hit = 1.0 - clamp(dot(hp_norms, ray_dir),0.0,1.0);
+	}
+
+	ALBEDO = mix(texture(prev_iteration_tex, SCREEN_UV).rgb, vec3(hit), 1.0/float(iteration));
+}
+"
+
+[sub_resource type="ViewportTexture" id=34]
+viewport_path = NodePath(".")
+
+[sub_resource type="ShaderMaterial" id=33]
+resource_local_to_scene = true
+shader = SubResource( 32 )
+shader_param/ao_ray_dist = null
+shader_param/cage_offset = null
+shader_param/cage_depth = null
+shader_param/iteration = 1
+shader_param/prev_iteration_tex = SubResource( 34 )
 
 [sub_resource type="Shader" id=13]
 code = "shader_type spatial;
@@ -1666,10 +2210,12 @@ inv_uv_material = SubResource( 5 )
 white_material = SubResource( 7 )
 curvature_material = SubResource( 9 )
 ao_material = SubResource( 12 )
-thickness_material = SubResource( 28 )
-normal_hp_lp_material = SubResource( 33 )
-depth_hp_lp_material = SubResource( 35 )
+thickness_material = SubResource( 38 )
+normal_hp_lp_material = SubResource( 27 )
+depth_hp_lp_material = SubResource( 29 )
+depth_normals_hp_lp_material = SubResource( 36 )
 worldnormal_hp_lp_material = SubResource( 31 )
+ao_hp_lp_material = SubResource( 33 )
 denoise_pass = SubResource( 14 )
 dilate_pass1 = SubResource( 16 )
 dilate_pass2 = SubResource( 18 )
