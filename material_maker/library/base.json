@@ -6432,6 +6432,447 @@
 			"seed_locked": false,
 			"tree_item": "Filter/Palettize",
 			"type": "palettize"
+		},
+		{
+			"connections": [
+				{
+					"from": "voronoi_3",
+					"from_port": 0,
+					"to": "buffer_5",
+					"to_port": 0
+				},
+				{
+					"from": "voronoi_2",
+					"from_port": 0,
+					"to": "buffer_7",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_7",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "voronoi_3",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_5",
+					"from_port": 0,
+					"to": "voronoi_2",
+					"to_port": 0
+				}
+			],
+			"icon_data": "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",
+			"label": "HBAO",
+			"longdesc": "",
+			"name": "graph_6",
+			"nodes": [
+				{
+					"name": "voronoi_3",
+					"node_position": {
+						"x": -600.80072,
+						"y": -894.601807
+					},
+					"parameters": {
+						"angleBiasDeg": 15,
+						"depth_scale": 0.08,
+						"intensity": 1,
+						"quality": 4,
+						"radius": 0.1
+					},
+					"seed": 49449,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "f"
+							}
+						],
+						"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n    vec2(cosMaxRot, -sinMaxROt),\n    vec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise    = rand3(uv * noiseScale);\n  sampleNoise.xy      = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n                             vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n    // incrementally rotate sample direction\n    offset_uv = deltaRotationMatrix * offset_uv;\n    float oldAngle   = angleBias;\n    for (int j = 0; j < steps; ++j) {\n      //add jitter & distance to offset UV\n      vec2 sample_uv     = uv + (jitter + float(j)) * offset_uv;\n      vec3 s_point     = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n      vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n      // 90 deg - (angle between normal from current point &  sampled tangent)\n      //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n      float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n      \n      if (gamma > oldAngle) {\n        float value = sin(gamma) - sin(oldAngle);\n        float attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n        occlusion += attenuation * value;\n\t\t//occlusion += value;\n        oldAngle = gamma;\n      }\n    }\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
+						"longdesc": "A node that generates several images from a tileable voronoi noise",
+						"name": "HBAO",
+						"outputs": [
+							{
+								"f": "$(name)_hbao($uv,$radius, $angleBiasDeg, $intensity, vec2(16.0,16.0))",
+								"longdesc": "A color pattern that assigns a random color to each cell",
+								"shortdesc": "Random color",
+								"type": "f"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0.01,
+								"label": "Radius",
+								"longdesc": "The scale along the X axis",
+								"max": 1,
+								"min": 0,
+								"name": "radius",
+								"shortdesc": "Scale.x",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 30,
+								"label": "Angle Bias",
+								"longdesc": "Angle bias for AO",
+								"max": 90,
+								"min": 0,
+								"name": "angleBiasDeg",
+								"shortdesc": "Angle Bias",
+								"step": 1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.2,
+								"label": "Intensity",
+								"longdesc": "Change intensity of AO",
+								"max": 5,
+								"min": 0,
+								"name": "intensity",
+								"shortdesc": "Intensity",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1,
+								"label": "Depth Scale",
+								"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+								"max": 1,
+								"min": 0,
+								"name": "depth_scale",
+								"shortdesc": "Depth Scale",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 4,
+								"label": "Steps",
+								"longdesc": "Steps in given direction per ray",
+								"max": 12,
+								"min": 1,
+								"name": "quality",
+								"shortdesc": "Quality",
+								"step": 1,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Voronoi Noise"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1338.030762,
+						"y": -788.080872
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"longdesc": "Greyscale heightmap",
+							"name": "input",
+							"shortdesc": "Input",
+							"type": "f"
+						}
+					],
+					"seed": 43798,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -902.684204,
+						"y": -327.282288
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"longdesc": "",
+							"name": "port0",
+							"shortdesc": "AO",
+							"type": "f"
+						}
+					],
+					"seed": 42623,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -1488.979004,
+						"y": -561.71167
+					},
+					"parameters": {
+						"param0": 10,
+						"param1": 0.1,
+						"param2": 15,
+						"param3": 0.08,
+						"param4": 4,
+						"param5": 1
+					},
+					"seed": 58911,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Size",
+							"linked_widgets": [
+								{
+									"node": "voronoi_2",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_5",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_7",
+									"widget": "size"
+								}
+							],
+							"name": "param0",
+							"shortdesc": "Size",
+							"type": "linked_control"
+						},
+						{
+							"label": "Radius",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "radius"
+								}
+							],
+							"longdesc": "Affected radius of point in UV size",
+							"name": "param1",
+							"shortdesc": "Radius",
+							"type": "linked_control"
+						},
+						{
+							"label": "Angle Bias",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "angleBiasDeg"
+								}
+							],
+							"longdesc": "Minimum angle on heightmap for AO to occur. Angle is calculated in UV space, where depth (grayscale input) is scaled by \"Depth Scale\" parameter",
+							"name": "param2",
+							"shortdesc": "Angle bias",
+							"type": "linked_control"
+						},
+						{
+							"label": "Depth Scale",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "depth_scale"
+								}
+							],
+							"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+							"name": "param3",
+							"shortdesc": "Depth Scale",
+							"type": "linked_control"
+						},
+						{
+							"label": "Quality",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "quality"
+								}
+							],
+							"longdesc": "Number of steps per direction sampling",
+							"name": "param4",
+							"shortdesc": "Quality",
+							"type": "linked_control"
+						},
+						{
+							"label": "Intensity",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "intensity"
+								}
+							],
+							"longdesc": "Change intensity of calculated AO",
+							"name": "param5",
+							"shortdesc": "Intensity",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "voronoi_2",
+					"node_position": {
+						"x": -710.111145,
+						"y": -596.459534
+					},
+					"parameters": {
+						"ksigma": 4,
+						"sigma": 3,
+						"size": 10,
+						"threshold": 0.7
+					},
+					"seed": 38722,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  Copyright (c) 2018-2019 Michele Morrone\n//  All rights reserved.\n//\n//  https://michelemorrone.eu - https://BrutPitt.com\n//\n//  me@michelemorrone.eu - brutpitt@gmail.com\n//  twitter: @BrutPitt - github: BrutPitt\n//  \n//  https://github.com/BrutPitt/glslSmartDeNoise/\n//\n//  This software is distributed under the terms of the BSD 2-Clause license\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  smartDeNoise - parameters\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//\n//  sampler2D tex     - sampler image / texture\n//  vec2 uv           - actual fragment coord\n//  float sigma  >  0 - sigma Standard Deviation\n//  float kSigma >= 0 - sigma coefficient \n//      kSigma * sigma  -->  radius of the circular kernel\n//  float threshold   - edge sharpening threshold \nvec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)\n{\n\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI\n\tfloat INV_PI = 0.31830988618379067153776752674503;\n    float radius = round(kSigma*sigma);\n    float radQ = radius * radius;\n\n    float invSigmaQx2 = .5 / (sigma * sigma);      // 1.0 / (sigma^2 * 2.0)\n    float invSigmaQx2PI = INV_PI * invSigmaQx2;    // 1/(2 * PI * sigma^2)\n\n    float invThresholdSqx2 = .5 / (threshold * threshold);     // 1.0 / (sigma^2 * 2.0)\n    float invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)\n\n    vec4 centrPx = $in(uv); \n\n    float zBuff = 0.0;\n    vec4 aBuff = vec4(0.0);\n    vec2 size = vec2($size, $size);\n\n    vec2 d;\n    for (d.x=-radius; d.x <= radius; d.x++) {\n        float pt = sqrt(radQ-d.x*d.x);       // pt = yRadius: have circular trend\n        for (d.y=-pt; d.y <= pt; d.y++) {\n            float blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;\n\n            vec4 walkPx =  $in(uv+d/size);\n            vec4 dC = walkPx-centrPx;\n            float deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;\n\n            zBuff += deltaFactor;\n            aBuff += deltaFactor*walkPx;\n        }\n    }\n    return aBuff/zBuff;\n}",
+						"longdesc": "A node that generates several images from a tileable voronoi noise",
+						"name": "Denoiser",
+						"outputs": [
+							{
+								"longdesc": "A color pattern that assigns a random color to each cell",
+								"rgba": "$(name)_smartDeNoise($uv, $sigma, $ksigma, $threshold)",
+								"shortdesc": "Random color",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"default": 10,
+								"first": 0,
+								"label": "size",
+								"last": 12,
+								"longdesc": "The scale along the X axis",
+								"name": "size",
+								"shortdesc": "Scale.x",
+								"type": "size"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "Sigma",
+								"max": 1,
+								"min": 0.005,
+								"name": "sigma",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "kSigma",
+								"max": 1,
+								"min": 0,
+								"name": "ksigma",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "threshold",
+								"max": 1,
+								"min": 0,
+								"name": "threshold",
+								"step": 0.1,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Voronoi Noise"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "buffer_5",
+					"node_position": {
+						"x": -931.449646,
+						"y": -724.330017
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 6771,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "buffer_7",
+					"node_position": {
+						"x": -948.36377,
+						"y": -449.796295
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 16139,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": -976.009644,
+						"y": -975.5
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 42465,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				}
+			],
+			"parameters": {
+				"param0": 10,
+				"param1": 0.1,
+				"param2": 15,
+				"param3": 0.08,
+				"param4": 4,
+				"param5": 1
+			},
+			"seed": 6741,
+			"seed_locked": false,
+			"shortdesc": "",
+			"tree_item": "Filter/HBAO",
+			"type": "graph"
 		}
 	],
 	"name": "Base library"

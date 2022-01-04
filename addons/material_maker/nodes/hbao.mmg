@@ -1,0 +1,372 @@
+{
+	"connections": [
+		{
+			"from": "voronoi_3",
+			"from_port": 0,
+			"to": "buffer_5",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_7",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "voronoi_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_5",
+			"from_port": 0,
+			"to": "denoiser",
+			"to_port": 0
+		},
+		{
+			"from": "denoiser",
+			"from_port": 0,
+			"to": "buffer_7",
+			"to_port": 0
+		}
+	],
+	"label": "HBAO",
+	"longdesc": "",
+	"name": "hbao",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "voronoi_3",
+			"node_position": {
+				"x": -600.80072,
+				"y": -894.601807
+			},
+			"parameters": {
+				"angleBiasDeg": 15,
+				"depth_scale": 0.08,
+				"intensity": 1,
+				"quality": 4,
+				"radius": 0.1
+			},
+			"seed": 49449,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n    vec2(cosMaxRot, -sinMaxROt),\n    vec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise    = rand3(uv * noiseScale);\n  sampleNoise.xy      = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n                             vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n    // incrementally rotate sample direction\n    offset_uv = deltaRotationMatrix * offset_uv;\n    float oldAngle   = angleBias;\n    for (int j = 0; j < steps; ++j) {\n      //add jitter & distance to offset UV\n      vec2 sample_uv     = uv + (jitter + float(j)) * offset_uv;\n      vec3 s_point     = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n      vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n      // 90 deg - (angle between normal from current point &  sampled tangent)\n      //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n      float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n      \n      if (gamma > oldAngle) {\n        float value = sin(gamma) - sin(oldAngle);\n        float attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n        occlusion += attenuation * value;\n\t\t//occlusion += value;\n        oldAngle = gamma;\n      }\n    }\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
+				"longdesc": "A node that generates several images from a tileable voronoi noise",
+				"name": "HBAO",
+				"outputs": [
+					{
+						"f": "$(name)_hbao($uv,$radius, $angleBiasDeg, $intensity, vec2(16.0,16.0))",
+						"longdesc": "A color pattern that assigns a random color to each cell",
+						"shortdesc": "Random color",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.01,
+						"label": "Radius",
+						"longdesc": "The scale along the X axis",
+						"max": 1,
+						"min": 0,
+						"name": "radius",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 30,
+						"label": "Angle Bias",
+						"longdesc": "Angle bias for AO",
+						"max": 90,
+						"min": 0,
+						"name": "angleBiasDeg",
+						"shortdesc": "Angle Bias",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.2,
+						"label": "Intensity",
+						"longdesc": "Change intensity of AO",
+						"max": 5,
+						"min": 0,
+						"name": "intensity",
+						"shortdesc": "Intensity",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Depth Scale",
+						"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+						"max": 1,
+						"min": 0,
+						"name": "depth_scale",
+						"shortdesc": "Depth Scale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Steps",
+						"longdesc": "Steps in given direction per ray",
+						"max": 12,
+						"min": 1,
+						"name": "quality",
+						"shortdesc": "Quality",
+						"step": 1,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Voronoi Noise"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1338.030762,
+				"y": -788.080872
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Greyscale heightmap",
+					"name": "input",
+					"shortdesc": "Input",
+					"type": "f"
+				}
+			],
+			"seed": 43798,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -902.684204,
+				"y": -327.282288
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "",
+					"name": "port0",
+					"shortdesc": "AO",
+					"type": "f"
+				}
+			],
+			"seed": 42623,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -1488.979004,
+				"y": -561.71167
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 0.1,
+				"param2": 15,
+				"param3": 0.08,
+				"param4": 4,
+				"param5": 1
+			},
+			"seed": 58911,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_5",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_7",
+							"widget": "size"
+						}
+					],
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Radius",
+					"linked_widgets": [
+						{
+							"node": "voronoi_3",
+							"widget": "radius"
+						}
+					],
+					"longdesc": "Affected radius of point in UV size",
+					"name": "param1",
+					"shortdesc": "Radius",
+					"type": "linked_control"
+				},
+				{
+					"label": "Angle Bias",
+					"linked_widgets": [
+						{
+							"node": "voronoi_3",
+							"widget": "angleBiasDeg"
+						}
+					],
+					"longdesc": "Minimum angle on heightmap for AO to occur. Angle is calculated in UV space, where depth (grayscale input) is scaled by \"Depth Scale\" parameter",
+					"name": "param2",
+					"shortdesc": "Angle bias",
+					"type": "linked_control"
+				},
+				{
+					"label": "Depth Scale",
+					"linked_widgets": [
+						{
+							"node": "voronoi_3",
+							"widget": "depth_scale"
+						}
+					],
+					"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+					"name": "param3",
+					"shortdesc": "Depth Scale",
+					"type": "linked_control"
+				},
+				{
+					"label": "Quality",
+					"linked_widgets": [
+						{
+							"node": "voronoi_3",
+							"widget": "quality"
+						}
+					],
+					"longdesc": "Number of steps per direction sampling",
+					"name": "param4",
+					"shortdesc": "Quality",
+					"type": "linked_control"
+				},
+				{
+					"label": "Intensity",
+					"linked_widgets": [
+						{
+							"node": "voronoi_3",
+							"widget": "intensity"
+						}
+					],
+					"longdesc": "Change intensity of calculated AO",
+					"name": "param5",
+					"shortdesc": "Intensity",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "buffer_5",
+			"node_position": {
+				"x": -931.449646,
+				"y": -724.330017
+			},
+			"parameters": {
+				"size": 10
+			},
+			"seed": 6771,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "buffer_7",
+			"node_position": {
+				"x": -948.36377,
+				"y": -449.796295
+			},
+			"parameters": {
+				"size": 10
+			},
+			"seed": 16139,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -976.009644,
+				"y": -975.5
+			},
+			"parameters": {
+				"size": 10
+			},
+			"seed": 42465,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "denoiser",
+			"node_position": {
+				"x": -711,
+				"y": -632
+			},
+			"parameters": {
+				"param0": 10,
+				"param1": 3,
+				"param2": 4,
+				"param3": 0.7
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "denoiser"
+		}
+	],
+	"parameters": {
+		"param0": 10,
+		"param1": 0.1,
+		"param2": 15,
+		"param3": 0.08,
+		"param4": 4,
+		"param5": 1
+	},
+	"seed": 6741,
+	"seed_locked": false,
+	"shortdesc": "",
+	"type": "graph"
+}
