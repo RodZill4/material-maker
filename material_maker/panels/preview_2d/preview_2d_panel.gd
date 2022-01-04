@@ -28,7 +28,7 @@ func _ready():
 	update_export_menu()
 	update_postprocess_menu()
 	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
-	$ContextMenu.set_item_checked(MENU_TEMPORAL_AA, temporal_aa)
+	$ContextMenu.set_item_checked($ContextMenu.get_item_index(MENU_TEMPORAL_AA), temporal_aa)
 
 func update_view_menu() -> void:
 	$ContextMenu.add_submenu_item("View", "View")
