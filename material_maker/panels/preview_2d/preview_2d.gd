@@ -72,10 +72,12 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			assert(!(source is GDScriptFunctionState))
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
-		$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), false)
+		if get_node_or_null("ContextMenu") != null:
+			$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), false)
 	else:
 		generator = null
-		$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
+		if get_node_or_null("ContextMenu") != null:
+			$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	update_material(source)
 
 func on_parameter_changed(n : String, v) -> void:
