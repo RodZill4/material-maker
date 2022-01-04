@@ -18,7 +18,7 @@ void fragment() {
 	if (reset) {
 		COLOR = vec4(color.xy, a);
 	} else {
-		vec2 alpha_sum = min(max(a, screen_color.za), a + screen_color.ba);
+		vec2 alpha_sum = min(max(a, screen_color.ba), a + screen_color.ba);
 		COLOR = vec4((color.rg*a+screen_color.rg*(alpha_sum-a))/alpha_sum, alpha_sum);
 	}
 }
