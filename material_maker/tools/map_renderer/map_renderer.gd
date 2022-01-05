@@ -149,6 +149,7 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	var cage_depth = -(cage_offset + main_window.get_config("bake_cage_r_distance"))
 	var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
 	var ao_ray_bias = main_window.get_config("bake_ao_ray_bias")
+	var ao_cosine_distribution = main_window.get_config("bake_ao_cosine_distribution")
 	var ray_count = main_window.get_config("bake_ray_count")
 	var denoise_radius = main_window.get_config("bake_denoise_radius")
 	if not baker_data.has("iterative"):
@@ -178,6 +179,7 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	baker_data.baker.set_shader_param("cage_depth", cage_depth)
 	baker_data.baker.set_shader_param("ao_ray_dist", ao_ray_dist)
 	baker_data.baker.set_shader_param("ao_ray_bias", ao_ray_bias)
+	baker_data.baker.set_shader_param("ao_cosine_distribution", ao_cosine_distribution)
 	baker_data.baker.set_shader_param("cage_offset", cage_offset)
 	if baker_data.has("dn_prepass"):
 		baker_data.baker.set_shader_param("depth_texture", depth_prepass_texture)
@@ -244,6 +246,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		var ray_count = main_window.get_config("bake_ray_count")
 		var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
 		var ao_ray_bias = main_window.get_config("bake_ao_ray_bias")
+		var ao_cosine_distribution = main_window.get_config("bake_ao_cosine_distribution")
 		var denoise_radius = main_window.get_config("bake_denoise_radius")
 		var progress_dialog = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
 		progress_dialog.set_text("Generating "+passes.map_name+" map")
@@ -255,6 +258,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		var bvh_data: ImageTexture = $BVHGenerator.generate(mesh)
 		passes.first.set_shader_param("bvh_data", bvh_data)
 		passes.first.set_shader_param("ao_ray_dist", ray_distance)
+		passes.first.set_shader_param("ao_cosine_distribution", ao_cosine_distribution)
 		passes.first.set_shader_param("bias_dist", ao_ray_bias)
 		for i in ray_count:
 			progress_dialog.set_progress(float(i)/ray_count)

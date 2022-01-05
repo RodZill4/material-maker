@@ -117,6 +117,7 @@ uniform sampler2D bvh_data;
 uniform float ao_ray_dist;
 uniform float bias_dist;
 uniform int iteration = 1;
+uniform bool ao_cosine_distribution = true;
 
 uniform sampler2D prev_iteration_tex;
 
@@ -325,7 +326,7 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 	return t;
 }
 
-vec3 random_hemi_point(vec3 rand, vec3 norm) {
+vec3 random_hemi_uniform_point(vec3 rand, vec3 norm) {
 	const float PI = 3.141592653;
 
 	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
@@ -340,6 +341,35 @@ vec3 random_hemi_point(vec3 rand, vec3 norm) {
 	return v * sign(dot(v, norm));
 }
 
+vec3 random_hemi_cosine_point(vec3 rand, vec3 norm) {
+	const float PI = 3.141592653;
+	float r = sqrt(rand.x);
+	float theta = 2.0 * PI * rand.y;
+	float x = r * cos(theta);
+	float y = r * sin(theta);
+	vec3 w_sampled = vec3(x, y, sqrt(max(0.0f, 1.0 - rand.x)));
+	//transform to local space
+	vec3 up = abs(norm.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+	vec3 tn = normalize(cross(up, norm));
+	vec3 bn = cross(norm, tn);
+	return vec3(bn.x * w_sampled.x + tn.x * w_sampled.y + norm.x * w_sampled.z,
+				bn.y * w_sampled.x + tn.y * w_sampled.y + norm.y * w_sampled.z,
+				bn.z * w_sampled.x + tn.z * w_sampled.y + norm.z * w_sampled.z);
+}
+
+
+vec3 random_hemi_point(vec3 rand, vec3 norm)
+{
+	if (ao_cosine_distribution)
+	{
+		return random_hemi_cosine_point(rand, norm);
+	}
+	else {
+		return random_hemi_uniform_point(rand, norm);
+	}
+}
+
+
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
@@ -350,7 +380,7 @@ void fragment() {
 	vec3 ddy_vert = dFdy(model_vert);
 	vec3 true_normal = normalize(cross(ddy_vert, ddx_vert));
 
-	vec3 ray_start = model_vert + model_norm * bias_dist;
+	vec3 ray_start = model_vert;
 
 	vec3 ray_dir;
 	for(int i = 0; i < 5; i++) {
@@ -363,11 +393,12 @@ void fragment() {
 			break;
 		}
 	}
+	ray_start+= ray_dir * bias_dist;
 	float hit = intersects_bvh(ray_start, ray_dir, NORMAL);
 	if(hit == 65536.0 || hit < 0.0  || hit > ao_ray_dist) {
 		hit = 1.0;
 	} else{
-		hit = 1.0 - clamp(dot(model_norm, ray_dir),0.0,1.0);
+		hit = 0.0;
 	}
 
 	ALBEDO = mix(texture(prev_iteration_tex, SCREEN_UV).rgb, vec3(hit), 1.0/float(iteration));
@@ -382,6 +413,7 @@ shader = SubResource( 10 )
 shader_param/ao_ray_dist = null
 shader_param/bias_dist = null
 shader_param/iteration = 1
+shader_param/ao_cosine_distribution = true
 shader_param/prev_iteration_tex = SubResource( 11 )
 
 [sub_resource type="Shader" id=37]
@@ -1704,6 +1736,7 @@ uniform sampler2D depth_texture;
 uniform sampler2D prev_iteration_tex;
 uniform float ao_ray_dist;
 uniform float ao_ray_bias;
+uniform bool ao_cosine_distribution = true;
 uniform float cage_offset;
 uniform float cage_depth;
 uniform int iteration = 1;
@@ -1925,7 +1958,7 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 	return t;
 }
 
-vec3 random_hemi_point(vec3 rand, vec3 norm) {
+vec3 random_hemi_uniform_point(vec3 rand, vec3 norm) {
 	const float PI = 3.141592653;
 
 	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
@@ -1938,6 +1971,34 @@ vec3 random_hemi_point(vec3 rand, vec3 norm) {
 	vec3 v = vec3(x, y, z);
 
 	return v * sign(dot(v, norm));
+}
+
+vec3 random_hemi_cosine_point(vec3 rand, vec3 norm) {
+	const float PI = 3.141592653;
+	float r = sqrt(rand.x);
+	float theta = 2.0 * PI * rand.y;
+	float x = r * cos(theta);
+	float y = r * sin(theta);
+	vec3 w_sampled = vec3(x, y, sqrt(max(0.0f, 1.0 - rand.x)));
+	//transform to local space
+	vec3 up = abs(norm.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+	vec3 tn = normalize(cross(up, norm));
+	vec3 bn = cross(norm, tn);
+	return vec3(bn.x * w_sampled.x + tn.x * w_sampled.y + norm.x * w_sampled.z,
+				bn.y * w_sampled.x + tn.y * w_sampled.y + norm.y * w_sampled.z,
+				bn.z * w_sampled.x + tn.z * w_sampled.y + norm.z * w_sampled.z);
+}
+
+
+vec3 random_hemi_point(vec3 rand, vec3 norm)
+{
+	if (ao_cosine_distribution)
+	{
+		return random_hemi_cosine_point(rand, norm);
+	}
+	else {
+		return random_hemi_uniform_point(rand, norm);
+	}
 }
 
 float rand(vec2 co){
@@ -1981,6 +2042,7 @@ resource_local_to_scene = true
 shader = SubResource( 32 )
 shader_param/ao_ray_dist = null
 shader_param/ao_ray_bias = null
+shader_param/ao_cosine_distribution = true
 shader_param/cage_offset = null
 shader_param/cage_depth = null
 shader_param/iteration = 1

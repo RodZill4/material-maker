@@ -285,7 +285,7 @@ columns = 2
 
 [node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 margin_top = 5.0
-margin_right = 126.0
+margin_right = 129.0
 margin_bottom = 19.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Ray count:"
@@ -297,8 +297,8 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 130.0
-margin_right = 188.0
+margin_left = 133.0
+margin_right = 191.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 64.0
@@ -310,7 +310,7 @@ config_variable = "bake_ray_count"
 
 [node name="LabelRayLength" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 margin_top = 33.0
-margin_right = 126.0
+margin_right = 129.0
 margin_bottom = 47.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Ray length:"
@@ -322,9 +322,9 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 130.0
+margin_left = 133.0
 margin_top = 28.0
-margin_right = 188.0
+margin_right = 191.0
 margin_bottom = 52.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 128.0
@@ -336,7 +336,7 @@ config_variable = "bake_ao_ray_dist"
 
 [node name="LabelRayBias" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 margin_top = 61.0
-margin_right = 126.0
+margin_right = 129.0
 margin_bottom = 75.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Ray bias:"
@@ -348,9 +348,9 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 130.0
+margin_left = 133.0
 margin_top = 56.0
-margin_right = 188.0
+margin_right = 191.0
 margin_bottom = 80.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 0.005
@@ -361,7 +361,7 @@ config_variable = "bake_ao_ray_bias"
 
 [node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 margin_top = 89.0
-margin_right = 100.0
+margin_right = 129.0
 margin_bottom = 103.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Denoise radius:"
@@ -373,9 +373,9 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 104.0
+margin_left = 133.0
 margin_top = 84.0
-margin_right = 162.0
+margin_right = 191.0
 margin_bottom = 108.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 3.0
@@ -386,9 +386,9 @@ float_only = true
 config_variable = "bake_denoise_radius"
 
 [node name="LabelFCageDistance" type="Label" parent="VBoxContainer/TabContainer/Bake"]
-margin_top = 89.0
-margin_right = 126.0
-margin_bottom = 103.0
+margin_top = 117.0
+margin_right = 129.0
+margin_bottom = 131.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Cage front distance:"
 __meta__ = {
@@ -399,10 +399,10 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 130.0
-margin_top = 84.0
-margin_right = 188.0
-margin_bottom = 108.0
+margin_left = 133.0
+margin_top = 112.0
+margin_right = 191.0
+margin_bottom = 136.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 0.05
 min_value = 1.0
@@ -412,9 +412,9 @@ float_only = true
 config_variable = "bake_cage_f_distance"
 
 [node name="LabelCageRDistance" type="Label" parent="VBoxContainer/TabContainer/Bake"]
-margin_top = 117.0
-margin_right = 126.0
-margin_bottom = 131.0
+margin_top = 145.0
+margin_right = 129.0
+margin_bottom = 159.0
 rect_pivot_offset = Vector2( -266.571, 61 )
 text = "Cage rear distance:"
 __meta__ = {
@@ -425,10 +425,10 @@ __meta__ = {
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 130.0
-margin_top = 112.0
-margin_right = 188.0
-margin_bottom = 136.0
+margin_left = 133.0
+margin_top = 140.0
+margin_right = 191.0
+margin_bottom = 164.0
 rect_pivot_offset = Vector2( -336.571, 66 )
 value = 0.2
 min_value = 1.0
@@ -438,17 +438,35 @@ float_only = true
 config_variable = "bake_cage_r_distance"
 
 [node name="SmoothCage" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 1 )]
-margin_top = 140.0
-margin_right = 126.0
-margin_bottom = 164.0
+margin_top = 168.0
+margin_right = 129.0
+margin_bottom = 192.0
 text = "Smooth cage"
 config_variable = "bake_smooth_cage"
 
 [node name="Space2" type="Control" parent="VBoxContainer/TabContainer/Bake"]
-margin_left = 130.0
-margin_top = 140.0
-margin_right = 188.0
-margin_bottom = 164.0
+margin_left = 133.0
+margin_top = 168.0
+margin_right = 191.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 0, 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CosineDistribution" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource( 1 )]
+margin_top = 196.0
+margin_right = 129.0
+margin_bottom = 220.0
+pressed = true
+text = "Cos distribution"
+config_variable = "bake_ao_cosine_distribution"
+
+[node name="Space3" type="Control" parent="VBoxContainer/TabContainer/Bake"]
+margin_left = 133.0
+margin_top = 196.0
+margin_right = 191.0
+margin_bottom = 220.0
 rect_min_size = Vector2( 0, 10 )
 __meta__ = {
 "_edit_use_anchors_": false
