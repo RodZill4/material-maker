@@ -354,7 +354,10 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	var required_pending_textures = []
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
-	var variables = get_parent().get_named_parameters()
+	var variables = {}
+	var named_parameters = get_parent().get_named_parameters()
+	for np in named_parameters.keys():
+		variables[np] = named_parameters[np].id
 	variables["name"] = genname
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))

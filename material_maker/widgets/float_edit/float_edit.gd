@@ -27,19 +27,17 @@ func get_value() -> String:
 	return text
 	
 func set_value(v, notify = false) -> void:
-	if ! is_inside_tree():
-		return
 	if v is float:
 		value = v
 		text = str(v)
 		do_update()
-		slider.visible = true
+		$Slider.visible = true
 		if notify:
 			emit_signal("value_changed", value)
 			emit_signal("value_changed_undo", value, false)
 	elif v is String and !float_only:
 		text = v
-		slider.visible = false
+		$Slider.visible = false
 		if notify:
 			emit_signal("value_changed", v)
 			emit_signal("value_changed_undo", v, false)
@@ -85,18 +83,22 @@ func _gui_input(event : InputEvent) -> void:
 		return
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.is_pressed():
-			last_position = event.position.x
-			start_position = last_position
-			start_value = value
-			sliding = true
-			from_lower_bound = value <= min_value
-			from_upper_bound = value >= max_value
-			modifiers = get_modifiers(event)
-			emit_signal("value_changed", value)
-			emit_signal("value_changed_undo", value+1, false)
-			emit_signal("value_changed_undo", value, true)
-			editable = false
-			selecting_enabled = false
+			if event.doubleclick:
+				yield(get_tree(), "idle_frame")
+				select_all()
+			else:
+				last_position = event.position.x
+				start_position = last_position
+				start_value = value
+				sliding = true
+				from_lower_bound = value <= min_value
+				from_upper_bound = value >= max_value
+				modifiers = get_modifiers(event)
+				emit_signal("value_changed", value)
+				emit_signal("value_changed_undo", value+1, false)
+				emit_signal("value_changed_undo", value, true)
+				editable = false
+				selecting_enabled = false
 		else:
 			sliding = false
 			editable = true
@@ -147,7 +149,7 @@ func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 			emit_signal("value_changed", value)
 			emit_signal("value_changed_undo", value, false)
 			$Slider.visible = true
-	elif float_only:
+	elif float_only or new_text == "":
 		do_update()
 		emit_signal("value_changed", value)
 		emit_signal("value_changed_undo", value, false)
@@ -163,5 +165,6 @@ func _on_FloatEdit_focus_entered():
 	select_all()
 
 func _on_LineEdit_focus_exited() -> void:
+	select(0, 0)
 	_on_LineEdit_text_entered(text, false)
 	select(0, 0)

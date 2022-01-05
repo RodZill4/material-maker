@@ -1016,17 +1016,22 @@
 			"type": "pattern"
 		},
 		{
-			"icon": "pattern_bricks",
-			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAN9JREFUWIXtlkEOgjAURKfmH0JvVFZ6BZacqO68gux6I7gFrqxNOuSDxTQmf1bl0UxJ+sMMUCmHqYR9DLcCPgf/KLdeBDgz441wxkn7RE1mcICB4En5fTOslfNpGT15H0FpBpe3AvxSaAKmknqEtG5/C2ZwxCh32UPHdvQMjmPtwUkOgfhHAjH4K4HqqGqj3v4WzAAQYGZ8O2wul+rBSv5r/UHyzGf5r1WF9tdoBoDkmU/zf0d/+EpOzX8F2k/VDABA9uQ/7Q+1cp8msJL/Wn/QRtWq7j8YSJ75PP9/XBVeq5MRKS4QRPwAAAAASUVORK5CYII=",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAUdJREFUaIHtms2NhDAMhZ0VPbgluFECt9ASN0rwLbREFcwhaIQ02iiTkDVeve8ylzyLJzSOfyAyjiMi732ZeFkWImLmcRwL5CKy73v9A5D3/vieEEKMwswF8uM4mDlGCCEUyKPtnzLrzwEGtIEBbcwbcET0TmffErN4sbw+QpQDVdz7Qv1kmqb4jhJnEohIvOq992W1xjAMRMTM67r+dqbr+z4nVuaxKyJSI9+2LUduPgvBgDYwoE13/bMnyDz2TDloyb8o5tDUawID2sCANuYNdPFnnueaKJVyEbl2P8AULjGbv2t+33b/0Pqqp8alivksBAPawIA25g24dDt3S8un2LKC9pyfGrSb3ye4Zf9wltPt5veZFO8fzGchGNAGBrQ5s5D6/B4bALPYL+YS/TKa+r8ABrSBAW3MG+hyRvv183vd/cOjeQEerRTGaJAKGAAAAABJRU5ErkJggg==",
+			"name": "bricks2",
 			"parameters": {
 				"bevel": 0.1,
 				"columns": 3,
+				"corner": 0.3,
 				"mortar": 0.1,
+				"pattern": 0,
+				"round": 0,
 				"row_offset": 0.5,
 				"rows": 6
 			},
+			"seed": 0,
+			"seed_locked": false,
 			"tree_item": "Pattern/Bricks",
-			"type": "bricks"
+			"type": "bricks2"
 		},
 		{
 			"icon": "pattern_bricks_tiles",
@@ -1039,68 +1044,83 @@
 				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/Tiles",
-			"type": "bricks"
+			"type": "bricks2"
 		},
 		{
 			"icon": "pattern_bricks_basketweave",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAHpJREFUWIXtlkEKQCEIRKePB6uT/6u1amOLkIqRGDeB0mOwlCkVe2H4AQDNnSN8fqp/mwIgAGBTpi1uuPoFBf4fLOr8Jj4AKJWtwKLz7+v8Jj4AsOj8X1AQnP/jCgTItA/kD5gA+YMMr8AH5NkHI+QPGAD5AwGAA/ugA/IEI9ycEzCEAAAAAElFTkSuQmCC",
 			"parameters": {
 				"bevel": 0.05,
-				"columns": 2,
+				"columns": 4,
 				"mortar": 0.05,
-				"pattern": 3,
-				"repeat": 2,
+				"pattern": 4,
 				"row_offset": 0,
-				"rows": 2
+				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/BasketWeave",
-			"type": "bricks"
+			"type": "bricks2"
 		},
 		{
 			"icon": "pattern_bricks_herringbone",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAIlJREFUWIXtlkEKACEIRX+DB6uTd7XZTLMwZLIRlNBVabxCxX6pYNYBAI27pTg9jmFtOvgRv8SbFi0BAE0FU+4NXrBYbynun8QDAPSuNvvB8AWb/eCfxAMAAeZB51xlP/gn8QBAqdyj/N7N/oVhqQ88AAHmQeqDAIDUBxGq4A8IMA9SHwQA/NYHN81TLvASaA6+AAAAAElFTkSuQmCC",
 			"parameters": {
 				"bevel": 0.05,
-				"columns": 2,
+				"columns": 4,
 				"mortar": 0.05,
-				"pattern": 2,
-				"repeat": 2,
+				"pattern": 3,
 				"row_offset": 0,
-				"rows": 2
+				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/HerringBone",
-			"type": "bricks"
+			"type": "bricks2"
 		},
 		{
 			"icon": "pattern_bricks_spanishbond",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAHdJREFUWIXtllEKwCAMQzvxwp6k3rj7mnWsrLAOlJJ8RSNPKPkoUVhyiViecvMS/R+AFICDRK0pJ6+T5+HasM3PjarydOnl64cIwA+ASl0P3Xrh5N/6O+VFS6Xi29v3fP0QAdgBsIOwHwCA/QBVTgPAfgBAEkBYJ8h8QNBYgbUtAAAAAElFTkSuQmCC",
 			"parameters": {
 				"bevel": 0.05,
-				"columns": 2,
+				"columns": 4,
 				"mortar": 0.05,
-				"pattern": 4,
-				"repeat": 2,
+				"pattern": 5,
 				"row_offset": 0,
-				"rows": 2
+				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/SpanishBond",
-			"type": "bricks"
+			"type": "bricks2"
 		},
 		{
-			"icon": "pattern_unevenbricks",
-			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAm5JREFUeJztmzGPKVEYhh+itA0KDdlElAqhVJAoRCOxnUKh2YRG/AalxF/wB5ZCNBKFQkuip6DRyBZqObfYa+/euzPM2HG/TOY8yWnOec/nnTeTY+Y4fIDCw/gBlFJ3tUKhAMBms7m7hlKKxWIBQK1WMxyv1+sAzOdzyzXj8Ti3ru0zAC+jA5A2II0OQNqANDoAaQPS6ACkDUijA5A2II0OQNqANJ4PIACQSqV+VKRSqThiZr1eX/XSarVs17x1bT48viESADidTqaCp6cnzDSHw4FkMkmxWGQ0Gln6wMViQalU4vX1lV6vZ8vs8/Mzx+Pxbr9G2gBAMBi8Kb6lsVLDiTlW51mt7flFUAcgbUAaHYC0AWl0ANIGpNEBSBuQRgcgbUAaV74NXn7ZNcLn893UfNV6/g6wdT7ggtl4s9kEYDKZ2DofEI1Gr9a9tHA4/JgAvExA2sA9dDodRzTg0gD6/b4jGnBpAG9vb4b94/GYwWBgOv4vLy8v7gygWq0a9o/HYwBCoRD5fN5SLc8vgjoAaQPS6ACkDUijA5A2II0rnwOWy6UjGvgdQCKRsGXArt5pMpnM1fHLKXYrBAC2260tA1b07+/vtmramWP2JGjGcDg0nDMcDgFQ5/P5s+VyOQWo/X7/V7+V1mw2FR87TA9tdpjNZgpQjUbj2xigAgB+v/FaaNZ/i3Q6fde81Wp1de5ut+N4PN5V24yHLILdbpdyuWxrTjabBWA6nRKJRAw1Zv0/QX8Nwp+d1K/EYrH/bkYCz98B33aFL4ed2u227X9/XXaF3YS+A6QNSKMDkDYgjQ5A2oA0ng/AlecDnOQXYmFIaRY0haIAAAAASUVORK5CYII=",
-			"name": "bricks_uneven",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAA4FJREFUaIHtmr9L80AYx59KNkEUnKpTRIuIdRJqdHFwkICbpeIfEAcHcag4OFW7KE6tEnHsUErdLI6lBtqiIG5FkUJBOhSUUnBRxHe4vKEk7d3lGj3zvvksvT73vSfP09yv9ALgcnwAoCgKfQNVVQFAluXR0VGTMRQKzczM0DSXJGl6ehqvEUVxaWmJxhsoivJFRywWQy1lWTaMJycnyBgKhfDNE4kEUkqS1E2TzWaRRhRFvDf0u/fhU/z9eAnwxvUJCOijUCjwjYMZAQBUVdXno5+i0WiMj4874kpwxItdnp6eaGSPj49EjQAAAwMD9NdutVr04l6oVquBQIAoEwBgbW3NWIzwxOPxvb29XkMDkCRpa2urW204HKZ3pXehvj7b09H6+jqlsSOrq6sd7RcXF7bCYBwDuVzOaiyXy+Vymc2hFVEUr6+vMYJYLKaqKp9BTMnIyAhRw5iALMuTk5OofHR0BADLy8tTU1PEhkjsIOx34PDwEADi8bjJgiGZTDJfrhv/ylaCgZeXF6LlB2CfhYaHh9stV1dXJsvPwG0W2t/fd0SjJ1Cv13uNyA7FYrFYLOI11WqVZtX3sUUgy3L7/IM4ODjIZDIAsLu7G4lErK00Tdvc3GS7YjfYu1AwGLRbq2kaKkiSNDQ0ZBWgBX5+fn5wcJAmhlwux20MXF5emiyJRMLYoVhrrWxsbAC6A4qibG9v01w1k8k4sht1EP0OTExM8I2DGdevxF4CvPES4I2XAG/0dWBnZ8duS0yTz89PokO8gCEeD074AMDY+t7d3aG/Iztuhq2k02lUMOlrtVqpVOrdD21D44zM2BGl02nieVn7E/D9/X171dzcHLInk0min4eHB8PP8/MzUe+dkf0yXJ+Avg7UajVThdXyO+l8xGR3NuCI67uQ6xPQH+qj0SheFwwG397eAEDTNL/fj4xjY2PfHR8RfRCLoogRfXx8tH9F4tfX1+8Lix7XdyHXJ6B3oePj4168VCqVSqXSscrYqNGwsrLSSxhUaJpm3cxxxPVdyAcAi4uLRN3NzQ2aRtv/N242m6jQ7Z0AtFUmvjFg7KjPz8/JIf/l9vaW9p259/f3/v5+jC/T8wDi7OwM1c7OznrPA12xfT6Qz+eNMk3f+25sJyAIwsLCAngrsVN4CfDG9Qnogxid+NGQSqVSqZTJeHp6im9F6d94N/s/4g+07J6BB8vQHAAAAABJRU5ErkJggg==",
+			"name": "bricks_uneven2",
 			"parameters": {
-				"bevel": 0.01,
-				"corner": 0,
+				"bevel": 0.1,
+				"corner": 0.3,
 				"iterations": 8,
 				"min_size": 0.3,
-				"mortar": 0.01,
+				"mortar": 0.1,
 				"randomness": 0.5,
 				"round": 0
 			},
+			"seed": 0,
+			"seed_locked": false,
 			"tree_item": "Pattern/UnevenBricks",
-			"type": "bricks_uneven"
+			"type": "bricks_uneven2"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAYlJREFUaIHtmTGKhTAQhsfFSkgneAhP4gW8goKtVxA8gtYeQlvBKwh21taClfC2CMg+n7irmTgbmK+ykC/5m2QyA2A4FgBEUaTJXpalbr8tv4qiQLfHcbx96/N/oXsfhgNQwwGoMT6ABQCe52myT9P0gJ8hxarrWlGRpmnf9wBQVZXruhi7eiMMw3meAeB4qy9lfN+Xqqqq1G071nUVQkh/27afPxh/CnEAajgANXbTNIg6XNuOZVm0+plbWPoqrUO28ktl3TcJ+t15wjiO2ybGcUSRGH8KcQBqOAA1xgewf3YwnyTP838iYdSw7jXvu66TD3l9vf8dctRwsOK9+1zrQ/6TkxrE+FOIA1DDAagxPsD9J6Xu3v/hck+uyPyNy/MBxGlAEATyQ2lGcfVWxyoiUDoULy4l6OEA1BgfQGk+gNWtH4ZhGAYUFfM4vxdzsooSQjiOg748QkV4fs+1bSt/E0Ks63r7vjwkyzIpD4LgtsT4U4gDUMMBqDE+wIX5QJIk+vZBNaag5xvUPb/FFf9gTwAAAABJRU5ErkJggg==",
+			"name": "bricks_uneven3",
+			"parameters": {
+				"bevel": 0.1,
+				"corner": 0.3,
+				"iterations": 8,
+				"min_size": 0.3,
+				"mortar": 0.1,
+				"round": 0,
+				"rows": 6
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Pattern/UnevenBricks2",
+			"type": "bricks_uneven3"
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAaZJREFUeJztmkGqg0AQRJ8/IwpjDpCz5AA5swfwLB4gDigi/lU2WdoNnWb67aerKUKg2mqAcxxHrvB6vQCYpunS++fzCYClfjNN03m/38k5k3Om73u6rqNtW263GwDHcbDvO9u2sa4rpRRKKbzfb5Zl4fF4XFpgnmeGYcBSP116+UXOWWOMiX4YoLFA3/caY0z0VQzouk5jjIm+igFt22qMMdFXMeDzb22FRP9PcQ+XqPwCjuPQGGOir2LAvu8aY0z0VQzYtk1jjIm+igHrumqMMdFXMaCUojHGRL96Axoqj8MJYBiGSwM+LMsiem+p34zjeHrO81L9BL7jrJQwAHzneSkJfOd5KQl853kpCXzneSlxDwDfeV5KAt95XkoC33leSgLfeV5KAt9xVkr1BjTA6TnPS/UT+M7zUv3oB1x6+YXnOB0GaCzg+Z4Q/QCNBTzfE6IfoLiHS6IfoLGA53tC9AM0FvB8T6j+83j1BkQ/AHzneal+9APAd5yVEgaA7zwvJfoB4DvPS4l+gJnyjxD9APCd56VEPwB853kp1X8er96A6vsB/yfswtgu8GDwAAAAAElFTkSuQmCC",
@@ -6432,6 +6452,458 @@
 			"seed_locked": false,
 			"tree_item": "Filter/Palettize",
 			"type": "palettize"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAldJREFUaIHtWsuuxCAIrc38/y97F814HUU4IGib9KyaVJGnAppyzgeMlBI+uKBe4qKALJpSuob1i/4QVAlAkhOhXUJcbkqAEVEe7moqBE8tKwugUpBFgGijgRFyfcgC1GvbghjkyQZFDBTuR5vDCDbuEfo5Z8EChQq/l0VApH8NEAQgqbg79Aw+yKARxzlnc1QgaISv1ypu3FqA8ZkRLZyDSfTytDHQi3hIvDIsxjlPTRkNYtWvONRqJYI452zI7cgpa9R/2HYh8G8oPHOh9UdEDVmAETcb1V/Dkk7fCndMp1V4BdiNV4DdeLwAaJfmniDS6cfhJwtoit2+9r2DrZqOHWeBPsnZkkI3aJT4aX6QmZm2KlhgurYvNOLeZoS+TvA1XU0NCuKR/lRsBbnfeUiNKps68TY6iFG34UQWa+aUkQta8/2iDRTnAGkEvtxxd5ue4Fn/4DVKjgF3IX48gpQSOVcXxIUz90sXM/4F4I2AqzPIeaAYIGVwVH/+wjadBORCLuqf55ukQDd3+42yUb+55ZgqKHgfg7NAzSuyTYmN3vnsqJ9FCFDzuj12RwsVrChoQpNTz84cc5FzfOPHPUcKt0C/+fpuo9AdWQ/VFVOdSLpXNkYLaPmIK6btLgTe49ZHR4QYj2+rTAmAnFyh6j+CLOCbfvN4b2h2Qz4H+PN1JUhXlF1o5qViqPdfsD81QOD4nGVEJyoG9tTE+DTVwqFFAuSjN3zrV6C7HzBjhhT/BgvdJXYZoW8j6ErKeSOAb9hGEEttOYi9ikBDNCMthRWpxKT78bdEf9cnuXe78CH/AAAAAElFTkSuQmCC",
+			"name": "fill_to_orientation",
+			"parameters": {
+				"invert": false
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Fill/To Orientation",
+			"type": "fill_to_orientation"
+		},
+		{
+			"connections": [
+				{
+					"from": "voronoi_3",
+					"from_port": 0,
+					"to": "buffer_5",
+					"to_port": 0
+				},
+				{
+					"from": "voronoi_2",
+					"from_port": 0,
+					"to": "buffer_7",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_7",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "voronoi_3",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_5",
+					"from_port": 0,
+					"to": "voronoi_2",
+					"to_port": 0
+				}
+			],
+			"icon_data": "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",
+			"label": "HBAO",
+			"longdesc": "",
+			"name": "graph_6",
+			"nodes": [
+				{
+					"name": "voronoi_3",
+					"node_position": {
+						"x": -600.80072,
+						"y": -894.601807
+					},
+					"parameters": {
+						"angleBiasDeg": 15,
+						"depth_scale": 0.08,
+						"intensity": 1,
+						"quality": 4,
+						"radius": 0.1
+					},
+					"seed": 49449,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "f"
+							}
+						],
+						"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n    vec2(cosMaxRot, -sinMaxROt),\n    vec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise    = rand3(uv * noiseScale);\n  sampleNoise.xy      = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n                             vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n    // incrementally rotate sample direction\n    offset_uv = deltaRotationMatrix * offset_uv;\n    float oldAngle   = angleBias;\n    for (int j = 0; j < steps; ++j) {\n      //add jitter & distance to offset UV\n      vec2 sample_uv     = uv + (jitter + float(j)) * offset_uv;\n      vec3 s_point     = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n      vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n      // 90 deg - (angle between normal from current point &  sampled tangent)\n      //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n      float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n      \n      if (gamma > oldAngle) {\n        float value = sin(gamma) - sin(oldAngle);\n        float attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n        occlusion += attenuation * value;\n\t\t//occlusion += value;\n        oldAngle = gamma;\n      }\n    }\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
+						"longdesc": "A node that generates several images from a tileable voronoi noise",
+						"name": "HBAO",
+						"outputs": [
+							{
+								"f": "$(name)_hbao($uv,$radius, $angleBiasDeg, $intensity, vec2(16.0,16.0))",
+								"longdesc": "A color pattern that assigns a random color to each cell",
+								"shortdesc": "Random color",
+								"type": "f"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 0.01,
+								"label": "Radius",
+								"longdesc": "The scale along the X axis",
+								"max": 1,
+								"min": 0,
+								"name": "radius",
+								"shortdesc": "Scale.x",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 30,
+								"label": "Angle Bias",
+								"longdesc": "Angle bias for AO",
+								"max": 90,
+								"min": 0,
+								"name": "angleBiasDeg",
+								"shortdesc": "Angle Bias",
+								"step": 1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.2,
+								"label": "Intensity",
+								"longdesc": "Change intensity of AO",
+								"max": 5,
+								"min": 0,
+								"name": "intensity",
+								"shortdesc": "Intensity",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1,
+								"label": "Depth Scale",
+								"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+								"max": 1,
+								"min": 0,
+								"name": "depth_scale",
+								"shortdesc": "Depth Scale",
+								"step": 0.01,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 4,
+								"label": "Steps",
+								"longdesc": "Steps in given direction per ray",
+								"max": 12,
+								"min": 1,
+								"name": "quality",
+								"shortdesc": "Quality",
+								"step": 1,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Voronoi Noise"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1338.030762,
+						"y": -788.080872
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"longdesc": "Greyscale heightmap",
+							"name": "input",
+							"shortdesc": "Input",
+							"type": "f"
+						}
+					],
+					"seed": 43798,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": -902.684204,
+						"y": -327.282288
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0,
+							"longdesc": "",
+							"name": "port0",
+							"shortdesc": "AO",
+							"type": "f"
+						}
+					],
+					"seed": 42623,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -1488.979004,
+						"y": -561.71167
+					},
+					"parameters": {
+						"param0": 10,
+						"param1": 0.1,
+						"param2": 15,
+						"param3": 0.08,
+						"param4": 4,
+						"param5": 1
+					},
+					"seed": 58911,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Size",
+							"linked_widgets": [
+								{
+									"node": "voronoi_2",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_5",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_7",
+									"widget": "size"
+								}
+							],
+							"name": "param0",
+							"shortdesc": "Size",
+							"type": "linked_control"
+						},
+						{
+							"label": "Radius",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "radius"
+								}
+							],
+							"longdesc": "Affected radius of point in UV size",
+							"name": "param1",
+							"shortdesc": "Radius",
+							"type": "linked_control"
+						},
+						{
+							"label": "Angle Bias",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "angleBiasDeg"
+								}
+							],
+							"longdesc": "Minimum angle on heightmap for AO to occur. Angle is calculated in UV space, where depth (grayscale input) is scaled by \"Depth Scale\" parameter",
+							"name": "param2",
+							"shortdesc": "Angle bias",
+							"type": "linked_control"
+						},
+						{
+							"label": "Depth Scale",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "depth_scale"
+								}
+							],
+							"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+							"name": "param3",
+							"shortdesc": "Depth Scale",
+							"type": "linked_control"
+						},
+						{
+							"label": "Quality",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "quality"
+								}
+							],
+							"longdesc": "Number of steps per direction sampling",
+							"name": "param4",
+							"shortdesc": "Quality",
+							"type": "linked_control"
+						},
+						{
+							"label": "Intensity",
+							"linked_widgets": [
+								{
+									"node": "voronoi_3",
+									"widget": "intensity"
+								}
+							],
+							"longdesc": "Change intensity of calculated AO",
+							"name": "param5",
+							"shortdesc": "Intensity",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "voronoi_2",
+					"node_position": {
+						"x": -710.111145,
+						"y": -596.459534
+					},
+					"parameters": {
+						"ksigma": 4,
+						"sigma": 3,
+						"size": 10,
+						"threshold": 0.7
+					},
+					"seed": 38722,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  Copyright (c) 2018-2019 Michele Morrone\n//  All rights reserved.\n//\n//  https://michelemorrone.eu - https://BrutPitt.com\n//\n//  me@michelemorrone.eu - brutpitt@gmail.com\n//  twitter: @BrutPitt - github: BrutPitt\n//  \n//  https://github.com/BrutPitt/glslSmartDeNoise/\n//\n//  This software is distributed under the terms of the BSD 2-Clause license\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  smartDeNoise - parameters\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//\n//  sampler2D tex     - sampler image / texture\n//  vec2 uv           - actual fragment coord\n//  float sigma  >  0 - sigma Standard Deviation\n//  float kSigma >= 0 - sigma coefficient \n//      kSigma * sigma  -->  radius of the circular kernel\n//  float threshold   - edge sharpening threshold \nvec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)\n{\n\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI\n\tfloat INV_PI = 0.31830988618379067153776752674503;\n    float radius = round(kSigma*sigma);\n    float radQ = radius * radius;\n\n    float invSigmaQx2 = .5 / (sigma * sigma);      // 1.0 / (sigma^2 * 2.0)\n    float invSigmaQx2PI = INV_PI * invSigmaQx2;    // 1/(2 * PI * sigma^2)\n\n    float invThresholdSqx2 = .5 / (threshold * threshold);     // 1.0 / (sigma^2 * 2.0)\n    float invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)\n\n    vec4 centrPx = $in(uv); \n\n    float zBuff = 0.0;\n    vec4 aBuff = vec4(0.0);\n    vec2 size = vec2($size, $size);\n\n    vec2 d;\n    for (d.x=-radius; d.x <= radius; d.x++) {\n        float pt = sqrt(radQ-d.x*d.x);       // pt = yRadius: have circular trend\n        for (d.y=-pt; d.y <= pt; d.y++) {\n            float blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;\n\n            vec4 walkPx =  $in(uv+d/size);\n            vec4 dC = walkPx-centrPx;\n            float deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;\n\n            zBuff += deltaFactor;\n            aBuff += deltaFactor*walkPx;\n        }\n    }\n    return aBuff/zBuff;\n}",
+						"longdesc": "A node that generates several images from a tileable voronoi noise",
+						"name": "Denoiser",
+						"outputs": [
+							{
+								"longdesc": "A color pattern that assigns a random color to each cell",
+								"rgba": "$(name)_smartDeNoise($uv, $sigma, $ksigma, $threshold)",
+								"shortdesc": "Random color",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"default": 10,
+								"first": 0,
+								"label": "size",
+								"last": 12,
+								"longdesc": "The scale along the X axis",
+								"name": "size",
+								"shortdesc": "Scale.x",
+								"type": "size"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "Sigma",
+								"max": 1,
+								"min": 0.005,
+								"name": "sigma",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "kSigma",
+								"max": 1,
+								"min": 0,
+								"name": "ksigma",
+								"step": 0.1,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 0.5,
+								"label": "threshold",
+								"max": 1,
+								"min": 0,
+								"name": "threshold",
+								"step": 0.1,
+								"type": "float"
+							}
+						],
+						"shortdesc": "Voronoi Noise"
+					},
+					"type": "shader"
+				},
+				{
+					"name": "buffer_5",
+					"node_position": {
+						"x": -931.449646,
+						"y": -724.330017
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 6771,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "buffer_7",
+					"node_position": {
+						"x": -948.36377,
+						"y": -449.796295
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 16139,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": -976.009644,
+						"y": -975.5
+					},
+					"parameters": {
+						"size": 10
+					},
+					"seed": 42465,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 1
+				}
+			],
+			"parameters": {
+				"param0": 10,
+				"param1": 0.1,
+				"param2": 15,
+				"param3": 0.08,
+				"param4": 4,
+				"param5": 1
+			},
+			"seed": 6741,
+			"seed_locked": false,
+			"shortdesc": "",
+			"tree_item": "Filter/HBAO",
+			"type": "graph"
 		}
 	],
 	"name": "Base library"

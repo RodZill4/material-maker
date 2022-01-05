@@ -150,6 +150,26 @@ func get_parameter(n : String):
 		var parameter_def = get_parameter_def(n)
 		return parameter_def.default
 
+func calculate_float_parameter(n : String) -> Dictionary:
+	var return_value : Dictionary = {}
+	var value = get_parameter(n)
+	if value is float:
+		return_value.value = value
+	elif value is String:
+		var parent : Node = get_parent()
+		if parent.has_method("get_named_parameters"):
+			return_value.used_named_parameters = []
+			var named_parameters : Dictionary = get_parent().get_named_parameters()
+			for np in named_parameters.keys():
+				if value.find("$"+np) != -1:
+					return_value.used_named_parameters.push_back(named_parameters[np].id)
+					value = value.replace("$"+np, str(named_parameters[np].value))
+		var expression : Expression = Expression.new()
+		var error = expression.parse(value, [])
+		if error == OK:
+			return_value.value = expression.execute()
+	return return_value
+
 class CustomGradientSorter:
 	static func compare(a, b) -> bool:
 		return a.pos < b.pos
