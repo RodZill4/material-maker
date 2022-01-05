@@ -148,6 +148,7 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	#notice "-" as we move form lp cage to hp
 	var cage_depth = -(cage_offset + main_window.get_config("bake_cage_r_distance"))
 	var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
+	var ao_ray_bias = main_window.get_config("bake_ao_ray_bias")
 	var ray_count = main_window.get_config("bake_ray_count")
 	var denoise_radius = main_window.get_config("bake_denoise_radius")
 	if not baker_data.has("iterative"):
@@ -176,6 +177,7 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	baker_data.baker.set_shader_param("bvh_data", bvh_data)
 	baker_data.baker.set_shader_param("cage_depth", cage_depth)
 	baker_data.baker.set_shader_param("ao_ray_dist", ao_ray_dist)
+	baker_data.baker.set_shader_param("ao_ray_bias", ao_ray_bias)
 	baker_data.baker.set_shader_param("cage_offset", cage_offset)
 	if baker_data.has("dn_prepass"):
 		baker_data.baker.set_shader_param("depth_texture", depth_prepass_texture)

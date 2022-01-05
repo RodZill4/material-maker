@@ -1703,6 +1703,7 @@ uniform sampler2D bvh_data;
 uniform sampler2D depth_texture;
 uniform sampler2D prev_iteration_tex;
 uniform float ao_ray_dist;
+uniform float ao_ray_bias;
 uniform float cage_offset;
 uniform float cage_depth;
 uniform int iteration = 1;
@@ -1949,7 +1950,7 @@ void fragment() {
 	vec3 hp_norms = n_d_tex.xyz * 2.0 - 1.0;
 
 	float depth_ray = (1.0 - n_d_tex.a) * abs(cage_depth);
-	vec3 ray_start = model_vert + model_norm_s * (cage_offset - depth_ray) + model_norm_s * 0.01;
+	vec3 ray_start = model_vert + model_norm_s * (cage_offset - depth_ray) + model_norm_s * ao_ray_bias;
 	vec3 ray_dir;
 	for(int i = 0; i < 5; i++) {
 		ray_dir = random_hemi_point(vec3(
@@ -1979,6 +1980,7 @@ viewport_path = NodePath(".")
 resource_local_to_scene = true
 shader = SubResource( 32 )
 shader_param/ao_ray_dist = null
+shader_param/ao_ray_bias = null
 shader_param/cage_offset = null
 shader_param/cage_depth = null
 shader_param/iteration = 1
