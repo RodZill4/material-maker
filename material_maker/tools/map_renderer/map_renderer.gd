@@ -12,6 +12,7 @@ export(ShaderMaterial) var depth_hp_lp_material
 export(ShaderMaterial) var depth_normals_hp_lp_material
 export(ShaderMaterial) var worldnormal_hp_lp_material
 export(ShaderMaterial) var ao_hp_lp_material
+export(ShaderMaterial) var thickness_hp_lp_material
 export(ShaderMaterial) var denoise_pass
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
@@ -128,7 +129,8 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 		hp_lp_normal = { baker=normal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Normal" },
 		hp_lp_depth = { baker=depth_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Depth" },
 		hp_lp_worldnormal = { baker=worldnormal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="World Normal" },
-		hp_lp_ao = { baker=ao_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="AO", dn_prepass=true, iterative=true, denoise=true }
+		hp_lp_ao = { baker=ao_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="AO", dn_prepass=true, iterative=true, denoise=true },
+		hp_lp_thickness = { baker=thickness_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Thickness", dn_prepass=true, iterative=true, denoise=true }
 	}
 	if hp_mesh_path == null or lp_mesh == null:
 		return
@@ -161,6 +163,8 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 		add_normals_in_color(local_lp_mesh)
 	$MeshInstance.mesh = local_lp_mesh
 
+	var aabb_length = $MeshInstance.get_aabb().size.length()
+
 	if baker_data.has("dn_prepass"):
 		progress_dialog.set_text("Generating depth pre-pass map")
 		$MeshInstance.set_surface_material(0, depth_normals_hp_lp_material)
@@ -176,6 +180,7 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	progress_dialog.set_text("Generating " + baker_data.map_name + " map")
 	$MeshInstance.set_surface_material(0, baker_data.baker)
 	baker_data.baker.set_shader_param("bvh_data", bvh_data)
+	baker_data.baker.set_shader_param("aabb_length", aabb_length)
 	baker_data.baker.set_shader_param("cage_depth", cage_depth)
 	baker_data.baker.set_shader_param("ao_ray_dist", ao_ray_dist)
 	baker_data.baker.set_shader_param("ao_ray_bias", ao_ray_bias)
@@ -254,7 +259,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		main_window.add_child(progress_dialog)
 		var ray_distance = ao_ray_dist
 		if map == "thickness":
-			ray_distance = -aabb.size.length()
+			ray_distance = aabb.size.length()
 		var bvh_data: ImageTexture = $BVHGenerator.generate(mesh)
 		passes.first.set_shader_param("bvh_data", bvh_data)
 		passes.first.set_shader_param("ao_ray_dist", ray_distance)
