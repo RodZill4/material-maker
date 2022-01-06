@@ -13,11 +13,13 @@ export(ShaderMaterial) var depth_normals_hp_lp_material
 export(ShaderMaterial) var worldnormal_hp_lp_material
 export(ShaderMaterial) var ao_hp_lp_material
 export(ShaderMaterial) var thickness_hp_lp_material
+export(ShaderMaterial) var bent_normal_hp_lp_material
 export(ShaderMaterial) var denoise_pass
 export(ShaderMaterial) var dilate_pass1
 export(ShaderMaterial) var dilate_pass2
 export(ShaderMaterial) var seams_pass1
 export(ShaderMaterial) var seams_pass2
+export(ShaderMaterial) var normalize_normals_pass
 
 func _ready():
 	pass
@@ -130,7 +132,8 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 		hp_lp_depth = { baker=depth_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Depth" },
 		hp_lp_worldnormal = { baker=worldnormal_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="World Normal" },
 		hp_lp_ao = { baker=ao_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="AO", dn_prepass=true, iterative=true, denoise=true },
-		hp_lp_thickness = { baker=thickness_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Thickness", dn_prepass=true, iterative=true, denoise=true }
+		hp_lp_thickness = { baker=thickness_hp_lp_material, passes=[dilate_pass1, dilate_pass2], map_name="Thickness", dn_prepass=true, iterative=true, denoise=true },
+		hp_lp_bentnormal = { baker=bent_normal_hp_lp_material, passes=[normalize_normals_pass, dilate_pass1, dilate_pass2], map_name="Bent Normal", dn_prepass=true, iterative=true }
 	}
 	if hp_mesh_path == null or lp_mesh == null:
 		return
@@ -154,8 +157,12 @@ func gen_hp_lp(lp_mesh: Mesh, hp_mesh_path: String, map : String, renderer_metho
 	var ao_cosine_distribution = main_window.get_config("bake_ao_cosine_distribution")
 	var ray_count = main_window.get_config("bake_ray_count")
 	var denoise_radius = main_window.get_config("bake_denoise_radius")
+	var use_normalized_normals = main_window.get_config("bake_normalize_bentnormal")
+
 	if not baker_data.has("iterative"):
 		ray_count = 1
+	if not use_normalized_normals:
+		baker_data.passes.erase(normalize_normals_pass)
 
 	if use_smooth_cage:
 		add_smooth_normals_in_color(local_lp_mesh)

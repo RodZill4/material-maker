@@ -130,7 +130,8 @@ const DEFAULT_CONFIG = {
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
 	bake_denoise_radius = 3,
-	bake_ao_cosine_distribution = true
+	bake_ao_cosine_distribution = true,
+	bake_normalize_bentnormal = false
 }
 
 func _ready() -> void:
