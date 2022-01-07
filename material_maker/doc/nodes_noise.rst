@@ -15,3 +15,4 @@ made from random patterns.
 	node_noise_anisotropic
 	node_noise_wavelet
 	node_noise_crystal
+	node_noise_dirt
