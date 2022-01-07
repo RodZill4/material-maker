@@ -348,7 +348,7 @@ func update_node() -> void:
 			hsizer.add_child(label_widget)
 		else:
 			var control : Control = Control.new()
-			control.rect_min_size.y = 12
+			control.rect_min_size.y = 25
 			hsizer.add_child(control)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
 	var input_names_width : int = 0
@@ -431,7 +431,7 @@ func update_node() -> void:
 			add_child(hsizer)
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
-			hsizer.rect_min_size.y = 12
+			hsizer.rect_min_size.y = 25
 	# Edit buttons
 	if generator.is_editable():
 		for theme in ["frame", "selectedframe"]:
