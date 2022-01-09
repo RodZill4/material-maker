@@ -147,6 +147,8 @@ func add_generator(generator : MMGenBase) -> bool:
 			if parent != null and parent is Object and parent.get_script() == get_script():
 				# Material is always in top level graph
 				return false
+	elif name == "":
+		name = generator.get_type()+"_1"
 	if has_node(name):
 		var name_prefix : String
 		var regex = RegEx.new()
@@ -238,15 +240,21 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	to.source_changed(to_port)
 	return true
 
-func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+func disconnect_children_ext(from_name : String, from_port : int, to_name : String, to, to_port : int) -> bool:
 	var new_connections : Array = []
 	for c in connections:
-		if c.from != from.name or c.from_port != from_port or c.to != to.name or c.to_port != to_port:
+		if c.from != from_name or c.from_port != from_port or c.to != to_name or c.to_port != to_port:
 			new_connections.push_back(c)
 		else:
 			to.source_changed(to_port)
 	connections = new_connections
 	return true
+
+func disconnect_children_by_name(from_name : String, from_port : int, to_name : String, to_port : int) -> bool:
+	return disconnect_children_ext(from_name, from_port, to_name, get_node(to_name), to_port)
+
+func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+	return disconnect_children_ext(from.name, from_port, to.name, to, to_port)
 
 func reconnect_inputs(generator, reconnects : Dictionary) -> bool:
 	var new_connections : Array = []
@@ -303,6 +311,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		while rv is GDScriptFunctionState:
+			print("This should never NEVER happen")
 			rv = yield(rv, "completed")
 		return rv
 	return { globals=[], defs="", code="", textures={} }
@@ -364,7 +373,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	# Create inputs and outputs generators
 	var gen_inputs = MMGenIOs.new()
 	gen_inputs.name = "gen_inputs"
-	gen_inputs.position = Vector2(left_bound-300, center.y)
+	gen_inputs.position = Vector2(left_bound-500, center.y)
 	new_graph.add_generator(gen_inputs)
 	var gen_outputs = MMGenIOs.new()
 	gen_outputs.name = "gen_outputs"

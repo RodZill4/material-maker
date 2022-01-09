@@ -52,11 +52,15 @@ func _post_load() -> void:
 
 func get_hier_name() -> String:
 	var type = load("res://addons/material_maker/engine/gen_base.gd")
+	if not get_parent() is type:
+		return ""
 	var rv = name
-	var object = get_parent()
-	while object is type:
-		rv = object.name+"/"+rv
-		object = object.get_parent()
+	var node = self
+	while true:
+		node = node.get_parent()
+		if not node.get_parent() is type:
+			break
+		rv = node.name+"/"+rv
 	return rv
 
 func accept_float_expressions() -> bool:

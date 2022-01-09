@@ -18,6 +18,7 @@ onready var slider = $Slider
 onready var cursor = $Slider/Cursor
 
 signal value_changed(value)
+signal value_changed_undo(value, merge_undo)
 
 func _ready() -> void:
 	do_update()
@@ -28,15 +29,18 @@ func get_value() -> String:
 func set_value(v, notify = false) -> void:
 	if v is float:
 		value = v
+		text = str(v)
 		do_update()
 		$Slider.visible = true
 		if notify:
 			emit_signal("value_changed", value)
+			emit_signal("value_changed_undo", value, false)
 	elif v is String and !float_only:
 		text = v
 		$Slider.visible = false
 		if notify:
 			emit_signal("value_changed", v)
+			emit_signal("value_changed_undo", v, false)
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -90,6 +94,9 @@ func _gui_input(event : InputEvent) -> void:
 				from_lower_bound = value <= min_value
 				from_upper_bound = value >= max_value
 				modifiers = get_modifiers(event)
+				emit_signal("value_changed", value)
+				emit_signal("value_changed_undo", value+1, false)
+				emit_signal("value_changed_undo", value, true)
 				editable = false
 				selecting_enabled = false
 		else:
@@ -121,6 +128,7 @@ func _gui_input(event : InputEvent) -> void:
 				v = max_value
 			set_value(v)
 			emit_signal("value_changed", value)
+			emit_signal("value_changed_undo", value, true)
 		accept_event()
 	elif event is InputEventKey and !event.echo:
 		match event.scancode:
@@ -135,17 +143,20 @@ func _on_LineEdit_text_changed(new_text : String) -> void:
 func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if new_text.is_valid_float():
 		var new_value : float = new_text.to_float()
-		if value != new_value:
+		if abs(value-new_value) > 0.00001:
 			value = new_value
 			do_update()
 			emit_signal("value_changed", value)
+			emit_signal("value_changed_undo", value, false)
 			$Slider.visible = true
 	elif float_only or new_text == "":
 		do_update()
 		emit_signal("value_changed", value)
+		emit_signal("value_changed_undo", value, false)
 		$Slider.visible = true
 	else:
 		emit_signal("value_changed", new_text)
+		emit_signal("value_changed_undo", new_text, false)
 		$Slider.visible = false
 	if release:
 		release_focus()
@@ -156,3 +167,4 @@ func _on_FloatEdit_focus_entered():
 func _on_LineEdit_focus_exited() -> void:
 	select(0, 0)
 	_on_LineEdit_text_entered(text, false)
+	select(0, 0)

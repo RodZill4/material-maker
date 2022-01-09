@@ -3,7 +3,7 @@ extends Control
 var value = null setget set_value
 
 
-signal updated(curve)
+signal updated(curve, old_value)
 
 
 func _ready():
@@ -22,9 +22,9 @@ func _on_CurveEdit_pressed():
 	while new_curve is GDScriptFunctionState:
 		new_curve = yield(new_curve, "completed")
 	if new_curve != null:
-		set_value(new_curve)
-		emit_signal("updated", new_curve.duplicate())
+		set_value(new_curve.value)
+		emit_signal("updated", new_curve.value.duplicate(), null if new_curve.value.compare(new_curve.previous_value) else new_curve.previous_value)
 
 func on_value_changed(v) -> void:
 	set_value(v)
-	emit_signal("updated", v.duplicate())
+	emit_signal("updated", v.duplicate(), null)

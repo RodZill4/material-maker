@@ -13,7 +13,7 @@ func _ready():
 
 func set_generator(g):
 	if g != generator:
-		if generator != null and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
+		if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 			generator.disconnect("parameter_changed", self, "on_parameter_changed")
 		generator = g
 		if generator != null:
@@ -73,7 +73,12 @@ func _on_value_changed(new_value, variable : String) -> void:
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 
-func _on_color_changed(new_color, variable : String) -> void:
+func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
+	ignore_parameter_change = variable
+	generator.set_parameter(variable, new_value)
+	ignore_parameter_change = ""
+
+func _on_color_changed(new_color, old_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""

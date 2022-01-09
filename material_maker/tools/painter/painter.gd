@@ -16,7 +16,15 @@ onready var emission_viewport = $EmissionPaint
 onready var normal_viewport = $NormalPaint
 onready var do_viewport = $DOPaint
 onready var mask_viewport = $MaskPaint
-onready var viewports = [ albedo_viewport, mr_viewport, emission_viewport, normal_viewport, do_viewport, mask_viewport ]
+const viewport_names : Array = [ "albedo", "mr", "emission", "normal", "do", "mask" ]
+onready var viewports : Dictionary = {
+	albedo=albedo_viewport,
+	mr=mr_viewport,
+	emission=emission_viewport,
+	normal=normal_viewport,
+	do=do_viewport,
+	mask=mask_viewport
+}
 
 var camera
 var transform
@@ -30,12 +38,7 @@ var brush_params = {
 	pattern_angle  = 0.0
 }
 
-var has_albedo   : bool = false
-var has_mr       : bool = false
-var has_emission : bool = false
-var has_normal   : bool = false
-var has_do       : bool = false
-var has_mask     : bool = false
+var has_channel : Dictionary = {}
 
 var brush_preview_material : ShaderMaterial
 var pattern_shown : bool = false
@@ -53,7 +56,8 @@ var shader_files : Dictionary = {}
 const CACHE_SHADER_FILES : bool = false
 
 
-signal painted()
+signal painted(painted_channels)
+signal end_of_stroke(stroke_state)
 
 
 func _ready():
@@ -63,8 +67,8 @@ func _ready():
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
-	for index in range(viewports.size()):
-		viewports[index].set_intermediate_textures(t2v_tex, mesh_seams_tex)
+	for v in viewports.keys():
+		viewports[v].set_intermediate_textures(t2v_tex, mesh_seams_tex)
 
 func update_seams_texture(_m : Mesh = null) -> void:
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
@@ -170,8 +174,8 @@ func init_textures(m : SpatialMaterial):
 func set_texture_size(s : float):
 	if texture_to_view_viewport.size.x != s:
 		texture_to_view_viewport.size = Vector2(s, s)
-		for index in range(viewports.size()):
-			viewports[index].set_texture_size(s)
+		for v in viewports.keys():
+			viewports[v].set_texture_size(s)
 		update_seams_texture()
 
 func update_view(c, t, s):
@@ -302,22 +306,22 @@ func update_brush(update_shaders : bool = false):
 		return
 	# Mode
 	var mode : String = get_brush_mode()
-	has_albedo = brush_node.get_parameter("has_albedo")
-	has_mr = brush_node.get_parameter("has_metallic") or brush_node.get_parameter("has_roughness")
-	has_emission = brush_node.get_parameter("has_emission")
-	has_normal = brush_node.get_parameter("has_normal")
-	has_do = brush_node.get_parameter("has_depth") or brush_node.get_parameter("has_ao")
-	has_mask = true #brush_node.get_parameter("has_mask")
+	for c in [ "albedo", "emission", "normal" ]:
+		has_channel[c] = brush_node.get_parameter("has_"+c)
+	has_channel["mr"] = brush_node.get_parameter("has_metallic") or brush_node.get_parameter("has_roughness")
+	has_channel["do"] = brush_node.get_parameter("has_depth") or brush_node.get_parameter("has_ao")
+	has_channel["mask"] = true
 	# Update shaders
 	if update_shaders:
-		for index in range(viewports.size()):
-			var shader_text = get_shader_file(viewports[index].get_shader_prefix()+"_"+mode)
+		for index in viewport_names.size():
+			var viewport = viewports[viewport_names[index]]
+			var shader_text = get_shader_file(viewport.get_shader_prefix()+"_"+mode)
 			shader_text = preprocess_shader(shader_text)
-			update_shader(viewports[index].get_paint_material(), shader_text, get_output_code(index+1))
-			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
-			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
-	for index in range(viewports.size()):
-		viewports[index].set_brush(brush_params)
+			update_shader(viewport.get_paint_material(), shader_text, get_output_code(index+1))
+			viewport.set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
+			viewport.set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
+	for v in viewports.keys():
+		viewports[v].set_brush(brush_params)
 
 func get_output_code(index : int) -> String:
 	if brush_node == null or !is_instance_valid(brush_node):
@@ -365,31 +369,42 @@ func update_shader(shader_material : ShaderMaterial, shader_template : String, s
 		shader_material.set_shader_param(t, brush_textures[t])
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	for index in range(viewports.size()):
-		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
+	for v in viewports.keys():
+		mm_renderer.update_float_parameters(viewports[v].paint_material, parameter_changes)
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 	return true
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
-	if has_albedo:
-		albedo_viewport.do_paint(shader_params, end_of_stroke)
-	if has_mr:
-		mr_viewport.do_paint(shader_params, end_of_stroke)
-	if has_emission:
-		emission_viewport.do_paint(shader_params, end_of_stroke)
-	if has_normal:
-		normal_viewport.do_paint(shader_params, end_of_stroke)
-	if has_do:
-		do_viewport.do_paint(shader_params, end_of_stroke)
-	if has_mask:
-		mask_viewport.do_paint(shader_params, end_of_stroke)
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	var active_viewports : Array = []
+	for v in viewports.keys():
+		if has_channel[v]:
+			active_viewports.push_back(v)
+			viewports[v].do_paint(shader_params, end_of_stroke)
+	var finished : bool = false
+	while ! finished:
+		yield(get_tree(), "idle_frame")
+		finished = true
+		for v in active_viewports:
+			if viewports[v].painting > 0:
+				finished = false
+				break
+	emit_signal("painted")
+	if end_of_stroke:
+		var stroke_state = {}
+		for v in active_viewports:
+			stroke_state[v] = viewports[v].get_current_state()
+		emit_signal("end_of_stroke", stroke_state)
+
+func set_state(s):
+	for c in s.keys():
+		if viewports.has(c):
+			viewports[c].init(Color(1, 1, 1, 1), s[c])
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")
+
 
 func fill(erase : bool, reset : bool = false) -> void:
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true)

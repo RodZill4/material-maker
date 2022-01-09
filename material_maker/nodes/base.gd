@@ -1,10 +1,12 @@
 extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
+
 var show_inputs : bool = false
 var show_outputs : bool = false
 
 var rendering_time : int = -1
+
 
 const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
 const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
@@ -14,6 +16,7 @@ const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
+
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -40,7 +43,6 @@ func _exit_tree() -> void:
 func on_generator_changed(g):
 	if generator == g:
 		update()
-
 
 func _draw() -> void:
 	var color : Color = get_color("title_color")
@@ -109,26 +111,39 @@ func set_generator(g) -> void:
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
 
+func set_generator_seed(s : float):
+	if generator.is_seed_locked():
+		return
+	var old_seed : float = generator.get_seed()
+	generator.set_seed(s)
+	var hier_name = generator.get_hier_name()
+	get_parent().undoredo.add("Set seed", [{ type="setseed", node=hier_name, seed=old_seed }], [{ type="setseed", node=hier_name, seed=s }], false)
+
 func reroll_generator_seed() -> void:
-	generator.reroll_seed()
+	set_generator_seed(randf())
 
 func _on_seed_menu(id):
 	match id:
 		0:
+			var old_seed_locked : bool = generator.is_seed_locked()
 			generator.toggle_lock_seed()
 			update()
 			get_parent().send_changed_signal()
+			var hier_name = generator.get_hier_name()
+			get_parent().undoredo.add("Lock/unlock seed", [{ type="setseedlocked", node=hier_name, seedlocked=old_seed_locked }], [{ type="setseedlocked", node=hier_name, seedlocked=!old_seed_locked }], false)
 		1:
 			OS.clipboard = "seed=%.9f" % generator.seed_value
 		2:
 			if OS.clipboard.left(5) == "seed=":
-				generator.set_seed(OS.clipboard.right(5).to_float())
+				set_generator_seed(OS.clipboard.right(5).to_float())
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
 			if event.button_index == BUTTON_LEFT:
 				generator.minimized = !generator.minimized
+				var hier_name = generator.get_hier_name()
+				get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
 				update_node()
 				accept_event();
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):

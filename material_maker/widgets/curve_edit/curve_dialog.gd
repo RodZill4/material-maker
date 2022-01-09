@@ -10,7 +10,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _on_CurveDialog_popup_hide():
-	emit_signal("return_curve", null)
+	emit_signal("return_curve", previous_value)
 
 func _on_OK_pressed():
 	emit_signal("return_curve", $VBoxContainer/EditorContainer/CurveEditor.curve)
@@ -24,7 +24,7 @@ func edit_curve(curve : MMCurve) -> Array:
 	popup_centered()
 	var result = yield(self, "return_curve")
 	queue_free()
-	return result
+	return { value=result, previous_value=previous_value }
 
 func _on_CurveEditor_value_changed(value):
 	emit_signal("curve_changed", value)

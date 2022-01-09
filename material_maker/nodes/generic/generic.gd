@@ -80,7 +80,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		if generator.parameters.has(c):
 			object.on_parameter_changed(c, generator.get_parameter(c))
 		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.connect("value_changed", object, "_on_value_changed", [ o.name ])
+			o.connect("value_changed_undo", object, "_on_float_value_changed", [ o.name ])
 		elif o is LineEdit:
 			o.connect("text_changed", object, "_on_text_changed", [ o.name ])
 		elif o is SizeOptionButton:
@@ -90,7 +90,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		elif o is CheckBox:
 			o.connect("toggled", object, "_on_value_changed", [ o.name ])
 		elif o is ColorPickerButton:
-			o.connect("color_changed", object, "_on_color_changed", [ o.name ])
+			o.connect("color_changed_undo", object, "_on_color_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("file_selected", object, "_on_file_changed", [ o.name ])
 		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
@@ -115,50 +115,47 @@ func update_parameter_tooltip(p : String, v):
 			controls[p].hint_tooltip = get_parameter_tooltip(d, v)
 			break
 
-func _on_text_changed(new_text, variable : String) -> void:
+func set_generator_parameter_ext(variable : String, value, old_value, merge_undo : bool = false):
 	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_text)
-	update_parameter_tooltip(variable, new_text)
+	generator.set_parameter(variable, value)
 	ignore_parameter_change = ""
 	get_parent().set_need_save()
+	update_parameter_tooltip(variable, str(value))
+	if old_value != null and get_parent().get("undoredo") != null:
+		var serialized_value = MMType.serialize_value(value)
+		if old_value != serialized_value:
+			var node_hier_name = generator.get_hier_name()
+			var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
+			var redo_command = { type="setparams", node=node_hier_name, params={ variable:serialized_value } }
+			get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
+
+func set_generator_parameter(variable : String, value, merge_undo : bool = false):
+	var old_value = MMType.serialize_value(generator.get_parameter(variable))
+	set_generator_parameter_ext(variable, value, old_value, merge_undo)
+
+func _on_text_changed(new_text, variable : String) -> void:
+	set_generator_parameter(variable, new_text)
 
 func _on_value_changed(new_value, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_value)
-	update_parameter_tooltip(variable, new_value)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_value)
 
-func _on_color_changed(new_color, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_color)
-	update_parameter_tooltip(variable, new_color)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
+	set_generator_parameter(variable, new_value, merge_undo)
+
+func _on_color_changed(new_color, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
 
 func _on_file_changed(new_file, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_file)
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+	set_generator_parameter(variable, new_file)
 
-func _on_gradient_changed(new_gradient, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_gradient.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+func _on_gradient_changed(new_gradient, merge_undo : bool = false, variable : String = "") -> void:
+	set_generator_parameter(variable, new_gradient.duplicate(), merge_undo)
 
-func _on_curve_changed(new_curve, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_curve.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+func _on_curve_changed(new_curve, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_curve, MMType.serialize_value(old_value))
 
-func _on_polygon_changed(new_polygon, variable : String) -> void:
-	ignore_parameter_change = variable
-	generator.set_parameter(variable, new_polygon.duplicate())
-	ignore_parameter_change = ""
-	get_parent().set_need_save()
+func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_polygon, MMType.serialize_value(old_value))
 
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
@@ -445,14 +442,26 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
+var edit_generator_prev_state : Dictionary
+var edit_generator_next_state : Dictionary
+
 func edit_generator() -> void:
 	if generator.has_method("edit"):
+		edit_generator_prev_state = generator.get_parent().serialize().duplicate(true)
+		edit_generator_next_state = {}
 		generator.edit(self)
 
 func update_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
 	update_node()
 	get_parent().set_need_save()
+	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)
+
+func finalize_generator_update() -> void:
+	if ! edit_generator_next_state.empty():
+		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
+		edit_generator_prev_state = {}
+		edit_generator_next_state = {}
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()

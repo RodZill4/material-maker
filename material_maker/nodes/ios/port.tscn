@@ -71,6 +71,7 @@ margin_left = 1264.0
 margin_top = 3.0
 margin_right = 1280.0
 margin_bottom = 19.0
+
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]
@@ -78,3 +79,4 @@ margin_bottom = 19.0
 [connection signal="descriptions_changed" from="Description" to="." method="_on_Description_descriptions_changed"]
 [connection signal="item_selected" from="Type" to="." method="_on_Type_item_selected"]
 [connection signal="group_size_changed" from="PortGroupButton" to="." method="_on_PortGroupButton_group_size_changed"]
+[connection signal="groups_updated" from="PortGroupButton" to="." method="_on_PortGroupButton_groups_updated"]

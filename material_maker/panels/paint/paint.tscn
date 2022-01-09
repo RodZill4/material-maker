@@ -1,5 +1,6 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
+[ext_resource path="res://material_maker/tools/undo_redo/undo_redo.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/paint/export.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=4]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=5]
@@ -162,6 +163,9 @@ __meta__ = {
 painter = NodePath("../Painter")
 
 [node name="Export" parent="." instance=ExtResource( 3 )]
+
+[node name="UndoRedo" type="Node" parent="."]
+script = ExtResource( 1 )
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 margin_right = 1280.0
@@ -585,6 +589,7 @@ scroll_offset = Vector2( 0, -87 )
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
+[connection signal="end_of_stroke" from="Painter" to="." method="_on_Painter_end_of_stroke"]
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="gui_input" from="VSplitContainer/HSplitContainer/Painter/View" to="." method="_on_View_gui_input"]
