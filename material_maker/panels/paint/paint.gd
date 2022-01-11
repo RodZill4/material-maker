@@ -941,6 +941,8 @@ func initialize_layer_history(layer):
 
 func initialize_layers_history(layer_list = null):
 	if layer_list == null:
+		for i in range(20):
+			yield(get_tree(), "idle_frame")
 		layer_list = layers.layers
 	for l in layer_list:
 		initialize_layer_history(l)
