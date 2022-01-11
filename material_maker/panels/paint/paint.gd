@@ -202,14 +202,6 @@ func set_object(o):
 		mat = o.mesh.surface_get_material(0)
 	if mat == null:
 		mat = SpatialMaterial.new()
-	"""
-	for t in [ "albedo_texture", "metallic_texture", "roughness_texture" ]:
-		if mat[t] != null:
-			var size = mat[t].get_size()
-			if size.x == size.y:
-				layers.set_texture_size(size.x)
-				break
-	"""
 	preview_material = SpatialMaterial.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
@@ -581,8 +573,8 @@ var brush_changed_scheduled : bool = false
 
 func on_brush_changed(_p, _v) -> void:
 	if !brush_changed_scheduled:
-		call_deferred("do_on_brush_changed")
 		brush_changed_scheduled = true
+		call_deferred("do_on_brush_changed")
 
 func do_on_brush_changed():
 	painter.set_brush_preview_material(brush_view_3d.material)
@@ -919,7 +911,13 @@ func undoredo_command(command : Dictionary) -> void:
 				painter.set_state(state)
 			else:
 				layer.set_state(state)
-				layers._on_layers_changed()
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			layers._on_layers_changed()
 			stroke_history.layers[layer].current = command.index
 
 func initialize_layer_history(layer):
