@@ -543,11 +543,17 @@ var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and !procedural_update_changed_scheduled:
-		call_deferred("do_update_procedural_layer")
 		procedural_update_changed_scheduled = true
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false, true)
+	painter.fill(false, true, false)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
@@ -942,6 +948,7 @@ func initialize_layers_history(layer_list = null):
 		initialize_layer_history(l)
 		initialize_layers_history(l.layers)
 
+# Undo/Redo for strokes
 func _on_Painter_end_of_stroke(stroke_state):
 	var layer = layers.selected_layer
 	var layer_history = stroke_history.layers[layer]

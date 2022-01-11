@@ -374,7 +374,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
 	return true
 
-func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
+func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true) -> void:
 	var active_viewports : Array = []
 	for v in viewports.keys():
 		if has_channel[v]:
@@ -389,7 +389,7 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false) -> void:
 				finished = false
 				break
 	emit_signal("painted")
-	if end_of_stroke:
+	if end_of_stroke and emit_end_of_stroke:
 		var stroke_state = {}
 		for v in active_viewports:
 			stroke_state[v] = viewports[v].get_current_state()
@@ -406,8 +406,8 @@ func set_state(s):
 	emit_signal("painted")
 
 
-func fill(erase : bool, reset : bool = false) -> void:
-	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true)
+func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) -> void:
+	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)
 
 func view_to_texture(position : Vector2) -> Vector2:
 	var position_in_texture : Color = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
