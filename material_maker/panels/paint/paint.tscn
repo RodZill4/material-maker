@@ -23,13 +23,6 @@ background_sky = SubResource( 2 )
 [sub_resource type="ShaderMaterial" id=5]
 shader = SubResource( 4 )
 
-[sub_resource type="InputEventKey" id=22]
-pressed = true
-scancode = 69
-
-[sub_resource type="ShortCut" id=23]
-shortcut = SubResource( 22 )
-
 [sub_resource type="AtlasTexture" id=32]
 flags = 4
 atlas = ExtResource( 5 )
@@ -99,6 +92,13 @@ region = Rect2( 192, 224, 32, 32 )
 flags = 4
 atlas = ExtResource( 5 )
 region = Rect2( 224, 224, 32, 32 )
+
+[sub_resource type="InputEventKey" id=22]
+pressed = true
+scancode = 69
+
+[sub_resource type="ShortCut" id=23]
+shortcut = SubResource( 22 )
 
 [sub_resource type="AtlasTexture" id=24]
 flags = 4
@@ -246,7 +246,6 @@ margin_bottom = 32.0
 hint_tooltip = "View space paint engine"
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 23 )
 texture_normal = SubResource( 32 )
 texture_pressed = SubResource( 33 )
 
@@ -603,6 +602,7 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Stamp" to="." method="set_current_tool" binds= [ 3 ]]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [ 4 ]]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
+[connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Tools/Eraser" to="." method="_on_Eraser_toggled"]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/MaskSelector" to="." method="_on_MaskSelector_pressed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]

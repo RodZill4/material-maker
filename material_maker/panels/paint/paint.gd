@@ -75,6 +75,7 @@ var last_motion_position : Vector2
 var last_motion_vector : Vector2 = Vector2(0, 0)
 var stroke_length : float = 0.0
 var stroke_angle : float = 0.0
+var stroke_seed : float = 0.0
 
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
@@ -286,6 +287,9 @@ func _on_Fill_pressed():
 	painter.fill(eraser_button.pressed)
 	set_need_save()
 
+func _on_Eraser_toggled(button_pressed):
+	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
+
 func _on_MaskSelector_pressed():
 	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instance()
 	add_child(dialog)
@@ -361,7 +365,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
 		last_motion_position = mouse_position
 		last_motion_vector = pos_delta
-		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle } )
+		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
 		if current_tool == MODE_COLOR_PICKER:
 			show_brush(null, null)
 		elif current_tool == MODE_LINE:
@@ -642,6 +646,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		brush_opacity=$VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushOpacity.value,
 		stroke_length=stroke_length,
 		stroke_angle=stroke_angle,
+		stroke_seed=stroke_seed,
 		erase=eraser_button.pressed,
 		pressure=pressure,
 		tilt=tilt,
@@ -673,6 +678,8 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		pos = next_paint_to
 		next_paint_to = null
 		paint(pos, next_pressure, tilt, painting_mode, end_of_stroke)
+	if end_of_stroke:
+		stroke_seed = randf()
 
 func update_view():
 	var mesh_instance = painted_mesh
@@ -964,3 +971,5 @@ func _on_Painter_end_of_stroke(stroke_state):
 	layer_history.current += 1
 	var redo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
 	undoredo.add("Paint Stroke", [undo_command], [redo_command])
+
+
