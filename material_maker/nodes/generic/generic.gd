@@ -123,7 +123,7 @@ func set_generator_parameter_ext(variable : String, value, old_value, merge_undo
 	update_parameter_tooltip(variable, str(value))
 	if old_value != null and get_parent().get("undoredo") != null:
 		var serialized_value = MMType.serialize_value(value)
-		if old_value != serialized_value:
+		if typeof(old_value) != typeof(serialized_value) or old_value != serialized_value:
 			var node_hier_name = generator.get_hier_name()
 			var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
 			var redo_command = { type="setparams", node=node_hier_name, params={ variable:serialized_value } }
