@@ -1,17 +1,20 @@
 extends HBoxContainer
 
+
 func _ready() -> void:
 	$Type.clear()
 	for t in $Types.get_children():
 		$Type.add_item(t.name)
 	_on_Type_item_selected($Type.selected)
 
+
 func update_up_down_button() -> void:
 	var parent = get_parent()
 	if parent == null:
 		return
 	$Up.disabled = (get_index() == 0)
-	$Down.disabled = (get_index() == get_parent().get_child_count()-2)
+	$Down.disabled = (get_index() == get_parent().get_child_count() - 2)
+
 
 func set_model_data(data) -> void:
 	if data.has("name"):
@@ -29,16 +32,18 @@ func set_model_data(data) -> void:
 	$Type.selected = selected
 	_on_Type_item_selected(selected)
 
+
 func get_model_data() -> Dictionary:
 	var data = $Types.get_node($Type.get_item_text($Type.selected)).get_model_data()
-	data.name=$Name.text
-	data.label=$Label.text
-	data.type=$Type.get_item_text($Type.selected)
+	data.name = $Name.text
+	data.label = $Label.text
+	data.type = $Type.get_item_text($Type.selected)
 	if $Description.short_description != "":
 		data.shortdesc = $Description.short_description
 	if $Description.long_description != "":
 		data.longdesc = $Description.long_description
 	return data
+
 
 func _on_Delete_pressed() -> void:
 	var p = get_parent()
@@ -46,13 +51,16 @@ func _on_Delete_pressed() -> void:
 	p.update_up_down_buttons()
 	queue_free()
 
+
 func _on_Up_pressed() -> void:
 	get_parent().move_child(self, get_index() - 1)
 	get_parent().update_up_down_buttons()
 
+
 func _on_Down_pressed() -> void:
 	get_parent().move_child(self, get_index() + 1)
 	get_parent().update_up_down_buttons()
+
 
 func _on_Type_item_selected(ID) -> void:
 	for t in $Types.get_children():

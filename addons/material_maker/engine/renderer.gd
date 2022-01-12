@@ -1,9 +1,7 @@
 tool
 extends Viewport
 
-
-var render_owner : Object = null
-
+var render_owner: Object = null
 
 signal done
 
@@ -11,26 +9,39 @@ signal done
 func _ready() -> void:
 	$ColorRect.material = $ColorRect.material.duplicate(true)
 
+
 func setup_material(shader_material, textures, shader_code) -> void:
 	shader_material.shader.code = shader_code
 	for k in textures.keys():
-		shader_material.set_shader_param(k+"_tex", textures[k])
+		shader_material.set_shader_param(k + "_tex", textures[k])
 
-func request(object : Object) -> Object:
+
+func request(object: Object) -> Object:
 	assert(render_owner == null)
 	render_owner = object
 	return self
 
-var current_font : String = ""
-func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
+
+var current_font: String = ""
+
+
+func render_text(
+	object: Object,
+	text: String,
+	font_path: String,
+	font_size: int,
+	x: float,
+	y: float,
+	center: bool = false
+) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	size = Vector2(2048, 2048)
 	$Font.visible = true
 	$Font.rect_position = Vector2(0, 0)
 	$Font.rect_size = size
 	$Font/Label.text = text
-	$Font/Label.rect_position = Vector2(2048*(0.5+x), 2048*(0.5+y))
-	var font : Font = $Font/Label.get_font("font")
+	$Font/Label.rect_position = Vector2(2048 * (0.5 + x), 2048 * (0.5 + y))
+	var font: Font = $Font/Label.get_font("font")
 	if font_path != "" and font_path != current_font:
 		var font_data = load(font_path)
 		if font_data != null:
@@ -38,7 +49,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 			current_font = font_path
 	font.size = font_size
 	if center:
-		$Font/Label.rect_position -= 0.5*font.get_string_size(text)
+		$Font/Label.rect_position -= 0.5 * font.get_string_size(text)
 	$ColorRect.visible = false
 	hdr = true
 	render_target_update_mode = Viewport.UPDATE_ONCE
@@ -49,7 +60,8 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+
+func render_material(object: Object, material: Material, render_size, with_hdr = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -66,7 +78,8 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(object : Object, shader, textures, render_size, with_hdr = true) -> Object:
+
+func render_shader(object: Object, shader, textures, render_size, with_hdr = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -86,21 +99,24 @@ func render_shader(object : Object, shader, textures, render_size, with_hdr = tr
 	yield(get_tree(), "idle_frame")
 	return self
 
-func copy_to_texture(t : ImageTexture) -> void:
-	var image : Image = get_texture().get_data()
+
+func copy_to_texture(t: ImageTexture) -> void:
+	var image: Image = get_texture().get_data()
 	if image != null:
 		t.create_from_image(image)
 
+
 func get_image() -> Image:
-	var image : Image = Image.new()
+	var image: Image = Image.new()
 	image.copy_from(get_texture().get_data())
 	return image
 
-func save_to_file(fn : String, is_greyscale : bool = false) -> void:
-	var image : Image = get_texture().get_data()
+
+func save_to_file(fn: String, is_greyscale: bool = false) -> void:
+	var image: Image = get_texture().get_data()
 	if image != null:
 		image.lock()
-		var export_image : Image = image
+		var export_image: Image = image
 		match fn.get_extension():
 			"png":
 				export_image.save_png(fn)
@@ -114,7 +130,8 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 				export_image.save_exr(fn, is_greyscale)
 		image.unlock()
 
-func release(object : Object) -> void:
+
+func release(object: Object) -> void:
 	assert(render_owner == object, "Invalid renderer release")
 	render_owner = null
 	get_parent().release(self)

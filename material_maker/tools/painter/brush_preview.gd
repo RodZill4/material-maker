@@ -1,14 +1,15 @@
 extends Node
 
-export var background_material : Material
+export var background_material: Material
 
 var initialized = false
 onready var painter = $Painter
 onready var camera = $Viewport/Camera
 
+
 func set_brush(brush) -> Texture:
 	if !initialized:
-		var preview_material : SpatialMaterial = SpatialMaterial.new()
+		var preview_material: SpatialMaterial = SpatialMaterial.new()
 		preview_material.albedo_texture = painter.get_albedo_texture()
 		preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
 		preview_material.metallic = 1.0
@@ -23,7 +24,7 @@ func set_brush(brush) -> Texture:
 		preview_material.emission_texture = painter.get_emission_texture()
 		preview_material.emission_texture.flags = Texture.FLAGS_DEFAULT
 		preview_material.normal_enabled = true
-		$NormalMap/Rect.material.set_shader_param("epsilon", 1.0/512.0)
+		$NormalMap/Rect.material.set_shader_param("epsilon", 1.0 / 512.0)
 		# TODO: Fix this
 		#$NormalMap/Rect.material.set_shader_param("tex", painter.get_depth_texture())
 		preview_material.normal_texture = $NormalMap.get_texture()
@@ -39,12 +40,12 @@ func set_brush(brush) -> Texture:
 			result = yield(result, "completed")
 		var mesh_instance = $Viewport/Object
 		var mesh_aabb = mesh_instance.get_aabb()
-		var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
-		var mesh_size = 0.5*mesh_aabb.size.length()
-		var cam_to_center = (camera.global_transform.origin-mesh_center).length()
-		camera.near = max(0.2, 0.5*(cam_to_center-mesh_size))
-		camera.far = 2.0*(cam_to_center+mesh_size)
-		var transform = camera.global_transform.affine_inverse()*mesh_instance.global_transform
+		var mesh_center = mesh_aabb.position + 0.5 * mesh_aabb.size
+		var mesh_size = 0.5 * mesh_aabb.size.length()
+		var cam_to_center = (camera.global_transform.origin - mesh_center).length()
+		camera.near = max(0.2, 0.5 * (cam_to_center - mesh_size))
+		camera.far = 2.0 * (cam_to_center + mesh_size)
+		var transform = camera.global_transform.affine_inverse() * mesh_instance.global_transform
 		painter.update_view(camera, transform, $Viewport.size)
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
@@ -57,21 +58,21 @@ func set_brush(brush) -> Texture:
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	var paint_parameters : Dictionary = {
-		texture_space=false,
-		rect_size=Vector2(512, 512),
-		texture_center=Vector2(0.5, 0.5),
-		texture_scale=1.0,
-		brush_pos=Vector2(256, 256),
-		brush_ppos=Vector2(256, 256),
-		brush_size=256,
-		brush_opacity=1.0,
-		brush_hardness=0.8,
-		stroke_length=100.0,
-		stroke_angle=0.0,
-		erase=false,
-		pressure=1.0,
-		fill=false
+	var paint_parameters: Dictionary = {
+		texture_space = false,
+		rect_size = Vector2(512, 512),
+		texture_center = Vector2(0.5, 0.5),
+		texture_scale = 1.0,
+		brush_pos = Vector2(256, 256),
+		brush_ppos = Vector2(256, 256),
+		brush_size = 256,
+		brush_opacity = 1.0,
+		brush_hardness = 0.8,
+		stroke_length = 100.0,
+		stroke_angle = 0.0,
+		erase = false,
+		pressure = 1.0,
+		fill = false
 	}
 	painter.paint(paint_parameters)
 	yield(get_tree(), "idle_frame")

@@ -1,14 +1,16 @@
 extends HBoxContainer
 
-var websocket_server : WebSocketServer
-var websocket_port : int
-var websocket_id : int = -1
+var websocket_server: WebSocketServer
+var websocket_port: int
+var websocket_id: int = -1
 
-var is_multipart : bool = false
-var multipart_message : String = ""
+var is_multipart: bool = false
+var multipart_message: String = ""
+
 
 func _ready():
 	set_process(false)
+
 
 func create_server() -> void:
 	if websocket_server == null:
@@ -25,13 +27,15 @@ func create_server() -> void:
 			print_debug("Listening on port %d..." % websocket_port)
 			set_process(true)
 
+
 func _on_ConnectButton_pressed() -> void:
 	if websocket_id == -1:
 		create_server()
 		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
 
+
 func update_preview_texture():
-	var status = get_node("/root/MainWindow").update_preview_3d([ $PreviewViewport ], true)
+	var status = get_node("/root/MainWindow").update_preview_3d([$PreviewViewport], true)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
@@ -43,17 +47,19 @@ func update_preview_texture():
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 
+
 func get_preview_texture():
 	return $PreviewViewport.get_texture()
 
+
 func _on_SendButton_pressed():
 	var main_window = get_node("/root/MainWindow")
-	var material_type : String
-	var preview_texture : Texture
+	var material_type: String
+	var preview_texture: Texture
 	match main_window.get_current_project().get_project_type():
 		"material":
 			material_type = "material"
-			var status = main_window.update_preview_3d([ $PreviewViewport ], true)
+			var status = main_window.update_preview_3d([$PreviewViewport], true)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
 			$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
@@ -75,12 +81,17 @@ func _on_SendButton_pressed():
 			return
 	var png_image = preview_texture.get_data().save_png_to_buffer()
 	var png_data = Marshalls.raw_to_base64(png_image)
-	var data = { type=material_type, image=png_data, json=JSON.print(main_window.get_current_graph_edit().top_generator.serialize()) }
+	var data = {
+		type = material_type,
+		image = png_data,
+		json = JSON.print(main_window.get_current_graph_edit().top_generator.serialize())
+	}
 	websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
 
 
 func _process(delta):
 	websocket_server.poll()
+
 
 func _on_client_connected(id: int, protocol: String) -> void:
 	if websocket_id == -1:
@@ -89,8 +100,12 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
 		$SendButton.disabled = true
 		is_multipart = false
-		var data = { type="mm_release", release=ProjectSettings.get_setting("application/config/actual_release") }
+		var data = {
+			type = "mm_release",
+			release = ProjectSettings.get_setting("application/config/actual_release")
+		}
 		websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
+
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
@@ -99,10 +114,12 @@ func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 		$ConnectButton.hint_tooltip = "Disconnected. Click to connect to the web site."
 		$SendButton.disabled = true
 
+
 func bring_to_top() -> void:
 	var is_always_on_top = OS.is_window_always_on_top()
 	OS.set_window_always_on_top(true)
 	OS.set_window_always_on_top(is_always_on_top)
+
 
 func _on_data_received(id: int) -> void:
 	var message = websocket_server.get_peer(id).get_packet().get_string_from_utf8()
@@ -118,7 +135,8 @@ func _on_data_received(id: int) -> void:
 	else:
 		process_message(message)
 
-func process_message(message : String) -> void:
+
+func process_message(message: String) -> void:
 	print("received message (%d)" % message.length())
 	var json = JSON.parse(message)
 	if json.error == OK:
@@ -146,4 +164,3 @@ func process_message(message : String) -> void:
 				bring_to_top()
 	else:
 		print("Incorrect JSON")
-

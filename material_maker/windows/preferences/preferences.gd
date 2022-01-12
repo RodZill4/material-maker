@@ -1,45 +1,52 @@
 extends WindowDialog
 
-var config : ConfigFile
+var config: ConfigFile
 
-signal config_changed()
+signal config_changed
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		queue_free()
 
-func edit_preferences(c : ConfigFile) -> void:
+
+func edit_preferences(c: ConfigFile) -> void:
 	config = c
 	update_controls(self)
 	popup_centered()
 
-func update_controls(p : Node) -> void:
+
+func update_controls(p: Node) -> void:
 	for c in p.get_children():
 		if c.has_method("init_from_config"):
 			c.init_from_config(config)
 		update_controls(c)
 
-func update_config(p : Node) -> void:
+
+func update_config(p: Node) -> void:
 	for c in p.get_children():
 		if c.has_method("update_config"):
 			c.update_config(config)
 		update_config(c)
 
+
 func _on_Apply_pressed():
 	update_config(self)
 	emit_signal("config_changed")
+
 
 func _on_OK_pressed():
 	update_config(self)
 	emit_signal("config_changed")
 	queue_free()
 
+
 func _on_Cancel_pressed():
 	queue_free()
 
 
 func _on_VBoxContainer_minimum_size_changed():
-	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+	rect_size = $VBoxContainer.rect_size + Vector2(4, 4)
 
 
 func _on_InstallLanguage_pressed():
@@ -57,4 +64,3 @@ func _on_InstallLanguage_pressed():
 		locale.install_translation(files[0])
 		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
 		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
-		

@@ -1,19 +1,24 @@
 extends ScrollContainer
 
-onready var parameters : GridContainer = $Parameters
+onready var parameters: GridContainer = $Parameters
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
-var controls : Dictionary = {}
+var controls: Dictionary = {}
 var generator = null
 var ignore_parameter_change = ""
+
 
 func _ready():
 	pass
 
+
 func set_generator(g):
 	if g != generator:
-		if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
+		if (
+			is_instance_valid(generator)
+			and generator.is_connected("parameter_changed", self, "on_parameter_changed")
+		):
 			generator.disconnect("parameter_changed", self, "on_parameter_changed")
 		generator = g
 		if generator != null:
@@ -31,8 +36,8 @@ func set_generator(g):
 			if p.has("label"):
 				if p.label.left(6) == "Paint " and parameter_labels.has(p.label.right(6)):
 					continue
-				elif parameter_labels.has("Paint "+p.label):
-					var paint_parameter = parameter_labels["Paint "+p.label]
+				elif parameter_labels.has("Paint " + p.label):
+					var paint_parameter = parameter_labels["Paint " + p.label]
 					var control = GENERIC.create_parameter_control(paint_parameter, false)
 					control.name = paint_parameter.name
 					if control is CheckBox:
@@ -40,7 +45,7 @@ func set_generator(g):
 					parameters.add_child(control)
 					controls[paint_parameter.name] = control
 				else:
-					var label : Label = Label.new()
+					var label: Label = Label.new()
 					label.text = p.label if p.has("label") else ""
 					label.size_flags_horizontal = SIZE_EXPAND_FILL
 					parameters.add_child(label)
@@ -52,10 +57,11 @@ func set_generator(g):
 			parameters.add_child(control)
 			controls[p.name] = control
 		GENERIC.initialize_controls_from_generator(controls, generator, self)
-	set_size(get_size()-Vector2(1.0, 1.0))
+	set_size(get_size() - Vector2(1.0, 1.0))
 	set_size(get_size())
 
-func on_parameter_changed(p : String, v) -> void:
+
+func on_parameter_changed(p: String, v) -> void:
 	if ignore_parameter_change == p:
 		return
 	if p == "__update_all__":
@@ -63,32 +69,38 @@ func on_parameter_changed(p : String, v) -> void:
 	else:
 		GENERIC.update_control_from_parameter(controls, p, v)
 
-func _on_text_changed(new_text, variable : String) -> void:
+
+func _on_text_changed(new_text, variable: String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_text)
 	ignore_parameter_change = ""
 
-func _on_value_changed(new_value, variable : String) -> void:
+
+func _on_value_changed(new_value, variable: String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 
-func _on_float_value_changed(new_value, merge_undo : bool = false, variable : String = "") -> void:
+
+func _on_float_value_changed(new_value, merge_undo: bool = false, variable: String = "") -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_value)
 	ignore_parameter_change = ""
 
-func _on_color_changed(new_color, old_value, variable : String) -> void:
+
+func _on_color_changed(new_color, old_value, variable: String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_color)
 	ignore_parameter_change = ""
 
-func _on_file_changed(new_file, variable : String) -> void:
+
+func _on_file_changed(new_file, variable: String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_file)
 	ignore_parameter_change = ""
 
-func _on_gradient_changed(new_gradient, variable : String) -> void:
+
+func _on_gradient_changed(new_gradient, variable: String) -> void:
 	ignore_parameter_change = variable
 	generator.set_parameter(variable, new_gradient.duplicate())
 	ignore_parameter_change = ""

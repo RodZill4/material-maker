@@ -1,18 +1,17 @@
 extends TextureButton
 class_name PortGroupButton
 
-export var group_parent : int = 2
+export var group_parent: int = 2
 
-var state : int = 0
+var state: int = 0
 # warning-ignore:unused_class_variable
-var group_size : int = 0
+var group_size: int = 0
 const TEXTURES = [
 	preload("res://material_maker/icons/port_group_0.tres"),
 	preload("res://material_maker/icons/port_group_1.tres"),
 	preload("res://material_maker/icons/port_group_2.tres"),
 	preload("res://material_maker/icons/port_group_3.tres")
 ]
-
 
 # warning-ignore:unused_signal
 signal groups_updated(g)
@@ -21,15 +20,18 @@ signal groups_updated(g)
 func _ready() -> void:
 	pass
 
+
 func set_state(s) -> void:
 	state = s
 	texture_normal = TEXTURES[state]
+
 
 func get_group_parent() -> Dictionary:
 	var rv = self
 	for _i in range(group_parent):
 		rv = rv.get_parent()
-	return { parent=rv, index=rv.get_index() }
+	return {parent = rv, index = rv.get_index()}
+
 
 class MyCustomSorter:
 	static func sort(a, b):
@@ -37,8 +39,9 @@ class MyCustomSorter:
 			return true
 		return false
 
-static func update_groups(parent : Control):
-	var buttons : Array = []
+
+static func update_groups(parent: Control):
+	var buttons: Array = []
 	for b in parent.get_tree().get_nodes_in_group("port_group_button"):
 		var p = b.get_group_parent()
 		if p.parent == parent:
@@ -46,8 +49,8 @@ static func update_groups(parent : Control):
 			p.erase("parent")
 			buttons.append(p)
 	buttons.sort_custom(MyCustomSorter, "sort")
-	var in_group : bool = false
-	var current_group : int = -1
+	var in_group: bool = false
+	var current_group: int = -1
 	var group_sizes = {}
 	for i in range(buttons.size()):
 		var b = buttons[i].button
@@ -69,6 +72,7 @@ static func update_groups(parent : Control):
 		group_sizes[current_group] = buttons.size() - current_group
 		buttons[current_group].button.group_size = group_sizes[current_group]
 	return group_sizes
+
 
 func _on_pressed() -> void:
 	set_state(state ^ 1)

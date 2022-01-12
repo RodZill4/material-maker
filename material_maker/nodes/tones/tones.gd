@@ -1,14 +1,15 @@
 extends MMGraphNodeGeneric
 
+
 class Cursor:
 	extends Control
 
-	var color : Color
-	var top : bool = true
-	var position : float
+	var color: Color
+	var top: bool = true
+	var position: float
 
-	const WIDTH : int = 8
-	const HEIGHT : int = 8
+	const WIDTH: int = 8
+	const HEIGHT: int = 8
 
 	func _init(c, p, t = true):
 		color = c
@@ -16,16 +17,25 @@ class Cursor:
 		top = t
 
 	func _ready() -> void:
-		rect_position.y = -2 if top else get_parent().rect_size.y+2-HEIGHT
+		rect_position.y = -2 if top else get_parent().rect_size.y + 2 - HEIGHT
 		set_value(position)
 		rect_size = Vector2(WIDTH, HEIGHT)
 
 	func _draw() -> void:
-		var polygon : PoolVector2Array
+		var polygon: PoolVector2Array
 		if top:
-			polygon = PoolVector2Array([Vector2(0, 0), Vector2(WIDTH/2.0, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)])
+			polygon = PoolVector2Array(
+				[Vector2(0, 0), Vector2(WIDTH / 2.0, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)]
+			)
 		else:
-			polygon = PoolVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2.0, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
+			polygon = PoolVector2Array(
+				[
+					Vector2(0, HEIGHT),
+					Vector2(WIDTH / 2.0, 0),
+					Vector2(WIDTH, HEIGHT),
+					Vector2(0, HEIGHT)
+				]
+			)
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
@@ -35,24 +45,28 @@ class Cursor:
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			rect_position.x += ev.relative.x
-			rect_position.x = min(max(-0.5*WIDTH, rect_position.x), get_parent().rect_size.x-0.5*WIDTH)
-			update_value((rect_position.x+0.5*WIDTH)/get_parent().rect_size.x)
+			rect_position.x = min(
+				max(-0.5 * WIDTH, rect_position.x), get_parent().rect_size.x - 0.5 * WIDTH
+			)
+			update_value((rect_position.x + 0.5 * WIDTH) / get_parent().rect_size.x)
 
-	func update_value(p : float) -> void:
+	func update_value(p: float) -> void:
 		if p != position:
 			set_value(p)
 			get_parent().get_parent().update_value(self, position)
 			update()
 
-	func set_value(v : float):
+	func set_value(v: float):
 		position = v
-		rect_position.x = position * get_parent().rect_size.x - 0.5*WIDTH
+		rect_position.x = position * get_parent().rect_size.x - 0.5 * WIDTH
 
-var cursor_in_min : Cursor
-var cursor_in_mid : Cursor
-var cursor_in_max : Cursor
-var cursor_out_min : Cursor
-var cursor_out_max : Cursor
+
+var cursor_in_min: Cursor
+var cursor_in_mid: Cursor
+var cursor_in_max: Cursor
+var cursor_out_min: Cursor
+var cursor_out_max: Cursor
+
 
 func _ready() -> void:
 	var slot_color = mm_io_types.types["rgba"].color
@@ -69,13 +83,16 @@ func _ready() -> void:
 	cursor_out_max = Cursor.new(Color(1.0, 1.0, 1.0), 1.0, false)
 	$Histogram.add_child(cursor_out_max)
 
+
 func update_node() -> void:
 	_on_Mode_item_selected(0)
 	on_parameter_changed("__input_changed__", 0)
 	# Preview
 	restore_preview_widget()
 
-var moving_cursor : bool = false
+
+var moving_cursor: bool = false
+
 
 func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
@@ -85,11 +102,12 @@ func on_parameter_changed(p, v) -> void:
 		else:
 			$Histogram.set_generator(null, 0)
 	elif !moving_cursor:
-		var cursor = get("cursor_"+p)
+		var cursor = get("cursor_" + p)
 		if cursor != null:
 			cursor.set_value(get_parameter(p))
 
-func get_parameter(n : String) -> float:
+
+func get_parameter(n: String) -> float:
 	var value = generator.get_parameter(n)
 	match $Bar/Mode.selected:
 		1:
@@ -100,7 +118,8 @@ func get_parameter(n : String) -> float:
 			return value.b
 		4:
 			return value.a
-	return (value.r+value.g+value.b)/3.0
+	return (value.r + value.g + value.b) / 3.0
+
 
 func _on_Mode_item_selected(_id):
 	cursor_in_min.set_value(get_parameter("in_min"))
@@ -109,7 +128,8 @@ func _on_Mode_item_selected(_id):
 	cursor_out_min.set_value(get_parameter("out_min"))
 	cursor_out_max.set_value(get_parameter("out_max"))
 
-func set_parameter(n : String, v : float, d : float) -> void:
+
+func set_parameter(n: String, v: float, d: float) -> void:
 	var value = generator.get_parameter(n)
 	match $Bar/Mode.selected:
 		0:
@@ -126,37 +146,39 @@ func set_parameter(n : String, v : float, d : float) -> void:
 		4:
 			value.a = v
 	moving_cursor = true
-	get_parent().set_node_parameters(generator, { n:MMType.serialize_value(value) })
+	get_parent().set_node_parameters(generator, {n: MMType.serialize_value(value)})
 	moving_cursor = false
 
-func update_value(control : Cursor, value : float) -> void:
+
+func update_value(control: Cursor, value: float) -> void:
 	match control:
 		cursor_in_min:
-			 set_parameter("in_min", value, 0)
+			set_parameter("in_min", value, 0)
 		cursor_in_mid:
-			 set_parameter("in_mid", value, 0.5)
+			set_parameter("in_mid", value, 0.5)
 		cursor_in_max:
-			 set_parameter("in_max", value, 1)
+			set_parameter("in_max", value, 1)
 		cursor_out_min:
-			 set_parameter("out_min", value, 0)
+			set_parameter("out_min", value, 0)
 		cursor_out_max:
-			 set_parameter("out_max", value, 1)
+			set_parameter("out_max", value, 1)
 	get_parent().send_changed_signal()
+
 
 func _on_Auto_pressed():
 	var histogram = $Histogram.get_histogram_texture().get_data()
 	histogram.lock()
-	var in_min : int = -1
-	var in_mid : int = -1
-	var in_mid_value : float = 0
-	var in_max : int = -1
+	var in_min: int = -1
+	var in_mid: int = -1
+	var in_mid_value: float = 0
+	var in_max: int = -1
 	var histogram_size = histogram.get_size().x
 	for i in range(histogram_size):
-		var color : Color = histogram.get_pixel(i, 0)
-		var value : float
+		var color: Color = histogram.get_pixel(i, 0)
+		var value: float
 		match $Bar/Mode.selected:
 			0:
-				value = (color.r+color.g+color.b)/3.0
+				value = (color.r + color.g + color.b) / 3.0
 			1:
 				value = color.r
 			2:
@@ -173,6 +195,6 @@ func _on_Auto_pressed():
 				in_mid = i
 				in_mid_value = value
 	histogram.unlock()
-	cursor_in_min.update_value(in_min/(histogram_size-1))
-	cursor_in_mid.update_value(in_mid/(histogram_size-1))
-	cursor_in_max.update_value(in_max/(histogram_size-1))
+	cursor_in_min.update_value(in_min / (histogram_size - 1))
+	cursor_in_mid.update_value(in_mid / (histogram_size - 1))
+	cursor_in_max.update_value(in_max / (histogram_size - 1))

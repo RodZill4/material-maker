@@ -1,14 +1,15 @@
 extends Control
 
+
 class GradientCursor:
 	extends Control
 
-	var color : Color
-	var sliding : bool = false
+	var color: Color
+	var sliding: bool = false
 
-	onready var label : Label = get_parent().get_node("Value")
+	onready var label: Label = get_parent().get_node("Value")
 
-	const WIDTH : int = 10
+	const WIDTH: int = 10
 
 	func _ready() -> void:
 		rect_position = Vector2(0, 15)
@@ -16,7 +17,16 @@ class GradientCursor:
 
 	func _draw() -> void:
 # warning-ignore:integer_division
-		var polygon : PoolVector2Array = PoolVector2Array([Vector2(0, 5), Vector2(WIDTH/2, 0), Vector2(WIDTH, 5), Vector2(WIDTH, 15), Vector2(0, 15), Vector2(0, 5)])
+		var polygon: PoolVector2Array = PoolVector2Array(
+			[
+				Vector2(0, 5),
+				Vector2(WIDTH / 2, 0),
+				Vector2(WIDTH, 5),
+				Vector2(WIDTH, 15),
+				Vector2(0, 15),
+				Vector2(0, 5)
+			]
+		)
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
@@ -44,8 +54,12 @@ class GradientCursor:
 		elif ev is InputEventMouseMotion and (ev.button_mask & BUTTON_MASK_LEFT) != 0 and sliding:
 			rect_position.x += get_local_mouse_position().x
 			if ev.control:
-				rect_position.x = round(get_cursor_position()*20.0)*0.05*(get_parent().rect_size.x - WIDTH)
-			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
+				rect_position.x = (
+					round(get_cursor_position() * 20.0)
+					* 0.05
+					* (get_parent().rect_size.x - WIDTH)
+				)
+			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x - rect_size.x)
 			get_parent().update_value()
 			label.text = "%.03f" % get_cursor_position()
 
@@ -68,7 +82,7 @@ class GradientCursor:
 
 
 var value = null setget set_value
-export var embedded : bool = true
+export var embedded: bool = true
 
 var continuous_change = true
 var popup = null
@@ -80,6 +94,7 @@ func _ready() -> void:
 	$Gradient.material = $Gradient.material.duplicate(true)
 	set_value(MMGradient.new())
 
+
 func get_gradient_from_data(data):
 	if typeof(data) == TYPE_ARRAY:
 		return data
@@ -90,7 +105,8 @@ func get_gradient_from_data(data):
 			return data
 	return null
 
-func get_drag_data(_position : Vector2):
+
+func get_drag_data(_position: Vector2):
 	var data = MMType.serialize_value(value)
 	var preview = ColorRect.new()
 	preview.rect_size = Vector2(64, 24)
@@ -98,41 +114,47 @@ func get_drag_data(_position : Vector2):
 	set_drag_preview(preview)
 	return data
 
-func can_drop_data(_position : Vector2, data) -> bool:
+
+func can_drop_data(_position: Vector2, data) -> bool:
 	return get_gradient_from_data(data) != null
 
-func drop_data(_position : Vector2, data) -> void:
+
+func drop_data(_position: Vector2, data) -> void:
 	var gradient = get_gradient_from_data(data)
 	if gradient != null:
 		set_value(MMType.deserialize_value(gradient))
 
-func set_value(v, from_popup : bool = false) -> void:
+
+func set_value(v, from_popup: bool = false) -> void:
 	value = v
 	for c in get_children():
 		if c is GradientCursor:
 			remove_child(c)
 			c.free()
 	for p in value.points:
-		add_cursor(p.v*(rect_size.x-GradientCursor.WIDTH), p.c)
+		add_cursor(p.v * (rect_size.x - GradientCursor.WIDTH), p.c)
 	$Interpolation.selected = value.interpolation
 	update_shader()
 	if !from_popup and popup != null:
 		popup.init(value)
 
-func do_set_value(v, cc : bool = true) -> void:
-	if ! cc:
+
+func do_set_value(v, cc: bool = true) -> void:
+	if !cc:
 		continuous_change = false
 	set_value(v, true)
 	update_value()
+
 
 func update_value() -> void:
 	value.clear()
 	for c in get_children():
 		if c is GradientCursor:
-			value.add_point(c.rect_position.x/(rect_size.x-GradientCursor.WIDTH), c.color)
+			value.add_point(c.rect_position.x / (rect_size.x - GradientCursor.WIDTH), c.color)
 	update_shader()
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
+
 
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
@@ -140,10 +162,11 @@ func add_cursor(x, color) -> void:
 	cursor.rect_position.x = x
 	cursor.color = color
 
+
 func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.button_index == 1 and ev.doubleclick:
 		if ev.position.y > 15:
-			var p = clamp(ev.position.x, 0, rect_size.x-GradientCursor.WIDTH)
+			var p = clamp(ev.position.x, 0, rect_size.x - GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))
 			continuous_change = false
 			update_value()
@@ -152,14 +175,16 @@ func _gui_input(ev) -> void:
 			add_child(popup)
 			var popup_size = popup.rect_size
 			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
-			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
+			popup.set_global_position(ev.global_position - Vector2(popup_size.x / 2, popup_size.y))
 			popup.init(value)
 			popup.connect("updated", self, "do_set_value")
 			popup.connect("popup_hide", popup, "queue_free")
 
+
 # Showing a color picker popup to change a cursor's color
 
 var active_cursor
+
 
 func select_color(cursor, position) -> void:
 	active_cursor = cursor
@@ -173,7 +198,9 @@ func select_color(cursor, position) -> void:
 	color_picker_popup.connect("popup_hide", self, "on_close_popup")
 	color_picker_popup.popup()
 
+
 # Calculating a color from the gradient and generating the shader
+
 
 func get_sorted_cursors() -> Array:
 	var array = []
@@ -183,27 +210,32 @@ func get_sorted_cursors() -> Array:
 	array.sort_custom(GradientCursor, "sort")
 	return array
 
+
 func get_gradient_color(x) -> Color:
 	return value.get_color(x / (rect_size.x - GradientCursor.WIDTH))
+
 
 func update_shader() -> void:
 	var shader
 	shader = "shader_type canvas_item;\n"
 	var params = value.get_shader_params("")
 	for sp in params.keys():
-		shader += "uniform float "+sp+" = "+str(params[sp])+";\n"
+		shader += "uniform float " + sp + " = " + str(params[sp]) + ";\n"
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
+
 
 func _on_Interpolation_item_selected(ID) -> void:
 	value.interpolation = ID
 	update_shader()
 	emit_signal("updated", value, false)
 
+
 func _on_Control_resized():
 	if value != null:
 		set_value(value)
+
 
 func on_close_popup():
 	popup = null

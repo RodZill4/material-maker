@@ -12,16 +12,19 @@ var pallette_colors = [
 	Color("B1A7F0")
 ]
 
+
 func _ready():
-	for s in [ "comment", "commentfocus" ]:
-		var frame : StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
-		add_stylebox_override(s, frame);
+	for s in ["comment", "commentfocus"]:
+		var frame: StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
+		add_stylebox_override(s, frame)
+
 
 func _draw() -> void:
 	var icon = preload("res://material_maker/icons/color_palette.png")
-	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
+	draw_texture_rect(icon, Rect2(rect_size.x - 40, 4, 16, 16), false)
 	if !is_connected("gui_input", self, "_on_gui_input"):
 		connect("gui_input", self, "_on_gui_input")
+
 
 func set_generator(g) -> void:
 	generator = g
@@ -30,12 +33,19 @@ func set_generator(g) -> void:
 	title = generator.title
 	set_color(generator.color)
 
-func _on_resize_request(new_size : Vector2) -> void:
-	var parent : GraphEdit = get_parent()
+
+func _on_resize_request(new_size: Vector2) -> void:
+	var parent: GraphEdit = get_parent()
 	if parent.use_snap:
-		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
+		new_size = (
+			parent.snap_distance
+			* Vector2(
+				round(new_size.x / parent.snap_distance), round(new_size.y / parent.snap_distance)
+			)
+		)
 	rect_size = new_size
 	generator.size = new_size
+
 
 func _on_Label_gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.doubleclick and ev.button_index == BUTTON_LEFT:
@@ -46,10 +56,13 @@ func _on_Label_gui_input(ev) -> void:
 		editor.select_all()
 		editor.grab_focus()
 
+
 var focus_lost = false
+
 
 func _on_TextEdit_focus_entered():
 	focus_lost = false
+
 
 func _on_TextEdit_focus_exited() -> void:
 	focus_lost = true
@@ -60,9 +73,10 @@ func _on_TextEdit_focus_exited() -> void:
 		label.visible = true
 		editor.visible = false
 
+
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
+		if Rect2(rect_size.x - 40, 4, 16, 16).has_point(event.position):
 			var light_theme = "light" in get_node("/root/MainWindow").theme.resource_path
 			accept_event()
 			$Popup.rect_position = event.global_position
@@ -95,6 +109,7 @@ func name_change_popup() -> void:
 		generator.title = status.text
 		get_parent().send_changed_signal()
 
+
 func set_color(c):
 	$Popup.hide()
 	generator.color = c
@@ -104,11 +119,14 @@ func set_color(c):
 	get_stylebox("commentfocus").bg_color = color
 	get_parent().send_changed_signal()
 
+
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
 		$PopupSelector.popup(Rect2(event.global_position, $PopupSelector.get_minimum_size()))
 		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
-		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed", self, "set_color"):
+		if !$PopupSelector/PanelContainer/ColorPicker.is_connected(
+			"color_changed", self, "set_color"
+		):
 			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed", self, "set_color")

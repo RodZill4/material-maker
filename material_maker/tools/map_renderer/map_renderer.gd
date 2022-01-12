@@ -13,18 +13,30 @@ export(ShaderMaterial) var dilate_pass2
 export(ShaderMaterial) var seams_pass1
 export(ShaderMaterial) var seams_pass2
 
+
 func _ready():
 	pass
 
-func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
-	var bake_passes =  {
-		mesh_normal =  { first=mesh_normal_material, second=dilate_pass1, third=dilate_pass2 },
-		mesh_tangent = { first=mesh_tangent_material, second=dilate_pass1, third=dilate_pass2 },
-		inv_uv =       { first=inv_uv_material, second=dilate_pass1, third=dilate_pass2 },
-		curvature =    { first=curvature_material, second=dilate_pass1, third=dilate_pass2 },
-		thickness =    { first=thickness_material, second=dilate_pass1, third=dilate_pass2, map_name="Thickness" },
-		ao =           { first=ao_material, second=dilate_pass1, third=dilate_pass2, map_name="Ambient Occlusion" },
-		seams =        { first=white_material, second=seams_pass1, third=seams_pass2 }
+
+func gen(mesh: Mesh, map: String, renderer_method: String, arguments: Array, map_size = 512) -> void:
+	var bake_passes = {
+		mesh_normal = {first = mesh_normal_material, second = dilate_pass1, third = dilate_pass2},
+		mesh_tangent = {first = mesh_tangent_material, second = dilate_pass1, third = dilate_pass2},
+		inv_uv = {first = inv_uv_material, second = dilate_pass1, third = dilate_pass2},
+		curvature = {first = curvature_material, second = dilate_pass1, third = dilate_pass2},
+		thickness = {
+			first = thickness_material,
+			second = dilate_pass1,
+			third = dilate_pass2,
+			map_name = "Thickness"
+		},
+		ao = {
+			first = ao_material,
+			second = dilate_pass1,
+			third = dilate_pass2,
+			map_name = "Ambient Occlusion"
+		},
+		seams = {first = white_material, second = seams_pass1, third = seams_pass2}
 	}
 	var passes = bake_passes[map]
 	size = Vector2(map_size, map_size)
@@ -42,7 +54,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		var ao_ray_bias = main_window.get_config("bake_ao_ray_bias")
 		var denoise_radius = main_window.get_config("bake_denoise_radius")
 		var progress_dialog = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
-		progress_dialog.set_text("Generating "+passes.map_name+" map")
+		progress_dialog.set_text("Generating " + passes.map_name + " map")
 		progress_dialog.set_progress(0)
 		main_window.add_child(progress_dialog)
 		var ray_distance = ao_ray_dist
@@ -53,8 +65,8 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		passes.first.set_shader_param("max_dist", ray_distance)
 		passes.first.set_shader_param("bias_dist", ao_ray_bias)
 		for i in ray_count:
-			progress_dialog.set_progress(float(i)/ray_count)
-			passes.first.set_shader_param("iteration", i+1)
+			progress_dialog.set_progress(float(i) / ray_count)
+			passes.first.set_shader_param("iteration", i + 1)
 			render_target_update_mode = Viewport.UPDATE_ONCE
 			yield(get_tree(), "idle_frame")
 		$MeshInstance.set_surface_material(0, denoise_pass)
@@ -78,7 +90,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 	renderer = renderer.render_material(self, passes.second, map_size)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	var t : ImageTexture = ImageTexture.new()
+	var t: ImageTexture = ImageTexture.new()
 	renderer.copy_to_texture(t)
 	passes.third.set_shader_param("tex", t)
 	passes.third.set_shader_param("size", map_size)

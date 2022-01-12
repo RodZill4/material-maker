@@ -5,11 +5,11 @@ class_name MMGenMaterial
 var export_paths = {}
 var uids = {}
 
-var updating : bool = false
-var update_again : bool = false
-var render_not_ready : bool = false
+var updating: bool = false
+var update_again: bool = false
+var render_not_ready: bool = false
 
-var preview_shader_code : String = ""
+var preview_shader_code: String = ""
 var preview_textures = {}
 var preview_texture_dependencies = {}
 
@@ -22,7 +22,8 @@ const TEXTURE_SIZE_MAX = 13  # 8192x8192
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
-var timer : Timer
+var timer: Timer
+
 
 func _ready() -> void:
 	add_to_group("preview")
@@ -30,30 +31,37 @@ func _ready() -> void:
 	add_child(timer)
 	timer.connect("timeout", self, "update_textures")
 
+
 func accept_float_expressions() -> bool:
 	return false
+
 
 func can_be_deleted() -> bool:
 	return false
 
+
 func get_type() -> String:
 	return "material_export"
+
 
 func get_type_name() -> String:
 	if shader_model.has("name"):
 		return shader_model.name
 	return "Material"
 
-func get_output_defs(show_hidden : bool = false) -> Array:
+
+func get_output_defs(show_hidden: bool = false) -> Array:
 	return .get_output_defs() if show_hidden else []
 
+
 func get_image_size() -> int:
-	var rv : int
+	var rv: int
 	if parameters.has("size"):
 		rv = int(pow(2, parameters.size))
 	else:
 		rv = int(pow(2, TEXTURE_SIZE_DEFAULT))
 	return rv
+
 
 func update_preview() -> void:
 	var graph_edit = self
@@ -63,42 +71,51 @@ func update_preview() -> void:
 		graph_edit.send_changed_signal()
 	schedule_update_textures()
 
+
 func set_parameter(p, v) -> void:
 	.set_parameter(p, v)
 	update_preview()
 
-func source_changed(input_index : int) -> void:
+
+func source_changed(input_index: int) -> void:
 	update_preview()
+
 
 func all_sources_changed() -> void:
 	update_preview()
 
-var new_parameter_values : Dictionary = {}
-var new_updated_textures : Array = []
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+
+var new_parameter_values: Dictionary = {}
+var new_updated_textures: Array = []
+
+
+func on_float_parameters_changed(parameter_changes: Dictionary) -> bool:
 	for p in parameter_changes.keys():
 		new_parameter_values[p] = parameter_changes[p]
 	schedule_update_textures()
 	return true
 
-func on_texture_changed(n : String) -> void:
+
+func on_texture_changed(n: String) -> void:
 	render_not_ready = true
 	new_updated_textures.push_back(n)
 	schedule_update_textures()
+
 
 func schedule_update_textures() -> void:
 	if timer != null:
 		timer.one_shot = true
 		timer.start(0.2)
 
+
 func update_textures() -> void:
 	var size = get_image_size()
 	update_again = true
 	if !updating:
 		while update_again:
-			var parameter_values : Dictionary = new_parameter_values
+			var parameter_values: Dictionary = new_parameter_values
 			new_parameter_values = {}
-			var updated_textures : Array = new_updated_textures
+			var updated_textures: Array = new_updated_textures
 			new_updated_textures = []
 			update_again = false
 			var image_size = get_image_size()
@@ -115,8 +132,10 @@ func update_textures() -> void:
 					for k in output_shader.textures.keys():
 						material.set_shader_param(k, output_shader.textures[k])
 					preview_textures[t].material = material
-				elif ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
-					var need_update : bool = false
+				elif !mm_renderer.update_float_parameters(
+					preview_textures[t].material, parameter_values
+				):
+					var need_update: bool = false
 					for ut in updated_textures:
 						if preview_textures[t].textures.has(ut):
 							need_update = true
@@ -126,28 +145,35 @@ func update_textures() -> void:
 				var renderer = mm_renderer.request(self)
 				while renderer is GDScriptFunctionState:
 					renderer = yield(renderer, "completed")
-				if ! preview_textures.has(t) or ! preview_textures[t].has("material"):
+				if !preview_textures.has(t) or !preview_textures[t].has("material"):
 					renderer.release(self)
 					break
-				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
+				var status = renderer.render_material(
+					self,
+					preview_textures[t].material,
+					size,
+					preview_textures[t].output_type != "rgba"
+				)
 				while status is GDScriptFunctionState:
 					status = yield(status, "completed")
 				# Abort rendering if material changed
-				if ! preview_textures.has(t):
+				if !preview_textures.has(t):
 					renderer.release(self)
 					break
 				renderer.copy_to_texture(preview_textures[t].texture)
 				renderer.release(self)
 			updating = false
 
-func update_materials(material_list, sequential : bool = false) -> void:
+
+func update_materials(material_list, sequential: bool = false) -> void:
 	for m in material_list:
 		var status = update_material(m, sequential)
 		if sequential:
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
 
-func update_material(m, sequential : bool = false) -> void:
+
+func update_material(m, sequential: bool = false) -> void:
 	if m is SpatialMaterial:
 		pass
 	elif m is ShaderMaterial:
@@ -161,37 +187,40 @@ func update_material(m, sequential : bool = false) -> void:
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
 
+
 func update() -> void:
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
 	preview_shader_code = result.shader_code
 	preview_texture_dependencies = result.texture_dependencies
 
+
 class CustomOptions:
 	extends Object
 	# empty
 
-func process_shader(shader_text : String):
+
+func process_shader(shader_text: String):
 	var custom_options = CustomOptions.new()
 	if shader_model.has("custom"):
 		var custom_options_script = GDScript.new()
-		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
+		custom_options_script.source_code = "extends Object\n\n" + shader_model.custom
 		custom_options_script.reload()
 		custom_options.set_script(custom_options_script)
-	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
+	var rv = {globals = [], defs = "", code = "", textures = {}, pending_textures = []}
 	var shader_code = ""
 	preview_textures = {}
-	var context : MMGenContext = MMGenContext.new()
-	var texture_regexp : RegEx = RegEx.new()
+	var context: MMGenContext = MMGenContext.new()
+	var texture_regexp: RegEx = RegEx.new()
 	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d+)\\)")
 	# Generate parameter declarations
 	rv = generate_parameter_declarations(rv)
 	# Generate functions for inputs
 	rv = generate_input_declarations(rv, context)
 	# Generate shader
-	var generating : bool = false
-	var gen_buffer : String = ""
-	var gen_options : Array = []
+	var generating: bool = false
+	var gen_buffer: String = ""
+	var gen_options: Array = []
 	for l in shader_text.split("\n"):
 		if generating:
 			if l == "$end_generate":
@@ -203,13 +232,13 @@ func process_shader(shader_text : String):
 				# Add generated definitions
 				rv.defs += subst_code.defs
 				# Add generated code
-				var new_code : String = subst_code.code+"\n"
-				new_code += subst_code.string+"\n"
+				var new_code: String = subst_code.code + "\n"
+				new_code += subst_code.string + "\n"
 				for o in gen_options:
-					if has_method("process_option_"+o):
-						new_code = call("process_option_"+o, new_code)
-					elif custom_options.has_method("process_option_"+o):
-						new_code = custom_options.call("process_option_"+o, new_code)
+					if has_method("process_option_" + o):
+						new_code = call("process_option_" + o, new_code)
+					elif custom_options.has_method("process_option_" + o):
+						new_code = custom_options.call("process_option_" + o, new_code)
 				shader_code += new_code
 				# process textures
 				for t in subst_code.textures.keys():
@@ -219,7 +248,7 @@ func process_shader(shader_text : String):
 						rv.pending_textures.push_back(t)
 				generating = false
 			else:
-				gen_buffer += l+"\n"
+				gen_buffer += l + "\n"
 		elif l.find("$begin_generate") != -1:
 			generating = true
 			gen_buffer = ""
@@ -227,13 +256,15 @@ func process_shader(shader_text : String):
 		else:
 			var result = texture_regexp.search(l)
 			if result:
-				preview_textures[result.strings[1]] = { output=result.strings[2].to_int(), texture=ImageTexture.new() }
-			shader_code += l+"\n"
-	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
+				preview_textures[result.strings[1]] = {
+					output = result.strings[2].to_int(), texture = ImageTexture.new()
+				}
+			shader_code += l + "\n"
+	var definitions: String = get_template_text("glsl_defs.tmpl") + "\n"
 	for d in rv.globals:
-		definitions += d+"\n"
-	definitions += rv.defs+"\n"
-	
+		definitions += d + "\n"
+	definitions += rv.defs + "\n"
+
 	shader_text = shader_code
 	shader_code = ""
 	for l in shader_text.split("\n"):
@@ -241,21 +272,25 @@ func process_shader(shader_text : String):
 			var processed_definitions = definitions
 			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
 			for o in gen_options:
-				if has_method("process_option_"+o):
-					processed_definitions = call("process_option_"+o, processed_definitions, true)
-				elif custom_options.has_method("process_option_"+o):
-					processed_definitions = custom_options.call("process_option_"+o, processed_definitions, true)
+				if has_method("process_option_" + o):
+					processed_definitions = call("process_option_" + o, processed_definitions, true)
+				elif custom_options.has_method("process_option_" + o):
+					processed_definitions = custom_options.call(
+						"process_option_" + o, processed_definitions, true
+					)
 			shader_code += processed_definitions
 			shader_code += "\n"
 		else:
 			shader_code += l
 			shader_code += "\n"
 
-	return { shader_code = shader_code, texture_dependencies=rv.textures }
+	return {shader_code = shader_code, texture_dependencies = rv.textures}
+
 
 # Export filters
 
-func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
+
+func process_option_hlsl(s: String, is_declaration: bool = false) -> String:
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
 	s = s.replace("vec4(", "tofloat4(")
@@ -269,59 +304,73 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("atan", "hlsl_atan")
 	s = s.replace("uniform float", "static const float")
 	s = s.replace("uniform int", "static const int")
-	var re : RegEx = RegEx.new()
+	var re: RegEx = RegEx.new()
 	re.compile("(\\w+)\\s*\\*=\\s*tofloat2x2([^;]+);")
 	while true:
-		var m : RegExMatch = re.search(s)
+		var m: RegExMatch = re.search(s)
 		if m == null:
 			break
-		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
+		s = s.replace(
+			m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [m.strings[1], m.strings[1], m.strings[2]]
+		)
 	if is_declaration:
-		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
+		s = get_template_text("hlsl_defs.tmpl") + "\n\n// EngineSpecificDefinitions\n\n\n" + s
 	return s
 
-func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
+
+func process_option_float_uniform_to_const(s: String, is_declaration: bool = false) -> String:
 	s = s.replace("uniform float", "const float")
 	s = s.replace("uniform int", "const int")
 	return s
 
-func process_option_rename_buffers(s : String, is_declaration : bool = false) -> String:
-	var index : int = 1
+
+func process_option_rename_buffers(s: String, is_declaration: bool = false) -> String:
+	var index: int = 1
 	for t in preview_texture_dependencies.keys():
 		s = s.replace(t, "texture_%d" % index)
 		index += 1
 	return s
 
-func process_option_unity(s : String, is_declaration : bool = false) -> String:
+
+func process_option_unity(s: String, is_declaration: bool = false) -> String:
 	s = s.replace("elapsed_time", "_Time.y")
 	return s
 
-func process_option_unreal(s : String, is_declaration : bool = false) -> String:
+
+func process_option_unreal(s: String, is_declaration: bool = false) -> String:
 	s = s.replace("elapsed_time", "Time")
 	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
 	if is_declaration:
-		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
+		s = s.replace(
+			"// EngineSpecificDefinitions",
+			"#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)"
+		)
 	return s
 
+
 # Export
+
 
 func get_export_profiles() -> Array:
 	var export_profiles = shader_model.exports.keys()
 	export_profiles.sort()
 	return export_profiles
 
-func get_export_extension(profile : String) -> String:
+
+func get_export_extension(profile: String) -> String:
 	if shader_model.exports[profile].has("export_extension"):
 		return shader_model.exports[profile].export_extension
 	return ""
 
-func get_export_path(profile : String) -> String:
+
+func get_export_path(profile: String) -> String:
 	if export_paths.has(profile):
 		return export_paths[profile]
 	return ""
 
-static func subst_string(s : String, export_context : Dictionary) -> String:
-	var modified : bool = true
+
+static func subst_string(s: String, export_context: Dictionary) -> String:
+	var modified: bool = true
 	while modified:
 		modified = false
 		for k in export_context.keys():
@@ -330,43 +379,51 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 				s = new_s
 				modified = true
 	var search_position = 0
-	while (true):
+	while true:
 		var search_string = "$(expr:"
 		var position = s.find(search_string, search_position)
 		if position == -1:
 			break
-		search_position = position+1
+		search_position = position + 1
 		var parenthesis_level = 0
-		var expr_begin = position+search_string.length()
+		var expr_begin = position + search_string.length()
 		for i in range(expr_begin, s.length()):
-			if s[i] == '(':
+			if s[i] == "(":
 				parenthesis_level += 1
-			elif s[i] == ')':
+			elif s[i] == ")":
 				if parenthesis_level == 0:
-					var expression = s.substr(expr_begin, i-expr_begin)
+					var expression = s.substr(expr_begin, i - expr_begin)
 					var expr = Expression.new()
 					var error = expr.parse(expression, [])
 					if error == OK:
-						s = s.replace(s.substr(position, i+1-position), str(expr.execute()))
+						s = s.replace(s.substr(position, i + 1 - position), str(expr.execute()))
 					elif false:
-						print("EXPRESSION ERROR ("+expression+")")
-						print("error: "+str(error))
-						s = s.replace(s.substr(position, i+1-position), "EXPRESSION ERROR ("+expression+")")
+						print("EXPRESSION ERROR (" + expression + ")")
+						print("error: " + str(error))
+						s = s.replace(
+							s.substr(position, i + 1 - position),
+							"EXPRESSION ERROR (" + expression + ")"
+						)
 					break
 				parenthesis_level -= 1
 	return s
 
-static func get_template_text(template : String) -> String:
+
+static func get_template_text(template: String) -> String:
 	var in_file = File.new()
-	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
-		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
+	if in_file.open(MMPaths.STD_GENDEF_PATH + "/" + template, File.READ) != OK:
+		if (
+			in_file.open(OS.get_executable_path().get_base_dir() + "/nodes/" + template, File.READ)
+			!= OK
+		):
 			return template
 	return in_file.get_as_text()
 
-func process_conditionals(template : String) -> String:
+
+func process_conditionals(template: String) -> String:
 	var context = get_connections_and_parameters_context()
-	var processed : String = ""
-	var skip_state : Array = [ false ]
+	var processed: String = ""
+	var skip_state: Array = [false]
 	for l in template.split("\n"):
 		if l == "":
 			continue
@@ -375,21 +432,22 @@ func process_conditionals(template : String) -> String:
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
-				print("Error in expression "+condition+": "+expr.get_error_text())
+				print("Error in expression " + condition + ": " + expr.get_error_text())
 				continue
 			skip_state.push_back(!expr.execute())
 		elif l.left(3) == "$fi":
 			skip_state.pop_back()
 		elif l.left(5) == "$else":
 			skip_state.push_back(!skip_state.pop_back())
-		elif ! skip_state.back():
+		elif !skip_state.back():
 			processed += l
 			processed += "\n"
 	return processed
 
-static func process_template(template : String, export_context : Dictionary) -> String:
-	var processed : String = ""
-	var skip_state : Array = [ false ]
+
+static func process_template(template: String, export_context: Dictionary) -> String:
+	var processed: String = ""
+	var skip_state: Array = [false]
 	for l in template.split("\n"):
 		if l == "":
 			continue
@@ -397,34 +455,37 @@ static func process_template(template : String, export_context : Dictionary) -> 
 		processed += "\n"
 	return processed
 
-func process_buffers(template : String) -> String:
-	var processed : String = ""
-	var generating : bool = false
-	var gen_buffer : String = ""
-	var gen_options : Array = []
+
+func process_buffers(template: String) -> String:
+	var processed: String = ""
+	var generating: bool = false
+	var gen_buffer: String = ""
+	var gen_options: Array = []
 	for l in template.split("\n"):
 		if generating:
 			if l == "$end_buffers":
-				var index : int = 1
+				var index: int = 1
 				for t in preview_texture_dependencies.keys():
-					processed += subst_string(gen_buffer, { "$(buffer_index)":str(index) })
+					processed += subst_string(gen_buffer, {"$(buffer_index)": str(index)})
 					index += 1
 				generating = false
 			else:
-				gen_buffer += l+"\n"
+				gen_buffer += l + "\n"
 		elif l == "$begin_buffers":
 			generating = true
 			gen_buffer = ""
 		else:
-			processed += l+"\n"
+			processed += l + "\n"
 	return processed
+
 
 func reset_uids() -> void:
 	uids = {}
 
-func get_uid(index : int) -> String:
-	if ! uids.has(index):
-		var uid : String = ""
+
+func get_uid(index: int) -> String:
+	if !uids.has(index):
+		var uid: String = ""
 		var r = []
 		for _k in range(16):
 			r.append(randi() & 255)
@@ -432,60 +493,66 @@ func get_uid(index : int) -> String:
 		r[8] = (r[8] & 0x3f) | 0x80
 		for k in range(16):
 # warning-ignore:unassigned_variable_op_assign
-			uid += '%02x' % r[k]
+			uid += "%02x" % r[k]
 		uids[index] = uid
 	return uids[index]
 
-func process_uids(template : String) -> String:
-	var uid_regexp : RegEx = RegEx.new()
+
+func process_uids(template: String) -> String:
+	var uid_regexp: RegEx = RegEx.new()
 	uid_regexp.compile("\\$uid\\((\\w+)\\)")
 	while true:
 		var result = uid_regexp.search(template)
-		if ! result:
+		if !result:
 			break
 		var uid = get_uid(int(result.strings[1]))
 		template = template.replace(result.strings[0], uid)
 	return template
 
-func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+
+func create_file_from_template(template: String, file_name: String, export_context: Dictionary) -> bool:
 	template = get_template_text(template)
 	var out_file = File.new()
 	Directory.new().remove(file_name)
 	if out_file.open(file_name, File.WRITE) != OK:
-		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
+		print("Cannot write file '" + file_name + "' (" + str(out_file.get_error()) + ")")
 		return false
-	var processed_template = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
+	var processed_template = process_uids(
+		process_buffers(process_conditionals(process_template(template, export_context)))
+	)
 	processed_template = process_shader(processed_template).shader_code
 	out_file.store_string(processed_template)
 	return true
 
+
 func get_connections_and_parameters_context() -> Dictionary:
-	var context : Dictionary = {}
+	var context: Dictionary = {}
 	for i in range(shader_model.inputs.size()):
 		var input = shader_model.inputs[i]
-		context["$(connected:"+input.name+")"] = "true" if get_source(i) != null else "false"
+		context["$(connected:" + input.name + ")"] = "true" if get_source(i) != null else "false"
 	for p in shader_model.parameters:
 		var value = p.default
 		if parameters.has(p.name):
 			value = parameters[p.name]
 		match p.type:
 			"float", "size":
-				context["$(param:"+p.name+")"] = str(value)
+				context["$(param:" + p.name + ")"] = str(value)
 			"boolean":
-				context["$(param:"+p.name+")"] = str(value).to_lower()
+				context["$(param:" + p.name + ")"] = str(value).to_lower()
 			"color":
-				context["$(param:"+p.name+".r)"] = str(value.r)
-				context["$(param:"+p.name+".g)"] = str(value.g)
-				context["$(param:"+p.name+".b)"] = str(value.b)
-				context["$(param:"+p.name+".a)"] = str(value.a)
+				context["$(param:" + p.name + ".r)"] = str(value.r)
+				context["$(param:" + p.name + ".g)"] = str(value.g)
+				context["$(param:" + p.name + ".b)"] = str(value.b)
+				context["$(param:" + p.name + ".a)"] = str(value.a)
 	return context
 
-func export_material(prefix : String, profile : String, size : int = 0) -> void:
+
+func export_material(prefix: String, profile: String, size: int = 0) -> void:
 	reset_uids()
 	if size == 0:
 		size = get_image_size()
 	export_paths[profile] = prefix
-	var export_context : Dictionary = get_connections_and_parameters_context()
+	var export_context: Dictionary = get_connections_and_parameters_context()
 	export_context["$(path_prefix)"] = prefix
 	export_context["$(file_prefix)"] = prefix.get_file()
 	for f in shader_model.exports[profile].files:
@@ -494,7 +561,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
-				print("Error in expression: "+expr.get_error_text())
+				print("Error in expression: " + expr.get_error_text())
 				continue
 			if !expr.execute():
 				continue
@@ -513,9 +580,9 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				var result = render(self, f.output, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
-				var is_greyscale : bool = false
+				var is_greyscale: bool = false
 				if get_output_defs(true).size() > f.output:
-					var output : Dictionary = get_output_defs(true)[f.output]
+					var output: Dictionary = get_output_defs(true)[f.output]
 					is_greyscale = output.has("type") and output.type == "f"
 				result.save_to_file(file_name, is_greyscale)
 				result.release(self)
@@ -523,43 +590,47 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
 					for p in f.file_params.keys():
-						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
+						file_export_context["$(file_param:" + p + ")"] = f.file_params[p]
 				var file_name = subst_string(f.file_name, export_context)
 				create_file_from_template(f.template, file_name, file_export_context)
 			"buffers":
-				var index : int = 1
+				var index: int = 1
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					preview_texture_dependencies[t].get_data().save_png(file_name)
 					index += 1
 			"buffer_templates":
-				var index : int = 1
+				var index: int = 1
 				for t in preview_texture_dependencies.keys():
 					var file_export_context = export_context.duplicate()
 					file_export_context["$(buffer_index)"] = str(index)
 					if f.has("file_params"):
 						for p in f.file_params.keys():
-							file_export_context["$(file_param:"+p+")"] = f.file_params[p]
+							file_export_context["$(file_param:" + p + ")"] = f.file_params[p]
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					create_file_from_template(f.template, file_name, file_export_context)
 					index += 1
+
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
 	data.export_paths = export_paths
 	return data
 
+
 func _serialize(data: Dictionary) -> Dictionary:
 	._serialize(data)
 	data.export = {}
 	return data
 
-func _deserialize(data : Dictionary) -> void:
+
+func _deserialize(data: Dictionary) -> void:
 	._deserialize(data)
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
+
 
 func edit(node) -> void:
 	if shader_model != null:

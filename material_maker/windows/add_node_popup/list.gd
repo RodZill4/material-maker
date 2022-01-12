@@ -2,9 +2,7 @@ extends VBoxContainer
 
 const NodeSelectionButton := preload("res://material_maker/windows/add_node_popup/node_selection_button.tscn")
 
-
 signal object_selected(obj)
-
 
 var button_pool := []
 
@@ -19,7 +17,7 @@ func clear() -> void:
 func add_item(obj, path: String, name: String, icon: Texture = null) -> void:
 	var bt := NodeSelectionButton.instance() if button_pool == [] else button_pool.pop_back()
 	add_child(bt)
-	bt.hint_tooltip = path + "/" + name # Could add node description to this.
+	bt.hint_tooltip = path + "/" + name  # Could add node description to this.
 	bt.set_name(name)
 	bt.set_path(path)
 	bt.set_icon(icon)

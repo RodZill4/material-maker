@@ -1,19 +1,20 @@
 extends MeshInstance
 
-export var can_tesselate : bool = true
+export var can_tesselate: bool = true
 
-export var uv_scale : Vector2 = Vector2(1, 1) setget set_uv_scale
-export var tesselated : bool = false setget set_tesselated
+export var uv_scale: Vector2 = Vector2(1, 1) setget set_uv_scale
+export var tesselated: bool = false setget set_tesselated
 
 
 func _ready():
-	var m : ShaderMaterial = ShaderMaterial.new()
+	var m: ShaderMaterial = ShaderMaterial.new()
 	m.shader = Shader.new()
 	set_surface_material(0, m)
 	m.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 	update_mesh()
 
-func set_uv_scale(s : Vector2) -> void:
+
+func set_uv_scale(s: Vector2) -> void:
 	if s != uv_scale:
 		uv_scale = s
 		var material = get_surface_material(0)
@@ -24,7 +25,8 @@ func set_uv_scale(s : Vector2) -> void:
 			elif material is ShaderMaterial:
 				material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 
-func set_tesselated(t : bool) -> void:
+
+func set_tesselated(t: bool) -> void:
 	var new_tesselated = t && can_tesselate
 	if new_tesselated == tesselated:
 		return
@@ -32,9 +34,10 @@ func set_tesselated(t : bool) -> void:
 	update_mesh()
 	# Force material update (this is not need at startup)
 	var parent = self
-	while ! (parent is ViewportContainer):
+	while !(parent is ViewportContainer):
 		parent = parent.get_parent()
-	parent.emit_signal("need_update", [ parent ])
+	parent.emit_signal("need_update", [parent])
+
 
 func update_mesh() -> void:
 	if mesh == null:

@@ -1,6 +1,7 @@
 tool
 extends Node
 
+
 func generate(mesh: Mesh) -> ImageTexture:
 	var b_mesh := MeshDataTool.new()
 	if not mesh is ArrayMesh:
@@ -16,12 +17,14 @@ func generate(mesh: Mesh) -> ImageTexture:
 	for i in b_mesh.get_vertex_count():
 		vertices.append(b_mesh.get_vertex(i))
 	for i in b_mesh.get_face_count():
-		triangles.append({
-			0: b_mesh.get_face_vertex(i, 0 if mesh is ArrayMesh else 2),
-			1: b_mesh.get_face_vertex(i, 1),
-			2: b_mesh.get_face_vertex(i, 2 if mesh is ArrayMesh else 0),
-			3: i
-		})
+		triangles.append(
+			{
+				0: b_mesh.get_face_vertex(i, 0 if mesh is ArrayMesh else 2),
+				1: b_mesh.get_face_vertex(i, 1),
+				2: b_mesh.get_face_vertex(i, 2 if mesh is ArrayMesh else 0),
+				3: i
+			}
+		)
 
 	var bvh := BVHNode.new()
 	bvh.vertices = vertices
@@ -212,12 +215,12 @@ class BVHNode:
 			return 65536.0
 
 		var prev_hit := t
-		t = 65536.0 # Set to large number
+		t = 65536.0  # Set to large number
 		var tri := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 		var min_node_idx := 0
 
 		var stack_point := 0
-		var node_stack := [] # ivec3
+		var node_stack := []  # ivec3
 		node_stack.resize(128)
 
 		var curr_node_idx := 0
@@ -231,13 +234,15 @@ class BVHNode:
 			var node_data_1 = _get_data(node_data_off + 1)
 			var level = node_data_0[3]
 
-			if not moving_up: # Moving down node hierarchy
-				if node_data_1[3] > 0: # Is a leaf node
+			if not moving_up:  # Moving down node hierarchy
+				if node_data_1[3] > 0:  # Is a leaf node
 					for j in range(node_data_off + 2, node_data_off + 2 + node_data_1[3] * 3, 3):
 						var tri_a = _get_data(j)
 						var tri_b = _get_data(j + 1)
 						var tri_c = _get_data(j + 2)
-						var tri_t = Geometry.ray_intersects_triangle(ray_start, ray_dir,
+						var tri_t = Geometry.ray_intersects_triangle(
+							ray_start,
+							ray_dir,
 							Vector3(tri_a[0], tri_a[1], tri_a[2]),
 							Vector3(tri_b[0], tri_b[1], tri_b[2]),
 							Vector3(tri_c[0], tri_c[1], tri_c[2])
@@ -257,8 +262,8 @@ class BVHNode:
 					stack_point -= 1
 					if stack_point <= 0:
 						break
-					if node_stack[stack_point][1] == level: # next node in stack is sibling
-						if t < node_stack[stack_point][0]: # no chance to get better hit from sibling
+					if node_stack[stack_point][1] == level:  # next node in stack is sibling
+						if t < node_stack[stack_point][0]:  # no chance to get better hit from sibling
 							stack_point -= 1
 							moving_up = true
 					else:
@@ -266,7 +271,6 @@ class BVHNode:
 					prev_hit = node_stack[stack_point][0]
 					curr_node_idx = node_stack[stack_point][2]
 				else:
-
 					# Push self onto stack
 					node_stack[stack_point] = Vector3(prev_hit, level, curr_node_idx)
 					stack_point += 1
@@ -287,28 +291,30 @@ class BVHNode:
 					var t_left = _intersect_aabb(ray_start, ray_dir, min_left, max_left, true)
 					var t_right = _intersect_aabb(ray_start, ray_dir, min_right, max_right, true)
 
-					if t_right == -1 and t_left != -1: # only left node hit
+					if t_right == -1 and t_left != -1:  # only left node hit
 						prev_hit = t_left
 						curr_node_idx = child_indices[0]
-					elif t_left == -1 and t_right != -1: # only right node hit
+					elif t_left == -1 and t_right != -1:  # only right node hit
 						prev_hit = t_right
 						curr_node_idx = child_indices[1]
-					elif t_left < t_right and t_left != -1: # left node hits closer
-						node_stack[stack_point] = Vector3(t_right, right_data_0[3], child_indices[1])
+					elif t_left < t_right and t_left != -1:  # left node hits closer
+						node_stack[stack_point] = Vector3(
+							t_right, right_data_0[3], child_indices[1]
+						)
 						stack_point += 1
 						prev_hit = t_left
 						curr_node_idx = child_indices[0]
-					elif t_right <= t_left and t_right != -1: # right node hits closer
+					elif t_right <= t_left and t_right != -1:  # right node hits closer
 						node_stack[stack_point] = Vector3(t_left, left_data_0[3], child_indices[0])
 						stack_point += 1
 						prev_hit = t_right
 						curr_node_idx = child_indices[1]
-					else: # no hit
+					else:  # no hit
 						stack_point -= 2
 						if stack_point <= 0:
 							break
-						if node_stack[stack_point][1] == level: # next node in stack is sibling
-							if t < node_stack[stack_point][0]: # no chance to get better hit from sibling
+						if node_stack[stack_point][1] == level:  # next node in stack is sibling
+							if t < node_stack[stack_point][0]:  # no chance to get better hit from sibling
 								stack_point -= 1
 								moving_up = true
 						else:
@@ -316,12 +322,12 @@ class BVHNode:
 						prev_hit = node_stack[max(stack_point, 0)][0]
 						curr_node_idx = node_stack[max(stack_point, 0)][2]
 
-			else: # Moving up hierarchy
+			else:  # Moving up hierarchy
 				stack_point -= 1
 				if stack_point <= 0:
 					break
-				if node_stack[stack_point][1] == level: # next node in stack is sibling
-					if t < node_stack[stack_point][0]: # no chance to get better hit from sibling
+				if node_stack[stack_point][1] == level:  # next node in stack is sibling
+					if t < node_stack[stack_point][0]:  # no chance to get better hit from sibling
 						stack_point -= 1
 					else:
 						moving_up = false
@@ -387,7 +393,7 @@ class BVHNode:
 		]
 
 	# This is faster than appending a whole array to the other array.
-	func _append_4(array: Array, val0=0, val1=0, val2=0, val3=0) -> void:
+	func _append_4(array: Array, val0 = 0, val1 = 0, val2 = 0, val3 = 0) -> void:
 		array.append(val0)
 		array.append(val1)
 		array.append(val2)
@@ -412,20 +418,20 @@ class BVHNode:
 			for x in img_width:
 				if i > data_size - 1:
 					break
-				image.set_pixel(x, y, Color(
-					_data[i * 4],
-					_data[i * 4 + 1],
-					_data[i * 4 + 2],
-					_data[i * 4 + 3]
-				))
+				image.set_pixel(
+					x, y, Color(_data[i * 4], _data[i * 4 + 1], _data[i * 4 + 2], _data[i * 4 + 3])
+				)
 				i += 1
 		image.unlock()
+
 #		print((OS.get_ticks_msec() - time) / 1000.0)
 
 	func _sort_by_extents(a: int, b: int) -> bool:
 		return aabb.size[a] > aabb.size[b]
 
-	func _intersect_aabb(ray_origin: Vector3, ray_dir: Vector3, box_min: Vector3, box_max: Vector3, solid:=false) -> float:
+	func _intersect_aabb(
+		ray_origin: Vector3, ray_dir: Vector3, box_min: Vector3, box_max: Vector3, solid := false
+	) -> float:
 		var tMin := (box_min - ray_origin) / ray_dir
 		var tMax := (box_max - ray_origin) / ray_dir
 		var t1 := Vector3(min(tMin.x, tMax.x), min(tMin.y, tMax.y), min(tMin.z, tMax.z))

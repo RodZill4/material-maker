@@ -6,8 +6,9 @@ var source = null
 var target = null
 
 var node = null
-var param_name : String = ""
-var creating : bool = false
+var param_name: String = ""
+var creating: bool = false
+
 
 func _init(parent) -> void:
 	size_flags_horizontal = SIZE_EXPAND_FILL
@@ -16,13 +17,17 @@ func _init(parent) -> void:
 	rect_clip_content = true
 	parent.add_child(self)
 
-func pick(s, n, pn : String, c : bool = false) -> void:
+
+func pick(s, n, pn: String, c: bool = false) -> void:
 	source = s
-	end = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
+	end = get_global_transform().xform_inv(
+		source.get_global_transform().xform(0.5 * source.rect_size)
+	)
 	node = n
 	param_name = pn
 	creating = c
 	set_process_input(true)
+
 
 func show_link(s, t) -> void:
 	set_process_input(false)
@@ -31,8 +36,13 @@ func show_link(s, t) -> void:
 	target = t
 	update()
 
+
 func closest(rect, point) -> Vector2:
-	return Vector2(max(rect.position.x, min(rect.end.x, point.x)), max(rect.position.y, min(rect.end.y, point.y)))
+	return Vector2(
+		max(rect.position.x, min(rect.end.x, point.x)),
+		max(rect.position.y, min(rect.end.y, point.y))
+	)
+
 
 func find_control(gp) -> Dictionary:
 	for c in get_parent().get_children():
@@ -40,23 +50,36 @@ func find_control(gp) -> Dictionary:
 			if c.get("controls") != null:
 				for w in c.controls:
 					var widget = c.controls[w]
-					if is_instance_valid(widget) and Rect2(widget.rect_global_position, widget.rect_size*widget.get_global_transform().get_scale()).has_point(gp):
-						return { node=c, widget=widget }
+					if (
+						is_instance_valid(widget)
+						and Rect2(widget.rect_global_position, widget.rect_size * widget.get_global_transform().get_scale()).has_point(
+							gp
+						)
+					):
+						return {node = c, widget = widget}
 	return {}
 
+
 func _draw() -> void:
-	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
+	var start = get_global_transform().xform_inv(
+		source.get_global_transform().xform(0.5 * source.rect_size)
+	)
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect
 	if target != null:
 		color = Color(0.5, 1, 0.5, 0.5)
-		rect = get_global_transform().xform_inv(target.get_global_transform().xform(Rect2(Vector2(0, 0), target.rect_size)))
+		rect = get_global_transform().xform_inv(
+			target.get_global_transform().xform(Rect2(Vector2(0, 0), target.rect_size))
+		)
 		draw_rect(rect, color, false, 2)
 		end = closest(rect, start)
-	rect = get_global_transform().xform_inv(source.get_global_transform().xform(Rect2(Vector2(0, 0), source.rect_size)))
+	rect = get_global_transform().xform_inv(
+		source.get_global_transform().xform(Rect2(Vector2(0, 0), source.rect_size))
+	)
 	draw_rect(rect, color, false, 2)
 	start = closest(rect, end)
 	draw_line(start, end, color, 1.5, true)
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -66,7 +89,17 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var control = find_control(event.global_position)
 		end = get_global_transform().xform_inv(event.global_position)
-		target = control.widget if control != null and !control.empty() and node.generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
+		target = (
+			control.widget
+			if (
+				control != null
+				and !control.empty()
+				and node.generator.can_link_parameter(
+					param_name, control.node.generator, control.widget.name
+				)
+			)
+			else null
+		)
 		update()
 	elif event is InputEventMouseButton:
 		if event.pressed:

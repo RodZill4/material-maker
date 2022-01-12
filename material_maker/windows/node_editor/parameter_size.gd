@@ -1,11 +1,13 @@
 extends HBoxContainer
 
-var size_first : int = 0
-var size_last : int = 13
-var size_default : int = 10
+var size_first: int = 0
+var size_last: int = 13
+var size_default: int = 10
+
 
 func _ready() -> void:
 	update_size_configuration()
+
 
 func get_model_data() -> Dictionary:
 	return {
@@ -13,6 +15,7 @@ func get_model_data() -> Dictionary:
 		last = size_last,
 		default = size_default,
 	}
+
 
 func set_model_data(data) -> void:
 	if data.has("first"):
@@ -23,9 +26,10 @@ func set_model_data(data) -> void:
 		size_default = data.default
 	update_size_configuration()
 
+
 func update_size_configuration() -> void:
 	if size_first > size_last:
-		var tmp : int = size_first
+		var tmp: int = size_first
 		size_first = size_last
 		size_last = tmp
 	size_default = int(clamp(size_default, size_first, size_last))
@@ -39,13 +43,16 @@ func update_size_configuration() -> void:
 	$Default.max_size = size_last
 	$Default.size_value = size_default
 
+
 func _on_First_item_selected(ID) -> void:
 	size_first = ID
 	update_size_configuration()
 
+
 func _on_Last_item_selected(ID) -> void:
 	size_last = ID
 	update_size_configuration()
+
 
 func _on_Default_item_selected(ID) -> void:
 	size_default = ID

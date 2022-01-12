@@ -5,11 +5,13 @@ var current_tab = -1 setget set_current_tab
 signal tab_changed
 signal no_more_tabs
 
+
 func add_child(control, legible_unique_name = false) -> void:
 	.add_child(control, legible_unique_name)
 	if !(control is Tabs):
 		$Tabs.add_tab(control.name)
-		move_child(control, $Tabs.get_tab_count()-1)
+		move_child(control, $Tabs.get_tab_count() - 1)
+
 
 func close_tab(tab = null) -> void:
 	if tab == null:
@@ -20,11 +22,14 @@ func close_tab(tab = null) -> void:
 	if result:
 		do_close_tab(tab)
 
+
 func get_tab_count() -> int:
 	return $Tabs.get_tab_count()
 
-func get_tab(i : int) -> Control:
+
+func get_tab(i: int) -> Control:
 	return $Tabs.get_child(i) as Control
+
 
 func check_save_tabs() -> bool:
 	for i in range($Tabs.get_tab_count()):
@@ -34,6 +39,7 @@ func check_save_tabs() -> bool:
 		if !result:
 			return false
 	return true
+
 
 func check_save_tab(tab) -> bool:
 	var tab_control = get_child(tab)
@@ -45,7 +51,7 @@ func check_save_tab(tab) -> bool:
 			save_path = "[unnamed]"
 		else:
 			save_path = save_path.get_file()
-		dialog.dialog_text = "Save "+save_path+" before closing?"
+		dialog.dialog_text = "Save " + save_path + " before closing?"
 		#dialog.dialog_autowrap = true
 		dialog.get_ok().text = "Save and close"
 		dialog.add_button("Discard changes", true, "discard")
@@ -68,7 +74,8 @@ func check_save_tab(tab) -> bool:
 					tab_control.remove_crash_recovery_file()
 	return true
 
-func do_close_custom_action(_action : String, _tab : int, dialog : AcceptDialog) -> void:
+
+func do_close_custom_action(_action: String, _tab: int, dialog: AcceptDialog) -> void:
 	dialog.queue_free()
 
 
@@ -84,10 +91,12 @@ func do_close_tab(tab = null) -> void:
 	else:
 		set_current_tab(0)
 
+
 func move_active_tab_to(idx_to) -> void:
 	$Tabs.move_tab(current_tab, idx_to)
 	move_child(get_child(current_tab), idx_to)
 	set_current_tab(idx_to)
+
 
 func set_current_tab(t) -> void:
 	if t == current_tab or t < 0 or t >= $Tabs.get_tab_count():
@@ -104,14 +113,18 @@ func set_current_tab(t) -> void:
 	$Tabs.current_tab = current_tab
 	emit_signal("tab_changed", current_tab)
 
+
 func set_tab_title(index, title) -> void:
 	$Tabs.set_tab_title(index, title)
+
 
 func get_current_tab_control() -> Node:
 	return get_child(current_tab)
 
+
 func _on_Tabs_tab_changed(tab) -> void:
 	set_current_tab(tab)
+
 
 func _on_Projects_resized() -> void:
 	$Tabs.rect_size.x = rect_size.x
@@ -123,12 +136,14 @@ func _on_CrashRecoveryTimer_timeout():
 		if tab_control.has_method("crash_recovery_save"):
 			tab_control.crash_recovery_save()
 
+
 func _input(event: InputEvent) -> void:
 	# Navigate between tabs using keyboard shortcuts.
 	if event.is_action_pressed("ui_previous_tab"):
 		set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
 	elif event.is_action_pressed("ui_next_tab"):
 		set_current_tab(wrapi(current_tab + 1, 0, $Tabs.get_tab_count()))
+
 
 func _gui_input(event: InputEvent) -> void:
 	# Navigate between tabs by hovering tabs then using the mouse wheel.
@@ -137,7 +152,11 @@ func _gui_input(event: InputEvent) -> void:
 	var rect := get_global_rect()
 	# Roughly matches the height of the tabs bar itself (with some additional tolerance for better usability).
 	rect.size.y = 30
-	if event is InputEventMouseButton and event.pressed and rect.has_point(get_global_mouse_position()):
+	if (
+		event is InputEventMouseButton
+		and event.pressed
+		and rect.has_point(get_global_mouse_position())
+	):
 		if event.button_index == BUTTON_WHEEL_UP:
 			set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
 		elif event.button_index == BUTTON_WHEEL_DOWN:

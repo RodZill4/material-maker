@@ -1,12 +1,13 @@
 extends Node
 
-const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth" ]
+const CHANNELS = ["albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth"]
+
 
 func _ready():
 	var graph = MMGenGraph.new()
 	graph.name = "graph"
 	add_child(graph)
-	var material = mm_loader.create_gen({ name="material", type="material" })
+	var material = mm_loader.create_gen({name = "material", type = "material"})
 	graph.add_child(material)
 	for i in CHANNELS.size():
 		if CHANNELS[i] == null:
@@ -16,7 +17,8 @@ func _ready():
 		graph.add_child(node)
 		graph.connect_children(node, 0, material, i)
 
-func setup_material(material_textures : Dictionary) -> void:
+
+func setup_material(material_textures: Dictionary) -> void:
 	var graph = get_node("graph")
 	for c in CHANNELS:
 		if c == null:

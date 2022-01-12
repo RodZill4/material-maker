@@ -1,8 +1,6 @@
 extends TextureButton
 
-
 var image_path = ""
-
 
 signal on_file_selected(f)
 
@@ -10,20 +8,23 @@ signal on_file_selected(f)
 func _ready():
 	pass
 
+
 func do_set_image_path(path) -> void:
 	if path == null:
 		return
 	image_path = path
 	if texture_normal == null:
 		texture_normal = ImageTexture.new()
-	var image : Image = Image.new()
+	var image: Image = Image.new()
 	image.load(image_path)
 	texture_normal.create_from_image(image)
 	hint_tooltip = path
 
+
 func set_image_path(path) -> void:
 	do_set_image_path(path)
 	emit_signal("on_file_selected", path)
+
 
 func _on_ImagePicker_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -45,5 +46,6 @@ func _on_ImagePicker_pressed():
 	if files.size() > 0:
 		set_image_path(files[0])
 
-func on_drop_image_file(file_name : String) -> void:
+
+func on_drop_image_file(file_name: String) -> void:
 	set_image_path(file_name)

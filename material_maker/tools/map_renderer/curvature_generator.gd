@@ -5,6 +5,7 @@ extends Node
 
 const FLT_EPSILON = 1.192092896e-7
 
+
 func generate(mesh: Mesh) -> Mesh:
 	var b_mesh := MeshDataTool.new()
 	if not mesh is ArrayMesh:
@@ -13,7 +14,7 @@ func generate(mesh: Mesh) -> Mesh:
 		b_mesh.create_from_surface(mesh, 0)
 
 	var num_verts = b_mesh.get_vertex_count()
-	if (num_verts == 0):
+	if num_verts == 0:
 		return Mesh.new()
 
 	var b_mesh_vertices := []
@@ -23,8 +24,7 @@ func generate(mesh: Mesh) -> Mesh:
 		b_mesh_vertices.append(b_mesh.get_vertex(i))
 		b_mesh_normals.append(b_mesh.get_vertex_normal(i))
 	for i in b_mesh.get_edge_count():
-		b_mesh_edges.append([b_mesh.get_edge_vertex(i, 0),
-				b_mesh.get_edge_vertex(i, 1)])
+		b_mesh_edges.append([b_mesh.get_edge_vertex(i, 0), b_mesh.get_edge_vertex(i, 1)])
 
 	# STEP 1: Find out duplicated vertices and point duplicates to a single
 	#         original vertex.
@@ -44,8 +44,13 @@ func generate(mesh: Mesh) -> Mesh:
 			var other_vert_index: int = sorted_vert_indices[other_sorted_vert_index]
 			var other_vert_co: Vector3 = b_mesh_vertices[other_vert_index]
 			# We are too far away now, we wouldn't have duplicate.
-			if (other_vert_co.x + other_vert_co.y + other_vert_co.z) - \
-				(vert_co.x + vert_co.y + vert_co.z) > 3 * FLT_EPSILON:
+			if (
+				(
+					(other_vert_co.x + other_vert_co.y + other_vert_co.z)
+					- (vert_co.x + vert_co.y + vert_co.z)
+				)
+				> 3 * FLT_EPSILON
+			):
 				break
 			# Found duplicate.
 			if (other_vert_co - vert_co).length_squared() < FLT_EPSILON:
@@ -54,7 +59,7 @@ func generate(mesh: Mesh) -> Mesh:
 				break
 
 		if not found:
-		  vert_orig_index[vert_index] = vert_index
+			vert_orig_index[vert_index] = vert_index
 
 	# Make sure we always point to the very first orig vertex.
 	for vert_index in num_verts:
@@ -104,7 +109,9 @@ func generate(mesh: Mesh) -> Mesh:
 			continue
 		if counter[vert_index] > 0:
 			var normal: Vector3 = vert_normal[vert_index]
-			var angle = acos(clamp(normal.dot(edge_accum[vert_index] / counter[vert_index]), -1.0, 1.0))
+			var angle = acos(
+				clamp(normal.dot(edge_accum[vert_index] / counter[vert_index]), -1.0, 1.0)
+			)
 			raw_data[vert_index] = angle / PI
 		else:
 			raw_data[vert_index] = 0.0
@@ -137,7 +144,7 @@ func generate(mesh: Mesh) -> Mesh:
 	# pack the curvature in the 4 channels to maintain precision.
 	for i in data.size():
 		var p: float = data[i] * 0.5 + 0.5
-		var col := [p, p*255.0, p*255.0*255.0, p*255.0*255.0*255.0]
+		var col := [p, p * 255.0, p * 255.0 * 255.0, p * 255.0 * 255.0 * 255.0]
 		col[0] = col[0] - int(col[0])
 		col[1] = col[1] - int(col[1])
 		col[2] = col[2] - int(col[2])
@@ -151,6 +158,7 @@ func generate(mesh: Mesh) -> Mesh:
 	var err := b_mesh.commit_to_surface(new_mesh)
 
 	return new_mesh
+
 
 func new_filled_array(size: int, data = null) -> Array:
 	var array := []

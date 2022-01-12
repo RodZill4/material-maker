@@ -1,11 +1,35 @@
 extends HBoxContainer
 
-const CONTROLS = [ "None", "P1.x", "P1.y", "P1.a", "P1.r", "P2.x", "P2.y", "P2.a", "P2.r", "P3.x", "P3.y", "Rect1.x", "Rect1.y", "Radius1.r", "Radius1.a", "Radius11.r", "Radius11.a", "Scale1.x", "Scale1.y", "Angle1.a", "Angle2.a" ]
+const CONTROLS = [
+	"None",
+	"P1.x",
+	"P1.y",
+	"P1.a",
+	"P1.r",
+	"P2.x",
+	"P2.y",
+	"P2.a",
+	"P2.r",
+	"P3.x",
+	"P3.y",
+	"Rect1.x",
+	"Rect1.y",
+	"Radius1.r",
+	"Radius1.a",
+	"Radius11.r",
+	"Radius11.a",
+	"Scale1.x",
+	"Scale1.y",
+	"Angle1.a",
+	"Angle2.a"
+]
+
 
 func _ready() -> void:
 	$Control.clear()
 	for c in CONTROLS:
 		$Control.add_item(c)
+
 
 func get_model_data() -> Dictionary:
 	var data = {
@@ -16,6 +40,7 @@ func get_model_data() -> Dictionary:
 		control = $Control.get_item_text($Control.selected)
 	}
 	return data
+
 
 func set_model_data(data) -> void:
 	if data.has("min"):
@@ -37,11 +62,13 @@ func set_model_data(data) -> void:
 				break
 
 
-func _on_Min_value_changed(v : float) -> void:
+func _on_Min_value_changed(v: float) -> void:
 	$Default.min_value = v
 
-func _on_Max_value_changed(v : float) -> void:
+
+func _on_Max_value_changed(v: float) -> void:
 	$Default.max_value = v
 
-func _on_Step_value_changed(v : float) -> void:
+
+func _on_Step_value_changed(v: float) -> void:
 	$Default.step = v

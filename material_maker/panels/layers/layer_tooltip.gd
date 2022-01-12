@@ -1,7 +1,9 @@
 extends PanelContainer
 
+
 func _ready():
-	pass # Replace with function body.
+	pass  # Replace with function body.
+
 
 func set_layer(l) -> void:
 	$VBoxContainer/LayerName.text = l.name

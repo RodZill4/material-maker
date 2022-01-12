@@ -9,46 +9,54 @@ Base class for texture generators, that defines their API
 signal parameter_changed(n, v)
 signal rendering_time(t)
 
-const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
+const DEFAULT_GENERATED_SHADER: Dictionary = {
+	defs = "", code = "", textures = {}, type = "f", f = "0.0"
+}
+
 
 class InputPort:
-	var generator : MMGenBase = null
-	var input_index : int = 0
+	var generator: MMGenBase = null
+	var input_index: int = 0
 
-	func _init(g : MMGenBase, i : int) -> void:
+	func _init(g: MMGenBase, i: int) -> void:
 		generator = g
 		input_index = i
 
 	func to_str() -> String:
-		return generator.name+".in("+str(input_index)+")"
+		return generator.name + ".in(" + str(input_index) + ")"
+
 
 class OutputPort:
-	var generator : MMGenBase = null
-	var output_index : int = 0
+	var generator: MMGenBase = null
+	var output_index: int = 0
 
-	func _init(g : MMGenBase, o : int) -> void:
+	func _init(g: MMGenBase, o: int) -> void:
 		generator = g
 		output_index = o
 
 	func to_str() -> String:
-		return generator.name+".out("+str(output_index)+")"
+		return generator.name + ".out(" + str(output_index) + ")"
 
-var position : Vector2 = Vector2(0, 0)
+
+var position: Vector2 = Vector2(0, 0)
 var model = null
 var orig_name = null
 var parameters = {}
 
-var seed_locked : bool = false
-var seed_value : float = 0
+var seed_locked: bool = false
+var seed_value: float = 0
 
-var preview : int = -1
-var minimized : bool = false
+var preview: int = -1
+var minimized: bool = false
+
 
 func _ready() -> void:
 	init_parameters()
 
+
 func _post_load() -> void:
 	pass
+
 
 func get_hier_name() -> String:
 	var type = load("res://addons/material_maker/engine/gen_base.gd")
@@ -60,59 +68,78 @@ func get_hier_name() -> String:
 		node = node.get_parent()
 		if not node.get_parent() is type:
 			break
-		rv = node.name+"/"+rv
+		rv = node.name + "/" + rv
 	return rv
+
 
 func accept_float_expressions() -> bool:
 	return true
 
+
 func can_be_deleted() -> bool:
 	return true
+
 
 func toggle_editable() -> bool:
 	return false
 
+
 func is_template() -> bool:
 	return model != null
+
 
 func get_template_name() -> String:
 	return model
 
+
 func is_editable() -> bool:
 	return false
+
 
 func get_description() -> String:
 	return ""
 
+
 func has_randomness() -> bool:
 	return false
 
-func set_seed(s : float) -> bool:
+
+func set_seed(s: float) -> bool:
 	if !has_randomness() or is_seed_locked():
 		return false
 	seed_value = s
 	if is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+		get_tree().call_group(
+			"preview",
+			"on_float_parameters_changed",
+			{"seed_o" + str(get_instance_id()): get_seed()}
+		)
 	return true
+
 
 func reroll_seed():
 	set_seed(randf())
 
+
 func get_seed_from_position(p) -> int:
 	return ((int(p.x) * 0x1f1f1f1f) ^ int(p.y)) % 65536
 
+
 func get_seed() -> float:
-	var s : float = seed_value
+	var s: float = seed_value
 	if !seed_locked and get_parent().get("transmits_seed") != null and get_parent().transmits_seed:
 		s += get_parent().get_seed()
 	return s
+
 
 func toggle_lock_seed() -> bool:
 	seed_locked = !seed_locked
 	return seed_locked
 
+
 func is_seed_locked() -> bool:
 	return seed_locked
+
 
 func init_parameters() -> void:
 	for p in get_parameter_defs():
@@ -122,103 +149,126 @@ func init_parameters() -> void:
 				if p.type == "size":
 					parameters[p.name] -= p.first
 			else:
-				print("No default value for parameter "+p.name)
+				print("No default value for parameter " + p.name)
+
 
 func set_position(p) -> void:
 	position = p
 
+
 func get_type() -> String:
 	return "generic"
+
 
 func get_type_name() -> String:
 	return "Unnamed"
 
+
 func get_parameter_defs() -> Array:
 	return []
 
-func get_parameter_def(param_name : String) -> Dictionary:
+
+func get_parameter_def(param_name: String) -> Dictionary:
 	var parameter_defs = get_parameter_defs()
 	for p in parameter_defs:
 		if p.name == param_name:
 			return p
 	return {}
 
-func get_parameter(n : String):
+
+func get_parameter(n: String):
 	if parameters.has(n):
 		return parameters[n]
 	else:
 		var parameter_def = get_parameter_def(n)
 		return parameter_def.default
 
-func calculate_float_parameter(n : String) -> Dictionary:
-	var return_value : Dictionary = {}
+
+func calculate_float_parameter(n: String) -> Dictionary:
+	var return_value: Dictionary = {}
 	var value = get_parameter(n)
 	if value is float:
 		return_value.value = value
 	elif value is String:
-		var parent : Node = get_parent()
+		var parent: Node = get_parent()
 		if parent.has_method("get_named_parameters"):
 			return_value.used_named_parameters = []
-			var named_parameters : Dictionary = get_parent().get_named_parameters()
+			var named_parameters: Dictionary = get_parent().get_named_parameters()
 			for np in named_parameters.keys():
-				if value.find("$"+np) != -1:
+				if value.find("$" + np) != -1:
 					return_value.used_named_parameters.push_back(named_parameters[np].id)
-					value = value.replace("$"+np, str(named_parameters[np].value))
-		var expression : Expression = Expression.new()
+					value = value.replace("$" + np, str(named_parameters[np].value))
+		var expression: Expression = Expression.new()
 		var error = expression.parse(value, [])
 		if error == OK:
 			return_value.value = expression.execute()
 	return return_value
 
+
 class CustomGradientSorter:
 	static func compare(a, b) -> bool:
 		return a.pos < b.pos
 
-func set_parameter(n : String, v) -> void:
+
+func set_parameter(n: String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
 	parameters[n] = v
 	emit_signal("parameter_changed", n, v)
 	if is_inside_tree():
-		var parameter_def : Dictionary = get_parameter_def(n)
+		var parameter_def: Dictionary = get_parameter_def(n)
 		if parameter_def.has("type"):
 			if parameter_def.type == "float" and v is float and old_value is float:
-				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
-				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
+				var parameter_name = "p_o" + str(get_instance_id()) + "_" + n
+				get_tree().call_group("preview", "on_float_parameters_changed", {parameter_name: v})
 				return
 			elif parameter_def.type == "color":
 				var parameter_changes = {}
-				for f in [ "r", "g", "b", "a" ]:
-					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
+				for f in ["r", "g", "b", "a"]:
+					var parameter_name = "p_o" + str(get_instance_id()) + "_" + n + "_" + f
 					parameter_changes[parameter_name] = v[f]
 				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 				return
 			elif parameter_def.type == "gradient":
-				if old_value is MMGradient and v is MMGradient and old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
+				if (
+					old_value is MMGradient
+					and v is MMGradient
+					and old_value != null
+					and v.interpolation == old_value.interpolation
+					and v.points.size() == old_value.points.size()
+				):
 					old_value.sort()
 					v.sort()
 					var parameter_changes = {}
 					for i in range(old_value.points.size()):
 						if v.points[i].v != old_value.points[i].v:
-							var parameter_name = "p_o%s_%s_%d_pos" % [ str(get_instance_id()), n, i ]
+							var parameter_name = "p_o%s_%s_%d_pos" % [str(get_instance_id()), n, i]
 							parameter_changes[parameter_name] = v.points[i].v
-						for f in [ "r", "g", "b", "a" ]:
+						for f in ["r", "g", "b", "a"]:
 							if v.points[i].c[f] != old_value.points[i].c[f]:
-								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								var parameter_name = (
+									"p_o%s_%s_%d_%s"
+									% [str(get_instance_id()), n, i, f]
+								)
 								parameter_changes[parameter_name] = v.points[i].c[f]
-					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+					get_tree().call_group(
+						"preview", "on_float_parameters_changed", parameter_changes
+					)
 					return
 		all_sources_changed()
 
-func notify_output_change(output_index : int) -> void:
+
+func notify_output_change(output_index: int) -> void:
 	var targets = get_targets(output_index)
 	for target in targets:
 		target.generator.source_changed(target.input_index)
 	emit_signal("parameter_changed", "__output_changed__", output_index)
 
-func source_changed(input_index : int) -> void:
+
+func source_changed(input_index: int) -> void:
 	emit_signal("parameter_changed", "__input_changed__", input_index)
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
+
 
 func all_sources_changed() -> void:
 	for input_index in get_input_defs().size():
@@ -226,38 +276,48 @@ func all_sources_changed() -> void:
 	for i in range(get_output_defs().size()):
 		notify_output_change(i)
 
+
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs(_show_hidden : bool = false) -> Array:
+
+func get_output_defs(_show_hidden: bool = false) -> Array:
 	return []
 
-func get_source(input_index : int) -> OutputPort:
+
+func get_source(input_index: int) -> OutputPort:
 	return get_parent().get_port_source(name, input_index)
 
-func get_targets(output_index : int) -> Array:
+
+func get_targets(output_index: int) -> Array:
 	var parent = get_parent()
 	if parent != null and parent.has_method("get_port_targets"):
 		return parent.get_port_targets(name, output_index)
 	return []
 
+
 # get the list of outputs that depend on the input whose index is passed as parameter
-func follow_input(_input_index : int) -> Array:
+func follow_input(_input_index: int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
 		rv.push_back(OutputPort.new(self, i))
 	return rv
 
-func get_input_shader(input_index : int) -> Dictionary:
+
+func get_input_shader(input_index: int) -> Dictionary:
 	var source = get_source(input_index)
 	if source != null:
 		return source.get_shader()
 	return {}
 
-func get_shader(output_index : int, context) -> Dictionary:
+
+func get_shader(output_index: int, context) -> Dictionary:
 	return get_shader_code("UV", output_index, context)
 
-static func generate_preview_shader(src_code, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
+
+static func generate_preview_shader(
+	src_code, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }"
+) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -272,7 +332,7 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 			code += g
 	var shader_code = src_code.defs
 	if src_code.has(type):
-		var preview_code : String = mm_io_types.types[type].preview
+		var preview_code: String = mm_io_types.types[type].preview
 		preview_code = preview_code.replace("$(code)", src_code.code)
 		preview_code = preview_code.replace("$(value)", src_code[type])
 		shader_code += preview_code
@@ -281,15 +341,16 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += main_fct
 	return code
 
-func generate_output_shader(output_index : int, preview : bool = false):
-	var context : MMGenContext = MMGenContext.new()
+
+func generate_output_shader(output_index: int, preview: bool = false):
+	var context: MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
 	while source is GDScriptFunctionState:
 		assert(false)
 		source = yield(source, "completed")
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
-	var shader : String
+	var shader: String
 	var output_type = "rgba"
 	var outputs = get_output_defs(true)
 	if outputs.size() > output_index:
@@ -298,21 +359,25 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
-	return { shader=shader, output_type=output_type, textures=source.textures }
+	return {shader = shader, output_type = output_type, textures = source.textures}
 
-func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
-	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
-	var output_type : String = output_shader.output_type
+
+func render(object: Object, output_index: int, size: int, preview: bool = false) -> Object:
+	var output_shader: Dictionary = generate_output_shader(output_index, preview)
+	var shader: String = output_shader.shader
+	var output_type: String = output_shader.output_type
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, output_shader.textures, size, output_type != "rgba")
+	renderer = renderer.render_shader(
+		object, shader, output_shader.textures, size, output_type != "rgba"
+	)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer
 
-func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+
+func get_shader_code(uv: String, output_index: int, context: MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
@@ -327,22 +392,31 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		print(rv)
 	return rv
 
-func get_output_attributes(output_index : int) -> Dictionary:
+
+func get_output_attributes(output_index: int) -> Dictionary:
 	return {}
+
 
 func _get_shader_code(_uv, _output_index, _context) -> Dictionary:
 	return {}
 
 
 func _serialize(data: Dictionary) -> Dictionary:
-	print("cannot save "+name)
+	print("cannot save " + name)
 	return data
+
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	return data
 
+
 func serialize() -> Dictionary:
-	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
+	var rv = {
+		name = name,
+		type = get_type(),
+		parameters = {},
+		node_position = {x = position.x, y = position.y}
+	}
 	for p in get_parameter_defs():
 		if parameters.has(p.name):
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
@@ -361,10 +435,12 @@ func serialize() -> Dictionary:
 	rv = _serialize_data(rv)
 	return rv
 
-func _deserialize(_data : Dictionary) -> void:
+
+func _deserialize(_data: Dictionary) -> void:
 	pass
 
-func deserialize(data : Dictionary) -> void:
+
+func deserialize(data: Dictionary) -> void:
 	_deserialize(data)
 	if data.has("name"):
 		name = data.name
@@ -392,7 +468,7 @@ func deserialize(data : Dictionary) -> void:
 	_post_load()
 
 
-static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
+static func define_shader_float_parameters(code: String, material: ShaderMaterial) -> void:
 	var regex = RegEx.new()
 	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
 	for p in regex.search_all(code):

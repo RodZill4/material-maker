@@ -2,24 +2,29 @@ extends Button
 class_name FilePickerButton
 
 var mode = FileDialog.MODE_OPEN_FILE
-var path : String = "" setget set_path
-var filters : PoolStringArray = PoolStringArray()
+var path: String = "" setget set_path
+var filters: PoolStringArray = PoolStringArray()
 
 signal file_selected(f)
 
+
 func _ready() -> void:
-	if ! is_connected("pressed", self, "_on_Control_pressed"):
+	if !is_connected("pressed", self, "_on_Control_pressed"):
 		connect("pressed", self, "_on_Control_pressed")
+
 
 func set_mode(m):
 	mode = m
 
-func set_path(p : String) -> void:
+
+func set_path(p: String) -> void:
 	path = p
 	text = path.get_file()
 
-func add_filter(f : String) -> void:
+
+func add_filter(f: String) -> void:
 	filters.append(f)
+
 
 func _on_Control_pressed() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()

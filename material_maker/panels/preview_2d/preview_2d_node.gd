@@ -1,7 +1,9 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
+
 func _ready() -> void:
 	update_export_menu()
+
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:

@@ -2,16 +2,19 @@ extends WindowDialog
 
 signal return_status(status)
 
-var mesh_filename    = null
+var mesh_filename = null
 var project_filename = null
 
-onready var mesh_instance : MeshInstance = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshPivot/MeshInstance
+onready var mesh_instance: MeshInstance = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshPivot/MeshInstance
+
 
 func _ready():
 	pass
 
+
 func _on_ViewportContainer_resized():
 	$VBoxContainer/HBoxContainer/ViewportContainer/Viewport.size = $VBoxContainer/HBoxContainer/ViewportContainer.rect_size
+
 
 func _on_ModelFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -26,25 +29,27 @@ func _on_ModelFile_pressed():
 	if files.size() == 1:
 		set_mesh(files[0])
 
-func set_mesh(file_name : String) -> void:
+
+func set_mesh(file_name: String) -> void:
 	if file_name == mesh_filename:
 		return
 	mesh_filename = file_name
-	var mesh : Mesh = $ObjLoader.load_obj_file(mesh_filename)
+	var mesh: Mesh = $ObjLoader.load_obj_file(mesh_filename)
 	if mesh != null:
 		mesh_instance.mesh = mesh
 		$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
 		$VBoxContainer/HBoxContainer2/OK.disabled = false
 		# Initialise project file name
-		set_project(mesh_filename.get_basename()+".mmpp")
+		set_project(mesh_filename.get_basename() + ".mmpp")
 		# Center the mesh and move the camera to the whole object is visible
-		var aabb : AABB = mesh_instance.get_aabb()
-		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
-		var d : float = aabb.size.length()
+		var aabb: AABB = mesh_instance.get_aabb()
+		mesh_instance.transform.origin = -aabb.position - 0.5 * aabb.size
+		var d: float = aabb.size.length()
 		var camera = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/CameraPivot/Camera
-		camera.transform.origin.z = 0.8*d
+		camera.transform.origin.z = 0.8 * d
 	else:
 		$VBoxContainer/HBoxContainer2/OK.disabled = true
+
 
 func _on_ProjectFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -61,22 +66,37 @@ func _on_ProjectFile_pressed():
 	if files.size() == 1:
 		set_project(files[0])
 
-func set_project(file_name : String) -> void:
+
+func set_project(file_name: String) -> void:
 	if file_name == project_filename:
 		return
 	project_filename = file_name
 	$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ProjectFile.text = project_filename.get_file()
 
+
 func _on_OK_pressed():
 	var mesh = mesh_instance.mesh
-	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename, project_filename=project_filename, size=pow(2, $VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Resolution.size_value) })
+	emit_signal(
+		"return_status",
+		{
+			mesh = mesh,
+			mesh_filename = mesh_filename,
+			project_filename = project_filename,
+			size = pow(
+				2, $VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Resolution.size_value
+			)
+		}
+	)
+
 
 func _on_Cancel_pressed():
 	emit_signal("return_status", null)
 
+
 func _on_NewPainterWindow_popup_hide():
 	yield(get_tree(), "idle_frame")
 	emit_signal("return_status", null)
+
 
 func ask(obj_file_name = null) -> String:
 	if obj_file_name != null:
@@ -86,4 +106,3 @@ func ask(obj_file_name = null) -> String:
 	var result = yield(self, "return_status")
 	queue_free()
 	return result
-
