@@ -94,6 +94,7 @@ func _ready():
 	set_current_tool(MODE_FREEHAND_DOTS)
 	initialize_2D_paint_select()
 	initialize_debug_selects()
+	graph_edit.undoredo.disable()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	update_brush_graph()

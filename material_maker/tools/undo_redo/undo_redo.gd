@@ -1,8 +1,7 @@
 extends Node
 
 
-const VERBOSE : bool = true
-
+var disabled : bool = false
 
 var stack : Array = []
 var step : int = 0
@@ -12,15 +11,20 @@ var group = null
 
 var performing_action : bool = false
 
+
 func _ready():
 	pass # Replace with function body.
+
+func disable():
+	disabled = true
 
 func can_undo() -> bool:
 	return step > 0
 
 func undo() -> void:
 	if !performing_action and step > 0:
-		print("Undo...")
+		if OS.is_debug_build():
+			print("Undo...")
 		performing_action = true
 		step -= 1
 		var parent = get_parent()
@@ -28,7 +32,7 @@ func undo() -> void:
 		if parent.has_method("undoredo_pre"):
 			state = parent.undoredo_pre()
 		for a in stack[step].undo_actions:
-			if VERBOSE and OS.is_debug_build():
+			if OS.is_debug_build():
 				print("Executing undo action on %s:" % str(parent))
 				print(a)
 			parent.undoredo_command(a)
@@ -41,14 +45,15 @@ func can_redo() -> bool:
 
 func redo() -> void:
 	if !performing_action and step < stack.size():
-		print("Redo...")
+		if OS.is_debug_build():
+			print("Redo...")
 		performing_action = true
 		var parent = get_parent()
 		var state = ""
 		if parent.has_method("undoredo_pre"):
 			state = parent.undoredo_pre()
 		for a in stack[step].redo_actions:
-			if VERBOSE and OS.is_debug_build():
+			if OS.is_debug_build():
 				print("Executing redo action on %s:" % str(parent))
 				print(a)
 			parent.undoredo_command(a)
@@ -89,6 +94,8 @@ func end_group():
 		group = null
 
 func add(action_name : String, undo_actions : Array, redo_actions : Array, merge_with_previous : bool = false) -> void:
+	if disabled:
+		return
 	if performing_action:
 		print("ERROR: undo/redo action tries to register undo/redo action")
 		return
@@ -108,4 +115,5 @@ func add(action_name : String, undo_actions : Array, redo_actions : Array, merge
 		step += 1
 		if group_level > 0:
 			group = undo_redo
-	get_node("/root/MainWindow/UndoRedoLabel").show_step(step)
+	if OS.is_debug_build():
+		get_node("/root/MainWindow/UndoRedoLabel").show_step(step)
