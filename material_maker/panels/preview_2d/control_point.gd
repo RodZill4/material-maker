@@ -161,8 +161,8 @@ func _on_Point_gui_input(event : InputEvent):
 				snap = grid.snap
 			if is_xy:
 				if snap > 0.0:
-					value.x = round(value.x*snap)/snap
-					value.y = round(value.y*snap)/snap
+					value.x = round((value.x-0.5)*snap)/snap+0.5
+					value.y = round((value.y-0.5)*snap)/snap+0.5
 			elif parameter_a != "":
 				var l = value.length()
 				var a = value.angle()
