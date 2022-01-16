@@ -12,9 +12,10 @@ var need_generate : bool = false
 var last_export_filename : String = ""
 var last_export_size : int = 0
 
+
 const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
-const MENU_TEMPORAL_AA : int = 1002
+
 
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()

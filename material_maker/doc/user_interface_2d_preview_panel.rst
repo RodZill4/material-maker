@@ -30,11 +30,17 @@ The 2D preview panel has a context menu that can be used to:
 
 * select the style and color of axes displayed on top of the preview
 
+* select the view mode (extend, repeat, clamp or temporal antoaliasing)
+  of the preview
+
 * export the previewed node to a file
 
 * export the previewed node's animation to a set of files or a spritesheet
 
 * render the previewed node and add it to the References panel
+
+* select a post process filter (available filters are useful to create
+  pixel art textures in different resolutions)
 
 Exporting animations
 ~~~~~~~~~~~~~~~~~~~~

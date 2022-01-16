@@ -207,7 +207,7 @@ items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 [node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "Extend", null, 0, false, false, 0, 0, null, "", false, "Repeat", null, 0, false, false, 1, 0, null, "", false, "Clamp", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
 
 [node name="Axes" type="PopupMenu" parent="ContextMenu" index="2"]
 margin_right = 91.0

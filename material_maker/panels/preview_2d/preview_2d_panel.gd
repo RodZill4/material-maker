@@ -21,14 +21,19 @@ const POSTPROCESS_OPTIONS : Array = [
 	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
 ]
 
+
+const VIEW_EXTEND : int = 0
+const VIEW_REPEAT : int = 1
+const VIEW_CLAMP : int = 2
+const VIEW_TEMPORAL_AA : int = 3
+
+
 func _ready():
 	update_shader_options()
 	update_view_menu()
 	update_axes_menu()
 	update_export_menu()
 	update_postprocess_menu()
-	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
-	$ContextMenu.set_item_checked($ContextMenu.get_item_index(MENU_TEMPORAL_AA), temporal_aa)
 
 func update_view_menu() -> void:
 	$ContextMenu.add_submenu_item("View", "View")
@@ -213,16 +218,19 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			export_again()
 		MENU_EXPORT_ANIMATION:
 			export_animation()
-		MENU_TEMPORAL_AA:
-			var index : int = $ContextMenu.get_item_index(id)
-			var v = ! $ContextMenu.is_item_checked(index)
-			$ContextMenu.set_item_checked(index, v)
-			set_temporal_aa(v)
 		_:
 			print("unsupported id "+str(id))
 
 func _on_View_id_pressed(id):
+	if id == view_mode:
+		return
+	$ContextMenu/View.set_item_checked(view_mode, false)
+	if view_mode == VIEW_TEMPORAL_AA:
+		set_temporal_aa(false)
 	view_mode = id
+	if view_mode == VIEW_TEMPORAL_AA:
+		set_temporal_aa(true)
+	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_param("mode", view_mode)
 
 func _on_Axes_id_pressed(id):
