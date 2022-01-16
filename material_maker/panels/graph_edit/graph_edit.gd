@@ -609,8 +609,12 @@ func do_paste(data) -> void:
 			c.selected = true
 
 func paste() -> void:
-	var data = OS.clipboard
-	if data.left(4) == "http":
+	var data = OS.clipboard.strip_edges()
+	var graph = null
+	if data.is_valid_html_color():
+		var color = Color(data)
+		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
+	elif data.left(4) == "http":
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
 		var error = http_request.request(data)
@@ -618,7 +622,9 @@ func paste() -> void:
 			push_error("An error occurred in the HTTP request.")
 		data = yield(http_request, "request_completed")[3].get_string_from_utf8()
 		http_request.queue_free()
-	var graph = parse_json(data)
+		graph = parse_json(data)
+	else:
+		graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = get_node("/root/MainWindow")
