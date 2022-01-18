@@ -156,7 +156,7 @@ func _on_Point_gui_input(event : InputEvent):
 		var value = get_parent().pos_to_value(rect_position+event.position)-parent_value
 		if event.control:
 			var snap : float = 0.0
-			var grid = get_parent().get_node("Axes")
+			var grid = get_parent().get_node("Guides")
 			if grid != null and grid.visible:
 				snap = grid.snap
 			if is_xy:
