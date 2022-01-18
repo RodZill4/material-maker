@@ -22,13 +22,14 @@ The mouse wheel can be used to zoom, and holding the middle mouse button makes i
 to pan across the preview.
 
 Depending on the selected node, controls can be shown and they can be moved
-around to modify the associated parameters.
+around to modify the associated parameters. Holding the **Control** key while
+dragging those control will snap to the current grid.
 
 The 2D preview panel has a context menu that can be used to:
 
 * reset the preview zoom and position
 
-* select the style and color of axes displayed on top of the preview
+* select the style and color of guides displayed on top of the preview
 
 * select the view mode (extend, repeat, clamp or temporal antoaliasing)
   of the preview

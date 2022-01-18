@@ -18,6 +18,8 @@ Group Node's tooltip.
 The subgraph node is not editable by default, but using the **Control+W**
 shortcut will make it possible to edit its contents using the pencil button.
 
+Double clicking a subgraph node will directly enter it.
+
 .. image:: images/subgraph.png
 	:align: center
 

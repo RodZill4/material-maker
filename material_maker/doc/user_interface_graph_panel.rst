@@ -66,6 +66,9 @@ They can be dragged and dropped from the **Library** panel to the graph panel.
 It is also possible to use the node menu that can be shown using the right mouse
 button. This menu has a filter field to quickly find the desired node.
 
+The buttons at the top of the node menu can be used to quickly create the most common
+nodes. They can be customized by dragging the nodes from the list below into the buttons.
+
 .. image:: images/node_menu.png
   :align: center
 

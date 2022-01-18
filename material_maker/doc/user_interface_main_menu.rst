@@ -43,6 +43,10 @@ File menu
 Edit menu
 ^^^^^^^^^
 
+* *Undo* reverts the latest change, and *Redo* can be used to re-apply reverted actions.
+  In Material projects, all operations on the graph can be reverted. In Paint projects,
+  only strokes are taken into account by undo/redo.
+
 * *Cut* Copies the selected nodes to the clipboard and removes them from the current material.
 
 * *Copy* Copies the selected nodes to the clipboard
