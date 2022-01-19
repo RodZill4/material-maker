@@ -16,4 +16,5 @@ __meta__ = {
 }
 
 [node name="PreviewViewport" parent="." instance=ExtResource( 1 )]
+hdr = true
 render_target_update_mode = 3
