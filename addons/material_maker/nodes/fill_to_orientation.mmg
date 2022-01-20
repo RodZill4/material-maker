@@ -1,0 +1,47 @@
+{
+	"name": "fill_to_orientation",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"invert": false
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec2 $(name_uv)_size = $in($uv).zw;\nfloat $(name_uv)orientation = $(name_uv)_size.x < $(name_uv)_size.y ? 0.0 : 1.0;",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Outputs the orientation of each bounding box (white: horizontal, black: vertical)",
+		"name": "Fill to Orientation",
+		"outputs": [
+			{
+				"f": "$invert ? 1.0 - $(name_uv)orientation : $(name_uv)orientation",
+				"longdesc": "The orientation of each bounding box (white: horizontal, black: vertical)",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": false,
+				"label": "Invert",
+				"name": "invert",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Fill to Orientation"
+	},
+	"type": "shader"
+}

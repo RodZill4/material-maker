@@ -21,26 +21,31 @@ const POSTPROCESS_OPTIONS : Array = [
 	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
 ]
 
+
+const VIEW_EXTEND : int = 0
+const VIEW_REPEAT : int = 1
+const VIEW_CLAMP : int = 2
+const VIEW_TEMPORAL_AA : int = 3
+
+
 func _ready():
 	update_shader_options()
 	update_view_menu()
-	update_axes_menu()
+	update_Guides_menu()
 	update_export_menu()
 	update_postprocess_menu()
-	$ContextMenu.add_check_item("Temporal AA", MENU_TEMPORAL_AA)
-	$ContextMenu.set_item_checked($ContextMenu.get_item_index(MENU_TEMPORAL_AA), temporal_aa)
 
 func update_view_menu() -> void:
 	$ContextMenu.add_submenu_item("View", "View")
 
-func update_axes_menu() -> void:
-	$ContextMenu/Axes.clear()
-	for s in $Axes.STYLES:
-		$ContextMenu/Axes.add_item(s)
-	$ContextMenu/Axes.add_submenu_item("Grid", "Grid")
-	$ContextMenu/Axes.add_separator()
-	$ContextMenu/Axes.add_item("Change color", 1000)
-	$ContextMenu.add_submenu_item("Axes", "Axes")
+func update_Guides_menu() -> void:
+	$ContextMenu/Guides.clear()
+	for s in $Guides.STYLES:
+		$ContextMenu/Guides.add_item(s)
+	$ContextMenu/Guides.add_submenu_item("Grid", "Grid")
+	$ContextMenu/Guides.add_separator()
+	$ContextMenu/Guides.add_item("Change color", 1000)
+	$ContextMenu.add_submenu_item("Guides", "Guides")
 
 func update_postprocess_menu() -> void:
 	$ContextMenu/PostProcess.clear()
@@ -155,7 +160,7 @@ func on_resized() -> void:
 	$Accumulate/Iteration.material.set_shader_param("preview_2d_scale", scale)
 	$Accumulate/Iteration.material.set_shader_param("preview_2d_size", rect_size)
 	setup_controls()
-	$Axes.update()
+	$Guides.update()
 	start_accumulate()
 
 var dragging : bool = false
@@ -213,33 +218,36 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			export_again()
 		MENU_EXPORT_ANIMATION:
 			export_animation()
-		MENU_TEMPORAL_AA:
-			var index : int = $ContextMenu.get_item_index(id)
-			var v = ! $ContextMenu.is_item_checked(index)
-			$ContextMenu.set_item_checked(index, v)
-			set_temporal_aa(v)
 		_:
 			print("unsupported id "+str(id))
 
 func _on_View_id_pressed(id):
+	if id == view_mode:
+		return
+	$ContextMenu/View.set_item_checked(view_mode, false)
+	if view_mode == VIEW_TEMPORAL_AA:
+		set_temporal_aa(false)
 	view_mode = id
+	if view_mode == VIEW_TEMPORAL_AA:
+		set_temporal_aa(true)
+	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_param("mode", view_mode)
 
-func _on_Axes_id_pressed(id):
+func _on_Guides_id_pressed(id):
 	if id == 1000:
 		var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instance()
 		add_child(color_picker_popup)
 		var color_picker = color_picker_popup.get_node("ColorPicker")
-		color_picker.color = $Axes.color
-		color_picker.connect("color_changed", $Axes, "set_color")
+		color_picker.color = $Guides.color
+		color_picker.connect("color_changed", $Guides, "set_color")
 		color_picker_popup.rect_position = get_global_mouse_position()
 		color_picker_popup.connect("popup_hide", color_picker_popup, "queue_free")
 		color_picker_popup.popup()
 	else:
-		$Axes.style = id
+		$Guides.style = id
 
 func _on_GridSize_value_changed(value):
-	$Axes.show_grid(value)
+	$Guides.show_grid(value)
 
 
 func _on_PostProcess_id_pressed(id):

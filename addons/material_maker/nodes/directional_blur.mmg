@@ -36,26 +36,31 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -381.25,
-				"y": -270.75
+				"x": -364.25,
+				"y": -255.75
 			},
 			"parameters": {
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 20527,
+			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -436.666626,
-				"y": -413.666656
+				"x": -456.666626,
+				"y": -433.666656
 			},
 			"parameters": {
 				"param0": 9,
 				"param1": 50,
-				"param2": 45
+				"param2": 45,
+				"param3": 0
 			},
+			"seed": 343,
+			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -73,6 +78,19 @@
 					"longdesc": "The resolution of the input",
 					"name": "param0",
 					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Mode",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_2",
+							"widget": "mode"
+						}
+					],
+					"longdesc": "Controls whether the blur moves in both directions or only in one.",
+					"name": "param3",
+					"shortdesc": "Mode",
 					"type": "linked_control"
 				},
 				{
@@ -128,7 +146,8 @@
 					"type": "f"
 				}
 			],
-			"seed_value": 91624,
+			"seed": 91624,
+			"seed_locked": true,
 			"type": "ios"
 		},
 		{
@@ -149,20 +168,24 @@
 					"type": "rgba"
 				}
 			],
+			"seed": 30896,
+			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -376.725464,
-				"y": -184.178955
+				"x": -357.725464,
+				"y": -153.178955
 			},
 			"parameters": {
 				"angle": 45,
+				"mode": 0,
 				"sigma": 50,
 				"size": 9
 			},
-			"seed_value": -47470,
+			"seed": -47470,
+			"seed_locked": true,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -177,12 +200,12 @@
 					{
 						"default": "1.0",
 						"function": true,
-						"label": "Label",
+						"label": "",
 						"name": "amount",
 						"type": "f"
 					}
 				],
-				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = $sigma*$amount(uv);\n\tfor (float i = -50.0; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = $sigma*$amount(uv);\n\tfor (float i = $mode; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
 				"name": "Directional Blur",
 				"outputs": [
 					{
@@ -198,6 +221,22 @@
 						"last": 12,
 						"name": "size",
 						"type": "size"
+					},
+					{
+						"default": 0,
+						"label": "Mode",
+						"name": "mode",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Both",
+								"value": "-50.0"
+							},
+							{
+								"name": "Single",
+								"value": "0.0"
+							}
+						]
 					},
 					{
 						"control": "None",
@@ -227,8 +266,11 @@
 	"parameters": {
 		"param0": 9,
 		"param1": 50,
-		"param2": 45
+		"param2": 45,
+		"param3": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shortdesc": "Directional blur",
 	"type": "graph"
 }

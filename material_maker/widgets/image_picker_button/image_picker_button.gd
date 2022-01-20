@@ -16,7 +16,9 @@ func do_set_image_path(path) -> void:
 	image_path = path
 	if texture_normal == null:
 		texture_normal = ImageTexture.new()
-	texture_normal.load(image_path)
+	var image : Image = Image.new()
+	image.load(image_path)
+	texture_normal.create_from_image(image)
 	hint_tooltip = path
 
 func set_image_path(path) -> void:

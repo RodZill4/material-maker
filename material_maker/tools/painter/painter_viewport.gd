@@ -12,7 +12,10 @@ onready var layerpaint_strokerect : ColorRect = $LayerPaint/Stroke
 
 onready var init_material = preload("res://material_maker/tools/painter/shaders/init.tres").duplicate(true)
 onready var init_channels_material = preload("res://material_maker/tools/painter/shaders/init_channels.tres").duplicate(true)
-onready var paint_material
+
+var paint_material
+var layer_material
+var stroke_material
 
 var param_tex2view : Texture
 var param_mesh_aabb : AABB
@@ -23,22 +26,29 @@ var param_seams : Texture
 var param_layer_textures : Dictionary
 var brush_params : Dictionary
 
+var painting : int = 0
+
 func _ready() -> void:
+	# paint material
 	paint_material = ShaderMaterial.new()
 	paint_material.shader = Shader.new()
-	layerpaint_layerrect.material = ShaderMaterial.new()
-	layerpaint_layerrect.material.shader = Shader.new()
-	layerpaint_layerrect.material.shader.code = get_parent().get_shader_file("paint_apply_background")
-	layerpaint_strokerect.material = ShaderMaterial.new()
-	layerpaint_strokerect.material.shader = Shader.new()
-	layerpaint_strokerect.material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
-	layerpaint_strokerect.material.set_shader_param("tex", strokepaint_viewport.get_texture())
+	# layer material in layer viewport
+	layer_material = ShaderMaterial.new()
+	layer_material.shader = Shader.new()
+	layer_material.shader.code = get_parent().get_shader_file("paint_apply_background")
+	layerpaint_layerrect.material = layer_material
+	# stroke material in layer viewport
+	stroke_material = ShaderMaterial.new()
+	stroke_material.shader = Shader.new()
+	stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+	stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
+	layerpaint_strokerect.material = stroke_material
 
 func set_shader_prefix(p):
 	shader_prefix = p
 	if is_inside_tree():
-		layerpaint_strokerect.material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
-		layerpaint_strokerect.material.set_shader_param("tex", strokepaint_viewport.get_texture())
+		stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+		stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
 
 func get_paint_material() -> ShaderMaterial:
 	set_paint_shader_params()
@@ -127,13 +137,16 @@ func finish_init():
 	var texture : ImageTexture = ImageTexture.new()
 	texture.create_from_image(image)
 	image.unlock()
-	layerpaint_layerrect.material.set_shader_param("tex", texture)
+	layer_material.set_shader_param("tex", texture)
+	layerpaint_layerrect.visible = true
 	layerpaint_strokerect.visible = false
 	# Cleanup stroke viewport
 	strokepaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	strokepaint_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
 	strokepaint_rect.visible = false
 	strokepaint_viewport.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	layerpaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	layerpaint_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
 	layerpaint_viewport.update_worlds()
@@ -142,49 +155,66 @@ func finish_init():
 	strokepaint_rect.visible = true
 
 func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
+	var reset = false
+	painting += 1
 	strokepaint_rect.material = paint_material
 	layerpaint_strokerect.visible = true
-	layerpaint_strokerect.material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
-	layerpaint_strokerect.material.set_shader_param("tex", strokepaint_viewport.get_texture())
+	stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+	stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
 	for p in shader_params.keys():
 		match p:
 			"brush_opacity":
 				layerpaint_strokerect.self_modulate = Color(1.0, 1.0, 1.0, shader_params[p])
 			"erase":
-				layerpaint_strokerect.material.set_shader_param("erase", shader_params[p])
+				stroke_material.set_shader_param("erase", shader_params[p])
+			"reset":
+				reset = shader_params[p]
 			_:
 				paint_material.set_shader_param(p, shader_params[p])
 	strokepaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	strokepaint_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME if reset else Viewport.CLEAR_MODE_NEVER
 	strokepaint_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	layerpaint_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
 	layerpaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	strokepaint_rect.visible = true
+	layerpaint_layerrect.visible = !reset
 	layerpaint_viewport.update_worlds()
 	if end_of_stroke:
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		var image = layerpaint_viewport.get_texture().get_data()
-		image.lock()
-		var texture : ImageTexture = ImageTexture.new()
-		texture.create_from_image(image)
-		image.unlock()
-		layerpaint_layerrect.material.set_shader_param("tex", texture)
-		layerpaint_strokerect.visible = true
+		if false and reset:
+			var image = strokepaint_viewport.get_texture().get_data()
+			image.lock()
+			var texture : ImageTexture = ImageTexture.new()
+			texture.create_from_image(image)
+			image.unlock()
+			layerpaint_strokerect.visible = false
+			return
+		else:
+			var image = layerpaint_viewport.get_texture().get_data()
+			image.lock()
+			var texture : ImageTexture = ImageTexture.new()
+			texture.create_from_image(image)
+			image.unlock()
+			layer_material.set_shader_param("tex", texture)
+			layerpaint_strokerect.visible = true
 		strokepaint_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ONLY_NEXT_FRAME
 		strokepaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 		strokepaint_rect.visible = false
 		strokepaint_viewport.update_worlds()
 		yield(get_tree(), "idle_frame")
 		yield(get_tree(), "idle_frame")
-		strokepaint_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-		strokepaint_rect.visible = false
-		strokepaint_viewport.update_worlds()
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
 		strokepaint_rect.visible = true
+	layerpaint_layerrect.visible = true
+	painting -= 1
 
 func get_texture():
 	return layerpaint_viewport.get_texture()
-	
+
+func get_current_state():
+	return layer_material.get_shader_param("tex")
+
 func get_stroke_texture():
 	return strokepaint_viewport.get_texture()

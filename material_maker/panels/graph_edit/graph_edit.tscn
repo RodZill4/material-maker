@@ -2,7 +2,7 @@
 
 [ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
-[ext_resource path="res://material_maker/panels/graph_edit/undo_redo.gd" type="Script" id=3]
+[ext_resource path="res://material_maker/tools/undo_redo/undo_redo.gd" type="Script" id=3]
 [ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Theme" id=1]

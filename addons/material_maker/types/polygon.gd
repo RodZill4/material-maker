@@ -19,6 +19,14 @@ func duplicate() -> Object:
 func clear() -> void:
 	points.clear()
 
+func compare(polygon) -> bool:
+	if polygon.points.size() != points.size():
+		return false
+	for i in points.size():
+		if points[i] != polygon.points[i]:
+			return false
+	return true
+
 func add_point(x : float, y : float, closed : bool = true) -> void:
 	var p : Vector2 = Vector2(x, y)
 	var points_count = points.size()

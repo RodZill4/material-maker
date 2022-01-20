@@ -1,7 +1,10 @@
 extends GraphNode
 class_name MMGraphNodeMinimal
 
+
 var generator : MMGenBase = null setget set_generator
+var disable_undoredo_for_offset : bool = false
+
 
 func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")
@@ -11,6 +14,8 @@ func _exit_tree() -> void:
 	get_parent().call_deferred("check_last_selected")
 
 func _on_offset_changed() -> void:
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, offset)
 	generator.set_position(offset)
 	# This is the old behavior
 	#reroll_generator_seed()
@@ -26,6 +31,11 @@ func update_node() -> void:
 
 func set_generator(g) -> void:
 	generator = g
+
+func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
+	offset = o
+	disable_undoredo_for_offset = false
 
 func get_input_slot(pos : Vector2) -> int:
 	var scale = get_global_transform().get_scale()

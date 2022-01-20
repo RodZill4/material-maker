@@ -36,6 +36,7 @@ func filter_entered(_filter) -> void:
 
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
+	current_graph.undoredo.start_group()
 	var node : GraphNode = current_graph.create_nodes(node_data, insert_position)[0]
 	if qc_node != "": # dragged from port
 		var port_position : Vector2
@@ -54,6 +55,7 @@ func add_node(node_data) -> void:
 					port_position = node.get_connection_input_position(new_slot)
 					break
 		node.offset -= port_position/current_graph.zoom
+	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
 

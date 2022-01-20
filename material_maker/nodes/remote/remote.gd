@@ -1,6 +1,8 @@
 extends MMGraphNodeGeneric
 class_name MMGraphNodeRemote
 
+var old_state : Dictionary
+
 var links = {}
 
 onready var grid = $Controls
@@ -40,7 +42,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	button.icon = preload("res://material_maker/icons/remove.tres")
 	button.hint_tooltip = "Remove parameter"
 	grid.add_child(button)
-	button.connect("pressed", generator, "remove_parameter", [ control.name ])
+	button.connect("pressed", self, "remove_parameter", [ control.name ])
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/up.tres")
 	button.hint_tooltip = "Move parameter up"
@@ -48,7 +50,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	if is_first:
 		button.disabled = true
 	else:
-		button.connect("pressed", generator, "move_parameter", [ control.name, -1 ])
+		button.connect("pressed", self, "move_parameter", [ control.name, -1 ])
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/down.tres")
 	button.hint_tooltip = "Move parameter down"
@@ -56,16 +58,15 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	if is_last:
 		button.disabled = true
 	else:
-		button.connect("pressed", generator, "move_parameter", [ control.name, 1 ])
+		button.connect("pressed", self, "move_parameter", [ control.name, 1 ])
 
 func update_node() -> void:
 	# Show or hide the close button
 	show_close = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
-	yield(get_tree(), "idle_frame")
 	for c in grid.get_children():
 		grid.remove_child(c)
-		c.free()
+		c.call_deferred("free")
 	title = generator.get_type_name()
 	controls = {}
 	var parameter_count : int = generator.get_parameter_defs().size()
@@ -129,6 +130,22 @@ func _on_value_changed(new_value, variable : String) -> void:
 			return
 	._on_value_changed(new_value, variable)
 
+func undo_redo_register_change(action_name : String, old_state : Dictionary):
+	var new_state = generator.serialize().duplicate(true)
+	if new_state.hash() == old_state.hash():
+		return
+	get_parent().undoredo_create_step(action_name, generator.get_hier_name(), old_state, new_state)
+		
+func move_parameter(widget_name : String, offset : int) -> void:
+	old_state = generator.serialize().duplicate(true)
+	generator.move_parameter(widget_name, offset)
+	undo_redo_register_change("Move parameter", old_state)
+
+func remove_parameter(widget_name : String) -> void:
+	old_state = generator.serialize().duplicate(true)
+	generator.remove_parameter(widget_name)
+	undo_redo_register_change("Remove parameter", old_state)
+
 func on_param_name_changed(new_name : String, param_name : String, line_edit : LineEdit) -> void:
 	if generator.rename(param_name, new_name, true):
 		line_edit.add_color_override("font_color", get_node("/root/MainWindow").theme.get_color("font_color", "LineEdit"))
@@ -136,15 +153,22 @@ func on_param_name_changed(new_name : String, param_name : String, line_edit : L
 		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
 
 func on_param_name_entered(new_name : String, param_name : String, line_edit : LineEdit) -> void:
+	old_state = generator.serialize().duplicate(true)
 	generator.rename(param_name, new_name)
+	undo_redo_register_change("Change parameter name", old_state)
 
 func on_param_name_entered2(param_name : String, line_edit : LineEdit) -> void:
+	old_state = generator.serialize().duplicate(true)
 	on_param_name_entered(line_edit.text, param_name, line_edit)
+	undo_redo_register_change("Change parameter name", old_state)
 
 func on_label_changed(new_label, param_name) -> void:
+	old_state = generator.serialize().duplicate(true)
 	generator.set_label(param_name, new_label)
+	undo_redo_register_change("Change parameter label", old_state)
 
 func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
+	old_state = generator.serialize().duplicate(true)
 	var widget = generator.get_widget(param_name)
 	if widget != null:
 		if shortdesc == "":
@@ -155,31 +179,41 @@ func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
 			widget.erase("longdesc")
 		else:
 			widget.longdesc = longdesc
+	undo_redo_register_change("Change parameter description", old_state)
+
+func link_parameter(widget_name : String, target_generator : MMGenBase, target_parameter : String) -> void:
+	generator.link_parameter(widget_name, target_generator, target_parameter)
+	undo_redo_register_change("Change parameter name", old_state)
 
 func _on_AddLink_pressed() -> void:
+	old_state = generator.serialize().duplicate(true)
 	var control = generator.create_linked_control("Unnamed")
 	var widget = Control.new()
 	widget.name = control
 	add_control("Unnamed", widget, false)
 	var link = MMNodeLink.new(get_parent())
-	link.pick(widget, generator, control, true)
+	link.pick(widget, self, control, true)
 
 func _on_AddConfig_pressed() -> void:
+	old_state = generator.serialize().duplicate(true)
 	var control = generator.create_config_control("Unnamed")
 	var widget = Control.new()
 	widget.name = control
 	add_control("Unnamed", widget, false)
 	var link = MMNodeLink.new(get_parent())
-	link.pick(widget, generator, control, true)
+	link.pick(widget, self, control, true)
 
 func _on_AddNamed_pressed():
+	old_state = generator.serialize().duplicate(true)
 	var control = generator.create_named_parameter("Unnamed")
 	update_node()
+	undo_redo_register_change("Add named parameter", old_state)
 
 func _on_Link_pressed(param_name) -> void:
 	var link = MMNodeLink.new(get_parent())
 	if controls.has(param_name):
-		link.pick(controls[param_name], generator, param_name)
+		old_state = generator.serialize().duplicate(true)
+		link.pick(controls[param_name], self, param_name)
 
 func _on_Edit_pressed(param_name) -> void:
 	for p in generator.get_parameter_defs():
@@ -190,8 +224,9 @@ func _on_Edit_pressed(param_name) -> void:
 			while result is GDScriptFunctionState:
 				result = yield(result, "completed")
 			if result.keys().size() == 4:
+				old_state = generator.serialize().duplicate(true)
 				generator.configure_named_parameter(param_name, result.min, result.max, result.step, result.default)
-			return
+				undo_redo_register_change("Configure named parameter", old_state)
 
 func _on_Remote_resize_request(new_minsize) -> void:
 	rect_size = new_minsize

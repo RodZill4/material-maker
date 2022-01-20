@@ -123,13 +123,13 @@ func select_layer(layer : Layer) -> void:
 				new_texture.create_from_image(old_texture.get_data())
 			selected_layer.set(c, new_texture)
 	if layer != null:
-		emit_signal("layer_selected", layer)
 		for c in layer.get_channels():
 			if layer.get(c) != null:
 				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
 				painter_node.call("init_"+c+"_texture")
 			layer.set(c, painter_node.call("get_"+c+"_texture"))
+		emit_signal("layer_selected", layer)
 	selected_layer = layer
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
@@ -394,9 +394,11 @@ func load(data : Dictionary, file_name : String):
 	var dir_name = file_name.left(file_name.rfind("."))
 	layers.clear()
 	load_layers(data.layers, layers, dir_name)
-	if !layers.empty():
-		select_layer(layers[0])
 	_on_layers_changed()
+	if !layers.empty():
+		for i in range(32):
+			yield(get_tree(), "idle_frame")
+		select_layer(layers[0])
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:

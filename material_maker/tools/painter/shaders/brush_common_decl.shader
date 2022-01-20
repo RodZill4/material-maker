@@ -10,6 +10,7 @@ uniform float     brush_hardness  = 0.5;
 const float       brush_opacity   = 1.0;
 uniform float     stroke_length   = 0.0;
 uniform float     stroke_angle    = 0.0;
+uniform float     stroke_seed     = 0.0;
 uniform float     pattern_scale   = 10.0;
 uniform float     pattern_angle   = 0.0;
 uniform float     pattern_alpha   = 0.0;

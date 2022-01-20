@@ -57,6 +57,7 @@ onready var layers = $PaintLayers
 onready var paint_engine_button = $VSplitContainer/HSplitContainer/Painter/Tools/Engine
 onready var eraser_button = $VSplitContainer/HSplitContainer/Painter/Tools/Eraser
 onready var graph_edit = $VSplitContainer/GraphEdit
+onready var undoredo = $UndoRedo
 
 onready var brush_view_3d = $VSplitContainer/HSplitContainer/Painter/BrushView
 var brush_view_3d_shown = false
@@ -74,6 +75,7 @@ var last_motion_position : Vector2
 var last_motion_vector : Vector2 = Vector2(0, 0)
 var stroke_length : float = 0.0
 var stroke_angle : float = 0.0
+var stroke_seed : float = 0.0
 
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
@@ -92,6 +94,7 @@ func _ready():
 	set_current_tool(MODE_FREEHAND_DOTS)
 	initialize_2D_paint_select()
 	initialize_debug_selects()
+	graph_edit.undoredo.disable()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
 	update_brush_graph()
@@ -191,6 +194,7 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	model_path = mesh_file_path
 	set_object(mi)
 	set_project_path(project_file_path)
+	initialize_layers_history()
 
 func set_object(o):
 	object_name = o.name
@@ -200,14 +204,6 @@ func set_object(o):
 		mat = o.mesh.surface_get_material(0)
 	if mat == null:
 		mat = SpatialMaterial.new()
-	"""
-	for t in [ "albedo_texture", "metallic_texture", "roughness_texture" ]:
-		if mat[t] != null:
-			var size = mat[t].get_size()
-			if size.x == size.y:
-				layers.set_texture_size(size.x)
-				break
-	"""
 	preview_material = SpatialMaterial.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
@@ -292,6 +288,9 @@ func _on_Fill_pressed():
 	painter.fill(eraser_button.pressed)
 	set_need_save()
 
+func _on_Eraser_toggled(button_pressed):
+	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
+
 func _on_MaskSelector_pressed():
 	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instance()
 	add_child(dialog)
@@ -309,7 +308,8 @@ func _physics_process(delta):
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
 		if ev.scancode == KEY_CONTROL:
-			painter.show_pattern(ev.pressed)
+			#TODO: move this to another shortcut, this is too annoying
+			#painter.show_pattern(ev.pressed)
 			accept_event()
 		elif ev.scancode == KEY_LEFT or ev.scancode == KEY_RIGHT or ev.scancode == KEY_UP or ev.scancode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
@@ -366,7 +366,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
 		last_motion_position = mouse_position
 		last_motion_vector = pos_delta
-		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle } )
+		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
 		if current_tool == MODE_COLOR_PICKER:
 			show_brush(null, null)
 		elif current_tool == MODE_LINE:
@@ -540,11 +540,17 @@ var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and !procedural_update_changed_scheduled:
-		call_deferred("do_update_procedural_layer")
 		procedural_update_changed_scheduled = true
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false, true)
+	painter.fill(false, true, false)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
@@ -572,8 +578,8 @@ var brush_changed_scheduled : bool = false
 
 func on_brush_changed(_p, _v) -> void:
 	if !brush_changed_scheduled:
-		call_deferred("do_on_brush_changed")
 		brush_changed_scheduled = true
+		call_deferred("do_on_brush_changed")
 
 func do_on_brush_changed():
 	painter.set_brush_preview_material(brush_view_3d.material)
@@ -641,6 +647,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		brush_opacity=$VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushOpacity.value,
 		stroke_length=stroke_length,
 		stroke_angle=stroke_angle,
+		stroke_seed=stroke_seed,
 		erase=eraser_button.pressed,
 		pressure=pressure,
 		tilt=tilt,
@@ -659,7 +666,9 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 			paint_options.rect_size = view_2d.rect_size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	painter.paint(paint_options, end_of_stroke)
+	var result = painter.paint(paint_options, end_of_stroke)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
 	previous_position = pos
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
@@ -670,6 +679,8 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		pos = next_paint_to
 		next_paint_to = null
 		paint(pos, next_pressure, tilt, painting_mode, end_of_stroke)
+	if end_of_stroke:
+		stroke_seed = randf()
 
 func update_view():
 	var mesh_instance = painted_mesh
@@ -774,6 +785,7 @@ func load_project(file_name) -> bool:
 		idmap_filename = data.idmap
 	layers.load(data, file_name)
 	set_need_save(false)
+	initialize_layers_history()
 	return true
 
 func save():
@@ -893,3 +905,72 @@ func set_environment(index) -> void:
 	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
 	var sun = $VSplitContainer/HSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
+
+# Undo/Redo
+
+var stroke_history = { layers={} }
+
+func undoredo_command(command : Dictionary) -> void:
+	match command.type:
+		"reload_layer_state":
+			var layer = command.layer
+			var state = stroke_history.layers[layer].history[command.index]
+			if layer == layers.selected_layer:
+				painter.set_state(state)
+			else:
+				layer.set_state(state)
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			layers._on_layers_changed()
+			stroke_history.layers[layer].current = command.index
+
+func initialize_layer_history(layer):
+	if stroke_history.layers.has(layer):
+		return
+	var channels = {}
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	for c in layer.get_channels():
+		var texture = layer.get_channel_texture(c)
+		if texture is ViewportTexture:
+			var image = texture.get_data()
+			image.lock()
+			texture = ImageTexture.new()
+			texture.create_from_image(image)
+			image.unlock()
+		channels[c] = texture
+	stroke_history.layers[layer] = { history=[channels], current=0 }
+
+func initialize_layers_history(layer_list = null):
+	if layer_list == null:
+		for i in range(20):
+			yield(get_tree(), "idle_frame")
+		layer_list = layers.layers
+	for l in layer_list:
+		initialize_layer_history(l)
+		initialize_layers_history(l.layers)
+
+# Undo/Redo for strokes
+func _on_Painter_end_of_stroke(stroke_state):
+	var layer = layers.selected_layer
+	var layer_history = stroke_history.layers[layer]
+	while layer_history.history.size() > layer_history.current+1:
+		layer_history.history.pop_back()
+	var new_history_item = layer_history.history.back().duplicate()
+	# Copy relevant channels into stroke state
+	for c in stroke_state.keys():
+		if c in layer.get_channels():
+			new_history_item[c] = stroke_state[c]
+	layer_history.history.push_back(new_history_item)
+	var undo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
+	layer_history.current += 1
+	var redo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
+	undoredo.add("Paint Stroke", [undo_command], [redo_command])
+
+

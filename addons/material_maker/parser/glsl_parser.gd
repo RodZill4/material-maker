@@ -13,7 +13,7 @@ const REGEXS : Array = [
 	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|?:^]" },
 ]
 
-const KEYWORDS = [ "if", "else", "for", "while", "break", "continue", "return",
+const KEYWORDS = [ "const", "if", "else", "for", "while", "break", "continue", "return",
 				   "in", "out" ]
 
 const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",

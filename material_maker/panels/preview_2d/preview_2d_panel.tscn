@@ -92,7 +92,7 @@ void fragment() {
 	COLOR = vec4(texture(sum, UV).rgb/float(divide), 1.0);
 }"
 
-[node name="Axes" type="Control" parent="." index="0"]
+[node name="Guides" type="Control" parent="." index="0"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -207,24 +207,24 @@ items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 [node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "Extend", null, 0, false, false, 0, 0, null, "", false, "Repeat", null, 0, false, false, 1, 0, null, "", false, "Clamp", null, 0, false, false, 2, 0, null, "", false ]
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
 
-[node name="Axes" type="PopupMenu" parent="ContextMenu" index="2"]
+[node name="Guides" type="PopupMenu" parent="ContextMenu" index="2"]
 margin_right = 91.0
 margin_bottom = 88.0
 
-[node name="Grid" type="Popup" parent="ContextMenu/Axes" index="1"]
+[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="1"]
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="PanelContainer" parent="ContextMenu/Axes/Grid" index="0"]
+[node name="Panel" type="PanelContainer" parent="ContextMenu/Guides/Grid" index="0"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="GridSize" parent="ContextMenu/Axes/Grid/Panel" index="0" instance=ExtResource( 6 )]
+[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource( 6 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -268,8 +268,8 @@ margin_bottom = 40.0
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Axes" to="." method="_on_Axes_id_pressed"]
-[connection signal="value_changed" from="ContextMenu/Axes/Grid/Panel/GridSize" to="." method="_on_GridSize_value_changed"]
+[connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]
+[connection signal="value_changed" from="ContextMenu/Guides/Grid/Panel/GridSize" to="." method="_on_GridSize_value_changed"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]

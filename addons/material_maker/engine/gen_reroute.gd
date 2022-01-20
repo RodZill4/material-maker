@@ -30,3 +30,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			rv = yield(rv, "completed")
 		return rv
 	return { globals=[], defs="", code="", textures={}, type="f", f="0.0" }
+
+func _serialize(data: Dictionary) -> Dictionary:
+	return data
