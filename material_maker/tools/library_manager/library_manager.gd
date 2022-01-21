@@ -156,7 +156,7 @@ func load_library(path : String) -> void:
 		disabled_libraries.erase(path)
 	emit_signal("libraries_changed")
 	save_library_list()
-	library.get_node_sections()
+	library.get_sections()
 
 func unload_library(index : int) -> void:
 	var lib = get_child(index).library_path

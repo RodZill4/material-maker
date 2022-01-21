@@ -85,6 +85,8 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 				g.position += position
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
+		else:
+			print("Cannot create gen "+n)
 	for c in connections:
 		if gennames.has(c.from):
 			c.from = gennames[c.from]
@@ -92,6 +94,8 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 			c.to = gennames[c.to]
 		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
 			rv.connections.append(c)
+		else:
+			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
 func create_gen(data) -> MMGenBase:

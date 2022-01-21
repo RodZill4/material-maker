@@ -413,7 +413,7 @@ func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	return []
 
 func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
-	var prev = generator.serialize()
+	var prev = generator.serialize().duplicate(true)
 	var nodes = do_create_nodes(data, position)
 	if !nodes.empty():
 		var next = generator.serialize()
