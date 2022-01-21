@@ -107,9 +107,15 @@ Tools menu
   confirmed, the current brush will be added to the user brush library under
   that name. The user library is saved automatically.
 
-* the *Painting* submenu can be used to change the painted textures resolutions,
-  enable or disable different channels of the painted material or select the
-  environment of the Paint panel.
+* the *Paint project settings* submenu can be used to show a dialog to configure
+  painted textures resolutions and enable or disable different channels of the
+  painted material
+  
+.. image:: images/paint_project_settings.png
+  :align: center
+
+* the *Set painting environment* submenu can be used to select the environment for
+  the Paint panel.
 
 * the *Environment editor* menu shows the *Environment editor* window that can be used
   to create new environments for 3D views.

@@ -51,19 +51,51 @@ orientation (more about brushes and brush types below). Holding the Control key 
 also show the patten on the whole view (which can be useful with Pattern and UV pattern
 brushes).
 
+.. |button_paint_engine| image:: images/button_paint_engine.png
+.. |button_freehand| image:: images/button_freehand.png
+.. |button_freehand_line| image:: images/button_freehand_line.png
+.. |button_line| image:: images/button_line.png
+.. |button_stamp| image:: images/button_stamp.png
+.. |button_pick_color| image:: images/button_pick_color.png
+.. |button_fill| image:: images/button_fill.png
+.. |button_eraser| image:: images/button_eraser.png
+.. |button_mask_selector| image:: images/button_mask_selector.png
+
 In the top left corner of the paint subpanel, buttons can be used to select a painting tool.
 The available tools are:
 
-* A freehand painting tool, that directly applies the brush
+* The painting engine selector |button_paint_engine|, that can be used to switch to one of the
+  following painting engines:
 
-* A freehand line tool, that draws line following the mouse cursors movement
+  * The View space painting engine, that projects the brush into the current
+    view. This engine paints correctly across seams, but since it is aligned
+    to the view, the result will be stretched where the painted surface is
+    not perpendicular to the view.
+  * The texture space painting engine, that paints directly in texture space.
+    This engine is view independent and does not distort of stretch the result,
+    but cannot paint across seams. Also make sure you see the whole brush before
+    painting, to avoid painting on UV islands that are not currently visible.
 
-* A line tool, that draws straight lines
+* A freehand painting tool |button_freehand|, that directly applies the brush to the painted surface
 
-* A fill tool (pressing this button will directly fill the current layer using
-  the current brush, or erase it if the eraser mode is active)
+* A freehand line tool |button_freehand_line|, that paints a line following the mouse cursors movement
 
-* An eraser mode, that applies to all aforementionned tools
+* A line tool |button_line|, that draws straight lines
+
+* A stamp tool |button_stamp| that allows to place the center of the stamp by pressing the mouse button,
+  then adjust its orientation and size before releasing the button
+
+* A color picker tool |button_pick_color|, that can be used to pick colors from the painted model and
+  modify the current brush if it is compatible (for example the Uniform brush)
+
+* A fill tool |button_fill| ; pressing this button will directly fill the current layer using
+  the current brush, or erase it if the eraser mode is active. Only channels that arte active
+  in the brush are affected
+
+* An eraser mode |button_eraser|, that applies to all painting tools
+
+* A mask selector |button_mask_selector| that will show a dialog that can configure the
+  painting mask using an ID map
 
 In the top right corner, common brush parameters such as size, hardness, opacity and spacing
 can be modified.
@@ -112,3 +144,22 @@ Brushes can have a Remote node whose parameters will be shown in the **Parameter
 
 Custom brushes can be saved into the user brush library using the **Tools->Add current brush to the user
 library** menu entry.
+
+Selecting a painting mask
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The mask selector button |button_mask_selector| will show the mask selection dialog, that can be
+used to set the current painting mask. This mask will affect all painting operations.
+
+.. image:: images/mask_selector.png
+  :align: center
+
+To modify the painting mask, it is first necessary to load an ID map for the model.
+
+When an ID map has been selected, clicking on the model will assign the corresponding
+ID to the mask.
+
+The 3D view of this dialog can be configured to show the ID map, the mask,
+or a mix of both.
+
+It is also possible to reset the mask so the whole object can be painted.
