@@ -86,7 +86,7 @@ margin_right = 315.0
 margin_bottom = 39.0
 size_flags_horizontal = 0
 size_flags_vertical = 6
-text = "© 2018-2021 Rodolphe Suescun and contributors"
+text = "© 2018-2022 Rodolphe Suescun and contributors"
 align = 1
 
 [node name="VBoxContainer" type="TabContainer" parent="HBoxContainer/VBoxContainer"]
