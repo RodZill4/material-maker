@@ -131,7 +131,5 @@ Help menu
 * *Report a bug* opens a web browser on the Issues page of Material Maker's GitHub project. Please
   do not hesitate to use it to suggest improvements for Material Maker.
 
-* *Material Maker on reddit* opens a web browser on Material Maker's subreddit.
-
 * *About* Shows the about dialog.
 
