@@ -245,12 +245,16 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 
 func disconnect_children_ext(from_name : String, from_port : int, to_name : String, to, to_port : int) -> bool:
 	var new_connections : Array = []
+	var trigger_source_changed : bool = false
 	for c in connections:
 		if c.from != from_name or c.from_port != from_port or c.to != to_name or c.to_port != to_port:
 			new_connections.push_back(c)
 		else:
-			to.source_changed(to_port)
+			trigger_source_changed = true
+			
 	connections = new_connections
+	if trigger_source_changed:
+		to.source_changed(to_port)
 	return true
 
 func disconnect_children_by_name(from_name : String, from_port : int, to_name : String, to_port : int) -> bool:
