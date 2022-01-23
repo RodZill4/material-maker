@@ -123,9 +123,9 @@ jobs:
           cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./doc ./build/mac/material_maker.app/Contents/MacOS/doc
       - name: Create DMG archive 🔧
-        run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker.dmg
+        run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
           name: Mac OSX snapshot
-          path: ./build/mac/material_maker.dmg
+          path: ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
