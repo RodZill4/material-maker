@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -239,6 +239,12 @@ snapped to 90 degree intervals.</p>
 <p>The <strong>HeightToAngle</strong> node can be used to easily generate a <em>Rotate</em> map from a
 heightmap. All instances will be rotated depending on the slope. When using this
 node to generate the <em>Rotate</em> map, the <em>Rotate</em> parameter must be set to 180.</p>
+<p>The <strong>HeightToOffset</strong> node can be used to easily generate a <em>Translate</em> map from a
+heightmap. Outputs must be connected to the Translate X and Y inputs of the Tiler node.
+All instances will be translated depending on the slope, to reach the
+specified level, and to be accurate, the slopes must be homogeneous. When using this
+node to generate the <em>Translate</em> map, the <em>Translate X</em> and <em>Translate Y</em> parameters
+must be set to 1.</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
@@ -279,7 +285,7 @@ with their corresponding input map.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -223,6 +223,9 @@ of the material. Exporting to one of those engines is described in the
 <div class="section" id="edit-menu">
 <h2>Edit menu<a class="headerlink" href="#edit-menu" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><em>Undo</em> reverts the latest change, and <em>Redo</em> can be used to re-apply reverted actions.
+In Material projects, all operations on the graph can be reverted. In Paint projects,
+only strokes are taken into account by undo/redo.</p></li>
 <li><p><em>Cut</em> Copies the selected nodes to the clipboard and removes them from the current material.</p></li>
 <li><p><em>Copy</em> Copies the selected nodes to the clipboard</p></li>
 <li><p><em>Paste</em> Copies the clipboard into the current material. Note that the nodes will be added to
@@ -270,9 +273,14 @@ pan the graph to create the screenshot).</p></li>
 project is a paint project. It first prompts for an item name. If a name is entered and
 confirmed, the current brush will be added to the user brush library under
 that name. The user library is saved automatically.</p></li>
-<li><p>the <em>Painting</em> submenu can be used to change the painted textures resolutions,
-enable or disable different channels of the painted material or select the
-environment of the Paint panel.</p></li>
+<li><p>the <em>Paint project settings</em> submenu can be used to show a dialog to configure
+painted textures resolutions and enable or disable different channels of the
+painted material</p></li>
+</ul>
+<img alt="_images/paint_project_settings.png" class="align-center" src="_images/paint_project_settings.png" />
+<ul class="simple">
+<li><p>the <em>Set painting environment</em> submenu can be used to select the environment for
+the Paint panel.</p></li>
 <li><p>the <em>Environment editor</em> menu shows the <em>Environment editor</em> window that can be used
 to create new environments for 3D views.</p></li>
 </ul>
@@ -285,7 +293,6 @@ to create new environments for 3D views.</p></li>
 documentation from the User Manual for the current library item</p></li>
 <li><p><em>Report a bug</em> opens a web browser on the Issues page of Material Maker’s GitHub project. Please
 do not hesitate to use it to suggest improvements for Material Maker.</p></li>
-<li><p><em>Material Maker on reddit</em> opens a web browser on Material Maker’s subreddit.</p></li>
 <li><p><em>About</em> Shows the about dialog.</p></li>
 </ul>
 </div>
@@ -305,7 +312,7 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

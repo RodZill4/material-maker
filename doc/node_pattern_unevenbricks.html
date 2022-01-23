@@ -43,7 +43,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Weave node" href="node_pattern_weave.html" />
+    <link rel="next" title="Uneven Bricks 2 node" href="node_pattern_unevenbricks2.html" />
     <link rel="prev" title="Arc Pavement node" href="node_pattern_arc_pavement.html" /> 
 </head>
 
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -115,6 +115,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_unevenbricks2.html">Uneven Bricks 2 node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_weave.html">Weave node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
@@ -205,7 +206,7 @@
             
   <div class="section" id="uneven-bricks-node">
 <h1>Uneven Bricks node<a class="headerlink" href="#uneven-bricks-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>Uneven Bricks</strong> node outputs several related bricks pattern textures that can be used for walls
+<p>The <strong>Uneven Bricks</strong> node outputs an uneven brick pattern texture that can be used for walls
 or pavement. It generates an uneven pattern by randomly splitting bricks.</p>
 <img alt="_images/node_pattern_unevenbricks.png" class="align-center" src="_images/node_pattern_unevenbricks.png" />
 <div class="section" id="inputs">
@@ -217,17 +218,12 @@ bevel and round parameters (the corresponding parameter is multiplied by the map
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>Uneven Bricks</strong> node provides the following textures:</p>
 <ul class="simple">
-<li><p>The first one is a greyscale image where bricks are shown in white and mortar in black.</p></li>
-<li><p>The second one is a color image where all bricks are drawn using a random uniform color.</p></li>
-<li><p>The 3rd and 4th textures are greyscale images of the X and Y position of the center of
-each brick.</p></li>
-<li><p>The 5th texture is an UV map texture for each brick (and can be used with the <strong>CustomUV</strong>
-node to apply a texture on each brick)</p></li>
-<li><p>the 6th texture is an UV map for each corner of each brick (and can be used with the
-<strong>CustomUV</strong> node to apply a texture on each corner)</p></li>
+<li><p>The first is a greyscale image where bricks are shown in white and mortar in black.</p></li>
+<li><p>The second is an RGBA texture that contains the bounding box for each brick.</p></li>
+<li><p>The 3rd is an RGBA texture that contains the bounding box for each brick corner.</p></li>
 </ul>
-<p>Those images can be used together to create complex materials that show for example bricks
-of different colors.</p>
+<p>The bounding box textures can be used in conjunction with <strong>Fill To</strong> nodes to generate random colors,
+custom UVs etc. to create complex materials that show for example bricks of different colors.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -242,7 +238,7 @@ only applies to the <em>Running bond</em> patterns.</p></li>
 <li><p>the <em>Mortar</em> parameter defines the relative thickness of mortar in patterns.</p></li>
 <li><p>the <em>Bevel</em> parameter defines the relative thickness of brick bevel in patterns.</p></li>
 <li><p>the <em>Round</em> parameter defines the radius of each round corner.</p></li>
-<li><p>the <em>Corner</em> parameter defines the size of each corner (for the 6th output texture).</p></li>
+<li><p>the <em>Corner</em> parameter defines the size of each corner (for the 3rd output texture).</p></li>
 </ul>
 </div>
 <div class="section" id="example-images">
@@ -257,7 +253,7 @@ only applies to the <em>Running bond</em> patterns.</p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="node_pattern_weave.html" class="btn btn-neutral float-right" title="Weave node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_pattern_unevenbricks2.html" class="btn btn-neutral float-right" title="Uneven Bricks 2 node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="node_pattern_arc_pavement.html" class="btn btn-neutral float-left" title="Arc Pavement node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
@@ -265,7 +261,7 @@ only applies to the <em>Running bond</em> patterns.</p></li>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -114,6 +114,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#creating-a-paint-project">Creating a paint project</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#painting-a-3d-model">Painting a 3D model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#creating-and-modifying-brushes">Creating and modifying brushes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#selecting-a-painting-mask">Selecting a painting mask</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="user_interface_brush_panel.html">Brush panel</a></li>
@@ -214,7 +215,7 @@ it before creating the paint project.</p>
 Paint panel, which consists of two sub panels. The top subpanel shows the model
 to be painted, and the bottom subpanel shows the graph where the current brush is
 described.</p>
-<a class="reference internal image-reference" href="_images/paint_panel.png"><img alt="_images/paint_panel.png" class="align-center" src="_images/paint_panel.png" style="width: 419.5px; height: 344.5px;" /></a>
+<a class="reference internal image-reference" href="_images/paint_panel.png"><img alt="_images/paint_panel.png" class="align-center" src="_images/paint_panel.png" style="width: 367.5px; height: 303.5px;" /></a>
 </div>
 <div class="section" id="painting-a-3d-model">
 <h2>Painting a 3D model<a class="headerlink" href="#painting-a-3d-model" title="Permalink to this headline">¶</a></h2>
@@ -237,12 +238,32 @@ brushes).</p>
 <p>In the top left corner of the paint subpanel, buttons can be used to select a painting tool.
 The available tools are:</p>
 <ul class="simple">
-<li><p>A freehand painting tool, that directly applies the brush</p></li>
-<li><p>A freehand line tool, that draws line following the mouse cursors movement</p></li>
-<li><p>A line tool, that draws straight lines</p></li>
-<li><p>A fill tool (pressing this button will directly fill the current layer using
-the current brush, or erase it if the eraser mode is active)</p></li>
-<li><p>An eraser mode, that applies to all aforementionned tools</p></li>
+<li><p>The painting engine selector <img alt="button_paint_engine" src="_images/button_paint_engine.png" />, that can be used to switch to one of the
+following painting engines:</p>
+<ul>
+<li><p>The View space painting engine, that projects the brush into the current
+view. This engine paints correctly across seams, but since it is aligned
+to the view, the result will be stretched where the painted surface is
+not perpendicular to the view.</p></li>
+<li><p>The texture space painting engine, that paints directly in texture space.
+This engine is view independent and does not distort of stretch the result,
+but cannot paint across seams. Also make sure you see the whole brush before
+painting, to avoid painting on UV islands that are not currently visible.</p></li>
+</ul>
+</li>
+<li><p>A freehand painting tool <img alt="button_freehand" src="_images/button_freehand.png" />, that directly applies the brush to the painted surface</p></li>
+<li><p>A freehand line tool <img alt="button_freehand_line" src="_images/button_freehand_line.png" />, that paints a line following the mouse cursors movement</p></li>
+<li><p>A line tool <img alt="button_line" src="_images/button_line.png" />, that draws straight lines</p></li>
+<li><p>A stamp tool <img alt="button_stamp" src="_images/button_stamp.png" /> that allows to place the center of the stamp by pressing the mouse button,
+then adjust its orientation and size before releasing the button</p></li>
+<li><p>A color picker tool <img alt="button_pick_color" src="_images/button_pick_color.png" />, that can be used to pick colors from the painted model and
+modify the current brush if it is compatible (for example the Uniform brush)</p></li>
+<li><p>A fill tool <img alt="button_fill" src="_images/button_fill.png" /> ; pressing this button will directly fill the current layer using
+the current brush, or erase it if the eraser mode is active. Only channels that arte active
+in the brush are affected</p></li>
+<li><p>An eraser mode <img alt="button_eraser" src="_images/button_eraser.png" />, that applies to all painting tools</p></li>
+<li><p>A mask selector <img alt="button_mask_selector" src="_images/button_mask_selector.png" /> that will show a dialog that can configure the
+painting mask using an ID map</p></li>
 </ul>
 <p>In the top right corner, common brush parameters such as size, hardness, opacity and spacing
 can be modified.</p>
@@ -284,6 +305,18 @@ corresponding component of the material will be painted.</p></li>
 <p>Custom brushes can be saved into the user brush library using the <strong>Tools-&gt;Add current brush to the user
 library</strong> menu entry.</p>
 </div>
+<div class="section" id="selecting-a-painting-mask">
+<h2>Selecting a painting mask<a class="headerlink" href="#selecting-a-painting-mask" title="Permalink to this headline">¶</a></h2>
+<p>The mask selector button <img alt="button_mask_selector" src="_images/button_mask_selector.png" /> will show the mask selection dialog, that can be
+used to set the current painting mask. This mask will affect all painting operations.</p>
+<img alt="_images/mask_selector.png" class="align-center" src="_images/mask_selector.png" />
+<p>To modify the painting mask, it is first necessary to load an ID map for the model.</p>
+<p>When an ID map has been selected, clicking on the model will assign the corresponding
+ID to the mask.</p>
+<p>The 3D view of this dialog can be configured to show the ID map, the mask,
+or a mix of both.</p>
+<p>It is also possible to reset the mask so the whole object can be painted.</p>
+</div>
 </div>
 
 
@@ -300,7 +333,7 @@ library</strong> menu entry.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

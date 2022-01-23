@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -227,9 +227,16 @@ a value to be used for pseudo-random scale and rotate transforms.</p></li>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>CustomUV</strong> node accepts a <em>scale</em> and a <em>rotate</em> parameters that define
-the strength of the random scale and rotate transforms applied locallly to
-the result.</p>
+<p>The <strong>CustomUV</strong> node accepts the following parameters:</p>
+<ul class="simple">
+<li><p><em>Inputs</em> is the number of alternate shapes in the input (1, 4 or 16). Images containing several
+shapes can easily be created using the <strong>Tile2x2</strong> node.</p></li>
+<li><p><em>Scale X and Scale Y</em> are the scale along X and Y axes applied to each instance.</p></li>
+<li><p><em>Rnd Rotate</em> is the maximum angle of the random rotation applied to each instance.</p></li>
+<li><p><em>Rnd Scale</em> is the amount of random scaling applied to each instance.</p></li>
+<li><p><em>Variations</em>: if checked, the node will deform different variations of its input
+(i.e. roll a different seed for each instance)</p></li>
+</ul>
 </div>
 </div>
 
@@ -247,7 +254,7 @@ the result.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

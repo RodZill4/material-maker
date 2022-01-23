@@ -13,3 +13,4 @@ have parameters, inputs and outputs.
    texture_nodes
    remote_nodes
    subgraph_nodes
+   reroute_nodes

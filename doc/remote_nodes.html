@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -109,11 +109,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#configuring-a-remote-node">Configuring a remote node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#linked-widgets">Linked widgets</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#configuration-widgets">Configuration widgets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#named-parameters">Named parameters</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reroute_nodes.html">Reroute nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -198,12 +200,13 @@ panel to a graph panel.</p>
 </div>
 <div class="section" id="configuring-a-remote-node">
 <h2>Configuring a remote node<a class="headerlink" href="#configuring-a-remote-node" title="Permalink to this headline">¶</a></h2>
-<p>Remote nodes provide two kinds of controls:</p>
+<p>Remote nodes provide three kinds of controls:</p>
 <ul class="simple">
 <li><p>linked widgets, that are associated to parameters in the graph and whose values are copied
 into the target parameters</p></li>
 <li><p>configuration widgets, that can be used to define named configurations of the target
 parameters</p></li>
+<li><p>named parameters, that can be used in expressions in all nodes of the subgraph</p></li>
 </ul>
 <div class="section" id="linked-widgets">
 <h3>Linked widgets<a class="headerlink" href="#linked-widgets" title="Permalink to this headline">¶</a></h3>
@@ -217,6 +220,7 @@ same as the selected parameter.</p>
 <img alt="add_linked_widget" src="_images/add_linked_widget.png" /> button of the linked widget, and select the parameter. While
 associating parameters to linked widgets, Material Maker will check compatibility.</p>
 <p>To delete a linked widget, click on its <img alt="remove_linked_widget" src="_images/remove_linked_widget.png" /> button.</p>
+<p>The arrow buttons can be used to reorder widgets.</p>
 </div>
 <div class="section" id="configuration-widgets">
 <h3>Configuration widgets<a class="headerlink" href="#configuration-widgets" title="Permalink to this headline">¶</a></h3>
@@ -236,6 +240,17 @@ add all other configurations.</p>
 values.</p>
 <p>It is also possible to rename, update or delete a configuration using the drop down button.</p>
 </div>
+<div class="section" id="named-parameters">
+<h3>Named parameters<a class="headerlink" href="#named-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Named parameters can be declared in Remote nodes, and used in parameter expressions of all nodes
+in the same subgraph.</p>
+<img alt="_images/named_parameter.png" class="align-center" src="_images/named_parameter.png" />
+<p>To create a named parameter, just click the “ab” button, and enter a unique name
+in the leftmost text entry. The parameter can then be referenced by name with a
+dollar prefix in parameter expressions of all nodes in the subgraph.</p>
+<p>It is possible to configure the lower and upper bound as well as the increment step
+by clicking the pencil button of the parameter.</p>
+</div>
 </div>
 </div>
 
@@ -253,7 +268,7 @@ values.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>

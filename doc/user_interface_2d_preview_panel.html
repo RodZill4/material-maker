@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.97
+                0.98
               </div>
             
           
@@ -213,14 +213,19 @@ easy to check that the texture wraps correctly.</p>
 <p>The mouse wheel can be used to zoom, and holding the middle mouse button makes it possible
 to pan across the preview.</p>
 <p>Depending on the selected node, controls can be shown and they can be moved
-around to modify the associated parameters.</p>
+around to modify the associated parameters. Holding the <strong>Control</strong> key while
+dragging those control will snap to the current grid.</p>
 <p>The 2D preview panel has a context menu that can be used to:</p>
 <ul class="simple">
 <li><p>reset the preview zoom and position</p></li>
-<li><p>select the style and color of axes displayed on top of the preview</p></li>
+<li><p>select the style and color of guides displayed on top of the preview</p></li>
+<li><p>select the view mode (extend, repeat, clamp or temporal antoaliasing)
+of the preview</p></li>
 <li><p>export the previewed node to a file</p></li>
 <li><p>export the previewed node’s animation to a set of files or a spritesheet</p></li>
 <li><p>render the previewed node and add it to the References panel</p></li>
+<li><p>select a post process filter (available filters are useful to create
+pixel art textures in different resolutions)</p></li>
 </ul>
 <div class="section" id="exporting-animations">
 <h2>Exporting animations<a class="headerlink" href="#exporting-animations" title="Permalink to this headline">¶</a></h2>
@@ -257,7 +262,7 @@ characters that will be replaced with the frame index (prefixed with zeroes if n
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2021, Rodz Labs.
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
     </p>
   </div>
