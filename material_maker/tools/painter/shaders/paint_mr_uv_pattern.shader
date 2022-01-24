@@ -9,14 +9,13 @@ void fragment() {
 	
 	vec2 a = fill ? vec2(1.0) : vec2(brush(0.5*local_uv+vec2(0.5)))*tex2view.z;
 	a *= color.ba;
+	a *= texture(mask_tex, UV).r;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
-	if (erase) {
-		COLOR = vec4(screen_color.xy, max(screen_color.za-a, 0.0));
-	} else if (reset) {
+	if (reset) {
 		COLOR = vec4(color.xy, a);
 	} else {
-		vec2 alpha_sum = min(vec2(1.0), a + screen_color.za);
+		vec2 alpha_sum = min(max(a, screen_color.ba), a + screen_color.ba);
 		COLOR = vec4((color.xy*a+screen_color.xy*(alpha_sum-a))/alpha_sum, alpha_sum);
 	}
 }

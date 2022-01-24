@@ -1,39 +1,24 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/panels/preview_2d/control_point.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" type="Script" id=4]
 [ext_resource path="res://material_maker/panels/preview_2d/lines.gd" type="Script" id=5]
+[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=6]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
-vec4 preview_2d(in vec2 uv) {
-	return vec4(vec3(step(length(uv-vec2(0.5))-0.4, 0.0)), 2.0*length(uv-vec2(0.5)));
-}
-
-uniform vec2 canvas_size = vec2(100.0, 100.0);
-uniform float scale = 1.2;
-uniform vec2 center = vec2(0.5);
-
 void fragment() {
-	vec2 ratio = canvas_size;
-	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
-	vec4 image = preview_2d(uv);
-	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
-	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
-	COLOR = vec4(image_with_background, 1.0);
+	COLOR = vec4(0.0, 0.0, 0.0, 1.0);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = SubResource( 1 )
-shader_param/canvas_size = Vector2( 100, 100 )
-shader_param/scale = 1.2
-shader_param/center = Vector2( 0.5, 0.5 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
@@ -45,6 +30,13 @@ flags = 4
 atlas = ExtResource( 1 )
 region = Rect2( 16, 64, 16, 16 )
 
+[sub_resource type="Shader" id=5]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id=6]
+resource_local_to_scene = true
+shader = SubResource( 5 )
+
 [node name="Preview2D" instance=ExtResource( 3 )]
 material = SubResource( 2 )
 margin_right = -758.0
@@ -54,18 +46,53 @@ script = ExtResource( 4 )
 shader = "uniform vec2 preview_2d_size = vec2(100.0);
 uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
+uniform int mode = 0;
+uniform vec4 background_color_1 = vec4(0.0);
+uniform vec4 background_color_2 = vec4(1.0);
 
 void fragment() {
 	vec2 ratio = preview_2d_size;
 	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
-	vec4 image = preview_2d(uv);
-	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
-	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
-	COLOR = vec4(image_with_background, 1.0);
+	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
+		COLOR = vec4(0.0);
+	} else {
+		if (mode == 1) {
+			uv = fract(uv);
+		}
+		vec4 image = preview_2d_postprocessed(uv);
+		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
+		COLOR = vec4(image_with_background, 1.0);
+	}
 }
 "
+shader_accumulate = "uniform sampler2D sum;
+uniform bool clear = false;
+uniform vec2 preview_2d_size = vec2(100.0);
+uniform float preview_2d_scale = 1.2;
+uniform vec2 preview_2d_center = vec2(0.5);
 
-[node name="Axes" type="Control" parent="." index="0"]
+void fragment() {
+	vec2 ratio = preview_2d_size;
+	vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
+	vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	if (clear) {
+		COLOR = preview_2d(uv);
+	} else {
+		COLOR = textureLod(sum, UV, 0.0)+preview_2d(uv);
+	}
+}
+"
+shader_divide = "shader_type canvas_item;
+
+uniform sampler2D sum;
+uniform int divide = 1;
+
+void fragment() {
+	COLOR = vec4(texture(sum, UV).rgb/float(divide), 1.0);
+}"
+
+[node name="Guides" type="Control" parent="." index="0"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -97,8 +124,8 @@ visible = false
 self_modulate = Color( 0, 1, 0.380392, 1 )
 margin_left = 5.0
 margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
+margin_right = 21.0
+margin_bottom = 45.0
 texture = SubResource( 4 )
 
 [node name="Rect1" parent="." index="4" instance=ExtResource( 2 )]
@@ -177,20 +204,72 @@ margin_right = 109.0
 margin_bottom = 52.0
 items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 
-[node name="Axes" type="PopupMenu" parent="ContextMenu" index="1"]
+[node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
+margin_right = 91.0
+margin_bottom = 88.0
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
+
+[node name="Guides" type="PopupMenu" parent="ContextMenu" index="2"]
 margin_right = 91.0
 margin_bottom = 88.0
 
-[node name="Export" type="PopupMenu" parent="ContextMenu" index="2"]
+[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="1"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="ContextMenu/Guides/Grid" index="0"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource( 6 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 65.0
+margin_bottom = 33.0
+value = 4.0
+min_value = 2.0
+max_value = 64.0
+step = 1.0
+float_only = true
+
+[node name="Export" type="PopupMenu" parent="ContextMenu" index="3"]
 margin_right = 91.0
 margin_bottom = 88.0
 
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="3"]
+[node name="Reference" type="PopupMenu" parent="ContextMenu" index="4"]
 margin_right = 91.0
 margin_bottom = 88.0
+
+[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="5"]
+margin_right = 91.0
+margin_bottom = 88.0
+
+[node name="Accumulate" type="Viewport" parent="." index="11"]
+size = Vector2( 2, 2 )
+handle_input_locally = false
+disable_3d = true
+keep_3d_linear = true
+render_target_v_flip = true
+render_target_clear_mode = 1
+render_target_update_mode = 1
+gui_snap_controls_to_pixels = false
+
+[node name="Iteration" type="ColorRect" parent="Accumulate" index="0"]
+material = SubResource( 6 )
+margin_right = 40.0
+margin_bottom = 40.0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Axes" to="." method="_on_Axes_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]
+[connection signal="value_changed" from="ContextMenu/Guides/Grid/Panel/GridSize" to="." method="_on_GridSize_value_changed"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]

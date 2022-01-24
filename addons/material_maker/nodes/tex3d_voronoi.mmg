@@ -1,0 +1,110 @@
+{
+	"name": "tex3d_voronoi",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"intensity": 1,
+		"randomness": 1,
+		"scale_x": 8,
+		"scale_y": 8,
+		"scale_z": 8
+	},
+	"seed": 714,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_xyzw = voronoi_3d($uv.xyz, vec3($scale_x, $scale_y, $scale_z), $intensity, $randomness, $seed);\nvec3 $(name_uv)_cc = fract(floor($(name_uv)_xyzw.xyz)/vec3($scale_x, $scale_y, $scale_z));",
+		"global": "// Based on https://www.shadertoy.com/view/ldl3W8\n// The MIT License\n// Copyright © 2013 Inigo Quilez\nvec4 iq_voronoi_3d(vec3 x, vec3 size, float randomness, vec2 seed) {\n    vec3 n = floor(x);\n    vec3 f = fract(x);\n\n\tvec3 mg, mr, mc;\n    float md = 8.0;\n    for (int k=-1; k<=1; k++)\n    for (int j=-1; j<=1; j++)\n    for (int i=-1; i<=1; i++) {\n        vec3 g = vec3(float(i),float(j),float(k));\n\t\tvec3 ngs = mod(n + g + size, size);\n\t\tvec3 o = randomness*rand3(seed + ngs.xy + ngs.yz);\n\t\tvec3 c = g + o;\n        vec3 r = c - f;\n        float d = dot(r,r);\n\n        if (d<md) {\n\t\t\tmc = c;\n            md = d;\n            mr = r;\n            mg = g;\n        }\n    }\n\n    md = 8.0;\n    for (int k=-2; k<=2; k++)\n    for (int j=-2; j<=2; j++)\n    for (int i=-2; i<=2; i++) {\n        vec3 g = mg + vec3(float(i),float(j),float(k));\n\t\tvec3 ngs = mod(n + g + size, size);\n\t\tvec3 o = randomness*rand3(seed +  + ngs.xy + ngs.yz);\n        vec3 r = g + o - f;\n        if (dot(r,r)>0.00001)\n       \t\tmd = min(md, dot(0.5*(mr+r), normalize((r-mr))));\n    }\n\n    return vec4(md, mc+n);\n}\n\nvec4 voronoi_3d(vec3 uv, vec3 size, float intensity, float randomness, float seed) {\n    uv *= size;\n\tvec4 v = iq_voronoi_3d(uv, size, randomness, rand2(vec2(seed, 1.0-seed)));\n\treturn vec4(v.yzw, v.x);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates several images from a tileable voronoi noise",
+		"name": "Voronoi 3D",
+		"outputs": [
+			{
+				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"shortdesc": "Nodes",
+				"tex3d_gs": "$intensity*length(($uv.xyz*vec3($scale_x, $scale_y, $scale_z)-$(name_uv)_xyzw.xyz))",
+				"type": "tex3d_gs"
+			},
+			{
+				"longdesc": "A greyscale pattern based on the distance to borders",
+				"shortdesc": "Borders",
+				"tex3d_gs": "$(name_uv)_xyzw.w",
+				"type": "tex3d_gs"
+			},
+			{
+				"longdesc": "A color pattern that assigns a random color to each cell",
+				"shortdesc": "Random color",
+				"tex3d": "rand3(vec2(rand($(name_uv)_cc.xy), rand($(name_uv)_cc.yz)))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale Z",
+				"longdesc": "The scale along the Z axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_z",
+				"shortdesc": "Scale.z",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.75,
+				"label": "Intensity",
+				"longdesc": "A value factor for greyscale outputs",
+				"max": 1,
+				"min": 0,
+				"name": "intensity",
+				"shortdesc": "Intensity",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Randomness",
+				"longdesc": "The randomness of cell centers positions",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"shortdesc": "Randomness",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Voronoi Noise"
+	},
+	"type": "shader"
+}

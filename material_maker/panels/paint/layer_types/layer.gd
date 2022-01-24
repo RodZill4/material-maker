@@ -24,6 +24,9 @@ func duplicate():
 	return layer
 
 
+func get_channel_texture(channel_name : String) -> Texture:
+	return get(channel_name)
+
 func get_channels() -> Array:
 	return []
 
@@ -70,3 +73,11 @@ static func save_layers(layers_array : Array, path : String) -> Array:
 
 		layers_data.push_back(layer_data)
 	return layers_data
+
+func set_state(s):
+	print(s)
+	for c in s.keys():
+		if c in get_channels():
+			set(c, s[c])
+		else:
+			print("Useless channel %s in layer state" % c)

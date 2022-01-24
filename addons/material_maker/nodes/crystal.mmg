@@ -1,0 +1,329 @@
+{
+	"connections": [
+		{
+			"from": "voronoi",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 0
+		},
+		{
+			"from": "voronoi_2",
+			"from_port": 0,
+			"to": "math_3",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "math_5",
+			"to_port": 1
+		},
+		{
+			"from": "math_4",
+			"from_port": 0,
+			"to": "math_5",
+			"to_port": 0
+		},
+		{
+			"from": "math_5",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 0
+		},
+		{
+			"from": "math_4",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 1
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 0
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 1
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 1
+		},
+		{
+			"from": "math_6",
+			"from_port": 0,
+			"to": "math_7",
+			"to_port": 0
+		},
+		{
+			"from": "math_7",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Crystal",
+	"longdesc": "Generates a crystal like pattern out of Voronoi noise",
+	"name": "crystal",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "math",
+			"node_position": {
+				"x": -1260,
+				"y": 200
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 13
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_2",
+			"node_position": {
+				"x": -1640,
+				"y": 200
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 19
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "voronoi",
+			"node_position": {
+				"x": -2000,
+				"y": 200
+			},
+			"parameters": {
+				"intensity": 1,
+				"randomness": 1,
+				"scale_x": 16,
+				"scale_y": 16,
+				"stretch_x": 0.85,
+				"stretch_y": 0.85
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "voronoi"
+		},
+		{
+			"name": "voronoi_2",
+			"node_position": {
+				"x": -2000,
+				"y": 520
+			},
+			"parameters": {
+				"intensity": 1,
+				"randomness": 1,
+				"scale_x": 16,
+				"scale_y": 16,
+				"stretch_x": 0.85,
+				"stretch_y": 0.85
+			},
+			"seed": 0.465376,
+			"seed_locked": false,
+			"type": "voronoi"
+		},
+		{
+			"name": "math_3",
+			"node_position": {
+				"x": -1640,
+				"y": 520
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 19
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_4",
+			"node_position": {
+				"x": -1260,
+				"y": 520
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 14
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_5",
+			"node_position": {
+				"x": -920,
+				"y": 360
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_6",
+			"node_position": {
+				"x": -660,
+				"y": 360
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 3
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -2200,
+				"y": 400
+			},
+			"parameters": {
+
+			},
+			"ports": [
+
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -120,
+				"y": 360
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -1560,
+				"y": -60
+			},
+			"parameters": {
+				"param0": 16,
+				"param1": 16
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Scale X",
+					"linked_widgets": [
+						{
+							"node": "voronoi",
+							"widget": "scale_x"
+						},
+						{
+							"node": "voronoi_2",
+							"widget": "scale_x"
+						}
+					],
+					"longdesc": "The scale along the X axis",
+					"name": "param0",
+					"shortdesc": "Scale X",
+					"type": "linked_control"
+				},
+				{
+					"label": "Scale Y",
+					"linked_widgets": [
+						{
+							"node": "voronoi",
+							"widget": "scale_y"
+						},
+						{
+							"node": "voronoi_2",
+							"widget": "scale_y"
+						}
+					],
+					"longdesc": "The scale along the Y axis",
+					"name": "param1",
+					"shortdesc": "Scale Y",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "math_7",
+			"node_position": {
+				"x": -400,
+				"y": 360
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 1.45,
+				"op": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		}
+	],
+	"parameters": {
+		"param0": 16,
+		"param1": 16
+	},
+	"seed": 0.014224,
+	"seed_locked": false,
+	"shortdesc": "Crystal",
+	"type": "graph"
+}

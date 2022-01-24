@@ -40,7 +40,7 @@ func get_io_defs() -> Array:
 func get_input_defs() -> Array:
 	return [] if name == "gen_inputs" else get_io_defs()
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [] if name == "gen_outputs" else get_io_defs()
 
 
@@ -59,9 +59,12 @@ func set_port_descriptions(i : int, short_description : String, long_description
 	ports[i].shortdesc = short_description
 	ports[i].longdesc = long_description
 
-func set_port_group_size(i : int, s : int) -> void:
-	ports[i].group_size = s
-
+func set_port_groups_sizes(g : Dictionary) -> void:
+	for i in ports.size():
+		if g.has(i):
+			ports[i].group_size = g[i]
+		else:
+			ports[i].group_size = 0
 
 func delete_port(i : int) -> void:
 	ports.remove(i)
@@ -113,7 +116,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "ios"
-	data.ports = ports
+	data.ports = ports.duplicate(true)
 	return data
 
 func _deserialize(data : Dictionary) -> void:

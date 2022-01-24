@@ -14,12 +14,13 @@ panel to a graph panel.
 Configuring a remote node
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Remote nodes provide two kinds of controls:
+Remote nodes provide three kinds of controls:
 
 * linked widgets, that are associated to parameters in the graph and whose values are copied
   into the target parameters
 * configuration widgets, that can be used to define named configurations of the target
   parameters
+* named parameters, that can be used in expressions in all nodes of the subgraph
 
 Linked widgets
 ~~~~~~~~~~~~~~
@@ -43,7 +44,9 @@ More parameters can be controlled by the same linked widget. To add one, click o
 |add_linked_widget| button of the linked widget, and select the parameter. While
 associating parameters to linked widgets, Material Maker will check compatibility.
 
-To delete a linked widget, click on its |remove_linked_widget| button. 
+To delete a linked widget, click on its |remove_linked_widget| button.
+
+The arrow buttons can be used to reorder widgets.
 
 Configuration widgets
 ~~~~~~~~~~~~~~~~~~~~~
@@ -72,3 +75,19 @@ Selecting a configuration using the drop down button will recall the associated 
 values.
 
 It is also possible to rename, update or delete a configuration using the drop down button.
+
+Named parameters
+~~~~~~~~~~~~~~~~
+
+Named parameters can be declared in Remote nodes, and used in parameter expressions of all nodes
+in the same subgraph.
+
+.. image:: images/named_parameter.png
+	:align: center
+
+To create a named parameter, just click the "ab" button, and enter a unique name
+in the leftmost text entry. The parameter can then be referenced by name with a
+dollar prefix in parameter expressions of all nodes in the subgraph.
+
+It is possible to configure the lower and upper bound as well as the increment step
+by clicking the pencil button of the parameter.

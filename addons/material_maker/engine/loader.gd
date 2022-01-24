@@ -5,10 +5,15 @@ var predefined_generators : Dictionary = {}
 
 var current_project_path : String = ""
 
+const CHECK_PREDEFINED : bool = false
+
 func _ready()-> void:
 	update_predefined_generators()
 
 func update_predefined_generators()-> void:
+	var parser
+	if CHECK_PREDEFINED:
+		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	predefined_generators = {}
 	for path in MMPaths.get_nodes_paths():
 		var dir = Directory.new()
@@ -19,7 +24,13 @@ func update_predefined_generators()-> void:
 				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
 					var file : File = File.new()
 					if file.open(path+"/"+file_name, File.READ) == OK:
-						predefined_generators[file_name.get_basename()] = parse_json(file.get_as_text())
+						var generator = parse_json(file.get_as_text())
+						if CHECK_PREDEFINED:
+							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
+								var parse_result = parser.parse(generator.shader_model.global)
+								if parse_result.status != "OK":
+									print(file_name+" has errors in global")
+						predefined_generators[file_name.get_basename()] = generator
 						file.close()
 				file_name = dir.get_next()
 	if false:
@@ -62,22 +73,29 @@ func load_gen(filename: String) -> MMGenBase:
 		return generator
 	return null
 
-func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
+func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = Vector2(0, 0)) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
 		var g = create_gen(n)
 		if g != null:
+			g.orig_name = g.name
 			var orig_name = g.name
 			if gen_graph.add_generator(g):
+				g.position += position
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
+		else:
+			print("Cannot create gen "+n)
 	for c in connections:
-		if gennames.has(c.from) and gennames.has(c.to):
+		if gennames.has(c.from):
 			c.from = gennames[c.from]
+		if gennames.has(c.to):
 			c.to = gennames[c.to]
-			if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
-				rv.connections.append(c)
+		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+			rv.connections.append(c)
+		else:
+			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
 func create_gen(data) -> MMGenBase:
@@ -100,7 +118,8 @@ func create_gen(data) -> MMGenBase:
 		switch = MMGenSwitch,
 		export = MMGenExport,
 		comment = MMGenComment,
-		debug = MMGenDebug
+		debug = MMGenDebug,
+		reroute = MMGenReroute
 	}
 	var generator = null
 	for g in guess:

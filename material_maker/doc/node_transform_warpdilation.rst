@@ -27,8 +27,7 @@ Parameters
 
 The **Warp Dilation** node has three parameters:
 
-* *Mode*, that defines if dilation if performed along the contours of the heightmap (in
-  clockwise or counter clockwise direction), or its slopes
+* *Angle*, that defines the angle from the slopes along which the warp effect is performed
 
 * *Resolution*, that defined the precision of the effect
 

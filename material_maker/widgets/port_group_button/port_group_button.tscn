@@ -3,9 +3,7 @@
 [ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/icons/port_group_0.tres" type="Texture" id=2]
 
-[node name="PortGroupButton" type="TextureButton" groups=[
-"port_group_button",
-]]
+[node name="PortGroupButton" type="TextureButton" groups=["port_group_button"]]
 margin_right = 16.0
 margin_bottom = 16.0
 hint_tooltip = "Click to define port groups"
@@ -16,4 +14,5 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="pressed" from="." to="." method="_on_pressed"]

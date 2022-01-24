@@ -43,7 +43,7 @@ func _draw() -> void:
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	hide()
-	if is_instance_valid(generator):
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	generator = g
 	parameter_x = ""
@@ -125,14 +125,19 @@ func update_parameters(value : Vector2) -> void:
 			value.y = abs(value.y)
 		3: # Scale
 			value = 4.0*value
+	var parameters : Dictionary = {}
 	if parameter_x != "":
-		generator.set_parameter(parameter_x, value.x)
+		parameters[parameter_x] = value.x
 	if parameter_y != "":
-		generator.set_parameter(parameter_y, value.y)
+		parameters[parameter_y] = value.y
 	if parameter_r != "":
-		generator.set_parameter(parameter_r, value.length())
+		parameters[parameter_r] = value.length()
 	if parameter_a != "":
-		generator.set_parameter(parameter_a, atan2(value.y, value.x)*57.2957795131)
+		parameters[parameter_a] = atan2(value.y, value.x)*57.2957795131
+	if ! parameters.empty():
+		var main_window = get_node("/root/MainWindow")
+		var graph_edit = main_window.get_current_graph_edit()
+		graph_edit.set_node_parameters(generator, parameters)
 
 func update_position(pos : Vector2) -> void:
 	match control_type:
@@ -148,7 +153,26 @@ func update_position(pos : Vector2) -> void:
 func _on_Point_gui_input(event : InputEvent):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var parent_value = get_parent_value()
-		var value = get_parent().pos_to_value(rect_position+0.5*rect_size+event.relative)-parent_value
+		var value = get_parent().pos_to_value(rect_position+event.position)-parent_value
+		if event.control:
+			var snap : float = 0.0
+			var grid = get_parent().get_node("Guides")
+			if grid != null and grid.visible:
+				snap = grid.snap
+			if is_xy:
+				if snap > 0.0:
+					value.x = round((value.x-0.5)*snap)/snap+0.5
+					value.y = round((value.y-0.5)*snap)/snap+0.5
+			elif parameter_a != "":
+				var l = value.length()
+				var a = value.angle()
+				snap = PI/12.0
+				a = round(a/snap)*snap
+				value = l*Vector2(cos(a), sin(a))
+		if event.shift:
+			if control_type == 3:
+				value.x = max(value.x, value.y)
+				value.y = value.x
 		if is_xy:
 			if parameter_x == "":
 				value.x = 0

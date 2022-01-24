@@ -24,6 +24,8 @@ The **Advanced Tiler** node accepts nine inputs:
 * The *Translate X* and *Translate Y* input maps are used to offset each instance.
 * The *Rotate* input map is used to rotate each instance.
 * The *Scale X* and *Scale Y* input maps are used to scale each instance.
+* *Variations*: if checked, the node will tile different variations of its input
+  (i.e. roll a different seed for each instance)
 
 The **Remap** node can be used to generate input maps (*Translate X*, *Translate Y*, *Rotate*,
 *Scale X* and *Scale Y*) easily. It takes a greyscale image as input and defines the
@@ -35,6 +37,13 @@ snapped to 90 degree intervals.
 The **HeightToAngle** node can be used to easily generate a *Rotate* map from a
 heightmap. All instances will be rotated depending on the slope. When using this
 node to generate the *Rotate* map, the *Rotate* parameter must be set to 180.
+
+The **HeightToOffset** node can be used to easily generate a *Translate* map from a
+heightmap. Outputs must be connected to the Translate X and Y inputs of the Tiler node.
+All instances will be translated depending on the slope, to reach the
+specified level, and to be accurate, the slopes must be homogeneous. When using this
+node to generate the *Translate* map, the *Translate X* and *Translate Y* parameters
+must be set to 1.
 
 Outputs
 +++++++

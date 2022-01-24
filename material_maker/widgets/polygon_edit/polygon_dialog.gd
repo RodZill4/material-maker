@@ -12,7 +12,7 @@ func set_closed(c : bool = true):
 	$VBoxContainer/EditorContainer/PolygonEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():
-	emit_signal("return_polygon", null)
+	emit_signal("return_polygon", previous_value)
 
 func _on_OK_pressed():
 	emit_signal("return_polygon", $VBoxContainer/EditorContainer/PolygonEditor.polygon)
@@ -26,7 +26,7 @@ func edit_polygon(polygon : MMPolygon) -> Array:
 	popup_centered()
 	var result = yield(self, "return_polygon")
 	queue_free()
-	return result
+	return { value=result, previous_value=previous_value }
 
 func _on_PolygonEditor_value_changed(value):
 	emit_signal("polygon_changed", value)

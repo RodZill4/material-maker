@@ -67,7 +67,16 @@ Parameters are used to configure nodes. The following types are supported:
   in generated shaders, but generated **Static PBR Materials** will still be
   static (this feature could for example be used to export variations of the
   same material). Other predefined material types can fully benefit from this
-  feature. 
+  feature.
+
+  Randomness can be added to any node by using the *$rnd(min, max)* function,
+  that will generate a random number between *min* and *max*. The node's seed
+  can then be modified, copied or locked using the die button.
+
+  Right clicking a float parameter field will show an expression editor, that
+  checks the syntax of the expression. Whenever the expression is incorrect,
+  the Apply and OK buttons will be disabled. You can still use the Enter key
+  to apply the changes if necessary.
 * **size** parameters are power of two values for the image size. They are used when
   actually storing data in a texture, or when performing resolution dependent calculations
   such as convolutions. They are shown as drop down list boxes.
@@ -126,8 +135,11 @@ Randomness
 ^^^^^^^^^^
 
 Nodes that provide random patterns have an implicit **seed** parameter. It is not possible
-to edit it directly, but moving the node in the graph will change its value. It is possible
-to freeze the seed value using the small die button in the node's title bar in the graph.
+to edit it directly, but clicking the small die button in the node's title bar will change
+its value.
+Right clicking this button will show a context menu that can be used to copy and paste the
+seed as well as lock and unlock it. A node with locked seed will not be affected by its
+parents and will have the same seed in all variations.
 
 .. image:: images/random_node.png
 	:align: center

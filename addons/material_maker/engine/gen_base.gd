@@ -35,6 +35,7 @@ class OutputPort:
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
+var orig_name = null
 var parameters = {}
 
 var seed_locked : bool = false
@@ -51,11 +52,15 @@ func _post_load() -> void:
 
 func get_hier_name() -> String:
 	var type = load("res://addons/material_maker/engine/gen_base.gd")
+	if not get_parent() is type:
+		return ""
 	var rv = name
-	var object = get_parent()
-	while object is type:
-		rv = object.name+"/"+rv
-		object = object.get_parent()
+	var node = self
+	while true:
+		node = node.get_parent()
+		if not node.get_parent() is type:
+			break
+		rv = node.name+"/"+rv
 	return rv
 
 func accept_float_expressions() -> bool:
@@ -70,7 +75,7 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
-func get_template_name() -> bool:
+func get_template_name() -> String:
 	return model
 
 func is_editable() -> bool:
@@ -82,12 +87,13 @@ func get_description() -> String:
 func has_randomness() -> bool:
 	return false
 
-func set_seed(s : float):
+func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
-		return
+		return false
 	seed_value = s
 	if is_inside_tree():
 		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	return true
 
 func reroll_seed():
 	set_seed(randf())
@@ -143,6 +149,26 @@ func get_parameter(n : String):
 	else:
 		var parameter_def = get_parameter_def(n)
 		return parameter_def.default
+
+func calculate_float_parameter(n : String) -> Dictionary:
+	var return_value : Dictionary = {}
+	var value = get_parameter(n)
+	if value is float:
+		return_value.value = value
+	elif value is String:
+		var parent : Node = get_parent()
+		if parent.has_method("get_named_parameters"):
+			return_value.used_named_parameters = []
+			var named_parameters : Dictionary = get_parent().get_named_parameters()
+			for np in named_parameters.keys():
+				if value.find("$"+np) != -1:
+					return_value.used_named_parameters.push_back(named_parameters[np].id)
+					value = value.replace("$"+np, str(named_parameters[np].value))
+		var expression : Expression = Expression.new()
+		var error = expression.parse(value, [])
+		if error == OK:
+			return_value.value = expression.execute()
+	return return_value
 
 class CustomGradientSorter:
 	static func compare(a, b) -> bool:
@@ -203,7 +229,7 @@ func all_sources_changed() -> void:
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func get_source(input_index : int) -> OutputPort:
@@ -255,26 +281,33 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += main_fct
 	return code
 
-func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+func generate_output_shader(output_index : int, preview : bool = false):
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
 	while source is GDScriptFunctionState:
+		assert(false)
 		source = yield(source, "completed")
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader : String
+	var output_type = "rgba"
+	var outputs = get_output_defs(true)
+	if outputs.size() > output_index:
+		output_type = outputs[output_index].type
 	if preview:
-		var output_type = "rgba"
-		var outputs = get_output_defs()
-		if outputs.size() > output_index:
-			output_type = outputs[output_index].type
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
+	return { shader=shader, output_type=output_type, textures=source.textures }
+
+func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+	var output_shader : Dictionary = generate_output_shader(output_index, preview)
+	var shader : String = output_shader.shader
+	var output_type : String = output_shader.output_type
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, source.textures, size)
+	renderer = renderer.render_shader(object, shader, output_shader.textures, size, output_type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer

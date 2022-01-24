@@ -36,6 +36,7 @@ func filter_entered(_filter) -> void:
 
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
+	current_graph.undoredo.start_group()
 	var node : GraphNode = current_graph.create_nodes(node_data, insert_position)[0]
 	if qc_node != "": # dragged from port
 		var port_position : Vector2
@@ -54,6 +55,7 @@ func add_node(node_data) -> void:
 					port_position = node.get_connection_input_position(new_slot)
 					break
 		node.offset -= port_position/current_graph.zoom
+	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
 	var achievements = get_node("/root/MainWindow/Achievements")
@@ -78,10 +80,86 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	qc_slot_type = slot_type
 	qc_is_output = is_output
 	filter.text = ""
+	for b in $PanelContainer/VBoxContainer/Buttons.get_children():
+		var obj = b.library_item.item
+		if not obj.has("type") or ( qc_slot_type != -1 and not check_quick_connect(obj) ):
+			b.disable()
+		else:
+			b.enable()
 	update_list(filter.text)
 	filter.grab_focus()
 	filter.select_all()
 
+func check_quick_connect(obj) -> bool:
+	var ref_obj = obj
+	if mm_loader.predefined_generators.has(obj.type):
+		ref_obj = mm_loader.predefined_generators[obj.type]
+	# comment and remote nodes have neither input nor output
+	if ref_obj.type == "comment" or ref_obj.type == "remote":
+		return false
+	if qc_is_output:
+		if ref_obj.has("shader_model"):
+			if ! ref_obj.shader_model.has("outputs") or ref_obj.shader_model.outputs.empty():
+				return false
+			else:
+				var found : bool = false
+				for outputs in ref_obj.shader_model.outputs.size():
+					if mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
+						found = true
+						break
+				if !found:
+					return false
+		elif ref_obj.has("nodes"):
+			var output_ports = []
+			for n in ref_obj.nodes:
+				if n.name == "gen_outputs":
+					if n.has("ports"):
+						output_ports = n.ports
+					break
+			var found : bool = false
+			for outputs in output_ports.size():
+				if mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
+					found = true
+					break
+			if !found:
+				return false
+			if output_ports.empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
+				return false
+		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer") and qc_slot_type != 0:
+			return false
+	else:
+		if ref_obj.has("shader_model"):
+			if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
+				return false
+			else:
+				var found : bool = false
+				for input in ref_obj.shader_model.inputs.size():
+					if mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
+						found = true
+						break
+				if !found:
+					return false
+		elif ref_obj.has("nodes"):
+			var input_ports = []
+			for n in ref_obj.nodes:
+				if n.name == "gen_inputs":
+					if n.has("ports"):
+						input_ports = n.ports
+					break
+			var found : bool = false
+			for input in input_ports.size():
+				if mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
+					found = true
+					break
+			if !found:
+				return false
+			if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
+				return false
+		elif ref_obj.type == "image" or ref_obj.type == "text":
+			return false
+		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and qc_slot_type != 0:
+			return false
+	return true
 
 func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
@@ -91,75 +169,8 @@ func update_list(filter_text : String = "") -> void:
 		var obj = i.item
 		if not obj.has("type"):
 			continue
-		if qc_slot_type != -1:
-			var ref_obj = obj
-			if mm_loader.predefined_generators.has(obj.type):
-				ref_obj = mm_loader.predefined_generators[obj.type]
-			# comment and remote nodes have neither input nor output
-			if ref_obj.type == "comment" or ref_obj.type == "remote":
-				continue
-			if qc_is_output:
-				if ref_obj.has("shader_model"):
-					if ! ref_obj.shader_model.has("outputs") or ref_obj.shader_model.outputs.empty():
-						continue
-					else:
-						var found : bool = false
-						for outputs in ref_obj.shader_model.outputs.size():
-							if mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
-								found = true
-								break
-						if !found:
-							continue
-				elif ref_obj.has("nodes"):
-					var output_ports = []
-					for n in ref_obj.nodes:
-						if n.name == "gen_outputs":
-							if n.has("ports"):
-								output_ports = n.ports
-							break
-					var found : bool = false
-					for outputs in output_ports.size():
-						if mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
-							found = true
-							break
-					if !found:
-						continue
-					if output_ports.empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
-						continue
-				elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer") and qc_slot_type != 0:
-					continue
-			else:
-				if ref_obj.has("shader_model"):
-					if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
-						continue
-					else:
-						var found : bool = false
-						for input in ref_obj.shader_model.inputs.size():
-							if mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
-								found = true
-								break
-						if !found:
-							continue
-				elif ref_obj.has("nodes"):
-					var input_ports = []
-					for n in ref_obj.nodes:
-						if n.name == "gen_inputs":
-							if n.has("ports"):
-								input_ports = n.ports
-							break
-					var found : bool = false
-					for input in input_ports.size():
-						if mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
-							found = true
-							break
-					if !found:
-						continue
-					if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
-						continue
-				elif ref_obj.type == "image" or ref_obj.type == "text":
-					continue
-				elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and qc_slot_type != 0:
-					continue
+		if qc_slot_type != -1 and ! check_quick_connect(obj):
+			continue
 		var split: Array = obj.tree_item.rsplit("/", true, 1)
 		match split:
 			[var name]:

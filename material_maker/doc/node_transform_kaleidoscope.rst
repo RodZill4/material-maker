@@ -20,11 +20,13 @@ The **Kaleidoscope** node outputs the result as RGBA.
 Parameters
 ++++++++++
 
-The **Kaleidoscope** node has two parameters:
+The **Kaleidoscope** node has three parameters:
 
-* *strength* to scale the warp effect.
+* *count* to set the number of replications of the input.
 
-* *epsilon* is used to evaluate the second input's derivative
+* *offset* is the offset angle used to select the area in the input that is replicated.
+
+* *variations* can be checked to select a different variation for each replication.
 
 Example images
 ++++++++++++++

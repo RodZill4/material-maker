@@ -69,9 +69,9 @@ const MENU = [
 	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
 	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
 
-	#{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
-	#{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
-	#{ menu="Edit" },
+	{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
+	{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
+	{ menu="Edit" },
 	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
 	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
 	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
@@ -100,15 +100,8 @@ const MENU = [
 	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
 	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
 	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Emission", command_parameter="emission_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Normal", command_parameter="normal_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting", command="toggle_paint_feature", description="Depth", command_parameter="depth_enabled", mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="256x256", command_parameter=256, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="512x512", command_parameter=512, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="1024x1024", command_parameter=1024, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="2048x2048", command_parameter=2048, mode="paint", toggle=true },
-	{ menu="Tools/Painting/Texture Size", command="set_painting_texture_size", description="4096x4096", command_parameter=4096, mode="paint", toggle=true },
-	{ menu="Tools/Painting", submenu="environment", description="Set environment", mode="paint" },
+	{ menu="Tools", command="paint_project_settings", description="Paint project settings", mode="paint" },
+	{ menu="Tools", submenu="paint_environment", description="Set painting environment", mode="paint" },
 	{ menu="Tools" },
 	{ menu="Tools", command="environment_editor", description="Environment editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
@@ -117,12 +110,12 @@ const MENU = [
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
 	{ menu="Help", command="show_achievements", description="Show achievements" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
-	{ menu="Help", command="show_reddit", description="Material Maker on reddit" },
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
 ]
 
 const DEFAULT_CONFIG = {
+	locale = "",
 	confirm_quit = true,
 	confirm_close_project = true,
 	vsync = true,
@@ -134,6 +127,7 @@ const DEFAULT_CONFIG = {
 	ui_3d_preview_sun_shadow = false,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
+	bake_ao_ray_bias = 0.005,
 	bake_denoise_radius = 3
 }
 
@@ -145,6 +139,10 @@ func _ready() -> void:
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
+	
+	if get_config("locale") == "":
+		config_cache.set_value("config", "locale", TranslationServer.get_locale())
+	
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
@@ -227,6 +225,11 @@ func on_config_changed() -> void:
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+	# locale
+	var locale = get_config("locale")
+	if locale != "" and locale != TranslationServer.get_locale():
+		TranslationServer.set_locale(locale)
+		get_tree().call_group("updated_from_locale", "update_from_locale")
 
 	var scale = get_config("ui_scale")
 	if scale <= 0:
@@ -489,6 +492,7 @@ func create_menu_set_theme(menu) -> void:
 
 func set_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
+	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
@@ -688,26 +692,26 @@ func edit_cut() -> void:
 		graph_edit.cut()
 
 func edit_undo() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		graph_edit.get_node("UndoRedo").undo()
+	var project = get_current_project()
+	if project != null and project.get("undoredo") != null:
+		project.undoredo.undo()
 
 func edit_undo_is_disabled() -> bool:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		return !graph_edit.get_node("UndoRedo").can_undo()
-	return false
+	var project = get_current_project()
+	if project != null and project.get("undoredo") != null:
+		return !project.undoredo.can_undo()
+	return true
 
 func edit_redo() -> void:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		graph_edit.get_node("UndoRedo").redo()
+	var project = get_current_project()
+	if project != null and project.get("undoredo") != null:
+		project.undoredo.redo()
 
 func edit_redo_is_disabled() ->  bool:
-	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		return !graph_edit.get_node("UndoRedo").can_redo()
-	return false
+	var project = get_current_project()
+	if project != null and project.get("undoredo") != null:
+		return !project.undoredo.can_redo()
+	return true
 
 func edit_cut_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -898,27 +902,17 @@ func add_brush_to_library(index) -> void:
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
-func toggle_paint_feature(channel : String, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.material_feature_is_checked(channel)
-	paint.check_material_feature(channel, value)
-	return value
+func paint_project_settings():
+	var dialog = load("res://material_maker/panels/paint/paint_project_settings.tscn").instance()
+	add_child(dialog)
+	dialog.edit_settings(get_current_project())
 
-func set_painting_texture_size(size : int, value = null) -> bool:
-	var paint = get_current_project()
-	if value == null:
-		return paint.get_texture_size() == size
-	paint.set_texture_size(size)
-	return true
-
-
-func create_menu_environment(menu) -> void:
+func create_menu_paint_environment(menu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", self, "_on_Environment_id_pressed"):
-		menu.connect("id_pressed", self, "_on_Environment_id_pressed")
+	if !menu.is_connected("id_pressed", self, "_on_PaintEnvironment_id_pressed"):
+		menu.connect("id_pressed", self, "_on_PaintEnvironment_id_pressed")
 
-func _on_Environment_id_pressed(id) -> void:
+func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
 	if paint != null:
 		paint.set_environment(id)
@@ -977,9 +971,6 @@ func show_achievements() -> void:
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
-
-func show_reddit() -> void:
-	OS.shell_open("https://www.reddit.com/r/MaterialMaker/")
 
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instance()
@@ -1141,6 +1132,8 @@ func generate_graph_screenshot():
 		return
 	# Generate the image
 	var graph_edit : GraphEdit = get_current_graph_edit()
+	var minimap_save : bool = graph_edit.minimap_enabled
+	graph_edit.minimap_enabled = false
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
@@ -1178,6 +1171,7 @@ func generate_graph_screenshot():
 	graph_edit.scroll_offset = save_scroll_offset
 	graph_edit.zoom = save_zoom
 	image.save_png(files[0])
+	graph_edit.minimap_enabled = minimap_save
 
 # Handle dropped files
 

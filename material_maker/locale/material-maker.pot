@@ -1,0 +1,910 @@
+# Translations template for Material Maker.
+# Copyright (C) 2021 Rodolphe Suescun and contributors
+# This file is distributed under the same license as the Material Maker project.
+# Rodolphe Suescun <rodzilla@free.fr>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: rodzilla@free.fr\n"
+"POT-Creation-Date: 2021-10-17 16:02\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: res:///start.tscn:440
+#: res:///material_maker/windows/about/about.tscn:74
+msgid "Material Maker"
+msgstr ""
+
+#: res:///start.tscn:471
+msgid "Powered by"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+#: res:///material_maker/main_window.tscn:103
+msgid "File"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:54
+msgid "New material"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:55
+msgid "New paint project"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:56
+msgid "Load"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:57
+msgid "Load material from website"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:58
+msgid "Load recent"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:60
+msgid "Save"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:61
+msgid "Save as..."
+msgstr ""
+
+#: res:///material_maker/main_window.gd:62
+msgid "Save all..."
+msgstr ""
+
+#: res:///material_maker/main_window.gd:64
+#: res:///material_maker/main_window.gd:65
+msgid "Export material"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:67
+#: res:///material_maker/windows/export_animation/export_animation.tscn:313
+msgid "Close"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:68
+msgid "Quit"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "Edit"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:70
+msgid "Undo"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:71
+msgid "Redo"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:73
+msgid "Cut"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:74
+msgid "Copy"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:75
+msgid "Paste"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:76
+msgid "Duplicate"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:78
+msgid "Select All"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:79
+msgid "Select None"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:80
+msgid "Invert Selection"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:82
+msgid "Load Selection"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:83
+msgid "Save Selection"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:85
+msgid "Set theme"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:86
+msgid "Preferences"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "View"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:88
+msgid "Center view"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:89
+msgid "Reset zoom"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:91
+msgid "Show/Hide side panels"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:92
+msgid "Panels"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "Tools"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:94
+msgid "Create"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:95
+msgid "Create group"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:96
+msgid "Make selected nodes editable"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:98
+msgid "Add selected node to library"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:99
+msgid "Add current brush to library"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:100
+msgid "Create a screenshot of the current graph"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "Painting"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:101
+#: res:///material_maker/panels/paint/paint_layers.gd:441
+msgid "Emission"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:102
+msgid "Normal"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:103
+#: res:///material_maker/panels/paint/paint_layers.gd:443
+msgid "Depth"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "Texture Size"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:109
+msgid "Set environment"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:111
+msgid "Environment editor"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:112
+msgid "Generate screenshots for the library nodes"
+msgstr ""
+
+#: res:///material_maker/main_window.gd
+msgid "Help"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:114
+msgid "User manual"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:115
+msgid "Show selected library item documentation"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:116
+msgid "Report a bug"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:117
+msgid "Material Maker on reddit"
+msgstr ""
+
+#: res:///material_maker/main_window.gd:119
+msgid "About"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:10
+msgid "Library"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:11
+msgid "Preview2D"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:12
+msgid "Preview3D"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:13
+msgid "Preview2D (2)"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:14
+msgid "Histogram"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:15
+msgid "Hierarchy"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:16
+msgid "Reference"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:17
+msgid "Brushes"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:18
+msgid "Layers"
+msgstr ""
+
+#: res:///material_maker/main_window_layout.gd:19
+msgid "Parameters"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:102
+msgid "Output"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:149
+msgid "Unlock seed"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:149
+msgid "Lock seed"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:151
+msgid "Copy seed"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:153
+msgid "Paste seed"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:164
+msgid "Propagate changes"
+msgstr ""
+
+#: res:///material_maker/nodes/base.gd:182
+msgid "Change seed (left mouse button) / Show seed menu (right mouse button)"
+msgstr ""
+
+#: res:///material_maker/nodes/comment/comment.tscn:61
+msgid "Double-click to write a comment"
+msgstr ""
+
+#: res:///material_maker/nodes/debug/debug.tscn:26
+msgid "Show shader"
+msgstr ""
+
+#: res:///material_maker/nodes/debug/debug_popup.tscn:43
+msgid "Shadertoy"
+msgstr ""
+
+#: res:///material_maker/nodes/debug/debug_popup.tscn:51
+msgid "Copy to clipboard"
+msgstr ""
+
+#: res:///material_maker/nodes/ios/port.tscn:67
+#: res:///material_maker/windows/node_editor/input.tscn:79
+#: res:///material_maker/windows/node_editor/output.tscn:71
+msgid "Greyscale"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:38
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:17
+#: res:///material_maker/windows/node_editor/parameter_size.tscn:18
+msgid "Min:"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:59
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:37
+#: res:///material_maker/windows/node_editor/parameter_size.tscn:34
+msgid "Max:"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:80
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:57
+msgid "Step:"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:100
+#: res:///material_maker/windows/node_editor/parameter_curve.tscn:18
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:76
+#: res:///material_maker/windows/node_editor/parameter_gradient.tscn:18
+#: res:///material_maker/windows/node_editor/parameter_polygon.tscn:18
+#: res:///material_maker/windows/node_editor/parameter_polyline.tscn:18
+#: res:///material_maker/windows/node_editor/parameter_size.tscn:50
+msgid "Default:"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:129
+#: res:///material_maker/panels/library/create_lib_dialog.tscn:73
+#: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:90
+#: res:///material_maker/widgets/float_edit/expression_editor.tscn:70
+#: res:///material_maker/widgets/polygon_edit/polygon_dialog.tscn:69
+#: res:///material_maker/windows/desc_dialog/desc_dialog.tscn:67
+#: res:///material_maker/windows/line_dialog/line_dialog.tscn:37
+#: res:///material_maker/windows/load_from_website/load_from_website.tscn:53
+#: res:///material_maker/windows/new_painter/new_painter.tscn:140
+#: res:///material_maker/windows/node_editor/enum_editor.tscn:183
+#: res:///material_maker/windows/node_editor/node_editor.tscn:252
+#: res:///material_maker/windows/preferences/preferences.tscn:388
+msgid "OK"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/named_parameter_dialog.tscn:136
+#: res:///material_maker/panels/library/create_lib_dialog.tscn:80
+#: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:97
+#: res:///material_maker/widgets/float_edit/expression_editor.tscn:77
+#: res:///material_maker/widgets/polygon_edit/polygon_dialog.tscn:76
+#: res:///material_maker/windows/desc_dialog/desc_dialog.tscn:74
+#: res:///material_maker/windows/line_dialog/line_dialog.tscn:44
+#: res:///material_maker/windows/load_from_website/load_from_website.tscn:60
+#: res:///material_maker/windows/new_painter/new_painter.tscn:147
+#: res:///material_maker/windows/node_editor/enum_editor.tscn:209
+#: res:///material_maker/windows/node_editor/node_editor.tscn:259
+#: res:///material_maker/windows/preferences/preferences.tscn:395
+msgid "Cancel"
+msgstr ""
+
+#: res:///material_maker/nodes/remote/remote.tscn:74
+msgid "ab"
+msgstr ""
+
+#: res:///material_maker/nodes/tones/tones.tscn:61
+msgid "Luminance"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:29
+msgid "Albedo alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:45
+msgid "Metallic alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:62
+msgid "Roughness alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:79
+msgid "Emission alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:96
+msgid "Normal map alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:113
+msgid "Depth alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_config_popup.tscn:130
+msgid "Occlusion alpha:"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_tooltip.tscn:28
+msgid "Layer name"
+msgstr ""
+
+#: res:///material_maker/panels/layers/layer_tooltip_thumbnail.tscn:30
+msgid "albedo"
+msgstr ""
+
+#: res:///material_maker/panels/library/create_lib_dialog.tscn:33
+msgid "Library name:"
+msgstr ""
+
+#: res:///material_maker/panels/library/create_lib_dialog.tscn:49
+msgid "Library file:"
+msgstr ""
+
+#: res:///material_maker/panels/library/create_lib_dialog.tscn:58
+msgid "Click to enter a path"
+msgstr ""
+
+#: res:///material_maker/panels/library/library.tscn:31
+msgid "Manage Libraries"
+msgstr ""
+
+#: res:///material_maker/panels/library/library.tscn:52
+msgid "Filter:"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint.tscn:320
+msgid "Brush size"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint.tscn:340
+msgid "Brush hardness"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint.tscn:361
+msgid "Brush opacity"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint.tscn:382
+msgid "Brush spacing"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint.tscn:442
+#: res:///material_maker/panels/paint/paint.tscn:469
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:98
+msgid "None"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:438
+msgid "Albedo"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:439
+msgid "Metallic"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:440
+msgid "Roughness"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:442
+msgid "Normal map"
+msgstr ""
+
+#: res:///material_maker/panels/paint/paint_layers.gd:444
+msgid "Occlusion"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/mesh_config_popup.tscn:35
+msgid "Mesh configuration"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/mesh_config_popup.tscn:54
+msgid "UV Scale:"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/mesh_config_popup.tscn:85
+msgid "Tesselated"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd
+#: res:///material_maker/panels/preview_3d/preview_3d_ui.tscn:26
+msgid "Model"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:24
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:35
+msgid "Select"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:25
+msgid "Configure"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd
+msgid "Rotate"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:26
+msgid "Off"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:27
+msgid "Slow"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:28
+msgid "Medium"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:29
+msgid "Fast"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd
+msgid "Generate map"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:30
+msgid "Mesh normal"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:31
+msgid "Inverse UV"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:32
+msgid "Curvature"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:33
+msgid "Ambient Occlusion"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd:34
+msgid "Thickness"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/preview_3d.gd
+#: res:///material_maker/panels/preview_3d/preview_3d_ui.tscn:33
+msgid "Environment"
+msgstr ""
+
+#: res:///material_maker/panels/preview_3d/thumbnails/generation/gen_thumbs_meshes.tscn:77
+msgid "Custom"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:387
+msgid "View to texture"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:388
+msgid "Texture to view"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:389
+msgid "Seams"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:390
+msgid "Albedo (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:391
+msgid "Metallic/Roughness (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:392
+msgid "Emission (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:393
+msgid "Normal (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:394
+msgid "Depth/Occlusion (current layer)"
+msgstr ""
+
+#: res:///material_maker/tools/painter/painter.gd:395
+msgid "Mask (current layer)"
+msgstr ""
+
+#: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:67
+msgid "Presets"
+msgstr ""
+
+#: res:///material_maker/widgets/curve_edit/curve_dialog.tscn:77
+msgid "Invert"
+msgstr ""
+
+#: res:///material_maker/widgets/file_picker_button/file_picker_button.tscn:8
+#: res:///material_maker/windows/node_editor/parameter_boolean.tscn:16
+msgid "Default"
+msgstr ""
+
+#: res:///material_maker/widgets/float_edit/expression_editor.tscn:63
+#: res:///material_maker/windows/node_editor/node_editor.tscn:245
+#: res:///material_maker/windows/preferences/preferences.tscn:381
+msgid "Apply"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:89
+msgid "© 2018-2021 Rodolphe Suescun and contributors"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:99
+msgid "Authors"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:134
+msgid " Godot Engine"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:143
+msgid "99% of Material Maker's code is the awesome Godot Engine"
+msgstr ""
+
+#: res:///material_maker/windows/about/about.tscn:146
+msgid "License"
+msgstr ""
+
+#: res:///material_maker/windows/add_node_popup/node_selection_button.tscn:46
+msgid "Node"
+msgstr ""
+
+#: res:///material_maker/windows/add_node_popup/node_selection_button.tscn:68
+msgid "path/to/node"
+msgstr ""
+
+#: res:///material_maker/windows/desc_dialog/desc_dialog.tscn:35
+msgid "Short Description:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:95
+#: res:///material_maker/windows/material_editor/material_editor.tscn:170
+#: res:///material_maker/windows/node_editor/enum_editor.tscn:72
+#: res:///material_maker/windows/node_editor/node_editor.tscn:59
+msgid "Name:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:108
+msgid "HDRI URL:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:122
+msgid "Color:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:135
+msgid "Sky Energy:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:155
+msgid "Ambient color:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:168
+msgid "Ambient Energy:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:188
+msgid "Sky contribution:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:207
+msgid "Sun color:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:220
+msgid "Sun Energy:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:240
+msgid "Sun Direction:"
+msgstr ""
+
+#: res:///material_maker/windows/environment_editor/environment_editor.tscn:261
+msgid "Sun Angle:"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:110
+msgid "Size:"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:131
+msgid "Begin:"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:158
+msgid "End:"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:185
+msgid "Images:"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:213
+msgid "PNG files"
+msgstr ""
+
+#: res:///material_maker/windows/export_animation/export_animation.tscn:306
+msgid "Export"
+msgstr ""
+
+#: res:///material_maker/windows/file_dialog/left_panel.tscn:17
+msgid "Recent"
+msgstr ""
+
+#: res:///material_maker/windows/file_dialog/left_panel.tscn:33
+msgid "Favorite"
+msgstr ""
+
+#: res:///material_maker/windows/line_dialog/line_dialog.tscn:18
+msgid "blah"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:89
+msgid "Export target:"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:128
+msgid "Extension:"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:182
+msgid "Condition:"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:195
+msgid "Type:"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:203
+msgid "Texture"
+msgstr ""
+
+#: res:///material_maker/windows/material_editor/material_editor.tscn:211
+msgid "Output:"
+msgstr ""
+
+#: res:///material_maker/windows/new_painter/new_painter.tscn:65
+msgid "Model:"
+msgstr ""
+
+#: res:///material_maker/windows/new_painter/new_painter.tscn:71
+msgid "Model file"
+msgstr ""
+
+#: res:///material_maker/windows/new_painter/new_painter.tscn:77
+msgid "Resolution:"
+msgstr ""
+
+#: res:///material_maker/windows/new_painter/new_painter.tscn:92
+msgid "Project:"
+msgstr ""
+
+#: res:///material_maker/windows/new_painter/new_painter.tscn:99
+msgid "Project file"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/enum_editor.tscn:115
+msgid "Value:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/input.tscn:57
+#: res:///material_maker/windows/node_editor/parameter.tscn:61
+msgid "name"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/input.tscn:65
+#: res:///material_maker/windows/node_editor/parameter.tscn:68
+msgid "Label"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:42
+#: res:///material_maker/windows/preferences/preferences.tscn:43
+msgid "General"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:77
+msgid "Parameters:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:104
+msgid "Inputs:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:127
+msgid "Outputs"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:139
+msgid "Outputs:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:162
+msgid "Main Code"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:175
+msgid "Instance Functions"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:188
+msgid "Global Functions"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/node_editor.tscn:205
+msgid "Includes:"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/parameter.tscn:80
+msgid "float"
+msgstr ""
+
+#: res:///material_maker/windows/node_editor/parameter_float.tscn:92
+msgid "Control:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/bool_option.tscn:8
+msgid "Confirm when quitting the application"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:63
+msgid "Language:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:77
+msgid "Install"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:95
+msgid "Confirm when closing a project"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:113
+msgid "UI scale (0 = auto):"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:139
+msgid "3D preview resolution:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:170
+msgid "3D preview tesselation detail:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:197
+msgid "3D preview sun shadow (requires restart)"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:210
+msgid "Enable VSync"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:225
+msgid "FPS limit:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:258
+msgid "Idle FPS limit:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:277
+msgid "Bake"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:292
+msgid "Ray count:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:317
+msgid "Ray length:"
+msgstr ""
+
+#: res:///material_maker/windows/preferences/preferences.tscn:343
+msgid "Denoise radius:"
+msgstr ""
+
+#: res:///material_maker/windows/progress_window/progress_window.tscn:38
+msgid "Doing this, doing that"
+msgstr ""
+

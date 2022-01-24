@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=111 format=2]
+[gd_resource type="Theme" load_steps=117 format=2]
 
 [ext_resource path="res://material_maker/theme/dark/textedit_space.png" type="Texture" id=1]
 [ext_resource path="res://material_maker/theme/dark/textedit_tab.png" type="Texture" id=2]
@@ -54,6 +54,8 @@
 [ext_resource path="res://material_maker/theme/dark/popupmenu_radio_unchecked.png" type="Texture" id=52]
 [ext_resource path="res://material_maker/theme/dark/tabcontainer_increment_highlight.png" type="Texture" id=53]
 [ext_resource path="res://material_maker/theme/dark/tabs_increment.png" type="Texture" id=54]
+[ext_resource path="res://material_maker/theme/font.tres" type="DynamicFont" id=55]
+[ext_resource path="res://material_maker/fonts/DroidSansFallback.ttf" type="DynamicFontData" id=56]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 6.0
@@ -273,6 +275,13 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 0.1, 0.115, 0.155, 1 )
 
+[sub_resource type="DynamicFont" id=120]
+size = 15
+outline_size = 2
+outline_color = Color( 0, 0, 0, 0.235294 )
+extra_spacing_top = -3
+font_data = ExtResource( 56 )
+
 [sub_resource type="StyleBoxFlat" id=22]
 content_margin_left = 28.0
 content_margin_right = 28.0
@@ -298,11 +307,10 @@ content_margin_right = 28.0
 content_margin_top = 24.0
 content_margin_bottom = 5.0
 bg_color = Color( 0, 0, 0, 0.3 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
 border_color = Color( 1, 1, 1, 0.9 )
+shadow_color = Color( 0, 0, 0, 0.0784314 )
+shadow_size = 5
+shadow_offset = Vector2( 0, 3 )
 
 [sub_resource type="StyleBoxFlat" id=24]
 content_margin_left = 28.0
@@ -315,6 +323,9 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 1, 1, 1, 0.9 )
+shadow_color = Color( 0, 0, 0, 0.117647 )
+shadow_size = 5
+shadow_offset = Vector2( 0, 3 )
 
 [sub_resource type="StyleBoxFlat" id=25]
 content_margin_left = 28.0
@@ -322,11 +333,21 @@ content_margin_right = 28.0
 content_margin_top = 24.0
 content_margin_bottom = 5.0
 bg_color = Color( 0, 0, 0, 0.7 )
+border_width_top = 22
+border_color = Color( 0.376471, 0.376471, 0.376471, 0.701961 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id=119]
+bg_color = Color( 0, 0, 0, 0 )
+draw_center = false
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color( 1, 1, 1, 0.9 )
+border_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -352,11 +373,8 @@ content_margin_right = 28.0
 content_margin_top = 24.0
 content_margin_bottom = 5.0
 bg_color = Color( 0, 0, 0, 0.9 )
-border_width_left = 1
 border_width_top = 22
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.41, 0.61, 0.91, 0.9 )
+border_color = Color( 0.376471, 0.376471, 0.376471, 0.901961 )
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -490,6 +508,25 @@ color = Color( 1, 1, 1, 0.1 )
 grow_begin = 7.0
 grow_end = 7.0
 
+[sub_resource type="StyleBoxFlat" id=121]
+bg_color = Color( 0.376471, 0.376471, 0.376471, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id=122]
+bg_color = Color( 0.376471, 0.376471, 0.376471, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
 [sub_resource type="StyleBoxEmpty" id=43]
 
 [sub_resource type="StyleBoxFlat" id=44]
@@ -607,6 +644,7 @@ shadow_color = Color( 0, 0, 0, 0.3 )
 shadow_size = 4
 
 [resource]
+default_font = ExtResource( 55 )
 Button/colors/font_color = Color( 0.8, 0.8075, 0.8275, 1 )
 Button/colors/font_color_disabled = Color( 1, 1, 1, 0.3 )
 Button/colors/font_color_hover = Color( 0.88, 0.8845, 0.8965, 1 )
@@ -634,8 +672,8 @@ CheckBox/icons/radio_unchecked = ExtResource( 13 )
 CheckBox/icons/unchecked = ExtResource( 20 )
 CheckBox/styles/disabled = SubResource( 5 )
 CheckBox/styles/hover = SubResource( 5 )
-CheckBox/styles/normal = SubResource( 5 )
-CheckBox/styles/pressed = SubResource( 5 )
+CheckBox/styles/normal = SubResource( 6 )
+CheckBox/styles/pressed = SubResource( 6 )
 CheckButton/colors/font_color = Color( 0.8, 0.8075, 0.8275, 1 )
 CheckButton/colors/font_color_disabled = Color( 1, 1, 1, 0.3 )
 CheckButton/colors/font_color_hover = Color( 0.88, 0.8845, 0.8965, 1 )
@@ -704,7 +742,6 @@ GraphEdit/colors/selection_fill = Color( 0.41, 0.61, 0.91, 0.3 )
 GraphEdit/colors/selection_stroke = Color( 0.41, 0.61, 0.91, 0.8 )
 GraphEdit/constants/bezier_len_neg = 160
 GraphEdit/constants/bezier_len_pos = 80
-GraphEdit/constants/port_grab_distance_vertical = 12
 GraphEdit/icons/minus = ExtResource( 31 )
 GraphEdit/icons/more = ExtResource( 21 )
 GraphEdit/icons/reset = ExtResource( 25 )
@@ -719,6 +756,7 @@ GraphNode/constants/port_offset = 10
 GraphNode/constants/separation = 1
 GraphNode/constants/title_h_offset = -16
 GraphNode/constants/title_offset = 20
+GraphNode/fonts/title_font = SubResource( 120 )
 GraphNode/icons/close = ExtResource( 19 )
 GraphNode/icons/port = ExtResource( 32 )
 GraphNode/icons/resizer = ExtResource( 33 )
@@ -726,6 +764,7 @@ GraphNode/styles/breakpoint = SubResource( 22 )
 GraphNode/styles/comment = SubResource( 23 )
 GraphNode/styles/commentfocus = SubResource( 24 )
 GraphNode/styles/frame = SubResource( 25 )
+GraphNode/styles/node_highlight = SubResource( 119 )
 GraphNode/styles/position = SubResource( 26 )
 GraphNode/styles/selectedframe = SubResource( 27 )
 GraphNode/styles/state_machine_frame = SubResource( 28 )
@@ -823,6 +862,8 @@ PopupMenu/styles/separator = SubResource( 42 )
 PopupPanel/styles/panel = SubResource( 38 )
 ProgressBar/colors/font_color = Color( 0.8, 0.8075, 0.8275, 1 )
 ProjectSettingsEditor/styles/panel = SubResource( 8 )
+Reroute/styles/frame = SubResource( 121 )
+Reroute/styles/selectedframe = SubResource( 122 )
 RichTextLabel/colors/default_color = Color( 0.8, 0.8075, 0.8275, 1 )
 RichTextLabel/colors/font_color_shadow = Color( 0, 0, 0, 0 )
 RichTextLabel/constants/shadow_as_outline = 0

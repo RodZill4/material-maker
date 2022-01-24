@@ -41,6 +41,8 @@ Shapes
 	node_3d_sdf_shapes_capsule
 	node_3d_sdf_shapes_cone
 	node_3d_sdf_shapes_torus
+	node_3d_sdf_shapes_plane
+	node_3d_sdf_shapes_angle
 
 Operators
 +++++++++

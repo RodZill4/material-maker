@@ -10,6 +10,8 @@
 	"parameters": {
 		"blend": 0
 	},
+	"seed": 22878,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"custom": "",
@@ -24,7 +26,7 @@
 					},
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\n\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\n\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n\n$definitions float_uniform_to_const,rename_buffers\n\nvoid fragment() {\n\tfloat _seed_variation_ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n}\n",
+						"template": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n$definitions float_uniform_to_const,rename_buffers\nvoid fragment() {\n\tfloat _seed_variation_ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n}\n",
 						"type": "template"
 					},
 					{
@@ -38,7 +40,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).shader",
-						"template": "Shader \"Unlit/NewUnlitShader\"\n{\n    Properties\n    {\n    }\n    SubShader\n    {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 100\n        Pass\n        {\n        \tBlend One One\n            CGPROGRAM\n            #pragma vertex vert\n            #pragma fragment frag\n            // make fog work\n            #pragma multi_compile_fog\n            #include \"UnityCG.cginc\"\n            struct appdata\n            {\n                float4 vertex : POSITION;\n                float2 uv : TEXCOORD0;\n            };\n            struct v2f\n            {\n                float2 uv : TEXCOORD0;\n                UNITY_FOG_COORDS(1)\n                float4 vertex : SV_POSITION;\n            };\n$definitions hlsl,rename_buffers,unity\n\t\t\n\t\t\tv2f vert (appdata v) {\n\t\t\t\tv2f o;\n\t\t\t\to.vertex = UnityObjectToClipPos(v.vertex);\n\t\t\t\to.uv = v.uv;\n\t\t\t\tUNITY_TRANSFER_FOG(o,o.vertex);\n\t\t\t\treturn o;\n\t\t\t}\n\t\t\tfixed4 frag (v2f i) : SV_Target {\n\t\t\t\tfloat2 uv = i.uv;\n$begin_generate hlsl,rename_buffers,unity\n                // sample the generated texture\n                fixed4 col = $color_tex(uv);\n$end_generate\n                // apply fog\n                UNITY_APPLY_FOG(i.fogCoord, col);\n                return col;\n            }\n            ENDCG\n        }\n    }\n}\n",
+						"template": "Shader \"Unlit/NewUnlitShader\"\n{\n    Properties\n    {\n    }\n    SubShader\n    {\n        Tags { \"RenderType\"=\"Opaque\" }\n        LOD 100\n        Pass\n        {\n        \tBlend One One\n            CGPROGRAM\n            #pragma vertex vert\n            #pragma fragment frag\n            // make fog work\n            #pragma multi_compile_fog\n            #include \"UnityCG.cginc\"\n            struct appdata\n            {\n                float4 vertex : POSITION;\n                float2 uv : TEXCOORD0;\n            };\n            struct v2f\n            {\n                float2 uv : TEXCOORD0;\n                UNITY_FOG_COORDS(1)\n                float4 vertex : SV_POSITION;\n            };\n$definitions hlsl,rename_buffers,unity\n\t\t\n\t\t\tv2f vert (appdata v) {\n\t\t\t\tv2f o;\n\t\t\t\to.vertex = UnityObjectToClipPos(v.vertex);\n\t\t\t\to.uv = v.uv;\n\t\t\t\tUNITY_TRANSFER_FOG(o,o.vertex);\n\t\t\t\treturn o;\n\t\t\t}\n\t\t\tfixed4 frag (v2f i) : SV_Target {\n\t\t\t\tfloat _seed_variation_ = 0.0;\n\t\t\t\tfloat2 uv = i.uv;\n$begin_generate hlsl,rename_buffers,unity\n                // sample the generated texture\n                fixed4 col = $color_tex(uv);\n$end_generate\n                // apply fog\n                UNITY_APPLY_FOG(i.fogCoord, col);\n                return col;\n            }\n            ENDCG\n        }\n    }\n}\n",
 						"type": "template"
 					},
 					{
@@ -67,7 +69,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).mm2ue",
-						"template": "/*\nInstructions to setup this material:\n- copy material_unlit.uasset and open the copy\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n- copy the shader code below and paste it into the Custom node\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv) {\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n        return $color_tex(uv);\n$end_generate\n    }\n};\nFunctions f;\nreturn f.generated_shader(TexCoords);\n",
+						"template": "/*\nInstructions to setup this material:\n- copy material_unlit.uasset and open the copy\n$begin_buffers\n- create a TextureObject for $(file_prefix)_texture_$(buffer_index).png in the graph\n  and a new input for texture_$(buffer_index) in the custom node, and connect them\n$end_buffers\n- copy the shader code below and paste it into the Custom node\n*/\nstruct Functions {\n$definitions hlsl,rename_buffers,unreal\n\tfixed4 generated_shader(float2 uv) {\n\t\tfloat _seed_variation_ = 0.0;\n$begin_generate hlsl,rename_buffers,unreal\n        // sample the generated texture\n        return $color_tex(uv);\n$end_generate\n    }\n};\nFunctions f;\nreturn f.generated_shader(TexCoords);\n",
 						"type": "template"
 					}
 				]

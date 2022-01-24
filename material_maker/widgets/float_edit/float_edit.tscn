@@ -12,6 +12,8 @@ margin_bottom = -696.0
 focus_mode = 1
 text = "0.5"
 context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
 caret_blink = true
 script = ExtResource( 1 )
 __meta__ = {
@@ -38,7 +40,6 @@ mouse_filter = 2
 
 [connection signal="focus_entered" from="." to="." method="_on_FloatEdit_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_LineEdit_focus_exited"]
-[connection signal="gui_input" from="." to="." method="_on_LineEdit_gui_input"]
 [connection signal="resized" from="." to="." method="do_update"]
 [connection signal="text_changed" from="." to="." method="_on_LineEdit_text_changed"]
 [connection signal="text_entered" from="." to="." method="_on_LineEdit_text_entered"]

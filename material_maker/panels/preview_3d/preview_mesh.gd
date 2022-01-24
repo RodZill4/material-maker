@@ -72,5 +72,7 @@ func update_mesh() -> void:
 			"SphereMesh":
 				mesh.radial_segments = 64
 				mesh.rings = 32
+			"ArrayMesh":
+				pass
 			_:
 				push_error("Unknown non-tesselated mesh type: %s" % mesh.get_class())

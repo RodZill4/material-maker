@@ -1,0 +1,59 @@
+{
+	"name": "normal_map_convert",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"op": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5, 0.5, 1.0)",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"longdesc": "Convert a normal map between OpenGL (default) and DirectX formats",
+		"name": "Convert Normal Map",
+		"outputs": [
+			{
+				"longdesc": "Shows the image with adjusted Hue, Saturation and Value",
+				"rgb": "$in($(uv))$op",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"longdesc": "The conversion that should be performed",
+				"name": "op",
+				"shortdesc": "Conversion",
+				"type": "enum",
+				"values": [
+					{
+						"name": "From/To OpenGL",
+						"value": "*vec3(-1.0, 1.0, -1.0)+vec3(1.0, 0.0, 1.0)"
+					},
+					{
+						"name": "From/To DirectX",
+						"value": "*vec3(-1.0, -1.0, -1.0)+vec3(1.0, 1.0, 1.0)"
+					}
+				]
+			}
+		],
+		"shortdesc": "Convert Normal Map"
+	},
+	"type": "shader"
+}

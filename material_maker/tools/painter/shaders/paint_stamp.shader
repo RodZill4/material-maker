@@ -12,14 +12,13 @@ void fragment() {
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
 	
 	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5))*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
 	
 	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
-	if (erase) {
-		COLOR = vec4(screen_color.xyz, max(screen_color.a-a, 0.0));
-	} else if (reset) {
+	if (reset) {
 		COLOR = vec4(color.xyz, a);
 	} else {
-		float alpha_sum = min(1.0, a + screen_color.a);
+		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
 		COLOR = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
 	}
 }

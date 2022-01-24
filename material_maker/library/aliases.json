@@ -9,6 +9,7 @@
 	"Filter/Decompose": "split,rgba",
 	"Filter/Greyscale": "desaturate",
 	"Filter/Invert": "negative",
+	"Filter/Math": "add,subtract,multiply,divide,log,log2,pow,abs,round,floor,ceil,trunc,fract,min,max,cos,sin,tan,sqrt,compare,greater,less",
 	"Filter/Supersample": "antialias,smoothen",
 	"Filter/SwapChannels": "shuffle,change,bind",
 	"Filter/Tonality": "curves",

@@ -1,7 +1,7 @@
 Uneven Bricks node
 ~~~~~~~~~~~~~~~~~~
 
-The **Uneven Bricks** node outputs several related bricks pattern textures that can be used for walls
+The **Uneven Bricks** node outputs an uneven brick pattern texture that can be used for walls
 or pavement. It generates an uneven pattern by randomly splitting bricks.
 
 .. image:: images/node_pattern_unevenbricks.png
@@ -18,21 +18,14 @@ Outputs
 
 The **Uneven Bricks** node provides the following textures:
 
-* The first one is a greyscale image where bricks are shown in white and mortar in black.
+* The first is a greyscale image where bricks are shown in white and mortar in black.
 
-* The second one is a color image where all bricks are drawn using a random uniform color.
+* The second is an RGBA texture that contains the bounding box for each brick.
 
-* The 3rd and 4th textures are greyscale images of the X and Y position of the center of
-  each brick.
+* The 3rd is an RGBA texture that contains the bounding box for each brick corner.
 
-* The 5th texture is an UV map texture for each brick (and can be used with the **CustomUV**
-  node to apply a texture on each brick)
-
-* the 6th texture is an UV map for each corner of each brick (and can be used with the
-  **CustomUV** node to apply a texture on each corner)
-
-Those images can be used together to create complex materials that show for example bricks
-of different colors.
+The bounding box textures can be used in conjunction with **Fill To** nodes to generate random colors,
+custom UVs etc. to create complex materials that show for example bricks of different colors.
 
 Parameters
 ++++++++++
@@ -56,14 +49,7 @@ The **Uneven Bricks** node accepts the following parameters:
 
 * the *Round* parameter defines the radius of each round corner.
 
-* the *Corner* parameter defines the size of each corner (for the 6th output texture).
-
-Notes
-+++++
-
-As with all random nodes, the seed is held by the node's position, so moving the node in the graph
-will modify the texture, and the outputs will remain the same if its position and parameters
-are not changed.
+* the *Corner* parameter defines the size of each corner (for the 3rd output texture).
 
 Example images
 ++++++++++++++

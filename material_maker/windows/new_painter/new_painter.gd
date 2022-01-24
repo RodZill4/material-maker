@@ -5,6 +5,8 @@ signal return_status(status)
 var mesh_filename    = null
 var project_filename = null
 
+onready var mesh_instance : MeshInstance = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshPivot/MeshInstance
+
 func _ready():
 	pass
 
@@ -30,11 +32,17 @@ func set_mesh(file_name : String) -> void:
 	mesh_filename = file_name
 	var mesh : Mesh = $ObjLoader.load_obj_file(mesh_filename)
 	if mesh != null:
-		$VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh = mesh
+		mesh_instance.mesh = mesh
 		$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
 		$VBoxContainer/HBoxContainer2/OK.disabled = false
-		if project_filename == null:
-			set_project(mesh_filename.get_basename()+".mmpp")
+		# Initialise project file name
+		set_project(mesh_filename.get_basename()+".mmpp")
+		# Center the mesh and move the camera to the whole object is visible
+		var aabb : AABB = mesh_instance.get_aabb()
+		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
+		var d : float = aabb.size.length()
+		var camera = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/CameraPivot/Camera
+		camera.transform.origin.z = 0.8*d
 	else:
 		$VBoxContainer/HBoxContainer2/OK.disabled = true
 
@@ -60,7 +68,7 @@ func set_project(file_name : String) -> void:
 	$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ProjectFile.text = project_filename.get_file()
 
 func _on_OK_pressed():
-	var mesh = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh
+	var mesh = mesh_instance.mesh
 	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename, project_filename=project_filename, size=pow(2, $VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Resolution.size_value) })
 
 func _on_Cancel_pressed():
@@ -78,3 +86,4 @@ func ask(obj_file_name = null) -> String:
 	var result = yield(self, "return_status")
 	queue_free()
 	return result
+

@@ -2,15 +2,19 @@ extends "res://addons/material_maker/parser/glsl_parser_base.gd"
 
 const REGEXS : Array = [
 	{ type="ignore", regex="^[\\s\\r\\n]+" },
+	{ type="ignore", regex="^//.*?[\\r\\n]" },
+	{ type="ignore", regex="^/\\*(?:.|[\\r\\n])*?\\*/" },
 	{ type="FLOATCONSTANT", regex="^(\\d*[.])?\\d+([eE][-+]?\\d+)?" },
 	{ type="IDENTIFIER", regex="^\\$?[\\w_]+" },
-	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|==)" },
+	{ type="SYMBOLS", regex="^==" },
 	{ type="SYMBOLS", regex="^(<<|>>|&&|\\|\\||^^)=" },
+	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|\\+\\+|--)" },
 	{ type="SYMBOLS", regex="^[+-/*\\%<>!&|^]=" },
-	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|^]" },
+	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|?:^]" },
 ]
 
-const KEYWORDS = [ "if", "else", "for", "while", "break", "continue", "return" ]
+const KEYWORDS = [ "const", "if", "else", "for", "while", "break", "continue", "return",
+				   "in", "out" ]
 
 const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"bvec2", "bvec3", "bvec4", "ivec2", "ivec3", "ivec4",

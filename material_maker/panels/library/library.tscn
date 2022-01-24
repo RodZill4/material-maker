@@ -9,7 +9,9 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
-[node name="Library" type="VBoxContainer"]
+[node name="Library" type="VBoxContainer" groups=[
+"updated_from_locale",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 200 )
@@ -69,7 +71,7 @@ hide_root = true
 select_mode = 1
 script = ExtResource( 1 )
 
-[node name="PopupMenu" type="PopupMenu" parent="."]
+[node name="ItemMenu" type="PopupMenu" parent="."]
 margin_right = 20.0
 margin_bottom = 20.0
 items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Remove item", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, false, 3, 0, null, "", true, "Define aliases", null, 0, false, false, 4, 0, null, "", false ]
@@ -79,5 +81,5 @@ items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update t
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_rmb_selected" from="Tree" to="." method="_on_Tree_item_rmb_selected"]
-[connection signal="about_to_show" from="PopupMenu" to="." method="_on_PopupMenu_about_to_show"]
-[connection signal="index_pressed" from="PopupMenu" to="." method="_on_PopupMenu_index_pressed"]
+[connection signal="about_to_show" from="ItemMenu" to="." method="_on_PopupMenu_about_to_show"]
+[connection signal="index_pressed" from="ItemMenu" to="." method="_on_PopupMenu_index_pressed"]

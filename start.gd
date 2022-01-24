@@ -6,6 +6,7 @@ var progress : float = 0.0
 onready var progress_bar = $VBoxContainer/ProgressBar
 onready var mutex : Mutex = Mutex.new()
 onready var semaphore : Semaphore = Semaphore.new()
+onready var thread: Thread = Thread.new()
 
 func _ready():
 	randomize()
@@ -75,8 +76,11 @@ func _ready():
 			resource_path = "res://material_maker/main_window.tscn"
 	else:
 		resource_path = "res://demo/demo.tscn"
+	
+	var locale = load("res://material_maker/locale/locale.gd").new()
+	locale.read_translations()
+	
 	set_process(true)
-	var thread = Thread.new()
 	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
 
 func load_resource(resource_path : String):
@@ -120,6 +124,7 @@ func _process(delta) -> void:
 			else:
 				var scene = resource.instance()
 				get_node("/root").add_child(scene)
+				thread.wait_to_finish()
 				queue_free()
 		else:
 			progress_bar.value = 100.0*progress

@@ -1,0 +1,98 @@
+{
+	"name": "warp_dilation2_nobuf",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 0,
+		"angle": 108.4,
+		"d": 0.5,
+		"s": 10
+	},
+	"seed": 7232,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The height map whose contours or slopes are followed",
+				"name": "hm",
+				"shortdesc": "Height map",
+				"type": "f"
+			}
+		],
+		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\tfloat dx = $hm(fract(uv+vec2(epsilon, 0.0)))-$hm(fract(uv-vec2(epsilon, 0.0)));\n\tfloat dy = $hm(fract(uv+vec2(0.0, epsilon)))-$hm(fract(uv-vec2(0.0, epsilon)));\n\treturn cos($angle*0.01745329251)*vec2(dx, dy)+sin($angle*0.01745329251)*vec2(-dy, dx);\n}\n\nfloat $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat v = 0.0;\n\tfor (float x = 0.0; x <= $d; x += e) {\n\t\tv = max(v, $in(fract(uv))*(1.0-x/$d*$a));\n\t\tvec2 delta = $(name)_slope(uv, 0.0001);\n\t\tuv += e*normalize(delta);\n\t}\n\treturn v;\n}",
+		"longdesc": "Dilates its input following the contours or slope of an input heightmap",
+		"name": "Warp Dilation 2",
+		"outputs": [
+			{
+				"f": "$(name)_dilate($uv)",
+				"longdesc": "The dilated image",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 10,
+				"first": 7,
+				"label": "Resolution",
+				"last": 12,
+				"name": "s",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Angle",
+				"longdesc": "The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher)",
+				"max": 180,
+				"min": -180,
+				"name": "angle",
+				"shortdesc": "Resolution",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Distance",
+				"longdesc": "The distance along which the contours or slopes are followed",
+				"max": 0.5,
+				"min": 0,
+				"name": "d",
+				"shortdesc": "Distance",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Attenuation",
+				"longdesc": "The attenuation applied along the path",
+				"max": 1,
+				"min": 0,
+				"name": "a",
+				"shortdesc": "Attenuation",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Warp Dilation"
+	},
+	"type": "shader"
+}

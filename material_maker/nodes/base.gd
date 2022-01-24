@@ -1,11 +1,12 @@
-extends GraphNode
+extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
-var generator : MMGenBase = null setget set_generator
+
 var show_inputs : bool = false
 var show_outputs : bool = false
 
 var rendering_time : int = -1
+
 
 const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
 const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
@@ -13,6 +14,9 @@ const RANDOMNESS_LOCKED_ICON : Texture = preload("res://material_maker/icons/ran
 const CUSTOM_ICON : Texture = preload("res://material_maker/icons/custom.png")
 const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
+
+const MENU_PROPAGATE_CHANGES : int = 1000
+
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -30,18 +34,15 @@ static func wrap_string(s : String, l : int = 50) -> String:
 	return s
 
 func _ready() -> void:
-	add_to_group("generator_node")
-	connect("offset_changed", self, "_on_offset_changed")
 	connect("gui_input", self, "_on_gui_input")
 
 func _exit_tree() -> void:
-	get_parent().call_deferred("check_last_selected")
-
+	#get_parent().call_deferred("check_last_selected")
+	pass
 
 func on_generator_changed(g):
 	if generator == g:
 		update()
-
 
 func _draw() -> void:
 	var color : Color = get_color("title_color")
@@ -64,7 +65,7 @@ func _draw() -> void:
 			conn_pos2 /= scale
 			draw_line(conn_pos1, conn_pos2, color)
 		if show_inputs:
-			var string : String = inputs[i].shortdesc if inputs[i].has("shortdesc") else inputs[i].name
+			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, color)
 	var outputs = generator.get_output_defs()
@@ -97,45 +98,52 @@ func _draw() -> void:
 			conn_pos /= scale
 			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
 		if show_outputs:
-			var string : String = outputs[i].shortdesc if outputs[i].has("shortdesc") else ("Output "+str(i))
+			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else (tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
-
-func update_node() -> void:
-	pass
+	if (selected):
+		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, rect_size))
 
 func set_generator(g) -> void:
-	generator = g
+	.set_generator(g)
 	g.connect("rendering_time", self, "update_rendering_time")
 
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
 
+func set_generator_seed(s : float):
+	if generator.is_seed_locked():
+		return
+	var old_seed : float = generator.get_seed()
+	generator.set_seed(s)
+	var hier_name = generator.get_hier_name()
+	get_parent().undoredo.add("Set seed", [{ type="setseed", node=hier_name, seed=old_seed }], [{ type="setseed", node=hier_name, seed=s }], false)
+
 func reroll_generator_seed() -> void:
-	generator.reroll_seed()
+	set_generator_seed(randf())
 
 func _on_seed_menu(id):
 	match id:
 		0:
+			var old_seed_locked : bool = generator.is_seed_locked()
 			generator.toggle_lock_seed()
 			update()
 			get_parent().send_changed_signal()
+			var hier_name = generator.get_hier_name()
+			get_parent().undoredo.add("Lock/unlock seed", [{ type="setseedlocked", node=hier_name, seedlocked=old_seed_locked }], [{ type="setseedlocked", node=hier_name, seedlocked=!old_seed_locked }], false)
 		1:
 			OS.clipboard = "seed=%.9f" % generator.seed_value
 		2:
 			if OS.clipboard.left(5) == "seed=":
-				generator.set_seed(OS.clipboard.right(5).to_float())
-
-func _on_offset_changed() -> void:
-	generator.set_position(offset)
-	# This is the old behavior
-	#reroll_generator_seed()
+				set_generator_seed(OS.clipboard.right(5).to_float())
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
 			if event.button_index == BUTTON_LEFT:
 				generator.minimized = !generator.minimized
+				var hier_name = generator.get_hier_name()
+				get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
 				update_node()
 				accept_event();
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
@@ -154,6 +162,23 @@ func _on_gui_input(event) -> void:
 					menu.connect("popup_hide", menu, "queue_free")
 					menu.connect("id_pressed", self, "_on_seed_menu")
 					accept_event()
+		elif event.doubleclick:
+			if generator is MMGenGraph:
+				get_parent().call_deferred("update_view", generator)
+				accept_event()
+		if event.button_index == BUTTON_RIGHT:
+			if generator is MMGenGraph:
+				accept_event()
+				var menu : PopupMenu = PopupMenu.new()
+				if !get_parent().get_propagation_targets(generator).empty():
+					menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
+				if menu.get_item_count() != 0:
+					add_child(menu)
+					menu.connect("modal_closed", menu, "queue_free")
+					menu.connect("id_pressed", self, "_on_menu_id_pressed")
+					menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+				else:
+					menu.free()
 	elif event is InputEventMouseMotion:
 		var epos = event.position
 		if Rect2(0, 0, rect_size.x-56, 16).has_point(epos):
@@ -161,27 +186,28 @@ func _on_gui_input(event) -> void:
 			if description != "":
 				hint_tooltip = wrap_string(description)
 			elif generator.model != null:
-				hint_tooltip = generator.model
+				hint_tooltip = TranslationServer.translate(generator.model)
 			return
 		elif Rect2(rect_size.x-56, 4, 16, 16).has_point(epos) and generator.has_randomness():
 			hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 			return
 		hint_tooltip = ""
 
+func get_input_slot(pos : Vector2) -> int:
+	var return_value = .get_input_slot(pos)
+	var new_show_inputs : bool = (return_value != -2)
+	if new_show_inputs != show_inputs:
+		show_inputs = new_show_inputs
+		update()
+	return return_value
+
 func get_output_slot(pos : Vector2) -> int:
-	var scale = get_global_transform().get_scale()
-	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
-		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-		if new_show_outputs != show_outputs:
-			show_outputs = new_show_outputs
-			update()
-		if new_show_outputs:
-			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
-					return i
-	return -1
+	var return_value = .get_output_slot(pos)
+	var new_show_outputs : bool = (return_value != -2)
+	if new_show_outputs != show_outputs:
+		show_outputs = new_show_outputs
+		update()
+	return return_value
 
 func get_slot_tooltip(pos : Vector2) -> String:
 	var scale = get_global_transform().get_scale()
@@ -197,7 +223,7 @@ func get_slot_tooltip(pos : Vector2) -> String:
 				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
 					var input_def = generator.get_input_defs()[i]
 					if input_def.has("longdesc"):
-						return wrap_string(input_def.longdesc)
+						return wrap_string(TranslationServer.translate(input_def.longdesc))
 			return ""
 	if get_connection_output_count() > 0:
 		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
@@ -211,7 +237,7 @@ func get_slot_tooltip(pos : Vector2) -> String:
 				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
 					var output_def = generator.get_output_defs()[i]
 					if output_def.has("longdesc"):
-						return wrap_string(output_def.longdesc)
+						return wrap_string(TranslationServer.translate(output_def.longdesc))
 	return ""
 
 func clear_connection_labels() -> void:
@@ -219,3 +245,16 @@ func clear_connection_labels() -> void:
 		show_inputs = false
 		show_outputs = false
 		update()
+
+func _on_menu_id_pressed(id : int) -> void:
+	match id:
+		MENU_PROPAGATE_CHANGES:
+			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
+			dialog.add_cancel("Cancel");
+			add_child(dialog)
+			var result = dialog.ask()
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result == "ok":
+				get_parent().call_deferred("propagate_node_changes", generator)

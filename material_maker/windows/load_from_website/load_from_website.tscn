@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/windows/load_from_website/load_from_website.gd" type="Script" id=1]
 
 [node name="LoadFromWebsite" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 340.0

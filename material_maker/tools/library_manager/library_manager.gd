@@ -11,6 +11,8 @@ export var config_section : String = ""
 var section_icons : Dictionary = {}
 var section_colors : Dictionary = {}
 
+var node_sections : Dictionary = {}
+
 var disabled_libraries : Array = []
 var disabled_sections : Array = []
 
@@ -53,6 +55,7 @@ func init_libraries() -> void:
 		if library.library_name == "":
 			library.library_name = base_lib_name
 		add_child(library)
+		library.generate_node_sections(node_sections)
 	library = LIBRARY.new()
 	if library.load_library(user_lib):
 		if library.library_name == "":
@@ -60,6 +63,7 @@ func init_libraries() -> void:
 	else:
 		library.create_library(user_lib, user_lib_name)
 	add_child(library)
+	library.generate_node_sections(node_sections)
 	init_section_icons()
 	yield(get_tree(), "idle_frame")
 	if config.has_section_key(config_section, "libraries"):
@@ -67,6 +71,7 @@ func init_libraries() -> void:
 			library = LIBRARY.new()
 			if library.load_library(p):
 				add_child(library)
+				library.generate_node_sections(node_sections)
 	if config.has_section_key(config_section, "disabled_libraries"):
 		disabled_libraries = config.get_value(config_section, "disabled_libraries")
 	if config.has_section_key(config_section, "disabled_sections"):
@@ -80,6 +85,16 @@ func compare_item_usage(i1, i2) -> int:
 	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0
 	var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
 	return u1 - u2
+
+func get_item(name : String):
+	for skip_disabled in [ true, false ]:
+		for li in get_child_count():
+			var l = get_child(li)
+			if ! skip_disabled or disabled_libraries.find(l.library_path) == -1:
+				var item = l.get_item(name)
+				if item != null:
+					return item
+	return null
 
 func get_items(filter : String, sorted = false) -> Array:
 	var array : Array = []
@@ -141,6 +156,7 @@ func load_library(path : String) -> void:
 		disabled_libraries.erase(path)
 	emit_signal("libraries_changed")
 	save_library_list()
+	library.get_sections()
 
 func unload_library(index : int) -> void:
 	var lib = get_child(index).library_path
@@ -210,7 +226,12 @@ func get_section_icon(section_name : String) -> Texture:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
-	var color = section_colors[section_name] if section_colors.has(section_name) else null
+	var color = null
+	if section_colors.has(section_name):
+		return section_colors[section_name]
+	for s in section_colors.keys():
+		if TranslationServer.translate(s) == section_name:
+			return section_colors[s]
 	return color
 
 func is_section_enabled(section_name : String) -> bool:

@@ -2,7 +2,8 @@ Dynamic PBR Material node
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **Dynamic PBR Material** node describes a PBR material with Albedo, Metallic, Roughness,
-Emission, Depth and Normal Maps generated as static images.
+Emission, Depth and Normal Maps generated using a shader, which makes it possible to create
+animated, resolution independent or non-repetitive materials.
 
 .. image:: images/node_material_dynamic.png
 	:align: center

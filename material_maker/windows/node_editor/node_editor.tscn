@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/windows/node_editor/node_editor.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/windows/node_editor/node_editor_item_list.gd" type="Script" id=2]
@@ -17,7 +17,11 @@ font_path = "res://material_maker/fonts/hack.ttf"
 size = 12
 font_data = SubResource( 2 )
 
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 0.768627 )
+
 [node name="NodeEditor" type="WindowDialog"]
+visible = true
 margin_right = 950.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 950, 450 )
@@ -195,35 +199,50 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Includes" type="HBoxContainer" parent="Sizer/Tabs/Global Functions"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 942.0
+margin_bottom = 24.0
 
 [node name="LabelIncludes" type="Label" parent="Sizer/Tabs/Global Functions/Includes"]
-margin_left = 46.0
 margin_top = 5.0
-margin_right = 88.0
+margin_right = 59.0
 margin_bottom = 19.0
 text = "Includes:"
 
 [node name="Includes" type="LineEdit" parent="Sizer/Tabs/Global Functions/Includes"]
-margin_left = 469.0
-margin_right = 888.0
+margin_left = 63.0
+margin_right = 942.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Functions" type="TextEdit" parent="Sizer/Tabs/Global Functions"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -8.0
-margin_bottom = -36.0
+margin_top = 28.0
+margin_right = 942.0
+margin_bottom = 390.0
 mouse_default_cursor_shape = 0
 size_flags_vertical = 3
-custom_fonts/font = SubResource( 3 )
 custom_colors/safe_line_number_color = Color( 1, 0, 0, 1 )
 custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
 custom_colors/executing_line_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
 syntax_highlighting = true
 show_line_numbers = true
+minimap_draw = true
+
+[node name="ErrorLabel" type="Label" parent="Sizer/Tabs/Global Functions/Functions"]
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = -17.0
+margin_right = -2.0
+margin_bottom = -7.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_styles/normal = SubResource( 4 )
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
 margin_left = 366.0
@@ -252,6 +271,8 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 text = "Cancel"
 
+[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
 [connection signal="pressed" from="Sizer/Tabs/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
 [connection signal="pressed" from="Sizer/Tabs/Outputs/Outputs/Sizer/AddOutput" to="." method="_on_AddOutput_pressed"]
