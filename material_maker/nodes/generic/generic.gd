@@ -135,7 +135,7 @@ func set_generator_parameter_ext(variable : String, value, old_value, merge_undo
 			var redo_command = { type="setparams", node=node_hier_name, params={ variable:serialized_value } }
 			get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
 			if generator.model != null:
-				var id = generator.model+"/"+variable+"/"+str(new_value)
+				var id = generator.model+"/"+variable+"/"+str(value)
 				if PARAM_ACHIEVEMENTS.has(id):
 					unlock_achievement(PARAM_ACHIEVEMENTS[id])
 
