@@ -1,10 +1,15 @@
 extends Node
 
+
+const DEBUG : bool = true
+
+
 export var background_material : Material
 
 var initialized = false
 onready var painter = $Painter
 onready var camera = $Viewport/Camera
+
 
 func set_brush(brush) -> Texture:
 	if !initialized:
@@ -73,19 +78,19 @@ func set_brush(brush) -> Texture:
 		pressure=1.0,
 		fill=false
 	}
-	painter.paint(paint_parameters)
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	painter.paint(paint_parameters, true)
+	yield(painter, "end_of_stroke")
+	painter.paint(paint_parameters, true)
+	yield(painter, "end_of_stroke")
 	$NormalMap.render_target_update_mode = Viewport.UPDATE_ONCE
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	$Viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	"""
-	for i in painter.debug_get_texture_names().size():
-		var t = painter.debug_get_texture(i)
-		t.get_data().save_png("d:/debug_brush_preview_%d.png" % i)
-	"""
+	if DEBUG:
+		for i in painter.debug_get_texture_names().size():
+			var t = painter.debug_get_texture(i)
+			t.get_data().save_png("d:/debug_brush_preview_%d.png" % i)
 	initialized = true
 	return $Viewport.get_texture()
