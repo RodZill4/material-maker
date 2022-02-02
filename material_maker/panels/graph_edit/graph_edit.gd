@@ -1094,7 +1094,7 @@ func undoredo_create_step(action_name : String, parent_path : String, prev : Dic
 		print("Incorrect call for undoredo_create_step")
 		return
 	var step_actions = undoredo_step_actions(parent_path, prev, next)
-	if ! step_actions.undo_actions.empty() and ! step_actions.redo_actions.empty():
+	if step_actions.has("undo_actions") && step_actions.has("redo_actions") && ! step_actions.undo_actions.empty() and ! step_actions.redo_actions.empty():
 		undoredo.add(action_name, step_actions.undo_actions, step_actions.redo_actions, false)
 
 # Node change propagation

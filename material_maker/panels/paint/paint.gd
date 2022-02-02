@@ -693,6 +693,10 @@ func update_view():
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
+		# DEBUG: show tex2view texture on model
+		#for i in range(10):
+		#	yield(get_tree(), "idle_frame")
+		#painted_mesh.get_surface_material(0).albedo_texture = painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
 	_on_BrushSize_value_changed(brush_size)
 
