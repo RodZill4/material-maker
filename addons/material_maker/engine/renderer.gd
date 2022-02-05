@@ -49,7 +49,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+func render_material(object : Object, material : Material, render_size, with_hdr = true, with_32_bits = false) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -59,6 +59,7 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
 	hdr = with_hdr
+	use_32_bpc_depth = with_32_bits 
 	render_target_update_mode = Viewport.UPDATE_ONCE
 	update_worlds()
 	yield(get_tree(), "idle_frame")
