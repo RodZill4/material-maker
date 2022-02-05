@@ -5,20 +5,11 @@ code = "shader_type canvas_item;
 
 uniform sampler2D input_tex;
 uniform sampler2D seams_tex;
-uniform float     seams_multiplier = 256.0;
-uniform float texture_size;
-
-vec2 seams_uv(vec2 uv) {
-	vec2 seams_value = texture(seams_tex, uv).xy-vec2(0.5);
-	return fract(uv+seams_value*seams_multiplier/texture_size);
-}
 
 void fragment() {
-	COLOR = texture(input_tex, seams_uv(UV));
+	COLOR = texture(input_tex, texture(seams_tex, UV).xy);
 }
 "
 
 [resource]
 shader = SubResource( 1 )
-shader_param/seams_multiplier = 256.0
-shader_param/texture_size = null
