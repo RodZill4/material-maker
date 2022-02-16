@@ -1,7 +1,8 @@
 extends TextureRect
 
 export var parent_control : String = ""
-export(int, "Simple", "Rect", "Radius", "Scale" ) var control_type : int = 0
+export(int, "Simple", "Rect", "Radius", "Scale", "RotateScale" ) var control_type : int = 0
+export var apply_local_transform : bool = false
 
 var generator : MMGenBase = null
 var parameter_x : String = ""
@@ -24,9 +25,17 @@ func _ready() -> void:
 func _draw() -> void:
 	match control_type:
 		1: # Rect
-			var ppos = parent_control_node.rect_position+0.5*parent_control_node.rect_size
-			draw_rect(Rect2(0.5*rect_size, 2.0*(ppos-(rect_position+0.5*rect_size))), modulate, false)
-		2: # Radius
+			var p0 = get_center_position()
+			var val = get_value()
+			var ppos = parent_control_node.get_center_position()
+			var p1 = ppos+get_parent().value_to_pos(val*Vector2(-1, 1), true, apply_local_transform)-get_parent().value_to_pos(Vector2(0, 0), true, apply_local_transform)
+			var p2 = 2.0*ppos-p0
+			var p3 = 2.0*ppos-p1
+			draw_line(0.5*rect_size, p1-p0+0.5*rect_size, modulate)
+			draw_line(p1-p0+0.5*rect_size, p2-p0+0.5*rect_size, modulate)
+			draw_line(p2-p0+0.5*rect_size, p3-p0+0.5*rect_size, modulate)
+			draw_line(p3-p0+0.5*rect_size, 0.5*rect_size, modulate)
+		2, 4: # Radius
 			var ppos
 			if parent_control_node == null:
 				ppos = get_parent().value_to_pos(Vector2(0, 0))
@@ -42,6 +51,8 @@ func _draw() -> void:
 			draw_rect(Rect2(0.5*rect_size, ppos-(rect_position+0.5*rect_size)), modulate, false)
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:
+	if dragging:
+		return
 	hide()
 	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
@@ -71,6 +82,9 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	else:
 		generator = null
 		update_position(Vector2(0, 0))
+
+func get_center_position() -> Vector2:
+	return rect_position+0.5*rect_size
 
 func get_value() -> Vector2:
 	var pos : Vector2 = Vector2(0, 0)
@@ -123,8 +137,6 @@ func update_parameters(value : Vector2) -> void:
 		1: # Rect
 			value.x = abs(value.x)
 			value.y = abs(value.y)
-		3: # Scale
-			value = 4.0*value
 	var parameters : Dictionary = {}
 	if parameter_x != "":
 		parameters[parameter_x] = value.x
@@ -135,17 +147,21 @@ func update_parameters(value : Vector2) -> void:
 	if parameter_a != "":
 		parameters[parameter_a] = atan2(value.y, value.x)*57.2957795131
 	if ! parameters.empty():
-		var main_window = get_node("/root/MainWindow")
-		var graph_edit = main_window.get_current_graph_edit()
-		graph_edit.set_node_parameters(generator, parameters)
+		var control_target = get_parent().get_node(get_parent().control_target)
+		if control_target == null:
+			var main_window = get_node("/root/MainWindow")
+			control_target = main_window.get_current_graph_edit()
+		control_target.set_node_parameters(generator, parameters)
 
-func update_position(pos : Vector2) -> void:
+func update_position(value : Vector2) -> void:
 	match control_type:
-		3: # Scale
-			pos *= 0.25
+		3, 4: # Scale
+			value *= 0.25
+	rect_position = get_parent().value_to_pos(value, true, apply_local_transform)
 	if parent_control_node != null:
-		pos += parent_control_node.get_value()
-	rect_position = get_parent().value_to_pos(pos)-0.5*rect_size
+		rect_position -= get_parent().value_to_pos(Vector2(0, 0), true, apply_local_transform)
+		rect_position += parent_control_node.get_center_position()
+	rect_position -= 0.5*rect_size
 	for c in children_control_nodes:
 		c.update_position(c.get_value())
 	update()
@@ -153,7 +169,11 @@ func update_position(pos : Vector2) -> void:
 func _on_Point_gui_input(event : InputEvent):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var parent_value = get_parent_value()
-		var value = get_parent().pos_to_value(rect_position+event.position)-parent_value
+		var new_pos = rect_position+event.position
+		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
+		var check_new_pos = get_parent().value_to_pos(value, true, apply_local_transform)
+		if parent_control_node != null:
+			value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
 		if event.control:
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
@@ -180,13 +200,15 @@ func _on_Point_gui_input(event : InputEvent):
 				value.y = 0
 		else:
 			if parameter_r == "":
-				value = 0.25*value/value.length()
+				value = value/value.length()
 			if parameter_a == "":
 				value = Vector2(value.length(), 0.0)
-		rect_position = get_parent().value_to_pos(value+parent_value)-0.5*rect_size
+		match control_type:
+			3, 4: # Scale
+				value *= 4.0
 		dragging = true
 		update_parameters(value)
-		update()
+		update_position(value)
 		dragging = false
 		for c in children_control_nodes:
 			c.update_position(c.get_value())

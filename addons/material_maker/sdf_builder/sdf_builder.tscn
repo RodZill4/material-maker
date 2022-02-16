@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
+[ext_resource path="res://addons/material_maker/sdf_builder/union.gd" type="Script" id=3]
+[ext_resource path="res://addons/material_maker/sdf_builder/box.gd" type="Script" id=4]
+[ext_resource path="res://addons/material_maker/sdf_builder/difference.gd" type="Script" id=5]
+[ext_resource path="res://addons/material_maker/sdf_builder/intersection.gd" type="Script" id=6]
+
+[node name="SDFBuilder" type="Node"]
+script = ExtResource( 2 )
+
+[node name="Circle" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[node name="Box" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="Union" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="Intersection" type="Node" parent="."]
+script = ExtResource( 6 )
+
+[node name="Difference" type="Node" parent="."]
+script = ExtResource( 5 )

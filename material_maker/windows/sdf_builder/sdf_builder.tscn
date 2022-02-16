@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder.gd" type="Script" id=3]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+
+[node name="Control" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 106.503
+margin_top = 99.6447
+margin_right = -118.498
+margin_bottom = -96.3553
+window_title = "SDF Builder"
+resizable = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Toolbar" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1054.0
+
+[node name="Main" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 4.0
+margin_right = 1054.0
+margin_bottom = 524.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tree" type="Tree" parent="VBoxContainer/Main"]
+margin_right = 261.0
+margin_bottom = 520.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
+material = SubResource( 2 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 265.0
+margin_right = 788.0
+margin_bottom = 520.0
+size_flags_horizontal = 3
+size_flags_vertical = 11
+size_flags_stretch_ratio = 2.0
+control_target = NodePath("../../..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Main"]
+margin_left = 792.0
+margin_right = 1054.0
+margin_bottom = 520.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GenSDF" type="Node" parent="."]
+script = ExtResource( 1 )
+
+[connection signal="cell_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_cell_selected"]
+[connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
+[connection signal="item_activated" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_activated"]

@@ -202,7 +202,7 @@ func set_shader_model(data: Dictionary) -> void:
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
 			model_uses_seed = true
-	if get_parent() != null:
+	if get_parent() != null and get_parent().has_method("check_input_connects"):
 		get_parent().check_input_connects(self)
 	all_sources_changed()
 
@@ -347,7 +347,10 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var required_globals = [ get_parent().get_globals() ]
+	var parent = get_parent()
+	var required_globals = []
+	if parent.has_method("get_globals"):
+		required_globals = [ parent.get_globals() ]
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
@@ -355,7 +358,9 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
 	var variables = {}
-	var named_parameters = get_parent().get_named_parameters()
+	var named_parameters = {}
+	if parent.has_method("get_named_parameters"):
+		named_parameters = parent.get_named_parameters()
 	for np in named_parameters.keys():
 		variables[np] = named_parameters[np].id
 	variables["name"] = genname
