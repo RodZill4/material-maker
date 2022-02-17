@@ -15,7 +15,7 @@ func get_includes():
 	return [ "rotate" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = 0.0;" % scene.index
+	return "float $(name_uv)_n%d = 1.0;" % scene.index
 
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
 	var output_name = "$(name_uv)_n%d" % scene.index

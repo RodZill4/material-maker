@@ -127,7 +127,6 @@ func get_preview_material():
 	return $Accumulate/Iteration.material if temporal_aa_current else material
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	print(parameter_changes)
 	if .on_float_parameters_changed(parameter_changes):
 		start_accumulate()
 		return true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/box.gd" type="Script" id=4]
 [ext_resource path="res://addons/material_maker/sdf_builder/difference.gd" type="Script" id=5]
 [ext_resource path="res://addons/material_maker/sdf_builder/intersection.gd" type="Script" id=6]
+[ext_resource path="res://addons/material_maker/sdf_builder/smooth_union.gd" type="Script" id=7]
 
 [node name="SDFBuilder" type="Node"]
 script = ExtResource( 2 )
@@ -24,3 +25,6 @@ script = ExtResource( 6 )
 
 [node name="Difference" type="Node" parent="."]
 script = ExtResource( 5 )
+
+[node name="SmoothUnion" type="Node" parent="."]
+script = ExtResource( 7 )
