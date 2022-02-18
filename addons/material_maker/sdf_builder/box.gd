@@ -1,5 +1,15 @@
 extends "res://addons/material_maker/sdf_builder/union.gd"
 
+export(int, "Box", "Rhombus", "IsocelesTriangle", "Tunnel") var shape
+
+const INCLUDES : Array = [
+	[ "rotate", "sdbox" ],
+	[ "rotate", "sdrhombus" ],
+	[ "rotate", "sdisoscelestriangle" ],
+	[ "rotate", "sdtunnel" ]
+]
+const FUNCTIONS : Array = [ "sd_box", "sdRhombus", "sd_isosceles_triangle", "sdTunnel" ]
+
 func _ready():
 	pass # Replace with function body.
 
@@ -14,7 +24,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "rotate", "sdbox" ]
+	return INCLUDES[shape]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = sd_box($(name_uv)_n%d_p, vec2($n%d_size_x, $n%d_size_y));\n" % [ scene.index, scene.index, scene.index, scene.index ]
+	return "float $(name_uv)_n%d = %s($(name_uv)_n%d_p, vec2($n%d_size_x, $n%d_size_y));\n" % [ scene.index, FUNCTIONS[shape], scene.index, scene.index, scene.index ]

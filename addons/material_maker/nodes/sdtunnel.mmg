@@ -1,0 +1,85 @@
+{
+	"name": "sdtunnel",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"h": 0.3,
+		"w": 0.3
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "// The MIT License, Copyright © 2021 Inigo Quilez, https://www.shadertoy.com/view/flSSDy\nfloat sdTunnel(vec2 p, vec2 wh) {\n    p.x = abs(p.x);\n    vec2 q = p - wh;\n\tvec2 v1 = vec2(max(q.x,0.0),q.y);\n    float d1 = dot(v1, v1);\n    q.x = (p.y>0.0) ? q.x : length(p)-wh.x;\n\tvec2 v2 = vec2(q.x,max(q.y,0.0));\n    float d2 = dot(v2, v2);\n    float d = sqrt( min(d1,d2) );\n    \n    return (max(q.x,q.y)<0.0) ? -d : d;\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A tunnel shape described as a signed distance function",
+		"name": "sdTunnel",
+		"outputs": [
+			{
+				"longdesc": "The generated signed distance function",
+				"sdf2d": "sdTunnel($uv-vec2($cx+0.5, $cy+0.5), vec2($w, $h))",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0.5,
+				"label": "Width",
+				"longdesc": "The width of the tunnel",
+				"max": 1,
+				"min": 0,
+				"name": "w",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 1,
+				"label": "Height",
+				"longdesc": "The height of the tunnel",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"shortdesc": "Height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center of the tunnel on the X axis",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center of the tunnel on the Y axis",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdTunnel"
+	},
+	"type": "shader"
+}
