@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder.gd" type="Script" id=3]
+[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" type="Script" id=4]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -55,6 +56,7 @@ margin_right = 261.0
 margin_bottom = 520.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 4 )
 
 [node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
 material = SubResource( 2 )
@@ -68,19 +70,19 @@ size_flags_vertical = 11
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Main"]
+[node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
 margin_left = 792.0
 margin_right = 1054.0
 margin_bottom = 520.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
+columns = 2
 
 [node name="GenSDF" type="Node" parent="."]
 script = ExtResource( 1 )
 
 [connection signal="cell_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_cell_selected"]
+[connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_activated" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_activated"]
+[connection signal="parameter_changed" from="GenSDF" to="." method="on_parameter_changed"]

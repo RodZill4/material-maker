@@ -141,7 +141,7 @@ func setup_controls(filter : String = "") -> void:
 	var param_defs = []
 	if is_instance_valid(generator):
 		if filter != "":
-			param_defs = generator.get_filtered_parameter_defs(filter) 
+			param_defs = generator.get_filtered_parameter_defs(filter)
 		else:
 			param_defs = generator.get_parameter_defs() 
 	for c in get_children():

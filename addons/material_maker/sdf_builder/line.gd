@@ -5,15 +5,15 @@ func _ready():
 
 func get_parameter_defs():
 	return [
-		{ name="position_x", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.x" },
-		{ name="position_y", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.y" },
-		{ name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
-		{ name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
-		{ name="ax", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.x" },
-		{ name="ay", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.y" },
-		{ name="bx", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.x" },
-		{ name="by", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.y" },
-		{ name="r", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="RadiusP11.r" }
+		{ label="Position.x", name="position_x", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.x" },
+		{ label="Position.y", name="position_y", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.y" },
+		{ label="Rotation", name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
+		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
+		{ label="A.x", name="ax", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.x" },
+		{ label="A.y", name="ay", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.y" },
+		{ label="B.x", name="bx", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.x" },
+		{ label="B.y", name="by", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.y" },
+		{ label="Radius", name="r", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="RadiusP11.r" }
 	]
 
 func get_includes():
