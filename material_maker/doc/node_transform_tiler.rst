@@ -20,9 +20,9 @@ The **Tiler** node accepts two inputs:
 Outputs
 +++++++
 
-The **Tiler** node outputs the splat image.
+The **Tiler** node outputs the splat image and a secondary output that assigns a random color to each tile.
 
-The greyscale tiler has a secondary output that assigns a random color to each tile.
+The greyscale tiler has a third output that assigns a UV layout to each tile.
 
 Parameters
 ++++++++++
