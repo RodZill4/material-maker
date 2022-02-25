@@ -140,13 +140,10 @@ func _on_Sizer_minimum_size_changed():
 
 # OK/Apply/Cancel buttons
 
-var applied : bool = false
-
 func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
 
 func _on_OK_pressed() -> void:
-	applied = true
 	emit_signal("node_changed", get_model_data())
 	_on_Cancel_pressed()
 

@@ -9,11 +9,11 @@ func get_parameter_defs():
 		{ label="Position.y", name="position_y", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.y" },
 		{ label="Rotation", name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
-		{ label="Radius", name="radius", type="float", min=0.0, max=1.0, step=0.01, default=0.5}
+		{ label="Radius", name="radius", type="float", min=0.0, max=1.0, step=0.01, default=0.5 }
 	]
 
 func get_includes():
 	return [ "rotate" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = length($(name_uv)_n%d_p)-$n%d_radius;\n" % [ scene.index, scene.index, scene.index ]
+	return "float $(name_uv)_n%d = length($(name_uv)_n%d_p)-$radius;\n" % [ scene.index, scene.index ]

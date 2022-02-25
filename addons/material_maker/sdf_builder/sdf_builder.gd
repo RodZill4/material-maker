@@ -23,7 +23,23 @@ func get_includes(scene : Dictionary) -> Array:
 					includes.push_back(i)
 	return includes
 
+func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Array):
+	pass
+
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv-vec2(0.5)", editor = false) -> Dictionary:
-	var shader_model = get_node(scene.type).scene_to_shader_model(scene, uv, editor)
+	var scene_node = get_node(scene.type)
+	var shader_model = scene_node.scene_to_shader_model(scene, uv, editor)
+	if editor:
+		for p in scene_node.get_parameter_defs():
+			p = p.duplicate(true)
+			if scene.parameters.has(p.name):
+				p.default = scene.parameters[p.name]
+			var new_name = "n%d_%s" % [ scene.index, p.name ]
+			shader_model.code = shader_model.code.replace("$"+p.name, "$"+new_name)
+			p.name = new_name
+			shader_model.parameters.push_back(p)
+	else:
+		for p in scene_node.get_parameter_defs():
+			shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
 	shader_model.includes = get_includes(scene)
 	return shader_model

@@ -21,7 +21,6 @@ font_data = SubResource( 2 )
 bg_color = Color( 0, 0, 0, 0.768627 )
 
 [node name="NodeEditor" type="WindowDialog"]
-visible = true
 margin_right = 950.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 950, 450 )

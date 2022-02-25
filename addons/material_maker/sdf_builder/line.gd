@@ -20,4 +20,4 @@ func get_includes():
 	return [ "rotate", "sdline" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = sdLine($(name_uv)_n%d_p, vec2($n%d_ax, $n%d_ay), vec2($n%d_bx, $n%d_by)).x-$n%d_r;\n" % [ scene.index, scene.index, scene.index, scene.index, scene.index, scene.index, scene.index ]
+	return "float $(name_uv)_n%d = sdLine($(name_uv)_n%d_p, vec2($ax, $ay), vec2($bx, $by)).x-$r;\n" % [ scene.index, scene.index ]

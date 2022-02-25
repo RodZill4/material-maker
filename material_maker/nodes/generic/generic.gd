@@ -442,27 +442,6 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
-var edit_generator_prev_state : Dictionary
-var edit_generator_next_state : Dictionary
-
-func edit_generator() -> void:
-	if generator.has_method("edit"):
-		edit_generator_prev_state = generator.get_parent().serialize().duplicate(true)
-		edit_generator_next_state = {}
-		generator.edit(self)
-
-func update_generator(shader_model) -> void:
-	generator.set_shader_model(shader_model)
-	update_node()
-	get_parent().set_need_save()
-	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)
-
-func finalize_generator_update() -> void:
-	if ! edit_generator_next_state.empty():
-		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
-		edit_generator_prev_state = {}
-		edit_generator_next_state = {}
-
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)

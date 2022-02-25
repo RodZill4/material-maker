@@ -13,11 +13,37 @@ var ignore_parameter_change : String = ""
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
 
+signal node_changed(model_data)
+signal editor_window_closed
+
+
 func _ready():
 	tree.set_hide_root(true)
 	if tree.get_root() == null:
 		tree.create_item()
-	popup_centered()
+
+func set_sdf_scene(s, parent = null):
+	var parent_item
+	if parent == null:
+		scene = s.duplicate(true)
+		s = scene
+		tree.clear()
+		tree.create_item()
+		parent_item = tree.get_root()
+	else:
+		parent_item = parent
+	for i in s:
+		var item = tree.create_item(parent_item)
+		item.set_text(0, i.type)
+		i.index = item.get_instance_id()
+		item.set_meta("scene", i)
+		set_sdf_scene(i.children, item)
+	if parent == null:
+		$GenSDF.set_sdf_scene(scene)
+		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	var top = tree.get_root().get_children()
+	if top != null:
+		tree.get_root().get_children().select(0)
 
 var current_item : TreeItem
 func _on_Tree_gui_input(event : InputEvent):
@@ -49,7 +75,7 @@ func _on_menu_add_shape(id : int):
 	data.index = item.get_instance_id()
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
-	$GenSDF.set_scene(scene)
+	$GenSDF.set_sdf_scene(scene)
 	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
 	item.select(0)
 
@@ -131,12 +157,14 @@ func _on_Tree_cell_selected():
 	$GenSDF.set_parameter("index", float(index))
 
 func set_node_parameters(generator, parameters):
+	print(parameters)
 	for p in parameters.keys():
 		var value = MMType.deserialize_value(parameters[p])
 		generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
 		var item : TreeItem = instance_from_id(p.right(1).to_int())
 		var parameter_name : String = p.right(p.find("_")+1)
 		item.get_meta("scene").parameters[parameter_name] = value
+		print(item.get_meta("scene"))
 	update_local_transform()
 	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
 
@@ -172,7 +200,7 @@ func _on_Tree_drop_item(item, dest, position):
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
-	$GenSDF.set_scene(scene)
+	$GenSDF.set_sdf_scene(scene)
 	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
 	new_item.select(0)
 	var index = new_item.get_meta("scene").index
@@ -182,3 +210,16 @@ func _on_Tree_drop_item(item, dest, position):
 	parameters["n%d_position_x" % index] = new_transform.get_origin().x
 	parameters["n%d_position_y" % index] = new_transform.get_origin().y
 	set_node_parameters($GenSDF, parameters)
+
+# OK/Apply/Cancel buttons
+
+func _on_Apply_pressed() -> void:
+	emit_signal("node_changed", scene)
+
+func _on_OK_pressed() -> void:
+	emit_signal("node_changed", scene)
+	_on_Cancel_pressed()
+
+func _on_Cancel_pressed() -> void:
+	emit_signal("editor_window_closed")
+	queue_free()

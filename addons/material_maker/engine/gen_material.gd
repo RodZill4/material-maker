@@ -566,6 +566,6 @@ func edit(node) -> void:
 		var edit_window = load("res://material_maker/windows/material_editor/material_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)
-		edit_window.connect("node_changed", node, "update_generator")
+		edit_window.connect("node_changed", node, "update_shader_generator")
 		edit_window.connect("popup_hide", edit_window, "queue_free")
 		edit_window.popup_centered()

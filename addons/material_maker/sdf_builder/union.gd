@@ -33,12 +33,9 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[], outputs=[ { sdf2d=output_name, type="sdf2d" } ] }
-	for p in get_parameter_defs():
-		p = p.duplicate(true)
-		p.name = "n%d_%s" % [ scene.index, p.name ]
-		data.parameters.push_back(p)
-	data.code = "vec2 %s_p = %s - vec2($n%d_position_x, $n%d_position_y);\n" % [ output_name, uv, scene.index, scene.index ]
-	data.code += "%s_p = rotate(%s_p, radians($n%d_angle))/$n%d_scale;\n" % [ output_name, output_name, scene.index, scene.index ]
+	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
+	data.code = "vec2 %s_p = %s - vec2($position_x, $position_y);\n" % [ output_name, uv ]
+	data.code += "%s_p = rotate(%s_p, radians($angle))/$scale;\n" % [ output_name, output_name ]
 	shape_and_children_code(scene, data, "%s_p" % output_name, editor)
-	data.code += "%s *= $n%d_scale;\n" % [ output_name, scene.index ]
+	data.code += "%s *= $scale;\n" % output_name
 	return data

@@ -44,7 +44,7 @@ margin_right = 1054.0
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
 margin_top = 4.0
 margin_right = 1054.0
-margin_bottom = 524.0
+margin_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -53,7 +53,7 @@ __meta__ = {
 
 [node name="Tree" type="Tree" parent="VBoxContainer/Main"]
 margin_right = 261.0
-margin_bottom = 520.0
+margin_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 4 )
@@ -64,7 +64,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 265.0
 margin_right = 788.0
-margin_bottom = 520.0
+margin_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 11
 size_flags_stretch_ratio = 2.0
@@ -73,16 +73,50 @@ control_target = NodePath("../../..")
 [node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
 margin_left = 792.0
 margin_right = 1054.0
-margin_bottom = 520.0
+margin_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
 
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 432.0
+margin_top = 504.0
+margin_right = 622.0
+margin_bottom = 524.0
+size_flags_horizontal = 4
+size_flags_vertical = 5
+custom_constants/separation = 5
+
+[node name="Apply" type="Button" parent="VBoxContainer/Buttons"]
+margin_right = 60.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Apply"
+
+[node name="OK" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 65.0
+margin_right = 125.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 130.0
+margin_right = 190.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Cancel"
+
 [node name="GenSDF" type="Node" parent="."]
 script = ExtResource( 1 )
+editor = true
 
+[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="cell_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_cell_selected"]
 [connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_activated" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_activated"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
 [connection signal="parameter_changed" from="GenSDF" to="." method="on_parameter_changed"]

@@ -105,6 +105,7 @@ func create_gen(data) -> MMGenBase:
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="is_brush", type=MMGenBrush },
 		{ keyword="shader_model", type=MMGenShader },
+		{ keyword="sdf_scene", type=MMGenSDF },
 		{ keyword="model_data", type=MMGenShader },
 		{ keyword="widgets", type=MMGenRemote }
 	]
@@ -114,6 +115,7 @@ func create_gen(data) -> MMGenBase:
 		image = MMGenImage,
 		text = MMGenText,
 		iterate_buffer = MMGenIterateBuffer,
+		sdf = MMGenSDF,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,
 		export = MMGenExport,
