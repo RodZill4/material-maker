@@ -12,7 +12,7 @@ func get_parameter_defs():
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
 	var output_name = "$(name_uv)_n%d" % scene.index
 	data.code += "float %s = 0.0;" % output_name
-	data.code += "float $(name_uv)_n%d_kk = 10.0/$n%d_k;" % [ scene.index, scene.index ]
+	data.code += "float $(name_uv)_n%d_kk = 10.0/$k;" % [ scene.index ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
 		data.parameters.append_array(data2.parameters)

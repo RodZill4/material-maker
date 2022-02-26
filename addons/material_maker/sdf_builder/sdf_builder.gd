@@ -1,7 +1,40 @@
 extends Node
 
+var item_types : Array = []
+var item_ids : Dictionary = {}
+
 func _ready():
-	pass # Replace with function body.
+	item_types.clear()
+	item_ids.clear()
+	create_item_list()
+
+func create_item_list(parent : Node = self):
+	for c in parent.get_children():
+		if c.get("item_type") == null:
+			create_item_list(c)
+		else:
+			item_ids[c.item_type] = item_types.size()
+			item_types.push_back(c)
+
+func get_items_menu(category : String, target : Object, method : String, binds : Array = [], parent : Node = self) -> PopupMenu:
+	if parent == self:
+		item_types.clear()
+	var menu : PopupMenu = PopupMenu.new()
+	for c in parent.get_children():
+		if c.get("item_type") == null:
+			var submenu : PopupMenu = get_items_menu(category, target, method, binds, c)
+			submenu.name = c.name
+			menu.add_child(submenu)
+			menu.add_submenu_item(c.name, c.name)
+		else:
+			var icon : Texture = c.get("icon")
+			if icon != null:
+				menu.add_icon_item(icon, c.name, item_ids[c.item_type])
+			else:
+				menu.add_item(c.name, item_ids[c.item_type])
+			item_types.push_back(c)
+	menu.connect("id_pressed", target, method, binds)
+	return menu
 
 func get_shape_names() -> Array:
 	var names = []
@@ -11,7 +44,7 @@ func get_shape_names() -> Array:
 
 func get_includes(scene : Dictionary) -> Array:
 	var includes : Array = []
-	var type = get_node(scene.type)
+	var type = item_types[item_ids[scene.type]]
 	if type.has_method("get_includes"):
 		for i in type.get_includes():
 			if !includes.has(i):
@@ -27,7 +60,7 @@ func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Arra
 	pass
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv-vec2(0.5)", editor = false) -> Dictionary:
-	var scene_node = get_node(scene.type)
+	var scene_node = item_types[item_ids[scene.type]]
 	var shader_model = scene_node.scene_to_shader_model(scene, uv, editor)
 	if editor:
 		for p in scene_node.get_parameter_defs():

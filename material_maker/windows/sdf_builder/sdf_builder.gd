@@ -35,6 +35,10 @@ func set_sdf_scene(s, parent = null):
 	for i in s:
 		var item = tree.create_item(parent_item)
 		item.set_text(0, i.type)
+		var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[i.type]]
+		var item_icon = item_type.get("icon")
+		if item_icon != null:
+			item.set_icon(0, item_icon)
 		i.index = item.get_instance_id()
 		item.set_meta("scene", i)
 		set_sdf_scene(i.children, item)
@@ -45,25 +49,22 @@ func set_sdf_scene(s, parent = null):
 	if top != null:
 		tree.get_root().get_children().select(0)
 
-var current_item : TreeItem
 func _on_Tree_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_RIGHT and event.pressed:
-			current_item = tree.get_item_at_position(tree.get_local_mouse_position())
-			var menu : PopupMenu = PopupMenu.new()
-			for shape_name in shape_names:
-				menu.add_item(shape_name)
+			var current_item : TreeItem = tree.get_item_at_position(tree.get_local_mouse_position())
+			var menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ])
 			add_child(menu)
 			menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-			menu.connect("id_pressed", self, "_on_menu_add_shape")
 			menu.connect("popup_hide", menu, "queue_free")
 
-func _on_menu_add_shape(id : int):
-	var shape_name = shape_names[id]
+func _on_menu_add_shape(id : int, current_item : TreeItem):
+	var shape = mm_sdf_builder.item_types[id]
+	var shape_name = shape.item_type
 	var data : Dictionary = { type=shape_name, children=[] }
 	var parameters : Dictionary = {}
 	data.parameters = parameters
-	for p in mm_sdf_builder.get_node(shape_name).get_parameter_defs():
+	for p in shape.get_parameter_defs():
 		parameters[p.name] = p.default
 	var item : TreeItem
 	if current_item == null:
@@ -72,6 +73,9 @@ func _on_menu_add_shape(id : int):
 	else:
 		item = tree.create_item(current_item)
 		current_item.get_meta("scene").children.push_back(data)
+	var item_icon = shape.get("icon")
+	if item_icon != null:
+		item.set_icon(0, item_icon)
 	data.index = item.get_instance_id()
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)

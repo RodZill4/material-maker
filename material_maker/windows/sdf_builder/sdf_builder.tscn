@@ -25,6 +25,7 @@ margin_left = 106.503
 margin_top = 99.6447
 margin_right = -118.498
 margin_bottom = -96.3553
+popup_exclusive = true
 window_title = "SDF Builder"
 resizable = true
 script = ExtResource( 3 )

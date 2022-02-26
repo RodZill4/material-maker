@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -8,39 +8,120 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/intersection.gd" type="Script" id=6]
 [ext_resource path="res://addons/material_maker/sdf_builder/smooth_union.gd" type="Script" id=7]
 [ext_resource path="res://addons/material_maker/sdf_builder/line.gd" type="Script" id=8]
+[ext_resource path="res://addons/material_maker/sdf_builder/icons/icons.svg" type="Texture" id=9]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 32, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 80, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 16, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 32, 16, 16, 16 )
 
 [node name="SDFBuilder" type="Node"]
 script = ExtResource( 2 )
 
-[node name="Circle" type="Node" parent="."]
+[node name="Shapes" type="Node" parent="."]
+
+[node name="Circle" type="Node" parent="Shapes"]
 script = ExtResource( 1 )
+item_type = "Circle"
+item_category = "SDF2D"
+icon = SubResource( 1 )
 
-[node name="Box" type="Node" parent="."]
+[node name="Box" type="Node" parent="Shapes"]
 script = ExtResource( 4 )
+item_type = "Box"
+item_category = "SDF2D"
+icon = SubResource( 2 )
 
-[node name="IsoscelesTriangle" type="Node" parent="."]
+[node name="IsoscelesTriangle" type="Node" parent="Shapes"]
 script = ExtResource( 4 )
+item_type = "IsoTriangle"
+item_category = "SDF2D"
+icon = SubResource( 3 )
 shape = 2
 
-[node name="Rhombus" type="Node" parent="."]
+[node name="Rhombus" type="Node" parent="Shapes"]
 script = ExtResource( 4 )
+item_type = "Rhombus"
+item_category = "SDF2D"
+icon = SubResource( 4 )
 shape = 1
 
-[node name="Tunnel" type="Node" parent="."]
+[node name="Tunnel" type="Node" parent="Shapes"]
 script = ExtResource( 4 )
+item_type = "Tunnel"
+item_category = "SDF2D"
+icon = SubResource( 5 )
 shape = 3
 
-[node name="Line" type="Node" parent="."]
+[node name="Line" type="Node" parent="Shapes"]
 script = ExtResource( 8 )
+item_type = "Line"
+item_category = "SDF2D"
+icon = SubResource( 6 )
 
-[node name="Union" type="Node" parent="."]
+[node name="Boolean" type="Node" parent="."]
+
+[node name="Union" type="Node" parent="Boolean"]
 script = ExtResource( 3 )
+item_type = "Union"
+item_category = "SDF2D"
+icon = SubResource( 7 )
 
-[node name="Intersection" type="Node" parent="."]
+[node name="Intersection" type="Node" parent="Boolean"]
 script = ExtResource( 6 )
+item_type = "Intersection"
+item_category = "SDF2D"
+icon = SubResource( 8 )
 
-[node name="Difference" type="Node" parent="."]
+[node name="Difference" type="Node" parent="Boolean"]
 script = ExtResource( 5 )
+item_type = "Difference"
+item_category = "SDF2D"
+icon = SubResource( 9 )
 
-[node name="SmoothUnion" type="Node" parent="."]
+[node name="Smooth" type="Node" parent="."]
+
+[node name="Union" type="Node" parent="Smooth"]
 script = ExtResource( 7 )
+item_type = "SmoothUnion"
+item_category = "SDF2D"
