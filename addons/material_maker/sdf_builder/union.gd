@@ -25,14 +25,18 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 	var output_name = "$(name_uv)_n%d" % scene.index
 	data.code += shape_code(scene, uv)
 	if editor:
-		data.code += "if (index == -%d) return %s;\n" % [ scene.index, output_name ]
+		data.code += "if (index == -%d) return %s*$scale;\n" % [ scene.index, output_name ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
 		data.parameters.append_array(data2.parameters)
 		data.code += data2.code
 		data.code += "%s = min(%s, %s);\n" % [ output_name, output_name, data2.outputs[0].sdf2d ] 
-	if editor:
-		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
+
+func mod_uv_code(output_name : String) -> String:
+	return ""
+
+func mod_code(output_name : String) -> String:
+	return ""
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var output_name = "$(name_uv)_n%d" % scene.index
@@ -40,6 +44,10 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
 	data.code = "vec2 %s_p = %s - vec2($position_x, $position_y);\n" % [ output_name, uv ]
 	data.code += "%s_p = rotate(%s_p, radians($angle))/$scale;\n" % [ output_name, output_name ]
+	data.code += mod_uv_code(output_name)
 	shape_and_children_code(scene, data, "%s_p" % output_name, editor)
 	data.code += "%s *= $scale;\n" % output_name
+	data.code += mod_code(output_name)
+	if editor:
+		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data

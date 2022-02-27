@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -9,6 +9,9 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/smooth_union.gd" type="Script" id=7]
 [ext_resource path="res://addons/material_maker/sdf_builder/line.gd" type="Script" id=8]
 [ext_resource path="res://addons/material_maker/sdf_builder/icons/icons.svg" type="Texture" id=9]
+[ext_resource path="res://addons/material_maker/sdf_builder/annular.gd" type="Script" id=10]
+[ext_resource path="res://addons/material_maker/sdf_builder/elongate.gd" type="Script" id=11]
+[ext_resource path="res://addons/material_maker/sdf_builder/round.gd" type="Script" id=12]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -124,4 +127,21 @@ icon = SubResource( 9 )
 [node name="Union" type="Node" parent="Smooth"]
 script = ExtResource( 7 )
 item_type = "SmoothUnion"
+item_category = "SDF2D"
+
+[node name="Alter" type="Node" parent="."]
+
+[node name="Elongate" type="Node" parent="Alter"]
+script = ExtResource( 11 )
+item_type = "Elongate"
+item_category = "SDF2D"
+
+[node name="Round" type="Node" parent="Alter"]
+script = ExtResource( 12 )
+item_type = "Round"
+item_category = "SDF2D"
+
+[node name="Annular" type="Node" parent="Alter"]
+script = ExtResource( 10 )
+item_type = "Annular"
 item_category = "SDF2D"
