@@ -1,5 +1,9 @@
 extends "res://addons/material_maker/sdf_builder/union.gd"
 
+
+export var op_sign : String = "-"
+
+
 func get_parameter_defs():
 	return [
 		{ label="Position.x", name="position_x", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.x" },
@@ -15,9 +19,8 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 	data.code += "float $(name_uv)_n%d_kk = 10.0/$k;" % [ scene.index ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		data.parameters.append_array(data2.parameters)
-		data.code += data2.code
-		data.code += "%s += exp2(-$(name_uv)_n%d_kk*%s);\n" % [ output_name, scene.index, data2.outputs[0].sdf2d ] 
-	data.code += "%s = -log2(%s)/$(name_uv)_n%d_kk;\n" % [ output_name, output_name, scene.index ] 
-	if editor:
-		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
+		if not data2.empty():
+			data.parameters.append_array(data2.parameters)
+			data.code += data2.code
+			data.code += "%s += exp2(%s$(name_uv)_n%d_kk*%s);\n" % [ output_name, op_sign, scene.index, data2.outputs[0].sdf2d ] 
+	data.code += "%s = %slog2(%s)/$(name_uv)_n%d_kk;\n" % [ output_name, op_sign, output_name, scene.index ] 

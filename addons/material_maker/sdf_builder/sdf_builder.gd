@@ -43,6 +43,8 @@ func get_shape_names() -> Array:
 	return names
 
 func get_includes(scene : Dictionary) -> Array:
+	if scene.has("hidden") and scene.hidden:
+		return []
 	var includes : Array = []
 	var type = item_types[item_ids[scene.type]]
 	if type.has_method("get_includes"):
@@ -60,6 +62,8 @@ func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Arra
 	pass
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv-vec2(0.5)", editor = false) -> Dictionary:
+	if scene.has("hidden") and scene.hidden:
+		return {}
 	var scene_node = item_types[item_ids[scene.type]]
 	var shader_model = scene_node.scene_to_shader_model(scene, uv, editor)
 	if editor:

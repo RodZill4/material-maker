@@ -39,21 +39,25 @@ func set_sdf_scene(s : Array):
 	shader_model.instance = "float $(name)_d(vec2 uv, int index) {\n"
 	var first : bool = true
 	var parameter_defs = []
-	if scene.empty():
-		shader_model.instance += "float return_value = 1.0;"
-	else:
-		for i in scene:
-			var item_shader_model = mm_sdf_builder.scene_to_shader_model(i, "uv", editor)
+	for i in scene:
+		var item_shader_model = mm_sdf_builder.scene_to_shader_model(i, "uv", editor)
+		if item_shader_model.has("includes"):
 			shader_model.includes.append_array(item_shader_model.includes)
+		if item_shader_model.has("parameters"):
 			parameter_defs.append_array(item_shader_model.parameters)
+		if item_shader_model.has("code"):
 			shader_model.instance += item_shader_model.code.replace("$(name_uv)", "")
+		if item_shader_model.has("outputs"):
 			var output_name = item_shader_model.outputs[0].sdf2d.replace("$(name_uv)", "")
 			if first:
 				shader_model.instance += "float return_value = %s;" % output_name
 				first = false
 			else:
 				shader_model.instance += "return_value = min(return_value, %s);" % output_name
-	shader_model.instance += "return index == 0 ? return_value : 1.0;"
+	if first:
+		shader_model.instance += "return 1.0;"
+	else:
+		shader_model.instance += "return index == 0 ? return_value : 1.0;"
 	shader_model.instance += "}\n"
 	if editor:
 		shader_model.code = "float edgewidth = 0.0001;\n"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/annular.gd" type="Script" id=10]
 [ext_resource path="res://addons/material_maker/sdf_builder/elongate.gd" type="Script" id=11]
 [ext_resource path="res://addons/material_maker/sdf_builder/round.gd" type="Script" id=12]
+[ext_resource path="res://addons/material_maker/sdf_builder/morph.gd" type="Script" id=13]
+[ext_resource path="res://addons/material_maker/sdf_builder/ngon.gd" type="Script" id=14]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -61,42 +63,47 @@ region = Rect2( 32, 16, 16, 16 )
 [node name="SDFBuilder" type="Node"]
 script = ExtResource( 2 )
 
-[node name="Shapes" type="Node" parent="."]
+[node name="Shape" type="Node" parent="."]
 
-[node name="Circle" type="Node" parent="Shapes"]
+[node name="Circle" type="Node" parent="Shape"]
 script = ExtResource( 1 )
 item_type = "Circle"
 item_category = "SDF2D"
 icon = SubResource( 1 )
 
-[node name="Box" type="Node" parent="Shapes"]
+[node name="Box" type="Node" parent="Shape"]
 script = ExtResource( 4 )
 item_type = "Box"
 item_category = "SDF2D"
 icon = SubResource( 2 )
 
-[node name="IsoscelesTriangle" type="Node" parent="Shapes"]
+[node name="NGon" type="Node" parent="Shape"]
+script = ExtResource( 14 )
+item_type = "NGon"
+item_category = "SDF2D"
+
+[node name="IsoscelesTriangle" type="Node" parent="Shape"]
 script = ExtResource( 4 )
 item_type = "IsoTriangle"
 item_category = "SDF2D"
 icon = SubResource( 3 )
 shape = 2
 
-[node name="Rhombus" type="Node" parent="Shapes"]
+[node name="Rhombus" type="Node" parent="Shape"]
 script = ExtResource( 4 )
 item_type = "Rhombus"
 item_category = "SDF2D"
 icon = SubResource( 4 )
 shape = 1
 
-[node name="Tunnel" type="Node" parent="Shapes"]
+[node name="Tunnel" type="Node" parent="Shape"]
 script = ExtResource( 4 )
 item_type = "Tunnel"
 item_category = "SDF2D"
 icon = SubResource( 5 )
 shape = 3
 
-[node name="Line" type="Node" parent="Shapes"]
+[node name="Line" type="Node" parent="Shape"]
 script = ExtResource( 8 )
 item_type = "Line"
 item_category = "SDF2D"
@@ -129,6 +136,12 @@ script = ExtResource( 7 )
 item_type = "SmoothUnion"
 item_category = "SDF2D"
 
+[node name="Intersection" type="Node" parent="Smooth"]
+script = ExtResource( 7 )
+item_type = "SmoothIntersection"
+item_category = "SDF2D"
+op_sign = ""
+
 [node name="Alter" type="Node" parent="."]
 
 [node name="Elongate" type="Node" parent="Alter"]
@@ -144,4 +157,9 @@ item_category = "SDF2D"
 [node name="Annular" type="Node" parent="Alter"]
 script = ExtResource( 10 )
 item_type = "Annular"
+item_category = "SDF2D"
+
+[node name="Morph" type="Node" parent="Alter"]
+script = ExtResource( 13 )
+item_type = "Morph"
 item_category = "SDF2D"

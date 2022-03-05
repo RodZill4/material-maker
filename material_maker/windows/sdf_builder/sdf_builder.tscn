@@ -57,6 +57,8 @@ margin_right = 261.0
 margin_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 2
+select_mode = 1
 script = ExtResource( 4 )
 
 [node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
@@ -113,10 +115,10 @@ script = ExtResource( 1 )
 editor = true
 
 [connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
-[connection signal="cell_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_cell_selected"]
+[connection signal="button_pressed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_button_pressed"]
 [connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
-[connection signal="item_activated" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_activated"]
+[connection signal="item_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]

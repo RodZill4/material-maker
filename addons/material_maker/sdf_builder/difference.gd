@@ -27,13 +27,14 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	var first : bool = true
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		data.parameters.append_array(data2.parameters)
-		data.code += data2.code
-		if first:
-			data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf2d ]
-			first = false
-		else:
-			data.code += "%s = max(%s, -(%s));\n" % [ output_name, output_name, data2.outputs[0].sdf2d ] 
+		if not data2.empty():
+			data.parameters.append_array(data2.parameters)
+			data.code += data2.code
+			if first:
+				data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf2d ]
+				first = false
+			else:
+				data.code += "%s = max(%s, -(%s));\n" % [ output_name, output_name, data2.outputs[0].sdf2d ] 
 	data.code += "%s *= $scale;\n" % [ output_name ]
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]

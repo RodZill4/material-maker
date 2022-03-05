@@ -9,15 +9,12 @@ func get_parameter_defs():
 		{ label="Position.y", name="position_y", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.y" },
 		{ label="Rotation", name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
-		{ label="A.x", name="ax", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.x" },
-		{ label="A.y", name="ay", type="float", min=-0.5, max=0.5, step=0.01, default=-0.25, control="P11.y" },
-		{ label="B.x", name="bx", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.x" },
-		{ label="B.y", name="by", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="P12.y" },
-		{ label="Radius", name="r", type="float", min=-0.5, max=0.5, step=0.01, default=0.25, control="RadiusP11.r" }
+		{ label="N", name="edgecount", type="float", min=3.0, max=32.0, step=1, default=5 },
+		{ label="Radius", name="radius", type="float", min=0.0, max=1.0, step=0.01, default=0.5 }
 	]
 
 func get_includes():
-	return [ "rotate", "sdline" ]
+	return [ "rotate", "sdcirclerepeat", "sdngon" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = sdLine(%s, vec2($ax, $ay), vec2($bx, $by)).x-$r;\n" % [ scene.index, uv ]
+	return "float $(name_uv)_n%d = sdNgon(%s, $radius, $edgecount);\n" % [ scene.index, uv ]
