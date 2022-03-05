@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/round.gd" type="Script" id=12]
 [ext_resource path="res://addons/material_maker/sdf_builder/morph.gd" type="Script" id=13]
 [ext_resource path="res://addons/material_maker/sdf_builder/ngon.gd" type="Script" id=14]
+[ext_resource path="res://addons/material_maker/sdf_builder/bend.gd" type="Script" id=15]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -152,6 +153,11 @@ item_category = "SDF2D"
 [node name="Round" type="Node" parent="Alter"]
 script = ExtResource( 12 )
 item_type = "Round"
+item_category = "SDF2D"
+
+[node name="Bend" type="Node" parent="Alter"]
+script = ExtResource( 15 )
+item_type = "Bend"
 item_category = "SDF2D"
 
 [node name="Annular" type="Node" parent="Alter"]
