@@ -1,4 +1,4 @@
-extends "res://addons/material_maker/sdf_builder/union.gd"
+extends "res://addons/material_maker/sdf_builder/sdf2d/union.gd"
 
 func _ready():
 	pass # Replace with function body.

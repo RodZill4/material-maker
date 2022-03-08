@@ -1,20 +1,24 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://addons/material_maker/sdf_builder/circle.gd" type="Script" id=1]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
-[ext_resource path="res://addons/material_maker/sdf_builder/union.gd" type="Script" id=3]
-[ext_resource path="res://addons/material_maker/sdf_builder/box.gd" type="Script" id=4]
-[ext_resource path="res://addons/material_maker/sdf_builder/difference.gd" type="Script" id=5]
-[ext_resource path="res://addons/material_maker/sdf_builder/intersection.gd" type="Script" id=6]
-[ext_resource path="res://addons/material_maker/sdf_builder/smooth_union.gd" type="Script" id=7]
-[ext_resource path="res://addons/material_maker/sdf_builder/line.gd" type="Script" id=8]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/union.gd" type="Script" id=3]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/box.gd" type="Script" id=4]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/difference.gd" type="Script" id=5]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/intersection.gd" type="Script" id=6]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/smooth_union.gd" type="Script" id=7]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/line.gd" type="Script" id=8]
 [ext_resource path="res://addons/material_maker/sdf_builder/icons/icons.svg" type="Texture" id=9]
-[ext_resource path="res://addons/material_maker/sdf_builder/annular.gd" type="Script" id=10]
-[ext_resource path="res://addons/material_maker/sdf_builder/elongate.gd" type="Script" id=11]
-[ext_resource path="res://addons/material_maker/sdf_builder/round.gd" type="Script" id=12]
-[ext_resource path="res://addons/material_maker/sdf_builder/morph.gd" type="Script" id=13]
-[ext_resource path="res://addons/material_maker/sdf_builder/ngon.gd" type="Script" id=14]
-[ext_resource path="res://addons/material_maker/sdf_builder/bend.gd" type="Script" id=15]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/annular.gd" type="Script" id=10]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/elongate.gd" type="Script" id=11]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/round.gd" type="Script" id=12]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/morph.gd" type="Script" id=13]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/ngon.gd" type="Script" id=14]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/bend.gd" type="Script" id=15]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/star.gd" type="Script" id=16]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/mirror.gd" type="Script" id=17]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/flip.gd" type="Script" id=18]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/stairs.gd" type="Script" id=19]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -26,6 +30,21 @@ flags = 4
 atlas = ExtResource( 9 )
 region = Rect2( 16, 0, 16, 16 )
 
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 128, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 96, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 112, 0, 16, 16 )
+
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 9 )
@@ -36,15 +55,15 @@ flags = 4
 atlas = ExtResource( 9 )
 region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 64, 0, 16, 16 )
-
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 9 )
 region = Rect2( 80, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 64, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=7]
 flags = 4
@@ -78,10 +97,24 @@ item_type = "Box"
 item_category = "SDF2D"
 icon = SubResource( 2 )
 
+[node name="Ellipse" type="Node" parent="Shape"]
+script = ExtResource( 4 )
+item_type = "Ellipse"
+item_category = "SDF2D"
+icon = SubResource( 10 )
+shape = 4
+
 [node name="NGon" type="Node" parent="Shape"]
 script = ExtResource( 14 )
 item_type = "NGon"
 item_category = "SDF2D"
+icon = SubResource( 11 )
+
+[node name="Star" type="Node" parent="Shape"]
+script = ExtResource( 16 )
+item_type = "Star"
+item_category = "SDF2D"
+icon = SubResource( 12 )
 
 [node name="IsoscelesTriangle" type="Node" parent="Shape"]
 script = ExtResource( 4 )
@@ -97,6 +130,12 @@ item_category = "SDF2D"
 icon = SubResource( 4 )
 shape = 1
 
+[node name="Line" type="Node" parent="Shape"]
+script = ExtResource( 8 )
+item_type = "Line"
+item_category = "SDF2D"
+icon = SubResource( 6 )
+
 [node name="Tunnel" type="Node" parent="Shape"]
 script = ExtResource( 4 )
 item_type = "Tunnel"
@@ -104,11 +143,10 @@ item_category = "SDF2D"
 icon = SubResource( 5 )
 shape = 3
 
-[node name="Line" type="Node" parent="Shape"]
-script = ExtResource( 8 )
-item_type = "Line"
+[node name="Stairs" type="Node" parent="Shape"]
+script = ExtResource( 19 )
+item_type = "Stairs"
 item_category = "SDF2D"
-icon = SubResource( 6 )
 
 [node name="Boolean" type="Node" parent="."]
 
@@ -144,6 +182,16 @@ item_category = "SDF2D"
 op_sign = ""
 
 [node name="Alter" type="Node" parent="."]
+
+[node name="Flip" type="Node" parent="Alter"]
+script = ExtResource( 18 )
+item_type = "Flip"
+item_category = "SDF2D"
+
+[node name="Mirror" type="Node" parent="Alter"]
+script = ExtResource( 17 )
+item_type = "Mirror"
+item_category = "SDF2D"
 
 [node name="Elongate" type="Node" parent="Alter"]
 script = ExtResource( 11 )

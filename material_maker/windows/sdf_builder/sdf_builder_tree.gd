@@ -5,7 +5,8 @@ signal drop_item(item, dest, position)
 
 
 func _ready():
-	pass # Replace with function body.
+	set_column_expand(1, false)
+	set_column_min_width(1, 28)
 
 func get_drag_data(position):
 	var item : TreeItem = get_item_at_position(position)

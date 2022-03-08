@@ -27,6 +27,8 @@ func get_value() -> String:
 	return text
 	
 func set_value(v, notify = false) -> void:
+	if v is int:
+		v = float(v)
 	if v is float:
 		value = v
 		text = str(v)

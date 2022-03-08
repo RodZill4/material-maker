@@ -1,0 +1,96 @@
+{
+	"name": "sdstairs",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"h": 0.2,
+		"steps": 3,
+		"w": 0.4
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "// The MIT License, Copyright © 2022 Inigo Quilez\n//https://www.shadertoy.com/view/7tKSWt\nfloat sdStairs(in vec2 p, in vec2 wh, float n) {\n    vec2 ba = wh*n;\n    float d = min(dot2(p-vec2(clamp(p.x,0.0,ba.x),0.0)), \n                  dot2(p-vec2(ba.x,clamp(p.y,0.0,ba.y))));\n    float s = sign(max(-p.y,p.x-ba.x) );\n\n    float dia = length(wh);\n    p = mat2(vec2(wh.x,-wh.y), vec2(wh.y,wh.x))*p/dia;\n    float id = clamp(round(p.x/dia),0.0,n-1.0);\n    p.x = p.x - id*dia;\n    p = mat2(vec2(wh.x, wh.y),vec2(-wh.y,wh.x))*p/dia;\n\t\n    float hh = wh.y/2.0;\n    p.y -= hh;\n    \n    if( p.y>hh*sign(p.x) ) s=1.0;\n    p = (id<0.5 || p.x>0.0) ? p : -p;\n\n    d = min( d, dot2(p-vec2(0.0,clamp(p.y,-hh,hh))) );\n    d = min( d, dot2(p-vec2(clamp(p.x,0.0,wh.x),hh)) );\n    \n    return sqrt(d)*s;\n}\n\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A stairs shape described as a signed distance function",
+		"name": "sdStairs",
+		"outputs": [
+			{
+				"longdesc": "The generated signed distance function",
+				"sdf2d": "sdStairs(vec2(1.0, -1.0)*($uv-vec2($cx+0.5, $cy+0.5))+vec2($w, $h), 2.0*vec2($w, $h)/$steps, $steps)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0.5,
+				"label": "Width",
+				"longdesc": "The width of the stairs shape",
+				"max": 1,
+				"min": 0,
+				"name": "w",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 1,
+				"label": "Height",
+				"longdesc": "The height of the stairs shape",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"shortdesc": "Height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center of the stairs shape on the X axis",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center of the stairs shape on the Y axis",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 3,
+				"label": "Steps",
+				"max": 16,
+				"min": 1,
+				"name": "steps",
+				"step": 1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdStairs"
+	},
+	"type": "shader"
+}

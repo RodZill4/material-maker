@@ -33,7 +33,7 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 			data.code += data2.code
 			data.code += "%s = min(%s, %s);\n" % [ output_name, output_name, data2.outputs[0].sdf2d ] 
 
-func mod_uv_code(output_name : String) -> String:
+func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return ""
 
 func mod_code(output_name : String) -> String:
@@ -45,7 +45,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
 	data.code = "vec2 %s_p = %s - vec2($position_x, $position_y);\n" % [ output_name, uv ]
 	data.code += "%s_p = rotate(%s_p, radians($angle))/$scale;\n" % [ output_name, output_name ]
-	data.code += mod_uv_code(output_name)
+	data.code += mod_uv_code(scene, output_name)
 	shape_and_children_code(scene, data, "%s_p" % output_name, editor)
 	data.code += mod_code(output_name)
 	data.code += "%s *= $scale;\n" % output_name

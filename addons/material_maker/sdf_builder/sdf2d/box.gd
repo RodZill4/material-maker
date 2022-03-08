@@ -1,14 +1,16 @@
-extends "res://addons/material_maker/sdf_builder/union.gd"
+extends "res://addons/material_maker/sdf_builder/sdf2d/union.gd"
 
-export(int, "Box", "Rhombus", "IsocelesTriangle", "Tunnel") var shape
+export(int, "Box", "Rhombus", "IsocelesTriangle", "Tunnel", "Ellipse") var shape
 
 const INCLUDES : Array = [
 	[ "rotate", "sdbox" ],
 	[ "rotate", "sdrhombus" ],
 	[ "rotate", "sdisoscelestriangle" ],
-	[ "rotate", "sdtunnel" ]
+	[ "rotate", "sdtunnel" ],
+	[ "rotate", "sdellipse" ],
+	[ "rotate", "sdstairs" ]
 ]
-const FUNCTIONS : Array = [ "sd_box", "sdRhombus", "sd_isosceles_triangle", "sdTunnel" ]
+const FUNCTIONS : Array = [ "sd_box", "sdRhombus", "sd_isosceles_triangle", "sdTunnel", "sd_ellipse", "sdStairs" ]
 
 func _ready():
 	pass # Replace with function body.

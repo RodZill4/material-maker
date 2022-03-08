@@ -100,7 +100,10 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var parameters : Dictionary = {}
 	data.parameters = parameters
 	for p in shape.get_parameter_defs():
-		parameters[p.name] = p.default
+		if p.type == "float" and p.default is int:
+			parameters[p.name] = float(p.default)
+		else:
+			parameters[p.name] = p.default
 	var item : TreeItem
 	if current_item == null:
 		item = tree.create_item()
@@ -175,6 +178,16 @@ func show_parameters(prefix : String):
 		$VBoxContainer/Main/Parameters.add_child(control)
 		controls[p.name] = control
 	GENERIC.initialize_controls_from_generator(controls, $GenSDF, self)
+	for p in $GenSDF.get_filtered_parameter_defs(prefix):
+		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter_def(p.name).default)
+
+func _on_value_changed(new_value, variable : String) -> void:
+	var value = MMType.deserialize_value(new_value)
+	var item : TreeItem = instance_from_id(variable.right(1).to_int())
+	var parameter_name : String = variable.right(variable.find("_")+1)
+	item.get_meta("scene").parameters[parameter_name] = value
+	$GenSDF.set_sdf_scene(scene)
+	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
 
 func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : String = "") -> void:
 	ignore_parameter_change = variable
@@ -211,7 +224,7 @@ func _on_Tree_button_pressed(item, column, _id):
 func set_node_parameters(generator, parameters):
 	for p in parameters.keys():
 		var value = MMType.deserialize_value(parameters[p])
-		generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+		generator.set_parameter(p, value)
 		var item : TreeItem = instance_from_id(p.right(1).to_int())
 		var parameter_name : String = p.right(p.find("_")+1)
 		item.get_meta("scene").parameters[parameter_name] = value

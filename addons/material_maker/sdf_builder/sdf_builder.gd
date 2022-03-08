@@ -77,6 +77,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv-vec2(0.5)", ed
 			shader_model.parameters.push_back(p)
 	else:
 		for p in scene_node.get_parameter_defs():
-			shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
+			if p.type == "float":
+				shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
 	shader_model.includes = get_includes(scene)
 	return shader_model
