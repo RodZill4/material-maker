@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -64,6 +64,11 @@ region = Rect2( 80, 0, 16, 16 )
 flags = 4
 atlas = ExtResource( 9 )
 region = Rect2( 64, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 144, 0, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=7]
 flags = 4
@@ -147,6 +152,7 @@ shape = 3
 script = ExtResource( 19 )
 item_type = "Stairs"
 item_category = "SDF2D"
+icon = SubResource( 13 )
 
 [node name="Boolean" type="Node" parent="."]
 

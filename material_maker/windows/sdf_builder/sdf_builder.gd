@@ -12,7 +12,9 @@ var ignore_parameter_change : String = ""
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
-const MENU_DELETE : int = 1000
+const MENU_COPY : int = 1000
+const MENU_PASTE : int = 1001
+const MENU_DELETE : int = 1002
 
 signal node_changed(model_data)
 signal editor_window_closed
@@ -27,7 +29,7 @@ func _ready():
 	if tree.get_root() == null:
 		tree.create_item()
 
-func set_sdf_scene(s, parent = null):
+func set_sdf_scene(s : Array, parent = null):
 	var parent_item
 	if parent == null:
 		scene = s.duplicate(true)
@@ -38,22 +40,26 @@ func set_sdf_scene(s, parent = null):
 	else:
 		parent_item = parent
 	for i in s:
-		var item = tree.create_item(parent_item)
-		item.set_text(0, i.type)
-		var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[i.type]]
-		var item_icon = item_type.get("icon")
-		if item_icon != null:
-			item.set_icon(0, item_icon)
-		i.index = item.get_instance_id()
-		item.add_button(1, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
-		item.set_meta("scene", i)
-		set_sdf_scene(i.children, item)
+		add_sdf_item(i, parent_item)
 	if parent == null:
 		$GenSDF.set_sdf_scene(scene)
 		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
 	var top = tree.get_root().get_children()
 	if top != null:
 		tree.get_root().get_children().select(0)
+
+func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
+	var item = tree.create_item(parent_item)
+	item.set_text(0, i.type)
+	var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[i.type]]
+	var item_icon = item_type.get("icon")
+	if item_icon != null:
+		item.set_icon(0, item_icon)
+	i.index = item.get_instance_id()
+	item.add_button(1, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
+	item.set_meta("scene", i)
+	set_sdf_scene(i.children, item)
+	return item
 
 func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 	var scene_list : Array = []
@@ -69,23 +75,49 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 		item_scene.children = scene_list
 		return item_scene
 
+func show_menu(current_item : TreeItem):
+	var menu : PopupMenu = PopupMenu.new()
+	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ])
+	menu.add_child(add_menu)
+	menu.add_submenu_item("Create", add_menu.name)
+	if current_item != null:
+		menu.add_separator()
+		menu.add_item("Copy", MENU_COPY)
+	var json = parse_json(OS.clipboard)
+	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
+		if current_item == null:
+			menu.add_separator()
+		menu.add_item("Paste", MENU_PASTE)
+	if current_item != null:
+		menu.add_separator()
+		menu.add_item("Delete", MENU_DELETE)
+	menu.connect("id_pressed", self, "_on_menu", [ current_item ])
+	add_child(menu)
+	menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+	menu.connect("popup_hide", menu, "queue_free")
+
 func _on_Tree_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_RIGHT and event.pressed:
 			var current_item : TreeItem = tree.get_item_at_position(tree.get_local_mouse_position())
-			var menu : PopupMenu = PopupMenu.new()
-			var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ])
-			menu.add_child(add_menu)
-			menu.add_submenu_item("Create", add_menu.name)
-			if current_item != null:
-				menu.add_item("Delete", MENU_DELETE)
-			menu.connect("id_pressed", self, "_on_menu", [ current_item ])
-			add_child(menu)
-			menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-			menu.connect("popup_hide", menu, "queue_free")
+			show_menu(current_item)
 
 func _on_menu(id : int, current_item : TreeItem):
 	match id:
+		MENU_COPY:
+			var tmp_scene : Dictionary = current_item.get_meta("scene").duplicate()
+			tmp_scene.is_easysdf = true
+			OS.clipboard = JSON.print(tmp_scene)
+		MENU_PASTE:
+			var json = parse_json(OS.clipboard)
+			if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
+				if current_item == null:
+					current_item = tree.get_root()
+				var new_item : TreeItem = add_sdf_item(json, current_item)
+				rebuild_scene()
+				$GenSDF.set_sdf_scene(scene)
+				$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+				new_item.select(0)
 		MENU_DELETE:
 			current_item.get_parent().remove_child(current_item)
 			tree.update()
