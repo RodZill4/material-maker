@@ -228,6 +228,7 @@ driver="Dummy"
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
+mm_preprocessor="*res://addons/material_maker/engine/preprocessor.gd"
 
 [debug]
 
@@ -302,6 +303,10 @@ file_logging/log_path=""
 [memory]
 
 limits/message_queue/max_size_kb=16384
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=204800000
 
 [rendering]
 

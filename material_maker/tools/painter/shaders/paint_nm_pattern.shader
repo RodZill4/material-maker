@@ -1,8 +1,8 @@
-#include paint_header
-#include paint_brush_functions_nm
+#include "paint_header.shader"
+#include "paint_brush_functions_nm.shader"
 
 void fragment() {
-#include paint_fragment_common
+#include "paint_fragment_common.shader"
 
 	vec2 epsilon = vec2(1.0/texture_size, 0.0);
 	vec2 tex2view_dx = dTex2View(UV, epsilon);

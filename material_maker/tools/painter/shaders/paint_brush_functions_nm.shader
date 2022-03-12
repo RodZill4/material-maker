@@ -1,4 +1,4 @@
-#include paint_brush_functions
+#include "paint_brush_functions.shader"
 
 vec2 tex2view(vec2 uv, vec2 duv) {
 	vec4 v = texture(tex2view_tex, seams_uv(uv));

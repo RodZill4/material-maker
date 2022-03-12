@@ -1,8 +1,8 @@
-#include paint_header_uv_pattern
-#include paint_brush_functions
+#include "paint_header_uv_pattern.shader"
+#include "paint_brush_functions.shader"
 
 void fragment() {
-#include paint_fragment_common
+#include "paint_fragment_common.shader"
 
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec4 color = pattern_function(fract(uv));
