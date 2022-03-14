@@ -47,6 +47,7 @@ func get_parameter_defs() -> Array:
 		VERSION_OLD:
 			parameter_defs.push_back({ name="lod", type="float", min=0, max=10.0, step=0.01, default=0 })
 		VERSION_COMPLEX:
+			parameter_defs.push_back({ name="highp", type="boolean", default=false })
 			parameter_defs.push_back({ name="filter", type="boolean", default=true })
 			parameter_defs.push_back({ name="mipmap", type="boolean", default=true })
 	return parameter_defs
@@ -147,8 +148,9 @@ func update_buffer() -> void:
 				return
 			current_renderer = renderer
 			update_again = false
+			var highp = parameters.highp if version == VERSION_COMPLEX and parameters.has("highp") else false
 			var time = OS.get_ticks_msec()
-			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
+			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")), true, highp)
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
 			if !update_again:

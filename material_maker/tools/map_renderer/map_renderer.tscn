@@ -782,37 +782,28 @@ render_mode blend_disabled;
 uniform sampler2D tex;
 uniform float size = 512.0;
 
-const int STEPS = 125;
-
-vec4 dilate_distance_h(vec2 uv) {
+void fragment() {
 	vec2 e = vec2(1.0/size, 0.0);
-	float d = size/float(STEPS);
-	float rv = 0.0;
 	float found = 0.0;
 	vec2 source_uv;
 	vec4 source_color;
-	int steps = min(STEPS, int(size)/2);
+	int steps = int(size*0.5);
 	for (int i = 0; i < steps; ++i) {
-		source_uv = uv+float(i)*e;
+		vec2 dx = float(i)*e;
+		source_uv = UV+dx;
 		source_color = texture(tex, source_uv);
 		if (source_color.a >= 0.5) {
-			rv = float(i);
 			found = 1.0;
 			break;
 		}
-		source_uv = uv-float(i)*e;
+		source_uv = UV-dx;
 		source_color = texture(tex, source_uv);
 		if (source_color.a >= 0.5) {
-			rv = -float(i);
 			found = 1.0;
 			break;
 		}
 	}
-	return vec4(vec3(0.5+0.5*rv*e.x*d), found);
-}
-
-void fragment() {
-	COLOR = dilate_distance_h(UV);
+	COLOR = vec4(source_uv, found, 1.0);
 }
 "
 
@@ -827,42 +818,26 @@ render_mode blend_disabled;
 uniform sampler2D tex;
 uniform float size = 512.0;
 
-const int STEPS = 64;
-
-vec4 best(vec4 last, vec2 uv, float dy) {
-	vec2 p = texture(tex, uv+dy).ar;
-	float d = size/float(STEPS);
-	float dx = (p.y-0.5)/d;
-	if (p.x > 0.5) {
-		float d_2 = dx*dx+dy*dy;
-		if (d_2 < last.y) {
-			last = vec4(1.0, d_2, p.y, dy);
-		}
+vec4 best(vec4 last, vec2 uv, vec2 p) {
+	vec4 t = texture(tex, p);
+	if (t.z < 0.5) {
+		return last;
 	}
-	return last;
-}
-
-vec4 dilate_distance_v(vec2 uv) {
-	float e = 1.0/size;
-	float d = size/float(STEPS);
-	vec4 p = vec4(texture(tex, uv).arr, 0.0);
-	if (p.x < 0.5) {
-		p.y = 1.0;
-	} else {
-		p.y = (p.y-0.5)/d;
-		p.y *= p.y;
-	}
-	int steps = min(STEPS, int(size)/2);
-	for (int i = 0; i < steps; ++i) {
-		float dy = float(i)*e;
-		p = best(p, uv, dy);
-		p = best(p, uv, -dy);
-	}
-	return vec4(p.z, 0.5+0.5*p.w*d, 0.0, p.x);
+	vec4 new = vec4(t.xy, length(t.xy-uv), 1.0);
+	return mix(last, new, step(new.z, last.z));
 }
 
 void fragment() {
-	COLOR = dilate_distance_v(UV);
+	vec4 p = vec4(UV, 2.0, 1.0);
+	vec2 e = vec2(0.0, 1.0/size);
+	int steps = int(size*0.5);
+	for (int i = 0; i < steps; ++i) {
+		vec2 dy = float(i)*e;
+		p = best(p, UV, UV+dy);
+		p = best(p, UV, UV-dy);
+	}
+	COLOR = vec4(p.xy, 0.0, 1.0);
+	//COLOR = vec4(texture(tex, UV).xy, 0.0, 1.0);
 }
 "
 
@@ -877,6 +852,7 @@ size = Vector2( 2048, 2048 )
 own_world = true
 world = SubResource( 1 )
 transparent_bg = true
+use_32_bpc_depth = true
 keep_3d_linear = true
 render_target_update_mode = 0
 script = ExtResource( 2 )
