@@ -276,9 +276,10 @@ func update_brush(update_shaders : bool = false):
 	#if brush_params.albedo_texture_mode != 2: $Pattern.visible = false
 	if brush_preview_material != null:
 		if update_shaders:
-			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush_%s.shader" % get_brush_mode()
+			#var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush_%s.shader" % get_brush_mode()
+			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.shader"
 			var code : String = get_output_code(1)
-			update_shader(brush_preview_material, brush_shader_file, { BRUSH_MODE=get_brush_mode() }, code)
+			update_shader(brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
 		var v2t_tex = view_to_texture_viewport.get_texture()
 		brush_preview_material.set_shader_param("rect_size", viewport_size)
 		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
@@ -308,9 +309,13 @@ func update_brush(update_shaders : bool = false):
 	if update_shaders:
 		for index in viewport_names.size():
 			var viewport = viewports[viewport_names[index]]
-			var shader_file : String = "res://material_maker/tools/painter/shaders/%s_%s.shader" % [ viewport.get_shader_prefix(), mode ]
+			var shader_file : String = "res://material_maker/tools/painter/shaders/paint.shader"
 			var code : String = get_output_code(index+1)
-			update_shader(viewport.get_paint_material(), shader_file, {}, code)
+			var defines : Dictionary = {}
+			defines.GENERATED_CODE = code
+			defines.TEXTURE_TYPE = "\""+viewport.get_shader_prefix()+"\""
+			defines.BRUSH_MODE = "\""+mode+"\""
+			update_shader(viewport.get_paint_material(), shader_file, defines)
 			viewport.set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
 			viewport.set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for v in viewports.keys():
@@ -350,11 +355,10 @@ func get_output_code(index : int) -> String:
 	new_code += "}\n"
 	return new_code
 
-func update_shader(shader_material : ShaderMaterial, shader_file : String, defines : Dictionary, shader_code : String) -> void:
+func update_shader(shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
-	defines.GENERATED_CODE = shader_code
 	shader_material.shader.code = mm_preprocessor.preprocess_file(shader_file, defines)
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
