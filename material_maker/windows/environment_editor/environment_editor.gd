@@ -2,14 +2,16 @@ extends WindowDialog
 
 onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 
-onready var environment_list : ItemList = $HSplitContainer/Environments
-onready var camera : Camera = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
-onready var camera_position = $HSplitContainer/ViewportContainer/Viewport/CameraPosition
-onready var camera_rotation1 = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1
-onready var camera_rotation2 = $HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2
+onready var environment_list : ItemList = $Main/HSplitContainer/Environments
+onready var camera : Camera = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
+onready var camera_position = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition
+onready var camera_rotation1 = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1
+onready var camera_rotation2 = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2
 onready var environment : Environment = camera.environment
-onready var sun : DirectionalLight = $HSplitContainer/ViewportContainer/Viewport/Sun
-onready var ui : GridContainer = $HSplitContainer/UI
+onready var sun : DirectionalLight = $Main/HSplitContainer/ViewportContainer/Viewport/Sun
+onready var ui : GridContainer = $Main/HSplitContainer/UI
+
+var share_button
 
 var new_environment_icon = preload("res://material_maker/windows/environment_editor/new_environment.png")
 
@@ -23,6 +25,8 @@ func _ready():
 	environment_manager.connect("name_updated", self, "on_name_updated")
 	environment_manager.connect("thumbnail_updated", self, "on_thumbnail_updated")
 	read_environment_list()
+	share_button = get_node("/root/MainWindow").get_share_button()
+	$Main/Buttons/Share.disabled = ! share_button.can_share()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -66,7 +70,7 @@ func read_environment_list():
 		set_current_environment(0)
 
 func _on_ViewportContainer_resized():
-	$HSplitContainer/ViewportContainer/Viewport.size = $HSplitContainer/ViewportContainer.rect_size
+	$Main/HSplitContainer/ViewportContainer/Viewport.size = $Main/HSplitContainer/ViewportContainer.rect_size
 
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)
@@ -138,14 +142,22 @@ func _on_Environments_item_selected(index):
 func _on_Environments_gui_input(event):
 	if ! (event is InputEventMouseButton) or event.button_index != BUTTON_RIGHT:
 		return
-	var context_menu = $HSplitContainer/Environments/ContextMenu
-	var index = $HSplitContainer/Environments.get_item_at_position(event.position)
-	if $HSplitContainer/Environments.is_selected(index) and ! environment_manager.is_read_only(index):
+	var context_menu = $Main/HSplitContainer/Environments/ContextMenu
+	var index = environment_list.get_item_at_position(event.position)
+	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
 		context_menu.popup(Rect2(get_global_mouse_position(), context_menu.get_minimum_size()))
 
 func _on_ContextMenu_id_pressed(id):
-	var index = $HSplitContainer/Environments.get_selected_items()[0]
+	var index = environment_list.get_selected_items()[0]
 	environment_manager.delete_environment(index)
-	$HSplitContainer/Environments.remove_item(index)
-	$HSplitContainer/Environments.select(index-1)
+	environment_list.remove_item(index)
+	environment_list.select(index-1)
 	_on_Environments_item_selected(index-1)
+
+func _on_Share_pressed():
+	var image = environment_manager.create_preview(current_environment, 512)
+	while image is GDScriptFunctionState:
+		image = yield(image, "completed")
+	var preview_texture : ImageTexture = ImageTexture.new()
+	preview_texture.create_from_image(image)
+	share_button.send_asset("environment", environment_manager.get_environment(current_environment), preview_texture)

@@ -42,6 +42,16 @@ func _ready():
 				texture.create_from_image(image)
 			environment_textures.push_back({ thumbnail=texture })
 
+func add_environment(data : Dictionary):
+	environments.push_back(data)
+	environment_textures.push_back({ thumbnail=ImageTexture.new() })
+	emit_signal("name_updated", environments.size()-1, data.name)
+	emit_signal("environment_updated", environments.size()-1)
+	update_thumbnail(environments.size()-1)
+
+func get_environment(index : int) -> Dictionary:
+	return environments[index]
+
 func load_environment(file_path : String) -> Array:
 	var array : Array = []
 	var file = File.new()
@@ -79,11 +89,11 @@ func create_environment_menu(menu : PopupMenu) -> void:
 func is_read_only(index) -> bool:
 	return index < ro_environments
 
-func set_value(index, variable, value):
+func set_value(index, variable, value, force = false):
 	if index < ro_environments || index >= environments.size():
 		return
 	var serialized_value = MMType.serialize_value(value)
-	if environments[index][variable] != serialized_value:
+	if force or environments[index][variable] != serialized_value:
 		environments[index][variable] = serialized_value
 		if variable == "hdri_url":
 			var status = read_hdr(index, value)
@@ -210,17 +220,23 @@ func update_thumbnail(index) -> void:
 
 onready var preview_generator : Viewport = $PreviewGenerator
 
+func create_preview(index : int, size : int = 64) -> Image:
+	apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
+	preview_generator.size = Vector2(size, size)
+	preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
+	preview_generator.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	return preview_generator.get_texture().get_data()
+
 func do_update_thumbnail() -> void:
 	rendering = true
 	for index in thumbnail_update_list:
-		apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
-		preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
-		preview_generator.update_worlds()
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		var t : ImageTexture = environment_textures[index].thumbnail
-		var image : Image = preview_generator.get_texture().get_data()
+		var image = create_preview(index)
+		while image is GDScriptFunctionState:
+			image = yield(image, "completed")
 		if image != null:
+			var t : ImageTexture = environment_textures[index].thumbnail
 			t.create_from_image(image)
 			emit_signal("thumbnail_updated", index, t)
 	thumbnail_update_list = []
