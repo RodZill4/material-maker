@@ -67,10 +67,11 @@ func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
-		current_project_path = filename.get_base_dir()
-		var generator = create_gen(data)
-		current_project_path = ""
-		return generator
+		if data != null:
+			current_project_path = filename.get_base_dir()
+			var generator = create_gen(data)
+			current_project_path = ""
+			return generator
 	return null
 
 func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = Vector2(0, 0)) -> Dictionary:

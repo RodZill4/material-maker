@@ -24,7 +24,7 @@ connected to several node inputs. Each node output (and input) can be:
 
 * a **3D signed distance function** (shown in red), with or without a color index
 
-* a **3D texture** (shown in fuchia), that can be associated to a color index, which makes
+* a **3D texture** (shown in fuchsia), that can be associated to a color index, which makes
   it possible to associate several 3D textures in a single 3D scene
 
 Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be

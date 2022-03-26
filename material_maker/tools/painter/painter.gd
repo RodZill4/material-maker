@@ -242,31 +242,6 @@ func update_tex2view():
 	renderer.copy_to_texture(texture_to_view_texture)
 	renderer.release(self)
 
-# Shader methods
-
-func get_shader_file(file_name : String) -> String:
-	var shader_text = ""
-	if CACHE_SHADER_FILES and shader_files.has(file_name):
-		shader_text = shader_files[file_name]
-	else:
-		var file = File.new()
-		if file.open("res://material_maker/tools/painter/shaders/"+file_name+".shader", File.READ) == OK:
-			shader_text = file.get_as_text()
-		else:
-			print("Cannot open %s.shader" % file_name)
-		shader_files[file_name] = shader_text
-	return shader_text
-
-func preprocess_shader(shader_text : String) -> String:
-	var regex : RegEx = RegEx.new()
-	regex.compile("#include\\s+(\\w+)")
-	while true:
-		var result : RegExMatch = regex.search(shader_text)
-		if result == null:
-			break
-		shader_text = shader_text.replace(result.strings[0], get_shader_file(result.strings[1]))
-	return shader_text
-
 # Brush methods
 
 func get_brush_mode() -> String:
@@ -280,9 +255,7 @@ func set_brush_preview_material(m : ShaderMaterial) -> void:
 	brush_preview_material = m
 
 func get_brush_preview_shader(mode : String) -> String:
-	var shader_text : String = get_shader_file("brush_%s" % mode)
-	shader_text = preprocess_shader(shader_text)
-	return shader_text
+	return mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/brush_%s.shader" % mode)
 
 func set_brush_angle(a) -> void:
 	brush_params.pattern_angle = a
@@ -303,8 +276,10 @@ func update_brush(update_shaders : bool = false):
 	#if brush_params.albedo_texture_mode != 2: $Pattern.visible = false
 	if brush_preview_material != null:
 		if update_shaders:
+			#var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush_%s.shader" % get_brush_mode()
+			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.shader"
 			var code : String = get_output_code(1)
-			update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
+			update_shader(brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
 		var v2t_tex = view_to_texture_viewport.get_texture()
 		brush_preview_material.set_shader_param("rect_size", viewport_size)
 		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
@@ -334,9 +309,13 @@ func update_brush(update_shaders : bool = false):
 	if update_shaders:
 		for index in viewport_names.size():
 			var viewport = viewports[viewport_names[index]]
-			var shader_text = get_shader_file(viewport.get_shader_prefix()+"_"+mode)
-			shader_text = preprocess_shader(shader_text)
-			update_shader(viewport.get_paint_material(), shader_text, get_output_code(index+1))
+			var shader_file : String = "res://material_maker/tools/painter/shaders/paint.shader"
+			var code : String = get_output_code(index+1)
+			var defines : Dictionary = {}
+			defines.GENERATED_CODE = code
+			defines.TEXTURE_TYPE = "\""+viewport.get_shader_prefix()+"\""
+			defines.BRUSH_MODE = "\""+mode+"\""
+			update_shader(viewport.get_paint_material(), shader_file, defines)
 			viewport.set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
 			viewport.set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for v in viewports.keys():
@@ -376,12 +355,11 @@ func get_output_code(index : int) -> String:
 	new_code += "}\n"
 	return new_code
 
-func update_shader(shader_material : ShaderMaterial, shader_template : String, shader_code : String) -> void:
+func update_shader(shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
-	var new_code = shader_template.left(shader_template.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+shader_template.right(shader_template.find("// END_PATTERN"))
-	shader_material.shader.code = new_code
+	shader_material.shader.code = mm_preprocessor.preprocess_file(shader_file, defines)
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
 	for t in brush_textures.keys():

@@ -1,7 +1,7 @@
 extends Node
 
 
-const DEBUG : bool = true
+const DEBUG : bool = false
 
 
 export var background_material : Material
@@ -12,6 +12,7 @@ onready var camera = $Viewport/Camera
 
 
 func set_brush(brush) -> Texture:
+	painter.set_texture_size(1024)
 	if !initialized:
 		var preview_material : SpatialMaterial = SpatialMaterial.new()
 		preview_material.albedo_texture = painter.get_albedo_texture()
@@ -33,9 +34,9 @@ func set_brush(brush) -> Texture:
 		#$NormalMap/Rect.material.set_shader_param("tex", painter.get_depth_texture())
 		preview_material.normal_texture = $NormalMap.get_texture()
 		preview_material.normal_texture.flags = Texture.FLAGS_DEFAULT
-		preview_material.depth_enabled = true
-		preview_material.depth_deep_parallax = true
 		# TODO: Fix this
+		#preview_material.depth_enabled = true
+		#preview_material.depth_deep_parallax = true
 		#preview_material.depth_texture = painter.get_depth_texture()
 		#preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
 		$Viewport/Object.set_surface_material(0, preview_material)

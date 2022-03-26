@@ -35,19 +35,19 @@ func _ready() -> void:
 	# layer material in layer viewport
 	layer_material = ShaderMaterial.new()
 	layer_material.shader = Shader.new()
-	layer_material.shader.code = get_parent().get_shader_file("paint_apply_background")
+	layer_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/paint_apply_background.shader")
 	layerpaint_layerrect.material = layer_material
 	# stroke material in layer viewport
 	stroke_material = ShaderMaterial.new()
 	stroke_material.shader = Shader.new()
-	stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.shader" % shader_prefix)
 	stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
 	layerpaint_strokerect.material = stroke_material
 
 func set_shader_prefix(p):
 	shader_prefix = p
 	if is_inside_tree():
-		stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+		stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.shader" % shader_prefix)
 		stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
 
 func get_paint_material() -> ShaderMaterial:
@@ -159,7 +159,7 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 	painting += 1
 	strokepaint_rect.material = paint_material
 	layerpaint_strokerect.visible = true
-	stroke_material.shader.code = get_parent().get_shader_file(shader_prefix+"_apply")
+	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.shader" % shader_prefix)
 	stroke_material.set_shader_param("tex", strokepaint_viewport.get_texture())
 	for p in shader_params.keys():
 		match p:

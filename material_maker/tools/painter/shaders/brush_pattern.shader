@@ -1,14 +1,6 @@
-#include brush_common_decl
+#include "brush_common_decl.shader"
 
-// BEGIN_PATTERN
-float brush_function(vec2 uv) {
-	return clamp(max(0.0, 1.0-length(2.0*(uv-vec2(0.5)))) / 0.5, 0.0, 1.0);
-}
-
-vec4 pattern_function(vec2 uv) {
-	return vec4(fract(10.0*uv.x+length(uv-vec2(0.5))*10.0), 0.0, 0.0, 1.0);
-}
-// END_PATTERN
+GENERATED_CODE
 
 float brush(vec2 uv) {
 	return clamp(brush_opacity*brush_function(uv)/(1.0-brush_hardness), 0.0, 1.0);

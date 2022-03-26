@@ -222,8 +222,8 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="0.98.0.0"
-config/actual_release="0.98"
+config/release="0.99.0.0"
+config/actual_release="0.99"
 
 [audio]
 
@@ -235,6 +235,7 @@ mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
 mm_sdf_builder="*res://addons/material_maker/sdf_builder/sdf_builder.tscn"
+mm_preprocessor="*res://addons/material_maker/engine/preprocessor.gd"
 
 [debug]
 
@@ -309,6 +310,10 @@ file_logging/log_path=""
 [memory]
 
 limits/message_queue/max_size_kb=16384
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=204800000
 
 [rendering]
 

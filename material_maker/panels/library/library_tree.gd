@@ -13,7 +13,24 @@ func on_scrollbar(value : float):
 	scroll_position = value
 	update()
 
+func get_last_item(parent : TreeItem):
+	var last_item : TreeItem = parent.get_children()
+	var item : TreeItem = last_item
+	while last_item != null:
+		if last_item.get_next() != null:
+			last_item = last_item.get_next()
+		elif !last_item.collapsed:
+			last_item = last_item.get_children()
+		else:
+			break
+		item = last_item
+	return item
+
 func _draw():
+	var bottom_rect = get_item_area_rect(get_last_item(get_root()))
+	var sp : float = scroll_position
+	if bottom_rect.position.y + bottom_rect.size.y < rect_size.y:
+		sp = 0
 	var library_manager = get_parent().library_manager
 	var item : TreeItem = get_root().get_children()
 	while item != null:
@@ -22,16 +39,10 @@ func _draw():
 			var rect : Rect2 = get_item_area_rect(item)
 			var last_rect : Rect2 = rect
 			if !item.collapsed:
-				var last_item : TreeItem = item.get_children()
-				while last_item != null:
+				var last_item : TreeItem = get_last_item(item)
+				if last_item != null:
 					last_rect = get_item_area_rect(last_item)
-					if last_item.get_next() != null:
-						last_item = last_item.get_next()
-					elif !last_item.collapsed:
-						last_item = last_item.get_children()
-					else:
-						break
-			draw_rect(Rect2(2, rect.position.y+6-scroll_position, 3, last_rect.position.y-rect.position.y+last_rect.size.y), color)
+			draw_rect(Rect2(1, rect.position.y+6-sp, 4, last_rect.position.y-rect.position.y+last_rect.size.y), color)
 		item = item.get_next()
 
 func get_drag_data(_position):

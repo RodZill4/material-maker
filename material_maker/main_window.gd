@@ -249,6 +249,9 @@ func get_current_graph_edit() -> MMGraphEdit:
 		return graph_edit.get_graph_edit()
 	return null
 
+func get_share_button():
+	return $VBoxContainer/TopBar/Share
+
 # Modes
 
 var current_mode : String = ""
