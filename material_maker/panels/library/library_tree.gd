@@ -5,9 +5,7 @@ export var supports_drag : bool = true
 var scroll_position = 0.0
 
 func _ready():
-	print("tree")
 	for c in get_children():
-		print(c)
 		if c.get_class() == "VScrollBar":
 			c.connect("value_changed", self, "on_scrollbar")
 
