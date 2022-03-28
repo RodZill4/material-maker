@@ -6954,6 +6954,41 @@
 			"seed_locked": false,
 			"tree_item": "Noise/Composite/Dirt",
 			"type": "dirt"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABFNJREFUeJzNWluS4yAMlJ8519z/FPM5VzAI7ceUvITwECDwuIqyMbiSbrVahmT5+vqidV2B27Is4Pe17iMiXNcFxpj7bIyBn5+fez4/w9dhv3de7Jn9OI4hgP37zjlwzgERvZ2dc3Ce5xCw0nn7eZ5DI++cA2vtB3giAiICDsAMsGGfiD4VoEkEESXBP60Aay1Ya8elgHMOjDFJ8CkF9OSzZN6yLGCMuQMwJAWICBAxmfu1CtAigoPinANEBETUTwEiuj+EozxCAbXzrLV3UBh8lIAeIgDgDfxfUAB/pxh4RNRLgRj4pxXgSz4GXi0FfGOJRfkJBaQkXyQgBzh1LwVeqgDNqJckz01UBSRquK6rGOUWBbSQwpKXgL8VYK2FbdvuPAaAu5Qxo+GHcUNEUZRnKMCXvBQ8IsLOjDEJDMzvO+eiY8z6kwqQSj5ZBYwxVaDDsScVIJV8bvwmoAa0PwYAagqQErGu6w1canbJKuAT0KOCUQrISb7G7FLj+3VdTaBDFcxQACK+Sb4VvP/szjW8VwWjFSCNeq0qolVA0wt6FcCLK418z1YBDRVoKwAR7/quke9ZE9RQQQxwSQGpLbEw6hr5XqwCI7ygpABOAQZeI3mVKqBRBkMVtCqgVvIaKaFSBnNekFOAb4J+1Efle4w4tTLoj0kVQESwbZtavrcQp1YGUySUFDAqstJnu8tgaq5UAaMiKx1vKoOSuezoJRJGRVb6rLgMtqSJJA1aI6elimwZ7PUGyYYJ/0Q1I99j4x9lsBd0zAtyCmACRr/ypohbXq8XHccBYdv3XXRPMtc59/bfAP/6+/sbnjz2bdugp63rWpzjnAOA3z2D8DjPczbmtyNKgASUlBSAd+B8zWee+9QhVkArKSFg/2B/WJYFjuOYjR0AIgTUAJXMNcZ8fGioCO7z3sDMQ6SAVlJCMLFU8N8V/A2SP0VAKyk54HwdK5PneU7zhb0WVA0p1toqEvw2yxeKCmglZV3/b5fHgJcI8H1hCgHa5icBXiIg3DYbSoCm+W3bBoiYBS4Fz23f91tV0whoJYXXBjng/nVsszTWQnNVI0Db/HyQOeB8DluOEG1zTCqghxR+988B9/ulFhICoGeOu7b5+QT0VAAJIbyl3kWAtvlJgfNRyvtSS/2E3kVADym53M95gNQI/caVJvXjaqrfRICUFH/x01MGS4TwDk8NcL/P97pWg2Fj+UmAS0iIERKCrwUe9lVXgzXAawngxnuHvcCjCuitCJLFT3ivBnwo+ykKkJJSWvykjFBqgL05L/aA1uiXgOfSomSAKdmrKqD3dThc/Ej9QJLzJdkPU0CN/HnxU2uENTk/TAG95lcL3I9+Ku9Z9jXRVFVADSnhu3+tH4R5Ly11U6qAhJRw7S8FHksBSc6rKqDX/FqBp8CPBi5SQA0pJdmXiGnJeU0iuleDqcWP1A+Ifv8XOBt4UgE10V+Wz8VPbRnkP2ho5HNL/x8y7SaXLBsOMAAAAABJRU5ErkJggg==",
+			"name": "fill_to_gradient",
+			"parameters": {
+				"grad": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"layers": 1,
+				"mode": 0,
+				"r_offset": 0,
+				"r_rotate": 180,
+				"rotate": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Fill/To Gradient",
+			"type": "fill_to_gradient"
 		}
 	],
 	"name": "Base library"
