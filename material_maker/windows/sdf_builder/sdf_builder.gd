@@ -102,22 +102,35 @@ func _on_Tree_gui_input(event : InputEvent):
 			var current_item : TreeItem = tree.get_item_at_position(tree.get_local_mouse_position())
 			show_menu(current_item)
 
+func delete_item(item : TreeItem):
+	item.get_parent().remove_child(item)
+	tree.update()
+	rebuild_scene()
+	$GenSDF.set_sdf_scene(scene)
+	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+
+func copy_item(item : TreeItem):
+	var tmp_scene : Dictionary = item.get_meta("scene").duplicate()
+	tmp_scene.is_easysdf = true
+	OS.clipboard = JSON.print(tmp_scene)
+
+func paste_item(parent : TreeItem):
+	var json = parse_json(OS.clipboard)
+	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
+		if parent == null:
+			parent = tree.get_root()
+		var new_item : TreeItem = add_sdf_item(json, parent)
+		rebuild_scene()
+		$GenSDF.set_sdf_scene(scene)
+		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+		new_item.select(0)
+
 func _on_menu(id : int, current_item : TreeItem):
 	match id:
 		MENU_COPY:
-			var tmp_scene : Dictionary = current_item.get_meta("scene").duplicate()
-			tmp_scene.is_easysdf = true
-			OS.clipboard = JSON.print(tmp_scene)
+			copy_item(current_item)
 		MENU_PASTE:
-			var json = parse_json(OS.clipboard)
-			if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
-				if current_item == null:
-					current_item = tree.get_root()
-				var new_item : TreeItem = add_sdf_item(json, current_item)
-				rebuild_scene()
-				$GenSDF.set_sdf_scene(scene)
-				$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
-				new_item.select(0)
+			paste_item(current_item)
 		MENU_DELETE:
 			current_item.get_parent().remove_child(current_item)
 			tree.update()
@@ -263,7 +276,7 @@ func set_node_parameters(generator, parameters):
 	update_local_transform()
 	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
 
-func copy_item(item : TreeItem, parent : TreeItem, index : int = -1):
+func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	var new_item : TreeItem = tree.create_item(parent, index)
 	new_item.set_text(0, item.get_text(0))
 	new_item.set_icon(0, item.get_icon(0))
@@ -271,7 +284,7 @@ func copy_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	new_item.set_meta("scene", item.get_meta("scene"))
 	var c : TreeItem = item.get_children()
 	while c != null:
-		copy_item(c, new_item)
+		duplicate_item(c, new_item)
 		c = c.get_next()
 	return new_item
 
@@ -279,7 +292,7 @@ func _on_Tree_drop_item(item, dest, position):
 	var source_transform = get_item_transform(item)
 	var dest_transform = get_item_transform(dest)
 	var new_transform : Transform2D = dest_transform.affine_inverse()*source_transform
-	var new_item : TreeItem = copy_item(item, dest, position)
+	var new_item : TreeItem = duplicate_item(item, dest, position)
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
@@ -307,6 +320,30 @@ func _on_Cancel_pressed() -> void:
 	emit_signal("editor_window_closed")
 	queue_free()
 
-
+func _input(event):
+	if event is InputEventKey:
+		if event.pressed:
+			match event.scancode:
+				KEY_DELETE:
+					var item : TreeItem = tree.get_selected()
+					if item != null:
+						delete_item(item)
+				KEY_X:
+					if event.control:
+						var item : TreeItem = tree.get_selected()
+						if item != null:
+							copy_item(item)
+							delete_item(item)
+				KEY_C:
+					if event.control:
+						var item : TreeItem = tree.get_selected()
+						if item != null:
+							copy_item(item)
+				KEY_V:
+					if event.control:
+						var item : TreeItem = tree.get_selected()
+						if item != null:
+							paste_item(item)
+		accept_event()
 
 
