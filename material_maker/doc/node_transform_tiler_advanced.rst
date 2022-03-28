@@ -48,7 +48,9 @@ must be set to 1.
 Outputs
 +++++++
 
-The **Advanced Tiler** node outputs the splat image and 2 instance color maps.
+The **Advanced Tiler** node outputs the splat image, 2 instance color maps.
+
+The greyscale tiler has a fourth output that assigns a UV layout to each tile.
 
 Parameters
 ++++++++++
