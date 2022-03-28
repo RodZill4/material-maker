@@ -1,0 +1,162 @@
+{
+	"name": "fill_to_gradient",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"grad": {
+			"interpolation": 1,
+			"points": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"pos": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"pos": 1,
+					"r": 1
+				}
+			],
+			"type": "Gradient"
+		},
+		"layers": 1,
+		"mode": 0,
+		"r_offset": 0,
+		"r_rotate": 180,
+		"rotate": 0
+	},
+	"seed": 0.243785,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "vec2 gradient_uv(vec2 uv, float rotate, float rnd_rotate, float rnd_offset, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (rotate + (seed.x * 2.0 - 1.0) * rnd_rotate) * 0.01745329251;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv.x += seed.y * rnd_offset;\n\tuv /= sqrt(2.0); // square root of 2 is the diagonal of a 1x1 square, to ensure full coverate of gradient\n\tuv += vec2(0.5);\n\treturn clamp(uv, vec2(0.0), vec2(1.0));\n}\n",
+		"includes": [
+			"fill_to_uv"
+		],
+		"inputs": [
+			{
+				"default": "vec4(0.0, 0.0, 1.0, 1.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "vec4 $(name)_multiple_gradients(vec2 uv) {\n\tvec4 bb = $in(fract(uv));\n\tvec3 custom_uv = fill_to_uv_$mode(uv, bb, float($seed));\n\tfloat rnd =  float($seed)+custom_uv.z;\n\n\tvec4 value = vec4(1.0);\n\tfor( int i = 0; i < int($layers); i++) {\n\t\tvec2 grad_uv = gradient_uv(custom_uv.xy, $rotate, $r_rotate, $r_offset, vec2(custom_uv.z, $seed + float(i)));\n\t\tvec4 gradient = $grad(grad_uv.x);\n\t\t//if (grad_uv.x > 0.99999)\n\t\t//\tgradient = $grad(0.0);\n\t\tvalue = min(value, gradient);\n\t}\n\treturn value;\n}",
+		"longdesc": "A fill companion node that generated an gradients on each filled area",
+		"name": "Fill to Gradient",
+		"outputs": [
+			{
+				"longdesc": "The generated gradient output",
+				"rgba": "$(name)_multiple_gradients($uv)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"label": "",
+				"longdesc": "Gradient to be spread on each fill area",
+				"name": "grad",
+				"shortdesc": "Gradient",
+				"type": "gradient"
+			},
+			{
+				"default": 0,
+				"label": "",
+				"longdesc": "Algorithm used to place the graident on each island",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Stretch",
+						"value": "stretch"
+					},
+					{
+						"name": "Square",
+						"value": "square"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Layers",
+				"longdesc": "Layers of gradients placed on top of each other, blended with the min function",
+				"max": 20,
+				"min": 1,
+				"name": "layers",
+				"shortdesc": "Layers",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rotate",
+				"longdesc": "Base rotation of the gradients",
+				"max": 360,
+				"min": 0,
+				"name": "rotate",
+				"shortdesc": "Rotate",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rnd Rotate",
+				"longdesc": "Rotation randomization of each gradient",
+				"max": 180,
+				"min": 0,
+				"name": "r_rotate",
+				"shortdesc": "Random Rotation",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Rnd Offset",
+				"longdesc": "Offset randomization of each gradient",
+				"max": 1,
+				"min": 0,
+				"name": "r_offset",
+				"shortdesc": "Random Offset",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Fill to Gradient"
+	},
+	"type": "shader"
+}

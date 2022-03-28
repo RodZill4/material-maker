@@ -167,6 +167,7 @@ func read_hdr(index : int, url : String) -> bool:
 		progress_window.queue_free()
 		progress_window = null
 		set_physics_process(false)
+		update_thumbnail(index)
 		return true
 	print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
 	return false

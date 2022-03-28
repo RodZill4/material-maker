@@ -13,7 +13,7 @@
 		"round": 0,
 		"rows": 6
 	},
-	"seed": 0.298327,
+	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rect = bricks_uneven2($uv, $rows, int($iterations), $min_size, float($seed));\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)), 1.0 / $rows);",
@@ -59,7 +59,7 @@
 			},
 			{
 				"longdesc": "An output that should be plugged into a Fill companion node",
-				"rgba": "vec4( $(name_uv)_rect.xy, $(name_uv)_rect.zw - $(name_uv)_rect.xy )",
+				"rgba": "vec4( fract(round($(name_uv)_rect.xy*4096.0)/4096.0), $(name_uv)_rect.zw - $(name_uv)_rect.xy )",
 				"shortdesc": "Brick Fill",
 				"type": "rgba"
 			},

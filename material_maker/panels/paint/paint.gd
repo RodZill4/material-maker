@@ -36,8 +36,10 @@ var brush_graph = null
 var brush_node = null
 var remote_node = null
 
-var brush_size : float = 50.0
-var brush_hardness : float = 0.5
+var brush_parameters : Dictionary = {
+	brush_size = 50.0,
+	brush_hardness = 0.5,
+}
 var pattern_scale : float = 10.0
 var pattern_angle : float = 0.0
 
@@ -66,10 +68,10 @@ onready var view_2d : ColorRect = $VSplitContainer/HSplitContainer/Painter2D/VBo
 onready var brush_view_2d = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture/BrushView
 var brush_view_2d_shown = false
 
-onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize
-onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushStrength
-onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushOpacity
-onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSpacing
+onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize
+onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushStrength
+onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity
+onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSpacing
 
 var last_motion_position : Vector2
 var last_motion_vector : Vector2 = Vector2(0, 0)
@@ -391,13 +393,13 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 		if ev.button_mask & BUTTON_MASK_LEFT != 0:
 			if ev.shift:
 				reset_stroke()
-				brush_size += ev.relative.x*0.1
-				brush_size = clamp(brush_size, 0.0, 250.0)
-				brush_hardness += ev.relative.y*0.01
-				brush_hardness = clamp(brush_hardness, 0.0, 1.0)
-				painter.update_brush_params( { brush_size=brush_size, brush_hardness=brush_hardness } )
-				$VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize.set_value(brush_size)
-				$VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushHardness.set_value(brush_hardness)
+				brush_parameters.brush_size += ev.relative.x*0.1
+				brush_parameters.brush_size = clamp(brush_parameters.brush_size, 0.0, 250.0)
+				brush_parameters.brush_hardness += ev.relative.y*0.01
+				brush_parameters.brush_hardness = clamp(brush_parameters.brush_hardness, 0.0, 1.0)
+				painter.update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
+				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize.set_value(brush_parameters.brush_size)
+				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness.set_value(brush_parameters.brush_hardness)
 			elif ev.control:
 				reset_stroke()
 				pattern_scale += ev.relative.x*0.1
@@ -644,7 +646,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		texture_space=(painting_mode != PAINTING_MODE_VIEW),
 		brush_pos=pos,
 		brush_ppos=previous_position,
-		brush_opacity=$VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushOpacity.value,
+		brush_opacity=$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity.value,
 		stroke_length=stroke_length,
 		stroke_angle=stroke_angle,
 		stroke_seed=stroke_seed,
@@ -698,7 +700,7 @@ func update_view():
 		#	yield(get_tree(), "idle_frame")
 		#painted_mesh.get_surface_material(0).albedo_texture = painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
-	_on_BrushSize_value_changed(brush_size)
+	_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
 func _on_resized():
 	call_deferred("update_view")
@@ -883,26 +885,32 @@ func _on_DebugSelect_item_selected(ID, t):
 
 # Brush options UI
 
-func _on_BrushSize_value_changed(value) -> void:
-	brush_size = value
-	painter.update_brush_params( { brush_size=brush_size } )
-
-func _on_BrushHardness_value_changed(value) -> void:
-	brush_hardness = value
-	painter.update_brush_params( { brush_hardness=brush_hardness } )
-
-func replace_brush_options_button() -> void:
-	if $VSplitContainer/HSplitContainer/Painter/Options.visible:
-		$VSplitContainer/HSplitContainer/Painter/Options.rect_size = $VSplitContainer/HSplitContainer/Painter/Options.rect_min_size
-		$VSplitContainer/HSplitContainer/Painter/OptionsButton.margin_top = $VSplitContainer/HSplitContainer/Painter/Options.rect_size.y
-		$VSplitContainer/HSplitContainer/Painter/OptionsButton.text = "-"
+var ignore_button_toggle : bool = false
+func _on_Button_toggled(button_pressed : bool, button : String):
+	if ignore_button_toggle:
+		return
+	var panel = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel
+	if button_pressed:
+		var buttons = $VSplitContainer/HSplitContainer/Painter/Options/Buttons
+		var shown = false
+		for c in panel.get_children():
+			c.visible = (button == c.name)
+			if c.visible:
+				shown = true
+		panel.visible = shown
+		ignore_button_toggle = true
+		for c in buttons.get_children():
+			c.pressed = (button == c.name)
+		ignore_button_toggle = false
+		$VSplitContainer/HSplitContainer/Painter/Options.margin_left = -3-$VSplitContainer/HSplitContainer/Painter/Options.get_minimum_size().x
+		$VSplitContainer/HSplitContainer/Painter/Options.margin_right = -3
 	else:
-		$VSplitContainer/HSplitContainer/Painter/OptionsButton.margin_top = 0
-		$VSplitContainer/HSplitContainer/Painter/OptionsButton.text = "+"
+		panel.visible = false
 
-func _on_OptionsButton_pressed() -> void:
-	$VSplitContainer/HSplitContainer/Painter/Options.visible = !$VSplitContainer/HSplitContainer/Painter/Options.visible
-	replace_brush_options_button()
+func _on_Brush_value_changed(value, brush_parameter):
+	brush_parameters[brush_parameter] = value
+	var params_update : Dictionary = { brush_parameter:value }
+	painter.update_brush_params(params_update)
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
