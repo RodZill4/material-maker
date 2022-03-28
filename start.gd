@@ -76,10 +76,10 @@ func _ready():
 			resource_path = "res://material_maker/main_window.tscn"
 	else:
 		resource_path = "res://demo/demo.tscn"
-	
+
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
-	
+
 	set_process(true)
 	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
 
