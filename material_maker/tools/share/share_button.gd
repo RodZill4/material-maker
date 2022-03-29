@@ -46,13 +46,16 @@ func update_preview_texture():
 func get_preview_texture():
 	return $PreviewViewport.get_texture()
 
+func can_share():
+	return ! $SendButton.disabled
+
 func _on_SendButton_pressed():
 	var main_window = get_node("/root/MainWindow")
-	var material_type : String
+	var asset_type : String
 	var preview_texture : Texture
 	match main_window.get_current_project().get_project_type():
 		"material":
-			material_type = "material"
+			asset_type = "material"
 			var status = main_window.update_preview_3d([ $PreviewViewport ], true)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
@@ -66,21 +69,35 @@ func _on_SendButton_pressed():
 			yield(get_tree(), "idle_frame")
 			preview_texture = $PreviewViewport.get_texture()
 		"paint":
-			material_type = "brush"
+			asset_type = "brush"
 			var status = main_window.get_current_project().get_brush_preview()
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
 			preview_texture = status
 		_:
 			return
+	send_asset(asset_type, main_window.get_current_graph_edit().top_generator.serialize(), preview_texture)
+
+func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture):
 	var png_image = preview_texture.get_data().save_png_to_buffer()
 	var png_data = Marshalls.raw_to_base64(png_image)
-	var data = { type=material_type, image=png_data, json=JSON.print(main_window.get_current_graph_edit().top_generator.serialize()) }
-	websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
-
+	var data = { type=asset_type, image=png_data, json=JSON.print(asset_data) }
+	send_data(JSON.print(data))
 
 func _process(delta):
 	websocket_server.poll()
+
+const PACKET_SIZE : int = 64000
+func send_data(data : String):
+	if (data.length() < PACKET_SIZE):
+		websocket_server.get_peer(websocket_id).put_packet(data.to_utf8())
+	else:
+		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_BEGIN%".to_utf8())
+		for s in range(0, data.length(), PACKET_SIZE):
+			yield(get_tree(), "idle_frame")
+			websocket_server.get_peer(websocket_id).put_packet(data.substr(s, PACKET_SIZE).to_utf8())
+		yield(get_tree(), "idle_frame")
+		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_END%".to_utf8())
 
 func _on_client_connected(id: int, protocol: String) -> void:
 	if websocket_id == -1:
@@ -90,7 +107,8 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$SendButton.disabled = true
 		is_multipart = false
 		var data = { type="mm_release", release=ProjectSettings.get_setting("application/config/actual_release") }
-		websocket_server.get_peer(websocket_id).put_packet(JSON.print(data).to_utf8())
+		send_data(JSON.print(data))
+
 
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
@@ -144,6 +162,9 @@ func process_message(message : String) -> void:
 					return
 				project_panel.set_brush(JSON.parse(data.json).result)
 				bring_to_top()
+			"load_environment":
+				var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+				environment_manager.add_environment(JSON.parse(data.json).result)
 	else:
 		print("Incorrect JSON")
 

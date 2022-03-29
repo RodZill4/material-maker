@@ -79,6 +79,9 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	qc_is_output = is_output
 	filter.text = ""
 	for b in $PanelContainer/VBoxContainer/Buttons.get_children():
+		if b.library_item == null:
+			b.disable()
+			continue
 		var obj = b.library_item.item
 		if not obj.has("type") or ( qc_slot_type != -1 and not check_quick_connect(obj) ):
 			b.disable()

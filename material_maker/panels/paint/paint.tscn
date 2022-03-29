@@ -362,39 +362,81 @@ shortcut_in_tooltip = false
 texture_normal = SubResource( 28 )
 texture_pressed = SubResource( 36 )
 
-[node name="Options" type="PanelContainer" parent="VSplitContainer/HSplitContainer/Painter"]
+[node name="Options" type="VBoxContainer" parent="VSplitContainer/HSplitContainer/Painter"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -175.0
+margin_left = -179.0
+margin_top = 3.0
+margin_right = -3.0
 margin_bottom = 122.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Grid" type="GridContainer" parent="VSplitContainer/HSplitContainer/Painter/Options"]
+[node name="Buttons" type="HBoxContainer" parent="VSplitContainer/HSplitContainer/Painter/Options"]
+margin_left = 74.0
+margin_right = 176.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+custom_constants/separation = 2
+
+[node name="Brush" type="Button" parent="VSplitContainer/HSplitContainer/Painter/Options/Buttons"]
+margin_right = 50.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 50, 0 )
+hint_tooltip = "Show brush options"
+size_flags_horizontal = 3
+toggle_mode = true
+pressed = true
+text = "Brush"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Jitter" type="Button" parent="VSplitContainer/HSplitContainer/Painter/Options/Buttons"]
+margin_left = 52.0
+margin_right = 102.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 50, 0 )
+hint_tooltip = "Show brush options"
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Jitter"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionsPanel" type="PanelContainer" parent="VSplitContainer/HSplitContainer/Painter/Options"]
+margin_top = 20.0
+margin_right = 176.0
+margin_bottom = 142.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Brush" type="GridContainer" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 168.0
+margin_right = 169.0
 margin_bottom = 115.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BrushSizeLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
-margin_left = 16.0
+[node name="BrushSizeLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
 margin_top = 5.0
-margin_right = 83.0
+margin_right = 60.0
 margin_bottom = 19.0
-size_flags_horizontal = 4
-text = "Brush size"
+text = "Size"
 
-[node name="BrushSize" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushSize" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 103.0
-margin_right = 161.0
+margin_left = 64.0
+margin_right = 162.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 value = 50.0
@@ -402,63 +444,20 @@ max_value = 250.0
 step = 1.0
 float_only = true
 
-[node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
+[node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
 margin_top = 33.0
-margin_right = 99.0
+margin_right = 60.0
 margin_bottom = 47.0
-size_flags_horizontal = 4
-text = "Brush hardness"
+text = "Spacing"
 
-[node name="BrushHardness" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
+[node name="BrushSpacing" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource( 4 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 103.0
+margin_left = 64.0
 margin_top = 28.0
-margin_right = 161.0
+margin_right = 162.0
 margin_bottom = 52.0
-size_flags_horizontal = 3
-value = 1.0
-step = 0.01
-float_only = true
-
-[node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
-margin_left = 6.0
-margin_top = 61.0
-margin_right = 93.0
-margin_bottom = 75.0
-size_flags_horizontal = 4
-text = "Brush opacity"
-
-[node name="BrushOpacity" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 103.0
-margin_top = 56.0
-margin_right = 161.0
-margin_bottom = 80.0
-size_flags_horizontal = 3
-value = 1.0
-step = 0.01
-float_only = true
-
-[node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid"]
-margin_left = 5.0
-margin_top = 89.0
-margin_right = 94.0
-margin_bottom = 103.0
-size_flags_horizontal = 4
-text = "Brush spacing"
-
-[node name="BrushSpacing" parent="VSplitContainer/HSplitContainer/Painter/Options/Grid" instance=ExtResource( 4 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 103.0
-margin_top = 84.0
-margin_right = 161.0
-margin_bottom = 108.0
 size_flags_horizontal = 3
 value = 1.0
 min_value = 1.0
@@ -466,17 +465,173 @@ max_value = 250.0
 step = 1.0
 float_only = true
 
-[node name="OptionsButton" type="Button" parent="VSplitContainer/HSplitContainer/Painter"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -20.0
-margin_top = 121.0
-margin_bottom = 20.0
-hint_tooltip = "Show brush options"
-text = "-"
+[node name="BrushOpacityLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+margin_top = 61.0
+margin_right = 60.0
+margin_bottom = 75.0
+text = "Opacity"
+
+[node name="BrushOpacity" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 64.0
+margin_top = 56.0
+margin_right = 162.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+margin_top = 89.0
+margin_right = 60.0
+margin_bottom = 103.0
+text = "Hardness"
+
+[node name="BrushHardness" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 64.0
+margin_top = 84.0
+margin_right = 162.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+step = 0.01
+float_only = true
+
+[node name="Jitter" type="GridContainer" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel"]
+visible = false
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 169.0
+margin_bottom = 115.0
+columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="JitterPositionLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+margin_top = 5.0
+margin_right = 52.0
+margin_bottom = 19.0
+text = "Position"
+
+[node name="JitterPosition" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 56.0
+margin_right = 162.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+value = 0.0
+max_value = 250.0
+step = 1.0
+float_only = true
+
+[node name="JitterSizeLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+margin_top = 33.0
+margin_right = 52.0
+margin_bottom = 47.0
+text = "Size"
+
+[node name="JitterSize" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 56.0
+margin_top = 28.0
+margin_right = 162.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+value = 0.0
+step = 0.01
+float_only = true
+
+[node name="JitterAngleLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+margin_top = 61.0
+margin_right = 52.0
+margin_bottom = 75.0
+text = "Angle"
+
+[node name="JitterAngle" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 56.0
+margin_top = 56.0
+margin_right = 162.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+value = 0.0
+step = 0.01
+float_only = true
+
+[node name="JitterOpacityLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+margin_top = 89.0
+margin_right = 52.0
+margin_bottom = 103.0
+text = "Opacity"
+
+[node name="JitterOpacity" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 56.0
+margin_top = 84.0
+margin_right = 162.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+value = 0.0
+step = 0.01
+float_only = true
+
+[node name="JitterHardnessLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+visible = false
+margin_top = 61.0
+margin_right = 60.0
+margin_bottom = 75.0
+text = "Hardness"
+
+[node name="JitterHardness" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+visible = false
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 56.0
+margin_right = 79.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="JitterSpacingLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter"]
+visible = false
+margin_top = 89.0
+margin_right = 60.0
+margin_bottom = 103.0
+text = "Spacing"
+
+[node name="JitterSpacing" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter" instance=ExtResource( 4 )]
+visible = false
+anchor_left = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 0.0
+margin_top = 84.0
+margin_right = 79.0
+margin_bottom = 108.0
+size_flags_horizontal = 3
+value = 1.0
+min_value = 1.0
+max_value = 250.0
+step = 1.0
+float_only = true
 
 [node name="Debug" type="Control" parent="VSplitContainer/HSplitContainer/Painter"]
 visible = false
@@ -604,10 +759,16 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
 [connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Tools/Eraser" to="." method="_on_Eraser_toggled"]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/MaskSelector" to="." method="_on_MaskSelector_pressed"]
-[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSize" to="." method="_on_BrushSize_value_changed"]
-[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushHardness" to="." method="_on_BrushHardness_value_changed"]
-[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/Grid/BrushSpacing" to="." method="_on_BrushOpacity_value_changed"]
-[connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Options/Buttons/Brush" to="." method="_on_Button_toggled" binds= [ "Brush" ]]
+[connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Options/Buttons/Jitter" to="." method="_on_Button_toggled" binds= [ "Jitter" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize" to="." method="_on_Brush_value_changed" binds= [ "brush_size" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness" to="." method="_on_Brush_value_changed" binds= [ "brush_hardness" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterPosition" to="." method="_on_Brush_value_changed" binds= [ "jitter_position" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterSize" to="." method="_on_Brush_value_changed" binds= [ "jitter_size" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterAngle" to="." method="_on_Brush_value_changed" binds= [ "jitter_angle" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterOpacity" to="." method="_on_Brush_value_changed" binds= [ "jitter_opacity" ]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterHardness" to="." method="_on_BrushHardness_value_changed"]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterSpacing" to="." method="_on_BrushOpacity_value_changed"]
 [connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter/Debug/Select1" to="." method="_on_DebugSelect_item_selected" binds= [ 0 ]]
 [connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter/Debug/Select2" to="." method="_on_DebugSelect_item_selected" binds= [ 1 ]]
 [connection signal="item_selected" from="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/ChannelSelect" to="." method="_on_ChannelSelect_item_selected"]

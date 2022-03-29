@@ -42,7 +42,7 @@ Notes
 This node outputs a specific normal map format that is suited for Material nodes.
 It is intentionnaly and obviously (yellowish instead of blueish) different from
 standard OpenGL and DirectX formats. Connecting OpenGL or DirectX normal maps to
-Material nodes will need to incorrect maps when exporting.
+Material nodes will lead to incorrect maps when exporting.
 
 If you need to export DirectX or OpenGL normal maps directly (either using the
 Export node or from a 2D Preview panel), you can use the **Convert Normal Map**

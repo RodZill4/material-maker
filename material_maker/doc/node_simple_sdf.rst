@@ -59,6 +59,7 @@ Transforms
 	node_simple_sdf_transforms_translate
 	node_simple_sdf_transforms_rotate
 	node_simple_sdf_transforms_scale
+	node_simple_sdf_transforms_scale_xy
 
 Example images
 ++++++++++++++
