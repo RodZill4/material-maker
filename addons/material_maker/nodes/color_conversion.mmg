@@ -1,0 +1,59 @@
+{
+	"name": "color_conversion",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"mode": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "// Converts a color from linear light gamma to sRGB gamma\nvec4 fromLinear(vec4 linearRGB)\n{\n    bvec3 cutoff = lessThan(linearRGB.rgb, vec3(0.0031308));\n    vec3 higher = vec3(1.055)*pow(linearRGB.rgb, vec3(1.0/2.4)) - vec3(0.055);\n    vec3 lower = linearRGB.rgb * vec3(12.92);\n\n    return vec4(mix(higher, lower, cutoff), linearRGB.a);\n}\n\n// Converts a color from sRGB gamma to linear light gamma\nvec4 toLinear(vec4 sRGB)\n{\n    bvec3 cutoff = lessThan(sRGB.rgb, vec3(0.04045));\n    vec3 higher = pow((sRGB.rgb + vec3(0.055))/vec3(1.055), vec3(2.4));\n    vec3 lower = sRGB.rgb/vec3(12.92);\n\n    return vec4(mix(higher, lower, cutoff), sRGB.a);\n}",
+		"inputs": [
+			{
+				"default": "vec4(vec3(0.0), 1.0)",
+				"label": "",
+				"longdesc": "The image to be converted",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Convert between Linear and sRGB color space",
+		"name": "Color Conversion",
+		"outputs": [
+			{
+				"longdesc": "The color converted image",
+				"rgba": "$mode($in($uv))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "Mode",
+				"longdesc": "Controls whether the node converts from Linear to sRGB or from sRGB to Linear",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Linear to sRGB",
+						"value": "fromLinear"
+					},
+					{
+						"name": "sRGB to Linear",
+						"value": "toLinear"
+					}
+				]
+			}
+		],
+		"shortdesc": "Color Conversion"
+	},
+	"type": "shader"
+}

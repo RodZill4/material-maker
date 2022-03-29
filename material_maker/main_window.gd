@@ -136,10 +136,10 @@ func _ready() -> void:
 	for k in DEFAULT_CONFIG.keys():
 		if ! config_cache.has_section_key("config", k):
 			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
-	
+
 	if get_config("locale") == "":
 		config_cache.set_value("config", "locale", TranslationServer.get_locale())
-	
+
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
@@ -234,7 +234,7 @@ func on_config_changed() -> void:
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
 	# Clamp to reasonable values to avoid crashes on startup.
-	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.5)
+	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:

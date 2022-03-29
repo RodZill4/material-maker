@@ -1,0 +1,90 @@
+{
+	"name": "sdf3d_scale_xyz",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"s": 1,
+		"sx": 1,
+		"sy": 1,
+		"sz": 1
+	},
+	"shader_model": {
+		"code": "vec2 $(name_uv)_in = $in(($uv)/vec3($sx*$s,$sy*$s,$sz*$s));",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec2(100.0, 0.0)",
+				"label": "",
+				"longdesc": "The input object as a signed distance function",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "sdf3dc"
+			}
+		],
+		"instance": "",
+		"longdesc": "Scales its input 3D object described as a signed distance function in a non uniform way.",
+		"name": "Scale XYZ",
+		"outputs": [
+			{
+				"longdesc": "The scaled object",
+				"sdf3dc": "vec2($(name_uv)_in.x*min(min($sx*$s,$sy*$s),$sz*$s), $(name_uv)_in.y)",
+				"shortdesc": "Output",
+				"type": "sdf3dc"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"longdesc": "The scale factor",
+				"max": 5,
+				"min": 0,
+				"name": "s",
+				"shortdesc": "Scale",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "Scale1.x",
+				"default": 1,
+				"label": "Scale X",
+				"longdesc": "The scale amount along the X axis",
+				"max": 5,
+				"min": 0,
+				"name": "sx",
+				"shortdesc": "Scale.x",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "Scale1.y",
+				"default": 1,
+				"label": "Scale Y",
+				"longdesc": "The scale amount along the Y axis",
+				"max": 5,
+				"min": 0,
+				"name": "sy",
+				"shortdesc": "Scale.y",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale Z",
+				"longdesc": "The scale amount along the Z axis",
+				"max": 5,
+				"min": 0,
+				"name": "sz",
+				"shortdesc": "Scale.z",
+				"step": 0.001,
+				"type": "float"
+			}
+		],
+		"shortdesc": "ScaleXYZ"
+	},
+	"type": "shader"
+}

@@ -69,6 +69,7 @@ Transforms
 
 	node_3d_sdf_transforms_translate
 	node_3d_sdf_transforms_scale
+	node_3d_sdf_transforms_scale_xyz
 	node_3d_sdf_transforms_rotate
 
 Example images
