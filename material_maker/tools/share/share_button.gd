@@ -106,7 +106,11 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
 		$SendButton.disabled = true
 		is_multipart = false
-		var data = { type="mm_release", release=ProjectSettings.get_setting("application/config/actual_release") }
+		var data = {
+			type="mm_release",
+			release=ProjectSettings.get_setting("application/config/actual_release"),
+			features=[ "share_environments" ]
+		}
 		send_data(JSON.print(data))
 
 
