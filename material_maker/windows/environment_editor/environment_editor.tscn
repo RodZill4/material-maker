@@ -259,20 +259,26 @@ step = 0.1
 float_only = true
 
 [node name="Buttons" type="HBoxContainer" parent="Main"]
-margin_left = 308.0
+margin_left = 220.0
 margin_top = 330.0
-margin_right = 492.0
+margin_right = 579.0
 margin_bottom = 350.0
 size_flags_horizontal = 4
 
-[node name="Share" type="Button" parent="Main/Buttons"]
-margin_right = 133.0
+[node name="Download" type="Button" parent="Main/Buttons"]
+margin_right = 161.0
 margin_bottom = 20.0
-text = "Share environment"
+text = "Download environment"
+
+[node name="Share" type="Button" parent="Main/Buttons"]
+margin_left = 165.0
+margin_right = 308.0
+margin_bottom = 20.0
+text = "Upload environment"
 
 [node name="Close" type="Button" parent="Main/Buttons"]
-margin_left = 137.0
-margin_right = 184.0
+margin_left = 312.0
+margin_right = 359.0
 margin_bottom = 20.0
 text = "Close"
 
@@ -283,5 +289,6 @@ text = "Close"
 [connection signal="id_pressed" from="Main/HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="gui_input" from="Main/HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
 [connection signal="resized" from="Main/HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
+[connection signal="pressed" from="Main/Buttons/Download" to="." method="_on_Download_pressed"]
 [connection signal="pressed" from="Main/Buttons/Share" to="." method="_on_Share_pressed"]
 [connection signal="pressed" from="Main/Buttons/Close" to="." method="queue_free"]

@@ -57,7 +57,7 @@ func on_name_updated(index, text):
 func on_thumbnail_updated(index, texture):
 	environment_list.set_item_icon(index, texture)
 
-func read_environment_list():
+func read_environment_list(select : int = 0):
 	environment_list.clear()
 	for e in environment_manager.get_environment_list():
 		environment_list.add_item(e.name)
@@ -66,8 +66,10 @@ func read_environment_list():
 	environment_list.add_item("New...")
 	environment_list.set_item_icon(environment_list.get_item_count()-1, new_environment_icon)
 	if environment_list.get_item_count() > 1:
-		environment_list.select(0)
-		set_current_environment(0)
+		if select < 0:
+			select += environment_list.get_item_count()-1
+		environment_list.select(select)
+		set_current_environment(select)
 
 func _on_ViewportContainer_resized():
 	$Main/HSplitContainer/ViewportContainer/Viewport.size = $Main/HSplitContainer/ViewportContainer.rect_size
@@ -154,10 +156,26 @@ func _on_ContextMenu_id_pressed(id):
 	environment_list.select(index-1)
 	_on_Environments_item_selected(index-1)
 
+func _on_Download_pressed():
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	add_child(dialog)
+	var result = dialog.select_material(2)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result == "":
+		return
+	var new_environment = JSON.parse(result).result
+	new_environment.erase("thumbnail")
+	print(new_environment.keys())
+	environment_manager.add_environment(new_environment)
+	read_environment_list(-1)
+
 func _on_Share_pressed():
 	var image = environment_manager.create_preview(current_environment, 512)
 	while image is GDScriptFunctionState:
 		image = yield(image, "completed")
 	var preview_texture : ImageTexture = ImageTexture.new()
 	preview_texture.create_from_image(image)
-	share_button.send_asset("environment", environment_manager.get_environment(current_environment), preview_texture)
+	var env = environment_manager.get_environment(current_environment).duplicate()
+	env.remove("thumbnail")
+	share_button.send_asset("environment", env, preview_texture)
