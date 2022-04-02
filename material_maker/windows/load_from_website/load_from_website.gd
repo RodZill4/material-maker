@@ -30,7 +30,7 @@ func _on_OK_pressed() -> void:
 func _on_Cancel_pressed() -> void:
 	emit_signal("return_material", "")
 
-func select_material() -> String:
+func select_material(type : int = 0) -> String:
 	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
 	if error != OK:
 		queue_free()
@@ -41,11 +41,17 @@ func select_material() -> String:
 	if parse_result == null or ! parse_result.result is Array:
 		queue_free()
 		return ""
-	materials = parse_result.result
-	materials.invert()
+	var tmp_materials = parse_result.result
+	tmp_materials.invert()
+	materials = []
+	for i in range(tmp_materials.size()):
+		var m = tmp_materials[i]
+		if m.type == type:
+			materials.push_back(m)
 	for i in range(materials.size()):
 		var m = materials[i]
-		$VBoxContainer/ItemList.add_item(m.name)
+		if m.type == type:
+			$VBoxContainer/ItemList.add_item(m.name)
 	update_thumbnails()
 	var result = yield(self, "return_material")
 	queue_free()

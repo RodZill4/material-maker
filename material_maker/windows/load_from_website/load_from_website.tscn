@@ -10,6 +10,7 @@ margin_top = 188.0
 margin_right = -362.0
 margin_bottom = -134.0
 window_title = "Load from website"
+resizable = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
