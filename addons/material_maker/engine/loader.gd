@@ -87,7 +87,7 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
 		else:
-			print("Cannot create gen "+n)
+			print("Cannot create gen "+str(n))
 	for c in connections:
 		if gennames.has(c.from):
 			c.from = gennames[c.from]
