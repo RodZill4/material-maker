@@ -1,3 +1,27 @@
+# Material Maker 0.99
+
+## General
+
+- The 3D preview had several improvements including better parallax mapping quality,
+  debanding applied by default and better control of scale factor to avoid decreased
+  rendering quality (contributed by Calinou)
+- Environments can now be downloaded from and uploaded to the website
+
+## 3D model painting
+
+- Brushes now have default jitter parameters (position, angle, size and opacity)
+- Painting on seams has been improved
+
+## Nodes
+
+- The Tesselated Material type has been fixed and renamed to Static PBR Displacement (contributed by Arnklit)
+- Tiler and Splatter nodes now have a new custom UV output (contributed by Arnklit)
+- Non uniform scale nodes have been added for 2D and 3D SDF (contributed by Paulo Falcao)
+- Circle splatter nodes now have support for variations (contributed by Arnklit)
+- A new Fill to Gradient node has been added (contributed by Arnklit)
+- A new color conversion node (that between linear and sRBG) has been added (contributed by Arnklit)
+- A new 3D SDF FBM node that adds FBM noise on top of an existing SDF shape has been added (contributed by Arnklit, based on an article by Inigo Quilez)
+
 # Material Maker 0.98
 
 ## General
