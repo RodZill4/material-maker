@@ -611,9 +611,12 @@ func do_paste(data) -> void:
 func paste() -> void:
 	var data = OS.clipboard.strip_edges()
 	var graph = null
+	var palette = try_parse_palette(data)
 	if data.is_valid_html_color():
 		var color = Color(data)
 		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
+	elif not palette.empty():
+		graph = palette
 	elif data.left(4) == "http":
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
@@ -637,6 +640,32 @@ func paste() -> void:
 			do_paste(graph)
 	else:
 		print(data)
+
+func try_parse_palette(hex_values_str : String) -> Dictionary:
+	var points = []
+	var hex_values = hex_values_str.strip_edges().split("\n")
+	var n = hex_values.size()
+	for i in range(n):
+		if not hex_values[i].is_valid_html_color():
+			return {}
+		var color = Color(hex_values[i])
+		points.push_back({
+			pos = (1.0 / (2 * n)) + (float(i) / n),
+			r = color.r,
+			g = color.g,
+			b = color.b,
+			a = color.a
+		})
+	return {
+		type = "colorize",
+		parameters = {
+			gradient = {
+				interpolation = 0,
+				points = points,
+				type = "Gradient"
+			}
+		}
+	}
 
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())
