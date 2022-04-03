@@ -166,7 +166,6 @@ func _on_Download_pressed():
 		return
 	var new_environment = JSON.parse(result).result
 	new_environment.erase("thumbnail")
-	print(new_environment.keys())
 	environment_manager.add_environment(new_environment)
 	read_environment_list(-1)
 
@@ -179,3 +178,7 @@ func _on_Share_pressed():
 	var env = environment_manager.get_environment(current_environment).duplicate()
 	env.remove("thumbnail")
 	share_button.send_asset("environment", env, preview_texture)
+
+
+func _on_Main_minimum_size_changed():
+	rect_size = $Main.rect_size+Vector2(4, 4)
