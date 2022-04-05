@@ -135,6 +135,11 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight) -> vo
 
 var progress_window = null
 
+var accept_dialog : AcceptDialog = null
+
+func on_accept_dialog_closed():
+	accept_dialog = null
+
 func read_hdr(index : int, url : String) -> bool:
 	while progress_window != null:
 		yield(get_tree(), "idle_frame")
@@ -163,15 +168,23 @@ func read_hdr(index : int, url : String) -> bool:
 		progress_window.set_progress(0)
 		set_physics_process(true)
 		yield($HTTPRequest, "request_completed")
-		set_hdr(index, file_path)
 		progress_window.queue_free()
 		progress_window = null
 		set_physics_process(false)
-		update_thumbnail(index)
-		return true
-	print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
+		if Directory.new().file_exists(file_path):
+			set_hdr(index, file_path)
+			update_thumbnail(index)
+			return true
+	if accept_dialog == null:
+		accept_dialog = AcceptDialog.new()
+		accept_dialog.window_title = "HDRI download error"
+		accept_dialog.dialog_text = "Failed to download %s" % url
+		get_node("/root/MainWindow").add_child(accept_dialog)
+		accept_dialog.connect("confirmed", accept_dialog, "queue_free")
+		accept_dialog.connect("popup_hide", accept_dialog, "queue_free")
+		accept_dialog.connect("tree_exiting", self, "on_accept_dialog_closed")
+		accept_dialog.popup_centered()
 	return false
-
 
 """
 func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):

@@ -24,7 +24,7 @@ copyright = '2018-2022, Rodolphe Suescun'
 author = 'Rodolphe Suescun'
 
 # The short X.Y version
-version = '0.98'
+version = '0.99'
 # The full version, including alpha/beta/rc tags
 release = ''
 

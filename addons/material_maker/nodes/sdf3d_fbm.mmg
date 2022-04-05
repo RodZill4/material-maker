@@ -1,0 +1,100 @@
+{
+	"name": "sdf3d_fbm",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"iterations": 5,
+		"mode": 0,
+		"scaling": 0,
+		"smoothness": 0.3
+	},
+	"seed": 0.815124,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "// https://iquilezles.org/www/articles/fbmsdf/fbmsdf.htm\nfloat fbm_sph( ivec3 i, vec3 f, ivec3 c, float seed )\n{\n\t// Line below randomizes the positions of each sphere, this can cause a bit of artifacting,\n\t// but also makes for a much more natural effect. Disabled for now.\n\t//f += rand3( vec2(i.xy + c.xy) - vec2( float(i.z + c.z) ) ) - vec3(0.5);\n\t// random radius at grid vertex i+c\n\tfloat rad = 0.5*rand31(vec3(i+c) + vec3(seed));\n\t// distance to sphere at grid vertex i+c\n\treturn length(f-vec3(c)) - rad; \n}\n\nfloat sdBase( vec3 p, float seed )\n{\n   ivec3 i = ivec3(floor(p));\n    vec3 f =       fract(p);\n   // distance to the 8 corners spheres\n   return min(min(min(fbm_sph(i,f,ivec3(0,0,0), seed),\n                      fbm_sph(i,f,ivec3(0,0,1), seed)),\n                  min(fbm_sph(i,f,ivec3(0,1,0), seed),\n                      fbm_sph(i,f,ivec3(0,1,1), seed))),\n              min(min(fbm_sph(i,f,ivec3(1,0,0), seed),\n                      fbm_sph(i,f,ivec3(1,0,1), seed)),\n                  min(fbm_sph(i,f,ivec3(1,1,0), seed),\n                      fbm_sph(i,f,ivec3(1,1,1), seed))));\n}\n\nfloat sdFbm( vec3 p, float d, int iterations, float smoothness, float seed, float scaling, int mode)\n{\n\tfloat s = 1.0;\n\tfor( int i=0; i<iterations; i++ )\n\t{\n\t\t// evaluate new octave\n\t\tfloat n = s*sdBase(p, seed);\n\t\t\n\t\tif(mode == 0) {\n\t\t\t// add\n\t\t\tn = smax(n,d - scaling * s,smoothness * s);\n\t\t\td = smin(n,d             ,smoothness * s);\n\t\t} else {\n\t\t\t// subtract\n\t\t\td = smax(d - scaling * s, -n, smoothness * s );\n\t\t}\n\t\t\n\t\t// prepare next octave\n\t\tp = mat3(vec3(0.02, 1.60, 1.20),\n\t\t\t\tvec3(-1.60, 0.72,-0.96),\n\t\t\t\tvec3(-1.20,-0.96, 1.28))*p;\n\t\ts = 0.5*s;\n\t}\n\treturn d;\n}",
+		"includes": [
+			"smooth_minmax",
+			"tex3d_fbm"
+		],
+		"inputs": [
+			{
+				"default": "length($uv)-.45",
+				"label": "",
+				"longdesc": "Shape input which should have noise added, defined as a signed distance function",
+				"name": "distance",
+				"shortdesc": "Input",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Adds FBM noise to a base 3D SDF shape",
+		"name": "SDF FBM",
+		"outputs": [
+			{
+				"sdf3d": "sdFbm($uv, $distance($uv), int($iterations), $smoothness, $seed, $scaling, $mode)",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"longdesc": "Option to either add the noise to the base shape or subtract it",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Add",
+						"value": "0"
+					},
+					{
+						"name": "Subtract",
+						"value": "1"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 5,
+				"label": "Iterations",
+				"longdesc": "The level of iterations performed",
+				"max": 10,
+				"min": 0,
+				"name": "iterations",
+				"shortdesc": "Iterations",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Smoothness",
+				"longdesc": "The smoothness of the boolean operation",
+				"max": 1,
+				"min": 0,
+				"name": "smoothness",
+				"shortdesc": "Smoothness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Scaling",
+				"longdesc": "Allows you to adjust the scaling of the layers of spheres used for the noise",
+				"max": 1,
+				"min": -1,
+				"name": "scaling",
+				"shortdesc": "Scaling",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "SDF FBM"
+	},
+	"type": "shader"
+}

@@ -59,6 +59,7 @@ Operators
 	node_3d_sdf_operators_extrusion
 	node_3d_sdf_operators_revolution
 	node_3d_sdf_operators_morph
+	node_3d_sdf_operators_sdf_fbm
 
 Transforms
 ++++++++++

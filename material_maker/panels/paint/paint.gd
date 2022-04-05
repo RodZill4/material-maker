@@ -368,7 +368,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
 		last_motion_position = mouse_position
 		last_motion_vector = pos_delta
-		painter.update_brush_params( { stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
+		painter.update_brush_params( { pressure=get_pressure(ev), stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
 		if current_tool == MODE_COLOR_PICKER:
 			show_brush(null, null)
 		elif current_tool == MODE_LINE:
