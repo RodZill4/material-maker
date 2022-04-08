@@ -165,7 +165,6 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	item.add_button(1, BUTTON_SHOWN, 0)
 	$GenSDF.set_sdf_scene(scene)
 	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
-	print($VBoxContainer/Main/Preview2D.material.shader.code)
 	item.select(0)
 
 func get_item_transform(item : TreeItem) -> Transform2D:

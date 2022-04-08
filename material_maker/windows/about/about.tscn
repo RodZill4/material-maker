@@ -14,7 +14,6 @@
 [ext_resource path="res://material_maker/windows/about/epic_megagrant.svg" type="Texture" id=12]
 
 [node name="About" type="WindowDialog"]
-visible = true
 margin_right = 664.0
 margin_bottom = 377.0
 window_title = "About..."
@@ -100,7 +99,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Authors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -148,6 +146,7 @@ text = "99% of Material Maker's code is the awesome Godot Engine"
 autowrap = true
 
 [node name="Donors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -264,7 +263,7 @@ margin_top = 13.0
 margin_right = 32.0
 margin_bottom = 45.0
 rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "itch.io"
+hint_tooltip = "Patreon"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
