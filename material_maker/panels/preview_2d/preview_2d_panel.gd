@@ -2,6 +2,7 @@ extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
 export(String, MULTILINE) var shader_accumulate : String = ""
 export(String, MULTILINE) var shader_divide : String = ""
+export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)
 var scale : float = 1.2
@@ -60,7 +61,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	#center = Vector2(0.5, 0.5)
 	#scale = 1.2
 	.set_generator(g, o, force)
-	setup_controls()
+	setup_controls("previous")
 	update_shader_options()
 
 func update_material(source):
@@ -131,20 +132,49 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 		return true
 	return false
 
-func setup_controls() -> void:
-	var param_defs = generator.get_parameter_defs() if is_instance_valid(generator) else []
+var setup_controls_filter : String = ""
+func setup_controls(filter : String = "") -> void:
+	if filter == "previous":
+		filter = setup_controls_filter
+	else:
+		setup_controls_filter = filter
+	var param_defs = []
+	if is_instance_valid(generator):
+		if filter != "":
+			param_defs = generator.get_filtered_parameter_defs(filter)
+		else:
+			param_defs = generator.get_parameter_defs() 
 	for c in get_children():
 		if c.has_method("setup_control"):
 			c.setup_control(generator, param_defs)
 
-func value_to_pos(value : Vector2) -> Vector2:
+var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
+var local_rotate : float = 0.0
+var local_scale : float = 1.0
+
+func set_center_transform(t):
+	center_transform = t
+
+func set_local_transform(r : float, s : float):
+	local_rotate = r
+	local_scale = s
+
+func value_to_pos(value : Vector2, apply_parent_transform : bool = false, apply_local_transform : bool = false) -> Vector2:
+	if apply_parent_transform:
+		value = center_transform.xform(value)
+	if apply_local_transform:
+		value = value.rotated(deg2rad(local_rotate))
+		value *= local_scale
 	return (value-center+Vector2(0.5, 0.5))*min(rect_size.x, rect_size.y)/scale+0.5*rect_size
 
-func value_to_offset(value : Vector2) -> Vector2:
-	return value*min(rect_size.x, rect_size.y)/scale
-
-func pos_to_value(pos : Vector2) -> Vector2:
-	return (pos-0.5*rect_size)*scale/min(rect_size.x, rect_size.y)+center-Vector2(0.5, 0.5)
+func pos_to_value(pos : Vector2, apply_parent_transform : bool = false, apply_local_transform : bool = false) -> Vector2:
+	var value = (pos-0.5*rect_size)*scale/min(rect_size.x, rect_size.y)+center-Vector2(0.5, 0.5)
+	if apply_local_transform:
+		value /= local_scale
+		value = value.rotated(-deg2rad(local_rotate))
+	if apply_parent_transform:
+		value = center_transform.affine_inverse().xform(value)
+	return value
 
 func update_shader_options() -> void:
 	on_resized()
@@ -159,7 +189,7 @@ func on_resized() -> void:
 	$Accumulate/Iteration.material.set_shader_param("preview_2d_center", center)
 	$Accumulate/Iteration.material.set_shader_param("preview_2d_scale", scale)
 	$Accumulate/Iteration.material.set_shader_param("preview_2d_size", rect_size)
-	setup_controls()
+	setup_controls("previous")
 	$Guides.update()
 	start_accumulate()
 

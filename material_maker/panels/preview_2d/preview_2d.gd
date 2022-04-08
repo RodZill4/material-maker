@@ -32,7 +32,9 @@ func update_export_menu() -> void:
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func do_update_material(source, target_material, template):
-	is_greyscale = source.has("type") and source.type == "f"
+	if ! source.has("type"):
+		return
+	is_greyscale = source.type == "f"
 	# Update shader
 	var code = MMGenBase.generate_preview_shader(source, source.type, template)
 	target_material.shader.code = code

@@ -42,8 +42,8 @@ func _on_menu_id_pressed(id : int) -> void:
 				if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export":
 					generator.model = null
 					generator.editable = true
-					update_generator(graph.nodes[0].shader_model)
+					update_shader_generator(graph.nodes[0].shader_model)
 		_:
 			generator.model = get_material_nodes()[id].name
 			generator.editable = false
-			update_generator(mm_loader.predefined_generators[generator.model].shader_model)
+			update_shader_generator(mm_loader.predefined_generators[generator.model].shader_model)
