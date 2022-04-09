@@ -14,6 +14,7 @@
 
 ## Nodes
 
+- Added an EasySDF node that can be used to describe complex SDF shapes with a dedicated editor
 - The Tesselated Material type has been fixed and renamed to Static PBR Displacement (contributed by Arnklit)
 - Tiler and Splatter nodes now have a new custom UV output (contributed by Arnklit)
 - Non uniform scale nodes have been added for 2D and 3D SDF (contributed by Paulo Falcao)
