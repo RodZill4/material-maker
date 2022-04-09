@@ -1,14 +1,17 @@
 #define hlsl_atan(x,y) atan2(x, y)
 #define mod(x,y) ((x)-(y)*floor((x)/(y)))
+
 inline float4 textureLod(sampler2D tex, float2 uv, float lod) {
     return tex2D(tex, uv);
 }
+
 inline float2 tofloat2(float x) {
     return float2(x, x);
 }
 inline float2 tofloat2(float x, float y) {
     return float2(x, y);
 }
+
 inline float3 tofloat3(float x) {
     return float3(x, x, x);
 }
@@ -21,6 +24,7 @@ inline float3 tofloat3(float2 xy, float z) {
 inline float3 tofloat3(float x, float2 yz) {
     return float3(x, yz.x, yz.y);
 }
+
 inline float4 tofloat4(float x, float y, float z, float w) {
     return float4(x, y, z, w);
 }
@@ -36,6 +40,11 @@ inline float4 tofloat4(float2 xy, float2 zw) {
 inline float4 tofloat4(float3 xyz, float w) {
     return float4(xyz.x, xyz.y, xyz.z, w);
 }
+inline float4 tofloat4(float2 xy, float z, float w) {
+    return float4(xy.x, xy.y, z, w);
+}
+
 inline float2x2 tofloat2x2(float2 v1, float2 v2) {
     return float2x2(v1.x, v1.y, v2.x, v2.y);
 }
+
