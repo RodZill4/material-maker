@@ -37,19 +37,20 @@ using the context menu.
 The available item types are:
 
 * Shapes: Circle, Elllipse, NGon, Star, Isoceles triangle, Rhombus, Line, Tunnel, Stairs
-
 * Boolean operations:
- * Union joins its children into a single shape
- * Intersection intersects its children
- * Difference removes all subsequent children from the first
- * Smooth union and smooth intersection are smooth variations of union and intersection
+
+  * Union joins its children into a single shape
+  * Intersection intersects its children
+  * Difference removes all subsequent children from the first
+  * Smooth union and smooth intersection are smooth variations of union and intersection
 
 * Alter operations that are applied to their children:
- * Flip, mirror or elongate along X and/or Y axis
- * Round by dilating Shapes
- * Bend
- * Annular
- * Morph between 2 children shapes
+
+  * Flip, mirror or elongate along X and/or Y axis
+  * Round by dilating Shapes
+  * Bend
+  * Annular
+  * Morph between 2 children shapes
 
 All item types have builtin translate, rotate and scale operations.
 Unless specified otherwise, all items apply a union operation to their children.
