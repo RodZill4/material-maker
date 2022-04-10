@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.98
+                0.99
               </div>
             
           
@@ -226,7 +226,7 @@ Overlapping instances are mixed with each other using a <em>lighten</em> filter.
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
 <p>The <strong>Circle Splatter</strong> node outputs the splat image.</p>
-<p>The greyscale splatter has a secondary output that assigns a random color to each splat instance.</p>
+<p>The greyscale circle splatter has two additional outputs, one that assigns a random color to each splat instance and one that assigns a UV layout to each splat instance.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -244,6 +244,8 @@ shapes can easily be created using the <strong>Tile2x2</strong> node.</p></li>
 <li><p><em>RndRotate</em> is the maximum angle of the random rotation applied to each instance.</p></li>
 <li><p><em>RndScale</em> is the amount of random scaling applied to each instance.</p></li>
 <li><p><em>RndValue</em> is the amount of random value applied to each instance.</p></li>
+<li><p><em>Variations</em>: if checked, the node will tile different variations of its input
+(i.e. roll a different seed for each instance)</p></li>
 </ul>
 </div>
 <div class="section" id="example-images">

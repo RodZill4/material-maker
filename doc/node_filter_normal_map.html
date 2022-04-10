@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.98
+                0.99
               </div>
             
           
@@ -152,6 +152,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_random_color.html">Fill to random color node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_uv.html">Fill to UV node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_orientation.html">Fill to Orientation node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_fill_to_gradient.html">Fill to Gradient node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_math.html">Math node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_smooth_minmax.html">Smooth MinMax node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_maketileable.html">Make Tileable node</a></li>
@@ -163,6 +164,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_palettize.html">Palettize node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_binary_smooth.html">Binary Smooth node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_hbao.html">HBAO node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_color_conversion.html">Color Conversion node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -275,7 +277,7 @@ For dynamic materials, it is necessary to disable the buffer.</p></li>
 <p>This node outputs a specific normal map format that is suited for Material nodes.
 It is intentionnaly and obviously (yellowish instead of blueish) different from
 standard OpenGL and DirectX formats. Connecting OpenGL or DirectX normal maps to
-Material nodes will need to incorrect maps when exporting.</p>
+Material nodes will lead to incorrect maps when exporting.</p>
 <p>If you need to export DirectX or OpenGL normal maps directly (either using the
 Export node or from a 2D Preview panel), you can use the <strong>Convert Normal Map</strong>
 node.</p>
