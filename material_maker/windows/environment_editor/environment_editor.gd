@@ -176,7 +176,7 @@ func _on_Share_pressed():
 	var preview_texture : ImageTexture = ImageTexture.new()
 	preview_texture.create_from_image(image)
 	var env = environment_manager.get_environment(current_environment).duplicate()
-	env.remove("thumbnail")
+	env.erase("thumbnail")
 	share_button.send_asset("environment", env, preview_texture)
 
 

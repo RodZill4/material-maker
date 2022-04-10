@@ -218,6 +218,7 @@ func new_environment(index : int) -> void:
 
 func delete_environment(index : int) -> void:
 	environments.remove(index)
+	environment_textures.remove(index)
 
 var thumbnail_update_list = []
 var rendering = false
