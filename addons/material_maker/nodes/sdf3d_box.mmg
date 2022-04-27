@@ -10,9 +10,11 @@
 		"sy": 0.25,
 		"sz": 0.25
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_q = abs($uv) - vec3($sx, $sy, $sz);\n",
-		"global": "",
+		"code": "",
+		"global": "float box3d(vec3 uv, vec3 s) {\n\tvec3 q = abs(uv) - s;\n\treturn length(max(q, 0.0))+min(max(q.x, max(q.y, q.z)), 0.0);\n}\n",
 		"inputs": [
 
 		],
@@ -22,7 +24,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the rounded box",
-				"sdf3d": "length(max($(name_uv)_q,0.0))+min(max($(name_uv)_q.x,max($(name_uv)_q.y,$(name_uv)_q.z)),0.0)-$r",
+				"sdf3d": "box3d($uv, vec3($sx, $sy, $sz))-$r",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}

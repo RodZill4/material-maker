@@ -4,6 +4,9 @@ extends WindowDialog
 onready var shape_names = mm_sdf_builder.get_shape_names()
 
 onready var tree : Tree = $VBoxContainer/Main/Tree
+onready var preview_2d : ColorRect = $VBoxContainer/Main/Preview2D
+onready var preview_3d : ViewportContainer = $VBoxContainer/Main/Preview3D
+onready var parameters_panel : GridContainer = $VBoxContainer/Main/Parameters
 
 
 var scene : Array = []
@@ -28,6 +31,22 @@ func _ready():
 	tree.set_hide_root(true)
 	if tree.get_root() == null:
 		tree.create_item()
+	#popup_centered()
+
+func set_preview(s : Array):
+	if s.empty():
+		return
+	var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s[0].type]]
+	$GenSDF.set_sdf_scene(s)
+	match item_type.item_category:
+		"SDF2D":
+			preview_2d.visible = true
+			preview_2d.set_generator($GenSDF, 0, true)
+			preview_3d.visible = false
+		"SDF3D":
+			preview_2d.visible = false
+			preview_3d.visible = true
+			preview_3d.set_generator($GenSDF, 0, true)
 
 func set_sdf_scene(s : Array, parent = null):
 	var parent_item
@@ -42,8 +61,7 @@ func set_sdf_scene(s : Array, parent = null):
 	for i in s:
 		add_sdf_item(i, parent_item)
 	if parent == null:
-		$GenSDF.set_sdf_scene(scene)
-		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+		set_preview(scene)
 	var top = tree.get_root().get_children()
 	if top != null:
 		tree.get_root().get_children().select(0)
@@ -77,7 +95,13 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 
 func show_menu(current_item : TreeItem):
 	var menu : PopupMenu = PopupMenu.new()
-	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ])
+	var filter : Array = []
+	if current_item == null:
+		filter = [ "SDF2D", "SDF3D" ]
+	else:
+		var parent_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[current_item.get_meta("scene").type]]
+		filter.push_back(parent_type.item_category)
+	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ], filter)
 	menu.add_child(add_menu)
 	menu.add_submenu_item("Create", add_menu.name)
 	if current_item != null:
@@ -106,8 +130,7 @@ func delete_item(item : TreeItem):
 	item.get_parent().remove_child(item)
 	tree.update()
 	rebuild_scene()
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 
 func copy_item(item : TreeItem):
 	var tmp_scene : Dictionary = item.get_meta("scene").duplicate()
@@ -121,8 +144,7 @@ func paste_item(parent : TreeItem):
 			parent = tree.get_root()
 		var new_item : TreeItem = add_sdf_item(json, parent)
 		rebuild_scene()
-		$GenSDF.set_sdf_scene(scene)
-		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+		set_preview(scene)
 		new_item.select(0)
 
 func _on_menu(id : int, current_item : TreeItem):
@@ -135,8 +157,7 @@ func _on_menu(id : int, current_item : TreeItem):
 			current_item.get_parent().remove_child(current_item)
 			tree.update()
 			rebuild_scene()
-			$GenSDF.set_sdf_scene(scene)
-			$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+			set_preview(scene)
 
 func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var shape = mm_sdf_builder.item_types[id]
@@ -163,8 +184,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
 	item.add_button(1, BUTTON_SHOWN, 0)
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 	item.select(0)
 
 func get_item_transform(item : TreeItem) -> Transform2D:
@@ -187,7 +207,7 @@ func get_item_transform(item : TreeItem) -> Transform2D:
 
 func update_center_transform():
 	var center_transform : Transform2D = get_item_transform(tree.get_selected().get_parent())
-	$VBoxContainer/Main/Preview2D.set_center_transform(center_transform)
+	preview_2d.set_center_transform(center_transform)
 
 func update_local_transform():
 	var item : TreeItem = tree.get_selected()
@@ -201,37 +221,36 @@ func update_local_transform():
 			var s : float = 1.0
 			if parameters.has("scale"):
 				s = parameters.scale
-			$VBoxContainer/Main/Preview2D.set_local_transform(r, s)
+			preview_2d.set_local_transform(r, s)
 
 func show_parameters(prefix : String):
 	controls = {}
-	for c in $VBoxContainer/Main/Parameters.get_children():
-		$VBoxContainer/Main/Parameters.remove_child(c)
+	for c in parameters_panel.get_children():
+		parameters_panel.remove_child(c)
 		c.free()
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
 		if p.has("label"):
 			var label : Label = Label.new()
 			label.text = p.label if p.has("label") else ""
 			label.size_flags_horizontal = SIZE_EXPAND_FILL
-			$VBoxContainer/Main/Parameters.add_child(label)
+			parameters_panel.add_child(label)
 		else:
-			$VBoxContainer/Main/Parameters.add_child(Control.new())
+			parameters_panel.add_child(Control.new())
 		var control = GENERIC.create_parameter_control(p, false)
 		control.name = p.name
 		control.size_flags_horizontal = SIZE_FILL
-		$VBoxContainer/Main/Parameters.add_child(control)
+		parameters_panel.add_child(control)
 		controls[p.name] = control
 	GENERIC.initialize_controls_from_generator(controls, $GenSDF, self)
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
-		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter_def(p.name).default)
+		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter(p.name))
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
 	var item : TreeItem = instance_from_id(variable.right(1).to_int())
 	var parameter_name : String = variable.right(variable.find("_")+1)
 	item.get_meta("scene").parameters[parameter_name] = value
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 
 func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : String = "") -> void:
 	ignore_parameter_change = variable
@@ -246,13 +265,17 @@ func on_parameter_changed(p : String, v) -> void:
 		GENERIC.update_control_from_parameter(controls, p, v)
 
 func _on_Tree_item_selected():
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF)
-	update_local_transform()
-	update_center_transform()
 	var index : int = tree.get_selected().get_meta("scene").index
-	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % index)
 	show_parameters("n%d" % index)
-	$GenSDF.set_parameter("index", float(index))
+	match $GenSDF.get_scene_type():
+		"SDF2D":
+			preview_2d.set_generator($GenSDF)
+			update_local_transform()
+			update_center_transform()
+			preview_2d.setup_controls("n%d" % index)
+			$GenSDF.set_parameter("index", float(index))
+		"SDF3D":
+			pass
 
 func _on_Tree_button_pressed(item, column, _id):
 	var item_scene : Dictionary = item.get_meta("scene")
@@ -262,8 +285,7 @@ func _on_Tree_button_pressed(item, column, _id):
 	else:
 		item_scene.hidden = true
 		item.set_button(1, 0, BUTTON_HIDDEN)
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 
 func set_node_parameters(generator, parameters):
 	for p in parameters.keys():
@@ -273,7 +295,7 @@ func set_node_parameters(generator, parameters):
 		var parameter_name : String = p.right(p.find("_")+1)
 		item.get_meta("scene").parameters[parameter_name] = value
 	update_local_transform()
-	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
+	preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
 
 func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	var new_item : TreeItem = tree.create_item(parent, index)
@@ -295,8 +317,7 @@ func _on_Tree_drop_item(item, dest, position):
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 	new_item.select(0)
 	var index = new_item.get_meta("scene").index
 	var parameters : Dictionary = {}
@@ -333,16 +354,29 @@ func _input(event):
 						if item != null:
 							copy_item(item)
 							delete_item(item)
+					else:
+						return
 				KEY_C:
 					if event.control:
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
+					else:
+						return
 				KEY_V:
 					if event.control:
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							paste_item(item)
+					else:
+						return
+				KEY_Z:
+					if event.control:
+						pass
+					else:
+						return
+				_:
+					return
 		accept_event()
 
 

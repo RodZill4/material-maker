@@ -16,23 +16,24 @@ func create_item_list(parent : Node = self):
 			item_ids[c.item_type] = item_types.size()
 			item_types.push_back(c)
 
-func get_items_menu(category : String, target : Object, method : String, binds : Array = [], parent : Node = self) -> PopupMenu:
-	if parent == self:
-		item_types.clear()
+func get_items_menu(category : String, target : Object, method : String, binds : Array = [], filter : Array = [], parent : Node = self) -> PopupMenu:
+
 	var menu : PopupMenu = PopupMenu.new()
 	for c in parent.get_children():
 		if c.get("item_type") == null:
-			var submenu : PopupMenu = get_items_menu(category, target, method, binds, c)
-			submenu.name = c.name
-			menu.add_child(submenu)
-			menu.add_submenu_item(c.name, c.name)
-		else:
+			var submenu : PopupMenu = get_items_menu(category, target, method, binds, filter, c)
+			if submenu.get_item_count() > 0:
+				submenu.name = c.name
+				menu.add_child(submenu)
+				menu.add_submenu_item(c.name, c.name)
+			else:
+				submenu.free()
+		elif c.item_category in filter:
 			var icon : Texture = c.get("icon")
 			if icon != null:
 				menu.add_icon_item(icon, c.name, item_ids[c.item_type])
 			else:
 				menu.add_item(c.name, item_ids[c.item_type])
-			item_types.push_back(c)
 	menu.connect("id_pressed", target, method, binds)
 	return menu
 
@@ -61,7 +62,7 @@ func get_includes(scene : Dictionary) -> Array:
 func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Array):
 	pass
 
-func scene_to_shader_model(scene : Dictionary, uv : String = "$uv-vec2(0.5)", editor = false) -> Dictionary:
+func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = false) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
 		return {}
 	var scene_node = item_types[item_ids[scene.type]]

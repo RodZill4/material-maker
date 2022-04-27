@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder.gd" type="Script" id=3]
 [ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" type="Script" id=4]
+[ext_resource path="res://preview_3d.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -69,9 +70,13 @@ margin_left = 265.0
 margin_right = 788.0
 margin_bottom = 496.0
 size_flags_horizontal = 3
-size_flags_vertical = 11
+size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
+
+[node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource( 5 )]
+visible = false
+size_flags_stretch_ratio = 2.0
 
 [node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
 margin_left = 792.0
