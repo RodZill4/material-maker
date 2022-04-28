@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/flip.gd" type="Script" id=26]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/mirror.gd" type="Script" id=27]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/elongate.gd" type="Script" id=28]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/round.gd" type="Script" id=29]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -217,8 +218,6 @@ item_category = "SDF2D"
 
 [node name="Round" type="Node" parent="SDF2D/Alter"]
 script = ExtResource( 12 )
-item_type = "Round"
-item_category = "SDF2D"
 
 [node name="Bend" type="Node" parent="SDF2D/Alter"]
 script = ExtResource( 15 )
@@ -294,4 +293,9 @@ item_category = "SDF3D"
 [node name="Elongate" type="Node" parent="SDF3D/Alter"]
 script = ExtResource( 28 )
 item_type = "Elongate3D"
+item_category = "SDF3D"
+
+[node name="Round" type="Node" parent="SDF3D/Alter"]
+script = ExtResource( 29 )
+item_type = "Round3D"
 item_category = "SDF3D"

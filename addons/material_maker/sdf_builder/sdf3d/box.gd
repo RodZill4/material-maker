@@ -28,4 +28,4 @@ func get_includes():
 	return INCLUDES[shape]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = %s(%s, vec3($size_x, $size_y, $size_z));\n" % [ scene.index, FUNCTIONS[shape], uv ]
+	return "%s(%s, vec3($size_x, $size_y, $size_z))" % [ FUNCTIONS[shape], uv ]

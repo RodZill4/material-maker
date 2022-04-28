@@ -12,11 +12,11 @@ func get_parameter_defs():
 		{ label="Rotation.y", name="angle_y", type="float", min=-180.0, max=180.0, step=0.01, default=0.0 },
 		{ label="Rotation.z", name="angle_z", type="float", min=-180.0, max=180.0, step=0.01, default=0.0 },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0 },
-		{ label="Radius", name="radius", type="float", min=0.0, max=1.0, step=0.01, default=0.5 }
+		{ label="Width", name="width", type="float", min=0.0, max=0.5, step=0.01, default=0.1 }
 	]
 
 func get_includes():
 	return [ "sdf3d_rotate" ]
 
-func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "length(%s)-$radius" % [ uv ]
+func mod_code(output_name : String) -> String:
+	return "%s -= $width;\n" % [ output_name ]

@@ -62,8 +62,8 @@ void vertex() {
 
 void fragment() {
     float _seed_variation_ = 0.0;
-	vec3 ro = world_camera;
-	vec3 rd =  normalize(world_position - ro);
+	vec3 ro = world_position;
+	vec3 rd =  normalize(world_position - world_camera);
 	
 	vec2 rm  = RayMarch(ro, rd);
 	float d = rm.x;

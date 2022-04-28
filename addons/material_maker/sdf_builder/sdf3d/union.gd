@@ -22,11 +22,16 @@ func get_includes():
 	return [ "sdf3d_rotate" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = 1.0;" % scene.index
+	return ""
 
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
 	var output_name = "$(name_uv)_n%d" % scene.index
-	data.code += shape_code(scene, uv)
+	var assigned : bool = false
+	data.code += "float %s;\n" % output_name
+	var init_value = shape_code(scene, uv)
+	if init_value != "":
+		data.code += "%s = %s;\n" % [ output_name, init_value ]
+		assigned = true
 	if editor:
 		data.code += "if (index == -%d) return %s*$scale;\n" % [ scene.index, output_name ]
 	for s in scene.children:
@@ -34,7 +39,13 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 		if not data2.empty():
 			data.parameters.append_array(data2.parameters)
 			data.code += data2.code
-			data.code += "%s = min(%s, %s);\n" % [ output_name, output_name, data2.outputs[0].sdf3d ] 
+			if assigned:
+				data.code += "%s = min(%s, %s);\n" % [ output_name, output_name, data2.outputs[0].sdf3d ]
+			else:
+				data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf3d ]
+				assigned = true
+	if ! assigned:
+		data.code += "%s = 1000000.0;\n" % [ output_name ]
 
 func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return ""
