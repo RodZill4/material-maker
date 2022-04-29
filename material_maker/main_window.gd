@@ -388,8 +388,7 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	if !do_load_project(recent_files[id]):
-		recent_files.remove(id)
+	do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f = File.new()
@@ -397,21 +396,29 @@ func load_recents() -> void:
 		recent_files = parse_json(f.get_as_text())
 		f.close()
 
-func add_recent(path) -> void:
+func save_recents() -> void:
+	var f = File.new()
+	f.open("user://recent_files.bin", File.WRITE)
+	f.store_string(to_json(recent_files))
+	f.close()
+
+func add_recent(path, save = true) -> void:
+	remove_recent(path, false)
+	recent_files.push_front(path)
+	while recent_files.size() > RECENT_FILES_COUNT:
+		recent_files.pop_back()
+	if save:
+		save_recents()
+
+func remove_recent(path, save = true) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
 			recent_files.remove(index)
 		else:
 			break
-	recent_files.push_front(path)
-	while recent_files.size() > RECENT_FILES_COUNT:
-		recent_files.pop_back()
-	var f = File.new()
-	f.open("user://recent_files.bin", File.WRITE)
-	f.store_string(to_json(recent_files))
-	f.close()
-
+	if save:
+		save_recents()
 
 func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
 	if prefix == "":
@@ -585,7 +592,7 @@ func do_load_projects(filenames) -> void:
 	if file_name != "":
 		config_cache.set_value("path", "project", file_name.get_base_dir())
 
-func do_load_project(file_name) -> void:
+func do_load_project(file_name) -> bool:
 	var status : bool = false
 	match file_name.get_extension():
 		"ptex":
@@ -595,6 +602,9 @@ func do_load_project(file_name) -> void:
 			status = do_load_painting(file_name)
 	if status:
 		add_recent(file_name)
+	else:
+		remove_recent(file_name)
+	return status
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
