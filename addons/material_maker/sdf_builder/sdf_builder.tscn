@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -30,6 +30,8 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/elongate.gd" type="Script" id=28]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/round.gd" type="Script" id=29]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/bend.gd" type="Script" id=30]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/annular.gd" type="Script" id=31]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/morph.gd" type="Script" id=32]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -304,4 +306,14 @@ item_category = "SDF3D"
 [node name="Bend" type="Node" parent="SDF3D/Alter"]
 script = ExtResource( 30 )
 item_type = "Bend3D"
+item_category = "SDF3D"
+
+[node name="Annular" type="Node" parent="SDF3D/Alter"]
+script = ExtResource( 31 )
+item_type = "Annular3D"
+item_category = "SDF3D"
+
+[node name="Morph" type="Node" parent="SDF3D/Alter"]
+script = ExtResource( 32 )
+item_type = "Morph3D"
 item_category = "SDF3D"
