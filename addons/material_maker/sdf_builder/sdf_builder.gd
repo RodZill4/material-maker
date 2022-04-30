@@ -17,7 +17,6 @@ func create_item_list(parent : Node = self):
 			item_types.push_back(c)
 
 func get_items_menu(category : String, target : Object, method : String, binds : Array = [], filter : Array = [], parent : Node = self) -> PopupMenu:
-
 	var menu : PopupMenu = PopupMenu.new()
 	for c in parent.get_children():
 		if c.get("item_type") == null:

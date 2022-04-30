@@ -100,7 +100,10 @@ func show_menu(current_item : TreeItem):
 		filter = [ "SDF2D", "SDF3D" ]
 	else:
 		var parent_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[current_item.get_meta("scene").type]]
-		filter.push_back(parent_type.item_category)
+		if parent_type.has_method("get_children_types"):
+			filter = parent_type.get_children_types()
+		else:
+			filter.push_back(parent_type.item_category)
 	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ], filter)
 	menu.add_child(add_menu)
 	menu.add_submenu_item("Create", add_menu.name)
