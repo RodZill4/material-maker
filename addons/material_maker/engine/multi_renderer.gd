@@ -3,6 +3,8 @@ extends Node
 
 var common_shader : String
 
+var global_parameters : Dictionary = {}
+
 const total_renderers = 8
 var free_renderers = []
 
@@ -26,6 +28,20 @@ func _ready() -> void:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
 		add_child(renderer)
 		free_renderers.append(renderer)
+
+# Global parameters
+
+func get_global_parameters():
+	return global_parameters.keys()
+
+func get_global_parameter(n : String):
+	if global_parameters.has(n):
+		return global_parameters[n]
+	else:
+		return null
+
+func set_global_parameter(n : String, value):
+	global_parameters[n] = value
 
 # General_purpose shader functions
 

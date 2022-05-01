@@ -358,11 +358,14 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
 	var variables = {}
-	var named_parameters = {}
+	if ! mm_renderer.get_global_parameters().empty():
+		for gp in mm_renderer.get_global_parameters():
+			variables[gp] = "mm_global_"+gp
 	if parent.has_method("get_named_parameters"):
+		var named_parameters = {}
 		named_parameters = parent.get_named_parameters()
-	for np in named_parameters.keys():
-		variables[np] = named_parameters[np].id
+		for np in named_parameters.keys():
+			variables[np] = named_parameters[np].id
 	variables["name"] = genname
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))

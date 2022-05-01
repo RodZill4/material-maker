@@ -314,6 +314,7 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)
+	assert(! (rv is GDScriptFunctionState))
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
 	if rv.has("type") and mm_io_types.types.has(rv.type):
