@@ -317,6 +317,20 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 	assert(! (rv is GDScriptFunctionState))
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
+	for v in mm_renderer.get_global_parameters():
+		var variable_name : String = "mm_global_"+v
+		var found : bool = false
+		if rv.has("code") and rv.code.find(variable_name) != -1:
+			found = true
+		if rv.has("globals"):
+			for g in rv.globals:
+				if g.find(variable_name) != -1:
+					found = true
+					break
+		if found:
+			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
+			if rv.globals.find(declaration) == -1:
+				rv.globals.push_front(declaration)
 	if rv.has("type") and mm_io_types.types.has(rv.type):
 		if mm_io_types.types[rv.type].has("convert"):
 			for c in mm_io_types.types[rv.type].convert:

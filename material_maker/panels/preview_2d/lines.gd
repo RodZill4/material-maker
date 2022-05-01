@@ -7,6 +7,9 @@ var snap : float = 0.0
 
 const STYLES : Array = [ "None", "Corners", "Lines", "Grid4x4", "Grid8x8", "Grid10x10", "Grid16x16" ]
 
+func _ready():
+	mm_renderer.set_global_parameter("mm_grid_size", 128)
+
 func draw_grid(size : int) -> void:
 	snap = size
 	var parent = get_parent()
@@ -54,10 +57,29 @@ func set_style(s : int) -> void:
 	snap = 0.0
 	style = s
 	update()
+	match style:
+		1:
+			mm_renderer.set_global_parameter("mm_grid_size", 128)
+		2:
+			mm_renderer.set_global_parameter("mm_grid_size", 1)
+		3:
+			mm_renderer.set_global_parameter("mm_grid_size", 4)
+		4:
+			mm_renderer.set_global_parameter("mm_grid_size", 8)
+		5:
+			mm_renderer.set_global_parameter("mm_grid_size", 10)
+		6:
+			mm_renderer.set_global_parameter("mm_grid_size", 16)
+		1000:
+			mm_renderer.set_global_parameter("mm_grid_size", snap)
+		_:
+			mm_renderer.set_global_parameter("mm_grid_size", 128)
+
 
 func show_grid(value) -> void:
 	snap = value
 	style = 1000
+	mm_renderer.set_global_parameter("mm_grid_size", snap)
 	update()
 
 func set_color(c : Color) -> void:
