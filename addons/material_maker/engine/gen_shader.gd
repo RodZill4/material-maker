@@ -373,7 +373,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
 	else:
-		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
+		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
