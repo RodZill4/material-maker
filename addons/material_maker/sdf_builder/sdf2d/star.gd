@@ -18,4 +18,4 @@ func get_includes():
 	return [ "rotate", "sdstar" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "sdStar(%s, $radius, int($branchcount),  2.0+($branchcount-2.0)*(1.0-$pointiness))" % [ scene.index, uv ]
+	return "sdStar(%s, $radius, int($branchcount),  2.0+($branchcount-2.0)*(1.0-$pointiness))" % [ uv ]
