@@ -48,3 +48,6 @@ func update_buffer() -> void:
 			renderer.release(self)
 		updating = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+
+func _serialize(data: Dictionary) -> Dictionary:
+	return data
