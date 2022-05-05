@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -33,6 +33,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/annular.gd" type="Script" id=31]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/morph.gd" type="Script" id=32]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/extrusion.gd" type="Script" id=33]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -257,6 +258,11 @@ item_category = "SDF3D"
 [node name="Extrusion" type="Node" parent="SDF3D/Generate"]
 script = ExtResource( 33 )
 item_type = "Extrusion"
+item_category = "SDF3D"
+
+[node name="Revolution" type="Node" parent="SDF3D/Generate"]
+script = ExtResource( 34 )
+item_type = "Revolution"
 item_category = "SDF3D"
 
 [node name="Boolean" type="Node" parent="SDF3D"]
