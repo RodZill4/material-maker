@@ -17,7 +17,6 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		assert(!(source is GDScriptFunctionState))
 		if source.empty():
 			source = MMGenBase.DEFAULT_GENERATED_SHADER
-		print(source)
 		var material = plane.get_surface_material(0)
 		var variables : Dictionary = {}
 		variables.GENERATED_GLOBALS = PoolStringArray(source.globals).join("\n")
@@ -25,7 +24,6 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.GENERATED_CODE = source.code
 		variables.GENERATED_OUTPUT = source.sdf3d
 		material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
-		print(material.shader.code)
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	var return_value : bool = false

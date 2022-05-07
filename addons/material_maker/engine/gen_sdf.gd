@@ -44,7 +44,6 @@ func get_scene_type() -> String:
 func set_sdf_scene(s : Array):
 	scene = s.duplicate(true)
 	var scene_type : String = get_scene_type()
-	print(scene_type)
 	var shader_model = { includes=[], parameters=[]}
 	var uv = "$uv"
 	match scene_type:
@@ -106,6 +105,11 @@ func set_sdf_scene(s : Array):
 				shader_model.outputs = [{}]
 				shader_model.outputs[0].sdf2d = "$(name_uv)_d"
 				shader_model.outputs[0].type = "sdf2d"
+	for p in parameter_defs:
+		if p.type == "float" and p.default is int:
+			parameters[p.name] = float(p.default)
+		else:
+			parameters[p.name] = p.default
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:

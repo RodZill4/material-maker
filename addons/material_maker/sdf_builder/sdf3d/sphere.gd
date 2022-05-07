@@ -1,5 +1,13 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
+export(int, "Sphere", "Octahedron") var shape
+
+const INCLUDES : Array = [
+	[ "sdf3d_rotate" ],
+	[ "sdf3d_rotate", "sdf3d_octahedron" ]
+]
+const FUNCTIONS : Array = [ "length(%s)-$radius", "sdOctahedron(%s, $radius)" ]
+
 func _ready():
 	pass # Replace with function body.
 
@@ -16,7 +24,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "sdf3d_rotate" ]
+	return INCLUDES[shape]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "length(%s)-$radius" % [ uv ]
+	return FUNCTIONS[shape] % [ uv ]

@@ -1,11 +1,12 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Box") var shape
+export(int, "Box", "Ellipsoid") var shape
 
 const INCLUDES : Array = [
-	[ "sdf3d_rotate", "sdf3d_box" ]
+	[ "sdf3d_rotate", "sdf3d_box" ],
+	[ "sdf3d_rotate", "sdf3d_ellipsoid" ]
 ]
-const FUNCTIONS : Array = [ "box3d" ]
+const FUNCTIONS : Array = [ "box3d", "sdEllipsoid" ]
 
 func _ready():
 	pass # Replace with function body.

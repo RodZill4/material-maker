@@ -23,9 +23,9 @@ func get_includes():
 func mod_uv_code(scene : Dictionary, output_name : String) -> String:
 	var code : String = ""
 	if scene.parameters.x_flip:
-		code += "%s_p.x = abs(%s_p.x);\n" % [ output_name, output_name ]
+		code += "%s_p.x = -%s_p.x;\n" % [ output_name, output_name ]
 	if scene.parameters.y_flip:
-		code += "%s_p.y = abs(%s_p.y);\n" % [ output_name, output_name ]
+		code += "%s_p.y = -%s_p.y;\n" % [ output_name, output_name ]
 	if scene.parameters.z_flip:
-		code += "%s_p.z = abs(%s_p.z);\n" % [ output_name, output_name ]
+		code += "%s_p.z = -%s_p.z;\n" % [ output_name, output_name ]
 	return code

@@ -77,7 +77,15 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = fal
 			shader_model.parameters.push_back(p)
 	else:
 		for p in scene_node.get_parameter_defs():
-			if p.type == "float":
-				shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
+			match p.type:
+				"boolean":
+					shader_model.code = shader_model.code.replace("$"+p.name, "true" if scene.parameters[p.name] else "false")
+				"enum":
+					shader_model.code = shader_model.code.replace("$"+p.name, p.values[scene.parameters[p.name]].value)
+				"float":
+					shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
+				_:
+					print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
+					return {}
 	shader_model.includes = get_includes(scene)
 	return shader_model

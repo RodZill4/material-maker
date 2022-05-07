@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -34,6 +34,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/morph.gd" type="Script" id=32]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/extrusion.gd" type="Script" id=33]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -252,6 +253,35 @@ item_category = "SDF3D"
 script = ExtResource( 22 )
 item_type = "Box3D"
 item_category = "SDF3D"
+
+[node name="Cylinder" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 35 )
+item_type = "Cylinder"
+item_category = "SDF3D"
+
+[node name="Capsule" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 35 )
+item_type = "Capsule"
+item_category = "SDF3D"
+shape = 1
+
+[node name="Pyramid" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 35 )
+item_type = "Pyramid"
+item_category = "SDF3D"
+shape = 2
+
+[node name="Ellipsoid" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 22 )
+item_type = "Ellipsoid"
+item_category = "SDF3D"
+shape = 1
+
+[node name="Octahedron" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 20 )
+item_type = "Octahedron"
+item_category = "SDF3D"
+shape = 1
 
 [node name="Generate" type="Node" parent="SDF3D"]
 
