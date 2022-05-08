@@ -55,7 +55,7 @@ func handle_mouse_motion(event: InputEventMouseMotion) -> void:
 	var motion = event.relative
 	if Input.is_mouse_button_pressed(BUTTON_LEFT):
 		var camera_basis = parent.camera.get_global_transform().basis
-		if event.control: # zooming by moving the mouse
+		if event.command: # zooming by moving the mouse
 			var zoom_factor = MOTION_FACTOR_ZOOM*0.1 if event.shift else MOTION_FACTOR_ZOOM
 			zoom(1.0+motion.y*zoom_factor)
 		elif event.shift: # rotate object
