@@ -1,5 +1,5 @@
 extends NavigationStyle3D
-class_name EuclideanNavigationStyle3D
+class_name TurntableNavigationStyle3D
 
 
 const MOTION_FACTOR_ORBIT = 0.004

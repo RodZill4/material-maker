@@ -14,11 +14,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://material_maker/panels/preview_3d/navigation_styles/default.gd"
 }, {
-"base": "NavigationStyle3D",
-"class": "EuclideanNavigationStyle3D",
-"language": "GDScript",
-"path": "res://material_maker/panels/preview_3d/navigation_styles/euclidean.gd"
-}, {
 "base": "Button",
 "class": "FilePickerButton",
 "language": "GDScript",
@@ -188,10 +183,14 @@ _global_script_classes=[ {
 "class": "SizeOptionButton",
 "language": "GDScript",
 "path": "res://material_maker/widgets/size_option_button/size_option_button.gd"
+}, {
+"base": "NavigationStyle3D",
+"class": "TurntableNavigationStyle3D",
+"language": "GDScript",
+"path": "res://material_maker/panels/preview_3d/navigation_styles/turntable.gd"
 } ]
 _global_script_class_icons={
 "DefaultNavigationStyle3D": "",
-"EuclideanNavigationStyle3D": "",
 "FilePickerButton": "",
 "MMCurve": "",
 "MMGenBase": "",
@@ -225,7 +224,8 @@ _global_script_class_icons={
 "MMType": "",
 "NavigationStyle3D": "",
 "PortGroupButton": "",
-"SizeOptionButton": ""
+"SizeOptionButton": "",
+"TurntableNavigationStyle3D": ""
 }
 
 [application]

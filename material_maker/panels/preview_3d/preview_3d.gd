@@ -34,7 +34,7 @@ const MENU = [
 
 const NAVIGATION_STYLES: Dictionary = {
 	"Default": DefaultNavigationStyle3D,
-	"Euclidean": EuclideanNavigationStyle3D,
+	"Turntable": TurntableNavigationStyle3D,
 }
 
 
