@@ -12,6 +12,7 @@ onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
 var navigation_style: NavigationStyle3D
+var initial_camera_stand_transform: Transform
 
 signal need_update(me)
 
@@ -27,7 +28,8 @@ const MENU = [
 	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
 	{ menu="Model/Generate map", submenu="generate_ao_map", description="Ambient Occlusion" },
 	{ menu="Model/Generate map", submenu="generate_thickness_map", description="Thickness" },
-	{ menu="Environment", submenu="environment_list", description="Select" }
+	{ menu="Environment", submenu="environment_list", description="Select" },
+	{ menu="Environment", submenu="navigation_styles_list", description="Navigation Styles"},
 ]
 
 const NAVIGATION_STYLES: Dictionary = {
@@ -48,6 +50,7 @@ func _ready() -> void:
 	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
 
 	navigation_style = NAVIGATION_STYLES["Default"].new(self)
+	initial_camera_stand_transform = camera_stand.get_global_transform()
 
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
 	# attempts to read the setting before the configuration file is loaded.
@@ -70,6 +73,15 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
+
+
+func create_menu_navigation_styles_list(menu : PopupMenu) -> void:
+	menu.clear()
+	var labels = NAVIGATION_STYLES.keys()
+	for i in labels.size():
+		menu.add_item(labels[i], i)
+	if !menu.is_connected("id_pressed", self, "_on_NavigationStyles_item_selected"):
+		menu.connect("id_pressed", self, "_on_NavigationStyles_item_selected")
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
@@ -108,6 +120,10 @@ func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
 	environment_manager.apply_environment(id, environment, sun)
+
+func _on_NavigationStyles_item_selected(id) -> void:
+	camera_stand.set_global_transform(initial_camera_stand_transform)
+	navigation_style = NAVIGATION_STYLES.values()[id].new(self)
 
 func _on_material_preview_size_changed() -> void:
 	# Apply supersampling to the new viewport size.
