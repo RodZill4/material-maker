@@ -57,6 +57,9 @@ func _ready() -> void:
 	yield(get_tree(), "idle_frame")
 	sun.shadow_enabled = get_node("/root/MainWindow").get_config("ui_3d_preview_sun_shadow")
 
+func _process(delta: float) -> void:
+	navigation_style.handle_process(delta)
+
 func create_menu_model_list(menu : PopupMenu) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
