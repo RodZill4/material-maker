@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "NavigationStyle3D",
+"class": "DefaultNavigationStyle3D",
+"language": "GDScript",
+"path": "res://material_maker/panels/preview_3d/navigation_styles/default.gd"
+}, {
+"base": "NavigationStyle3D",
+"class": "EuclideanNavigationStyle3D",
+"language": "GDScript",
+"path": "res://material_maker/panels/preview_3d/navigation_styles/euclidean.gd"
+}, {
 "base": "Button",
 "class": "FilePickerButton",
 "language": "GDScript",
@@ -164,6 +174,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/types/types.gd"
 }, {
+"base": "Object",
+"class": "NavigationStyle3D",
+"language": "GDScript",
+"path": "res://material_maker/panels/preview_3d/navigation_styles/base.gd"
+}, {
 "base": "TextureButton",
 "class": "PortGroupButton",
 "language": "GDScript",
@@ -175,6 +190,8 @@ _global_script_classes=[ {
 "path": "res://material_maker/widgets/size_option_button/size_option_button.gd"
 } ]
 _global_script_class_icons={
+"DefaultNavigationStyle3D": "",
+"EuclideanNavigationStyle3D": "",
 "FilePickerButton": "",
 "MMCurve": "",
 "MMGenBase": "",
@@ -206,6 +223,7 @@ _global_script_class_icons={
 "MMPaths": "",
 "MMPolygon": "",
 "MMType": "",
+"NavigationStyle3D": "",
 "PortGroupButton": "",
 "SizeOptionButton": ""
 }
