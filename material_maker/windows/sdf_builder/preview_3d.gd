@@ -1,14 +1,14 @@
 extends ViewportContainer
 
+onready var viewport = $Viewport
 onready var camera_position = $Viewport/CameraPosition
 onready var camera_rotation1 = $Viewport/CameraPosition/CameraRotation1
 onready var camera_rotation2 = $Viewport/CameraPosition/CameraRotation1/CameraRotation2
 onready var camera : Camera = $Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
 onready var plane : MeshInstance = $Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera/Plane
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	_on_Preview3D_resized()
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(g):
@@ -25,6 +25,9 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.GENERATED_OUTPUT = source.sdf3d
 		material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
 
+func setup_controls(filter : String = "") -> void:
+	pass
+
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	var return_value : bool = false
 	var m : ShaderMaterial = plane.get_surface_material(0)
@@ -37,9 +40,13 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	return return_value
 
 func _on_Preview3D_resized():
-	$Viewport.size = rect_size
+	if viewport != null:
+		viewport.size = rect_size
 
-func _on_Preview3D_gui_input(ev):
+func _input(ev):
+	_unhandled_input(ev)
+	
+func navigation_input(ev) -> bool:
 	if ev is InputEventMouseMotion:
 		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
@@ -49,6 +56,7 @@ func _on_Preview3D_gui_input(ev):
 			else:
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
+			return true
 	elif ev is InputEventMouseButton:
 		if ev.control:
 			if ev.button_index == BUTTON_WHEEL_UP:
@@ -56,8 +64,8 @@ func _on_Preview3D_gui_input(ev):
 			elif ev.button_index == BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
-				return
-			accept_event()
+				return false
+			return true
 		else:
 			var zoom = 0.0
 			if ev.button_index == BUTTON_WHEEL_UP:
@@ -66,4 +74,9 @@ func _on_Preview3D_gui_input(ev):
 				zoom += 1.0
 			if zoom != 0.0:
 				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
-				accept_event()
+			return true
+	return false
+
+func _on_Background_input_event(camera, event, position, normal, shape_idx):
+	if navigation_input(event):
+		accept_event()

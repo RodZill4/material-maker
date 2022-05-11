@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material_maker/windows/sdf_builder/gizmo_arrow.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/sdf_builder/gizmo.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=3]
+code = "shader_type spatial;
+render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,unshaded;
+uniform vec4 color : hint_color;
+
+varying float center_depth;
+
+void vertex() {
+	center_depth = (MODELVIEW_MATRIX*vec4(vec3(0.0), 1.0)).z;
+}
+
+void fragment() {
+	vec3 c = color.rgb*(0.05+0.95*smoothstep(-0.05, 0.05, VERTEX.z - center_depth));
+	ALBEDO = c;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+shader_param/color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 3 )
+shader_param/color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 3 )
+shader_param/color = Color( 0, 0, 1, 1 )
+
+[node name="Gizmo" type="Spatial"]
+script = ExtResource( 2 )
+
+[node name="ArrowX" parent="." instance=ExtResource( 1 )]
+material = SubResource( 4 )
+
+[node name="ArrowY" parent="." instance=ExtResource( 1 )]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0 )
+material = SubResource( 5 )
+
+[node name="ArrowZ" parent="." instance=ExtResource( 1 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
+material = SubResource( 6 )
+
+[connection signal="move" from="ArrowX" to="." method="_on_Arrow_move"]
+[connection signal="rotate" from="ArrowX" to="." method="_on_Arrow_rotate"]
+[connection signal="move" from="ArrowY" to="." method="_on_Arrow_move"]
+[connection signal="rotate" from="ArrowY" to="." method="_on_Arrow_rotate"]
+[connection signal="move" from="ArrowZ" to="." method="_on_Arrow_move"]
+[connection signal="rotate" from="ArrowZ" to="." method="_on_Arrow_rotate"]

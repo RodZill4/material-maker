@@ -6,7 +6,6 @@
 [ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" type="Script" id=4]
 [ext_resource path="res://material_maker/windows/sdf_builder/preview_3d.tscn" type="PackedScene" id=5]
 
-
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
@@ -64,6 +63,7 @@ select_mode = 1
 script = ExtResource( 4 )
 
 [node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
+visible = false
 material = SubResource( 2 )
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -76,8 +76,11 @@ size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
 [node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource( 5 )]
-visible = false
+margin_left = 265.0
+margin_right = 265.0
+margin_bottom = 0.0
 size_flags_stretch_ratio = 2.0
+stretch = true
 
 [node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
 margin_left = 792.0

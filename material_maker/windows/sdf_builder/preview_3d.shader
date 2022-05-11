@@ -108,8 +108,8 @@ void fragment() {
 	} else {
 		vec3 p = ro + rd * d;
 		ALBEDO = vec3(1.0);
-		ROUGHNESS = 1.0;
+		ROUGHNESS = 0.2;
 		METALLIC = 0.0;
-		NORMAL = (INV_CAMERA_MATRIX*WORLD_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
+		NORMAL = (INV_CAMERA_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
 	}
 }
