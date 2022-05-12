@@ -2,10 +2,11 @@ tool
 extends Node
 
 var predefined_generators : Dictionary = {}
+var predefined_functions : Dictionary = {}
 
 var current_project_path : String = ""
 
-const CHECK_PREDEFINED : bool = false
+const CHECK_PREDEFINED : bool = true
 
 func _ready()-> void:
 	update_predefined_generators()
@@ -15,6 +16,7 @@ func update_predefined_generators()-> void:
 	if CHECK_PREDEFINED:
 		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	predefined_generators = {}
+	predefined_functions = {}
 	for path in MMPaths.get_nodes_paths():
 		var dir = Directory.new()
 		if dir.open(path) == OK:
@@ -30,6 +32,19 @@ func update_predefined_generators()-> void:
 								var parse_result = parser.parse(generator.shader_model.global)
 								if parse_result.status != "OK":
 									print(file_name+" has errors in global")
+								elif parse_result.value.type == "translation_unit":
+									for definition in parse_result.value.value:
+										if definition.type == "function_definition":
+											var function_name = definition.value[0].value[0].value.name
+											if function_name.type == "IDENTIFIER":
+												if predefined_functions.has(function_name.value):
+													print(str(function_name.value)+" is defined in "+file_name.get_basename()+" and "+predefined_functions[function_name.value])
+												else:
+													predefined_functions[function_name.value] = file_name.get_basename()
+											else:
+												print(definition)
+										else:
+											print(definition.type)
 						predefined_generators[file_name.get_basename()] = generator
 						file.close()
 				file_name = dir.get_next()
