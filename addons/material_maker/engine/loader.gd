@@ -6,7 +6,7 @@ var predefined_functions : Dictionary = {}
 
 var current_project_path : String = ""
 
-const CHECK_PREDEFINED : bool = true
+const CHECK_PREDEFINED : bool = false
 
 func _ready()-> void:
 	update_predefined_generators()

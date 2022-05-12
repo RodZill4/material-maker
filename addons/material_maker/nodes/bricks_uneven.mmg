@@ -13,9 +13,11 @@
 		"randomness": 0.5,
 		"round": 0
 	},
+	"seed": 0.848998,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rect = bricks_uneven($uv, int($iterations), $min_size, $randomness, float($seed));\nvec4 $(name_uv) = brick2($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.00001, $bevel*$bevel_map($uv)));\n",
-		"global": "vec4 brick2(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float round, float bevel) {\n\tfloat color;\n\tvec2 size = bmax - bmin;\n\tvec2 center = 0.5*(bmin+bmax);\n    vec2 d = abs(uv-center)-0.5*(size)+vec2(round+mortar);\n    color = length(max(d,vec2(0))) + min(max(d.x,d.y),0.0)-round;\n\tcolor = clamp(-color/bevel, 0.0, 1.0);\n\tvec2 tiled_brick_pos = mod(bmin, vec2(1.0, 1.0));\n\treturn vec4(color, center, tiled_brick_pos.x+7.0*tiled_brick_pos.y);\n}\n\nvec4 bricks_uneven(vec2 uv, int iterations, float min_size, float randomness, float seed) {\n\tvec2 a = vec2(0.0);\n\tvec2 b = vec2(1.0);\n\t\n\tfor (int i = 0; i < iterations; ++i) {\n\t\tvec2 size = b-a;\n\t\tif (max(size.x, size.y) < min_size) {\n\t\tbreak;\n\t\t}\n\t\tfloat x = rand(rand2(vec2(rand(a+b), seed)))*randomness+(1.0-randomness)*0.5;\n\t\tif (size.x > size.y) {\n\t\t\tx *= size.x;\n\t\t\tif (uv.x > a.x+x) {\n\t\t\t\ta.x += x;\n\t\t\t} else {\n\t\t\t\tb.x = a.x + x;\n\t\t\t}\n\t\t} else {\n\t\t\tx *= size.y;\n\t\t\tif (uv.y > a.y+x) {\n\t\t\t\ta.y += x;\n\t\t\t} else {\n\t\t\t\tb.y = a.y + x;\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(a, b);\n}\n",
+		"code": "vec4 $(name_uv)_rect = oldbricks_uneven($uv, int($iterations), $min_size, $randomness, float($seed));\nvec4 $(name_uv) = oldbrick2($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.00001, $bevel*$bevel_map($uv)));\n",
+		"global": "vec4 oldbrick2(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float round, float bevel) {\n\tfloat color;\n\tvec2 size = bmax - bmin;\n\tvec2 center = 0.5*(bmin+bmax);\n    vec2 d = abs(uv-center)-0.5*(size)+vec2(round+mortar);\n    color = length(max(d,vec2(0))) + min(max(d.x,d.y),0.0)-round;\n\tcolor = clamp(-color/bevel, 0.0, 1.0);\n\tvec2 tiled_brick_pos = mod(bmin, vec2(1.0, 1.0));\n\treturn vec4(color, center, tiled_brick_pos.x+7.0*tiled_brick_pos.y);\n}\n\nvec4 oldbricks_uneven(vec2 uv, int iterations, float min_size, float randomness, float seed) {\n\tvec2 a = vec2(0.0);\n\tvec2 b = vec2(1.0);\n\t\n\tfor (int i = 0; i < iterations; ++i) {\n\t\tvec2 size = b-a;\n\t\tif (max(size.x, size.y) < min_size) {\n\t\tbreak;\n\t\t}\n\t\tfloat x = rand(rand2(vec2(rand(a+b), seed)))*randomness+(1.0-randomness)*0.5;\n\t\tif (size.x > size.y) {\n\t\t\tx *= size.x;\n\t\t\tif (uv.x > a.x+x) {\n\t\t\t\ta.x += x;\n\t\t\t} else {\n\t\t\t\tb.x = a.x + x;\n\t\t\t}\n\t\t} else {\n\t\t\tx *= size.y;\n\t\t\tif (uv.y > a.y+x) {\n\t\t\t\ta.y += x;\n\t\t\t} else {\n\t\t\t\tb.y = a.y + x;\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(a, b);\n}\n",
 		"includes": [
 			"bricks"
 		],
@@ -75,13 +77,13 @@
 			},
 			{
 				"longdesc": "An UV map output for each brick, to be connected to the Map input of a CustomUV node",
-				"rgb": "brick_uv($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, float($seed))",
+				"rgb": "oldbrick_uv($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, float($seed))",
 				"shortdesc": "Brick UV",
 				"type": "rgb"
 			},
 			{
 				"longdesc": "An UV map output for each brick corner, to be connected to the Map input of a CustomUV node",
-				"rgb": "brick_corner_uv($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, float($seed))",
+				"rgb": "oldbrick_corner_uv($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, float($seed))",
 				"shortdesc": "Corner UV",
 				"type": "rgb"
 			},
