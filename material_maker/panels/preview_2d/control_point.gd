@@ -201,6 +201,8 @@ func _on_Point_gui_input(event : InputEvent):
 		else:
 			if parameter_r == "":
 				value = value/value.length()
+				if control_type == 2:
+					value *= 0.25
 			if parameter_a == "":
 				value = Vector2(value.length(), 0.0)
 		match control_type:
