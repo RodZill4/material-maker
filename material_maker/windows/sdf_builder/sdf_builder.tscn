@@ -81,6 +81,7 @@ margin_right = 265.0
 margin_bottom = 0.0
 size_flags_stretch_ratio = 2.0
 stretch = true
+control_target = NodePath("../../..")
 
 [node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
 margin_left = 792.0

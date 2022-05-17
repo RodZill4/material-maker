@@ -55,6 +55,8 @@ func set_sdf_scene(s : Array):
 	var first : bool = true
 	var parameter_defs = []
 	for i in scene:
+		if i.has("hidden") and i.hidden:
+			continue
 		var item_shader_model = mm_sdf_builder.scene_to_shader_model(i, "uv", editor)
 		if item_shader_model.has("includes"):
 			shader_model.includes.append_array(item_shader_model.includes)

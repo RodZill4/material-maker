@@ -190,21 +190,27 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	set_preview(scene)
 	item.select(0)
 
+
+func get_local_item_transform_2d(item : TreeItem) -> Transform2D:
+	var item_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
+	if item.has_meta("scene"):
+		var scene = item.get_meta("scene")
+		if scene.has("parameters"):
+			var parameters = scene.parameters
+			var t : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
+			if parameters.has("angle"):
+				t = t.rotated(deg2rad(parameters.angle))
+			if parameters.has("scale"):
+				t = t.scaled(Vector2(parameters.scale, parameters.scale))
+			if parameters.has("position_x") and parameters.has("position_y"):
+				t = Transform2D(0, Vector2(parameters.position_x, parameters.position_y))*t
+			return t
+	return Transform2D(0, Vector2(0.0, 0.0))
+
 func get_item_transform_2d(item : TreeItem) -> Transform2D:
 	var item_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 	while item != null:
-		if item.has_meta("scene"):
-			var scene = item.get_meta("scene")
-			if scene.has("parameters"):
-				var parameters = scene.parameters
-				var t : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
-				if parameters.has("angle"):
-					t = t.rotated(deg2rad(parameters.angle))
-				if parameters.has("scale"):
-					t = t.scaled(Vector2(parameters.scale, parameters.scale))
-				if parameters.has("position_x") and parameters.has("position_y"):
-					t = Transform2D(0, Vector2(parameters.position_x, parameters.position_y))*t
-				item_transform = t*item_transform
+		item_transform = get_local_item_transform_2d(item)*item_transform
 		item = item.get_parent()
 	return item_transform
 
@@ -226,33 +232,42 @@ func update_local_transform_2d():
 				s = parameters.scale
 			preview_2d.set_local_transform(r, s)
 
+
+func get_local_item_transform_3d(item : TreeItem) -> Transform:
+	if item.has_meta("scene"):
+		var scene = item.get_meta("scene")
+		if scene.has("parameters"):
+			var parameters = scene.parameters
+			var t : Transform = Transform()
+			if parameters.has("angle_x"):
+				t = t.rotated(Vector3(1, 0, 0), deg2rad(parameters.angle_x))
+			if parameters.has("angle_y"):
+				t = t.rotated(Vector3(0, 1, 0), deg2rad(parameters.angle_y))
+			if parameters.has("angle_z"):
+				t = t.rotated(Vector3(0, 0, 1), deg2rad(parameters.angle_z))
+			if parameters.has("scale"):
+				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
+			if parameters.has("position_x") and parameters.has("position_y") and parameters.has("position_z"):
+				t = Transform(Basis(), Vector3(parameters.position_x, parameters.position_y, parameters.position_z))*t
+			return t
+	return Transform()
+
 func get_item_transform_3d(item : TreeItem) -> Transform:
 	var item_transform : Transform = Transform()
 	while item != null:
-		if item.has_meta("scene"):
-			var scene = item.get_meta("scene")
-			if scene.has("parameters"):
-				var parameters = scene.parameters
-				var t : Transform = Transform()
-				if parameters.has("angle_x"):
-					t = t.rotated(Vector3(1, 0, 0), deg2rad(parameters.angle_x))
-				if parameters.has("angle_y"):
-					t = t.rotated(Vector3(0, 1, 0), deg2rad(parameters.angle_y))
-				if parameters.has("angle_z"):
-					t = t.rotated(Vector3(0, 0, 1), deg2rad(parameters.angle_z))
-				if parameters.has("scale"):
-					t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
-				if parameters.has("position_x") and parameters.has("position_y") and parameters.has("position_z"):
-					t = Transform(Basis(), Vector3(parameters.position_x, parameters.position_y, parameters.position_z))*t
-				item_transform = t*item_transform
+		item_transform = get_local_item_transform_3d(item)*item_transform
 		item = item.get_parent()
 	return item_transform
 
 func update_center_transform_3d():
-	pass
+	var parent_transform : Transform = get_item_transform_3d(tree.get_selected().get_parent())
+	preview_3d.set_parent_transform(parent_transform)
 
 func update_local_transform_3d():
-	pass
+	var local_transform : Transform = get_local_item_transform_3d(tree.get_selected())
+	preview_3d.set_local_transform(local_transform)
+	print(local_transform.origin)
+
 
 func show_parameters(prefix : String):
 	controls = {}
@@ -323,14 +338,19 @@ func _on_Tree_button_pressed(item, column, _id):
 	set_preview(scene)
 
 func set_node_parameters(generator, parameters):
+	var parameters_changed : bool = false
 	for p in parameters.keys():
 		var value = MMType.deserialize_value(parameters[p])
 		generator.set_parameter(p, value)
 		var item : TreeItem = instance_from_id(p.right(1).to_int())
-		var parameter_name : String = p.right(p.find("_")+1)
-		item.get_meta("scene").parameters[parameter_name] = value
-	update_local_transform_2d()
-	preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
+		if item != null:
+			var parameter_name : String = p.right(p.find("_")+1)
+			item.get_meta("scene").parameters[parameter_name] = value
+			parameters_changed = true
+	if parameters_changed:
+		update_local_transform_2d()
+		preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
+		update_local_transform_3d()
 
 func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	var new_item : TreeItem = tree.create_item(parent, index)

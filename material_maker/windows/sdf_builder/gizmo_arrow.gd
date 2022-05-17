@@ -24,6 +24,14 @@ func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
 			var amount : float = event.relative.dot(direction_2d)/direction_2d_length2
 			emit_signal("move", amount*global_transform.basis.xform(Vector3(1, 0, 0)))
 
+var rotate_direction_2d : Vector2
 func _on_RotateArea_input_event(camera, event, position, normal, shape_idx):
-	print("Rotate event "+str(self))
-	print(event.as_text())
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		var tangent = (position-global_transform.origin).cross(global_transform.basis.xform(Vector3(1.0, 0.0, 0.0)))
+		var end : Vector3 = position+tangent
+		rotate_direction_2d = camera.unproject_position(end) - camera.unproject_position(position)
+	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
+		var rotate_direction_2d_length2 : float = rotate_direction_2d.length_squared()
+		if rotate_direction_2d_length2 != 0:
+			var amount : float = event.relative.dot(rotate_direction_2d)/rotate_direction_2d_length2
+			emit_signal("rotate", global_transform.basis.xform(Vector3(1, 0, 0)), amount)

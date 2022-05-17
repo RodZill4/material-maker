@@ -138,5 +138,17 @@ shape = SubResource( 5 )
 [node name="OmniLight" type="DirectionalLight" parent="Viewport"]
 transform = Transform( 0.999941, -0.00199387, -0.01067, 0.0106636, -0.00320327, 0.999938, -0.00202793, -0.999993, -0.00318182, 0, 3.40578, 0 )
 
+[node name="Buttons" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="GizmoButton" type="Button" parent="Buttons"]
+margin_right = 54.0
+margin_bottom = 40.0
+text = "Gizmo"
+
 [connection signal="resized" from="." to="." method="_on_Preview3D_resized"]
+[connection signal="rotated" from="Viewport/Gizmo" to="." method="_on_Gizmo_rotated"]
+[connection signal="translated" from="Viewport/Gizmo" to="." method="_on_Gizmo_translated"]
 [connection signal="input_event" from="Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera/Plane/Area" to="." method="_on_Background_input_event"]
+[connection signal="pressed" from="Buttons/GizmoButton" to="." method="_on_GizmoButton_pressed"]
