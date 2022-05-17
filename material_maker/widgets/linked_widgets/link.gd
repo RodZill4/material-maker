@@ -76,6 +76,8 @@ func _input(event: InputEvent) -> void:
 					node.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
 					node.generator.remove_parameter(param_name)
+			else:
+				node.generator.remove_parameter(param_name)
 			set_process_input(false)
 			queue_free()
 	get_tree().set_input_as_handled()
