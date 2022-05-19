@@ -3,8 +3,8 @@ extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 export(int, "Box", "Ellipsoid") var shape
 
 const INCLUDES : Array = [
-	[ "sdf3d_rotate", "sdf3d_box" ],
-	[ "sdf3d_rotate", "sdf3d_ellipsoid" ]
+	[ "rotate", "sdf3d_box" ],
+	[ "rotate", "sdf3d_ellipsoid" ]
 ]
 const FUNCTIONS : Array = [ "box3d", "sdEllipsoid" ]
 

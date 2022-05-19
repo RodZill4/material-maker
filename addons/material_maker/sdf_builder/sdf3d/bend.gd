@@ -16,7 +16,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "sdf3d_rotate", "sdf3d_bend" ]
+	return [ "rotate", "sdf3d_bend" ]
 
 func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return "%s_p = Bend3d(%s_p, $amount);\n" % [ output_name, output_name ]

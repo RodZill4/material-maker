@@ -70,10 +70,8 @@ func _on_Gizmo_translated(_v : Vector3):
 	get_node(control_target).set_node_parameters(generator, parameters)
 
 func _on_Gizmo_rotated(v, a):
-	var axis : Vector3 = parent_transform.basis.inverse().xform(v).normalized()
-	var local_rotation_quat : Quat = Quat(axis, a)
-	var local_transform_quat = local_transform.basis.get_rotation_quat()
-	var local_rotation : Vector3 = (local_transform_quat*local_rotation_quat).get_euler()
+	var axis : Vector3 = parent_transform.affine_inverse().basis.xform(v).normalized()
+	var local_rotation : Vector3 = local_transform.basis.rotated(axis, a).get_euler()
 	var parameters : Dictionary = {}
 	parameters[setup_controls_filter+"_angle_x"] = rad2deg(local_rotation.x)
 	parameters[setup_controls_filter+"_angle_y"] = rad2deg(local_rotation.y)

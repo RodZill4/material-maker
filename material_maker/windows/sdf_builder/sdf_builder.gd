@@ -239,12 +239,8 @@ func get_local_item_transform_3d(item : TreeItem) -> Transform:
 		if scene.has("parameters"):
 			var parameters = scene.parameters
 			var t : Transform = Transform()
-			if parameters.has("angle_x"):
-				t = t.rotated(Vector3(1, 0, 0), deg2rad(parameters.angle_x))
-			if parameters.has("angle_y"):
-				t = t.rotated(Vector3(0, 1, 0), deg2rad(parameters.angle_y))
-			if parameters.has("angle_z"):
-				t = t.rotated(Vector3(0, 0, 1), deg2rad(parameters.angle_z))
+			if parameters.has("angle_x") and parameters.has("angle_y") and parameters.has("angle_z"):
+				t = Transform(Basis(Vector3(deg2rad(parameters.angle_x), deg2rad(parameters.angle_y), deg2rad(parameters.angle_z))))
 			if parameters.has("scale"):
 				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
 			if parameters.has("position_x") and parameters.has("position_y") and parameters.has("position_z"):
@@ -266,7 +262,6 @@ func update_center_transform_3d():
 func update_local_transform_3d():
 	var local_transform : Transform = get_local_item_transform_3d(tree.get_selected())
 	preview_3d.set_local_transform(local_transform)
-	print(local_transform.origin)
 
 
 func show_parameters(prefix : String):

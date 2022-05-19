@@ -3,8 +3,8 @@ extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 export(int, "Sphere", "Octahedron") var shape
 
 const INCLUDES : Array = [
-	[ "sdf3d_rotate" ],
-	[ "sdf3d_rotate", "sdf3d_octahedron" ]
+	[ "rotate" ],
+	[ "rotate", "sdf3d_octahedron" ]
 ]
 const FUNCTIONS : Array = [ "length(%s)-$radius", "sdOctahedron(%s, $radius)" ]
 

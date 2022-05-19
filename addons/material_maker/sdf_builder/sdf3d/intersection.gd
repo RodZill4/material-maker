@@ -15,7 +15,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "sdf3d_rotate" ]
+	return [ "rotate" ]
 
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
 	var output_name = "$(name_uv)_n%d" % scene.index

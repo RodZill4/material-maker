@@ -89,3 +89,10 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = fal
 					return {}
 	shader_model.includes = get_includes(scene)
 	return shader_model
+
+func generate_rotate_3d(variable, _scene) -> String:
+	var rv : String = ""
+	rv += "%s.zx = rotate(%s.zx, radians($angle_y));\n" % [ variable, variable ]
+	rv += "%s.yz = rotate(%s.yz, radians($angle_x));\n" % [ variable, variable ]
+	rv += "%s.xy = rotate(%s.xy, radians($angle_z));\n" % [ variable, variable ]
+	return rv

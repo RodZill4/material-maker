@@ -18,7 +18,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "sdf3d_rotate" ]
+	return [ "rotate" ]
 
 func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return "vec3 %s_s = vec3($size_x, $size_y, $size_z);\n%s_p = %s_p - clamp(%s_p, -%s_s, %s_s);\n" % [ output_name, output_name, output_name, output_name, output_name, output_name ]

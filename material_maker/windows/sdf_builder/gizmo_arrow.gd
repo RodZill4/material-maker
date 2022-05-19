@@ -33,5 +33,5 @@ func _on_RotateArea_input_event(camera, event, position, normal, shape_idx):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
 		var rotate_direction_2d_length2 : float = rotate_direction_2d.length_squared()
 		if rotate_direction_2d_length2 != 0:
-			var amount : float = event.relative.dot(rotate_direction_2d)/rotate_direction_2d_length2
+			var amount : float = -event.relative.dot(rotate_direction_2d)/rotate_direction_2d_length2
 			emit_signal("rotate", global_transform.basis.xform(Vector3(1, 0, 0)), amount)

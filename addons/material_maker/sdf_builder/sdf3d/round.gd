@@ -16,7 +16,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "sdf3d_rotate" ]
+	return [ "rotate" ]
 
 func mod_code(output_name : String) -> String:
 	return "%s -= $width;\n" % [ output_name ]
