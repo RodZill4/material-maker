@@ -26,7 +26,8 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	var data : Dictionary = { parameters=[], outputs=[ { sdf3d=output_name, type="sdf3d" } ] }
 	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
 	data.code = "vec3 %s_p = %s - vec3($position_x, $position_y, $position_z);\n" % [ output_name, uv ]
-	data.code += "%s_p = rotate3d(%s_p, radians(vec3($angle_x, $angle_y, $angle_z)))/$scale;\n" % [ output_name, output_name ]
+	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene)
+	data.code += "%s_p /= $scale;\n" % [ output_name ]
 	shape_and_children_code(scene, data, "%s_p.xy" % output_name, editor)
 	data.code += "vec2 %s_w = vec2(%s, abs(%s_p.z) - $length);\n" % [ output_name, output_name, output_name ]
 	data.code += "%s = min(max(%s_w.x, %s_w.y),0.0) + length(max(%s_w,0.0))*$scale;\n" % [ output_name, output_name, output_name, output_name ] 
