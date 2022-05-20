@@ -83,7 +83,10 @@ func set_sdf_scene(s : Array):
 	shader_model.instance += "}\n"
 	match scene_type:
 		"SDF3D":
-			shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+			if editor:
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+			else:
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0), 0);\n" % uv
 			shader_model.outputs = [{}]
 			shader_model.outputs[0].sdf3d = "$(name_uv)_d"
 			shader_model.outputs[0].type = "sdf3d"
