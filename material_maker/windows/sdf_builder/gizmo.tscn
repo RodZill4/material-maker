@@ -7,6 +7,7 @@
 code = "shader_type spatial;
 render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,unshaded;
 uniform vec4 color : hint_color;
+uniform float highlight = 0.0;
 
 varying float center_depth;
 
@@ -15,22 +16,25 @@ void vertex() {
 }
 
 void fragment() {
-	vec3 c = color.rgb*(0.05+0.95*smoothstep(-0.05, 0.05, VERTEX.z - center_depth));
-	ALBEDO = c;
+	vec3 c = vec3(highlight)+color.rgb*(0.05+0.95*smoothstep(-0.05, 0.05, VERTEX.z - center_depth));
+	ALBEDO = clamp(c, vec3(0.0), vec3(1.0));
 }
 "
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = SubResource( 3 )
 shader_param/color = Color( 1, 0, 0, 1 )
+shader_param/highlight = 0.0
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = SubResource( 3 )
 shader_param/color = Color( 0, 1, 0, 1 )
+shader_param/highlight = 0.0
 
 [sub_resource type="ShaderMaterial" id=6]
 shader = SubResource( 3 )
 shader_param/color = Color( 0, 0, 1, 1 )
+shader_param/highlight = 0.0
 
 [node name="Gizmo" type="Spatial"]
 script = ExtResource( 2 )
