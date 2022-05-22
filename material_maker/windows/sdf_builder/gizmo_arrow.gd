@@ -2,13 +2,35 @@ tool
 extends Spatial
 
 export var material : Material setget set_material
+export(int, "Full", "ArrowOnly", "TorusOnly") var mode = 0 setget set_mode
+
 
 signal move(v)
 signal rotate(v, a)
 
+
 func _ready():
 	set_material(material)
-	
+
+func set_mode(m):
+	mode = m
+	match m:
+		0:
+			$Arrow.visible = true
+			$TranslateArea.visible = true
+			$Torus.visible = true
+			$RotateArea.visible = true
+		1:
+			$Arrow.visible = true
+			$TranslateArea.visible = true
+			$Torus.visible = false
+			$RotateArea.visible = false
+		2:
+			$Arrow.visible = false
+			$TranslateArea.visible = false
+			$Torus.visible = true
+			$RotateArea.visible = true
+
 func set_material(m):
 	material = m
 	if is_inside_tree():

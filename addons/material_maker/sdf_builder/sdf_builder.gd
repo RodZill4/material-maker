@@ -61,10 +61,13 @@ func get_includes(scene : Dictionary) -> Array:
 func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Array):
 	pass
 
+func scene_get_type(scene : Dictionary):
+	return item_types[item_ids[scene.type]]
+
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = false) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
 		return {}
-	var scene_node = item_types[item_ids[scene.type]]
+	var scene_node = scene_get_type(scene)
 	var shader_model = scene_node.scene_to_shader_model(scene, uv, editor)
 	if editor:
 		for p in scene_node.get_parameter_defs():

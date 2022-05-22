@@ -2,7 +2,7 @@ extends ViewportContainer
 
 
 export var control_target : NodePath
-
+export(int, "SDF2D", "SDF3D") var mode = 1 setget set_mode
 
 onready var viewport = $Viewport
 onready var camera_position = $Viewport/CameraPosition
@@ -14,9 +14,14 @@ onready var gizmo : Spatial = $Viewport/Gizmo
 
 var generator : MMGenBase = null
 
+var gizmo_is_local = false
 
 func _ready():
 	_on_Preview3D_resized()
+
+func set_mode(m):
+	mode = m
+	$Viewport/Gizmo.mode = mode
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(g) and (force or g != generator):
@@ -52,6 +57,10 @@ var local_transform : Transform
 
 func update_gizmo_position():
 	gizmo.translation = (parent_transform*local_transform).origin
+	if gizmo_is_local:
+		gizmo.transform.basis = Basis((parent_transform.basis*local_transform.basis).get_euler())
+	else:
+		gizmo.transform.basis = Basis(Vector3(0, 0, 0))
 
 func set_local_transform(t : Transform):
 	local_transform = t
@@ -76,6 +85,7 @@ func _on_Gizmo_rotated(v, a):
 	parameters[setup_controls_filter+"_angle_x"] = rad2deg(local_rotation.x)
 	parameters[setup_controls_filter+"_angle_y"] = rad2deg(local_rotation.y)
 	parameters[setup_controls_filter+"_angle_z"] = rad2deg(local_rotation.z)
+	parameters[setup_controls_filter+"_angle"] = rad2deg(local_rotation.z)
 	get_node(control_target).set_node_parameters(generator, parameters)
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
@@ -133,8 +143,9 @@ func _on_Background_input_event(camera, event, position, normal, shape_idx):
 	if navigation_input(event):
 		accept_event()
 
+func _on_GizmoButton_toggled(button_pressed):
+	gizmo.visible = button_pressed
 
-func _on_GizmoButton_pressed():
-	gizmo.visible = ! gizmo.visible
-
-
+func _on_LocalButton_toggled(button_pressed):
+	gizmo_is_local = button_pressed
+	update_gizmo_position()

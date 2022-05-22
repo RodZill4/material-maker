@@ -67,15 +67,18 @@ func set_sdf_scene(s : Array):
 		if item_shader_model.has("outputs"):
 			var output = item_shader_model.outputs[0]
 			var output_name
+			var field : String
 			if scene_type == "SDF2D":
-				output_name = item_shader_model.outputs[0].sdf2d.replace("$(name_uv)", "")
+				field = "sdf2d"
 			else:
-				output_name = item_shader_model.outputs[0].sdf3d.replace("$(name_uv)", "")
-			if first:
-				shader_model.instance += "float return_value = %s;" % output_name
-				first = false
-			else:
-				shader_model.instance += "return_value = min(return_value, %s);" % output_name
+				field = "sdf3d"
+			if item_shader_model.outputs[0].has(field):
+				output_name = item_shader_model.outputs[0][field].replace("$(name_uv)", "")
+				if first:
+					shader_model.instance += "float return_value = %s;\n" % output_name
+					first = false
+				else:
+					shader_model.instance += "return_value = min(return_value, %s);\n" % output_name
 	if first:
 		shader_model.instance += "return 1.0;"
 	else:

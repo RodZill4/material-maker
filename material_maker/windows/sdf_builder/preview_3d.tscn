@@ -103,9 +103,6 @@ mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Viewport" type="Viewport" parent="."]
 handle_input_locally = false
@@ -145,10 +142,20 @@ margin_bottom = 40.0
 [node name="GizmoButton" type="Button" parent="Buttons"]
 margin_right = 54.0
 margin_bottom = 40.0
+toggle_mode = true
+pressed = true
 text = "Gizmo"
+
+[node name="LocalButton" type="Button" parent="Buttons"]
+margin_left = 58.0
+margin_right = 103.0
+margin_bottom = 40.0
+toggle_mode = true
+text = "Local"
 
 [connection signal="resized" from="." to="." method="_on_Preview3D_resized"]
 [connection signal="rotated" from="Viewport/Gizmo" to="." method="_on_Gizmo_rotated"]
 [connection signal="translated" from="Viewport/Gizmo" to="." method="_on_Gizmo_translated"]
 [connection signal="input_event" from="Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera/Plane/Area" to="." method="_on_Background_input_event"]
-[connection signal="pressed" from="Buttons/GizmoButton" to="." method="_on_GizmoButton_pressed"]
+[connection signal="toggled" from="Buttons/GizmoButton" to="." method="_on_GizmoButton_toggled"]
+[connection signal="toggled" from="Buttons/LocalButton" to="." method="_on_LocalButton_toggled"]

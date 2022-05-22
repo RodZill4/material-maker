@@ -97,9 +97,14 @@ func show_menu(current_item : TreeItem):
 	var menu : PopupMenu = PopupMenu.new()
 	var filter : Array = []
 	if current_item == null:
-		filter = [ "SDF2D", "SDF3D" ]
+		var first_child : TreeItem = tree.get_root().get_children()
+		if first_child == null:
+			filter = [ "SDF2D", "SDF3D" ]
+		else:
+			print(mm_sdf_builder.scene_get_type(first_child.get_meta("scene")).item_category)
+			filter = [ mm_sdf_builder.scene_get_type(first_child.get_meta("scene")).item_category ]
 	else:
-		var parent_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[current_item.get_meta("scene").type]]
+		var parent_type = mm_sdf_builder.scene_get_type(current_item.get_meta("scene"))
 		if parent_type.has_method("get_children_types"):
 			filter = parent_type.get_children_types()
 		else:
@@ -243,8 +248,11 @@ func get_local_item_transform_3d(item : TreeItem) -> Transform:
 				t = Transform(Basis(Vector3(deg2rad(parameters.angle_x), deg2rad(parameters.angle_y), deg2rad(parameters.angle_z))))
 			if parameters.has("scale"):
 				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
-			if parameters.has("position_x") and parameters.has("position_y") and parameters.has("position_z"):
-				t = Transform(Basis(), Vector3(parameters.position_x, parameters.position_y, parameters.position_z))*t
+			if parameters.has("position_x") and parameters.has("position_y"):
+				var origin = Vector3(parameters.position_x, parameters.position_y, 0.0)
+				if parameters.has("position_z"):
+					origin.z = parameters.position_z
+				t = Transform(Basis(), origin)*t
 			return t
 	return Transform()
 
@@ -306,7 +314,8 @@ func on_parameter_changed(p : String, v) -> void:
 		GENERIC.update_control_from_parameter(controls, p, v)
 
 func _on_Tree_item_selected():
-	var index : int = tree.get_selected().get_meta("scene").index
+	var scene = tree.get_selected().get_meta("scene")
+	var index : int = scene.index
 	show_parameters("n%d" % index)
 	match $GenSDF.get_scene_type():
 		"SDF2D":
@@ -317,6 +326,7 @@ func _on_Tree_item_selected():
 			$GenSDF.set_parameter("index", float(index))
 		"SDF3D":
 			preview_3d.set_generator($GenSDF)
+			preview_3d.mode = 1 if mm_sdf_builder.scene_get_type(scene).item_category == "SDF3D" else 0
 			update_local_transform_3d()
 			update_center_transform_3d()
 			preview_3d.setup_controls("n%d" % index)
