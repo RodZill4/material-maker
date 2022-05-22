@@ -64,6 +64,7 @@ margin_top = 1.0
 margin_right = -3.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 114, 19 )
+mouse_filter = 2
 color = Color( 0.5, 0.5, 0.5, 1 )
 
 [node name="Background" type="ColorRect" parent="."]
