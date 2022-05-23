@@ -224,6 +224,14 @@ func update_local_transform_2d():
 				s = parameters.scale
 			preview_2d.set_local_transform(r, s)
 
+func update_2d_orientation(root_2d : TreeItem):
+	var euler : Vector3
+	if root_2d != null:
+		euler = get_item_transform_3d(root_2d).basis.get_euler()
+	else:
+		euler = Vector3(0, 0, 0)
+	print(euler)
+	preview_3d.set_2d_orientation(euler)
 
 func get_local_item_transform_3d(item : TreeItem) -> Transform:
 	if item.has_meta("scene"):
@@ -233,6 +241,8 @@ func get_local_item_transform_3d(item : TreeItem) -> Transform:
 			var t : Transform = Transform()
 			if parameters.has("angle_x") and parameters.has("angle_y") and parameters.has("angle_z"):
 				t = Transform(Basis(Vector3(deg2rad(parameters.angle_x), deg2rad(parameters.angle_y), deg2rad(parameters.angle_z))))
+			elif parameters.has("angle"):
+				t = Transform(Basis(Vector3(0, 0, deg2rad(parameters.angle))))
 			if parameters.has("scale"):
 				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
 			if parameters.has("position_x") and parameters.has("position_y"):
@@ -301,7 +311,8 @@ func on_parameter_changed(p : String, v) -> void:
 		GENERIC.update_control_from_parameter(controls, p, v)
 
 func _on_Tree_item_selected():
-	var scene = tree.get_selected().get_meta("scene")
+	var selected_item = tree.get_selected()
+	var scene = selected_item.get_meta("scene")
 	var index : int = scene.index
 	show_parameters("n%d" % index)
 	match $GenSDF.get_scene_type():
@@ -316,6 +327,10 @@ func _on_Tree_item_selected():
 			preview_3d.mode = 1 if mm_sdf_builder.scene_get_type(scene).item_category == "SDF3D" else 0
 			update_local_transform_3d()
 			update_center_transform_3d()
+			var parent_3d = null
+			if tree.get_sdf_item_type_name(selected_item) == "SDF2D":
+				parent_3d = tree.get_nearest_parent(selected_item, "SDF3D")
+			update_2d_orientation(parent_3d)
 			preview_3d.setup_controls("n%d" % index)
 			$GenSDF.set_parameter("index", float(index))
 
@@ -337,8 +352,9 @@ func set_node_parameters(generator, parameters):
 		var item : TreeItem = instance_from_id(p.right(1).to_int())
 		if item != null:
 			var parameter_name : String = p.right(p.find("_")+1)
-			item.get_meta("scene").parameters[parameter_name] = value
-			parameters_changed = true
+			if item.get_meta("scene").parameters.has(parameter_name):
+				item.get_meta("scene").parameters[parameter_name] = value
+				parameters_changed = true
 	if parameters_changed:
 		update_local_transform_2d()
 		preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
@@ -356,10 +372,10 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 		c = c.get_next()
 	return new_item
 
-func move_item_2d(item, dest, position):
-	var source_transform = get_item_transform_2d(item)
-	var dest_transform = get_item_transform_2d(dest)
-	var new_transform : Transform2D = dest_transform.affine_inverse()*source_transform
+func move_item(item, dest, position):
+	var source_transform : Transform = get_item_transform_3d(item)
+	var dest_transform : Transform = get_item_transform_3d(dest)
+	var new_transform : Transform = dest_transform.affine_inverse()*source_transform
 	var new_item : TreeItem = duplicate_item(item, dest, position)
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
@@ -368,14 +384,19 @@ func move_item_2d(item, dest, position):
 	new_item.select(0)
 	var index = new_item.get_meta("scene").index
 	var parameters : Dictionary = {}
-	parameters["n%d_angle" % index] = rad2deg(new_transform.get_rotation())
-	parameters["n%d_scale" % index] = new_transform.get_scale().x
-	parameters["n%d_position_x" % index] = new_transform.get_origin().x
-	parameters["n%d_position_y" % index] = new_transform.get_origin().y
+	var angle_euler : Vector3 = new_transform.basis.get_euler()
+	parameters["n%d_angle_x" % index] = rad2deg(angle_euler.z)
+	parameters["n%d_angle_x" % index] = rad2deg(angle_euler.x)
+	parameters["n%d_angle_y" % index] = rad2deg(angle_euler.y)
+	parameters["n%d_angle_z" % index] = rad2deg(angle_euler.z)
+	parameters["n%d_scale" % index] = new_transform.basis.get_scale().x
+	parameters["n%d_position_x" % index] = new_transform.origin.x
+	parameters["n%d_position_y" % index] = new_transform.origin.y
+	parameters["n%d_position_z" % index] = new_transform.origin.z
 	set_node_parameters($GenSDF, parameters)
 
 func _on_Tree_drop_item(item, dest, position):
-	move_item_2d(item, dest, position)
+	move_item(item, dest, position)
 
 
 # OK/Apply/Cancel buttons

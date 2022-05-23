@@ -54,13 +54,14 @@ func setup_controls(filter : String = "") -> void:
 
 var parent_transform : Transform
 var local_transform : Transform
+var euler_2d : Vector3 = Vector3(0, 0, 0)
 
 func update_gizmo_position():
 	gizmo.translation = (parent_transform*local_transform).origin
 	if gizmo_is_local:
 		gizmo.transform.basis = Basis((parent_transform.basis*local_transform.basis).get_euler())
 	else:
-		gizmo.transform.basis = Basis(Vector3(0, 0, 0))
+		gizmo.transform.basis = Basis(euler_2d)
 
 func set_local_transform(t : Transform):
 	local_transform = t
@@ -68,6 +69,10 @@ func set_local_transform(t : Transform):
 
 func set_parent_transform(t : Transform):
 	parent_transform = t
+	update_gizmo_position()
+
+func set_2d_orientation(e : Vector3):
+	euler_2d = e
 	update_gizmo_position()
 
 func _on_Gizmo_translated(_v : Vector3):
