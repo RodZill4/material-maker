@@ -27,13 +27,32 @@ func item_is_parent(item1 : TreeItem, item2 : TreeItem) -> bool:
 		item2 = item2.get_parent()
 	return false
 
+func get_valid_children_types(parent : TreeItem):
+	var valid_children_types : Array = []
+	if parent == null or not parent.has_meta("scene"):
+		var first_child : TreeItem = get_root().get_children()
+		if first_child == null:
+			valid_children_types = [ "SDF2D", "SDF3D" ]
+		else:
+			valid_children_types = [ mm_sdf_builder.scene_get_type(first_child.get_meta("scene")).item_category ]
+	else:
+		var parent_scene = parent.get_meta("scene")
+		var parent_type = mm_sdf_builder.scene_get_type(parent_scene)
+		if parent_type.has_method("get_children_types"):
+			valid_children_types = parent_type.get_children_types()
+		else:
+			valid_children_types.push_back(parent_type.item_category)
+	return valid_children_types
+
 func can_drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var destination : TreeItem = get_item_at_position(position)
+		if destination != null and get_drop_section_at_position(position) != 0:
+			destination = destination.get_parent()
+		if not mm_sdf_builder.scene_get_type(data.item.get_meta("scene")).item_category in get_valid_children_types(destination):
+			return false
 		if destination == null:
 			return true
-		if get_drop_section_at_position(position) != 0:
-			destination = destination.get_parent()
 		return ! item_is_parent(data.item, destination)
 	return false
 

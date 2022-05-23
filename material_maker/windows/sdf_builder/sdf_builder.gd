@@ -95,20 +95,7 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 
 func show_menu(current_item : TreeItem):
 	var menu : PopupMenu = PopupMenu.new()
-	var filter : Array = []
-	if current_item == null:
-		var first_child : TreeItem = tree.get_root().get_children()
-		if first_child == null:
-			filter = [ "SDF2D", "SDF3D" ]
-		else:
-			print(mm_sdf_builder.scene_get_type(first_child.get_meta("scene")).item_category)
-			filter = [ mm_sdf_builder.scene_get_type(first_child.get_meta("scene")).item_category ]
-	else:
-		var parent_type = mm_sdf_builder.scene_get_type(current_item.get_meta("scene"))
-		if parent_type.has_method("get_children_types"):
-			filter = parent_type.get_children_types()
-		else:
-			filter.push_back(parent_type.item_category)
+	var filter : Array = tree.get_valid_children_types(current_item)
 	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ], filter)
 	menu.add_child(add_menu)
 	menu.add_submenu_item("Create", add_menu.name)
