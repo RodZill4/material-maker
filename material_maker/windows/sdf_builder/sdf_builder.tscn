@@ -63,7 +63,6 @@ select_mode = 1
 script = ExtResource( 4 )
 
 [node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
-visible = false
 material = SubResource( 2 )
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -76,6 +75,7 @@ size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
 [node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource( 5 )]
+visible = false
 margin_left = 265.0
 margin_right = 265.0
 margin_bottom = 0.0

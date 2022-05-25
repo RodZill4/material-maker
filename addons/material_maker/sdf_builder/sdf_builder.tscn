@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -35,6 +35,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/extrusion.gd" type="Script" id=33]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" type="Script" id=36]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -132,6 +133,11 @@ script = ExtResource( 14 )
 item_type = "NGon"
 item_category = "SDF2D"
 icon = SubResource( 11 )
+
+[node name="Polygon" type="Node" parent="SDF2D/Shape"]
+script = ExtResource( 36 )
+item_type = "Polygon"
+item_category = "SDF2D"
 
 [node name="Star" type="Node" parent="SDF2D/Shape"]
 script = ExtResource( 16 )

@@ -304,6 +304,12 @@ func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : S
 	set_node_parameters($GenSDF, { variable:new_value })
 	ignore_parameter_change = ""
 
+func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
+	ignore_parameter_change = variable
+	$GenSDF.set_parameter(variable, new_polygon)
+	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_polygon) })
+	ignore_parameter_change = ""
+
 func on_parameter_changed(p : String, v) -> void:
 	if ignore_parameter_change == p:
 		return
@@ -385,7 +391,7 @@ func move_item(item, dest, position):
 	var index = new_item.get_meta("scene").index
 	var parameters : Dictionary = {}
 	var angle_euler : Vector3 = new_transform.basis.get_euler()
-	parameters["n%d_angle_x" % index] = rad2deg(angle_euler.z)
+	parameters["n%d_angle" % index] = rad2deg(angle_euler.z)
 	parameters["n%d_angle_x" % index] = rad2deg(angle_euler.x)
 	parameters["n%d_angle_y" % index] = rad2deg(angle_euler.y)
 	parameters["n%d_angle_z" % index] = rad2deg(angle_euler.z)

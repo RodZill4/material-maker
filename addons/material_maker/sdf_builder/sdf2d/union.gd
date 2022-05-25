@@ -18,6 +18,9 @@ func get_parameter_defs():
 func get_includes():
 	return [ "rotate" ]
 
+func shape_code_pre(scene : Dictionary, uv : String = "$uv") -> String:
+	return ""
+
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
 	return ""
 
@@ -27,6 +30,7 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 	data.code += "float %s;\n" % output_name
 	var init_value = shape_code(scene, uv)
 	if init_value != "":
+		data.code += shape_code_pre(scene, uv)
 		data.code += "%s = %s;\n" % [ output_name, init_value ]
 		assigned = true
 	if editor:
