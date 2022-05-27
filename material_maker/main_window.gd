@@ -78,6 +78,8 @@ const MENU = [
 	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
 	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
 	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
+	{ menu="Edit", command="edit_select_sources", shortcut="Control+L", description="Select Sources" },
+	{ menu="Edit", command="edit_select_targets", shortcut="Control+Shift+L", description="Select Targets" },
 	{ menu="Edit" },
 	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
 	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
@@ -762,6 +764,36 @@ func edit_select_invert() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.select_invert()
+
+func edit_select_connected(end1 : String, end2 : String) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var node_list : Array = []
+	for n in graph_edit.get_selected_nodes():
+		node_list.push_back(n.name)
+	print(node_list)
+	while !node_list.empty():
+		var new_node_list = []
+		for c in graph_edit.get_connection_list():
+			if c[end1] in node_list:
+				var source = graph_edit.get_node(c[end2])
+				if !source.selected:
+					new_node_list.push_back(c[end2])
+					source.selected = true
+		node_list = new_node_list
+
+func edit_select_sources_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit.get_selected_nodes().empty()
+
+func edit_select_sources() -> void:
+	edit_select_connected("to", "from")
+
+func edit_select_targets_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit.get_selected_nodes().empty()
+
+func edit_select_targets() -> void:
+	edit_select_connected("from", "to")
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
