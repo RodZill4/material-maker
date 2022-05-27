@@ -64,14 +64,15 @@ func _input(event: InputEvent) -> void:
 		queue_free()
 		node.generator.remove_parameter(param_name)
 	if event is InputEventMouseMotion:
-		var control = find_control(event.global_position)
-		end = get_global_transform().xform_inv(event.global_position)
+		var mouse_global_position = get_global_mouse_position()
+		var control = find_control(mouse_global_position)
+		end = get_global_transform().xform_inv(mouse_global_position)
 		target = control.widget if control != null and !control.empty() and node.generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		update()
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
-				var control = find_control(event.global_position)
+				var control = find_control(get_global_mouse_position())
 				if !control.empty():
 					node.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
