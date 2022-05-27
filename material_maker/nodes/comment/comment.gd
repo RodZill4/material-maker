@@ -31,7 +31,9 @@ func set_generator(g) -> void:
 	rect_size = generator.size
 	title = generator.title
 	set_color(generator.color)
-	resize_to_selection()
+	
+	if get_node("/root/MainWindow").get_config("auto_size_comment"):
+		resize_to_selection()
 
 func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
