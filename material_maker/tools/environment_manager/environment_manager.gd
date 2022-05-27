@@ -186,16 +186,6 @@ func read_hdr(index : int, url : String) -> bool:
 		accept_dialog.popup_centered()
 	return false
 
-"""
-func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):
-	set_hdr(index, $HTTPRequest.download_file)
-	progress_window.queue_free()
-	progress_window = null
-	set_physics_process(false)
-	update_thumbnail(index)
-	emit_signal("environment_updated", index)
-"""
-
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 

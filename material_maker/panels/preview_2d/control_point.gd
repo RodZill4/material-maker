@@ -168,10 +168,8 @@ func update_position(value : Vector2) -> void:
 
 func _on_Point_gui_input(event : InputEvent):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
-		var parent_value = get_parent_value()
 		var new_pos = rect_position+event.position
 		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
-		var check_new_pos = get_parent().value_to_pos(value, true, apply_local_transform)
 		if parent_control_node != null:
 			value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
 		if event.control:

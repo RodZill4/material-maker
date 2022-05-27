@@ -219,6 +219,7 @@ func on_config_changed() -> void:
 	OS.vsync_enabled = get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
+# warning-ignore:narrowing_conversion
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 	# locale
 	var locale = get_config("locale")
@@ -235,6 +236,7 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.0)
+# warning-ignore:narrowing_conversion
 	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
@@ -846,12 +848,11 @@ func make_selected_nodes_editable() -> void:
 				n.update_node()
 
 func create_menu_add_to_library(menu, manager, function) -> void:
-	var gens = mm_loader.get_generator_list()
 	menu.clear()
 	for i in manager.get_child_count():
-		var library = manager.get_child(i)
-		if ! library.read_only:
-			menu.add_item(library.library_name, i)
+		var lib = manager.get_child(i)
+		if ! lib.read_only:
+			menu.add_item(lib.library_name, i)
 	if !menu.is_connected("id_pressed", self, function):
 		menu.connect("id_pressed", self, function)
 
@@ -1085,9 +1086,11 @@ func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
+# warning-ignore:narrowing_conversion
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
 			# Return to the normal FPS limit when the window is focused.
+# warning-ignore:narrowing_conversion
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")

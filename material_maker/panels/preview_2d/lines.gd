@@ -51,7 +51,7 @@ func _draw() -> void:
 		6:
 			draw_grid(16)
 		1000:
-			draw_grid(snap)
+			draw_grid(int(snap))
 
 func set_style(s : int) -> void:
 	snap = 0.0

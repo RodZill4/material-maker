@@ -19,7 +19,7 @@ func _ready():
 		default_library_item = main_window.config_cache.get_value("library", "quick_button_%d" % get_index())
 	set_library_item(default_library_item)
 
-func can_drop_data(position, data):
+func can_drop_data(_position, _data):
 	return true
 
 func set_library_item(li : String):
@@ -28,7 +28,7 @@ func set_library_item(li : String):
 		material.set_shader_param("tex", library_item.icon)
 		hint_tooltip = library_item.item.tree_item
 
-func drop_data(position, data):
+func drop_data(_position, data):
 	set_library_item(data)
 	var main_window = get_node("/root/MainWindow")
 	main_window.config_cache.set_value("library", "quick_button_%d" % get_index(), data)

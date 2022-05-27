@@ -1,8 +1,6 @@
 extends VBoxContainer
 
 export var library_manager_name = ""
-export var base_library_name = "base.json"
-export var user_library_name = "user.json"
 
 var expanded_items : Array = []
 

@@ -139,7 +139,7 @@ func _gui_input(event : InputEvent) -> void:
 				start_value = value
 				modifiers = get_modifiers(event)
 
-func _on_LineEdit_text_changed(new_text : String) -> void:
+func _on_LineEdit_text_changed(_new_text : String) -> void:
 	pass
 
 func _on_LineEdit_text_entered(new_text : String, release = true) -> void:

@@ -11,6 +11,7 @@ class Preview:
 		output_index = i
 
 
+# warning-ignore:unused_class_variable
 export(String, MULTILINE) var shader_context_defs : String = ""
 
 var node_factory = null
@@ -27,7 +28,6 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -937,17 +937,17 @@ func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2
 	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
 	undoredo.add("Move nodes", [undo_action], [redo_action], true)
 
-func set_node_parameters(generator, parameters : Dictionary):
-	var hier_name = generator.get_hier_name()
+func set_node_parameters(node, parameters : Dictionary):
+	var hier_name = node.get_hier_name()
 	var prev_params : Dictionary = {}
 	for p in parameters.keys():
-		var prev_value = MMType.serialize_value(generator.get_parameter(p))
+		var prev_value = MMType.serialize_value(node.get_parameter(p))
 		if parameters[p] != prev_value:
-			generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+			node.set_parameter(p, MMType.deserialize_value(parameters[p]))
 		prev_params[p] = prev_value
 	if ! prev_params.empty():
-		var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
-		var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
+		var undo_action = { type="setparams", node=hier_name, params=prev_params }
+		var redo_action = { type="setparams", node=hier_name, params=parameters }
 		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
 
 func undoredo_merge(action_name, undo_actions, redo_actions, last_action):

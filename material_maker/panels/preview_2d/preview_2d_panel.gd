@@ -2,6 +2,7 @@ extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
 export(String, MULTILINE) var shader_accumulate : String = ""
 export(String, MULTILINE) var shader_divide : String = ""
+# warning-ignore:unused_class_variable
 export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)

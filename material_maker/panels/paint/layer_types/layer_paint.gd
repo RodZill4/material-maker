@@ -1,25 +1,44 @@
 extends "res://material_maker/panels/paint/layer_types/layer.gd"
 
+# warning-ignore:unused_class_variable
 var albedo : Texture
+# warning-ignore:unused_class_variable
 var mr : Texture
+# warning-ignore:unused_class_variable
 var emission : Texture
+# warning-ignore:unused_class_variable
 var normal : Texture
+# warning-ignore:unused_class_variable
 var do : Texture
 
+# warning-ignore:unused_class_variable
 var albedo_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var metallic_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var roughness_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var emission_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var normal_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var depth_alpha : float = 1.0
+# warning-ignore:unused_class_variable
 var occlusion_alpha : float = 1.0
 
+# warning-ignore:unused_class_variable
 var albedo_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var metallic_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var roughness_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var emission_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var normal_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var depth_color_rects : Array = []
+# warning-ignore:unused_class_variable
 var occlusion_color_rects : Array = []
 
 func get_layer_type() -> int:

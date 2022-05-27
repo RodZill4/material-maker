@@ -84,7 +84,7 @@ func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : 
 	var data = { type=asset_type, image=png_data, json=JSON.print(asset_data) }
 	send_data(JSON.print(data))
 
-func _process(delta):
+func _process(_delta):
 	websocket_server.poll()
 
 const PACKET_SIZE : int = 64000
@@ -99,6 +99,7 @@ func send_data(data : String):
 		yield(get_tree(), "idle_frame")
 		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_END%".to_utf8())
 
+# warning-ignore:unused_argument
 func _on_client_connected(id: int, protocol: String) -> void:
 	if websocket_id == -1:
 		websocket_id = id
@@ -114,6 +115,7 @@ func _on_client_connected(id: int, protocol: String) -> void:
 		send_data(JSON.print(data))
 
 
+# warning-ignore:unused_argument
 func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
 	if websocket_id == id:
 		websocket_id = -1
