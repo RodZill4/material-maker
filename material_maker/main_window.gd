@@ -122,10 +122,15 @@ const DEFAULT_CONFIG = {
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
 	ui_3d_preview_sun_shadow = false,
+	bake_cage_f_distance = 0.05,
+	bake_cage_r_distance = 0.2,
+	bake_smooth_cage = true,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
-	bake_denoise_radius = 3
+	bake_denoise_radius = 3,
+	bake_ao_cosine_distribution = true,
+	bake_normalize_bentnormal = false
 }
 
 func _ready() -> void:
