@@ -39,14 +39,14 @@ class GradientCursor:
 				var parent = get_parent()
 				parent.remove_child(self)
 				parent.continuous_change = false
-				parent.update_value()
+				parent.update_from_value()
 				queue_free()
 		elif ev is InputEventMouseMotion and (ev.button_mask & BUTTON_MASK_LEFT) != 0 and sliding:
 			rect_position.x += get_local_mouse_position().x
 			if ev.control:
 				rect_position.x = round(get_cursor_position()*20.0)*0.05*(get_parent().rect_size.x - WIDTH)
 			rect_position.x = min(max(0, rect_position.x), get_parent().rect_size.x-rect_size.x)
-			get_parent().update_value()
+			get_parent().update_from_value()
 			label.text = "%.03f" % get_cursor_position()
 
 	func get_cursor_position() -> float:
@@ -54,7 +54,7 @@ class GradientCursor:
 
 	func set_color(c) -> void:
 		color = c
-		get_parent().update_value()
+		get_parent().update_from_value()
 		update()
 
 	static func sort(a, b) -> bool:
@@ -104,7 +104,7 @@ func can_drop_data(_position : Vector2, data) -> bool:
 func drop_data(_position : Vector2, data) -> void:
 	var gradient = get_gradient_from_data(data)
 	if gradient != null:
-		set_value(MMType.deserialize_value(gradient))
+		set_value_and_update(MMType.deserialize_value(gradient), false)
 
 func set_value(v, from_popup : bool = false) -> void:
 	value = v
@@ -119,13 +119,7 @@ func set_value(v, from_popup : bool = false) -> void:
 	if !from_popup and popup != null:
 		popup.init(value)
 
-func do_set_value(v, cc : bool = true) -> void:
-	if ! cc:
-		continuous_change = false
-	set_value(v, true)
-	update_value()
-
-func update_value() -> void:
+func update_from_value() -> void:
 	value.clear()
 	for c in get_children():
 		if c is GradientCursor:
@@ -133,6 +127,12 @@ func update_value() -> void:
 	update_shader()
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
+
+func set_value_and_update(v, cc : bool = true) -> void:
+	if ! cc:
+		continuous_change = false
+	set_value(v, true)
+	update_from_value()
 
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
@@ -146,7 +146,7 @@ func _gui_input(ev) -> void:
 			var p = clamp(ev.position.x, 0, rect_size.x-GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))
 			continuous_change = false
-			update_value()
+			update_from_value()
 		elif embedded:
 			popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instance()
 			add_child(popup)
@@ -154,7 +154,7 @@ func _gui_input(ev) -> void:
 			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
 			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
 			popup.init(value)
-			popup.connect("updated", self, "do_set_value")
+			popup.connect("updated", self, "set_value_and_update")
 			popup.connect("popup_hide", popup, "queue_free")
 
 # Showing a color picker popup to change a cursor's color
