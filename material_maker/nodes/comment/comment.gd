@@ -12,6 +12,8 @@ var pallette_colors = [
 	Color("B1A7F0")
 ]
 
+const AUTO_SIZE_PADDING : int = 22
+
 func _ready():
 	for s in [ "comment", "commentfocus" ]:
 		var frame : StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
@@ -29,6 +31,7 @@ func set_generator(g) -> void:
 	rect_size = generator.size
 	title = generator.title
 	set_color(generator.color)
+	resize_to_selection()
 
 func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
@@ -36,6 +39,40 @@ func _on_resize_request(new_size : Vector2) -> void:
 		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
 	rect_size = new_size
 	generator.size = new_size
+
+func resize_to_selection() -> void:
+	# If any nodes are selected on initialization automatically adjust size to match
+	var parent : GraphEdit = get_parent()
+	var selected_nodes : Array = parent.get_selected_nodes()
+	
+	if not selected_nodes.empty():
+		var min_bounds : Vector2 = Vector2(INF, INF)
+		var max_bounds : Vector2 = Vector2(-INF, -INF)
+		for node in selected_nodes:
+			var node_pos : Vector2 = node.offset
+			var node_size : Vector2 = node.get_size()
+			
+			# Top-left corner
+			if node_pos.x < min_bounds.x:
+				min_bounds.x = node_pos.x
+			if node_pos.y < min_bounds.y:
+				min_bounds.y = node_pos.y
+				
+			# Bottom-right corner
+			var bottom_right : Vector2 = Vector2(node_pos.x + node_size.x, node_pos.y + node_size.y)
+			if bottom_right.x > max_bounds.x:
+				max_bounds.x = bottom_right.x
+			if bottom_right.y > max_bounds.y:
+				max_bounds.y = bottom_right.y
+				
+		offset = Vector2(min_bounds.x - AUTO_SIZE_PADDING, min_bounds.y - AUTO_SIZE_PADDING)
+		
+		# Size needs to account for offset padding as well (Padding * 2)
+		var new_size : Vector2 = Vector2(max_bounds.x - min_bounds.x + AUTO_SIZE_PADDING * 2,
+										 max_bounds.y - min_bounds.y + AUTO_SIZE_PADDING * 2)
+		
+		rect_size = new_size
+		generator.size = new_size
 
 func _on_Label_gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.doubleclick and ev.button_index == BUTTON_LEFT:
