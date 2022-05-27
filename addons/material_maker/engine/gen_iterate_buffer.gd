@@ -80,6 +80,8 @@ func follow_input(input_index : int) -> Array:
 		return .follow_input(input_index)
 
 func update_shader(input_port_index : int) -> void:
+	if ! is_instance_valid(self):
+		return
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(input_port_index)
