@@ -276,6 +276,9 @@ func _on_Guides_id_pressed(id):
 		color_picker_popup.popup()
 	else:
 		$Guides.style = id
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_2d_preview_change_grid")
 
 func _on_GridSize_value_changed(value):
 	$Guides.show_grid(value)

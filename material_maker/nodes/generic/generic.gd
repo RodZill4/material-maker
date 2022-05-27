@@ -8,8 +8,14 @@ var output_count = 0
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 
+
+const PARAM_ACHIEVEMENTS = {
+	"math/op/19": "ui_math_circle",
+}
+
 func _ready() -> void:
 	add_to_group("updated_from_locale")
+
 
 func _draw() -> void:
 	._draw()
@@ -128,6 +134,10 @@ func set_generator_parameter_ext(variable : String, value, old_value, merge_undo
 			var undo_command = { type="setparams", node=node_hier_name, params={ variable:old_value } }
 			var redo_command = { type="setparams", node=node_hier_name, params={ variable:serialized_value } }
 			get_parent().undoredo.add("Set parameter value", [ undo_command ], [ redo_command ], merge_undo)
+			if generator.model != null:
+				var id = generator.model+"/"+variable+"/"+str(value)
+				if PARAM_ACHIEVEMENTS.has(id):
+					unlock_achievement(PARAM_ACHIEVEMENTS[id])
 
 func set_generator_parameter(variable : String, value, merge_undo : bool = false):
 	var old_value = MMType.serialize_value(generator.get_parameter(variable))
@@ -539,6 +549,11 @@ func on_mouse_entered():
 func on_mouse_exited():
 	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
 		preview.visible = true
+
+func unlock_achievement(achievement_name : String) -> void:
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock(achievement_name)
 
 func update_from_locale() -> void:
 	update_title()

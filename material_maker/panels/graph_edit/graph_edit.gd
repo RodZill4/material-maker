@@ -683,6 +683,9 @@ func drop_data(position, data) -> void:
 		do_paste({type="colorize", gradient=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_dropnode")
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator and generator.get_parent() is MMGenGraph:
@@ -703,6 +706,10 @@ func create_subgraph() -> void:
 	undoredo_create_step("Create subgraph", generator.get_hier_name(), prev, next)
 	if subgraph != null:
 		update_view(subgraph)
+	if generators.size() >= 5:
+		var achievements = get_node("/root/MainWindow/Achievements")
+		if achievements != null:
+			achievements.unlock("ui_group")
 
 
 func _on_ButtonShowTree_pressed() -> void:

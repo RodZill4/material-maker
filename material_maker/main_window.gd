@@ -41,6 +41,8 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+onready var achievements = $Achievements
+
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
 const IDLE_FPS_LIMIT_MIN = 1
@@ -106,6 +108,7 @@ const MENU = [
 
 	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
 	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
+	{ menu="Help", command="show_achievements", description="Show achievements" },
 	{ menu="Help", command="bug_report", description="Report a bug" },
 	{ menu="Help" },
 	{ menu="Help", command="about", description="About" }
@@ -205,6 +208,8 @@ func _ready() -> void:
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
+	
+	$Achievements.set_config(config_cache)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
@@ -887,6 +892,7 @@ func add_selection_to_library(index) -> void:
 	var image : Image = result.get_image()
 	result.release(self)
 	node_library_manager.add_item_to_library(index, status.text, image, data)
+	achievements.unlock("ui_warehousemanager")
 
 func create_menu_add_brush_to_library(menu) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
@@ -951,6 +957,7 @@ func show_doc() -> void:
 	var doc_dir = get_doc_dir()
 	if doc_dir != "":
 		OS.shell_open(doc_dir+"/index.html")
+		achievements.unlock("ui_doc")
 
 func show_doc_is_disabled() -> bool:
 	return get_doc_dir() == ""
@@ -969,6 +976,12 @@ func show_library_item_doc() -> void:
 
 func show_library_item_doc_is_disabled() -> bool:
 	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
+
+func show_achievements() -> void:
+	var dialog = load("res://material_maker/tools/achievements/achievements_window.tscn").instance()
+	dialog.set_achievements($Achievements.ACHIEVEMENTS, $Achievements.unlocked)
+	add_child(dialog)
+	dialog.popup_centered()
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")

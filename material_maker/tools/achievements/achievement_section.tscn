@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://material_maker/tools/achievements/achievement_section.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.501961, 0.501961, 0.501961, 0.25098 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 0.501961, 0.501961, 0.501961, 0.25098 )
+
+[node name="AchievementSection" type="Label"]
+margin_right = 679.0
+margin_bottom = 34.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+custom_styles/normal = SubResource( 1 )
+text = "User interface"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="gui_input" from="." to="." method="_on_AchievementSection_gui_input"]

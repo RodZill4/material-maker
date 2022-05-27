@@ -58,7 +58,9 @@ func add_node(node_data) -> void:
 	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
-
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_createnode")
 
 func object_selected(obj) -> void:
 	add_node(obj)

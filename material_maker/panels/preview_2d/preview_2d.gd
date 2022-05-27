@@ -199,6 +199,9 @@ func _on_Reference_id_pressed(id : int):
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	get_node("/root/MainWindow").get_panel("Reference").add_reference(texture)
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock("ui_2d_preview_to_reference")
 
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():

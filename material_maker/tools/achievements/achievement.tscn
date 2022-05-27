@@ -1,0 +1,82 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://material_maker/tools/achievements/mmcup.png" type="Texture" id=1]
+[ext_resource path="res://material_maker/tools/achievements/achievement.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float c = 0.0;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25), color, c);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/c = 0.0
+
+[node name="Achievement" type="Panel"]
+margin_right = 359.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 70 )
+size_flags_horizontal = 3
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 3.0
+margin_right = -3.0
+margin_bottom = -3.0
+mouse_filter = 2
+custom_constants/separation = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+margin_right = 285.0
+margin_bottom = 64.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/margin_right = 3
+custom_constants/margin_top = 3
+custom_constants/margin_left = 3
+custom_constants/margin_bottom = 3
+
+[node name="Text" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 282.0
+margin_bottom = 61.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="Title" type="Label" parent="HBoxContainer/MarginContainer/Text"]
+margin_right = 279.0
+margin_bottom = 14.0
+
+[node name="Text" type="Label" parent="HBoxContainer/MarginContainer/Text"]
+modulate = Color( 1, 1, 1, 0.627451 )
+margin_top = 14.0
+margin_right = 279.0
+margin_bottom = 58.0
+size_flags_vertical = 3
+valign = 1
+autowrap = true
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+material = SubResource( 2 )
+margin_left = 289.0
+margin_right = 353.0
+margin_bottom = 64.0
+mouse_filter = 2
+texture = ExtResource( 1 )

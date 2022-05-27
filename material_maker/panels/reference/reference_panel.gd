@@ -23,6 +23,7 @@ func on_drop_image_file(file_name : String) -> void:
 func add_reference(t : Texture) -> void:
 	images.insert(current_image+1, { texture=t, scale=1.0, center=Vector2(0.5, 0.5) })
 	change_image(1)
+	unlock_achievement("ui_add_reference")
 
 func get_color_under_cursor() -> Color:
 	var image : Image = get_viewport().get_texture().get_data()
@@ -71,6 +72,8 @@ func _on_Image_gui_input(event) -> void:
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
+			if gradient != null:
+				unlock_achievement("ui_reference_sample gradient")
 			gradient = null
 			dragging = false
 			zooming = false
@@ -158,3 +161,8 @@ func _on_ContextMenu_index_pressed(index):
 		1:
 			images.remove(current_image)
 			change_image(0)
+
+func unlock_achievement(achievement_name : String) -> void:
+	var achievements = get_node("/root/MainWindow/Achievements")
+	if achievements != null:
+		achievements.unlock(achievement_name)
