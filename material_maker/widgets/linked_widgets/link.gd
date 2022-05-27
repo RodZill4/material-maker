@@ -63,12 +63,14 @@ func _input(event: InputEvent) -> void:
 		set_process_input(false)
 		queue_free()
 		node.generator.remove_parameter(param_name)
-	if event is InputEventMouseMotion:
+		get_tree().set_input_as_handled()
+	elif event is InputEventMouseMotion:
 		var mouse_global_position = get_global_mouse_position()
 		var control = find_control(mouse_global_position)
 		end = get_global_transform().xform_inv(mouse_global_position)
 		target = control.widget if control != null and !control.empty() and node.generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		update()
+		get_tree().set_input_as_handled()
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
@@ -77,6 +79,6 @@ func _input(event: InputEvent) -> void:
 					node.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
 					node.generator.remove_parameter(param_name)
-			set_process_input(false)
-			queue_free()
-	get_tree().set_input_as_handled()
+				set_process_input(false)
+				queue_free()
+				get_tree().set_input_as_handled()
