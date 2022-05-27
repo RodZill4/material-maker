@@ -14,6 +14,13 @@ onready var viewport_container : ViewportContainer = $VBoxContainer/HBoxContaine
 onready var viewport : Viewport = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport
 onready var texture_rect : TextureRect = $VBoxContainer/HBoxContainer/ViewportContainer/TextureRect
 
+
+const CAMERA_DISTANCE_MIN = 0.5
+const CAMERA_DISTANCE_MAX = 150.0
+const CAMERA_FOV_MIN = 10
+const CAMERA_FOV_MAX = 90
+
+
 signal return_status(status)
 
 
@@ -116,13 +123,26 @@ func update_mask_from_mouse_position(mouse_position : Vector2):
 	renderer.copy_to_texture(mask)
 	renderer.release(self)
 
+func zoom(amount : float):
+	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
+
 func _on_ViewportContainer_gui_input(event):
 	if event is InputEventMouseMotion:
 		if event.button_mask == BUTTON_MASK_MIDDLE:
 			mesh_instance.rotation.y += 0.01*event.relative.x
 			camera_pivot.rotation.x -= 0.01*event.relative.y
 	elif event is InputEventMouseButton:
-		if event.pressed and event.button_index == BUTTON_LEFT and idmap_filename != "":
+		if event.button_index == BUTTON_WHEEL_UP:
+			if event.command:
+				camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+			else:
+				zoom(1.0 / (1.01 if event.shift else 1.1))
+		elif event.button_index == BUTTON_WHEEL_DOWN:
+			if event.command:
+				camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
+			else:
+				zoom(1.01 if event.shift else 1.1)
+		elif event.pressed and event.button_index == BUTTON_LEFT and idmap_filename != "":
 			update_mask_from_mouse_position(viewport_container.get_local_mouse_position())
 
 func _on_OK_pressed():
@@ -165,4 +185,5 @@ func ask(parameters : Dictionary) -> String:
 	queue_free()
 	return result
 
-
+func _on_VBoxContainer_minimum_size_changed():
+	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
