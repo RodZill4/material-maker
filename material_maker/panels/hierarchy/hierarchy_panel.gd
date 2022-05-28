@@ -46,7 +46,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
 		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
-	if current_generator != null and is_instance_valid(current_generator):
+	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed", self, "on_hierarchy_changed"):
 		current_generator.disconnect("hierarchy_changed", self, "on_hierarchy_changed")
 	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
 		current_graph_edit = null
