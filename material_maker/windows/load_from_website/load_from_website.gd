@@ -44,7 +44,7 @@ func fill_list(filter : String):
 	var item_index : int = 0
 	for i in range(assets.size()):
 		var m = assets[i]
-		if filter == "" or m.name.to_lower().find(filter.to_lower()) != -1:
+		if filter == "" or m.name.to_lower().find(filter.to_lower()) != -1 or m.tags.to_lower().find(filter.to_lower()) != -1:
 			item_list.add_item(m.name)
 			item_list.set_item_icon(item_index, m.texture)
 			displayed_assets.push_back(m.id)
