@@ -24,7 +24,6 @@ tracks/0/keys = {
 }
 
 [node name="NewPainterWindow" type="WindowDialog"]
-visible = true
 margin_right = 520.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 400, 250 )
@@ -67,6 +66,7 @@ margin_left = 76.0
 margin_right = 157.0
 margin_bottom = 20.0
 text = "Model file"
+clip_text = true
 
 [node name="ResolutionLabel" type="Label" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
 margin_top = 27.0
@@ -95,6 +95,7 @@ margin_top = 48.0
 margin_right = 157.0
 margin_bottom = 68.0
 text = "Project file"
+clip_text = true
 
 [node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/Main"]
 margin_left = 161.0
@@ -106,7 +107,7 @@ stretch = true
 [node name="Viewport" type="Viewport" parent="VBoxContainer/Main/ViewportContainer"]
 size = Vector2( 359, 256 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 
 [node name="MeshPivot" type="Spatial" parent="VBoxContainer/Main/ViewportContainer/Viewport"]
 
@@ -124,6 +125,14 @@ transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0 )
 [node name="Camera" type="Camera" parent="VBoxContainer/Main/ViewportContainer/Viewport/CameraPivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5 )
 far = 50.0
+
+[node name="Error" type="Label" parent="VBoxContainer/Main/ViewportContainer"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 40.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 260.0
