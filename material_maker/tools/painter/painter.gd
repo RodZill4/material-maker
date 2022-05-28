@@ -1,11 +1,16 @@
 extends Node
 
+var texture_size : float = 0
+
 onready var view_to_texture_viewport = $View2Texture
 onready var view_to_texture_mesh = $View2Texture/PaintedMesh
 onready var view_to_texture_camera = $View2Texture/Camera
+var view_to_texture_image : Image
 
 onready var texture_to_view_viewport = $Texture2View
 onready var texture_to_view_mesh = $Texture2View/PaintedMesh
+onready var texture_to_view_texture : ImageTexture = ImageTexture.new()
+onready var texture_to_view_postprocess : ShaderMaterial = preload("res://material_maker/tools/painter/shaders/texture2view_postprocess.tres")
 
 onready var mesh_seams_tex : ImageTexture = ImageTexture.new()
 
@@ -15,7 +20,15 @@ onready var emission_viewport = $EmissionPaint
 onready var normal_viewport = $NormalPaint
 onready var do_viewport = $DOPaint
 onready var mask_viewport = $MaskPaint
-onready var viewports = [ albedo_viewport, mr_viewport, emission_viewport, normal_viewport, do_viewport, mask_viewport ]
+const viewport_names : Array = [ "albedo", "mr", "emission", "normal", "do", "mask" ]
+onready var viewports : Dictionary = {
+	albedo=albedo_viewport,
+	mr=mr_viewport,
+	emission=emission_viewport,
+	normal=normal_viewport,
+	do=do_viewport,
+	mask=mask_viewport
+}
 
 var camera
 var transform
@@ -23,18 +36,13 @@ var viewport_size
 
 var brush_node = null
 var brush_params = {
-	brush_size = Vector2(1.0, 1.0),
+	brush_size = 1.0,
 	brush_hardness = 0.5,
 	pattern_scale  = 10.0,
 	pattern_angle  = 0.0
 }
 
-var has_albedo   : bool = false
-var has_mr       : bool = false
-var has_emission : bool = false
-var has_normal   : bool = false
-var has_do       : bool = false
-var has_mask     : bool = false
+var has_channel : Dictionary = {}
 
 var brush_preview_material : ShaderMaterial
 var pattern_shown : bool = false
@@ -43,32 +51,36 @@ var brush_textures : Dictionary = {}
 var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
 var mesh_normal_tex : ImageTexture = null
-
+var mesh_tangent_tex : ImageTexture = null
 
 const VIEW_TO_TEXTURE_RATIO = 2.0
 
+# shader files
+var shader_files : Dictionary = {}
+const CACHE_SHADER_FILES : bool = false
 
-signal painted()
+
+signal painted(painted_channels)
+signal end_of_stroke(stroke_state)
 
 
 func _ready():
 	var v2t_tex = view_to_texture_viewport.get_texture()
-	var t2v_tex = texture_to_view_viewport.get_texture()
 	# shader debug
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
-	for index in range(viewports.size()):
-		viewports[index].set_intermediate_textures(t2v_tex, mesh_seams_tex)
+	for v in viewports.keys():
+		viewports[v].set_intermediate_textures(texture_to_view_texture, mesh_seams_tex)
 
-func update_seams_texture():
+func update_seams_texture(_m : Mesh = null) -> void:
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
 	add_child(map_renderer)
-	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_to_view_viewport.size.x)
+	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	map_renderer.queue_free()
@@ -78,12 +90,17 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	add_child(map_renderer)
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
-	var result = map_renderer.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_to_view_viewport.size.x)
+	var result = map_renderer.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
-	result = map_renderer.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_to_view_viewport.size.x)
+	result = map_renderer.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if mesh_tangent_tex == null:
+		mesh_tangent_tex = ImageTexture.new()
+	result = map_renderer.gen(m, "mesh_tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	map_renderer.queue_free()
@@ -97,12 +114,10 @@ func set_mesh(m : Mesh):
 	mat = view_to_texture_mesh.get_surface_material(0)
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_material(0, mat)
-	var result = update_seams_texture()
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	result = update_inv_uv_texture(m)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	for init_fct in [ "update_seams_texture", "update_inv_uv_texture" ]:
+		var result = call(init_fct, m)
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
 
 func calculate_mask(value : float, channel : int) -> Color:
 	if (channel == SpatialMaterial.TEXTURE_CHANNEL_RED):
@@ -160,16 +175,20 @@ func init_textures(m : SpatialMaterial):
 		init_do_texture(Color(0.0, 1.0, 0.0, 0.0), null)
 
 func set_texture_size(s : float):
-	if texture_to_view_viewport.size.x != s:
+	if texture_size != s:
+		texture_size = s
 		texture_to_view_viewport.size = Vector2(s, s)
-		for index in range(viewports.size()):
-			viewports[index].set_texture_size(s)
+		for v in viewports.keys():
+			viewports[v].set_texture_size(s)
 		update_seams_texture()
 
 func update_view(c, t, s):
 	camera = c
 	transform = t
 	viewport_size = s
+	brush_params.view_back = transform.basis.xform_inv(Vector3(0.0, 0.0, 1.0)).normalized()
+	brush_params.view_right = transform.basis.xform_inv(Vector3(1.0, 0.0, 0.0)).normalized()
+	brush_params.view_up = transform.basis.xform_inv(Vector3(0.0, 1.0, 0.0)).normalized()
 	update_tex2view()
 	update_brush()
 
@@ -193,6 +212,8 @@ func update_tex2view():
 	view_to_texture_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
+	view_to_texture_image.lock()
 	mat = texture_to_view_mesh.get_surface_material(0)
 	if true:
 		var shader_file = File.new()
@@ -202,9 +223,24 @@ func update_tex2view():
 	mat.set_shader_param("fovy_degrees", camera.fov)
 	mat.set_shader_param("z_near", camera.near)
 	mat.set_shader_param("z_far", camera.far)
+	mat.set_shader_param("texture_size", texture_size)
+	mat.set_shader_param("texel_tolerance", 16)
 	mat.set_shader_param("aspect", aspect)
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 	texture_to_view_viewport.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	texture_to_view_postprocess.set_shader_param("texture_size", texture_size)
+	texture_to_view_postprocess.set_shader_param("input_tex", texture_to_view_viewport.get_texture())
+	texture_to_view_postprocess.set_shader_param("seams_tex", mesh_seams_tex)
+	renderer = renderer.render_material(self, texture_to_view_postprocess, texture_size)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer.copy_to_texture(texture_to_view_texture)
+	renderer.release(self)
 
 # Brush methods
 
@@ -219,31 +255,39 @@ func set_brush_preview_material(m : ShaderMaterial) -> void:
 	brush_preview_material = m
 
 func get_brush_preview_shader(mode : String) -> String:
-	var file = File.new()
-	file.open("res://material_maker/tools/painter/shaders/brush_%s.shader" % mode, File.READ)
-	return file.get_as_text()
+	return mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/brush_%s.shader" % mode)
 
 func set_brush_angle(a) -> void:
 	brush_params.pattern_angle = a
 	update_brush()
+
+func update_brush_params(shader_params : Dictionary) -> void:
+	for p in shader_params.keys():
+		brush_params[p] = shader_params[p]
+		if brush_preview_material != null:
+			brush_preview_material.set_shader_param(p, brush_params[p])
 
 func show_pattern(b):
 	if pattern_shown != b:
 		pattern_shown = b
 		update_brush()
 
-func update_brush(update_shaders = false):
+func update_brush(update_shaders : bool = false):
 	#if brush_params.albedo_texture_mode != 2: $Pattern.visible = false
 	if brush_preview_material != null:
 		if update_shaders:
+			#var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush_%s.shader" % get_brush_mode()
+			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.shader"
 			var code : String = get_output_code(1)
-			update_shader(brush_preview_material, get_brush_preview_shader(get_brush_mode()), code)
+			update_shader(brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
 		var v2t_tex = view_to_texture_viewport.get_texture()
+		brush_preview_material.set_shader_param("rect_size", viewport_size)
 		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
 		brush_preview_material.set_shader_param("mesh_inv_uv_tex", mesh_inv_uv_tex)
 		brush_preview_material.set_shader_param("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_param("mesh_aabb_size", mesh_aabb.size)
 		brush_preview_material.set_shader_param("mesh_normal_tex", mesh_normal_tex)
+		brush_preview_material.set_shader_param("mesh_tangent_tex", mesh_tangent_tex)
 		brush_preview_material.set_shader_param("layer_albedo_tex", get_albedo_texture())
 		brush_preview_material.set_shader_param("layer_mr_tex", get_mr_texture())
 		brush_preview_material.set_shader_param("layer_emission_tex", get_emission_texture())
@@ -256,20 +300,26 @@ func update_brush(update_shaders = false):
 		return
 	# Mode
 	var mode : String = get_brush_mode()
-	has_albedo = brush_node.get_parameter("has_albedo")
-	has_mr = brush_node.get_parameter("has_metallic") or brush_node.get_parameter("has_roughness")
-	has_emission = brush_node.get_parameter("has_emission")
-	has_normal = brush_node.get_parameter("has_normal")
-	has_do = brush_node.get_parameter("has_depth") or brush_node.get_parameter("has_ao")
-	has_mask = true #brush_node.get_parameter("has_mask")
+	for c in [ "albedo", "emission", "normal" ]:
+		has_channel[c] = brush_node.get_parameter("has_"+c)
+	has_channel["mr"] = brush_node.get_parameter("has_metallic") or brush_node.get_parameter("has_roughness")
+	has_channel["do"] = brush_node.get_parameter("has_depth") or brush_node.get_parameter("has_ao")
+	has_channel["mask"] = true
 	# Update shaders
 	if update_shaders:
-		for index in range(viewports.size()):
-			update_shader(viewports[index].get_paint_material(), viewports[index].get_paint_shader(mode), get_output_code(index+1))
-			viewports[index].set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex)
-			viewports[index].set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
-	for index in range(viewports.size()):
-		viewports[index].set_brush(brush_params)
+		for index in viewport_names.size():
+			var viewport = viewports[viewport_names[index]]
+			var shader_file : String = "res://material_maker/tools/painter/shaders/paint.shader"
+			var code : String = get_output_code(index+1)
+			var defines : Dictionary = {}
+			defines.GENERATED_CODE = code
+			defines.TEXTURE_TYPE = "\""+viewport.get_shader_prefix()+"\""
+			defines.BRUSH_MODE = "\""+mode+"\""
+			update_shader(viewport.get_paint_material(), shader_file, defines)
+			viewport.set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
+			viewport.set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
+	for v in viewports.keys():
+		viewports[v].set_brush(brush_params)
 
 func get_output_code(index : int) -> String:
 	if brush_node == null or !is_instance_valid(brush_node):
@@ -305,57 +355,63 @@ func get_output_code(index : int) -> String:
 	new_code += "}\n"
 	return new_code
 
-func update_shader(shader_material : ShaderMaterial, shader_template : String, shader_code : String) -> void:
+func update_shader(shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
-	var new_code = shader_template.left(shader_template.find("// BEGIN_PATTERN"))+"// BEGIN_PATTERN\n"+shader_code+shader_template.right(shader_template.find("// END_PATTERN"))
-	shader_material.shader.code = new_code
+	shader_material.shader.code = mm_preprocessor.preprocess_file(shader_file, defines)
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
 	for t in brush_textures.keys():
 		shader_material.set_shader_param(t, brush_textures[t])
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
-	for index in range(viewports.size()):
-		mm_renderer.update_float_parameters(viewports[index].paint_material, parameter_changes)
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	for v in viewports.keys():
+		mm_renderer.update_float_parameters(viewports[v].paint_material, parameter_changes)
 	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
+	return true
 
-func update_brush_params(shader_params : Dictionary) -> void:
-	for p in shader_params.keys():
-		if p == "brush_size":
-			brush_params[p] = Vector2(shader_params.brush_size, shader_params.brush_size)/viewport_size
-		else:
-			brush_params[p] = shader_params[p]
-		if brush_preview_material != null:
-			brush_preview_material.set_shader_param(p, brush_params[p])
+func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true) -> void:
+	var active_viewports : Array = []
+	for v in viewports.keys():
+		if has_channel[v]:
+			active_viewports.push_back(v)
+			viewports[v].do_paint(shader_params, end_of_stroke)
+	var finished : bool = false
+	while ! finished:
+		yield(get_tree(), "idle_frame")
+		finished = true
+		for v in active_viewports:
+			if viewports[v].painting > 0:
+				finished = false
+				break
+	emit_signal("painted")
+	if end_of_stroke and emit_end_of_stroke:
+		var stroke_state = {}
+		for v in active_viewports:
+			stroke_state[v] = viewports[v].get_current_state()
+		emit_signal("end_of_stroke", stroke_state)
 
-func paint(shader_params : Dictionary) -> void:
-	if has_albedo:
-		albedo_viewport.do_paint(shader_params)
-	if has_mr:
-		mr_viewport.do_paint(shader_params)
-	if has_emission:
-		emission_viewport.do_paint(shader_params)
-	if has_normal:
-		normal_viewport.do_paint(shader_params)
-	if has_do:
-		do_viewport.do_paint(shader_params)
-	if has_mask:
-		mask_viewport.do_paint(shader_params)
+func set_state(s):
+	for c in s.keys():
+		if viewports.has(c):
+			viewports[c].init(Color(1, 1, 1, 1), s[c])
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	emit_signal("painted")
 
-func fill(erase : bool, reset : bool = false) -> void:
-	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset })
+
+func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) -> void:
+	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)
 
 func view_to_texture(position : Vector2) -> Vector2:
-	var view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
-	view_to_texture_image.lock()
-	var position_in_texture = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
-	position_in_texture = Vector2(position_in_texture.r, position_in_texture.g)
-	return position_in_texture
+	var position_in_texture : Color = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
+	if position_in_texture.r == position_in_texture.b && position_in_texture.g == position_in_texture.b:
+		return Vector2(-1, -1)
+	else:
+		return Vector2(position_in_texture.r, position_in_texture.g)
 
 func get_albedo_texture():
 	return albedo_viewport.get_texture()
@@ -379,7 +435,10 @@ func save_viewport(v : Viewport, f : String):
 	v.get_texture().get_data().save_png(f)
 
 func debug_get_texture_names():
-	return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
+	if OS.is_debug_build():
+		return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)", "Inv. UV map", "Mesh normal map", "Mesh tangent map" ]
+	else:
+		return [ "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
 
 # Localization strings
 # tr("View to texture")
@@ -393,11 +452,13 @@ func debug_get_texture_names():
 # tr("Mask (current layer)")
 
 func debug_get_texture(ID):
+	if ! OS.is_debug_build():
+		ID -= 3
 	match ID:
 		0:
 			return view_to_texture_viewport.get_texture()
 		1:
-			return texture_to_view_viewport.get_texture()
+			return texture_to_view_texture
 		2:
 			return mesh_seams_tex
 		3:
@@ -412,4 +473,13 @@ func debug_get_texture(ID):
 			return do_viewport.get_texture()
 		8:
 			return mask_viewport.get_texture()
+		9:
+			return mesh_inv_uv_tex
+		10:
+			return mesh_normal_tex
+		11:
+			return mesh_tangent_tex
+
+
+
 	return null

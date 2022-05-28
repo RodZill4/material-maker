@@ -6,20 +6,26 @@
 	},
 	"parameters": {
 		"fixed_offset": 0,
-		"offset": 1,
-		"overlap": 1,
-		"rotate": 180,
-		"scale": 0.5,
+		"inputs": 0,
+		"offset": 0.25,
+		"overlap": 2,
+		"rotate": 45,
+		"scale": 0.2,
 		"scale_x": 0.5,
 		"scale_y": 0.5,
-		"select_inputs": 0,
-		"tx": 20,
-		"ty": 20,
-		"value": 2
+		"tx": 4,
+		"ty": 4,
+		"value": 1,
+		"variations": false
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+		"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
 		"global": "",
+		"includes": [
+			"custom_uv"
+		],
 		"inputs": [
 			{
 				"default": "0.0",
@@ -40,7 +46,7 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = fract((floor(uv*tile)+vec2(float(dx), float(dy))+vec2(0.5))/tile-vec2(0.5));\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\tc = max(c, c1);\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\tc = max(c, c1);\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
 		"longdesc": "Tiles several occurences of an input image while adding randomness.",
 		"name": "Tiler",
 		"outputs": [
@@ -54,6 +60,12 @@
 				"longdesc": "Shows a random color for each instance of the input image",
 				"rgb": "$(name_uv)_rch.rgb",
 				"shortdesc": "Instance map",
+				"type": "rgb"
+			},
+			{
+				"longdesc": "Per instance UVs. Can be used with Custom UV node.",
+				"rgb": "$(name_uv)_instance_uv",
+				"shortdesc": "Instance UV",
 				"type": "rgb"
 			}
 		],
@@ -98,21 +110,21 @@
 				"default": 0,
 				"label": "Inputs",
 				"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
-				"name": "select_inputs",
+				"name": "inputs",
 				"shortdesc": "Input",
 				"type": "enum",
 				"values": [
 					{
 						"name": "1",
-						"value": " "
+						"value": " 1.0"
 					},
 					{
 						"name": "4",
-						"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+						"value": "2.0"
 					},
 					{
 						"name": "16",
-						"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+						"value": "4.0"
 					}
 				]
 			},

@@ -11,6 +11,7 @@ class Preview:
 		output_index = i
 
 
+# warning-ignore:unused_class_variable
 export(String, MULTILINE) var shader_context_defs : String = ""
 
 var node_factory = null
@@ -27,17 +28,19 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
 onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
+onready var undoredo = $UndoRedo
+var undoredo_move_node_selection_changed : bool = true
 
 signal save_path_changed
 signal graph_changed
 signal view_updated
 signal preview_changed
+
 
 
 func _ready() -> void:
@@ -69,13 +72,14 @@ func process_port_click(pressed : bool):
 			var rect : Rect2 = c.get_global_rect()
 			var pos = get_global_mouse_position()-rect.position
 			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-			if rect.has_point(get_global_mouse_position()):
+			var output_count : int = c.get_connection_output_count()
+			if rect.has_point(get_global_mouse_position()) and output_count > 0:
 				var scale = c.get_global_transform().get_scale()
 				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-				var output_2 : Vector2 = c.get_connection_output_position(c.get_connection_output_count()-1)+5*scale
+				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
 				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 				if in_output:
-					for i in range(c.get_connection_output_count()):
+					for i in range(output_count):
 						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
 							if pressed:
 								port_click_node = c
@@ -102,13 +106,14 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+		# reverted to default GraphEdit behavior
+		if false and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
 				event.control = true
 				do_zoom(1.1)
-		elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+		elif false and event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
 			if event.control:
 				event.control = false
 			elif !event.shift:
@@ -116,15 +121,24 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
-				if c.has_method("get_output_slot"):
-					var rect = c.get_global_rect()
-					rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-					if rect.has_point(get_global_mouse_position()):
+				if ! c is GraphNode:
+					continue
+				var rect = c.get_global_rect()
+				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				if rect.has_point(get_global_mouse_position()):
+					if c.has_method("get_input_slot"):
+						var slot = c.get_input_slot(get_global_mouse_position()-c.rect_global_position)
+						if slot >= 0:
+							# Tell the node its connector was clicked
+							if c.has_method("on_clicked_input"):
+								c.on_clicked_input(slot, Input.is_key_pressed(KEY_SHIFT))
+								return
+					if c.has_method("get_output_slot"):
 						var slot = c.get_output_slot(get_global_mouse_position()-c.rect_global_position)
-						if slot != -1:
+						if slot >= 0:
 							# Tell the node its connector was clicked
 							if c.has_method("on_clicked_output"):
-								c.on_clicked_output(slot)
+								c.on_clicked_output(slot, Input.is_key_pressed(KEY_SHIFT))
 								return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
@@ -163,29 +177,69 @@ func add_node(node) -> void:
 	move_child(node, 0)
 	node.connect("close_request", self, "remove_node", [ node ])
 
-func connect_node(from, from_slot, to, to_slot):
-	var from_node : MMGraphNodeBase = get_node(from)
-	var to_node : MMGraphNodeBase = get_node(to)
+func connect_node(from : String, from_slot : int, to : String, to_slot : int):
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
 	var connect_count = 1
 	var connected : bool = false
 	var out_ports = from_node.generator.get_output_defs()
 	var in_ports = to_node.generator.get_input_defs()
 	if out_ports[from_slot].has("group_size") and in_ports[to_slot].has("group_size") and out_ports[from_slot].group_size == in_ports[to_slot].group_size:
 		connect_count = out_ports[from_slot].group_size
+	var connect_list : Array = []
+	var disconnect_list : Array = []
 	for i in range(connect_count):
 		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
 			var disconnect = get_source(to, to_slot+i)
 			if !disconnect.empty():
 				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
+				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
 			.connect_node(from, from_slot+i, to, to_slot+i)
+			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})
 			connected = true
 	if connected:
+		var generator_hier_name : String = generator.get_hier_name()
+		var undo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=connect_list },
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=disconnect_list }
+		]
+		var redo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=disconnect_list },
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=connect_list }
+		]
+		undoredo.add("Connect nodes", undo_actions, redo_actions)
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
 
-func disconnect_node(from, from_slot, to, to_slot) -> void:
-	if generator.disconnect_children(get_node(from).generator, from_slot, get_node(to).generator, to_slot):
+func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	var from_gen = from_node.generator
+	var to_gen = to_node.generator
+	if generator.disconnect_children(from_gen, from_slot, to_gen, to_slot):
 		.disconnect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
+		return true
+	return false
+
+func disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
+	var from_gen = get_node(from).generator
+	var to_gen = get_node(to).generator
+	if do_disconnect_node(from, from_slot, to, to_slot):
+		var generator_hier_name : String = generator.get_hier_name()
+		var connection = {from=from_gen.name, from_port=from_slot, to=to_gen.name, to_port=to_slot}
+		var undo_actions = [
+			{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=[connection] }
+		]
+		var redo_actions = [
+			{ type="remove_connections", parent=generator_hier_name, connections=[connection] }
+		]
+		undoredo.add("Disconnect nodes", undo_actions, redo_actions)
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
@@ -194,6 +248,12 @@ func on_connections_changed(removed_connections : Array, added_connections : Arr
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 
 func remove_node(node) -> void:
+	var prev = generator.serialize()
+	do_remove_node(node)
+	var next = generator.serialize()
+	undoredo_create_step("Delete node", generator.get_hier_name(), prev, next)
+
+func do_remove_node(node) -> void:
 	for i in PREVIEW_COUNT:
 		if current_preview[i] != null and node.generator == current_preview[i].generator:
 			set_current_preview(i, null)
@@ -203,7 +263,7 @@ func remove_node(node) -> void:
 		var node_name = node.name
 		for c in get_connection_list():
 			if c.from == node_name or c.to == node_name:
-				disconnect_node(c.from, c.from_port, c.to, c.to_port)
+				do_disconnect_node(c.from, c.from_port, c.to, c.to_port)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
@@ -278,7 +338,7 @@ func center_view() -> void:
 		scroll_offset = center - 0.5*rect_size
 
 func update_view(g) -> void:
-	if generator != null:
+	if generator != null and is_instance_valid(generator):
 		generator.disconnect("connections_changed", self, "on_connections_changed")
 	clear_view()
 	generator = g
@@ -310,12 +370,12 @@ func clear_material() -> void:
 func update_graph(generators, connections) -> Array:
 	var rv = []
 	for g in generators:
-		var node = node_factory.create_node(g.get_template_name() if g.is_template() else "", g.get_type())
+		var node = node_factory.create_node(g)
 		if node != null:
 			node.name = "node_"+g.name
 			add_node(node)
 			node.generator = g
-		node.offset = g.position
+		node.do_set_position(g.position)
 		rv.push_back(node)
 	for c in connections:
 		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
@@ -341,22 +401,24 @@ func get_free_name(type) -> String:
 		i += 1
 	return ""
 
-func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
+func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if !data is Dictionary:
 		return []
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections)
-		var actions : Array = []
-		for g in new_stuff.generators:
-			g.position += position
-			actions.append({ action="add_node", node=g.name })
-		for c in new_stuff.connections:
-			actions.append({ action="add_connection", connection=c })
-		$UndoRedo.add_action("Add nodes and connections", actions)
-		return update_graph(new_stuff.generators, new_stuff.connections)
+		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
+		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
+		return return_value
 	return []
+
+func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
+	var prev = generator.serialize().duplicate(true)
+	var nodes = do_create_nodes(data, position)
+	if !nodes.empty():
+		var next = generator.serialize()
+		undoredo_create_step("Add and connect nodes", generator.get_hier_name(), prev, next)
+	return nodes
 
 func create_gen_from_type(gen_name) -> void:
 	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
@@ -486,9 +548,12 @@ func get_selected_nodes() -> Array:
 	return selected_nodes
 
 func remove_selection() -> void:
+	var prev = generator.serialize()
 	for c in get_children():
 		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
-			remove_node(c)
+			do_remove_node(c)
+	var next = generator.serialize()
+	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = []) -> Dictionary:
@@ -544,8 +609,12 @@ func do_paste(data) -> void:
 			c.selected = true
 
 func paste() -> void:
-	var data = OS.clipboard
-	if data.left(4) == "http":
+	var data = OS.clipboard.strip_edges()
+	var graph = null
+	if data.is_valid_html_color():
+		var color = Color(data)
+		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
+	elif data.left(4) == "http":
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
 		var error = http_request.request(data)
@@ -553,7 +622,9 @@ func paste() -> void:
 			push_error("An error occurred in the HTTP request.")
 		data = yield(http_request, "request_completed")[3].get_string_from_utf8()
 		http_request.queue_free()
-	var graph = parse_json(data)
+		graph = parse_json(data)
+	else:
+		graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = get_node("/root/MainWindow")
@@ -614,7 +685,7 @@ func drop_data(position, data) -> void:
 		create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
 
 func on_ButtonUp_pressed() -> void:
-	if generator != top_generator && generator.get_parent() is MMGenGraph:
+	if generator != top_generator and generator.get_parent() is MMGenGraph:
 		call_deferred("update_view", generator.get_parent())
 
 func _on_Label_text_changed(new_text) -> void:
@@ -626,9 +697,13 @@ func create_subgraph() -> void:
 	var generators = []
 	for n in get_selected_nodes():
 		generators.push_back(n.generator)
+	var prev = generator.serialize()
 	var subgraph = generator.create_subgraph(generators)
+	var next = generator.serialize()
+	undoredo_create_step("Create subgraph", generator.get_hier_name(), prev, next)
 	if subgraph != null:
 		update_view(subgraph)
+
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instance()
@@ -642,7 +717,6 @@ func edit_subgraph(g : MMGenGraph) -> void:
 	if !g.is_editable():
 		g.toggle_editable()
 	update_view(g)
-
 
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 	if button_pressed != generator.transmits_seed:
@@ -662,12 +736,24 @@ func highlight_connections() -> void:
 		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
 	highlighting_connections = false
 
-func _on_GraphEdit_node_selected(node) -> void:
-	set_current_preview(0, node)
-	highlight_connections()
+func _on_GraphEdit_node_selected(node : GraphNode) -> void:
+	if node.comment:
+		for c in get_children():
+			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
+				c.selected = true
+	else:
+		highlight_connections()
+		yield(get_tree(), "idle_frame")
+		if current_preview[0] != null:
+			for n in get_selected_nodes():
+				if n.generator == current_preview[0].generator:
+					return
+		set_current_preview(0, node)
+	undoredo_move_node_selection_changed = true
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
+	undoredo_move_node_selection_changed = true
 
 func get_current_preview(slot : int = 0):
 	if locked_preview[slot] != null:
@@ -683,7 +769,7 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	if locked:
 		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
-		if locked_preview[slot] != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
+		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
@@ -700,7 +786,7 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 				c.update()
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
-	# Check if the connector was actually dragged
+	# Check if the connector was actually  dragged
 	var node : GraphNode = get_node(node_name)
 	if node == null:
 		return
@@ -734,9 +820,288 @@ func _on_Description_descriptions_changed(short_description, long_description):
 	generator.longdesc = long_description
 
 
+# Undo/Redo
+
+func get_node_from_hier_name(hier_path : String, return_closest = false):
+	var node : Node = top_generator
+	if hier_path != "":
+		for n in hier_path.split("/"):
+			if not node.has_node(n):
+				if return_closest:
+					return node
+				else:
+					return null
+			node = node.get_node(n)
+	return node
+
+func undoredo_pre():
+	return generator.get_hier_name()
+
+func undoredo_post(pre_returnvalue) -> void:
+	var current_node = get_node_from_hier_name(pre_returnvalue)
+	if current_node == null:
+		current_node = get_node_from_hier_name(pre_returnvalue, true)
+		update_view(current_node)
+
+func undoredo_command(command : Dictionary) -> void:
+	match command.type:
+		"add_to_graph":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			var position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
+			var generators = command.generators if command.has("generators") else []
+			var connections = command.connections if command.has("connections") else []
+			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
+			if generator == parent_generator:
+				var actions : Array = []
+				for g in new_stuff.generators:
+					actions.append({ action="add_node", node=g.name })
+				for c in new_stuff.connections:
+					actions.append({ action="add_connection", connection=c })
+				update_graph(new_stuff.generators, new_stuff.connections)
+		"remove_connections":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			for c in command.connections:
+				parent_generator.disconnect_children_by_name(c.from, c.from_port, c.to, c.to_port)
+			if generator == parent_generator:
+				for c in command.connections:
+					.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		"remove_generators":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			for n in command.generators:
+				var g = parent_generator.get_node(n)
+				if generator == parent_generator:
+					if has_node("node_"+g.name):
+						do_remove_node(get_node("node_"+g.name))
+					else:
+						print("Cannot find node_"+g.name)
+						for c in get_children():
+							print(c.name)
+				else:
+					parent_generator.remove_generator(g)
+		"update_generator":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			var g = parent_generator.get_node(command.name)
+			if g != null:
+				g.deserialize(command.data)
+				var updated_generators = [ g ]
+				match g.get_type_name():
+					"Inputs", "Outputs":
+						updated_generators.push_back(parent_generator)
+				for ug in updated_generators:
+					if generator == ug.get_parent():
+						if has_node("node_"+ug.name):
+							var node = get_node("node_"+ug.name)
+							if node.has_method("update_node"):
+								node.update_node()
+		"setparams":
+			var g = get_node_from_hier_name(command.node)
+			for p in command.params.keys():
+				g.set_parameter(p, MMType.deserialize_value(command.params[p]))
+		"setseed":
+			var g = get_node_from_hier_name(command.node)
+			g.set_seed(command.seed)
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update()
+		"setseedlocked":
+			var g = get_node_from_hier_name(command.node)
+			if command.seedlocked != g.is_seed_locked():
+				g.toggle_lock_seed()
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update()
+		"setminimized":
+			var g = get_node_from_hier_name(command.node)
+			g.minimized = command.minimized
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
+		"move_generators":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			for k in command.positions.keys():
+				if parent_generator == generator:
+					get_node("node_"+k).do_set_position(command.positions[k])
+				else:
+					parent_generator.get_node(k).set_position(command.positions[k])
+		_:
+			print("Unknown undo/redo command:")
+			print(command)
+
+func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2):
+	if old_pos == new_pos:
+		return
+	var undo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:old_pos } }
+	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
+	undoredo.add("Move nodes", [undo_action], [redo_action], true)
+
+func set_node_parameters(node, parameters : Dictionary):
+	var hier_name = node.get_hier_name()
+	var prev_params : Dictionary = {}
+	for p in parameters.keys():
+		var prev_value = MMType.serialize_value(node.get_parameter(p))
+		if parameters[p] != prev_value:
+			node.set_parameter(p, MMType.deserialize_value(parameters[p]))
+		prev_params[p] = prev_value
+	if ! prev_params.empty():
+		var undo_action = { type="setparams", node=hier_name, params=prev_params }
+		var redo_action = { type="setparams", node=hier_name, params=parameters }
+		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
+
+func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
+	match action_name:
+		"Move nodes":
+			if action_name == last_action.name and ! undoredo_move_node_selection_changed:
+				var a = undo_actions[0]
+				for p in a.positions.keys():
+					if ! last_action.undo_actions[0].positions.has(p):
+						last_action.undo_actions[0].positions[p] = a.positions[p]
+				a = redo_actions[0]
+				for p in a.positions.keys():
+					if ! last_action.redo_actions[0].positions.has(p):
+						last_action.redo_actions[0].positions[p] = a.positions[p]
+				return true
+			print("undo/redo for move nodes reset")
+			undoredo_move_node_selection_changed = false
+	return false
+
+func simplify_graph(graph):
+	var new_nodes = {}
+	for n in graph.nodes:
+		new_nodes[n.name] = n
+	graph.nodes = new_nodes
+	var new_connections = {}
+	for c in graph.connections:
+		if ! new_connections.has(c.to):
+			new_connections[c.to] = {}
+		new_connections[c.to][c.to_port] = { from=c.from, from_port=c.from_port }
+	graph.connections = new_connections
+	return graph
+
+func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dictionary, top : bool = true) -> Dictionary:
+	if prev.type != next.type:
+		return {}
+	var undo_actions : Array = []
+	var redo_actions : Array = []
+	match prev.type:
+		"graph":
+			prev = simplify_graph(prev)
+			next = simplify_graph(next)
+			# Check all instances in prev
+			var undo_add_nodes : Array = []
+			var redo_add_nodes : Array = []
+			var undo_update_nodes : Array = []
+			var redo_update_nodes : Array = []
+			var undo_remove_nodes : Array = []
+			var redo_remove_nodes : Array = []
+			for pin in prev.nodes.keys():
+				if next.nodes.has(pin):
+					var pi = prev.nodes[pin]
+					var ni = next.nodes[pin]
+					if pi.hash() != ni.hash():
+						var child_path = pin if parent_path == "" else parent_path+"/"+pin
+						var step_actions = undoredo_step_actions(child_path, pi, ni, false)
+						if step_actions.empty():
+							undo_remove_nodes.push_back(pin)
+							undo_add_nodes.push_back(pi)
+							redo_remove_nodes.push_back(pin)
+							redo_add_nodes.push_back(ni)
+						else:
+							undo_update_nodes.append_array(step_actions.undo_actions)
+							redo_update_nodes.append_array(step_actions.redo_actions)
+				else:
+					undo_add_nodes.push_back(prev.nodes[pin])
+					redo_remove_nodes.push_back(pin)
+			for nin in next.nodes.keys():
+				if ! prev.nodes.has(nin):
+					undo_remove_nodes.push_back(nin)
+					redo_add_nodes.push_back(next.nodes[nin])
+			# Check all connections in prev
+			var undo_add_connections : Array = []
+			var redo_add_connections : Array = []
+			var undo_remove_connections : Array = []
+			var redo_remove_connections : Array = []
+			for pcn in prev.connections.keys():
+				var pc = prev.connections[pcn]
+				if next.connections.has(pcn):
+					var nc = next.connections[pcn]
+					for pcpn in pc.keys():
+						var pcp = pc[pcpn]
+						if nc.has(pcpn):
+							var ncp = nc[pcpn]
+							if pcp.from != ncp.from or pcp.from_port != ncp.from_port:
+								undo_add_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+								redo_remove_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+								undo_remove_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=pcn, to_port=pcpn})
+								redo_add_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=pcn, to_port=pcpn})
+						else:
+							undo_add_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+							redo_remove_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+				else:
+					for pcpn in pc.keys():
+						var pcp = pc[pcpn]
+						undo_add_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+						redo_remove_connections.push_back({ from=pcp.from, from_port=pcp.from_port, to=pcn, to_port=pcpn})
+			# Check all connections in next
+			for ncn in next.connections.keys():
+				var nc = next.connections[ncn]
+				if prev.connections.has(ncn):
+					var pc = next.connections[ncn]
+					for ncpn in nc.keys():
+						var ncp = nc[ncpn]
+						if ! pc.has(ncpn):
+							undo_remove_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
+							redo_add_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
+				else:
+					for ncpn in nc.keys():
+						var ncp = nc[ncpn]
+						undo_remove_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
+						redo_add_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
+			if ! undo_remove_connections.empty():
+				undo_actions.push_back({ type="remove_connections", parent=parent_path, connections=undo_remove_connections })
+			if ! redo_remove_connections.empty():
+				redo_actions.push_back({ type="remove_connections", parent=parent_path, connections=redo_remove_connections })
+			if ! undo_remove_nodes.empty():
+				undo_actions.push_back({ type="remove_generators", parent=parent_path, generators=undo_remove_nodes })
+			if ! redo_remove_nodes.empty():
+				redo_actions.push_back({ type="remove_generators", parent=parent_path, generators=redo_remove_nodes })
+			if ! undo_update_nodes.empty():
+				undo_actions.append_array(undo_update_nodes)
+			if ! redo_update_nodes.empty():
+				redo_actions.append_array(redo_update_nodes)
+			if ! undo_add_nodes.empty() or ! undo_add_connections.empty():
+				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
+			if ! redo_add_nodes.empty() or ! redo_add_connections.empty():
+				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
+		"remote","ios":
+			var generator_path = parent_path.left(parent_path.rfind("/"))
+			undo_actions.push_back({ type="update_generator", parent=generator_path, name=next.name, data=prev })
+			redo_actions.push_back({ type="update_generator", parent=generator_path, name=prev.name, data=next })
+		_:
+			print("ERROR: Unsupported node type %s in undoredo_step_actions" % prev.type)
+			return {}
+	if top:
+		print("Undo actions:")
+		print(undo_actions)
+		print("Redo actions:")
+		print(redo_actions)
+	return { undo_actions=undo_actions, redo_actions=redo_actions }
+
+func undoredo_create_step(action_name : String, parent_path : String, prev : Dictionary, next : Dictionary) -> void:
+	if prev.type != next.type:
+		print("Incorrect call for undoredo_create_step")
+		return
+	var step_actions = undoredo_step_actions(parent_path, prev, next)
+	if step_actions.has("undo_actions") && step_actions.has("redo_actions") && ! step_actions.undo_actions.empty() and ! step_actions.redo_actions.empty():
+		undoredo.add(action_name, step_actions.undo_actions, step_actions.redo_actions, false)
+
+# Node change propagation
+
 func find_graph_with_label(label: String) -> GraphNode:
 	for c in get_children():
-		if c is GraphNode and c.generator is MMGenGraph && c.generator.get_type_name() == label:
+		if c is GraphNode and c.generator is MMGenGraph and c.generator.get_type_name() == label:
 			return c
 	return null
 
@@ -760,3 +1125,74 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 
+# Adding/removing reroute nodes
+
+func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
+	var prev = generator.serialize()
+	var new_connections = []
+	var removed : bool = false
+	for c in get_connection_list():
+		if c.to == node.name and c.to_port == port_index:
+			var from_node = get_node(c.from)
+			if from_node.generator is MMGenReroute:
+				var source = null
+				for c2 in get_connection_list():
+					if c2.to == c.from:
+						source = {from=c2.from,from_port=c2.from_port}
+						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+				if source != null:
+					for c2 in get_connection_list():
+						if c2.from == c.from:
+							do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+							new_connections.push_back({from=get_node(source.from).generator.name, from_port=source.from_port, to=get_node(c2.to).generator.name, to_port=c2.to_port})
+							#connect_node(source.from, source.from_port, c2.to, c2.to_port)
+					do_remove_node(from_node)
+					if !new_connections.empty():
+						do_create_nodes({nodes=[], connections=new_connections})
+				removed = true
+			break
+	if ! removed:
+		var scale = node.get_global_transform().get_scale()
+		var port_position = node.offset+node.get_connection_input_position(port_index)/scale
+		var reroute_position = port_position+Vector2(-74, -12)
+		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
+		for c2 in get_connection_list():
+			if c2.to == node.name and c2.to_port == port_index:
+				do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+				new_connections.push_back({from=get_node(c2.from).generator.name, from_port=c2.from_port, to="reroute", to_port=0})
+		new_connections.push_back({from="reroute", from_port=0, to=node.generator.name, to_port=port_index})
+		do_create_nodes({nodes=[reroute_node], connections=new_connections})
+	var next = generator.serialize()
+	undoredo_create_step("Reroute input", generator.get_hier_name(), prev, next)
+
+func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
+	var prev = generator.serialize()
+	var reroutes : bool = false
+	var destinations = []
+	for c in get_connection_list():
+		if c.from == node.name and c.from_port == port_index:
+			var to_node = get_node(c.to)
+			if to_node.generator is MMGenReroute:
+				reroutes = true
+				var reroute_connections = []
+				for c2 in get_connection_list():
+					if c2.from == c.to:
+						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+						reroute_connections.push_back({ from=node.generator.name, from_port=port_index, to=get_node(c2.to).generator.name, to_port=c2.to_port })
+				if !reroute_connections.empty():
+					do_create_nodes({nodes=[], connections=reroute_connections})
+				do_remove_node(to_node)
+			else:
+				destinations.push_back(c.duplicate())
+	if !reroutes:
+		var scale = node.get_global_transform().get_scale()
+		var port_position = node.offset+node.get_connection_output_position(port_index)/scale
+		var reroute_position = port_position+Vector2(50, -12)
+		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
+		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]
+		for d in destinations:
+			do_disconnect_node(d.from, d.from_port, d.to, d.to_port)
+			reroute_connections.push_back({ from="reroute", from_port=0, to=get_node(d.to).generator.name, to_port=d.to_port })
+		do_create_nodes({nodes=[ reroute_node ],connections=reroute_connections})
+	var next = generator.serialize()
+	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)

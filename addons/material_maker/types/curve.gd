@@ -9,6 +9,8 @@ class Point:
 		p = Vector2(x, y)
 		ls = nls
 		rs = nrs
+	func compare(point) -> bool:
+		return p == point.p and ls == point.ls and rs == point.rs
 
 var points = [ Point.new(0.0, 0.0, 0.0, 1.0), Point.new(1.0, 1.0, 1.0, 0.0) ]
 
@@ -28,13 +30,21 @@ func duplicate() -> Object:
 func clear() -> void:
 	points.clear()
 
+func compare(curve) -> bool:
+	if curve.points.size() != points.size():
+		return false
+	for i in points.size():
+		if ! points[i].compare(curve.points[i]):
+			return false
+	return true
+
 func add_point(x : float, y : float, ls : float = INF, rs : float = INF) -> void:
 	for i in points.size():
 		if x < points[i].p.x:
 			if ls == INF:
-				ls == 0
+				ls = 0
 			if rs == INF:
-				rs == 0
+				rs = 0
 			points.insert(i, Point.new(x, y, ls, rs))
 			return
 	points.append(Point.new(x, y, ls, rs))

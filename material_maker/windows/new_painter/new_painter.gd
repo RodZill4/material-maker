@@ -5,11 +5,14 @@ signal return_status(status)
 var mesh_filename    = null
 var project_filename = null
 
-func _ready():
-	pass
+onready var mesh_instance : MeshInstance = $VBoxContainer/Main/ViewportContainer/Viewport/MeshPivot/MeshInstance
+onready var button_ok : Button = $VBoxContainer/Buttons/OK
+onready var camera : Camera = $VBoxContainer/Main/ViewportContainer/Viewport/CameraPivot/Camera
+onready var viewport_container : ViewportContainer = $VBoxContainer/Main/ViewportContainer
+onready var viewport : Viewport = $VBoxContainer/Main/ViewportContainer/Viewport
 
 func _on_ViewportContainer_resized():
-	$VBoxContainer/HBoxContainer/ViewportContainer/Viewport.size = $VBoxContainer/HBoxContainer/ViewportContainer.rect_size
+	viewport.size = $VBoxContainer/Main/ViewportContainer.rect_size
 
 func _on_ModelFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -30,13 +33,18 @@ func set_mesh(file_name : String) -> void:
 	mesh_filename = file_name
 	var mesh : Mesh = $ObjLoader.load_obj_file(mesh_filename)
 	if mesh != null:
-		$VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh = mesh
-		$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
-		$VBoxContainer/HBoxContainer2/OK.disabled = false
-		if project_filename == null:
-			set_project(mesh_filename.get_basename()+".mmpp")
+		mesh_instance.mesh = mesh
+		$VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
+		button_ok.disabled = false
+		# Initialise project file name
+		set_project(mesh_filename.get_basename()+".mmpp")
+		# Center the mesh and move the camera to the whole object is visible
+		var aabb : AABB = mesh_instance.get_aabb()
+		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
+		var d : float = aabb.size.length()
+		camera.transform.origin.z = 0.8*d
 	else:
-		$VBoxContainer/HBoxContainer2/OK.disabled = true
+		button_ok.disabled = true
 
 func _on_ProjectFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -57,11 +65,11 @@ func set_project(file_name : String) -> void:
 	if file_name == project_filename:
 		return
 	project_filename = file_name
-	$VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/ProjectFile.text = project_filename.get_file()
+	$VBoxContainer/Main/VBoxContainer/GridContainer/ProjectFile.text = project_filename.get_file()
 
 func _on_OK_pressed():
-	var mesh = $VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshInstance.mesh
-	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename, project_filename=project_filename, size=pow(2, $VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Resolution.size_value) })
+	var mesh = mesh_instance.mesh
+	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename, project_filename=project_filename, size=pow(2, $VBoxContainer/Main/VBoxContainer/GridContainer/Resolution.size_value) })
 
 func _on_Cancel_pressed():
 	emit_signal("return_status", null)

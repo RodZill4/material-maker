@@ -2,6 +2,7 @@ tool
 extends Node
 
 var predefined_generators : Dictionary = {}
+var predefined_functions : Dictionary = {}
 
 var current_project_path : String = ""
 
@@ -15,6 +16,7 @@ func update_predefined_generators()-> void:
 	if CHECK_PREDEFINED:
 		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	predefined_generators = {}
+	predefined_functions = {}
 	for path in MMPaths.get_nodes_paths():
 		var dir = Directory.new()
 		if dir.open(path) == OK:
@@ -30,6 +32,19 @@ func update_predefined_generators()-> void:
 								var parse_result = parser.parse(generator.shader_model.global)
 								if parse_result.status != "OK":
 									print(file_name+" has errors in global")
+								elif parse_result.value.type == "translation_unit":
+									for definition in parse_result.value.value:
+										if definition.type == "function_definition":
+											var function_name = definition.value[0].value[0].value.name
+											if function_name.type == "IDENTIFIER":
+												if predefined_functions.has(function_name.value):
+													print(str(function_name.value)+" is defined in "+file_name.get_basename()+" and "+predefined_functions[function_name.value])
+												else:
+													predefined_functions[function_name.value] = file_name.get_basename()
+											else:
+												print(definition)
+										else:
+											print(definition.type)
 						predefined_generators[file_name.get_basename()] = generator
 						file.close()
 				file_name = dir.get_next()
@@ -67,28 +82,36 @@ func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
 		var data = parse_json(file.get_as_text())
-		current_project_path = filename.get_base_dir()
-		var generator = create_gen(data)
-		current_project_path = ""
-		return generator
+		if data != null:
+			current_project_path = filename.get_base_dir()
+			var generator = create_gen(data)
+			current_project_path = ""
+			return generator
 	return null
 
-func add_to_gen_graph(gen_graph, generators, connections) -> Dictionary:
+func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = Vector2(0, 0)) -> Dictionary:
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
 		var g = create_gen(n)
 		if g != null:
+			g.orig_name = g.name
 			var orig_name = g.name
 			if gen_graph.add_generator(g):
+				g.position += position
 				rv.generators.append(g)
 			gennames[orig_name] = g.name
+		else:
+			print("Cannot create gen "+str(n))
 	for c in connections:
-		if gennames.has(c.from) and gennames.has(c.to):
+		if gennames.has(c.from):
 			c.from = gennames[c.from]
+		if gennames.has(c.to):
 			c.to = gennames[c.to]
-			if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
-				rv.connections.append(c)
+		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+			rv.connections.append(c)
+		else:
+			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
 func create_gen(data) -> MMGenBase:
@@ -98,6 +121,7 @@ func create_gen(data) -> MMGenBase:
 		{ keyword="nodes", type=MMGenGraph },
 		{ keyword="is_brush", type=MMGenBrush },
 		{ keyword="shader_model", type=MMGenShader },
+		{ keyword="sdf_scene", type=MMGenSDF },
 		{ keyword="model_data", type=MMGenShader },
 		{ keyword="widgets", type=MMGenRemote }
 	]
@@ -107,11 +131,13 @@ func create_gen(data) -> MMGenBase:
 		image = MMGenImage,
 		text = MMGenText,
 		iterate_buffer = MMGenIterateBuffer,
+		sdf = MMGenSDF,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,
 		export = MMGenExport,
 		comment = MMGenComment,
-		debug = MMGenDebug
+		debug = MMGenDebug,
+		reroute = MMGenReroute
 	}
 	var generator = null
 	for g in guess:

@@ -47,23 +47,28 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
+	var parameter_uses_seed : bool = (v is String and v.find("$rnd(") != -1)
+	var uses_seed_updated : bool = false
+	if parameter_uses_seed:
+		if ! params_use_seed:
+			uses_seed_updated = true
+		params_use_seed = true
+	elif old_value is String and old_value.find("$rnd(") != -1:
+		var new_params_use_seed : bool = false
+		for k in parameters.keys():
+			if k != n and parameters[k] is String and parameters[k].find("$rnd(") != -1:
+				new_params_use_seed = true
+				break
+		if params_use_seed != new_params_use_seed:
+			uses_seed_updated = true
+			params_use_seed = new_params_use_seed
 	.set_parameter(n, v)
 	var had_rnd : bool = false
 	if old_value is String and old_value.find("$rnd(") != -1:
 		had_rnd = true
 	var has_rnd : bool = false
-	if v is String and v.find("$rnd(") != -1:
-		has_rnd = true
-	if had_rnd != has_rnd:
-		var use_seed : bool = false
-		for k in parameters.keys():
-			if parameters[k] is String and parameters[k].find("$rnd(") != -1:
-				use_seed = true
-				break
-		if params_use_seed != use_seed:
-			params_use_seed = use_seed
-			if is_inside_tree():
-				get_tree().call_group("generator_node", "on_generator_changed", self)
+	if uses_seed_updated and is_inside_tree():
+		get_tree().call_group("generator_node", "on_generator_changed", self)
 
 func get_input_defs() -> Array:
 	if shader_model == null or !shader_model.has("inputs"):
@@ -71,7 +76,7 @@ func get_input_defs() -> Array:
 	else:
 		return shader_model.inputs
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if shader_model == null or !shader_model.has("outputs"):
 		return []
 	else:
@@ -197,7 +202,7 @@ func set_shader_model(data: Dictionary) -> void:
 	if shader_model.has("instance"):
 		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
 			model_uses_seed = true
-	if get_parent() != null:
+	if get_parent() != null and get_parent().has_method("check_input_connects"):
 		get_parent().check_input_connects(self)
 	all_sources_changed()
 
@@ -231,7 +236,7 @@ func find_keyword_call(string, keyword):
 	var end = find_matching_parenthesis(string, parameter_begin-1)
 	if end < string.length():
 		return string.substr(parameter_begin, end-parameter_begin)
-	return ""
+	return null
 
 func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
@@ -342,14 +347,25 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var required_globals = [ get_parent().get_globals() ]
+	var parent = get_parent()
+	var required_globals = []
+	if parent.has_method("get_globals"):
+		required_globals = [ parent.get_globals() ]
 	var required_defs = ""
 	var required_code = ""
 	var required_textures = {}
 	var required_pending_textures = []
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
-	var variables = get_parent().get_named_parameters()
+	var variables = {}
+	if ! mm_renderer.get_global_parameters().empty():
+		for gp in mm_renderer.get_global_parameters():
+			variables[gp] = "mm_global_"+gp
+	if parent.has_method("get_named_parameters"):
+		var named_parameters = {}
+		named_parameters = parent.get_named_parameters()
+		for np in named_parameters.keys():
+			variables[np] = named_parameters[np].id
 	variables["name"] = genname
 	if uv != "":
 		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
@@ -357,7 +373,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
 	else:
-		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
+		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
 	variables["node_id"] = str(get_instance_id())
 	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
@@ -411,6 +427,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if source == null:
 				continue
 			var src_attributes = source.generator.get_output_attributes(source.output_index)
+			if src_attributes.has("texture"):
+				var source_globals = source.generator.get_globals(src_attributes.texture)
+				for sg in source_globals:
+					if required_globals.find(sg) == -1:
+						required_globals.push_back(sg)
 			for a in src_attributes.keys():
 				if a == "texture_size":
 					variables[input.name+".size"] = src_attributes.texture_size
@@ -619,6 +640,6 @@ func edit(node) -> void:
 		var edit_window = load("res://material_maker/windows/node_editor/node_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)
-		edit_window.connect("node_changed", node, "update_generator")
-		edit_window.connect("popup_hide", edit_window, "queue_free")
+		edit_window.connect("node_changed", node, "update_shader_generator")
+		edit_window.connect("editor_window_closed", node, "finalize_generator_update")
 		edit_window.popup_centered()

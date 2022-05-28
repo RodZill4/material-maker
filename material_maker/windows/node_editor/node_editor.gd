@@ -15,7 +15,8 @@ const ParameterEditor = preload("res://material_maker/windows/node_editor/parame
 const InputEditor = preload("res://material_maker/windows/node_editor/input.tscn")
 const OutputEditor = preload("res://material_maker/windows/node_editor/output.tscn")
 
-signal node_changed
+signal node_changed(model_data)
+signal editor_window_closed
 
 func _ready() -> void:
 	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:
@@ -116,7 +117,7 @@ var globals_error_line = -1
 
 func _on_Functions_text_changed():
 	var text : String = global_functions_editor.text
-	var error_label = $"Sizer/Tabs/Global Functions/ErrorLabel"
+	var error_label = $"Sizer/Tabs/Global Functions/Functions/ErrorLabel"
 	if globals_error_line != -1:
 		global_functions_editor.set_line_as_safe(globals_error_line, false)
 		error_label.visible = false
@@ -144,7 +145,8 @@ func _on_Apply_pressed() -> void:
 
 func _on_OK_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
-	queue_free()
+	_on_Cancel_pressed()
 
 func _on_Cancel_pressed() -> void:
+	emit_signal("editor_window_closed")
 	queue_free()

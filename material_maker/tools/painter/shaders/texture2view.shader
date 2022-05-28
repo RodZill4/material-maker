@@ -8,8 +8,9 @@ uniform mat4      model_transform;
 uniform float     fovy_degrees = 45;
 uniform float     z_near = 0.01;
 uniform float     z_far = 60.0;
+uniform float     texture_size = 8.0;
 uniform float     aspect = 1.0;
-uniform float     uv_tolerance = 0.001;
+uniform float     texel_tolerance = 1.0;
 
 varying mat4 projection_matrix;
 varying vec4 global_position;
@@ -44,18 +45,18 @@ float visibility(vec2 uv, vec3 view_pos) {
 	// Compare actual UV with uv from view
 	vec4 pos = textureLod(view2texture, view_pos.xy, 0.0);
 	vec2 uv_delta = pos.xy-uv;
-	return 1.0-20.0*length(uv_delta);
+	return 1.0-texture_size*length(uv_delta)/texel_tolerance;
 }
 
 void fragment() {
-	float box = 3.0;
+	float box = 1.0;
 	vec4 position = projection_matrix*vec4(global_position.xyz, 1.0);
 	position.xyz /= position.w;
 	vec3 xyz = vec3(0.5-0.5*position.x, 0.5+0.5*position.y, 0.5+0.5*position.z);
 	float visible = 0.0;
 	if (position.x > -1.0 && position.x < 1.0 && position.y > -1.0 && position.y < 1.0) {
 		float visibility_multiplier = 0.0;
-		vec2 epsilon = vec2(0.0005);
+		vec2 epsilon = vec2(1.0/texture_size);
 		for (float dx = -box*epsilon.x; dx <= box*epsilon.x; dx += epsilon.x) {
 			for (float dy = -box*epsilon.y; dy <= box*epsilon.y; dy += epsilon.y) {
 				visibility_multiplier += max(visibility_multiplier, visibility(UV.xy, xyz+vec3(dx, dy, 0.0)));

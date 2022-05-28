@@ -93,7 +93,7 @@ func get_input_defs() -> Array:
 		return get_node("gen_inputs").get_output_defs()
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if has_node("gen_outputs"):
 		return get_node("gen_outputs").get_input_defs()
 	return []
@@ -147,6 +147,8 @@ func add_generator(generator : MMGenBase) -> bool:
 			if parent != null and parent is Object and parent.get_script() == get_script():
 				# Material is always in top level graph
 				return false
+	elif name == "":
+		name = generator.get_type()+"_1"
 	if has_node(name):
 		var name_prefix : String
 		var regex = RegEx.new()
@@ -214,15 +216,18 @@ func get_connected_outputs(generator) -> Array:
 	return rv
 
 func connect_children(from, from_port : int, to, to_port : int) -> bool:
+	if from == null or to == null:
+		return false
 	# check the new connection does not create a loop
 	var spreadlist = [ InputPort.new(to, to_port) ]
 	while !spreadlist.empty():
 		var input : InputPort = spreadlist.pop_front()
-		for o in input.generator.follow_input(input.input_index):
-			if o.generator == from and o.output_index == from_port:
-				return false
-			for t in o.generator.get_parent().get_port_targets(o.generator.name, o.output_index):
-				spreadlist.push_back(t)
+		if input.generator != null:
+			for o in input.generator.follow_input(input.input_index):
+				if o.generator == from and o.output_index == from_port:
+					return false
+				for t in o.generator.get_parent().get_port_targets(o.generator.name, o.output_index):
+					spreadlist.push_back(t)
 	# disconnect target
 	while true:
 		var remove = -1
@@ -238,15 +243,25 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	to.source_changed(to_port)
 	return true
 
-func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+func disconnect_children_ext(from_name : String, from_port : int, to_name : String, to, to_port : int) -> bool:
 	var new_connections : Array = []
+	var trigger_source_changed : bool = false
 	for c in connections:
-		if c.from != from.name or c.from_port != from_port or c.to != to.name or c.to_port != to_port:
+		if c.from != from_name or c.from_port != from_port or c.to != to_name or c.to_port != to_port:
 			new_connections.push_back(c)
 		else:
-			to.source_changed(to_port)
+			trigger_source_changed = true
+			
 	connections = new_connections
+	if trigger_source_changed:
+		to.source_changed(to_port)
 	return true
+
+func disconnect_children_by_name(from_name : String, from_port : int, to_name : String, to_port : int) -> bool:
+	return disconnect_children_ext(from_name, from_port, to_name, get_node(to_name), to_port)
+
+func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
+	return disconnect_children_ext(from.name, from_port, to.name, to, to_port)
 
 func reconnect_inputs(generator, reconnects : Dictionary) -> bool:
 	var new_connections : Array = []
@@ -288,7 +303,7 @@ func get_named_parameters() -> Dictionary:
 		if c is MMGenRemote:
 			var remote_named_parameters = c.get_named_parameters()
 			for k in remote_named_parameters.keys():
-				named_parameters[k] = remote_named_parameters[k]
+				named_parameters[k] = { id=remote_named_parameters[k], value=c.get_parameter(k) }
 	return named_parameters
 
 func get_globals() -> String:
@@ -303,6 +318,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		while rv is GDScriptFunctionState:
+			print("This should never NEVER happen")
 			rv = yield(rv, "completed")
 		return rv
 	return { globals=[], defs="", code="", textures={} }
@@ -364,7 +380,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	# Create inputs and outputs generators
 	var gen_inputs = MMGenIOs.new()
 	gen_inputs.name = "gen_inputs"
-	gen_inputs.position = Vector2(left_bound-300, center.y)
+	gen_inputs.position = Vector2(left_bound-500, center.y)
 	new_graph.add_generator(gen_inputs)
 	var gen_outputs = MMGenIOs.new()
 	gen_outputs.name = "gen_outputs"

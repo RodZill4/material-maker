@@ -54,7 +54,7 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	if version == VERSION_OLD:
 		return [ { type="rgba" }, { type="rgba" } ]
 	else:
@@ -109,12 +109,15 @@ func set_pending() -> void:
 		mm_renderer.add_pending_request()
 		is_pending = true
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	if mm_renderer.update_float_parameters(material, parameter_changes):
 		update_again = true
-		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
+		if is_inside_tree():
+			get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
 		if pending_textures.empty():
 			update_buffer()
+		return true
+	return false
 
 func on_texture_changed(n : String) -> void:
 	pending_textures.erase(n)

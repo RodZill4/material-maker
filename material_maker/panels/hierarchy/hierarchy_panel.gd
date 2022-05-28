@@ -46,7 +46,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
 		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
-	if current_generator != null and is_instance_valid(current_generator):
+	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed", self, "on_hierarchy_changed"):
 		current_generator.disconnect("hierarchy_changed", self, "on_hierarchy_changed")
 	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
 		current_graph_edit = null
@@ -101,7 +101,8 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 			fill_item(tree.create_item(item), c, selected)
 
 func _on_Hierarchy_item_double_clicked() -> void:
-	emit_signal("group_selected", tree.get_selected().get_metadata(0))
+	if tree.get_selected() != null:
+		emit_signal("group_selected", tree.get_selected().get_metadata(0))
 
 func on_view_updated(generator) -> void:
 	assert(generator is MMGenGraph)

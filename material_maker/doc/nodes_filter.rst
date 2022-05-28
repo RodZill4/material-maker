@@ -17,6 +17,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_greyscale
 	node_filter_tonality
 	node_filter_colorize
+	node_filter_colormap
 	node_filter_blend
 	node_filter_combine
 	node_filter_decompose
@@ -34,6 +35,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_occlusion
 	node_filter_quantize
 	node_filter_dilate
+	node_filter_bevel
 	node_filter_fill
 	node_filter_fill_to_position
 	node_filter_fill_to_size
@@ -41,10 +43,17 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_fill_to_random_grey
 	node_filter_fill_to_random_color
 	node_filter_fill_to_uv
+	node_filter_fill_to_orientation
+	node_filter_fill_to_gradient
 	node_filter_math
+	node_filter_smooth_minmax
 	node_filter_maketileable
 	node_filter_pixelize
 	node_filter_supersample
 	node_filter_smoothcurvature
 	node_filter_smoothcurvature2
 	node_filter_denoiser
+	node_filter_palettize
+	node_filter_binary_smooth
+	node_filter_hbao
+	node_filter_color_conversion

@@ -44,8 +44,8 @@ func get_type_name() -> String:
 		return shader_model.name
 	return "Material"
 
-func get_output_defs() -> Array:
-	return []
+func get_output_defs(show_hidden : bool = false) -> Array:
+	return .get_output_defs() if show_hidden else []
 
 func get_image_size() -> int:
 	var rv : int
@@ -73,11 +73,17 @@ func source_changed(input_index : int) -> void:
 func all_sources_changed() -> void:
 	update_preview()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> void:
+var new_parameter_values : Dictionary = {}
+var new_updated_textures : Array = []
+func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
+	for p in parameter_changes.keys():
+		new_parameter_values[p] = parameter_changes[p]
 	schedule_update_textures()
+	return true
 
 func on_texture_changed(n : String) -> void:
 	render_not_ready = true
+	new_updated_textures.push_back(n)
 	schedule_update_textures()
 
 func schedule_update_textures() -> void:
@@ -90,19 +96,48 @@ func update_textures() -> void:
 	update_again = true
 	if !updating:
 		while update_again:
+			var parameter_values : Dictionary = new_parameter_values
+			new_parameter_values = {}
+			var updated_textures : Array = new_updated_textures
+			new_updated_textures = []
 			update_again = false
 			var image_size = get_image_size()
 			updating = true
 			for t in preview_textures.keys():
-				var result = render(self, preview_textures[t].output, size)
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
+				if parameter_values.empty() or not preview_textures[t].has("material"):
+					var output_shader = generate_output_shader(preview_textures[t].output)
+					preview_textures[t].textures = output_shader.textures
+					preview_textures[t].output_type = output_shader.output_type
+					var material = ShaderMaterial.new()
+					material.shader = Shader.new()
+					material.shader.code = output_shader.shader
+					define_shader_float_parameters(output_shader.shader, material)
+					for k in output_shader.textures.keys():
+						material.set_shader_param(k, output_shader.textures[k])
+					preview_textures[t].material = material
+				elif ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
+					var need_update : bool = false
+					for ut in updated_textures:
+						if preview_textures[t].textures.has(ut):
+							need_update = true
+							break
+					if !need_update:
+						continue
+				var renderer = mm_renderer.request(self)
+				while renderer is GDScriptFunctionState:
+					renderer = yield(renderer, "completed")
+				if ! preview_textures.has(t) or ! preview_textures[t].has("material"):
+					renderer.release(self)
+					break
+				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
 				# Abort rendering if material changed
 				if ! preview_textures.has(t):
-					result.release(self)
+					renderer.release(self)
 					break
-				result.copy_to_texture(preview_textures[t].texture)
-				result.release(self)
+				renderer.copy_to_texture(preview_textures[t].texture)
+				renderer.release(self)
 			updating = false
 
 func update_materials(material_list, sequential : bool = false) -> void:
@@ -139,7 +174,6 @@ class CustomOptions:
 func process_shader(shader_text : String):
 	var custom_options = CustomOptions.new()
 	if shader_model.has("custom"):
-		print(shader_model.custom)
 		var custom_options_script = GDScript.new()
 		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
 		custom_options_script.reload()
@@ -479,7 +513,11 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				var result = render(self, f.output, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
-				result.save_to_file(file_name)
+				var is_greyscale : bool = false
+				if get_output_defs(true).size() > f.output:
+					var output : Dictionary = get_output_defs(true)[f.output]
+					is_greyscale = output.has("type") and output.type == "f"
+				result.save_to_file(file_name, is_greyscale)
 				result.release(self)
 			"template":
 				var file_export_context = export_context.duplicate()
@@ -528,6 +566,6 @@ func edit(node) -> void:
 		var edit_window = load("res://material_maker/windows/material_editor/material_editor.tscn").instance()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(shader_model)
-		edit_window.connect("node_changed", node, "update_generator")
+		edit_window.connect("node_changed", node, "update_shader_generator")
 		edit_window.connect("popup_hide", edit_window, "queue_free")
 		edit_window.popup_centered()

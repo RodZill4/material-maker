@@ -5,7 +5,7 @@ var end
 var source = null
 var target = null
 
-var generator = null
+var node = null
 var param_name : String = ""
 var creating : bool = false
 
@@ -16,11 +16,11 @@ func _init(parent) -> void:
 	rect_clip_content = true
 	parent.add_child(self)
 
-func pick(s, g, n : String, c : bool = false) -> void:
+func pick(s, n, pn : String, c : bool = false) -> void:
 	source = s
 	end = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
-	generator = g
-	param_name = n
+	node = n
+	param_name = pn
 	creating = c
 	set_process_input(true)
 
@@ -45,6 +45,8 @@ func find_control(gp) -> Dictionary:
 	return {}
 
 func _draw() -> void:
+	if ! is_instance_valid(self):
+		return
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect
@@ -62,20 +64,25 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		set_process_input(false)
 		queue_free()
-		generator.remove_parameter(param_name)
-	if event is InputEventMouseMotion:
-		var control = find_control(event.global_position)
-		end = get_global_transform().xform_inv(event.global_position)
-		target = control.widget if control != null and !control.empty() and generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
-		update()
+		node.generator.remove_parameter(param_name)
+		get_tree().set_input_as_handled()
+		return
+	elif event is InputEventMouseMotion:
+		var mouse_global_position = get_global_mouse_position()
+		var control = find_control(mouse_global_position)
+		end = get_global_transform().xform_inv(mouse_global_position)
+		target = control.widget if control != null and !control.empty() and node.generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
+		get_tree().set_input_as_handled()
 	elif event is InputEventMouseButton:
 		if event.pressed:
 			if event.button_index == BUTTON_LEFT:
-				var control = find_control(event.global_position)
+				var control = find_control(get_global_mouse_position())
 				if !control.empty():
-					generator.link_parameter(param_name, control.node.generator, control.widget.name)
+					node.link_parameter(param_name, control.node.generator, control.widget.name)
 				elif creating:
-					generator.remove_parameter(param_name)
-			set_process_input(false)
-			queue_free()
-	get_tree().set_input_as_handled()
+					node.generator.remove_parameter(param_name)
+				set_process_input(false)
+				queue_free()
+				get_tree().set_input_as_handled()
+				return
+	call_deferred("update")

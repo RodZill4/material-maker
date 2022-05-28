@@ -42,6 +42,16 @@ func _ready():
 				texture.create_from_image(image)
 			environment_textures.push_back({ thumbnail=texture })
 
+func add_environment(data : Dictionary):
+	environments.push_back(data)
+	environment_textures.push_back({ thumbnail=ImageTexture.new() })
+	emit_signal("name_updated", environments.size()-1, data.name)
+	emit_signal("environment_updated", environments.size()-1)
+	update_thumbnail(environments.size()-1)
+
+func get_environment(index : int) -> Dictionary:
+	return environments[index]
+
 func load_environment(file_path : String) -> Array:
 	var array : Array = []
 	var file = File.new()
@@ -79,11 +89,11 @@ func create_environment_menu(menu : PopupMenu) -> void:
 func is_read_only(index) -> bool:
 	return index < ro_environments
 
-func set_value(index, variable, value):
+func set_value(index, variable, value, force = false):
 	if index < ro_environments || index >= environments.size():
 		return
 	var serialized_value = MMType.serialize_value(value)
-	if environments[index][variable] != serialized_value:
+	if force or environments[index][variable] != serialized_value:
 		environments[index][variable] = serialized_value
 		if variable == "hdri_url":
 			var status = read_hdr(index, value)
@@ -125,6 +135,11 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight) -> vo
 
 var progress_window = null
 
+var accept_dialog : AcceptDialog = null
+
+func on_accept_dialog_closed():
+	accept_dialog = null
+
 func read_hdr(index : int, url : String) -> bool:
 	while progress_window != null:
 		yield(get_tree(), "idle_frame")
@@ -153,24 +168,23 @@ func read_hdr(index : int, url : String) -> bool:
 		progress_window.set_progress(0)
 		set_physics_process(true)
 		yield($HTTPRequest, "request_completed")
-		set_hdr(index, file_path)
 		progress_window.queue_free()
 		progress_window = null
 		set_physics_process(false)
-		return true
-	print("An error occurred in the HTTP request (%s, %d)." % [ url, error ])
+		if Directory.new().file_exists(file_path):
+			set_hdr(index, file_path)
+			update_thumbnail(index)
+			return true
+	if accept_dialog == null:
+		accept_dialog = AcceptDialog.new()
+		accept_dialog.window_title = "HDRI download error"
+		accept_dialog.dialog_text = "Failed to download %s" % url
+		get_node("/root/MainWindow").add_child(accept_dialog)
+		accept_dialog.connect("confirmed", accept_dialog, "queue_free")
+		accept_dialog.connect("popup_hide", accept_dialog, "queue_free")
+		accept_dialog.connect("tree_exiting", self, "on_accept_dialog_closed")
+		accept_dialog.popup_centered()
 	return false
-
-
-"""
-func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):
-	set_hdr(index, $HTTPRequest.download_file)
-	progress_window.queue_free()
-	progress_window = null
-	set_physics_process(false)
-	update_thumbnail(index)
-	emit_signal("environment_updated", index)
-"""
 
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
@@ -194,6 +208,7 @@ func new_environment(index : int) -> void:
 
 func delete_environment(index : int) -> void:
 	environments.remove(index)
+	environment_textures.remove(index)
 
 var thumbnail_update_list = []
 var rendering = false
@@ -210,17 +225,23 @@ func update_thumbnail(index) -> void:
 
 onready var preview_generator : Viewport = $PreviewGenerator
 
+func create_preview(index : int, size : int = 64) -> Image:
+	apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
+	preview_generator.size = Vector2(size, size)
+	preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
+	preview_generator.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	return preview_generator.get_texture().get_data()
+
 func do_update_thumbnail() -> void:
 	rendering = true
 	for index in thumbnail_update_list:
-		apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment, $PreviewGenerator/Sun)
-		preview_generator.render_target_update_mode = Viewport.UPDATE_ONCE
-		preview_generator.update_worlds()
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		var t : ImageTexture = environment_textures[index].thumbnail
-		var image : Image = preview_generator.get_texture().get_data()
+		var image = create_preview(index)
+		while image is GDScriptFunctionState:
+			image = yield(image, "completed")
 		if image != null:
+			var t : ImageTexture = environment_textures[index].thumbnail
 			t.create_from_image(image)
 			emit_signal("thumbnail_updated", index, t)
 	thumbnail_update_list = []

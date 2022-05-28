@@ -6,14 +6,17 @@ class_name MMGenComment
 Comments to put in the graph
 """
 
-var text : String = "Double-click to write a comment"
-var size : Vector2 = Vector2(0, 0)
+var text : String = ""
+var size : Vector2 = Vector2(300, 200)
 var title : String = "Comment"
-var color : Color = Color(1.0, 0.5, 0.0)
+
+var color = null
 
 func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 4
+	if color == null:
+		color = Color.white if "light" in get_node("/root/MainWindow").theme.resource_path else Color.black
 
 func get_type() -> String:
 	return "comment"
@@ -27,7 +30,7 @@ func get_parameter_defs() -> Array:
 func get_input_defs() -> Array:
 	return []
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func _serialize(data: Dictionary) -> Dictionary:

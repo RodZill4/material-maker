@@ -6,9 +6,7 @@
 
 [sub_resource type="World" id=1]
 
-[node name="Preview3D" type="ViewportContainer" groups=[
-"preview",
-]]
+[node name="Preview3D" type="ViewportContainer" groups=["preview"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -31,6 +29,7 @@ own_world = true
 world = SubResource( 1 )
 handle_input_locally = false
 msaa = 1
+debanding = true
 render_target_clear_mode = 1
 render_target_update_mode = 3
 physics_object_picking = true

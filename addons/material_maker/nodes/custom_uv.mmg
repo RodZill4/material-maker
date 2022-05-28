@@ -17,6 +17,7 @@
 		"inputs": [
 			{
 				"default": "vec4(1.0)",
+				"function": "true",
 				"label": "Input",
 				"longdesc": "The image or atlas of images to be remapped.",
 				"name": "in",
@@ -38,7 +39,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the remapped image",
-				"rgba": "$in(get_from_tileset($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))))",
+				"rgba": "$in.variation(get_from_tileset($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}
@@ -113,6 +114,14 @@
 				"shortdesc": "RndScale",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Variations",
+				"longdesc": "Check to use variations of the input image",
+				"name": "variations",
+				"shortdesc": "Variations",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Custom UV remapper"

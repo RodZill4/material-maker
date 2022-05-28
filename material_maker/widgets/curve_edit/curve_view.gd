@@ -34,7 +34,7 @@ func _draw():
 		var yac = p1.y+d*curve.points[i].rs
 		var ybc = p2.y-d*curve.points[i+1].ls
 		var p = transform_point(p1)
-		var count : int = max(1, int((transform_point(p2).x-p.x/5.0)))
+		var count : int = int(max(1, (transform_point(p2).x-p.x/5.0)))
 		for tt in range(count):
 			var t = (tt+1.0)/count
 			var omt = (1.0 - t)

@@ -1,0 +1,125 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
+[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder.gd" type="Script" id=3]
+[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" type="Script" id=4]
+
+[sub_resource type="Shader" id=1]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+
+[node name="Control" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 106.503
+margin_top = 99.6447
+margin_right = -118.498
+margin_bottom = -96.3553
+popup_exclusive = true
+window_title = "SDF Builder"
+resizable = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Toolbar" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1054.0
+
+[node name="Main" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 4.0
+margin_right = 1054.0
+margin_bottom = 500.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tree" type="Tree" parent="VBoxContainer/Main"]
+margin_right = 261.0
+margin_bottom = 496.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+select_mode = 1
+script = ExtResource( 4 )
+
+[node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
+material = SubResource( 2 )
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 265.0
+margin_right = 788.0
+margin_bottom = 496.0
+size_flags_horizontal = 3
+size_flags_vertical = 11
+size_flags_stretch_ratio = 2.0
+control_target = NodePath("../../..")
+
+[node name="Parameters" type="GridContainer" parent="VBoxContainer/Main"]
+margin_left = 792.0
+margin_right = 1054.0
+margin_bottom = 496.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 432.0
+margin_top = 504.0
+margin_right = 622.0
+margin_bottom = 524.0
+size_flags_horizontal = 4
+size_flags_vertical = 5
+custom_constants/separation = 5
+
+[node name="Apply" type="Button" parent="VBoxContainer/Buttons"]
+margin_right = 60.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Apply"
+
+[node name="OK" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 65.0
+margin_right = 125.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
+margin_left = 130.0
+margin_right = 190.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Cancel"
+
+[node name="GenSDF" type="Node" parent="."]
+script = ExtResource( 1 )
+editor = true
+
+[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="button_pressed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_button_pressed"]
+[connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
+[connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
+[connection signal="item_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="parameter_changed" from="GenSDF" to="." method="on_parameter_changed"]

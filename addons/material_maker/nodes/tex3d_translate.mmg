@@ -1,0 +1,79 @@
+{
+	"name": "tex3d_translate",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"x": 0,
+		"y": 0,
+		"z": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "A node that translates a 3D texture",
+		"name": "TEX3D Translate",
+		"outputs": [
+			{
+				"longdesc": "The translated 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "$in(vec4($uv.xyz-vec3($x, $y, $z), $uv.w))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "X",
+				"longdesc": "The translation along the X axis",
+				"max": 5,
+				"min": -5,
+				"name": "x",
+				"shortdesc": "Translate.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Y",
+				"longdesc": "The translation along the Y axis",
+				"max": 5,
+				"min": -5,
+				"name": "y",
+				"shortdesc": "Translate.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Z",
+				"longdesc": "The translation along the Z axis",
+				"max": 5,
+				"min": -5,
+				"name": "z",
+				"shortdesc": "Translate.z",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D Translate"
+	},
+	"type": "shader"
+}

@@ -1,0 +1,53 @@
+{
+	"name": "tex3d_scale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"s": 1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "A node that scales a 3D texture",
+		"name": "TEX3D Scale",
+		"outputs": [
+			{
+				"longdesc": "The scaled 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "$in(vec4($uv.xyz/max($s, 0.00001), $uv.w))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale",
+				"longdesc": "The scale of the 3D texture",
+				"max": 10,
+				"min": 0.1,
+				"name": "s",
+				"shortdesc": "Scale",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D Scale"
+	},
+	"type": "shader"
+}

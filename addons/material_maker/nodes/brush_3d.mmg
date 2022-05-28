@@ -1,0 +1,40 @@
+{
+	"name": "brush_3d",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": -57344,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5)",
+				"label": "",
+				"name": "in",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Maps a 3D texture to the painted object",
+		"name": "3D Brush Map",
+		"outputs": [
+			{
+				"longdesc": "The 3D texture mapped in texture space",
+				"rgb": "$in(vec4(mesh_aabb_position+texture(mesh_inv_uv_tex, $uv).xyz*mesh_aabb_size, 0.0))",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		],
+		"shortdesc": "3D Brush map"
+	},
+	"type": "shader"
+}

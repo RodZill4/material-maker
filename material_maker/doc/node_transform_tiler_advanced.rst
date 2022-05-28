@@ -38,10 +38,19 @@ The **HeightToAngle** node can be used to easily generate a *Rotate* map from a
 heightmap. All instances will be rotated depending on the slope. When using this
 node to generate the *Rotate* map, the *Rotate* parameter must be set to 180.
 
+The **HeightToOffset** node can be used to easily generate a *Translate* map from a
+heightmap. Outputs must be connected to the Translate X and Y inputs of the Tiler node.
+All instances will be translated depending on the slope, to reach the
+specified level, and to be accurate, the slopes must be homogeneous. When using this
+node to generate the *Translate* map, the *Translate X* and *Translate Y* parameters
+must be set to 1.
+
 Outputs
 +++++++
 
-The **Advanced Tiler** node outputs the splat image and 2 instance color maps.
+The **Advanced Tiler** node outputs the splat image, 2 instance color maps.
+
+The greyscale tiler has a fourth output that assigns a UV layout to each tile.
 
 Parameters
 ++++++++++

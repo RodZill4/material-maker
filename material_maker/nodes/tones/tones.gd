@@ -7,8 +7,8 @@ class Cursor:
 	var top : bool = true
 	var position : float
 
-	const WIDTH : int = 8
-	const HEIGHT : int = 8
+	const WIDTH : int = 12
+	const HEIGHT : int = 12
 
 	func _init(c, p, t = true):
 		color = c
@@ -75,13 +75,19 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
-func on_parameter_changed(p, _v) -> void:
+var moving_cursor : bool = false
+
+func on_parameter_changed(p, v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
 		if source != null:
 			$Histogram.set_generator(source.generator, source.output_index)
 		else:
 			$Histogram.set_generator(null, 0)
+	elif !moving_cursor:
+		var cursor = get("cursor_"+p)
+		if cursor != null:
+			cursor.set_value(get_parameter(p))
 
 func get_parameter(n : String) -> float:
 	var value = generator.get_parameter(n)
@@ -119,7 +125,9 @@ func set_parameter(n : String, v : float, d : float) -> void:
 			value.b = v
 		4:
 			value.a = v
-	generator.set_parameter(n, value)
+	moving_cursor = true
+	get_parent().set_node_parameters(generator, { n:MMType.serialize_value(value) })
+	moving_cursor = false
 
 func update_value(control : Cursor, value : float) -> void:
 	match control:

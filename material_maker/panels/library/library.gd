@@ -1,8 +1,6 @@
 extends VBoxContainer
 
 export var library_manager_name = ""
-export var base_library_name = "base.json"
-export var user_library_name = "user.json"
 
 var expanded_items : Array = []
 
@@ -189,7 +187,7 @@ func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
 			yield(timer, "timeout")
 			var image = get_viewport().get_texture().get_data()
 			image.flip_y()
-			image = image.get_rect(Rect2(new_nodes[0].rect_global_position-Vector2(1, 2), new_nodes[0].rect_size+Vector2(4, 4)))
+			image = image.get_rect(Rect2(new_nodes[0].rect_global_position, new_nodes[0].rect_size+Vector2(0, 2)))
 			print(get_icon_name(get_item_path(item)))
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
 			for n in new_nodes:

@@ -1,7 +1,5 @@
 extends VBoxContainer
 
-export(NodePath) var painter = null
-
 # The layer object
 var layers
 
@@ -36,11 +34,13 @@ func _on_Add_pressed():
 
 func _on_add_layer_menu(id):
 	layers.add_layer(id)
+	layers.get_parent().initialize_layers_history()
 
 func _on_Duplicate_pressed():
 	var current = tree.get_selected()
 	if current != null:
 		layers.duplicate_layer(current.get_meta("layer"))
+	layers.get_parent().initialize_layers_history()
 
 func _on_Remove_pressed():
 	var current = tree.get_selected()

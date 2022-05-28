@@ -1,17 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://material_maker/windows/environment_editor/environment_editor_scene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/environment_editor/environment_editor_viewport.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/windows/environment_editor/environment_editor.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=3]
 
-[sub_resource type="PanoramaSky" id=1]
-
-[sub_resource type="Environment" id=2]
-background_mode = 2
-background_sky = SubResource( 1 )
-
 [node name="EnvironmentEditor" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 230.0
@@ -27,60 +20,52 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HSplitContainer" type="HBoxContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Main" type="VBoxContainer" parent="."]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 798.0
+margin_bottom = 348.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Environments" type="ItemList" parent="HSplitContainer"]
+[node name="HSplitContainer" type="HBoxContainer" parent="Main"]
+margin_right = 796.0
+margin_bottom = 322.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Environments" type="ItemList" parent="Main/HSplitContainer"]
 margin_right = 112.0
-margin_bottom = 350.0
+margin_bottom = 322.0
 rect_min_size = Vector2( 112, 100 )
 max_columns = 4
 same_column_width = true
 fixed_column_width = 96
 icon_mode = 0
 
-[node name="ContextMenu" type="PopupMenu" parent="HSplitContainer/Environments"]
+[node name="ContextMenu" type="PopupMenu" parent="Main/HSplitContainer/Environments"]
 margin_right = 149.0
 margin_bottom = 34.0
 items = [ "Delete environment", null, 0, false, false, 0, 0, null, "", false ]
 
-[node name="ViewportContainer" type="ViewportContainer" parent="HSplitContainer"]
+[node name="ViewportContainer" type="ViewportContainer" parent="Main/HSplitContainer"]
 margin_left = 116.0
-margin_right = 596.0
-margin_bottom = 350.0
+margin_right = 592.0
+margin_bottom = 322.0
 size_flags_horizontal = 3
 
-[node name="Viewport" type="Viewport" parent="HSplitContainer/ViewportContainer"]
-size = Vector2( 200, 200 )
-own_world = true
-handle_input_locally = false
-msaa = 2
-render_target_update_mode = 3
+[node name="Viewport" parent="Main/HSplitContainer/ViewportContainer" instance=ExtResource( 1 )]
+render_target_update_mode = 0
 
-[node name="Objects" parent="HSplitContainer/ViewportContainer/Viewport" instance=ExtResource( 1 )]
-
-[node name="CameraPosition" type="Spatial" parent="HSplitContainer/ViewportContainer/Viewport"]
-
-[node name="CameraRotation1" type="Spatial" parent="HSplitContainer/ViewportContainer/Viewport/CameraPosition"]
-
-[node name="CameraRotation2" type="Spatial" parent="HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1"]
-
-[node name="Camera" type="Camera" parent="HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2"]
-transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2, 4 )
-environment = SubResource( 2 )
-current = true
-
-[node name="Sun" type="DirectionalLight" parent="HSplitContainer/ViewportContainer/Viewport"]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0 )
-
-[node name="UI" type="GridContainer" parent="HSplitContainer"]
-margin_left = 600.0
-margin_right = 800.0
-margin_bottom = 350.0
+[node name="UI" type="GridContainer" parent="Main/HSplitContainer"]
+margin_left = 596.0
+margin_right = 796.0
+margin_bottom = 322.0
 rect_min_size = Vector2( 200, 0 )
 mouse_filter = 2
 columns = 2
@@ -88,26 +73,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NameLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="NameLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 5.0
 margin_right = 107.0
 margin_bottom = 19.0
 text = "Name:"
 
-[node name="name" type="LineEdit" parent="HSplitContainer/UI"]
+[node name="name" type="LineEdit" parent="Main/HSplitContainer/UI"]
 margin_left = 111.0
 margin_right = 200.0
 margin_bottom = 24.0
 rect_pivot_offset = Vector2( 29, 5 )
 size_flags_horizontal = 3
 
-[node name="HdriUrlLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="HdriUrlLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 33.0
 margin_right = 107.0
 margin_bottom = 47.0
 text = "HDRI URL:"
 
-[node name="hdri_url" type="LineEdit" parent="HSplitContainer/UI"]
+[node name="hdri_url" type="LineEdit" parent="Main/HSplitContainer/UI"]
 margin_left = 111.0
 margin_top = 28.0
 margin_right = 200.0
@@ -115,26 +100,26 @@ margin_bottom = 52.0
 rect_pivot_offset = Vector2( 29, 5 )
 size_flags_horizontal = 3
 
-[node name="show_color" type="CheckBox" parent="HSplitContainer/UI"]
+[node name="show_color" type="CheckBox" parent="Main/HSplitContainer/UI"]
 margin_top = 56.0
 margin_right = 107.0
 margin_bottom = 80.0
 text = "Color:"
 
-[node name="color" type="ColorPickerButton" parent="HSplitContainer/UI"]
+[node name="color" type="ColorPickerButton" parent="Main/HSplitContainer/UI"]
 margin_left = 111.0
 margin_top = 56.0
 margin_right = 200.0
 margin_bottom = 80.0
 size_flags_horizontal = 3
 
-[node name="SkyEnergyLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="SkyEnergyLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 89.0
 margin_right = 107.0
 margin_bottom = 103.0
 text = "Sky Energy:"
 
-[node name="sky_energy" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="sky_energy" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -148,26 +133,26 @@ max_value = 16.0
 step = 0.1
 float_only = true
 
-[node name="AmbientLightLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="AmbientLightLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 115.0
 margin_right = 107.0
 margin_bottom = 129.0
 text = "Ambient color:"
 
-[node name="ambient_light_color" type="ColorPickerButton" parent="HSplitContainer/UI"]
+[node name="ambient_light_color" type="ColorPickerButton" parent="Main/HSplitContainer/UI"]
 margin_left = 111.0
 margin_top = 112.0
 margin_right = 200.0
 margin_bottom = 132.0
 size_flags_horizontal = 3
 
-[node name="AmbientLightEnergyLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="AmbientLightEnergyLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 141.0
 margin_right = 107.0
 margin_bottom = 155.0
 text = "Ambient Energy:"
 
-[node name="ambient_light_energy" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="ambient_light_energy" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -181,13 +166,13 @@ max_value = 16.0
 step = 0.1
 float_only = true
 
-[node name="AmbientLightSkyContributionLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="AmbientLightSkyContributionLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 169.0
 margin_right = 107.0
 margin_bottom = 183.0
 text = "Sky contribution:"
 
-[node name="ambient_light_sky_contribution" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="ambient_light_sky_contribution" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -200,26 +185,26 @@ value = 1.0
 step = 0.01
 float_only = true
 
-[node name="SunLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="SunLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 195.0
 margin_right = 107.0
 margin_bottom = 209.0
 text = "Sun color:"
 
-[node name="sun_color" type="ColorPickerButton" parent="HSplitContainer/UI"]
+[node name="sun_color" type="ColorPickerButton" parent="Main/HSplitContainer/UI"]
 margin_left = 111.0
 margin_top = 192.0
 margin_right = 200.0
 margin_bottom = 212.0
 size_flags_horizontal = 3
 
-[node name="SunEnergyLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="SunEnergyLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 221.0
 margin_right = 107.0
 margin_bottom = 235.0
 text = "Sun Energy:"
 
-[node name="sun_energy" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="sun_energy" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -233,13 +218,13 @@ max_value = 16.0
 step = 0.1
 float_only = true
 
-[node name="SunDirectionLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="SunDirectionLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 249.0
 margin_right = 107.0
 margin_bottom = 263.0
 text = "Sun Direction:"
 
-[node name="sun_direction" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="sun_direction" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -254,13 +239,13 @@ max_value = 180.0
 step = 0.1
 float_only = true
 
-[node name="SunAngleLabel" type="Label" parent="HSplitContainer/UI"]
+[node name="SunAngleLabel" type="Label" parent="Main/HSplitContainer/UI"]
 margin_top = 277.0
 margin_right = 107.0
 margin_bottom = 291.0
 text = "Sun Angle:"
 
-[node name="sun_angle" parent="HSplitContainer/UI" instance=ExtResource( 3 )]
+[node name="sun_angle" parent="Main/HSplitContainer/UI" instance=ExtResource( 3 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -275,10 +260,38 @@ max_value = 90.0
 step = 0.1
 float_only = true
 
+[node name="Buttons" type="HBoxContainer" parent="Main"]
+margin_left = 218.0
+margin_top = 326.0
+margin_right = 577.0
+margin_bottom = 346.0
+size_flags_horizontal = 4
+
+[node name="Download" type="Button" parent="Main/Buttons"]
+margin_right = 161.0
+margin_bottom = 20.0
+text = "Download environment"
+
+[node name="Share" type="Button" parent="Main/Buttons"]
+margin_left = 165.0
+margin_right = 308.0
+margin_bottom = 20.0
+text = "Upload environment"
+
+[node name="Close" type="Button" parent="Main/Buttons"]
+margin_left = 312.0
+margin_right = 359.0
+margin_bottom = 20.0
+text = "Close"
+
 [connection signal="popup_hide" from="." to="." method="queue_free"]
-[connection signal="gui_input" from="HSplitContainer/Environments" to="." method="_on_Environments_gui_input"]
-[connection signal="item_selected" from="HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
-[connection signal="rmb_clicked" from="HSplitContainer/Environments" to="." method="_on_Environments_rmb_clicked"]
-[connection signal="id_pressed" from="HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
-[connection signal="gui_input" from="HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
-[connection signal="resized" from="HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
+[connection signal="minimum_size_changed" from="Main" to="." method="_on_Main_minimum_size_changed"]
+[connection signal="gui_input" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_gui_input"]
+[connection signal="item_selected" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
+[connection signal="rmb_clicked" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_rmb_clicked"]
+[connection signal="id_pressed" from="Main/HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
+[connection signal="gui_input" from="Main/HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
+[connection signal="resized" from="Main/HSplitContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
+[connection signal="pressed" from="Main/Buttons/Download" to="." method="_on_Download_pressed"]
+[connection signal="pressed" from="Main/Buttons/Share" to="." method="_on_Share_pressed"]
+[connection signal="pressed" from="Main/Buttons/Close" to="." method="queue_free"]

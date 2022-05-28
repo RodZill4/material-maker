@@ -1,6 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material_maker/tools/share/hdri/kloofendal_48d_partly_cloudy_1k.exr" type="Texture" id=1]
 
 [sub_resource type="SphereMesh" id=1]
+radial_segments = 256
+rings = 128
 
 [sub_resource type="Shader" id=2]
 code = "shader_type spatial;
@@ -46,28 +50,32 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/uv2_scale = Vector3( 1, 1, 1 )
 shader_param/uv2_offset = Vector3( 0, 0, 0 )
 
-[sub_resource type="ProceduralSky" id=4]
-sky_energy = 0.75
-sun_latitude = 10.0
-sun_longitude = 125.0
+[sub_resource type="PanoramaSky" id=6]
+panorama = ExtResource( 1 )
 
 [sub_resource type="Environment" id=5]
 background_mode = 2
-background_sky = SubResource( 4 )
+background_sky = SubResource( 6 )
 ambient_light_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
 tonemap_mode = 2
 
 [node name="Spatial" type="Spatial"]
 
-[node name="Sphere" type="MeshInstance" parent="."]
+[node name="Pivot" type="Spatial" parent="."]
+transform = Transform( -0.38692, 0, -0.922113, 0, 1, 0, 0.922113, 0, -0.38692, 0, 0, 0 )
+
+[node name="Sphere" type="MeshInstance" parent="Pivot"]
 transform = Transform( 0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0 )
 mesh = SubResource( 1 )
+skeleton = NodePath("../..")
 material/0 = SubResource( 3 )
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.5, -0.224144, 0.836516, 0, 0.965926, 0.258819, -0.866025, -0.12941, 0.482963, 0, 0, 0 )
+[node name="DirectionalLight" type="DirectionalLight" parent="Pivot"]
+transform = Transform( 0.488265, -0.365119, 0.792645, 0.0168143, 0.912039, 0.409759, -0.872534, -0.186743, 0.451456, 0, 0, 0 )
 shadow_enabled = true
 
-[node name="Camera" type="Camera" parent="."]
+[node name="Camera" type="Camera" parent="Pivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )

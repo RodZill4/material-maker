@@ -13,3 +13,6 @@ made from random patterns.
 	node_noise_voronoi
 	node_noise_fbm
 	node_noise_anisotropic
+	node_noise_wavelet
+	node_noise_crystal
+	node_noise_dirt

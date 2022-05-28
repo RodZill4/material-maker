@@ -8,7 +8,7 @@ Base class for texture generators that provide a texture as output
 
 var texture : ImageTexture = ImageTexture.new()
 
-func get_output_defs() -> Array:
+func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type="rgba" } ]
 
 func get_globals(texture_name : String) -> Array:

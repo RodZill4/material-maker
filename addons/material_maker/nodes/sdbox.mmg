@@ -10,9 +10,11 @@
 		"h": 0.2,
 		"w": 0.3
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_d = abs($uv-vec2($cx+0.5, $cy+0.5))-vec2($w, $h);\n",
-		"global": "",
+		"code": "",
+		"global": "float sd_box(vec2 uv, vec2 size) {\n\tvec2 d = abs(uv)-size;\n\treturn length(max(d, vec2(0)))+min(max(d.x, d.y), 0.0);\n}",
 		"inputs": [
 
 		],
@@ -22,7 +24,7 @@
 		"outputs": [
 			{
 				"longdesc": "The generated signed distance function",
-				"sdf2d": "length(max($(name_uv)_d,vec2(0)))+min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0)",
+				"sdf2d": "sd_box($uv-vec2($cx+0.5, $cy+0.5), vec2($w, $h))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://material_maker/tools/painter/shaders/texture2view.shader" type="Shader" id=1]
-[ext_resource path="res://material_maker/tools/painter/shaders/viewtotexture.tres" type="Material" id=5]
+[ext_resource path="res://material_maker/tools/painter/shaders/view2texture.tres" type="Material" id=5]
 [ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
 [ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
 
@@ -24,8 +24,9 @@ shader_param/model_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4 
 shader_param/fovy_degrees = 70.0
 shader_param/z_near = 0.833974
 shader_param/z_far = 10.2641
+shader_param/texture_size = 8.0
 shader_param/aspect = 1.83214
-shader_param/uv_tolerance = 0.01
+shader_param/texel_tolerance = 1.0
 shader_param/view2texture = SubResource( 4 )
 
 [node name="Painter" type="Node" groups=["preview"]]

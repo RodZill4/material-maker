@@ -16,7 +16,7 @@ func popup_centered(size : Vector2 = Vector2(0, 0)) -> void:
 	.popup_centered(size)
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()
 
-func _on_LineEdit_text_entered(new_text) -> void:
+func _on_LineEdit_text_entered(_new_text) -> void:
 	pass
 
 func _on_FilePickerButton_file_selected(f):
@@ -37,3 +37,6 @@ func enter_info(value : String = "") -> Dictionary:
 	var result = yield(self, "return_info")
 	queue_free()
 	return result
+
+func _on_VBoxContainer_minimum_size_changed():
+	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)

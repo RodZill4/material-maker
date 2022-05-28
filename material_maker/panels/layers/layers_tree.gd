@@ -12,7 +12,6 @@ const ICONS = [ ICON_LAYER_PAINT, ICON_LAYER_PROC, ICON_LAYER_MASK ]
 const BUTTON_SHOWN = preload("res://material_maker/panels/layers/icons/visible.tres")
 const BUTTON_HIDDEN = preload("res://material_maker/panels/layers/icons/not_visible.tres")
 
-signal layers_changed()
 signal selection_changed(old_selected, new_selected)
 
 func _ready():

@@ -5,16 +5,19 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"v1": 0,
+		"v2": 0.1,
+		"v3": 0.2,
+		"v4": 0.3,
+		"v5": 0.4
 	},
-	"seed": 0.846412,
+	"seed": 0.196283,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 rotate(vec2 uv, vec2 center, float rotate) {\n \tvec2 rv;\n\tuv -= center;\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv += center;\n    return rv;\t\n}",
 		"inputs": [
 			{
-				"default": "vec4(0.0)",
+				"default": "vec2(0.0)",
 				"function": true,
 				"label": "",
 				"longdesc": "The input image",
@@ -29,37 +32,96 @@
 		"outputs": [
 			{
 				"longdesc": "Shows a variation of the input",
-				"sdf3dc": "$in.variation($uv, $seed)",
+				"sdf3dc": "$in.variation($uv, $seed+$v1)",
 				"shortdesc": "Output1",
 				"type": "sdf3dc"
 			},
 			{
 				"longdesc": "Shows a variation of the input",
-				"sdf3dc": "$in.variation($uv, $seed+0.1)",
+				"sdf3dc": "$in.variation($uv, $seed+$v2)",
 				"shortdesc": "Output2",
 				"type": "sdf3dc"
 			},
 			{
 				"longdesc": "Shows a variation of the input",
-				"sdf3dc": "$in.variation($uv, $seed+0.2)",
+				"sdf3dc": "$in.variation($uv, $seed+$v3)",
 				"shortdesc": "Output3",
 				"type": "sdf3dc"
 			},
 			{
 				"longdesc": "Shows a variation of the input",
-				"sdf3dc": "$in.variation($uv, $seed+0.3)",
+				"sdf3dc": "$in.variation($uv, $seed+$v4)",
 				"shortdesc": "Output4",
 				"type": "sdf3dc"
 			},
 			{
 				"longdesc": "Shows a variation of the input",
-				"sdf3dc": "$in.variation($uv, $seed+0.4)",
+				"sdf3dc": "$in.variation($uv, $seed+$v5)",
 				"shortdesc": "Output5",
 				"type": "sdf3dc"
 			}
 		],
 		"parameters": [
-
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"longdesc": "Seed modifier for output 1",
+				"max": 1,
+				"min": 0,
+				"name": "v1",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "",
+				"longdesc": "Seed modifier for output 2",
+				"max": 1,
+				"min": 0,
+				"name": "v2",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.2,
+				"label": "",
+				"longdesc": "Seed modifier for output 3",
+				"max": 1,
+				"min": 0,
+				"name": "v3",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "",
+				"longdesc": "Seed modifier for output 4",
+				"max": 1,
+				"min": 0,
+				"name": "v4",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.4,
+				"label": "",
+				"longdesc": "Seed modifier for output 5",
+				"max": 1,
+				"min": 0,
+				"name": "v5",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			}
 		],
 		"shortdesc": "Variations"
 	},

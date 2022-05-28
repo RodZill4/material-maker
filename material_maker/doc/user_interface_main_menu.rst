@@ -43,6 +43,10 @@ File menu
 Edit menu
 ^^^^^^^^^
 
+* *Undo* reverts the latest change, and *Redo* can be used to re-apply reverted actions.
+  In Material projects, all operations on the graph can be reverted. In Paint projects,
+  only strokes are taken into account by undo/redo.
+
 * *Cut* Copies the selected nodes to the clipboard and removes them from the current material.
 
 * *Copy* Copies the selected nodes to the clipboard
@@ -51,6 +55,18 @@ Edit menu
   the center of the view, so it is advised to scroll to the correct location before pasting.
   Pasting also unselects all previously selected nodes and selects all newly created nodes,
   so they can easily be moved around.
+
+* *Duplicate* creates a copy of the current selection without affecting the clipboard
+
+* *Select all* selects all nodes in the current graph view
+
+* *Select none* clears the selection in the current graph view
+
+* *Invert selection* inverts the selection in the current graph view
+
+* *Select sources* selects all direct and indirect source nodes of the current selection
+
+* *Select targets* selects all direct and indirect target nodes of the current selection
 
 * *Load Selection* Loads a graph selection previously saved into a file
 
@@ -103,9 +119,15 @@ Tools menu
   confirmed, the current brush will be added to the user brush library under
   that name. The user library is saved automatically.
 
-* the *Painting* submenu can be used to change the painted textures resolutions,
-  enable or disable different channels of the painted material or select the
-  environment of the Paint panel.
+* the *Paint project settings* submenu can be used to show a dialog to configure
+  painted textures resolutions and enable or disable different channels of the
+  painted material
+  
+.. image:: images/paint_project_settings.png
+  :align: center
+
+* the *Set painting environment* submenu can be used to select the environment for
+  the Paint panel.
 
 * the *Environment editor* menu shows the *Environment editor* window that can be used
   to create new environments for 3D views.
@@ -120,8 +142,6 @@ Help menu
 
 * *Report a bug* opens a web browser on the Issues page of Material Maker's GitHub project. Please
   do not hesitate to use it to suggest improvements for Material Maker.
-
-* *Material Maker on reddit* opens a web browser on Material Maker's subreddit.
 
 * *About* Shows the about dialog.
 

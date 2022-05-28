@@ -15,15 +15,13 @@ onready var metallic = $Metallic
 onready var roughness = $Roughness
 onready var emission = $Emission
 onready var normal = $Normal
+onready var normal_map = $NormalMap
 onready var depth = $Depth
 onready var occlusion = $Occlusion
 onready var painter_node = get_node(painter) if painter != null else null
 
-"""
-onready var nm_viewport = $NormalMap
-onready var nm_rect = $NormalMap/Rect
-onready var nm_material = $NormalMap/Rect.get_material()
-"""
+onready var nm_material : ShaderMaterial = $NormalMap/Rect.get_material()
+var generate_nm : bool = true
 
 onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
 
@@ -52,20 +50,15 @@ func set_texture_size(s : float):
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	resize_layers(s)
-	albedo.size = size
-	metallic.size = size
-	roughness.size = size
-	emission.size = size
-	normal.size = size
-	depth.size = size
-	occlusion.size = size
-	"""
-	nm_viewport.size = size
-	nm_rect.rect_size = size
+	for vp in [ albedo, metallic, roughness, emission, normal, depth, occlusion, normal_map ]:
+		vp.size = size
+		for c in vp.get_children():
+			c.rect_size = size
+	
 	nm_material.set_shader_param("epsilon", 1/s)
-	nm_material.set_shader_param("tex", depth.get_texture())
-	nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
-	"""
+	#nm_material.set_shader_param("depth_tex", depth.get_texture())
+	#nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
+	
 	painter_node.set_texture_size(s)
 	select_layer(selected_layer_save)
 	while result is GDScriptFunctionState:
@@ -106,7 +99,7 @@ func get_emission_texture():
 
 func get_normal_map():
 	#return nm_viewport.get_texture()
-	return normal.get_texture()
+	return normal_map.get_texture()
 
 func get_depth_texture():
 	return depth.get_texture()
@@ -130,14 +123,18 @@ func select_layer(layer : Layer) -> void:
 				new_texture.create_from_image(old_texture.get_data())
 			selected_layer.set(c, new_texture)
 	if layer != null:
-		emit_signal("layer_selected", layer)
 		for c in layer.get_channels():
 			if layer.get(c) != null:
 				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
 				painter_node.call("init_"+c+"_texture")
 			layer.set(c, painter_node.call("get_"+c+"_texture"))
+		emit_signal("layer_selected", layer)
 	selected_layer = layer
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	_on_layers_changed()
@@ -379,11 +376,29 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		occlusion.add_child(color_rect)
 	_on_Painter_painted()
 
+func set_normal_options(paint_normal, paint_depth_as_bump, bump_strength):
+	if paint_normal:
+		generate_nm = true
+		if paint_depth_as_bump:
+			nm_material.set_shader_param("bump_strength", bump_strength)
+		else:
+			nm_material.set_shader_param("bump_strength", 0.0)
+	elif paint_depth_as_bump:
+		generate_nm = true
+		nm_material.set_shader_param("bump_strength", 1.0)
+	else:
+		generate_nm = false
+	_on_Painter_painted()
+
 func load(data : Dictionary, file_name : String):
 	var dir_name = file_name.left(file_name.rfind("."))
 	layers.clear()
 	load_layers(data.layers, layers, dir_name)
 	_on_layers_changed()
+	if !layers.empty():
+		for i in range(32):
+			yield(get_tree(), "idle_frame")
+		select_layer(layers[0])
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
 	for l in data_layers:
@@ -412,8 +427,7 @@ func save(file_name : String) -> Dictionary:
 	var dir_name = file_name.left(file_name.rfind("."))
 	var dir = Directory.new()
 	dir.make_dir(dir_name)
-	var data = { texture_size=texture_size }
-	#tree.save_layers(data, tree.get_root(), 0, dir_name, [ "albedo", "mr", "emission", "depth" ])
+	var data = {}
 	data.layers = Layer.save_layers(layers, dir_name)
 	return data
 
@@ -421,13 +435,11 @@ func _on_Painter_painted():
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
 		viewport.update_worlds()
-	# TODO: make the following optional (and mix with normal channel)
-	"""
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	nm_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-	nm_viewport.update_worlds()
-	"""
+	if generate_nm:
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		normal_map.render_target_update_mode = Viewport.UPDATE_ONCE
+		normal_map.update_worlds()
 
 # debug
 

@@ -20,9 +20,11 @@ The **Directional Blur** node outputs the result of the blur operation.
 Parameters
 ++++++++++
 
-The **Directional Blur** node has three parameters:
+The **Directional Blur** node has four parameters:
 
 * The *grid size* defines the size of the output image.
+
+* The *mode* spcifies whether the blur will move in one direction or both.
 
 * The *sigma* parameter defines how smooth the output will be.
 

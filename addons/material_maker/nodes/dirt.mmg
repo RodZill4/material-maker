@@ -1,0 +1,1873 @@
+{
+	"connections": [
+		{
+			"from": "tiler",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "shape",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 0
+		},
+		{
+			"from": "fbm2",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "tiler",
+			"to_port": 1
+		},
+		{
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "math_3",
+			"to_port": 0
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "tiler",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "tiler_2",
+			"to_port": 0
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "tiler_3",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_2",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_3",
+			"from_port": 0,
+			"to": "math_6",
+			"to_port": 1
+		},
+		{
+			"from": "math_6",
+			"from_port": 0,
+			"to": "math_7",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "math_7",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_5",
+			"from_port": 0,
+			"to": "math_5",
+			"to_port": 0
+		},
+		{
+			"from": "shape_3",
+			"from_port": 0,
+			"to": "rotate",
+			"to_port": 0
+		},
+		{
+			"from": "rotate",
+			"from_port": 0,
+			"to": "tiler_5",
+			"to_port": 0
+		},
+		{
+			"from": "math_3",
+			"from_port": 0,
+			"to": "tiler_4",
+			"to_port": 0
+		},
+		{
+			"from": "shape_3",
+			"from_port": 0,
+			"to": "tiler_6",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_4",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 0
+		},
+		{
+			"from": "tiler_6",
+			"from_port": 0,
+			"to": "math_4",
+			"to_port": 1
+		},
+		{
+			"from": "math_4",
+			"from_port": 0,
+			"to": "math_12",
+			"to_port": 0
+		},
+		{
+			"from": "math_5",
+			"from_port": 0,
+			"to": "math_12",
+			"to_port": 1
+		},
+		{
+			"from": "math_12",
+			"from_port": 0,
+			"to": "math_9",
+			"to_port": 0
+		},
+		{
+			"from": "math_9",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 2
+		}
+	],
+	"label": "Dirt",
+	"longdesc": "A node to generate varios composite dirt noises",
+	"name": "dirt",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "math_2",
+			"node_position": {
+				"x": -1417.5,
+				"y": -8.5
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": "3.14 / 2.0",
+				"op": 17
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "shape",
+			"node_position": {
+				"x": -1629.5,
+				"y": 4.5
+			},
+			"parameters": {
+				"edge": 0.32,
+				"radius": 1,
+				"shape": 0,
+				"sides": 6
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "shape"
+		},
+		{
+			"name": "fbm2",
+			"node_position": {
+				"x": -1072.5,
+				"y": -246.5
+			},
+			"parameters": {
+				"folds": 0,
+				"iterations": 2,
+				"noise": 1,
+				"persistence": 0.5,
+				"scale_x": "2.0 * $d_scale",
+				"scale_y": "2.0 * $d_scale"
+			},
+			"seed": 0.303018,
+			"seed_locked": false,
+			"type": "fbm2"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -732.5,
+				"y": -222.5
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0.34375,
+							"g": 0.34375,
+							"pos": 0,
+							"r": 0.34375
+						},
+						{
+							"a": 1,
+							"b": 0.800781,
+							"g": 0.800781,
+							"pos": 1,
+							"r": 0.800781
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "colorize"
+		},
+		{
+			"name": "tiler",
+			"node_position": {
+				"x": -1069.5,
+				"y": 8.5
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 0,
+				"scale": 0.7,
+				"scale_x": "0.004 / $d_scale",
+				"scale_y": "0.004 / $d_scale",
+				"select_inputs": 0,
+				"tx": "256.0 * $d_scale",
+				"ty": "256.0 * $d_scale",
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.008811,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": -747.5,
+				"y": -2.5
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.48,
+				"op": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1947.5,
+				"y": -55.357143
+			},
+			"parameters": {
+
+			},
+			"ports": [
+
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 184.5,
+				"y": 516.642822
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -1176.071411,
+				"y": -484.5
+			},
+			"parameters": {
+				"d_scale": 1,
+				"param0": 0,
+				"param1": 11
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"configurations": {
+						"Dirt 1": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"Dirt 2": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							}
+						],
+						"Dirt 3": [
+							{
+								"node": "switch",
+								"value": 2,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Type",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"longdesc": "The type of dirt noise to generate",
+					"name": "param0",
+					"shortdesc": "Noise",
+					"type": "config_control"
+				},
+				{
+					"default": 1,
+					"label": "Scale",
+					"longdesc": "The scale of the noise pattern",
+					"max": 8,
+					"min": 1,
+					"name": "d_scale",
+					"shortdesc": "Scale",
+					"step": 1,
+					"type": "named_parameter"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the output",
+					"name": "param1",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "shape_2",
+			"node_position": {
+				"x": -1505.75708,
+				"y": 610.095276
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 1,
+				"shape": 0,
+				"sides": 6
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "shape"
+		},
+		{
+			"name": "math_3",
+			"node_position": {
+				"x": -1565.75708,
+				"y": 1001.095215
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": "3.14 / 2.0",
+				"op": 17
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "tiler_2",
+			"node_position": {
+				"x": -1148.00708,
+				"y": 570.928589
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 0,
+				"scale": 0.7,
+				"scale_x": "0.008 / $d_scale",
+				"scale_y": "0.008 / $d_scale",
+				"select_inputs": 0,
+				"tx": "64.0 * $d_scale",
+				"ty": "64.0 * $d_scale",
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.704787,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "tiler_3",
+			"node_position": {
+				"x": -1168.25708,
+				"y": 978.428589
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 0,
+				"scale": 0.7,
+				"scale_x": "0.004 / $d_scale",
+				"scale_y": "0.004 / $d_scale",
+				"select_inputs": 0,
+				"tx": "256.0 * $d_scale",
+				"ty": "256.0 * $d_scale",
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.008811,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "math_6",
+			"node_position": {
+				"x": -839.75708,
+				"y": 757.428589
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_7",
+			"node_position": {
+				"x": -822.75708,
+				"y": 976.428589
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.41,
+				"op": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -97.75708,
+				"y": 507.428589
+			},
+			"parameters": {
+				"choices": 3,
+				"outputs": 1,
+				"source": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "switch"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -99.24292,
+				"y": 682.355774
+			},
+			"parameters": {
+				"size": 11
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "tiler_5",
+			"node_position": {
+				"x": -1162.04834,
+				"y": 2428.061279
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 180,
+				"scale": 0.53,
+				"scale_x": 0.004,
+				"scale_y": 0.024,
+				"select_inputs": 0,
+				"tx": 128,
+				"ty": 128,
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.221531,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "shape_3",
+			"node_position": {
+				"x": -1698.54834,
+				"y": 2330.061279
+			},
+			"parameters": {
+				"edge": 1,
+				"radius": 0.6,
+				"shape": 1,
+				"sides": 4
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "shape"
+		},
+		{
+			"name": "math_5",
+			"node_position": {
+				"x": -873.54834,
+				"y": 2374.061279
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.24,
+				"op": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "rotate",
+			"node_position": {
+				"x": -1442.54834,
+				"y": 2496.061279
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": 45
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "rotate"
+		},
+		{
+			"name": "tiler_4",
+			"node_position": {
+				"x": -1162.04834,
+				"y": 1532.061279
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 0,
+				"scale": 0.7,
+				"scale_x": "0.008 / $d_scale",
+				"scale_y": "0.008 / $d_scale",
+				"select_inputs": 0,
+				"tx": "128.0 * $d_scale",
+				"ty": "128.0 * $d_scale",
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.704787,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "tiler_6",
+			"node_position": {
+				"x": -1151.04834,
+				"y": 1959.061279
+			},
+			"parameters": {
+				"fixed_offset": 0,
+				"offset": 1,
+				"overlap": 2,
+				"rotate": 180,
+				"scale": 0.7,
+				"scale_x": "0.012 / $d_scale",
+				"scale_y": "0.012 / $d_scale",
+				"select_inputs": 0,
+				"tx": "128.0 * $d_scale",
+				"ty": "128.0 * $d_scale",
+				"value": 0.86,
+				"variations": false
+			},
+			"seed": 0.008811,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)));",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image or atlas of 4 or 16 input images",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The mask applied to the pattern",
+						"name": "mask",
+						"shortdesc": "Mask",
+						"type": "f"
+					}
+				],
+				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\t$select_inputs\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\t\t//c = max(c, c1);\n\t\t\t\tc = c + c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"longdesc": "Tiles several occurences of an input image while adding randomness.",
+				"name": "Add Tiler",
+				"outputs": [
+					{
+						"f": "$(name_uv)_rch.a",
+						"longdesc": "Shows the generated pattern",
+						"shortdesc": "Output",
+						"type": "f"
+					},
+					{
+						"longdesc": "Shows a random color for each instance of the input image",
+						"rgb": "$(name_uv)_rch.rgb",
+						"shortdesc": "Instance map",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile X",
+						"longdesc": "The number of columns of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "tx",
+						"shortdesc": "Tile.x",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 4,
+						"label": "Tile Y",
+						"longdesc": "The number of rows of the tiles pattern",
+						"max": 64,
+						"min": 1,
+						"name": "ty",
+						"shortdesc": "Tile.y",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Overlap",
+						"longdesc": "The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.",
+						"max": 5,
+						"min": 0,
+						"name": "overlap",
+						"shortdesc": "Overlap",
+						"step": 1,
+						"type": "float"
+					},
+					{
+						"default": 0,
+						"label": "Inputs",
+						"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+						"name": "select_inputs",
+						"shortdesc": "Input",
+						"type": "enum",
+						"values": [
+							{
+								"name": "1",
+								"value": " "
+							},
+							{
+								"name": "4",
+								"value": "pv = clamp(0.5*(pv+floor(rand2(seed)*2.0)), vec2(0.0), vec2(1.0));"
+							},
+							{
+								"name": "16",
+								"value": "pv = clamp(0.25*(pv+floor(rand2(seed)*4.0)), vec2(0.0), vec2(1.0));"
+							}
+						]
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale X",
+						"longdesc": "The scale of input images on the X axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "Scale Y",
+						"longdesc": "The scale of input images on the Y axis",
+						"max": 2,
+						"min": 0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Fixed Offset",
+						"longdesc": "The relative offset of odd rows",
+						"max": 1,
+						"min": 0,
+						"name": "fixed_offset",
+						"shortdesc": "FixedOffset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Offset",
+						"max": 1,
+						"min": 0,
+						"name": "offset",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Rotate",
+						"longdesc": "The random rotation applied to each image instance",
+						"max": 180,
+						"min": 0,
+						"name": "rotate",
+						"shortdesc": "RndRotate",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0,
+						"label": "Rnd Scale",
+						"longdesc": "The random scale applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "scale",
+						"shortdesc": "RndScale",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Rnd Value",
+						"longdesc": "The random greyscale value applied to each image instance",
+						"max": 1,
+						"min": 0,
+						"name": "value",
+						"shortdesc": "RndValue",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Variations",
+						"longdesc": "Check to tile variations of the input",
+						"name": "variations",
+						"shortdesc": "Variations",
+						"type": "boolean"
+					}
+				],
+				"shortdesc": "Tiler"
+			},
+			"type": "shader"
+		},
+		{
+			"name": "math_4",
+			"node_position": {
+				"x": -824.54834,
+				"y": 1597.061279
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_9",
+			"node_position": {
+				"x": -583.54834,
+				"y": 1784.061279
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0.32,
+				"op": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		},
+		{
+			"name": "math_12",
+			"node_position": {
+				"x": -825.54834,
+				"y": 1802.061279
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		}
+	],
+	"parameters": {
+		"d_scale": 1,
+		"param0": 0,
+		"param1": 11
+	},
+	"seed": 0.745354,
+	"seed_locked": false,
+	"shortdesc": "Dirt",
+	"type": "graph"
+}
