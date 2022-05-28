@@ -3,7 +3,7 @@ extends Node
 func _ready():
 	pass # Replace with function body.
 
-func load_obj_file(path : String) -> Mesh:
+func load_obj_file(path : String) -> ArrayMesh:
 	if path == null:
 		return null
 	var ext := path.get_extension()
@@ -50,7 +50,7 @@ func load_obj_file(path : String) -> Mesh:
 		st.generate_normals()
 	if hasTex:
 		st.generate_tangents()
-	var mdl : Mesh = st.commit()
+	var mdl : ArrayMesh = st.commit()
 	
 	return mdl
 

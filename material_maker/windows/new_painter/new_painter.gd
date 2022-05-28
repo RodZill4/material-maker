@@ -10,6 +10,7 @@ onready var button_ok : Button = $VBoxContainer/Buttons/OK
 onready var camera : Camera = $VBoxContainer/Main/ViewportContainer/Viewport/CameraPivot/Camera
 onready var viewport_container : ViewportContainer = $VBoxContainer/Main/ViewportContainer
 onready var viewport : Viewport = $VBoxContainer/Main/ViewportContainer/Viewport
+onready var error_label : Label = $VBoxContainer/Main/ViewportContainer/Error
 
 func _on_ViewportContainer_resized():
 	viewport.size = $VBoxContainer/Main/ViewportContainer.rect_size
@@ -31,7 +32,7 @@ func set_mesh(file_name : String) -> void:
 	if file_name == mesh_filename:
 		return
 	mesh_filename = file_name
-	var mesh : Mesh = $ObjLoader.load_obj_file(mesh_filename)
+	var mesh : ArrayMesh = $ObjLoader.load_obj_file(mesh_filename)
 	if mesh != null:
 		mesh_instance.mesh = mesh
 		$VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
@@ -43,6 +44,12 @@ func set_mesh(file_name : String) -> void:
 		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
 		var d : float = aabb.size.length()
 		camera.transform.origin.z = 0.8*d
+		var errors : PoolStringArray = PoolStringArray()
+		if mesh.get_surface_count() > 1:
+			errors.append("Mesh has several surfaces")
+		if mesh.surface_get_format(0) & ArrayMesh.ARRAY_FORMAT_TEX_UV == 0:
+			errors.append("Mesh does not have UVs")
+		error_label.text = errors.join("\n")
 	else:
 		button_ok.disabled = true
 
