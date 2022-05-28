@@ -13,6 +13,7 @@
 	"Filter/Supersample": "antialias,smoothen",
 	"Filter/SwapChannels": "shuffle,change,bind",
 	"Filter/Tonality": "curves",
+	"Filter/Tones": "levels",
 	"Miscellaneous/Buffer": "pause,wait,optimize",
 	"Miscellaneous/Comment": "note,frame",
 	"Miscellaneous/Export": "save",
