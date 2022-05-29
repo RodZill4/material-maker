@@ -170,6 +170,8 @@ func update_buffer() -> void:
 				renderer = mm_renderer.request(self)
 				while renderer is GDScriptFunctionState:
 					renderer = yield(renderer, "completed")
+				if renderer == null:
+					return
 				current_renderer = renderer
 			if current_iteration == 0:
 				renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
