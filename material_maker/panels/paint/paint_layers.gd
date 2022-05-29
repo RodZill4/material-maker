@@ -23,7 +23,7 @@ onready var painter_node = get_node(painter) if painter != null else null
 onready var nm_material : ShaderMaterial = $NormalMap/Rect.get_material()
 var generate_nm : bool = true
 
-onready var layers_pane = get_node("/root/MainWindow").layout.get_panel("Layers")
+onready var layers_pane = mm_globals.main_window.layout.get_panel("Layers")
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
 const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")

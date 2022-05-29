@@ -4,8 +4,6 @@ export(int, 0, 3) var preview : int = 0
 
 onready var tree = $Tree
 
-var config_cache : ConfigFile
-
 var default_texture : ImageTexture = null
 var current_graph_edit = null
 var current_generator = null
@@ -17,8 +15,8 @@ var pending_updates = {}
 signal group_selected
 
 func _ready() -> void:
-	if config_cache.has_section_key("hierarchy", "previews"):
-		preview = config_cache.get_value("hierarchy", "previews")
+	if mm_globals.config.has_section_key("hierarchy", "previews"):
+		preview = mm_globals.config.get_value("hierarchy", "previews")
 	var default_image = Image.new()
 	default_image.create(24, 24, false, Image.FORMAT_RGBA8)
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
@@ -138,7 +136,7 @@ func _on_Delay_timeout() -> void:
 
 func _on_PreviewMenu_id_pressed(id):
 	preview = id
-	config_cache.set_value("hierarchy", "previews", preview)
+	mm_globals.config.set_value("hierarchy", "previews", preview)
 	update_from_graph_edit(current_graph_edit)
 
 

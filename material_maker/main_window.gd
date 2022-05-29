@@ -4,8 +4,6 @@ var quitting : bool = false
 
 var recent_files = []
 
-var config_cache : ConfigFile = ConfigFile.new()
-
 var current_tab = null
 
 var updating : bool = false
@@ -113,53 +111,34 @@ const MENU = [
 	{ menu="Help", command="about", description="About" }
 ]
 
-const DEFAULT_CONFIG = {
-	locale = "",
-	confirm_quit = true,
-	confirm_close_project = true,
-	vsync = true,
-	fps_limit = 145,
-	idle_fps_limit = 20,
-	ui_scale = 0,
-	ui_3d_preview_resolution = 2.0,
-	ui_3d_preview_tesselation_detail = 256,
-	ui_3d_preview_sun_shadow = false,
-	bake_ray_count = 64,
-	bake_ao_ray_dist = 128.0,
-	bake_ao_ray_bias = 0.005,
-	bake_denoise_radius = 3
-}
+
+func _enter_tree() -> void:
+	mm_globals.main_window = self
 
 func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 
-	# Load and nitialize config
-	config_cache.load("user://cache.ini")
-	for k in DEFAULT_CONFIG.keys():
-		if ! config_cache.has_section_key("config", k):
-			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
-
-	if get_config("locale") == "":
-		config_cache.set_value("config", "locale", TranslationServer.get_locale())
+	if mm_globals.get_config("locale") == "":
+		mm_globals.set_config("locale", TranslationServer.get_locale())
 
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
-	if config_cache.has_section_key("window", "screen"):
-		OS.current_screen = config_cache.get_value("window", "screen")
-	if config_cache.has_section_key("window", "maximized"):
-		OS.window_maximized = config_cache.get_value("window", "maximized")
+	if mm_globals.config.has_section_key("window", "screen"):
+		OS.current_screen = mm_globals.config.get_value("window", "screen")
+	if mm_globals.config.has_section_key("window", "maximized"):
+		OS.window_maximized = mm_globals.config.get_value("window", "maximized")
 
 	if !OS.window_maximized:
-		if config_cache.has_section_key("window", "position"):
-			OS.window_position = config_cache.get_value("window", "position")
-		if config_cache.has_section_key("window", "size"):
-			OS.window_size = config_cache.get_value("window", "size")
+		if mm_globals.config.has_section_key("window", "position"):
+			OS.window_position = mm_globals.config.get_value("window", "position")
+		if mm_globals.config.has_section_key("window", "size"):
+			OS.window_size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
 	var theme_name : String = "default"
-	if config_cache.has_section_key("window", "theme"):
-		theme_name = config_cache.get_value("window", "theme")
+	if mm_globals.config.has_section_key("window", "theme"):
+		theme_name = mm_globals.config.get_value("window", "theme")
 	set_theme(theme_name)
 
 	# In HTML5 export, copy all examples to the filesystem
@@ -184,7 +163,7 @@ func _ready() -> void:
 	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
 
-	layout.load_panels(config_cache)
+	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
@@ -208,28 +187,31 @@ func _ready() -> void:
 
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
+func _exit_tree() -> void:
+	# Save the window position and size to remember it when restarting the application
+	mm_globals.config.set_value("window", "screen", OS.current_screen)
+	mm_globals.config.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
+	mm_globals.config.set_value("window", "position", OS.window_position)
+	mm_globals.config.set_value("window", "size", OS.window_size)
+	layout.save_config()
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 
-func get_config(key : String):
-	if ! config_cache.has_section_key("config", key):
-		return DEFAULT_CONFIG[key]
-	return config_cache.get_value("config", key)
-
 func on_config_changed() -> void:
-	OS.vsync_enabled = get_config("vsync")
+	OS.vsync_enabled = mm_globals.get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
 # warning-ignore:narrowing_conversion
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 	# locale
-	var locale = get_config("locale")
+	var locale = mm_globals.get_config("locale")
 	if locale != "" and locale != TranslationServer.get_locale():
 		TranslationServer.set_locale(locale)
 		get_tree().call_group("updated_from_locale", "update_from_locale")
 
-	var scale = get_config("ui_scale")
+	var scale = mm_globals.get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
 		# This prevents UI elements from being too small on hiDPI displays.
@@ -237,9 +219,9 @@ func on_config_changed() -> void:
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
 	# Clamp to reasonable values to avoid crashes on startup.
-	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.0)
+	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
+	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -464,7 +446,7 @@ func export_material(file_path : String, profile : String) -> void:
 	var project = get_current_project()
 	if project == null:
 		return
-	config_cache.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
+	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	project.export_material(export_prefix, profile)
 
@@ -482,8 +464,8 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
 	var config_key = export_profile_config_key(profile)
-	if config_cache.has_section_key("path", config_key):
-		dialog.current_dir = config_cache.get_value("path", config_key)
+	if mm_globals.config.has_section_key("path", config_key):
+		dialog.current_dir = mm_globals.config.get_value("path", config_key)
 	add_child(dialog)
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
@@ -506,7 +488,7 @@ func set_theme(theme_name) -> void:
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
 	set_theme(theme_name)
-	config_cache.set_value("window", "theme", theme_name)
+	mm_globals.config.set_value("window", "theme", theme_name)
 
 
 func create_menu_show_panels(menu : PopupMenu) -> void:
@@ -576,8 +558,8 @@ func load_project() -> void:
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
 	dialog.add_filter("*.mmpp;Model Painting File")
-	if config_cache.has_section_key("path", "project"):
-		dialog.current_dir = config_cache.get_value("path", "project")
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
@@ -594,7 +576,7 @@ func do_load_projects(filenames) -> void:
 		file.close()
 		do_load_project(file_name)
 	if file_name != "":
-		config_cache.set_value("path", "project", file_name.get_base_dir())
+		mm_globals.config.set_value("path", "project", file_name.get_base_dir())
 
 func do_load_project(file_name) -> bool:
 	var status : bool = false
@@ -679,14 +661,14 @@ func quit() -> void:
 	dialog.dialog_text = "Quit Material Maker?"
 	dialog.add_cancel("Cancel")
 	add_child(dialog)
-	if get_config("confirm_quit"):
+	if mm_globals.get_config("confirm_quit"):
 		var result = dialog.ask()
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if result == "cancel":
 			quitting = false
 			return
-	if get_config("confirm_close_project"):
+	if mm_globals.get_config("confirm_close_project"):
 		var result = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
@@ -808,13 +790,13 @@ func edit_load_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if config_cache.has_section_key("path", "selection"):
-		dialog.current_dir = config_cache.get_value("path", "selection")
+	if mm_globals.config.has_section_key("path", "selection"):
+		dialog.current_dir = mm_globals.config.get_value("path", "selection")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file = File.new()
 		if file.open(files[0], File.READ) == OK:
 			graph_edit.do_paste(parse_json(file.get_as_text()))
@@ -830,13 +812,13 @@ func edit_save_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if config_cache.has_section_key("path", "selection"):
-		dialog.current_dir = config_cache.get_value("path", "selection")
+	if mm_globals.config.has_section_key("path", "selection"):
+		dialog.current_dir = mm_globals.config.get_value("path", "selection")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file = File.new()
 		if file.open(files[0], File.WRITE) == OK:
 			file.store_string(to_json(graph_edit.serialize_selection()))
@@ -846,7 +828,7 @@ func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instance()
 	add_child(dialog)
 	dialog.connect("config_changed", self, "on_config_changed")
-	dialog.edit_preferences(config_cache)
+	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1105,25 +1087,16 @@ func on_group_selected(generator) -> void:
 	if graph_edit != null:
 		graph_edit.edit_subgraph(generator)
 
-func _exit_tree() -> void:
-	# Save the window position and size to remember it when restarting the application
-	config_cache.set_value("window", "screen", OS.current_screen)
-	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
-	config_cache.set_value("window", "position", OS.window_position)
-	config_cache.set_value("window", "size", OS.window_size)
-	layout.save_config(config_cache)
-	config_cache.save("user://cache.ini")
-
 func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
 # warning-ignore:narrowing_conversion
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
 			# Return to the normal FPS limit when the window is focused.
 # warning-ignore:narrowing_conversion
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")
 			quit()

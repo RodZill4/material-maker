@@ -14,7 +14,7 @@ var pallette_colors = [
 
 func _ready():
 	for s in [ "comment", "commentfocus" ]:
-		var frame : StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
+		var frame : StyleBoxFlat = mm_globals.main_window.theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
 		add_stylebox_override(s, frame);
 
 func _draw() -> void:
@@ -63,7 +63,7 @@ func _on_TextEdit_focus_exited() -> void:
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
-			var light_theme = "light" in get_node("/root/MainWindow").theme.resource_path
+			var light_theme = "light" in mm_globals.main_window.theme.resource_path
 			accept_event()
 			$Popup.rect_position = event.global_position
 			$Popup.popup()

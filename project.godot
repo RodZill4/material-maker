@@ -231,6 +231,7 @@ driver="Dummy"
 
 [autoload]
 
+mm_globals="*res://material_maker/globals.gd"
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"

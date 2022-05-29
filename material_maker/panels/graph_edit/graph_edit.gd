@@ -494,16 +494,16 @@ func save_as() -> bool:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = get_node("/root/MainWindow")
-	if main_window.config_cache.has_section_key("path", "project"):
-		dialog.current_dir = main_window.config_cache.get_value("path", "project")
+	var main_window = mm_globals.main_window
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
-			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
+			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
 			return true
 	return false
 
@@ -627,7 +627,7 @@ func paste() -> void:
 		graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
@@ -1121,7 +1121,7 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
 	
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 

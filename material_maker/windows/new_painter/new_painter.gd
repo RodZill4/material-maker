@@ -13,7 +13,7 @@ onready var viewport : Viewport = $VBoxContainer/Main/ViewportContainer/Viewport
 onready var error_label : Label = $VBoxContainer/Main/ViewportContainer/Error
 
 func _on_ViewportContainer_resized():
-	viewport.size = $VBoxContainer/Main/ViewportContainer.rect_size
+	viewport.size = viewport_container.rect_size
 
 func _on_ModelFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
@@ -60,8 +60,8 @@ func _on_ProjectFile_pressed():
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.mmpp;Material Maker paint project file")
-	#if config_cache.has_section_key("path", "material"):
-	#	dialog.current_dir = config_cache.get_value("path", "material")
+	#if mm_globals.config.has_section_key("path", "material"):
+	#	dialog.current_dir = mm_globals.config.get_value("path", "material")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
