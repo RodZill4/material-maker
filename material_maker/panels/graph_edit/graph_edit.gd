@@ -42,13 +42,31 @@ signal view_updated
 signal preview_changed
 
 
-
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func _exit_tree():
+	save_config()
+
+func load_config():
+	if mm_globals.has_config("graphedit_use_snap"):
+		use_snap = mm_globals.get_config("graphedit_use_snap")
+	if mm_globals.has_config("graphedit_snap_distance"):
+		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+
+func save_config():
+	mm_globals.set_config("graphedit_use_snap", use_snap)
+	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+
+func _on_GraphEdit_visibility_changed():
+	if is_visible_in_tree():
+		load_config()
+	else:
+		save_config()
 
 func get_project_type() -> String:
 	return "material"

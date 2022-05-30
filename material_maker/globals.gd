@@ -30,7 +30,6 @@ func _enter_tree():
 
 func _exit_tree():
 	config.save("user://cache.ini")
-	print("Globals exit")
 
 func _ready():
 	pass # Replace with function body.
