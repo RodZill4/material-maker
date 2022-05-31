@@ -45,7 +45,7 @@ func find_control(gp) -> Dictionary:
 	return {}
 
 func _draw() -> void:
-	if ! is_instance_valid(self):
+	if ! ( is_instance_valid(source) and is_instance_valid(self) ):
 		return
 	var start = get_global_transform().xform_inv(source.get_global_transform().xform(0.5*source.rect_size))
 	var color = Color(1, 0.5, 0.5, 0.5)
