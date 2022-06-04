@@ -23,18 +23,18 @@ var moving = false
 signal need_update(me)
 
 const MENU = [
-	{ menu="Model", submenu="model_list", description="Select" },
-	{ menu="Model", command="configure_model", description="Configure" },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Off", command_parameter=0 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Slow", command_parameter=0.01 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Medium", command_parameter=0.05 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Fast", command_parameter=0.1 },
-	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
-	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
-	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
-	{ menu="Model/Generate map", submenu="generate_ao_map", description="Ambient Occlusion" },
-	{ menu="Model/Generate map", submenu="generate_thickness_map", description="Thickness" },
-	{ menu="Environment", submenu="environment_list", description="Select" }
+	{ menu="Model/Select", submenu="model_list" },
+	{ menu="Model/Configure", command="configure_model" },
+	{ menu="Model/Rotate/Off", command="set_rotate_model_speed", command_parameter=0 },
+	{ menu="Model/Rotate/Slow", command="set_rotate_model_speed", command_parameter=0.01 },
+	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
+	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
+	{ menu="Model/Generate map/Mesh normal", submenu="generate_mesh_normal_map" },
+	{ menu="Model/Generate map/Inverse UV", submenu="generate_inverse_uv_map" },
+	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
+	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
+	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
+	{ menu="Environment/Select", submenu="environment_list" }
 ]
 
 
@@ -43,7 +43,7 @@ var _mouse_start_position : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	ui = get_node(ui_path)
-	mm_globals.main_window.create_menus(MENU, self, ui)
+	mm_globals.menu_manager.create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 

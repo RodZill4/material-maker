@@ -543,9 +543,10 @@ func save_file(filename) -> bool:
 # Export
 
 func get_material_node() -> MMGenMaterial:
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			return g
+	if top_generator != null:
+		for g in top_generator.get_children():
+			if g.has_method("get_export_profiles"):
+				return g
 	return null
 
 func export_material(export_prefix, profile) -> void:

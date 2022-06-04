@@ -49,66 +49,66 @@ const RECENT_FILES_COUNT = 15
 const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
-	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
-	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
-	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
-	{ menu="File", command="load_material_from_website", description="Load material from website" },
-	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
-	{ menu="File" },
-	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
-	{ menu="File", command="save_project_as", shortcut="Control+Shift+S", description="Save as..." },
-	{ menu="File", command="save_all_projects", description="Save all..." },
-	{ menu="File" },
-	{ menu="File", submenu="export_material", description="Export material" },
+	{ menu="File/New material", command="new_material", shortcut="Control+N" },
+	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N" },
+	{ menu="File/Load", command="load_project", shortcut="Control+O" },
+	{ menu="File/Load material from website", command="load_material_from_website" },
+	{ menu="File/Load recent", submenu="load_recent", standalone_only=true },
+	{ menu="File/-" },
+	{ menu="File/Save", command="save_project", shortcut="Control+S" },
+	{ menu="File/Save as...", command="save_project_as", shortcut="Control+Shift+S" },
+	{ menu="File/Save all...", command="save_all_projects" },
+	{ menu="File/-" },
+	{ menu="File/Export material", submenu="export_material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
-	{ menu="File" },
-	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
-	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
+	{ menu="File/-" },
+	{ menu="File/Close", command="close_project", shortcut="Control+Shift+Q" },
+	{ menu="File/Quit", command="quit", shortcut="Control+Q" },
 
-	{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
-	{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
-	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
-	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
-	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
-	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
-	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
-	{ menu="Edit", command="edit_select_sources", shortcut="Control+L", description="Select Sources" },
-	{ menu="Edit", command="edit_select_targets", shortcut="Control+Shift+L", description="Select Targets" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
-	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
-	{ menu="Edit" },
-	{ menu="Edit", submenu="set_theme", description="Set theme" },
-	{ menu="Edit", command="edit_preferences", description="Preferences" },
+	{ menu="Edit/Undo", command="edit_undo", shortcut="Control+Z" },
+	{ menu="Edit/Redo", command="edit_redo", shortcut="Control+Shift+Z" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Cut", command="edit_cut", shortcut="Control+X" },
+	{ menu="Edit/Copy", command="edit_copy", shortcut="Control+C" },
+	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
+	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
+	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
+	{ menu="Edit/Invert Selection", command="edit_select_invert", shortcut="Control+I" },
+	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
+	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Load Selection", command="edit_load_selection" },
+	{ menu="Edit/Save Selection", command="edit_save_selection" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Set theme", submenu="set_theme" },
+	{ menu="Edit/Preferences", command="edit_preferences" },
 
-	{ menu="View", command="view_center", shortcut="C", description="Center view" },
-	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
-	{ menu="View" },
-	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide side panels" },
-	{ menu="View", submenu="show_panels", description="Panels" },
+	{ menu="View/Center view", command="view_center", shortcut="C" },
+	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
+	{ menu="View/-" },
+	{ menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
+	{ menu="View/Panels", submenu="show_panels" },
 
-	{ menu="Tools", submenu="create", description="Create" },
-	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
-	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
-	{ menu="Tools" },
-	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
-	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
-	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
-	{ menu="Tools", command="paint_project_settings", description="Paint project settings", mode="paint" },
-	{ menu="Tools", submenu="paint_environment", description="Set painting environment", mode="paint" },
-	{ menu="Tools" },
-	{ menu="Tools", command="environment_editor", description="Environment editor" },
+	{ menu="Tools/Create", submenu="create" },
+	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
+	{ menu="Tools/Make selected nodes editable", command="make_selected_nodes_editable", shortcut="Control+W" },
+	{ menu="Tools/-" },
+	{ menu="Tools/Add selected node to library", submenu="add_selection_to_library", mode="material" },
+	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint" },
+	{ menu="Tools/Create a screenshot of the current graph", command="generate_graph_screenshot", mode="material" },
+	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint" },
+	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
+	{ menu="Tools/-" },
+	{ menu="Tools/Environment editor", command="environment_editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
-	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
-	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
-	{ menu="Help", command="bug_report", description="Report a bug" },
-	{ menu="Help" },
-	{ menu="Help", command="about", description="About" }
+	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
+	{ menu="Help/Report a bug", command="bug_report" },
+	{ menu="Help/" },
+	{ menu="Help/About", command="about" }
 ]
 
 
@@ -116,6 +116,8 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	for m in MENU:
+		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
 
 	if mm_globals.get_config("locale") == "":
@@ -177,7 +179,7 @@ func _ready() -> void:
 	load_recents()
 
 	# Create menus
-	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
+	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 	new_material()
 
@@ -248,119 +250,8 @@ func get_current_mode() -> String:
 func set_current_mode(mode : String) -> void:
 	current_mode = mode
 	layout.change_mode(current_mode)
-	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 # Menus
-
-func create_menus(menu_def, object, menu_bar) -> void:
-	for i in menu_def.size():
-		if ! menu_bar.has_node(menu_def[i].menu.split("/")[0]):
-			var menu_button = MenuButton.new()
-			menu_button.name = menu_def[i].menu
-			menu_button.text = menu_def[i].menu
-			menu_button.switch_on_hover = true
-			menu_bar.add_child(menu_button)
-	for m in menu_bar.get_children():
-		if ! m is MenuButton:
-			continue
-		var menu = m.get_popup()
-		create_menu(menu_def, object, menu, m.name)
-		#m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
-
-func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
-	var mode = ""
-	if object.has_method("get_current_mode"):
-		mode = object.get_current_mode()
-	var is_mac : bool = OS.get_name() == "OSX"
-	var submenus = {}
-	var menu_name_length = menu_name.length()
-	menu.clear()
-
-	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
-		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
-	for i in menu_def.size():
-		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
-			continue
-		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
-			continue
-		if menu_def[i].has("mode") and menu_def[i].mode != mode:
-			continue
-		if menu_def[i].menu == menu_name:
-			if menu_def[i].has("submenu"):
-				var submenu = PopupMenu.new()
-				var submenu_function = "create_menu_"+menu_def[i].submenu
-				if object.has_method(submenu_function):
-					submenu.connect("about_to_show", object, submenu_function, [ submenu ]);
-				else:
-					create_menu(menu_def, object, submenu, menu_def[i].submenu)
-				menu.add_child(submenu)
-				menu.add_submenu_item(menu_def[i].description, submenu.get_name())
-			elif menu_def[i].has("description"):
-				var shortcut = 0
-				if menu_def[i].has("shortcut"):
-					for s in menu_def[i].shortcut.split("+"):
-						if s == "Alt":
-							shortcut |= KEY_MASK_ALT
-						elif s == "Control":
-							shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
-						elif s == "Shift":
-							shortcut |= KEY_MASK_SHIFT
-						else:
-							shortcut |= OS.find_scancode_from_string(s)
-				if menu_def[i].has("toggle") and menu_def[i].toggle:
-					menu.add_check_item(menu_def[i].description, i, shortcut)
-				else:
-					menu.add_item(menu_def[i].description, i, shortcut)
-			else:
-				menu.add_separator()
-		elif menu_def[i].menu.begins_with(menu_name+"/"):
-			var submenu_name = menu_def[i].menu.right(menu_name_length+1)
-			submenu_name = submenu_name.split("/")[0]
-			if ! submenus.has(submenu_name):
-				var submenu = PopupMenu.new()
-				create_menu(menu_def, object, submenu, menu_name+"/"+submenu_name)
-				menu.add_child(submenu)
-				menu.add_submenu_item(submenu_name, submenu.get_name())
-				submenus[submenu_name] = submenu
-	if !menu.is_connected("about_to_show", self, "on_menu_about_to_show"):
-		menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
-	return menu
-
-func on_menu_id_pressed(id, menu_def, object) -> void:
-	if menu_def[id].has("command"):
-		var command = menu_def[id].command
-		if object.has_method(command):
-			var parameters = []
-			if menu_def[id].has("command_parameter"):
-				parameters.append(menu_def[id].command_parameter)
-			if menu_def[id].has("toggle") and menu_def[id].toggle:
-				parameters.append(!object.callv(command, parameters))
-			object.callv(command, parameters)
-
-func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
-	var mode = ""
-	if object.has_method("get_current_mode"):
-		mode = object.get_current_mode()
-	for i in menu_def.size():
-		if menu_def[i].menu != name:
-			continue
-		if menu_def[i].has("submenu"):
-			pass
-		elif menu_def[i].has("command"):
-			var item : int = menu.get_item_index(i)
-			var command = menu_def[i].command+"_is_disabled"
-			if object.has_method(command):
-				var is_disabled = object.call(command)
-				menu.set_item_disabled(item, is_disabled)
-			if menu_def[i].has("mode"):
-				menu.set_item_disabled(item, menu_def[i].mode != mode)
-			if menu_def[i].has("toggle") and menu_def[i].toggle:
-				command = menu_def[i].command
-				var parameters = []
-				if menu_def[i].has("command_parameter"):
-					parameters.append(menu_def[i].command_parameter)
-				if object.has_method(command):
-					menu.set_item_checked(item, object.callv(command, parameters))
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
@@ -414,29 +305,32 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void
 			menu.remove_child(sm)
 			sm.free()
 	var project = get_current_project()
-	if project != null:
-		var material_node = project.get_material_node()
-		var prefix_len = prefix.length()
-		var submenus = []
-		for id in range(material_node.get_export_profiles().size()):
-			var p : String = material_node.get_export_profiles()[id]
-			if p.left(prefix_len) != prefix:
-				continue
-			p = p.right(prefix_len)
-			var slash_position = p.find("/")
-			if slash_position == -1:
-				menu.add_item(p, id)
-			else:
-				var submenu_name = p.left(slash_position)
-				if submenus.find(submenu_name) == -1:
-					var submenu = PopupMenu.new()
-					submenu.name = submenu_name
-					menu.add_child(submenu)
-					create_menu_export_material(submenu, p.left(slash_position+1))
-					menu.add_submenu_item(submenu_name, submenu_name, id)
-					submenus.push_back(submenu_name)
-		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
-			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
+	if project == null:
+		return
+	var material_node = project.get_material_node()
+	if material_node == null:
+		return
+	var prefix_len = prefix.length()
+	var submenus = []
+	for id in range(material_node.get_export_profiles().size()):
+		var p : String = material_node.get_export_profiles()[id]
+		if p.left(prefix_len) != prefix:
+			continue
+		p = p.right(prefix_len)
+		var slash_position = p.find("/")
+		if slash_position == -1:
+			menu.add_item(p, id)
+		else:
+			var submenu_name = p.left(slash_position)
+			if submenus.find(submenu_name) == -1:
+				var submenu = PopupMenu.new()
+				submenu.name = submenu_name
+				menu.add_child(submenu)
+				create_menu_export_material(submenu, p.left(slash_position+1))
+				menu.add_submenu_item(submenu_name, submenu_name, id)
+				submenus.push_back(submenu_name)
+	if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
+		menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
 func export_profile_config_key(profile : String) -> String:
 	var key = "export_"+profile.to_lower().replace(" ", "_")
@@ -505,9 +399,10 @@ func _on_ShowPanels_id_pressed(id) -> void:
 	layout.set_panel_visible(panel, !layout.is_panel_visible(panel))
 
 
-func create_menu_create(menu) -> void:
+func create_menu_create(menu : PopupMenu) -> void:
 	var gens = mm_loader.get_generator_list()
 	menu.clear()
+	menu.rect_size = Vector2(0, 0)
 	for i in gens.size():
 		menu.add_item(gens[i], i)
 	if !menu.is_connected("id_pressed", self, "_on_Create_id_pressed"):
@@ -725,7 +620,7 @@ func edit_paste() -> void:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
-	return validate_json(OS.clipboard) == ""
+	return validate_json(OS.clipboard) != ""
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

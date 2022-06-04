@@ -1,6 +1,8 @@
 extends Node
 
 
+onready var menu_manager = $MenuManager
+
 var main_window
 
 var config : ConfigFile = ConfigFile.new()
