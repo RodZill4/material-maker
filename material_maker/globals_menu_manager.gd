@@ -17,6 +17,7 @@ func create_menus(menu_def, object, menu_bar) -> void:
 			continue
 		var menu = m.get_popup()
 		menu.connect("about_to_show", self, "create_menu", [ menu_def, object, menu, m.name+"/" ])
+		create_menu(menu_def, object, menu, m.name+"/")
 
 func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
 	var mode = ""
