@@ -176,6 +176,8 @@ class CustomGradientSorter:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
+	if typeof(old_value) == typeof(v) and old_value == v:
+		return
 	parameters[n] = v
 	emit_signal("parameter_changed", n, v)
 	if is_inside_tree():
