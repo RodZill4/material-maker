@@ -1,0 +1,44 @@
+{
+	"name": "noise_white",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 11
+	},
+	"seed": 0.561617,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float white_noise(vec2 uv, float size, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = rand(seed2+point_pos);\n    return color;\n}",
+		"inputs": [
+
+		],
+		"instance": "float $(name)_f(vec2 uv) {\n\treturn white_noise(uv, 1.0/$(size), $(seed));\n}",
+		"longdesc": "Generates white noise in a given resolution",
+		"name": "White Noise",
+		"outputs": [
+			{
+				"f": "$(name)_f($(uv))",
+				"longdesc": "Shows the noise pattern",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 11,
+				"first": 4,
+				"label": "Grid Size",
+				"last": 13,
+				"longdesc": "The grid size",
+				"name": "size",
+				"shortdesc": "Size",
+				"type": "size"
+			}
+		],
+		"shortdesc": "White Noise"
+	},
+	"type": "shader"
+}
