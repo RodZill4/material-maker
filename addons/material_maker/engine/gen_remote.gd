@@ -223,6 +223,8 @@ func set_label(widget_name : String, new_label : String) -> void:
 	emit_signal("parameter_changed", "__update_all__", null)
 
 func can_link_parameter(widget_name : String, generator : MMGenBase, param : String) -> bool:
+	if generator == self:
+		return false
 	var widget : Dictionary = get_widget(widget_name)
 	if !widget.linked_widgets.empty():
 		# Check if the param is already linked

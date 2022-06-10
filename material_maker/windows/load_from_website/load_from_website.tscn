@@ -23,6 +23,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Filter" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Filter"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Filter:"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Filter"]
+margin_right = 58.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
 [node name="ItemList" type="ItemList" parent="VBoxContainer"]
 margin_right = 578.0
 margin_bottom = 366.0
@@ -64,6 +79,8 @@ text = "Cancel"
 [node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="popup_hide" from="." to="." method="_on_LoadFromWebsite_popup_hide"]
+[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="text_changed" from="VBoxContainer/Filter/LineEdit" to="." method="_on_Filter_changed"]
 [connection signal="item_activated" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_activated"]
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_selected"]
 [connection signal="nothing_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_nothing_selected"]

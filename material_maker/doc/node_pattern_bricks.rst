@@ -22,7 +22,7 @@ The **Bricks** node provides the following textures:
 
 * The second is an RGBA texture that contains the bounding box for each brick.
 
-* The 3rd is an RGBA texture that contains the bounding box for each brick corner.
+* The third is an RGBA texture that contains the bounding box for each brick corner.
 
 The bounding box textures can be used in conjunction with **Fill To** nodes to generate random colors,
 custom UVs etc. to create complex materials that show for example bricks of different colors.
@@ -33,6 +33,9 @@ Parameters
 The **Bricks** node accepts the following parameters:
 
 * the *Pattern* parameter defines the bricks pattern that will be generated.
+
+* the *Repeat* parameter defines the number of patterns on the horizontal and vertical
+  axes of the texture.
 
 * the *Rows* parameter defines the number of brick rows in a single pattern of the texture.
 

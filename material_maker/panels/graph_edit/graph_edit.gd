@@ -42,13 +42,31 @@ signal view_updated
 signal preview_changed
 
 
-
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func _exit_tree():
+	save_config()
+
+func load_config():
+	if mm_globals.has_config("graphedit_use_snap"):
+		use_snap = mm_globals.get_config("graphedit_use_snap")
+	if mm_globals.has_config("graphedit_snap_distance"):
+		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+
+func save_config():
+	mm_globals.set_config("graphedit_use_snap", use_snap)
+	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+
+func _on_GraphEdit_visibility_changed():
+	if is_visible_in_tree():
+		load_config()
+	else:
+		save_config()
 
 func get_project_type() -> String:
 	return "material"
@@ -494,16 +512,16 @@ func save_as() -> bool:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = get_node("/root/MainWindow")
-	if main_window.config_cache.has_section_key("path", "project"):
-		dialog.current_dir = main_window.config_cache.get_value("path", "project")
+	var main_window = mm_globals.main_window
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
-			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
+			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
 			return true
 	return false
 
@@ -525,9 +543,10 @@ func save_file(filename) -> bool:
 # Export
 
 func get_material_node() -> MMGenMaterial:
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			return g
+	if top_generator != null:
+		for g in top_generator.get_children():
+			if g.has_method("get_export_profiles"):
+				return g
 	return null
 
 func export_material(export_prefix, profile) -> void:
@@ -627,7 +646,7 @@ func paste() -> void:
 		graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
@@ -1121,7 +1140,7 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
 	
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 

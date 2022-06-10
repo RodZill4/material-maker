@@ -40,7 +40,7 @@ func update_mesh() -> void:
 	if mesh == null:
 		return
 	if tesselated:
-		var tesselation_detail: int = get_node("/root/MainWindow").preview_tesselation_detail
+		var tesselation_detail: int = mm_globals.main_window.preview_tesselation_detail
 		match mesh.get_class():
 			"CubeMesh", "PrismMesh":
 				mesh.subdivide_width = tesselation_detail

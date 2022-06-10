@@ -449,10 +449,8 @@ func load_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		if config_cache.has_section_key("path", "template"):
-			dialog.current_dir = config_cache.get_value("path", "template")
+	if mm_globals.config.has_section_key("path", "template"):
+		dialog.current_dir = mm_globals.config.get_value("path", "template")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
@@ -460,9 +458,7 @@ func load_generator() -> void:
 		do_load_generator(files[0])
 
 func do_load_generator(file_name : String) -> void:
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		config_cache.set_value("path", "template", file_name.get_base_dir())
+	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
 		var file = File.new()
@@ -488,10 +484,8 @@ func save_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		if config_cache.has_section_key("path", "template"):
-			dialog.current_dir = config_cache.get_value("path", "template")
+	if mm_globals.config.has_section_key("path", "template"):
+		dialog.current_dir = mm_globals.config.get_value("path", "template")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
@@ -499,9 +493,7 @@ func save_generator() -> void:
 		do_save_generator(files[0])
 
 func do_save_generator(file_name : String) -> void:
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		config_cache.set_value("path", "template", file_name.get_base_dir())
+	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
 		var data = generator.serialize()

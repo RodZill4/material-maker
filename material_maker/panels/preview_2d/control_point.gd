@@ -149,7 +149,7 @@ func update_parameters(value : Vector2) -> void:
 	if ! parameters.empty():
 		var control_target = get_parent().get_node(get_parent().control_target)
 		if control_target == null:
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			control_target = main_window.get_current_graph_edit()
 		control_target.set_node_parameters(generator, parameters)
 

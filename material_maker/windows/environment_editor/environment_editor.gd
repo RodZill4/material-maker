@@ -25,7 +25,7 @@ func _ready():
 	environment_manager.connect("name_updated", self, "on_name_updated")
 	environment_manager.connect("thumbnail_updated", self, "on_thumbnail_updated")
 	read_environment_list()
-	share_button = get_node("/root/MainWindow").get_share_button()
+	share_button = mm_globals.main_window.get_share_button()
 	$Main/Buttons/Share.disabled = ! share_button.can_share()
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -122,8 +122,10 @@ jobs:
           cp -R ./material_maker/meshes ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./doc ./build/mac/material_maker.app/Contents/MacOS/doc
+      - name: Ad-hoc signing ✍️
+        run: codesign -s - --force --deep ./build/mac/material_maker.app
       - name: Create DMG archive 🔧
-        run: hdiutil create -srcfolder ./build/mac -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
+        run: hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:

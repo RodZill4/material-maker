@@ -154,7 +154,6 @@ func _on_NewPainterWindow_popup_hide():
 	emit_signal("return_status", { idmap_filename=idmap_filename, mask=mask })
 
 func ask(parameters : Dictionary) -> String:
-	var config_cache = get_node("/root/MainWindow").config_cache
 	set_mesh(parameters.mesh)
 	# Create idmap texture
 	idmap = ImageTexture.new()
@@ -169,19 +168,19 @@ func ask(parameters : Dictionary) -> String:
 	assert(parameters.has("mask"))
 	mask = parameters.mask
 	var view_mode = 0
-	if config_cache.has_section_key("select_mask_dialog", "view_mode"):
-		view_mode = config_cache.get_value("select_mask_dialog", "view_mode")
-	if config_cache.has_section_key("select_mask_dialog", "rx"):
-		mesh_instance.rotation.y = config_cache.get_value("select_mask_dialog", "rx")
-	if config_cache.has_section_key("select_mask_dialog", "ry"):
-		camera_pivot.rotation.x = config_cache.get_value("select_mask_dialog", "ry")
+	if mm_globals.config.has_section_key("select_mask_dialog", "view_mode"):
+		view_mode = mm_globals.config.get_value("select_mask_dialog", "view_mode")
+	if mm_globals.config.has_section_key("select_mask_dialog", "rx"):
+		mesh_instance.rotation.y = mm_globals.config.get_value("select_mask_dialog", "rx")
+	if mm_globals.config.has_section_key("select_mask_dialog", "ry"):
+		camera_pivot.rotation.x = mm_globals.config.get_value("select_mask_dialog", "ry")
 	set_view_mode(view_mode)
 	popup_centered()
 	_on_ViewportContainer_resized()
 	var result = yield(self, "return_status")
-	config_cache.set_value("select_mask_dialog", "view_mode", current_view_mode)
-	config_cache.set_value("select_mask_dialog", "rx", mesh_instance.rotation.y)
-	config_cache.set_value("select_mask_dialog", "ry", camera_pivot.rotation.x)
+	mm_globals.config.set_value("select_mask_dialog", "view_mode", current_view_mode)
+	mm_globals.config.set_value("select_mask_dialog", "rx", mesh_instance.rotation.y)
+	mm_globals.config.set_value("select_mask_dialog", "ry", camera_pivot.rotation.x)
 	queue_free()
 	return result
 

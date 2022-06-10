@@ -31,7 +31,7 @@ func _on_ConnectButton_pressed() -> void:
 		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
 
 func update_preview_texture():
-	var status = get_node("/root/MainWindow").update_preview_3d([ $PreviewViewport ], true)
+	var status = mm_globals.main_window.update_preview_3d([ $PreviewViewport ], true)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
 	$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
@@ -50,7 +50,7 @@ func can_share():
 	return ! $SendButton.disabled
 
 func _on_SendButton_pressed():
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	var asset_type : String
 	var preview_texture : Texture
 	match main_window.get_current_project().get_project_type():
@@ -153,7 +153,7 @@ func process_message(message : String) -> void:
 				$ConnectButton.hint_tooltip = "Connected and logged in.\nMaterials can be submitted."
 				$SendButton.disabled = false
 			"load_material":
-				var main_window = get_node("/root/MainWindow")
+				var main_window = mm_globals.main_window
 				main_window.new_material()
 				var graph_edit = main_window.get_current_graph_edit()
 				var new_generator = mm_loader.create_gen(JSON.parse(data.json).result)
@@ -161,7 +161,7 @@ func process_message(message : String) -> void:
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
 				bring_to_top()
 			"load_brush":
-				var main_window = get_node("/root/MainWindow")
+				var main_window = mm_globals.main_window
 				var project_panel = main_window.get_current_project()
 				if not project_panel.has_method("set_brush"):
 					print("Cannot load brush")

@@ -7,7 +7,8 @@ const GENFUNCTIONS : Array = [ "generate_shadertoy", "generate_godot_canvasitem"
 func show_code(s) -> void:
 	src_code = s
 	_on_ShaderType_item_selected(0)
-	connect("popup_hide", self, "queue_free")
+	if !is_connected("popup_hide", self, "queue_free"):
+		connect("popup_hide", self, "queue_free")
 	popup_centered()
 
 func _on_ShaderType_item_selected(index):
@@ -28,10 +29,13 @@ func generate_shadertoy() -> String:
 	code += "#define SEED_VARIATION 0.0\n\n"
 	code += mm_renderer.common_shader.right(mm_renderer.common_shader.find("//---"))
 	code += "\n"
+	code = code.replace("varying float elapsed_time;", "")
+	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}\n", "")
 	if src_code.has("globals"):
 		for g in src_code.globals:
 			code += g
-	code += src_code.defs
+	var code_defs = src_code.defs
+	code += code_defs
 	code += "\n"
 	code += "void mainImage(out vec4 fragColor, in vec2 fragCoord) {\n"
 	code += "float minSize = min(iResolution.x, iResolution.y);\n"

@@ -66,6 +66,7 @@ void fragment() {
 	}
 }
 "
+config_var_suffix = ""
 shader_accumulate = "uniform sampler2D sum;
 uniform bool clear = false;
 uniform vec2 preview_2d_size = vec2(100.0);

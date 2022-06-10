@@ -148,7 +148,7 @@ func remove_parameter(widget_name : String) -> void:
 
 func on_param_name_changed(new_name : String, param_name : String, line_edit : LineEdit) -> void:
 	if generator.rename(param_name, new_name, true):
-		line_edit.add_color_override("font_color", get_node("/root/MainWindow").theme.get_color("font_color", "LineEdit"))
+		line_edit.add_color_override("font_color", mm_globals.main_window.theme.get_color("font_color", "LineEdit"))
 	else:
 		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
 
