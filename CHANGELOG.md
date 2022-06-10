@@ -1,3 +1,9 @@
+# Material Maker 1.0
+
+## General
+
+- Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
+
 # Material Maker 0.99
 
 ## General
