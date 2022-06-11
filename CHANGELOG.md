@@ -4,6 +4,9 @@
 
 - Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
 
+## Nodes
+ - Added Smooth Mix (a mix-by-height node with smooth transition between materials) Worflow node
+
 # Material Maker 0.99
 
 ## General
