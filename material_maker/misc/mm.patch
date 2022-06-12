@@ -1,0 +1,48 @@
+Les fichiers binaires godot-3.2.3-stable/bin/godot.windows.opt.64.exe et godot/bin/godot.windows.opt.64.exe sont différents
+diff -ruN '--exclude=.*' '--exclude=*.pyc' '--exclude=*.obj' '--exclude=*.gen.*' '--exclude=*.lib' '--exclude=*.pdb' '--exclude=*.exp' '--exclude=*.ico' '--exclude=*.log' godot-3.2.3-stable/core/image.cpp godot/core/image.cpp
+--- godot-3.2.3-stable/core/image.cpp	2020-11-16 07:25:38 +0000
++++ godot/core/image.cpp	2020-10-16 21:12:02 +0000
+@@ -2743,7 +2743,7 @@
+ 	ClassDB::bind_method(D_METHOD("load", "path"), &Image::load);
+ 	ClassDB::bind_method(D_METHOD("save_png", "path"), &Image::save_png);
+ 	ClassDB::bind_method(D_METHOD("save_png_to_buffer"), &Image::save_png_to_buffer);
+-	ClassDB::bind_method(D_METHOD("save_exr", "path", "grayscale"), &Image::save_exr, DEFVAL(false));
++	ClassDB::bind_method(D_METHOD("save_exr", "path", "grayscale"), &Image::save_exr);
+ 
+ 	ClassDB::bind_method(D_METHOD("detect_alpha"), &Image::detect_alpha);
+ 	ClassDB::bind_method(D_METHOD("is_invisible"), &Image::is_invisible);
+diff -ruN '--exclude=.*' '--exclude=*.pyc' '--exclude=*.obj' '--exclude=*.gen.*' '--exclude=*.lib' '--exclude=*.pdb' '--exclude=*.exp' '--exclude=*.ico' '--exclude=*.log' godot-3.2.3-stable/custom.py godot/custom.py
+--- godot-3.2.3-stable/custom.py	1970-01-01 01:00:00 +0000
++++ godot/custom.py	2021-01-09 11:00:44 +0000
+@@ -0,0 +1,21 @@
++# Generated using https://godot-build-options-generator.github.io
++
++#deprecated = "no"
++module_bullet_enabled = "no"
++module_camera_enabled = "no"
++module_csg_enabled = "no"
++module_enet_enabled = "no"
++module_gdnative_enabled = "no"
++module_gdnavigation_enabled = "no"
++module_gridmap_enabled = "no"
++module_jsonrpc_enabled = "no"
++module_mobile_vr_enabled = "no"
++module_ogg_enabled = "no"
++module_opensimplex_enabled = "no"
++module_opus_enabled = "no"
++module_stb_vorbis_enabled = "no"
++module_theora_enabled = "no"
++module_upnp_enabled = "no"
++module_visual_script_enabled = "no"
++module_vorbis_enabled = "no"
++module_webm_enabled = "no"
+diff -ruN '--exclude=.*' '--exclude=*.pyc' '--exclude=*.obj' '--exclude=*.gen.*' '--exclude=*.lib' '--exclude=*.pdb' '--exclude=*.exp' '--exclude=*.ico' '--exclude=*.log' godot-3.2.3-stable/modules/tinyexr/config.py godot/modules/tinyexr/config.py
+--- godot-3.2.3-stable/modules/tinyexr/config.py	2020-11-16 07:26:59 +0000
++++ godot/modules/tinyexr/config.py	2020-10-16 21:18:14 +0000
+@@ -1,5 +1,5 @@
+ def can_build(env, platform):
+-    return env["tools"]
++    return True
+ 
+ 
+ def configure(env):
