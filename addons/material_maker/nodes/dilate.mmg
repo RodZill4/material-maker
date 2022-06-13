@@ -13,27 +13,27 @@
 			"to_port": 0
 		},
 		{
-			"from": "dilate_pass_1",
+			"from": "buffer_2_3",
 			"from_port": 0,
-			"to": "buffer_2",
+			"to": "gen_outputs",
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2",
+			"from": "default_color",
 			"from_port": 0,
-			"to": "dilate_pass_4",
+			"to": "buffer_2_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "default_color",
 			"to_port": 0
 		},
 		{
 			"from": "dilate_pass_3",
 			"from_port": 0,
 			"to": "buffer_2_3",
-			"to_port": 0
-		},
-		{
-			"from": "buffer_2_3",
-			"from_port": 0,
-			"to": "gen_outputs",
 			"to_port": 0
 		},
 		{
@@ -49,15 +49,27 @@
 			"to_port": 0
 		},
 		{
-			"from": "default_color",
+			"from": "buffer_2",
 			"from_port": 0,
-			"to": "buffer_2_2",
+			"to": "dilate_pass_5",
 			"to_port": 0
 		},
 		{
-			"from": "gen_inputs",
-			"from_port": 1,
-			"to": "default_color",
+			"from": "dilate_pass_5",
+			"from_port": 0,
+			"to": "dilate_pass_4",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_1",
+			"from_port": 0,
+			"to": "dilate_pass_6",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_6",
+			"from_port": 0,
+			"to": "buffer_2",
 			"to_port": 0
 		}
 	],
@@ -72,39 +84,45 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -473.691315,
-				"y": -200.988342
+				"x": 283.308716,
+				"y": -510.988342
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 11
 			},
+			"seed": 32897,
+			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -255.691315,
-				"y": -123.988342
+				"x": 535.308716,
+				"y": -325.988342
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 11
 			},
+			"seed": 65434,
+			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -140.306458,
-				"y": -377.953613
+				"x": 463.693542,
+				"y": -773.953613
 			},
 			"parameters": {
-				"param0": 9,
+				"param0": 11,
 				"param1": 0.1,
 				"param2": 0,
 				"param3": 0
 			},
+			"seed": 1419,
+			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -187,8 +205,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -872.306458,
-				"y": -171.4814
+				"x": -124.306458,
+				"y": -462.481384
 			},
 			"parameters": {
 
@@ -209,13 +227,15 @@
 					"type": "rgb"
 				}
 			],
+			"seed": 317,
+			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 254.21106,
-				"y": -64.4814
+				"x": 1126.21106,
+				"y": -488.481384
 			},
 			"parameters": {
 
@@ -229,75 +249,174 @@
 					"type": "rgb"
 				}
 			],
-			"seed_value": -14401,
+			"seed": -14401,
+			"seed_locked": true,
 			"type": "ios"
 		},
 		{
 			"name": "buffer_2_2",
 			"node_position": {
-				"x": -255.323547,
-				"y": -44.695679
+				"x": 531.676453,
+				"y": -66.695679
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 11
 			},
+			"seed": 65483,
+			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
 			"name": "dilate_pass_1",
 			"node_position": {
-				"x": -252.698792,
-				"y": -201.368988
+				"x": 530.301208,
+				"y": -511.368988
 			},
 			"parameters": {
 				"d": 0.1,
-				"s": 9
+				"s": 11
 			},
-			"seed_value": 71939,
-			"type": "dilate_pass_1"
-		},
-		{
-			"name": "dilate_pass_3",
-			"node_position": {
-				"x": -31.698792,
-				"y": -72.368988
+			"seed": 71939,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "vec3 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(1.0/$s, 0.0);\n\tint steps = int($s*$d);\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t\tsource_uv = uv-float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec3(rv, source_uv);\n}\n",
+				"name": "Distance pass 1",
+				"outputs": [
+					{
+						"rgb": "$(name)_distance_h($uv)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
 			},
-			"parameters": {
-				"amount": 0
-			},
-			"type": "dilate_pass_3"
+			"type": "shader"
 		},
 		{
 			"name": "dilate_pass_4",
 			"node_position": {
-				"x": -31.689392,
-				"y": -186.577301
+				"x": 834.310547,
+				"y": -518.577271
 			},
 			"parameters": {
 				"d": 0.1,
 				"distance": 0,
-				"s": 9
+				"s": 11
 			},
-			"type": "dilate_pass_2"
+			"seed": 50297,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = $in(uv);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = $in(uv+dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = $in(uv-dx);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
+				"name": "Distance pass 2",
+				"outputs": [
+					{
+						"rgb": "$(name)_distance_v($uv)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 2,
+						"label": "",
+						"name": "distance",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Euclidian",
+								"value": "euclidian"
+							},
+							{
+								"name": "Manhattan",
+								"value": "manhattan"
+							},
+							{
+								"name": "Chebyshev",
+								"value": "chebyshev"
+							}
+						]
+					}
+				]
+			},
+			"type": "shader"
 		},
 		{
 			"name": "buffer_2_3",
 			"node_position": {
-				"x": -46.966125,
-				"y": -0.711548
+				"x": 798.033875,
+				"y": 16.288452
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 9
+				"size": 11
 			},
+			"seed": -38802,
+			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
 			"name": "default_color",
 			"node_position": {
-				"x": -469.868713,
-				"y": -98.02066
+				"x": 284.131287,
+				"y": -66.02066
 			},
 			"parameters": {
 				"default": {
@@ -308,15 +427,126 @@
 					"type": "Color"
 				}
 			},
+			"seed": 939,
+			"seed_locked": false,
 			"type": "default_color"
+		},
+		{
+			"name": "dilate_pass_3",
+			"node_position": {
+				"x": 806.301208,
+				"y": -90.368988
+			},
+			"parameters": {
+				"amount": 0
+			},
+			"seed": 50311,
+			"seed_locked": false,
+			"type": "dilate_pass_3"
+		},
+		{
+			"name": "dilate_pass_5",
+			"node_position": {
+				"x": 531.735229,
+				"y": -232.556641
+			},
+			"parameters": {
+				"m": 256
+			},
+			"seed": 56366,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "source",
+						"type": "rgba"
+					}
+				],
+				"instance": "",
+				"name": "joiner",
+				"outputs": [
+					{
+						"rgb": "vec3($source($uv).rg + $source($uv).ba/$m, $uv.y)",
+						"shortdesc": "source_big",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 256,
+						"label": "Modulus",
+						"max": 1,
+						"min": 0,
+						"name": "m",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "dilate_pass_6",
+			"node_position": {
+				"x": 526.753418,
+				"y": -407.462036
+			},
+			"parameters": {
+				"m": 256
+			},
+			"seed": 56366,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(1.0)",
+						"function": true,
+						"label": "",
+						"name": "source",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "splitter",
+				"outputs": [
+					{
+						"rgba": "vec4( $source($uv).xy - vec2(mod($source($uv).x, 1.0/$m), mod($source($uv).y, 1.0/$m)) , vec2(mod($source($uv).x, 1.0/$m), mod($source($uv).y, 1.0/$m))*$m )",
+						"shortdesc": "source_big",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 256,
+						"label": "modulus",
+						"max": 1,
+						"min": 0,
+						"name": "m",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {
-		"param0": 9,
+		"param0": 11,
 		"param1": 0.1,
 		"param2": 0,
 		"param3": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shortdesc": "Dilate",
 	"type": "graph"
 }
