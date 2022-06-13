@@ -27,13 +27,15 @@ func _ready() -> void:
 	material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
-	add_to_group("preview")
+	#add_to_group("preview")
+	mm_deps.create_buffer("o%s_tex" % str(get_instance_id()), self, "on_deps_fct")
 
 func _exit_tree() -> void:
 	if current_renderer != null:
 		current_renderer.release(self)
 	if is_pending:
 		mm_renderer.remove_pending_request()
+	mm_deps.delete_buffer("o%s_tex" % str(get_instance_id()))
 
 func get_type() -> String:
 	return "buffer"
@@ -61,10 +63,10 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 		return [ { type="rgba" } ]
 
 func source_changed(_input_port_index : int) -> void:
-	call_deferred("update_shader")
+	update_shader()
 
 func all_sources_changed() -> void:
-	call_deferred("update_shader")
+	update_shader()
 
 func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
@@ -75,15 +77,18 @@ func set_parameter(n : String, v) -> void:
 			get_tree().call_group("preview", "on_float_parameters_changed", { param_name:param_value })
 	.set_parameter(n, v)
 
+var updating_shader : bool = false
 func update_shader() -> void:
+	if ! updating_shader:
+		updating_shader = true
+		call_deferred("do_update_shader")
+
+func do_update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(0)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-		assert (!(source is GDScriptFunctionState))
-		while source is GDScriptFunctionState:
-			source = yield(source, "completed")
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader_code = mm_renderer.generate_shader(source)
@@ -92,14 +97,16 @@ func update_shader() -> void:
 		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
 	material.shader.code = shader_code
 	update_again = true
+	var buffer_name = "o%s_tex" % str(get_instance_id())
+	mm_deps.buffer_clear_dependencies(buffer_name)
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		mm_deps.buffer_add_dependency(buffer_name, p.name)
 	if source.has("textures"):
 		for k in source.textures.keys():
 			material.set_shader_param(k, source.textures[k])
-	if source.has("pending_textures"):
-		pending_textures = source.pending_textures
-	else:
-		pending_textures = []
-	if pending_textures.empty():
+	pending_textures = []
+	yield(get_tree(), "idle_frame")
+	if ! mm_deps.buffer_has_pending_dependencies(buffer_name):
 		update_buffer()
 	else:
 		set_pending()
@@ -120,12 +127,14 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	return false
 
 func on_texture_changed(n : String) -> void:
+	return
 	pending_textures.erase(n)
 	if pending_textures.empty() and mm_renderer.material_has_parameter(material, n):
 		update_again = true
 		update_buffer()
 
 func on_texture_invalidated(n : String) -> void:
+	return
 	if mm_renderer.material_has_parameter(material, n):
 		if pending_textures.empty():
 			get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
@@ -167,7 +176,8 @@ func update_buffer() -> void:
 			renderer.release(self)
 			current_renderer = null
 		updating = false
-		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+		#get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+		mm_deps.buffer_updated("o%s_tex" % str(get_instance_id()))
 
 func get_globals(texture_name : String) -> Array:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]

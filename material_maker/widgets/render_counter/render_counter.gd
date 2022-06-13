@@ -13,6 +13,7 @@ onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
 const ITEM_AUTO : int           = 1000
 const ITEM_RENDER_ENABLED : int = 1001
+const ITEM_MATERIAL_STATS : int = 1002
 
 func _ready() -> void:
 	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
@@ -30,6 +31,8 @@ func _ready() -> void:
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
+	menu.add_separator()
+	menu.add_item("Material stats", ITEM_MATERIAL_STATS)
 
 func on_counter_change(count : int, pending : int) -> void:
 	if count == 0 and pending == 0:
@@ -85,6 +88,21 @@ func _on_PopupMenu_id_pressed(id):
 			var b : bool = ! menu.is_item_checked(index)
 			menu.set_item_checked(index, b)
 			mm_renderer.enable_renderers(b)
+		ITEM_MATERIAL_STATS:
+			var material = mm_globals.main_window.get_current_graph_edit().top_generator
+			print(count_buffers(material))
+
+func count_buffers(material) -> int:
+	var buffers = 0
+	for c in material.get_children():
+		if c.get_type() == "buffer":
+			buffers += 1
+		elif c.get_type() == "iterate_buffer":
+			buffers += 1
+			print("iterate_buffer: "+str(c.parameters["iterations"]))
+		elif c.get_type() == "graph":
+			buffers += count_buffers(c)
+	return buffers
 
 func _on_Renderers_id_pressed(id):
 	set_max_renderers(id)
