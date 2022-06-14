@@ -1,7 +1,7 @@
 Seven segment display node
 ~~~~~~~~~~
 
-The **Seven Segment Display** node outputs a seven segment display with a variable weight
+The **Seven Segment Display** node outputs a seven segment display with variable weight(segment length/thickness)
 
 .. image:: images/node_pattern_seven_segment_display.png
 	:align: center
