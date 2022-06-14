@@ -1,0 +1,38 @@
+{
+	"name": "pack_2x32_to_4x16",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 56366,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "const float pack_size = 256.0;\n\nvec4 pack_2x32_to_4x16(vec2 s) {\n\treturn vec4(s.xy - vec2(mod(s.x, 1.0/pack_size), mod(s.y, 1.0/pack_size)) , vec2(mod(s.x, 1.0/pack_size), mod(s.y, 1.0/pack_size))*pack_size);\n}\n\nvec2 pack_4x16_to_2x32(vec4 s) {\n\treturn s.rg + s.ba/pack_size;\n}\n",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"function": true,
+				"label": "",
+				"name": "source",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "pack_2x32_to_4x16",
+		"outputs": [
+			{
+				"rgba": "pack_2x32_to_4x16($source($uv).xy)",
+				"shortdesc": "source_big",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}
