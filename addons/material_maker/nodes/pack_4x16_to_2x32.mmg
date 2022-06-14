@@ -7,13 +7,13 @@
 	"parameters": {
 
 	},
-	"seed": 56366,
+	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"includes": [
-			"pack_2x32_to_4x16"
+			"pack_1x32_to_2x16"
 		],
 		"inputs": [
 			{

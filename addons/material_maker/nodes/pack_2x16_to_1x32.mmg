@@ -1,5 +1,5 @@
 {
-	"name": "pack_2x32_to_4x16",
+	"name": "pack_2x16_to_1x32",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -25,12 +25,12 @@
 			}
 		],
 		"instance": "",
-		"name": "pack_2x32_to_4x16",
+		"name": "pack_2x16_to_1x32",
 		"outputs": [
 			{
-				"rgba": "pack_2x32_to_4x16($source($uv).xy)",
+				"f": "pack_2x16_to_1x32($source($uv).xy)",
 				"shortdesc": "source_big",
-				"type": "rgba"
+				"type": "f"
 			}
 		],
 		"parameters": [

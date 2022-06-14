@@ -7063,6 +7063,50 @@
 			"seed_locked": false,
 			"tree_item": "Transform/Morphology",
 			"type": "morphology2"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJVJREFUeJzt0EERACAMwDDAv+dNRh40Cnq9M3N+9nSA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AHaAlW2A33VbEAVAAAAAElFTkSuQmCC",
+			"name": "pack_2x32_to_4x16_3",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Miscellaneous/Pack/pack_1x32_to_2x16",
+			"type": "pack_1x32_to_2x16"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJVJREFUeJzt0EERACAMwDDAv+dNRh40Cnq9M3N+9nSA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AHaAlW2A33VbEAVAAAAAElFTkSuQmCC",
+			"name": "pack_4x16_to_2x32_3",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Miscellaneous/Pack/pack_2x16_to_1x32",
+			"type": "pack_2x16_to_1x32"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJVJREFUeJzt0EERACAMwDDAv+dNRh40Cnq9M3N+9nSA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AHaAlW2A33VbEAVAAAAAElFTkSuQmCC",
+			"name": "pack_2x32_to_4x16_4",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Miscellaneous/Pack/pack_2x32_to_4x16",
+			"type": "pack_2x32_to_4x16"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJVJREFUeJzt0EERACAMwDDAv+dNRh40Cnq9M3N+9nSA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AFaA3SA1gAdoDVAB2gN0AHaAlW2A33VbEAVAAAAAElFTkSuQmCC",
+			"name": "pack_4x16_to_2x32_4",
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Miscellaneous/Pack/pack_4x16_to_2x32",
+			"type": "pack_4x16_to_2x32"
 		}
 	],
 	"name": "Base library"

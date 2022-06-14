@@ -271,7 +271,7 @@
 				"code": "",
 				"global": "",
 				"includes": [
-					"pack_2x32_to_4x16"
+					"pack_1x32_to_2x16"
 				],
 				"inputs": [
 					{
@@ -330,7 +330,7 @@
 				"code": "",
 				"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
 				"includes": [
-					"pack_2x32_to_4x16"
+					"pack_1x32_to_2x16"
 				],
 				"inputs": [
 					{
