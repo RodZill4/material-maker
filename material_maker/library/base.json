@@ -7050,6 +7050,19 @@
 			"seed_locked": false,
 			"tree_item": "Workflow/Mix/Smooth",
 			"type": "mwf_mix_smooth"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAByVJREFUaIHtmc1v2twSh8E+5ssQi5BAkkYKqIrUsmxZFnZl1bIhEoE/kBSprJJdtt22i65aVVGUQqlIAGMbG+zjj7uYy9xT0qaFxLd5X+UsosTBz5if58zMmQk2m82zs7Ner3d1dSXLsqqqk8lkOp3OZjPTNCmltm3btu26ruu6gUAgEAgEg8FgMMjzPCFEEIRQKBSJRKLRqCiKkiQlk8nNzc2dnZ39/f16vd5qtXzlk7Ozs+/fvw+HQ0VRdF2fzWaWZVFKHcfxPM/zPCQGg8FAIMBe4TiO4zhCCCEkFAqhjY2Njb29vWq1enR0dH5+7iuf9Hq9BbrjOK7rLoBAG8/zWDTHcaATiBSLxRKJxPr6+u7ubqVSOTo6uri4uLy89JVPrq6ugE4pRWGQwvM8qxBoxhoAeQRBCIfDsVhMkqRMJlMul1utVrfbHQwGsiz7yieyLIM2lFJCCKUUuagBaAYLlYN/sQrF4/FUKlUqldrtdr/fH41GiqJomna3/GKxyPKJqqr4ZimlkiTpug4by3EcQDuOA3+iDdhkKBI4qCRJhULh+PgYfAYe3TCMu+WfnJywfDKZTIDueR7HcbquP3r0SJZliA+AZhd8EvTj5ysUComimM/nT09PFUWZTCaGYRiGMZ1OTdP0lc/H43HLsiCQBQIBnuc9z3vy5InneaFQSBAEQghQ0DXZ+ADarK2t5fP5jx8/DgaD8XgM2oDnwBe4Pf/p06c/5fORSARfH9xJCPE879mzZ47jgAGwgRuLdVDYW9ls9suXL4gGbcBz4Omv858/f27b9u35vCAIQIetg5vGcZwXL15YlsUawHCB+y8cDqfT6W63C2jMUCA8hvzrfNu274TPE0LQ7cCAMF+WZb18+dIwDBAD5cFFCFlbWxsOh9e58Oi4U1fmJxKJm/k8x3GYEdnIBcswjFevXmmaxtIxcofD4clkAlD642KDzM38169fq6q6Mp9fyN648fHNappWrVZlWYbohp/ned40TYwkWNUgmg2LN/BVVb0Nnw/MF3geawPfrCzLtVptMBiAK4OiEFgAxELZrIRP7x+fv26ADWSwPM8bDAb1er3f7+P97C/XL2J1+ef8RqOxAv+/pQhbVy3EY7juum6/36/X671eDwLLdUkWKgL20f+Q32g0luXzbAmOuIWAAJ9xHKfX69VqtW63C96JDnrdbfDpl+UfHh4uxedZ4oIqSIcbXNellHa73Wq12ul0oD7DvYVVDXxyodZfin9wcPDn/P/lv58u1gbcb5pmp9OpVCqdTmc6nS7Ee4ep9a8/vR98nhDCMWUTRgY2NfI8jwjbtmezWafTKZfLX79+xXINMy6mLdy4vvIJfAE0wxqDi5BuBEEA/7Nt27Ks2WymaVqpVMKyFizBjc781MJ+B5/4RBAEbn5yYw1AohFFUVEU4KJCYEDXdUVRCoUCHNV1XUcteJ7H8yFe8YlPQqEQ+XHx83ZAMpn89u0bpRQMwKKUWpZlmqZhGJqmybKcz+dHo5Gqqiit67ooP1s4+MEnkUgEykNoYMAKh8NbW1ufPn1iDxkcx2FWtyxrOp3quq6q6mg0yuVyo9EIK3vXdbl50sWegl/8aDQKJ85wOIztl1wu9/79e9z+lFJ4X2iAUjqbzVgbW1tb4/EYbMD75TgOqk5f+UQUxWg0GovFYrFYPB6XJCmfz7979w4LKQxegUAABCOEwE/TNNElxuNxMpk0DAM8FeQBsX3lE0mSRFFMJBKSJKVSqUKhcHp6qus6HGTZxYr0001pGIYoilCEAR2aOb7ySTKZlCRpfX09k8mUSqXj42NFUSCD2POOHxrAsIhm2LAIykWjUTgrRiIRfHT/+GRzc3NjY2N3d7dcLrfb7eFwOJlM4LjJHkqwCGGTq+M4sKXAATiOg3gSi8UEQcBWpq98srOzs7e3V6lUWq1Wv99XFMUwjOttVzQAInnzhZphMwc2LvpMOp32lU/29/ehS9rtdkejkaZp2Ir6aRkIdMzkC4008EtswW5vb+dyuYODg2az6ROfq9fr7Xb74uJiMBhAExMdFOVhy1ePWexBEcMl0FOp1Pb29uPHjxuNxtu3b/3jc61W6/z8/PLyUpZlkAffr/PjkfxXBxTMrNDDSSQSyWQynU7ncrnDw8M3b974x6/Vaj7OB8Bz/sHzgWaz+TAf+DfOBxb4/7z5wAL/YT7w/5oP/Ir/y/nAXfXv/9p8wL6j/v19nw/8tn+/UCovy//t/OH384Fb9u/dvz4fuGX/3n2YD9zMX2I+sFr//s/5q80flpsPrNC/X4q/wvxh6fnAsv37ZfnLzh9WmQ8s1b9fgb/U/OFhPvAwH7iBXywW7/t8IB6Pj8fj2/D/vfOBTCbz+fNn9pDB/b35QDabXW4+kM1mP3z4cK/mA5lM5mE+cP/nA8Vi8eTk5GE+8DAfuG/zAV/5vs8H/Ob/B5RMS/HccyzDAAAAAElFTkSuQmCC",
+			"name": "mesh",
+			"parameters": {
+				"diagonal": false,
+				"shape": 0,
+				"tiling": 2
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Pattern/Mesh",
+			"type": "mesh"
 		}
 	],
 	"name": "Base library"
