@@ -27,6 +27,7 @@
 	"Pattern/Generic": "grid",
 	"Pattern/Generic/Checkerboard": "background,chess",
 	"Pattern/Truchet": "maze",
+	"Pattern/Seven Segment Display": "7",
 	"Simple": "basic",
 	"Simple/Curve": "line",
 	"Simple/Gradient": "fountain,linear,fill,straight",
