@@ -43,6 +43,7 @@
 	"Simple/SDF/Transforms/Scale": "zoom",
 	"Simple/SDF/Transforms/Translate": "move,shift,push",
 	"Simple/SDF/sdShow": "render,finish",
+	"Simple/Seven Segment Display": "7",
 	"Simple/Shape": "basic",
 	"Simple/Shape/Circle": "basic",
 	"Simple/Shape/Curved Star": "basic",

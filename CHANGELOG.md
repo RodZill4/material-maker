@@ -6,6 +6,7 @@
 
 ## Nodes
  - Added Smooth Mix (a mix-by-height node with smooth transition between materials) Worflow node
+ - Added Seven Segment Display node with variable length/width (contributed by williamchange)
 
 # Material Maker 0.99
 
