@@ -3,7 +3,7 @@ Seven segment display node
 
 The **Seven Segment Display** node outputs a seven segment display with variable weight(segment length/thickness)
 
-.. image:: images/node_pattern_seven_segment_display.png
+.. image:: images/node_simple_seven_segment_display.png
 	:align: center
 
 Inputs
@@ -14,7 +14,7 @@ The **Seven Segment Display** node accepts an optional bevel map, which the para
 Outputs
 +++++++
 
-The **Seven Segment Display** outputs a greyscale texture.
+The **Seven Segment Display** node outputs a greyscale texture.
 
 Parameters
 ++++++++++
