@@ -1,5 +1,5 @@
 Seven segment display node
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **Seven Segment Display** node outputs a seven segment display with variable weight(segment length/thickness)
 
@@ -27,9 +27,13 @@ The **Seven Segment Display** node accepts the following parameters:
 
 * The *Number* parameter specifies the number on the display.
 
+* The *Digits* parameter specifies the minimum number of digits on the display.
+
 * The *Scale* parameter controls the scale of the output texture.
 
 * the *Bevel* parameter controls the width of the edge of each segment.
+
+* the *Spacing* parameter controls the spacing between digits on the display.
 
 Example images
 ++++++++++++++

@@ -1,95 +1,125 @@
 {
-    "name": "seven_segment",
-    "node_position": {
-        "x": 0,
-        "y": 0
-    },
-    "parameters": {
-        "bevel": 0,
-        "n": 8,
-        "s": 1,
-        "sl": 0.9,
-        "st": 0.3
-    },
-    "shader_model": {
-        "code": "",
-        "global": "float m(vec4 a, vec4 b)\n{\n\treturn max(max(max(a.x,a.y),max(a.z,a.w)),max(max(b.x,b.y),max(b.z,b.w)));\n}\n\nvec4 fs(vec2 p,float s, float st, float sl, bool is_top)\n{\n\tsl = (1.0 - sl)/2.0; st /= 2.0;\n\tsl = clamp(sl, 0.0,1.0);\n\n\tp = 2.5*(1.0/s)*(p - 0.5)-vec2(0.0, is_top ? -0.5 : 0.5);\n\tvec2 p1 = p; vec2 p2 = p;\n\t\n\tp = abs(p)-0.5;\n\tvec4 d = vec4(min(st - abs(max(p.x, p.y) * -1.0),\n\t\tmin(-dot(p, normalize(vec2(1.0, 1.0))),\n\t\tabs(dot(p, normalize(vec2(1.0, -1.0))))) - sl));\n\n\tp1.x = abs(p1.x);\n\tp2.y = abs(p2.y);\n\n\tfloat q1 = -dot(p1,vec2(1.0,1.0));\n\tfloat q2 = -dot(p2,vec2(-1.0,1.0));\n\tfloat q3 = dot(p1,vec2(-1.0,1.0));\n\tfloat q4 = -dot(p2,vec2(1.0,1.0));\n\t\n\treturn min(d,vec4(q1,q2,q3,q4));\n}\nfloat ssd(vec2 p, float s, float st, float sl, float bevel, int num)\n{\n\tvec4 a = fs(p,s,st,sl,true);\n\tvec4 b = fs(p,s,st,sl,false);\n\t\n\tfloat d;\n\t\n\tvec4 x = vec4(0.0);\n\t\n\tif (num == 0) d = m(vec4(a.xyw,b.y),vec4(b.zw,x.xx));\n\tif (num == 1) d = m(vec4(a.y,b.y,x.xx),x);\n\tif (num == 2) d = m(vec4(a.xyz,b.w),vec4(b.z,x.xxx));\n\tif (num == 3) d = m(vec4(a.xyz,b.y),vec4(b.z,x.xxx));\n\tif (num == 4) d = m(vec4(a.yzw,b.y),x);\n\tif (num == 5) d = m(vec4(a.xwz,b.y),vec4(b.z,x.xxx));\n\tif (num == 6) d = m(vec4(a.xwz,b.y),vec4(b.zw,x.xx));\n\tif (num == 7) d = m(vec4(a.xy,b.y,x.x),x);\n\tif (num == 8) d = m(a,b);\n\tif (num == 9) d = m(a,vec4(b.yz,x.xx));\n\t\n\treturn clamp(d/max(bevel, 0.00001), 0.0, 1.0);\n}",
-        "inputs": [
-            {
-                "default": "1.0",
-                "label": "5:",
-                "longdesc": "Map that affects the bevel parameter",
-                "name": "bevel_map",
-                "shortdesc": "Bevel Map",
-                "type": "f"
-            }
-        ],
-        "instance": "",
-        "name": "Seven Segment Display",
-        "outputs": [
-            {
-                "f": "ssd($uv, $s, $st, $sl, $bevel*$bevel_map($uv), int($n))",
-                "shortdesc": "Output",
-                "type": "f"
-            }
-        ],
-        "parameters": [
-            {
-                "control": "None",
-                "default": 0.3,
-                "label": "Thickness",
-                "max": 1,
-                "min": 0,
-                "name": "st",
-                "shortdesc": "Segments thickness",
-                "step": 0.01,
-                "type": "float"
-            },
-            {
-                "control": "None",
-                "default": 0.9,
-                "label": "Length",
-                "max": 1,
-                "min": 0,
-                "name": "sl",
-                "shortdesc": "Segments length",
-                "step": 0.01,
-                "type": "float"
-            },
-            {
-                "control": "None",
-                "default": 0.5,
-                "label": "Number",
-                "max": 9,
-                "min": 0,
-                "name": "n",
-                "shortdesc": "Number for the display",
-                "step": 1,
-                "type": "float"
-            },
-            {
-                "control": "None",
-                "default": 1,
-                "label": "Scale",
-                "max": 1,
-                "min": 0,
-                "name": "s",
-                "step": 0.01,
-                "type": "float"
-            },
-            {
-                "control": "None",
-                "default": 0,
-                "label": "Bevel",
-                "max": 1,
-                "min": 0,
-                "name": "bevel",
-                "shortdesc": "Width of the edge of each segment",
-                "step": 0.01,
-                "type": "float"
-            }
-        ],
-        "shortdesc": "Simple 7-seg number display"
-    },
-    "type": "shader"
+	"name": "seven_segment",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"digits": 1,
+		"n": 8,
+		"s": 1,
+		"sl": 0.9,
+		"spacing": 0.1,
+		"st": 0.3
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float m(vec4 a, vec4 b)\n{\n\treturn max(max(max(a.x,a.y),max(a.z,a.w)),max(max(b.x,b.y),max(b.z,b.w)));\n}\n\nvec4 fs(vec2 p,float s, float st, float sl, bool is_top)\n{\n\tsl = (1.0 - sl)/2.0; st /= 2.0;\n\tsl = clamp(sl, 0.0,1.0);\n\n\tp = 2.5*(1.0/s)*(p - 0.5)-vec2(0.0, is_top ? -0.5 : 0.5);\n\tvec2 p1 = p; vec2 p2 = p;\n\t\n\tp = abs(p)-0.5;\n\tvec4 d = vec4(min(st - abs(max(p.x, p.y) * -1.0),\n\t\tmin(-dot(p, normalize(vec2(1.0, 1.0))),\n\t\tabs(dot(p, normalize(vec2(1.0, -1.0))))) - sl));\n\n\tp1.x = abs(p1.x);\n\tp2.y = abs(p2.y);\n\n\tfloat q1 = -dot(p1,vec2(1.0,1.0));\n\tfloat q2 = -dot(p2,vec2(-1.0,1.0));\n\tfloat q3 = dot(p1,vec2(-1.0,1.0));\n\tfloat q4 = -dot(p2,vec2(1.0,1.0));\n\t\n\treturn min(d,vec4(q1,q2,q3,q4));\n}\n\nfloat ssd(vec2 p, float s, float st, float sl, float bevel, int num)\n{\n\tvec4 a = fs(p,s,st,sl,true);\n\tvec4 b = fs(p,s,st,sl,false);\n\t\n\tfloat d;\n\t\n\tvec4 x = vec4(0.0);\n\t\n\tif (num == 0) d = m(vec4(a.xyw,b.y),vec4(b.zw,x.xx));\n\tif (num == 1) d = m(vec4(a.y,b.y,x.xx),x);\n\tif (num == 2) d = m(vec4(a.xyz,b.w),vec4(b.z,x.xxx));\n\tif (num == 3) d = m(vec4(a.xyz,b.y),vec4(b.z,x.xxx));\n\tif (num == 4) d = m(vec4(a.yzw,b.y),x);\n\tif (num == 5) d = m(vec4(a.xwz,b.y),vec4(b.z,x.xxx));\n\tif (num == 6) d = m(vec4(a.xwz,b.y),vec4(b.zw,x.xx));\n\tif (num == 7) d = m(vec4(a.xy,b.y,x.x),x);\n\tif (num == 8) d = m(a,b);\n\tif (num == 9) d = m(a,vec4(b.yz,x.xx));\n\t\n\treturn clamp(d/max(bevel, 0.00001), 0.0, 1.0);\n}\n\nfloat ssd_multi(vec2 p, float s, float st, float sl, float bevel, int num, int digits, float spacing)\n{\n\tfloat v = 0.0;\n\twhile (num > 0 || digits > 0) {\n\t\tv = max(v, ssd(p, s, st, sl, bevel, num % 10));\n\t\tnum /= 10;\n\t\tp.x += (spacing+0.5)*s;\n\t\tdigits -= 1;\n\t}\n\treturn v;\n}\n",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "6:",
+				"longdesc": "Map that affects the bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel Map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Seven Segment Display",
+		"outputs": [
+			{
+				"f": "ssd_multi($uv, $s, $st, $sl, $bevel*$bevel_map($uv), int($n), int($digits), $spacing)",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Thickness",
+				"max": 1,
+				"min": 0,
+				"name": "st",
+				"shortdesc": "Segments thickness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.9,
+				"label": "Length",
+				"max": 1,
+				"min": 0,
+				"name": "sl",
+				"shortdesc": "Segments length",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 8,
+				"label": "Number",
+				"max": 100,
+				"min": 0,
+				"name": "n",
+				"shortdesc": "Number for the display",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Digits",
+				"longdesc": "Minimum number of digits of the display",
+				"max": 9,
+				"min": 1,
+				"name": "digits",
+				"shortdesc": "Digits",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale",
+				"longdesc": "Scale of the display",
+				"max": 1,
+				"min": 0,
+				"name": "s",
+				"shortdesc": "Scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Bevel",
+				"max": 1,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Width of the edge of each segment",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Spacing",
+				"longdesc": "Space between digits",
+				"max": 0.5,
+				"min": 0,
+				"name": "spacing",
+				"shortdesc": "Spacing",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Simple 7-seg number display"
+	},
+	"type": "shader"
 }
