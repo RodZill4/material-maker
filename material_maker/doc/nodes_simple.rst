@@ -16,3 +16,4 @@ The simple nodes are nodes that do not accept any input and generate one or seve
 	node_simple_profile
 	node_simple_polycurve
 	node_simple_easysdf
+	node_simple_seven_segment_display
