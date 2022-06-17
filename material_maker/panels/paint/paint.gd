@@ -233,6 +233,10 @@ func set_object(o):
 	preview_material.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_material(0, preview_material)
+	# Center camera on  mesh
+	var aabb : AABB = painted_mesh.get_aabb()
+	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
 	painter.init_textures(mat)

@@ -176,7 +176,7 @@ func _on_Point_gui_input(event : InputEvent):
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
 			if grid != null and grid.visible:
-				snap = grid.snap
+				snap = grid.grid_size
 			if is_xy:
 				if snap > 0.0:
 					value.x = round((value.x-0.5)*snap)/snap+0.5

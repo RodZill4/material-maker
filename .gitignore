@@ -21,3 +21,4 @@ addons/material_maker/library/base/*.png.import
 
 # Export
 build/
+*.mmcr

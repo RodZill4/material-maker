@@ -84,9 +84,15 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
 	update_material(source)
 
+var refreshing_generator : bool = false
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
-		set_generator(generator, output, true)
+		if ! refreshing_generator:
+			refreshing_generator = true
+			yield(get_tree(), "idle_frame")
+			set_generator(generator, output, true)
+			refreshing_generator = false
+		return
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:
