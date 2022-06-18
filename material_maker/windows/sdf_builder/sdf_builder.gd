@@ -48,6 +48,12 @@ func set_preview(s : Array):
 			preview_3d.visible = true
 			preview_3d.set_generator($GenSDF, 0, true)
 
+func select_first_item():
+	var top = tree.get_root().get_children()
+	if top != null:
+		top.select(0)
+		_on_Tree_item_selected()
+
 func set_sdf_scene(s : Array, parent = null):
 	var parent_item
 	if parent == null:
@@ -62,9 +68,7 @@ func set_sdf_scene(s : Array, parent = null):
 		add_sdf_item(i, parent_item)
 	if parent == null:
 		set_preview(scene)
-	var top = tree.get_root().get_children()
-	if top != null:
-		tree.get_root().get_children().select(0)
+	select_first_item()
 
 func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	var item = tree.create_item(parent_item)
@@ -126,6 +130,7 @@ func delete_item(item : TreeItem):
 	tree.update()
 	rebuild_scene()
 	set_preview(scene)
+	select_first_item()
 
 func copy_item(item : TreeItem):
 	var tmp_scene : Dictionary = item.get_meta("scene").duplicate()
@@ -149,10 +154,7 @@ func _on_menu(id : int, current_item : TreeItem):
 		MENU_PASTE:
 			paste_item(current_item)
 		MENU_DELETE:
-			current_item.get_parent().remove_child(current_item)
-			tree.update()
-			rebuild_scene()
-			set_preview(scene)
+			delete_item(current_item)
 
 func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var shape = mm_sdf_builder.item_types[id]
