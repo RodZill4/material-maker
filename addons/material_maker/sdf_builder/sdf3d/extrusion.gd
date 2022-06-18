@@ -21,6 +21,9 @@ func get_parameter_defs():
 func get_includes():
 	return [ "sdf3d_rotate" ]
 
+func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
+	return "1000000.0"
+
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[], outputs=[ { sdf3d=output_name, type="sdf3d" } ] }
