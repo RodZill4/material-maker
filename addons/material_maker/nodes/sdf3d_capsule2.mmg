@@ -13,7 +13,7 @@
 	"seed_locked": false,
 	"shader_model": {
 		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);\n",
-		"global": "",
+		"global": "float sdCapsule(vec3 p, float h, float r) {\n\tp.y -= clamp(p.y, -h, h);\n\treturn length(p)-r;\n}\n",
 		"inputs": [
 			{
 				"default": "1.0",

@@ -16,4 +16,4 @@ func get_includes():
 	return [ "rotate" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = length(%s)-$radius;\n" % [ scene.index, uv ]
+	return "length(%s)-$radius" % [ uv ]

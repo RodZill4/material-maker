@@ -1,11 +1,10 @@
 {
-	"name": "sdf3d_box",
+	"name": "sdf3d_ellipsoid",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"r": 0.01,
 		"sx": 0.3,
 		"sy": 0.25,
 		"sz": 0.25
@@ -14,17 +13,17 @@
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float box3d(vec3 uv, vec3 s) {\n\tvec3 q = abs(uv) - s;\n\treturn length(max(q, 0.0))+min(max(q.x, max(q.y, q.z)), 0.0);\n}\n",
+		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// source: https://www.shadertoy.com/view/tdS3DG\nfloat sdEllipsoid(vec3 p, vec3 r)  {\n    float k0 = length(p/r);\n    float k1 = length(p/(r*r));\n    return k0*(k0-1.0)/k1;\n}\n",
 		"inputs": [
 
 		],
 		"instance": "",
-		"longdesc": "Generates a rounded box as a signed distance function",
-		"name": "Box",
+		"longdesc": "Generates an ellipsoid as a signed distance function",
+		"name": "Ellipsoid",
 		"outputs": [
 			{
-				"longdesc": "Shows the rounded box",
-				"sdf3d": "box3d($uv, vec3($sx, $sy, $sz))-$r",
+				"longdesc": "Shows the ellipsoid",
+				"sdf3d": "sdEllipsoid($uv, vec3($sx, $sy, $sz))",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
@@ -34,7 +33,7 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Size X",
-				"longdesc": "The size of the box along the X axis",
+				"longdesc": "The size of the ellipsoid along the X axis",
 				"max": 1,
 				"min": 0,
 				"name": "sx",
@@ -46,7 +45,7 @@
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Size Y",
-				"longdesc": "The size of the box along the Y axis",
+				"longdesc": "The size of the ellipsoid along the Y axis",
 				"max": 1,
 				"min": 0,
 				"name": "sy",
@@ -58,28 +57,16 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Size Z",
-				"longdesc": "The size of the box along the Z axis",
+				"longdesc": "The size of the ellipsoid along the Z axis",
 				"max": 1,
 				"min": 0,
 				"name": "sz",
 				"shortdesc": "Size.z",
 				"step": 0.01,
 				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.5,
-				"label": "Radius",
-				"longdesc": "The radius of the rounded box",
-				"max": 1,
-				"min": 0,
-				"name": "r",
-				"shortdesc": "Radius",
-				"step": 0.01,
-				"type": "float"
 			}
 		],
-		"shortdesc": "Box"
+		"shortdesc": "Ellipsoid"
 	},
 	"type": "shader"
 }

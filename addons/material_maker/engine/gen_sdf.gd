@@ -27,19 +27,36 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 		return defs
 
 func get_output_defs(_show_hidden : bool = false) -> Array:
-	if editor:
-		return [ { type="rgb" } ]
-	else:
-		return [ { type="sdf2d" } ]
+	match get_scene_type():
+		"SDF3D":
+			return [ { type="sdf3d" } ]
+		_:
+			if editor:
+				return [ { type="rgb" } ]
+			else:
+				return [ { type="sdf2d" } ]
+
+func get_scene_type() -> String:
+	if scene.empty():
+		return ""
+	return mm_sdf_builder.item_types[mm_sdf_builder.item_ids[scene[0].type]].item_category
 
 func set_sdf_scene(s : Array):
 	scene = s.duplicate(true)
-	var uv = "$uv-vec2(0.5)"
+	var scene_type : String = get_scene_type()
 	var shader_model = { includes=[], parameters=[]}
-	shader_model.instance = "float $(name)_d(vec2 uv, int index) {\n"
+	var uv = "$uv"
+	match scene_type:
+		"SDF3D":
+			shader_model.instance = "float $(name)_d(vec3 uv, int index) {\n"
+		_:
+			uv = "$uv-vec2(0.5)"
+			shader_model.instance = "float $(name)_d(vec2 uv, int index) {\n"
 	var first : bool = true
 	var parameter_defs = []
 	for i in scene:
+		if i.has("hidden") and i.hidden:
+			continue
 		var item_shader_model = mm_sdf_builder.scene_to_shader_model(i, "uv", editor)
 		if item_shader_model.has("includes"):
 			shader_model.includes.append_array(item_shader_model.includes)
@@ -48,36 +65,59 @@ func set_sdf_scene(s : Array):
 		if item_shader_model.has("code"):
 			shader_model.instance += item_shader_model.code.replace("$(name_uv)", "")
 		if item_shader_model.has("outputs"):
-			var output_name = item_shader_model.outputs[0].sdf2d.replace("$(name_uv)", "")
-			if first:
-				shader_model.instance += "float return_value = %s;" % output_name
-				first = false
+			var output = item_shader_model.outputs[0]
+			var output_name
+			var field : String
+			if scene_type == "SDF2D":
+				field = "sdf2d"
 			else:
-				shader_model.instance += "return_value = min(return_value, %s);" % output_name
+				field = "sdf3d"
+			if item_shader_model.outputs[0].has(field):
+				output_name = item_shader_model.outputs[0][field].replace("$(name_uv)", "")
+				if first:
+					shader_model.instance += "float return_value = %s;\n" % output_name
+					first = false
+				else:
+					shader_model.instance += "return_value = min(return_value, %s);\n" % output_name
 	if first:
 		shader_model.instance += "return 1.0;"
 	else:
 		shader_model.instance += "return index == 0 ? return_value : 1.0;"
 	shader_model.instance += "}\n"
-	if editor:
-		shader_model.code = "float edgewidth = 0.0001;\n"
-		shader_model.code += "float $(name_uv)_d = -$(name)_d(%s, 0);\n" % uv
-		shader_model.code += "float $(name_uv)_d2 = -$(name)_d(%s, int(round($index)));\n" % uv
-		shader_model.code += "float $(name_uv)_d3 = -$(name)_d(%s, -int(round($index)));\n" % uv
-		shader_model.code += "float color = 0.25*smoothstep(-edgewidth, edgewidth, $(name_uv)_d);\n"
-		shader_model.code += "color += 0.5*smoothstep(-edgewidth, edgewidth, $(name_uv)_d2);\n"
-		shader_model.code += "color += 0.05*sin($(name_uv)_d*251.327412287);\n"
-		shader_model.outputs = [{}]
-		shader_model.outputs[0].rgb = "clamp(color+vec3(0.2, 0.2, 0.0)*smoothstep(-edgewidth, edgewidth, $(name_uv)_d3), vec3(0.0), vec3(1.0))"
-		shader_model.outputs[0].type = "rgb"
-
-		parameter_defs.push_back({default=-1, name="index", type="float"})
-		shader_model.parameters = parameter_defs
-	else:
-		shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
-		shader_model.outputs = [{}]
-		shader_model.outputs[0].sdf2d = "$(name_uv)_d"
-		shader_model.outputs[0].type = "sdf2d"
+	match scene_type:
+		"SDF3D":
+			if editor:
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+			else:
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0), 0);\n" % uv
+			shader_model.outputs = [{}]
+			shader_model.outputs[0].sdf3d = "$(name_uv)_d"
+			shader_model.outputs[0].type = "sdf3d"
+			shader_model.parameters = parameter_defs
+		_:
+			if editor:
+				shader_model.code = "float edgewidth = 0.0001;\n"
+				shader_model.code += "float $(name_uv)_d = -$(name)_d(%s, 0);\n" % uv
+				shader_model.code += "float $(name_uv)_d2 = -$(name)_d(%s, int(round($index)));\n" % uv
+				shader_model.code += "float $(name_uv)_d3 = -$(name)_d(%s, -int(round($index)));\n" % uv
+				shader_model.code += "float color = 0.25*smoothstep(-edgewidth, edgewidth, $(name_uv)_d);\n"
+				shader_model.code += "color += 0.5*smoothstep(-edgewidth, edgewidth, $(name_uv)_d2);\n"
+				shader_model.code += "color += 0.05*sin($(name_uv)_d*251.327412287);\n"
+				shader_model.outputs = [{}]
+				shader_model.outputs[0].rgb = "clamp(color+vec3(0.2, 0.2, 0.0)*smoothstep(-edgewidth, edgewidth, $(name_uv)_d3), vec3(0.0), vec3(1.0))"
+				shader_model.outputs[0].type = "rgb"
+				parameter_defs.push_back({default=-1, name="index", type="float"})
+				shader_model.parameters = parameter_defs
+			else:
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+				shader_model.outputs = [{}]
+				shader_model.outputs[0].sdf2d = "$(name_uv)_d"
+				shader_model.outputs[0].type = "sdf2d"
+	for p in parameter_defs:
+		if p.type == "float" and p.default is int:
+			parameters[p.name] = float(p.default)
+		else:
+			parameters[p.name] = p.default
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:
