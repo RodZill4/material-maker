@@ -4,8 +4,6 @@ var quitting : bool = false
 
 var recent_files = []
 
-var config_cache : ConfigFile = ConfigFile.new()
-
 var current_tab = null
 
 var updating : bool = false
@@ -51,113 +49,98 @@ const RECENT_FILES_COUNT = 15
 const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
-	{ menu="File", command="new_material", shortcut="Control+N", description="New material" },
-	{ menu="File", command="new_paint_project", shortcut="Control+Shift+N", description="New paint project" },
-	{ menu="File", command="load_project", shortcut="Control+O", description="Load" },
-	{ menu="File", command="load_material_from_website", description="Load material from website" },
-	{ menu="File", submenu="load_recent", description="Load recent", standalone_only=true },
-	{ menu="File" },
-	{ menu="File", command="save_project", shortcut="Control+S", description="Save" },
-	{ menu="File", command="save_project_as", shortcut="Control+Shift+S", description="Save as..." },
-	{ menu="File", command="save_all_projects", description="Save all..." },
-	{ menu="File" },
-	{ menu="File", submenu="export_material", description="Export material" },
+	{ menu="File/New material", command="new_material", shortcut="Control+N" },
+	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N" },
+	{ menu="File/Load", command="load_project", shortcut="Control+O" },
+	{ menu="File/Load material from website", command="load_material_from_website" },
+	{ menu="File/Load recent", submenu="load_recent", standalone_only=true },
+	{ menu="File/-" },
+	{ menu="File/Save", command="save_project", shortcut="Control+S" },
+	{ menu="File/Save as...", command="save_project_as", shortcut="Control+Shift+S" },
+	{ menu="File/Save all...", command="save_all_projects" },
+	{ menu="File/-" },
+	{ menu="File/Export material", submenu="export_material" },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
-	{ menu="File" },
-	{ menu="File", command="close_project", shortcut="Control+Shift+Q", description="Close" },
-	{ menu="File", command="quit", shortcut="Control+Q", description="Quit" },
+	{ menu="File/-" },
+	{ menu="File/Close", command="close_project", shortcut="Control+Shift+Q" },
+	{ menu="File/Quit", command="quit", shortcut="Control+Q" },
 
-	{ menu="Edit", command="edit_undo", shortcut="Control+Z", description="Undo" },
-	{ menu="Edit", command="edit_redo", shortcut="Control+Shift+Z", description="Redo" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_cut", shortcut="Control+X", description="Cut" },
-	{ menu="Edit", command="edit_copy", shortcut="Control+C", description="Copy" },
-	{ menu="Edit", command="edit_paste", shortcut="Control+V", description="Paste" },
-	{ menu="Edit", command="edit_duplicate", shortcut="Control+D", description="Duplicate" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_select_all", shortcut="Control+A", description="Select All" },
-	{ menu="Edit", command="edit_select_none", shortcut="Control+Shift+A", description="Select None" },
-	{ menu="Edit", command="edit_select_invert", shortcut="Control+I", description="Invert Selection" },
-	{ menu="Edit" },
-	{ menu="Edit", command="edit_load_selection", description="Load Selection" },
-	{ menu="Edit", command="edit_save_selection", description="Save Selection" },
-	{ menu="Edit" },
-	{ menu="Edit", submenu="set_theme", description="Set theme" },
-	{ menu="Edit", command="edit_preferences", description="Preferences" },
+	{ menu="Edit/Undo", command="edit_undo", shortcut="Control+Z" },
+	{ menu="Edit/Redo", command="edit_redo", shortcut="Control+Shift+Z" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Cut", command="edit_cut", shortcut="Control+X" },
+	{ menu="Edit/Copy", command="edit_copy", shortcut="Control+C" },
+	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
+	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
+	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
+	{ menu="Edit/Invert Selection", command="edit_select_invert", shortcut="Control+I" },
+	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
+	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Load Selection", command="edit_load_selection" },
+	{ menu="Edit/Save Selection", command="edit_save_selection" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Set theme", submenu="set_theme" },
+	{ menu="Edit/Preferences", command="edit_preferences" },
 
-	{ menu="View", command="view_center", shortcut="C", description="Center view" },
-	{ menu="View", command="view_reset_zoom", shortcut="Control+0", description="Reset zoom" },
-	{ menu="View" },
-	{ menu="View", command="toggle_side_panels", shortcut="Control+Space", description="Show/Hide side panels" },
-	{ menu="View", submenu="show_panels", description="Panels" },
+	{ menu="View/Center view", command="view_center", shortcut="C" },
+	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
+	{ menu="View/-" },
+	{ menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
+	{ menu="View/Panels", submenu="show_panels" },
 
-	{ menu="Tools", submenu="create", description="Create" },
-	{ menu="Tools", command="create_subgraph", shortcut="Control+G", description="Create group" },
-	{ menu="Tools", command="make_selected_nodes_editable", shortcut="Control+W", description="Make selected nodes editable" },
-	{ menu="Tools" },
-	{ menu="Tools", submenu="add_selection_to_library", description="Add selected node to library", mode="material" },
-	{ menu="Tools", submenu="add_brush_to_library", description="Add current brush to library", mode="paint" },
-	{ menu="Tools", command="generate_graph_screenshot", description="Create a screenshot of the current graph", mode="material" },
-	{ menu="Tools", command="paint_project_settings", description="Paint project settings", mode="paint" },
-	{ menu="Tools", submenu="paint_environment", description="Set painting environment", mode="paint" },
-	{ menu="Tools" },
-	{ menu="Tools", command="environment_editor", description="Environment editor" },
+	{ menu="Tools/Create", submenu="create" },
+	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
+	{ menu="Tools/Make selected nodes editable", command="make_selected_nodes_editable", shortcut="Control+W" },
+	{ menu="Tools/-" },
+	{ menu="Tools/Add selected node to library", submenu="add_selection_to_library", mode="material" },
+	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint" },
+	{ menu="Tools/Create a screenshot of the current graph", command="generate_graph_screenshot", mode="material" },
+	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint" },
+	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
+	{ menu="Tools/-" },
+	{ menu="Tools/Environment editor", command="environment_editor" },
 	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
 
-	{ menu="Help", command="show_doc", shortcut="F1", description="User manual" },
-	{ menu="Help", command="show_library_item_doc", shortcut="Control+F1", description="Show selected library item documentation" },
-	{ menu="Help", command="bug_report", description="Report a bug" },
-	{ menu="Help" },
-	{ menu="Help", command="about", description="About" }
+	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
+	{ menu="Help/Report a bug", command="bug_report" },
+	{ menu="Help/" },
+	{ menu="Help/About", command="about" }
 ]
 
-const DEFAULT_CONFIG = {
-	locale = "",
-	confirm_quit = true,
-	confirm_close_project = true,
-	vsync = true,
-	fps_limit = 145,
-	idle_fps_limit = 20,
-	ui_scale = 0,
-	ui_3d_preview_resolution = 2.0,
-	ui_3d_preview_tesselation_detail = 256,
-	ui_3d_preview_sun_shadow = false,
-	bake_ray_count = 64,
-	bake_ao_ray_dist = 128.0,
-	bake_ao_ray_bias = 0.005,
-	bake_denoise_radius = 3
-}
+
+func _enter_tree() -> void:
+	mm_globals.main_window = self
 
 func _ready() -> void:
+	for m in MENU:
+		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
 
-	# Load and nitialize config
-	config_cache.load("user://cache.ini")
-	for k in DEFAULT_CONFIG.keys():
-		if ! config_cache.has_section_key("config", k):
-			config_cache.set_value("config", k, DEFAULT_CONFIG[k])
-
-	if get_config("locale") == "":
-		config_cache.set_value("config", "locale", TranslationServer.get_locale())
+	if mm_globals.get_config("locale") == "":
+		mm_globals.set_config("locale", TranslationServer.get_locale())
 
 	on_config_changed()
 
 	# Restore the window position/size if values are present in the configuration cache
-	if config_cache.has_section_key("window", "screen"):
-		OS.current_screen = config_cache.get_value("window", "screen")
-	if config_cache.has_section_key("window", "maximized"):
-		OS.window_maximized = config_cache.get_value("window", "maximized")
+	if mm_globals.config.has_section_key("window", "screen"):
+		OS.current_screen = mm_globals.config.get_value("window", "screen")
+	if mm_globals.config.has_section_key("window", "maximized"):
+		OS.window_maximized = mm_globals.config.get_value("window", "maximized")
 
 	if !OS.window_maximized:
-		if config_cache.has_section_key("window", "position"):
-			OS.window_position = config_cache.get_value("window", "position")
-		if config_cache.has_section_key("window", "size"):
-			OS.window_size = config_cache.get_value("window", "size")
+		if mm_globals.config.has_section_key("window", "position"):
+			OS.window_position = mm_globals.config.get_value("window", "position")
+		if mm_globals.config.has_section_key("window", "size"):
+			OS.window_size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
 	var theme_name : String = "default"
-	if config_cache.has_section_key("window", "theme"):
-		theme_name = config_cache.get_value("window", "theme")
+	if mm_globals.config.has_section_key("window", "theme"):
+		theme_name = mm_globals.config.get_value("window", "theme")
 	set_theme(theme_name)
 
 	# In HTML5 export, copy all examples to the filesystem
@@ -182,7 +165,7 @@ func _ready() -> void:
 	# Set window title
 	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
 
-	layout.load_panels(config_cache)
+	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
@@ -196,7 +179,7 @@ func _ready() -> void:
 	load_recents()
 
 	# Create menus
-	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
+	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 	new_material()
 
@@ -206,27 +189,31 @@ func _ready() -> void:
 
 	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
+func _exit_tree() -> void:
+	# Save the window position and size to remember it when restarting the application
+	mm_globals.config.set_value("window", "screen", OS.current_screen)
+	mm_globals.config.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
+	mm_globals.config.set_value("window", "position", OS.window_position)
+	mm_globals.config.set_value("window", "size", OS.window_size)
+	layout.save_config()
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 
-func get_config(key : String):
-	if ! config_cache.has_section_key("config", key):
-		return DEFAULT_CONFIG[key]
-	return config_cache.get_value("config", key)
-
 func on_config_changed() -> void:
-	OS.vsync_enabled = get_config("vsync")
+	OS.vsync_enabled = mm_globals.get_config("vsync")
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+# warning-ignore:narrowing_conversion
+	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 	# locale
-	var locale = get_config("locale")
+	var locale = mm_globals.get_config("locale")
 	if locale != "" and locale != TranslationServer.get_locale():
 		TranslationServer.set_locale(locale)
 		get_tree().call_group("updated_from_locale", "update_from_locale")
 
-	var scale = get_config("ui_scale")
+	var scale = mm_globals.get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
 		# This prevents UI elements from being too small on hiDPI displays.
@@ -234,8 +221,9 @@ func on_config_changed() -> void:
 	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
 	# Clamp to reasonable values to avoid crashes on startup.
-	preview_rendering_scale_factor = clamp(get_config("ui_3d_preview_resolution"), 1.0, 2.0)
-	preview_tesselation_detail = clamp(get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
+	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
+# warning-ignore:narrowing_conversion
+	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -262,119 +250,8 @@ func get_current_mode() -> String:
 func set_current_mode(mode : String) -> void:
 	current_mode = mode
 	layout.change_mode(current_mode)
-	create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 # Menus
-
-func create_menus(menu_def, object, menu_bar) -> void:
-	for i in menu_def.size():
-		if ! menu_bar.has_node(menu_def[i].menu.split("/")[0]):
-			var menu_button = MenuButton.new()
-			menu_button.name = menu_def[i].menu
-			menu_button.text = menu_def[i].menu
-			menu_button.switch_on_hover = true
-			menu_bar.add_child(menu_button)
-	for m in menu_bar.get_children():
-		if ! m is MenuButton:
-			continue
-		var menu = m.get_popup()
-		create_menu(menu_def, object, menu, m.name)
-		#m.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, m.name, menu ])
-
-func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
-	var mode = ""
-	if object.has_method("get_current_mode"):
-		mode = object.get_current_mode()
-	var is_mac : bool = OS.get_name() == "OSX"
-	var submenus = {}
-	var menu_name_length = menu_name.length()
-	menu.clear()
-
-	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
-		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
-	for i in menu_def.size():
-		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
-			continue
-		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
-			continue
-		if menu_def[i].has("mode") and menu_def[i].mode != mode:
-			continue
-		if menu_def[i].menu == menu_name:
-			if menu_def[i].has("submenu"):
-				var submenu = PopupMenu.new()
-				var submenu_function = "create_menu_"+menu_def[i].submenu
-				if object.has_method(submenu_function):
-					submenu.connect("about_to_show", object, submenu_function, [ submenu ]);
-				else:
-					create_menu(menu_def, object, submenu, menu_def[i].submenu)
-				menu.add_child(submenu)
-				menu.add_submenu_item(menu_def[i].description, submenu.get_name())
-			elif menu_def[i].has("description"):
-				var shortcut = 0
-				if menu_def[i].has("shortcut"):
-					for s in menu_def[i].shortcut.split("+"):
-						if s == "Alt":
-							shortcut |= KEY_MASK_ALT
-						elif s == "Control":
-							shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
-						elif s == "Shift":
-							shortcut |= KEY_MASK_SHIFT
-						else:
-							shortcut |= OS.find_scancode_from_string(s)
-				if menu_def[i].has("toggle") and menu_def[i].toggle:
-					menu.add_check_item(menu_def[i].description, i, shortcut)
-				else:
-					menu.add_item(menu_def[i].description, i, shortcut)
-			else:
-				menu.add_separator()
-		elif menu_def[i].menu.begins_with(menu_name+"/"):
-			var submenu_name = menu_def[i].menu.right(menu_name_length+1)
-			submenu_name = submenu_name.split("/")[0]
-			if ! submenus.has(submenu_name):
-				var submenu = PopupMenu.new()
-				create_menu(menu_def, object, submenu, menu_name+"/"+submenu_name)
-				menu.add_child(submenu)
-				menu.add_submenu_item(submenu_name, submenu.get_name())
-				submenus[submenu_name] = submenu
-	if !menu.is_connected("about_to_show", self, "on_menu_about_to_show"):
-		menu.connect("about_to_show", self, "on_menu_about_to_show", [ menu_def, object, menu_name, menu ])
-	return menu
-
-func on_menu_id_pressed(id, menu_def, object) -> void:
-	if menu_def[id].has("command"):
-		var command = menu_def[id].command
-		if object.has_method(command):
-			var parameters = []
-			if menu_def[id].has("command_parameter"):
-				parameters.append(menu_def[id].command_parameter)
-			if menu_def[id].has("toggle") and menu_def[id].toggle:
-				parameters.append(!object.callv(command, parameters))
-			object.callv(command, parameters)
-
-func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) -> void:
-	var mode = ""
-	if object.has_method("get_current_mode"):
-		mode = object.get_current_mode()
-	for i in menu_def.size():
-		if menu_def[i].menu != name:
-			continue
-		if menu_def[i].has("submenu"):
-			pass
-		elif menu_def[i].has("command"):
-			var item : int = menu.get_item_index(i)
-			var command = menu_def[i].command+"_is_disabled"
-			if object.has_method(command):
-				var is_disabled = object.call(command)
-				menu.set_item_disabled(item, is_disabled)
-			if menu_def[i].has("mode"):
-				menu.set_item_disabled(item, menu_def[i].mode != mode)
-			if menu_def[i].has("toggle") and menu_def[i].toggle:
-				command = menu_def[i].command
-				var parameters = []
-				if menu_def[i].has("command_parameter"):
-					parameters.append(menu_def[i].command_parameter)
-				if object.has_method(command):
-					menu.set_item_checked(item, object.callv(command, parameters))
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
@@ -388,8 +265,7 @@ func create_menu_load_recent(menu) -> void:
 			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	if !do_load_project(recent_files[id]):
-		recent_files.remove(id)
+	do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f = File.new()
@@ -397,21 +273,29 @@ func load_recents() -> void:
 		recent_files = parse_json(f.get_as_text())
 		f.close()
 
-func add_recent(path) -> void:
+func save_recents() -> void:
+	var f = File.new()
+	f.open("user://recent_files.bin", File.WRITE)
+	f.store_string(to_json(recent_files))
+	f.close()
+
+func add_recent(path, save = true) -> void:
+	remove_recent(path, false)
+	recent_files.push_front(path)
+	while recent_files.size() > RECENT_FILES_COUNT:
+		recent_files.pop_back()
+	if save:
+		save_recents()
+
+func remove_recent(path, save = true) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
 			recent_files.remove(index)
 		else:
 			break
-	recent_files.push_front(path)
-	while recent_files.size() > RECENT_FILES_COUNT:
-		recent_files.pop_back()
-	var f = File.new()
-	f.open("user://recent_files.bin", File.WRITE)
-	f.store_string(to_json(recent_files))
-	f.close()
-
+	if save:
+		save_recents()
 
 func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
 	if prefix == "":
@@ -421,29 +305,32 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void
 			menu.remove_child(sm)
 			sm.free()
 	var project = get_current_project()
-	if project != null:
-		var material_node = project.get_material_node()
-		var prefix_len = prefix.length()
-		var submenus = []
-		for id in range(material_node.get_export_profiles().size()):
-			var p : String = material_node.get_export_profiles()[id]
-			if p.left(prefix_len) != prefix:
-				continue
-			p = p.right(prefix_len)
-			var slash_position = p.find("/")
-			if slash_position == -1:
-				menu.add_item(p, id)
-			else:
-				var submenu_name = p.left(slash_position)
-				if submenus.find(submenu_name) == -1:
-					var submenu = PopupMenu.new()
-					submenu.name = submenu_name
-					menu.add_child(submenu)
-					create_menu_export_material(submenu, p.left(slash_position+1))
-					menu.add_submenu_item(submenu_name, submenu_name, id)
-					submenus.push_back(submenu_name)
-		if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
-			menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
+	if project == null:
+		return
+	var material_node = project.get_material_node()
+	if material_node == null:
+		return
+	var prefix_len = prefix.length()
+	var submenus = []
+	for id in range(material_node.get_export_profiles().size()):
+		var p : String = material_node.get_export_profiles()[id]
+		if p.left(prefix_len) != prefix:
+			continue
+		p = p.right(prefix_len)
+		var slash_position = p.find("/")
+		if slash_position == -1:
+			menu.add_item(p, id)
+		else:
+			var submenu_name = p.left(slash_position)
+			if submenus.find(submenu_name) == -1:
+				var submenu = PopupMenu.new()
+				submenu.name = submenu_name
+				menu.add_child(submenu)
+				create_menu_export_material(submenu, p.left(slash_position+1))
+				menu.add_submenu_item(submenu_name, submenu_name, id)
+				submenus.push_back(submenu_name)
+	if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
+		menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
 
 func export_profile_config_key(profile : String) -> String:
 	var key = "export_"+profile.to_lower().replace(" ", "_")
@@ -453,7 +340,7 @@ func export_material(file_path : String, profile : String) -> void:
 	var project = get_current_project()
 	if project == null:
 		return
-	config_cache.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
+	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	project.export_material(export_prefix, profile)
 
@@ -471,8 +358,8 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
 	var config_key = export_profile_config_key(profile)
-	if config_cache.has_section_key("path", config_key):
-		dialog.current_dir = config_cache.get_value("path", config_key)
+	if mm_globals.config.has_section_key("path", config_key):
+		dialog.current_dir = mm_globals.config.get_value("path", config_key)
 	add_child(dialog)
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
@@ -495,7 +382,7 @@ func set_theme(theme_name) -> void:
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
 	set_theme(theme_name)
-	config_cache.set_value("window", "theme", theme_name)
+	mm_globals.config.set_value("window", "theme", theme_name)
 
 
 func create_menu_show_panels(menu : PopupMenu) -> void:
@@ -512,9 +399,10 @@ func _on_ShowPanels_id_pressed(id) -> void:
 	layout.set_panel_visible(panel, !layout.is_panel_visible(panel))
 
 
-func create_menu_create(menu) -> void:
+func create_menu_create(menu : PopupMenu) -> void:
 	var gens = mm_loader.get_generator_list()
 	menu.clear()
+	menu.rect_size = Vector2(0, 0)
 	for i in gens.size():
 		menu.add_item(gens[i], i)
 	if !menu.is_connected("id_pressed", self, "_on_Create_id_pressed"):
@@ -565,8 +453,8 @@ func load_project() -> void:
 	dialog.mode = FileDialog.MODE_OPEN_FILES
 	dialog.add_filter("*.ptex;Procedural Textures File")
 	dialog.add_filter("*.mmpp;Model Painting File")
-	if config_cache.has_section_key("path", "project"):
-		dialog.current_dir = config_cache.get_value("path", "project")
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
@@ -583,9 +471,9 @@ func do_load_projects(filenames) -> void:
 		file.close()
 		do_load_project(file_name)
 	if file_name != "":
-		config_cache.set_value("path", "project", file_name.get_base_dir())
+		mm_globals.config.set_value("path", "project", file_name.get_base_dir())
 
-func do_load_project(file_name) -> void:
+func do_load_project(file_name) -> bool:
 	var status : bool = false
 	match file_name.get_extension():
 		"ptex":
@@ -595,6 +483,9 @@ func do_load_project(file_name) -> void:
 			status = do_load_painting(file_name)
 	if status:
 		add_recent(file_name)
+	else:
+		remove_recent(file_name)
+	return status
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -665,14 +556,14 @@ func quit() -> void:
 	dialog.dialog_text = "Quit Material Maker?"
 	dialog.add_cancel("Cancel")
 	add_child(dialog)
-	if get_config("confirm_quit"):
+	if mm_globals.get_config("confirm_quit"):
 		var result = dialog.ask()
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if result == "cancel":
 			quitting = false
 			return
-	if get_config("confirm_close_project"):
+	if mm_globals.get_config("confirm_close_project"):
 		var result = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
@@ -729,7 +620,7 @@ func edit_paste() -> void:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
-	return validate_json(OS.clipboard) == ""
+	return validate_json(OS.clipboard) != ""
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -751,6 +642,36 @@ func edit_select_invert() -> void:
 	if graph_edit != null:
 		graph_edit.select_invert()
 
+func edit_select_connected(end1 : String, end2 : String) -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var node_list : Array = []
+	for n in graph_edit.get_selected_nodes():
+		node_list.push_back(n.name)
+	print(node_list)
+	while !node_list.empty():
+		var new_node_list = []
+		for c in graph_edit.get_connection_list():
+			if c[end1] in node_list:
+				var source = graph_edit.get_node(c[end2])
+				if !source.selected:
+					new_node_list.push_back(c[end2])
+					source.selected = true
+		node_list = new_node_list
+
+func edit_select_sources_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit.get_selected_nodes().empty()
+
+func edit_select_sources() -> void:
+	edit_select_connected("to", "from")
+
+func edit_select_targets_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit.get_selected_nodes().empty()
+
+func edit_select_targets() -> void:
+	edit_select_connected("from", "to")
+
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
@@ -764,13 +685,13 @@ func edit_load_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if config_cache.has_section_key("path", "selection"):
-		dialog.current_dir = config_cache.get_value("path", "selection")
+	if mm_globals.config.has_section_key("path", "selection"):
+		dialog.current_dir = mm_globals.config.get_value("path", "selection")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file = File.new()
 		if file.open(files[0], File.READ) == OK:
 			graph_edit.do_paste(parse_json(file.get_as_text()))
@@ -786,13 +707,13 @@ func edit_save_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if config_cache.has_section_key("path", "selection"):
-		dialog.current_dir = config_cache.get_value("path", "selection")
+	if mm_globals.config.has_section_key("path", "selection"):
+		dialog.current_dir = mm_globals.config.get_value("path", "selection")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		config_cache.set_value("path", "selection", files[0].get_base_dir())
+		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file = File.new()
 		if file.open(files[0], File.WRITE) == OK:
 			file.store_string(to_json(graph_edit.serialize_selection()))
@@ -802,7 +723,7 @@ func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instance()
 	add_child(dialog)
 	dialog.connect("config_changed", self, "on_config_changed")
-	dialog.edit_preferences(config_cache)
+	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -836,12 +757,11 @@ func make_selected_nodes_editable() -> void:
 				n.update_node()
 
 func create_menu_add_to_library(menu, manager, function) -> void:
-	var gens = mm_loader.get_generator_list()
 	menu.clear()
 	for i in manager.get_child_count():
-		var library = manager.get_child(i)
-		if ! library.read_only:
-			menu.add_item(library.library_name, i)
+		var lib = manager.get_child(i)
+		if ! lib.read_only:
+			menu.add_item(lib.library_name, i)
 	if !menu.is_connected("id_pressed", self, function):
 		menu.connect("id_pressed", self, function)
 
@@ -1062,23 +982,16 @@ func on_group_selected(generator) -> void:
 	if graph_edit != null:
 		graph_edit.edit_subgraph(generator)
 
-func _exit_tree() -> void:
-	# Save the window position and size to remember it when restarting the application
-	config_cache.set_value("window", "screen", OS.current_screen)
-	config_cache.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
-	config_cache.set_value("window", "position", OS.window_position)
-	config_cache.set_value("window", "size", OS.window_size)
-	layout.save_config(config_cache)
-	config_cache.save("user://cache.ini")
-
 func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
+# warning-ignore:narrowing_conversion
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_FOCUS_IN:
 			# Return to the normal FPS limit when the window is focused.
-			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+# warning-ignore:narrowing_conversion
+			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			yield(get_tree(), "idle_frame")
 			quit()

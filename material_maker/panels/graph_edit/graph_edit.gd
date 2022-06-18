@@ -11,6 +11,7 @@ class Preview:
 		output_index = i
 
 
+# warning-ignore:unused_class_variable
 export(String, MULTILINE) var shader_context_defs : String = ""
 
 var node_factory = null
@@ -27,7 +28,6 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -42,13 +42,31 @@ signal view_updated
 signal preview_changed
 
 
-
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func _exit_tree():
+	save_config()
+
+func load_config():
+	if mm_globals.has_config("graphedit_use_snap"):
+		use_snap = mm_globals.get_config("graphedit_use_snap")
+	if mm_globals.has_config("graphedit_snap_distance"):
+		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+
+func save_config():
+	mm_globals.set_config("graphedit_use_snap", use_snap)
+	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+
+func _on_GraphEdit_visibility_changed():
+	if is_visible_in_tree():
+		load_config()
+	else:
+		save_config()
 
 func get_project_type() -> String:
 	return "material"
@@ -494,16 +512,16 @@ func save_as() -> bool:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = get_node("/root/MainWindow")
-	if main_window.config_cache.has_section_key("path", "project"):
-		dialog.current_dir = main_window.config_cache.get_value("path", "project")
+	var main_window = mm_globals.main_window
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
-			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
+			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
 			return true
 	return false
 
@@ -525,9 +543,10 @@ func save_file(filename) -> bool:
 # Export
 
 func get_material_node() -> MMGenMaterial:
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			return g
+	if top_generator != null:
+		for g in top_generator.get_children():
+			if g.has_method("get_export_profiles"):
+				return g
 	return null
 
 func export_material(export_prefix, profile) -> void:
@@ -627,7 +646,7 @@ func paste() -> void:
 		graph = parse_json(data)
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
@@ -937,17 +956,17 @@ func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2
 	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
 	undoredo.add("Move nodes", [undo_action], [redo_action], true)
 
-func set_node_parameters(generator, parameters : Dictionary):
-	var hier_name = generator.get_hier_name()
+func set_node_parameters(node, parameters : Dictionary):
+	var hier_name = node.get_hier_name()
 	var prev_params : Dictionary = {}
 	for p in parameters.keys():
-		var prev_value = MMType.serialize_value(generator.get_parameter(p))
+		var prev_value = MMType.serialize_value(node.get_parameter(p))
 		if parameters[p] != prev_value:
-			generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+			node.set_parameter(p, MMType.deserialize_value(parameters[p]))
 		prev_params[p] = prev_value
 	if ! prev_params.empty():
-		var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
-		var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
+		var undo_action = { type="setparams", node=hier_name, params=prev_params }
+		var redo_action = { type="setparams", node=hier_name, params=parameters }
 		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
 
 func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
@@ -1121,7 +1140,7 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
 	
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 

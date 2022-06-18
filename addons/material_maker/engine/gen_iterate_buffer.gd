@@ -80,6 +80,8 @@ func follow_input(input_index : int) -> Array:
 		return .follow_input(input_index)
 
 func update_shader(input_port_index : int) -> void:
+	if ! is_instance_valid(self):
+		return
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(input_port_index)
@@ -168,6 +170,8 @@ func update_buffer() -> void:
 				renderer = mm_renderer.request(self)
 				while renderer is GDScriptFunctionState:
 					renderer = yield(renderer, "completed")
+				if renderer == null:
+					return
 				current_renderer = renderer
 			if current_iteration == 0:
 				renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))

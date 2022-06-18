@@ -3,7 +3,6 @@ extends Node
 var environments = []
 var environment_textures = []
 
-onready var main_window : Control = get_node("/root/MainWindow")
 onready var base_dir : String = OS.get_executable_path().get_base_dir()
 var ro_environments = 0
 
@@ -163,7 +162,7 @@ func read_hdr(index : int, url : String) -> bool:
 	var error = $HTTPRequest.request(url)
 	if error == OK:
 		progress_window = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
-		main_window.add_child(progress_window)
+		mm_globals.main_window.add_child(progress_window)
 		progress_window.set_text("Downloading HDRI file")
 		progress_window.set_progress(0)
 		set_physics_process(true)
@@ -179,22 +178,12 @@ func read_hdr(index : int, url : String) -> bool:
 		accept_dialog = AcceptDialog.new()
 		accept_dialog.window_title = "HDRI download error"
 		accept_dialog.dialog_text = "Failed to download %s" % url
-		get_node("/root/MainWindow").add_child(accept_dialog)
+		mm_globals.main_window.add_child(accept_dialog)
 		accept_dialog.connect("confirmed", accept_dialog, "queue_free")
 		accept_dialog.connect("popup_hide", accept_dialog, "queue_free")
 		accept_dialog.connect("tree_exiting", self, "on_accept_dialog_closed")
 		accept_dialog.popup_centered()
 	return false
-
-"""
-func _on_HTTPRequest_request_completed(_result, _response_code, _headers, _body, index):
-	set_hdr(index, $HTTPRequest.download_file)
-	progress_window.queue_free()
-	progress_window = null
-	set_physics_process(false)
-	update_thumbnail(index)
-	emit_signal("environment_updated", index)
-"""
 
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))

@@ -44,7 +44,7 @@ Example images
 .. figure:: images/node_transform_multi_warp_sample1.png
 	:align: center
 
-	Edge damge using "Min" blend mode.
+	Edge damage using "Min" blend mode.
 
 
 .. figure:: images/node_transform_multi_warp_sample2.png

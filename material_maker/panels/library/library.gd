@@ -1,8 +1,6 @@
 extends VBoxContainer
 
 export var library_manager_name = ""
-export var base_library_name = "base.json"
-export var user_library_name = "user.json"
 
 var expanded_items : Array = []
 
@@ -320,7 +318,7 @@ func _on_PopupMenu_index_pressed(index):
 			if status.ok:
 				library_manager.rename_item_in_library(library_index, item_path, status.text)
 		1: # Update thumbnail
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return

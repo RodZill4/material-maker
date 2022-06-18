@@ -385,6 +385,21 @@ step = 1.0
 float_only = true
 config_variable = "bake_denoise_radius"
 
+[node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="AutoSizeComment" type="CheckBox" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource( 1 )]
+margin_right = 270.0
+margin_bottom = 24.0
+pressed = true
+text = "Auto size comment node to selection"
+flat = true
+config_variable = "auto_size_comment"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 324.0
 margin_right = 302.0

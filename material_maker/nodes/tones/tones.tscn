@@ -85,17 +85,18 @@ __meta__ = {
 margin_left = 16.0
 margin_top = 50.0
 margin_right = 176.0
-margin_bottom = 130.0
-rect_min_size = Vector2( 160, 80 )
+margin_bottom = 150.0
+rect_min_size = Vector2( 160, 100 )
 
 [node name="Spacer2" type="Control" parent="."]
 margin_left = 16.0
-margin_top = 131.0
+margin_top = 151.0
 margin_right = 176.0
-margin_bottom = 135.0
+margin_bottom = 155.0
 rect_min_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="item_selected" from="Bar/Mode" to="." method="_on_Mode_item_selected"]
 [connection signal="pressed" from="Bar/Auto" to="." method="_on_Auto_pressed"]

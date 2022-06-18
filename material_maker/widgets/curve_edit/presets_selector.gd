@@ -14,7 +14,7 @@ var presets = [
 
 func _enter_tree() -> void:
 	get_popup().connect("id_pressed", self, "_menu_item_selected")
-	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var current_theme : Theme = mm_globals.main_window.theme
 	var path = "res://material_maker/theme/"
 	if "light" in current_theme.resource_path:
 		path += "light/"

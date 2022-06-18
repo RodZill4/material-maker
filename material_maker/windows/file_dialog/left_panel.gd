@@ -6,23 +6,19 @@ var favorites : Array = []
 signal open_directory(dirpath)
 
 func _ready():
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		if config_cache.has_section_key("file_dialog", "recents"):
-			var parse_result = JSON.parse(config_cache.get_value("file_dialog", "recents"))
-			if parse_result != null:
-				recents = parse_result.result
-		if config_cache.has_section_key("file_dialog", "favorites"):
-			var parse_result = JSON.parse(config_cache.get_value("file_dialog", "favorites"))
-			if parse_result != null:
-				favorites = parse_result.result
-		update_lists()
+	if mm_globals.config.has_section_key("file_dialog", "recents"):
+		var parse_result = JSON.parse(mm_globals.config.get_value("file_dialog", "recents"))
+		if parse_result != null:
+			recents = parse_result.result
+	if mm_globals.config.has_section_key("file_dialog", "favorites"):
+		var parse_result = JSON.parse(mm_globals.config.get_value("file_dialog", "favorites"))
+		if parse_result != null:
+			favorites = parse_result.result
+	update_lists()
 
 func _exit_tree():
-	if get_node("/root/MainWindow") != null:
-		var config_cache = get_node("/root/MainWindow").config_cache
-		config_cache.set_value("file_dialog", "recents", JSON.print(recents))
-		config_cache.set_value("file_dialog", "favorites", JSON.print(favorites))
+	mm_globals.config.set_value("file_dialog", "recents", JSON.print(recents))
+	mm_globals.config.set_value("file_dialog", "favorites", JSON.print(favorites))
 
 func add_recent(file_path : String):
 	if recents.find(file_path) != -1:

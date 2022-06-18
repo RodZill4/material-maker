@@ -176,6 +176,8 @@ class CustomGradientSorter:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
+	if typeof(old_value) == typeof(v) and old_value == v:
+		return
 	parameters[n] = v
 	emit_signal("parameter_changed", n, v)
 	if is_inside_tree():
@@ -314,8 +316,23 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)
+	assert(! (rv is GDScriptFunctionState))
 	while rv is GDScriptFunctionState:
 		rv = yield(rv, "completed")
+	for v in mm_renderer.get_global_parameters():
+		var variable_name : String = "mm_global_"+v
+		var found : bool = false
+		if rv.has("code") and rv.code.find(variable_name) != -1:
+			found = true
+		if rv.has("globals"):
+			for g in rv.globals:
+				if g.find(variable_name) != -1:
+					found = true
+					break
+		if found:
+			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
+			if rv.globals.find(declaration) == -1:
+				rv.globals.push_front(declaration)
 	if rv.has("type") and mm_io_types.types.has(rv.type):
 		if mm_io_types.types[rv.type].has("convert"):
 			for c in mm_io_types.types[rv.type].convert:
