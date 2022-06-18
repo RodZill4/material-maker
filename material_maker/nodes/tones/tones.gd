@@ -7,8 +7,8 @@ class Cursor:
 	var top : bool = true
 	var position : float
 
-	const WIDTH : int = 8
-	const HEIGHT : int = 8
+	const WIDTH : int = 12
+	const HEIGHT : int = 12
 
 	func _init(c, p, t = true):
 		color = c

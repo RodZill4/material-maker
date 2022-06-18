@@ -9,9 +9,11 @@
 		"rows": 4,
 		"width": 0.9
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float weave(vec2 uv, vec2 count, float width) {\n    uv *= count;\n\tfloat c = (sin(3.1415926*(uv.x+floor(uv.y)))*0.5+0.5)*step(abs(fract(uv.y)-0.5), width*0.5);\n\tc = max(c, (sin(3.1415926*(1.0+uv.y+floor(uv.x)))*0.5+0.5)*step(abs(fract(uv.x)-0.5), width*0.5));\n\treturn c;\n}",
+		"global": "float oldweave(vec2 uv, vec2 count, float width) {\n    uv *= count;\n\tfloat c = (sin(3.1415926*(uv.x+floor(uv.y)))*0.5+0.5)*step(abs(fract(uv.y)-0.5), width*0.5);\n\tc = max(c, (sin(3.1415926*(1.0+uv.y+floor(uv.x)))*0.5+0.5)*step(abs(fract(uv.x)-0.5), width*0.5));\n\treturn c;\n}",
 		"inputs": [
 			{
 				"default": "1.0",
@@ -27,7 +29,7 @@
 		"name": "Weave",
 		"outputs": [
 			{
-				"f": "weave($uv, vec2($columns, $rows), $width*$width_map($uv))",
+				"f": "oldweave($uv, vec2($columns, $rows), $width*$width_map($uv))",
 				"longdesc": "Shows the generated greyscale weave pattern.",
 				"shortdesc": "Output",
 				"type": "f"

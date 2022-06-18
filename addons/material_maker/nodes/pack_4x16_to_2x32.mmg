@@ -1,0 +1,41 @@
+{
+	"name": "pack_4x16_to_2x32",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"includes": [
+			"pack_1x32_to_2x16"
+		],
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"name": "source",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "pack_4x16_to_2x32",
+		"outputs": [
+			{
+				"rgb": "vec3(pack_4x16_to_2x32($source($uv)), 0.0)",
+				"shortdesc": "source_big",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

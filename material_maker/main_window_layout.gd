@@ -10,7 +10,7 @@ const PANELS = [
 	{ name="Library", scene=preload("res://material_maker/panels/library/library.tscn"), position="TopLeft" },
 	{ name="Preview2D", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft" },
 	{ name="Preview3D", scene=preload("res://material_maker/panels/preview_3d/preview_3d_panel.tscn"), position="BottomLeft" },
-	{ name="Preview2D (2)", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft" },
+	{ name="Preview2D (2)", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="BottomLeft", parameters={ config_var_suffix="_2" } },
 	{ name="Histogram", scene=preload("res://material_maker/widgets/histogram/histogram.tscn"), position="BottomLeft" },
 	{ name="Hierarchy", scene=preload("res://material_maker/panels/hierarchy/hierarchy_panel.tscn"), position="TopRight" },
 	{ name="Reference", scene=preload("res://material_maker/panels/reference/reference_panel.tscn"), position="BottomLeft" },
@@ -36,21 +36,22 @@ func toggle_side_panels() -> void:
 	$Left.visible = not $Left.visible
 	$SplitRight/Right.visible = not $SplitRight/Right.visible
 
-func load_panels(config_cache) -> void:
+func load_panels() -> void:
 	# Create panels
 	for panel_pos in PANEL_POSITIONS.keys():
 		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
 	for panel in PANELS:
-		var node = panel.scene.instance()
+		var node : Node = panel.scene.instance()
 		node.name = panel.name
-		if "config_cache" in node:
-			node.config_cache = config_cache
+		if panel.has("parameters"):
+			for p in panel.parameters.keys():
+				node.set(p, panel.parameters[p])
 		panels[panel.name] = node
 		var tab = get_node(PANEL_POSITIONS[panel.position])
 		var config_panel_name = panel.name.replace(" ", "_").replace("(", "_").replace(")", "_")
-		if config_cache.has_section_key("layout", config_panel_name+"_location"):
-			tab = get_node(PANEL_POSITIONS[config_cache.get_value("layout", config_panel_name+"_location")])
-		if config_cache.has_section_key("layout", config_panel_name+"_hidden") && config_cache.get_value("layout", config_panel_name+"_hidden"):
+		if mm_globals.config.has_section_key("layout", config_panel_name+"_location"):
+			tab = get_node(PANEL_POSITIONS[mm_globals.config.get_value("layout", config_panel_name+"_location")])
+		if mm_globals.config.has_section_key("layout", config_panel_name+"_hidden") && mm_globals.config.get_value("layout", config_panel_name+"_hidden"):
 			node.set_meta("parent_tab_container", tab)
 			node.set_meta("hidden", true)
 		else:
@@ -58,16 +59,16 @@ func load_panels(config_cache) -> void:
 			node.set_meta("hidden", false)
 	# Split positions
 	yield(get_tree(), "idle_frame")
-	if config_cache.has_section_key("layout", "LeftVSplitOffset"):
-		split_offset = config_cache.get_value("layout", "LeftVSplitOffset")
-	if config_cache.has_section_key("layout", "LeftHSplitOffset"):
-		$Left.split_offset = config_cache.get_value("layout", "LeftHSplitOffset")
-	if config_cache.has_section_key("layout", "RightVSplitOffset"):
-		$SplitRight.split_offset = config_cache.get_value("layout", "RightVSplitOffset")
-	if config_cache.has_section_key("layout", "RightHSplitOffset"):
-		$SplitRight/Right.split_offset = config_cache.get_value("layout", "RightHSplitOffset")
+	if mm_globals.config.has_section_key("layout", "LeftVSplitOffset"):
+		split_offset = mm_globals.config.get_value("layout", "LeftVSplitOffset")
+	if mm_globals.config.has_section_key("layout", "LeftHSplitOffset"):
+		$Left.split_offset = mm_globals.config.get_value("layout", "LeftHSplitOffset")
+	if mm_globals.config.has_section_key("layout", "RightVSplitOffset"):
+		$SplitRight.split_offset = mm_globals.config.get_value("layout", "RightVSplitOffset")
+	if mm_globals.config.has_section_key("layout", "RightHSplitOffset"):
+		$SplitRight/Right.split_offset = mm_globals.config.get_value("layout", "RightHSplitOffset")
 
-func save_config(config_cache) -> void:
+func save_config() -> void:
 	for p in panels:
 		var config_panel_name = p.replace(" ", "_").replace("(", "_").replace(")", "_")
 		var location = panels[p].get_parent()
@@ -75,14 +76,14 @@ func save_config(config_cache) -> void:
 		if location == null:
 			hidden = panels[p].get_meta("hidden")
 			location = panels[p].get_meta("parent_tab_container")
-		config_cache.set_value("layout", config_panel_name+"_hidden", hidden)
+		mm_globals.config.set_value("layout", config_panel_name+"_hidden", hidden)
 		for l in PANEL_POSITIONS.keys():
 			if location == get_node(PANEL_POSITIONS[l]):
-				config_cache.set_value("layout", config_panel_name+"_location", l)
-	config_cache.set_value("layout", "LeftVSplitOffset", split_offset)
-	config_cache.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
-	config_cache.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)
-	config_cache.set_value("layout", "RightHSplitOffset", $SplitRight/Right.split_offset)
+				mm_globals.config.set_value("layout", config_panel_name+"_location", l)
+	mm_globals.config.set_value("layout", "LeftVSplitOffset", split_offset)
+	mm_globals.config.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
+	mm_globals.config.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)
+	mm_globals.config.set_value("layout", "RightHSplitOffset", $SplitRight/Right.split_offset)
 
 func get_panel(n) -> Control:
 	return panels[n]

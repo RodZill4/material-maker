@@ -49,7 +49,6 @@ func _exit_tree():
 # Libraries
 
 func init_libraries() -> void:
-	var config = get_config()
 	var library = LIBRARY.new()
 	if library.load_library(base_lib, true) or library.load_library(alt_base_lib):
 		if library.library_name == "":
@@ -66,20 +65,17 @@ func init_libraries() -> void:
 	library.generate_node_sections(node_sections)
 	init_section_icons()
 	yield(get_tree(), "idle_frame")
-	if config.has_section_key(config_section, "libraries"):
-		for p in config.get_value(config_section, "libraries"):
+	if mm_globals.config.has_section_key(config_section, "libraries"):
+		for p in mm_globals.config.get_value(config_section, "libraries"):
 			library = LIBRARY.new()
 			if library.load_library(p):
 				add_child(library)
 				library.generate_node_sections(node_sections)
-	if config.has_section_key(config_section, "disabled_libraries"):
-		disabled_libraries = config.get_value(config_section, "disabled_libraries")
-	if config.has_section_key(config_section, "disabled_sections"):
-		disabled_sections = config.get_value(config_section, "disabled_sections")
+	if mm_globals.config.has_section_key(config_section, "disabled_libraries"):
+		disabled_libraries = mm_globals.config.get_value(config_section, "disabled_libraries")
+	if mm_globals.config.has_section_key(config_section, "disabled_sections"):
+		disabled_sections = mm_globals.config.get_value(config_section, "disabled_sections")
 	emit_signal("libraries_changed")
-
-func get_config() -> ConfigFile:
-	return get_node("/root/MainWindow").config_cache
 
 func compare_item_usage(i1, i2) -> int:
 	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0
@@ -130,7 +126,7 @@ func save_library_list() -> void:
 	var library_list = []
 	for i in range(2, get_child_count()):
 		library_list.push_back(get_child(i).library_path)
-	get_config().set_value(config_section, "libraries", library_list)
+	mm_globals.config.set_value(config_section, "libraries", library_list)
 
 func has_library(path : String) -> bool:
 	for c in get_children():
@@ -178,7 +174,7 @@ func toggle_library(index : int) -> bool:
 		disabled_libraries.erase(lib)
 		enabled = true
 	emit_signal("libraries_changed")
-	get_config().set_value(config_section, "disabled_libraries", disabled_libraries)
+	mm_globals.config.set_value(config_section, "disabled_libraries", disabled_libraries)
 	return enabled
 
 func add_item_to_library(index : int, item_name : String, image : Image, data : Dictionary) -> void:
@@ -245,7 +241,7 @@ func toggle_section(section_name : String) -> bool:
 		disabled_sections.erase(section_name)
 		enabled = true
 	emit_signal("libraries_changed")
-	get_config().set_value(config_section, "disabled_sections", disabled_sections)
+	mm_globals.config.set_value(config_section, "disabled_sections", disabled_sections)
 	return enabled
 
 # Aliases

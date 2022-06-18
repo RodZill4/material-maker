@@ -23,7 +23,7 @@ func _on_offset_changed() -> void:
 func reroll_generator_seed() -> void:
 	pass
 
-func on_generator_changed(g):
+func on_generator_changed(_g):
 	pass
 
 func update_node() -> void:

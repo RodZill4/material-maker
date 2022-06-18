@@ -38,9 +38,6 @@ region = Rect2( 0, 0, 16, 16 )
 margin_right = 150.0
 margin_bottom = 224.0
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Buttons" type="HBoxContainer" parent="."]
 margin_right = 150.0
@@ -128,5 +125,4 @@ script = ExtResource( 1 )
 [connection signal="cell_selected" from="Tree" to="Tree" method="_on_Tree_cell_selected"]
 [connection signal="gui_input" from="Tree" to="Tree" method="_on_Tree_gui_input"]
 [connection signal="item_edited" from="Tree" to="Tree" method="_on_Tree_item_edited"]
-[connection signal="layers_changed" from="Tree" to="." method="_on_Tree_layers_changed"]
 [connection signal="selection_changed" from="Tree" to="." method="_on_Tree_selection_changed"]

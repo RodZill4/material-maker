@@ -56,14 +56,22 @@ margin_bottom = 30.0
 rect_min_size = Vector2( 120, 32 )
 focus_mode = 1
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="Border" type="ColorRect" parent="."]
+anchor_right = 1.0
+margin_left = 3.0
+margin_top = 1.0
+margin_right = -3.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 114, 19 )
+mouse_filter = 2
+color = Color( 0.5, 0.5, 0.5, 1 )
 
 [node name="Background" type="ColorRect" parent="."]
 material = SubResource( 2 )
 anchor_right = 1.0
 margin_left = 4.0
+margin_top = 2.0
 margin_right = -4.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 112, 17 )
@@ -73,6 +81,7 @@ mouse_filter = 2
 material = SubResource( 4 )
 anchor_right = 1.0
 margin_left = 4.0
+margin_top = 2.0
 margin_right = -4.0
 margin_bottom = 15.0
 rect_min_size = Vector2( 112, 17 )

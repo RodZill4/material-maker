@@ -21,7 +21,7 @@
 				"files": [
 					{
 						"file_name": "$(path_prefix).tres",
-						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"res://$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
+						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
 						"type": "template"
 					},
 					{

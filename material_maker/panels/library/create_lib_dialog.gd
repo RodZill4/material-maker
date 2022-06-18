@@ -16,7 +16,7 @@ func popup_centered(size : Vector2 = Vector2(0, 0)) -> void:
 	.popup_centered(size)
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()
 
-func _on_LineEdit_text_entered(new_text) -> void:
+func _on_LineEdit_text_entered(_new_text) -> void:
 	pass
 
 func _on_FilePickerButton_file_selected(f):

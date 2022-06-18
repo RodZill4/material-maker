@@ -56,6 +56,18 @@ Edit menu
   Pasting also unselects all previously selected nodes and selects all newly created nodes,
   so they can easily be moved around.
 
+* *Duplicate* creates a copy of the current selection without affecting the clipboard
+
+* *Select all* selects all nodes in the current graph view
+
+* *Select none* clears the selection in the current graph view
+
+* *Invert selection* inverts the selection in the current graph view
+
+* *Select sources* selects all direct and indirect source nodes of the current selection
+
+* *Select targets* selects all direct and indirect target nodes of the current selection
+
 * *Load Selection* Loads a graph selection previously saved into a file
 
 * *Save Selection* Saves the current graph selection into a file

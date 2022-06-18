@@ -150,11 +150,11 @@ func on_brush_graph_changed() -> void:
 	var new_remote = get_remote()
 	if new_remote != remote_node:
 		remote_node = new_remote
-		get_node("/root/MainWindow").get_panel("Parameters").set_generator(remote_node)
+		mm_globals.main_window.get_panel("Parameters").set_generator(remote_node)
 
 # called when the project's tab is selected
 func project_selected() -> void:
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	main_window.get_panel("Layers").set_layers($PaintLayers)
 	remote_node = get_remote()
 	main_window.get_panel("Parameters").set_generator(remote_node)
@@ -166,7 +166,7 @@ func update_brush() -> void:
 	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
 
 func set_brush(data) -> void:
-	var parameters_panel = get_node("/root/MainWindow").get_panel("Parameters")
+	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
 	parameters_panel.set_generator(null)
 	graph_edit.new_material(data)
 	update_brush()
@@ -233,6 +233,10 @@ func set_object(o):
 	preview_material.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_material(0, preview_material)
+	# Center camera on  mesh
+	var aabb : AABB = painted_mesh.get_aabb()
+	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
 	painter.init_textures(mat)

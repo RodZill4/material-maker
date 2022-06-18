@@ -14,12 +14,11 @@ signal object_selected(obj)
 func _ready():
 	# Wait main window initialization
 	yield(get_tree(), "idle_frame")
-	var main_window = get_node("/root/MainWindow")
-	if main_window.config_cache.has_section_key("library", "quick_button_%d" % get_index()):
-		default_library_item = main_window.config_cache.get_value("library", "quick_button_%d" % get_index())
+	if mm_globals.config.has_section_key("library", "quick_button_%d" % get_index()):
+		default_library_item = mm_globals.config.get_value("library", "quick_button_%d" % get_index())
 	set_library_item(default_library_item)
 
-func can_drop_data(position, data):
+func can_drop_data(_position, _data):
 	return true
 
 func set_library_item(li : String):
@@ -28,10 +27,9 @@ func set_library_item(li : String):
 		material.set_shader_param("tex", library_item.icon)
 		hint_tooltip = library_item.item.tree_item
 
-func drop_data(position, data):
+func drop_data(_position, data):
 	set_library_item(data)
-	var main_window = get_node("/root/MainWindow")
-	main_window.config_cache.set_value("library", "quick_button_%d" % get_index(), data)
+	mm_globals.config.set_value("library", "quick_button_%d" % get_index(), data)
 
 func _on_gui_input(event):
 	if !disabled and event is InputEventMouseButton:

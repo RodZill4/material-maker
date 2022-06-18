@@ -31,7 +31,7 @@ func set_path(p: String) -> void:
 func set_icon(icon: Texture) -> void:
 	$HBoxContainer/HBoxContainer/Icon.texture = icon
 
-func get_drag_data(position):
+func get_drag_data(_position):
 	var texture_rect : TextureRect = TextureRect.new()
 	texture_rect.texture = $HBoxContainer/HBoxContainer/Icon.texture
 	texture_rect.rect_scale = Vector2(0.35, 0.35)
