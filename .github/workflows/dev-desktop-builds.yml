@@ -5,6 +5,13 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      sign_macos:
+        description: 'Sign macOS version'     
+        type: boolean
+        required: true
+        default: 'false'
 
 env:
   GODOT_VERSION: 3.4
@@ -85,6 +92,7 @@ jobs:
           export GODOT_VERSION=${GODOT_VERSION_MAC}
           export EXPORT_NAME=material_maker
       - name: Install the Apple certificate and provisioning profile
+        if: ${{ github.event.inputs.sign_macos == 'true' }}
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -151,7 +159,13 @@ jobs:
           cp -R ./material_maker/misc/export ./build/mac/material_maker.app/Contents/MacOS
           cp -R ./doc ./build/mac/material_maker.app/Contents/MacOS/doc
       - name: Ad-hoc signing ✍️
-        run: codesign -s "Rodolphe Suescun" --force --deep ./build/mac/material_maker.app
+        if: ${{ github.event.inputs.sign_macos != 'true' }}
+        run: |
+          codesign -s - --force --deep ./build/mac/material_maker.app
+      - name: Signing ✍️
+        if: ${{ github.event.inputs.sign_macos == 'true' }}
+        run: |
+          codesign -s "Rodolphe Suescun" --force --deep ./build/mac/material_maker.app
       - name: Create DMG archive 🔧
         run: hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
