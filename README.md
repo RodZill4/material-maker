@@ -23,6 +23,12 @@ choco install material-maker
 ```text
 choco install material-maker.portable
 ```
+On Linux, you can use AppImages [material-maker AppImage](https://github.com/stupid-kid-af/material-maker-AppImage)
+```text
+wget https://github.com/stupid-kid-af/material-maker-AppImage/releases/download/v0.99/Material_Maker-x86_64.AppImage
+chmod a+x Material_Maker-x86_64.AppImage
+./Material_Maker-x86_64.AppImage    #Run the AppImage
+```
 
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 
