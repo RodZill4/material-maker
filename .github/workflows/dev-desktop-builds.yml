@@ -165,9 +165,17 @@ jobs:
       - name: Signing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         run: |
-          codesign -s "Rodolphe Suescun" --force --deep ./build/mac/material_maker.app
+          codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep ./build/mac/material_maker.app
       - name: Create DMG archive 🔧
         run: hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
+      - name: Notarizing ✍️
+        if: ${{ github.event.inputs.sign_macos == 'true' }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          NOTARYTOOL_APP_PASSWORD: ${{ secrets.NOTARYTOOL_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
