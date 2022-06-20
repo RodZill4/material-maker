@@ -34,8 +34,8 @@ func set_mode(m):
 func set_material(m):
 	material = m
 	if is_inside_tree():
-		$Arrow.set_surface_material(0, material.duplicate())
-		$Torus.set_surface_material(0, material.duplicate())
+		$Arrow.set_surface_material(0, material)
+		$Torus.set_surface_material(0, material)
 
 func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
