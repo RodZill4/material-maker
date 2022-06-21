@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount": 1,
-		"blend_type": 13
+		"amount": 0.5,
+		"blend_type": 0
 	},
 	"seed": 0,
 	"seed_locked": false,
