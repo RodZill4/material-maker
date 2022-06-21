@@ -231,6 +231,10 @@ func _on_gui_input(event):
 			new_center = center-event.relative*scale/multiplier
 		elif zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
+	elif event is InputEventPanGesture:
+		new_center = center-event.delta*10.0*scale/multiplier
+	elif event is InputEventMagnifyGesture:
+		new_scale = clamp(new_scale/event.factor, 0.005, 5.0)
 	if new_scale != scale:
 		new_center = center+offset_from_center*(scale-new_scale)/multiplier
 		scale = new_scale
