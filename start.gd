@@ -1,12 +1,8 @@
 extends Control
 
-var resource = null
-var progress : float = 0.0
+var loader : ResourceInteractiveLoader
 
 onready var progress_bar = $VBoxContainer/ProgressBar
-onready var mutex : Mutex = Mutex.new()
-onready var semaphore : Semaphore = Semaphore.new()
-onready var thread: Thread = Thread.new()
 
 func _ready():
 	randomize()
@@ -80,35 +76,9 @@ func _ready():
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
 
-	set_process(true)
-	thread.start(self, "load_resource", resource_path, Thread.PRIORITY_HIGH)
-
-func load_resource(resource_path : String):
-	var loader : ResourceInteractiveLoader = ResourceLoader.load_interactive(resource_path)
-	if loader == null: # check for errors
-		return
-	while true:
-		mutex.lock()
-		if false:
-			# fake loading mode
-			progress += 0.02
-			if progress > 1:
-				progress = 0
-		else:
-			var err = loader.poll()
-			if err == ERR_FILE_EOF:
-				resource = loader.get_resource()
-				progress = -1
-				mutex.unlock()
-				return
-			elif err == OK:
-				progress = float(loader.get_stage()) / loader.get_stage_count()
-			else:
-				progress = -1
-				mutex.unlock()
-				return
-		mutex.unlock()
-		semaphore.wait()
+	loader = ResourceLoader.load_interactive(resource_path)
+	if loader != null: # check for errors
+		set_process(true)
 
 var wait : float = 0.0
 func _process(delta) -> void:
@@ -116,20 +86,13 @@ func _process(delta) -> void:
 	if wait < 0.01:
 		return
 	wait = 0.0
-	if mutex.try_lock() == OK:
-		if progress < 0:
-			if resource == null:
-				print("error")
-				queue_free()
-			else:
-				var scene = resource.instance()
-				get_node("/root").add_child(scene)
-				thread.wait_to_finish()
-				queue_free()
-		else:
-			progress_bar.value = 100.0*progress
-		mutex.unlock()
-		semaphore.post()
+	var err = loader.poll()
+	if err == ERR_FILE_EOF:
+		var scene = loader.get_resource().instance()
+		get_node("/root").add_child(scene)
+		queue_free()
+	elif err == OK:
+		progress_bar.value = 100.0*float(loader.get_stage()) / loader.get_stage_count()
 
 func export_files(files, output_dir, target, size) -> void:
 	$VBoxContainer/ProgressBar.min_value = 0
