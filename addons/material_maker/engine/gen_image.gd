@@ -54,7 +54,7 @@ func _serialize_data(data: Dictionary) -> Dictionary:
 	var image_path : String = data.parameters.image
 	image_path = image_path.replace(mm_loader.current_project_path, "%PROJECT_PATH%")
 	image_path = image_path.replace(OS.get_user_data_dir(), "%USER_DATA_PATH%")
-	image_path = image_path.replace(OS.get_executable_path().get_base_dir(), "%MATERIAL_MAKER_PATH%")
+	image_path = image_path.replace(MMPaths.get_resource_dir(), "%MATERIAL_MAKER_PATH%")
 	data.parameters.image = image_path
 	return data
 
@@ -62,8 +62,8 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("parameters") and data.parameters.has("image"):
 		data.parameters.image = data.parameters.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
 		data.parameters.image = data.parameters.image.replace("%USER_DATA_PATH%", OS.get_user_data_dir())
-		data.parameters.image = data.parameters.image.replace("%MATERIAL_MAKER_PATH%", OS.get_executable_path().get_base_dir())
+		data.parameters.image = data.parameters.image.replace("%MATERIAL_MAKER_PATH%", MMPaths.get_resource_dir())
 	elif data.has("image"):
 		data.image = data.image.replace("%PROJECT_PATH%", mm_loader.current_project_path)
 		data.image = data.image.replace("%USER_DATA_PATH%", OS.get_user_data_dir())
-		data.image = data.image.replace("%MATERIAL_MAKER_PATH%", OS.get_executable_path().get_base_dir())
+		data.image = data.image.replace("%MATERIAL_MAKER_PATH%", MMPaths.get_resource_dir())

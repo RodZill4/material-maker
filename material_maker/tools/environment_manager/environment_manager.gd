@@ -3,7 +3,7 @@ extends Node
 var environments = []
 var environment_textures = []
 
-onready var base_dir : String = OS.get_executable_path().get_base_dir()
+onready var base_dir : String = MMPaths.get_resource_dir()
 var ro_environments = 0
 
 const DEFAULT_ENVIRONMENT = {

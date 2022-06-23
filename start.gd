@@ -88,9 +88,16 @@ func _process(delta) -> void:
 	wait = 0.0
 	var err = loader.poll()
 	if err == ERR_FILE_EOF:
-		var scene = loader.get_resource().instance()
-		get_node("/root").add_child(scene)
-		queue_free()
+		var root = get_tree().root
+		set_process(false)
+		# Remove the current scene
+		root.remove_child(self)
+		call_deferred("free")
+		# Add the next scene
+		progress_bar.value = 100.0
+		var scene = loader.get_resource()
+		var instance = scene.instance()
+		root.add_child(instance)
 	elif err == OK:
 		progress_bar.value = 100.0*float(loader.get_stage()) / loader.get_stage_count()
 
