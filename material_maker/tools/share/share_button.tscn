@@ -1,17 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://material_maker/tools/share/broken_link.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/tools/share/share_button.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/tools/share/preview_viewport.tscn" type="PackedScene" id=3]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 7
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 224, 0, 32, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 7
+flags = 4
 atlas = ExtResource( 4 )
 region = Rect2( 224, 16, 32, 16 )
 
@@ -20,9 +19,6 @@ margin_right = 40.0
 margin_bottom = 40.0
 hint_tooltip = "Open Material Maker web site"
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ConnectButton" type="TextureButton" parent="."]
 margin_top = 12.0
@@ -56,6 +52,5 @@ margin_right = 87.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 15, 0 )
 
-[node name="PreviewViewport" parent="." instance=ExtResource( 3 )]
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
 [connection signal="pressed" from="SendButton" to="." method="_on_SendButton_pressed"]
