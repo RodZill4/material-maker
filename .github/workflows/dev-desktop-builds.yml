@@ -176,6 +176,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
+          xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:
