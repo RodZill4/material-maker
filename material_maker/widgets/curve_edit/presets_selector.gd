@@ -36,3 +36,9 @@ func _menu_item_selected(index : int) -> void:
 	var curve = MMCurve.new()
 	curve.points = presets[index]
 	get_parent().get_parent().get_node("EditorContainer/CurveEditor").set_curve(curve)
+
+
+func _on_Save_pressed():
+	var curve : MMCurve = get_parent().get_parent().get_node("EditorContainer/CurveEditor").get_curve()
+	presets.append(curve.points)
+	get_popup().add_item("Custom " + str(len(presets)))

@@ -10,6 +10,9 @@ func set_curve(c : MMCurve) -> void:
 	update()
 	update_controls()
 
+func get_curve() -> MMCurve:
+	return curve
+
 func update_controls() -> void:
 	for c in get_children():
 		c.queue_free()

@@ -76,8 +76,15 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "Invert"
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+[node name="Save" type="Button" parent="VBoxContainer/HBoxContainer"]
 margin_left = 128.0
+margin_right = 188.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 60, 0 )
+text = "Save"
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_left = 192.0
 margin_right = 257.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
@@ -99,5 +106,6 @@ text = "Cancel"
 [connection signal="popup_hide" from="." to="." method="_on_CurveDialog_popup_hide"]
 [connection signal="value_changed" from="VBoxContainer/EditorContainer/CurveEditor" to="." method="_on_CurveEditor_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Invert" to="." method="_on_Invert_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Save" to="VBoxContainer/HBoxContainer/PresetsSelector" method="_on_Save_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
