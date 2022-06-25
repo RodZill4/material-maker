@@ -1,0 +1,10 @@
+{
+  "ja" : {
+    "author" : "mekogma",
+    "url" : "https://gist.githubusercontent.com/meko3/2a3f8504fb9a087518c71c27ef579681/raw/8bbe398ae7f8427fbf5dbf7fd265f6299abb263f/material-maker-ja-v1.0.1.csv"
+  },
+  "zh" : {
+    "author" : "free_king",
+    "url" : "https://raw.githubusercontent.com/RodZill4/material-maker/f1be50b21a0f4991ac39e12a5362f5c5eb4c83a0/material_maker/locale/translations/zh.csv"
+  }
+}
