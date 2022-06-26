@@ -14,17 +14,17 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 3.4
+  GODOT_VERSION: 3.4.4
   GODOT_VERSION_MAC: 3.4.4
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_99
+  MM_RELEASE: 1_00
 
 jobs:
   export_windows_linux:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:3.4
+      image: docker://barichello/godot-ci:${GODOT_VERSION}
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
