@@ -3,6 +3,7 @@
 ## General
 
 - Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
+- In the Reference panel, it is now possible to scan an average color by dragging the mouse cursor around
 
 ## Nodes
 - Added *Seven Segment Display* node with variable length/width (contributed by williamchange)
