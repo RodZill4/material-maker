@@ -83,7 +83,7 @@ func _on_Image_gui_input(event) -> void:
 			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
 		elif zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
-		elif selected_slot.get_parent() == $VBoxContainer/Colors:
+		elif event.button_mask & BUTTON_MASK_LEFT != 0 and selected_slot.get_parent() == $VBoxContainer/Colors:
 			color_count += 1
 			color += get_color_under_cursor()
 			selected_slot.set_color(color/color_count)
