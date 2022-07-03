@@ -46,6 +46,7 @@ func _on_timeout() -> void:
 		image.load(file_path)
 		texture.create_from_image(image)
 		.set_parameter("image", file_path)
+		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data
