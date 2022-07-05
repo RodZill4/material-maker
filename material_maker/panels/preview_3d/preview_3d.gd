@@ -106,6 +106,8 @@ func select_object(id) -> void:
 	current_object = objects.get_child(id)
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
+	var aabb : AABB = current_object.get_aabb()
+	current_object.transform.origin = -(aabb.position+0.5*aabb.size)
 
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")

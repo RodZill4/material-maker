@@ -1,0 +1,596 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "dilate_pass_1",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_1",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "dilate_pass_4",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_2",
+			"from_port": 0,
+			"to": "buffer_4",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_4",
+			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "dilate_pass_2",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_3",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 1
+		},
+		{
+			"from": "dilate_pass_4",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		}
+	],
+	"label": "Slope",
+	"longdesc": "Dilates the white areas of a mask, using the colors of an optional input",
+	"name": "slope",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": 79.308716,
+				"y": -434.988342
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 11
+			},
+			"seed": 32897,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": 551.308716,
+				"y": -656.988403
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 11
+			},
+			"seed": 65434,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": 434.693542,
+				"y": -807.953613
+			},
+			"parameters": {
+				"length": 0.2,
+				"size": 11,
+				"slope": 1
+			},
+			"seed": 1419,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "dilate_pass_1",
+							"widget": "s"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
+						},
+						{
+							"node": "dilate_pass_2",
+							"widget": "s"
+						},
+						{
+							"node": "dilate_pass_3",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_4",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the input images",
+					"name": "size",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "d"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "d"
+						},
+						{
+							"node": "dilate_pass_2",
+							"widget": "d"
+						},
+						{
+							"node": "dilate_pass_3",
+							"widget": "d"
+						}
+					],
+					"longdesc": "The maximum length of the slope effect",
+					"name": "length",
+					"shortdesc": "Length",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_4",
+							"widget": "p"
+						},
+						{
+							"node": "dilate_pass_3",
+							"widget": "p"
+						},
+						{
+							"node": "dilate_pass_1",
+							"widget": "p"
+						},
+						{
+							"node": "dilate_pass_2",
+							"widget": "p"
+						}
+					],
+					"longdesc": "The slope of the effect",
+					"name": "slope",
+					"shortdesc": "Slope",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -285.306458,
+				"y": -444.481384
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The input mask whose white areas will be dilated",
+					"name": "mask",
+					"shortdesc": "Mask",
+					"type": "f"
+				}
+			],
+			"seed": 317,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 975.210999,
+				"y": -466.481384
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Shows the dilated image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"seed": -14401,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "dilate_pass_1",
+			"node_position": {
+				"x": 337.301147,
+				"y": -500.368958
+			},
+			"parameters": {
+				"d": 0.2,
+				"p": 1,
+				"s": 11
+			},
+			"seed": 71939,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "vec2 $(name_uv)_dist = $(name)_distance_h($uv);\n",
+				"global": "",
+				"includes": [
+					"pack_1x32_to_2x16"
+				],
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "vec2 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(1.0/$s, 0.0);\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfloat source_h;\n\tfloat best_source_h = 0.0;\n\tfloat h;\n\tfloat best_h = 0.0;\n\tfloat best_x = 0.0;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-abs(float(i))*e.x/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_x = source_uv.x;\n\t\t}\n\t}\n\treturn vec2(best_source_h, best_x);\n}\n",
+				"name": "Dilate pass 1",
+				"outputs": [
+					{
+						"rgba": "pack_2x32_to_4x16($(name_uv)_dist)",
+						"type": "rgba"
+					},
+					{
+						"f": "$(name_uv)_dist.x-abs($(name_uv)_dist.y-$uv.x)/$d",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "p",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "dilate_pass_4",
+			"node_position": {
+				"x": 567.310547,
+				"y": -572.577271
+			},
+			"parameters": {
+				"d": 0.2,
+				"p": 1,
+				"s": 11
+			},
+			"seed": 50297,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"includes": [
+					"pack_1x32_to_2x16"
+				],
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": "float $(name)_distance_v(vec2 uv) {\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat best_h = 0.0;\n\tfloat l;\n\tfloat h;\n\tvec2 in_uv = uv;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tin_uv.y = uv.y+float(i)/$s;\n\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));\n\t\tl = length(vec2(h_x.y-uv.x, float(i)/$s));\n\t\tif (l < $d) {\n\t\t\th = h_x.x-l*$p/$d;\n\t\t\tif (h > best_h) {\n\t\t\t\tbest_h = h;\n\t\t\t}\n\t\t}\n\t}\n\treturn best_h;\n}\n",
+				"name": "Dilate pass 2",
+				"outputs": [
+					{
+						"f": "$(name)_distance_v($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "p",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": 760.403809,
+				"y": -455.191284
+			},
+			"parameters": {
+				"size": 11
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 1
+		},
+		{
+			"name": "buffer_4",
+			"node_position": {
+				"x": 532.280334,
+				"y": -164.698944
+			},
+			"parameters": {
+				"lod": 0,
+				"size": 11
+			},
+			"seed": 65434,
+			"seed_locked": false,
+			"type": "buffer"
+		},
+		{
+			"name": "dilate_pass_2",
+			"node_position": {
+				"x": 336.272766,
+				"y": -358.079498
+			},
+			"parameters": {
+				"d": 0.2,
+				"p": 1,
+				"s": 11
+			},
+			"seed": 71939,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "vec2 $(name_uv)_dist = $(name)_distance_h($uv);\n",
+				"global": "",
+				"includes": [
+					"pack_1x32_to_2x16"
+				],
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": "vec2 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfloat source_h;\n\tfloat best_source_h = 0.0;\n\tfloat h;\n\tfloat best_h = 0.0;\n\tfloat best_y = 0.0;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-float(i)*e.y/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_y = source_uv.y;\n\t\t}\n\t\tsource_uv = uv-float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-float(i)*e.y/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_y = source_uv.y;\n\t\t}\n\t}\n\treturn vec2(best_source_h, best_y);\n}\n",
+				"name": "Dilate pass 1",
+				"outputs": [
+					{
+						"rgba": "pack_2x32_to_4x16($(name_uv)_dist)",
+						"type": "rgba"
+					},
+					{
+						"f": "$(name_uv)_dist.x-abs($(name_uv)_dist.y-$uv.y)/$d",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "p",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "dilate_pass_3",
+			"node_position": {
+				"x": 553.282166,
+				"y": -285.287811
+			},
+			"parameters": {
+				"d": 0.2,
+				"p": 1,
+				"s": 11
+			},
+			"seed": 50297,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"includes": [
+					"pack_1x32_to_2x16"
+				],
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": "float $(name)_distance_v(vec2 uv) {\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat best_h = 0.0;\n\tfloat l;\n\tfloat h;\n\tvec2 in_uv = uv;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tin_uv.x = uv.x+float(i)/$s;\n\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));\n\t\tl = length(vec2(h_x.y-uv.y, float(i)/$s));\n\t\tif (l < $d) {\n\t\t\th = h_x.x-l*$p/$d;\n\t\t\tif (h > best_h) {\n\t\t\t\tbest_h = h;\n\t\t\t}\n\t\t}\n\t}\n\treturn best_h;\n}\n",
+				"name": "Dilate pass 2",
+				"outputs": [
+					{
+						"f": "$(name)_distance_v($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1,
+						"min": 0,
+						"name": "p",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": 540.77887,
+				"y": -444.191284
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 14
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		}
+	],
+	"parameters": {
+		"length": 0.2,
+		"size": 11,
+		"slope": 1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Dilate",
+	"type": "graph"
+}

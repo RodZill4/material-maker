@@ -843,7 +843,7 @@ func environment_editor() -> void:
 # -----------------------------------------------------------------------
 
 func get_doc_dir() -> String:
-	var base_dir = OS.get_executable_path().replace("\\", "/").get_base_dir()
+	var base_dir = MMPaths.get_resource_dir().replace("\\", "/")
 	# In release builds, documentation is expected to be located in
 	# a subdirectory of the program directory
 	var release_doc_path = base_dir.plus_file("doc")

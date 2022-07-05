@@ -14,17 +14,17 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 3.4
+  GODOT_VERSION: 3.4.4
   GODOT_VERSION_MAC: 3.4.4
   EXPORT_NAME: material_maker
-  MM_RELEASE: 0_99
+  MM_RELEASE: 1_00
 
 jobs:
   export_windows_linux:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:3.4
+      image: docker://barichello/godot-ci:3.4.4
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -176,6 +176,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
+          xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v2
         with:

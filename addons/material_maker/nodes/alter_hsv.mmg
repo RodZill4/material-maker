@@ -1,0 +1,119 @@
+{
+	"name": "alter_hsv",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"all": 0.2,
+		"hue": 0.1,
+		"saturation": 0.1,
+		"value": 0.1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_rbga = $in($(uv));\nvec3 $(name_uv)_hsv = rgb_to_hsv($(name_uv)_rbga.rgb);\n$(name_uv)_hsv.x = fract($(name_uv)_hsv.x+$(hue)*$all*($hmap($uv)-0.5));\n$(name_uv)_hsv.y = clamp($(name_uv)_hsv.y+$(saturation)*$all*($smap($uv)-0.5), 0.0, 1.0);\n$(name_uv)_hsv.z = clamp($(name_uv)_hsv.z+$(value)*$all*($vmap($uv)-0.5), 0.0, 1.0);\n\t",
+		"global": "",
+		"includes": [
+			"adjust_hsv"
+		],
+		"inputs": [
+			{
+				"default": "vec4($uv.x, $uv.y, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			},
+			{
+				"default": "0.5",
+				"label": "",
+				"longdesc": "The alteration map for hue",
+				"name": "hmap",
+				"shortdesc": "hue map",
+				"type": "f"
+			},
+			{
+				"default": "0.5",
+				"label": "",
+				"longdesc": "The alteration map for value",
+				"name": "vmap",
+				"shortdesc": "Value map",
+				"type": "f"
+			},
+			{
+				"default": "0.5",
+				"label": "",
+				"longdesc": "The alteration map for saturation",
+				"name": "smap",
+				"shortdesc": "Saturation map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Alters the Hue, Saturation and Value of its input using 3 map inputs",
+		"name": "AlterHSV",
+		"outputs": [
+			{
+				"longdesc": "Shows the image with adjusted Hue, Saturation and Value",
+				"rgba": "vec4(hsv_to_rgb($(name_uv)_hsv), $(name_uv)_rbga.a)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "All",
+				"longdesc": "The alteration intensity for hue, value and saturation",
+				"max": 1,
+				"min": 0,
+				"name": "all",
+				"shortdesc": "All",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Hue",
+				"longdesc": "The alteration intensity for hue",
+				"max": 1,
+				"min": 0,
+				"name": "hue",
+				"shortdesc": "Hue",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Value",
+				"longdesc": "The alteration intensity for value",
+				"max": 1,
+				"min": 0,
+				"name": "value",
+				"shortdesc": "Value",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Saturation",
+				"longdesc": "The alteration intensity for saturation",
+				"max": 1,
+				"min": 0,
+				"name": "saturation",
+				"shortdesc": "Saturation",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Alter HSV"
+	},
+	"type": "shader"
+}
