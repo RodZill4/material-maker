@@ -2514,6 +2514,18 @@
 			"type": "make_tileable"
 		},
 		{
+			"icon": "filter_maketileable",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAURJREFUeJztmN0NwjAQgw+UJfrUGdr9Z2hn6CTwFFSuKQ1JJMuN/ZQfvnByJML5MQzDyzpWMDOb57kIXpbF2PkQJ/8eEr+cnQ/7xWmasuB1XZPrjHzwm1dOeufZ+YMBZmbjOCbhbdt+Hs7IP7NOvLFkALoAtGQAugC0kq9A7q/tmZj4gwFX7+yV2PgvA87+YeWKkf8YwHZzrfhH7+2wXgEz7n6+llcesF9k7OdreeUBqQ8x9fO1fPevgAxAF4CWDEAXgJbyAL/A2tWV8soD4oDt5lrxygPQBaClPCBOWPv5Wl55gN9k6+dreeUBWSfeWDIAXQBaMgBdAFrKA/wCa1dXyisPiAO2m2vFKw9AF4CW8oA4Ye3na3nlAX6TrZ+v5ZUHZJ14Y8kAdAFoyQB0AWgpD/ALrF1dKa88IA7Ybq4V330e8AY4lJWFlh8ktgAAAABJRU5ErkJggg==",
+			"name": "make_tileable_square",
+			"parameters": {
+				"fw": 0.1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Filter/Make Tileable Square",
+			"type": "make_tileable_square"
+		},
+		{
 			"icon": "filter_pixelize",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAudJREFUeJztW9Fx2zAMpXvaQ+gk4iZWJ9F5EsmThJqk0CTph+Rz34NNxnV7uB75fpJHkBCCgCQEUieJ82d4BCGqefmDhn+LnviWl8sT+be/aNJ/ie72iwhJVHL0wf9bQ6lHFi/+RxlSkD8bX30ENAd4G+CNTo7JrzSHhZZ9CVcaqgVOUhKL6UDygXqYNWHOPq+MXX/1EdAc4G2AN7rb5JPivq1ZznOcu8dY0E/7tPKc5zUq/CA5rwmF5x36qo+A5gBvA7zRfT1nj8BUFxQrUn634DwjpXx/EXweQzccYN8F8Hm9+Tt3Xn0ENAd4G+CNrtxlh/TKLcCUEgHO5XlfH895fWEjeY/y5ZqAT2fMA7aiur2h+ghoDvA2wBv3NcDU5C7UkLKKeNs2ubxmqWnhPCGSfsZG9Yu+WMTcG6qPgOYAbwO80d1yaCUB59a6CsoHlCfaaHVBzrl+5IZCLq+J5YjlgvWBafrIDzhQfQQ0B3gb4I372SAJeB9Xk6snoFxTjCMpLJzd6ao4nmqI0k+ozhxmMv8aqo+A5gBvA7xxGqePxzdEDHCf5TWC6wUsH+h9nrHympNQH0/xOETgvfzZWWH1EdAc4G2AN+71AEGB3bYjsOW6AJ8mVMBrwLoiN+cA/O7BcuKJ9J3RPHOrzeg75NVHQHOAtwHe6O7bs5BIiZ+BxbgAN3Oc5vRC+/pIk3q58vNIn2nB/qWbrHb8juojoDnA2wBv/HY2qIWuAmwYfgLfqGiXVjpXIPWc6huQXCPWA6bzWFBQgOw/qo+A5gBvA7zxwh0hBWZyeXpX6Okw75K+Ay/V7S9c5393zj9B9RHQHOBtgDdO03zUBAUFQnd+kIXA9QH7zRFzutsb373vjyg9/ln/6iOgOcDbAG+c5jl+hhDCSnOey/ib+egHO5Q+23vxM8C3wWeVGvBCg8gYQmgR0BxQvQM6fSIwn+wUNvqN3wXMff0S8vpf3en5HCAofveouhcxq4+AX73ewLyNr5xRAAAAAElFTkSuQmCC",
 			"name": "pixelize",
