@@ -106,6 +106,8 @@ func select_object(id) -> void:
 	current_object = objects.get_child(id)
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
+	var aabb : AABB = current_object.get_aabb()
+	current_object.transform.origin = -(aabb.position+0.5*aabb.size)
 
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
@@ -149,7 +151,15 @@ func zoom(amount : float):
 	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
 
 func on_gui_input(event) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventPanGesture:
+		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		var camera_basis = camera.global_transform.basis
+		var rotation : Vector2 = event.delta
+		camera_stand.rotate(camera_basis.x.normalized(), -rotation.y)
+		camera_stand.rotate(camera_basis.y.normalized(), -rotation.x)
+	elif event is InputEventMagnifyGesture:
+		zoom(event.factor)
+	elif event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
 			$MaterialPreview/Preview3d/ObjectRotate.stop(false)

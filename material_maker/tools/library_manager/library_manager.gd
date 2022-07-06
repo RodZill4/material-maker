@@ -253,7 +253,7 @@ func init_aliases() -> void:
 	user_item_aliases = load_aliases(user_aliases_file_name)
 
 func load_aliases(path : String) -> Dictionary:
-	path = path.replace("root://", OS.get_executable_path().get_base_dir()+"/")
+	path = path.replace("root://", MMPaths.get_resource_dir()+"/")
 	var file = File.new()
 	if ! file.open(path, File.READ) == OK:
 		return {}

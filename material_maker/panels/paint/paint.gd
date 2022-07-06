@@ -447,7 +447,16 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 
 func _on_View_gui_input(ev : InputEvent):
 	handle_stroke_input(ev, PAINTING_MODE_TEXTURE_FROM_VIEW if paint_engine_button.pressed else PAINTING_MODE_VIEW)
-	if ev is InputEventMouseMotion:
+	if ev is InputEventPanGesture:
+		camera_rotation1.rotate_y(-0.1*ev.delta.x)
+		camera_rotation2.rotate_x(-0.1*ev.delta.y)
+		update_view()
+		accept_event()
+	elif ev is InputEventMagnifyGesture:
+		camera.translate(Vector3(0.0, 0.0, ev.factor-1.0))
+		update_view()
+		accept_event()
+	elif ev is InputEventMouseMotion:
 		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
 				var factor = 0.0025*camera.translation.z

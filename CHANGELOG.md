@@ -3,15 +3,21 @@
 ## General
 
 - Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
+- In the Reference panel, it is now possible to scan an average color by dragging the mouse cursor around
 
 ## Nodes
-- Added Seven Segment Display node with variable length/width (contributed by williamchange)
-- Added Smooth Mix (a mix-by-height node with smooth transition between materials) Worflow node
-- Updated Dilate node to improve precision in higher resolutions (contributed by Arnklit and wojtekpil)
-- Added new Morphology node that provides dilation and erosion operations
-- Added new Make Tileable Square node (contributed by Arnklit)
-- Updated Normal Map node to improve precision when the buffer option is used
-- Added new packing/unpacking nodes that can store 1 (or 2) values into 2 (or 4) when using buffers for better precision (contributed by Arnklit and wojtekpil)
+- Added *Seven Segment Display* node with variable length/width (contributed by williamchange)
+- Added *Smooth Mix* (a mix-by-height node with smooth transition between materials) Worflow node
+- Updated *Dilate* node to improve precision in higher resolutions (contributed by Arnklit and wojtekpil)
+- Added new *Morphology* node that provides dilation and erosion operations
+- Added *Clouds Noise* and *Directional Noise* nodes (contributed by Arnklit)
+- Added new *Make Tileable Square* node (contributed by Arnklit)
+- Added *Slope* node, that generates slopes from the highest areas of a heightmap
+- Added *AlterHSV* node that can be used to modify the Hue, Saturation and Value of its input using
+  input maps 
+- Updated *Normal Map* node to improve precision when the buffer option is used
+- Added new packing/unpacking nodes that can store 1 (or 2) values into 2 (or 4) when using buffers
+  for better precision (contributed by Arnklit and wojtekpil)
 
 # Material Maker 0.99
 

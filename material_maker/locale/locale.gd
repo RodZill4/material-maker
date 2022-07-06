@@ -2,11 +2,25 @@ extends Object
 
 const LOCALE_DIR : String = "user://locale"
 
-func install_translation(fn : String):
+func get_translations_dir() -> String:
+	return LOCALE_DIR
+
+func create_translations_dir():
 	var dir : Directory = Directory.new()
 	dir.make_dir_recursive(LOCALE_DIR)
+
+func install_translation(fn : String):
+	create_translations_dir()
+	var dir : Directory = Directory.new()
 	if dir.copy(fn, LOCALE_DIR.plus_file(fn.get_file())) == OK:
 		read_translations()
+
+func uninstall_translation(tn : String):
+	var dir : Directory = Directory.new()
+	if dir.open(LOCALE_DIR) != OK:
+		return
+	for ext in [ "po", "translation", "csv" ]:
+		dir.remove(LOCALE_DIR.plus_file(tn+"."+ext))
 
 func add_translations(dest : Translation, src : Translation):
 	for m in src.get_message_list():
@@ -14,7 +28,7 @@ func add_translations(dest : Translation, src : Translation):
 
 func read_translations():
 	var translations : Dictionary = {}
-	var dir = Directory.new()
+	var dir : Directory = Directory.new()
 	if dir.open(LOCALE_DIR) == OK:
 		var csv_files : Array = []
 		dir.list_dir_begin()

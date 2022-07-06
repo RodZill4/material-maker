@@ -894,6 +894,7 @@ seams_pass1 = SubResource( 20 )
 seams_pass2 = SubResource( 22 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
+extra_cull_margin = 16384.0
 mesh = SubResource( 23 )
 material/0 = SubResource( 5 )
 __meta__ = {
