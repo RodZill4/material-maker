@@ -10,6 +10,7 @@
 - Added *Smooth Mix* (a mix-by-height node with smooth transition between materials) Worflow node
 - Updated *Dilate* node to improve precision in higher resolutions (contributed by Arnklit and wojtekpil)
 - Added new *Morphology* node that provides dilation and erosion operations
+- Added *Clouds Noise* and *Directional Noise* nodes (contributed by Arnklit)
 - Added *Slope* node, that generates slopes from the highest areas of a heightmap
 - Added *AlterHSV* node that can be used to modify the Hue, Saturation and Value of its input using
   input maps 
