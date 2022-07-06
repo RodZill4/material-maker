@@ -17,3 +17,5 @@ made from random patterns.
 	node_noise_wavelet
 	node_noise_crystal
 	node_noise_dirt
+	node_noise_clouds
+	node_noise_directional_noise

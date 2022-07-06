@@ -7,6 +7,8 @@ var websocket_id : int = -1
 var is_multipart : bool = false
 var multipart_message : String = ""
 
+var preview_viewport : Viewport = null
+
 func _ready():
 	set_process(false)
 
@@ -25,26 +27,32 @@ func create_server() -> void:
 			print_debug("Listening on port %d..." % websocket_port)
 			set_process(true)
 
+func create_preview_viewport():
+	if preview_viewport == null:
+		preview_viewport = load("res://material_maker/tools/share/preview_viewport.tscn").instance()
+		add_child(preview_viewport)
+
 func _on_ConnectButton_pressed() -> void:
 	if websocket_id == -1:
 		create_server()
 		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
 
 func update_preview_texture():
-	var status = mm_globals.main_window.update_preview_3d([ $PreviewViewport ], true)
+	create_preview_viewport()
+	var status = mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")
-	$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
-	$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
-	$PreviewViewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
-	$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
-	$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
-	$PreviewViewport.update_worlds()
+	preview_viewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
+	preview_viewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
+	preview_viewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
+	preview_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+	preview_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	preview_viewport.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 
 func get_preview_texture():
-	return $PreviewViewport.get_texture()
+	return preview_viewport.get_texture()
 
 func can_share():
 	return ! $SendButton.disabled
@@ -56,18 +64,19 @@ func _on_SendButton_pressed():
 	match main_window.get_current_project().get_project_type():
 		"material":
 			asset_type = "material"
-			var status = main_window.update_preview_3d([ $PreviewViewport ], true)
+			create_preview_viewport()
+			var status = main_window.update_preview_3d([ preview_viewport ], true)
 			while status is GDScriptFunctionState:
 				status = yield(status, "completed")
-			$PreviewViewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
-			$PreviewViewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
-			$PreviewViewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
-			$PreviewViewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
-			$PreviewViewport.render_target_update_mode = Viewport.UPDATE_ONCE
-			$PreviewViewport.update_worlds()
+			preview_viewport.get_materials()[0].set_shader_param("uv1_scale", Vector3(4, 2, 4))
+			preview_viewport.get_materials()[0].set_shader_param("uv1_offset", Vector3(0, 0.5, 0))
+			preview_viewport.get_materials()[0].set_shader_param("depth_offset", 0.8)
+			preview_viewport.render_target_clear_mode = Viewport.CLEAR_MODE_ALWAYS
+			preview_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+			preview_viewport.update_worlds()
 			yield(get_tree(), "idle_frame")
 			yield(get_tree(), "idle_frame")
-			preview_texture = $PreviewViewport.get_texture()
+			preview_texture = preview_viewport.get_texture()
 		"paint":
 			asset_type = "brush"
 			var status = main_window.get_current_project().get_brush_preview()

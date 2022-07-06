@@ -24,7 +24,7 @@ class TranslationStrings:
 		node_regex = RegEx.new()
 		node_regex.compile("\\[node name=\"(.*)\" type=\"(.*)\" parent=\"(.*)\"\\]")
 		menu_regex = RegEx.new()
-		menu_regex.compile("menu=\"([^\"]*?)\".*description=\"([^\"]*)")
+		menu_regex.compile("menu=\"([^\"]*?)\"")
 		panel_regex = RegEx.new()
 		panel_regex.compile("name=\"([^\"]*?)\".*scene=")
 		tscn_regex = RegEx.new()
@@ -116,14 +116,27 @@ class TranslationStrings:
 			for s in strings:
 				f.store_line("%s|%s" % [ s.string.replace("\n", "\\n"), translation.get_message(s.string).replace("\n", "\\n") ])
 			f.close()
+		if f.open(fn+".report", File.WRITE) == OK:
+			var string_list = []
+			for s in strings:
+				string_list.push_back(s.string)
+			f.store_line("Missing strings:")
+			for s in string_list:
+				if translation.get_message_list().find(s) == -1:
+					f.store_line("- "+s)
+			f.store_line("Extra strings:")
+			for s in translation.get_message_list():
+				if ! (s in string_list):
+					f.store_line("- "+s)
+			f.close()
 
 	func save(fn : String, translation = null):
 		var f : File = File.new()
 		if f.open(fn, File.WRITE) == OK:
 			f.store_line("# Translations template for Material Maker.")
-			f.store_line("# Copyright (C) 2021 Rodolphe Suescun and contributors")
+			f.store_line("# Copyright (C) 2018-2022 Rodolphe Suescun and contributors")
 			f.store_line("# This file is distributed under the same license as the Material Maker project.")
-			f.store_line("# Rodolphe Suescun <rodzilla@free.fr>, 2021.")
+			f.store_line("# Rodolphe Suescun <rodzilla@free.fr>, 2022.")
 			f.store_line("#")
 			f.store_line("#, fuzzy")
 			f.store_line("msgid \"\"")
@@ -185,14 +198,12 @@ class TranslationStrings:
 					result = menu_regex.search(l)
 					if result != null:
 						for m in result.strings[1].split("/"):
-							if add_string(m, fn):
+							if add_string(m, "Menu in "+fn):
 								string_count += 1
-						if add_string(result.strings[2], fn+":"+str(line_number)):
-							string_count += 1
 					# extract panels from code (Material Maker specific)
 					else:
 						result = panel_regex.search(l)
-						if result != null and add_string(result.strings[1], fn+":"+str(line_number)):
+						if result != null and add_string(result.strings[1], "Panel name in "+fn+":"+str(line_number)):
 							string_count += 1
 				line_number += 1
 		return string_count

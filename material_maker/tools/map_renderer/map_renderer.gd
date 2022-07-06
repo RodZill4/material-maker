@@ -37,10 +37,10 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 	var aabb = $MeshInstance.get_aabb()
 	if map in ["ao", "thickness"]:
 		var main_window = mm_globals.main_window
-		var ray_count = main_window.get_config("bake_ray_count")
-		var ao_ray_dist = main_window.get_config("bake_ao_ray_dist")
-		var ao_ray_bias = main_window.get_config("bake_ao_ray_bias")
-		var denoise_radius = main_window.get_config("bake_denoise_radius")
+		var ray_count = mm_globals.get_config("bake_ray_count")
+		var ao_ray_dist = mm_globals.get_config("bake_ao_ray_dist")
+		var ao_ray_bias = mm_globals.get_config("bake_ao_ray_bias")
+		var denoise_radius = mm_globals.get_config("bake_denoise_radius")
 		var progress_dialog = preload("res://material_maker/windows/progress_window/progress_window.tscn").instance()
 		progress_dialog.set_text("Generating "+passes.map_name+" map")
 		progress_dialog.set_progress(0)

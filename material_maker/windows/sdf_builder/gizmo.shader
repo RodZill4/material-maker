@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,unshaded;
+render_mode blend_mix,depth_draw_opaque,cull_back,unshaded;
 uniform vec4 color : hint_color;
 uniform float highlight = 0.0;
 

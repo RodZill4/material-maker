@@ -359,7 +359,7 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 static func get_template_text(template : String) -> String:
 	var in_file = File.new()
 	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
-		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
+		if in_file.open(MMPaths.get_resource_dir()+"/nodes/"+template, File.READ) != OK:
 			return template
 	return in_file.get_as_text()
 

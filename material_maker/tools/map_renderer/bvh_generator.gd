@@ -96,6 +96,7 @@ class BVHNode:
 			root._id_nodes[id] = self
 
 		var data_offset := root._node_data.size()
+# warning-ignore:integer_division
 		_append_4(root._data, data_offset / 4)
 		_append_4(root._node_data, aabb.position.x, aabb.position.y, aabb.position.z, level)
 		_append_4(root._node_data, aabb.end.x, aabb.end.y, aabb.end.z, 0)
@@ -214,7 +215,7 @@ class BVHNode:
 		var prev_hit := t
 		t = 65536.0 # Set to large number
 		var tri := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
-		var min_node_idx := 0
+		var _min_node_idx := 0
 
 		var stack_point := 0
 		var node_stack := [] # ivec3
@@ -251,7 +252,7 @@ class BVHNode:
 									Vector3(tri_c[0], tri_c[1], tri_c[2])
 								]
 #								print(curr_node_idx)
-								min_node_idx = curr_node_idx
+								_min_node_idx = curr_node_idx
 							t = min(t, tri_t)
 
 					stack_point -= 1
@@ -399,6 +400,7 @@ class BVHNode:
 		_data[0] = _node_ids.size() + DATA_HEADER_SIZE
 
 		_data += _node_data
+# warning-ignore:integer_division
 		var data_size = _data.size() / 4
 		var img_width = min(data_size, 16384)
 		var img_height = data_size / 16384 + 1

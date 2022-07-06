@@ -783,21 +783,21 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
-	if node != null:
+	if is_instance_valid(node):
 		preview = Preview.new(node.generator, output_index)
 	if locked:
-		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
 		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
 	else:
-		if node != null and current_preview[slot] != null and current_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
 		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
-	if node != null:
+	if is_instance_valid(node):
 		node.update()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
