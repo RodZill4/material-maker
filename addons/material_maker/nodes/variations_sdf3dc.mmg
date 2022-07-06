@@ -15,7 +15,6 @@
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 rotate(vec2 uv, vec2 center, float rotate) {\n \tvec2 rv;\n\tuv -= center;\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv += center;\n    return rv;\t\n}",
 		"inputs": [
 			{
 				"default": "vec2(0.0)",

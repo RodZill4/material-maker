@@ -143,6 +143,12 @@
 			"from_port": 0,
 			"to": "colormap",
 			"to_port": 1
+		},
+		{
+			"from": "perlin_color_2",
+			"from_port": 0,
+			"to": "uniform_greyscale",
+			"to_port": 0
 		}
 	],
 	"label": "Graph",
@@ -1508,11 +1514,11 @@
 			},
 			"parameters": {
 				"count": 25,
+				"inputs": 0,
 				"rotate": 0,
 				"scale": 0,
 				"scale_x": 1,
 				"scale_y": 1,
-				"select_inputs": 0,
 				"value": 0,
 				"variations": false
 			},
@@ -1805,11 +1811,11 @@
 			},
 			"parameters": {
 				"count": 8,
+				"inputs": 0,
 				"rotate": 0,
 				"scale": 0,
 				"scale_x": 1,
 				"scale_y": 1,
-				"select_inputs": 0,
 				"value": 0,
 				"variations": false
 			},
@@ -2016,6 +2022,7 @@
 				"folds": 0,
 				"iterations": 5,
 				"noise": 0,
+				"offset": 0,
 				"persistence": 0.5,
 				"scale_x": 2,
 				"scale_y": 2
@@ -2647,6 +2654,453 @@
 			"seed_locked": false,
 			"shortdesc": "",
 			"type": "graph"
+		},
+		{
+			"connections": [
+				{
+					"from": "buffer",
+					"from_port": 0,
+					"to": "invert",
+					"to_port": 0
+				},
+				{
+					"from": "buffer",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 0
+				},
+				{
+					"from": "invert",
+					"from_port": 0,
+					"to": "switch",
+					"to_port": 1
+				},
+				{
+					"from": "switch",
+					"from_port": 0,
+					"to": "shape_2",
+					"to_port": 0
+				},
+				{
+					"from": "shape_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "buffer",
+					"from_port": 0,
+					"to": "shape_3",
+					"to_port": 1
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "buffer",
+					"to_port": 0
+				},
+				{
+					"from": "shape_2",
+					"from_port": 0,
+					"to": "uniform_greyscale",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_3",
+					"from_port": 0,
+					"to": "uniform_greyscale_2",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale",
+					"from_port": 0,
+					"to": "buffer_3",
+					"to_port": 0
+				},
+				{
+					"from": "uniform_greyscale_2",
+					"from_port": 0,
+					"to": "shape_3",
+					"to_port": 0
+				}
+			],
+			"label": "Morphology",
+			"longdesc": "",
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": 654.047668,
+				"y": -146.946777
+			},
+			"nodes": [
+				{
+					"name": "buffer",
+					"node_position": {
+						"x": -800,
+						"y": 60
+					},
+					"parameters": {
+						"filter": false,
+						"mipmap": false,
+						"size": 10
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 2
+				},
+				{
+					"name": "invert",
+					"node_position": {
+						"x": -460,
+						"y": 60
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "invert"
+				},
+				{
+					"name": "shape_2",
+					"node_position": {
+						"x": -99,
+						"y": -45
+					},
+					"parameters": {
+						"d": 0.1,
+						"s": 10
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "0.0",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "f"
+							}
+						],
+						"instance": "vec2 $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dx = floor($d/e)*e;\n\tfloat v = 0.0;\n\tfloat bestuv_x = uv.x;\n\tfor (float x = 0.0; x < dx; x += e) {\n\t\tfloat c = $in(uv+vec2(x, 0.0));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_x = uv.x+x;\n\t\t}\n\t\tc = $in(uv-vec2(x, 0.0));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_x = uv.x-x;\n\t\t}\n\t}\n\treturn vec2(v, bestuv_x);\n}",
+						"name": "Morphology Dilation 1",
+						"outputs": [
+							{
+								"rgb": "vec3($(name)_dilate($uv), 0.0)",
+								"type": "rgb"
+							}
+						],
+						"parameters": [
+							{
+								"default": 9,
+								"first": 6,
+								"label": "",
+								"last": 12,
+								"name": "s",
+								"type": "size"
+							},
+							{
+								"control": "None",
+								"default": 0.1,
+								"label": "",
+								"max": 0.3,
+								"min": 0,
+								"name": "d",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "shape_3",
+					"node_position": {
+						"x": -217,
+						"y": 340
+					},
+					"parameters": {
+						"d": 0.1,
+						"s": 10
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec3(0.0)",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "rgb"
+							},
+							{
+								"default": "vec4(0.0)",
+								"label": "",
+								"name": "in2",
+								"type": "rgba"
+							}
+						],
+						"instance": "vec3 $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dx = floor($d/e)*e;\n\tfloat v = 0.0;\n\tvec2 bestuv = uv;\n\tfor (float x = 0.0; x < dx; x += e) {\n\t\tvec2 input = $in(uv+vec2(0.0, x)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.x, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(input.y, uv.y+x);\n\t\t}\n\t\tinput = $in(uv-vec2(0.0, x)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.x, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(input.y, uv.y-x);\n\t\t}\n\t}\n\treturn vec3(v, bestuv);\n}",
+						"name": "Morphology Dilation 2",
+						"outputs": [
+							{
+								"rgba": "$in2(fract($(name)_dilate($uv).yz))",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"default": 9,
+								"first": 6,
+								"label": "",
+								"last": 12,
+								"name": "s",
+								"type": "size"
+							},
+							{
+								"control": "None",
+								"default": 0.1,
+								"label": "",
+								"max": 0.3,
+								"min": 0,
+								"name": "d",
+								"step": 0.01,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "uniform_greyscale",
+					"node_position": {
+						"x": -107.877747,
+						"y": 80.625549
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "pack_2x32_to_4x16"
+				},
+				{
+					"name": "buffer_3",
+					"node_position": {
+						"x": -149,
+						"y": 148
+					},
+					"parameters": {
+						"filter": false,
+						"mipmap": false,
+						"size": 10
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "buffer",
+					"version": 2
+				},
+				{
+					"name": "uniform_greyscale_2",
+					"node_position": {
+						"x": -185.877747,
+						"y": 271.625549
+					},
+					"parameters": {
+
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "pack_4x16_to_2x32"
+				},
+				{
+					"name": "switch",
+					"node_position": {
+						"x": -300,
+						"y": -40
+					},
+					"parameters": {
+						"choices": 2,
+						"outputs": 1,
+						"source": 0
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "switch"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -243,
+						"y": -205
+					},
+					"parameters": {
+						"distance": 0.1,
+						"operation": 0,
+						"resolution": 10
+					},
+					"seed": 0,
+					"seed_locked": false,
+					"type": "remote",
+					"widgets": [
+						{
+							"configurations": {
+								"Dilation": [
+									{
+										"node": "switch",
+										"value": 0,
+										"widget": "source"
+									}
+								],
+								"Erosion": [
+									{
+										"node": "switch",
+										"value": 1,
+										"widget": "source"
+									}
+								]
+							},
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "switch",
+									"widget": "source"
+								}
+							],
+							"longdesc": "Morphology operation",
+							"name": "operation",
+							"shortdesc": "Operation",
+							"type": "config_control"
+						},
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "shape_2",
+									"widget": "s"
+								},
+								{
+									"node": "shape_3",
+									"widget": "s"
+								},
+								{
+									"node": "buffer",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_3",
+									"widget": "size"
+								}
+							],
+							"longdesc": "Resolution of the generated image",
+							"name": "resolution",
+							"shortdesc": "Resolution",
+							"type": "linked_control"
+						},
+						{
+							"label": "",
+							"linked_widgets": [
+								{
+									"node": "shape_2",
+									"widget": "d"
+								},
+								{
+									"node": "shape_3",
+									"widget": "d"
+								}
+							],
+							"longdesc": "Distance of the operation",
+							"name": "distance",
+							"shortdesc": "Distance",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -1221.203125,
+						"y": 65.215454
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgb"
+						}
+					],
+					"seed": 0,
+					"seed_locked": false,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 200,
+						"y": 75.583458
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"name": "port0",
+							"type": "rgba"
+						}
+					],
+					"seed": 0,
+					"seed_locked": false,
+					"type": "ios"
+				}
+			],
+			"parameters": {
+				"distance": 0.1,
+				"operation": 0,
+				"resolution": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shortdesc": "",
+			"type": "graph"
+		},
+		{
+			"name": "perlin_color_2",
+			"node_position": {
+				"x": 332.047668,
+				"y": -213.946777
+			},
+			"parameters": {
+				"iterations": 1,
+				"persistence": 0.5,
+				"scale_x": 32,
+				"scale_y": 32
+			},
+			"seed": 0.626789,
+			"seed_locked": false,
+			"type": "perlin_color"
+		},
+		{
+			"name": "uniform_greyscale_2",
+			"node_position": {
+				"x": 635.15625,
+				"y": 24.505493
+			},
+			"parameters": {
+				"distance": 0.05,
+				"operation": 0,
+				"resolution": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "morphology2"
 		}
 	],
 	"parameters": {

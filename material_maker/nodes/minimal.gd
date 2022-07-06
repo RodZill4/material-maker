@@ -10,9 +10,6 @@ func _ready() -> void:
 	connect("offset_changed", self, "_on_offset_changed")
 	add_to_group("generator_node")
 
-func _exit_tree() -> void:
-	get_parent().call_deferred("check_last_selected")
-
 func _on_offset_changed() -> void:
 	if ! disable_undoredo_for_offset:
 		get_parent().undoredo_move_node(generator.name, generator.position, offset)
@@ -23,7 +20,7 @@ func _on_offset_changed() -> void:
 func reroll_generator_seed() -> void:
 	pass
 
-func on_generator_changed(g):
+func on_generator_changed(_g):
 	pass
 
 func update_node() -> void:

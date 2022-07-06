@@ -8,7 +8,7 @@ signal moved(index)
 signal removed(index)
 
 func _draw():
-	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var current_theme : Theme = mm_globals.main_window.theme
 	var color : Color = current_theme.get_color("font_color", "Label")
 	draw_rect(Rect2(0, 0, 7, 7), color)
 

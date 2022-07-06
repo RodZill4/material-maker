@@ -20,6 +20,8 @@ const CONTRIBUTORS = [
 	{ name="escargot-sans-gluten", contribution="3D preview and user interface improvements" },
 	{ name="Tarox", contribution="Material Maker icon and lots of very useful feedback" },
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes" },
+	{ name="Zhibade", contribution="Auto size new comment nodes to current selection" },
+	{ name="williamchange", contribution="Seven Segment Display node" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 

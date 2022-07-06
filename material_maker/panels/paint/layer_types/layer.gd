@@ -30,7 +30,7 @@ func get_channel_texture(channel_name : String) -> Texture:
 func get_channels() -> Array:
 	return []
 
-func _load_layer(data : Dictionary) -> void:
+func _load_layer(_data : Dictionary) -> void:
 	pass
 
 func load_layer(data : Dictionary, first_index : int, path : String) -> void:
@@ -47,7 +47,7 @@ func load_layer(data : Dictionary, first_index : int, path : String) -> void:
 			set(c, texture)
 	_load_layer(data)
 
-func _save_layer(data : Dictionary):
+func _save_layer(_data : Dictionary):
 	pass
 
 func save_layer(path : String) -> Dictionary:

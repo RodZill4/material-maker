@@ -23,7 +23,7 @@ func load_library(path : String, ro : bool = false) -> bool:
 	if OS.get_name() == "Android":
 		path = path.replace("root://", "res://material_maker/")
 	else:
-		path = path.replace("root://", OS.get_executable_path().get_base_dir()+"/")
+		path = path.replace("root://", MMPaths.get_resource_dir()+"/")
 	if ! file.open(path, File.READ) == OK:
 		print("Failed to open "+path)
 		return false
@@ -49,7 +49,6 @@ func load_library(path : String, ro : bool = false) -> bool:
 	return true
 
 func get_item(name : String):
-	var array : Array = []
 	for i in library_items:
 		if name == i.tree_item:
 			return { name=i.tree_item, item=i, icon=library_icons[i.tree_item] }

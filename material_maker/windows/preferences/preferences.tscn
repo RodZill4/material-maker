@@ -40,7 +40,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -75,6 +74,12 @@ margin_left = 100.0
 margin_right = 152.0
 margin_bottom = 20.0
 text = "Install"
+
+[node name="DownloadLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+margin_left = 100.0
+margin_right = 152.0
+margin_bottom = 20.0
+text = "Download"
 
 [node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
 margin_top = 24.0
@@ -275,6 +280,7 @@ float_only = true
 config_variable = "idle_fps_limit"
 
 [node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -385,6 +391,19 @@ step = 1.0
 float_only = true
 config_variable = "bake_denoise_radius"
 
+[node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="AutoSizeComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource( 1 )]
+margin_right = 270.0
+pressed = true
+text = "Auto size comment node to selection"
+config_variable = "auto_size_comment"
+
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 margin_top = 324.0
 margin_right = 302.0
@@ -418,9 +437,11 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 60, 0 )
 text = "Cancel"
 
+[connection signal="about_to_show" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="popup_hide" from="." to="." method="queue_free"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

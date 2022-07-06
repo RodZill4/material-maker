@@ -6,11 +6,14 @@
 	},
 	"parameters": {
 		"direction": 0,
+		"flip_sides": false,
 		"offset": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 uvmirror_h(vec2 uv, float offset) {\n\treturn vec2(max(0, abs(uv.x-0.5)-0.5*offset)+0.5, uv.y);\n}\nvec2 uvmirror_v(vec2 uv, float offset) {\n\treturn vec2(uv.x, max(0, abs(uv.y-0.5)-0.5*offset)+0.5);\n}",
+		"global": "vec2 uvmirror_h(vec2 uv, float offset, float flip_sides) {\n\treturn vec2(flip_sides*max(0.0, (abs(uv.x-0.5)-0.5*offset))+0.5, uv.y);\n}\nvec2 uvmirror_v(vec2 uv, float offset, float flip_sides) {\n\treturn vec2(uv.x, flip_sides*max(0.0, (abs(uv.y-0.5)-0.5*offset))+0.5);\n}\n",
 		"inputs": [
 			{
 				"default": "vec4($uv, 0, 1)",
@@ -27,7 +30,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the mirrored image",
-				"rgba": "$i(uvmirror_$direction($uv, $offset))",
+				"rgba": "$i(uvmirror_$direction($uv, $offset, $flip_sides ? -1.0 : 1.0))",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}
@@ -62,6 +65,12 @@
 				"shortdesc": "Offset",
 				"step": 0.005,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Flip sides",
+				"name": "flip_sides",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Mirror"

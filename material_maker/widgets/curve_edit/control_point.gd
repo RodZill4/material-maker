@@ -16,7 +16,7 @@ func _ready():
 	pass # Replace with function body.
 
 func _draw():
-	var current_theme : Theme = get_node("/root/MainWindow").theme
+	var current_theme : Theme = mm_globals.main_window.theme
 	var color : Color = current_theme.get_color("font_color", "Label")
 	for c in get_children():
 		if c.visible:

@@ -436,6 +436,22 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	return new_graph
 
 
+func connections_to_compact(connection_array : Array) -> Dictionary:
+	var rv : Dictionary = {}
+	for c in connection_array:
+		if ! rv.has(c.to):
+			rv[c.to] = {}
+		rv[c.to][str(c.to_port)] = { node=c.from, port=c.from_port }
+	return rv
+
+func connections_from_compact(compact : Dictionary) -> Array:
+	var rv : Array = []
+	for n in compact.keys():
+		for p in compact[n].keys():
+			var from : Dictionary = compact[n][p]
+			rv.push_back({ from=from.node, from_port=from.port, to=n, to_port=p.to_int() })
+	return rv
+
 func _serialize(data: Dictionary) -> Dictionary:
 	data.label = label
 	data.shortdesc = shortdesc
@@ -443,6 +459,7 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.nodes = []
 	for c in get_children():
 		data.nodes.append(c.serialize())
+	#data.connections = connections_to_compact(connections)
 	data.connections = connections
 	return data
 
@@ -454,7 +471,13 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("longdesc"):
 		longdesc = data.longdesc
 	var nodes = data.nodes if data.has("nodes") else []
-	mm_loader.add_to_gen_graph(self, nodes, data.connections if data.has("connections") else [])
+	var connection_array : Array = []
+	if data.has("connections"):
+		if data.connections is Array:
+			connection_array = data.connections
+		elif data.connections is Dictionary:
+			connection_array = connections_from_compact(data.connections)
+	mm_loader.add_to_gen_graph(self, nodes, connection_array)
 
 
 func apply_diff_from(graph : MMGenGraph) -> void:

@@ -1,7 +1,5 @@
 extends VBoxContainer
 
-export(NodePath) var painter = null
-
 # The layer object
 var layers
 

@@ -62,7 +62,7 @@ func _process(_delta):
 		if fps > 50.0:
 			fast_counter += 1
 			if fast_counter > 5:
-				set_max_renderers(min(mm_renderer.max_renderers+1, 8))
+				set_max_renderers(int(min(mm_renderer.max_renderers+1, 8)))
 		else:
 			fast_counter = 0
 			if fps < 20.0:
