@@ -31,4 +31,5 @@ color = Color( 0.501961, 0.501961, 0.501961, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="gui_input" from="." to="." method="_on_ColorSlot_gui_input"]

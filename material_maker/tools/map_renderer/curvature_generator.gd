@@ -148,7 +148,7 @@ func generate(mesh: Mesh) -> Mesh:
 		b_mesh.set_vertex_color(i, Color(col[0], col[1], col[2], col[3]))
 
 	var new_mesh := ArrayMesh.new()
-	var err := b_mesh.commit_to_surface(new_mesh)
+	var _err := b_mesh.commit_to_surface(new_mesh)
 
 	return new_mesh
 

@@ -35,8 +35,8 @@ func on_right_click():
 	var position_color : Color = image.get_pixelv(mouse_position)
 	image.unlock()
 	var position : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
+	position -= Vector3(0.5, 0.5, 0.5)
 	position *= aabb.size
-	position += aabb.position
 	new_pivot_position = -position
 	# Reset normal rendering
 	current_object.set_surface_material(0, material_save)

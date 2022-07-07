@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/windows/line_dialog/line_dialog.gd" type="Script" id=1]
 
 [node name="LineDialog" type="WindowDialog"]
-visible = true
 margin_right = 332.0
 margin_bottom = 80.0
 window_title = "blah"
