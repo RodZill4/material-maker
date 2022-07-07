@@ -945,6 +945,20 @@ func undoredo_command(command : Dictionary) -> void:
 					get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
+		"resize_comment":
+			var g = get_node_from_hier_name(command.node)
+			g.size = command.size
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
+		"comment_color_change":
+			var g = get_node_from_hier_name(command.node)
+			g.color = command.color
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
