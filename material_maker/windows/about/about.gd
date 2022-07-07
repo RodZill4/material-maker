@@ -26,7 +26,9 @@ const CONTRIBUTORS = [
 ]
 
 const PATRONS = [
-	"Edward Herbert", "Hugo Locurcio", "LitmusZest", "nargacu83", "Harken"
+	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "nargacu83", "Jose Ivan Lopez Romo",
+	"Harken", "Interstice", "Rafe Hall", "rustweaver", "Shikher Pandey",
+	"The5", "a critter in flux", "Ryan Roden-Corrent"
 ]
 
 func _ready() -> void:
