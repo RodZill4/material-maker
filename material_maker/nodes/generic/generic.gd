@@ -8,6 +8,7 @@ var output_count = 0
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 
+
 func _ready() -> void:
 	add_to_group("updated_from_locale")
 
@@ -258,6 +259,14 @@ func restore_preview_widget() -> void:
 func update_preview() -> void:
 	if generator == null or generator.preview == -1:
 		return
+	if is_connected("mouse_entered", self, "on_mouse_entered"):
+		disconnect("mouse_entered", self, "on_mouse_entered")
+		disconnect("mouse_exited", self, "on_mouse_exited")
+	for i in controls:
+		var control = controls[i]
+		if is_instance_valid(control) and control.is_connected("mouse_entered", self, "on_mouse_entered"):
+			control.disconnect("mouse_entered", self, "on_mouse_entered")
+			control.disconnect("mouse_exited", self, "on_mouse_exited")
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
@@ -271,6 +280,17 @@ func do_update_preview() -> void:
 		parent = parent.get_parent()
 	preview.rect_position = Vector2(18, 24)-pos
 	preview.rect_size = rect_size-Vector2(38, 28)
+	if ! is_connected("mouse_entered", self, "on_mouse_entered"):
+		connect("mouse_entered", self, "on_mouse_entered")
+		connect("mouse_exited", self, "on_mouse_exited")
+	for i in controls:
+		var control = controls[i]
+		if is_instance_valid(control) and !control.is_connected("mouse_entered", self, "on_mouse_entered"):
+			control.connect("mouse_entered", self, "on_mouse_entered")
+			control.connect("mouse_exited", self, "on_mouse_exited")
+	if ! preview.is_connected("mouse_entered", self, "on_mouse_entered"):
+		preview.connect("mouse_entered", self, "on_mouse_entered")
+		preview.connect("mouse_exited", self, "on_mouse_exited")
 	preview.visible = true
 
 func update_rendering_time(t : int) -> void:
@@ -512,12 +532,16 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if ! with_shift:
 		if generator.preview == index:
 			generator.preview = -1
-			disconnect("mouse_entered", self, "on_mouse_entered")
-			disconnect("mouse_exited", self, "on_mouse_exited")
+			if is_connected("mouse_entered", self, "on_mouse_entered"):
+				disconnect("mouse_entered", self, "on_mouse_entered")
+				disconnect("mouse_exited", self, "on_mouse_exited")
+			for i in controls:
+				var control = controls[i]
+				if is_instance_valid(control) and control.is_connected("mouse_entered", self, "on_mouse_entered"):
+					control.disconnect("mouse_entered", self, "on_mouse_entered")
+					control.disconnect("mouse_exited", self, "on_mouse_exited")
 		else:
 			generator.preview = index
-			connect("mouse_entered", self, "on_mouse_entered")
-			connect("mouse_exited", self, "on_mouse_exited")
 			update_preview()
 		restore_preview_widget()
 		update()
@@ -529,8 +553,9 @@ func on_mouse_entered():
 		preview.visible = false
 
 func on_mouse_exited():
-	if !generator.minimized and !get_global_rect().has_point(get_global_mouse_position()):
+	if !generator.minimized:
 		preview.visible = true
+	
 
 func update_from_locale() -> void:
 	update_title()
