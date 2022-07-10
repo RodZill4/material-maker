@@ -1,5 +1,4 @@
 extends Control
-class_name MMGradientEditor
 
 class GradientCursor:
 	extends Control
