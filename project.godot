@@ -119,11 +119,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/material_maker/types/gradient.gd"
 }, {
-"base": "Control",
-"class": "MMGradientEditor",
-"language": "GDScript",
-"path": "res://material_maker/widgets/gradient_editor/gradient_editor.gd"
-}, {
 "base": "GraphEdit",
 "class": "MMGraphEdit",
 "language": "GDScript",
@@ -202,7 +197,6 @@ _global_script_class_icons={
 "MMGenText": "",
 "MMGenTexture": "",
 "MMGradient": "",
-"MMGradientEditor": "",
 "MMGraphEdit": "",
 "MMGraphNodeBase": "",
 "MMGraphNodeGeneric": "",
