@@ -1,4 +1,5 @@
 extends Control
+class_name MMGradientEditor
 
 class GradientCursor:
 	extends Control
@@ -137,6 +138,9 @@ func set_value_and_update(v, cc : bool = true) -> void:
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
 	add_child(cursor)
+	if is_connected("mouse_entered", get_node("../.."), "on_mouse_entered"):
+		cursor.connect("mouse_entered", get_node("../.."), "on_mouse_entered")
+		cursor.connect("mouse_exited", get_node("../.."), "on_mouse_exited")
 	cursor.rect_position.x = x
 	cursor.color = color
 

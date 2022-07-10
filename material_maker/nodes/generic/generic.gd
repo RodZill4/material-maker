@@ -259,14 +259,7 @@ func restore_preview_widget() -> void:
 func update_preview() -> void:
 	if generator == null or generator.preview == -1:
 		return
-	if is_connected("mouse_entered", self, "on_mouse_entered"):
-		disconnect("mouse_entered", self, "on_mouse_entered")
-		disconnect("mouse_exited", self, "on_mouse_exited")
-	for i in controls:
-		var control = controls[i]
-		if is_instance_valid(control) and control.is_connected("mouse_entered", self, "on_mouse_entered"):
-			control.disconnect("mouse_entered", self, "on_mouse_entered")
-			control.disconnect("mouse_exited", self, "on_mouse_exited")
+	preview_disconnect(self)
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
@@ -280,17 +273,7 @@ func do_update_preview() -> void:
 		parent = parent.get_parent()
 	preview.rect_position = Vector2(18, 24)-pos
 	preview.rect_size = rect_size-Vector2(38, 28)
-	if ! is_connected("mouse_entered", self, "on_mouse_entered"):
-		connect("mouse_entered", self, "on_mouse_entered")
-		connect("mouse_exited", self, "on_mouse_exited")
-	for i in controls:
-		var control = controls[i]
-		if is_instance_valid(control) and !control.is_connected("mouse_entered", self, "on_mouse_entered"):
-			control.connect("mouse_entered", self, "on_mouse_entered")
-			control.connect("mouse_exited", self, "on_mouse_exited")
-	if ! preview.is_connected("mouse_entered", self, "on_mouse_entered"):
-		preview.connect("mouse_entered", self, "on_mouse_entered")
-		preview.connect("mouse_exited", self, "on_mouse_exited")
+	preview_connect(self)
 	preview.visible = true
 
 func update_rendering_time(t : int) -> void:
@@ -532,14 +515,7 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if ! with_shift:
 		if generator.preview == index:
 			generator.preview = -1
-			if is_connected("mouse_entered", self, "on_mouse_entered"):
-				disconnect("mouse_entered", self, "on_mouse_entered")
-				disconnect("mouse_exited", self, "on_mouse_exited")
-			for i in controls:
-				var control = controls[i]
-				if is_instance_valid(control) and control.is_connected("mouse_entered", self, "on_mouse_entered"):
-					control.disconnect("mouse_entered", self, "on_mouse_entered")
-					control.disconnect("mouse_exited", self, "on_mouse_exited")
+			preview_disconnect(self)
 		else:
 			generator.preview = index
 			update_preview()
@@ -547,6 +523,28 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 		update()
 		return true
 	return false
+
+func preview_connect(node : Control) -> void:
+	if node is Control and !node.is_connected("mouse_entered", self, "on_mouse_entered"):
+		if node is Popup:
+			node.connect("mouse_entered", self, "on_mouse_entered")
+			node.connect("popup_hide", self, "on_mouse_exited")
+		else:
+			node.connect("mouse_entered", self, "on_mouse_entered")
+			node.connect("mouse_exited", self, "on_mouse_exited")
+		for child in node.get_children():
+			preview_connect(child)
+	
+func preview_disconnect(node : Control) -> void:
+	if node is Control and node.is_connected("mouse_entered", self, "on_mouse_entered"):
+		if node is Popup:
+			node.disconnect("mouse_entered", self, "on_mouse_entered")
+			node.disconnect("popup_hide", self, "on_mouse_exited")
+		else:
+			node.disconnect("mouse_entered", self, "on_mouse_entered")
+			node.disconnect("mouse_exited", self, "on_mouse_exited")
+		for child in node.get_children():
+			preview_disconnect(child)
 
 func on_mouse_entered():
 	if !generator.minimized:
