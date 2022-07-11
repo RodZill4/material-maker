@@ -137,9 +137,10 @@ func set_value_and_update(v, cc : bool = true) -> void:
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
 	add_child(cursor)
-	if is_connected("mouse_entered", get_node("../.."), "on_mouse_entered"):
-		cursor.connect("mouse_entered", get_node("../.."), "on_mouse_entered")
-		cursor.connect("mouse_exited", get_node("../.."), "on_mouse_exited")
+	# Inherit mouse_entered/mouse_exited behaviour (for nodes previews)
+	for s in [ "mouse_entered", "mouse_exited" ]:
+		for c in get_signal_connection_list(s):
+			cursor.connect(s, c.target, c.method, c.binds, c.flags)
 	cursor.rect_position.x = x
 	cursor.color = color
 
