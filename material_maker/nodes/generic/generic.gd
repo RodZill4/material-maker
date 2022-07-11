@@ -260,7 +260,7 @@ func restore_preview_widget() -> void:
 func update_preview() -> void:
 	if generator == null or generator.preview == -1:
 		return
-	preview_disconnect(self)
+	preview_disconnect()
 	preview_timer.start(0.2)
 
 func do_update_preview() -> void:
@@ -274,7 +274,7 @@ func do_update_preview() -> void:
 		parent = parent.get_parent()
 	preview.rect_position = Vector2(18, 24)-pos
 	preview.rect_size = rect_size-Vector2(38, 28)
-	preview_connect(self)
+	preview_connect()
 	preview.visible = true
 
 func update_rendering_time(t : int) -> void:
@@ -516,7 +516,7 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if ! with_shift:
 		if generator.preview == index:
 			generator.preview = -1
-			preview_disconnect(self)
+			preview_disconnect()
 		else:
 			generator.preview = index
 			update_preview()
@@ -525,7 +525,7 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 		return true
 	return false
 
-func preview_connect(node : Control) -> void:
+func preview_connect_node(node : Control) -> void:
 	if node is Control and !node.is_connected("mouse_entered", self, "on_mouse_entered"):
 		if node is Popup:
 			node.connect("mouse_entered", self, "on_mouse_entered")
@@ -534,9 +534,9 @@ func preview_connect(node : Control) -> void:
 			node.connect("mouse_entered", self, "on_mouse_entered")
 			node.connect("mouse_exited", self, "on_mouse_exited")
 		for child in node.get_children():
-			preview_connect(child)
+			preview_connect_node(child)
 
-func preview_disconnect(node : Control) -> void:
+func preview_disconnect_node(node : Control) -> void:
 	if node is Control and node.is_connected("mouse_entered", self, "on_mouse_entered"):
 		if node is Popup:
 			node.disconnect("mouse_entered", self, "on_mouse_entered")
@@ -545,7 +545,22 @@ func preview_disconnect(node : Control) -> void:
 			node.disconnect("mouse_entered", self, "on_mouse_entered")
 			node.disconnect("mouse_exited", self, "on_mouse_exited")
 		for child in node.get_children():
-			preview_disconnect(child)
+			preview_disconnect_node(child)
+
+func preview_connect() -> void:
+	if !get_tree().is_connected("node_added", self, "on_node_added"):
+		get_tree().connect("node_added", self, "on_node_added")
+	preview_connect_node(self)
+
+func preview_disconnect() -> void:
+	if get_tree().is_connected("node_added", self, "on_node_added"):
+		get_tree().disconnect("node_added", self, "on_node_added")
+	preview_disconnect_node(self)
+
+func on_node_added(n : Node):
+	#print("Adding "+str(n)+", parent = "+str(n.get_parent()))
+	if n is Control and is_a_parent_of(n):
+		preview_connect_node(n)
 
 func on_mouse_entered():
 	if !generator.minimized:
