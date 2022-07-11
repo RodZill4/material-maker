@@ -1,6 +1,7 @@
 extends MMGraphNodeBase
 class_name MMGraphNodeGeneric
 
+
 var controls = {}
 var ignore_parameter_change = ""
 var output_count = 0
@@ -534,7 +535,7 @@ func preview_connect(node : Control) -> void:
 			node.connect("mouse_exited", self, "on_mouse_exited")
 		for child in node.get_children():
 			preview_connect(child)
-	
+
 func preview_disconnect(node : Control) -> void:
 	if node is Control and node.is_connected("mouse_entered", self, "on_mouse_entered"):
 		if node is Popup:
@@ -552,8 +553,11 @@ func on_mouse_entered():
 
 func on_mouse_exited():
 	if !generator.minimized:
+		var preview_parent = preview.get_parent()
+		# Fake move of preview in hierarchy, so it's shown in front of whatever
+		# control that has been created recently
+		preview_parent.move_child(preview, preview_parent.get_child_count()-1)
 		preview.visible = true
-	
 
 func update_from_locale() -> void:
 	update_title()
