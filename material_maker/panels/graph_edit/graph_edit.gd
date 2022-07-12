@@ -611,12 +611,10 @@ func do_paste(data) -> void:
 func paste() -> void:
 	var data = OS.clipboard.strip_edges()
 	var graph = null
-	var palette = try_parse_palette(data)
+
 	if data.is_valid_html_color():
 		var color = Color(data)
 		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
-	elif not palette.empty():
-		graph = palette
 	elif data.left(4) == "http":
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
@@ -628,6 +626,10 @@ func paste() -> void:
 		graph = parse_json(data)
 	else:
 		graph = parse_json(data)
+	if graph == null:
+		var palette = try_parse_palette(data)
+		if not palette.empty():
+			graph = palette
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = get_node("/root/MainWindow")
@@ -643,12 +645,17 @@ func paste() -> void:
 
 func try_parse_palette(hex_values_str : String) -> Dictionary:
 	var points = []
-	var hex_values = hex_values_str.strip_edges().split("\n")
-	var n = hex_values.size()
-	for i in range(n):
-		if not hex_values[i].is_valid_html_color():
+	var regex_color : RegEx = RegEx.new()
+	regex_color.compile("#[0-9a-fA-F]+")
+	var regex_matches : Array = regex_color.search_all(hex_values_str)
+	var n = regex_matches.size()
+	if n < 2:
+		return {}
+	var i = 0
+	for m in regex_matches:
+		if not m.strings[0].is_valid_html_color():
 			return {}
-		var color = Color(hex_values[i])
+		var color = Color(m.strings[0])
 		points.push_back({
 			pos = (1.0 / (2 * n)) + (float(i) / n),
 			r = color.r,
@@ -656,6 +663,7 @@ func try_parse_palette(hex_values_str : String) -> Dictionary:
 			b = color.b,
 			a = color.a
 		})
+		i += 1
 	return {
 		type = "colorize",
 		parameters = {
