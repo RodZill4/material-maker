@@ -22,6 +22,9 @@ const TEXTURE_SIZE_MAX = 13  # 8192x8192
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
+# The minimum allowed texture size as a power-of-two exponent
+const TEXTURE_FILTERING_LIMIT = 256
+
 var timer : Timer
 
 func _ready() -> void:
@@ -138,6 +141,10 @@ func update_textures() -> void:
 					break
 				renderer.copy_to_texture(preview_textures[t].texture)
 				renderer.release(self)
+				if image_size <= TEXTURE_FILTERING_LIMIT:
+					preview_textures[t].texture.flags &= ~Texture.FLAG_FILTER
+				else:
+					preview_textures[t].texture.flags |= Texture.FLAG_FILTER
 			updating = false
 
 func update_materials(material_list, sequential : bool = false) -> void:
