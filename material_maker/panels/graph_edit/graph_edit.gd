@@ -522,6 +522,7 @@ func save_as() -> bool:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
 			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
+			top_generator.emit_signal("hierarchy_changed")
 			return true
 	return false
 
