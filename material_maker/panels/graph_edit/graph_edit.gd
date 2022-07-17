@@ -84,28 +84,37 @@ func do_zoom(factor : float):
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
 
-func process_port_click(pressed : bool):
+func get_nodes_under_mouse() -> Array:
+	var array : Array = []
 	for c in get_children():
 		if c is GraphNode:
 			var rect : Rect2 = c.get_global_rect()
-			var pos = get_global_mouse_position()-rect.position
 			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-			var output_count : int = c.get_connection_output_count()
-			if rect.has_point(get_global_mouse_position()) and output_count > 0:
-				var scale = c.get_global_transform().get_scale()
-				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
-				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-				if in_output:
-					for i in range(output_count):
-						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
-							if pressed:
-								port_click_node = c
-								port_click_port_index = i
-							elif port_click_node == c and port_click_port_index == i:
-								set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
-								port_click_port_index = -1
-							return
+			if rect.has_point(get_global_mouse_position()):
+				array.push_back(c)
+	return array
+
+func process_port_click(pressed : bool):
+	for c in get_nodes_under_mouse():
+		var rect : Rect2 = c.get_global_rect()
+		var pos = get_global_mouse_position()-rect.position
+		rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+		var output_count : int = c.get_connection_output_count()
+		if output_count > 0:
+			var scale = c.get_global_transform().get_scale()
+			var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
+			var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
+			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+			if in_output:
+				for i in range(output_count):
+					if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+						if pressed:
+							port_click_node = c
+							port_click_port_index = i
+						elif port_click_node == c and port_click_port_index == i:
+							set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+							port_click_port_index = -1
+						return
 
 func _gui_input(event) -> void:
 	if (
@@ -164,7 +173,11 @@ func _gui_input(event) -> void:
 			node_popup.show_popup()
 		else:
 			if event.button_index == BUTTON_LEFT:
-				process_port_click(event.is_pressed())
+				if event.doubleclick:
+					if get_nodes_under_mouse().empty():
+						on_ButtonUp_pressed()
+				else:
+					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
