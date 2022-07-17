@@ -88,4 +88,10 @@ func buffer_updated(buffer_name):
 			print("Rendering "+d)
 
 func dependency_update(dependency_name : String, value = null):
-	pass
+	print("Update "+dependency_name+" to "+str(value))
+
+func dependencies_update(dependency_values : Dictionary):
+	for k in dependency_values.keys():
+		dependency_update(k, dependency_values[k])
+	if is_inside_tree():
+		get_tree().call_group("preview", "on_float_parameters_changed", dependency_values)

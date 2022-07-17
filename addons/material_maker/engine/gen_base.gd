@@ -87,12 +87,14 @@ func get_description() -> String:
 func has_randomness() -> bool:
 	return false
 
+func update_float_parameters(parameter_values : Dictionary):
+	mm_deps.dependencies_update(parameter_values)
+
 func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
 		return false
 	seed_value = s
-	if is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	mm_deps.dependencies_update({ "seed_o"+str(get_instance_id()): get_seed() })
 	return true
 
 func reroll_seed():
@@ -185,14 +187,14 @@ func set_parameter(n : String, v) -> void:
 		if parameter_def.has("type"):
 			if parameter_def.type == "float" and v is float and old_value is float:
 				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
-				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
+				mm_deps.dependencies_update({ parameter_name:v })
 				return
 			elif parameter_def.type == "color":
 				var parameter_changes = {}
 				for f in [ "r", "g", "b", "a" ]:
 					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
 					parameter_changes[parameter_name] = v[f]
-				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+				mm_deps.dependencies_update(parameter_changes)
 				return
 			elif parameter_def.type == "gradient":
 				if old_value is MMGradient and v is MMGradient and old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
@@ -207,7 +209,7 @@ func set_parameter(n : String, v) -> void:
 							if v.points[i].c[f] != old_value.points[i].c[f]:
 								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i].c[f]
-					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+					mm_deps.dependencies_update(parameter_changes)
 					return
 		all_sources_changed()
 

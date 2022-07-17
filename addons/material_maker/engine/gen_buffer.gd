@@ -74,7 +74,7 @@ func set_parameter(n : String, v) -> void:
 		if n == "size":
 			var param_name = "o%s_tex_size" % str(get_instance_id())
 			var param_value = pow(2, v)
-			get_tree().call_group("preview", "on_float_parameters_changed", { param_name:param_value })
+			mm_deps.dependencies_update({ param_name:param_value })
 	.set_parameter(n, v)
 
 var updating_shader : bool = false

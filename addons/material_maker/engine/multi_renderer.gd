@@ -42,7 +42,7 @@ func get_global_parameter(n : String):
 
 func set_global_parameter(n : String, value):
 	global_parameters[n] = value
-	get_tree().call_group("preview", "on_float_parameters_changed", { "mm_global_"+n:value })
+	mm_deps.dependencies_update({ "mm_global_"+n:value })
 
 func get_global_parameter_declaration(n : String) -> String:
 	if global_parameters.has(n):

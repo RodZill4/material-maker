@@ -156,7 +156,7 @@ func set_current_iteration(i : int) -> void:
 	current_iteration = i
 	var iteration_param_name = "o%s_iteration" % str(get_instance_id())
 	if is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameters_changed", { iteration_param_name:current_iteration })
+		mm_deps.dependencies_update({ iteration_param_name:current_iteration })
 
 func update_buffer() -> void:
 	update_again = true
