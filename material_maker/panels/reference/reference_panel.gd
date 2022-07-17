@@ -75,6 +75,7 @@ func _on_Image_gui_input(event) -> void:
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
+			color_count = 0
 			gradient = null
 			dragging = false
 			zooming = false
@@ -83,7 +84,7 @@ func _on_Image_gui_input(event) -> void:
 			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
 		elif zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
-		elif event.button_mask & BUTTON_MASK_LEFT != 0 and selected_slot.get_parent() == $VBoxContainer/Colors:
+		elif color_count > 0 and event.button_mask & BUTTON_MASK_LEFT != 0 and selected_slot.get_parent() == $VBoxContainer/Colors:
 			color_count += 1
 			color += get_color_under_cursor()
 			selected_slot.set_color(color/color_count)
