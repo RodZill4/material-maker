@@ -30,7 +30,7 @@ Parameters
 The **Blend** node has two parameters:
 
 * The *blend mode*, that can be one of the following: *Normal*, *Dissolve*, *Multiply*, *Screen*,
-  *Overlay*, *Hard Light*, *Soft Light*, *Burn*, *Dodge*, *Lighten*, *Darken*, *Difference*.
+  *Overlay*, *Hard Light*, *Soft Light*, *Burn*, *Dodge*, *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*.
 
 * The *opacity* used when mixing the result of the blend operation with the bottom input
   when the corresponding input is not connected. When connected, the opacity channel is
