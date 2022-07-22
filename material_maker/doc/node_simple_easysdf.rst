@@ -1,7 +1,7 @@
 EasySDF node
 ~~~~~~~~~~~~
 
-The **EasySDF** node outputs a custom 2D SDF shape that can be defined using a simple editor.
+The **EasySDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
 
 Inputs
 ++++++
@@ -11,7 +11,7 @@ The EasySDF node does not have any input.
 Outputs
 +++++++
 
-The EasySDF node generates a single 2D Signed Distance Function output.
+The EasySDF node generates a single 2D or 3D Signed Distance Function output.
 
 Parameters
 ++++++++++
@@ -36,21 +36,42 @@ using the context menu.
 
 The available item types are:
 
-* Shapes: Circle, Elllipse, NGon, Star, Isoceles triangle, Rhombus, Line, Tunnel, Stairs
-* Boolean operations:
+* For 2D:
 
-  * Union joins its children into a single shape
-  * Intersection intersects its children
-  * Difference removes all subsequent children from the first
-  * Smooth union and smooth intersection are smooth variations of union and intersection
+  * Shapes: Circle, Ellipse, NGon, Star, Isoceles triangle, Rhombus, Line, Tunnel, Stairs
+  * Boolean operations:
 
-* Alter operations that are applied to their children:
+    * Union joins its children into a single shape
+    * Intersection intersects its children
+    * Difference removes all subsequent children from the first
+    * Smooth union and smooth intersection are smooth variations of union and intersection
 
-  * Flip, mirror or elongate along X and/or Y axis
-  * Round by dilating Shapes
-  * Bend
-  * Annular
-  * Morph between 2 children shapes
+  * Alter operations that are applied to their children:
+
+    * Flip, mirror or elongate along X and/or Y axis
+    * Round by dilating Shapes
+    * Bend
+    * Annular
+    * Morph between 2 children shapes
+
+* For 3D:
+
+  * Shapes: Sphere, Box, Cylinder, Capsule, Pyramid, Ellipsoid, Octahedron
+  * Revolution and Extrusion (that accept 2D SDF as children)
+  * Boolean operations:
+
+    * Union joins its children into a single shape
+    * Intersection intersects its children
+    * Difference removes all subsequent children from the first
+    * Smooth union and smooth intersection are smooth variations of union and intersection
+
+  * Alter operations that are applied to their children:
+
+    * Flip, mirror or elongate along X and/or Y axis
+    * Round by dilating Shapes
+    * Bend
+    * Annular
+    * Morph between 2 children shapes
 
 All item types have builtin translate, rotate and scale operations.
 Unless specified otherwise, all items apply a union operation to their children.
@@ -58,8 +79,10 @@ Unless specified otherwise, all items apply a union operation to their children.
 Preview
 -------
 
-The preview shows the generated shape for the whole tree in grey, and highlights the
+The 2D preview shows the generated shape for the whole tree in grey, and highlights the
 selected subtree in light grey and the selected item without alterations in light yellow.
+
+The 3D preview shows the generated shape for the whole tree.
 
 Controls for position, scale, rotation angle an item-specific parameters are shown in the
 preview and can be used to modify the selected item's parameters.
