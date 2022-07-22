@@ -23,7 +23,6 @@
 - Added *AlterHSV* node that can be used to modify the Hue, Saturation and Value of its input using
   input maps
 - Added new *Mesh* node (contributed by Arnklit)
-- Added new *AlterHSV* node that can be used to create variations of its input in HSV space
 - Updated *Normal Map* node to improve precision when the buffer option is used
 - Added new Additive and AddSub modes to the *Blend* node (contributed by Arnklit)
 - Added new packing/unpacking nodes that can store 1 (or 2) values into 2 (or 4) when using buffers
