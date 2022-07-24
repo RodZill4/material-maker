@@ -17,7 +17,7 @@
   <url type="bugtracker">https://github.com/RodZill4/material-maker/issues</url>
   <screenshots>
     <screenshot type="default">
-      <image type="source" width="1282" height="752">https://raw.githubusercontent.com/RodZill4/material-maker/master/material_maker/doc/images/screenshot.png</image>
+      <image type="source" width="1257" height="680">https://raw.githubusercontent.com/RodZill4/material-maker/master/material_maker/doc/images/screenshot.png</image>
       <caption>Editing a procedurally generated texture</caption>
     </screenshot>
   </screenshots>
