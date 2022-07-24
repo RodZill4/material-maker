@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" type="Script" id=36]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" type="Script" id=37]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -245,6 +246,34 @@ item_category = "SDF2D"
 script = ExtResource( 13 )
 item_type = "Morph"
 item_category = "SDF2D"
+
+[node name="Color" type="Node" parent="SDF2D"]
+
+[node name="Albedo" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Albedo2D"
+item_category = "SDF2D"
+channel_name = "albedo"
+type = 1
+
+[node name="Metallic" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Metallic2D"
+item_category = "SDF2D"
+channel_name = "metallic"
+
+[node name="Roughness" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Roughness2D"
+item_category = "SDF2D"
+channel_name = "roughness"
+
+[node name="Emission" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Albedo2D"
+item_category = "SDF2D"
+channel_name = "emission"
+type = 1
 
 [node name="SDF3D" type="Node" parent="."]
 

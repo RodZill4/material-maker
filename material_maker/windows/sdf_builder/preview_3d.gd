@@ -104,7 +104,6 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 				break
 	return return_value
 
-
 func _on_Preview3D_resized():
 	if viewport != null:
 		viewport.size = rect_size

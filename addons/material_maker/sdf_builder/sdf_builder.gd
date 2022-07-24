@@ -90,7 +90,8 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = fal
 				_:
 					print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
 					return {}
-	shader_model.includes = get_includes(scene)
+	if ! shader_model.empty():
+		shader_model.includes = get_includes(scene)
 	return shader_model
 
 func generate_rotate_3d(variable, _scene) -> String:

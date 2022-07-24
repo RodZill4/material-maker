@@ -27,14 +27,26 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 		return defs
 
 func get_output_defs(_show_hidden : bool = false) -> Array:
+	var outputs : Array
+	var color_output : String
+	var gs_output : String
 	match get_scene_type():
 		"SDF3D":
-			return [ { type="sdf3d" } ]
+			outputs = [ { type="sdf3d" } ]
+			color_output = "tex3d"
+			gs_output = "tex3d_gs"
 		_:
 			if editor:
-				return [ { type="rgb" } ]
+				outputs = [ { type="rgb" } ]
 			else:
-				return [ { type="sdf2d" } ]
+				outputs = [ { type="sdf2d" } ]
+			color_output = "rgba"
+			gs_output = "float"
+	outputs.push_back({type=color_output, channel="albedo"})
+	outputs.push_back({type=gs_output, channel="metallic"})
+	outputs.push_back({type=gs_output, channel="roughness"})
+	outputs.push_back({type=color_output, channel="emission"})
+	return outputs
 
 func get_scene_type() -> String:
 	if scene.empty():
