@@ -6,9 +6,6 @@
 	},
 	"parameters": {
 		"amount": 1,
-		"cutoff": false,
-		"cutoff_r1": 0.318277,
-		"cutoff_r2": 0.172759,
 		"gradient": {
 			"interpolation": 1,
 			"points": [
@@ -29,7 +26,7 @@
 			],
 			"type": "Gradient"
 		},
-		"perspective": 0.503309,
+		"perspective": 0.285821,
 		"use_perspective": true
 	},
 	"seed": 0,
@@ -41,16 +38,42 @@
 
 		],
 		"instance": "",
-		"name": "Spiral",
+		"name": "Spiral Gradient",
 		"outputs": [
 			{
 				"longdesc": "Number of repetitions of the gradient",
-				"rgba": "$gradient($cutoff ? max(spiral_$(name_uv), float(length_$(name_uv) > $cutoff_r1) + float(length_$(name_uv) < $cutoff_r2)) : spiral_$(name_uv))",
+				"rgba": "$gradient(spiral_$(name_uv))",
 				"shortdesc": "Gradient",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"max": 20,
+				"min": 0,
+				"name": "amount",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Zoom",
+				"max": 10,
+				"min": 0,
+				"name": "perspective",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Perspective",
+				"name": "use_perspective",
+				"type": "boolean"
+			},
 			{
 				"default": {
 					"interpolation": 1,
@@ -77,58 +100,6 @@
 				"name": "gradient",
 				"shortdesc": "Gradient",
 				"type": "gradient"
-			},
-			{
-				"default": false,
-				"label": "Perspective",
-				"name": "use_perspective",
-				"type": "boolean"
-			},
-			{
-				"control": "Radius1.r",
-				"default": 0.5,
-				"label": "Scale",
-				"max": 10,
-				"min": 0,
-				"name": "perspective",
-				"step": 0.1,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 1,
-				"label": "Amount",
-				"max": 20,
-				"min": 0,
-				"name": "amount",
-				"step": 1,
-				"type": "float"
-			},
-			{
-				"default": false,
-				"label": "Cutoff",
-				"name": "cutoff",
-				"type": "boolean"
-			},
-			{
-				"control": "P3.y",
-				"default": 0.5,
-				"label": "Inner Cutoff",
-				"max": 1,
-				"min": 0,
-				"name": "cutoff_r2",
-				"step": 0.1,
-				"type": "float"
-			},
-			{
-				"control": "P2.y",
-				"default": 1,
-				"label": "Outer Cutoff",
-				"max": 1,
-				"min": 0,
-				"name": "cutoff_r1",
-				"step": 0.1,
-				"type": "float"
 			}
 		]
 	},
