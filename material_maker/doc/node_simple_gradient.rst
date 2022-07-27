@@ -1,7 +1,7 @@
 Gradient nodes
 ~~~~~~~~~~~~~~
 
-The **Gradient**, **Circular Gradient** and **Radial Gradient** nodes generate
+The **Gradient**, **Circular Gradient**, **Spiral Gradient** and **Radial Gradient** nodes generate
 a color, user defined gradient.
 
 .. image:: images/node_simple_gradient.png
