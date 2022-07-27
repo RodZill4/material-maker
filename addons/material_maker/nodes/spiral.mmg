@@ -1,0 +1,136 @@
+{
+	"name": "spiral",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 1,
+		"cutoff": false,
+		"cutoff_r1": 0.318277,
+		"cutoff_r2": 0.172759,
+		"gradient": {
+			"interpolation": 1,
+			"points": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"pos": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"pos": 1,
+					"r": 1
+				}
+			],
+			"type": "Gradient"
+		},
+		"perspective": 0.503309,
+		"use_perspective": true
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec2 position_$(name_uv) = $uv - 0.5;\nfloat length_$(name_uv) = length(position_$(name_uv));\nfloat spiral_$(name_uv) = (1.0 + sin(($use_perspective ? (($perspective * 6.0) / length_$(name_uv)) : (length_$(name_uv) / ($perspective / 6.0))) + (circular_gradient(position_$(name_uv)) * 6.28318530718 * $amount))) / 2.0;",
+		"global": "float circular_gradient(vec2 uv) {\n  return fract(0.15915494309 * atan(uv.x, uv.y));\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Spiral",
+		"outputs": [
+			{
+				"longdesc": "Number of repetitions of the gradient",
+				"rgba": "$gradient($cutoff ? max(spiral_$(name_uv), float(length_$(name_uv) > $cutoff_r1) + float(length_$(name_uv) < $cutoff_r2)) : spiral_$(name_uv))",
+				"shortdesc": "Gradient",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0,
+							"pos": 0,
+							"r": 0
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"pos": 1,
+							"r": 1
+						}
+					],
+					"type": "Gradient"
+				},
+				"label": "",
+				"longdesc": "Gradient to be spread on the image",
+				"name": "gradient",
+				"shortdesc": "Gradient",
+				"type": "gradient"
+			},
+			{
+				"default": false,
+				"label": "Perspective",
+				"name": "use_perspective",
+				"type": "boolean"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Scale",
+				"max": 10,
+				"min": 0,
+				"name": "perspective",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Amount",
+				"max": 20,
+				"min": 0,
+				"name": "amount",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Cutoff",
+				"name": "cutoff",
+				"type": "boolean"
+			},
+			{
+				"control": "P3.y",
+				"default": 0.5,
+				"label": "Inner Cutoff",
+				"max": 1,
+				"min": 0,
+				"name": "cutoff_r2",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "P2.y",
+				"default": 1,
+				"label": "Outer Cutoff",
+				"max": 1,
+				"min": 0,
+				"name": "cutoff_r1",
+				"step": 0.1,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
