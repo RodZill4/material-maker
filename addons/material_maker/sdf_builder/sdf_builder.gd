@@ -64,6 +64,32 @@ func add_parameters(scene : Dictionary, data : Dictionary, parameter_defs : Arra
 func scene_get_type(scene : Dictionary):
 	return item_types[item_ids[scene.type]]
 
+func serialize_scene(s : Array) -> Array:
+	var serialized = []
+	for i in s:
+		var new_i = i.duplicate()
+		if i.has("children"):
+			new_i.children = serialize_scene(i.children)
+		if i.has("parameters"):
+			new_i.parameters = {}
+			for k in i.parameters.keys():
+				new_i.parameters[k] = MMType.serialize_value(i.parameters[k])
+		serialized.push_back(new_i)
+	return serialized
+
+func deserialize_scene(s : Array) -> Array:
+	var deserialized = []
+	for i in s:
+		var new_i = i.duplicate()
+		if i.has("children"):
+			new_i.children = serialize_scene(i.children)
+		if i.has("parameters"):
+			new_i.parameters = {}
+			for k in i.parameters.keys():
+				new_i.parameters[k] = MMType.deserialize_value(i.parameters[k])
+		deserialized.push_back(new_i)
+	return deserialized
+
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = false) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
 		return {}
@@ -75,18 +101,20 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = fal
 			if scene.parameters.has(p.name):
 				p.default = scene.parameters[p.name]
 			var new_name = "n%d_%s" % [ scene.index, p.name ]
-			shader_model.code = shader_model.code.replace("$"+p.name, "$"+new_name)
+			if shader_model.has("code"):
+				shader_model.code = shader_model.code.replace("$"+p.name, "$"+new_name)
 			p.name = new_name
 			shader_model.parameters.push_back(p)
 	else:
 		for p in scene_node.get_parameter_defs():
+			var value = scene.parameters[p.name]
 			match p.type:
 				"boolean":
-					shader_model.code = shader_model.code.replace("$"+p.name, "true" if scene.parameters[p.name] else "false")
+					shader_model.code = shader_model.code.replace("$"+p.name, "true" if value else "false")
 				"enum":
-					shader_model.code = shader_model.code.replace("$"+p.name, p.values[scene.parameters[p.name]].value)
+					shader_model.code = shader_model.code.replace("$"+p.name, p.values[value].value)
 				"float":
-					shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % scene.parameters[p.name])
+					shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % value)
 				_:
 					print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
 					return {}

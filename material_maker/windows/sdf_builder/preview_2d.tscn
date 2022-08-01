@@ -1,6 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/sdf_builder/preview_2d.gd" type="Script" id=2]
 
 [sub_resource type="Shader" id=2]
 resource_local_to_scene = true
@@ -15,13 +16,6 @@ void fragment() {
 resource_local_to_scene = true
 shader = SubResource( 2 )
 
-[sub_resource type="GDScript" id=1]
-script/source = "extends \"res://material_maker/panels/preview_2d/preview_2d_panel.gd\"
-
-func _ready():
-	pass # Replace with function body.
-"
-
 [sub_resource type="Shader" id=4]
 resource_local_to_scene = true
 
@@ -31,7 +25,7 @@ shader = SubResource( 4 )
 
 [node name="Preview2D" instance=ExtResource( 1 )]
 material = SubResource( 3 )
-script = SubResource( 1 )
+script = ExtResource( 2 )
 shader = "uniform vec2 preview_2d_size = vec2(100.0);
 uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
@@ -55,31 +49,8 @@ void fragment() {
 	}
 }
 "
-shader_accumulate = "uniform sampler2D sum;
-uniform bool clear = false;
-uniform vec2 preview_2d_size = vec2(100.0);
-uniform float preview_2d_scale = 1.2;
-uniform vec2 preview_2d_center = vec2(0.5);
-
-void fragment() {
-	vec2 ratio = preview_2d_size;
-	vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
-	vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
-	if (clear) {
-		COLOR = preview_2d(uv);
-	} else {
-		COLOR = textureLod(sum, UV, 0.0)+preview_2d(uv);
-	}
-}
-"
-shader_divide = "shader_type canvas_item;
-
-uniform sampler2D sum;
-uniform int divide = 1;
-
-void fragment() {
-	COLOR = vec4(texture(sum, UV).rgb/float(divide), 1.0);
-}"
+shader_accumulate = ""
+shader_divide = ""
 
 [node name="ContextMenu" parent="." index="15"]
 items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]

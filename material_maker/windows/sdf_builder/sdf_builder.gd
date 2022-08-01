@@ -133,7 +133,7 @@ func delete_item(item : TreeItem):
 	select_first_item()
 
 func copy_item(item : TreeItem):
-	var tmp_scene : Dictionary = item.get_meta("scene").duplicate()
+	var tmp_scene : Dictionary = mm_sdf_builder.serialize_scene([item.get_meta("scene")])[0]
 	tmp_scene.is_easysdf = true
 	OS.clipboard = JSON.print(tmp_scene)
 
@@ -142,7 +142,7 @@ func paste_item(parent : TreeItem):
 	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
 		if parent == null:
 			parent = tree.get_root()
-		var new_item : TreeItem = add_sdf_item(json, parent)
+		var new_item : TreeItem = add_sdf_item(mm_sdf_builder.deserialize_scene([json])[0], parent)
 		rebuild_scene()
 		set_preview(scene)
 		new_item.select(0)
@@ -166,7 +166,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 		if p.type == "float" and p.default is int:
 			parameters[p.name] = float(p.default)
 		else:
-			parameters[p.name] = p.default
+			parameters[p.name] = MMType.deserialize_value(p.default)
 	var item : TreeItem
 	if current_item == null:
 		item = tree.create_item()
@@ -232,7 +232,6 @@ func update_2d_orientation(root_2d : TreeItem):
 		euler = get_item_transform_3d(root_2d).basis.get_euler()
 	else:
 		euler = Vector3(0, 0, 0)
-	print(euler)
 	preview_3d.set_2d_orientation(euler)
 
 func get_local_item_transform_3d(item : TreeItem) -> Transform:
@@ -304,6 +303,12 @@ func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : S
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, new_value)
 	set_node_parameters($GenSDF, { variable:new_value })
+	ignore_parameter_change = ""
+
+func _on_color_changed(new_color, old_value, variable : String) -> void:
+	ignore_parameter_change = variable
+	$GenSDF.set_parameter(variable, MMType.serialize_value(new_color))
+	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_color) })
 	ignore_parameter_change = ""
 
 func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:

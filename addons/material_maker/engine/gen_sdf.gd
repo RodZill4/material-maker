@@ -58,6 +58,7 @@ func set_sdf_scene(s : Array):
 	var scene_type : String = get_scene_type()
 	var shader_model = { includes=[], parameters=[]}
 	var uv = "$uv"
+	# Generate distance function
 	match scene_type:
 		"SDF3D":
 			shader_model.instance = "float $(name)_d(vec3 uv, int index) {\n"
@@ -102,29 +103,13 @@ func set_sdf_scene(s : Array):
 				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
 			else:
 				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0), 0);\n" % uv
-			shader_model.outputs = [{}]
-			shader_model.outputs[0].sdf3d = "$(name_uv)_d"
-			shader_model.outputs[0].type = "sdf3d"
 			shader_model.parameters = parameter_defs
+			shader_model.outputs = [{ sdf3d = "$(name_uv)_d", type = "sdf3d" }]
 		_:
 			if editor:
-				shader_model.code = "float edgewidth = 0.0001;\n"
-				shader_model.code += "float $(name_uv)_d = -$(name)_d(%s, 0);\n" % uv
-				shader_model.code += "float $(name_uv)_d2 = -$(name)_d(%s, int(round($index)));\n" % uv
-				shader_model.code += "float $(name_uv)_d3 = -$(name)_d(%s, -int(round($index)));\n" % uv
-				shader_model.code += "float color = 0.25*smoothstep(-edgewidth, edgewidth, $(name_uv)_d);\n"
-				shader_model.code += "color += 0.5*smoothstep(-edgewidth, edgewidth, $(name_uv)_d2);\n"
-				shader_model.code += "color += 0.05*sin($(name_uv)_d*251.327412287);\n"
-				shader_model.outputs = [{}]
-				shader_model.outputs[0].rgb = "clamp(color+vec3(0.2, 0.2, 0.0)*smoothstep(-edgewidth, edgewidth, $(name_uv)_d3), vec3(0.0), vec3(1.0))"
-				shader_model.outputs[0].type = "rgb"
 				parameter_defs.push_back({default=-1, name="index", type="float"})
-				shader_model.parameters = parameter_defs
-			else:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
-				shader_model.outputs = [{}]
-				shader_model.outputs[0].sdf2d = "$(name_uv)_d"
-				shader_model.outputs[0].type = "sdf2d"
+			shader_model.parameters = parameter_defs
+			shader_model.outputs = [{ sdf2d = "$(name)_d(%s, 0)" % uv, type = "sdf2d" }]
 	for p in parameter_defs:
 		if p.type == "float" and p.default is int:
 			parameters[p.name] = float(p.default)
@@ -133,12 +118,12 @@ func set_sdf_scene(s : Array):
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:
-	data.sdf_scene = scene
+	data.sdf_scene = mm_sdf_builder.serialize_scene(scene)
 	return data
 
 func _deserialize(data : Dictionary) -> void:
 	if data.has("sdf_scene"):
-		set_sdf_scene(data.sdf_scene)
+		set_sdf_scene(mm_sdf_builder.deserialize_scene(data.sdf_scene))
 
 func edit(node) -> void:
 	if scene != null:

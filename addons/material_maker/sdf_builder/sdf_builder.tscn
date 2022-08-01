@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" type="Script" id=36]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" type="Script" id=37]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform.gd" type="Script" id=38]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -396,3 +397,10 @@ item_category = "SDF3D"
 script = ExtResource( 32 )
 item_type = "Morph3D"
 item_category = "SDF3D"
+
+[node name="Texture" type="Node" parent="."]
+
+[node name="Uniform" type="Node" parent="Texture"]
+script = ExtResource( 38 )
+item_type = "Uniform"
+item_category = "TEX"

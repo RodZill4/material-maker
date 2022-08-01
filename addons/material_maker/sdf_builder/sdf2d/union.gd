@@ -37,9 +37,11 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 		data.code += "if (index == -%d) return %s*$scale;\n" % [ scene.index, output_name ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, uv, editor)
-		if not data2.empty():
+		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
-			data.code += data2.code
+		if data2.has("outputs"):
+			if data2.has("code"):
+				data.code += data2.code
 			if assigned:
 				data.code += "%s = min(%s, %s);\n" % [ output_name, output_name, data2.outputs[0].sdf2d ]
 			else:
