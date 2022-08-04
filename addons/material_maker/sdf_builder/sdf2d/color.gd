@@ -19,9 +19,7 @@ func get_includes():
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var data : Dictionary = { parameters=[] }
 	for s in scene.children:
-		print("Getting parameters")
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, uv, editor)
-		print(data2)
 		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
 	return data

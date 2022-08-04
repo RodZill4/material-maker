@@ -61,10 +61,13 @@ func set_sdf_scene(s : Array):
 	# Generate distance function
 	match scene_type:
 		"SDF3D":
-			shader_model.instance = "float $(name)_d(vec3 uv, int index) {\n"
+			shader_model.instance = "float $(name)_d(vec3 uv"
 		_:
 			uv = "$uv-vec2(0.5)"
-			shader_model.instance = "float $(name)_d(vec2 uv, int index) {\n"
+			shader_model.instance = "float $(name)_d(vec2 uv"
+	if editor:
+		shader_model.instance += ", int index"
+	shader_model.instance += ") {\n"
 	var first : bool = true
 	var parameter_defs = []
 	for i in scene:
@@ -94,8 +97,10 @@ func set_sdf_scene(s : Array):
 					shader_model.instance += "return_value = min(return_value, %s);\n" % output_name
 	if first:
 		shader_model.instance += "return 1.0;"
-	else:
+	elif editor:
 		shader_model.instance += "return index == 0 ? return_value : 1.0;"
+	else:
+		shader_model.instance += "return return_value;"
 	shader_model.instance += "}\n"
 	match scene_type:
 		"SDF3D":
@@ -106,10 +111,12 @@ func set_sdf_scene(s : Array):
 			shader_model.parameters = parameter_defs
 			shader_model.outputs = [{ sdf3d = "$(name_uv)_d", type = "sdf3d" }]
 		_:
+			shader_model.parameters = parameter_defs
 			if editor:
 				parameter_defs.push_back({default=-1, name="index", type="float"})
-			shader_model.parameters = parameter_defs
-			shader_model.outputs = [{ sdf2d = "$(name)_d(%s, 0)" % uv, type = "sdf2d" }]
+				shader_model.outputs = [{ sdf2d = "$(name)_d(%s, 0)" % uv, type = "sdf2d" }]
+			else:
+				shader_model.outputs = [{ sdf2d = "$(name)_d(%s)" % uv, type = "sdf2d" }]
 	for p in parameter_defs:
 		if p.type == "float" and p.default is int:
 			parameters[p.name] = float(p.default)

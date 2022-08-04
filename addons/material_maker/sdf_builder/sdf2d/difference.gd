@@ -1,8 +1,4 @@
-extends Node
-
-export var item_type : String
-export var item_category : String
-export var icon : Texture
+extends "res://addons/material_maker/sdf_builder/base.gd"
 
 func _ready():
 	pass # Replace with function body.
