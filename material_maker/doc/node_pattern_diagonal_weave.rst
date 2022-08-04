@@ -1,5 +1,5 @@
 Diagonal Weave node
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 The **Diagonal Weave** node outputs a weaving pipes pattern.
 
