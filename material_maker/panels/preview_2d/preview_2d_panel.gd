@@ -1,7 +1,10 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
+export(String) var config_var_suffix : String = ""
+
 export(String, MULTILINE) var shader_accumulate : String = ""
 export(String, MULTILINE) var shader_divide : String = ""
+# warning-ignore:unused_class_variable
 export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)
@@ -47,6 +50,10 @@ func update_Guides_menu() -> void:
 	$ContextMenu/Guides.add_separator()
 	$ContextMenu/Guides.add_item("Change color", 1000)
 	$ContextMenu.add_submenu_item("Guides", "Guides")
+	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):
+		_on_View_id_pressed(mm_globals.get_config("preview"+config_var_suffix+"_view_mode"))
+	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
+		_on_PostProcess_id_pressed(mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess"))
 
 func update_postprocess_menu() -> void:
 	$ContextMenu/PostProcess.clear()
@@ -224,6 +231,10 @@ func _on_gui_input(event):
 			new_center = center-event.relative*scale/multiplier
 		elif zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
+	elif event is InputEventPanGesture:
+		new_center = center-event.delta*10.0*scale/multiplier
+	elif event is InputEventMagnifyGesture:
+		new_scale = clamp(new_scale/event.factor, 0.005, 5.0)
 	if new_scale != scale:
 		new_center = center+offset_from_center*(scale-new_scale)/multiplier
 		scale = new_scale
@@ -262,6 +273,7 @@ func _on_View_id_pressed(id):
 		set_temporal_aa(true)
 	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_param("mode", view_mode)
+	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
 
 func _on_Guides_id_pressed(id):
 	if id == 1000:
@@ -283,4 +295,4 @@ func _on_GridSize_value_changed(value):
 func _on_PostProcess_id_pressed(id):
 	current_postprocess_option = id
 	set_generator(generator, output, true)
-
+	mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", current_postprocess_option)

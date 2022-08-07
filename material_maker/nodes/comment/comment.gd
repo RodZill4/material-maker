@@ -12,9 +12,11 @@ var pallette_colors = [
 	Color("B1A7F0")
 ]
 
+const AUTO_SIZE_PADDING : int = 22
+
 func _ready():
 	for s in [ "comment", "commentfocus" ]:
-		var frame : StyleBoxFlat = get_node("/root/MainWindow").theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
+		var frame : StyleBoxFlat = mm_globals.main_window.theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
 		add_stylebox_override(s, frame);
 
 func _draw() -> void:
@@ -28,14 +30,57 @@ func set_generator(g) -> void:
 	label.text = generator.text
 	rect_size = generator.size
 	title = generator.title
-	set_color(generator.color)
+
+	set_stylebox_color(generator.color)
+	
+	if mm_globals.get_config("auto_size_comment"):
+		resize_to_selection()
 
 func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
 	if parent.use_snap:
 		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
+	if rect_size == new_size:
+		return
+	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=rect_size }
+	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
+	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
 	rect_size = new_size
 	generator.size = new_size
+
+func resize_to_selection() -> void:
+	# If any nodes are selected on initialization automatically adjust size to match
+	var parent : GraphEdit = get_parent()
+	var selected_nodes : Array = parent.get_selected_nodes()
+	
+	if not selected_nodes.empty():
+		var min_bounds : Vector2 = Vector2(INF, INF)
+		var max_bounds : Vector2 = Vector2(-INF, -INF)
+		for node in selected_nodes:
+			var node_pos : Vector2 = node.offset
+			var node_size : Vector2 = node.get_size()
+			
+			# Top-left corner
+			if node_pos.x < min_bounds.x:
+				min_bounds.x = node_pos.x
+			if node_pos.y < min_bounds.y:
+				min_bounds.y = node_pos.y
+				
+			# Bottom-right corner
+			var bottom_right : Vector2 = Vector2(node_pos.x + node_size.x, node_pos.y + node_size.y)
+			if bottom_right.x > max_bounds.x:
+				max_bounds.x = bottom_right.x
+			if bottom_right.y > max_bounds.y:
+				max_bounds.y = bottom_right.y
+				
+		offset = Vector2(min_bounds.x - AUTO_SIZE_PADDING, min_bounds.y - AUTO_SIZE_PADDING)
+		
+		# Size needs to account for offset padding as well (Padding * 2)
+		var new_size : Vector2 = Vector2(max_bounds.x - min_bounds.x + AUTO_SIZE_PADDING * 2,
+										 max_bounds.y - min_bounds.y + AUTO_SIZE_PADDING * 2)
+		
+		rect_size = new_size
+		generator.size = new_size
 
 func _on_Label_gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.doubleclick and ev.button_index == BUTTON_LEFT:
@@ -63,7 +108,7 @@ func _on_TextEdit_focus_exited() -> void:
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
 		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
-			var light_theme = "light" in get_node("/root/MainWindow").theme.resource_path
+			var light_theme = "light" in mm_globals.main_window.theme.resource_path
 			accept_event()
 			$Popup.rect_position = event.global_position
 			$Popup.popup()
@@ -82,6 +127,9 @@ func _on_gui_input(event) -> void:
 		elif event.doubleclick:
 			name_change_popup()
 
+func update_node() -> void:
+	rect_size = generator.size
+	set_stylebox_color(generator.color)
 
 func name_change_popup() -> void:
 	accept_event()
@@ -97,12 +145,19 @@ func name_change_popup() -> void:
 
 func set_color(c):
 	$Popup.hide()
+	if c == generator.color:
+		return
+	var undo_action = { type="comment_color_change", node=generator.get_hier_name(), color=generator.color }
+	var redo_action = { type="comment_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change comment color", [undo_action], [redo_action], true)
 	generator.color = c
-	var color = c
-	color.a = 0.3
-	get_stylebox("comment").bg_color = color
-	get_stylebox("commentfocus").bg_color = color
+	set_stylebox_color(c)
 	get_parent().send_changed_signal()
+
+func set_stylebox_color(c):
+	c.a = 0.3
+	get_stylebox("comment").bg_color = c
+	get_stylebox("commentfocus").bg_color = c
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:

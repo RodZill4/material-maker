@@ -18,4 +18,4 @@ func get_includes():
 	return [ "rotate", "sdstairs" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = sdStairs(vec2(1.0, -1.0)*%s+vec2($size_x, $size_y), 2.0*vec2($size_x, $size_y)/$steps, $steps);\n" % [ scene.index, uv ]
+	return "sdStairs(vec2(1.0, -1.0)*%s+vec2($size_x, $size_y), 2.0*vec2($size_x, $size_y)/$steps, $steps)" % [ uv ]

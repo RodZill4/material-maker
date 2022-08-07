@@ -17,19 +17,19 @@ var initial_camera_stand_transform: Transform
 signal need_update(me)
 
 const MENU = [
-	{ menu="Model", submenu="model_list", description="Select" },
-	{ menu="Model", command="configure_model", description="Configure" },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Off", command_parameter=0 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Slow", command_parameter=0.01 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Medium", command_parameter=0.05 },
-	{ menu="Model/Rotate", command="set_rotate_model_speed", description="Fast", command_parameter=0.1 },
-	{ menu="Model/Generate map", submenu="generate_mesh_normal_map", description="Mesh normal" },
-	{ menu="Model/Generate map", submenu="generate_inverse_uv_map", description="Inverse UV" },
-	{ menu="Model/Generate map", submenu="generate_curvature_map", description="Curvature" },
-	{ menu="Model/Generate map", submenu="generate_ao_map", description="Ambient Occlusion" },
-	{ menu="Model/Generate map", submenu="generate_thickness_map", description="Thickness" },
-	{ menu="Environment", submenu="environment_list", description="Select" },
-	{ menu="Environment", submenu="navigation_styles_list", description="Navigation Styles"},
+	{ menu="Model/Select", submenu="model_list" },
+	{ menu="Model/Configure", command="configure_model" },
+	{ menu="Model/Rotate/Off", command="set_rotate_model_speed", command_parameter=0 },
+	{ menu="Model/Rotate/Slow", command="set_rotate_model_speed", command_parameter=0.01 },
+	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
+	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
+	{ menu="Model/Generate map/Mesh normal", submenu="generate_mesh_normal_map" },
+	{ menu="Model/Generate map/Inverse UV", submenu="generate_inverse_uv_map" },
+	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
+	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
+	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
+	{ menu="Environment/Select", submenu="environment_list" },
+	{ menu="Environment/Navigation Styles", submenu="navigation_styles_list" },
 ]
 
 const NAVIGATION_STYLES: Dictionary = {
@@ -40,7 +40,7 @@ const NAVIGATION_STYLES: Dictionary = {
 
 func _ready() -> void:
 	ui = get_node(ui_path)
-	get_node("/root/MainWindow").create_menus(MENU, self, ui)
+	mm_globals.menu_manager.create_menus(MENU, self, ui)
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 
@@ -55,7 +55,7 @@ func _ready() -> void:
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
 	# attempts to read the setting before the configuration file is loaded.
 	yield(get_tree(), "idle_frame")
-	sun.shadow_enabled = get_node("/root/MainWindow").get_config("ui_3d_preview_sun_shadow")
+	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
 
 func _process(delta: float) -> void:
 	navigation_style.handle_process(delta)
@@ -94,8 +94,8 @@ func _on_Model_item_selected(id) -> void:
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.mode = FileDialog.MODE_OPEN_FILE
 		dialog.add_filter("*.obj;OBJ model File")
-		if get_node("/root/MainWindow").config_cache.has_section_key("path", "mesh"):
-			dialog.current_dir = get_node("/root/MainWindow").config_cache.get_value("path", "mesh")
+		if mm_globals.config.has_section_key("path", "mesh"):
+			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
 		var files = dialog.select_files()
 		while files is GDScriptFunctionState:
 			files = yield(files, "completed")
@@ -105,7 +105,7 @@ func _on_Model_item_selected(id) -> void:
 		select_object(id)
 
 func do_load_custom_mesh(file_path) -> void:
-	get_node("/root/MainWindow").config_cache.set_value("path", "mesh", file_path.get_base_dir())
+	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	var mesh = $ObjLoader.load_obj_file(file_path)
 	if mesh != null:
@@ -118,6 +118,8 @@ func select_object(id) -> void:
 	current_object = objects.get_child(id)
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
+	var aabb : AABB = current_object.get_aabb()
+	current_object.transform.origin = -(aabb.position+0.5*aabb.size)
 
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
@@ -130,7 +132,7 @@ func _on_NavigationStyles_item_selected(id) -> void:
 
 func _on_material_preview_size_changed() -> void:
 	# Apply supersampling to the new viewport size.
-	$MaterialPreview.size = rect_size * get_node("/root/MainWindow").preview_rendering_scale_factor
+	$MaterialPreview.size = rect_size * mm_globals.main_window.preview_rendering_scale_factor
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()
@@ -175,8 +177,8 @@ func generate_map(generate_function : String, size : int) -> void:
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image File")
 	dialog.add_filter("*.exr;EXR image File")
-	if get_node("/root/MainWindow").config_cache.has_section_key("path", "maps"):
-		dialog.current_dir = get_node("/MainWindow").config_cache.get_value("path", "maps")
+	if mm_globals.config.has_section_key("path", "maps"):
+		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")

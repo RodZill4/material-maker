@@ -51,13 +51,32 @@ func build_field_selection_test(t1):
 		return null
 	return t1.value
 
+func build_function_header(t1, t2, t3):
+	return { return_type=t1, name=t2, parameters=[] }
+
+func build_function_header_with_parameters(t1, t2):
+	t1.value.parameters.push_back(t2)
+	return t1.value
+
+func build_function_header_with_parameters_2(t1, t2, t3):
+	t1.value.parameters.push_back(t3)
+	return t1.value
+
 func build_function_call_header(t1, t2):
 	return { name=t1, parameters=[] }
 
 func build_function_call_header_with_parameters(t1, t2):
 	t1.value.parameters.push_back(t2)
 	return t1.value
-	
+
 func build_function_call_header_with_parameters_2(t1, t2, t3):
 	t1.value.parameters.push_back(t3)
 	return t1.value
+
+func build_translation_unit(t1):
+	return [ t1 ]
+
+func build_translation_unit_2(t1, t2):
+	t1.value.push_back(t2)
+	return t1.value
+

@@ -8,6 +8,25 @@ func _ready():
 	set_column_expand(1, false)
 	set_column_min_width(1, 28)
 
+func get_sdf_item_type(item : TreeItem) -> Object:
+	if item == null or not item.has_meta("scene"):
+		return null
+	var scene = item.get_meta("scene")
+	return mm_sdf_builder.scene_get_type(scene)
+
+func get_sdf_item_type_name(item : TreeItem) -> String:
+	var type : Object = get_sdf_item_type(item)
+	if type == null:
+		return ""
+	return type.item_category
+
+func get_nearest_parent(item : TreeItem, type : String) -> TreeItem:
+	while item != null:
+		if get_sdf_item_type_name(item) == type:
+			break
+		item = item.get_parent()
+	return item
+
 func get_drag_data(position):
 	var item : TreeItem = get_item_at_position(position)
 	if item == null:
@@ -27,13 +46,30 @@ func item_is_parent(item1 : TreeItem, item2 : TreeItem) -> bool:
 		item2 = item2.get_parent()
 	return false
 
+func get_valid_children_types(parent : TreeItem):
+	var valid_children_types : Array = []
+	var parent_type : Object = get_sdf_item_type(parent)
+	if parent_type == null:
+		var first_child : TreeItem = get_root().get_children()
+		if first_child == null:
+			valid_children_types = [ "SDF2D", "SDF3D" ]
+		else:
+			valid_children_types = [ get_sdf_item_type_name(first_child) ]
+	elif parent_type.has_method("get_children_types"):
+		valid_children_types = parent_type.get_children_types()
+	else:
+		valid_children_types.push_back(parent_type.item_category)
+	return valid_children_types
+
 func can_drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var destination : TreeItem = get_item_at_position(position)
+		if destination != null and get_drop_section_at_position(position) != 0:
+			destination = destination.get_parent()
+		if not mm_sdf_builder.scene_get_type(data.item.get_meta("scene")).item_category in get_valid_children_types(destination):
+			return false
 		if destination == null:
 			return true
-		if get_drop_section_at_position(position) != 0:
-			destination = destination.get_parent()
 		return ! item_is_parent(data.item, destination)
 	return false
 

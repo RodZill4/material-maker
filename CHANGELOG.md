@@ -1,3 +1,39 @@
+# Material Maker 1.0
+
+## General
+
+- Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
+- In the Reference panel, it is now possible to scan an average color by dragging the mouse cursor around
+- When creating a new painting project, MM now checks the model can be painted (i.e. has a single surface and correct UVs)
+- The configuration of 2D preview and graph editor panels is now saved
+- Added support for gestures in 2D and 3D preview as well as painting panels
+- Added a new Download button for translations in the Preferences dialog
+- Pasting a list of HTML colors (in hex format) into the graph editor now creates a new Colorize node
+
+## Nodes
+
+- Added 3D SDF shapes, primitives and transforms to *EasySDF* node and corresponding editor
+- Added *Seven Segment Display* node with variable length/width (contributed by williamchange)
+- Added *Smooth Mix* (a mix-by-height node with smooth transition between materials) Worflow node
+- Updated *Dilate* node to improve precision in higher resolutions (contributed by Arnklit and wojtekpil)
+- Added new *Morphology* node that provides dilation and erosion operations
+- Added *White Noise*, *Clouds Noise* and *Directional Noise* nodes (contributed by Arnklit)
+- Added new *Make Tileable Square* node (contributed by Arnklit)
+- Added *Slope* node, that generates slopes from the highest areas of a heightmap
+- Added *AlterHSV* node that can be used to modify the Hue, Saturation and Value of its input using
+  input maps
+- Added new *Mesh* node (contributed by Arnklit)
+- Updated *Normal Map* node to improve precision when the buffer option is used
+- Added new Additive and AddSub modes to the *Blend* node (contributed by Arnklit)
+- Added new packing/unpacking nodes that can store 1 (or 2) values into 2 (or 4) when using buffers
+  for better precision (contributed by Arnklit and wojtekpil)
+- Added a flip parameter to the *Mirror* node:w
+
+## Miscellaneous
+
+- MacOS port is now signed and notarized
+- Material Maker is now based on Godot 3.4.4
+
 # Material Maker 0.99
 
 ## General

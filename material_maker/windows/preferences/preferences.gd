@@ -38,6 +38,10 @@ func _on_Cancel_pressed():
 	queue_free()
 
 
+func _on_Preferences_about_to_show():
+	yield(get_tree(), "idle_frame")
+	_on_VBoxContainer_minimum_size_changed()
+
 func _on_VBoxContainer_minimum_size_changed():
 	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
 
@@ -55,6 +59,18 @@ func _on_InstallLanguage_pressed():
 	if files.size() > 0:
 		var locale = load("res://material_maker/locale/locale.gd").new()
 		locale.install_translation(files[0])
-		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
-		$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
-		
+		update_language_list()
+
+func update_language_list():
+	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
+	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
+
+func _on_DownloadLanguage_pressed():
+	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instance()
+	mm_globals.main_window.add_child(download_popup)
+	download_popup.connect("tree_exited", self, "_on_DownloadLanguage_closed")
+
+func _on_DownloadLanguage_closed():
+	var locale = load("res://material_maker/locale/locale.gd").new()
+	locale.read_translations()
+	update_language_list()

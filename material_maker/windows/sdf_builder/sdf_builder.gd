@@ -4,6 +4,9 @@ extends WindowDialog
 onready var shape_names = mm_sdf_builder.get_shape_names()
 
 onready var tree : Tree = $VBoxContainer/Main/Tree
+onready var preview_2d : ColorRect = $VBoxContainer/Main/Preview2D
+onready var preview_3d : ViewportContainer = $VBoxContainer/Main/Preview3D
+onready var parameters_panel : GridContainer = $VBoxContainer/Main/Parameters
 
 
 var scene : Array = []
@@ -28,6 +31,28 @@ func _ready():
 	tree.set_hide_root(true)
 	if tree.get_root() == null:
 		tree.create_item()
+	#popup_centered()
+
+func set_preview(s : Array):
+	if s.empty():
+		return
+	var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s[0].type]]
+	$GenSDF.set_sdf_scene(s)
+	match item_type.item_category:
+		"SDF2D":
+			preview_2d.visible = true
+			preview_2d.set_generator($GenSDF, 0, true)
+			preview_3d.visible = false
+		"SDF3D":
+			preview_2d.visible = false
+			preview_3d.visible = true
+			preview_3d.set_generator($GenSDF, 0, true)
+
+func select_first_item():
+	var top = tree.get_root().get_children()
+	if top != null:
+		top.select(0)
+		_on_Tree_item_selected()
 
 func set_sdf_scene(s : Array, parent = null):
 	var parent_item
@@ -42,11 +67,8 @@ func set_sdf_scene(s : Array, parent = null):
 	for i in s:
 		add_sdf_item(i, parent_item)
 	if parent == null:
-		$GenSDF.set_sdf_scene(scene)
-		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
-	var top = tree.get_root().get_children()
-	if top != null:
-		tree.get_root().get_children().select(0)
+		set_preview(scene)
+	select_first_item()
 
 func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	var item = tree.create_item(parent_item)
@@ -77,7 +99,8 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 
 func show_menu(current_item : TreeItem):
 	var menu : PopupMenu = PopupMenu.new()
-	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ])
+	var filter : Array = tree.get_valid_children_types(current_item)
+	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ], filter)
 	menu.add_child(add_menu)
 	menu.add_submenu_item("Create", add_menu.name)
 	if current_item != null:
@@ -106,8 +129,8 @@ func delete_item(item : TreeItem):
 	item.get_parent().remove_child(item)
 	tree.update()
 	rebuild_scene()
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
+	select_first_item()
 
 func copy_item(item : TreeItem):
 	var tmp_scene : Dictionary = item.get_meta("scene").duplicate()
@@ -121,8 +144,7 @@ func paste_item(parent : TreeItem):
 			parent = tree.get_root()
 		var new_item : TreeItem = add_sdf_item(json, parent)
 		rebuild_scene()
-		$GenSDF.set_sdf_scene(scene)
-		$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+		set_preview(scene)
 		new_item.select(0)
 
 func _on_menu(id : int, current_item : TreeItem):
@@ -132,11 +154,7 @@ func _on_menu(id : int, current_item : TreeItem):
 		MENU_PASTE:
 			paste_item(current_item)
 		MENU_DELETE:
-			current_item.get_parent().remove_child(current_item)
-			tree.update()
-			rebuild_scene()
-			$GenSDF.set_sdf_scene(scene)
-			$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+			delete_item(current_item)
 
 func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var shape = mm_sdf_builder.item_types[id]
@@ -163,33 +181,38 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
 	item.add_button(1, BUTTON_SHOWN, 0)
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 	item.select(0)
 
-func get_item_transform(item : TreeItem) -> Transform2D:
+
+func get_local_item_transform_2d(item : TreeItem) -> Transform2D:
+	var item_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
+	if item.has_meta("scene"):
+		var scene = item.get_meta("scene")
+		if scene.has("parameters"):
+			var parameters = scene.parameters
+			var t : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
+			if parameters.has("angle"):
+				t = t.rotated(deg2rad(parameters.angle))
+			if parameters.has("scale"):
+				t = t.scaled(Vector2(parameters.scale, parameters.scale))
+			if parameters.has("position_x") and parameters.has("position_y"):
+				t = Transform2D(0, Vector2(parameters.position_x, parameters.position_y))*t
+			return t
+	return Transform2D(0, Vector2(0.0, 0.0))
+
+func get_item_transform_2d(item : TreeItem) -> Transform2D:
 	var item_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 	while item != null:
-		if item.has_meta("scene"):
-			var scene = item.get_meta("scene")
-			if scene.has("parameters"):
-				var parameters = scene.parameters
-				var t : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
-				if parameters.has("angle"):
-					t = t.rotated(deg2rad(parameters.angle))
-				if parameters.has("scale"):
-					t = t.scaled(Vector2(parameters.scale, parameters.scale))
-				if parameters.has("position_x") and parameters.has("position_y"):
-					t = Transform2D(0, Vector2(parameters.position_x, parameters.position_y))*t
-				item_transform = t*item_transform
+		item_transform = get_local_item_transform_2d(item)*item_transform
 		item = item.get_parent()
 	return item_transform
 
-func update_center_transform():
-	var center_transform : Transform2D = get_item_transform(tree.get_selected().get_parent())
-	$VBoxContainer/Main/Preview2D.set_center_transform(center_transform)
+func update_center_transform_2d():
+	var center_transform : Transform2D = get_item_transform_2d(tree.get_selected().get_parent())
+	preview_2d.set_center_transform(center_transform)
 
-func update_local_transform():
+func update_local_transform_2d():
 	var item : TreeItem = tree.get_selected()
 	if item.has_meta("scene"):
 		var item_scene = item.get_meta("scene")
@@ -201,42 +224,92 @@ func update_local_transform():
 			var s : float = 1.0
 			if parameters.has("scale"):
 				s = parameters.scale
-			$VBoxContainer/Main/Preview2D.set_local_transform(r, s)
+			preview_2d.set_local_transform(r, s)
+
+func update_2d_orientation(root_2d : TreeItem):
+	var euler : Vector3
+	if root_2d != null:
+		euler = get_item_transform_3d(root_2d).basis.get_euler()
+	else:
+		euler = Vector3(0, 0, 0)
+	print(euler)
+	preview_3d.set_2d_orientation(euler)
+
+func get_local_item_transform_3d(item : TreeItem) -> Transform:
+	if item.has_meta("scene"):
+		var scene = item.get_meta("scene")
+		if scene.has("parameters"):
+			var parameters = scene.parameters
+			var t : Transform = Transform()
+			if parameters.has("angle_x") and parameters.has("angle_y") and parameters.has("angle_z"):
+				t = Transform(Basis(Vector3(deg2rad(parameters.angle_x), deg2rad(parameters.angle_y), deg2rad(parameters.angle_z))))
+			elif parameters.has("angle"):
+				t = Transform(Basis(Vector3(0, 0, deg2rad(parameters.angle))))
+			if parameters.has("scale"):
+				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
+			if parameters.has("position_x") and parameters.has("position_y"):
+				var origin = Vector3(parameters.position_x, parameters.position_y, 0.0)
+				if parameters.has("position_z"):
+					origin.z = parameters.position_z
+				t = Transform(Basis(), origin)*t
+			return t
+	return Transform()
+
+func get_item_transform_3d(item : TreeItem) -> Transform:
+	var item_transform : Transform = Transform()
+	while item != null:
+		item_transform = get_local_item_transform_3d(item)*item_transform
+		item = item.get_parent()
+	return item_transform
+
+func update_center_transform_3d():
+	var parent_transform : Transform = get_item_transform_3d(tree.get_selected().get_parent())
+	preview_3d.set_parent_transform(parent_transform)
+
+func update_local_transform_3d():
+	var local_transform : Transform = get_local_item_transform_3d(tree.get_selected())
+	preview_3d.set_local_transform(local_transform)
+
 
 func show_parameters(prefix : String):
 	controls = {}
-	for c in $VBoxContainer/Main/Parameters.get_children():
-		$VBoxContainer/Main/Parameters.remove_child(c)
+	for c in parameters_panel.get_children():
+		parameters_panel.remove_child(c)
 		c.free()
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
 		if p.has("label"):
 			var label : Label = Label.new()
 			label.text = p.label if p.has("label") else ""
 			label.size_flags_horizontal = SIZE_EXPAND_FILL
-			$VBoxContainer/Main/Parameters.add_child(label)
+			parameters_panel.add_child(label)
 		else:
-			$VBoxContainer/Main/Parameters.add_child(Control.new())
+			parameters_panel.add_child(Control.new())
 		var control = GENERIC.create_parameter_control(p, false)
 		control.name = p.name
 		control.size_flags_horizontal = SIZE_FILL
-		$VBoxContainer/Main/Parameters.add_child(control)
+		parameters_panel.add_child(control)
 		controls[p.name] = control
 	GENERIC.initialize_controls_from_generator(controls, $GenSDF, self)
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
-		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter_def(p.name).default)
+		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter(p.name))
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
 	var item : TreeItem = instance_from_id(variable.right(1).to_int())
 	var parameter_name : String = variable.right(variable.find("_")+1)
 	item.get_meta("scene").parameters[parameter_name] = value
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 
 func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : String = "") -> void:
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, new_value)
 	set_node_parameters($GenSDF, { variable:new_value })
+	ignore_parameter_change = ""
+
+func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
+	ignore_parameter_change = variable
+	$GenSDF.set_parameter(variable, new_polygon)
+	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_polygon) })
 	ignore_parameter_change = ""
 
 func on_parameter_changed(p : String, v) -> void:
@@ -246,13 +319,28 @@ func on_parameter_changed(p : String, v) -> void:
 		GENERIC.update_control_from_parameter(controls, p, v)
 
 func _on_Tree_item_selected():
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF)
-	update_local_transform()
-	update_center_transform()
-	var index : int = tree.get_selected().get_meta("scene").index
-	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % index)
+	var selected_item = tree.get_selected()
+	var scene = selected_item.get_meta("scene")
+	var index : int = scene.index
 	show_parameters("n%d" % index)
-	$GenSDF.set_parameter("index", float(index))
+	match $GenSDF.get_scene_type():
+		"SDF2D":
+			preview_2d.set_generator($GenSDF)
+			update_local_transform_2d()
+			update_center_transform_2d()
+			preview_2d.setup_controls("n%d" % index)
+			$GenSDF.set_parameter("index", float(index))
+		"SDF3D":
+			preview_3d.set_generator($GenSDF)
+			preview_3d.mode = 1 if mm_sdf_builder.scene_get_type(scene).item_category == "SDF3D" else 0
+			update_local_transform_3d()
+			update_center_transform_3d()
+			var parent_3d = null
+			if tree.get_sdf_item_type_name(selected_item) == "SDF2D":
+				parent_3d = tree.get_nearest_parent(selected_item, "SDF3D")
+			update_2d_orientation(parent_3d)
+			preview_3d.setup_controls("n%d" % index)
+			$GenSDF.set_parameter("index", float(index))
 
 func _on_Tree_button_pressed(item, column, _id):
 	var item_scene : Dictionary = item.get_meta("scene")
@@ -262,18 +350,23 @@ func _on_Tree_button_pressed(item, column, _id):
 	else:
 		item_scene.hidden = true
 		item.set_button(1, 0, BUTTON_HIDDEN)
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 
 func set_node_parameters(generator, parameters):
+	var parameters_changed : bool = false
 	for p in parameters.keys():
 		var value = MMType.deserialize_value(parameters[p])
 		generator.set_parameter(p, value)
 		var item : TreeItem = instance_from_id(p.right(1).to_int())
-		var parameter_name : String = p.right(p.find("_")+1)
-		item.get_meta("scene").parameters[parameter_name] = value
-	update_local_transform()
-	$VBoxContainer/Main/Preview2D.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
+		if item != null:
+			var parameter_name : String = p.right(p.find("_")+1)
+			if item.get_meta("scene").parameters.has(parameter_name):
+				item.get_meta("scene").parameters[parameter_name] = value
+				parameters_changed = true
+	if parameters_changed:
+		update_local_transform_2d()
+		preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
+		update_local_transform_3d()
 
 func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	var new_item : TreeItem = tree.create_item(parent, index)
@@ -287,24 +380,32 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 		c = c.get_next()
 	return new_item
 
-func _on_Tree_drop_item(item, dest, position):
-	var source_transform = get_item_transform(item)
-	var dest_transform = get_item_transform(dest)
-	var new_transform : Transform2D = dest_transform.affine_inverse()*source_transform
+func move_item(item, dest, position):
+	var source_transform : Transform = get_item_transform_3d(item)
+	var dest_transform : Transform = get_item_transform_3d(dest)
+	var new_transform : Transform = dest_transform.affine_inverse()*source_transform
 	var new_item : TreeItem = duplicate_item(item, dest, position)
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
-	$GenSDF.set_sdf_scene(scene)
-	$VBoxContainer/Main/Preview2D.set_generator($GenSDF, 0, true)
+	set_preview(scene)
 	new_item.select(0)
 	var index = new_item.get_meta("scene").index
 	var parameters : Dictionary = {}
-	parameters["n%d_angle" % index] = rad2deg(new_transform.get_rotation())
-	parameters["n%d_scale" % index] = new_transform.get_scale().x
-	parameters["n%d_position_x" % index] = new_transform.get_origin().x
-	parameters["n%d_position_y" % index] = new_transform.get_origin().y
+	var angle_euler : Vector3 = new_transform.basis.get_euler()
+	parameters["n%d_angle" % index] = rad2deg(angle_euler.z)
+	parameters["n%d_angle_x" % index] = rad2deg(angle_euler.x)
+	parameters["n%d_angle_y" % index] = rad2deg(angle_euler.y)
+	parameters["n%d_angle_z" % index] = rad2deg(angle_euler.z)
+	parameters["n%d_scale" % index] = new_transform.basis.get_scale().x
+	parameters["n%d_position_x" % index] = new_transform.origin.x
+	parameters["n%d_position_y" % index] = new_transform.origin.y
+	parameters["n%d_position_z" % index] = new_transform.origin.z
 	set_node_parameters($GenSDF, parameters)
+
+func _on_Tree_drop_item(item, dest, position):
+	move_item(item, dest, position)
+
 
 # OK/Apply/Cancel buttons
 
@@ -333,16 +434,29 @@ func _input(event):
 						if item != null:
 							copy_item(item)
 							delete_item(item)
+					else:
+						return
 				KEY_C:
 					if event.control:
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
+					else:
+						return
 				KEY_V:
 					if event.control:
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							paste_item(item)
+					else:
+						return
+				KEY_Z:
+					if event.control:
+						pass
+					else:
+						return
+				_:
+					return
 		accept_event()
 
 

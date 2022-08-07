@@ -11,6 +11,7 @@ class Preview:
 		output_index = i
 
 
+# warning-ignore:unused_class_variable
 export(String, MULTILINE) var shader_context_defs : String = ""
 
 var node_factory = null
@@ -27,7 +28,6 @@ var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
 onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 onready var timer : Timer = $Timer
 
 onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -42,13 +42,31 @@ signal view_updated
 signal preview_changed
 
 
-
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+
+func _exit_tree():
+	save_config()
+
+func load_config():
+	if mm_globals.has_config("graphedit_use_snap"):
+		use_snap = mm_globals.get_config("graphedit_use_snap")
+	if mm_globals.has_config("graphedit_snap_distance"):
+		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+
+func save_config():
+	mm_globals.set_config("graphedit_use_snap", use_snap)
+	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+
+func _on_GraphEdit_visibility_changed():
+	if is_visible_in_tree():
+		load_config()
+	else:
+		save_config()
 
 func get_project_type() -> String:
 	return "material"
@@ -66,28 +84,37 @@ func do_zoom(factor : float):
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
 
-func process_port_click(pressed : bool):
+func get_nodes_under_mouse() -> Array:
+	var array : Array = []
 	for c in get_children():
 		if c is GraphNode:
 			var rect : Rect2 = c.get_global_rect()
-			var pos = get_global_mouse_position()-rect.position
 			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-			var output_count : int = c.get_connection_output_count()
-			if rect.has_point(get_global_mouse_position()) and output_count > 0:
-				var scale = c.get_global_transform().get_scale()
-				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
-				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-				if in_output:
-					for i in range(output_count):
-						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
-							if pressed:
-								port_click_node = c
-								port_click_port_index = i
-							elif port_click_node == c and port_click_port_index == i:
-								set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
-								port_click_port_index = -1
-							return
+			if rect.has_point(get_global_mouse_position()):
+				array.push_back(c)
+	return array
+
+func process_port_click(pressed : bool):
+	for c in get_nodes_under_mouse():
+		var rect : Rect2 = c.get_global_rect()
+		var pos = get_global_mouse_position()-rect.position
+		rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+		var output_count : int = c.get_connection_output_count()
+		if output_count > 0:
+			var scale = c.get_global_transform().get_scale()
+			var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
+			var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
+			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+			if in_output:
+				for i in range(output_count):
+					if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+						if pressed:
+							port_click_node = c
+							port_click_port_index = i
+						elif port_click_node == c and port_click_port_index == i:
+							set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+							port_click_port_index = -1
+						return
 
 func _gui_input(event) -> void:
 	if (
@@ -146,7 +173,11 @@ func _gui_input(event) -> void:
 			node_popup.show_popup()
 		else:
 			if event.button_index == BUTTON_LEFT:
-				process_port_click(event.is_pressed())
+				if event.doubleclick:
+					if get_nodes_under_mouse().empty():
+						on_ButtonUp_pressed()
+				else:
+					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
@@ -494,16 +525,17 @@ func save_as() -> bool:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
 	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = get_node("/root/MainWindow")
-	if main_window.config_cache.has_section_key("path", "project"):
-		dialog.current_dir = main_window.config_cache.get_value("path", "project")
+	var main_window = mm_globals.main_window
+	if mm_globals.config.has_section_key("path", "project"):
+		dialog.current_dir = mm_globals.config.get_value("path", "project")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
-			main_window.config_cache.set_value("path", "project", save_path.get_base_dir())
+			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
+			top_generator.emit_signal("hierarchy_changed")
 			return true
 	return false
 
@@ -525,9 +557,10 @@ func save_file(filename) -> bool:
 # Export
 
 func get_material_node() -> MMGenMaterial:
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			return g
+	if top_generator != null:
+		for g in top_generator.get_children():
+			if g.has_method("get_export_profiles"):
+				return g
 	return null
 
 func export_material(export_prefix, profile) -> void:
@@ -611,6 +644,7 @@ func do_paste(data) -> void:
 func paste() -> void:
 	var data = OS.clipboard.strip_edges()
 	var graph = null
+
 	if data.is_valid_html_color():
 		var color = Color(data)
 		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
@@ -625,9 +659,13 @@ func paste() -> void:
 		graph = parse_json(data)
 	else:
 		graph = parse_json(data)
+	if graph == null:
+		var palette = try_parse_palette(data)
+		if not palette.empty():
+			graph = palette
 	if graph != null:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
@@ -637,6 +675,38 @@ func paste() -> void:
 			do_paste(graph)
 	else:
 		print(data)
+
+func try_parse_palette(hex_values_str : String) -> Dictionary:
+	var points = []
+	var regex_color : RegEx = RegEx.new()
+	regex_color.compile("#[0-9a-fA-F]+")
+	var regex_matches : Array = regex_color.search_all(hex_values_str)
+	var n = regex_matches.size()
+	if n < 2:
+		return {}
+	var i = 0
+	for m in regex_matches:
+		if not m.strings[0].is_valid_html_color():
+			return {}
+		var color = Color(m.strings[0])
+		points.push_back({
+			pos = (1.0 / (2 * n)) + (float(i) / n),
+			r = color.r,
+			g = color.g,
+			b = color.b,
+			a = color.a
+		})
+		i += 1
+	return {
+		type = "colorize",
+		parameters = {
+			gradient = {
+				interpolation = 0,
+				points = points,
+				type = "Gradient"
+			}
+		}
+	}
 
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())
@@ -764,21 +834,21 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
-	if node != null:
+	if is_instance_valid(node):
 		preview = Preview.new(node.generator, output_index)
 	if locked:
-		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
 		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
 	else:
-		if node != null and current_preview[slot] != null and current_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
 		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
-	if node != null:
+	if is_instance_valid(node):
 		node.update()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
@@ -926,6 +996,20 @@ func undoredo_command(command : Dictionary) -> void:
 					get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
+		"resize_comment":
+			var g = get_node_from_hier_name(command.node)
+			g.size = command.size
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
+		"comment_color_change":
+			var g = get_node_from_hier_name(command.node)
+			g.color = command.color
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
@@ -937,17 +1021,17 @@ func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2
 	var redo_action = { type="move_generators", parent=generator.get_hier_name(), positions={ node_name:new_pos } }
 	undoredo.add("Move nodes", [undo_action], [redo_action], true)
 
-func set_node_parameters(generator, parameters : Dictionary):
-	var hier_name = generator.get_hier_name()
+func set_node_parameters(node, parameters : Dictionary):
+	var hier_name = node.get_hier_name()
 	var prev_params : Dictionary = {}
 	for p in parameters.keys():
-		var prev_value = MMType.serialize_value(generator.get_parameter(p))
+		var prev_value = MMType.serialize_value(node.get_parameter(p))
 		if parameters[p] != prev_value:
-			generator.set_parameter(p, MMType.deserialize_value(parameters[p]))
+			node.set_parameter(p, MMType.deserialize_value(parameters[p]))
 		prev_params[p] = prev_value
 	if ! prev_params.empty():
-		var undo_action = { type="setparams", node=generator.get_hier_name(), params=prev_params }
-		var redo_action = { type="setparams", node=generator.get_hier_name(), params=parameters }
+		var undo_action = { type="setparams", node=hier_name, params=prev_params }
+		var redo_action = { type="setparams", node=hier_name, params=parameters }
 		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
 
 func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
@@ -1121,7 +1205,7 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
 	
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
 

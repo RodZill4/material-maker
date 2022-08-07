@@ -10,8 +10,10 @@ rect_clip_content = true
 expand = true
 stretch_mode = 5
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
 
 [connection signal="pressed" from="." to="." method="_on_ImagePicker_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -37,9 +37,6 @@ slot/2/right_enabled = false
 slot/2/right_type = 0
 slot/2/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBox" type="VBoxContainer" parent="."]
 margin_left = 16.0
@@ -186,10 +183,11 @@ __meta__ = {
 }
 
 [node name="ColorPicker" type="ColorPicker" parent="PopupSelector/PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 329.0
-margin_bottom = 469.0
+margin_left = 11.0
+margin_top = 11.0
+margin_right = 333.0
+margin_bottom = 473.0
+edit_alpha = false
 __meta__ = {
 "_edit_use_anchors_": false
 }

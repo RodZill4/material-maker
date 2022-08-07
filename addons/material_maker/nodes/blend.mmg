@@ -8,9 +8,11 @@
 		"amount": 0.5,
 		"blend_type": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_s1 = $s1($uv);\nvec4 $(name_uv)_s2 = $s2($uv);\nfloat $(name_uv)_a = $amount*$a($uv);\n",
-		"global": "vec3 blend_normal(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1 + (1.0-opacity)*c2;\n}\n\nvec3 blend_dissolve(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tif (rand(uv) < opacity) {\n\t\treturn c1;\n\t} else {\n\t\treturn c2;\n\t}\n}\n\nvec3 blend_multiply(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1*c2 + (1.0-opacity)*c2;\n}\n\nvec3 blend_screen(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*(1.0-(1.0-c1)*(1.0-c2)) + (1.0-opacity)*c2;\n}\n\nfloat blend_overlay_f(float c1, float c2) {\n\treturn (c1 < 0.5) ? (2.0*c1*c2) : (1.0-2.0*(1.0-c1)*(1.0-c2));\n}\n\nvec3 blend_overlay(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_overlay_f(c1.x, c2.x), blend_overlay_f(c1.y, c2.y), blend_overlay_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_hard_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*0.5*(c1*c2+blend_overlay(uv, c1, c2, 1.0)) + (1.0-opacity)*c2;\n}\n\nfloat blend_soft_light_f(float c1, float c2) {\n\treturn (c2 < 0.5) ? (2.0*c1*c2+c1*c1*(1.0-2.0*c2)) : 2.0*c1*(1.0-c2)+sqrt(c1)*(2.0*c2-1.0);\n}\n\nvec3 blend_soft_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_soft_light_f(c1.x, c2.x), blend_soft_light_f(c1.y, c2.y), blend_soft_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_burn_f(float c1, float c2) {\n\treturn (c1==0.0)?c1:max((1.0-((1.0-c2)/c1)),0.0);\n}\n\nvec3 blend_burn(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_burn_f(c1.x, c2.x), blend_burn_f(c1.y, c2.y), blend_burn_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_dodge_f(float c1, float c2) {\n\treturn (c1==1.0)?c1:min(c2/(1.0-c1),1.0);\n}\n\nvec3 blend_dodge(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_dodge_f(c1.x, c2.x), blend_dodge_f(c1.y, c2.y), blend_dodge_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_lighten(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*max(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*min(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_difference(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*clamp(c2-c1, vec3(0.0), vec3(1.0)) + (1.0-opacity)*c2;\n}\n",
+		"global": "vec3 blend_normal(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1 + (1.0-opacity)*c2;\n}\n\nvec3 blend_dissolve(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\tif (rand(uv) < opacity) {\n\t\treturn c1;\n\t} else {\n\t\treturn c2;\n\t}\n}\n\nvec3 blend_multiply(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*c1*c2 + (1.0-opacity)*c2;\n}\n\nvec3 blend_screen(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*(1.0-(1.0-c1)*(1.0-c2)) + (1.0-opacity)*c2;\n}\n\nfloat blend_overlay_f(float c1, float c2) {\n\treturn (c1 < 0.5) ? (2.0*c1*c2) : (1.0-2.0*(1.0-c1)*(1.0-c2));\n}\n\nvec3 blend_overlay(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_overlay_f(c1.x, c2.x), blend_overlay_f(c1.y, c2.y), blend_overlay_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_hard_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*0.5*(c1*c2+blend_overlay(uv, c1, c2, 1.0)) + (1.0-opacity)*c2;\n}\n\nfloat blend_soft_light_f(float c1, float c2) {\n\treturn (c2 < 0.5) ? (2.0*c1*c2+c1*c1*(1.0-2.0*c2)) : 2.0*c1*(1.0-c2)+sqrt(c1)*(2.0*c2-1.0);\n}\n\nvec3 blend_soft_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_soft_light_f(c1.x, c2.x), blend_soft_light_f(c1.y, c2.y), blend_soft_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_burn_f(float c1, float c2) {\n\treturn (c1==0.0)?c1:max((1.0-((1.0-c2)/c1)),0.0);\n}\n\nvec3 blend_burn(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_burn_f(c1.x, c2.x), blend_burn_f(c1.y, c2.y), blend_burn_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nfloat blend_dodge_f(float c1, float c2) {\n\treturn (c1==1.0)?c1:min(c2/(1.0-c1),1.0);\n}\n\nvec3 blend_dodge(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*vec3(blend_dodge_f(c1.x, c2.x), blend_dodge_f(c1.y, c2.y), blend_dodge_f(c1.z, c2.z)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_lighten(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*max(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_darken(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*min(c1, c2) + (1.0-opacity)*c2;\n}\n\nvec3 blend_difference(vec2 uv, vec3 c1, vec3 c2, float opacity) {\n\treturn opacity*clamp(c2-c1, vec3(0.0), vec3(1.0)) + (1.0-opacity)*c2;\n}\n\nvec3 blend_additive(vec2 uv, vec3 c1, vec3 c2, float oppacity) {\n\treturn c2 + c1 * oppacity;\n}\n\nvec3 blend_addsub(vec2 uv, vec3 c1, vec3 c2, float oppacity) {\n\treturn c2 + (c1 - .5) * 2.0 * oppacity;\n}",
 		"inputs": [
 			{
 				"default": "vec4($uv.x, 1.0, 1.0, 1.0)",
@@ -50,7 +52,7 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": 13,
 				"label": "",
 				"longdesc": "The algorithm used to blend the inputs",
 				"name": "blend_type",
@@ -104,6 +106,14 @@
 					{
 						"name": "Difference",
 						"value": "difference"
+					},
+					{
+						"name": "Additive",
+						"value": "additive"
+					},
+					{
+						"name": "AddSub",
+						"value": "addsub"
 					}
 				]
 			},

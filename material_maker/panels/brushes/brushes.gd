@@ -4,7 +4,7 @@ func _ready():
 	pass
 
 func _on_Tree_item_activated():
-	var main_window = get_node("/root/MainWindow")
+	var main_window = mm_globals.main_window
 	var data = $Tree.get_selected().get_metadata(0)
 	if data != null:
 		main_window.get_current_project().set_brush(data)

@@ -65,20 +65,21 @@ shader_param/tex = SubResource( 8 )
 
 [sub_resource type="Shader" id=10]
 code = "shader_type canvas_item;
-
-uniform sampler2D tex;
 render_mode blend_disabled;
 
+uniform sampler2D tex;
+uniform float gradient_width = 0.1;
+
 void fragment() {
-	if (abs(fract(UV.y+0.05)) < 0.1) {
+	if (abs(fract(UV.y+gradient_width)) < 2.0*gradient_width) {
 		COLOR = vec4(vec3(UV.x), 1.0);
 	} else {
 		vec4 highest = vec4(0.0);
 		for (int i = 0; i < 128; ++i) {
 			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
 		}
-		vec4 value = step(vec4(0.95-UV.y)*highest/0.9, texture(tex, vec2(UV.x, 0.0)));
-		float alpha = step(0.1, dot(value, vec4(1.0)));
+		vec4 value = step(vec4(1.0-gradient_width-UV.y)*highest/(1.0-2.0*gradient_width), texture(tex, vec2(UV.x, 0.0)));
+		float alpha = step(2.0*gradient_width, dot(value, vec4(1.0)));
 		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
 	}
 }"
@@ -90,17 +91,13 @@ viewport_path = NodePath("ViewportHistogram2")
 [sub_resource type="ShaderMaterial" id=12]
 resource_local_to_scene = true
 shader = SubResource( 10 )
+shader_param/gradient_width = 0.1
 shader_param/tex = SubResource( 11 )
 
-[node name="Histogram" type="Control" groups=[
-"preview",
-]]
+[node name="Histogram" type="Control" groups=["preview"]]
 margin_right = 64.0
 margin_bottom = 64.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ViewportImage" type="Viewport" parent="."]
 size = Vector2( 256, 256 )
@@ -149,7 +146,5 @@ rect_min_size = Vector2( 128, 2 )
 material = SubResource( 12 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
 [connection signal="visibility_changed" from="." to="." method="_on_Histogram_visibility_changed"]

@@ -17,12 +17,13 @@
   <url type="bugtracker">https://github.com/RodZill4/material-maker/issues</url>
   <screenshots>
     <screenshot type="default">
-      <image type="source" width="1282" height="752">https://raw.githubusercontent.com/RodZill4/material-maker/master/material_maker/doc/images/screenshot.png</image>
+      <image type="source" width="1257" height="680">https://raw.githubusercontent.com/RodZill4/material-maker/master/material_maker/doc/images/screenshot.png</image>
       <caption>Editing a procedurally generated texture</caption>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="1.0" date="2022-07-22"/>
     <release version="0.99" date="2022-04-09"/>
     <release version="0.98" date="2022-01-22"/>
     <release version="0.97" date="2021-10-17"/>

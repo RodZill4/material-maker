@@ -94,10 +94,14 @@ func get_value() -> Vector2:
 				var p = generator.get_parameter(parameter_x)
 				if p is float:
 					pos.x = p
+				else:
+					visible = false
 			if parameter_y != "":
 				var p = generator.get_parameter(parameter_y)
 				if p is float:
 					pos.y = p
+				else:
+					visible = false
 		else:
 			var r = 0.25
 			var a = 0
@@ -105,10 +109,14 @@ func get_value() -> Vector2:
 				var p = generator.get_parameter(parameter_r)
 				if p is float:
 					r = p
+				else:
+					visible = false
 			if parameter_a != "":
 				var p = generator.get_parameter(parameter_a)
 				if p is float:
 					a = p*0.01745329251
+				else:
+					visible = false
 			pos.x = r*cos(a)
 			pos.y = r*sin(a)
 	return pos
@@ -149,7 +157,7 @@ func update_parameters(value : Vector2) -> void:
 	if ! parameters.empty():
 		var control_target = get_parent().get_node(get_parent().control_target)
 		if control_target == null:
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			control_target = main_window.get_current_graph_edit()
 		control_target.set_node_parameters(generator, parameters)
 
@@ -168,17 +176,15 @@ func update_position(value : Vector2) -> void:
 
 func _on_Point_gui_input(event : InputEvent):
 	if event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
-		var parent_value = get_parent_value()
 		var new_pos = rect_position+event.position
 		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
-		var check_new_pos = get_parent().value_to_pos(value, true, apply_local_transform)
 		if parent_control_node != null:
 			value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
 		if event.control:
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
 			if grid != null and grid.visible:
-				snap = grid.snap
+				snap = grid.grid_size
 			if is_xy:
 				if snap > 0.0:
 					value.x = round((value.x-0.5)*snap)/snap+0.5
@@ -201,6 +207,8 @@ func _on_Point_gui_input(event : InputEvent):
 		else:
 			if parameter_r == "":
 				value = value/value.length()
+				if control_type == 2:
+					value *= 0.25
 			if parameter_a == "":
 				value = Vector2(value.length(), 0.0)
 		match control_type:

@@ -7,6 +7,8 @@ var current_image = -1
 
 var dragging = false
 var zooming = false
+var color : Color
+var color_count : int = 0
 var gradient = null
 var gradient_length : float = 0.0
 
@@ -53,7 +55,9 @@ func _on_Image_gui_input(event) -> void:
 				elif event.command:
 					zooming = true
 				elif selected_slot.get_parent() == $VBoxContainer/Colors:
-					selected_slot.set_color(get_color_under_cursor())
+					color_count = 1
+					color = get_color_under_cursor()
+					selected_slot.set_color(color)
 				else:
 					gradient = selected_slot.gradient
 					gradient.clear()
@@ -71,6 +75,7 @@ func _on_Image_gui_input(event) -> void:
 		elif event.button_index == BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == BUTTON_LEFT:
+			color_count = 0
 			gradient = null
 			dragging = false
 			zooming = false
@@ -79,6 +84,10 @@ func _on_Image_gui_input(event) -> void:
 			new_center = m.get_shader_param("center")-event.relative*scale/multiplier
 		elif zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
+		elif color_count > 0 and event.button_mask & BUTTON_MASK_LEFT != 0 and selected_slot.get_parent() == $VBoxContainer/Colors:
+			color_count += 1
+			color += get_color_under_cursor()
+			selected_slot.set_color(color/color_count)
 		elif gradient != null:
 			var new_gradient_length = gradient_length + event.relative.length()
 			if gradient_length > 0.0:

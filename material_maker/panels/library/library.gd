@@ -1,8 +1,6 @@
 extends VBoxContainer
 
 export var library_manager_name = ""
-export var base_library_name = "base.json"
-export var user_library_name = "user.json"
 
 var expanded_items : Array = []
 
@@ -44,17 +42,19 @@ func _ready() -> void:
 func init_expanded_items() -> void:
 	var f = File.new()
 	if f.open("user://expanded_items.bin", File.READ) == OK:
-		expanded_items = parse_json(f.get_as_text())
+		var json = parse_json(f.get_as_text())
 		f.close()
-	else:
-		expanded_items = []
-		for m in library_manager.get_items(""):
-			var n : String = m.name
-			var slash_position = n.find("/")
-			if slash_position != -1:
-				n = m.name.left(slash_position)
-			if expanded_items.find(n) == -1:
-				expanded_items.push_back(n)
+		if json != null and json is Array:
+			expanded_items = json
+			return
+	expanded_items = []
+	for m in library_manager.get_items(""):
+		var n : String = m.name
+		var slash_position = n.find("/")
+		if slash_position != -1:
+			n = m.name.left(slash_position)
+		if expanded_items.find(n) == -1:
+			expanded_items.push_back(n)
 
 func _exit_tree() -> void:
 	var f = File.new()
@@ -320,7 +320,7 @@ func _on_PopupMenu_index_pressed(index):
 			if status.ok:
 				library_manager.rename_item_in_library(library_index, item_path, status.text)
 		1: # Update thumbnail
-			var main_window = get_node("/root/MainWindow")
+			var main_window = mm_globals.main_window
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return

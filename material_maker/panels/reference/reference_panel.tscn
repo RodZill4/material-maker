@@ -55,9 +55,7 @@ size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Image"]
 anchor_right = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+mouse_filter = 2
 
 [node name="Prev" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
 margin_right = 20.0
@@ -68,6 +66,7 @@ text = "<"
 margin_left = 24.0
 margin_right = 224.0
 margin_bottom = 20.0
+mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="Next" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
@@ -118,6 +117,7 @@ margin_bottom = 353.0
 margin_right = 20.0
 margin_bottom = 20.0
 items = [ "Load Reference", null, 0, false, false, 0, 0, null, "", false, "Remove Reference", null, 0, false, false, 1, 0, null, "", false ]
+
 [connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
 [connection signal="resized" from="VBoxContainer/Image" to="." method="_on_Image_resized"]
 [connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Prev" to="." method="change_image" binds= [ -1 ]]

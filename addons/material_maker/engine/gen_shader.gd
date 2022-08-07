@@ -236,7 +236,7 @@ func find_keyword_call(string, keyword):
 	var end = find_matching_parenthesis(string, parameter_begin-1)
 	if end < string.length():
 		return string.substr(parameter_begin, end-parameter_begin)
-	return ""
+	return null
 
 func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
