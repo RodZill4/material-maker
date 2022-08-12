@@ -1193,11 +1193,13 @@
 				"a": 31,
 				"b": 0,
 				"da": 60,
+				"dp": false,
 				"dps": 0.65,
 				"dpx": 0.3,
 				"dpy": 0.415,
 				"sl": 0.15,
-				"st": 0.2
+				"st": 0.2,
+				"t": 0
 			},
 			"tree_item": "Simple/Sixteen Segment Display",
 			"type": "sixteen_segment"
