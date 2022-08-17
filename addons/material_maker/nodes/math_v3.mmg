@@ -48,7 +48,7 @@
 		],
 		"parameters": [
 			{
-				"default": 24,
+				"default": 0,
 				"label": "",
 				"longdesc": "The operation to be performed",
 				"name": "op",
@@ -154,6 +154,14 @@
 					{
 						"name": "normalize(A)",
 						"value": "normalize($in1($uv))"
+					},
+					{
+						"name": "sign(A)",
+						"value": "sign($in1($uv))"
+					},
+					{
+						"name": "mod(A, B)",
+						"value": "mod($in1($uv),$in2($uv))"
 					}
 				]
 			},
