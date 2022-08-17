@@ -136,6 +136,46 @@
 					{
 						"name": "smoothstep(0.0, 1.0, A)",
 						"value": "smoothstep(0.0, 1.0, $in1($uv))"
+					},
+					{
+						"name": "sign(A)",
+						"value": "sign($in1($uv))"
+					},
+					{
+						"name": "mod(A,B)",
+						"value": "mod($in1($uv), $in2($uv))"
+					},
+					{
+						"name": "atan2(A,B)",
+						"value": "atan($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "asin(A)",
+						"value": "asin($in1($uv))"
+					},
+					{
+						"name": "acos(A)",
+						"value": "acos($in1($uv))"
+					},
+					{
+						"name": "atan(A)",
+						"value": "atan($in1($uv))"
+					},
+					{
+						"name": "sinh(A)",
+						"value": "sinh($in1($uv))"
+					},
+					{
+						"name": "cosh(A)",
+						"value": "cosh($in1($uv))"
+					},
+					{
+						"name": "tanh(A)",
+						"value": "tanh($in1($uv))"
+					},
+					{
+						"name": "exp(A)",
+						"value": "exp($in1($uv))"
 					}
 				]
 			},
