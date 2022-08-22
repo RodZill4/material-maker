@@ -2,6 +2,7 @@ shader_type canvas_item;
 render_mode blend_disabled;
 
 
+uniform int view_style = VIEW_STYLE;
 varying float elapsed_time;
 
 
@@ -70,7 +71,16 @@ void fragment() {
 	color += sstep(abs(d2), 0.002*preview_2d_scale);
 	color += sstep(abs(d3), 0.003*preview_2d_scale);
 	color += 0.05*sin(d*251.327412287);
-	vec4 image = vec4(vec3(clamp(color, 0.0, 1.0)), 1.0);
+	vec4 albedo;
+	COLOR_FCT(uv, albedo, _seed_variation_);
+	vec4 image;
+	if (view_style == 0) {
+		 image = clamp(albedo+vec4(vec3(clamp(color, 0.0, 1.0)), 1.0), vec4(0.0), vec4(1.0));
+	} else if (view_style == 1) {
+		 image = clamp(vec4(vec3(clamp(color, 0.0, 1.0)), 1.0), vec4(0.0), vec4(1.0));
+	} else if (view_style == 2) {
+		 image = clamp(albedo, vec4(0.0), vec4(1.0));
+	}
 	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 	vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
 	COLOR = vec4(image_with_background, 1.0);

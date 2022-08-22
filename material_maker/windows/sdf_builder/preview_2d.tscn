@@ -26,29 +26,6 @@ shader = SubResource( 4 )
 [node name="Preview2D" instance=ExtResource( 1 )]
 material = SubResource( 3 )
 script = ExtResource( 2 )
-shader = "uniform vec2 preview_2d_size = vec2(100.0);
-uniform float preview_2d_scale = 1.2;
-uniform vec2 preview_2d_center = vec2(0.5);
-uniform int mode = 0;
-uniform vec4 background_color_1 = vec4(0.0);
-uniform vec4 background_color_2 = vec4(1.0);
-
-void fragment() {
-	vec2 ratio = preview_2d_size;
-	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
-	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
-		COLOR = vec4(0.0);
-	} else {
-		if (mode == 1) {
-			uv = fract(uv);
-		}
-		vec4 image = preview_2d_postprocessed(uv);
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
-		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
-		COLOR = vec4(image_with_background, 1.0);
-	}
-}
-"
 shader_accumulate = ""
 shader_divide = ""
 
@@ -60,3 +37,16 @@ items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null,
 
 [node name="Iteration" parent="Accumulate" index="0"]
 material = SubResource( 5 )
+
+[node name="UI" type="HBoxContainer" parent="." index="17"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="View" type="OptionButton" parent="UI" index="0"]
+margin_right = 106.0
+margin_bottom = 40.0
+text = "SDF+Albedo"
+items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null ]
+selected = 0
+
+[connection signal="item_selected" from="UI/View" to="." method="_on_View_item_selected"]

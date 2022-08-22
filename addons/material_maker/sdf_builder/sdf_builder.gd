@@ -90,7 +90,32 @@ func deserialize_scene(s : Array) -> Array:
 		deserialized.push_back(new_i)
 	return deserialized
 
-func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = false) -> Dictionary:
+func replace_parameters(scene : Dictionary, string : String) -> String:
+	var scene_node = scene_get_type(scene)
+	for p in scene_node.get_parameter_defs():
+		var new_name = "n%d_%s" % [ scene.index, p.name ]
+		string = string.replace("$"+p.name, "$"+new_name)
+	return string
+
+func replace_parameter_values(scene : Dictionary, string : String) -> String:
+	var scene_node = scene_get_type(scene)
+	for p in scene_node.get_parameter_defs():
+		var value = scene.parameters[p.name]
+		match p.type:
+			"boolean":
+				string = string.replace("$"+p.name, "true" if value else "false")
+			"enum":
+				string = string.replace("$"+p.name, p.values[value].value)
+			"float":
+				string = string.replace("$"+p.name, "%.09f" % value)
+			"color":
+				string = string.replace("$"+p.name, "vec4(%.09f, %.09f, %.09f, %.09f)" % [ value.r, value.g, value.b, value.a ] )
+			_:
+				print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
+				return "%ERROR%"
+	return string
+
+func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
 		return {}
 	var scene_node = scene_get_type(scene)
@@ -102,25 +127,24 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor = fal
 				p.default = scene.parameters[p.name]
 			var new_name = "n%d_%s" % [ scene.index, p.name ]
 			if shader_model.has("code"):
-				shader_model.code = shader_model.code.replace("$"+p.name, "$"+new_name)
+				shader_model.code = replace_parameter_values(scene, shader_model.code)
 			p.name = new_name
 			shader_model.parameters.push_back(p)
 	else:
-		for p in scene_node.get_parameter_defs():
-			var value = scene.parameters[p.name]
-			match p.type:
-				"boolean":
-					shader_model.code = shader_model.code.replace("$"+p.name, "true" if value else "false")
-				"enum":
-					shader_model.code = shader_model.code.replace("$"+p.name, p.values[value].value)
-				"float":
-					shader_model.code = shader_model.code.replace("$"+p.name, "%.09f" % value)
-				_:
-					print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
-					return {}
+		if shader_model.has("code"):
+			shader_model.code = replace_parameter_values(scene, shader_model.code)
 	if ! shader_model.empty():
 		shader_model.includes = get_includes(scene)
 	return shader_model
+
+func get_color_code(scene : Dictionary, uv : String, editor : bool = false):
+	var scene_node = scene_get_type(scene)
+	var rv : String = scene_node.get_color_code(scene, uv, editor)
+	if editor:
+		rv = replace_parameters(scene, rv)
+	else:
+		rv = replace_parameter_values(scene, rv)
+	return rv
 
 func generate_rotate_3d(variable, _scene) -> String:
 	var rv : String = ""
