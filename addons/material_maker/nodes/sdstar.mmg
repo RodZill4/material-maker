@@ -7,86 +7,63 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
-		"ir": 0.5,
-		"n": 5,
-		"r": 0.5,
-		"rot": 0
+		"m": 0.32174,
+		"n": 7,
+		"r": 0.123007
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// https://www.shadertoy.com/view/3tSGDy\n\nfloat sdStar(vec2 p, float r, int n, float m) {\n    float an = 3.141593/float(n);\n    float en = 3.141593/m;\n    vec2  acs = vec2(cos(an),sin(an));\n    vec2  ecs = vec2(cos(en),sin(en));\n    float bn = mod(atan(p.x,p.y),2.0*an) - an;\n    p = length(p)*vec2(cos(bn),abs(sin(bn)));\n    p -= r*acs;\n    p += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);\n    return length(p)*sign(p.x);\n}\n",
-		"includes": [
-			"sdrotate",
-			"sdcirclerepeat"
-		],
+		"global": "float sdStar(in vec2 p, in float r, in float n, in float m)\n{\n    p.y = -p.y;\n    // next 4 lines can be precomputed for a given shape\n    float an = 3.141593/n;\n    float en = 3.141593/m;  // m is between 2 and n\n    vec2  acs = vec2(cos(an),sin(an));\n    vec2  ecs = vec2(cos(en),sin(en)); // ecs=vec2(0,1) for regular polygon\n\n    float bn = mod(atan(p.x,p.y),2.0*an) - an;\n    p = length(p)*vec2(cos(bn),abs(sin(bn)));\n    p -= r*acs;\n    p += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);\n    return length(p)*sign(p.x);\n}",
 		"inputs": [
 
 		],
 		"instance": "",
-		"longdesc": "A star described as a signed distance function",
+		"longdesc": "An n-gon described as a signed distance function",
 		"name": "sdStar",
 		"outputs": [
 			{
-				"longdesc": "The star as a signed distance function",
-				"sdf2d": "sdStar(sdf2d_rotate($uv-vec2($cx, $cy), $rot*0.01745329251-1.57079632679)-vec2(0.5), $r, int($n), $n+(1.0-$n)*$ir)",
+				"longdesc": "The n-gon as a signed distance function",
+				"sdf2d": "sdStar($uv - 0.5 - vec2($cx, $cy), $r + $m, $n, 2.0 + (1.0 - ($m / ($r + $m))) * ($n - 2.0))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "None",
-				"default": 3,
-				"label": "N",
-				"longdesc": "The number of branches of the star",
-				"max": 12,
-				"min": 3,
-				"name": "n",
-				"shortdesc": "N",
-				"step": 1,
+				"control": "Radius11.r",
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
-				"label": "Radius",
-				"longdesc": "The radius of the star",
+				"default": 0.25,
+				"label": "Inner Radius",
 				"max": 1,
 				"min": 0,
-				"name": "r",
-				"shortdesc": "Radius",
+				"name": "m",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "None",
-				"default": 0.25,
-				"label": "Pointiness",
-				"longdesc": "The pointiness of the star",
-				"max": 1,
-				"min": 0,
-				"name": "ir",
-				"shortdesc": "Pointiness",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "Radius1.a",
-				"default": 0,
-				"label": "Rotation",
-				"longdesc": "The rotation of the star",
-				"max": 180,
-				"min": -180,
-				"name": "rot",
-				"shortdesc": "Rotation",
-				"step": 0.01,
+				"default": 0.5,
+				"label": "Count",
+				"max": 20,
+				"min": 1,
+				"name": "n",
+				"step": 1,
 				"type": "float"
 			},
 			{
 				"control": "P1.x",
-				"default": 0,
+				"default": 0.2,
 				"label": "Center X",
 				"longdesc": "The position of the center on the X axis",
 				"max": 0.5,
@@ -98,7 +75,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": 0,
+				"default": -0.25,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,
@@ -109,7 +86,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdStar"
+		"shortdesc": "sdNgon"
 	},
 	"type": "shader"
 }

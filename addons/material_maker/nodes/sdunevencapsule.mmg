@@ -1,60 +1,69 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdunevencapsule",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0,
+		"cy": -0.25,
+		"h": 0.4,
+		"r1": 0.2,
+		"r2": 0.3
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float sdTriangleIsosceles( in vec2 p, in vec2 q )\n{\n    p.x = abs(p.x);\n    vec2 a = p - q*clamp( dot(p,q)/dot(q,q), 0.0, 1.0 );\n    vec2 b = p - q*vec2( clamp( p.x/q.x, 0.0, 1.0 ), 1.0 );\n    float s = -sign( q.y );\n    vec2 d = min( vec2( dot(a,a), s*(p.x*q.y-p.y*q.x) ),\n                  vec2( dot(b,b), s*(p.y-q.y)  ));\n    return -sqrt(d.x)*sign(d.y);\n}",
+		"global": "float sdUnevenCapsule( vec2 p, float r1, float r2, float h )\n{\n    p.x = abs(p.x);\n    float b = (r1-r2)/h;\n    float a = sqrt(1.0-b*b);\n    float k = dot(p,vec2(-b,a));\n    if( k < 0.0 ) return length(p) - r1;\n    if( k > a*h ) return length(p-vec2(0.0,h)) - r2;\n    return dot(p, vec2(a,b) ) - r1;\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdUnevenCapsule",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdUnevenCapsule($uv - 0.5 - vec2($cx, $cy), $r1, $r2, $h)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Rect1.x",
-				"default": 0.5,
-				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
-				"max": 1,
-				"min": 0,
-				"name": "width",
-				"shortdesc": "Rotation",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Height",
 				"max": 1,
 				"min": 0,
-				"name": "height",
-				"step": 0.1,
+				"name": "h",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.x",
+				"default": 0.5,
+				"label": "Top Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r2",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Bottom Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r1",
+				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "P1.x",
-				"default": 0,
+				"default": 0.2,
 				"label": "Center X",
 				"longdesc": "The position of the center on the X axis",
 				"max": 0.5,
@@ -66,7 +75,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": 0,
+				"default": -0.25,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,
