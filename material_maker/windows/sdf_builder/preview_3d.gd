@@ -19,9 +19,14 @@ var gizmo_is_local = false
 func _ready():
 	_on_Preview3D_resized()
 
+func update_viewport():
+	viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	viewport.update_worlds()
+
 func set_mode(m):
 	mode = m
 	$Viewport/Gizmo.mode = mode
+	update_viewport()
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(g) and (force or g != generator):
@@ -82,6 +87,7 @@ func _on_Gizmo_translated(_v : Vector3):
 	parameters[setup_controls_filter+"_position_y"] = local_position.y
 	parameters[setup_controls_filter+"_position_z"] = local_position.z
 	get_node(control_target).set_node_parameters(generator, parameters)
+	update_viewport()
 
 func _on_Gizmo_rotated(v, a):
 	var axis : Vector3 = parent_transform.affine_inverse().basis.xform(v).normalized()
@@ -92,6 +98,7 @@ func _on_Gizmo_rotated(v, a):
 	parameters[setup_controls_filter+"_angle_z"] = rad2deg(local_rotation.z)
 	parameters[setup_controls_filter+"_angle"] = rad2deg(local_rotation.z)
 	get_node(control_target).set_node_parameters(generator, parameters)
+	update_viewport()
 
 func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 	var return_value : bool = false
@@ -102,6 +109,8 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 				return_value = true
 				m.set_shader_param(n, parameter_changes[n])
 				break
+	if return_value:
+		update_viewport()
 	return return_value
 
 func _on_Preview3D_resized():
@@ -146,6 +155,7 @@ func navigation_input(ev) -> bool:
 func _on_Background_input_event(camera, event, position, normal, shape_idx):
 	if navigation_input(event):
 		accept_event()
+		update_viewport()
 
 func _on_GizmoButton_toggled(button_pressed):
 	gizmo.visible = button_pressed
