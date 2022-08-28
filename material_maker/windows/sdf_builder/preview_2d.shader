@@ -72,7 +72,10 @@ void fragment() {
 	color += sstep(abs(d3), 0.003*preview_2d_scale);
 	color += 0.05*sin(d*251.327412287);
 	vec4 albedo;
-	COLOR_FCT(uv, albedo, _seed_variation_);
+	float metallic;
+	float roughness;
+	vec3 emission;
+	COLOR_FCT(uv, albedo, metallic, roughness, emission, _seed_variation_);
 	vec4 image;
 	if (view_style == 0) {
 		 image = clamp(albedo+vec4(vec3(clamp(color, 0.0, 1.0)), 1.0), vec4(0.0), vec4(1.0));
@@ -80,6 +83,12 @@ void fragment() {
 		 image = clamp(vec4(vec3(clamp(color, 0.0, 1.0)), 1.0), vec4(0.0), vec4(1.0));
 	} else if (view_style == 2) {
 		 image = clamp(albedo, vec4(0.0), vec4(1.0));
+	} else if (view_style == 3) {
+		 image = clamp(vec4(vec3(metallic), 1.0), vec4(0.0), vec4(1.0));
+	} else if (view_style == 4) {
+		 image = clamp(vec4(vec3(roughness), 1.0), vec4(0.0), vec4(1.0));
+	} else if (view_style == 5) {
+		 image = clamp(vec4(emission, 1.0), vec4(0.0), vec4(1.0));
 	}
 	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
 	vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);

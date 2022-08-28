@@ -21,5 +21,12 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	data.code = ""
 	return data
 
-func get_color_code(scene : Dictionary, uv : String = "$uv", editor : bool = false):
-	return "albedo = $color;" 
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+	match ctxt.type:
+		"rgba":
+			return "$color" 
+		"color":
+			return "($color).xyz" 
+		"float":
+			return "dot(($color).xyz, vec3(1.0))/3.0"
+	return ""

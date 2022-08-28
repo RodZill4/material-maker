@@ -12,3 +12,6 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
 	return data
+
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+	return ""

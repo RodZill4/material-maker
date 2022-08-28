@@ -127,7 +127,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 				p.default = scene.parameters[p.name]
 			var new_name = "n%d_%s" % [ scene.index, p.name ]
 			if shader_model.has("code"):
-				shader_model.code = replace_parameter_values(scene, shader_model.code)
+				shader_model.code = replace_parameters(scene, shader_model.code)
 			p.name = new_name
 			shader_model.parameters.push_back(p)
 	else:
@@ -137,9 +137,11 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		shader_model.includes = get_includes(scene)
 	return shader_model
 
-func get_color_code(scene : Dictionary, uv : String, editor : bool = false):
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+	if scene.has("hidden") and scene.hidden:
+		return ""
 	var scene_node = scene_get_type(scene)
-	var rv : String = scene_node.get_color_code(scene, uv, editor)
+	var rv : String = scene_node.get_color_code(scene, ctxt, editor)
 	if editor:
 		rv = replace_parameters(scene, rv)
 	else:

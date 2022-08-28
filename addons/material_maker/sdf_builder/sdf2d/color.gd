@@ -24,9 +24,11 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			data.parameters.append_array(data2.parameters)
 	return data
 
-func get_color_code(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> String:
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+	if channel_name != ctxt.channel:
+		return ""
 	for s in scene.children:
-		var color_code = mm_sdf_builder.get_color_code(s, uv, editor)
+		var color_code = mm_sdf_builder.get_color_code(s, ctxt, editor)
 		if color_code != "":
-			return color_code
+			return ctxt.channel+" = "+color_code+";"
 	return ""

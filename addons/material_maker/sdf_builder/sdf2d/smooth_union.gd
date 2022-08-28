@@ -19,8 +19,9 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 	data.code += "float $(name_uv)_n%d_kk = 10.0/$k;" % [ scene.index ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		if not data2.empty():
+		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
+		if data2.has("code"):
 			data.code += data2.code
 			data.code += "%s += exp2(%s$(name_uv)_n%d_kk*%s);\n" % [ output_name, op_sign, scene.index, data2.outputs[0].sdf2d ] 
 	data.code += "%s = %slog2(%s)/$(name_uv)_n%d_kk;\n" % [ output_name, op_sign, output_name, scene.index ] 

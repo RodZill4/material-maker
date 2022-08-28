@@ -46,7 +46,7 @@ margin_bottom = 40.0
 margin_right = 106.0
 margin_bottom = 40.0
 text = "SDF+Albedo"
-items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null ]
+items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null, "Roughness", null, false, 4, null, "Emission", null, false, 5, null ]
 selected = 0
 
 [connection signal="item_selected" from="UI/View" to="." method="_on_View_item_selected"]

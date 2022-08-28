@@ -26,13 +26,15 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 				defs.push_back(p)
 		return defs
 
-func get_output_defs(_show_hidden : bool = false) -> Array:
+func get_output_defs__(_show_hidden : bool = false) -> Array:
 	var outputs : Array
+	var rgba_output : String
 	var color_output : String
 	var gs_output : String
 	match get_scene_type():
 		"SDF3D":
 			outputs = [ { type="sdf3d" } ]
+			rgba_output = "tex3d"
 			color_output = "tex3d"
 			gs_output = "tex3d_gs"
 		_:
@@ -40,12 +42,13 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 				outputs = [ { type="rgb" } ]
 			else:
 				outputs = [ { type="sdf2d" } ]
-			color_output = "rgba"
+			rgba_output = "rgba"
+			color_output = "color"
 			gs_output = "float"
-	outputs.push_back({type=color_output, channel="albedo"})
-	outputs.push_back({type=gs_output, channel="metallic"})
-	outputs.push_back({type=gs_output, channel="roughness"})
-	outputs.push_back({type=color_output, channel="emission"})
+	outputs.push_back({type=rgba_output})
+	outputs.push_back({type=gs_output})
+	outputs.push_back({type=gs_output})
+	outputs.push_back({type=color_output})
 	return outputs
 
 func get_scene_type() -> String:
@@ -73,11 +76,14 @@ func set_sdf_scene(s : Array):
 		distance_function += ", int index"
 	
 	distance_function += ") {\n"
-	color_function += ", out vec4 albedo) {\n"
+	color_function += ", out vec4 albedo, out float metallic, out float roughness, out vec3 emission) {\n"
 	if editor:
 		color_function += "int index = 0;\n"
 
 	color_function += "albedo = vec4(0.0, 0.0, 0.0, 1.0);\n"
+	color_function += "metallic = 0.0;\n"
+	color_function += "roughness = 1.0;\n"
+	color_function += "emission = vec3(0.0);\n"
 	var first : bool = true
 	var parameter_defs = []
 	for i in scene:
@@ -93,7 +99,13 @@ func set_sdf_scene(s : Array):
 			distance_function += code
 			color_function += code
 		color_function += "\n"
-		color_function += mm_sdf_builder.get_color_code(i, "uv", editor)
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="albedo", target="albedo", type="rgba" }, editor)
+		color_function += "\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="metallic", target="metallic", type="float" }, editor)
+		color_function += "\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="roughness", target="roughness", type="float" }, editor)
+		color_function += "\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="emission", target="emission", type="color" }, editor)
 		color_function += "\n"
 		if item_shader_model.has("outputs"):
 			var output = item_shader_model.outputs[0]
@@ -129,19 +141,25 @@ func set_sdf_scene(s : Array):
 			if editor:
 				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
 			else:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0), 0);\n" % uv
+				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0));\n" % uv
 			shader_model.parameters = parameter_defs
 			shader_model.outputs = [{ sdf3d = "$(name_uv)_d", type = "sdf3d" }]
 		_:
 			shader_model.parameters = parameter_defs
 			shader_model.code = "vec4 $(name_uv)_albedo;\n"
-			shader_model.code += "$(name)_c(%s, $(name_uv)_albedo);\n" % uv
+			shader_model.code += "float $(name_uv)_metallic;\n"
+			shader_model.code += "float $(name_uv)_roughness;\n"
+			shader_model.code += "vec3 $(name_uv)_emission;\n"
+			shader_model.code += "$(name)_c(%s, $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
 				parameter_defs.push_back({default=-1, name="index", type="float"})
 				shader_model.outputs = [{ sdf2d = "$(name)_d(%s, 0)" % uv, type = "sdf2d" }]
 			else:
-				shader_model.outputs = [{ sdf2d = "$(name)_d(%s)" % uv, type = "sdf2d" }]
-			shader_model.outputs.push_back({ rgba = "$(name_uv)_albedo", type = "rgba" })
+				shader_model.outputs = [{ sdf2d = "$(name)_d(%s)" % uv, type = "sdf2d", shortdesc="SDF" }]
+			shader_model.outputs.push_back({ rgba = "$(name_uv)_albedo", type = "rgba", shortdesc="Albedo" })
+			shader_model.outputs.push_back({ f = "$(name_uv)_metallic", type = "f", shortdesc="Metallic" })
+			shader_model.outputs.push_back({ f = "$(name_uv)_roughness", type = "f", shortdesc="Roughness" })
+			shader_model.outputs.push_back({ rgb = "$(name_uv)_emission", type = "rgb", shortdesc="Emission" })
 	for p in parameter_defs:
 		if p.type == "float" and p.default is int:
 			parameters[p.name] = float(p.default)
