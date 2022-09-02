@@ -18,7 +18,7 @@ The **Triangle Voronoi** noise node provides five outputs:
 
 * a greyscale Triangle Voronoi noise texture that shows the distance to the cell centers.
 
-* a greyscale texture that shows the distance to the cell borders.
+* a greyscale texture that shows the distance to the feature points.
 
 * a color texture where each cell is filled with a random color.
 
@@ -35,7 +35,7 @@ The **Triangle Voronoi** noise node accepts the following parameters:
 
 * *Stretch X* and *Stretch Y* are applied to the distance functions.
 
-* *Randomness* defines the position of cell centers.
+* *Randomness* defines the location of the feature points.
 
 Example images
 ++++++++++++++
