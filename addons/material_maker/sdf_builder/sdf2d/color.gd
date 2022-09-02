@@ -30,5 +30,5 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	for s in scene.children:
 		var color_code = mm_sdf_builder.get_color_code(s, ctxt, editor)
 		if color_code != "":
-			return ctxt.channel+" = "+color_code+";"
+			return ctxt.target+" = "+color_code+";"
 	return ""

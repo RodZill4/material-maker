@@ -72,4 +72,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 			color_code += child_color_code+"\n"
 	if color_code == "":
 		return ""
-	return "if (_n%d < 0.0) {\n%s}\n" % [ scene.index, color_code ]
+	if ctxt.has("check") and !ctxt.check:
+		return "{\n%s}\n" % [ color_code ]
+	else:
+		return "if (_n%d < 0.0) {\n%s}\n" % [ scene.index, color_code ]

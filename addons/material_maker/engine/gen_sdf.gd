@@ -135,6 +135,7 @@ func set_sdf_scene(s : Array):
 		color_function += "return return_value;"
 	distance_function += "}\n"
 	color_function += "}\n"
+	color_function = color_function.replace("$(name_uv)", "")
 	shader_model.instance = distance_function + color_function
 	match scene_type:
 		"SDF3D":

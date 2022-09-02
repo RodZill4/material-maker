@@ -18,6 +18,7 @@ const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 const MENU_COPY : int = 1000
 const MENU_PASTE : int = 1001
 const MENU_DELETE : int = 1002
+const MENU_DUMP : int = 1003
 
 signal node_changed(model_data)
 signal editor_window_closed
@@ -114,6 +115,7 @@ func show_menu(current_item : TreeItem):
 	if current_item != null:
 		menu.add_separator()
 		menu.add_item("Delete", MENU_DELETE)
+		#menu.add_item("Dump", MENU_DUMP)
 	menu.connect("id_pressed", self, "_on_menu", [ current_item ])
 	add_child(menu)
 	menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
@@ -155,6 +157,8 @@ func _on_menu(id : int, current_item : TreeItem):
 			paste_item(current_item)
 		MENU_DELETE:
 			delete_item(current_item)
+		MENU_DUMP:
+			print(current_item.get_meta("scene"))
 
 func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var shape = mm_sdf_builder.item_types[id]
@@ -186,11 +190,10 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 
 
 func get_local_item_transform_2d(item : TreeItem) -> Transform2D:
-	var item_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 	if item.has_meta("scene"):
-		var scene = item.get_meta("scene")
-		if scene.has("parameters"):
-			var parameters = scene.parameters
+		var item_scene = item.get_meta("scene")
+		if item_scene.has("parameters"):
+			var parameters = item_scene.parameters
 			var t : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 			if parameters.has("angle"):
 				t = t.rotated(deg2rad(parameters.angle))
@@ -236,9 +239,9 @@ func update_2d_orientation(root_2d : TreeItem):
 
 func get_local_item_transform_3d(item : TreeItem) -> Transform:
 	if item.has_meta("scene"):
-		var scene = item.get_meta("scene")
-		if scene.has("parameters"):
-			var parameters = scene.parameters
+		var item_scene = item.get_meta("scene")
+		if item_scene.has("parameters"):
+			var parameters = item_scene.parameters
 			var t : Transform = Transform()
 			if parameters.has("angle_x") and parameters.has("angle_y") and parameters.has("angle_z"):
 				t = Transform(Basis(Vector3(deg2rad(parameters.angle_x), deg2rad(parameters.angle_y), deg2rad(parameters.angle_z))))
@@ -305,13 +308,13 @@ func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : S
 	set_node_parameters($GenSDF, { variable:new_value })
 	ignore_parameter_change = ""
 
-func _on_color_changed(new_color, old_value, variable : String) -> void:
+func _on_color_changed(new_color, _old_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, MMType.serialize_value(new_color))
 	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_color) })
 	ignore_parameter_change = ""
 
-func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
+func _on_polygon_changed(new_polygon, _old_value, variable : String) -> void:
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, new_polygon)
 	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_polygon) })
@@ -325,8 +328,10 @@ func on_parameter_changed(p : String, v) -> void:
 
 func _on_Tree_item_selected():
 	var selected_item = tree.get_selected()
-	var scene = selected_item.get_meta("scene")
-	var index : int = scene.index
+	var item_scene = selected_item.get_meta("scene")
+	var index : int = item_scene.index
+	if index != selected_item.get_instance_id():
+		print("index don't match")
 	show_parameters("n%d" % index)
 	match $GenSDF.get_scene_type():
 		"SDF2D":
@@ -337,7 +342,7 @@ func _on_Tree_item_selected():
 			$GenSDF.set_parameter("index", float(index))
 		"SDF3D":
 			preview_3d.set_generator($GenSDF)
-			preview_3d.mode = 1 if mm_sdf_builder.scene_get_type(scene).item_category == "SDF3D" else 0
+			preview_3d.mode = 1 if mm_sdf_builder.scene_get_type(item_scene).item_category == "SDF3D" else 0
 			update_local_transform_3d()
 			update_center_transform_3d()
 			var parent_3d = null
@@ -347,7 +352,7 @@ func _on_Tree_item_selected():
 			preview_3d.setup_controls("n%d" % index)
 			$GenSDF.set_parameter("index", float(index))
 
-func _on_Tree_button_pressed(item, column, _id):
+func _on_Tree_button_pressed(item, _column, _id):
 	var item_scene : Dictionary = item.get_meta("scene")
 	if item_scene.has("hidden") and item_scene.hidden:
 		item_scene.erase("hidden")
@@ -362,12 +367,16 @@ func set_node_parameters(generator, parameters):
 	for p in parameters.keys():
 		var value = MMType.deserialize_value(parameters[p])
 		generator.set_parameter(p, value)
-		var item : TreeItem = instance_from_id(p.right(1).to_int())
+		var item_id : int = p.left(p.find("_")).right(1).to_int()
+		var item : TreeItem = instance_from_id(item_id)
 		if item != null:
 			var parameter_name : String = p.right(p.find("_")+1)
 			if item.get_meta("scene").parameters.has(parameter_name):
 				item.get_meta("scene").parameters[parameter_name] = value
 				parameters_changed = true
+			print_debug("Found parameter "+p)
+		else:
+			print_debug("Didn't find parameter "+p+"("+str(item_id)+")")
 	if parameters_changed:
 		update_local_transform_2d()
 		preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)

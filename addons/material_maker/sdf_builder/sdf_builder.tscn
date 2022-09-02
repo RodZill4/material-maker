@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -39,6 +39,8 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" type="Script" id=37]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform.gd" type="Script" id=38]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/fbm.gd" type="Script" id=39]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" type="Script" id=40]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/step.gd" type="Script" id=41]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -409,4 +411,14 @@ item_category = "TEX"
 [node name="FBM" type="Node" parent="Texture"]
 script = ExtResource( 39 )
 item_type = "FBM"
+item_category = "TEX"
+
+[node name="SimpleGradient" type="Node" parent="Texture"]
+script = ExtResource( 40 )
+item_type = "SimpleGradient"
+item_category = "TEX"
+
+[node name="Step" type="Node" parent="Texture"]
+script = ExtResource( 41 )
+item_type = "Step"
 item_category = "TEX"
