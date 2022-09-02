@@ -50,7 +50,7 @@ func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
 			emit_signal("move", amount*global_transform.basis.xform(Vector3(1, 0, 0)))
 
 var rotate_direction_2d : Vector2
-func _on_RotateArea_input_event(camera, event, position, normal, shape_idx):
+func _on_RotateArea_input_event(camera, event, position, _normal, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		$Torus.get_surface_material(0).set_shader_param("highlight", 0.1 if event.pressed else 0.0)
 		if event.pressed:
