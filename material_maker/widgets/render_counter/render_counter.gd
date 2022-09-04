@@ -19,17 +19,21 @@ func _ready() -> void:
 	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
 	menu.add_check_item("Auto", ITEM_AUTO)
 	menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
+	# Renderers menu
 	menu.add_submenu_item("Renderers", "Renderers")
 	for i in range(8):
 		renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
 	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
 	menu.add_separator()
+	# Buffer size limit menu
 	menu.add_submenu_item("Maximum buffer size", "MaxBufferSize")
 	buffers_menu.add_radio_check_item("Unlimited", 0)
 	for i in range(7):
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
+	$GpuRam.hint_tooltip = "%s\n%s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
+	print($GpuRam.hint_tooltip)
 
 func on_counter_change(count : int, pending : int) -> void:
 	if count == 0 and pending == 0:
@@ -67,6 +71,18 @@ func _process(_delta):
 			fast_counter = 0
 			if fps < 20.0:
 				set_max_renderers(1)
+	var used_gpu_ram : float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
+	var unit_modifier : String = ""
+	if used_gpu_ram > 100000000:
+		used_gpu_ram *= 0.000000001
+		unit_modifier = "G"
+	elif used_gpu_ram > 100000:
+		used_gpu_ram *= 0.000001
+		unit_modifier = "M"
+	elif used_gpu_ram > 100:
+		used_gpu_ram *= 0.001
+		unit_modifier = "k"
+	$GpuRam.text = "%.1f %sb " % [ used_gpu_ram, unit_modifier ]
 
 func set_max_renderers(max_renderers : int):
 	if mm_renderer.max_renderers == max_renderers:
