@@ -63,10 +63,12 @@ func generate_shader(src_code : Dictionary) -> String:
 	var shader_code = ""
 	if src_code.has("defs"):
 		shader_code = src_code.defs
+	shader_code += "\nuniform float scale = 1.0;\n"
+	shader_code += "\nuniform vec2 chunk = vec2(0.0);\n"
 	shader_code += "\nuniform float variation = 0.0;\n"
 	shader_code += "\nvoid fragment() {\n"
 	shader_code += "float _seed_variation_ = variation;\n"
-	shader_code += "vec2 uv = UV;\n"
+	shader_code += "vec2 uv = chunk+scale*UV;\n"
 	if src_code.has("code"):
 		shader_code += src_code.code
 	if src_code.has("rgba"):

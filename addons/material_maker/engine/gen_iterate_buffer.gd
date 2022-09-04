@@ -19,7 +19,7 @@ var is_pending : bool = false
 var used_named_parameters : Array = []
 var pending_textures = [[], []]
 
-func _ready() -> void:
+func _init():
 	texture.flags = Texture.FLAG_REPEAT
 	material = ShaderMaterial.new()
 	material.shader = Shader.new()
@@ -27,6 +27,8 @@ func _ready() -> void:
 	loop_material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
+
+func _ready() -> void:
 	add_to_group("preview")
 
 func set_pending() -> void:

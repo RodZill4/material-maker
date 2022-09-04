@@ -4,6 +4,9 @@ extends Viewport
 
 var render_owner : Object = null
 
+var max_viewport_size : int = 2048
+var texture : Texture
+
 
 signal done
 
@@ -54,15 +57,45 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
 	var shader_material = $ColorRect.material
-	size = Vector2(render_size, render_size)
+	var chunk_count : int = 1
+	var render_scale : float = 1.0
+	if render_size <= max_viewport_size:
+		size = Vector2(render_size, render_size)
+	else:
+		chunk_count = render_size/max_viewport_size
+		render_scale = float(max_viewport_size)/float(render_size)
+		size = Vector2(max_viewport_size, max_viewport_size)
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
 	hdr = with_hdr
-	render_target_update_mode = Viewport.UPDATE_ONCE
-	update_worlds()
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	if chunk_count == 1:
+		material.set_shader_param("scale", 1.0)
+		material.set_shader_param("chunk", Vector2(0.0, 0.0))
+		render_target_update_mode = Viewport.UPDATE_ONCE
+		update_worlds()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		texture = get_texture()
+	else:
+		print(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
+		print(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+		print(Performance.get_monitor(Performance.RENDER_USAGE_VIDEO_MEM_TOTAL))
+		var image : Image = Image.new()
+		image.create(render_size, render_size, false, get_texture().get_data().get_format())
+		material.set_shader_param("scale", render_scale)
+		for x in range(chunk_count):
+			for y in range(chunk_count):
+				material.set_shader_param("chunk", render_scale*Vector2(x, y))
+				render_target_update_mode = Viewport.UPDATE_ONCE
+				update_worlds()
+				yield(get_tree(), "idle_frame")
+				yield(get_tree(), "idle_frame")
+				print(Rect2(0, 0, size.x, size.y))
+				print(Vector2(x*size.x, y*size.y))
+				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
+		texture = ImageTexture.new()
+		texture.create_from_image(image)
 	$ColorRect.material = shader_material
 	return self
 
@@ -87,17 +120,17 @@ func render_shader(object : Object, shader, textures, render_size, with_hdr = tr
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:
-	var image : Image = get_texture().get_data()
+	var image : Image = texture.get_data()
 	if image != null:
 		t.create_from_image(image)
 
 func get_image() -> Image:
 	var image : Image = Image.new()
-	image.copy_from(get_texture().get_data())
+	image.copy_from(texture.get_data())
 	return image
 
 func save_to_file(fn : String, is_greyscale : bool = false) -> void:
-	var image : Image = get_texture().get_data()
+	var image : Image = texture.get_data()
 	if image != null:
 		image.lock()
 		var export_image : Image = image
