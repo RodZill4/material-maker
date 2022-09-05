@@ -91,8 +91,6 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 				update_worlds()
 				yield(get_tree(), "idle_frame")
 				yield(get_tree(), "idle_frame")
-				print(Rect2(0, 0, size.x, size.y))
-				print(Vector2(x*size.x, y*size.y))
 				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
 		texture = ImageTexture.new()
 		texture.create_from_image(image)
@@ -150,4 +148,5 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 func release(object : Object) -> void:
 	assert(render_owner == object, "Invalid renderer release")
 	render_owner = null
+	texture = null
 	get_parent().release(self)
