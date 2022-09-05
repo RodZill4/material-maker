@@ -20,6 +20,7 @@ func get_parameter_defs():
 			] },
 		{ default=4, label="Scale X", max=32, min=1, name="scale_x", step=1, type="float" },
 		{ default=4, label="Scale Y", max=32, min=1, name="scale_y", step=1, type="float" },
+		{ default=4, label="Scale Z", max=32, min=1, name="scale_z", step=1, type="float" },
 		{ default=0, label="Folds", max=5, min=0, name="folds", step=1, type="float" },
 		{ default=3, label="Iterations", max=10, min=1, name="iterations", step=1, type="float" },
 		{ default=0.5, label="Persistence", max=1, min=0, name="persistence", step=0.01, type="float" },
@@ -27,7 +28,7 @@ func get_parameter_defs():
 	]
 
 func get_includes():
-	return [ "fbm2" ]
+	return [ "fbm2", "tex3d_fbm" ]
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var data : Dictionary = { parameters=[] }
@@ -38,7 +39,12 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	return data
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
-	var tex : String = "fbm_2d_$noise("+ctxt.uv+", vec2($scale_x, $scale_y), int($folds), int($iterations), $persistence, $offset, 0.0)"
+	var tex : String
+	print(ctxt)
+	if ctxt.has("geometry") and ctxt.geometry == "sdf3d":
+		tex = "fbm3d_$noise("+ctxt.uv+", vec3($scale_x, $scale_y, $scale_z), int($iterations), $persistence, 0.0)"
+	else:
+		tex = "fbm_2d_$noise("+ctxt.uv+", vec2($scale_x, $scale_y), int($folds), int($iterations), $persistence, $offset, 0.0)"
 	match ctxt.type:
 		"rgba":
 			return "vec4(vec3("+tex+"), 1.0)"

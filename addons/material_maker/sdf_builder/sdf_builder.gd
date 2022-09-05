@@ -100,7 +100,11 @@ func replace_parameters(scene : Dictionary, string : String) -> String:
 func replace_parameter_values(scene : Dictionary, string : String) -> String:
 	var scene_node = scene_get_type(scene)
 	for p in scene_node.get_parameter_defs():
-		var value = scene.parameters[p.name]
+		var value
+		if scene.parameters.has(p.name):
+			value = scene.parameters[p.name]
+		else:
+			value = p.default
 		match p.type:
 			"boolean":
 				string = string.replace("$"+p.name, "true" if value else "false")

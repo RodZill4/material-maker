@@ -1,4 +1,4 @@
-extends "res://addons/material_maker/sdf_builder/base.gd"
+extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
 
 func _ready():
@@ -30,12 +30,14 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
 		if not data2.empty():
 			data.parameters.append_array(data2.parameters)
-			data.code += data2.code
-			if first:
-				data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf3d ]
-				first = false
-			else:
-				data.code += "%s = max(%s, -(%s));\n" % [ output_name, output_name, data2.outputs[0].sdf3d ] 
+			if data2.has("code"):
+				data.code += data2.code
+			if data2.has("outputs"):
+				if first:
+					data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf3d ]
+					first = false
+				else:
+					data.code += "%s = max(%s, -(%s));\n" % [ output_name, output_name, data2.outputs[0].sdf3d ] 
 	data.code += "%s *= $scale;\n" % [ output_name ]
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]

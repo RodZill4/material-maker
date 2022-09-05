@@ -139,12 +139,20 @@ func set_sdf_scene(s : Array):
 	shader_model.instance = distance_function + color_function
 	match scene_type:
 		"SDF3D":
+			shader_model.code = "vec4 $(name_uv)_albedo;\n"
+			shader_model.code += "float $(name_uv)_metallic;\n"
+			shader_model.code += "float $(name_uv)_roughness;\n"
+			shader_model.code += "vec3 $(name_uv)_emission;\n"
+			shader_model.code += "$(name)_c(%s.xyz*vec3(1.0, -1.0, -1.0), $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+				shader_model.outputs = [{ sdf3d = "$(name)_d(%s, 0)" % uv, type = "sdf3d" }]
 			else:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0));\n" % uv
+				shader_model.outputs = [{ sdf3d = "$(name)_d(%s*vec3(1.0, -1.0, -1.0))" % uv, type = "sdf3d" }]
 			shader_model.parameters = parameter_defs
-			shader_model.outputs = [{ sdf3d = "$(name_uv)_d", type = "sdf3d" }]
+			shader_model.outputs.push_back({ tex3d = "$(name_uv)_albedo.rgb", type = "tex3d", shortdesc="Albedo" })
+			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_metallic", type = "tex3d_gs", shortdesc="Metallic" })
+			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_roughness", type = "tex3d_gs", shortdesc="Roughness" })
+			shader_model.outputs.push_back({ tex3d = "$(name_uv)_emission", type = "tex3d", shortdesc="Emission" })
 		_:
 			shader_model.parameters = parameter_defs
 			shader_model.code = "vec4 $(name_uv)_albedo;\n"
