@@ -31,7 +31,7 @@ The **Japanese glyphs** node accepts the following parameters:
 
 * The *Grid Size* parameter controls the number of columns/rows of the grid.
 
-* the *Bevel* parameter controls the width of the edge of the glyph(s).
+* The *Bevel* parameter controls the width of the edge of the glyph(s).
 
 Example images
 ++++++++++++++
