@@ -5,29 +5,34 @@
 		"y": 0
 	},
 	"parameters": {
-		"mix": 4,
+		"mix": 0,
 		"x_scale": 2,
-		"x_wave": 2,
+		"x_wave": 0,
 		"y_scale": 2,
-		"y_wave": 2,
+		"y_wave": 0,
 		"z_scale": 2,
-		"z_wave": 2
+		"z_wave": 0
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float wave3d_constant(float x) {\n\treturn 1.0;\n}\n\nfloat wave3d_sine(float x) {\n\treturn 0.5-0.5*cos(3.14159265359*2.0*x);\n}\n\nfloat wave3d_triangle(float x) {\n\tx = fract(x);\n\treturn min(2.0*x, 2.0-2.0*x);\n}\n\nfloat wave3d_sawtooth(float x) {\n\treturn fract(x);\n}\n\nfloat wave3d_square(float x) {\n\treturn (fract(x) < 0.5) ? 0.0 : 1.0;\n}\n\nfloat wave3d_bounce(float x) {\n\tx = 2.0*(fract(x)-0.5);\n\treturn sqrt(1.0-x*x);\n}\n\nfloat mix3d_mul(float x, float y, float z) {\n\treturn x*y*z;\n}\n\nfloat mix3d_add(float x, float y, float z) {\n\treturn min(x+y+z, 1.0);\n}\n\nfloat mix3d_max(float x, float y, float z) {\n\treturn max(max(x, y), z);\n}\n\nfloat mix3d_min(float x, float y, float z) {\n\treturn min(min(x, y), z);\n}\n\nfloat mix3d_xor(float x, float y, float z) {\n\tfloat xy = min(x+y, 2.0-x-y);\n\treturn min(xy+z, 2.0-xy-z);\n}\n\nfloat mix3d_pow(float x, float y, float z) {\n\treturn pow(pow(x, y), z);\n}",
+		"global": "float mix3d_mul(float x, float y, float z) {\n\treturn x*y*z;\n}\n\nfloat mix3d_add(float x, float y, float z) {\n\treturn min(x+y+z, 1.0);\n}\n\nfloat mix3d_max(float x, float y, float z) {\n\treturn max(max(x, y), z);\n}\n\nfloat mix3d_min(float x, float y, float z) {\n\treturn min(min(x, y), z);\n}\n\nfloat mix3d_xor(float x, float y, float z) {\n\tfloat xy = min(x+y, 2.0-x-y);\n\treturn min(xy+z, 2.0-xy-z);\n}\n\nfloat mix3d_pow(float x, float y, float z) {\n\treturn pow(pow(x, y), z);\n}",
+		"includes": [
+			"pattern"
+		],
 		"inputs": [
 
 		],
-		"instance": "float $(name)_fct(vec3 uv) {\n\treturn mix3d_$(mix)(wave3d_$(x_wave)($(x_scale)*uv.x), wave3d_$(y_wave)($(y_scale)*uv.y), wave3d_$(z_wave)($(z_scale)*uv.z));\n}",
+		"instance": "",
 		"longdesc": "A greyscale 3D texture that combines patterns along all 3 axes",
 		"name": "TEX3D Pattern",
 		"outputs": [
 			{
 				"longdesc": "The generated 3D texture",
 				"shortdesc": "Output",
-				"tex3d": "vec3($(name)_fct($(uv).xyz))",
-				"type": "tex3d"
+				"tex3d_gs": "mix3d_$(mix)(wave_$(x_wave)($(x_scale)*$uv.x), wave_$(y_wave)($(y_scale)*$uv.y), wave_$(z_wave)($(z_scale)*$uv.z))",
+				"type": "tex3d_gs"
 			}
 		],
 		"parameters": [

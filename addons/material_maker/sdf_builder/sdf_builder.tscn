@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -42,6 +42,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" type="Script" id=40]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/step.gd" type="Script" id=41]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" type="Script" id=42]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/pattern.gd" type="Script" id=43]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -435,6 +436,11 @@ type = 1
 [node name="Uniform" type="Node" parent="Texture"]
 script = ExtResource( 38 )
 item_type = "Uniform"
+item_category = "TEX"
+
+[node name="Pattern" type="Node" parent="Texture"]
+script = ExtResource( 43 )
+item_type = "Pattern"
 item_category = "TEX"
 
 [node name="FBM" type="Node" parent="Texture"]

@@ -6,17 +6,10 @@ func _ready():
 
 func get_parameter_defs():
 	return [
-		{ default=2, label="Noise", name="noise", type="enum", values=[
+		{ default=0, label="Noise", name="noise", type="enum", values=[
 				{ name="Value", value="value" },
 				{ name="Perlin", value="perlin" },
-				{ name="Simplex", value="simplex" },
-				{ name="Cellular", value="cellular" },
-				{ name="Cellular2", value="cellular2" },
-				{ name="Cellular3", value="cellular3" },
-				{ name="Cellular4", value="cellular4" },
-				{ name="Cellular5", value="cellular5" },
-				{ name="Cellular6", value="cellular6" },
-				{ name="Voronoise", value="voronoise" }
+				{ name="Cellular", value="cellular" }
 			] },
 		{ default=4, label="Scale X", max=32, min=1, name="scale_x", step=1, type="float" },
 		{ default=4, label="Scale Y", max=32, min=1, name="scale_y", step=1, type="float" },
@@ -38,13 +31,14 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			data.parameters.append_array(data2.parameters)
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
-	var tex : String
-	print(ctxt)
+func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }):
 	if ctxt.has("geometry") and ctxt.geometry == "sdf3d":
-		tex = "fbm3d_$noise("+ctxt.uv+", vec3($scale_x, $scale_y, $scale_z), int($iterations), $persistence, 0.0)"
+		return "fbm3d_$noise("+ctxt.uv+", vec3($scale_x, $scale_y, $scale_z), int($iterations), $persistence, 0.0)"
 	else:
-		tex = "fbm_2d_$noise("+ctxt.uv+", vec2($scale_x, $scale_y), int($folds), int($iterations), $persistence, $offset, 0.0)"
+		return "fbm_2d_$noise("+ctxt.uv+", vec2($scale_x, $scale_y), int($folds), int($iterations), $persistence, $offset, 0.0)"
+
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+	var tex : String = get_color_code_gs(ctxt)
 	match ctxt.type:
 		"rgba":
 			return "vec4(vec3("+tex+"), 1.0)"
