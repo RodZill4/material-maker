@@ -561,7 +561,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					if rv.pending_textures.find(t) == -1:
 						rv.pending_textures.push_back(t)
 		# Add inline code
-		if shader_model_preprocessed.has("code"):
+		if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
 			var variant_index = context.get_variant(self, uv)
 			if variant_index == -1:
 				variant_index = context.get_variant(self, uv)
@@ -591,7 +591,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			variant_index = context.get_variant(self, variant_string)
 			for f in mm_io_types.types.keys():
 				if output.has(f):
-					var subst_output = subst(output[f], context, uv)
+					var subst_output = subst(output[f].replace("@NOCODE", ""), context, uv)
 					assert(! (subst_output is GDScriptFunctionState))
 					while subst_output is GDScriptFunctionState:
 						subst_output = yield(subst_output, "completed")

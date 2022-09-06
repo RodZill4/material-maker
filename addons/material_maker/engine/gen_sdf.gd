@@ -145,9 +145,9 @@ func set_sdf_scene(s : Array):
 			shader_model.code += "vec3 $(name_uv)_emission;\n"
 			shader_model.code += "$(name)_c(%s.xyz*vec3(1.0, -1.0, -1.0), $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
-				shader_model.outputs = [{ sdf3d = "$(name)_d(%s, 0)" % uv, type = "sdf3d" }]
+				shader_model.outputs = [{ sdf3d = "@NOCODE $(name)_d(%s, 0)" % uv, type = "sdf3d" }]
 			else:
-				shader_model.outputs = [{ sdf3d = "$(name)_d(%s*vec3(1.0, -1.0, -1.0))" % uv, type = "sdf3d" }]
+				shader_model.outputs = [{ sdf3d = "@NOCODE $(name)_d(%s*vec3(1.0, -1.0, -1.0))" % uv, type = "sdf3d" }]
 			shader_model.parameters = parameter_defs
 			shader_model.outputs.push_back({ tex3d = "$(name_uv)_albedo.rgb", type = "tex3d", shortdesc="Albedo" })
 			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_metallic", type = "tex3d_gs", shortdesc="Metallic" })
@@ -162,9 +162,9 @@ func set_sdf_scene(s : Array):
 			shader_model.code += "$(name)_c(%s, $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
 				parameter_defs.push_back({default=-1, name="index", type="float"})
-				shader_model.outputs = [{ sdf2d = "$(name)_d(%s, 0)" % uv, type = "sdf2d" }]
+				shader_model.outputs = [{ sdf2d = "@NOCODE $(name)_d(%s, 0)" % uv, type = "sdf2d" }]
 			else:
-				shader_model.outputs = [{ sdf2d = "$(name)_d(%s)" % uv, type = "sdf2d", shortdesc="SDF" }]
+				shader_model.outputs = [{ sdf2d = "@NOCODE $(name)_d(%s)" % uv, type = "sdf2d", shortdesc="SDF" }]
 			shader_model.outputs.push_back({ rgba = "$(name_uv)_albedo", type = "rgba", shortdesc="Albedo" })
 			shader_model.outputs.push_back({ f = "$(name_uv)_metallic", type = "f", shortdesc="Metallic" })
 			shader_model.outputs.push_back({ f = "$(name_uv)_roughness", type = "f", shortdesc="Roughness" })

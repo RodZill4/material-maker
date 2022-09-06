@@ -78,4 +78,4 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	if ctxt.has("check") and !ctxt.check:
 		return "{\n%s}\n" % [ color_code ]
 	else:
-		return "if (_n%d < SURF_DIST) {\n%s}\n" % [ scene.index, color_code ]
+		return "if (_n%d < 0.001) {\n%s}\n" % [ scene.index, color_code ]
