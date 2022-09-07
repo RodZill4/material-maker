@@ -10,7 +10,8 @@ func get_parameter_defs():
 		{ label="Position.y", name="position_y", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.y" },
 		{ label="Rotation", name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
-		{ label="K", name="k", type="float", min=0.0, max=5.0, step=0.01, default=1.0, control="Scale1.r" }
+		{ label="K", name="k", type="float", min=0.0, max=5.0, step=0.01, default=1.0, control="Scale1.r" },
+		{ label="ColorK", name="color_k", type="float", min=0.0, max=1.0, step=0.01, default=0.5 }
 	]
 
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
@@ -35,7 +36,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
 		if child_color_code != "":
 			color_code += child_color_code
-			color_code += "\ncoef_%d = 1.0/(1.0+max(1000000.0*$(name_uv)_n%d, 0.0));" % [ scene.index, s.index ]
+			color_code += "\ncoef_%d = 1.0/pow(1.0+max($(name_uv)_n%d, 0.0), 10000.0*pow(0.8-0.3*clamp($color_k, 0.0, 1.0), 10.0));" % [ scene.index, s.index ]
 			color_code += "\nsum_%d+=tmp_%d*coef_%d;" % [ scene.index, scene.index, scene.index ]
 			color_code += "\ncoefsum_%d += coef_%d;" % [ scene.index, scene.index ]
 	if color_code == "":
