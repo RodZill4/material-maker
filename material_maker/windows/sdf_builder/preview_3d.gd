@@ -126,6 +126,8 @@ func _input(ev):
 	_unhandled_input(ev)
 	
 func navigation_input(ev) -> bool:
+	if ! get_global_rect().has_point(get_global_mouse_position()):
+		return false
 	if ev is InputEventMouseMotion:
 		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
