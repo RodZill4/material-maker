@@ -18,6 +18,7 @@ func create_item_list(parent : Node = self):
 
 func get_items_menu(category : String, target : Object, method : String, binds : Array = [], filter : Array = [], parent : Node = self) -> PopupMenu:
 	var menu : PopupMenu = PopupMenu.new()
+	var sole_submenu : PopupMenu = null
 	for c in parent.get_children():
 		if c.get("item_type") == null:
 			var submenu : PopupMenu = get_items_menu(category, target, method, binds, filter, c)
@@ -25,8 +26,10 @@ func get_items_menu(category : String, target : Object, method : String, binds :
 				submenu.name = c.name
 				menu.add_child(submenu)
 				menu.add_submenu_item(c.name, c.name)
+				sole_submenu = submenu
 			else:
 				submenu.free()
+				submenu = null
 		elif c.item_category in filter:
 			var icon : Texture = c.get("icon")
 			if icon != null:
@@ -34,6 +37,11 @@ func get_items_menu(category : String, target : Object, method : String, binds :
 			else:
 				menu.add_item(c.name, item_ids[c.item_type])
 	menu.connect("id_pressed", target, method, binds)
+	if menu.get_item_count() == 1 and sole_submenu != null:
+		menu.clear()
+		menu.remove_child(sole_submenu)
+		menu.free()
+		return sole_submenu
 	return menu
 
 func get_shape_names() -> Array:
