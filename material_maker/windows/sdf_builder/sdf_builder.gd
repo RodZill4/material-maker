@@ -15,10 +15,12 @@ var ignore_parameter_change : String = ""
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
-const MENU_COPY : int = 1000
-const MENU_PASTE : int = 1001
-const MENU_DELETE : int = 1002
-const MENU_DUMP : int = 1003
+const MENU_RENAME : int = 1000
+const MENU_CUT : int = 1001
+const MENU_COPY : int = 1002
+const MENU_PASTE : int = 1003
+const MENU_DELETE : int = 1004
+const MENU_DUMP : int = 1005
 
 signal node_changed(model_data)
 signal editor_window_closed
@@ -73,7 +75,8 @@ func set_sdf_scene(s : Array, parent = null):
 
 func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	var item = tree.create_item(parent_item)
-	item.set_text(0, i.type)
+	item.set_text(0, i.name if i.has("name") else i.type)
+	item.set_editable(0, true)
 	var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[i.type]]
 	var item_icon = item_type.get("icon")
 	if item_icon != null:
@@ -82,6 +85,8 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	item.add_button(1, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
 	item.set_meta("scene", i)
 	set_sdf_scene(i.children, item)
+	if i.has("collapsed") and i.collapsed:
+		item.collapsed = true
 	return item
 
 func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
@@ -106,6 +111,8 @@ func show_menu(current_item : TreeItem):
 	menu.add_submenu_item("Create", add_menu.name)
 	if current_item != null:
 		menu.add_separator()
+		menu.add_item("Rename", MENU_RENAME)
+		menu.add_item("Cut", MENU_CUT)
 		menu.add_item("Copy", MENU_COPY)
 	var json = parse_json(OS.clipboard)
 	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
@@ -151,6 +158,12 @@ func paste_item(parent : TreeItem):
 
 func _on_menu(id : int, current_item : TreeItem):
 	match id:
+		MENU_RENAME:
+			current_item.select(0)
+			tree.edit_selected()
+		MENU_CUT:
+			copy_item(current_item)
+			delete_item(current_item)
 		MENU_COPY:
 			copy_item(current_item)
 		MENU_PASTE:
@@ -188,6 +201,22 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	set_preview(scene)
 	item.select(0)
 
+func _on_Tree_item_edited():
+	var item : TreeItem = tree.get_selected()
+	var item_scene : Dictionary = item.get_meta("scene")
+	var name : String = item.get_text(0)
+	if name == "" or name == item_scene.type:
+		item_scene.erase("name")
+		item.set_text(0, item_scene.type)
+	else:
+		item_scene.name = name
+
+func _on_Tree_item_collapsed(item):
+	var item_scene : Dictionary = item.get_meta("scene")
+	if item.collapsed:
+		item_scene.collapsed = true
+	else:
+		item_scene.erase("collapsed")
 
 func get_local_item_transform_2d(item : TreeItem) -> Transform2D:
 	if item.has_meta("scene"):
@@ -472,5 +501,3 @@ func _input(event):
 				_:
 					return
 		accept_event()
-
-

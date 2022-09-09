@@ -128,6 +128,8 @@ editor = true
 [connection signal="button_pressed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_button_pressed"]
 [connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
+[connection signal="item_collapsed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
+[connection signal="item_edited" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_edited"]
 [connection signal="item_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
