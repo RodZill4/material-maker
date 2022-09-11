@@ -211,9 +211,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="10.065466"
-     inkscape:cx="209.37928"
-     inkscape:cy="172.22253"
+     inkscape:zoom="20.130932"
+     inkscape:cx="21.732725"
+     inkscape:cy="117.75411"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -249,7 +249,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4113,5 +4112,9 @@
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 207.83984 164.7207 C 203.28741 164.88986 210.817 176.94308 205.75195 183.39844 L 198.89844 183.59766 L 198.89844 186.47852 L 216.78125 186.47852 L 216.78125 183.69727 L 209.62695 183.29883 C 203.96979 176.81922 213.25295 164.64976 207.83984 164.7207 z M 199.8418 186.62891 C 199.7042 186.62891 199.59375 186.73935 199.59375 186.87695 C 199.59375 187.01455 199.7042 187.125 199.8418 187.125 L 215.73828 187.125 C 215.87588 187.125 215.98633 187.01455 215.98633 186.87695 C 215.98633 186.73935 215.87588 186.62891 215.73828 186.62891 L 199.8418 186.62891 z "
        transform="translate(0,88.06665)" />
+    <path
+       id="rect1517"
+       style="fill:#ffffff;stroke:none;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stop-color:#000000;fill-opacity:1"
+       d="m 19.125,201.12716 v 11.62305 h 4.232422 v -11.62305 z m 5.205078,0 v 11.62305 H 28.5625 v -11.62305 z m -7.642578,7.28907 v 6.69531 h 14.511719 v -6.69531 h -1.742188 v 5.1289 H 18.28125 v -5.1289 z" />
   </g>
 </svg>

@@ -52,6 +52,9 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Iterate Buffer"
 
+func get_buffers() -> Array:
+	return [ self ]
+
 func get_parameter_defs() -> Array:
 	return [
 			{ name="size", type="size", first=4, last=13, default=4 },

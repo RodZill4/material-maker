@@ -2,8 +2,22 @@ extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
 
+class NodeButton:
+	var hidden : bool = false
+	var texture : Texture
+	
+	func _init(t : Texture):
+		hidden = false
+		texture = t
+
+
 var show_inputs : bool = false
 var show_outputs : bool = false
+
+var buttons : Array = []
+var minimize_button : NodeButton
+var randomness_button : NodeButton
+var buffer_button : NodeButton
 
 var rendering_time : int = -1
 
@@ -11,6 +25,7 @@ var rendering_time : int = -1
 const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
 const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
 const RANDOMNESS_LOCKED_ICON : Texture = preload("res://material_maker/icons/randomness_locked.tres")
+const BUFFER_ICON : Texture = preload("res://material_maker/icons/buffer.tres")
 const CUSTOM_ICON : Texture = preload("res://material_maker/icons/custom.png")
 const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
@@ -33,20 +48,43 @@ static func wrap_string(s : String, l : int = 50) -> String:
 			break
 	return s
 
+func _init():
+	minimize_button = add_button(MINIMIZE_ICON)
+	randomness_button = add_button(RANDOMNESS_ICON)
+	randomness_button.hidden = true
+	buffer_button = add_button(BUFFER_ICON)
+	buffer_button.hidden = true
+
 func _ready() -> void:
 	connect("gui_input", self, "_on_gui_input")
+	call_deferred("update")
+
+func add_button(texture : Texture) -> NodeButton:
+	var button : NodeButton = NodeButton.new(texture)
+	buttons.push_back(button)
+	return button
 
 func on_generator_changed(g):
 	if generator == g:
 		update()
 
+func update():
+	if generator != null and generator.has_randomness():
+		randomness_button.hidden = false
+		randomness_button.texture = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
+	else:
+		randomness_button.hidden = true
+	buffer_button.hidden = generator.get_buffers().empty()
+	.update()
+
 func _draw() -> void:
 	var color : Color = get_color("title_color")
-	var icon = MINIMIZE_ICON
-	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false, color)
-	if generator != null and generator.has_randomness():
-		icon = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
-		draw_texture_rect(icon, Rect2(rect_size.x-56, 4, 16, 16), false)
+	var button_x : int = rect_size.x-40
+	for b in buttons:
+		if b.hidden:
+			continue
+		draw_texture_rect(b.texture, Rect2(button_x, 4, 16, 16), false, color)
+		button_x -= 16
 	var inputs = generator.get_input_defs()
 	var font : Font = get_font("default_font")
 	var scale = get_global_transform().get_scale()
@@ -133,35 +171,48 @@ func _on_seed_menu(id):
 			if OS.clipboard.left(5) == "seed=":
 				set_generator_seed(OS.clipboard.right(5).to_float())
 
+func on_node_button(b : NodeButton, event : InputEvent) -> bool:
+	if b == minimize_button:
+		if event.button_index == BUTTON_LEFT:
+			generator.minimized = !generator.minimized
+			var hier_name = generator.get_hier_name()
+			get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
+			update_node()
+			return true
+	elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
+		match event.button_index:
+			BUTTON_LEFT:
+				reroll_generator_seed()
+				return true
+			BUTTON_RIGHT:
+				var menu : PopupMenu = PopupMenu.new()
+				menu.add_item(tr("Unlock seed") if generator.is_seed_locked() else tr("Lock seed"), 0)
+				menu.add_separator()
+				menu.add_item(tr("Copy seed"), 1)
+				if ! generator.is_seed_locked() and OS.clipboard.left(5) == "seed=":
+					menu.add_item(tr("Paste seed"), 2)
+				add_child(menu)
+				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+				menu.connect("popup_hide", menu, "queue_free")
+				menu.connect("id_pressed", self, "_on_seed_menu")
+				return true
+	return false
+
 var doubleclicked : bool = false
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
-				if event.button_index == BUTTON_LEFT:
-					generator.minimized = !generator.minimized
-					var hier_name = generator.get_hier_name()
-					get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
-					update_node()
-					accept_event();
-			elif Rect2(rect_size.x-56, 4, 16, 16).has_point(event.position):
-				match event.button_index:
-					BUTTON_LEFT:
-						reroll_generator_seed()
-					BUTTON_RIGHT:
-						var menu : PopupMenu = PopupMenu.new()
-						menu.add_item(tr("Unlock seed") if generator.is_seed_locked() else tr("Lock seed"), 0)
-						menu.add_separator()
-						menu.add_item(tr("Copy seed"), 1)
-						if ! generator.is_seed_locked() and OS.clipboard.left(5) == "seed=":
-							menu.add_item(tr("Paste seed"), 2)
-						add_child(menu)
-						menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-						menu.connect("popup_hide", menu, "queue_free")
-						menu.connect("id_pressed", self, "_on_seed_menu")
+			var button_x : int = rect_size.x-40
+			for b in buttons:
+				if b.hidden:
+					continue
+				if Rect2(button_x, 4, 16, 16).has_point(event.position):
+					if on_node_button(b, event):
 						accept_event()
-			elif event.doubleclick:
+						return
+				button_x -= 16
+			if event.doubleclick:
 				doubleclicked = true
 			if event.button_index == BUTTON_RIGHT:
 				if generator is MMGenGraph:
