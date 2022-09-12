@@ -112,5 +112,6 @@ void fragment() {
 		ROUGHNESS = roughness;
 		METALLIC = metallic;
 		NORMAL = (INV_CAMERA_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
+		EMISSION = emission;
 	}
 }

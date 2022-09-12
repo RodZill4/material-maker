@@ -258,26 +258,26 @@ item_category = "SDF2D"
 [node name="Albedo" type="Node" parent="SDF2D/Color"]
 script = ExtResource( 37 )
 item_type = "Albedo2D"
-item_category = "SDF2D"
+item_category = "SDF2D_COLOR"
 channel_name = "albedo"
 type = 2
 
 [node name="Metallic" type="Node" parent="SDF2D/Color"]
 script = ExtResource( 37 )
 item_type = "Metallic2D"
-item_category = "SDF2D"
+item_category = "SDF2D_COLOR"
 channel_name = "metallic"
 
 [node name="Roughness" type="Node" parent="SDF2D/Color"]
 script = ExtResource( 37 )
 item_type = "Roughness2D"
-item_category = "SDF2D"
+item_category = "SDF2D_COLOR"
 channel_name = "roughness"
 
 [node name="Emission" type="Node" parent="SDF2D/Color"]
 script = ExtResource( 37 )
 item_type = "Emission2D"
-item_category = "SDF2D"
+item_category = "SDF2D_COLOR"
 channel_name = "emission"
 type = 1
 
@@ -408,27 +408,27 @@ item_category = "SDF3D"
 [node name="Albedo" type="Node" parent="SDF3D/Color"]
 script = ExtResource( 42 )
 item_type = "Albedo3D"
-item_category = "SDF3D"
+item_category = "SDF3D_COLOR"
 channel_name = "albedo"
 type = 2
 
 [node name="Metallic" type="Node" parent="SDF3D/Color"]
 script = ExtResource( 42 )
 item_type = "Metallic3D"
-item_category = "SDF3D"
+item_category = "SDF3D_COLOR"
 channel_name = "metallic"
 
 [node name="Roughness" type="Node" parent="SDF3D/Color"]
 script = ExtResource( 42 )
 item_type = "Roughness3D"
-item_category = "SDF3D"
+item_category = "SDF3D_COLOR"
 channel_name = "roughness"
 
 [node name="Emission" type="Node" parent="SDF3D/Color"]
 script = ExtResource( 42 )
 item_type = "Emission3D"
-item_category = "SDF3D"
-channel_name = "Emission"
+item_category = "SDF3D_COLOR"
+channel_name = "emission"
 type = 1
 
 [node name="Texture" type="Node" parent="."]

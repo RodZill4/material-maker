@@ -374,16 +374,9 @@ func _on_Tree_item_selected():
 			var scene_type = mm_sdf_builder.scene_get_type(item_scene)
 			match scene_type.item_category:
 				"SDF3D":
-					print(scene_type.get_property_list())
-					if scene_type.get_script() == preload("res://addons/material_maker/sdf_builder/sdf3d/color.gd"):
-						preview_3d.mode = 0
-					else:
-						preview_3d.mode = 2
+					preview_3d.mode = 2
 				"SDF2D":
-					if scene_type.get_script() == preload("res://addons/material_maker/sdf_builder/sdf2d/color.gd"):
-						preview_3d.mode = 0
-					else:
-						preview_3d.mode = 1
+					preview_3d.mode = 1
 				_:
 					preview_3d.mode = 0
 			update_local_transform_3d()

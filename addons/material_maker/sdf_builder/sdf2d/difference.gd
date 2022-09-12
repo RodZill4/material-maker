@@ -3,6 +3,9 @@ extends "res://addons/material_maker/sdf_builder/base.gd"
 func _ready():
 	pass # Replace with function body.
 
+func get_children_types():
+	return [ "SDF2D", "SDF2D_COLOR" ]
+
 func get_parameter_defs():
 	return [
 		{ label="Position.x", name="position_x", type="float", min=-1.0, max=1.0, step=0.01, default=0.0, control="P1.x" },

@@ -4,7 +4,7 @@ func _ready():
 	pass # Replace with function body.
 
 func get_children_types():
-	return [ "SDF2D" ]
+	return [ "SDF2D", "SDF3D_COLOR" ]
 
 func get_parameter_defs():
 	return [
