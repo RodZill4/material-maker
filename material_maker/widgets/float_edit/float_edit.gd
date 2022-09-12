@@ -96,7 +96,7 @@ func _gui_input(event : InputEvent) -> void:
 				from_lower_bound = value <= min_value
 				from_upper_bound = value >= max_value
 				modifiers = get_modifiers(event)
-				emit_signal("value_changed_undo", value)
+				emit_signal("value_changed_undo", value, false)
 				editable = false
 				selecting_enabled = false
 		else:
