@@ -69,8 +69,10 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
 	var color_code : String = ""
+	var ctxt2 : Dictionary = ctxt.duplicate()
+	ctxt2.local_uv = "$(name_uv)_n%d_p" % scene.index
 	for s in scene.children:
-		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt, editor)
+		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
 		if child_color_code != "":
 			color_code += child_color_code+"\n"
 	if color_code == "":

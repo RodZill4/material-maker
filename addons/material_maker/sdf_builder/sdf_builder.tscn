@@ -260,7 +260,7 @@ script = ExtResource( 37 )
 item_type = "Albedo2D"
 item_category = "SDF2D"
 channel_name = "albedo"
-type = 1
+type = 2
 
 [node name="Metallic" type="Node" parent="SDF2D/Color"]
 script = ExtResource( 37 )
@@ -410,7 +410,7 @@ script = ExtResource( 42 )
 item_type = "Albedo3D"
 item_category = "SDF3D"
 channel_name = "albedo"
-type = 1
+type = 2
 
 [node name="Metallic" type="Node" parent="SDF3D/Color"]
 script = ExtResource( 42 )

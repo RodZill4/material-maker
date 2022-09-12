@@ -2,7 +2,7 @@ tool
 extends Spatial
 
 export var material : Material setget set_material
-export(int, "Full", "ArrowOnly", "TorusOnly") var mode = 0 setget set_mode
+export(int, "Full", "ArrowOnly", "TorusOnly", "Nothing") var mode = 0 setget set_mode
 
 
 signal move(v)
@@ -30,6 +30,11 @@ func set_mode(m):
 			$TranslateArea.visible = false
 			$Torus.visible = true
 			$RotateArea.visible = true
+		_:
+			$Arrow.visible = false
+			$TranslateArea.visible = false
+			$Torus.visible = false
+			$RotateArea.visible = false
 
 func set_material(m):
 	material = m

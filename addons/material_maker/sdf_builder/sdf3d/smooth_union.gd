@@ -40,9 +40,9 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 		if child_color_code != "":
 			color_code += child_color_code
 			color_code += "\ncoef_%d = 1.0/pow(1.0+max($(name_uv)_n%d, 0.0), 10000.0*pow(0.8-0.3*clamp($color_k, 0.0, 1.0), 10.0));" % [ scene.index, s.index ]
-			color_code += "\nsum_%d+=tmp_%d*coef_%d;" % [ scene.index, scene.index, scene.index ]
+			color_code += "\nsum_%d += tmp_%d*coef_%d;" % [ scene.index, scene.index, scene.index ]
 			color_code += "\ncoefsum_%d += coef_%d;" % [ scene.index, scene.index ]
 	if color_code == "":
 		return ""
-	color_code = ("vec4 sum_%d;\nvec4 tmp_%d;\nfloat coef_%d;\nfloat coefsum_%d = 0.0;\n" % [ scene.index, scene.index, scene.index, scene.index ])+color_code+("%s = sum_%d/coefsum_%d;" % [ ctxt.target, scene.index, scene.index ])
+	color_code = ("%s sum_%d;\n%s tmp_%d;\nfloat coef_%d;\nfloat coefsum_%d = 0.0;\n" % [ ctxt.glsl_type, scene.index, ctxt.glsl_type, scene.index, scene.index, scene.index ])+color_code+("%s = sum_%d/coefsum_%d;" % [ ctxt.target, scene.index, scene.index ])
 	return "if (_n%d < 0.001) {\n%s}\n" % [ scene.index, color_code ]

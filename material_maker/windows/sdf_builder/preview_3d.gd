@@ -2,7 +2,7 @@ extends ViewportContainer
 
 
 export var control_target : NodePath
-export(int, "SDF2D", "SDF3D") var mode = 1 setget set_mode
+export(int, "NONE", "SDF2D", "SDF3D") var mode = 1 setget set_mode
 
 onready var viewport = $Viewport
 onready var camera_position = $Viewport/CameraPosition

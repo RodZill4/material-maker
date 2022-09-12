@@ -109,8 +109,8 @@ void fragment() {
 		vec3 emission;
 		COLOR_FCT(p, albedo, metallic, roughness, emission, _seed_variation_);
 		ALBEDO = albedo.rgb;
-		ROUGHNESS = 0.2;
-		METALLIC = 0.0;
+		ROUGHNESS = roughness;
+		METALLIC = metallic;
 		NORMAL = (INV_CAMERA_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
 	}
 }

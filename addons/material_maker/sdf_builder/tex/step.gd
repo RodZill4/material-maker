@@ -27,7 +27,9 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	if scene.children.empty():
 		child = "0.0"
 	else:
-		child = mm_sdf_builder.get_color_code(scene.children[0], ctxt, editor)
+		var ctxt2 : Dictionary = ctxt.duplicate()
+		ctxt2.type = "float"
+		child = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor)
 	var tex : String = "clamp(("+child+"-$value)/max(0.0001, $width)+0.5, 0.0, 1.0)"
 	if scene.parameters.has("invert") && scene.parameters.invert:
 		tex = "(1.0-"+tex+")"

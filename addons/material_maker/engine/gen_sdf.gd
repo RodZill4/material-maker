@@ -98,14 +98,14 @@ func set_sdf_scene(s : Array):
 			var code : String = item_shader_model.code.replace("$(name_uv)", "")
 			distance_function += code
 			color_function += code
-		color_function += "\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="albedo", target="albedo", type="rgba" }, editor)
-		color_function += "\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="metallic", target="metallic", type="float" }, editor)
-		color_function += "\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="roughness", target="roughness", type="float" }, editor)
-		color_function += "\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="emission", target="emission", type="color" }, editor)
+		color_function += "\n// Albedo\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="albedo", target="albedo", type="rgba", glsl_type="vec4" }, editor)
+		color_function += "\n// Metallic\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="metallic", target="metallic", type="float", glsl_type="float" }, editor)
+		color_function += "\n// Roughness\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="roughness", target="roughness", type="float", glsl_type="float" }, editor)
+		color_function += "\n// Emission\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="emission", target="emission", type="color", glsl_type="vec3" }, editor)
 		color_function += "\n"
 		if item_shader_model.has("outputs"):
 			var output = item_shader_model.outputs[0]
