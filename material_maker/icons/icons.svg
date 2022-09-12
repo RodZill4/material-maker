@@ -212,8 +212,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="20.130932"
-     inkscape:cx="21.732725"
-     inkscape:cy="117.75411"
+     inkscape:cx="21.782399"
+     inkscape:cy="129.67606"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -4116,5 +4116,27 @@
        id="rect1517"
        style="fill:#ffffff;stroke:none;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;stop-color:#000000;fill-opacity:1"
        d="m 19.125,201.12716 v 11.62305 h 4.232422 v -11.62305 z m 5.205078,0 v 11.62305 H 28.5625 v -11.62305 z m -7.642578,7.28907 v 6.69531 h 14.511719 v -6.69531 h -1.742188 v 5.1289 H 18.28125 v -5.1289 z" />
+    <path
+       id="path1496"
+       style="fill:#ffffff;fill-opacity:1;stroke:#818181;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stop-color:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 3.1793895,216.97342 v 11.62305 h 4.232422 v -11.62305 z m 5.205078,0 v 11.62305 H 12.61689 v -11.62305 z m -7.64257797,7.28907 v 6.69531 H 15.253609 v -6.69531 h -1.742188 v 5.1289 H 2.3356395 v -5.1289 z" />
+    <path
+       id="path2930"
+       style="fill:#ffffff;fill-opacity:1;stroke:#818181;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       d="m 19.22435,216.97342 v 11.62305 h 4.232422 v -11.62305 z m 5.205078,0 v 11.62305 h 4.232422 v -11.62305 z m -7.642578,7.28907 v 6.69531 h 14.511719 v -6.69531 h -1.742188 v 5.1289 H 18.3806 v -5.1289 z" />
+    <rect
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.595476;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       id="rect2954"
+       width="2.7569513"
+       height="6.9047971"
+       x="28.736872"
+       y="216.62502" />
+    <rect
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.595476;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
+       id="rect3102"
+       width="2.7569513"
+       height="6.9047971"
+       x="24.141954"
+       y="216.62502" />
   </g>
 </svg>
