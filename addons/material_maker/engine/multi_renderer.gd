@@ -10,6 +10,7 @@ var free_renderers = []
 
 var max_renderers : int = 8
 var renderers_enabled : bool = true
+var max_viewport_size : int = 2048
 
 var max_buffer_size = 0
 

@@ -9,6 +9,7 @@ var fast_counter : int = 0
 
 onready var menu : PopupMenu = $PopupMenu
 onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
+onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
 onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
 const ITEM_AUTO : int           = 1000
@@ -25,6 +26,14 @@ func _ready() -> void:
 		renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
 	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
 	menu.add_separator()
+	# Render size limit menu
+	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
+	var render_size = mm_globals.get_config("max_viewport_size")
+	for i in range(4):
+		var size : int = 512 << i
+		render_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
+	mm_renderer.max_viewport_size = render_size
+	render_menu.set_item_checked(render_menu.get_item_index(render_size), true)
 	# Buffer size limit menu
 	menu.add_submenu_item("Maximum buffer size", "MaxBufferSize")
 	buffers_menu.add_radio_check_item("Unlimited", 0)
@@ -104,6 +113,12 @@ func _on_PopupMenu_id_pressed(id):
 
 func _on_Renderers_id_pressed(id):
 	set_max_renderers(id)
+
+func _on_MaxRenderSize_id_pressed(id):
+	render_menu.set_item_checked(render_menu.get_item_index(mm_renderer.max_viewport_size), false)
+	mm_renderer.max_viewport_size = id
+	render_menu.set_item_checked(render_menu.get_item_index(id), true)
+	mm_globals.set_config("max_viewport_size", id)
 
 func _on_MaxBufferSize_id_pressed(id):
 	if mm_renderer.max_buffer_size == id:

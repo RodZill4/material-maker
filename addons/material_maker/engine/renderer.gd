@@ -4,7 +4,6 @@ extends Viewport
 
 var render_owner : Object = null
 
-var max_viewport_size : int = 2048
 var texture : Texture
 
 
@@ -59,6 +58,7 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	var shader_material = $ColorRect.material
 	var chunk_count : int = 1
 	var render_scale : float = 1.0
+	var max_viewport_size : int = mm_renderer.max_viewport_size
 	if render_size <= max_viewport_size:
 		size = Vector2(render_size, render_size)
 	else:
@@ -78,9 +78,6 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 		yield(get_tree(), "idle_frame")
 		texture = get_texture()
 	else:
-		print(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
-		print(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
-		print(Performance.get_monitor(Performance.RENDER_USAGE_VIDEO_MEM_TOTAL))
 		var image : Image = Image.new()
 		image.create(render_size, render_size, false, get_texture().get_data().get_format())
 		material.set_shader_param("scale", render_scale)
