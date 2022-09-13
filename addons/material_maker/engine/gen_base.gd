@@ -114,6 +114,9 @@ func toggle_lock_seed() -> bool:
 func is_seed_locked() -> bool:
 	return seed_locked
 
+func get_buffers() -> Array:
+	return []
+
 func init_parameters() -> void:
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):

@@ -1,3 +1,15 @@
+# Material Maker 1.1
+
+## General
+
+- Updated renderer to limit the size of rendering viewports (big textures are rendered in chunks and reassembled).
+  This reduces crashes on lower end GPU and/or when generating high resolution textures. The maximum render size
+  can be configured in the progress counter context menu.
+- Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
+  can be used to know if Material Maker uses the integrated graphics on a laptop).
+
+## Nodes
+
 # Material Maker 1.0
 
 ## General

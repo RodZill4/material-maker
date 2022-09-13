@@ -14,6 +14,8 @@ const VERSION_COMPLEX : int = 2
 var version : int = VERSION_OLD
 
 var material : ShaderMaterial = null
+var is_paused : bool = false
+var need_update : bool = false
 var updating : bool = false
 var update_again : bool = true
 
@@ -40,6 +42,16 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "Buffer"
+
+func set_paused(v : bool) -> void:
+	if v == is_paused:
+		return
+	is_paused = v
+	if ! v and need_update:
+		update_buffer()
+
+func get_buffers() -> Array:
+	return [ self ]
 
 func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [ { name="size", type="size", first=4, last=13, default=4 } ]
@@ -134,6 +146,9 @@ func on_texture_invalidated(n : String) -> void:
 			pending_textures.push_back(n)
 
 func update_buffer() -> void:
+	if is_paused:
+		need_update = true
+		return
 	if !updating:
 		updating = true
 		while update_again:
@@ -167,6 +182,7 @@ func update_buffer() -> void:
 			renderer.release(self)
 			current_renderer = null
 		updating = false
+		need_update = false
 		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 
 func get_globals(texture_name : String) -> Array:

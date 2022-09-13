@@ -9,6 +9,8 @@ a loop n times on the result.
 
 var material : ShaderMaterial = null
 var loop_material : ShaderMaterial = null
+var is_paused : bool = false
+var need_update : bool = false
 var updating : bool = false
 var update_again : bool = false
 var current_iteration : int = 0
@@ -19,7 +21,7 @@ var is_pending : bool = false
 var used_named_parameters : Array = []
 var pending_textures = [[], []]
 
-func _ready() -> void:
+func _init():
 	texture.flags = Texture.FLAG_REPEAT
 	material = ShaderMaterial.new()
 	material.shader = Shader.new()
@@ -27,6 +29,8 @@ func _ready() -> void:
 	loop_material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
+
+func _ready() -> void:
 	add_to_group("preview")
 
 func set_pending() -> void:
@@ -39,6 +43,13 @@ func unset_pending():
 		mm_renderer.remove_pending_request()
 		is_pending = false
 
+func set_paused(v : bool) -> void:
+	if v == is_paused:
+		return
+	is_paused = v
+	if ! v and need_update:
+		update_buffer()
+
 func _exit_tree() -> void:
 	if current_renderer != null:
 		current_renderer.release(self)
@@ -49,6 +60,9 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "Iterate Buffer"
+
+func get_buffers() -> Array:
+	return [ self ]
 
 func get_parameter_defs() -> Array:
 	return [
@@ -159,6 +173,9 @@ func set_current_iteration(i : int) -> void:
 		get_tree().call_group("preview", "on_float_parameters_changed", { iteration_param_name:current_iteration })
 
 func update_buffer() -> void:
+	if is_paused:
+		need_update = true
+		return
 	update_again = true
 	if !updating:
 		updating = true
@@ -198,6 +215,7 @@ func update_buffer() -> void:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
 		else:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+		need_update = false
 		updating = false
 
 func get_globals(texture_name : String) -> Array:

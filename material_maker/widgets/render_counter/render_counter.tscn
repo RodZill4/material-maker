@@ -6,9 +6,6 @@
 margin_right = 170.0
 margin_bottom = 20.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="FpsCounter" type="Label" parent="."]
 margin_bottom = 20.0
@@ -18,9 +15,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="GpuRam" type="Label" parent="."]
 margin_left = 4.0
-margin_right = 154.0
+margin_right = 4.0
+margin_bottom = 20.0
+mouse_filter = 0
+size_flags_vertical = 1
+valign = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = 8.0
+margin_right = 158.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 150, 0 )
 mouse_filter = 2
@@ -45,6 +53,10 @@ margin_bottom = 20.0
 margin_right = 20.0
 margin_bottom = 20.0
 
+[node name="MaxRenderSize" type="PopupMenu" parent="PopupMenu"]
+margin_right = 20.0
+margin_bottom = 20.0
+
 [node name="MaxBufferSize" type="PopupMenu" parent="PopupMenu"]
 margin_right = 20.0
 margin_bottom = 20.0
@@ -52,4 +64,5 @@ margin_bottom = 20.0
 [connection signal="gui_input" from="." to="." method="_on_RenderCounter_gui_input"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
 [connection signal="id_pressed" from="PopupMenu/Renderers" to="." method="_on_Renderers_id_pressed"]
+[connection signal="id_pressed" from="PopupMenu/MaxRenderSize" to="." method="_on_MaxRenderSize_id_pressed"]
 [connection signal="id_pressed" from="PopupMenu/MaxBufferSize" to="." method="_on_MaxBufferSize_id_pressed"]
