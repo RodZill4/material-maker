@@ -14,7 +14,7 @@
 		"global": "const float pack_size = 256.0;\n\nvec2 pack_1x32_to_2x16(float s) {\n\treturn vec2(s - mod(s, 1.0/pack_size), mod(s, 1.0/pack_size)*pack_size);\n}\n\nfloat pack_2x16_to_1x32(vec2 s) {\n\treturn s.x + s.y/pack_size;\n}\n\nvec4 pack_2x32_to_4x16(vec2 s) {\n\treturn vec4(s.xy - vec2(mod(s.x, 1.0/pack_size), mod(s.y, 1.0/pack_size)) , vec2(mod(s.x, 1.0/pack_size), mod(s.y, 1.0/pack_size))*pack_size);\n}\n\nvec2 pack_4x16_to_2x32(vec4 s) {\n\treturn s.rg + s.ba/pack_size;\n}\n",
 		"inputs": [
 			{
-				"default": "vec3(1.0)",
+				"default": "1.0",
 				"function": true,
 				"label": "",
 				"name": "source",

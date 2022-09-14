@@ -55,6 +55,13 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return label
 
+func get_buffers() -> Array:
+	var buffers : Array = []
+	for c in get_children():
+		if c is MMGenBase:
+			buffers.append_array(c.get_buffers())
+	return buffers
+
 func set_type_name(l) -> void:
 	if l !=label:
 		label = l
