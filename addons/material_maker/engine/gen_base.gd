@@ -212,6 +212,20 @@ func set_parameter(n : String, v) -> void:
 								parameter_changes[parameter_name] = v.points[i].c[f]
 					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 					return
+			elif parameter_def.type == "curve":
+				if old_value is MMCurve and v is MMCurve and old_value != null and v.points.size() == old_value.points.size():
+					var parameter_changes = {}
+					for i in range(old_value.points.size()):
+						for f in [ "x", "y" ]:
+							if v.points[i].p[f] != old_value.points[i].p[f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i].p[f]
+						for f in [ "ls", "rs" ]:
+							if v.points[i][f] != old_value.points[i][f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i][f]
+					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+					return
 		all_sources_changed()
 
 func notify_output_change(output_index : int) -> void:
