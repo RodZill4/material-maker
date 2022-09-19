@@ -7,8 +7,14 @@
   can be configured in the progress counter context menu.
 - Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
   can be used to know if Material Maker uses the integrated graphics on a laptop).
+- In Graph views, added support for arrow keys to scroll in all directions (useful when connecting nodes that
+  are far from each other).
 
 ## Nodes
+
+## Fixes, optimizations
+
+- Optimized curve parameter editor
 
 # Material Maker 1.0
 

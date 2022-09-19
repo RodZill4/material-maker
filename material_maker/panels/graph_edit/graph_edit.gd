@@ -181,8 +181,22 @@ func _gui_input(event) -> void:
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
-			remove_selection()
+		print(zoom)
+		match scancode_with_modifiers:
+			KEY_DELETE,KEY_BACKSPACE:
+				remove_selection()
+			KEY_LEFT:
+				scroll_offset.x -= 0.5*rect_size.x
+				accept_event()
+			KEY_RIGHT:
+				scroll_offset.x += 0.5*rect_size.x
+				accept_event()
+			KEY_UP:
+				scroll_offset.y -= 0.5*rect_size.y
+				accept_event()
+			KEY_DOWN:
+				scroll_offset.y += 0.5*rect_size.y
+				accept_event()
 	elif event is InputEventMouseMotion:
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
