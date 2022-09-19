@@ -47,6 +47,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	texture = get_texture()
 	$Font.visible = false
 	$ColorRect.visible = true
 	return self
