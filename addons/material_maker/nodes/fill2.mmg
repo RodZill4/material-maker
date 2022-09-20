@@ -1,0 +1,229 @@
+{
+	"connections": [
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "fill_iterate",
+			"to_port": 0
+		},
+		{
+			"from": "fill_iterate",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "fill_preprocess",
+			"to_port": 0
+		},
+		{
+			"from": "fill_preprocess",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "shape",
+			"to_port": 0
+		},
+		{
+			"from": "shape",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Fill",
+	"longdesc": "Fills areas defined by white outlines of its input",
+	"name": "fill",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "iterate_buffer",
+			"node_position": {
+				"x": -134.86264,
+				"y": -362.841705
+			},
+			"parameters": {
+				"filter": true,
+				"iterations": 10,
+				"mipmap": true,
+				"size": 8
+			},
+			"seed": 29168,
+			"seed_locked": true,
+			"type": "iterate_buffer"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -542.307068,
+				"y": -370.662445
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "The input image whose white outlines must be filled",
+					"name": "port0",
+					"shortdesc": "Input",
+					"type": "f"
+				}
+			],
+			"seed": 58064,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 290.267273,
+				"y": -361.662445
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Generates fill data, to be connected to a fill companion node",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "fill"
+				}
+			],
+			"seed": -4244,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -171.110138,
+				"y": -542.509705
+			},
+			"parameters": {
+				"param0": 8,
+				"param1": 10
+			},
+			"seed": 52136,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "size"
+						},
+						{
+							"node": "fill_preprocess",
+							"widget": "s"
+						},
+						{
+							"node": "fill_iterate",
+							"widget": "s"
+						}
+					],
+					"longdesc": "The resolution of the inptu image",
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "iterations"
+						}
+					],
+					"longdesc": "The number of iterations of the algorithm. The optimal value depends a lot on the input image.",
+					"name": "param1",
+					"shortdesc": "Iterations",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "fill_iterate",
+			"node_position": {
+				"x": -91.524506,
+				"y": -225.609192
+			},
+			"parameters": {
+				"s": 8
+			},
+			"seed": 11778,
+			"seed_locked": false,
+			"type": "fill_iterate"
+		},
+		{
+			"name": "fill_preprocess",
+			"node_position": {
+				"x": -110.443481,
+				"y": -427.202026
+			},
+			"parameters": {
+				"s": 8
+			},
+			"seed": 24315,
+			"seed_locked": false,
+			"type": "fill_preprocess"
+		},
+		{
+			"name": "shape",
+			"node_position": {
+				"x": 111.919891,
+				"y": -363.122955
+			},
+			"parameters": {
+
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
+				"inputs": [
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": "",
+				"name": "Fill Convert",
+				"outputs": [
+					{
+						"fill": "$in($(uv))",
+						"type": "fill"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"param0": 8,
+		"param1": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Fill",
+	"type": "graph"
+}

@@ -2409,13 +2409,13 @@
 		{
 			"icon": "filter_fill",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAs5JREFUeJztW9uOJCEIxUr9/y87L2vFskUBD2JSe14mPa0IiNy0ExFlIqKcM6WUaAbpuB3geNHwmHLOmYhchPdW1j/Wl3B7MbjDUmr67XqS9XPOdI2+bD9bBULslBYpJdG6l2SQVoAIPyEVuJ3TtYCeACsCWZhDQMLzNWPuNMc3gskKqAqDKCY4nBRCC54wyA44jGEJNJv5WECZ6C3waVbwOMFdjEU5RA5sHvAVXET7zfIkK/hvAVFO6RQreEWBLyL8CERawbAa3IWoo1COfrgCovF5H3BHM6CJQsijUo7eHZmba4VH8VkU+VkfUDveREQ5wgqidr+Fqw+YndnoTPDlA7y0vHpx4amklw9ACz8SUmv6nsnSqym6wySta3gp4RUFUIsg7ux2OeaLCK9dL8Y9rODHB6wuws09cfeJmiOwql0E4zMaaCvo+gD0IugdRdJiEyGrEnpzPEwfpdRuOWwhvsP8PdZ82uIriBAeBUgYhJii8X5/dfN+ymGLGUYAdps9ux1+Bi5mdlJI3/ZI3wPNxLs1hE661a2xwrO4FtglPPLFimTc1hciGmgKKun/erhngs8IW97nWaERvv47wpMJcoQluXn7GaGElo6WpnTskwdoGasRGQqtpl/AtsU1hVE7BlVMFTpSoSwPOi+NebeM7YA2xGmP3vRihLMC7uxzn62QhmVrITVVwMipaSOIBb2usFtDZIaeFcx2Hd1eQzi+erz4epwLi5bc3QqPxq3oamx2yeGVDPXoIHefSHgE6gk7w6KkLtCgpyxRFJhhR1hEhb0WQwWMFt1tBVy+LwUni/l6vM0UpQ0JtCNbdcKsAlAFDYruSmE0wtITGVTlp1mrXW/V/4h/NLUyzjq+By4tHylh9H1XAV47iuwRWFroPXTb4hKc1j6XKKX3/c/tsFfdjbKqVSto55idYGSLHNmnUP9oKsLxjejO+hQt2jl/j5vBqPNZAccAAAAASUVORK5CYII=",
-			"name": "fill_2",
+			"name": "fill",
 			"parameters": {
 				"param0": 8,
 				"param1": 10
 			},
 			"tree_item": "Filter/Fill",
-			"type": "fill"
+			"type": "fill2"
 		},
 		{
 			"icon": "filter_fill_to_position",
@@ -2425,7 +2425,7 @@
 				"axis": 0
 			},
 			"tree_item": "Filter/Fill/To Position",
-			"type": "fill_to_position"
+			"type": "fill_to_position2"
 		},
 		{
 			"icon": "filter_fill_to_size",
