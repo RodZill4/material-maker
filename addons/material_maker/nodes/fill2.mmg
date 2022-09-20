@@ -39,7 +39,7 @@
 	],
 	"label": "Fill",
 	"longdesc": "Fills areas defined by white outlines of its input",
-	"name": "fill",
+	"name": "fill2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -52,10 +52,10 @@
 				"y": -362.841705
 			},
 			"parameters": {
-				"filter": true,
+				"filter": false,
 				"iterations": 10,
-				"mipmap": true,
-				"size": 8
+				"mipmap": false,
+				"size": 11
 			},
 			"seed": 29168,
 			"seed_locked": true,
@@ -112,7 +112,7 @@
 				"y": -542.509705
 			},
 			"parameters": {
-				"param0": 8,
+				"param0": 11,
 				"param1": 10
 			},
 			"seed": 52136,
@@ -162,7 +162,7 @@
 				"y": -225.609192
 			},
 			"parameters": {
-				"s": 8
+				"s": 11
 			},
 			"seed": 11778,
 			"seed_locked": false,
@@ -175,7 +175,7 @@
 				"y": -427.202026
 			},
 			"parameters": {
-				"s": 8
+				"s": 11
 			},
 			"seed": 24315,
 			"seed_locked": false,
@@ -219,7 +219,7 @@
 		}
 	],
 	"parameters": {
-		"param0": 8,
+		"param0": 11,
 		"param1": 10
 	},
 	"seed": 0,

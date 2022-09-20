@@ -2436,7 +2436,7 @@
 			},
 			"seed_value": -52887,
 			"tree_item": "Filter/Fill/To Size",
-			"type": "fill_to_size"
+			"type": "fill_to_size2"
 		},
 		{
 			"icon": "filter_fill_to_color",
@@ -2452,7 +2452,7 @@
 				}
 			},
 			"tree_item": "Filter/Fill/To Color",
-			"type": "fill_to_color"
+			"type": "fill_to_color2"
 		},
 		{
 			"icon": "filter_fill_to_random_grey",
@@ -2462,7 +2462,7 @@
 				"edgecolor": 1
 			},
 			"tree_item": "Filter/Fill/To random grey",
-			"type": "fill_to_random_grey"
+			"type": "fill_to_random_grey2"
 		},
 		{
 			"icon": "filter_fill_to_random_color",
@@ -2478,7 +2478,7 @@
 				}
 			},
 			"tree_item": "Filter/Fill/To random color",
-			"type": "fill_to_random_color"
+			"type": "fill_to_random_color2"
 		},
 		{
 			"icon": "filter_fill_to_uv",
@@ -2488,7 +2488,7 @@
 
 			},
 			"tree_item": "Filter/Fill/To UV",
-			"type": "fill_to_uv"
+			"type": "fill_to_uv2"
 		},
 		{
 			"icon": "filter_math",
