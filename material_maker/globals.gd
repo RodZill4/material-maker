@@ -104,9 +104,10 @@ func parse_paste_data(data : String):
 			push_error("An error occurred in the HTTP request.")
 		else:
 			var downloaded_data = yield(http_request, "request_completed")[3].get_string_from_utf8()
-			graph = parse_json(downloaded_data)
+			if not validate_json(downloaded_data):
+				graph = parse_json(downloaded_data)
 		http_request.queue_free()
-	else:
+	elif not validate_json(data):
 		graph = parse_json(data)
 	if graph != null and graph is Dictionary:
 		if graph.has("nodes"):
