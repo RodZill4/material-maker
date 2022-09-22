@@ -16,4 +16,5 @@ dest_files=[ "res://.import/suzanne.obj-c2744d21afa3d06d52f534c9bf43e4a0.mesh", 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
 offset_mesh=Vector3( 0, 0, 0 )
-optimize_mesh=true
+octahedral_compression=true
+optimize_mesh_flags=4286
