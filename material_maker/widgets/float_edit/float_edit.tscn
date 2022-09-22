@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.gd" type="Script" id=1]
+
+[sub_resource type="Theme" id=1]
+
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+
+void fragment(){
+	COLOR=vec4(.18,.58,.53,clamp(UV.x,0.,.75));
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 6 )
 
 [node name="FloatEdit" type="LineEdit"]
 anchor_left = 1.0
@@ -16,27 +28,26 @@ virtual_keyboard_enabled = false
 shortcut_keys_enabled = false
 caret_blink = true
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Slider" type="ColorRect" parent="."]
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 2.0
-margin_top = -3.0
+margin_top = -23.0
 margin_right = -2.0
-margin_bottom = -3.0
+margin_bottom = -1.0
 rect_min_size = Vector2( 0, 2 )
 mouse_filter = 2
-color = Color( 0.501961, 0.501961, 0.501961, 1 )
+theme = SubResource( 1 )
+color = Color( 0.184314, 0.580392, 0.533333, 0.117647 )
 
 [node name="Cursor" type="ColorRect" parent="Slider"]
+material = SubResource( 5 )
 margin_right = 3.0
-margin_bottom = 1.0
+margin_bottom = 22.0
 rect_min_size = Vector2( 3, 2 )
-mouse_filter = 2
+mouse_filter = 1
 
 [connection signal="focus_entered" from="." to="." method="_on_FloatEdit_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_LineEdit_focus_exited"]

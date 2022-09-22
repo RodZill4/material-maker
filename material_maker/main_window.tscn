@@ -120,9 +120,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 10 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="NodeLibraryManager" type="Node" parent="."]
 script = ExtResource( 14 )
@@ -164,16 +161,16 @@ __meta__ = {
 
 [node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 1268.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
 margin_right = 1177.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 size_flags_horizontal = 3
 
 [node name="File" type="MenuButton" parent="VBoxContainer/TopBar/Menu"]
-margin_right = 31.0
-margin_bottom = 25.0
+margin_right = 37.0
+margin_bottom = 29.0
 text = "File"
 items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 4, 268435539, null, "", false, "Save material as...", null, 0, false, false, 5, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 8, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 10, 0, null, "", false, "Quit", null, 0, false, false, 11, 268435537, null, "", false ]
 switch_on_hover = true
@@ -181,12 +178,12 @@ switch_on_hover = true
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
 margin_left = 1181.0
 margin_right = 1268.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 
 [node name="Layout" type="HSplitContainer" parent="VBoxContainer"]
-margin_top = 29.0
+margin_top = 33.0
 margin_right = 1268.0
-margin_bottom = 679.0
+margin_bottom = 675.0
 grow_horizontal = 0
 size_flags_vertical = 3
 split_offset = -1118
@@ -194,22 +191,22 @@ script = ExtResource( 2 )
 
 [node name="Left" type="VSplitContainer" parent="VBoxContainer/Layout"]
 margin_right = 124.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 margin_right = 124.0
-margin_bottom = 349.0
+margin_bottom = 353.0
 tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
-margin_top = 357.0
+margin_top = 361.0
 margin_right = 124.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
@@ -217,12 +214,12 @@ use_hidden_tabs_for_min_size = true
 [node name="SplitRight" type="HSplitContainer" parent="VBoxContainer/Layout"]
 margin_left = 132.0
 margin_right = 1268.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 split_offset = 133
 
 [node name="ProjectsPanel" type="Control" parent="VBoxContainer/Layout/SplitRight"]
 margin_right = 981.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
@@ -355,34 +352,34 @@ margin_bottom = 32.0
 [node name="Right" type="VSplitContainer" parent="VBoxContainer/Layout/SplitRight"]
 margin_left = 989.0
 margin_right = 1136.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
 margin_right = 147.0
-margin_bottom = 349.0
+margin_bottom = 353.0
 tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
-margin_top = 357.0
+margin_top = 361.0
 margin_right = 147.0
-margin_bottom = 650.0
+margin_bottom = 642.0
 tab_align = 0
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
 
 [node name="StatusBar" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 683.0
+margin_top = 679.0
 margin_right = 1268.0
 margin_bottom = 708.0
 
 [node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar"]
 margin_right = 1062.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_active = false
@@ -390,7 +387,7 @@ scroll_active = false
 [node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
 margin_left = 1066.0
 margin_right = 1082.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 script = SubResource( 9 )
 
 [node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
@@ -403,9 +400,9 @@ size_flags_vertical = 4
 texture = SubResource( 8 )
 
 [node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
-margin_top = 4.0
+margin_top = 6.0
 margin_right = 16.0
-margin_bottom = 20.0
+margin_bottom = 22.0
 mouse_filter = 2
 size_flags_vertical = 4
 texture = ExtResource( 15 )
@@ -417,12 +414,12 @@ autostart = true
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/StatusBar"]
 margin_left = 1086.0
 margin_right = 1090.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 
 [node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource( 11 )]
 margin_left = 1094.0
 margin_right = 1268.0
-margin_bottom = 25.0
+margin_bottom = 29.0
 
 [node name="NodeFactory" type="Node" parent="."]
 script = ExtResource( 9 )
