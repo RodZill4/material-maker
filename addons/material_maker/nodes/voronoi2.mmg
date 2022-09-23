@@ -1,0 +1,129 @@
+{
+	"name": "voronoi2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"intensity": 1,
+		"randomness": 0.85,
+		"scale_x": 4,
+		"scale_y": 4,
+		"stretch_x": 1,
+		"stretch_y": 1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_xyzw = voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y, $stretch_x), $intensity, $randomness, $seed);",
+		"global": "// Based on https://www.shadertoy.com/view/ldl3W8\n// The MIT License\n// Copyright © 2013 Inigo Quilez\nvec3 iq_voronoi(vec2 x, vec2 size, vec2 stretch, float randomness, vec2 seed) {\n    vec2 n = floor(x);\n    vec2 f = fract(x);\n\n\tvec2 mg, mr, mc;\n    float md = 8.0;\n    for (int j=-1; j<=1; j++)\n    for (int i=-1; i<=1; i++) {\n        vec2 g = vec2(float(i),float(j));\n\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));\n\t\tvec2 c = g + o;\n        vec2 r = c - f;\n\t\tvec2 rr = r*stretch;\n        float d = dot(rr,rr);\n\n        if (d<md) {\n\t\t\tmc = c;\n            md = d;\n            mr = r;\n            mg = g;\n        }\n    }\n\n    md = 8.0;\n    for (int j=-2; j<=2; j++)\n    for (int i=-2; i<=2; i++) {\n        vec2 g = mg + vec2(float(i),float(j));\n\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));\n        vec2 r = g + o - f;\n\t\tvec2 rr = (mr-r)*stretch;\n        if (dot(rr,rr)>0.00001)\n       \t\tmd = min(md, dot(0.5*(mr+r)*stretch, normalize((r-mr)*stretch)));\n    }\n\n    return vec3(md, mc+n);\n}\n\nvec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, float seed) {\n    uv *= size;\n\tvec3 v = iq_voronoi(uv, size, stretch, randomness, rand2(vec2(seed, 1.0-seed)));\n\treturn vec4(v.yz, intensity*length((uv-v.yz)*stretch), v.x);\n}\n",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates several images from a tileable voronoi noise",
+		"name": "Voronoi",
+		"outputs": [
+			{
+				"f": "$(name_uv)_xyzw.z",
+				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"shortdesc": "Nodes",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv)_xyzw.w",
+				"longdesc": "A greyscale pattern based on the distance to borders",
+				"shortdesc": "Borders",
+				"type": "f"
+			},
+			{
+				"longdesc": "A color pattern that assigns a random color to each cell",
+				"rgb": "rand3(fract(floor($(name_uv)_xyzw.xy)/vec2($scale_x, $scale_y)))",
+				"shortdesc": "Random color",
+				"type": "rgb"
+			},
+			{
+				"fill": "round(vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y))*4096.0)/4096.0",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stretch X",
+				"longdesc": "The stretch factor along the X axis",
+				"max": 1,
+				"min": 0.01,
+				"name": "stretch_x",
+				"shortdesc": "Stretch.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stretch Y",
+				"longdesc": "The stretch factor along the Y axis",
+				"max": 1,
+				"min": 0.01,
+				"name": "stretch_y",
+				"shortdesc": "Stretch.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.75,
+				"label": "Intensity",
+				"longdesc": "A value factor for greyscale outputs",
+				"max": 1,
+				"min": 0,
+				"name": "intensity",
+				"shortdesc": "Intensity",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Randomness",
+				"longdesc": "The randomness of cell centers positions",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"shortdesc": "Randomness",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Voronoi Noise"
+	},
+	"type": "shader"
+}

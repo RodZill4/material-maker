@@ -1042,7 +1042,7 @@
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAUdJREFUaIHtms2NhDAMhZ0VPbgluFECt9ASN0rwLbREFcwhaIQ02iiTkDVeve8ylzyLJzSOfyAyjiMi732ZeFkWImLmcRwL5CKy73v9A5D3/vieEEKMwswF8uM4mDlGCCEUyKPtnzLrzwEGtIEBbcwbcET0TmffErN4sbw+QpQDVdz7Qv1kmqb4jhJnEohIvOq992W1xjAMRMTM67r+dqbr+z4nVuaxKyJSI9+2LUduPgvBgDYwoE13/bMnyDz2TDloyb8o5tDUawID2sCANuYNdPFnnueaKJVyEbl2P8AULjGbv2t+33b/0Pqqp8alivksBAPawIA25g24dDt3S8un2LKC9pyfGrSb3ye4Zf9wltPt5veZFO8fzGchGNAGBrQ5s5D6/B4bALPYL+YS/TKa+r8ABrSBAW3MG+hyRvv183vd/cOjeQEerRTGaJAKGAAAAABJRU5ErkJggg==",
-			"name": "bricks2",
+			"name": "bricks",
 			"parameters": {
 				"bevel": 0.1,
 				"columns": 3,
@@ -1056,7 +1056,7 @@
 			"seed": 0,
 			"seed_locked": false,
 			"tree_item": "Pattern/Bricks",
-			"type": "bricks2"
+			"type": "bricks3"
 		},
 		{
 			"icon": "pattern_bricks_tiles",
@@ -1069,7 +1069,7 @@
 				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/Tiles",
-			"type": "bricks2"
+			"type": "bricks3"
 		},
 		{
 			"icon": "pattern_bricks_basketweave",
@@ -1083,7 +1083,7 @@
 				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/BasketWeave",
-			"type": "bricks2"
+			"type": "bricks3"
 		},
 		{
 			"icon": "pattern_bricks_herringbone",
@@ -1097,7 +1097,7 @@
 				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/HerringBone",
-			"type": "bricks2"
+			"type": "bricks3"
 		},
 		{
 			"icon": "pattern_bricks_spanishbond",
@@ -1111,11 +1111,11 @@
 				"rows": 4
 			},
 			"tree_item": "Pattern/Bricks/SpanishBond",
-			"type": "bricks2"
+			"type": "bricks3"
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAA4FJREFUaIHtmr9L80AYx59KNkEUnKpTRIuIdRJqdHFwkICbpeIfEAcHcag4OFW7KE6tEnHsUErdLI6lBtqiIG5FkUJBOhSUUnBRxHe4vKEk7d3lGj3zvvksvT73vSfP09yv9ALgcnwAoCgKfQNVVQFAluXR0VGTMRQKzczM0DSXJGl6ehqvEUVxaWmJxhsoivJFRywWQy1lWTaMJycnyBgKhfDNE4kEUkqS1E2TzWaRRhRFvDf0u/fhU/z9eAnwxvUJCOijUCjwjYMZAQBUVdXno5+i0WiMj4874kpwxItdnp6eaGSPj49EjQAAAwMD9NdutVr04l6oVquBQIAoEwBgbW3NWIzwxOPxvb29XkMDkCRpa2urW204HKZ3pXehvj7b09H6+jqlsSOrq6sd7RcXF7bCYBwDuVzOaiyXy+Vymc2hFVEUr6+vMYJYLKaqKp9BTMnIyAhRw5iALMuTk5OofHR0BADLy8tTU1PEhkjsIOx34PDwEADi8bjJgiGZTDJfrhv/ylaCgZeXF6LlB2CfhYaHh9stV1dXJsvPwG0W2t/fd0SjJ1Cv13uNyA7FYrFYLOI11WqVZtX3sUUgy3L7/IM4ODjIZDIAsLu7G4lErK00Tdvc3GS7YjfYu1AwGLRbq2kaKkiSNDQ0ZBWgBX5+fn5wcJAmhlwux20MXF5emiyJRMLYoVhrrWxsbAC6A4qibG9v01w1k8k4sht1EP0OTExM8I2DGdevxF4CvPES4I2XAG/0dWBnZ8duS0yTz89PokO8gCEeD074AMDY+t7d3aG/Iztuhq2k02lUMOlrtVqpVOrdD21D44zM2BGl02nieVn7E/D9/X171dzcHLInk0min4eHB8PP8/MzUe+dkf0yXJ+Avg7UajVThdXyO+l8xGR3NuCI67uQ6xPQH+qj0SheFwwG397eAEDTNL/fj4xjY2PfHR8RfRCLoogRfXx8tH9F4tfX1+8Lix7XdyHXJ6B3oePj4168VCqVSqXSscrYqNGwsrLSSxhUaJpm3cxxxPVdyAcAi4uLRN3NzQ2aRtv/N242m6jQ7Z0AtFUmvjFg7KjPz8/JIf/l9vaW9p259/f3/v5+jC/T8wDi7OwM1c7OznrPA12xfT6Qz+eNMk3f+25sJyAIwsLCAngrsVN4CfDG9Qnogxid+NGQSqVSqZTJeHp6im9F6d94N/s/4g+07J6BB8vQHAAAAABJRU5ErkJggg==",
-			"name": "bricks_uneven2",
+			"name": "bricks_uneven",
 			"parameters": {
 				"bevel": 0.1,
 				"corner": 0.3,
@@ -1128,11 +1128,11 @@
 			"seed": 0,
 			"seed_locked": false,
 			"tree_item": "Pattern/UnevenBricks",
-			"type": "bricks_uneven2"
+			"type": "bricks_uneven2_2"
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAYlJREFUaIHtmTGKhTAQhsfFSkgneAhP4gW8goKtVxA8gtYeQlvBKwh21taClfC2CMg+n7irmTgbmK+ykC/5m2QyA2A4FgBEUaTJXpalbr8tv4qiQLfHcbx96/N/oXsfhgNQwwGoMT6ABQCe52myT9P0gJ8hxarrWlGRpmnf9wBQVZXruhi7eiMMw3meAeB4qy9lfN+Xqqqq1G071nUVQkh/27afPxh/CnEAajgANXbTNIg6XNuOZVm0+plbWPoqrUO28ktl3TcJ+t15wjiO2ybGcUSRGH8KcQBqOAA1xgewf3YwnyTP838iYdSw7jXvu66TD3l9vf8dctRwsOK9+1zrQ/6TkxrE+FOIA1DDAagxPsD9J6Xu3v/hck+uyPyNy/MBxGlAEATyQ2lGcfVWxyoiUDoULy4l6OEA1BgfQGk+gNWtH4ZhGAYUFfM4vxdzsooSQjiOg748QkV4fs+1bSt/E0Ks63r7vjwkyzIpD4LgtsT4U4gDUMMBqDE+wIX5QJIk+vZBNaag5xvUPb/FFf9gTwAAAABJRU5ErkJggg==",
-			"name": "bricks_uneven3",
+			"name": "bricks_uneven",
 			"parameters": {
 				"bevel": 0.1,
 				"corner": 0.3,
@@ -1145,7 +1145,7 @@
 			"seed": 0,
 			"seed_locked": false,
 			"tree_item": "Pattern/UnevenBricks2",
-			"type": "bricks_uneven3"
+			"type": "bricks_uneven3_2"
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAaZJREFUeJztmkGqg0AQRJ8/IwpjDpCz5AA5swfwLB4gDigi/lU2WdoNnWb67aerKUKg2mqAcxxHrvB6vQCYpunS++fzCYClfjNN03m/38k5k3Om73u6rqNtW263GwDHcbDvO9u2sa4rpRRKKbzfb5Zl4fF4XFpgnmeGYcBSP116+UXOWWOMiX4YoLFA3/caY0z0VQzouk5jjIm+igFt22qMMdFXMeDzb22FRP9PcQ+XqPwCjuPQGGOir2LAvu8aY0z0VQzYtk1jjIm+igHrumqMMdFXMaCUojHGRL96Axoqj8MJYBiGSwM+LMsiem+p34zjeHrO81L9BL7jrJQwAHzneSkJfOd5KQl853kpCXzneSlxDwDfeV5KAt95XkoC33leSgLfeV5KAt9xVkr1BjTA6TnPS/UT+M7zUv3oB1x6+YXnOB0GaCzg+Z4Q/QCNBTzfE6IfoLiHS6IfoLGA53tC9AM0FvB8T6j+83j1BkQ/AHzneal+9APAd5yVEgaA7zwvJfoB4DvPS4l+gJnyjxD9APCd56VEPwB853kp1X8er96A6vsB/yfswtgu8GDwAAAAAElFTkSuQmCC",
@@ -1454,7 +1454,7 @@
 				"sy": 4
 			},
 			"tree_item": "Pattern/Beehive",
-			"type": "beehive"
+			"type": "beehive2"
 		},
 		{
 			"icon": "pattern_sine_wave",
@@ -1931,7 +1931,7 @@
 				"scale_y": 4
 			},
 			"tree_item": "Noise/Voronoi",
-			"type": "voronoi"
+			"type": "voronoi2"
 		},
 		{
 			"icon": "noise_color",
