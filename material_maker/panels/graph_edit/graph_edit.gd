@@ -181,7 +181,6 @@ func _gui_input(event) -> void:
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		print(zoom)
 		match scancode_with_modifiers:
 			KEY_DELETE,KEY_BACKSPACE:
 				remove_selection()
