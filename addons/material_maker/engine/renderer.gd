@@ -71,8 +71,8 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = material
 	hdr = with_hdr
 	if chunk_count == 1:
-		material.set_shader_param("scale", 1.0)
-		material.set_shader_param("chunk", Vector2(0.0, 0.0))
+		material.set_shader_param("mm_chunk_size", 1.0)
+		material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
 		render_target_update_mode = Viewport.UPDATE_ONCE
 		update_worlds()
 		yield(get_tree(), "idle_frame")
@@ -81,10 +81,10 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	else:
 		var image : Image = Image.new()
 		image.create(render_size, render_size, false, get_texture().get_data().get_format())
-		material.set_shader_param("scale", render_scale)
+		material.set_shader_param("mm_chunk_size", render_scale)
 		for x in range(chunk_count):
 			for y in range(chunk_count):
-				material.set_shader_param("chunk", render_scale*Vector2(x, y))
+				material.set_shader_param("mm_chunk_offset", render_scale*Vector2(x, y))
 				render_target_update_mode = Viewport.UPDATE_ONCE
 				update_worlds()
 				yield(get_tree(), "idle_frame")
