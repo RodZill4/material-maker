@@ -12,6 +12,8 @@
 
 ## Nodes
 
+-  Added additional modes to Math node (contributed by williamchange)
+
 ## Fixes, optimizations
 
 - Optimized curve parameter editor
