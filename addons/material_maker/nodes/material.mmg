@@ -403,7 +403,7 @@
 				"type": "rgb"
 			},
 			{
-				"f": "$depth_tex($uv)",
+				"f": "clamp($depth_tex($uv), 0.0, 1.0)",
 				"type": "f"
 			},
 			{
