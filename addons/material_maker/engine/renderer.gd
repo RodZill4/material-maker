@@ -113,6 +113,7 @@ func render_shader(object : Object, shader, textures, render_size, with_hdr = tr
 	update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	texture = get_texture()
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:
