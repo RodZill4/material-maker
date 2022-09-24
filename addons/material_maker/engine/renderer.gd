@@ -52,7 +52,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+func render_material(object : Object, material : Material, render_size : int, with_hdr : bool = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -95,25 +95,15 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(object : Object, shader, textures, render_size, with_hdr = true) -> Object:
-	assert(render_owner == object, "Invalid renderer use")
-	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
-		render_size = mm_renderer.max_buffer_size
-	size = Vector2(render_size, render_size)
-	$ColorRect.rect_position = Vector2(0, 0)
-	$ColorRect.rect_size = size
+func render_shader(object : Object, shader : String, textures : Dictionary, render_size : int, with_hdr : bool = true) -> Object:
 	var shader_material = $ColorRect.material
 	shader_material.shader.code = shader
 	if textures != null:
 		for k in textures.keys():
 			shader_material.set_shader_param(k, textures[k])
-	shader_material.set_shader_param("preview_size", render_size)
-	hdr = with_hdr
-	render_target_update_mode = Viewport.UPDATE_ONCE
-	update_worlds()
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	texture = get_texture()
+	var status = render_material(object, shader_material, render_size, with_hdr)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:
