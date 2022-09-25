@@ -155,6 +155,10 @@
 						{
 							"node": "buffer_2",
 							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
 						}
 					],
 					"longdesc": "The resolution of the input image",
