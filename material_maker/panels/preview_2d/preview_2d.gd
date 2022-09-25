@@ -174,7 +174,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
 	tmp_material.shader = Shader.new()
-	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
+	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
 	# Set texture params
 	if source.has("textures"):
 		for k in source.textures.keys():
