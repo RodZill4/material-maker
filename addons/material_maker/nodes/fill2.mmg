@@ -1,30 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "iterate_buffer",
-			"from_port": 1,
-			"to": "fill_iterate",
-			"to_port": 0
-		},
-		{
-			"from": "fill_iterate",
-			"from_port": 0,
-			"to": "iterate_buffer",
-			"to_port": 1
-		},
-		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "fill_preprocess",
-			"to_port": 0
-		},
-		{
-			"from": "fill_preprocess",
-			"from_port": 0,
-			"to": "iterate_buffer",
-			"to_port": 0
-		},
-		{
 			"from": "shape",
 			"from_port": 0,
 			"to": "gen_outputs",
@@ -83,6 +59,30 @@
 			"from_port": 0,
 			"to": "dilate_pass_4",
 			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "fill_preprocess_2",
+			"to_port": 0
+		},
+		{
+			"from": "fill_preprocess_2",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "fill_iterate_2",
+			"to_port": 0
+		},
+		{
+			"from": "fill_iterate_2",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
 		}
 	],
 	"label": "Fill",
@@ -100,8 +100,9 @@
 				"y": -362.841705
 			},
 			"parameters": {
+				"autostop": true,
 				"filter": false,
-				"iterations": 10,
+				"iterations": 50,
 				"mipmap": false,
 				"size": 8
 			},
@@ -156,13 +157,13 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -246.110138,
-				"y": -583.509705
+				"x": -261.110138,
+				"y": -575.509705
 			},
 			"parameters": {
-				"param0": 8,
-				"param1": 10,
-				"param2": 0
+				"adjust": 0,
+				"remove_edges": 0,
+				"size": 8
 			},
 			"seed": 52136,
 			"seed_locked": false,
@@ -176,30 +177,17 @@
 							"widget": "size"
 						},
 						{
-							"node": "fill_preprocess",
+							"node": "fill_preprocess_2",
 							"widget": "s"
 						},
 						{
-							"node": "fill_iterate",
+							"node": "fill_iterate_2",
 							"widget": "s"
 						}
 					],
-					"longdesc": "The resolution of the inptu image",
-					"name": "param0",
+					"longdesc": "The resolution of the input image",
+					"name": "size",
 					"shortdesc": "Size",
-					"type": "linked_control"
-				},
-				{
-					"label": "",
-					"linked_widgets": [
-						{
-							"node": "iterate_buffer",
-							"widget": "iterations"
-						}
-					],
-					"longdesc": "The number of iterations of the algorithm. The optimal value depends a lot on the input image.",
-					"name": "param1",
-					"shortdesc": "Iterations",
 					"type": "linked_control"
 				},
 				{
@@ -226,85 +214,43 @@
 							"widget": "source"
 						}
 					],
-					"name": "param2",
+					"longdesc": "Grow filled areas to remove edges",
+					"name": "remove_edges",
+					"shortdesc": "Remove edge",
 					"type": "config_control"
+				},
+				{
+					"label": "Adjust",
+					"linked_widgets": [
+						{
+							"node": "shape",
+							"widget": "grow"
+						}
+					],
+					"longdesc": "Adjust the size of the area's bounding box (to compensate for removed edges)",
+					"name": "adjust",
+					"shortdesc": "Adjust",
+					"type": "linked_control"
 				}
 			]
 		},
 		{
-			"name": "fill_iterate",
-			"node_position": {
-				"x": -91.524506,
-				"y": -225.609192
-			},
-			"parameters": {
-				"s": 8
-			},
-			"seed": 11778,
-			"seed_locked": false,
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-					{
-						"default": "0.0",
-						"function": true,
-						"label": "",
-						"name": "in",
-						"type": "rgba"
-					}
-				],
-				"instance": "vec4 $(name)_fill(vec2 uv) {\n\tfloat size = $s;\n\tint iterations = min(int(size), 1024);\n\tvec4 color = $in(fract(uv));\n\tif (color.z+color.w < 1.0/size) {\n\t\treturn vec4(0.0);\n\t}\n\tvec2 offsets[4] = { vec2(1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, -1.0), vec2(1.0, -1.0) };\n\tvec2 mult_base = vec2(1.0, 0.0);\n\tfor (int o = 0; o < 4; ++o) {\n\t\tvec2 offset = offsets[o]/size;\n\t\tvec2 mult = mult_base;\n\t\tfor (int d = 0; d < 2; ++d) {\n\t\t\tvec2 uv2 = uv;\n\t\t\tint l = 0;\n\t\t\tfor (int i = 1; i < iterations; i += 1) {\n\t\t\t\tuv2 += offset*mult;\n\t\t\t\tvec4 color2 = $in(fract(uv2));\n\t\t\t\tif (color2.z+color2.w == 0.0) {\n\t\t\t\t\tif (l < 1) {\n\t\t\t\t\t\tmult = mult.yx;\n\t\t\t\t\t\tl += 1;\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tl = 0;\n\t\t\t\tvec2 p1 = color.xy+floor(uv-color.xy);\n\t\t\t\tvec2 p2 = color2.xy+floor(uv2-color2.xy);\n\t\t\t\tvec2 p = min(p1, p2);\n\t\t\t\tvec2 s = max(p1+color.zw, p2+color2.zw)-p;\n\t\t\t\tcolor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(fract(p), s), step(s.xyxy, vec4(1.0)));\n\t\t\t}\n\t\t\tmult = mult_base.yx;\n\t\t}\n\t}\n\treturn floor(color*size)/size;\n}\n",
-				"name": "Fill iterate",
-				"outputs": [
-					{
-						"rgba": "$(name)_fill($uv)",
-						"type": "rgba"
-					}
-				],
-				"parameters": [
-					{
-						"default": 9,
-						"first": 6,
-						"label": "",
-						"last": 12,
-						"name": "s",
-						"type": "size"
-					}
-				]
-			},
-			"type": "shader"
-		},
-		{
-			"name": "fill_preprocess",
-			"node_position": {
-				"x": -110.443481,
-				"y": -427.202026
-			},
-			"parameters": {
-				"s": 8
-			},
-			"seed": 24315,
-			"seed_locked": false,
-			"type": "fill_preprocess"
-		},
-		{
 			"name": "shape",
 			"node_position": {
-				"x": 635.919922,
+				"x": 636.919922,
 				"y": -415.122955
 			},
 			"parameters": {
-
+				"grow": 0
 			},
 			"seed": 0,
 			"seed_locked": false,
 			"shader_model": {
-				"code": "",
+				"code": "vec4 $(name_uv)_v = $in($(uv));\nvec2 $(name_uv)_a = 1.0-step(vec2(1.0), $(name_uv)_v.zw);",
 				"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
 				"inputs": [
 					{
-						"default": "1.0",
+						"default": "vec4(0.0)",
 						"label": "",
 						"name": "in",
 						"type": "rgba"
@@ -314,12 +260,21 @@
 				"name": "Fill Convert",
 				"outputs": [
 					{
-						"fill": "$in($(uv))",
+						"fill": "$in($(uv))+$grow*vec4(-1.0*$(name_uv)_a, 2.0*$(name_uv)_a)",
 						"type": "fill"
 					}
 				],
 				"parameters": [
-
+					{
+						"control": "None",
+						"default": 0,
+						"label": "",
+						"max": 0.2,
+						"min": 0,
+						"name": "grow",
+						"step": 0.01,
+						"type": "float"
+					}
 				]
 			},
 			"type": "shader"
@@ -515,8 +470,8 @@
 		{
 			"name": "shader_1",
 			"node_position": {
-				"x": 181.692261,
-				"y": -318.035889
+				"x": 175.692261,
+				"y": -292.035889
 			},
 			"parameters": {
 
@@ -535,7 +490,7 @@
 					}
 				],
 				"instance": "",
-				"name": "",
+				"name": "Detect edges",
 				"outputs": [
 					{
 						"f": "sign(dot($in($uv), vec4(1.0)))",
@@ -578,12 +533,38 @@
 			"seed_locked": false,
 			"type": "buffer",
 			"version": 2
+		},
+		{
+			"name": "fill_preprocess_2",
+			"node_position": {
+				"x": -108.156067,
+				"y": -423.50708
+			},
+			"parameters": {
+				"s": 8
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "fill_preprocess"
+		},
+		{
+			"name": "fill_iterate_2",
+			"node_position": {
+				"x": -98.005157,
+				"y": -199.56427
+			},
+			"parameters": {
+				"s": 8
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "fill_iterate"
 		}
 	],
 	"parameters": {
-		"param0": 8,
-		"param1": 10,
-		"param2": 0
+		"adjust": 0,
+		"remove_edges": 0,
+		"size": 8
 	},
 	"seed": 0,
 	"seed_locked": false,

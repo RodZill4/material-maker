@@ -70,8 +70,9 @@
 				"y": -341.841705
 			},
 			"parameters": {
+				"autostop": true,
 				"filter": false,
-				"iterations": 10,
+				"iterations": 50,
 				"mipmap": false,
 				"size": 8
 			},
@@ -126,12 +127,11 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -246.110138,
-				"y": -583.509705
+				"x": -228.110138,
+				"y": -560.509705
 			},
 			"parameters": {
-				"param0": 8,
-				"param1": 10
+				"size": 8
 			},
 			"seed": 52136,
 			"seed_locked": false,
@@ -162,21 +162,8 @@
 						}
 					],
 					"longdesc": "The resolution of the input image",
-					"name": "param0",
+					"name": "size",
 					"shortdesc": "Size",
-					"type": "linked_control"
-				},
-				{
-					"label": "",
-					"linked_widgets": [
-						{
-							"node": "iterate_buffer",
-							"widget": "iterations"
-						}
-					],
-					"longdesc": "The number of iterations of the algorithm. The optimal value depends a lot on the input image.",
-					"name": "param1",
-					"shortdesc": "Iterations",
 					"type": "linked_control"
 				}
 			]
@@ -345,8 +332,7 @@
 		}
 	],
 	"parameters": {
-		"param0": 8,
-		"param1": 10
+		"size": 8
 	},
 	"seed": 0,
 	"seed_locked": false,
