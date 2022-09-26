@@ -1,22 +1,22 @@
-Uneven Bricks node
-~~~~~~~~~~~~~~~~~~
+Uneven Bricks 3 node
+~~~~~~~~~~~~~~~~~~~~
 
-The **Uneven Bricks** node outputs an uneven brick pattern texture that can be used for walls
-or pavement. It generates an uneven pattern by randomly splitting bricks.
+The **Uneven Bricks 3** node outputs an uneven brick pattern texture that can be used for walls
+or pavement. It generates an uneven pattern by randomly offsetting brick intersections.
 
-.. image:: images/node_pattern_unevenbricks.png
+.. image:: images/node_pattern_unevenbricks3.png
 	:align: center
 
 Inputs
 ++++++
 
-The **Uneven Bricks** node accepts 3 optional greyscale input maps for the shape mortar,
+The **Uneven Bricks 3** node accepts 3 optional greyscale input maps for the shape mortar,
 bevel and round parameters (the corresponding parameter is multiplied by the map value).
 
 Outputs
 +++++++
 
-The **Uneven Bricks** node provides the following textures:
+The **Uneven Bricks 3** node provides the following textures:
 
 * The first is a greyscale image where bricks are shown in white and mortar in black.
 
@@ -30,11 +30,11 @@ custom UVs etc. to create complex materials that show for example bricks of diff
 Parameters
 ++++++++++
 
-The **Uneven Bricks** node accepts the following parameters:
+The **Uneven Bricks 3** node accepts the following parameters:
 
-* the *Iterations* parameter defines number of brick split iterations.
+* the *Rows* parameter defines the number of brick rows in a single pattern of the texture.
 
-* the *Min size* parameter defines the minimum size of a brick.
+* the *Columns* parameter defines the number of brick rows in a single pattern of the texture.
 
 * the *Randomness* parameter defines the randomness introduced when generating the pattern.
 
@@ -49,5 +49,5 @@ The **Uneven Bricks** node accepts the following parameters:
 Example images
 ++++++++++++++
 
-.. image:: images/node_unevenbricks_samples.png
+.. image:: images/node_unevenbricks3_samples.png
 	:align: center
