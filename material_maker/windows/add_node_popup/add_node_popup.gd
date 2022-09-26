@@ -128,7 +128,9 @@ func check_quick_connect(obj) -> bool:
 				return false
 			if output_ports.empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
 				return false
-		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer") and qc_slot_type != 0:
+		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0:
+			return false
+		elif (ref_obj.type == "debug" or ref_obj.type == "export" or ref_obj.type == "sdf"):
 			return false
 	else:
 		if ref_obj.has("shader_model"):
@@ -158,9 +160,9 @@ func check_quick_connect(obj) -> bool:
 				return false
 			if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
 				return false
-		elif ref_obj.type == "image" or ref_obj.type == "text":
+		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf":
 			return false
-		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "export" ) and qc_slot_type != 0:
+		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer" or ref_obj.type == "export") and qc_slot_type != 0:
 			return false
 	return true
 

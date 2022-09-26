@@ -1,12 +1,12 @@
-Fill node
-~~~~~~~~~
+Fill From Colors node
+~~~~~~~~~~~~~~~~~~~~~
 
-The **Fill** node fills all areas surrounded by white pixels, and generates
-a specific input for the fill companion (generally named "Fill to ...") nodes.
+The **Fill From Colors** node generates specific data for the fill companion (generally named
+"Fill to ...") nodes from an image composed of color areas.
 
 That fill information is an axis aligned bounding box of each filled area.
 
-.. image:: images/node_filter_fill.png
+.. image:: images/node_filter_fill_from_colors.png
 	:align: center
 
 Inputs
@@ -14,7 +14,7 @@ Inputs
 
 The **Fill** node accepts:
 
-* a mask greyscale input whose light parts surround areas that must be filled
+* an RGBA input whose light parts surround areas that must be filled
 
 Outputs
 +++++++
@@ -33,6 +33,3 @@ The **Fill** node accepts the following parameters:
   resolutions can cause precision issues.
   Setting it higher than the input's resolution will not yield any benefit - only
   increase the computation time.
-* *Remove edges* is an option to grow filled areas to remove edges.
-* *Adjust* is useful when removing edges and is used to grow the areas bounding boxes.
-  It is useful when using for example the **Fill to UV** or the **Fill to Gradient** node. 

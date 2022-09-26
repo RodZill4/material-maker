@@ -103,7 +103,7 @@ const MENU = [
 	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
 	{ menu="Tools/-" },
 	{ menu="Tools/Environment editor", command="environment_editor" },
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
+	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
