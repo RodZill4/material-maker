@@ -12,6 +12,7 @@
 
 ## Nodes
 
+- Added additional modes to Math node (contributed by williamchange)
 - Updated the iteration buffer with an autostop parameter. When set, the Iteration Buffer will stop iterating
   ass soon as 2 consecutive results are identical.
 - Added a Fill port type that is used as output of the Fill node (and nodes that generate fill information)
