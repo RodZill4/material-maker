@@ -1,12 +1,12 @@
-Fill From Color node
-~~~~~~~~~~~~~~~~~~~~
+Fill From Colors node
+~~~~~~~~~~~~~~~~~~~~~
 
-The **Fill** node generates specific data for the fill companion (generally named
-"Filled to ...") nodes from an image composed of color areas.
+The **Fill From Colors** node generates specific data for the fill companion (generally named
+"Fill to ...") nodes from an image composed of color areas.
 
 That fill information is an axis aligned bounding box of each filled area.
 
-.. image:: images/node_filter_fill.png
+.. image:: images/node_filter_fill_from_colors.png
 	:align: center
 
 Inputs

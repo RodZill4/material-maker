@@ -32,4 +32,11 @@ The **Iterate Buffer** node has two parameters:
 
 * the *texture resolution*
 
+* the *autostop* property; if set, the Iterate buffer will automatically stop if the iteration
+  does not change the buffer contents
+
 * the *number of iterations* for the loop
+
+* the *filter* property; if set, the buffer output will be filtered
+
+* the *mipmap* property; if set, mipmaps will be generated for this buffer
