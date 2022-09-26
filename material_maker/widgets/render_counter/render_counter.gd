@@ -41,8 +41,7 @@ func _ready() -> void:
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
-	$GpuRam.hint_tooltip = "%s\n%s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
-	print($GpuRam.hint_tooltip)
+	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
 
 func on_counter_change(count : int, pending : int) -> void:
 	if count == 0 and pending == 0:
@@ -68,6 +67,19 @@ func on_counter_change(count : int, pending : int) -> void:
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ $ProgressBar.value, $ProgressBar.max_value ]
 	last_value = count
 
+func e3tok(value : float) -> String:
+	var unit_modifier : String = ""
+	if value > 100000000:
+		value *= 0.000000001
+		unit_modifier = "G"
+	elif value > 100000:
+		value *= 0.000001
+		unit_modifier = "M"
+	elif value > 100:
+		value *= 0.001
+		unit_modifier = "k"
+	return "%.1f %sb " % [ value, unit_modifier ]
+
 func _process(_delta):
 	var fps : float = Performance.get_monitor(Performance.TIME_FPS)
 	$FpsCounter.text = "%.1f FPS " % fps
@@ -80,18 +92,14 @@ func _process(_delta):
 			fast_counter = 0
 			if fps < 20.0:
 				set_max_renderers(1)
-	var used_gpu_ram : float = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
-	var unit_modifier : String = ""
-	if used_gpu_ram > 100000000:
-		used_gpu_ram *= 0.000000001
-		unit_modifier = "G"
-	elif used_gpu_ram > 100000:
-		used_gpu_ram *= 0.000001
-		unit_modifier = "M"
-	elif used_gpu_ram > 100:
-		used_gpu_ram *= 0.001
-		unit_modifier = "k"
-	$GpuRam.text = "%.1f %sb " % [ used_gpu_ram, unit_modifier ]
+
+func _on_MemUpdateTimer_timeout():
+	$GpuRam.text = e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+	var tooltip : String = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
+	tooltip += "\nVideo mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+	tooltip += "\nTexture mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
+	tooltip += "\nVertex mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VERTEX_MEM_USED))
+	$GpuRam.hint_tooltip = tooltip
 
 func set_max_renderers(max_renderers : int):
 	if mm_renderer.max_renderers == max_renderers:
