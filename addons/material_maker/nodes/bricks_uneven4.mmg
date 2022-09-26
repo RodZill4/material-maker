@@ -8,12 +8,12 @@
 		"bevel": 0.1,
 		"corner": 0.3,
 		"mortar": 0.1,
-		"randomness": 0.5,
+		"randomness": 0.51,
 		"round": 0,
 		"x": 6,
 		"y": 6
 	},
-	"seed": 0.281633,
+	"seed": 0.460931,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_rect = bricks_uneven3($uv, vec2($x, $y), $randomness, $seed);\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.00001, $bevel*$bevel_map($uv)), 0.5 / max($x, $y) );",
@@ -58,16 +58,16 @@
 				"type": "f"
 			},
 			{
+				"fill": "round(vec4(fract($(name_uv)_rect.xy), $(name_uv)_rect.zw - $(name_uv)_rect.xy)*4096.0)/4096.0",
 				"longdesc": "An output that should be plugged into a Fill companion node",
-				"rgba": "round(vec4(fract($(name_uv)_rect.xy), $(name_uv)_rect.zw - $(name_uv)_rect.xy)*4096.0)/4096.0",
 				"shortdesc": "Brick Fill",
-				"type": "rgba"
+				"type": "fill"
 			},
 			{
+				"fill": "brick_corner_bb($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, 0.5 / max($x, $y))",
 				"longdesc": "An output that should be plugged into a Fill companion node",
-				"rgba": "brick_corner_bb($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, 0.5 / max($x, $y))",
 				"shortdesc": "Corner Fill",
-				"type": "rgba"
+				"type": "fill"
 			}
 		],
 		"parameters": [
