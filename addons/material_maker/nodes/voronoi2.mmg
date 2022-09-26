@@ -37,12 +37,6 @@
 				"type": "f"
 			},
 			{
-				"longdesc": "A color pattern that assigns a random color to each cell",
-				"rgb": "rand3(fract(floor($(name_uv)_xyzw.xy)/vec2($scale_x, $scale_y)))",
-				"shortdesc": "Random color",
-				"type": "rgb"
-			},
-			{
 				"fill": "round(vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y))*4096.0)/4096.0",
 				"longdesc": "An output that should be plugged into a Fill companion node",
 				"shortdesc": "Fill",
