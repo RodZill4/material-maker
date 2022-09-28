@@ -1,0 +1,66 @@
+{
+	"name": "fill_to_size",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"formula": 0
+	},
+	"seed_value": -52887,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "fill"
+			}
+		],
+		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a greyscale value that depends on its size",
+		"name": "Fill to Size",
+		"outputs": [
+			{
+				"f": "$formula",
+				"longdesc": "The generated output image",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "",
+				"longdesc": "The size value to be used (area, width, height or maximum between width and height)",
+				"name": "formula",
+				"shortdesc": "Size",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Area",
+						"value": "sqrt($(name_uv)_bb.z*$(name_uv)_bb.w)"
+					},
+					{
+						"name": "Width",
+						"value": "$(name_uv)_bb.z"
+					},
+					{
+						"name": "Height",
+						"value": "$(name_uv)_bb.w"
+					},
+					{
+						"name": "max(W, H)",
+						"value": "max($(name_uv)_bb.z, $(name_uv)_bb.w)"
+					}
+				]
+			}
+		],
+		"shortdesc": "Fill to size"
+	},
+	"type": "shader"
+}

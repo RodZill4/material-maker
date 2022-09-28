@@ -12,7 +12,15 @@
 
 ## Nodes
 
--  Added additional modes to Math node (contributed by williamchange)
+- Added additional modes to Math node (contributed by williamchange)
+- Updated the iteration buffer with an autostop parameter. When set, the Iteration Buffer will stop iterating
+  ass soon as 2 consecutive results are identical.
+- Added a Fill port type that is used as output of the Fill node (and nodes that generate fill information)
+  and input of the Fill companion nodes.
+- Removed the Iterations parameter from the Fill node, and added parameters to remove the edges and adjust
+  the generated bounding box.
+- Added a new **Fill from colors** node that generates fill information from the color islands in its input.
+- Updated the Voronoi node to output Fill information instead of a random color.
 
 ## Fixes, optimizations
 

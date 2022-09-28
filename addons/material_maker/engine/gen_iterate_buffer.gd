@@ -67,6 +67,7 @@ func get_buffers() -> Array:
 func get_parameter_defs() -> Array:
 	return [
 			{ name="size", type="size", first=4, last=13, default=4 },
+			{ name="autostop", type="boolean", default=false },
 			{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
 			{ name="filter", type="boolean", default=true },
 			{ name="mipmap", type="boolean", default=true }
@@ -179,6 +180,8 @@ func update_buffer() -> void:
 	update_again = true
 	if !updating:
 		updating = true
+		var autostop : bool = get_parameter("autostop")
+		var previous_hash_value : int = 0 if ( not autostop or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
 		while update_again:
 			update_again = false
 			unset_pending()
@@ -203,7 +206,7 @@ func update_buffer() -> void:
 				texture.flags = 0
 			renderer.release(self)
 			current_renderer = null
-		set_current_iteration(current_iteration+1)
+		# Calculate iteration count
 		var iterations = calculate_float_parameter("iterations")
 		if iterations.has("used_named_parameters"):
 			used_named_parameters = iterations.used_named_parameters
@@ -211,6 +214,13 @@ func update_buffer() -> void:
 			iterations = iterations.value
 		else:
 			iterations = 1
+		# Calculate iteration index
+		var hash_value : int = 0 if ( not autostop or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
+		if autostop and hash_value == previous_hash_value:
+			print("autostopping at "+str(current_iteration))
+			set_current_iteration(iterations+1)
+		else:
+			set_current_iteration(current_iteration+1)
 		if current_iteration <= iterations:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
 		else:

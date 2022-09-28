@@ -52,7 +52,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+func render_material(object : Object, material : Material, render_size : int, with_hdr : bool = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
@@ -71,8 +71,8 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = material
 	hdr = with_hdr
 	if chunk_count == 1:
-		material.set_shader_param("scale", 1.0)
-		material.set_shader_param("chunk", Vector2(0.0, 0.0))
+		material.set_shader_param("mm_chunk_size", 1.0)
+		material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
 		render_target_update_mode = Viewport.UPDATE_ONCE
 		update_worlds()
 		yield(get_tree(), "idle_frame")
@@ -81,10 +81,10 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	else:
 		var image : Image = Image.new()
 		image.create(render_size, render_size, false, get_texture().get_data().get_format())
-		material.set_shader_param("scale", render_scale)
+		material.set_shader_param("mm_chunk_size", render_scale)
 		for x in range(chunk_count):
 			for y in range(chunk_count):
-				material.set_shader_param("chunk", render_scale*Vector2(x, y))
+				material.set_shader_param("mm_chunk_offset", render_scale*Vector2(x, y))
 				render_target_update_mode = Viewport.UPDATE_ONCE
 				update_worlds()
 				yield(get_tree(), "idle_frame")
@@ -95,24 +95,15 @@ func render_material(object : Object, material : Material, render_size, with_hdr
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(object : Object, shader, textures, render_size, with_hdr = true) -> Object:
-	assert(render_owner == object, "Invalid renderer use")
-	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
-		render_size = mm_renderer.max_buffer_size
-	size = Vector2(render_size, render_size)
-	$ColorRect.rect_position = Vector2(0, 0)
-	$ColorRect.rect_size = size
+func render_shader(object : Object, shader : String, textures : Dictionary, render_size : int, with_hdr : bool = true) -> Object:
 	var shader_material = $ColorRect.material
 	shader_material.shader.code = shader
 	if textures != null:
 		for k in textures.keys():
 			shader_material.set_shader_param(k, textures[k])
-	shader_material.set_shader_param("preview_size", render_size)
-	hdr = with_hdr
-	render_target_update_mode = Viewport.UPDATE_ONCE
-	update_worlds()
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	var status = render_material(object, shader_material, render_size, with_hdr)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:

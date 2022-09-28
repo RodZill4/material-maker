@@ -21,7 +21,11 @@ The **Voronoi** noise node provides three outputs:
 
 * a greyscale texture that shows the distance to the closest segment bisector of all feature points pairs.
 
-* a color Voronoi partition.
+* Fill information for each cell that must be connected to a Fill companion node
+
+The third output can be used in conjunction with **Fill To** nodes to generate random colors,
+custom UVs etc. to create complex materials that show for example bricks of different colors.
+
 
 Parameters
 ++++++++++
