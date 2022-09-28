@@ -356,7 +356,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	var profile_name : String = profile
+	var last_profile_name_slash : int = profile_name.rfind("/")
+	if last_profile_name_slash != -1:
+		profile_name = profile_name.right(last_profile_name_slash+1)
+	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile_name+" Material")
 	var config_key = export_profile_config_key(profile)
 	if mm_globals.config.has_section_key("path", config_key):
 		dialog.current_dir = mm_globals.config.get_value("path", config_key)
