@@ -152,7 +152,8 @@ func zoom(amount : float):
 
 func on_gui_input(event) -> void:
 	if event is InputEventPanGesture:
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		if mm_globals.get_config("ui_3d_preview_rotation_mode") == 0:
+			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		var camera_basis = camera.global_transform.basis
 		var rotation : Vector2 = event.delta
 		camera_stand.rotate(camera_basis.x.normalized(), -rotation.y)
@@ -160,7 +161,7 @@ func on_gui_input(event) -> void:
 	elif event is InputEventMagnifyGesture:
 		zoom(event.factor)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
+		if mm_globals.get_config("ui_3d_preview_rotation_mode") == 0 and (event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE):
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
 			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 

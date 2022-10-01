@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = {
 	max_viewport_size = 2048,
 	ui_scale = 0,
 	ui_3d_preview_resolution = 2.0,
+	ui_3d_preview_rotation_mode = 0,
 	ui_3d_preview_tesselation_detail = 256,
 	ui_3d_preview_sun_shadow = false,
 	bake_ray_count = 64,
