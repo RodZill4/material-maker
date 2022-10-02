@@ -279,7 +279,8 @@ func update_shader_generator(shader_model) -> void:
 	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)
 
 func update_sdf_generator(sdf_scene) -> void:
-	generator.set_sdf_scene(sdf_scene)
+	generator.node_parameters = sdf_scene.parameters
+	generator.set_sdf_scene(sdf_scene.scene)
 	update_node()
 	get_parent().set_need_save()
 	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)

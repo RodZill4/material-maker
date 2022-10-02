@@ -4,6 +4,7 @@ class_name MMGenSDF
 
 
 export var editor : bool = false
+var node_parameters : Array = []
 var scene : Array = []
 
 
@@ -15,6 +16,8 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "EasySDF"
+
+
 
 func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 	if parameters_filter == "":
@@ -59,7 +62,7 @@ func get_scene_type() -> String:
 func set_sdf_scene(s : Array):
 	scene = s.duplicate(true)
 	var scene_type : String = get_scene_type()
-	var shader_model = { includes=[], parameters=[]}
+	var shader_model = { includes=[], parameters=[] }
 	var uv = "$uv"
 	var distance_function = ""
 	var color_function = ""
@@ -85,7 +88,9 @@ func set_sdf_scene(s : Array):
 	color_function += "roughness = 1.0;\n"
 	color_function += "emission = vec3(0.0);\n"
 	var first : bool = true
-	var parameter_defs = []
+	var parameter_defs = node_parameters.duplicate(true)
+	for p in parameter_defs:
+		p.label = p.shortdesc if p.has("shortdesc") else ""
 	for i in scene:
 		if i.has("hidden") and i.hidden:
 			continue
@@ -177,10 +182,13 @@ func set_sdf_scene(s : Array):
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:
+	data.node_parameters = node_parameters.duplicate(true)
 	data.sdf_scene = mm_sdf_builder.serialize_scene(scene)
 	return data
 
 func _deserialize(data : Dictionary) -> void:
+	if data.has("node_parameters"):
+		node_parameters = data.node_parameters.duplicate(true)
 	if data.has("sdf_scene"):
 		set_sdf_scene(mm_sdf_builder.deserialize_scene(data.sdf_scene))
 
@@ -188,6 +196,7 @@ func edit(node) -> void:
 	if scene != null:
 		var edit_window = load("res://material_maker/windows/sdf_builder/sdf_builder.tscn").instance()
 		node.get_parent().add_child(edit_window)
+		edit_window.set_node_parameter_defs(node_parameters)
 		edit_window.set_sdf_scene(scene)
 		edit_window.connect("node_changed", node, "update_sdf_generator")
 		edit_window.connect("editor_window_closed", node, "finalize_generator_update")

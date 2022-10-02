@@ -1,13 +1,15 @@
 extends WindowDialog
 
 
-onready var shape_names = mm_sdf_builder.get_shape_names()
+#onready var shape_names = mm_sdf_builder.get_shape_names()
 
 onready var tree : Tree = $VBoxContainer/Main/Tree
 onready var preview_2d : ColorRect = $VBoxContainer/Main/Preview2D
 onready var preview_3d : ViewportContainer = $VBoxContainer/Main/Preview3D
-onready var parameters_panel : GridContainer = $VBoxContainer/Main/Parameters
+onready var node_parameters_panel : GridContainer = $VBoxContainer/Main/Parameters/NodeParameters
+onready var item_parameters_panel : GridContainer = $VBoxContainer/Main/Parameters/ItemParameters
 
+var node_parameter_mode : bool = true
 
 var scene : Array = []
 var controls : Dictionary = {}
@@ -34,7 +36,7 @@ func _ready():
 	tree.set_hide_root(true)
 	if tree.get_root() == null:
 		tree.create_item()
-	#popup_centered()
+	set_node_parameter_mode(false)
 
 func set_preview(s : Array):
 	if s.empty():
@@ -56,6 +58,135 @@ func select_first_item():
 	if top != null:
 		top.select(0)
 		_on_Tree_item_selected()
+
+func set_node_parameter_mode(b : bool = true):
+	if b == node_parameter_mode:
+		return
+	node_parameter_mode = b
+	$VBoxContainer/Main/Parameters/NodeParams.pressed = b
+	$VBoxContainer/Main/Parameters/ItemParams.pressed = not b
+	_on_Tree_item_selected()
+
+func _on_NodeParams_toggled(button_pressed):
+	set_node_parameter_mode(button_pressed)
+
+func _on_ItemParams_toggled(button_pressed):
+	set_node_parameter_mode(not button_pressed)
+
+func update_node_parameters_grid():
+	for c in node_parameters_panel.get_children():
+		node_parameters_panel.remove_child(c)
+		c.free()
+	var is_first : bool = true
+	var button : Button
+	for pi in range($GenSDF.node_parameters.size()):
+		var p = $GenSDF.node_parameters[pi]
+		var line_edit : LineEdit = LineEdit.new()
+		line_edit.set_text(p.name)
+		node_parameters_panel.add_child(line_edit)
+		line_edit.connect("text_changed", self, "on_node_parameter_name_changed", [ pi, line_edit ])
+		line_edit.connect("text_entered", self, "on_node_parameter_name_entered", [ pi, line_edit ])
+		line_edit.connect("focus_exited", self, "on_node_parameter_name_entered2", [ pi, line_edit ])
+		var description = preload("res://material_maker/widgets/desc_button/desc_button.tscn").instance()
+		description.short_description = p.shortdesc if p.has("shortdesc") else ""
+		description.long_description = p.longdesc if p.has("longdesc") else ""
+		description.connect("descriptions_changed", self, "on_node_parameter_descriptions_changed", [ pi ])
+		node_parameters_panel.add_child(description)
+		var control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instance()
+		control.min_value = p.min
+		control.max_value = p.max
+		control.step = p.step
+		control.value = p.default
+		node_parameters_panel.add_child(control)
+		button = Button.new()
+		button.icon = preload("res://material_maker/icons/edit.tres")
+		node_parameters_panel.add_child(button)
+		button.connect("pressed", self, "edit_node_parameter", [ pi ])
+		button.hint_tooltip = "Configure parameter "+p.name
+		button = Button.new()
+		button.icon = preload("res://material_maker/icons/remove.tres")
+		button.hint_tooltip = "Remove parameter"
+		node_parameters_panel.add_child(button)
+		button.connect("pressed", self, "remove_node_parameter", [ pi ])
+		button = Button.new()
+		button.icon = preload("res://material_maker/icons/up.tres")
+		button.hint_tooltip = "Move parameter up"
+		node_parameters_panel.add_child(button)
+		if is_first:
+			button.disabled = true
+		else:
+			button.connect("pressed", self, "move_node_parameter", [ pi, -1 ])
+		button = Button.new()
+		button.icon = preload("res://material_maker/icons/down.tres")
+		button.hint_tooltip = "Move parameter down"
+		node_parameters_panel.add_child(button)
+		button.connect("pressed", self, "move_node_parameter", [ pi, 1 ])
+		is_first = false
+	if button != null:
+		button.disabled = true
+
+func create_node_parameter():
+	$GenSDF.node_parameters.push_back({name="param1", type="float", min=0, max=1, step=0.01, default=0.5})
+	call_deferred("update_node_parameters_grid")
+
+func on_node_parameter_name_changed(new_name : String, param_index : int, line_edit : LineEdit) -> void:
+	var valid_name : bool = true
+	for pi in range($GenSDF.node_parameters.size()):
+		if pi != param_index and $GenSDF.node_parameters[pi].name == new_name:
+			valid_name = false
+			break
+	if valid_name:
+		line_edit.add_color_override("font_color", mm_globals.main_window.theme.get_color("font_color", "LineEdit"))
+	else:
+		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
+
+func on_node_parameter_name_entered(new_name : String, param_index : int, _line_edit : LineEdit) -> void:
+	for pi in range($GenSDF.node_parameters.size()):
+		if pi == param_index:
+			$GenSDF.node_parameters[pi].name = new_name
+			break
+
+func on_node_parameter_name_entered2(param_index : int, line_edit : LineEdit) -> void:
+	on_node_parameter_name_entered(line_edit.text, param_index, line_edit)
+
+func _on_descriptions_changed(shortdesc, longdesc, param_index) -> void:
+	var p : Dictionary = $GenSDF.node_parameters[param_index]
+	if shortdesc == "":
+		p.erase("shortdesc")
+	else:
+		p.shortdesc = shortdesc
+	if longdesc == "":
+		p.erase("longdesc")
+	else:
+		p.longdesc = longdesc
+
+func edit_node_parameter(param_index) -> void:
+	var p = $GenSDF.node_parameters[param_index]
+	var dialog = preload("res://material_maker/nodes/remote/named_parameter_dialog.tscn").instance()
+	add_child(dialog)
+	var result = dialog.configure_param(p.min, p.max, p.step, p.default)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result.keys().size() == 4:
+		p.min = result.min
+		p.max = result.max
+		p.step = result.step
+		p.default = result.default
+		call_deferred("update_node_parameters_grid")
+
+func remove_node_parameter(param_index) -> void:
+	$GenSDF.node_parameters.remove(param_index)
+	call_deferred("update_node_parameters_grid")
+
+func move_node_parameter(param_index, offset) -> void:
+	var p = $GenSDF.node_parameters[param_index]
+	$GenSDF.node_parameters.remove(param_index)
+	$GenSDF.node_parameters.insert(param_index+offset, p)
+	call_deferred("update_node_parameters_grid")
+
+func set_node_parameter_defs(np : Array):
+	$GenSDF.node_parameters = np.duplicate()
+	update_node_parameters_grid()
 
 func set_sdf_scene(s : Array, parent = null):
 	var parent_item
@@ -301,25 +432,42 @@ func update_local_transform_3d():
 	var local_transform : Transform = get_local_item_transform_3d(tree.get_selected())
 	preview_3d.set_local_transform(local_transform)
 
+func show_node_parameters(_prefix : String):
+	for c in node_parameters_panel.get_children():
+		node_parameters_panel.remove_child(c)
+		c.free()
+	var plus_button = TextureButton.new()
+	plus_button.texture_normal = preload("res://material_maker/icons/add.tres")
+	node_parameters_panel.add_child(plus_button)
 
-func show_parameters(prefix : String):
+func show_item_parameters(prefix : String):
 	controls = {}
-	for c in parameters_panel.get_children():
-		parameters_panel.remove_child(c)
+	for c in item_parameters_panel.get_children():
+		item_parameters_panel.remove_child(c)
 		c.free()
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
 		if p.has("label"):
 			var label : Label = Label.new()
 			label.text = p.label if p.has("label") else ""
 			label.size_flags_horizontal = SIZE_EXPAND_FILL
-			parameters_panel.add_child(label)
+			item_parameters_panel.add_child(label)
 		else:
-			parameters_panel.add_child(Control.new())
-		var control = GENERIC.create_parameter_control(p, false)
+			item_parameters_panel.add_child(Control.new())
+		var control : Control = GENERIC.create_parameter_control(p, false)
 		control.name = p.name
 		control.size_flags_horizontal = SIZE_FILL
-		parameters_panel.add_child(control)
+		item_parameters_panel.add_child(control)
 		controls[p.name] = control
+		if p.type == "float":
+			var button : Button = Button.new()
+			button.text = "f(x)"
+			item_parameters_panel.add_child(button)
+			button.connect("pressed", self, "on_parameter_expression_button", [ p.name ])
+			print(p.name)
+			if node_parameter_mode:
+				control.editable = false
+		else:
+			item_parameters_panel.add_child(Control.new())
 	GENERIC.initialize_controls_from_generator(controls, $GenSDF, self)
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
 		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter(p.name))
@@ -357,28 +505,36 @@ func on_parameter_changed(p : String, v) -> void:
 
 func _on_Tree_item_selected():
 	var selected_item = tree.get_selected()
+	if selected_item == null:
+		return
 	var item_scene = selected_item.get_meta("scene")
 	var index : int = item_scene.index
 	if index != selected_item.get_instance_id():
 		print("index don't match")
-	show_parameters("n%d" % index)
+	show_item_parameters("n%d" % index)
 	match $GenSDF.get_scene_type():
 		"SDF2D":
 			preview_2d.set_generator($GenSDF)
-			update_local_transform_2d()
-			update_center_transform_2d()
-			preview_2d.setup_controls("n%d" % index)
+			if ! node_parameter_mode:
+				update_local_transform_2d()
+				update_center_transform_2d()
+				preview_2d.setup_controls("n%d" % index)
+			else:
+				preview_2d.setup_controls("no_control")
 			$GenSDF.set_parameter("index", float(index))
 		"SDF3D":
 			preview_3d.set_generator($GenSDF)
 			var scene_type = mm_sdf_builder.scene_get_type(item_scene)
-			match scene_type.item_category:
-				"SDF3D":
-					preview_3d.mode = 2
-				"SDF2D":
-					preview_3d.mode = 1
-				_:
-					preview_3d.mode = 0
+			if ! node_parameter_mode:
+				match scene_type.item_category:
+					"SDF3D":
+						preview_3d.mode = 2
+					"SDF2D":
+						preview_3d.mode = 1
+					_:
+						preview_3d.mode = 0
+			else:
+				preview_3d.mode = 0
 			update_local_transform_3d()
 			update_center_transform_3d()
 			var parent_3d = null
@@ -460,10 +616,10 @@ func _on_Tree_drop_item(item, dest, position):
 # OK/Apply/Cancel buttons
 
 func _on_Apply_pressed() -> void:
-	emit_signal("node_changed", scene)
+	emit_signal("node_changed", { parameters=$GenSDF.node_parameters, scene=scene })
 
 func _on_OK_pressed() -> void:
-	emit_signal("node_changed", scene)
+	_on_Apply_pressed()
 	_on_Cancel_pressed()
 
 func _on_Cancel_pressed() -> void:
