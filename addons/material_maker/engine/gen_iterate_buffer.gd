@@ -148,12 +148,13 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 func on_texture_changed(n : String) -> void:
 	for i in range(2):
 		pending_textures[i].erase(n)
+	for i in range(2):
 		var m : Material = [ material, loop_material ][i]
 		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
 			if p.name == n:
 				if i == 0:
 					set_current_iteration(0)
-				if not pending_textures[i].empty():
+				if pending_textures[i].empty():
 					update_buffer()
 				return
 
