@@ -122,9 +122,20 @@ func replace_parameter_values(scene : Dictionary, string : String) -> String:
 				string = string.replace("$"+p.name, "%.09f" % value)
 			"color":
 				string = string.replace("$"+p.name, "vec4(%.09f, %.09f, %.09f, %.09f)" % [ value.r, value.g, value.b, value.a ] )
+			"polygon":
+				var polygon : String = "{"
+				var first = true
+				for v in value.points:
+					if first:
+						first = false
+					else:
+						polygon += ","
+					polygon += "vec2(%.09f,%.09f)" % [ v.x, v.y ]
+				polygon += "}"
+				string = string.replace("$"+p.name, polygon)
 			_:
 				print("Unsupported parameter %s of type %s" % [ p.name, p.type ])
-				return "%ERROR%"
+				#return "%ERROR%"
 	return string
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
