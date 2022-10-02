@@ -19,12 +19,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2",
-			"from_port": 0,
-			"to": "fill_preprocess",
-			"to_port": 0
-		},
-		{
 			"from": "fill_preprocess",
 			"from_port": 0,
 			"to": "iterate_buffer",
@@ -45,14 +39,14 @@
 		{
 			"from": "buffer_3",
 			"from_port": 0,
-			"to": "buffer_2",
-			"to_port": 0
+			"to": "fill_iterate",
+			"to_port": 1
 		},
 		{
 			"from": "buffer_3",
 			"from_port": 0,
-			"to": "fill_iterate",
-			"to_port": 1
+			"to": "fill_preprocess",
+			"to_port": 0
 		}
 	],
 	"label": "Fill from colors",
@@ -151,10 +145,6 @@
 						{
 							"node": "fill_iterate",
 							"widget": "s"
-						},
-						{
-							"node": "buffer_2",
-							"widget": "size"
 						},
 						{
 							"node": "buffer_3",
@@ -299,26 +289,10 @@
 			"type": "shader"
 		},
 		{
-			"name": "buffer_2",
-			"node_position": {
-				"x": -408.065674,
-				"y": -434.233154
-			},
-			"parameters": {
-				"filter": false,
-				"mipmap": false,
-				"size": 8
-			},
-			"seed": 0,
-			"seed_locked": false,
-			"type": "buffer",
-			"version": 2
-		},
-		{
 			"name": "buffer_3",
 			"node_position": {
-				"x": -401.640808,
-				"y": -310.542969
+				"x": -407.640808,
+				"y": -328.542969
 			},
 			"parameters": {
 				"filter": false,
