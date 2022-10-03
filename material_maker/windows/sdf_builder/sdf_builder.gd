@@ -451,6 +451,8 @@ func show_node_parameters(_prefix : String):
 	node_parameters_panel.add_child(plus_button)
 
 func show_item_parameters(prefix : String):
+	var item : TreeItem = instance_from_id(prefix.right(1).to_int())
+	var scene : Dictionary = item.get_meta("scene")
 	controls = {}
 	for c in item_parameters_panel.get_children():
 		item_parameters_panel.remove_child(c)
@@ -472,6 +474,7 @@ func show_item_parameters(prefix : String):
 			var button : Button = Button.new()
 			button.text = "f(x)"
 			item_parameters_panel.add_child(button)
+			button.flat = not ( scene.has("parmexprs") and scene.parmexprs.has(p.name.right(p.name.find("_")+1)) )
 			button.connect("pressed", self, "on_parameter_expression_button", [ p.name ])
 			if node_parameter_mode:
 				control.editable = false
@@ -501,6 +504,7 @@ func set_parameter_expression(value : String, item_scene : Dictionary, param_nam
 		item_scene.parmexprs[param_name] = value
 	if node_parameter_mode:
 		set_preview(scene)
+	_on_Tree_item_selected()
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
