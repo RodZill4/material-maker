@@ -100,7 +100,7 @@ func update_node_parameters_grid():
 		control.step = p.step
 		control.value = p.default
 		node_parameters_panel.add_child(control)
-		control.connect("value_changed_undo", self, "on_node_parameter_value_changed", [ pi ])
+		control.connect("value_changed_undo", self, "on_node_parameter_value_changed", [ pi ].duplicate(true))
 		button = Button.new()
 		button.icon = preload("res://material_maker/icons/edit.tres")
 		node_parameters_panel.add_child(button)
@@ -452,7 +452,7 @@ func show_node_parameters(_prefix : String):
 
 func show_item_parameters(prefix : String):
 	var item : TreeItem = instance_from_id(prefix.right(1).to_int())
-	var scene : Dictionary = item.get_meta("scene")
+	var item_scene : Dictionary = item.get_meta("scene")
 	controls = {}
 	for c in item_parameters_panel.get_children():
 		item_parameters_panel.remove_child(c)
@@ -474,7 +474,7 @@ func show_item_parameters(prefix : String):
 			var button : Button = Button.new()
 			button.text = "f(x)"
 			item_parameters_panel.add_child(button)
-			button.flat = not ( scene.has("parmexprs") and scene.parmexprs.has(p.name.right(p.name.find("_")+1)) )
+			button.flat = not ( item_scene.has("parmexprs") and item_scene.parmexprs.has(p.name.right(p.name.find("_")+1)) )
 			button.connect("pressed", self, "on_parameter_expression_button", [ p.name ])
 			if node_parameter_mode:
 				control.editable = false
@@ -600,9 +600,6 @@ func set_node_parameters(generator, parameters):
 			if item.get_meta("scene").parameters.has(parameter_name):
 				item.get_meta("scene").parameters[parameter_name] = value
 				parameters_changed = true
-			print_debug("Found parameter "+p)
-		else:
-			print_debug("Didn't find parameter "+p+"("+str(item_id)+")")
 	if parameters_changed:
 		update_local_transform_2d()
 		preview_2d.setup_controls("n%d" % tree.get_selected().get_meta("scene").index)
