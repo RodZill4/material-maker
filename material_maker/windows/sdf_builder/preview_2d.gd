@@ -7,7 +7,7 @@ var view_style : int = 0
 func _ready():
 	pass # Replace with function body.
 
-func generate_preview_shader(source, template) -> String:
+func generate_preview_shader(source, _template) -> String:
 	var variables : Dictionary = {}
 	variables.GENERATED_GLOBALS = PoolStringArray(source.globals).join("\n") if source.has("globals") else ""
 	variables.GENERATED_INSTANCE = source.defs

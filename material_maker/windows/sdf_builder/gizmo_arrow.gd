@@ -42,7 +42,7 @@ func set_material(m):
 		$Arrow.set_surface_material(0, material)
 		$Torus.set_surface_material(0, material)
 
-func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
+func _on_TranslateArea_input_event(camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		$Arrow.get_surface_material(0).set_shader_param("highlight", 0.1 if event.pressed else 0.0)
 	elif event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:

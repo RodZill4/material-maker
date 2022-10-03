@@ -55,12 +55,6 @@ func setup_controls(filter : String = "") -> void:
 		filter = setup_controls_filter
 	else:
 		setup_controls_filter = filter
-	var param_defs = []
-	if is_instance_valid(generator):
-		if filter != "":
-			param_defs = generator.get_filtered_parameter_defs(filter)
-		else:
-			param_defs = generator.get_parameter_defs()
 
 var parent_transform : Transform
 var local_transform : Transform
@@ -159,7 +153,7 @@ func navigation_input(ev) -> bool:
 	return false
 
 
-func _on_Background_input_event(camera, event, position, normal, shape_idx):
+func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 	if navigation_input(event):
 		accept_event()
 		update_viewport()
