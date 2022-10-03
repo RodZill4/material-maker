@@ -4,6 +4,7 @@ class_name MMGenSDF
 
 
 export var editor : bool = false
+export var expressions : bool = false
 var node_parameters : Array = []
 var scene : Array = []
 
@@ -16,8 +17,6 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "EasySDF"
-
-
 
 func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 	if parameters_filter == "":
@@ -179,6 +178,11 @@ func set_sdf_scene(s : Array):
 			parameters[p.name] = float(p.default)
 		else:
 			parameters[p.name] = p.default
+	if editor and expressions:
+		for p in parameter_defs:
+			if p.has("parmexpr"):
+				shader_model.code = shader_model.code.replace("$"+p.name, p.parmexpr)
+				shader_model.instance = shader_model.instance.replace("$"+p.name, p.parmexpr)
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:

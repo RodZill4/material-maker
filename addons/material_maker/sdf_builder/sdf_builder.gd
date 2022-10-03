@@ -119,7 +119,10 @@ func replace_parameter_values(scene : Dictionary, string : String) -> String:
 			"enum":
 				string = string.replace("$"+p.name, p.values[value].value)
 			"float":
-				string = string.replace("$"+p.name, "%.09f" % value)
+				if scene.has("parmexprs") and scene.parmexprs.has(p.name):
+					string = string.replace("$"+p.name, scene.parmexprs[p.name])
+				else:
+					string = string.replace("$"+p.name, "%.09f" % value)
 			"color":
 				string = string.replace("$"+p.name, "vec4(%.09f, %.09f, %.09f, %.09f)" % [ value.r, value.g, value.b, value.a ] )
 			"polygon":
@@ -138,7 +141,7 @@ func replace_parameter_values(scene : Dictionary, string : String) -> String:
 				#return "%ERROR%"
 	return string
 
-func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
+func scene_to_shader_model(scene : Dictionary, uv : String, editor : bool) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
 		return {}
 	var scene_node = scene_get_type(scene)
@@ -148,11 +151,13 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			p = p.duplicate(true)
 			if scene.parameters.has(p.name):
 				p.default = scene.parameters[p.name]
+			if scene.has("parmexprs") and scene.parmexprs.has(p.name):
+				p.parmexpr = scene.parmexprs[p.name]
 			var new_name = "n%d_%s" % [ scene.index, p.name ]
-			if shader_model.has("code"):
-				shader_model.code = replace_parameters(scene, shader_model.code)
 			p.name = new_name
 			shader_model.parameters.push_back(p)
+		if shader_model.has("code"):
+			shader_model.code = replace_parameters(scene, shader_model.code)
 	else:
 		if shader_model.has("code"):
 			shader_model.code = replace_parameter_values(scene, shader_model.code)

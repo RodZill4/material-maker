@@ -65,6 +65,8 @@ func set_node_parameter_mode(b : bool = true):
 	node_parameter_mode = b
 	$VBoxContainer/Main/Parameters/NodeParams.pressed = b
 	$VBoxContainer/Main/Parameters/ItemParams.pressed = not b
+	$GenSDF.expressions = node_parameter_mode
+	set_preview(scene)
 	_on_Tree_item_selected()
 
 func _on_NodeParams_toggled(button_pressed):
@@ -98,6 +100,7 @@ func update_node_parameters_grid():
 		control.step = p.step
 		control.value = p.default
 		node_parameters_panel.add_child(control)
+		control.connect("value_changed_undo", self, "on_node_parameter_value_changed", [ pi ])
 		button = Button.new()
 		button.icon = preload("res://material_maker/icons/edit.tres")
 		node_parameters_panel.add_child(button)
@@ -139,6 +142,13 @@ func on_node_parameter_name_changed(new_name : String, param_index : int, line_e
 		line_edit.add_color_override("font_color", mm_globals.main_window.theme.get_color("font_color", "LineEdit"))
 	else:
 		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
+
+func on_node_parameter_value_changed(new_value, _merge_undo : bool = false, param_index : int = 0) -> void:
+	var variable = $GenSDF.node_parameters[param_index].name
+	ignore_parameter_change = variable
+	$GenSDF.set_parameter(variable, new_value)
+	$GenSDF.node_parameters[param_index].default = new_value
+	ignore_parameter_change = ""
 
 func on_node_parameter_name_entered(new_name : String, param_index : int, _line_edit : LineEdit) -> void:
 	for pi in range($GenSDF.node_parameters.size()):
@@ -463,7 +473,6 @@ func show_item_parameters(prefix : String):
 			button.text = "f(x)"
 			item_parameters_panel.add_child(button)
 			button.connect("pressed", self, "on_parameter_expression_button", [ p.name ])
-			print(p.name)
 			if node_parameter_mode:
 				control.editable = false
 		else:
@@ -471,6 +480,27 @@ func show_item_parameters(prefix : String):
 	GENERIC.initialize_controls_from_generator(controls, $GenSDF, self)
 	for p in $GenSDF.get_filtered_parameter_defs(prefix):
 		GENERIC.update_control_from_parameter(controls, p.name, $GenSDF.get_parameter(p.name))
+
+func on_parameter_expression_button(param_full_name : String):
+	var item_id : int = param_full_name.left(param_full_name.find("_")).right(1).to_int()
+	var item : TreeItem = instance_from_id(item_id)
+	if item != null:
+		var item_scene : Dictionary = item.get_meta("scene")
+		var param_name = param_full_name.right(param_full_name.find("_")+1)
+		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
+		add_child(expression_editor)
+		var param_value : String = item_scene.parmexprs[param_name] if ( item_scene.has("parmexprs") and item_scene.parmexprs.has(param_name) ) else ""
+		expression_editor.edit_parameter(param_name, param_value, self, "set_parameter_expression", [ item_scene, param_name ], true)
+
+func set_parameter_expression(value : String, item_scene : Dictionary, param_name : String):
+	if not item_scene.has("parmexprs"):
+		item_scene.parmexprs = {}
+	if value == "":
+		item_scene.parmexprs.erase(param_name)
+	else:
+		item_scene.parmexprs[param_name] = value
+	if node_parameter_mode:
+		set_preview(scene)
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
