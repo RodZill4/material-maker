@@ -159,12 +159,14 @@ func on_node_parameter_name_entered(new_name : String, param_index : int, _line_
 func on_node_parameter_name_entered2(param_index : int, line_edit : LineEdit) -> void:
 	on_node_parameter_name_entered(line_edit.text, param_index, line_edit)
 
-func _on_descriptions_changed(shortdesc, longdesc, param_index) -> void:
+func on_node_parameter_descriptions_changed(shortdesc, longdesc, param_index) -> void:
 	var p : Dictionary = $GenSDF.node_parameters[param_index]
 	if shortdesc == "":
 		p.erase("shortdesc")
+		p.erase("label")
 	else:
 		p.shortdesc = shortdesc
+		p.label = shortdesc
 	if longdesc == "":
 		p.erase("longdesc")
 	else:
