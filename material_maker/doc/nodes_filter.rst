@@ -47,6 +47,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_fill_to_orientation
 	node_filter_fill_to_gradient
 	node_filter_math
+	node_filter_vec3_math
 	node_filter_smooth_minmax
 	node_filter_maketileable
 	node_filter_pixelize
