@@ -3,7 +3,7 @@ Triangle Voronoi noise node
 
 The **Triangle Voronoi** node outputs Voronoi noise textures with triangle distance to cell borders
 
-.. image:: images/node_noise_voronoi_triangle.png
+.. image:: images/node_noise_triangle_voronoi.png
 	:align: center
 
 Inputs
