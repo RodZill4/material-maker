@@ -181,8 +181,21 @@ func _gui_input(event) -> void:
 			call_deferred("check_previews")
 	elif event is InputEventKey and event.pressed:
 		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
-			remove_selection()
+		match scancode_with_modifiers:
+			KEY_DELETE,KEY_BACKSPACE:
+				remove_selection()
+			KEY_LEFT:
+				scroll_offset.x -= 0.5*rect_size.x
+				accept_event()
+			KEY_RIGHT:
+				scroll_offset.x += 0.5*rect_size.x
+				accept_event()
+			KEY_UP:
+				scroll_offset.y -= 0.5*rect_size.y
+				accept_event()
+			KEY_DOWN:
+				scroll_offset.y += 0.5*rect_size.y
+				accept_event()
 	elif event is InputEventMouseMotion:
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
@@ -642,31 +655,15 @@ func do_paste(data) -> void:
 			c.selected = true
 
 func paste() -> void:
-	var data = OS.clipboard.strip_edges()
-	var graph = null
-
-	if data.is_valid_html_color():
-		var color = Color(data)
-		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
-	elif data.left(4) == "http":
-		var http_request = HTTPRequest.new()
-		add_child(http_request)
-		var error = http_request.request(data)
-		if error != OK:
-			push_error("An error occurred in the HTTP request.")
-		data = yield(http_request, "request_completed")[3].get_string_from_utf8()
-		http_request.queue_free()
-		graph = parse_json(data)
-	else:
-		graph = parse_json(data)
-	if graph == null:
-		var palette = try_parse_palette(data)
-		if not palette.empty():
-			graph = palette
-	if graph != null:
+	var data : String = OS.clipboard.strip_edges()
+	var parsed_data = mm_globals.parse_paste_data(data)
+	while parsed_data is GDScriptFunctionState:
+		parsed_data = yield(parsed_data, "completed")
+	if parsed_data.graph != null:
+		var graph = parsed_data.graph
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = mm_globals.main_window
-			var graph_edit = main_window.new_panel()
+			var graph_edit = main_window.new_graph_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)
@@ -675,38 +672,6 @@ func paste() -> void:
 			do_paste(graph)
 	else:
 		print(data)
-
-func try_parse_palette(hex_values_str : String) -> Dictionary:
-	var points = []
-	var regex_color : RegEx = RegEx.new()
-	regex_color.compile("#[0-9a-fA-F]+")
-	var regex_matches : Array = regex_color.search_all(hex_values_str)
-	var n = regex_matches.size()
-	if n < 2:
-		return {}
-	var i = 0
-	for m in regex_matches:
-		if not m.strings[0].is_valid_html_color():
-			return {}
-		var color = Color(m.strings[0])
-		points.push_back({
-			pos = (1.0 / (2 * n)) + (float(i) / n),
-			r = color.r,
-			g = color.g,
-			b = color.b,
-			a = color.a
-		})
-		i += 1
-	return {
-		type = "colorize",
-		parameters = {
-			gradient = {
-				interpolation = 0,
-				points = points,
-				type = "Gradient"
-			}
-		}
-	}
 
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())

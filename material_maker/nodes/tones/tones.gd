@@ -77,7 +77,7 @@ func update_node() -> void:
 
 var moving_cursor : bool = false
 
-func on_parameter_changed(p, v) -> void:
+func on_parameter_changed(p, _v) -> void:
 	if p == "__input_changed__":
 		var source = generator.get_source(0)
 		if source != null:

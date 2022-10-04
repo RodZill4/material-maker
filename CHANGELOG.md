@@ -1,3 +1,31 @@
+# Material Maker 1.1
+
+## General
+
+- Updated renderer to limit the size of rendering viewports (big textures are rendered in chunks and reassembled).
+  This reduces crashes on lower end GPU and/or when generating high resolution textures. The maximum render size
+  can be configured in the progress counter context menu.
+- Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
+  can be used to know if Material Maker uses the integrated graphics on a laptop).
+- In Graph views, added support for arrow keys to scroll in all directions (useful when connecting nodes that
+  are far from each other).
+
+## Nodes
+
+- Added additional modes to Math node (contributed by williamchange)
+- Updated the iteration buffer with an autostop parameter. When set, the Iteration Buffer will stop iterating
+  ass soon as 2 consecutive results are identical.
+- Added a Fill port type that is used as output of the Fill node (and nodes that generate fill information)
+  and input of the Fill companion nodes.
+- Removed the Iterations parameter from the Fill node, and added parameters to remove the edges and adjust
+  the generated bounding box.
+- Added a new **Fill from colors** node that generates fill information from the color islands in its input.
+- Updated the Voronoi node to output Fill information instead of a random color.
+
+## Fixes, optimizations
+
+- Optimized curve parameter editor
+
 # Material Maker 1.0
 
 ## General

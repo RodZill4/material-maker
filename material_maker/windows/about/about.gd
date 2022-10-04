@@ -22,6 +22,7 @@ const CONTRIBUTORS = [
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes" },
 	{ name="Zhibade", contribution="Auto size new comment nodes to current selection" },
 	{ name="williamchange", contribution="Seven Segment Display node" },
+	{ name="Theaninova", contribution="Spiral Gradient node" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 

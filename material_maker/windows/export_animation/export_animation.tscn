@@ -73,7 +73,6 @@ tracks/1/keys = {
 shader = SubResource( 10 )
 
 [node name="ExportAnimation" type="WindowDialog"]
-visible = true
 margin_right = 785.0
 margin_bottom = 320.0
 window_title = "Export animation"
@@ -81,8 +80,11 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-shader = "void fragment() {
-	COLOR = preview_2d(UV);
+shader = "uniform float mm_chunk_size = 1.0;
+uniform vec2 mm_chunk_offset = vec2(0.0);
+
+void fragment() {
+	COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);
 }"
 
 [node name="VBox" type="VBoxContainer" parent="."]
@@ -269,7 +271,7 @@ __meta__ = {
 [node name="Viewport" type="Viewport" parent="VBox/Images/HBox/Begin"]
 size = Vector2( 256, 256 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
 
 [node name="Image" type="ColorRect" parent="VBox/Images/HBox/Begin/Viewport"]
@@ -353,7 +355,7 @@ __meta__ = {
 [node name="Viewport" type="Viewport" parent="VBox/Images/HBox/End"]
 size = Vector2( 256, 256 )
 handle_input_locally = false
-render_target_update_mode = 3
+render_target_update_mode = 0
 gui_disable_input = true
 
 [node name="Image" type="ColorRect" parent="VBox/Images/HBox/End/Viewport"]

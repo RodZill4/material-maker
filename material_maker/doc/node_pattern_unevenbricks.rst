@@ -20,11 +20,11 @@ The **Uneven Bricks** node provides the following textures:
 
 * The first is a greyscale image where bricks are shown in white and mortar in black.
 
-* The second is an RGBA texture that contains the bounding box for each brick.
+* The second is Fill information for each brick and must be connected to a Fill companion node.
 
-* The 3rd is an RGBA texture that contains the bounding box for each brick corner.
+* The third is Fill information for each brick corner and must be connected to a Fill companion node.
 
-The bounding box textures can be used in conjunction with **Fill To** nodes to generate random colors,
+The second and third outputs can be used in conjunction with **Fill To** nodes to generate random colors,
 custom UVs etc. to create complex materials that show for example bricks of different colors.
 
 Parameters

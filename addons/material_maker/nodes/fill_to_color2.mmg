@@ -1,0 +1,66 @@
+{
+	"name": "fill_to_color",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edgecolor": {
+			"a": 1,
+			"b": 0,
+			"g": 0,
+			"r": 0,
+			"type": "Color"
+		}
+	},
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "fill"
+			},
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"longdesc": "The image from which colors are taken",
+				"name": "map",
+				"shortdesc": "Color map",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a color taken from a color map image",
+		"name": "Fill to Color",
+		"outputs": [
+			{
+				"longdesc": "The generated output image",
+				"rgba": "mix($edgecolor, $map(fract($(name_uv)_bb.xy+0.5*$(name_uv)_bb.zw)), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "Edge Color",
+				"longdesc": "The color used to draw outlines",
+				"name": "edgecolor",
+				"shortdesc": "Outline color",
+				"type": "color"
+			}
+		],
+		"shortdesc": "Fill to color"
+	},
+	"type": "shader"
+}

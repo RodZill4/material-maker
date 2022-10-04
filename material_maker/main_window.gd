@@ -39,6 +39,7 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
 const IDLE_FPS_LIMIT_MIN = 1
@@ -102,7 +103,7 @@ const MENU = [
 	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
 	{ menu="Tools/-" },
 	{ menu="Tools/Environment editor", command="environment_editor" },
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
+	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
@@ -187,7 +188,7 @@ func _ready() -> void:
 
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
-	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
+	mm_renderer.connect("render_queue", $VBoxContainer/StatusBar/RenderCounter, "on_counter_change")
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application

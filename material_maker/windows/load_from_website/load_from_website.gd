@@ -84,7 +84,7 @@ func update_thumbnails() -> void:
 		var m = assets[i]
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
-		if image.load(cache_filename) != OK:
+		if ! File.new().file_exists(cache_filename) or image.load(cache_filename) != OK:
 			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
 			if error == OK:
 				var data : PoolByteArray = yield($ImageHTTPRequest, "request_completed")[3]

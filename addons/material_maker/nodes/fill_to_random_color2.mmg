@@ -1,0 +1,60 @@
+{
+	"name": "fill_to_random_color2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edgecolor": {
+			"a": 1,
+			"b": 1,
+			"g": 1,
+			"r": 1,
+			"type": "Color"
+		}
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_bb = $in($uv);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "fill"
+			}
+		],
+		"instance": "",
+		"longdesc": "A fill companion node that fills each area with a random color",
+		"name": "Fill to Random Color        ",
+		"outputs": [
+			{
+				"longdesc": "The generated output image",
+				"rgb": "mix($edgecolor.rgb, rand3(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
+				"shortdesc": "Output",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "Edge Color",
+				"longdesc": "The color used for outlines",
+				"name": "edgecolor",
+				"shortdesc": "Outline color",
+				"type": "color"
+			}
+		],
+		"shortdesc": "Fill to random color"
+	},
+	"type": "shader"
+}
