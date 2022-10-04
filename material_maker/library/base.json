@@ -1206,6 +1206,15 @@
 			"type": "truchet"
 		},
 		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAchJREFUaIHtmrEOwyAMRGnFwOg/zu8ysoWxA1JVRQT7Inx0wFtSX/reEkji13EcclOlV7XW4Fm1Vognth+61xKR7h94C0A8sZ21ZwgCEE/8njJmOAJ2nvh7bMnQBIw88SKkZpgCFp6rgJohC6g8HYFxhi8w5ukLDDIppcdwlkJ5YikFyngLpJQgntjO2jMEAYgnfk8ZMxwBO0/8PbZkaAJGnngRUjNMAQvPVUDNkAVUno7AOMMXGPPEWmvOOedsvDq6X2+3aeh5A+K5XcjuCt2vB2RvHPCtyhMBlAnqJwlATFA/T8DOBPVTBYxMUD9bwMIE9S8QUJmgflgA6n7GBPWjC2V/JR4Uul8PoANDAGWC+kkCEBPUzxOwM0H9VAEjE9TPFrAwQf0LBFQmqB8WgLpDCOh+Hb1+u03bHzbglXgK0JRHn9a/QGAi/QKBufRsgen0VAEPep6AE72IvM7z9BbwoxeRtyt9CMGVXkTglRit9h7Jib6UskBgIv0Cgbn0bIHp9FQBD3qegBM9ScCPvrTvA1AAffHUPinYHyHQ2vNCs2vPC2mZPS+k1J4X0jJ7XkgplGfPC82uPS+kZfa8kFJ7XkjL/Nu80AcMpmqu325YFAAAAABJRU5ErkJggg==",
+			"name": "diagonal_weave",
+			"parameters": {
+				"size": 4
+			},
+			"tree_item": "Pattern/Diagonal Weave",
+			"type": "diagonal_weave"
+		},
+		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAQdJREFUaIHtmsEOwyAMQ9v9/z+zA6hiozsktupF+J1LHENhS8pxGANxsgK11mLCJ0eaEyWa/dBmeCCEyGU/5GEP6Hgk+5EB5mH7FejU2wM94zkD5BRaowXiJMbMueKzCEYLD1hnGvGAR4s9/es9yXmgRHslhP8KG1BjA2psQI0NqLEBNTagJmaA1QshShD+BhPrgScKmi/hXFV5O+q5kvISJtbE6WXctSsxo+0LlT9Gy79C+RVA+znAAfARJzes9jFa+4fsdpqJja1oqNgewL8G0CXKH6M2oMYG1NiAGhtQYwNqbEDNZh+6V9V6Vw1m1aqXPVbc2MrjK2fVV6BTew90VBdfjQF5A3+vllnSsA/eAAAAAElFTkSuQmCC",
 			"name": "seven_segment",
 			"parameters": {
