@@ -1,0 +1,162 @@
+{
+	"name": "bricks_uneven4",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.1,
+		"corner": 0.3,
+		"mortar": 0.1,
+		"randomness": 0.51,
+		"round": 0,
+		"x": 6,
+		"y": 6
+	},
+	"seed": 0.460931,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_rect = bricks_uneven3($uv, vec2($x, $y), $randomness, $seed);\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.00001, $bevel*$bevel_map($uv)), 0.5 / max($x, $y) );",
+		"global": "float brick_cut(vec2 id, float random, float seed) {\n\treturn 0.5 + (rand(id + seed) - 0.5) * random;\n}\n\nvec4 bricks_uneven3(vec2 uv, vec2 size, float random, float seed) {\n\tvec2 fl = floor(uv);\n\tuv = fract(uv);\n\tuv *= size;\n\t\n\tvec2 cell_id = floor(uv);\n\tvec2 cell_uv = fract(uv);\n\t\n\t// We generate a random value for each cell. \n\t// These values are used to decide where to cut each cell in half.\n\t// We cut them every other horizontally and verticall in a checkerlike pattern.\n\t// We go through each cell and check all the cells around it (that's why we need to generate 9 values.\n\t// We can then calculate the brick rects based on where we find the cuts in the surrounding cells.\n\t\n\tfloat current = brick_cut(cell_id, random, seed);\n\tfloat top = brick_cut( mod( cell_id + vec2(0.0, -1.0), size), random, seed);\n\tfloat top_right = brick_cut( mod( cell_id + vec2(1.0, -1.0), size), random, seed);\n\tfloat right = brick_cut( mod( cell_id + vec2(1.0, 0.0), size), random, seed);\n\tfloat bottom_right = brick_cut( mod( cell_id + vec2(1.0, 1.0), size), random, seed);\n\tfloat bottom = brick_cut( mod( cell_id + vec2(0.0, 1.0), size), random, seed);\n\tfloat bottom_left = brick_cut( mod( cell_id + vec2(-1.0, 1.0), size), random, seed);\n\tfloat left = brick_cut( mod( cell_id + vec2(-1.0, 0.0), size), random, seed);\n\tfloat top_left = brick_cut( mod( cell_id + vec2(-1.0, -1.0), size), random, seed);\n\t\n\tvec4 bricks = vec4(cell_id, cell_id);\n\t\n\t// Horizontal\n\tif (mod(cell_id.x + cell_id.y, 2.0) > 0.5) {\n\t\tif ( current > cell_uv.y ) {\n\t\t\tif ( top > cell_uv.x) {\n\t\t\t\tbricks.x -= 1.0 - left;\n\t\t\t\tbricks.y -= 1.0 - top_left;\n\t\t\t\tbricks.z += top;\n\t\t\t\tbricks.w += current;\n\t\t\t} else {\n\t\t\t\tbricks.x += top;\n\t\t\t\tbricks.y -= 1.0 - top_right;\n\t\t\t\tbricks.z += 1.0 + right;\n\t\t\t\tbricks.w += current;\n\t\t\t}\n\t\t} else {\n\t\t\tif ( bottom > cell_uv.x) {\n\t\t\t\tbricks.x -= 1.0 - left;\n\t\t\t\tbricks.y += current;\n\t\t\t\tbricks.z += bottom;\n\t\t\t\tbricks.w += 1.0 + bottom_left;\n\t\t\t} else {\n\t\t\t\tbricks.x += bottom;\n\t\t\t\tbricks.y += current;\n\t\t\t\tbricks.z += 1.0 + right;\n\t\t\t\tbricks.w += 1.0 + bottom_right;\n\t\t\t}\n\t\t}\n\t// Vertical\n\t} else { \n\t\tif ( current > cell_uv.x ) {\n\t\t\tif (left > cell_uv.y) {\n\t\t\t\tbricks.x -= 1.0 - top_left;\n\t\t\t\tbricks.y -= 1.0 - top;\n\t\t\t\tbricks.z += current;\n\t\t\t\tbricks.w += left;\n\t\t\t} else {\n\t\t\t\tbricks.x -= 1.0 - bottom_left;\n\t\t\t\tbricks.y += left;\n\t\t\t\tbricks.z += current;\n\t\t\t\tbricks.w += 1.0 + bottom;\t\n\t\t\t}\n\t\t} else {\n\t\t\tif (right > cell_uv.y) {\n\t\t\t\tbricks.x += current;\n\t\t\t\tbricks.y -= 1.0 - top;\n\t\t\t\tbricks.z += 1.0 + top_right;\n\t\t\t\tbricks.w += right;\n\t\t\t} else {\n\t\t\t\tbricks.x += current;\n\t\t\t\tbricks.y += right;\n\t\t\t\tbricks.z += 1.0 + bottom_right;\n\t\t\t\tbricks.w += 1.0 + bottom;\n\t\t\t}\n\t\t}\n\t}\n\n\tbricks.xy /= size;\n\tbricks.xy += fl;\n\tbricks.zw /= size;\n\tbricks.zw += fl;\n\t\n\treturn bricks;\n}",
+		"includes": [
+			"bricks2"
+		],
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "4:",
+				"longdesc": "A map that affects the Mortar parameter",
+				"name": "mortar_map",
+				"shortdesc": "Mortar map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Round parameter",
+				"name": "round_map",
+				"shortdesc": "Round map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates an uneven bricks pattern using a different algorithm than Uneven Bricks.",
+		"name": "Uneven Bricks 3",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"longdesc": "A greyscale image that shows the bricks pattern",
+				"shortdesc": "Brick pattern",
+				"type": "f"
+			},
+			{
+				"fill": "round(vec4(fract($(name_uv)_rect.xy), $(name_uv)_rect.zw - $(name_uv)_rect.xy)*4096.0)/4096.0",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Brick Fill",
+				"type": "fill"
+			},
+			{
+				"fill": "brick_corner_bb($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, 0.5 / max($x, $y))",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Corner Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 6,
+				"label": "Rows",
+				"longdesc": "The number of rows of a pattern",
+				"max": 32,
+				"min": 2,
+				"name": "x",
+				"shortdesc": "Rows",
+				"step": 2,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 6,
+				"label": "Columns",
+				"longdesc": "The number of columns of a pattern",
+				"max": 32,
+				"min": 2,
+				"name": "y",
+				"shortdesc": "Columns",
+				"step": 2,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Randomness",
+				"longdesc": "The randomness of the pattern",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"shortdesc": "Randomness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Mortar",
+				"longdesc": "The width of the space between bricks",
+				"max": 1,
+				"min": 0,
+				"name": "mortar",
+				"shortdesc": "Mortar",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Bevel",
+				"longdesc": "The width of the edge of each brick",
+				"max": 1,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Round",
+				"longdesc": "The radius of the round corners of bricks",
+				"max": 1,
+				"min": 0,
+				"name": "round",
+				"shortdesc": "Round",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Corner",
+				"longdesc": "The size of the corner part of each brick (only used by the Corner UV output)",
+				"max": 1,
+				"min": 0,
+				"name": "corner",
+				"shortdesc": "Corner",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Uneven Bricks 3"
+	},
+	"type": "shader"
+}
