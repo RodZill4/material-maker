@@ -1,0 +1,168 @@
+{
+	"name": "sixteen_segment",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 31,
+		"b": 0,
+		"da": 60,
+		"dp": false,
+		"dps": 0.65,
+		"dpx": 0.3,
+		"dpy": 0.415,
+		"sl": 0.15,
+		"st": 0.2,
+		"t": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "// Display modes\nconst bool ASCII_DISPLAY = true;\nconst bool CUSTOM_DISPLAY = false;\n\n// ASCII Character configurations (31-125)\n// 31 reserved to display all segments\n\nconst float CHARS[] = {\n\tfloat(0xFFFF), float(0x0000), float(0x0202), float(0x0022),\n    float(0xE722), float(0xE774), float(0xCF71), float(0xB1E8),\n\tfloat(0x0020), float(0x0081), float(0x0808), float(0xCCA9),\n\tfloat(0xC420), float(0x0800), float(0x8400), float(0x0000),\n\tfloat(0x0801), float(0x3B57), float(0x0203), float(0xB546),\n\tfloat(0x2746), float(0x8612), float(0xA1D4), float(0xB754),\n\tfloat(0x0246), float(0xB756), float(0xA756), float(0x4020),\n\tfloat(0x0820), float(0x8081), float(0xA500), float(0x0C08),\n\tfloat(0x4446), float(0x3576), float(0x9656), float(0x6766),\n\tfloat(0x3154), float(0x6366), float(0xB154), float(0x9054),\n\tfloat(0x3754), float(0x9612), float(0x6164), float(0x3302),\n\tfloat(0x9091), float(0x3110), float(0x121B), float(0x129A),\n\tfloat(0x3356), float(0x9456), float(0x33D6), float(0x94D6),\n\tfloat(0xA754), float(0x4064), float(0x3312), float(0x1811),\n\tfloat(0x1A92), float(0x0889), float(0xA712), float(0x2945),\n\tfloat(0x4124), float(0x0088), float(0x6060), float(0x0880),\n\tfloat(0x2100), float(0x0008), float(0xF100), float(0xF010),\n\tfloat(0xB000), float(0x4702), float(0xB800), float(0xC424),\n\tfloat(0xE070), float(0xD010), float(0x4000), float(0x7020),\n\tfloat(0x40A1), float(0x1010), float(0xD600), float(0xD000),\n\tfloat(0xF000), float(0x9070), float(0x0626), float(0x9000),\n\tfloat(0xE050), float(0xB010), float(0x7000), float(0x1800),\n\tfloat(0x1A80), float(0x0889), float(0x0722), float(0xA800),\n\tfloat(0xC124), float(0x4020), float(0x6460)\n};\n\n/*\n bit position mapping:\n  _10__ __14__\n | \\   |   /  |\n 12 13 11 16  15\n |    \\|/     |\n  __1__ __6___\n |    /|\\     |\n 4  5  2  9   7\n | /   |   \\  |\n  __3__|__8___\n\n 1  4    8   12    16\n |  |    |    |    |        \n 0000 0000 0000 0000\n\n e.g. M = 0001 0010 0001 1011 (binary) = 4635 (dec) = 0x121B (hex) \n*/\n\nfloat m(vec4 d) { return max(max(d.x,d.y),max(d.z,d.w)); }\n\nfloat fs(vec2 p, float st, float sl, vec4 s14, float s5, bool sf, float da)\n{\n\tconst vec2 h = vec2(1,-1);\n\tda *= 0.017453;\n\t\n\tsl *= 0.1;\n\tst *= 0.5;\n\tsl = clamp(sl, 0,1);\n\n\tp = 2.0 * (p - 0.5);\n\tvec2 p1 = p;\n\tvec2 p2 = p;\n\tvec2 _p = p;\n\t\n\tp = abs(p) - vec2(0.25,0.4);\n\t\n\tfloat f = -max(p.x, p.y);\n\tfloat ism = f - st - (sl*1.625);\n\tfloat isg = min(ism, st-abs(dot(normalize(vec2(sin(da),cos(da))),_p*vec2(sf ? 1.0:-1.0 ,1.0))));\n\t\n\tfloat d = min(st - abs(f), min(-dot(p, normalize(h.xx)), abs(dot(p, normalize(h)))) - sl);\n\n\tp1.x = abs(p1.x); p2.y = abs(p2.y);\n\tp1 += vec2(0.15, 0.0); p2 -= vec2(0.0, 0.15);\n\n\tfloat q1 = -dot(p1,h.xx);\n\tfloat q2 = min(p2.x, -dot(p2,h.yx));\n\tfloat q3 = dot(p1, h.yx);\n\tfloat q4 = min(-p2.x, -dot(p2,h.xx));\n\t\n\tvec4 qv4 = vec4(q1,q2,q3,q4);\n\tqv4 = min(qv4,s14);\n\t\n\treturn max(m(min(vec4(d),qv4)), min(isg,s5));\n}\n\nfloat i(float n, int b) { b = 16 - b; return float(mod(floor(n / exp2(floor(float(b)))), 2.0) != 0.0); }\n\nfloat xvisd(vec2 uv, float st, float sl, float bevel, float a, float dps, vec2 dpo, float da, bool is_ascii, bool dp)\n{\n\tfloat d;\n\tconst vec2 b = vec2(1,0);\n\n\tint n = int(clamp(a, 31.0, 125.0) - 31.0);\n\n\tfloat ch = is_ascii ? CHARS[n] : a;\n\tfloat dpt = is_ascii ? (( n == 0 || n == 15 || n == 32 ) ? 1.0 : 0.0) : float(dp);\n\t\n\tst = clamp(st, 0, 1) * 0.5;\n\n\tfloat d1 = fs(uv+vec2(0.125, -0.2), st, sl, vec4(i(ch,1), i(ch,2), i(ch,3), i(ch,4)), i(ch,5) ,true, da );\n\tfloat d2 = fs(uv-vec2(0.125,  0.2), st, sl, vec4(i(ch,6), i(ch,7), i(ch,8), 0), i(ch,9) ,false, da);\n\tfloat d3 = fs(uv+vec2(0.125,  0.2), st, sl, vec4(i(ch,10), i(ch,11),0, i(ch,12)), i(ch,13) ,false, da);\n\tfloat d4 = fs(uv-vec2(0.125, -0.2), st, sl, vec4(i(ch,14), i(ch,15),0,0), i(ch,16), true, da);\n\t\n\td = m(vec4(d1,d2,d3,d4));\n\td = max(d,(-distance(uv-0.5,dpo)*3.0)+0.1*dps*dpt);\n\n\treturn clamp(d/max(bevel, 1e-4), 0, 1);\n}\n\nfloat xvisd_custom(vec2 uv, float st, float sl, float bevel, float a, float dps, vec2 dpo, float da, bool dp)\n{\n\treturn xvisd(uv, st, sl, bevel, a, dps, dpo, da, CUSTOM_DISPLAY, dp);\n}\n\nfloat xvisd_ascii(vec2 uv, float st, float sl, float bevel, float a, float dps, vec2 dpo, float da, bool dp)\n{\n\treturn xvisd(uv, st, sl, bevel, a, dps, dpo, da, ASCII_DISPLAY, dp);\n}\n\nfloat all_seg(vec2 uv, float st, float sl, float dps, vec2 dpo, float da)\n{\n\treturn xvisd(uv, st, sl, 0, 31.0, dps, dpo, da, ASCII_DISPLAY, false);\n}",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "7:",
+				"longdesc": "Map that affects the bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel Map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Sixteen Segment Display",
+		"outputs": [
+			{
+				"f": "xvisd_$t($uv, $st, $sl, $b*$bevel_map($uv), $a, $dps, vec2($dpx, $dpy), $da, $dp)",
+				"shortdesc": "Display Output",
+				"type": "f"
+			},
+			{
+				"f": "all_seg($uv, $st, $sl, $dps, vec2($dpx, $dpy), $da)",
+				"shortdesc": "Display Mask",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "Display",
+				"longdesc": "Specifies how the character code is handled.\n\nASCII: Read as an ASCII code in decimal (32-125), 31 turns all segments on.\n\nCustom: Read as an integer (0-65535). Interpreted as an unsigned 16-bit binary number which determines which segment(s) to turn on (e.g. 4635 = 'M').",
+				"name": "t",
+				"shortdesc": "Display Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "ASCII",
+						"value": "ascii"
+					},
+					{
+						"name": "Custom",
+						"value": "custom"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 31,
+				"label": "1:",
+				"longdesc": "Character code/configuration for the display. See 'Display Mode' for more details.",
+				"max": 125,
+				"min": 31,
+				"name": "a",
+				"shortdesc": "Character Code",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.15,
+				"label": "Gap",
+				"max": 1,
+				"min": 0,
+				"name": "sl",
+				"shortdesc": "Gap between segments",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.2,
+				"label": "Thickness",
+				"max": 1,
+				"min": 0,
+				"name": "st",
+				"shortdesc": "Segment Thickness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.65,
+				"label": "DP Size",
+				"max": 1,
+				"min": 0,
+				"name": "dps",
+				"shortdesc": "Size of the decimal point",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0.3,
+				"label": "DP Position",
+				"max": 1,
+				"min": 0,
+				"name": "dpx",
+				"shortdesc": "Decimal point position on the x axis",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0.415,
+				"label": "5:",
+				"max": 1,
+				"min": 0,
+				"name": "dpy",
+				"shortdesc": "Decimal point position on the y axis",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 60,
+				"label": "Diagonals Rotation",
+				"max": 180,
+				"min": 0,
+				"name": "da",
+				"shortdesc": "Rotation angle for the diagonal segments",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Bevel",
+				"max": 1,
+				"min": 0,
+				"name": "b",
+				"shortdesc": "Width of the edge of each segment",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Decimal Point",
+				"longdesc": "Toggles the decimal point when the display mode is set to 'custom'",
+				"name": "dp",
+				"shortdesc": "Decimal point (DP) toggle",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Sixteen Segment Display"
+	},
+	"type": "shader"
+}
