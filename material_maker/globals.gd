@@ -115,6 +115,9 @@ func parse_paste_data(data : String):
 				type = "newgraph"
 			else:
 				type = "graph"
+		elif graph.has("type"):
+			type = "graph"
+			graph = { connections=[], nodes=[graph] }
 		else:
 			graph = null
 	if graph == null or ! graph is Dictionary:
