@@ -54,6 +54,7 @@ margin_left = 116.0
 margin_right = 584.0
 margin_bottom = 314.0
 size_flags_horizontal = 3
+stretch = true
 
 [node name="Viewport" parent="Main/HSplitContainer/ViewportContainer" instance=ExtResource( 1 )]
 render_target_update_mode = 0
