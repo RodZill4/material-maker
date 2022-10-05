@@ -67,6 +67,7 @@ func get_buffers() -> Array:
 func get_parameter_defs() -> Array:
 	return [
 			{ name="size", type="size", first=4, last=13, default=4 },
+			{ name="autostop", type="boolean", default=false },
 			{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
 			{ name="filter", type="boolean", default=true },
 			{ name="mipmap", type="boolean", default=true }
@@ -101,6 +102,7 @@ func update_shader(input_port_index : int) -> void:
 	var source_output = get_source(input_port_index)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+		assert(! source is GDScriptFunctionState)
 		while source is GDScriptFunctionState:
 			source = yield(source, "completed")
 	if source.empty():
@@ -146,14 +148,15 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 func on_texture_changed(n : String) -> void:
 	for i in range(2):
 		pending_textures[i].erase(n)
-		if pending_textures[i].empty():
-			var m : Material = [ material, loop_material ][i]
-			for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-				if p.name == n:
-					if i == 0:
-						set_current_iteration(0)
+	for i in range(2):
+		var m : Material = [ material, loop_material ][i]
+		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
+			if p.name == n:
+				if i == 0:
+					set_current_iteration(0)
+				if pending_textures[i].empty():
 					update_buffer()
-					return
+				return
 
 func on_texture_invalidated(n : String) -> void:
 	for i in range(2):
@@ -179,6 +182,8 @@ func update_buffer() -> void:
 	update_again = true
 	if !updating:
 		updating = true
+		var autostop : bool = get_parameter("autostop")
+		var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
 		while update_again:
 			update_again = false
 			unset_pending()
@@ -203,7 +208,7 @@ func update_buffer() -> void:
 				texture.flags = 0
 			renderer.release(self)
 			current_renderer = null
-		set_current_iteration(current_iteration+1)
+		# Calculate iteration count
 		var iterations = calculate_float_parameter("iterations")
 		if iterations.has("used_named_parameters"):
 			used_named_parameters = iterations.used_named_parameters
@@ -211,6 +216,12 @@ func update_buffer() -> void:
 			iterations = iterations.value
 		else:
 			iterations = 1
+		# Calculate iteration index
+		var hash_value : int = 1 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
+		if autostop and hash_value == previous_hash_value:
+			set_current_iteration(iterations+1)
+		else:
+			set_current_iteration(current_iteration+1)
 		if current_iteration <= iterations:
 			get_tree().call_group("preview", "on_texture_changed", "o%s_loop_tex" % str(get_instance_id()))
 		else:

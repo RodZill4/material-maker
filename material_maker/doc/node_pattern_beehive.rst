@@ -18,9 +18,10 @@ The **Beehive** generates:
 
 * a greyscale output texture
 
-* a color texture where each tile is filled with a random color
+* Fill information for each hexagon that must be connected to a Fill companion node
 
-* an UV map that maps each hexagon and that can be used with the CustomUV node
+The second output can be used in conjunction with **Fill To** nodes to generate random colors,
+custom UVs etc. to create complex materials that show for example bricks of different colors.
 
 Parameters
 ++++++++++

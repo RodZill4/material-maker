@@ -61,8 +61,12 @@ margin_bottom = 20.0
 margin_right = 20.0
 margin_bottom = 20.0
 
+[node name="MemUpdateTimer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="gui_input" from="." to="." method="_on_RenderCounter_gui_input"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
 [connection signal="id_pressed" from="PopupMenu/Renderers" to="." method="_on_Renderers_id_pressed"]
 [connection signal="id_pressed" from="PopupMenu/MaxRenderSize" to="." method="_on_MaxRenderSize_id_pressed"]
 [connection signal="id_pressed" from="PopupMenu/MaxBufferSize" to="." method="_on_MaxBufferSize_id_pressed"]
+[connection signal="timeout" from="MemUpdateTimer" to="." method="_on_MemUpdateTimer_timeout"]

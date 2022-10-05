@@ -20,11 +20,11 @@ The **Uneven Bricks** node provides the following textures:
 
 * The first is a greyscale image where bricks are shown in white and mortar in black.
 
-* The second is an RGBA texture that contains the bounding box for each brick.
+* The second is Fill information for each brick and must be connected to a Fill companion node.
 
-* The 3rd is an RGBA texture that contains the bounding box for each brick corner.
+* The third is Fill information for each brick corner and must be connected to a Fill companion node.
 
-The bounding box textures can be used in conjunction with **Fill To** nodes to generate random colors,
+The second and third outputs can be used in conjunction with **Fill To** nodes to generate random colors,
 custom UVs etc. to create complex materials that show for example bricks of different colors.
 
 Parameters
@@ -37,11 +37,6 @@ The **Uneven Bricks** node accepts the following parameters:
 * the *Min size* parameter defines the minimum size of a brick.
 
 * the *Randomness* parameter defines the randomness introduced when generating the pattern.
-
-* the *Columns* parameter defines the number of brick rows in a single pattern of the texture.
-
-* the *Offset* parameter defines the offset of odd rows of the pattern. This parameter
-  only applies to the *Running bond* patterns.
 
 * the *Mortar* parameter defines the relative thickness of mortar in patterns.
 
