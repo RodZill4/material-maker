@@ -6,8 +6,8 @@ extends WindowDialog
 onready var tree : Tree = $VBoxContainer/Main/Tree
 onready var preview_2d : ColorRect = $VBoxContainer/Main/Preview2D
 onready var preview_3d : ViewportContainer = $VBoxContainer/Main/Preview3D
-onready var node_parameters_panel : GridContainer = $VBoxContainer/Main/Parameters/NodeParameters
-onready var item_parameters_panel : GridContainer = $VBoxContainer/Main/Parameters/ItemParameters
+onready var node_parameters_panel : GridContainer = $VBoxContainer/Main/ScrollContainer/Parameters/NodeParameters
+onready var item_parameters_panel : GridContainer = $VBoxContainer/Main/ScrollContainer/Parameters/ItemParameters
 
 var node_parameter_mode : bool = true
 
@@ -63,8 +63,8 @@ func set_node_parameter_mode(b : bool = true):
 	if b == node_parameter_mode:
 		return
 	node_parameter_mode = b
-	$VBoxContainer/Main/Parameters/NodeParams.pressed = b
-	$VBoxContainer/Main/Parameters/ItemParams.pressed = not b
+	$VBoxContainer/Main/ScrollContainer/Parameters/NodeParams.pressed = b
+	$VBoxContainer/Main/ScrollContainer/Parameters/ItemParams.pressed = not b
 	$GenSDF.expressions = node_parameter_mode
 	set_preview(scene)
 	_on_Tree_item_selected()
@@ -84,7 +84,8 @@ func update_node_parameters_grid():
 	for pi in range($GenSDF.node_parameters.size()):
 		var p = $GenSDF.node_parameters[pi]
 		var line_edit : LineEdit = LineEdit.new()
-		line_edit.set_text(p.name)
+		line_edit.text = p.name
+		line_edit.hint_tooltip = p.name
 		node_parameters_panel.add_child(line_edit)
 		line_edit.connect("text_changed", self, "on_node_parameter_name_changed", [ pi, line_edit ])
 		line_edit.connect("text_entered", self, "on_node_parameter_name_entered", [ pi, line_edit ])
@@ -128,20 +129,35 @@ func update_node_parameters_grid():
 	if button != null:
 		button.disabled = true
 
+func node_parameter_exists_already(name : String, param_index : int) -> bool:
+	for pi in range($GenSDF.node_parameters.size()):
+		if pi != param_index and $GenSDF.node_parameters[pi].name == name:
+			return true
+	return false
+
 func create_node_parameter():
-	$GenSDF.node_parameters.push_back({name="param1", type="float", min=0, max=1, step=0.01, default=0.5})
+	var i : int = 1
+	while node_parameter_exists_already("param"+str(i), -1):
+		i += 1
+	$GenSDF.node_parameters.push_back({name="param"+str(i), type="float", min=0, max=1, step=0.01, default=0.5})
 	call_deferred("update_node_parameters_grid")
 
 func on_node_parameter_name_changed(new_name : String, param_index : int, line_edit : LineEdit) -> void:
-	var valid_name : bool = true
-	for pi in range($GenSDF.node_parameters.size()):
-		if pi != param_index and $GenSDF.node_parameters[pi].name == new_name:
-			valid_name = false
-			break
-	if valid_name:
-		line_edit.add_color_override("font_color", mm_globals.main_window.theme.get_color("font_color", "LineEdit"))
-	else:
+	if node_parameter_exists_already(new_name, param_index):
 		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
+	else:
+		line_edit.add_color_override("font_color", mm_globals.main_window.theme.get_color("font_color", "LineEdit"))
+
+func on_node_parameter_name_entered(new_name : String, param_index : int, line_edit : LineEdit) -> void:
+	if node_parameter_exists_already(new_name, param_index):
+		line_edit.text = $GenSDF.node_parameters[param_index].name
+		on_node_parameter_name_changed(line_edit.text, param_index, line_edit)
+	else:
+		$GenSDF.node_parameters[param_index].name = new_name
+		line_edit.hint_tooltip = new_name
+
+func on_node_parameter_name_entered2(param_index : int, line_edit : LineEdit) -> void:
+	on_node_parameter_name_entered(line_edit.text, param_index, line_edit)
 
 func on_node_parameter_value_changed(new_value, _merge_undo : bool = false, param_index : int = 0) -> void:
 	var variable = $GenSDF.node_parameters[param_index].name
@@ -149,15 +165,6 @@ func on_node_parameter_value_changed(new_value, _merge_undo : bool = false, para
 	$GenSDF.set_parameter(variable, new_value)
 	$GenSDF.node_parameters[param_index].default = new_value
 	ignore_parameter_change = ""
-
-func on_node_parameter_name_entered(new_name : String, param_index : int, _line_edit : LineEdit) -> void:
-	for pi in range($GenSDF.node_parameters.size()):
-		if pi == param_index:
-			$GenSDF.node_parameters[pi].name = new_name
-			break
-
-func on_node_parameter_name_entered2(param_index : int, line_edit : LineEdit) -> void:
-	on_node_parameter_name_entered(line_edit.text, param_index, line_edit)
 
 func on_node_parameter_descriptions_changed(shortdesc, longdesc, param_index) -> void:
 	var p : Dictionary = $GenSDF.node_parameters[param_index]
@@ -697,3 +704,7 @@ func _input(event):
 				_:
 					return
 		accept_event()
+
+func _on_VBoxContainer_minimum_size_changed():
+	rect_min_size = $VBoxContainer.rect_min_size+Vector2(4, 4)
+	print(rect_min_size)

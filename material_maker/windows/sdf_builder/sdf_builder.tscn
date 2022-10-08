@@ -62,6 +62,7 @@ __meta__ = {
 [node name="Tree" type="Tree" parent="VBoxContainer/Main"]
 margin_right = 261.0
 margin_bottom = 496.0
+rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
@@ -85,27 +86,32 @@ visible = false
 margin_left = 265.0
 margin_right = 265.0
 margin_bottom = 0.0
+rect_min_size = Vector2( 200, 200 )
 size_flags_stretch_ratio = 2.0
-stretch = true
 control_target = NodePath("../../..")
 
-[node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Main"]
 margin_right = 40.0
 margin_bottom = 40.0
+scroll_horizontal_enabled = false
+
+[node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main/ScrollContainer"]
+margin_right = 139.0
+margin_bottom = 79.0
 custom_constants/separation = 1
 
-[node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/Parameters"]
+[node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_right = 136.0
 margin_bottom = 24.0
 text = "Node Parameters"
 
-[node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/Parameters"]
+[node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_left = 792.0
 margin_right = 1054.0
 margin_bottom = 496.0
 columns = 7
 
-[node name="Button" type="Button" parent="VBoxContainer/Main/Parameters"]
+[node name="Button" type="Button" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_left = 792.0
 margin_right = 804.0
 margin_bottom = 20.0
@@ -113,16 +119,16 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = SubResource( 3 )
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/Parameters"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_right = 40.0
 margin_bottom = 4.0
 
-[node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/Parameters"]
+[node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_right = 24.0
 margin_bottom = 24.0
 text = "Item Parameters"
 
-[node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/Parameters"]
+[node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
 margin_left = 792.0
 margin_right = 1054.0
 margin_bottom = 496.0
@@ -162,15 +168,16 @@ script = ExtResource( 1 )
 editor = true
 
 [connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="button_pressed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_button_pressed"]
 [connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_collapsed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_edited" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_edited"]
 [connection signal="item_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
-[connection signal="toggled" from="VBoxContainer/Main/Parameters/NodeParams" to="." method="_on_NodeParams_toggled"]
-[connection signal="pressed" from="VBoxContainer/Main/Parameters/Button" to="." method="create_node_parameter"]
-[connection signal="toggled" from="VBoxContainer/Main/Parameters/ItemParams" to="." method="_on_ItemParams_toggled"]
+[connection signal="toggled" from="VBoxContainer/Main/ScrollContainer/Parameters/NodeParams" to="." method="_on_NodeParams_toggled"]
+[connection signal="pressed" from="VBoxContainer/Main/ScrollContainer/Parameters/Button" to="." method="create_node_parameter"]
+[connection signal="toggled" from="VBoxContainer/Main/ScrollContainer/Parameters/ItemParams" to="." method="_on_ItemParams_toggled"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
