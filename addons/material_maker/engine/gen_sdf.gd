@@ -62,14 +62,16 @@ func set_sdf_scene(s : Array):
 	scene = s.duplicate(true)
 	var scene_type : String = get_scene_type()
 	var shader_model = { includes=[], parameters=[] }
-	var uv = "$uv"
-	var distance_function = ""
-	var color_function = ""
+	var uv : String = "$uv"
+	var distance_function : String = ""
+	var color_function : String = ""
+	var default_albedo : String = "vec4(0.0, 0.0, 0.0, 1.0)"
 	# Generate distance function
 	match scene_type:
 		"SDF3D":
 			distance_function = "float $(name)_d(vec3 uv"
 			color_function = "float $(name)_c(vec3 uv"
+			default_albedo = "vec4(1.0, 1.0, 1.0, 1.0)"
 		_:
 			uv = "$uv-vec2(0.5)"
 			distance_function = "float $(name)_d(vec2 uv"
@@ -82,7 +84,7 @@ func set_sdf_scene(s : Array):
 	if editor:
 		color_function += "int index = 0;\n"
 
-	color_function += "albedo = vec4(0.0, 0.0, 0.0, 1.0);\n"
+	color_function += "albedo = "+default_albedo+";\n"
 	color_function += "metallic = 0.0;\n"
 	color_function += "roughness = 1.0;\n"
 	color_function += "emission = vec3(0.0);\n"
