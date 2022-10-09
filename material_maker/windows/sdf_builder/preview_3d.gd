@@ -115,6 +115,7 @@ func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
 func _on_Preview3D_resized():
 	if viewport != null:
 		viewport.size = rect_size
+		update_viewport()
 
 func _input(ev):
 	_unhandled_input(ev)
