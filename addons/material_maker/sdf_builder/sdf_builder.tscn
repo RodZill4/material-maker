@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -36,6 +36,13 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" type="Script" id=36]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" type="Script" id=37]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform.gd" type="Script" id=38]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/fbm.gd" type="Script" id=39]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" type="Script" id=40]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/step.gd" type="Script" id=41]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" type="Script" id=42]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/pattern.gd" type="Script" id=43]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -246,6 +253,34 @@ script = ExtResource( 13 )
 item_type = "Morph"
 item_category = "SDF2D"
 
+[node name="Color" type="Node" parent="SDF2D"]
+
+[node name="Albedo" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Albedo2D"
+item_category = "SDF2D_COLOR"
+channel_name = "albedo"
+type = 2
+
+[node name="Metallic" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Metallic2D"
+item_category = "SDF2D_COLOR"
+channel_name = "metallic"
+
+[node name="Roughness" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Roughness2D"
+item_category = "SDF2D_COLOR"
+channel_name = "roughness"
+
+[node name="Emission" type="Node" parent="SDF2D/Color"]
+script = ExtResource( 37 )
+item_type = "Emission2D"
+item_category = "SDF2D_COLOR"
+channel_name = "emission"
+type = 1
+
 [node name="SDF3D" type="Node" parent="."]
 
 [node name="Shape" type="Node" parent="SDF3D"]
@@ -367,3 +402,58 @@ item_category = "SDF3D"
 script = ExtResource( 32 )
 item_type = "Morph3D"
 item_category = "SDF3D"
+
+[node name="Color" type="Node" parent="SDF3D"]
+
+[node name="Albedo" type="Node" parent="SDF3D/Color"]
+script = ExtResource( 42 )
+item_type = "Albedo3D"
+item_category = "SDF3D_COLOR"
+channel_name = "albedo"
+type = 2
+
+[node name="Metallic" type="Node" parent="SDF3D/Color"]
+script = ExtResource( 42 )
+item_type = "Metallic3D"
+item_category = "SDF3D_COLOR"
+channel_name = "metallic"
+
+[node name="Roughness" type="Node" parent="SDF3D/Color"]
+script = ExtResource( 42 )
+item_type = "Roughness3D"
+item_category = "SDF3D_COLOR"
+channel_name = "roughness"
+
+[node name="Emission" type="Node" parent="SDF3D/Color"]
+script = ExtResource( 42 )
+item_type = "Emission3D"
+item_category = "SDF3D_COLOR"
+channel_name = "emission"
+type = 1
+
+[node name="Texture" type="Node" parent="."]
+
+[node name="Uniform" type="Node" parent="Texture"]
+script = ExtResource( 38 )
+item_type = "Uniform"
+item_category = "TEX"
+
+[node name="Pattern" type="Node" parent="Texture"]
+script = ExtResource( 43 )
+item_type = "Pattern"
+item_category = "TEX"
+
+[node name="FBM" type="Node" parent="Texture"]
+script = ExtResource( 39 )
+item_type = "FBM"
+item_category = "TEX"
+
+[node name="SimpleGradient" type="Node" parent="Texture"]
+script = ExtResource( 40 )
+item_type = "SimpleGradient"
+item_category = "TEX"
+
+[node name="Step" type="Node" parent="Texture"]
+script = ExtResource( 41 )
+item_type = "Step"
+item_category = "TEX"

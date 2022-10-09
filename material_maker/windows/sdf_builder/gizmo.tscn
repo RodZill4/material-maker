@@ -35,7 +35,7 @@ mode = 1
 [node name="ArrowZ" parent="." instance=ExtResource( 1 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
 material = SubResource( 6 )
-mode = 2
+mode = 1
 
 [connection signal="move" from="ArrowX" to="." method="_on_Arrow_move"]
 [connection signal="rotate" from="ArrowX" to="." method="_on_Arrow_rotate"]

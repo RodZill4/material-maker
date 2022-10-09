@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://material_maker/windows/sdf_builder/gizmo_arrow.gd" type="Script" id=1]
 
@@ -26,10 +26,6 @@ surfaces/0 = {
 "vertex_count": 91
 }
 
-[sub_resource type="SpatialMaterial" id=9]
-flags_unshaded = true
-albedo_color = Color( 1, 0, 0, 1 )
-
 [sub_resource type="SpatialMaterial" id=7]
 resource_name = "None"
 albedo_color = Color( 0.8, 0.8, 0.8, 1 )
@@ -50,10 +46,6 @@ surfaces/0 = {
 "vertex_count": 441
 }
 
-[sub_resource type="SpatialMaterial" id=10]
-flags_unshaded = true
-albedo_color = Color( 1, 0, 0, 1 )
-
 [sub_resource type="CylinderShape" id=4]
 margin = 0.01
 height = 1.0
@@ -69,12 +61,12 @@ material = SubResource( 3 )
 [node name="Arrow" type="MeshInstance" parent="."]
 mesh = SubResource( 6 )
 skeleton = NodePath("../..")
-material/0 = SubResource( 9 )
+material/0 = SubResource( 3 )
 
 [node name="Torus" type="MeshInstance" parent="."]
 mesh = SubResource( 8 )
 skeleton = NodePath("../..")
-material/0 = SubResource( 10 )
+material/0 = SubResource( 3 )
 
 [node name="TranslateArea" type="Area" parent="."]
 input_capture_on_drag = true

@@ -44,6 +44,12 @@ func set_value(v, notify = false) -> void:
 			emit_signal("value_changed", v)
 			emit_signal("value_changed_undo", v, false)
 
+func set_value_from_expression_editor(v : String):
+	if v.is_valid_float():
+		set_value(float(v), true)
+	else:
+		set_value(v, true)
+
 func set_min_value(v : float) -> void:
 	min_value = v
 	do_update()
@@ -79,7 +85,7 @@ func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed() and !float_only:
 		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
 		add_child(expression_editor)
-		expression_editor.edit_parameter(self)
+		expression_editor.edit_parameter(name, text, self, "set_value_from_expression_editor")
 		accept_event()
 	if !slider.visible or !sliding and !editable:
 		return

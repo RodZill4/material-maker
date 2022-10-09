@@ -2,7 +2,7 @@ tool
 extends Spatial
 
 export var material : Material setget set_material
-export(int, "Full", "ArrowOnly", "TorusOnly") var mode = 0 setget set_mode
+export(int, "Full", "ArrowOnly", "TorusOnly", "Nothing") var mode = 0 setget set_mode
 
 
 signal move(v)
@@ -30,6 +30,11 @@ func set_mode(m):
 			$TranslateArea.visible = false
 			$Torus.visible = true
 			$RotateArea.visible = true
+		_:
+			$Arrow.visible = false
+			$TranslateArea.visible = false
+			$Torus.visible = false
+			$RotateArea.visible = false
 
 func set_material(m):
 	material = m
@@ -37,7 +42,7 @@ func set_material(m):
 		$Arrow.set_surface_material(0, material)
 		$Torus.set_surface_material(0, material)
 
-func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
+func _on_TranslateArea_input_event(camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		$Arrow.get_surface_material(0).set_shader_param("highlight", 0.1 if event.pressed else 0.0)
 	elif event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
@@ -50,7 +55,7 @@ func _on_TranslateArea_input_event(camera, event, position, normal, shape_idx):
 			emit_signal("move", amount*global_transform.basis.xform(Vector3(1, 0, 0)))
 
 var rotate_direction_2d : Vector2
-func _on_RotateArea_input_event(camera, event, position, normal, shape_idx):
+func _on_RotateArea_input_event(camera, event, position, _normal, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		$Torus.get_surface_material(0).set_shader_param("highlight", 0.1 if event.pressed else 0.0)
 		if event.pressed:

@@ -4,7 +4,7 @@ func _ready():
 	pass # Replace with function body.
 
 func get_children_types():
-	return [ "SDF2D" ]
+	return [ "SDF2D", "SDF3D_COLOR" ]
 
 func get_parameter_defs():
 	return [
@@ -37,3 +37,14 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
+
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+	var ctxt2 : Dictionary = ctxt.duplicate()
+	ctxt2.local_uv = "$(name_uv)_n%d_q" % scene.index
+	ctxt2.uv = "$(name_uv)_n%d_q" % scene.index
+	ctxt2.check = false
+	var color_code : String = .get_color_code(scene, ctxt2, editor)
+	if ctxt.has("check") and !ctxt.check:
+		return "{\n%s}\n" % [ color_code ]
+	else:
+		return "if (_n%d < 0.001) {\n%s}\n" % [ scene.index, color_code ]

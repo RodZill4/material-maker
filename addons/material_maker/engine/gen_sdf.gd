@@ -4,6 +4,8 @@ class_name MMGenSDF
 
 
 export var editor : bool = false
+export var expressions : bool = false
+var node_parameters : Array = []
 var scene : Array = []
 
 
@@ -26,15 +28,30 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 				defs.push_back(p)
 		return defs
 
-func get_output_defs(_show_hidden : bool = false) -> Array:
+func get_output_defs__(_show_hidden : bool = false) -> Array:
+	var outputs : Array
+	var rgba_output : String
+	var color_output : String
+	var gs_output : String
 	match get_scene_type():
 		"SDF3D":
-			return [ { type="sdf3d" } ]
+			outputs = [ { type="sdf3d" } ]
+			rgba_output = "tex3d"
+			color_output = "tex3d"
+			gs_output = "tex3d_gs"
 		_:
 			if editor:
-				return [ { type="rgb" } ]
+				outputs = [ { type="rgb" } ]
 			else:
-				return [ { type="sdf2d" } ]
+				outputs = [ { type="sdf2d" } ]
+			rgba_output = "rgba"
+			color_output = "color"
+			gs_output = "float"
+	outputs.push_back({type=rgba_output})
+	outputs.push_back({type=gs_output})
+	outputs.push_back({type=gs_output})
+	outputs.push_back({type=color_output})
+	return outputs
 
 func get_scene_type() -> String:
 	if scene.empty():
@@ -44,16 +61,37 @@ func get_scene_type() -> String:
 func set_sdf_scene(s : Array):
 	scene = s.duplicate(true)
 	var scene_type : String = get_scene_type()
-	var shader_model = { includes=[], parameters=[]}
-	var uv = "$uv"
+	var shader_model = { includes=[], parameters=[] }
+	var uv : String = "$uv"
+	var distance_function : String = ""
+	var color_function : String = ""
+	var default_albedo : String = "vec4(0.0, 0.0, 0.0, 1.0)"
+	# Generate distance function
 	match scene_type:
 		"SDF3D":
-			shader_model.instance = "float $(name)_d(vec3 uv, int index) {\n"
+			distance_function = "float $(name)_d(vec3 uv"
+			color_function = "float $(name)_c(vec3 uv"
+			default_albedo = "vec4(1.0, 1.0, 1.0, 1.0)"
 		_:
 			uv = "$uv-vec2(0.5)"
-			shader_model.instance = "float $(name)_d(vec2 uv, int index) {\n"
+			distance_function = "float $(name)_d(vec2 uv"
+			color_function = "float $(name)_c(vec2 uv"
+	if editor:
+		distance_function += ", int index"
+	
+	distance_function += ") {\n"
+	color_function += ", out vec4 albedo, out float metallic, out float roughness, out vec3 emission) {\n"
+	if editor:
+		color_function += "int index = 0;\n"
+
+	color_function += "albedo = "+default_albedo+";\n"
+	color_function += "metallic = 0.0;\n"
+	color_function += "roughness = 1.0;\n"
+	color_function += "emission = vec3(0.0);\n"
 	var first : bool = true
-	var parameter_defs = []
+	var parameter_defs = node_parameters.duplicate(true)
+	for p in parameter_defs:
+		p.label = p.shortdesc if p.has("shortdesc") else ""
 	for i in scene:
 		if i.has("hidden") and i.hidden:
 			continue
@@ -63,7 +101,18 @@ func set_sdf_scene(s : Array):
 		if item_shader_model.has("parameters"):
 			parameter_defs.append_array(item_shader_model.parameters)
 		if item_shader_model.has("code"):
-			shader_model.instance += item_shader_model.code.replace("$(name_uv)", "")
+			var code : String = item_shader_model.code.replace("$(name_uv)", "")
+			distance_function += code
+			color_function += code
+		color_function += "\n// Albedo\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="albedo", target="albedo", type="rgba", glsl_type="vec4" }, editor)
+		color_function += "\n// Metallic\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="metallic", target="metallic", type="float", glsl_type="float" }, editor)
+		color_function += "\n// Roughness\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="roughness", target="roughness", type="float", glsl_type="float" }, editor)
+		color_function += "\n// Emission\n"
+		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="emission", target="emission", type="color", glsl_type="vec3" }, editor)
+		color_function += "\n"
 		if item_shader_model.has("outputs"):
 			var output = item_shader_model.outputs[0]
 			var output_name
@@ -75,63 +124,85 @@ func set_sdf_scene(s : Array):
 			if item_shader_model.outputs[0].has(field):
 				output_name = item_shader_model.outputs[0][field].replace("$(name_uv)", "")
 				if first:
-					shader_model.instance += "float return_value = %s;\n" % output_name
+					distance_function += "float return_value = %s;\n" % output_name
+					color_function += "float return_value = %s;\n" % output_name
 					first = false
 				else:
-					shader_model.instance += "return_value = min(return_value, %s);\n" % output_name
+					distance_function += "return_value = min(return_value, %s);\n" % output_name
+					color_function += "return_value = min(return_value, %s);\n" % output_name
 	if first:
-		shader_model.instance += "return 1.0;"
+		distance_function += "return 1.0;"
+		color_function += "return 1.0;"
+	elif editor:
+		distance_function += "return index == 0 ? return_value : 1.0;"
+		color_function += "return index == 0 ? return_value : 1.0;"
 	else:
-		shader_model.instance += "return index == 0 ? return_value : 1.0;"
-	shader_model.instance += "}\n"
+		distance_function += "return return_value;"
+		color_function += "return return_value;"
+	distance_function += "}\n"
+	color_function += "}\n"
+	color_function = color_function.replace("$(name_uv)", "")
+	shader_model.instance = distance_function + color_function
 	match scene_type:
 		"SDF3D":
+			shader_model.code = "vec4 $(name_uv)_albedo;\n"
+			shader_model.code += "float $(name_uv)_metallic;\n"
+			shader_model.code += "float $(name_uv)_roughness;\n"
+			shader_model.code += "vec3 $(name_uv)_emission;\n"
+			shader_model.code += "$(name)_c(%s.xyz*vec3(1.0, -1.0, -1.0), $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
+				shader_model.outputs = [{ sdf3d = "@NOCODE $(name)_d(%s, 0)" % uv, type = "sdf3d" }]
 			else:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s*vec3(1.0, -1.0, -1.0), 0);\n" % uv
-			shader_model.outputs = [{}]
-			shader_model.outputs[0].sdf3d = "$(name_uv)_d"
-			shader_model.outputs[0].type = "sdf3d"
+				shader_model.outputs = [{ sdf3d = "@NOCODE $(name)_d(%s*vec3(1.0, -1.0, -1.0))" % uv, type = "sdf3d" }]
 			shader_model.parameters = parameter_defs
+			shader_model.outputs.push_back({ tex3d = "$(name_uv)_albedo.rgb", type = "tex3d", shortdesc="Albedo" })
+			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_metallic", type = "tex3d_gs", shortdesc="Metallic" })
+			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_roughness", type = "tex3d_gs", shortdesc="Roughness" })
+			shader_model.outputs.push_back({ tex3d = "$(name_uv)_emission", type = "tex3d", shortdesc="Emission" })
 		_:
+			shader_model.parameters = parameter_defs
+			shader_model.code = "vec4 $(name_uv)_albedo;\n"
+			shader_model.code += "float $(name_uv)_metallic;\n"
+			shader_model.code += "float $(name_uv)_roughness;\n"
+			shader_model.code += "vec3 $(name_uv)_emission;\n"
+			shader_model.code += "$(name)_c(%s, $(name_uv)_albedo, $(name_uv)_metallic, $(name_uv)_roughness, $(name_uv)_emission);\n" % uv
 			if editor:
-				shader_model.code = "float edgewidth = 0.0001;\n"
-				shader_model.code += "float $(name_uv)_d = -$(name)_d(%s, 0);\n" % uv
-				shader_model.code += "float $(name_uv)_d2 = -$(name)_d(%s, int(round($index)));\n" % uv
-				shader_model.code += "float $(name_uv)_d3 = -$(name)_d(%s, -int(round($index)));\n" % uv
-				shader_model.code += "float color = 0.25*smoothstep(-edgewidth, edgewidth, $(name_uv)_d);\n"
-				shader_model.code += "color += 0.5*smoothstep(-edgewidth, edgewidth, $(name_uv)_d2);\n"
-				shader_model.code += "color += 0.05*sin($(name_uv)_d*251.327412287);\n"
-				shader_model.outputs = [{}]
-				shader_model.outputs[0].rgb = "clamp(color+vec3(0.2, 0.2, 0.0)*smoothstep(-edgewidth, edgewidth, $(name_uv)_d3), vec3(0.0), vec3(1.0))"
-				shader_model.outputs[0].type = "rgb"
 				parameter_defs.push_back({default=-1, name="index", type="float"})
-				shader_model.parameters = parameter_defs
+				shader_model.outputs = [{ sdf2d = "@NOCODE $(name)_d(%s, 0)" % uv, type = "sdf2d" }]
 			else:
-				shader_model.code = "float $(name_uv)_d = $(name)_d(%s, 0);\n" % uv
-				shader_model.outputs = [{}]
-				shader_model.outputs[0].sdf2d = "$(name_uv)_d"
-				shader_model.outputs[0].type = "sdf2d"
+				shader_model.outputs = [{ sdf2d = "@NOCODE $(name)_d(%s)" % uv, type = "sdf2d", shortdesc="SDF" }]
+			shader_model.outputs.push_back({ rgba = "$(name_uv)_albedo", type = "rgba", shortdesc="Albedo" })
+			shader_model.outputs.push_back({ f = "$(name_uv)_metallic", type = "f", shortdesc="Metallic" })
+			shader_model.outputs.push_back({ f = "$(name_uv)_roughness", type = "f", shortdesc="Roughness" })
+			shader_model.outputs.push_back({ rgb = "$(name_uv)_emission", type = "rgb", shortdesc="Emission" })
 	for p in parameter_defs:
 		if p.type == "float" and p.default is int:
 			parameters[p.name] = float(p.default)
 		else:
 			parameters[p.name] = p.default
+	if editor and expressions:
+		for p in parameter_defs:
+			if p.has("parmexpr"):
+				shader_model.code = shader_model.code.replace("$"+p.name, p.parmexpr)
+				shader_model.instance = shader_model.instance.replace("$"+p.name, p.parmexpr)
 	set_shader_model(shader_model)
 
 func _serialize(data: Dictionary) -> Dictionary:
-	data.sdf_scene = scene
+	data.node_parameters = node_parameters.duplicate(true)
+	data.sdf_scene = mm_sdf_builder.serialize_scene(scene)
 	return data
 
 func _deserialize(data : Dictionary) -> void:
+	if data.has("node_parameters"):
+		node_parameters = data.node_parameters.duplicate(true)
 	if data.has("sdf_scene"):
-		set_sdf_scene(data.sdf_scene)
+		set_sdf_scene(mm_sdf_builder.deserialize_scene(data.sdf_scene))
 
 func edit(node) -> void:
 	if scene != null:
 		var edit_window = load("res://material_maker/windows/sdf_builder/sdf_builder.tscn").instance()
 		node.get_parent().add_child(edit_window)
+		edit_window.set_node_parameter_defs(node_parameters)
 		edit_window.set_sdf_scene(scene)
 		edit_window.connect("node_changed", node, "update_sdf_generator")
 		edit_window.connect("editor_window_closed", node, "finalize_generator_update")

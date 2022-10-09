@@ -31,12 +31,15 @@ func update_export_menu() -> void:
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
+func generate_preview_shader(source, template) -> String:
+	return MMGenBase.generate_preview_shader(source, source.type, template)
+
 func do_update_material(source, target_material, template):
 	if ! source.has("type"):
 		return
 	is_greyscale = source.type == "f"
 	# Update shader
-	var code = MMGenBase.generate_preview_shader(source, source.type, template)
+	var code = generate_preview_shader(source, template)
 	target_material.shader.code = code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(target_material.shader.code, target_material)
