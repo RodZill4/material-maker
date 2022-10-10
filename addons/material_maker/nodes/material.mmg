@@ -23,7 +23,7 @@
 		"normal": 1,
 		"roughness": 1,
 		"size": 11,
-		"sss": 0
+		"sss": 1
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -84,7 +84,7 @@
 					}
 				]
 			},
-			"Godot": {
+			"Godot/G3 Spatial": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -121,16 +121,116 @@
 						"conditions": "$(connected:sss_tex)",
 						"file_name": "$(path_prefix)_sss.png",
 						"output": 5,
+						"prompt_overwrite": false,
 						"type": "texture"
 					},
 					{
 						"file_name": "$(path_prefix).tres",
-						"template": "[gd_resource type=\"SpatialMaterial\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_depth.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_on_uv2 = false\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_light_affect = $(param:ao)\nao_texture = ExtResource( 2 )\nao_on_uv2 = false\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\ndepth_enabled = true\ndepth_scale = $(expr:0.2*$(param:depth_scale))\ndepth_deep_parallax = true\ndepth_min_layers = 8\ndepth_max_layers = 32\ndepth_flip_tangent = false\ndepth_flip_binormal = false\ndepth_texture = ExtResource( 4 )\n$fi\n",
+						"prompt_overwrite": true,
+						"template": "[gd_resource type=\"SpatialMaterial\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_depth.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_on_uv2 = false\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\ndepth_enabled = true\ndepth_scale = $(expr:0.2*$(param:depth_scale))\ndepth_deep_parallax = true\ndepth_min_layers = 8\ndepth_max_layers = 32\ndepth_flip_tangent = false\ndepth_flip_binormal = false\ndepth_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
 						"type": "template"
 					}
 				]
 			},
-			"Unity - 3D": {
+			"Godot/G4 ORM": {
+				"export_extension": "tres",
+				"files": [
+					{
+						"conditions": "$(connected:albedo_tex)",
+						"file_name": "$(path_prefix)_albedo.png",
+						"output": 0,
+						"prompt_overwrite": false,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+						"file_name": "$(path_prefix)_orm.png",
+						"output": 1,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:emission_tex)",
+						"file_name": "$(path_prefix)_emission.png",
+						"output": 2,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:normal_tex)",
+						"file_name": "$(path_prefix)_normal.png",
+						"output": 3,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:depth_tex)",
+						"file_name": "$(path_prefix)_heightmap.png",
+						"output": 8,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:sss_tex)",
+						"file_name": "$(path_prefix)_sss.png",
+						"output": 5,
+						"prompt_overwrite": false,
+						"type": "texture"
+					},
+					{
+						"file_name": "$(path_prefix).tres",
+						"prompt_overwrite": true,
+						"template": "[gd_resource type=\"ORMMaterial3D\" load_steps=6 format=3]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\n$if $(connected:metallic_tex)\norm_texture = ExtResource( 2 )\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+						"type": "template"
+					}
+				]
+			},
+			"Godot/G4 Standard": {
+				"export_extension": "tres",
+				"files": [
+					{
+						"conditions": "$(connected:albedo_tex)",
+						"file_name": "$(path_prefix)_albedo.png",
+						"output": 0,
+						"prompt_overwrite": false,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
+						"file_name": "$(path_prefix)_orm.png",
+						"output": 1,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:emission_tex)",
+						"file_name": "$(path_prefix)_emission.png",
+						"output": 2,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:normal_tex)",
+						"file_name": "$(path_prefix)_normal.png",
+						"output": 3,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:depth_tex)",
+						"file_name": "$(path_prefix)_heightmap.png",
+						"output": 8,
+						"prompt_overwrite": false,
+						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:sss_tex)",
+						"file_name": "$(path_prefix)_sss.png",
+						"output": 5,
+						"type": "texture"
+					},
+					{
+						"file_name": "$(path_prefix).tres",
+						"prompt_overwrite": true,
+						"template": "[gd_resource type=\"StandardMaterial3D\" load_steps=5 format=2]\n$if $(connected:albedo_tex)\n[ext_resource path=\"$(file_prefix)_albedo.png\" type=\"Texture\" id=1]\n$fi\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\n[ext_resource path=\"$(file_prefix)_orm.png\" type=\"Texture\" id=2]\n$fi\n$if $(connected:normal_tex)\n[ext_resource path=\"$(file_prefix)_normal.png\" type=\"Texture\" id=3]\n$fi\n$if $(connected:depth_tex)\n[ext_resource path=\"$(file_prefix)_heightmap.png\" type=\"Texture\" id=4]\n$fi\n$if $(connected:emission_tex)\n[ext_resource path=\"$(file_prefix)_emission.png\" type=\"Texture\" id=5]\n$fi\n$if $(connected:sss_tex)\n[ext_resource path=\"$(file_prefix)_sss.png\" type=\"Texture\" id=6]\n$fi\n[resource]\nalbedo_color = Color($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))\n$if $(connected:albedo_tex)\nalbedo_texture = ExtResource( 1 )\n$fi\nmetallic = $(param:metallic)\n$if $(connected:metallic_tex)\nmetallic_texture = ExtResource( 2 )\nmetallic_texture_channel = 2\n$fi\nroughness = $(param:roughness)\n$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)\nroughness_texture = ExtResource( 2 )\nroughness_texture_channel = 1\n$fi\n$if $(connected:normal_tex)\nnormal_enabled = true\nnormal_scale = $(param:normal)\nnormal_texture = ExtResource( 3 )\n$fi\n$if $(connected:emission_tex)\nemission_enabled = true\nemission = Color( 0, 0, 0, 1 )\nemission_energy = $(param:emission_energy)\nemission_operator = 0\nemission_texture = ExtResource( 5 )\n$fi\n$if $(connected:ao_tex)\nao_enabled = true\nao_texture = ExtResource( 2 )\nao_texture_channel = 0\n$fi\n$if $(connected:depth_tex)\nheightmap_enabled = true\nheightmap_scale = $(expr:25.0*$(param:depth_scale))\nheightmap_deep_parallax = true\nheightmap_min_layers = 8\nheightmap_max_layers = 32\nheightmap_texture = ExtResource( 4 )\n$fi\n$if $(connected:sss_tex)\nsubsurf_scatter_enabled = true\nsubsurf_scatter_strength = $(param:sss)\nsubsurf_scatter_texture = ExtResource( 6 )\n$fi\n",
+						"type": "template"
+					}
+				]
+			},
+			"Unity/3D": {
 				"export_extension": "mat",
 				"files": [
 					{
@@ -142,6 +242,7 @@
 					{
 						"conditions": "$(connected:albedo_tex)",
 						"file_name": "$(path_prefix)_albedo.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(0)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
@@ -154,6 +255,7 @@
 					{
 						"conditions": "$(connected:roughness_tex) or $(connected:metallic_tex)",
 						"file_name": "$(path_prefix)_metal_smoothness.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(1)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
@@ -166,6 +268,7 @@
 					{
 						"conditions": "$(connected:normal_tex)",
 						"file_name": "$(path_prefix)_normal.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(2)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 0\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 1\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
@@ -178,6 +281,7 @@
 					{
 						"conditions": "$(connected:depth_tex)",
 						"file_name": "$(path_prefix)_height.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(3)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
@@ -190,6 +294,7 @@
 					{
 						"conditions": "$(connected:ao_tex)",
 						"file_name": "$(path_prefix)_occlusion.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(4)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
@@ -202,18 +307,20 @@
 					{
 						"conditions": "$(connected:emission_tex)",
 						"file_name": "$(path_prefix)_emission.png.meta",
+						"prompt_overwrite": true,
 						"template": "fileFormatVersion: 2\nguid: $uid(5)\nTextureImporter:\n  internalIDToNameTable: []\n  externalObjects: {}\n  serializedVersion: 10\n  mipmaps:\n    mipMapMode: 0\n    enableMipMap: 1\n    sRGBTexture: 1\n    linearTexture: 0\n    fadeOut: 0\n    borderMipMap: 0\n    mipMapsPreserveCoverage: 0\n    alphaTestReferenceValue: 0.5\n    mipMapFadeDistanceStart: 1\n    mipMapFadeDistanceEnd: 3\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    heightScale: 0.25\n    normalMapFilter: 0\n  isReadable: 0\n  streamingMipmaps: 0\n  streamingMipmapsPriority: 0\n  grayScaleToAlpha: 0\n  generateCubemap: 6\n  cubemapConvolution: 0\n  seamlessCubemap: 0\n  textureFormat: 1\n  maxTextureSize: 2048\n  textureSettings:\n    serializedVersion: 2\n    filterMode: -1\n    aniso: -1\n    mipBias: -100\n    wrapU: -1\n    wrapV: -1\n    wrapW: -1\n  nPOTScale: 1\n  lightmap: 0\n  compressionQuality: 50\n  spriteMode: 0\n  spriteExtrude: 1\n  spriteMeshType: 1\n  alignment: 0\n  spritePivot: {x: 0.5, y: 0.5}\n  spritePixelsToUnits: 100\n  spriteBorder: {x: 0, y: 0, z: 0, w: 0}\n  spriteGenerateFallbackPhysicsShape: 1\n  alphaUsage: 1\n  alphaIsTransparency: 0\n  spriteTessellationDetail: -1\n  textureType: 0\n  textureShape: 1\n  singleChannelComponent: 0\n  maxTextureSizeSet: 0\n  compressionQualitySet: 0\n  textureFormatSet: 0\n  platformSettings:\n  - serializedVersion: 3\n    buildTarget: DefaultTexturePlatform\n    maxTextureSize: 2048\n    resizeAlgorithm: 0\n    textureFormat: -1\n    textureCompression: 1\n    compressionQuality: 50\n    crunchedCompression: 0\n    allowsAlphaSplitting: 0\n    overridden: 0\n    androidETC2FallbackOverride: 0\n    forceMaximumCompressionQuality_BC6H_BC7: 0\n  spriteSheet:\n    serializedVersion: 2\n    sprites: []\n    outline: []\n    physicsShape: []\n    bones: []\n    spriteID: \n    internalID: 0\n    vertices: []\n    indices: \n    edges: []\n    weights: []\n    secondaryTextures: []\n  spritePackingTag: \n  pSDRemoveMatte: 0\n  pSDShowRemoveMatteOption: 0\n  userData: \n  assetBundleName: \n  assetBundleVariant: \n",
 						"type": "template"
 					},
 					{
 						"file_name": "$(path_prefix).mat",
-						"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: test\n  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}\n  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses: []\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _BumpScale: 1\n    - _Cutoff: 0.5\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _GlossMapScale: 1\n    - _Glossiness: 0.5\n    - _GlossyReflections: 1\n    - _Metallic: 0\n    - _Mode: 0\n    - _OcclusionStrength: 1\n    - _Parallax: 0.02\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _UVSec: 0\n    - _ZWrite: 1\n    m_Colors:\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}\n",
+						"prompt_overwrite": true,
+						"template": "%YAML 1.1\n%TAG !u! tag:unity3d.com,2011:\n--- !u!21 &2100000\nMaterial:\n  serializedVersion: 6\n  m_ObjectHideFlags: 0\n  m_CorrespondingSourceObject: {fileID: 0}\n  m_PrefabInstance: {fileID: 0}\n  m_PrefabAsset: {fileID: 0}\n  m_Name: $(file_prefix)\n  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}\n  m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP\n  m_LightmapFlags: 4\n  m_EnableInstancingVariants: 0\n  m_DoubleSidedGI: 0\n  m_CustomRenderQueue: -1\n  stringTagMap: {}\n  disabledShaderPasses: []\n  m_SavedProperties:\n    serializedVersion: 3\n    m_TexEnvs:\n    - _BumpMap:\n$if $(connected:normal_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(2), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailAlbedoMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailMask:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _DetailNormalMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _EmissionMap:\n        m_Texture: {fileID: 0}\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MainTex:\n$if $(connected:albedo_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(0), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _MetallicGlossMap:\n$if $(connected:roughness_tex) or $(connected:metallic_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(1), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _OcclusionMap:\n$if $(connected:ao_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(4), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    - _ParallaxMap:\n$if $(connected:depth_tex)\n        m_Texture: {fileID: 2800000, guid: $uid(3), type: 3}\n$else\n        m_Texture: {fileID: 0}\n$fi\n        m_Scale: {x: 1, y: 1}\n        m_Offset: {x: 0, y: 0}\n    m_Floats:\n    - _BumpScale: 1\n    - _Cutoff: 0.5\n    - _DetailNormalMapScale: 1\n    - _DstBlend: 0\n    - _GlossMapScale: 1\n    - _Glossiness: 0.5\n    - _GlossyReflections: 1\n    - _Metallic: 0\n    - _Mode: 0\n    - _OcclusionStrength: 1\n    - _Parallax: 0.02\n    - _SmoothnessTextureChannel: 0\n    - _SpecularHighlights: 1\n    - _SrcBlend: 1\n    - _UVSec: 0\n    - _ZWrite: 1\n    m_Colors:\n    - _Color: {r: 1, g: 1, b: 1, a: 1}\n    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}\n",
 						"type": "template"
 					}
 				],
 				"uids": 6
 			},
-			"Unity - HDRP": {
+			"Unity/HDRP": {
 				"export_extension": "mat",
 				"files": [
 					{
