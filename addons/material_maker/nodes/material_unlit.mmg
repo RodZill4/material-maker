@@ -10,22 +10,41 @@
 	"parameters": {
 		"blend": 0
 	},
-	"seed": 22878,
+	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"custom": "",
 		"exports": {
-			"Godot": {
+			"Godot/CanvasItem": {
 				"export_extension": "tres",
 				"files": [
 					{
 						"file_name": "$(path_prefix).tres",
-						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
+						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
 						"type": "template"
 					},
 					{
-						"file_name": "$(path_prefix).shader",
+						"file_name": "$(path_prefix).gdshader",
+						"template": "shader_type canvas_item;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n$definitions float_uniform_to_const,rename_buffers\nvoid fragment() {\n\tfloat _seed_variation_ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tCOLOR = color_tex;\n$end_generate\n}\n",
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					}
+				]
+			},
+			"Godot/Spatial": {
+				"export_extension": "tres",
+				"files": [
+					{
+						"file_name": "$(path_prefix).tres",
+						"template": "[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]\n[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]\n$begin_buffers\n[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]\n$end_buffers\n[resource]\nshader = ExtResource( 1 )\n$begin_buffers\nshader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )\n$end_buffers\n",
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix).gdshader",
 						"template": "shader_type spatial;\n$begin_generate\nrender_mode unshaded, blend_$blend;\n$end_generate\nuniform vec3 uv1_scale = vec3(1.0, 1.0, 1.0);\nuniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);\nuniform float variation = 0.0;\nvarying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n\tUV = UV*uv1_scale.xy+uv1_offset.xy;\n}\n$definitions float_uniform_to_const,rename_buffers\nvoid fragment() {\n\tfloat _seed_variation_ = variation;\n\tvec2 uv = fract(UV);\n$begin_generate rename_buffers\n\tvec4 color_tex = $color_tex(uv);\n\tcolor_tex = mix(pow((color_tex + vec4(0.055)) * (1.0 / (1.0 + 0.055)),vec4(2.4)),color_tex * (1.0 / 12.92),lessThan(color_tex,vec4(0.04045)));\n\tALBEDO = color_tex.rgb;\n\tALPHA = color_tex.a;\n$end_generate\n}\n",
 						"type": "template"
 					},
