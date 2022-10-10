@@ -84,7 +84,7 @@
 					}
 				]
 			},
-			"Godot/G3 Spatial": {
+			"Godot/Godot 3 Spatial": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -132,7 +132,7 @@
 					}
 				]
 			},
-			"Godot/G4 ORM": {
+			"Godot/Godot 4 ORM": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -181,7 +181,7 @@
 					}
 				]
 			},
-			"Godot/G4 Standard": {
+			"Godot/Godot 4 Standard": {
 				"export_extension": "tres",
 				"files": [
 					{
