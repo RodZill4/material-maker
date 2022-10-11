@@ -327,6 +327,7 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]
