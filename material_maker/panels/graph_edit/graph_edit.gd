@@ -179,32 +179,52 @@ func _gui_input(event) -> void:
 				else:
 					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
-	elif event is InputEventKey and event.pressed:
-		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		match scancode_with_modifiers:
-			KEY_DELETE,KEY_BACKSPACE:
-				remove_selection()
-			KEY_LEFT:
-				scroll_offset.x -= 0.5*rect_size.x
-				accept_event()
-			KEY_RIGHT:
-				scroll_offset.x += 0.5*rect_size.x
-				accept_event()
-			KEY_UP:
-				scroll_offset.y -= 0.5*rect_size.y
-				accept_event()
-			KEY_DOWN:
-				scroll_offset.y += 0.5*rect_size.y
-				accept_event()
+	elif event is InputEventKey:
+		if event.pressed:
+			var scancode_with_modifiers = event.get_scancode_with_modifiers()
+			match scancode_with_modifiers:
+				KEY_DELETE,KEY_BACKSPACE:
+					remove_selection()
+				KEY_LEFT:
+					scroll_offset.x -= 0.5*rect_size.x
+					accept_event()
+				KEY_RIGHT:
+					scroll_offset.x += 0.5*rect_size.x
+					accept_event()
+				KEY_UP:
+					scroll_offset.y -= 0.5*rect_size.y
+					accept_event()
+				KEY_DOWN:
+					scroll_offset.y += 0.5*rect_size.y
+					accept_event()
+		match event.get_scancode():
+			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
+				var found_tip : bool = false
+				for c in get_children():
+					if c.has_method("set_slot_tip_text"):
+						var rect = c.get_global_rect()
+						rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+						if rect.has_point(get_global_mouse_position()):
+							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.rect_global_position)
 	elif event is InputEventMouseMotion:
+		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
 				var rect = c.get_global_rect()
 				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
 				if rect.has_point(get_global_mouse_position()):
-					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+					var rel_pos : Vector2 = get_global_mouse_position()-c.rect_global_position
+					var slot : Dictionary = c.get_slot_from_position(rel_pos)
+					hint_tooltip = c.get_slot_tooltip(rel_pos, slot)
+					found_tip = found_tip or c.set_slot_tip_text(rel_pos, slot)
+					break
 				else:
 					c.clear_connection_labels()
+		if !found_tip:
+			var rect = get_global_rect()
+			rect = Rect2(rect.position, rect.size*get_global_transform().get_scale())
+			if rect.has_point(get_global_mouse_position()):
+				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:

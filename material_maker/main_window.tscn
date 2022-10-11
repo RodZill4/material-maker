@@ -387,6 +387,8 @@ size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_active = false
 
+[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]
+
 [node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
 margin_left = 1066.0
 margin_right = 1082.0
@@ -468,4 +470,5 @@ anims/show = SubResource( 7 )
 [connection signal="gui_input" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer/ControlView" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D" method="on_gui_input"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/Right/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
+[connection signal="timeout" from="VBoxContainer/StatusBar/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/ClipBoardAnalyzer" method="_on_Timer_timeout"]

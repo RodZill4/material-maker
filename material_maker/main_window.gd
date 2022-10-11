@@ -1120,6 +1120,21 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 							next_controls.append(control.get_parent())
 					controls = next_controls
 
+func set_tip_text(tip : String, timeout : float = 0.0):
+	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
+	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
+	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
+	$VBoxContainer/StatusBar/Tip.bbcode_text = tip
+	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
+	tip_timer.stop()
+	if timeout > 0.0:
+		tip_timer.one_shot = true
+		tip_timer.wait_time = timeout
+		tip_timer.start()
+
+func _on_Tip_Timer_timeout():
+	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
+
 # Use this to investigate the connect bug
 
 func draw_children(p, x):

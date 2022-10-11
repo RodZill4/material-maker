@@ -313,7 +313,7 @@ func get_output_slot(pos : Vector2) -> int:
 		update()
 	return return_value
 
-func get_slot_tooltip(pos : Vector2) -> String:
+func get_slot_from_position(pos : Vector2) -> Dictionary:
 	var scale = get_global_transform().get_scale()
 	if get_connection_input_count() > 0:
 		var input_1 : Vector2 = get_connection_input_position(0)-5*scale
@@ -325,10 +325,7 @@ func get_slot_tooltip(pos : Vector2) -> String:
 		if new_show_inputs:
 			for i in range(get_connection_input_count()):
 				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
-					var input_def = generator.get_input_defs()[i]
-					if input_def.has("longdesc"):
-						return wrap_string(TranslationServer.translate(input_def.longdesc))
-			return ""
+					return { type="input", index=i }
 	if get_connection_output_count() > 0:
 		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
 		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
@@ -339,10 +336,44 @@ func get_slot_tooltip(pos : Vector2) -> String:
 		if new_show_outputs:
 			for i in range(get_connection_output_count()):
 				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
-					var output_def = generator.get_output_defs()[i]
-					if output_def.has("longdesc"):
-						return wrap_string(TranslationServer.translate(output_def.longdesc))
+					return { type="output", index=i }
+	return { type="none", index=-1 }
+
+func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
+	if io.empty():
+		io = get_slot_from_position(pos)
+	match io.type:
+		"input":
+			mm_globals.set_tip_text("")
+			var input_def = generator.get_input_defs()[io.index]
+			if input_def.has("longdesc"):
+				return wrap_string(TranslationServer.translate(input_def.longdesc))
+		"output":
+			
+			var output_def = generator.get_output_defs()[io.index]
+			if output_def.has("longdesc"):
+				return wrap_string(TranslationServer.translate(output_def.longdesc))
+		_:
+			mm_globals.set_tip_text("")
 	return ""
+
+func set_slot_tip_text(pos : Vector2, io : Dictionary = {}):
+	if io.empty():
+		io = get_slot_from_position(pos)
+	match io.type:
+		"output":
+			if Input.is_key_pressed(KEY_CONTROL):
+				if Input.is_key_pressed(KEY_SHIFT):
+					mm_globals.set_tip_text("#LMB: Lock/Unlock in 2D preview (2), #RMB: Add/Remove reroute node")
+				else:
+					mm_globals.set_tip_text("#LMB: Lock/Unlock in 2D preview, #RMB: Toggle preview")
+			else:
+				if Input.is_key_pressed(KEY_SHIFT):
+					mm_globals.set_tip_text("#LMB: Show in 2D preview (2), #RMB: Add/Remove reroute node")
+				else:
+					mm_globals.set_tip_text("#LMB: Show in 2D preview, #RMB: Toggle preview")
+			return true
+	return false
 
 func clear_connection_labels() -> void:
 	if show_inputs or show_outputs:

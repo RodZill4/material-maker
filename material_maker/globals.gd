@@ -130,3 +130,6 @@ func parse_paste_data(data : String):
 	last_paste_data = data
 	last_parsed_paste_data = { type=type, graph=graph }
 	return { type=type, graph=graph }
+
+func set_tip_text(tip : String, timeout : float = 0.0):
+	main_window.set_tip_text(tip, timeout)

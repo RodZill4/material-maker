@@ -296,3 +296,6 @@ func _on_PostProcess_id_pressed(id):
 	current_postprocess_option = id
 	set_generator(generator, output, true)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", current_postprocess_option)
+
+func _on_Preview2D_mouse_entered():
+	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom, #RMB: Context menu", 3)
