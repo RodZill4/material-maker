@@ -200,6 +200,8 @@ func on_gui_input(event) -> void:
 		if event.pressure != 0.0:
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		var motion = event.relative
+		if motion.length() > 200:
+			return
 		if Input.is_key_pressed(KEY_ALT):
 			zoom(1.0+motion.y*0.01)
 		else:
