@@ -19,6 +19,7 @@ Updated 2022/10/05
   the bottom of the user interface.
 - Added a small icon in the status bar that shows the status of the clipboard (and if it can be pasted into
   a graph view).
+- Added an option for Tonemaps in the 3D Preview panel.
 
 ## Nodes
 
