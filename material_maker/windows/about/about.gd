@@ -24,6 +24,7 @@ const CONTRIBUTORS = [
 	{ name="williamchange", contribution="Seven Segment Display node" },
 	{ name="Theaninova", contribution="Spiral Gradient node" },
 	{ name="Variable", contribution="UI fixes" },
+	{ name="jeremybeier", contribution="Unity export fixes" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 
