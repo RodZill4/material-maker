@@ -23,6 +23,8 @@ Updated 2022/10/05
 
 ## Nodes
 
+- Updated the EasySDF node with support for coloring (of albedo, roughness, metallic and emission channels)
+  and node parameters.
 - Added additional modes to **Math** node (contributed by williamchange).
 - Updated the iteration buffer with an autostop parameter. When set, the Iteration Buffer will stop iterating
   as soon as 2 consecutive results are identical.
@@ -37,7 +39,8 @@ Updated 2022/10/05
 - Added **Triangle Voronoi** node (contributed by williamchange).
 - Added **Sixteen Segment Display** and **Roman Numerals** nodes (contributed by williamchange).
 - Added **Japanese Glyphs** node (contributed by williamchange).
-- Added **Uneven Bricks 3** node (contributed by Arnklit)
+- Added **Uneven Bricks 3** node (contributed by Arnklit).
+- Added **Swirl** node.
 
 ## Fixes, optimizations
 
