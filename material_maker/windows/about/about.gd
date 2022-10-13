@@ -22,13 +22,17 @@ const CONTRIBUTORS = [
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes" },
 	{ name="Zhibade", contribution="Auto size new comment nodes to current selection" },
 	{ name="williamchange", contribution="Seven Segment Display node" },
+	{ name="Theaninova", contribution="Spiral Gradient node" },
+	{ name="Variable", contribution="UI fixes" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 
 const PATRONS = [
-	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "nargacu83", "Jose Ivan Lopez Romo",
-	"Harken", "Interstice", "Rafe Hall", "rustweaver", "Shikher Pandey",
-	"The5", "a critter in flux", "Ryan Roden-Corrent"
+	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo", "nargacu83",
+	"Interstice", "Rafe Hall", "rustweaver", "Harken", "BasicIncomePlz", "Adam Nakonieczny",
+	"The5", "Andres Hernandez", "Preclude Interactive", "Hanzhong Wang", "Ryan Roden-Corrent",
+	"Micha Grandel",
+	"Shikher Pandey", "a critter in flux", "Tom Wor"
 ]
 
 func _ready() -> void:

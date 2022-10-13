@@ -1,0 +1,113 @@
+{
+	"name": "roman_numerals",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0,
+		"h": 0.75,
+		"n": 5,
+		"r": 0.4,
+		"s": 0.5,
+		"w": 0.5
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float line(vec2 p, vec4 l) { return sdLine(p,l.xy,l.zw).x; }\n\nfloat ri(vec2 p, float w, float h)\n{\n\tfloat d = line(abs(p), vec4(w*1.7,h,0,h));\n\treturn min(d,line(vec2(p.x,abs(p.y)), vec4(0,h,0,0)));\n}\n\nfloat rv(vec2 p, float w, float h)\n{\n\tp.x = abs(p.x);\n\tfloat d = line(p,vec4(0,h,w,-h));\n\treturn min(d,line(vec2(abs(p.x-w),p.y+h), vec4(w*0.8,0,0,0)));\n}\n\nfloat rx(vec2 p, float w, float h)\n{\n\tp = abs(p);\n\tfloat d = line(p,vec4(w,h,0,0));\n\treturn min(d, line(abs(p-vec2(w,h)),vec4(w*0.8,0,0,0)));\n}\n\nfloat rl(vec2 p, float w, float h)\n{\n\tfloat w2 = w*1.5;\n\tfloat d = line(p,vec4(-w2,h,-w2,-h));\n\treturn min(d, line(p,vec4(-w2,h,w2,h)));\n}\n\nfloat rnum(vec2 p,float w, float h, float s, int n)\n{\n\tvec2 s0 = vec2(s,0);\n\tfloat rn[6] = float[] (\n\t\t\tmin(rx(p,w,h),rl(p-s0,w,h)),\n\t\t\trx(p,w,h),\n\t\t\tmin(ri(p,w,h),rx(p-s0,w,h)),\n\t\t\trv(p,w,h),\n\t\t\tmin(ri(p,w,h),rv(p-s0,w,h)),\n\t\t\tri(p,w,h) );\n\treturn rn[n];\n}\n\nfloat roman(vec2 p, float w, float h, int n, float bevel, float r, float s)\n{\n\tp -= 0.5;\n\th *= 0.5;\n\tw *= 0.25;\n\tconst int val[] = {40,10,9,5,4,1};\n\tfloat res = 1.0; n = clamp(n,0,40);\n\t\n\tfor (int i = 0; i < 6; ++i) {\n\t\twhile(n - val[i] >= 0) {\n\t\t\tfloat no = rnum(p,w,h,s,i);\n\t\t\tres = min(res,no);\n\t\t\tp -= vec2(s,0);\n\t\t\tn -= val[i]; \n\t\t}}\n\treturn clamp(0.0-(res-r*0.03)/max(bevel, 1e-4), 0, 1);\n}",
+		"includes": [
+			"sdline2"
+		],
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "5:",
+				"longdesc": "Map that affects the bevel parameter.",
+				"name": "bevel_map",
+				"shortdesc": "Bevel Map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Roman Numerals",
+		"outputs": [
+			{
+				"f": "roman($uv, $w, $h, int($n), $bevel*$bevel_map($uv), $r, $s)",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Width",
+				"max": 1,
+				"min": 0,
+				"name": "w",
+				"shortdesc": "Glyph Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Height",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"shortdesc": "Glyph Height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Thickness",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Glyph Thickness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Number",
+				"max": 40,
+				"min": 1,
+				"name": "n",
+				"shortdesc": "Roman number to display",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Bevel",
+				"max": 1,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Glyph edge width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Spacing",
+				"max": 1,
+				"min": 0,
+				"name": "s",
+				"shortdesc": "Spacing between glyphs",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Roman Numerals"
+	},
+	"type": "shader"
+}

@@ -39,6 +39,7 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
 const IDLE_FPS_LIMIT_MIN = 1
@@ -102,7 +103,7 @@ const MENU = [
 	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
 	{ menu="Tools/-" },
 	{ menu="Tools/Environment editor", command="environment_editor" },
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
+	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
@@ -187,7 +188,7 @@ func _ready() -> void:
 
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
-	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
+	mm_renderer.connect("render_queue", $VBoxContainer/StatusBar/RenderCounter, "on_counter_change")
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -356,7 +357,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	var profile_name : String = profile
+	var last_profile_name_slash : int = profile_name.rfind("/")
+	if last_profile_name_slash != -1:
+		profile_name = profile_name.right(last_profile_name_slash+1)
+	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile_name+" Material")
 	var config_key = export_profile_config_key(profile)
 	if mm_globals.config.has_section_key("path", config_key):
 		dialog.current_dir = mm_globals.config.get_value("path", config_key)
@@ -1114,6 +1119,21 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 						if control.get_parent() != self:
 							next_controls.append(control.get_parent())
 					controls = next_controls
+
+func set_tip_text(tip : String, timeout : float = 0.0):
+	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
+	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
+	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
+	$VBoxContainer/StatusBar/Tip.bbcode_text = tip
+	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
+	tip_timer.stop()
+	if timeout > 0.0:
+		tip_timer.one_shot = true
+		tip_timer.wait_time = timeout
+		tip_timer.start()
+
+func _on_Tip_Timer_timeout():
+	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
 
 # Use this to investigate the connect bug
 

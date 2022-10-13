@@ -1,6 +1,9 @@
 extends WindowDialog
 
-var float_edit = null
+var object : Object = null
+var method : String
+var extra_parameters : Array = []
+var accept_empty : bool = false
 
 onready var editor = $MarginContainer/VBoxContainer/TextEdit
 onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
@@ -8,20 +11,22 @@ onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").n
 func _ready():
 	pass # Replace with function body.
 
-func edit_parameter(fe):
-	float_edit = fe
-	window_title = "Expression editor - "+fe.name
-	editor.text = fe.get_value()
+func edit_parameter(object_name : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
+	object = o
+	method = m
+	extra_parameters = ep
+	accept_empty = ae
+	window_title = "Expression editor - "+object_name
+	editor.text = value
 	popup_centered()
 	editor.cursor_set_column(editor.text.length())
 	editor.grab_focus()
 
 func _on_Apply_pressed():
 	var value = editor.text.replace("\n", "").strip_edges()
-	if value.is_valid_float():
-		float_edit.set_value(float(value), true)
-	else:
-		float_edit.set_value(value, true)
+	var parameters : Array = [ value ]
+	parameters.append_array(extra_parameters)
+	object.callv(method, parameters)
 
 func _on_OK_pressed():
 	_on_Apply_pressed()
@@ -38,10 +43,14 @@ func _on_TextEdit_gui_input(event):
 			KEY_ESCAPE:
 				_on_Cancel_pressed()
 			_:
-				var parse_result = parser.parse(editor.text)
-				if parse_result.status == "OK" and parse_result.non_terminal == "expression":
+				if accept_empty and editor.text == "":
 					$MarginContainer/VBoxContainer/HBoxContainer/OK.disabled = false
 					$MarginContainer/VBoxContainer/HBoxContainer/Apply.disabled = false
 				else:
-					$MarginContainer/VBoxContainer/HBoxContainer/OK.disabled = true
-					$MarginContainer/VBoxContainer/HBoxContainer/Apply.disabled = true
+					var parse_result = parser.parse(editor.text)
+					if parse_result.status == "OK" and parse_result.non_terminal == "expression":
+						$MarginContainer/VBoxContainer/HBoxContainer/OK.disabled = false
+						$MarginContainer/VBoxContainer/HBoxContainer/Apply.disabled = false
+					else:
+						$MarginContainer/VBoxContainer/HBoxContainer/OK.disabled = true
+						$MarginContainer/VBoxContainer/HBoxContainer/Apply.disabled = true

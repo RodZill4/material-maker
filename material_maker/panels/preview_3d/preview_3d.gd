@@ -34,7 +34,8 @@ const MENU = [
 	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
-	{ menu="Environment/Select", submenu="environment_list" }
+	{ menu="Environment/Select", submenu="environment_list" },
+	{ menu="Environment/Tonemap", submenu="tonemap_list" }
 ]
 
 
@@ -73,6 +74,18 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
+
+const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
+
+func create_menu_tonemap_list(menu : PopupMenu) -> void:
+	var tonemap_mode : int = mm_globals.get_config("ui_3d_preview_tonemap")
+	menu.clear()
+	for i in TONEMAPS.size():
+		menu.add_radio_check_item(TONEMAPS[i], i)
+		if i == tonemap_mode:
+			menu.set_item_checked(i, true)
+	if !menu.is_connected("id_pressed", self, "_on_Tonemaps_item_selected"):
+		menu.connect("id_pressed", self, "_on_Tonemaps_item_selected")
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
@@ -113,6 +126,12 @@ func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
 	environment_manager.apply_environment(id, environment, sun)
+	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
+
+func _on_Tonemaps_item_selected(id) -> void:
+	mm_globals.set_config("ui_3d_preview_tonemap", id)
+	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
+	environment.tonemap_mode = id
 
 func _on_material_preview_size_changed() -> void:
 	# Apply supersampling to the new viewport size.
@@ -200,6 +219,8 @@ func on_gui_input(event) -> void:
 		if event.pressure != 0.0:
 			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		var motion = event.relative
+		if motion.length() > 200:
+			return
 		if Input.is_key_pressed(KEY_ALT):
 			zoom(1.0+motion.y*0.01)
 		else:

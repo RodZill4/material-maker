@@ -5,8 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"s": 11
+		"s": 9
 	},
+	"seed": 11778,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -19,7 +21,7 @@
 				"type": "rgba"
 			}
 		],
-		"instance": "vec4 $(name)_fill(vec2 uv) {\n\tfloat size = $s;\n\tint iterations = min(int(size), 256);\n\tvec4 color = $in(fract(uv));\n\tif (color.z+color.w < 1.0/size) {\n\t\treturn vec4(0.0);\n\t}\n\tvec2 offsets[8] = { vec2(1.0, 0.0), vec2(-1.0, 0.0), vec2(0.0, 1.0), vec2(0.0, -1.0), vec2(1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, -1.0) };\n\tfor (int o = 0; o < 8; ++o) {\n\t\tvec2 uv2 = uv;\n\t\tvec2 offset = offsets[o]/size;\n\t\tfor (int i = 1; i < iterations; i += 1) {\n\t\t\tuv2 += offset;\n\t\t\tvec4 color2 = $in(fract(uv2));\n\t\t\tif (color2.z+color2.w == 0.0) {\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tvec2 p1 = color.xy+floor(uv-color.xy);\n\t\t\tvec2 p2 = color2.xy+floor(uv2-color2.xy);\n\t\t\tvec2 p = min(p1, p2);\n\t\t\tvec2 s = max(p1+color.zw, p2+color2.zw)-p;\n\t\t\tcolor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(fract(p), s), step(s.xyxy, vec4(1.0)));\n\t\t}\n\t}\n\treturn floor(color*size)/size;\n}\n",
+		"instance": "vec4 $(name)_fill(vec2 uv) {\n\tfloat size = $s;\n\tint iterations = min(int(size), 1024);\n\tvec4 color = $in(fract(uv));\n\tif (color.z+color.w < 1.0/size) {\n\t\treturn vec4(0.0);\n\t}\n\tvec2 offsets[4] = { vec2(1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, -1.0), vec2(1.0, -1.0) };\n\tvec2 mult_base = vec2(1.0, 0.0);\n\tfor (int o = 0; o < 4; ++o) {\n\t\tvec2 offset = offsets[o]/size;\n\t\tvec2 mult = mult_base;\n\t\tfor (int d = 0; d < 2; ++d) {\n\t\t\tvec2 uv2 = uv;\n\t\t\tint l = 0;\n\t\t\tfor (int i = 1; i < iterations; i += 1) {\n\t\t\t\tuv2 += offset*mult;\n\t\t\t\tvec4 color2 = $in(fract(uv2));\n\t\t\t\tif (color2.z+color2.w == 0.0) {\n\t\t\t\t\tif (l < 1) {\n\t\t\t\t\t\tmult = mult.yx;\n\t\t\t\t\t\tl += 1;\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tl = 0;\n\t\t\t\tvec2 p1 = color.xy+floor(uv-color.xy);\n\t\t\t\tvec2 p2 = color2.xy+floor(uv2-color2.xy);\n\t\t\t\tvec2 p = min(p1, p2);\n\t\t\t\tvec2 s = max(p1+color.zw, p2+color2.zw)-p;\n\t\t\t\tcolor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(fract(p), s), step(s.xyxy, vec4(1.0)));\n\t\t\t}\n\t\t\tmult = mult_base.yx;\n\t\t}\n\t}\n\treturn floor(color*size)/size;\n}\n",
 		"name": "Fill iterate",
 		"outputs": [
 			{

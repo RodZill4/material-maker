@@ -16,24 +16,20 @@ popup_exclusive = true
 window_title = "Environment editor"
 resizable = true
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Main" type="VBoxContainer" parent="."]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 798.0
-margin_bottom = 348.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 6.0
+margin_right = -6.0
+margin_bottom = -6.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HSplitContainer" type="HBoxContainer" parent="Main"]
-margin_right = 796.0
-margin_bottom = 322.0
+margin_right = 788.0
+margin_bottom = 314.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -41,7 +37,7 @@ __meta__ = {
 
 [node name="Environments" type="ItemList" parent="Main/HSplitContainer"]
 margin_right = 112.0
-margin_bottom = 322.0
+margin_bottom = 314.0
 rect_min_size = Vector2( 112, 100 )
 max_columns = 4
 same_column_width = true
@@ -55,17 +51,18 @@ items = [ "Delete environment", null, 0, false, false, 0, 0, null, "", false ]
 
 [node name="ViewportContainer" type="ViewportContainer" parent="Main/HSplitContainer"]
 margin_left = 116.0
-margin_right = 592.0
-margin_bottom = 322.0
+margin_right = 584.0
+margin_bottom = 314.0
 size_flags_horizontal = 3
+stretch = true
 
 [node name="Viewport" parent="Main/HSplitContainer/ViewportContainer" instance=ExtResource( 1 )]
 render_target_update_mode = 0
 
 [node name="UI" type="GridContainer" parent="Main/HSplitContainer"]
-margin_left = 596.0
-margin_right = 796.0
-margin_bottom = 322.0
+margin_left = 588.0
+margin_right = 788.0
+margin_bottom = 314.0
 rect_min_size = Vector2( 200, 0 )
 mouse_filter = 2
 columns = 2
@@ -261,10 +258,10 @@ step = 0.1
 float_only = true
 
 [node name="Buttons" type="HBoxContainer" parent="Main"]
-margin_left = 218.0
-margin_top = 326.0
-margin_right = 577.0
-margin_bottom = 346.0
+margin_left = 214.0
+margin_top = 318.0
+margin_right = 573.0
+margin_bottom = 338.0
 size_flags_horizontal = 4
 
 [node name="Download" type="Button" parent="Main/Buttons"]

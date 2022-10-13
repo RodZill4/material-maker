@@ -393,6 +393,10 @@
 						{
 							"node": "shape_3",
 							"widget": "d"
+						},
+						{
+							"node": "shape_4",
+							"widget": "d"
 						}
 					],
 					"longdesc": "Distance of the operation",
@@ -489,7 +493,7 @@
 				"y": -40.762772
 			},
 			"parameters": {
-				"d": 0.11,
+				"d": 0.05,
 				"s": 10
 			},
 			"seed": 0,

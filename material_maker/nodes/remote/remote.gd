@@ -130,11 +130,11 @@ func _on_value_changed(new_value, variable : String) -> void:
 			return
 	._on_value_changed(new_value, variable)
 
-func undo_redo_register_change(action_name : String, old_state : Dictionary):
+func undo_redo_register_change(action_name : String, previous_state : Dictionary):
 	var new_state = generator.serialize().duplicate(true)
-	if new_state.hash() == old_state.hash():
+	if new_state.hash() == previous_state.hash():
 		return
-	get_parent().undoredo_create_step(action_name, generator.get_hier_name(), old_state, new_state)
+	get_parent().undoredo_create_step(action_name, generator.get_hier_name(), previous_state, new_state)
 		
 func move_parameter(widget_name : String, offset : int) -> void:
 	old_state = generator.serialize().duplicate(true)
@@ -152,7 +152,7 @@ func on_param_name_changed(new_name : String, param_name : String, line_edit : L
 	else:
 		line_edit.add_color_override("font_color", Color(1.0, 0.0, 0.0))
 
-func on_param_name_entered(new_name : String, param_name : String, line_edit : LineEdit) -> void:
+func on_param_name_entered(new_name : String, param_name : String, _line_edit : LineEdit) -> void:
 	old_state = generator.serialize().duplicate(true)
 	generator.rename(param_name, new_name)
 	undo_redo_register_change("Change parameter name", old_state)
@@ -205,7 +205,7 @@ func _on_AddConfig_pressed() -> void:
 
 func _on_AddNamed_pressed():
 	old_state = generator.serialize().duplicate(true)
-	var control = generator.create_named_parameter("Unnamed")
+	var _control = generator.create_named_parameter("Unnamed")
 	update_node()
 	undo_redo_register_change("Add named parameter", old_state)
 

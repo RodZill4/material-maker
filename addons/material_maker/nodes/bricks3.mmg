@@ -1,0 +1,207 @@
+{
+	"name": "bricks3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.1,
+		"columns": 3,
+		"corner": 0.3,
+		"mortar": 0.1,
+		"pattern": 0,
+		"repeat": 1,
+		"round": 0,
+		"row_offset": 0.5,
+		"rows": 6
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_rect = bricks_$pattern($uv, vec2($columns, $rows), $repeat, $row_offset);\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)), 1.0 / $rows);",
+		"global": "vec4 brick(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float round, float bevel, float brick_height) {\n\tfloat color;\n\tvec2 size = bmax - bmin;\n\tfloat min_size = min(size.x, size.y);\n\n\tmortar *= brick_height;\n\tbevel *= brick_height;\n\tround *= brick_height;\n\n\tvec2 center = 0.5*(bmin+bmax);\n    vec2 d = abs(uv-center)-0.5*(size)+vec2(round+mortar);\n    color = length(max(d,vec2(0))) + min(max(d.x,d.y),0.0)-round;\n\tcolor = clamp(-color/bevel, 0.0, 1.0);\n\tvec2 tiled_brick_pos = mod(bmin, vec2(1.0, 1.0));\n\treturn vec4(color, center, tiled_brick_pos.x+7.0*tiled_brick_pos.y);\n}\n\nvec4 brick_corner_bb(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float corner, float brick_height) {\n\tvec2 center = 0.5*(bmin + bmax);\n\tvec2 size = bmax - bmin;\n\tfloat max_size = max(size.x, size.y);\n\tfloat min_size = min(size.x, size.y);\n\n\tmortar *= brick_height;\n\tcorner *= brick_height;\n\t\n\tvec2 corner1 = vec2(bmin + mortar);\n\tvec2 corner2 = vec2(bmax.x - mortar - corner, bmin.y + mortar);\n\tvec2 corner3 = vec2(bmin.x + mortar, bmax.y - mortar - corner);\n\tvec2 corner4 = vec2(bmax - mortar - corner);\n\tvec2 top = uv.x < center.x ? corner1 : corner2;\n\tvec2 bottom = uv.x < center.x ? corner3 : corner4;\n\tvec2 positions = uv.y < center.y ? top : bottom;\n\treturn vec4(round(fract(positions)*4096.0)/4096.0, corner, corner);\n}\n\nvec4 bricks_rb(vec2 uv, vec2 count, float repeat, float offset) {\n\tcount *= repeat;\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn vec4(bmin, bmin+vec2(1.0)/count);\n}\n\nvec4 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset) {\n\tcount *= repeat;\n\tfloat x_offset = offset*step(0.5, fract(uv.y*count.y*0.5));\n\tcount.x = count.x*(1.0+step(0.5, fract(uv.y*count.y*0.5)));\n\tvec2 bmin = floor(vec2(uv.x*count.x-x_offset, uv.y*count.y));\n\tbmin.x += x_offset;\n\tbmin /= count;\n\treturn vec4(bmin, bmin+vec2(1.0)/count);\n}\n\nvec4 bricks_rb3(vec2 uv, vec2 count, float repeat, float offset) {\n\tvec4 bb = bricks_rb(uv, count, repeat, offset);\n\t\n\tif ( (uv.x - bb.x) / (bb.z - bb.x) < 1.0/3.0) {\n\t\tbb.z = bb.x + (bb.z - bb.x) / 3.0;\n\t} else {\n\t\tbb.x = bb.x + (bb.z - bb.x) / 3.0;\n\t}\n\treturn bb;\n}\n\nvec4 bricks_hb(vec2 uv, vec2 count, float repeat, float offset) {\n\tfloat pc = count.x+count.y;\n\tfloat c = pc*repeat;\n\tvec2 corner = floor(uv*c);\n\tfloat cdiff = mod(corner.x-corner.y, pc);\n\tif (cdiff < count.x) {\n\t\treturn vec4((corner-vec2(cdiff, 0.0))/c, (corner-vec2(cdiff, 0.0)+vec2(count.x, 1.0))/c);\n\t} else {\n\t\treturn vec4((corner-vec2(0.0, pc-cdiff-1.0))/c, (corner-vec2(0.0, pc-cdiff-1.0)+vec2(1.0, count.y))/c);\n\t}\n}\n\nvec4 bricks_bw(vec2 uv, vec2 count, float repeat, float offset) {\n\tvec2 c = 2.0*count*repeat;\n\tfloat mc = max(c.x, c.y);\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = count*floor(repeat*2.0*uv);\n\tfloat cdiff = mod(dot(floor(repeat*2.0*uv), vec2(1.0)), 2.0);\n\tvec2 corner;\n\tvec2 size;\n\tif (cdiff == 0.0) {\n\t\tcorner = vec2(corner1.x, corner2.y);\n\t\tsize = vec2(1.0, count.y);\n\t} else {\n\t\tcorner = vec2(corner2.x, corner1.y);\n\t\tsize = vec2(count.x, 1.0);\n\t}\n\treturn vec4(corner/c, (corner+size)/c);\n}\n\nvec4 bricks_sb(vec2 uv, vec2 count, float repeat, float offset) {\n\tvec2 c = (count+vec2(1.0)) * repeat;\n\tfloat mc = max(c.x, c.y);\n\tvec2 corner1 = floor(uv*c);\n\tvec2 corner2 = (count+vec2(1.0))*floor(repeat*uv);\n\tvec2 rcorner = corner1 - corner2;\n\tvec2 corner;\n\tvec2 size;\n\tif (rcorner.x == 0.0 && rcorner.y < count.y) {\n\t\tcorner = corner2;\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == 0.0) {\n\t\tcorner = corner2+vec2(1.0, 0.0);\n\t\tsize = vec2(count.x, 1.0);\n\t} else if (rcorner.x == count.x) {\n\t\tcorner = corner2+vec2(count.x, 1.0);\n\t\tsize = vec2(1.0, count.y);\n\t} else if (rcorner.y == count.y) {\n\t\tcorner = corner2+vec2(0.0, count.y);\n\t\tsize = vec2(count.x, 1.0);\n\t} else {\n\t\tcorner = corner2+vec2(1.0);\n\t\tsize = vec2(count.x-1.0, count.y-1.0);\n\t}\n\treturn vec4(corner/c, (corner+size)/c);\n}",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "6:",
+				"longdesc": "A map that affects the Mortar parameter",
+				"name": "mortar_map",
+				"shortdesc": "Mortar map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Round parameter",
+				"name": "round_map",
+				"shortdesc": "Round map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates different bricks patterns, with many useful outputs.",
+		"name": "Bricks",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"longdesc": "A greyscale image that shows the bricks pattern",
+				"shortdesc": "Bricks pattern",
+				"type": "f"
+			},
+			{
+				"fill": "round(vec4(fract($(name_uv)_rect.xy), $(name_uv)_rect.zw - $(name_uv)_rect.xy)*4096.0)/4096.0",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Brick Fill",
+				"type": "fill"
+			},
+			{
+				"fill": "brick_corner_bb($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, 1.0 / $rows)",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Corner Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"default": 2,
+				"label": "",
+				"longdesc": "The type of brick pattern",
+				"name": "pattern",
+				"shortdesc": "Pattern",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Running bond",
+						"value": "rb"
+					},
+					{
+						"name": "Running bond (2)",
+						"value": "rb2"
+					},
+					{
+						"name": "Running bond (3)",
+						"value": "rb3"
+					},
+					{
+						"name": "HerringBone",
+						"value": "hb"
+					},
+					{
+						"name": "Basket weave",
+						"value": "bw"
+					},
+					{
+						"name": "Spanish bond",
+						"value": "sb"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Repeat",
+				"longdesc": "The number of repetitions of the whole pattern",
+				"max": 8,
+				"min": 1,
+				"name": "repeat",
+				"shortdesc": "Repeat",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 6,
+				"label": "Rows",
+				"longdesc": "The number of rows of a pattern",
+				"max": 64,
+				"min": 1,
+				"name": "rows",
+				"shortdesc": "Rows",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 3,
+				"label": "Columns",
+				"longdesc": "The number of columns of a pattern",
+				"max": 64,
+				"min": 1,
+				"name": "columns",
+				"shortdesc": "Columns",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Offset",
+				"longdesc": "The offset of the pattern (not useful for all patterns)",
+				"max": 1,
+				"min": 0,
+				"name": "row_offset",
+				"shortdesc": "Offset",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Mortar",
+				"longdesc": "The width of the space between bricks",
+				"max": 0.5,
+				"min": 0,
+				"name": "mortar",
+				"shortdesc": "Mortar",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Bevel",
+				"longdesc": "The width of the edge of each brick",
+				"max": 0.5,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Round",
+				"longdesc": "The radius of the round corners of bricks",
+				"max": 0.5,
+				"min": 0,
+				"name": "round",
+				"shortdesc": "Round",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Corner",
+				"longdesc": "The size of the corner part of each brick (only used by the Corner UV output)",
+				"max": 0.5,
+				"min": 0,
+				"name": "corner",
+				"shortdesc": "Corner",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Simple bricks patterns"
+	},
+	"type": "shader"
+}
