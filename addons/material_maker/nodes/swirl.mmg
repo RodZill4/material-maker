@@ -1,0 +1,102 @@
+{
+	"name": "swirl",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"angle": 360,
+		"cx": 0,
+		"cy": 0,
+		"radius": 0.5,
+		"tile": false
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "vec2 swirl_tile_false(vec2 uv, vec2 center, float radius, float angle) {\n\tvec2 v = uv-center;\n\tfloat l = length(v);\n\tif (l > radius) {\n\t\treturn uv;\n\t} else {\n\t\treturn rotate(v, angle*(1.0-l/radius)*(1.0-l/radius))+center;\n\t}\n}\n\nvec2 swirl_tile_true(vec2 uv, vec2 center, float radius, float angle) {\n\tcenter = fract(center);\n\tvec2 tile_offset = 2.0*(step(vec2(0.5), uv)-vec2(0.5));\n\tuv = swirl_tile_false(uv, center, radius, angle);\n\tuv = swirl_tile_false(uv, center+tile_offset, radius, angle);\n\tuv = swirl_tile_false(uv, center+vec2(tile_offset.x, 0.0), radius, angle);\n\treturn swirl_tile_false(uv, center+vec2(0.0, tile_offset.y), radius, angle);\n}\n",
+		"includes": [
+			"rotate"
+		],
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image",
+				"name": "i",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Applies a swirl to its input",
+		"name": "Swirl",
+		"outputs": [
+			{
+				"longdesc": "Shows the swirled image",
+				"rgba": "$i(swirl_tile_$tile($uv, vec2(0.5+$cx, 0.5+$cy), $radius, $angle*0.01745329251))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the swirl center",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the swirl center",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Angle",
+				"longdesc": "The angle of the swirl",
+				"max": 360,
+				"min": -360,
+				"name": "angle",
+				"shortdesc": "Angle",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Radius",
+				"longdesc": "The radius of the swirl",
+				"max": 0.5,
+				"min": 0,
+				"name": "radius",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Tile",
+				"name": "tile",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Swirl++"
+	},
+	"type": "shader"
+}
