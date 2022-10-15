@@ -1,0 +1,184 @@
+{
+	"name": "skewed_bricks",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.1,
+		"columns": 3,
+		"corner": 0.3,
+		"mortar": 0.1,
+		"offset": 0.5,
+		"randomness": 1,
+		"round": 0,
+		"rows": 6
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_brick_uv;\nvec3 $(name_uv)_corner_uv;\nvec4 $(name_uv)_brick_fill;\nvec4 $(name_uv)_corner_fill;\nfloat $(name_uv)_bricks = skewed_bricks($uv, vec2($columns, $rows), $offset, $randomness, $mortar * $mortar_map($uv), $bevel * $bevel_map($uv), $round * $round_map($uv), $corner, $seed, $(name_uv)_brick_uv, $(name_uv)_corner_uv, $(name_uv)_brick_fill, $(name_uv)_corner_fill);",
+		"global": "float skewed_brick_rand(vec2 x) {\n\t// To avoid weird precission errors I was having\n\tx *= 4096.0;\n\tx = round(x);\n\treturn rand(x);\n}\n\nvec2 perpendicular(vec2 vector) {\n\tvector = vector.yx;\n\tvector.y = -vector.y;\n\treturn vector;\n}\n\n// https://wiki.secondlife.com/wiki/Geometric#Line_and_Line.2C_intersection_point\n// Copyright 2001, softSurfer (www.softsurfer.com); 2008, LSL-port by Nexii Malthus\n// (CC BY-SA 3.0 License)\nvec2 get_line_intersection( vec2 A, vec2 B, vec2 C, vec2 D ) {\n    vec2 b = B - A;\n\tvec2 d = D - C;\n    float dotperp = b.x * d.y - b.y * d.x;\n\t// if I had to worry about parallel lines, but I shouldn't have to here\n    // if (dotperp == 0) return <-1,-1,-1>;\n\tvec2 c = C - A;\n    float t = (c.x * d.y - c.y * d.x) / dotperp;\n\treturn vec2(A.x + t * b.x, A.y + t * b.y);\n}\n\nfloat skewed_bricks(vec2 uv, vec2 scale, float offset, float randomness, float mortar, float bevel, float round, float corner, float seed, inout vec3 brick_uv, inout vec3 corner_uv, inout vec4 brick_fill, inout vec4 corner_fill) {\n\t// rb2\n\t//scale.x *= 1.0 + step(0.5, fract(uv.y * scale.y * 0.5));\n\t\n\tvec2 scaled_uv = uv * scale;\n\t\n\tfloat x_offset = offset * step(0.5, fract(uv.y * scale.y * 0.5));\n\t\t\n\tvec2 cell_id = floor(scaled_uv);\n\tvec2 cell_uv = fract(scaled_uv);\n\t\n\tcell_id -= vec2(x_offset, 0.0);\n\t\n\tfloat min_distance = 1.0;\n\tvec2 c_point;\n\tvec2 left_top;\n\tvec2 right_top;\n\tvec2 right_bottom;\n\tvec2 left_bottom;\n\t\n\tfor (int i = -1; i <= 1; i++) {\n\t\t// neighbor in uv space\n\t\tvec2 neighbor = vec2(float(i), 0.0);\n\t\tvec2 point = cell_id + neighbor + vec2(0.5) + (vec2(0.0, skewed_brick_rand(mod(cell_id + neighbor + seed, scale)) - 0.5) * randomness * scale.y / 4.0);\n\t\tpoint /= scale;\n\t\tfloat dist = distance(point, uv);\n\t\t\n\t\t// get left, right neighbor in here as well, to calculate perpendicular and intersect\n\t\tvec2 left = cell_id + neighbor + vec2(-1.0, 0.0) + vec2(0.5) + (vec2(0.0, skewed_brick_rand(mod(cell_id + neighbor + vec2(-1.0, 0.0) + seed, scale)) - 0.5) * randomness * scale.y / 4.0);\n\t\tleft /= scale;\n\t\tvec2 right = cell_id + neighbor + vec2(1.0, 0.0) + vec2(0.5) + (vec2(0.0, skewed_brick_rand(mod(cell_id + neighbor + vec2(1.0, 0.0) + seed, scale)) - 0.5) * randomness * scale.y / 4.0);\n\t\tright /= scale;\n\t\t\n\t\t// Find the midpoint between current and left and a vector perpendicular to the vector between the two points\n\t\tvec2 left_midpoint = (left + point) / 2.0;\n\t\tvec2 left_perpendicular = perpendicular(point - left);\n\t\tvec2 left_2 = left_midpoint + left_perpendicular;\n\t\t// Do the same for midpoint to right point\n\t\tvec2 right_midpoint = (point + right) / 2.0;\n\t\tvec2 right_perpendicular = perpendicular(right - point);\n\t\tvec2 right_2 = right_midpoint + right_perpendicular;\n\t\t\n\t\tif (dist < min_distance) {\n\t\t\tmin_distance = dist;\n\t\t\tc_point = point;\n\t\t\tleft_top = get_line_intersection(left_midpoint, left_2, cell_id / scale, cell_id / scale + vec2(1.0, 0.0));\n\t\t\tright_top = get_line_intersection(right_midpoint, right_2, cell_id / scale, cell_id / scale + vec2(1.0, 0.0));\n\t\t\tright_bottom = get_line_intersection(right_midpoint, right_2, (cell_id + 1.0) / scale, (cell_id + 1.0) / scale + vec2(1.0, 0.0));\n\t\t\tleft_bottom = get_line_intersection(left_midpoint, left_2, (cell_id + 1.0) / scale, (cell_id + 1.0) / scale + vec2(1.0, 0.0));\n\t\t}\n\t}\n\n\t// The bricks skewed uv.x gradient\n\tfloat grad = (uv.x - mix(left_top.x, left_bottom.x, cell_uv.y)) / mix(right_top.x - left_top.x, right_bottom.x - left_bottom.x, cell_uv.y);\n\t\n\tbrick_uv = vec3(grad, cell_uv.y, skewed_brick_rand(fract(c_point)));\n\t\n\tcorner_uv.xy = scale.yx / corner / 8.0 * (1.0 - (2.0 * abs(brick_uv.xy - 0.5)));\n\tcorner_uv.x = brick_uv.x < 0.5 ? corner_uv.x : 1.0 - corner_uv.x;\n\tcorner_uv.y = brick_uv.y < 0.5 ? corner_uv.y : 1.0 - corner_uv.y;\n\tcorner_uv.z = skewed_brick_rand( floor(brick_uv.xy * 2.0) + fract(c_point) );\n\t\n\t// Calculate bounding box\n\tbrick_fill.x = min(left_top.x, left_bottom.x);\n\tbrick_fill.y = min(left_top.y, right_top.y);\n\tbrick_fill.z = max(right_top.x, right_bottom.x);\n\tbrick_fill.z = brick_fill.z - brick_fill.x;\n\tbrick_fill.w = 1.0 / scale.y;\n\tbrick_fill.xy = fract(brick_fill.xy);\n\t// Calculate corner bounding box\n\tfloat half_corner_size = 1.0 / scale.y * corner * 0.5;\n\tvec2 top_centers = brick_uv.x < 0.5 ? left_top + (normalize(left_bottom - left_top) + vec2(1.0, 0.0)) * half_corner_size : right_top + (normalize(right_bottom - right_top) - vec2(1.0, 0.0)) * half_corner_size; \n\tvec2 bottom_centers = brick_uv.x < 0.5 ? left_bottom + (normalize(left_top - left_bottom) + vec2(1.0, 0.0)) * half_corner_size : right_bottom + (normalize(right_top - right_bottom) - vec2(1.0, 0.0)) * half_corner_size; \n\tcorner_fill.xy = brick_uv.y < 0.5 ? top_centers : bottom_centers;\n\tcorner_fill.xy -= half_corner_size;\n\tcorner_fill.zw = vec2(half_corner_size * 2.0);\n\tcorner_fill = fract(corner_fill);\n\tcorner_fill *= 4096.0;\n\tcorner_fill = round(corner_fill);\n\tcorner_fill /= 4096.0;\n\t// Round values to avoid precission errors\n\tbrick_fill *= 4096.0;\n\tbrick_fill = round(brick_fill);\n\tbrick_fill /= 4096.0;\n\t\n\t// Render the brick\n\tfloat brick_height = 1.0 / scale.y;\n\tround /= brick_height;\n\tmortar /= brick_height;\n\tbevel /= brick_height;\n\t\n\tfloat color;\n\tvec2 d = (min(brick_uv.xy, 1.0 - brick_uv.xy) * -2.0)*scale.yx+vec2(round+mortar);\n    color = length(max(d,vec2(0))) + min(max(d.x,d.y),0.0)-round;\n\tcolor = clamp(-color/bevel, 0.0, 1.0);\n\t\n\treturn color;\n}",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "5:",
+				"longdesc": "A map that affects the Mortar parameter",
+				"name": "mortar_map",
+				"shortdesc": "Mortar Map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel Map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Round parameter",
+				"name": "round_map",
+				"shortdesc": "Round Map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates running bond bricks patterns where the vertical cuts are skewed.",
+		"name": "Skewed Bricks",
+		"outputs": [
+			{
+				"f": "$(name_uv)_bricks",
+				"longdesc": "A greyscale image that shows the bricks pattern",
+				"shortdesc": "Bricks Pattern",
+				"type": "f"
+			},
+			{
+				"longdesc": "A UV layout that exactly matches the skewed brick, use this output with the Custom UV node.",
+				"rgb": "$(name_uv)_brick_uv",
+				"shortdesc": "Skewed Bricks UV",
+				"type": "rgb"
+			},
+			{
+				"longdesc": "A UV layout that exactly matches the skewed brick's corners, use this output with the Custom UV node. For a perfectly square corner uv, use the Corner Fill output and Fill to UV node.",
+				"rgb": "$(name_uv)_corner_uv",
+				"shortdesc": "Skewed Corner UV",
+				"type": "rgb"
+			},
+			{
+				"fill": "$(name_uv)_brick_fill",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Brick Fill",
+				"type": "fill"
+			},
+			{
+				"fill": "$(name_uv)_corner_fill",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Corner Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 6,
+				"label": "Rows",
+				"longdesc": "The number of rows of a pattern",
+				"max": 64,
+				"min": 0,
+				"name": "rows",
+				"shortdesc": "Rows",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 3,
+				"label": "Columns",
+				"longdesc": "The number of columns of a pattern",
+				"max": 64,
+				"min": 0,
+				"name": "columns",
+				"shortdesc": "Columns",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Offset",
+				"longdesc": "The offset of the pattern",
+				"max": 1,
+				"min": 0,
+				"name": "offset",
+				"shortdesc": "Offset",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Randomness",
+				"longdesc": "The randomness of the pattern",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"shortdesc": "Randomness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Mortar",
+				"longdesc": "The width of the space between bricks",
+				"max": 1,
+				"min": 0,
+				"name": "mortar",
+				"shortdesc": "Mortar",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Bevel",
+				"longdesc": "The width of the edge of each brick",
+				"max": 1,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Round",
+				"longdesc": "The radius of the round corners of bricks",
+				"max": 1,
+				"min": 0,
+				"name": "round",
+				"shortdesc": "Round",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Corner",
+				"longdesc": "The size of the corner part of each brick (only used to calculate the Corner UV  and Corner Fill outputs)",
+				"max": 1,
+				"min": 0,
+				"name": "corner",
+				"shortdesc": "Corner",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Skewed Bricks"
+	},
+	"type": "shader"
+}
