@@ -96,7 +96,7 @@
 				"type": "boolean"
 			}
 		],
-		"shortdesc": "Swirl++"
+		"shortdesc": "Swirl"
 	},
 	"type": "shader"
 }
