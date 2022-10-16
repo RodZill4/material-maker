@@ -65,7 +65,7 @@ margin_bottom = 496.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
+columns = 3
 select_mode = 1
 script = ExtResource( 4 )
 

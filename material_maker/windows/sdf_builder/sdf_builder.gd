@@ -232,7 +232,7 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	if item_icon != null:
 		item.set_icon(0, item_icon)
 	i.index = item.get_instance_id()
-	item.add_button(1, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
+	item.add_button(2, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
 	item.set_meta("scene", i)
 	set_sdf_scene(i.children, item)
 	if i.has("collapsed") and i.collapsed:
@@ -591,10 +591,10 @@ func _on_Tree_button_pressed(item, _column, _id):
 	var item_scene : Dictionary = item.get_meta("scene")
 	if item_scene.has("hidden") and item_scene.hidden:
 		item_scene.erase("hidden")
-		item.set_button(1, 0, BUTTON_SHOWN)
+		item.set_button(2, 0, BUTTON_SHOWN)
 	else:
 		item_scene.hidden = true
-		item.set_button(1, 0, BUTTON_HIDDEN)
+		item.set_button(2, 0, BUTTON_HIDDEN)
 	set_preview(scene)
 
 func set_node_parameters(generator, parameters):
@@ -618,7 +618,7 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	var new_item : TreeItem = tree.create_item(parent, index)
 	new_item.set_text(0, item.get_text(0))
 	new_item.set_icon(0, item.get_icon(0))
-	new_item.add_button(1, item.get_button(1, 0), 0)
+	new_item.add_button(2, item.get_button(2, 0), 0)
 	new_item.set_meta("scene", item.get_meta("scene"))
 	var c : TreeItem = item.get_children()
 	while c != null:
