@@ -517,6 +517,7 @@ func set_parameter_expression(value : String, item_scene : Dictionary, param_nam
 
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
+	$GenSDF.set_parameter(variable, new_value)
 	var item : TreeItem = instance_from_id(variable.right(1).to_int())
 	var parameter_name : String = variable.right(variable.find("_")+1)
 	item.get_meta("scene").parameters[parameter_name] = value
