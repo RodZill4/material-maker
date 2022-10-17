@@ -25,8 +25,6 @@ func mod_code(scene : Dictionary, output_name : String, editor : bool) -> String
 	for s in scene.children:
 		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category != "TEX":
 			continue
-		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category != "TEX":
-			continue
 		var ctxt : Dictionary = { uv=output_name+"_p", geometry="sdf3d", type="float", glsl_type="float" }
 		var distort_map : String = mm_sdf_builder.get_color_code(s, ctxt, editor)
 		if distort_map != "":
