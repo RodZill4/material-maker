@@ -19,8 +19,11 @@ func _ready():
 
 func on_drop_image_file(file_name : String) -> void:
 	var t : ImageTexture = ImageTexture.new()
-	t.load(file_name)
-	add_reference(t)
+	var status = t.load(file_name)
+	if status == OK:
+		add_reference(t)
+	else:
+		print("Error loading %s (%d)"% [ file_name, status ])
 
 func add_reference(t : Texture) -> void:
 	images.insert(current_image+1, { texture=t, scale=1.0, center=Vector2(0.5, 0.5) })
@@ -29,6 +32,8 @@ func add_reference(t : Texture) -> void:
 func get_color_under_cursor() -> Color:
 	var image : Image = get_viewport().get_texture().get_data()
 	var pos = get_global_mouse_position()
+	pos *= image.get_size()
+	pos /= get_viewport_rect().size
 	pos.y = image.get_height() - pos.y
 	image.lock()
 	var c = image.get_pixelv(pos)
