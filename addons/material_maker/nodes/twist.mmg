@@ -1,0 +1,73 @@
+{
+	"name": "twist",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"angle": 0,
+		"axis": 0
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_p = $uv;\n$axis;\n",
+		"global": "",
+		"includes": [
+			"rotate"
+		],
+		"inputs": [
+			{
+				"default": "vec2(0.0)",
+				"label": "",
+				"name": "in",
+				"shortdesc": "SDF3D Input",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Type - SDF3D Operator\nCode - PauloFalcao\n\nTwist a SDF3D on the specified axis by an angle.",
+		"name": "Twist",
+		"outputs": [
+			{
+				"sdf3d": "$in($(name_uv)_p)",
+				"shortdesc": "SDF3D Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 2,
+				"label": "Axis",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "$(name_uv)_p.yz=rotate($(name_uv)_p.yz, $(name_uv)_p.x*$angle*0.01745329251)"
+					},
+					{
+						"name": "Y",
+						"value": "$(name_uv)_p.zx=rotate($(name_uv)_p.zx, $(name_uv)_p.y*$angle*0.01745329251)"
+					},
+					{
+						"name": "Z",
+						"value": "$(name_uv)_p.xy=rotate($(name_uv)_p.xy, $(name_uv)_p.z*$angle*0.01745329251)"
+					}
+				]
+			},
+			{
+				"control": "Angle1.a",
+				"default": 0,
+				"label": "Angle",
+				"max": 360,
+				"min": -360,
+				"name": "angle",
+				"step": 0.1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Twist"
+	},
+	"type": "shader"
+}
