@@ -6,6 +6,7 @@ signal drop_item(item, dest, position)
 
 func _ready():
 	set_column_expand(1, false)
+	set_column_min_width(1, 28)
 	set_column_expand(2, false)
 	set_column_min_width(2, 28)
 

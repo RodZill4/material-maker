@@ -347,7 +347,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	data.index = item.get_instance_id()
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
-	item.add_button(1, BUTTON_SHOWN, 0)
+	item.add_button(2, BUTTON_SHOWN, 0)
 	set_preview(scene)
 	item.select(0)
 
@@ -521,8 +521,10 @@ func _on_value_changed(new_value, variable : String) -> void:
 	var parameter_name : String = variable.right(variable.find("_")+1)
 	item.get_meta("scene").parameters[parameter_name] = value
 	set_preview(scene)
+	call_deferred("_on_Tree_item_selected")
 
 func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : String = "") -> void:
+	print(variable+" = "+str(new_value))
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, new_value)
 	set_node_parameters($GenSDF, { variable:new_value })
@@ -596,6 +598,7 @@ func _on_Tree_button_pressed(item, _column, _id):
 		item_scene.hidden = true
 		item.set_button(2, 0, BUTTON_HIDDEN)
 	set_preview(scene)
+	_on_Tree_item_selected()
 
 func set_node_parameters(generator, parameters):
 	var parameters_changed : bool = false
