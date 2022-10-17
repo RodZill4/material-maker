@@ -46,7 +46,6 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.DIST_FCT = node_prefix+"_d"
 		variables.COLOR_FCT = node_prefix+"_c"
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
-
 		material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
 
 var setup_controls_filter : String = ""

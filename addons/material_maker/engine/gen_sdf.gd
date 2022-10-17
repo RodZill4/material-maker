@@ -28,31 +28,6 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 				defs.push_back(p)
 		return defs
 
-func get_output_defs__(_show_hidden : bool = false) -> Array:
-	var outputs : Array
-	var rgba_output : String
-	var color_output : String
-	var gs_output : String
-	match get_scene_type():
-		"SDF3D":
-			outputs = [ { type="sdf3d" } ]
-			rgba_output = "tex3d"
-			color_output = "tex3d"
-			gs_output = "tex3d_gs"
-		_:
-			if editor:
-				outputs = [ { type="rgb" } ]
-			else:
-				outputs = [ { type="sdf2d" } ]
-			rgba_output = "rgba"
-			color_output = "color"
-			gs_output = "float"
-	outputs.push_back({type=rgba_output})
-	outputs.push_back({type=gs_output})
-	outputs.push_back({type=gs_output})
-	outputs.push_back({type=color_output})
-	return outputs
-
 func get_scene_type() -> String:
 	if scene.empty():
 		return ""
@@ -176,10 +151,11 @@ func set_sdf_scene(s : Array):
 			shader_model.outputs.push_back({ f = "$(name_uv)_roughness", type = "f", shortdesc="Roughness" })
 			shader_model.outputs.push_back({ rgb = "$(name_uv)_emission", type = "rgb", shortdesc="Emission" })
 	for p in parameter_defs:
-		if p.type == "float" and p.default is int:
-			parameters[p.name] = float(p.default)
-		else:
-			parameters[p.name] = p.default
+		if ! parameters.has(p.name):
+			if p.type == "float" and p.default is int:
+				parameters[p.name] = float(p.default)
+			else:
+				parameters[p.name] = p.default
 	if editor and expressions:
 		for p in parameter_defs:
 			if p.has("parmexpr"):
