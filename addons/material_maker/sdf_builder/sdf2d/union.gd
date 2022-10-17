@@ -50,7 +50,7 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return ""
 
-func mod_code(output_name : String) -> String:
+func mod_code(scene : Dictionary, output_name : String, editor : bool) -> String:
 	return ""
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
@@ -61,7 +61,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	data.code += "%s_p = rotate(%s_p, radians($angle))/$scale;\n" % [ output_name, output_name ]
 	data.code += mod_uv_code(scene, output_name)
 	shape_and_children_code(scene, data, "%s_p" % output_name, editor)
-	data.code += mod_code(output_name)
+	data.code += mod_code(scene, output_name, editor)
 	data.code += "%s *= $scale;\n" % output_name
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
@@ -77,7 +77,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 			color_code += child_color_code+"\n"
 	if color_code == "":
 		return ""
-	if ctxt.has("check") and !ctxt.check:
+	if ctxt.has("check") and ! ctxt.check:
 		return "{\n%s}\n" % [ color_code ]
 	else:
 		return "if (_n%d < 0.0) {\n%s}\n" % [ scene.index, color_code ]

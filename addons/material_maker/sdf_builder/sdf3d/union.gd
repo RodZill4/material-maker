@@ -52,7 +52,7 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 func mod_uv_code(_scene : Dictionary, output_name : String) -> String:
 	return ""
 
-func mod_code(output_name : String) -> String:
+func mod_code(scene : Dictionary, output_name : String, editor : bool) -> String:
 	return ""
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
@@ -64,17 +64,22 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	data.code += "%s_p /= $scale;\n" % [ output_name ]
 	data.code += mod_uv_code(scene, output_name)
 	shape_and_children_code(scene, data, "%s_p" % output_name, editor)
-	data.code += mod_code(output_name)
+	data.code += mod_code(scene, output_name, editor)
 	data.code += "%s *= $scale;\n" % output_name
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
+
+func get_coloring_tolerance() -> String:
+	return "0.001"
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
 	var color_code : String = ""
 	var ctxt2 : Dictionary = ctxt.duplicate()
 	ctxt2.local_uv = "$(name_uv)_n%d_p" % scene.index
 	for s in scene.children:
+		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category == "TEX":
+			continue
 		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
 		if child_color_code != "":
 			color_code += child_color_code+"\n"
@@ -83,4 +88,4 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	if ctxt.has("check") and !ctxt.check:
 		return "{\n%s}\n" % [ color_code ]
 	else:
-		return "if (_n%d < 0.001) {\n%s}\n" % [ scene.index, color_code ]
+		return "if (_n%d < %s) {\n%s}\n" % [ scene.index, get_coloring_tolerance(), color_code ]

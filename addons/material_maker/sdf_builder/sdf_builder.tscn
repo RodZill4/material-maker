@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=59 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -44,6 +44,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" type="Script" id=42]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/pattern.gd" type="Script" id=43]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/blend.gd" type="Script" id=44]
+[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/distort.gd" type="Script" id=45]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -402,6 +403,11 @@ item_category = "SDF3D"
 [node name="Morph" type="Node" parent="SDF3D/Alter"]
 script = ExtResource( 32 )
 item_type = "Morph3D"
+item_category = "SDF3D"
+
+[node name="Distort" type="Node" parent="SDF3D/Alter"]
+script = ExtResource( 45 )
+item_type = "Distort3D"
 item_category = "SDF3D"
 
 [node name="Color" type="Node" parent="SDF3D"]
