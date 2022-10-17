@@ -524,7 +524,6 @@ func _on_value_changed(new_value, variable : String) -> void:
 	call_deferred("_on_Tree_item_selected")
 
 func _on_float_value_changed(new_value, _merge_undo : bool = false, variable : String = "") -> void:
-	print(variable+" = "+str(new_value))
 	ignore_parameter_change = variable
 	$GenSDF.set_parameter(variable, new_value)
 	set_node_parameters($GenSDF, { variable:new_value })

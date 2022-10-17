@@ -308,6 +308,12 @@ item_type = "Capsule"
 item_category = "SDF3D"
 shape = 1
 
+[node name="Cone" type="Node" parent="SDF3D/Shape"]
+script = ExtResource( 35 )
+item_type = "Cone"
+item_category = "SDF3D"
+shape = 3
+
 [node name="Pyramid" type="Node" parent="SDF3D/Shape"]
 script = ExtResource( 35 )
 item_type = "Pyramid"
