@@ -12,7 +12,7 @@ float raymarch(vec3 ro, vec3 rd) {
 		vec3 p = ro + rd*d;
 		float dstep = calcdist(p);
 		d += dstep;
-		if (dstep < 0.0001) break;
+		if (abs(dstep) < 0.001) break;
 	}
 	return d;
 }
