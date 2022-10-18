@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/windows/sdf_builder/preview_2d.tscn" type="PackedScene" id=2]
@@ -20,10 +20,14 @@ void fragment() {
 resource_local_to_scene = true
 shader = SubResource( 1 )
 
+[sub_resource type="ButtonGroup" id=4]
+
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 48, 0, 16, 16 )
+
+[sub_resource type="ButtonGroup" id=5]
 
 [node name="Control" type="WindowDialog"]
 anchor_right = 1.0
@@ -60,7 +64,7 @@ __meta__ = {
 }
 
 [node name="Tree" type="Tree" parent="VBoxContainer/Main"]
-margin_right = 261.0
+margin_right = 302.0
 margin_bottom = 496.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
@@ -73,8 +77,8 @@ script = ExtResource( 4 )
 material = SubResource( 2 )
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 265.0
-margin_right = 788.0
+margin_left = 306.0
+margin_right = 911.0
 margin_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -91,8 +95,9 @@ size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Main"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 915.0
+margin_right = 1054.0
+margin_bottom = 496.0
 scroll_horizontal_enabled = false
 
 [node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main/ScrollContainer"]
@@ -101,37 +106,41 @@ margin_bottom = 79.0
 custom_constants/separation = 1
 
 [node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_right = 136.0
+margin_right = 139.0
 margin_bottom = 24.0
+group = SubResource( 4 )
 text = "Node Parameters"
 
 [node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_left = 792.0
-margin_right = 1054.0
-margin_bottom = 496.0
+margin_top = 25.0
+margin_right = 139.0
+margin_bottom = 25.0
 columns = 7
 
 [node name="Button" type="Button" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_left = 792.0
-margin_right = 804.0
-margin_bottom = 20.0
+margin_top = 26.0
+margin_right = 28.0
+margin_bottom = 48.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = SubResource( 3 )
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_right = 40.0
-margin_bottom = 4.0
+margin_top = 49.0
+margin_right = 139.0
+margin_bottom = 53.0
 
 [node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_right = 24.0
-margin_bottom = 24.0
+margin_top = 54.0
+margin_right = 139.0
+margin_bottom = 78.0
+group = SubResource( 5 )
 text = "Item Parameters"
 
 [node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_left = 792.0
-margin_right = 1054.0
-margin_bottom = 496.0
+margin_top = 79.0
+margin_right = 139.0
+margin_bottom = 79.0
 columns = 3
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
