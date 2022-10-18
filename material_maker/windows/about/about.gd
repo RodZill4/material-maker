@@ -6,10 +6,11 @@ onready var patrons_list = $HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBo
 
 const CONTRIBUTORS = [
 	{ name="Rodolphe Suescun", contribution="Lead developer" },
-	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones, Mask to SDF and Normal Blend) and node updates, and very nice video tutorials" },
+	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones, Mask to SDF, Normal Blend and many Bricks nodes) and node updates, and very nice video tutorials" },
 	{ name="Hugo Locurcio", contribution="Lots of contributions, mostly related to rendering and user interface" },
 	{ name="Roujel Williams", contribution="Curvature, Ambient Occlusion and Thickness maps generation" },
 	{ name="wojtekpil", contribution="Multiwarp, HBAO and Denoiser nodes as well as fixes in baker tools" },
+	{ name="williamchange", contribution="Several nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates" },
 	{ name="GoldenThumbs", contribution="Wavefront (OBJ) model loader" },
 	{ name="Bonbonmiel", contribution="Many user interface improvements (in Nodes popup, 3D preview...)" },
 	{ name="Donald Mull Jr.", contribution="Export for Unity HDRP" },
@@ -21,7 +22,6 @@ const CONTRIBUTORS = [
 	{ name="Tarox", contribution="Material Maker icon and lots of very useful feedback" },
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes" },
 	{ name="Zhibade", contribution="Auto size new comment nodes to current selection" },
-	{ name="williamchange", contribution="Seven Segment Display node" },
 	{ name="Theaninova", contribution="Spiral Gradient node" },
 	{ name="Variable", contribution="UI fixes" },
 	{ name="jeremybeier", contribution="Unity export fixes" },

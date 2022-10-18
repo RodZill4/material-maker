@@ -4,12 +4,11 @@ Updated 2022/10/05
 
 ## General
 
-- Material Maker is now based on Godot 3.5.
 - Updated renderer to limit the size of rendering viewports (big textures are rendered in chunks and reassembled).
-  This reduces crashes on lower end GPU and/or when generating high resolution textures. The maximum render size
-  can be configured in the progress counter context menu.
+  This can be used to avoid crashes on lower end GPU and/or when generating high resolution textures. The maximum
+  render size can be configured in the progress counter context menu.
 - Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
-  can be used to know if Material Maker uses the integrated graphics on a laptop).
+  can be used to know if Material Maker runs on the integrated graphics on a laptop).
 - In Graph views, added support for arrow keys to scroll in all directions (useful when connecting nodes that
   are far from each other).
 - Buffer nodes and nodes that contain buffers are now shown with a specific icon. Right clicking that icon
@@ -19,14 +18,18 @@ Updated 2022/10/05
   the bottom of the user interface.
 - Added a small icon in the status bar that shows the status of the clipboard (and if it can be pasted into
   a graph view).
+- Started adding tips to the status bar.
 - Added an option for Tonemaps in the 3D Preview panel.
+- Added an option to overwrite existing material files (.tres for Godot engine, .mat and .meta for
+  Unity engine) when re-exporting materials.
+- Added Godot 4 export targets to all material types (contributed by Arnklit).
 
 ## Nodes
 
 - Updated the EasySDF node with support for coloring (of albedo, roughness, metallic and emission channels)
-  and node parameters.
+  and node parameters, and added more shapes and operators.
 - Added additional modes to **Math** node (contributed by williamchange).
-- Updated the iteration buffer with an autostop parameter. When set, the Iteration Buffer will stop iterating
+- Updated the **Iteration Buffer** with an autostop parameter. When set, the Iteration Buffer will stop iterating
   as soon as 2 consecutive results are identical.
 - Added a Fill port type that is used as output of the **Fill** node (and nodes that generate fill information)
   and input of the Fill companion nodes.
@@ -39,8 +42,12 @@ Updated 2022/10/05
 - Added **Triangle Voronoi** node (contributed by williamchange).
 - Added **Sixteen Segment Display** and **Roman Numerals** nodes (contributed by williamchange).
 - Added **Japanese Glyphs** node (contributed by williamchange).
-- Added **Uneven Bricks 3** node (contributed by Arnklit).
+- Added **Uneven Bricks 3**, **Uneven Bricks 4** and **Uneven Bricks 5** nodes (contributed by Arnklit).
 - Added **Swirl** node.
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 3.5.
 
 ## Fixes, optimizations
 
