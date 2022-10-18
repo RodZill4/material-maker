@@ -88,9 +88,10 @@ shader_divide = "shader_type canvas_item;
 
 uniform sampler2D sum;
 uniform int divide = 1;
+uniform float exponent = 1.0;
 
 void fragment() {
-	COLOR = vec4(texture(sum, UV).rgb/float(divide), 1.0);
+	COLOR = vec4(pow(texture(sum, UV).rgb/float(divide), vec3(exponent)), 1.0);
 }"
 control_target = NodePath("")
 
@@ -268,7 +269,7 @@ items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 [node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false, "Temporal AA 2.2", null, 2, false, false, 4, 0, null, "", false ]
 
 [node name="Guides" type="PopupMenu" parent="ContextMenu" index="2"]
 margin_right = 91.0
