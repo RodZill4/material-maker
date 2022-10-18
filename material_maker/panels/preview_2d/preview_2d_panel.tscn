@@ -314,6 +314,7 @@ margin_bottom = 88.0
 [node name="Accumulate" type="Viewport" parent="." index="16"]
 size = Vector2( 2, 2 )
 handle_input_locally = false
+use_32_bpc_depth = true
 disable_3d = true
 keep_3d_linear = true
 render_target_v_flip = true
