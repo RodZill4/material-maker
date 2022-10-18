@@ -27,15 +27,16 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	var ctxt2 : Dictionary = ctxt.duplicate(true)
 	ctxt2.type = "rgba"
 	if scene.children.empty():
-		tex = "$color1"
+		tex = "vec4(1.0)"
 	else:
 		tex = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor)
-		if scene.children.size() > 1:
-			var tex2 : String = mm_sdf_builder.get_color_code(scene.children[1], ctxt2, editor)
+		for i in range(1, scene.children.size(), 2):
+			ctxt2.type = "rgba"
+			var tex2 : String = mm_sdf_builder.get_color_code(scene.children[i], ctxt2, editor)
 			var mask : String = "0.5"
-			if scene.children.size() > 2:
+			if scene.children.size() > i+1:
 				ctxt2.type = "float"
-				mask = mm_sdf_builder.get_color_code(scene.children[2], ctxt2, editor)
+				mask = mm_sdf_builder.get_color_code(scene.children[i+1], ctxt2, editor)
 			tex = "mix("+tex+", "+tex2+", "+mask+")"
 	match ctxt.type:
 		"rgba":
