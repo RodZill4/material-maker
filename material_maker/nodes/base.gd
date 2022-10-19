@@ -273,7 +273,6 @@ func _on_gui_input(event) -> void:
 			doubleclicked = false
 			if generator is MMGenGraph:
 				get_parent().call_deferred("update_view", generator)
-				accept_event()
 			elif generator is MMGenSDF:
 				edit_generator()
 	elif event is InputEventMouseMotion:
