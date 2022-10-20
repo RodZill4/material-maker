@@ -16,7 +16,7 @@ const CONTRIBUTORS = [
 	{ name="Donald Mull Jr.", contribution="Export for Unity HDRP" },
 	{ name="Metin ÇETİN", contribution="Add node popup menu" },
 	{ name="Jack Perkins", contribution="User interface improvements" },
-	{ name="Paulo Falcao", contribution="Preview for v4v4 input/outputs and lots of ideas/feedback for SDF nodes" },
+	{ name="Paulo Falcao", contribution="Preview for v4v4 input/outputs, Temporal Anti Aliasing and lots of ideas/feedback for SDF nodes" },
 	{ name="Jesse Dubay", contribution="3D preview and user interface improvements, Colormap node" },
 	{ name="escargot-sans-gluten", contribution="3D preview and user interface improvements" },
 	{ name="Tarox", contribution="Material Maker icon and lots of very useful feedback" },
