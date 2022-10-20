@@ -75,10 +75,10 @@ uniform vec2 preview_2d_center = vec2(0.5);
 
 void fragment() {
 	vec2 exy = UV*preview_2d_size + vec2(676.0,807.0);
-	vec2 t = mod(TIME+vec2(0.724079,0.325093),vec2(97.0,79.0))+vec2(83.235541,79.433931); 
-	vec2 rnds = fract(exy.x*vec2(0.00468887,0.00634141)*exy.y*vec2(0.00935653,0.00346097)*t);
-	rnds = fract( rnds*exy.x*vec2(0.00835019,0.00736577)*exy.y*vec2(0.00239233,0.00936437)*t*vec2(0.928001,0.135787));
-	rnds = (sin(rnds*vec2(468887.236017,269651.419473))*0.5)/preview_2d_size;
+	vec2 t = mod(TIME*vec2(0.724079,0.325093),vec2(9.1223,7.3947))+vec2(83.235541,79.433931); 
+   	vec2 rnds = fract(t*exy.x*exy.y*vec2(0.00004387155,0.00002194742));
+   	rnds = fract(t*rnds*exy.x*exy.y*vec2(0.00001853812,0.00003936601));
+	rnds = (sin(rnds*vec2(887.236017,651.419473))*0.5)/preview_2d_size;
 
 	vec2 uv = preview_2d_center+(UV+rnds-0.5)*preview_2d_scale*preview_2d_size/min(preview_2d_size.x, preview_2d_size.y);	
 	if (clear) {
@@ -87,7 +87,6 @@ void fragment() {
 		COLOR = textureLod(sum, UV, 0.0)+preview_2d(uv);
 	}
 }
-
 "
 shader_divide = "shader_type canvas_item;
 
