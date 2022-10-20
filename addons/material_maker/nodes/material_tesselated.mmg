@@ -36,7 +36,7 @@
 				"files": [
 					{
 						"conditions": "$(connected:albedo_tex)",
-						"file_name": "$(path_prefix)_albedo.exr",
+						"file_name": "$(path_prefix)_albedo.png",
 						"output": 0,
 						"type": "texture"
 					},
@@ -54,8 +54,8 @@
 					},
 					{
 						"conditions": "$(connected:normal_tex)",
-						"file_name": "$(path_prefix)_normal.exr",
-						"output": 10,
+						"file_name": "$(path_prefix)_normal.png",
+						"output": 7,
 						"type": "texture"
 					},
 					{
@@ -72,7 +72,7 @@
 					},
 					{
 						"conditions": "$(connected:emission_tex)",
-						"file_name": "$(path_prefix)_emission.exr",
+						"file_name": "$(path_prefix)_emission.png",
 						"output": 2,
 						"type": "texture"
 					},

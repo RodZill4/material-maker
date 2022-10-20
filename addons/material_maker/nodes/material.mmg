@@ -55,7 +55,7 @@
 					{
 						"conditions": "$(connected:normal_tex)",
 						"file_name": "$(path_prefix)_normal.png",
-						"output": 10,
+						"output": 7,
 						"type": "texture"
 					},
 					{
