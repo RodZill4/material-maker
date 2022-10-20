@@ -1094,6 +1094,7 @@ func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
 	return return_value
 
 func on_files_dropped(files : PoolStringArray, _screen) -> void:
+	yield(get_tree(), "idle_frame")
 	var file : File = File.new()
 	for f in files:
 		if file.open(f, File.READ) != OK:
