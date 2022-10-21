@@ -18,7 +18,7 @@ Tree/colors/font_color = Color( 0.690196, 0.690196, 0.690196, 1 )
 Tree/colors/font_color_selected = Color( 1, 1, 1, 1 )
 Tree/colors/guide_color = Color( 0, 0, 0, 0.1 )
 Tree/colors/relationship_line_color = Color( 0.27451, 0.27451, 0.27451, 1 )
-Tree/colors/selection_color = Color( 0.1, 0.1, 1, 0.8 )
+Tree/colors/selection_color = Color( 0.101961, 0.101961, 1, 0.8 )
 Tree/colors/title_button_color = Color( 0.878431, 0.878431, 0.878431, 1 )
 Tree/constants/button_margin = 4
 Tree/constants/draw_guides = 1
@@ -60,5 +60,6 @@ script = ExtResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
+
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_double_clicked"]
 [connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]
