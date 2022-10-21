@@ -61,7 +61,9 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Iterate Buffer"
 
-func get_buffers() -> Array:
+func get_buffers(flags : int = BUFFERS_ALL) -> Array:
+	if ( is_paused and flags == BUFFERS_RUNNING ) or ( ! is_paused and flags == BUFFERS_PAUSED ):
+		return []
 	return [ self ]
 
 func get_parameter_defs() -> Array:

@@ -6,6 +6,10 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
+const BUFFERS_ALL     : int = 0
+const BUFFERS_PAUSED  : int = 1
+const BUFFERS_RUNNING : int = 2
+
 signal parameter_changed(n, v)
 signal rendering_time(t)
 
@@ -114,7 +118,7 @@ func toggle_lock_seed() -> bool:
 func is_seed_locked() -> bool:
 	return seed_locked
 
-func get_buffers() -> Array:
+func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 	return []
 
 func init_parameters() -> void:

@@ -79,10 +79,7 @@ func update():
 		randomness_button.hidden = true
 	buffer_button.hidden = generator.get_buffers().empty()
 	if ! buffer_button.hidden:
-		buffer_button.texture = BUFFER_ICON
-		for b in generator.get_buffers():
-			if b.is_paused:
-				buffer_button.texture = BUFFER_PAUSED_ICON
+		buffer_button.texture = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty() else BUFFER_PAUSED_ICON
 	.update()
 
 func _draw() -> void:
@@ -179,14 +176,15 @@ func _on_seed_menu(id):
 		2:
 			if OS.clipboard.left(5) == "seed=":
 				set_generator_seed(OS.clipboard.right(5).to_float())
+
 func _on_buffer_menu(id):
 	match id:
 		0:
-			for b in generator.get_buffers():
+			for b in generator.get_buffers(MMGenBase.BUFFERS_RUNNING):
 				b.set_paused(true)
 			update()
 		1:
-			for b in generator.get_buffers():
+			for b in generator.get_buffers(MMGenBase.BUFFERS_PAUSED):
 				b.set_paused(false)
 			update()
 
@@ -219,8 +217,10 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 		match event.button_index:
 			BUTTON_RIGHT:
 				var menu : PopupMenu = PopupMenu.new()
-				menu.add_item(tr("Pause buffers"))
-				menu.add_item(tr("Resume buffers"))
+				menu.add_item(tr("Pause buffers"), 0)
+				menu.set_item_disabled(0, generator.get_buffers(MMGenBase.BUFFERS_RUNNING).empty())
+				menu.add_item(tr("Resume buffers"), 1)
+				menu.set_item_disabled(1, generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty())
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
 				menu.connect("popup_hide", menu, "queue_free")
@@ -235,7 +235,7 @@ func update_button_tooltip(b : NodeButton) -> bool:
 		hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 		return true
 	elif b == buffer_button:
-		hint_tooltip = tr("%d buffer(s)") % generator.get_buffers().size()
+		hint_tooltip = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
 		return true
 	return false
 

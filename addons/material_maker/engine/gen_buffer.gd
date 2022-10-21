@@ -50,7 +50,9 @@ func set_paused(v : bool) -> void:
 	if ! v and need_update:
 		update_buffer()
 
-func get_buffers() -> Array:
+func get_buffers(flags : int = BUFFERS_ALL) -> Array:
+	if ( is_paused and flags == BUFFERS_RUNNING ) or ( ! is_paused and flags == BUFFERS_PAUSED ):
+		return []
 	return [ self ]
 
 func get_parameter_defs() -> Array:
