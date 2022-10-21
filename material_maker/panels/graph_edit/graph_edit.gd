@@ -1032,7 +1032,7 @@ func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
 					if ! last_action.redo_actions[0].positions.has(p):
 						last_action.redo_actions[0].positions[p] = a.positions[p]
 				return true
-			print("undo/redo for move nodes reset")
+			#print("undo/redo for move nodes reset")
 			undoredo_move_node_selection_changed = false
 	return false
 
@@ -1151,7 +1151,7 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 		_:
 			print("ERROR: Unsupported node type %s in undoredo_step_actions" % prev.type)
 			return {}
-	if top:
+	if false and top:
 		print("Undo actions:")
 		print(undo_actions)
 		print("Redo actions:")
