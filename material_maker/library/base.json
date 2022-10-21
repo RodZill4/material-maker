@@ -7377,6 +7377,18 @@
 			"seed_locked": false,
 			"tree_item": "Transform/Swirl",
 			"type": "swirl"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAABY5JREFUaIHtWl1vokwUBuVzBhgBRfzq1nSTpv8/6UVvetc/sT+gm9RqraIIAntx4rzzIl8ibNNknwtjyZxznmfOmZkzVI775uDb8svzkiR1u12O447HYxAEbQVq3CMhxDAMjLEsy1SA7/ue531+fm42m2bDNSlA1/XBYGBZFiEEY6woiiAIHMeFYej7/na7/fj4WC6Xb29vu92uqaBCU44cx3Fd13Gcfr/f6/V0XVdVVRCEJEmOx+Nut9tsNqvVarFYYIx///69XC4biduMANd1p9PpeDx2XReSYBgGQkgUxSRJwjD0PG+9Xi+XSxAmiiLP8+/v79eHbkCAbdvj8Xg6nYKG4XAIScAYi6LIcdzhcPA8b7Vavb29IYQkSeJ5HjKzXq+/WABCyHXd0WjEanAcx7IsXdclSeI4zvf9z8/P5XKpaZosy51OJ45jWBie5x2Px68U0O/3B4PBcDgEDbPZbDqduq6LEKJjJEkyDIMQQtkHQbDf7z3P22w2r6+v1xDoXmOs6/pkMpmeMJvNbm5uZrOZoijng2VZVlUV5j4Mw8Ph4Ps+JCeKotocrhLgOM6EAWhg5z4FSZI6nU4QBL7v7/d73/d3u53neZ7n1ebQqW0piqJhGFAbvV7PNE2o+2Ir27YtyzJNs9frEULg1KvNgbtGgKZpuq7ruk5lEEKqGAJpwzB0XQcnGOPaNOoLwBhjjDVNg0+gUsVQO4Gaf40AdALGGD47nUreFEXBJ1AntWnUFECps1RqmyOEoGuqgZoC2OzT79XNaQnVM2dRUwBdf8YJsixXN9c0jRpSV/WY1BGg63qPgWVZtm1f6gT2U9bPRVNAUecgg7YHzt3b29vb21vLsi51oigKtNkAONdqXHcuFgCd883NzY8fP+bz+c+fP+fz+aVOAIZh7E84HA5hGEKPdJGTCwTwPD8ajejcA/v7+3vomWuA53lZlmHugyCAjiiKoovua1UFEELYhgcE3N3d1ah+Fqqqwo05DMM4jnmeFwRBFEXoWKt4KBGAEDJN03Xd8Xg8Go1YDVBCcG2/BqIoggCO4zqdjiiK0LfCjTSO4+ILQ+7xMZlM6HED2yW0a3D3dV233+/DfeVKwKsAz/OiKOp2u6qqGobx8fEBrzDoEn99fY3juKoAuGe5rquqKkII9mlCiGmatm07jjMcDmvsPHmwLGu328VxLIoiQsgwDGAPnfZ+v99sNtvtNvP+mS0giqLj8ahp2nw+V1UVDktWQ7/fv6aBSYEQEgQBvAvDGBNCgDFMv+/7Ly8veZeebAFxHEdRFEWRIAh3d3cpDdDKN8UeMBgMut2uoihwSrLsn5+fgcwFAqL/Yz6fw3qAHqb2vlkMy7Jg+oE9nA9PT0/AIXMB5AqI45gmIYoi3/cfHh4yb7rNQpZlWZZt2wb2j4+PlH1eBnJ7IWoG2G63rdHOgKqqv379Ag6URubIIgFV7FvCarVKVUGSJJkjSwSwMlpje1X0XAHxCdRRO1SzQXmX5r88A9RRO1SzwU7ct8xAzKBgD+VKBXxVBti4BXsoVywg5aUdqrnRU8gbWV5C31hAkiSsi7yduA2kQtfPQMpRO2xzo1MOBXNXXkKshnbYVoqeNzJXAMs7OaEdthmhKUqrt2QNsF7+WgbO565mBtgJ+MIM1FwDrHHpNDSL87jXllCpl2Zx0dyVlFAK7RC+KvQ/AS2gGQEpR/Bn82Rz4p5Hz0NRBqp7aRypoPUzkOmubaTS3kAJ0e+Nc82Le04gDyX/3GRdLBaLxWIBz3k++7dqec8z+RU8r15CRQJYs6bYFxM6f16ahEoZKGVfnTrrufR5laItz8D7+zv9cVtT7FMhCh5em4FW2QNKNRSjKLxpmv+NOyNaSp0dUEoos/rp9/V6/Tfvg//wD98JfwB/XwR1Zkp6NQAAAABJRU5ErkJggg==",
+			"name": "sdshow2",
+			"parameters": {
+				"base": 0,
+				"bevel": 0.1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"tree_item": "Simple/SDF/sdShow/FixDist",
+			"type": "sdshow2"
 		}
 	],
 	"name": "Base library"
