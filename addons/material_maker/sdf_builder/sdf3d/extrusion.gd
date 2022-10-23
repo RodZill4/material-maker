@@ -28,9 +28,9 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[], outputs=[ { sdf3d=output_name, type="sdf3d" } ] }
 	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
-	data.code += "vec3 %s_p = %s;\n" % [ output_name, uv ]
+	data.code = "vec3 %s_p = %s;\n" % [ output_name, uv ]
 	if editor or mm_sdf_builder.check_non_zero_param(scene, "position_x") or mm_sdf_builder.check_non_zero_param(scene, "position_y") or mm_sdf_builder.check_non_zero_param(scene, "position_z"):
-		data.code = "%s_p -= vec3($position_x, $position_y, $position_z);\n" % output_name
+		data.code += "%s_p -= vec3($position_x, $position_y, $position_z);\n" % output_name
 	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene, editor)
 	if editor or mm_sdf_builder.check_non_zero_param(scene, "scale", 1.0):
 		data.code += "%s_p /= $scale;\n" % [ output_name ]
