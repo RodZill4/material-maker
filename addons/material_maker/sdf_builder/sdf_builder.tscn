@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -47,6 +47,7 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/distort.gd" type="Script" id=45]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/twist.gd" type="Script" id=46]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/torus.gd" type="Script" id=47]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform_gs.gd" type="Script" id=48]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -463,6 +464,11 @@ type = 1
 [node name="Uniform" type="Node" parent="Texture/Generator"]
 script = ExtResource( 38 )
 item_type = "Uniform"
+item_category = "TEX"
+
+[node name="GreyscaleUniform" type="Node" parent="Texture/Generator"]
+script = ExtResource( 48 )
+item_type = "GreyscaleUniform"
 item_category = "TEX"
 
 [node name="Pattern" type="Node" parent="Texture/Generator"]
