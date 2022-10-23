@@ -176,9 +176,15 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 		rv = replace_parameter_values(scene, rv)
 	return rv
 
-func generate_rotate_3d(variable, _scene) -> String:
+func check_non_zero_param(scene, param_name, zero : float = 0.0) -> bool:
+	return scene.has("parmexprs") and scene.parmexprs.has(param_name) or scene.has("parameters") and scene.parameters.has(param_name) and abs(scene.parameters[param_name]-zero) > 0.0001
+
+func generate_rotate_3d(variable, scene, editor : bool = true) -> String:
 	var rv : String = ""
-	rv += "%s.zx = rotate(%s.zx, radians($angle_y));\n" % [ variable, variable ]
-	rv += "%s.yz = rotate(%s.yz, radians($angle_x));\n" % [ variable, variable ]
-	rv += "%s.xy = rotate(%s.xy, radians($angle_z));\n" % [ variable, variable ]
+	if editor or check_non_zero_param(scene, "angle_y"):
+		rv += "%s.zx = rotate(%s.zx, radians($angle_y));\n" % [ variable, variable ]
+	if editor or check_non_zero_param(scene, "angle_x"):
+		rv += "%s.yz = rotate(%s.yz, radians($angle_x));\n" % [ variable, variable ]
+	if editor or check_non_zero_param(scene, "angle_z"):
+		rv += "%s.xy = rotate(%s.xy, radians($angle_z));\n" % [ variable, variable ]
 	return rv

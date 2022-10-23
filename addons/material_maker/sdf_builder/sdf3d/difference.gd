@@ -21,9 +21,12 @@ func get_includes():
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[], outputs=[ { sdf3d=output_name, type="sdf3d" } ] }
-	data.code = "vec3 %s_p = %s - vec3($position_x, $position_y, $position_z);\n" % [ output_name, uv ]
-	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene)
-	data.code += "%s_p /= $scale;\n" % [ output_name ]
+	data.code = "vec3 %s_p = %s;\n" % [ output_name, uv ]
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "position_x") or mm_sdf_builder.check_non_zero_param(scene, "position_y") or mm_sdf_builder.check_non_zero_param(scene, "position_z"):
+		data.code += "%s_p -= vec3($position_x, $position_y, $position_z);\n" % output_name
+	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene, editor)
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "scale", 1.0):
+		data.code += "%s_p /= $scale;\n" % [ output_name ]
 	data.code += "float %s = 0.0;" % output_name
 	var first : bool = true
 	for s in scene.children:
@@ -38,7 +41,8 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 					first = false
 				else:
 					data.code += "%s = max(%s, -(%s));\n" % [ output_name, output_name, data2.outputs[0].sdf3d ] 
-	data.code += "%s *= $scale;\n" % [ output_name ]
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "scale", 1.0):
+		data.code += "%s *= $scale;\n" % output_name
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
