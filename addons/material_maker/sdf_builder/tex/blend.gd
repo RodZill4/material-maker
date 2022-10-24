@@ -22,27 +22,23 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			data.parameters.append_array(data2.parameters)
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
-	var tex : String
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
+	var tex : String = "vec4(1.0)"
 	var ctxt2 : Dictionary = ctxt.duplicate(true)
 	ctxt2.type = "rgba"
-	if scene.children.empty():
-		tex = "vec4(1.0)"
-	else:
-		tex = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor)
+	if ! scene.children.empty():
+		tex = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor).color
 		for i in range(1, scene.children.size(), 2):
 			ctxt2.type = "rgba"
-			var tex2 : String = mm_sdf_builder.get_color_code(scene.children[i], ctxt2, editor)
+			var tex2 : String = mm_sdf_builder.get_color_code(scene.children[i], ctxt2, editor).color
 			var mask : String = "0.5"
 			if scene.children.size() > i+1:
 				ctxt2.type = "float"
-				mask = mm_sdf_builder.get_color_code(scene.children[i+1], ctxt2, editor)
+				mask = mm_sdf_builder.get_color_code(scene.children[i+1], ctxt2, editor).color
 			tex = "mix("+tex+", "+tex2+", "+mask+")"
 	match ctxt.type:
-		"rgba":
-			return tex
 		"color":
-			return "("+tex+").xyz" 
+			tex = "("+tex+").xyz" 
 		"float":
-			return "dot(("+tex+").xyz, vec3(1.0))/3.0"
-	return ""
+			tex = "dot(("+tex+").xyz, vec3(1.0))/3.0"
+	return { color = tex }

@@ -31,19 +31,17 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			data.parameters.append_array(data2.parameters)
 	return data
 
-func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }):
+func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }) -> String:
 	if ctxt.has("geometry") and ctxt.geometry == "sdf3d":
 		return "fbm3d_$noise("+ctxt.uv+", vec3($scale_x, $scale_y, $scale_z), int($iterations), $persistence, 0.0)"
 	else:
 		return "fbm_2d_$noise("+ctxt.uv+", vec2($scale_x, $scale_y), int($folds), int($iterations), $persistence, $offset, 0.0)"
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	var tex : String = get_color_code_gs(ctxt)
 	match ctxt.type:
 		"rgba":
-			return "vec4(vec3("+tex+"), 1.0)"
+			tex = "vec4(vec3("+tex+"), 1.0)"
 		"color":
-			return "vec3("+tex+")"
-		"float":
-			return tex 
-	return ""
+			tex = "vec3("+tex+")"
+	return { color = tex }

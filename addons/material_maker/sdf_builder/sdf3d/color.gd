@@ -26,18 +26,17 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, uv, editor)
 		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
-	data.code = "vec3 %s_p = %s;\n" % [ output_name, uv ]
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	if channel_name != ctxt.channel:
-		return ""
+		return {}
 	var ctxt2 : Dictionary = ctxt.duplicate()
 	ctxt2.geometry = "sdf3d"
 	if scene.parameters.has("local") and scene.parameters.local:
 		ctxt2.uv = ctxt.local_uv
 	for s in scene.children:
-		var color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
-		if color_code != "":
-			return ctxt.target+" = "+color_code+";"
-	return ""
+		var color_code : Dictionary = mm_sdf_builder.get_color_code(s, ctxt2, editor)
+		if ! color_code.empty():
+			return { color = ctxt.target+" = "+color_code.color+";" }
+	return {}

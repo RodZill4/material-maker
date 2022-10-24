@@ -11,5 +11,5 @@ func get_parameter_defs():
 func get_includes():
 	return [ ]
 
-func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }):
+func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }) -> String:
 		return "$value"

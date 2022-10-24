@@ -1,4 +1,4 @@
-extends "res://addons/material_maker/sdf_builder/base.gd"
+extends "res://addons/material_maker/sdf_builder/sdf2d/union.gd"
 
 func _ready():
 	pass # Replace with function body.
@@ -39,13 +39,3 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
-
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
-	var color_code : String = ""
-	for s in scene.children:
-		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt, editor)
-		if child_color_code != "":
-			color_code += child_color_code+"\n"
-	if color_code == "":
-		return ""
-	return "if (_n%d < 0.0) {\n%s}\n" % [ scene.index, color_code ]

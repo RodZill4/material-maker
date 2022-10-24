@@ -32,8 +32,8 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 		data.code += shape_code_pre(scene, uv)
 		data.code += "%s = %s;\n" % [ output_name, init_value ]
 		assigned = true
-	if editor:
-		data.code += "if (index == -%d) return %s*$scale;\n" % [ scene.index, output_name ]
+		if editor:
+			data.code += "if (index == -%d) return %s*$scale;\n" % [ scene.index, output_name ]
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, uv, editor)
 		if data2.has("parameters"):
@@ -67,17 +67,34 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	var color_code : String = ""
 	var ctxt2 : Dictionary = ctxt.duplicate()
 	ctxt2.local_uv = "$(name_uv)_n%d_p" % scene.index
-	for s in scene.children:
+	var colored_children : Array = []
+	var else_color : String = ""
+	var first : bool = true
+	for i in range(scene.children.size()):
+		var s = scene.children[scene.children.size() - i - 1]
+		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category == "TEX":
+			continue
 		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
-		if child_color_code != "":
-			color_code += child_color_code+"\n"
-	if color_code == "":
-		return ""
-	if ctxt.has("check") and ! ctxt.check:
-		return "{\n%s}\n" % [ color_code ]
-	else:
-		return "if (_n%d < 0.0) {\n%s}\n" % [ scene.index, color_code ]
+		if ! child_color_code.has("color"):
+			continue
+		if ! child_color_code.has("distance"):
+			if else_color == "":
+				else_color = child_color_code.color
+			continue
+		if first:
+			first = false
+		else:
+			color_code += " else "
+		color_code += "if (%s < 0.0) {\n%s\n}\n" % [ child_color_code.distance, child_color_code.color ]
+	if else_color != "":
+		if first:
+			color_code += "%s\n" % [ else_color ]
+		else:
+			color_code += " else {\n%s\n}" % [ else_color ]
+	elif first:
+		return { distance = "_n%d" % scene.index }
+	return { color = color_code, distance = "_n%d" % scene.index }

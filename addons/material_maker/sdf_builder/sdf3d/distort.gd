@@ -26,9 +26,9 @@ func mod_code(scene : Dictionary, output_name : String, editor : bool) -> String
 		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category != "TEX":
 			continue
 		var ctxt : Dictionary = { uv=output_name+"_p", geometry="sdf3d", type="float", glsl_type="float" }
-		var distort_map : String = mm_sdf_builder.get_color_code(s, ctxt, editor)
-		if distort_map != "":
-			return "%s += $amount*(%s-0.5);\n" % [ output_name, distort_map ]
+		var distort_map : Dictionary = mm_sdf_builder.get_color_code(s, ctxt, editor)
+		if distort_map.has("color"):
+			return "%s += $amount*(%s-0.5);\n" % [ output_name, distort_map.color ]
 	return ""
 
 func get_coloring_tolerance() -> String:

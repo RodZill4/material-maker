@@ -77,19 +77,52 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 func get_coloring_tolerance() -> String:
 	return "0.001"
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	var color_code : String = ""
 	var ctxt2 : Dictionary = ctxt.duplicate()
 	ctxt2.local_uv = "$(name_uv)_n%d_p" % scene.index
+	var colored_children : Array = []
+	var color_count : int = 0
+	var distance_count : int = 0
 	for s in scene.children:
 		if mm_sdf_builder.item_types[mm_sdf_builder.item_ids[s.type]].item_category == "TEX":
 			continue
 		var child_color_code = mm_sdf_builder.get_color_code(s, ctxt2, editor)
-		if child_color_code != "":
-			color_code += child_color_code+"\n"
-	if color_code == "":
-		return ""
-	if ctxt.has("check") and !ctxt.check:
-		return "{\n%s}\n" % [ color_code ]
-	else:
-		return "if (_n%d < %s) {\n%s}\n" % [ scene.index, get_coloring_tolerance(), color_code ]
+		colored_children.append(child_color_code)
+		if child_color_code.has("color"):
+			color_count += 1
+			if child_color_code.has("distance"):
+				distance_count += 1
+	if color_count == 0:
+		return { distance = "_n%d" % scene.index }
+	if distance_count == 0:
+		for c in colored_children:
+			if c.has("color"):
+				return { color = c.color, distance = "_n%d" % scene.index }
+	var first : bool = true
+	for i in range(colored_children.size()):
+		if ! colored_children[i].has("distance"):
+			continue
+		if first:
+			first = false
+			color_code += "int $(name_uv)_n%d_id = %d;\nfloat $(name_uv)_n%d_best_d = %s;\n" % [ scene.index, i, scene.index, colored_children[i].distance ]
+		else:
+			color_code += "if ($(name_uv)_n%d_best_d > %s) { $(name_uv)_n%d_best_d = %s; $(name_uv)_n%d_id = %d; }\n" % [ scene.index, colored_children[i].distance, scene.index, colored_children[i].distance, scene.index, i ]
+	first = true
+	var else_color = ""
+	for i in range(colored_children.size()):
+		if ! colored_children[i].has("color"):
+			continue
+		if ! colored_children[i].has("distance"):
+			if else_color == "":
+				else_color = colored_children[i].color
+			continue
+		if first:
+			first = false
+		else:
+			color_code += " else "
+		color_code += "if ($(name_uv)_n%d_id == %d) {\n%s\n}\n" % [ scene.index, i, colored_children[i].color ]
+	if else_color != "":
+		color_code += " else {\n%s\n}" % [ else_color ]
+	return { color = color_code, distance = "_n%d" % scene.index }
+

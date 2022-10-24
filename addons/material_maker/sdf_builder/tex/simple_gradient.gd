@@ -24,19 +24,17 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 			data.parameters.append_array(data2.parameters)
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	var tex : String
 	var ctxt2 : Dictionary = ctxt.duplicate(true)
 	ctxt2.type = "float"
 	if scene.children.empty():
 		tex = "$color1"
 	else:
-		tex = "mix($color1, $color2, "+mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor)+")"
+		tex = "mix($color1, $color2, "+mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor).color+")"
 	match ctxt.type:
-		"rgba":
-			return tex
 		"color":
-			return "("+tex+").xyz" 
+			tex = "("+tex+").xyz" 
 		"float":
-			return "dot(("+tex+").xyz, vec3(1.0))/3.0"
-	return ""
+			tex = "dot(("+tex+").xyz, vec3(1.0))/3.0"
+	return { color = tex }

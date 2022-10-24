@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
@@ -48,6 +48,8 @@
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/twist.gd" type="Script" id=46]
 [ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/torus.gd" type="Script" id=47]
 [ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform_gs.gd" type="Script" id=48]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/deform.gd" type="Script" id=49]
+[ext_resource path="res://addons/material_maker/sdf_builder/tex/brightness_contrast.gd" type="Script" id=50]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -483,6 +485,16 @@ item_category = "TEX"
 
 [node name="Filter" type="Node" parent="Texture"]
 
+[node name="BrightnessContrast" type="Node" parent="Texture/Filter"]
+script = ExtResource( 50 )
+item_type = "BrightnessContrast"
+item_category = "TEX"
+
+[node name="Step" type="Node" parent="Texture/Filter"]
+script = ExtResource( 41 )
+item_type = "Step"
+item_category = "TEX"
+
 [node name="SimpleGradient" type="Node" parent="Texture/Filter"]
 script = ExtResource( 40 )
 item_type = "SimpleGradient"
@@ -493,7 +505,7 @@ script = ExtResource( 44 )
 item_type = "Blend"
 item_category = "TEX"
 
-[node name="Step" type="Node" parent="Texture/Filter"]
-script = ExtResource( 41 )
-item_type = "Step"
+[node name="Deform" type="Node" parent="Texture/Filter"]
+script = ExtResource( 49 )
+item_type = "Deform"
 item_category = "TEX"

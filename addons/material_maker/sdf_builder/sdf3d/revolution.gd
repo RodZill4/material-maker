@@ -42,13 +42,13 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> String:
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	var ctxt2 : Dictionary = ctxt.duplicate()
 	ctxt2.local_uv = "$(name_uv)_n%d_q" % scene.index
 	ctxt2.uv = "$(name_uv)_n%d_q" % scene.index
 	ctxt2.check = false
-	var color_code : String = .get_color_code(scene, ctxt2, editor)
-	if ctxt.has("check") and !ctxt.check:
-		return "{\n%s}\n" % [ color_code ]
+	var color_code : Dictionary = .get_color_code(scene, ctxt2, editor)
+	if color_code.has("color"):
+		return { color = color_code.color, distance = "_n%d" % scene.index }
 	else:
-		return "if (_n%d < 0.001) {\n%s}\n" % [ scene.index, color_code ]
+		return { distance = "_n%d" % scene.index }

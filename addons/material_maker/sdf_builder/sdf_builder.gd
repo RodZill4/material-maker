@@ -165,15 +165,16 @@ func scene_to_shader_model(scene : Dictionary, uv : String, editor : bool) -> Di
 		shader_model.includes = get_includes(scene)
 	return shader_model
 
-func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
 	if scene.has("hidden") and scene.hidden:
-		return ""
+		return {}
 	var scene_node = scene_get_type(scene)
-	var rv : String = scene_node.get_color_code(scene, ctxt, editor)
-	if editor:
-		rv = replace_parameters(scene, rv)
-	else:
-		rv = replace_parameter_values(scene, rv)
+	var rv : Dictionary = scene_node.get_color_code(scene, ctxt, editor)
+	if rv.has("color"):
+		if editor:
+			rv.color = replace_parameters(scene, rv.color)
+		else:
+			rv.color = replace_parameter_values(scene, rv.color)
 	return rv
 
 func check_non_zero_param(scene, param_name, zero : float = 0.0) -> bool:

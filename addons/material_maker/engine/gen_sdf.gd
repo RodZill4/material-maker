@@ -79,15 +79,6 @@ func set_sdf_scene(s : Array):
 			var code : String = item_shader_model.code.replace("$(name_uv)", "")
 			distance_function += code
 			color_function += code
-		color_function += "\n// Albedo\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="albedo", target="albedo", type="rgba", glsl_type="vec4" }, editor)
-		color_function += "\n// Metallic\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="metallic", target="metallic", type="float", glsl_type="float" }, editor)
-		color_function += "\n// Roughness\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="roughness", target="roughness", type="float", glsl_type="float" }, editor)
-		color_function += "\n// Emission\n"
-		color_function += mm_sdf_builder.get_color_code(i, { uv="uv", channel="emission", target="emission", type="color", glsl_type="vec3" }, editor)
-		color_function += "\n"
 		if item_shader_model.has("outputs"):
 			var output = item_shader_model.outputs[0]
 			var output_name
@@ -105,6 +96,27 @@ func set_sdf_scene(s : Array):
 				else:
 					distance_function += "return_value = min(return_value, %s);\n" % output_name
 					color_function += "return_value = min(return_value, %s);\n" % output_name
+	var fake_scene = { index=0, type="Union3D", children=scene, parameters={} }
+	if scene_type == "SDF2D":
+		fake_scene.type = "Union"
+	var color_code : Dictionary
+	color_code = mm_sdf_builder.get_color_code(fake_scene, { uv="uv", channel="albedo", target="albedo", type="rgba", glsl_type="vec4" }, editor)
+	if color_code.has("color"):
+		color_function += "\n// Albedo\n"
+		color_function += "{\n"+color_code.color+"}\n"
+	color_code = mm_sdf_builder.get_color_code(fake_scene, { uv="uv", channel="metallic", target="metallic", type="float", glsl_type="float" }, editor)
+	if color_code.has("color"):
+		color_function += "\n// Metallic\n"
+		color_function += "{\n"+color_code.color+"}\n"
+	color_code = mm_sdf_builder.get_color_code(fake_scene, { uv="uv", channel="roughness", target="roughness", type="float", glsl_type="float" }, editor)
+	if color_code.has("color"):
+		color_function += "\n// Roughness\n"
+		color_function += "{\n"+color_code.color+"}\n"
+	color_code = mm_sdf_builder.get_color_code(fake_scene, { uv="uv", channel="emission", target="emission", type="color", glsl_type="vec3" }, editor)
+	if color_code.has("color"):
+		color_function += "\n// Emission\n"
+		color_function += "{\n"+color_code.color+"}\n"
+	color_function += "\n"
 	if first:
 		distance_function += "return 1.0;"
 		color_function += "return 1.0;"
@@ -131,8 +143,8 @@ func set_sdf_scene(s : Array):
 				shader_model.outputs = [{ sdf3d = "@NOCODE $(name)_d(%s*vec3(1.0, -1.0, -1.0))" % uv, type = "sdf3d" }]
 			shader_model.parameters = parameter_defs
 			shader_model.outputs.push_back({ tex3d = "$(name_uv)_albedo.rgb", type = "tex3d", shortdesc="Albedo" })
-			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_metallic", type = "tex3d_gs", shortdesc="Metallic" })
-			shader_model.outputs.push_back({ tex3d_gs = "$(name_uv)_roughness", type = "tex3d_gs", shortdesc="Roughness" })
+			shader_model.outputs.push_back({ tex3d_gs = "clamp($(name_uv)_metallic, 0.0, 1.0)", type = "tex3d_gs", shortdesc="Metallic" })
+			shader_model.outputs.push_back({ tex3d_gs = "clamp($(name_uv)_roughness, 0.0, 1.0)", type = "tex3d_gs", shortdesc="Roughness" })
 			shader_model.outputs.push_back({ tex3d = "$(name_uv)_emission", type = "tex3d", shortdesc="Emission" })
 		_:
 			shader_model.parameters = parameter_defs

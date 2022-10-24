@@ -50,7 +50,8 @@ func get_parameter_defs():
 func get_includes():
 	return [ "pattern", "tex3d_pattern" ]
 
-func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }):
+func get_color_code_gs(ctxt : Dictionary = { uv="$uv" }) -> String:
+	var tex : String
 	if ctxt.has("geometry") and ctxt.geometry == "sdf3d":
 		return "mix3d_$mix(wave_$x_wave($x_scale*"+ctxt.uv+".x), wave_$y_wave($y_scale*"+ctxt.uv+".y), wave_$z_wave($z_scale*"+ctxt.uv+".z))"
 	else:
