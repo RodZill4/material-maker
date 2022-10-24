@@ -37,6 +37,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_dilate
 	node_filter_bevel
 	node_filter_fill
+	node_filter_fill_from_colors
 	node_filter_fill_to_position
 	node_filter_fill_to_size
 	node_filter_fill_to_color
@@ -46,6 +47,7 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_fill_to_orientation
 	node_filter_fill_to_gradient
 	node_filter_math
+	node_filter_vec3_math
 	node_filter_smooth_minmax
 	node_filter_maketileable
 	node_filter_pixelize

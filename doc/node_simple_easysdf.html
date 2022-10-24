@@ -1,37 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EasySDF node &mdash; Material Maker  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+  <title>EasySDF node &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="3D nodes" href="nodes_3d.html" />
+    <link rel="next" title="Seven segment display node" href="node_simple_seven_segment_display.html" />
     <link rel="prev" title="PolyCurve node" href="node_simple_polycurve.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Material Maker<img src="_static/icon.png" class="logo" alt="Logo"/>
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.0
+                1.1
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,7 +84,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
@@ -50,8 +106,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_uniform.html">Uniform nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_shape.html">Shape node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_image.html">Image node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_simple_seven_segment_display.html">Seven segment display node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_text.html">Text node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_japanese_glyphs.html">Japanese glyphs node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_gradient.html">Gradient nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_sdf.html">2D Signed distance function geometry nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_curve.html">Curve node</a></li>
@@ -66,6 +122,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_seven_segment_display.html">Seven segment display node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_sixteen_segment_display.html">Sixteen Segment Display node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_roman_numerals.html">Roman numerals node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
@@ -81,31 +139,73 @@
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Material Maker</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
           <li><a href="nodes_simple.html">Simple nodes</a> &raquo;</li>
+        
       <li>EasySDF node</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="easysdf-node">
 <h1>EasySDF node<a class="headerlink" href="#easysdf-node" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>EasySDF</strong> node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.</p>
@@ -115,11 +215,13 @@
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The EasySDF node generates a single 2D or 3D Signed Distance Function output.</p>
+<p>The EasySDF node generates a Signed Distance Function output for a 2D or 3D shape,
+as well as Albedo, Metallic, Roughness and Emission maps.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>EasySDF</strong> node has no parameter.</p>
+<p>The <strong>EasySDF</strong> node has no parameter by default.</p>
+<p>Node parameters can be defined in the editor.</p>
 </div>
 <div class="section" id="editor">
 <h2>Editor<a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h2>
@@ -130,7 +232,7 @@
 <h3>Treeview<a class="headerlink" href="#treeview" title="Permalink to this headline">¶</a></h3>
 <p>The treeview shows all items of the SDF shape in a hierarchy. Items can be added, copied, pasted or deleted
 using the context menu.</p>
-<p>The available item types are:</p>
+<p>The available SDF item types are:</p>
 <ul class="simple">
 <li><p>For 2D:</p>
 <ul>
@@ -180,18 +282,75 @@ using the context menu.</p>
 </ul>
 <p>All item types have builtin translate, rotate and scale operations.
 Unless specified otherwise, all items apply a union operation to their children.</p>
+<ul>
+<li><p>For both 2D and 3D items, Coloring items can be added, and define the corresponding
+channel for their parent:</p>
+<ul class="simple">
+<li><p>Albedo</p></li>
+<li><p>Metallic</p></li>
+<li><p>Roughness</p></li>
+<li><p>Emission</p></li>
+</ul>
+<p>Coloring items generally apply to their parent item, except for smooth unions
+that only take their children colors into account (and blend them according to
+their ColorK parameter).</p>
+</li>
+<li><p>Those Coloring items can contain Texturing items:</p>
+<ul class="simple">
+<li><p>Uniform: a uniform color</p></li>
+<li><p>SimpleGradient: Create a gradient between 2 colors (defined as parameters) following
+its greyscale child texture</p></li>
+<li><p>Pattern: A greyscale pattern similar to the Pattern node</p></li>
+<li><p>FBM: A greyscale noise similar to the FBM node</p></li>
+</ul>
+</li>
+</ul>
 </div>
 <div class="section" id="preview">
 <h3>Preview<a class="headerlink" href="#preview" title="Permalink to this headline">¶</a></h3>
 <p>The 2D preview shows the generated shape for the whole tree in grey, and highlights the
-selected subtree in light grey and the selected item without alterations in light yellow.</p>
+selected subtree in light grey and the selected item without alterations in light yellow.
+It has several view modes:</p>
+<ul class="simple">
+<li><p>a mode that shows the SDF and Albedo coloring</p></li>
+<li><p>a mode that shows the SDF only</p></li>
+<li><p>a mode that shows the Albedo coloring</p></li>
+<li><p>a mode that shows the Metallic coloring</p></li>
+<li><p>a mode that shows the Roughness coloring</p></li>
+<li><p>a mode that shows the Emission coloring</p></li>
+</ul>
 <p>The 3D preview shows the generated shape for the whole tree.</p>
-<p>Controls for position, scale, rotation angle an item-specific parameters are shown in the
+<p>Controls for position, scale, rotation angle and item-specific parameters are shown in the
 preview and can be used to modify the selected item’s parameters.</p>
 </div>
 <div class="section" id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>The Parameters panel can be used to modify the selected items parameters.</p>
+<p>The Parameters panel has 2 sections, Node Parameters, and Item Parameters.</p>
+<p>The Node Parameters must be declared and can be used in Item Parameters
+expressions. A new node parameter can be created by clicking the “+”
+button. Its name can be modified directly in the corresponding text
+entry, its label and description can be edited by using the “yellow page”
+button, and its bounds and editing step can be set using the pencil button.
+It can also be deleted using the red cross button or moved in the list with
+the arrow buttons.</p>
+<p>The Item Parameters section shows the parameters of the currently selected
+item. They are predefined for each item type, and float parameters have an
+extra “expression” button, that can be used to define an expression that
+uses Node Parameters.</p>
+<p>Regarding parameters, there are 2 modes in the editor, and clicking either
+Node Parameters or Item Parameters checkbox will switch:</p>
+<ul class="simple">
+<li><p>In Item Parameters mode (enabled by default), Node Parameters are not taken
+into account, and the values of Item Parameters can be edited. Parameter
+expressions and Node Parameters can be edited, but doing so will not update
+the preview.
+This mode can be used to edit a default pose for the shapes.</p></li>
+<li><p>In Node Parameters mode, Item Parameters will be read-only (and the corresponding)
+gizmos in the preview will be hidden, parameter expressions will be applied when
+defined.
+This mode is useful to tweak expressions and default values for the Node
+Parameters.</p></li>
+</ul>
 </div>
 </div>
 <div class="section" id="example-images">
@@ -202,33 +361,50 @@ preview and can be used to modify the selected item’s parameters.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="node_simple_seven_segment_display.html" class="btn btn-neutral float-right" title="Seven segment display node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="node_simple_polycurve.html" class="btn btn-neutral float-left" title="PolyCurve node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="nodes_3d.html" class="btn btn-neutral float-right" title="3D nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2022, Rodolphe Suescun.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

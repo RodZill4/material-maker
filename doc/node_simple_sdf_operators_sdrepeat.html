@@ -1,37 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sdRepeat node &mdash; Material Maker  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+  <title>sdRepeat node &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sdCircleRepeat node" href="node_simple_sdf_operators_sdcirclerepeat.html" />
     <link rel="prev" title="sdMorph node" href="node_simple_sdf_operators_sdmorph.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Material Maker<img src="_static/icon.png" class="logo" alt="Logo"/>
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.0
+                1.1
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,7 +84,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
@@ -50,8 +106,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_uniform.html">Uniform nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_shape.html">Shape node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_image.html">Image node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_simple_seven_segment_display.html">Seven segment display node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_text.html">Text node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_japanese_glyphs.html">Japanese glyphs node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_gradient.html">Gradient nodes</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="node_simple_sdf.html">2D Signed distance function geometry nodes</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="node_simple_sdf_operators_sdshow.html">sdShow node</a></li>
@@ -66,6 +122,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_polycurve.html">PolyCurve node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_easysdf.html">EasySDF node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_seven_segment_display.html">Seven segment display node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_sixteen_segment_display.html">Sixteen Segment Display node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_roman_numerals.html">Roman numerals node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
@@ -81,32 +139,75 @@
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Material Maker</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
           <li><a href="nodes_simple.html">Simple nodes</a> &raquo;</li>
+        
           <li><a href="node_simple_sdf.html">2D Signed distance function geometry nodes</a> &raquo;</li>
+        
       <li>sdRepeat node</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="sdrepeat-node">
 <h1>sdRepeat node<a class="headerlink" href="#sdrepeat-node" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>sdRepeat</strong> node generates a signed distance image obtained by repeating
@@ -134,33 +235,50 @@ of the repeat grid, as well as the <em>rotation randomness</em> as parameters.</
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="node_simple_sdf_operators_sdmorph.html" class="btn btn-neutral float-left" title="sdMorph node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="node_simple_sdf_operators_sdcirclerepeat.html" class="btn btn-neutral float-right" title="sdCircleRepeat node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_simple_sdf_operators_sdmorph.html" class="btn btn-neutral float-left" title="sdMorph node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2022, Rodolphe Suescun.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

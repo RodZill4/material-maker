@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Swirl node &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/custom.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Workflow nodes" href="nodes_workflow.html" />
+    <link rel="prev" title="Slope node" href="node_transform_slope.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_material.html">Material nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_transform.html">Transform nodes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_transform.html">Transform node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_translate.html">Translate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_rotate.html">Rotate node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_scale.html">Scale node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_shear.html">Shear node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_mirror.html">Mirror node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_kaleidoscope.html">Kaleidoscope node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_warp.html">Warp node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_circlemap.html">Circle Map node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_customuv.html">CustomUV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_tile2x2.html">Tile2x2 node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_splatter.html">Splatter node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_tiler.html">Tiler node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_tiler_advanced.html">Advanced Tiler node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_circlesplatter.html">Circle Splatter node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_warpdilation.html">Warp Dilation node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_multi_warp.html">Multi Warp node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_morphology.html">Morphology node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_slope.html">Slope node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Swirl node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
+          <li><a href="nodes_transform.html">Transform nodes</a> &raquo;</li>
+        
+      <li>Swirl node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="swirl-node">
+<h1>Swirl node<a class="headerlink" href="#swirl-node" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Swirl</strong> node applies a swirl effect on its input.</p>
+<img alt="_images/node_transform_swirl.png" class="align-center" src="_images/node_transform_swirl.png" />
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Swirl</strong> node accepts a single RGBA input, interpreted as a heightmap.</p>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Swirl</strong> node outputs the transformed image as RGBA.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Swirl</strong> node has 3 parameters:</p>
+<ul class="simple">
+<li><p>the coordinates of the center of the effect.</p></li>
+<li><p>the <em>Angle</em> of the swirl effect.</p></li>
+<li><p>the <em>Radius</em> of the swirl effect.</p></li>
+<li><p>an option to make the effect tileable.</p></li>
+</ul>
+</div>
+<div class="section" id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/node_swirl_samples.png" class="align-center" src="_images/node_swirl_samples.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="nodes_workflow.html" class="btn btn-neutral float-right" title="Workflow nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_transform_slope.html" class="btn btn-neutral float-left" title="Slope node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

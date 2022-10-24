@@ -1,37 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Common properties of nodes &mdash; Material Maker  documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+  <title>Common properties of nodes &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/js/custom.js"></script>
-    <script src="_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Shader nodes" href="shader_nodes.html" />
     <link rel="prev" title="Nodes overview" href="nodes.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Material Maker<img src="_static/icon.png" class="logo" alt="Logo"/>
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
           </a>
+
+          
+            
+            
               <div class="version">
-                1.0
+                1.1
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -39,7 +84,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
@@ -65,30 +121,71 @@
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Material Maker</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="nodes.html">Nodes overview</a> &raquo;</li>
+        
       <li>Common properties of nodes</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <div class="section" id="common-properties-of-nodes">
 <h1>Common properties of nodes<a class="headerlink" href="#common-properties-of-nodes" title="Permalink to this headline">¶</a></h1>
 <p>The nodes will always have outputs that will be connected to the inputs of other
@@ -97,7 +194,7 @@ in the user interface, and inputs to receive data from other nodes.</p>
 <img alt="_images/node_example.png" class="align-center" src="_images/node_example.png" />
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>Nodes can have several outputs that represent the images they provide. Each node output can be
+<p>Nodes can have several outputs that represent the data they provide. Each node output can be
 connected to several node inputs. Each node output (and input) can be:</p>
 <ul class="simple">
 <li><p>a <strong>greyscale image</strong> (shown in grey)</p></li>
@@ -105,8 +202,12 @@ connected to several node inputs. Each node output (and input) can be:</p>
 <li><p>an <strong>RGBA image</strong> (shown in semi-transparent green)</p></li>
 <li><p>a <strong>2D signed distance function</strong> (shown in orange)</p></li>
 <li><p>a <strong>3D signed distance function</strong> (shown in red), with or without a color index</p></li>
-<li><p>a <strong>3D texture</strong> (shown in fuchsia), that can be associated to a color index, which makes
-it possible to associate several 3D textures in a single 3D scene</p></li>
+<li><p>a color or greyscale <strong>3D texture</strong> (shown in fuchsia), that can be associated to
+a color index, which makes it possible to associate several 3D textures in a single
+3D scene</p></li>
+<li><p><strong>Fill information</strong> (shown in light orange), that contain the bounding box of the
+area. This information is generated by the Fill node and a few pattern nodes, and is
+used as input by the Fill companion nodes</p></li>
 </ul>
 <p>Greyscale, color and RGBA inputs and outputs can be connected to each other and will automatically be
 converted when required.</p>
@@ -114,6 +215,7 @@ converted when required.</p>
 field. They can be converted into greyscale images using the <cite>sdShow</cite> node.</p>
 <p>3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
 converted into a greyscale height map and a color normal map using the <cite>Render</cite> node.</p>
+<p>3D textures are previewed on a sphere</p>
 <p>Clicking on an output slot will show the corresponding preview at the bottom of the node.
 When a node has several outputs, only one of them can be previewed at a time. The previewed
 output slot will have a circle around it, and clicking it again will hide the preview.</p>
@@ -234,33 +336,50 @@ outputs) may break existing materials, and should thus be avoided.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="nodes.html" class="btn btn-neutral float-left" title="Nodes overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="shader_nodes.html" class="btn btn-neutral float-right" title="Shader nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="nodes.html" class="btn btn-neutral float-left" title="Nodes overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2022, Rodolphe Suescun.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-2022, Rodolphe Suescun.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
