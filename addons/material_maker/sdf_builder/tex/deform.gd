@@ -40,9 +40,9 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 				deform = deform_color_code.color
 		ctxt2 = ctxt.duplicate()
 		if ctxt.has("geometry") and ctxt.geometry == "sdf3d":
-			ctxt2.uv = "(%s+$amount*%s.xyz)" % [ ctxt2.uv, deform ]
+			ctxt2.uv = "(%s+$amount*(%s.xyz-vec3(0.5)))" % [ ctxt2.uv, deform ]
 		else:
-			ctxt2.uv = "(%s+$amount*%s.xy)" % [ ctxt2.uv, deform ]
+			ctxt2.uv = "(%s+$amount*(%s.xy-vec2(0.5)))" % [ ctxt2.uv, deform ]
 		var tex_color_code : Dictionary = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor)
 		if tex_color_code.has("color"):
 			tex = tex_color_code.color
