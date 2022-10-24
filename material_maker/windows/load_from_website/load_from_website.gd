@@ -48,6 +48,7 @@ func fill_list(filter : String):
 		if filter == "" or m.name.to_lower().find(filter.to_lower()) != -1 or m.tags.to_lower().find(filter.to_lower()) != -1:
 			item_list.add_item(m.name)
 			item_list.set_item_icon(item_index, m.texture)
+			item_list.set_item_tooltip(item_index, "Name: %s\nAuthor: %s\nLicense: %s" % [ m.name, m.author, m.license ])
 			displayed_assets.push_back(m.id)
 			item_index += 1
 
