@@ -13,11 +13,11 @@ func get_histogram_texture() -> ImageTexture:
 	return $Control.material.get_shader_param("tex")
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
+	if !force and generator == g and output == o:
+		return
 	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
-	if !force and generator == g and output == o:
-		return
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -39,9 +39,18 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			$ViewportImage/ColorRect.material.set_shader_param(k, source.textures[k])
 	update_histogram()
 
-func on_parameter_changed(n : String, _v) -> void:
-	if n == "__input_changed__":
-		set_generator(generator, output, true)
+
+var refreshing_generator : bool = false
+func on_parameter_changed(n : String, v) -> void:
+	if !is_inside_tree():
+		return
+	if n == "__output_changed__" and output == v:
+		if ! refreshing_generator:
+			refreshing_generator = true
+			yield(get_tree(), "idle_frame")
+			set_generator(generator, output, true)
+			refreshing_generator = false
+		return
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:

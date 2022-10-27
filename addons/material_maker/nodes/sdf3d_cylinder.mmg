@@ -9,9 +9,11 @@
 		"l": 0.25,
 		"r": 0.25
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_d = abs(vec2($axis)) - vec2($r,$l);\n",
-		"global": "",
+		"code": "",
+		"global": "float sdCylinder(vec3 p, float h, float r) {\n\tvec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);\n\treturn min(max(d.x, d.y),0.0) + length(max(d, 0.0));\n}\n",
 		"inputs": [
 
 		],
@@ -21,14 +23,14 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the cylinder",
-				"sdf3d": "min(max($(name_uv)_d.x,$(name_uv)_d.y),0.0) + length(max($(name_uv)_d,0.0))",
+				"sdf3d": "sdCylinder($uv$axis, $l, $r)",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
-				"default": 1,
+				"default": 2,
 				"label": "Axis",
 				"longdesc": "The axis of the cylinder",
 				"name": "axis",
@@ -37,15 +39,15 @@
 				"values": [
 					{
 						"name": "X",
-						"value": "length($uv.yz),$uv.x"
+						"value": ".yxz"
 					},
 					{
 						"name": "Y",
-						"value": "length($uv.xz),$uv.y"
+						"value": ""
 					},
 					{
 						"name": "Z",
-						"value": "length($uv.xy),$uv.z"
+						"value": ".xzy"
 					}
 				]
 			},

@@ -1,0 +1,41 @@
+{
+	"name": "pack_2x16_to_1x32",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"includes": [
+			"pack_1x32_to_2x16"
+		],
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"function": true,
+				"label": "",
+				"name": "source",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"name": "pack_2x16_to_1x32",
+		"outputs": [
+			{
+				"f": "pack_2x16_to_1x32($source($uv).xy)",
+				"shortdesc": "source_big",
+				"type": "f"
+			}
+		],
+		"parameters": [
+
+		]
+	},
+	"type": "shader"
+}

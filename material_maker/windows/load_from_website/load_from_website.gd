@@ -13,7 +13,8 @@ func _ready() -> void:
 
 func _exit_tree():
 	print("Waiting for thread to finish")
-	thumbnail_update_thread.wait_to_finish()
+	if thumbnail_update_thread != null:
+		thumbnail_update_thread.wait_to_finish()
 	print("Finished")
 
 func _on_ItemList_item_activated(index) -> void:
@@ -47,44 +48,47 @@ func fill_list(filter : String):
 		if filter == "" or m.name.to_lower().find(filter.to_lower()) != -1 or m.tags.to_lower().find(filter.to_lower()) != -1:
 			item_list.add_item(m.name)
 			item_list.set_item_icon(item_index, m.texture)
+			item_list.set_item_tooltip(item_index, "Name: %s\nAuthor: %s\nLicense: %s" % [ m.name, m.author, m.license ])
 			displayed_assets.push_back(m.id)
 			item_index += 1
 
 func select_material(type : int = 0) -> String:
 	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
-	if error != OK:
-		queue_free()
-		return ""
-	popup_centered()
-	var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
-	var parse_result : JSONParseResult = JSON.parse(data)
-	if parse_result == null or ! parse_result.result is Array:
-		queue_free()
-		return ""
-	var tmp_assets = parse_result.result
-	tmp_assets.invert()
-	assets = []
-	var image : Image = Image.new()
-	image.create(256, 256, false, Image.FORMAT_RGBA8)
-	for i in range(tmp_assets.size()):
-		var m = tmp_assets[i]
-		if m.type == type:
-			m.texture = ImageTexture.new()
-			m.texture.create_from_image(image)
-			assets.push_back(m)
-	fill_list("")
-	thumbnail_update_thread = Thread.new()
-	thumbnail_update_thread.start(self, "update_thumbnails", null, 0)
-	var result = yield(self, "return_asset")
+	if error == OK:
+		var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
+		var parse_result : JSONParseResult = JSON.parse(data)
+		if parse_result != null and parse_result.result is Array:
+			popup_centered()
+			var tmp_assets = parse_result.result
+			tmp_assets.invert()
+			assets = []
+			var image : Image = Image.new()
+			image.create(256, 256, false, Image.FORMAT_RGBA8)
+			for i in range(tmp_assets.size()):
+				var m = tmp_assets[i]
+				if m.type == type:
+					m.texture = ImageTexture.new()
+					m.texture.create_from_image(image)
+					assets.push_back(m)
+			fill_list("")
+			thumbnail_update_thread = Thread.new()
+			thumbnail_update_thread.start(self, "update_thumbnails", null, 0)
+			var result = yield(self, "return_asset")
+			queue_free()
+			return result
 	queue_free()
-	return result
+	var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	dialog.dialog_text = "Cannot get assets from the website"
+	mm_globals.main_window.add_child(dialog)
+	dialog.ask()
+	return ""
 
 func update_thumbnails() -> void:
 	for i in range(assets.size()):
 		var m = assets[i]
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
-		if image.load(cache_filename) != OK:
+		if ! File.new().file_exists(cache_filename) or image.load(cache_filename) != OK:
 			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
 			if error == OK:
 				var data : PoolByteArray = yield($ImageHTTPRequest, "request_completed")[3]

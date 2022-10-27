@@ -2,8 +2,9 @@ Fill node
 ~~~~~~~~~
 
 The **Fill** node fills all areas surrounded by white pixels, and generates
-a specific input for the **Fill to random grey**, the **Fill to random color** and
-the **Fill to UV** nodes.
+a specific input for the fill companion (generally named "Fill to ...") nodes.
+
+That fill information is an axis aligned bounding box of each filled area.
 
 .. image:: images/node_filter_fill.png
 	:align: center
@@ -28,9 +29,10 @@ The **Fill** node accepts the following parameters:
 
 * *resolution* is the resolution of the effect and only influences how details
   of the mask (and not the source if any) is captured. It is advised to be careful
-  with using high values here, as the computation time may become very long.
+  with using high values here, as the computation time may become very long and high
+  resolutions can cause precision issues.
   Setting it higher than the input's resolution will not yield any benefit - only
   increase the computation time.
-* *iterations* is the number of iterations of the fill algorithm. The optimal value
-  for this parameter depends on the input image. Starting with 5 or 10, then increasing
-  the value depending on the result is a good way of finding it.
+* *Remove edges* is an option to grow filled areas to remove edges.
+* *Adjust* is useful when removing edges and is used to grow the areas bounding boxes.
+  It is useful when using for example the **Fill to UV** or the **Fill to Gradient** node. 

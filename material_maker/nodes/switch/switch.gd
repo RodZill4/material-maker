@@ -67,8 +67,10 @@ func update_node() -> void:
 			sizer.get_child(0).text = ""
 			has_input = false
 		else:
-			sizer.get_child(0).text = PoolByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+i/int(output_count))
-			sizer.get_child(0).add_color_override("font_color", Color(1.0, 1.0, 1.0) if i/int(output_count) == generator.parameters.source else Color(0.5, 0.5, 0.5))
+# warning-ignore:integer_division
+			var source : int = i/output_count
+			sizer.get_child(0).text = PoolByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+source)
+			sizer.get_child(0).add_color_override("font_color", Color(1.0, 1.0, 1.0) if source == generator.parameters.source else Color(0.5, 0.5, 0.5))
 		set_slot(i, has_input, 42, Color(1.0, 1.0, 1.0, 1.0), has_output, 42, Color(1.0, 1.0, 1.0, 1.0))
 	# Preview
 	restore_preview_widget()

@@ -17,4 +17,4 @@ func get_includes():
 	return [ "rotate", "sdcirclerepeat", "sdngon" ]
 
 func shape_code(scene : Dictionary, uv : String = "$uv") -> String:
-	return "float $(name_uv)_n%d = sdNgon(%s, $radius, $edgecount);\n" % [ scene.index, uv ]
+	return "sdNgon(%s, $radius, $edgecount)" % [ uv ]

@@ -23,3 +23,6 @@ The transform nodes are nodes that affect the geometry of their input.
 	node_transform_circlesplatter
 	node_transform_warpdilation
 	node_transform_multi_warp
+	node_transform_morphology
+	node_transform_slope
+	node_transform_swirl

@@ -137,6 +137,8 @@ func _on_Export_pressed():
 			spritesheet.save_png(filename)
 		image_anim.material.set_shader_param("begin", begin)
 		image_anim.material.set_shader_param("end", end)
+		image_anim.material.set_shader_param("mm_chunk_size", 1.0)
+		image_anim.material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
 
 
 func _on_VBox_minimum_size_changed():

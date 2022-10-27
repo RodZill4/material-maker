@@ -702,6 +702,8 @@ render_mode blend_disabled;
 
 uniform sampler2D tex;
 uniform float size = 512.0;
+uniform float mm_chunk_size = 1.0;
+uniform vec2 mm_chunk_offset = vec2(0.0);
 
 const int STEPS = 64;
 
@@ -729,13 +731,15 @@ vec4 dilate_distance_h(vec2 uv) {
 }
 
 void fragment() {
-	COLOR = dilate_distance_h(UV);
+	COLOR = dilate_distance_h(mm_chunk_offset+mm_chunk_size*UV);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=16]
 shader = SubResource( 15 )
 shader_param/size = 512.0
+shader_param/mm_chunk_size = 1.0
+shader_param/mm_chunk_offset = Vector2( 0, 0 )
 
 [sub_resource type="Shader" id=17]
 code = "shader_type canvas_item;
@@ -743,6 +747,8 @@ render_mode blend_disabled;
 
 uniform sampler2D tex;
 uniform float size = 512.0;
+uniform float mm_chunk_size = 1.0;
+uniform vec2 mm_chunk_offset = vec2(0.0);
 
 const int STEPS = 64;
 
@@ -767,13 +773,15 @@ vec4 dilate_distance_v(vec2 uv) {
 }
 
 void fragment() {
-	COLOR = dilate_distance_v(UV);
+	COLOR = dilate_distance_v(mm_chunk_offset+mm_chunk_size*UV);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=18]
 shader = SubResource( 17 )
 shader_param/size = 512.0
+shader_param/mm_chunk_size = 1.0
+shader_param/mm_chunk_offset = Vector2( 0, 0 )
 
 [sub_resource type="Shader" id=19]
 code = "shader_type canvas_item;
@@ -781,6 +789,8 @@ render_mode blend_disabled;
 
 uniform sampler2D tex;
 uniform float size = 512.0;
+uniform float mm_chunk_size = 1.0;
+uniform vec2 mm_chunk_offset = vec2(0.0);
 
 const int STEPS = 125;
 
@@ -812,13 +822,15 @@ vec4 dilate_distance_h(vec2 uv) {
 }
 
 void fragment() {
-	COLOR = dilate_distance_h(UV);
+	COLOR = dilate_distance_h(mm_chunk_offset+mm_chunk_size*UV);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=20]
 shader = SubResource( 19 )
 shader_param/size = 512.0
+shader_param/mm_chunk_size = 1.0
+shader_param/mm_chunk_offset = Vector2( 0, 0 )
 
 [sub_resource type="Shader" id=21]
 code = "shader_type canvas_item;
@@ -826,6 +838,8 @@ render_mode blend_disabled;
 
 uniform sampler2D tex;
 uniform float size = 512.0;
+uniform float mm_chunk_size = 1.0;
+uniform vec2 mm_chunk_offset = vec2(0.0);
 
 const int STEPS = 64;
 
@@ -862,13 +876,15 @@ vec4 dilate_distance_v(vec2 uv) {
 }
 
 void fragment() {
-	COLOR = dilate_distance_v(UV);
+	COLOR = dilate_distance_v(mm_chunk_offset+mm_chunk_size*UV);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=22]
 shader = SubResource( 21 )
 shader_param/size = 512.0
+shader_param/mm_chunk_size = 1.0
+shader_param/mm_chunk_offset = Vector2( 0, 0 )
 
 [sub_resource type="PrismMesh" id=23]
 
@@ -894,6 +910,7 @@ seams_pass1 = SubResource( 20 )
 seams_pass2 = SubResource( 22 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
+extra_cull_margin = 16384.0
 mesh = SubResource( 23 )
 material/0 = SubResource( 5 )
 __meta__ = {

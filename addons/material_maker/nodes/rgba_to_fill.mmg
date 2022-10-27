@@ -1,0 +1,42 @@
+{
+	"name": "rgba_to_fill",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "A node that encodes Fill information from RGBA",
+		"name": "RGBA to Fill",
+		"outputs": [
+			{
+				"fill": "$in($uv)",
+				"longdesc": "The generated output image",
+				"shortdesc": "Output",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+
+		],
+		"shortdesc": "RGBA to Fill"
+	},
+	"type": "shader"
+}

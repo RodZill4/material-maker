@@ -1,0 +1,486 @@
+{
+	"connections": [
+		{
+			"from": "scale",
+			"from_port": 0,
+			"to": "translate",
+			"to_port": 0
+		},
+		{
+			"from": "scale",
+			"from_port": 0,
+			"to": "translate_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "scale",
+			"to_port": 0
+		},
+		{
+			"from": "scale",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 0
+		},
+		{
+			"from": "translate",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 1
+		},
+		{
+			"from": "translate_5",
+			"from_port": 0,
+			"to": "blend",
+			"to_port": 2
+		},
+		{
+			"from": "blend",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 0
+		},
+		{
+			"from": "translate_5",
+			"from_port": 0,
+			"to": "rotate",
+			"to_port": 0
+		},
+		{
+			"from": "rotate",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 2
+		},
+		{
+			"from": "translate_2",
+			"from_port": 0,
+			"to": "blend_2",
+			"to_port": 1
+		},
+		{
+			"from": "translate_5",
+			"from_port": 0,
+			"to": "rotate_2",
+			"to_port": 0
+		},
+		{
+			"from": "rotate_2",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 2
+		},
+		{
+			"from": "blend_2",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 0
+		},
+		{
+			"from": "translate_3",
+			"from_port": 0,
+			"to": "blend_3",
+			"to_port": 1
+		},
+		{
+			"from": "translate_5",
+			"from_port": 0,
+			"to": "rotate_3",
+			"to_port": 0
+		},
+		{
+			"from": "rotate_3",
+			"from_port": 0,
+			"to": "blend_4",
+			"to_port": 2
+		},
+		{
+			"from": "blend_3",
+			"from_port": 0,
+			"to": "blend_4",
+			"to_port": 0
+		},
+		{
+			"from": "translate_4",
+			"from_port": 0,
+			"to": "blend_4",
+			"to_port": 1
+		},
+		{
+			"from": "blend_4",
+			"from_port": 0,
+			"to": "transform2",
+			"to_port": 0
+		},
+		{
+			"from": "transform2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "blend_2",
+			"from_port": 0,
+			"to": "translate_3",
+			"to_port": 0
+		},
+		{
+			"from": "blend_2",
+			"from_port": 0,
+			"to": "translate_4",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "tones_step",
+			"to_port": 0
+		},
+		{
+			"from": "tones_step",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "translate_5",
+			"to_port": 0
+		}
+	],
+	"label": "Make Tileable Square",
+	"longdesc": "Creates a tileable version of its input image by moving different parts around to hide seams.",
+	"name": "make_tileable_square",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "translate_2",
+			"node_position": {
+				"x": -500,
+				"y": 300
+			},
+			"parameters": {
+				"translate_x": -1,
+				"translate_y": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "translate"
+		},
+		{
+			"name": "translate_3",
+			"node_position": {
+				"x": -500,
+				"y": 420
+			},
+			"parameters": {
+				"translate_x": 0,
+				"translate_y": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "translate"
+		},
+		{
+			"name": "translate_4",
+			"node_position": {
+				"x": -500,
+				"y": 540
+			},
+			"parameters": {
+				"translate_x": 0,
+				"translate_y": -1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "translate"
+		},
+		{
+			"name": "translate",
+			"node_position": {
+				"x": -500,
+				"y": 180
+			},
+			"parameters": {
+				"translate_x": 1,
+				"translate_y": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "translate"
+		},
+		{
+			"name": "translate_5",
+			"node_position": {
+				"x": 100,
+				"y": 180
+			},
+			"parameters": {
+				"translate_x": 0.5,
+				"translate_y": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "translate"
+		},
+		{
+			"name": "scale",
+			"node_position": {
+				"x": -500,
+				"y": 0
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"scale_x": "1.0+$fw",
+				"scale_y": "1.0+$fw"
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "scale"
+		},
+		{
+			"name": "blend",
+			"node_position": {
+				"x": -200,
+				"y": 180
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "blend"
+		},
+		{
+			"name": "tones_step",
+			"node_position": {
+				"x": -200,
+				"y": 60
+			},
+			"parameters": {
+				"invert": true,
+				"value": 0.5,
+				"width": "$fw"
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "tones_step"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -940,
+				"y": 200
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "The image to be made tileable",
+					"name": "in",
+					"shortdesc": "Input",
+					"type": "rgba"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 400,
+				"y": 200
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "A tileable version of the input image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "rgba"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -300,
+				"y": -200
+			},
+			"parameters": {
+				"fw": 0.1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"default": 0.5,
+					"label": "Width",
+					"max": 1,
+					"min": 0,
+					"name": "fw",
+					"shortdesc": "Width",
+					"step": 0.01,
+					"type": "named_parameter"
+				}
+			]
+		},
+		{
+			"name": "blend_2",
+			"node_position": {
+				"x": -200,
+				"y": 300
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "blend"
+		},
+		{
+			"name": "rotate",
+			"node_position": {
+				"x": 100,
+				"y": 300
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": 180
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "rotate"
+		},
+		{
+			"name": "rotate_2",
+			"node_position": {
+				"x": 100,
+				"y": 420
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": 90
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "rotate"
+		},
+		{
+			"name": "blend_3",
+			"node_position": {
+				"x": -200,
+				"y": 420
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "blend"
+		},
+		{
+			"name": "blend_4",
+			"node_position": {
+				"x": -200,
+				"y": 540
+			},
+			"parameters": {
+				"amount": 1,
+				"blend_type": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "blend"
+		},
+		{
+			"name": "rotate_3",
+			"node_position": {
+				"x": 100,
+				"y": 540
+			},
+			"parameters": {
+				"cx": 0,
+				"cy": 0,
+				"rotate": -90
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "rotate"
+		},
+		{
+			"name": "transform2",
+			"node_position": {
+				"x": 100,
+				"y": 660
+			},
+			"parameters": {
+				"mode": 1,
+				"rotate": 0,
+				"scale_x": 1,
+				"scale_y": 1,
+				"translate_x": 0,
+				"translate_y": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "transform2"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": -200,
+				"y": 0
+			},
+			"parameters": {
+				"color": "$uv.x"
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "uniform_greyscale"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": 100,
+				"y": 0
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 0,
+				"op": 20
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "math"
+		}
+	],
+	"parameters": {
+		"fw": 0.1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "Make Tileable Square",
+	"type": "graph"
+}

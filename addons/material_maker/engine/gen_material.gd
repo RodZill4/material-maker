@@ -22,6 +22,9 @@ const TEXTURE_SIZE_MAX = 13  # 8192x8192
 # The default texture size as a power-of-two exponent
 const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
+# The minimum allowed texture size as a power-of-two exponent
+const TEXTURE_FILTERING_LIMIT = 256
+
 var timer : Timer
 
 func _ready() -> void:
@@ -138,6 +141,10 @@ func update_textures() -> void:
 					break
 				renderer.copy_to_texture(preview_textures[t].texture)
 				renderer.release(self)
+				if image_size <= TEXTURE_FILTERING_LIMIT:
+					preview_textures[t].texture.flags &= ~Texture.FLAG_FILTER
+				else:
+					preview_textures[t].texture.flags |= Texture.FLAG_FILTER
 			updating = false
 
 func update_materials(material_list, sequential : bool = false) -> void:
@@ -359,7 +366,7 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 static func get_template_text(template : String) -> String:
 	var in_file = File.new()
 	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
-		if in_file.open(OS.get_executable_path().get_base_dir()+"/nodes/"+template, File.READ) != OK:
+		if in_file.open(MMPaths.get_resource_dir()+"/nodes/"+template, File.READ) != OK:
 			return template
 	return in_file.get_as_text()
 
@@ -488,6 +495,9 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var export_context : Dictionary = get_connections_and_parameters_context()
 	export_context["$(path_prefix)"] = prefix
 	export_context["$(file_prefix)"] = prefix.get_file()
+	var exported_files : Array = []
+	var overwrite_files : Array = []
+	var dir : Directory = Directory.new()
 	for f in shader_model.exports[profile].files:
 		if f.has("conditions"):
 			var condition = subst_string(f.conditions, export_context)
@@ -498,6 +508,26 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				continue
 			if !expr.execute():
 				continue
+		if f.has("prompt_overwrite") and f.prompt_overwrite:
+			var file_name = subst_string(f.file_name, export_context)
+			if dir.file_exists(file_name):
+				overwrite_files.push_back(f)
+				continue
+		exported_files.push_back(f)
+	if ! overwrite_files.empty():
+		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		dialog.dialog_text = "Overwrite existing files?"
+		for f in overwrite_files:
+			var file_name = subst_string(f.file_name, export_context)
+			dialog.dialog_text += "\n- "+file_name.get_file()
+		dialog.add_cancel("Keep existing file(s)");
+		mm_globals.main_window.add_child(dialog)
+		var result = dialog.ask()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		if result == "ok":
+			exported_files.append_array(overwrite_files)
+	for f in exported_files:
 		match f.type:
 			"texture":
 				# Wait until no buffer has been updated for 5 frames

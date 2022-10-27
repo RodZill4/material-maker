@@ -14,6 +14,7 @@ func on_right_click():
 	var hide_texture : ImageTexture = ImageTexture.new()
 	hide_texture.create_from_image($MaterialPreview.get_texture().get_data())
 	$TextureRect.texture = hide_texture
+	$TextureRect.rect_size = rect_size
 	$TextureRect.visible = true
 	# Setup local position rendering
 	var material_save = current_object.get_surface_material(0)
@@ -30,13 +31,13 @@ func on_right_click():
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_data()
 	image.lock()
-	var mouse_position = get_local_mouse_position()
+	var mouse_position = get_local_mouse_position()*$MaterialPreview.size/rect_size
 	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	image.unlock()
 	var position : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
+	position -= Vector3(0.5, 0.5, 0.5)
 	position *= aabb.size
-	position += aabb.position
 	new_pivot_position = -position
 	# Reset normal rendering
 	current_object.set_surface_material(0, material_save)
@@ -51,3 +52,6 @@ func _on_PopupMenu_id_pressed(id):
 			pivot.transform.origin = Vector3(0, 0, 0)
 		1:
 			pivot.transform.origin = new_pivot_position
+
+func _on_Preview3D_mouse_entered():
+	mm_globals.set_tip_text("#LMB: Rotate view, #RMB: Tilt view, Mouse wheel: Zoom", 3)

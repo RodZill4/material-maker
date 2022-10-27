@@ -30,7 +30,8 @@ func set_generator(g) -> void:
 	label.text = generator.text
 	rect_size = generator.size
 	title = generator.title
-	set_color(generator.color)
+
+	set_stylebox_color(generator.color)
 	
 	if mm_globals.get_config("auto_size_comment"):
 		resize_to_selection()
@@ -39,6 +40,11 @@ func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
 	if parent.use_snap:
 		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
+	if rect_size == new_size:
+		return
+	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=rect_size }
+	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
+	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
 	rect_size = new_size
 	generator.size = new_size
 
@@ -121,6 +127,9 @@ func _on_gui_input(event) -> void:
 		elif event.doubleclick:
 			name_change_popup()
 
+func update_node() -> void:
+	rect_size = generator.size
+	set_stylebox_color(generator.color)
 
 func name_change_popup() -> void:
 	accept_event()
@@ -136,12 +145,19 @@ func name_change_popup() -> void:
 
 func set_color(c):
 	$Popup.hide()
+	if c == generator.color:
+		return
+	var undo_action = { type="comment_color_change", node=generator.get_hier_name(), color=generator.color }
+	var redo_action = { type="comment_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change comment color", [undo_action], [redo_action], true)
 	generator.color = c
-	var color = c
-	color.a = 0.3
-	get_stylebox("comment").bg_color = color
-	get_stylebox("commentfocus").bg_color = color
+	set_stylebox_color(c)
 	get_parent().send_changed_signal()
+
+func set_stylebox_color(c):
+	c.a = 0.3
+	get_stylebox("comment").bg_color = c
+	get_stylebox("commentfocus").bg_color = c
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:

@@ -191,12 +191,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
-margin_top = 100.0
-margin_right = 620.0
-margin_bottom = 115.0
-rect_min_size = Vector2( 0, 15 )
-
 [node name="PatronsLabel" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
 margin_left = 281.0
 margin_top = 119.0

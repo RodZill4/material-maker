@@ -1,11 +1,94 @@
+# Material Maker 1.1
+
+Updated 2022/10/05
+
+## General
+
+- Updated renderer to limit the size of rendering viewports (big textures are rendered in chunks and reassembled).
+  This can be used to avoid crashes on lower end GPU and/or when generating high resolution textures. The maximum
+  render size can be configured in the progress counter context menu.
+- Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
+  can be used to know if Material Maker runs on the integrated graphics on a laptop).
+- In Graph views, added support for arrow keys to scroll in all directions (useful when connecting nodes that
+  are far from each other).
+- Buffer nodes and nodes that contain buffers are now shown with a specific icon. Right clicking that icon
+  show a context menu that can pause and resume the buffers (making it possible to disable useless rendering
+  of parts of the material).
+- The FPS counter, the GPU memory counter and the rendering progress bar have been moved to a status bar at
+  the bottom of the user interface.
+- Added a small icon in the status bar that shows the status of the clipboard (and if it can be pasted into
+  a graph view).
+- Started adding tips to the status bar.
+- Added an option for Tonemaps in the 3D Preview panel.
+- Added an option to overwrite existing material files (.tres for Godot engine, .mat and .meta for
+  Unity engine) when re-exporting materials.
+- Added Godot 4 export targets to all material types (contributed by Arnklit).
+
+## Nodes
+
+- Updated the EasySDF node with support for coloring (of albedo, roughness, metallic and emission channels)
+  and node parameters, and added more shapes and operators.
+- Added additional modes to **Math** node (contributed by williamchange).
+- Updated the **Iteration Buffer** with an autostop parameter. When set, the Iteration Buffer will stop iterating
+  as soon as 2 consecutive results are identical.
+- Added a Fill port type that is used as output of the **Fill** node (and nodes that generate fill information)
+  and input of the Fill companion nodes.
+- Removed the Iterations parameter from the **Fill** node, and added parameters to remove the edges and adjust
+  the generated bounding box.
+- Added a new **Fill from colors** node that generates fill information from the color islands in its input.
+- Updated the **Beehive** and **Voronoi** nodes to output Fill information instead of a random color.
+- Added **Spiral Gradient** node (contributed by Theaninova).
+- Added **Diagonal Weave** node (contributed by williamchange).
+- Added **Triangle Voronoi** node (contributed by williamchange).
+- Added **Sixteen Segment Display** and **Roman Numerals** nodes (contributed by williamchange).
+- Added **Japanese Glyphs** node (contributed by williamchange).
+- Added **Uneven Bricks 3**, **Uneven Bricks 4** and **Uneven Bricks 5** nodes (contributed by Arnklit).
+- Added **Swirl** node.
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 3.5.
+
+## Fixes, optimizations
+
+- Fixed crash that occurred when **Material** node was fed incorrect Depth values.
+- Optimized curve parameter editor
+
 # Material Maker 1.0
 
 ## General
 
 - Added an option to automatically size new comment nodes to current selection (contributed by Zhibade)
+- In the Reference panel, it is now possible to scan an average color by dragging the mouse cursor around
+- When creating a new painting project, MM now checks the model can be painted (i.e. has a single surface and correct UVs)
+- The configuration of 2D preview and graph editor panels is now saved
+- Added support for gestures in 2D and 3D preview as well as painting panels
+- Added a new Download button for translations in the Preferences dialog
+- Pasting a list of HTML colors (in hex format) into the graph editor now creates a new Colorize node
 
 ## Nodes
- - Added Smooth Mix (a mix-by-height node with smooth transition between materials) Worflow node
+
+- Added 3D SDF shapes, primitives and transforms to *EasySDF* node and corresponding editor
+- Added *Seven Segment Display* node with variable length/width (contributed by williamchange)
+- Added *Smooth Mix* (a mix-by-height node with smooth transition between materials) Worflow node
+- Updated *Dilate* node to improve precision in higher resolutions (contributed by Arnklit and wojtekpil)
+- Added new *Morphology* node that provides dilation and erosion operations
+- Added *White Noise*, *Clouds Noise* and *Directional Noise* nodes (contributed by Arnklit)
+- Added new *Make Tileable Square* node (contributed by Arnklit)
+- Added *Slope* node, that generates slopes from the highest areas of a heightmap
+- Added *AlterHSV* node that can be used to modify the Hue, Saturation and Value of its input using
+  input maps
+- Added new *Mesh* node (contributed by Arnklit)
+- Updated *Normal Map* node to improve precision when the buffer option is used
+- Added new Additive and AddSub modes to the *Blend* node (contributed by Arnklit)
+- Added new packing/unpacking nodes that can store 1 (or 2) values into 2 (or 4) when using buffers
+  for better precision (contributed by Arnklit and wojtekpil)
+- Added a flip parameter to the *Mirror* node:w
+
+## Miscellaneous
+
+- MacOS port is now signed and notarized
+- Material Maker is now based on Godot 3.4.4
 
 # Material Maker 0.99
 

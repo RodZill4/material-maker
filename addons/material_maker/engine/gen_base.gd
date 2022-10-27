@@ -6,6 +6,10 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
+const BUFFERS_ALL     : int = 0
+const BUFFERS_PAUSED  : int = 1
+const BUFFERS_RUNNING : int = 2
+
 signal parameter_changed(n, v)
 signal rendering_time(t)
 
@@ -116,6 +120,9 @@ func toggle_lock_seed() -> bool:
 func is_seed_locked() -> bool:
 	return seed_locked
 
+func get_buffers(flags : int = BUFFERS_ALL) -> Array:
+	return []
+
 func init_parameters() -> void:
 	for p in get_parameter_defs():
 		if !parameters.has(p.name):
@@ -210,6 +217,20 @@ func set_parameter(n : String, v) -> void:
 								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i].c[f]
 					mm_deps.dependencies_update(parameter_changes)
+					return
+			elif parameter_def.type == "curve":
+				if old_value is MMCurve and v is MMCurve and old_value != null and v.points.size() == old_value.points.size():
+					var parameter_changes = {}
+					for i in range(old_value.points.size()):
+						for f in [ "x", "y" ]:
+							if v.points[i].p[f] != old_value.points[i].p[f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i].p[f]
+						for f in [ "ls", "rs" ]:
+							if v.points[i][f] != old_value.points[i][f]:
+								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i][f]
+					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
 					return
 		all_sources_changed()
 

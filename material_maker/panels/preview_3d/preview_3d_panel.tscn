@@ -42,6 +42,7 @@ visible = false
 margin_right = 187.0
 margin_bottom = 22.0
 mouse_filter = 2
+expand = true
 flip_v = true
 
 [node name="UI" type="PanelContainer" parent="." index="2"]
@@ -60,4 +61,5 @@ margin_right = 20.0
 margin_bottom = 20.0
 items = [ "Reset center", null, 0, false, false, 0, 0, null, "", false, "Center on clicked surface", null, 0, false, false, 1, 0, null, "", false ]
 
+[connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]

@@ -14,3 +14,6 @@ func get_type_name() -> String:
 
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
+
+func _serialize(data: Dictionary) -> Dictionary:
+	return data

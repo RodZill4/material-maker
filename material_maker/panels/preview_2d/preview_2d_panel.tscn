@@ -74,9 +74,13 @@ uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
 
 void fragment() {
-	vec2 ratio = preview_2d_size;
-	vec2 jitter_uv = UV+0.75*fract(sin(vec2(TIME, TIME*0.5)*43758.5453123))/preview_2d_size;
-	vec2 uv = preview_2d_center+(jitter_uv-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	vec2 exy = UV*preview_2d_size + vec2(676.0,807.0);
+	vec2 t = mod(TIME*vec2(0.724079,0.325093),vec2(9.1223,7.3947))+vec2(83.235541,79.433931); 
+   	vec2 rnds = fract(t*exy.x*exy.y*vec2(0.00004387155,0.00002194742));
+   	rnds = fract(t*rnds*exy.x*exy.y*vec2(0.00001853812,0.00003936601));
+	rnds = (sin(rnds*vec2(887.236017,651.419473))*0.5)/preview_2d_size;
+
+	vec2 uv = preview_2d_center+(UV+rnds-0.5)*preview_2d_scale*preview_2d_size/min(preview_2d_size.x, preview_2d_size.y);	
 	if (clear) {
 		COLOR = preview_2d(uv);
 	} else {
@@ -88,9 +92,10 @@ shader_divide = "shader_type canvas_item;
 
 uniform sampler2D sum;
 uniform int divide = 1;
+uniform float exponent = 1.0;
 
 void fragment() {
-	COLOR = vec4(texture(sum, UV).rgb/float(divide), 1.0);
+	COLOR = vec4(pow(texture(sum, UV).rgb/float(divide), vec3(exponent)), 1.0);
 }"
 control_target = NodePath("")
 
@@ -268,7 +273,7 @@ items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
 [node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
 margin_right = 91.0
 margin_bottom = 88.0
-items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false, "Temporal AA 2.2", null, 2, false, false, 4, 0, null, "", false ]
 
 [node name="Guides" type="PopupMenu" parent="ContextMenu" index="2"]
 margin_right = 91.0
@@ -314,6 +319,7 @@ margin_bottom = 88.0
 [node name="Accumulate" type="Viewport" parent="." index="16"]
 size = Vector2( 2, 2 )
 handle_input_locally = false
+use_32_bpc_depth = true
 disable_3d = true
 keep_3d_linear = true
 render_target_v_flip = true
@@ -327,6 +333,7 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]

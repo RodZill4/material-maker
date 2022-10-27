@@ -84,28 +84,37 @@ func do_zoom(factor : float):
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
 
-func process_port_click(pressed : bool):
+func get_nodes_under_mouse() -> Array:
+	var array : Array = []
 	for c in get_children():
 		if c is GraphNode:
 			var rect : Rect2 = c.get_global_rect()
-			var pos = get_global_mouse_position()-rect.position
 			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-			var output_count : int = c.get_connection_output_count()
-			if rect.has_point(get_global_mouse_position()) and output_count > 0:
-				var scale = c.get_global_transform().get_scale()
-				var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-				var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
-				var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-				if in_output:
-					for i in range(output_count):
-						if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
-							if pressed:
-								port_click_node = c
-								port_click_port_index = i
-							elif port_click_node == c and port_click_port_index == i:
-								set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
-								port_click_port_index = -1
-							return
+			if rect.has_point(get_global_mouse_position()):
+				array.push_back(c)
+	return array
+
+func process_port_click(pressed : bool):
+	for c in get_nodes_under_mouse():
+		var rect : Rect2 = c.get_global_rect()
+		var pos = get_global_mouse_position()-rect.position
+		rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+		var output_count : int = c.get_connection_output_count()
+		if output_count > 0:
+			var scale = c.get_global_transform().get_scale()
+			var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
+			var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
+			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
+			if in_output:
+				for i in range(output_count):
+					if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+						if pressed:
+							port_click_node = c
+							port_click_port_index = i
+						elif port_click_node == c and port_click_port_index == i:
+							set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+							port_click_port_index = -1
+						return
 
 func _gui_input(event) -> void:
 	if (
@@ -164,21 +173,58 @@ func _gui_input(event) -> void:
 			node_popup.show_popup()
 		else:
 			if event.button_index == BUTTON_LEFT:
-				process_port_click(event.is_pressed())
+				if event.doubleclick:
+					if get_nodes_under_mouse().empty():
+						on_ButtonUp_pressed()
+				else:
+					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
-	elif event is InputEventKey and event.pressed:
-		var scancode_with_modifiers = event.get_scancode_with_modifiers()
-		if scancode_with_modifiers == KEY_DELETE or scancode_with_modifiers == KEY_BACKSPACE:
-			remove_selection()
+	elif event is InputEventKey:
+		if event.pressed:
+			var scancode_with_modifiers = event.get_scancode_with_modifiers()
+			match scancode_with_modifiers:
+				KEY_DELETE,KEY_BACKSPACE:
+					remove_selection()
+				KEY_LEFT:
+					scroll_offset.x -= 0.5*rect_size.x
+					accept_event()
+				KEY_RIGHT:
+					scroll_offset.x += 0.5*rect_size.x
+					accept_event()
+				KEY_UP:
+					scroll_offset.y -= 0.5*rect_size.y
+					accept_event()
+				KEY_DOWN:
+					scroll_offset.y += 0.5*rect_size.y
+					accept_event()
+		match event.get_scancode():
+			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
+				var found_tip : bool = false
+				for c in get_children():
+					if c.has_method("set_slot_tip_text"):
+						var rect = c.get_global_rect()
+						rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+						if rect.has_point(get_global_mouse_position()):
+							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.rect_global_position)
 	elif event is InputEventMouseMotion:
+		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
 				var rect = c.get_global_rect()
 				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
 				if rect.has_point(get_global_mouse_position()):
-					hint_tooltip = c.get_slot_tooltip(get_global_mouse_position()-c.rect_global_position)
+					var rel_pos : Vector2 = get_global_mouse_position()-c.rect_global_position
+					var slot : Dictionary = c.get_slot_from_position(rel_pos)
+					hint_tooltip = c.get_slot_tooltip(rel_pos, slot)
+					found_tip = found_tip or c.set_slot_tip_text(rel_pos, slot)
+					break
 				else:
 					c.clear_connection_labels()
+		if !found_tip:
+			var rect = get_global_rect()
+			rect = Rect2(rect.position, rect.size*get_global_transform().get_scale())
+			if rect.has_point(get_global_mouse_position()):
+				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -522,6 +568,7 @@ func save_as() -> bool:
 		if save_file(files[0]):
 			main_window.add_recent(save_path)
 			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
+			top_generator.emit_signal("hierarchy_changed")
 			return true
 	return false
 
@@ -628,26 +675,15 @@ func do_paste(data) -> void:
 			c.selected = true
 
 func paste() -> void:
-	var data = OS.clipboard.strip_edges()
-	var graph = null
-	if data.is_valid_html_color():
-		var color = Color(data)
-		graph = {type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a }}
-	elif data.left(4) == "http":
-		var http_request = HTTPRequest.new()
-		add_child(http_request)
-		var error = http_request.request(data)
-		if error != OK:
-			push_error("An error occurred in the HTTP request.")
-		data = yield(http_request, "request_completed")[3].get_string_from_utf8()
-		http_request.queue_free()
-		graph = parse_json(data)
-	else:
-		graph = parse_json(data)
-	if graph != null:
+	var data : String = OS.clipboard.strip_edges()
+	var parsed_data = mm_globals.parse_paste_data(data)
+	while parsed_data is GDScriptFunctionState:
+		parsed_data = yield(parsed_data, "completed")
+	if parsed_data.graph != null:
+		var graph = parsed_data.graph
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = mm_globals.main_window
-			var graph_edit = main_window.new_panel()
+			var graph_edit = main_window.new_graph_panel()
 			var new_generator = mm_loader.create_gen(graph)
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)
@@ -783,21 +819,21 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
-	if node != null:
+	if is_instance_valid(node):
 		preview = Preview.new(node.generator, output_index)
 	if locked:
-		if node != null and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
 		if locked_preview[slot] != null and preview != null and locked_preview[slot].generator == preview.generator and locked_preview[slot].output_index == preview.output_index:
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
 	else:
-		if node != null and current_preview[slot] != null and current_preview[slot].generator != node.generator:
+		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
 		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
-	if node != null:
+	if is_instance_valid(node):
 		node.update()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
@@ -945,6 +981,20 @@ func undoredo_command(command : Dictionary) -> void:
 					get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
+		"resize_comment":
+			var g = get_node_from_hier_name(command.node)
+			g.size = command.size
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
+		"comment_color_change":
+			var g = get_node_from_hier_name(command.node)
+			g.color = command.color
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
@@ -982,7 +1032,7 @@ func undoredo_merge(action_name, undo_actions, redo_actions, last_action):
 					if ! last_action.redo_actions[0].positions.has(p):
 						last_action.redo_actions[0].positions[p] = a.positions[p]
 				return true
-			print("undo/redo for move nodes reset")
+			#print("undo/redo for move nodes reset")
 			undoredo_move_node_selection_changed = false
 	return false
 
@@ -1101,7 +1151,7 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 		_:
 			print("ERROR: Unsupported node type %s in undoredo_step_actions" % prev.type)
 			return {}
-	if top:
+	if false and top:
 		print("Undo actions:")
 		print(undo_actions)
 		print("Redo actions:")

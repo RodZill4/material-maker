@@ -10,6 +10,7 @@ var free_renderers = []
 
 var max_renderers : int = 8
 var renderers_enabled : bool = true
+var max_viewport_size : int = 2048
 
 var max_buffer_size = 0
 
@@ -63,10 +64,12 @@ func generate_shader(src_code : Dictionary) -> String:
 	var shader_code = ""
 	if src_code.has("defs"):
 		shader_code = src_code.defs
+	shader_code += "\nuniform float mm_chunk_size = 1.0;\n"
+	shader_code += "\nuniform vec2 mm_chunk_offset = vec2(0.0);\n"
 	shader_code += "\nuniform float variation = 0.0;\n"
 	shader_code += "\nvoid fragment() {\n"
 	shader_code += "float _seed_variation_ = variation;\n"
-	shader_code += "vec2 uv = UV;\n"
+	shader_code += "vec2 uv = mm_chunk_offset+mm_chunk_size*UV;\n"
 	if src_code.has("code"):
 		shader_code += src_code.code
 	if src_code.has("rgba"):

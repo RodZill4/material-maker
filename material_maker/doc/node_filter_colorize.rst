@@ -29,6 +29,9 @@ Notes
 
 The input will be considered (and implicitly converted to) greyscale if it is a color texture.
 
+Pasting a text containing HTML colors (in the #1234ab syntax) into a graph editor will create a Colorize
+node that contains all specified colors.
+
 Example images
 ++++++++++++++
 

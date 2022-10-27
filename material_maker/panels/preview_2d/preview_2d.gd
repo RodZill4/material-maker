@@ -31,12 +31,15 @@ func update_export_menu() -> void:
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
+func generate_preview_shader(source, template) -> String:
+	return MMGenBase.generate_preview_shader(source, source.type, template)
+
 func do_update_material(source, target_material, template):
 	if ! source.has("type"):
 		return
 	is_greyscale = source.type == "f"
 	# Update shader
-	var code = MMGenBase.generate_preview_shader(source, source.type, template)
+	var code = generate_preview_shader(source, template)
 	target_material.shader.code = code
 	# Get parameter values from the shader code
 	MMGenBase.define_shader_float_parameters(target_material.shader.code, target_material)
@@ -84,9 +87,15 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
 	update_material(source)
 
+var refreshing_generator : bool = false
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
-		set_generator(generator, output, true)
+		if ! refreshing_generator:
+			refreshing_generator = true
+			yield(get_tree(), "idle_frame")
+			set_generator(generator, output, true)
+			refreshing_generator = false
+		return
 	var p = generator.get_parameter_def(n)
 	if p.has("type"):
 		match p.type:
@@ -168,7 +177,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
 	tmp_material.shader = Shader.new()
-	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
+	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
 	# Set texture params
 	if source.has("textures"):
 		for k in source.textures.keys():

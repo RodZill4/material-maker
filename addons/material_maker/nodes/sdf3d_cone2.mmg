@@ -1,0 +1,51 @@
+{
+	"name": "sdf3d_cone2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"h": 1,
+		"r": 0.5
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float sdCone(vec3 p, vec2 q) {\n  vec2 w = vec2( length(p.xz), p.y );\n  vec2 a = w - q*clamp( dot(w,q)/dot(q,q), 0.0, 1.0 );\n  vec2 b = w - q*vec2( clamp( w.x/q.x, 0.0, 1.0 ), 1.0 );\n  float k = sign( q.y );\n  float d = min(dot( a, a ),dot(b, b));\n  float s = max( k*(w.x*q.y-w.y*q.x),k*(w.y-q.y)  );\n  return sqrt(d)*sign(s);\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"name": "Cone",
+		"outputs": [
+			{
+				"sdf3d": "sdCone($uv+vec3(0.0, 0.5*$h, 0.0), vec2($r, $h))",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Height",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

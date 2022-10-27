@@ -6,6 +6,7 @@ func set_value(v) -> void:
 	$VBoxContainer/LineEdit.text = v
 
 func popup_centered(size : Vector2 = Vector2(0, 0)) -> void:
+	_on_VBoxContainer_minimum_size_changed()
 	.popup_centered(size)
 	$VBoxContainer/LineEdit.grab_focus()
 
@@ -34,4 +35,4 @@ func enter_text(title : String, label : String, value : String) -> Dictionary:
 	return result
 
 func _on_VBoxContainer_minimum_size_changed():
-	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+	rect_size = $VBoxContainer.get_minimum_size()+Vector2(20, 4)

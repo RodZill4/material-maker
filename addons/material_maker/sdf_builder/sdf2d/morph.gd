@@ -18,18 +18,18 @@ func get_includes():
 func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String = "$uv", editor : bool = false):
 	var output_name = "$(name_uv)_n%d" % scene.index
 	data.code += "float %s = 42.0;" % output_name
-	var first : bool = true
+	var count : int = 0
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		if not data2.empty():
+		if data2.has("parameters"):
 			data.parameters.append_array(data2.parameters)
+		if data2.has("code"):
 			data.code += data2.code
-			if first:
+			if count == 0:
 				data.code += "%s = %s;\n" % [ output_name, data2.outputs[0].sdf2d ]
-				first = false
-			else:
+			elif count == 1:
 				data.code += "%s *= $k;\n" % [ output_name ]
 				data.code += "%s += %s*(1.0-$k);\n" % [ output_name, data2.outputs[0].sdf2d ]
-				break
+			count += 1
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]

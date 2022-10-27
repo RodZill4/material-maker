@@ -1,0 +1,122 @@
+{
+	"name": "tr",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"randomness": 0.85,
+		"scale_x": 4,
+		"scale_y": 4,
+		"stretch_x": 1,
+		"stretch_y": 1
+	},
+	"seed": 0.344448,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "mat3 $(name_uv)_m3 = tri_voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y,$stretch_x), $randomness, $seed);",
+		"global": "// Based on https://www.shadertoy.com/view/ss3fW4\nconst float s3 = 0.866025;\n\nvec3 sdTriEdges(vec2 p) {\n    return vec3(\n        dot(p, vec2(0,-1)),\n        dot(p, vec2(s3, 0.5)),\n        dot(p, vec2(-s3, 0.5))\n    );\n}\n\nfloat sdTri(vec2 p) {\n    vec3 t = sdTriEdges(p);\n    return max(t.x, max(t.y, t.z));\n}\n\nvec3 primaryAxis(vec3 p) {\n    vec3 a = abs(p);\n    return (1.0-step(a.xyz, a.yzx))*step(a.zxy, a.xyz)*sign(p);\n}\n\nvec3 sdgBorder(vec2 pt1, vec2 pt2) {\t\n    vec3 tbRel = sdTriEdges(pt2 - pt1);    \n    vec3 axis = primaryAxis(tbRel);\n    \n    vec2 gA = vec2(0,-1);\n    vec2 gB = vec2(s3, 0.5);\n    vec2 gC = vec2(-s3, 0.5);\n\t\t   \n    vec2 norA = gC * axis.x + gA * axis.y + gB * axis.z;\n    vec2 norB = gB * -axis.x + gC * -axis.y + gA * -axis.z;\n   \n    vec2 dir = gA * axis.x + gB * axis.y + gC * axis.z;\n    vec2 corner = dir * dot(dir, pt1 - pt2) * 2.0/3.0;\n    \t\n    mat2 r90 = mat2(vec2(0.0,-1.0),vec2(1.0,0.0));\n    \n    bool isEdge = axis.x + axis.y + axis.z < 0.0;\n\t    \n    if (isEdge) {\n        corner = pt2 + corner;\n        vec2 ca = corner + min(0.0, dot(corner, -norA)) * norA;\n        vec2 cb = corner + max(0.0, dot(corner, -norB)) * norB;\n        float side = step(dot(corner, dir * r90), 0.0);\n        corner = mix(cb, ca, side);\n    } else {\n        corner = pt1 - corner;\n        vec2 ca = corner + max(0.0, dot(corner, -norA)) * norA;\n        vec2 cb = corner + min(0.0, dot(corner, -norB)) * norB;\n        float side = step(dot(corner, dir * r90), 0.0);\n        corner = mix(ca, cb, side);\n    }\n    \n    vec2 nor = normalize(corner);\n    float d = length(corner);\n    return vec3(abs(d), nor);\n}\n\nfloat vmax(vec3 v) { return max(v.x, max(v.y, v.z)); }\n\nvec4 cellPoint(vec2 n, vec2 f, vec2 cell, float r, float seed, vec2 s, vec2 st) {\n    vec2 coord = n + cell;\n    vec2 o = r*rand2(seed + mod(n + cell + s, s));\n    vec2 point = cell + o - f;\n\tpoint *= st;\n    return vec4(point, coord);\n}\n\nvec2 tri_coord(vec2 x, vec2 s, vec2 st, float r, float seed) {\n    vec2 n = floor(x);\n    vec2 f = fract(x);\n\n\tvec2 closestCoord;\n\n    const int reach = 2;\n    float closestDist = 8.0;\n    for( int j = -reach; j <= reach; j++ )\n    for( int i = -reach; i <= reach; i++ )\n    {\n        vec2 cell = vec2(float(i), float(j));\n        vec4 point = cellPoint(n,f,cell,r,seed,s,st);\n        \n        float dist = vmax(sdTriEdges(point.xy));\n\n        if( vmax(sdTriEdges(point.xy)) < closestDist )\n        {\n            closestDist = dist;\n            closestCoord = point.zw;\n        }\n    }\n    return closestCoord;\n}\n\nmat3 tri_voronoi( vec2 x, vec2 s, vec2 st, float r, float seed) {    \n    x *= s;\n    vec2 n = floor(x);\n    vec2 f = fract(x);\n\n\tvec2 closestCell, closestPoint, nor;\n\n    const int reach = 3;\n    float closestDist = 8.0;\n\t\n    for( int j = -reach; j <= reach; j++ )\n    for( int i = -reach; i <= reach; i++ )\n    {\n        vec2 cell = vec2(float(i), float(j));\n        vec2 point = cellPoint(n,f,cell,r,seed,s,st).xy;\n\n        float dist = sdTri(point);\n\n        if( dist < closestDist )\n        {\n            closestDist = dist;\n            closestPoint = point;\n            closestCell = cell;\n        }\n    }\n\n    closestDist = 8.0;\n    for( int j = -reach-1; j <= reach+1; j++ )\n    for( int i = -reach-1; i <= reach+1; i++ )\n    {\n        vec2 cell = closestCell + vec2(float(i), float(j));\n        vec2 coord = n + cell;\n    \t\tvec2 o = r*rand2(seed + mod(n + cell + s, s));\n    \t\tvec2 point = cell + o - f;\n\t\tpoint *= st;\n\n        float dist = sdTri(closestPoint - point);\n\t\t\n        if( dist > 0.00001 ) {\n            vec3 sdg = sdgBorder(closestPoint, point);\n            if (sdg.x < closestDist) {\n                closestDist = sdg.x;\n                nor = sdg.zy;\n            }\n        }\n    }\n    \n    return mat3(\n        vec3(closestDist,closestPoint),\n        vec3(nor,0),\n        vec3(tri_coord(x,s,st,r,seed),0));\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates several images from a tileable voronoi noise",
+		"name": "Triangle Voronoi",
+		"outputs": [
+			{
+				"f": "length($(name_uv)_m3[0].yz)",
+				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"shortdesc": "Nodes",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv)_m3[0].x",
+				"longdesc": "A greyscale pattern based on the distance to borders",
+				"shortdesc": "Border",
+				"type": "f"
+			},
+			{
+				"longdesc": "Shows a random color for each cell",
+				"rgb": "rand3(fract($(name_uv)_m3[2].xy/vec2($scale_x,$scale_y)))",
+				"shortdesc": "Random color",
+				"type": "rgb"
+			},
+			{
+				"longdesc": "Shows an UV map to be connected to the UV map port of the Custom UV node",
+				"rgb": "vec3(-$(name_uv)_m3[0].yz*0.5+0.5,rand(fract($(name_uv)_m3[2].xy/vec2($scale_x,$scale_y))))",
+				"shortdesc": "UV Map",
+				"type": "rgb"
+			},
+			{
+				"longdesc": "Generated normal map",
+				"rgb": "vec3(0.5)+0.5*normalize(vec3(vec2(-$(name_uv)_m3[1].y,-$(name_uv)_m3[1].x), -1.0))",
+				"shortdesc": "Normal Map",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale X",
+				"longdesc": "The scale along the X axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Scale Y",
+				"longdesc": "The scale along the Y axis",
+				"max": 32,
+				"min": 1,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stretch X",
+				"longdesc": "The stretch factor along the X axis",
+				"max": 1,
+				"min": 0,
+				"name": "stretch_x",
+				"shortdesc": "Stretch.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stretch Y",
+				"longdesc": "The stretch factor along the Y axis",
+				"max": 1,
+				"min": 0,
+				"name": "stretch_y",
+				"shortdesc": "Stretch.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.85,
+				"label": "Randomness",
+				"longdesc": "The randomness of cell centers positions",
+				"max": 1,
+				"min": 0,
+				"name": "randomness",
+				"shortdesc": "Randomness",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Triangle voronoi noise"
+	},
+	"type": "shader"
+}

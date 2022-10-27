@@ -36,7 +36,7 @@ When generating a map from a custom mesh, an image node for the generated map wi
 be stored in the clipboard, and it is possible to directly paste that node into about
 a material graph.
 
-The *Environment* menu provides different environments.
+The *Environment* menu provides different environments, as well as tonemap options.
 
 In the 3D view, the view can be rotated about the yaw and the pitch axes (from the
 camera's point of view) by holding the left mouse button and moving the mouse horizontally

@@ -15,5 +15,5 @@ func get_parameter_defs():
 func get_includes():
 	return [ "rotate" ]
 
-func mod_code(output_name : String) -> String:
+func mod_code(scene : Dictionary, output_name : String, editor : bool) -> String:
 	return "%s = abs(%s)-0.5*$width;\n" % [ output_name, output_name ]

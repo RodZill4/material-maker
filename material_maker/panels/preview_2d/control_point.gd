@@ -94,10 +94,14 @@ func get_value() -> Vector2:
 				var p = generator.get_parameter(parameter_x)
 				if p is float:
 					pos.x = p
+				else:
+					visible = false
 			if parameter_y != "":
 				var p = generator.get_parameter(parameter_y)
 				if p is float:
 					pos.y = p
+				else:
+					visible = false
 		else:
 			var r = 0.25
 			var a = 0
@@ -105,10 +109,14 @@ func get_value() -> Vector2:
 				var p = generator.get_parameter(parameter_r)
 				if p is float:
 					r = p
+				else:
+					visible = false
 			if parameter_a != "":
 				var p = generator.get_parameter(parameter_a)
 				if p is float:
 					a = p*0.01745329251
+				else:
+					visible = false
 			pos.x = r*cos(a)
 			pos.y = r*sin(a)
 	return pos
@@ -176,7 +184,7 @@ func _on_Point_gui_input(event : InputEvent):
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
 			if grid != null and grid.visible:
-				snap = grid.snap
+				snap = grid.grid_size
 			if is_xy:
 				if snap > 0.0:
 					value.x = round((value.x-0.5)*snap)/snap+0.5
