@@ -23,6 +23,18 @@
 			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "fast_blur_shader",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 1
+		},
+		{
+			"from": "fast_blur_shader",
+			"from_port": 2,
+			"to": "gen_outputs",
+			"to_port": 2
 		}
 	],
 	"label": "Fast Blur",
@@ -41,7 +53,8 @@
 			},
 			"parameters": {
 				"quality": 1,
-				"sigma": 100
+				"sigma": 100,
+				"strength": 1
 			},
 			"seed": -27696,
 			"type": "fast_blur_shader"
@@ -92,9 +105,21 @@
 			"ports": [
 				{
 					"group_size": 0,
-					"longdesc": "The generated blurred image",
-					"name": "output",
-					"shortdesc": "Output",
+					"longdesc": "The input image with high frequency details blurred away",
+					"name": "Blurred",
+					"shortdesc": "Blurred",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "The input image with only high frequency details kept.\nNote that all channels including alpha will be centered at 0, so this will need to be connected to a SwapChannels node to be seen in previews.",
+					"name": "High Pass",
+					"shortdesc": "High Pass",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "The input image with high frequency details strengthened",
+					"name": "Sharpened",
+					"shortdesc": "Sharpened",
 					"type": "rgba"
 				}
 			],
@@ -110,7 +135,8 @@
 			"parameters": {
 				"param0": 11,
 				"param1": 100,
-				"param2": 1
+				"param2": 1,
+				"param3": 1
 			},
 			"seed": 57528,
 			"type": "remote",
@@ -157,6 +183,19 @@
 					"name": "param2",
 					"shortdesc": "Quality",
 					"type": "linked_control"
+				},
+				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "fast_blur_shader",
+							"widget": "strength"
+						}
+					],
+					"longdesc": "High pass multiplier. Unused for low pass output.",
+					"name": "param3",
+					"shortdesc": "Strength",
+					"type": "linked_control"
 				}
 			]
 		},
@@ -177,7 +216,8 @@
 	"parameters": {
 		"param0": 11,
 		"param1": 100,
-		"param2": 1
+		"param2": 1,
+		"param3": 1
 	},
 	"seed_int": 0,
 	"shortdesc": "",

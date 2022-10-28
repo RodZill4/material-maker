@@ -2,6 +2,7 @@
 	"Filter/AdjustHSV": "hue,saturation,value,brightness,color,tone",
 	"Filter/Blend": "merge,mix,overlay,combine,fuse,rgba",
 	"Filter/Blur": "gaussian,soften,feather",
+	"Filter/Blur/Fast": "gaussian,soften,feather,sharpen,high,low,pass",
 	"Filter/BrightnessContrast": "adjust",
 	"Filter/Colorize": "gradient,map,color,tint,ramp",
 	"Filter/Colorize/Invert": "negative",

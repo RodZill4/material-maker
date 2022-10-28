@@ -6,11 +6,12 @@
 	},
 	"parameters": {
 		"quality": 1,
-		"sigma": 100
+		"sigma": 100,
+		"strength": 1
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": "",
+		"code": "vec4 $(name_uv)_blurred = $(name)_blur($uv, vec2(1.0)/$in.size, max(1.0, floor($sigma*$in.size/2048.0)), int($quality));",
 		"global": "",
 		"inputs": [
 			{
@@ -44,7 +45,18 @@
 		"name": "Fast Blur",
 		"outputs": [
 			{
-				"rgba": "$(name)_blur($uv, vec2(1.0)/$in.size, max(1.0, floor($sigma*$in.size/2048.0)), int($quality))",
+				"rgba": "$(name_uv)_blurred",
+				"shortdesc": "Low Pass",
+				"type": "rgba"
+			},
+			{
+				"rgba": "($in($uv) - $(name_uv)_blurred) * $strength",
+				"shortdesc": "High Pass",
+				"type": "rgba"
+			},
+			{
+				"rgba": "($in($uv) - $(name_uv)_blurred) * ($strength+1.0) + $(name_uv)_blurred",
+				"shortdesc": "Sharpened",
 				"type": "rgba"
 			}
 		],
@@ -67,6 +79,16 @@
 				"min": 0,
 				"name": "quality",
 				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 2,
+				"label": "",
+				"max": 10,
+				"min": 0,
+				"name": "strength",
+				"step": 0.1,
 				"type": "float"
 			}
 		]
