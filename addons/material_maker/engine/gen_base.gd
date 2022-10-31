@@ -197,11 +197,7 @@ func set_parameter(n : String, v) -> void:
 				mm_deps.dependencies_update({ parameter_name:v })
 				return
 			elif parameter_def.type == "color":
-				var parameter_changes = {}
-				for f in [ "r", "g", "b", "a" ]:
-					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
-					parameter_changes[parameter_name] = v[f]
-				mm_deps.dependencies_update(parameter_changes)
+				mm_deps.dependency_update("p_o"+str(get_instance_id())+"_"+n, v)
 				return
 			elif parameter_def.type == "gradient":
 				if old_value is MMGradient and v is MMGradient and old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
@@ -212,10 +208,9 @@ func set_parameter(n : String, v) -> void:
 						if v.points[i].v != old_value.points[i].v:
 							var parameter_name = "p_o%s_%s_%d_pos" % [ str(get_instance_id()), n, i ]
 							parameter_changes[parameter_name] = v.points[i].v
-						for f in [ "r", "g", "b", "a" ]:
-							if v.points[i].c[f] != old_value.points[i].c[f]:
-								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
-								parameter_changes[parameter_name] = v.points[i].c[f]
+						if v.points[i].c != old_value.points[i].c:
+							var parameter_name = "p_o%s_%s_%d_col" % [ str(get_instance_id()), n, i ]
+							parameter_changes[parameter_name] = v.points[i].c
 					mm_deps.dependencies_update(parameter_changes)
 					return
 			elif parameter_def.type == "curve":
@@ -230,7 +225,7 @@ func set_parameter(n : String, v) -> void:
 							if v.points[i][f] != old_value.points[i][f]:
 								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i][f]
-					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+					mm_deps.dependencies_update(parameter_changes)
 					return
 		all_sources_changed()
 
@@ -434,6 +429,9 @@ func deserialize(data : Dictionary) -> void:
 
 static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
 	var regex = RegEx.new()
-	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
+	regex.compile("uniform\\s+float\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
 	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[2], float(p.strings[3]))
+		material.set_shader_param(p.strings[1], float(p.strings[2]))
+	regex.compile("uniform\\s+vec4\\s+([\\w_\\d]+)\\s*=\\s*vec4\\s*\\(\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^\\)\\s]+)\\s*\\);")
+	for p in regex.search_all(code):
+		material.set_shader_param(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))

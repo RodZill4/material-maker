@@ -124,7 +124,8 @@ func _on_PopupMenu_id_pressed(id):
 			mm_renderer.enable_renderers(b)
 		ITEM_MATERIAL_STATS:
 			var material = mm_globals.main_window.get_current_graph_edit().top_generator
-			print(count_buffers(material))
+			print("Buffers: "+str(count_buffers(material)))
+			mm_deps.print_stats()
 
 func count_buffers(material) -> int:
 	var buffers = 0

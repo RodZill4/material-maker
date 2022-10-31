@@ -72,15 +72,12 @@ func get_color(x) -> Color:
 	else:
 		return Color(0.0, 0.0, 0.0, 1.0)
 
-func get_shader_params(name) -> Dictionary:
+func get_shader_params(name : String, attribute : String = "uniform") -> String:
 	sort()
-	var rv = {}
+	var rv = ""
 	for i in range(points.size()):
-		rv["p_"+name+"_"+str(i)+"_pos"] = points[i].v
-		rv["p_"+name+"_"+str(i)+"_r"] = points[i].c.r
-		rv["p_"+name+"_"+str(i)+"_g"] = points[i].c.g
-		rv["p_"+name+"_"+str(i)+"_b"] = points[i].c.b
-		rv["p_"+name+"_"+str(i)+"_a"] = points[i].c.a
+		rv += "%s float p_%s_%d_pos = %.09f;\n" % [ attribute, name, i, points[i].v ]
+		rv += "%s vec4 p_%s_%d_col = vec4(%.09f, %.09f, %.09f, %.09f);\n" % [ attribute, name, i, points[i].c.r, points[i].c.g, points[i].c.b, points[i].c.a ]
 	return rv
 
 # get_color_in_shader
@@ -91,7 +88,7 @@ func pv(name : String, i : int) -> String:
 	return "p_"+name+"_"+str(i)+"_pos"
 
 func pc(name : String, i : int) -> String:
-	return "vec4(p_"+name+"_"+str(i)+"_r,p_"+name+"_"+str(i)+"_g,p_"+name+"_"+str(i)+"_b,p_"+name+"_"+str(i)+"_a)"
+	return "p_"+name+"_"+str(i)+"_col"
 
 func get_shader(name) -> String:
 	sort()

@@ -10,9 +10,7 @@ func _ready() -> void:
 func set_gradient(g) -> void:
 	gradient = g
 	var shadertext = "shader_type canvas_item;\n"
-	var params = gradient.get_shader_params("my")
-	for v in params.keys():
-		shadertext += "const float %s = %.09f;\n" % [ v , params[v] ]
+	shadertext += gradient.get_shader_params("my")
 	shadertext += gradient.get_shader("my")
 	shadertext += "void fragment() {\nCOLOR = my_gradient_fct(UV.x);\n}\n"
 	$ColorRect.material.shader.code = shadertext

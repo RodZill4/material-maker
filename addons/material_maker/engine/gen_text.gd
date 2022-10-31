@@ -47,7 +47,7 @@ func update_buffer() -> void:
 				renderer.copy_to_texture(texture)
 			renderer.release(self)
 		updating = false
-		get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
+		mm_deps.dependency_update("o%s_tex")
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

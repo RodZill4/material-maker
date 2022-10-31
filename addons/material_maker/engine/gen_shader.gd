@@ -398,7 +398,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					value = 0
 				value_string = p.values[value].value
 			elif p.type == "color":
-				value_string = "vec4(p_%s_%s_r, p_%s_%s_g, p_%s_%s_b, p_%s_%s_a)" % [ genname, p.name, genname, p.name, genname, p.name, genname, p.name ]
+				value_string = "p_%s_%s" % [ genname, p.name ]
 			elif p.type == "gradient":
 				value_string = genname+"_"+p.name+"_gradient_fct"
 			elif p.type == "curve":
@@ -484,18 +484,13 @@ func generate_parameter_declarations(rv : Dictionary):
 		if p.type == "float" and parameters[p.name] is float:
 			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
 		elif p.type == "color":
-			rv.defs += "uniform float p_%s_%s_r = %.9f;\n" % [ genname, p.name, parameters[p.name].r ]
-			rv.defs += "uniform float p_%s_%s_g = %.9f;\n" % [ genname, p.name, parameters[p.name].g ]
-			rv.defs += "uniform float p_%s_%s_b = %.9f;\n" % [ genname, p.name, parameters[p.name].b ]
-			rv.defs += "uniform float p_%s_%s_a = %.9f;\n" % [ genname, p.name, parameters[p.name].a ]
+			rv.defs += "uniform vec4 p_%s_%s = vec4(%.9f, %.9f, %.9f, %.9f);\n" % [ genname, p.name, parameters[p.name].r, parameters[p.name].g, parameters[p.name].b, parameters[p.name].a ]
 		elif p.type == "gradient":
 			var g = parameters[p.name]
 			if !(g is MMGradient):
 				g = MMGradient.new()
 				g.deserialize(parameters[p.name])
-			var params = g.get_shader_params(genname+"_"+p.name)
-			for sp in params.keys():
-				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
+			rv.defs += g.get_shader_params(genname+"_"+p.name)
 			rv.defs += g.get_shader(genname+"_"+p.name)
 		elif p.type == "curve":
 			var g = parameters[p.name]

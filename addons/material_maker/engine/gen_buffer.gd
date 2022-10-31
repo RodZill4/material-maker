@@ -30,7 +30,7 @@ func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 9
 	#add_to_group("preview")
-	mm_deps.create_buffer("o%s_tex" % str(get_instance_id()), self, "on_deps_fct")
+	mm_deps.create_buffer("o%s_tex" % str(get_instance_id()), self)
 
 func _exit_tree() -> void:
 	if current_renderer != null:
@@ -49,8 +49,8 @@ func set_paused(v : bool) -> void:
 	if v == is_paused:
 		return
 	is_paused = v
-	if ! v and need_update:
-		update_buffer()
+	if ! v:
+		mm_deps.update()
 
 func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 	if ( is_paused and flags == BUFFERS_RUNNING ) or ( ! is_paused and flags == BUFFERS_PAUSED ):
@@ -84,7 +84,6 @@ func all_sources_changed() -> void:
 
 func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
-		get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
 		if n == "size":
 			var param_name = "o%s_tex_size" % str(get_instance_id())
 			var param_value = pow(2, v)
@@ -96,8 +95,10 @@ func update_shader() -> void:
 	if ! updating_shader:
 		updating_shader = true
 		call_deferred("do_update_shader")
+		print("blah")
 
 func do_update_shader() -> void:
+	updating_shader = false
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(0)
@@ -120,43 +121,41 @@ func do_update_shader() -> void:
 			material.set_shader_param(k, source.textures[k])
 	pending_textures = []
 	yield(get_tree(), "idle_frame")
-	if ! mm_deps.buffer_has_pending_dependencies(buffer_name):
-		update_buffer()
-	else:
-		set_pending()
+	mm_deps.update()
 
-func set_pending() -> void:
-	if ! is_pending:
-		mm_renderer.add_pending_request()
-		is_pending = true
-
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	if mm_renderer.update_float_parameters(material, parameter_changes):
-		update_again = true
-		if is_inside_tree():
-			get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
-		if pending_textures.empty():
-			update_buffer()
-		return true
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+	mm_renderer.update_float_parameters(material, { parameter_name: value })
 	return false
 
-func on_texture_changed(n : String) -> void:
-	return
-	pending_textures.erase(n)
-	if pending_textures.empty() and mm_renderer.material_has_parameter(material, n):
-		update_again = true
-		update_buffer()
-
-func on_texture_invalidated(n : String) -> void:
-	return
-	if mm_renderer.material_has_parameter(material, n):
-		if pending_textures.empty():
-			get_tree().call_group("preview", "on_texture_invalidated", "o%s_tex" % str(get_instance_id()))
-			set_pending()
-		if pending_textures.find(n) == -1:
-			pending_textures.push_back(n)
+func on_dep_update_buffer(buffer_name) -> bool:
+	if is_paused:
+		need_update = true
+		return false
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	var time = OS.get_ticks_msec()
+	renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer.copy_to_texture(texture)
+	renderer.release(self)
+	match version:
+		VERSION_COMPLEX:
+			var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
+			if ! parameters.has("filter") or parameters.filter:
+				flags |= Texture.FLAG_FILTER
+			if ! parameters.has("mipmap") or parameters.mipmap:
+				flags |= Texture.FLAG_MIPMAPS
+			texture.flags = flags
+		_:
+			texture.flags = Texture.FLAGS_DEFAULT
+	emit_signal("rendering_time", OS.get_ticks_msec() - time)
+	mm_deps.buffer_updated(buffer_name)
+	return true
 
 func update_buffer() -> void:
+	return
 	if is_paused:
 		need_update = true
 		return
@@ -193,7 +192,6 @@ func update_buffer() -> void:
 			renderer.release(self)
 			current_renderer = null
 		updating = false
-		#get_tree().call_group("preview", "on_texture_changed", "o%s_tex" % str(get_instance_id()))
 		mm_deps.buffer_updated("o%s_tex" % str(get_instance_id()))
 		need_update = false
 
