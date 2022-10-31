@@ -119,21 +119,8 @@ func on_parameter_changed(n : String, v) -> void:
 func get_preview_material():
 	return material
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	return false
-	var return_value : bool = false
-	var m : ShaderMaterial = get_preview_material()
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				m.set_shader_param(n, parameter_changes[n])
-				break
-	return return_value
-
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	print(parameter_name+" = "+str(value))
-	mm_renderer.update_float_parameters(material, { parameter_name: value })
+	mm_renderer.update_float_parameters(get_preview_material(), { parameter_name: value })
 	return false
 
 func on_resized() -> void:
