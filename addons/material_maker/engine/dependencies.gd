@@ -120,7 +120,6 @@ func dependency_update(dependency_name : String, value = null):
 		assert(value != null)
 		for d in dependencies[dependency_name]:
 			assert(buffers.has(d))
-			print(d)
 			var b : Buffer = buffers[d]
 			if b.object.has_method("on_dep_update_value") and b.object.on_dep_update_value(d, dependency_name, value):
 				continue

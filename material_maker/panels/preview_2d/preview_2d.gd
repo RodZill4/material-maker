@@ -120,7 +120,7 @@ func get_preview_material():
 	return material
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	mm_renderer.update_float_parameters(get_preview_material(), { parameter_name: value })
+	get_preview_material().set_shader_param(parameter_name, value)
 	return false
 
 func on_resized() -> void:
