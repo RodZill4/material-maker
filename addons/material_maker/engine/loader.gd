@@ -26,7 +26,7 @@ func update_predefined_generators()-> void:
 				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
 					var file : File = File.new()
 					if file.open(path+"/"+file_name, File.READ) == OK:
-						var generator = parse_json(file.get_as_text())
+						var generator = string_to_dict_tree(file.get_as_text())
 						if CHECK_PREDEFINED:
 							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
 								var parse_result = parser.parse(generator.shader_model.global)
@@ -78,10 +78,46 @@ func generator_name_from_path(path : String) -> String:
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
+static func string_to_dict_tree(string_data : String) -> Dictionary:
+	var file_data = string_data.split("\n########################################")
+	var data = parse_json(file_data[0])
+	file_data.remove(0)
+
+	if not data:
+		return data
+
+	var re = RegEx.new()
+	re.compile("^(?<type>.+?):(?<path>.+)\n(?<val>(.|\n)*)")
+
+	for f in file_data:
+		var result = re.search(f)
+		if not result:
+			print("File appears to be corrupt, some data will be missing")
+			break
+
+		var val = result.get_string("val")
+		match result.get_string("type"):
+			"string":
+				val = val.replace("    ", "    ") #TODO: Pick tab vs space
+			var path_type:
+				print("Unrecognized type %s, this file may have been written by a newer version of Material Maker" % path_type)
+
+		var data_dict = data
+		var path = result.get_string("path")
+		while true:
+			var path_split = path.split(".", true, 1)
+			if path_split.size() == 1:
+				break
+			data_dict = data_dict[path_split[0]]
+			path = path_split[1]
+		data_dict[path] = val
+
+	return data
+
 func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
-		var data = parse_json(file.get_as_text())
+		var data = string_to_dict_tree(file.get_as_text())
 		if data != null:
 			current_project_path = filename.get_base_dir()
 			var generator = create_gen(data)

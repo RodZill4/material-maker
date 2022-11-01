@@ -494,19 +494,46 @@ func save_generator() -> void:
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() > 0:
-		do_save_generator(files[0])
+		do_save_generator(files[0], generator)
 
-func do_save_generator(file_name : String) -> void:
+static func extract_verbose_values(path : String, data : Dictionary) -> Array:
+	var rv = []
+	var keys = data.keys().duplicate()
+	keys.sort()
+	for key in keys:
+		var v = data[key]
+		var mpath = path + "." + key
+		match typeof(v):
+			TYPE_STRING:
+				if "\n" in v:
+					data.erase(key)
+					rv.append("string:" + mpath.substr(1) + "\n" + v)
+			TYPE_DICTIONARY:
+				rv.append_array(extract_verbose_values(mpath, v))
+	return rv
+
+static func dict_tree_to_string(data : Dictionary) -> String:
+	data = data.duplicate(true)
+
+	var rv = ""
+	if OS.get_environment("MM_WRITE_NEW_FORMAT") != "":
+		var keyvals = extract_verbose_values("", data)
+		keyvals.push_front("")
+		rv = PoolStringArray(keyvals).join("\n########################################")
+
+	return JSON.print(data, "\t", true) + "\n" + rv
+
+static func do_save_generator(file_name : String, _generator : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
-		var data = generator.serialize()
+		var data = _generator.serialize()
 		data.name = file_name.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
 		for k in [ "uids", "export_paths" ]:
 			if data.has(k):
 				data.erase(k)
-		file.store_string(JSON.print(data, "\t", true))
+		file.store_string(dict_tree_to_string(data))
 		file.close()
 		mm_loader.update_predefined_generators()
 
