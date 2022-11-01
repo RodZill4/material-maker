@@ -96,7 +96,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	return self
 
 func render_shader(object : Object, shader : String, textures : Dictionary, render_size : int, with_hdr : bool = true) -> Object:
-	var shader_material = $ColorRect.material
+	var shader_material = $ColorRect.material.duplicate(true)
 	shader_material.shader.code = shader
 	if textures != null:
 		for k in textures.keys():
