@@ -91,7 +91,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	return self
 
 func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
-	var shader_material = $ColorRect.material
+	var shader_material = $ColorRect.material.duplicate(true)
 	shader_material.shader.code = shader
 	mm_deps.material_update_params(shader_material)
 	var status = render_material(object, shader_material, render_size, with_hdr)
