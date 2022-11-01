@@ -22,7 +22,7 @@ func _ready():
 					OS.execute(bat_file_path, [], true, output)
 					dir.remove(bat_file_path)
 					dir.change_dir(output[0].split("\n")[2])
-			var target : String = "Godot"
+			var target : String = "Godot/Godot 4 Standard"
 			var output_dir : String = dir.get_current_dir()
 			var size : int = 0
 			var files : Array = []
@@ -127,9 +127,11 @@ func export_files(files, output_dir, target, size) -> void:
 				if c.has_method("export_material"):
 					if c.has_method("get_export_profiles"):
 						if c.get_export_profiles().find(target) == -1:
-							show_error("ERROR: Unsupported target %s"+target)
+							show_error("ERROR: Unsupported target '%s', please select from the following:\n%s" % [target, "\n".join(c.get_export_profiles())])
 							continue
-					$VBoxContainer/Label.text = "Exporting "+f.get_file()
+					var export_msg = "Exporting %s to %s..." % [f.get_file(), output_dir]
+					$VBoxContainer/Label.text = export_msg
+					print(export_msg)
 					var prefix : String = output_dir+"/"+f.get_file().get_basename()
 					var result = c.export_material(prefix, target, size)
 					while result is GDScriptFunctionState:
@@ -139,5 +141,6 @@ func export_files(files, output_dir, target, size) -> void:
 	get_tree().quit()
 
 func show_error(message : String):
+	print(message)
 	$ErrorPanel.show()
 	$ErrorPanel/Label.text = message
