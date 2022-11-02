@@ -903,10 +903,6 @@ func update_preview() -> void:
 	updating = true
 	while need_update:
 		need_update = false
-# warning-ignore:void_assignment
-		status = update_preview_2d()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
 		status = update_preview_3d([ preview_3d, preview_3d_background ])
 		while status is GDScriptFunctionState:
 			status = yield(status, "completed")
@@ -934,19 +930,21 @@ func update_preview_2d() -> void:
 					histogram.set_generator(null)
 					preview_2d_background.set_generator(null)
 
+var current_gen_material = null
 func update_preview_3d(previews : Array, sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var gen_material = null
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
-		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.update()
-		if sequential:
-			while status is GDScriptFunctionState:
-				yield(status, "completed")
+		gen_material = graph_edit.top_generator.get_node("Material")
+	if gen_material != current_gen_material:
+		if current_gen_material != null and is_instance_valid(current_gen_material):
+			current_gen_material.set_3d_previews([])
+		current_gen_material = gen_material
+	if current_gen_material != null:
+		var materials : Array = []
 		for p in previews:
-			status = gen_material.update_materials(p.get_materials(), sequential)
-			if sequential:
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
+			materials.append_array(p.get_materials())
+		current_gen_material.set_3d_previews(materials)
 
 func on_preview_changed(graph) -> void:
 	if graph == get_current_graph_edit():

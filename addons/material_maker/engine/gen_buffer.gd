@@ -95,7 +95,6 @@ func update_shader() -> void:
 	if ! updating_shader:
 		updating_shader = true
 		call_deferred("do_update_shader")
-		print("blah")
 
 func do_update_shader() -> void:
 	updating_shader = false
@@ -124,22 +123,25 @@ func do_update_shader() -> void:
 	mm_deps.update()
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	mm_renderer.update_float_parameters(material, { parameter_name: value })
+	if value != null:
+		material.set_shader_param(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if is_paused:
 		need_update = true
 		return false
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
+	assert(current_renderer == null)
+	current_renderer = mm_renderer.request(self)
+	while current_renderer is GDScriptFunctionState:
+		current_renderer = yield(current_renderer, "completed")
 	var time = OS.get_ticks_msec()
-	renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer.copy_to_texture(texture)
-	renderer.release(self)
+	current_renderer = current_renderer.render_material(self, material, pow(2, get_parameter("size")))
+	while current_renderer is GDScriptFunctionState:
+		current_renderer = yield(current_renderer, "completed")
+	current_renderer.copy_to_texture(texture)
+	current_renderer.release(self)
+	current_renderer = null
 	match version:
 		VERSION_COMPLEX:
 			var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
@@ -153,47 +155,6 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	emit_signal("rendering_time", OS.get_ticks_msec() - time)
 	mm_deps.buffer_updated(buffer_name)
 	return true
-
-func update_buffer() -> void:
-	return
-	if is_paused:
-		need_update = true
-		return
-	if !updating:
-		updating = true
-		while update_again:
-			if is_pending:
-				mm_renderer.remove_pending_request()
-				is_pending = false
-			var renderer = mm_renderer.request(self)
-			while renderer is GDScriptFunctionState:
-				renderer = yield(renderer, "completed")
-			if renderer == null:
-				return
-			current_renderer = renderer
-			update_again = false
-			var time = OS.get_ticks_msec()
-			renderer = renderer.render_material(self, material, pow(2, get_parameter("size")))
-			while renderer is GDScriptFunctionState:
-				renderer = yield(renderer, "completed")
-			if !update_again:
-				renderer.copy_to_texture(texture)
-				match version:
-					VERSION_COMPLEX:
-						var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
-						if ! parameters.has("filter") or parameters.filter:
-							flags |= Texture.FLAG_FILTER
-						if ! parameters.has("mipmap") or parameters.mipmap:
-							flags |= Texture.FLAG_MIPMAPS
-						texture.flags = flags
-					_:
-						texture.flags = Texture.FLAGS_DEFAULT
-			emit_signal("rendering_time", OS.get_ticks_msec() - time)
-			renderer.release(self)
-			current_renderer = null
-		updating = false
-		mm_deps.buffer_updated("o%s_tex" % str(get_instance_id()))
-		need_update = false
 
 func get_globals(texture_name : String) -> Array:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]

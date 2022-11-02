@@ -20,7 +20,7 @@ class Buffer:
 		object = o
 		dependencies = []
 		pending_dependencies = 0
-		status = Invalidated
+		status = Updated
 
 
 var dependencies : Dictionary = {}
@@ -32,11 +32,9 @@ func _ready():
 
 func create_buffer(buffer_name : String, object : Object = null):
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
-	if dependencies.has(buffer_name):
-		for b in dependencies[buffer_name]:
-			var buffer = buffers[b]
-			buffer.pending_dependencies += 1
-			buffer.status = Buffer.Invalidated
+	buffer_invalidate(buffer_name)
+	if object is Node and not object.is_connected("tree_exiting", self, "delete_buffers_from_object"):
+		object.connect("tree_exiting", self, "delete_buffers_from_object", [ object ])
 
 func delete_buffer(buffer_name : String):
 	buffer_clear_dependencies(buffer_name)
@@ -44,6 +42,16 @@ func delete_buffer(buffer_name : String):
 	if dependencies.has(buffer_name):
 		for b in dependencies[buffer_name]:
 			buffers[b].dependencies.remove(buffer_name)
+
+func delete_buffers_from_object(object : Object):
+	print("delete_buffers_from_object "+str(object))
+	var remove_buffers : Array = []
+	for b in buffers.keys():
+		if buffers[b].object == object:
+			remove_buffers.append(b)
+	for b in remove_buffers:
+		print("Deleting "+b)
+		delete_buffer(b)
 
 func buffer_clear_dependencies(buffer_name : String):
 	assert(buffers.has(buffer_name))
@@ -143,8 +151,10 @@ func do_update():
 		var buffer : Buffer = buffers[b]
 		if buffer.status == Buffer.Invalidated and buffer.pending_dependencies == 0:
 			if buffer.object.has_method("on_dep_update_buffer"):
-				buffer.status = Buffer.Updating
-				buffer.object.on_dep_update_buffer(b)
+				var status = buffer.object.on_dep_update_buffer(b)
+				if not status is bool or status:
+					buffer.status = Buffer.Updating
+				
 
 func print_stats():
 	for b in buffers.keys():

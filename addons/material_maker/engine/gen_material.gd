@@ -2,6 +2,8 @@ tool
 extends MMGenShader
 class_name MMGenMaterial
 
+var buffer_name_prefix : String
+
 var export_paths = {}
 var uids = {}
 
@@ -9,9 +11,12 @@ var updating : bool = false
 var update_again : bool = false
 var render_not_ready : bool = false
 
-var preview_shader_code : String = ""
+var preview_material : ShaderMaterial
+var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
+
+var external_previews : Array = []
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_SIZE_MIN = 4  # 16x16
@@ -25,13 +30,13 @@ const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_FILTERING_LIMIT = 256
 
-var timer : Timer
 
 func _ready() -> void:
+	preview_material = ShaderMaterial.new()
+	preview_material.shader = Shader.new()
+	buffer_name_prefix = "material_%d" % get_instance_id()
+	mm_deps.create_buffer(buffer_name_prefix, self)
 	add_to_group("preview")
-	timer = Timer.new()
-	add_child(timer)
-	timer.connect("timeout", self, "update_textures")
 
 func accept_float_expressions() -> bool:
 	return false
@@ -64,88 +69,72 @@ func update_preview() -> void:
 		graph_edit = graph_edit.get_parent()
 	if graph_edit != null and graph_edit.has_method("send_changed_signal"):
 		graph_edit.send_changed_signal()
-	schedule_update_textures()
 
 func set_parameter(p, v) -> void:
 	.set_parameter(p, v)
-	update_preview()
 
 func source_changed(input_index : int) -> void:
-	update_preview()
+	update()
 
 func all_sources_changed() -> void:
-	update_preview()
+	update()
 
-var new_parameter_values : Dictionary = {}
-var new_updated_textures : Array = []
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	for p in parameter_changes.keys():
-		new_parameter_values[p] = parameter_changes[p]
-	schedule_update_textures()
-	return true
+func set_shader_model(data: Dictionary) -> void:
+	.set_shader_model(data)
+	update()
 
-func on_texture_changed(n : String) -> void:
-	render_not_ready = true
-	new_updated_textures.push_back(n)
-	schedule_update_textures()
+func update_shaders() -> void:
+	for t in preview_textures.keys():
+		var output_shader = generate_output_shader(preview_textures[t].output)
+		preview_textures[t].textures = output_shader.textures
+		preview_textures[t].output_type = output_shader.output_type
+		var material = ShaderMaterial.new()
+		material.shader = Shader.new()
+		material.shader.code = output_shader.shader
+		define_shader_float_parameters(output_shader.shader, material)
+		for k in output_shader.textures.keys():
+			material.set_shader_param(k, output_shader.textures[k])
+		preview_textures[t].material = material
+		mm_deps.buffer_clear_dependencies(preview_textures[t].buffer)
+		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+			mm_deps.buffer_add_dependency(preview_textures[t].buffer, p.name)
 
-func schedule_update_textures() -> void:
-	if timer != null:
-		timer.one_shot = true
-		timer.start(0.2)
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+	if value == null:
+		return false
+	if buffer_name == buffer_name_prefix:
+		preview_parameters[parameter_name] = value
+		for p in external_previews:
+			p.set_shader_param(parameter_name, value)
+	else:
+		var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
+		preview_textures[texture_name].material.set_shader_param(parameter_name, value)
+	return false
 
-func update_textures() -> void:
+func on_dep_update_buffer(buffer_name) -> bool:
+	if buffer_name == buffer_name_prefix:
+		return false
+	var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
+	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("material"):
+		print("Cannot update "+buffer_name)
+		print(preview_textures[texture_name])
+		return false
 	var size = get_image_size()
-	update_again = true
-	if !updating:
-		while update_again:
-			var parameter_values : Dictionary = new_parameter_values
-			new_parameter_values = {}
-			var updated_textures : Array = new_updated_textures
-			new_updated_textures = []
-			update_again = false
-			var image_size = get_image_size()
-			updating = true
-			for t in preview_textures.keys():
-				if parameter_values.empty() or not preview_textures[t].has("material"):
-					var output_shader = generate_output_shader(preview_textures[t].output)
-					preview_textures[t].textures = output_shader.textures
-					preview_textures[t].output_type = output_shader.output_type
-					var material = ShaderMaterial.new()
-					material.shader = Shader.new()
-					material.shader.code = output_shader.shader
-					define_shader_float_parameters(output_shader.shader, material)
-					for k in output_shader.textures.keys():
-						material.set_shader_param(k, output_shader.textures[k])
-					preview_textures[t].material = material
-				elif ! mm_renderer.update_float_parameters(preview_textures[t].material, parameter_values):
-					var need_update : bool = false
-					for ut in updated_textures:
-						if preview_textures[t].textures.has(ut):
-							need_update = true
-							break
-					if !need_update:
-						continue
-				var renderer = mm_renderer.request(self)
-				while renderer is GDScriptFunctionState:
-					renderer = yield(renderer, "completed")
-				if ! preview_textures.has(t) or ! preview_textures[t].has("material"):
-					renderer.release(self)
-					break
-				var status = renderer.render_material(self, preview_textures[t].material, size, preview_textures[t].output_type != "rgba")
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
-				# Abort rendering if material changed
-				if ! preview_textures.has(t):
-					renderer.release(self)
-					break
-				renderer.copy_to_texture(preview_textures[t].texture)
-				renderer.release(self)
-				if image_size <= TEXTURE_FILTERING_LIMIT:
-					preview_textures[t].texture.flags &= ~Texture.FLAG_FILTER
-				else:
-					preview_textures[t].texture.flags |= Texture.FLAG_FILTER
-			updating = false
+	var renderer = mm_renderer.request(self)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	var status = renderer.render_material(self, preview_textures[texture_name].material, size, preview_textures[texture_name].output_type != "rgba")
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
+	# Abort rendering if material changed
+	renderer.copy_to_texture(preview_textures[texture_name].texture)
+	renderer.release(self)
+	mm_deps.buffer_updated(preview_textures[texture_name].buffer)
+	if size <= TEXTURE_FILTERING_LIMIT:
+		preview_textures[texture_name].texture.flags &= ~Texture.FLAG_FILTER
+	else:
+		preview_textures[texture_name].texture.flags |= Texture.FLAG_FILTER
+	return true
 
 func update_materials(material_list, sequential : bool = false) -> void:
 	for m in material_list:
@@ -158,25 +147,25 @@ func update_material(m, sequential : bool = false) -> void:
 	if m is SpatialMaterial:
 		pass
 	elif m is ShaderMaterial:
-		m.shader.code = preview_shader_code
-		for t in preview_texture_dependencies.keys():
-			m.set_shader_param(t, preview_texture_dependencies[t])
-		for t in preview_textures.keys():
-			m.set_shader_param(t, preview_textures[t].texture)
-		var status = update_textures()
-		if sequential:
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+		m.shader.code = preview_material.shader.code
+		for p in preview_parameters.keys():
+			m.set_shader_param(p, preview_parameters[p])
 
 func update() -> void:
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
-	preview_shader_code = result.shader_code
-	preview_texture_dependencies = result.texture_dependencies
+	preview_material.shader.code = result.shader_code
+	update_shaders()
+	for p in external_previews:
+		p.shader.code = result.shader_code
+		for t in preview_textures.keys():
+			p.set_shader_param(t, preview_textures[t].texture)
+	mm_deps.buffer_clear_dependencies(buffer_name_prefix)
+	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+		mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
 
 class CustomOptions:
 	extends Object
-	# empty
 
 func process_shader(shader_text : String):
 	var custom_options = CustomOptions.new()
@@ -187,6 +176,8 @@ func process_shader(shader_text : String):
 		custom_options.set_script(custom_options_script)
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
 	var shader_code = ""
+	for t in preview_textures.keys():
+		mm_deps.delete_buffer(preview_textures[t].buffer)
 	preview_textures = {}
 	var context : MMGenContext = MMGenContext.new()
 	var texture_regexp : RegEx = RegEx.new()
@@ -234,7 +225,13 @@ func process_shader(shader_text : String):
 		else:
 			var result = texture_regexp.search(l)
 			if result:
-				preview_textures[result.strings[1]] = { output=result.strings[2].to_int(), texture=ImageTexture.new() }
+				var buffer_name = "%s_%s" % [ buffer_name_prefix, result.strings[1] ]
+				preview_textures[result.strings[1]] = {
+					output=result.strings[2].to_int(),
+					texture=ImageTexture.new(),
+					buffer=buffer_name
+				}
+				mm_deps.create_buffer(buffer_name, self)
 			shader_code += l+"\n"
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
 	for d in rv.globals:
@@ -257,8 +254,11 @@ func process_shader(shader_text : String):
 		else:
 			shader_code += l
 			shader_code += "\n"
-
 	return { shader_code = shader_code, texture_dependencies=rv.textures }
+
+func set_3d_previews(previews : Array):
+	external_previews = previews
+	update()
 
 # Export filters
 
