@@ -146,5 +146,3 @@ rect_min_size = Vector2( 128, 2 )
 material = SubResource( 12 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-
-[connection signal="visibility_changed" from="." to="." method="_on_Histogram_visibility_changed"]
