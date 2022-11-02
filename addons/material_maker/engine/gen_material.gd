@@ -152,6 +152,8 @@ func update_material(m, sequential : bool = false) -> void:
 			m.set_shader_param(p, preview_parameters[p])
 
 func update() -> void:
+	if ! is_inside_tree():
+		return
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
 	preview_material.shader.code = result.shader_code
