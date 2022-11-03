@@ -11,7 +11,7 @@ var updating : bool = false
 var update_again : bool = false
 var render_not_ready : bool = false
 
-var preview_material : ShaderMaterial
+var preview_material : ShaderMaterial = null
 var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
@@ -36,7 +36,7 @@ func _ready() -> void:
 	preview_material.shader = Shader.new()
 	buffer_name_prefix = "material_%d" % get_instance_id()
 	mm_deps.create_buffer(buffer_name_prefix, self)
-	add_to_group("preview")
+	update()
 
 func accept_float_expressions() -> bool:
 	return false
@@ -151,20 +151,26 @@ func update_material(m, sequential : bool = false) -> void:
 		for p in preview_parameters.keys():
 			m.set_shader_param(p, preview_parameters[p])
 
+func update_external_previews() -> void:
+	for p in external_previews:
+		p.shader.code = preview_material.shader.code
+		for t in preview_textures.keys():
+			p.set_shader_param(t, preview_textures[t].texture)
+		for t in preview_texture_dependencies.keys():
+			p.set_shader_param(t, preview_texture_dependencies[t])
+
 func update() -> void:
-	if ! is_inside_tree():
+	if preview_material == null:
 		return
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
 	preview_material.shader.code = result.shader_code
+	preview_texture_dependencies = result.texture_dependencies
 	update_shaders()
-	for p in external_previews:
-		p.shader.code = result.shader_code
-		for t in preview_textures.keys():
-			p.set_shader_param(t, preview_textures[t].texture)
 	mm_deps.buffer_clear_dependencies(buffer_name_prefix)
 	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
 		mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
+	update_external_previews()
 
 class CustomOptions:
 	extends Object
@@ -260,7 +266,7 @@ func process_shader(shader_text : String):
 
 func set_3d_previews(previews : Array):
 	external_previews = previews
-	update()
+	update_external_previews()
 
 # Export filters
 

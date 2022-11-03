@@ -896,17 +896,7 @@ func about() -> void:
 # Preview
 
 func update_preview() -> void:
-	var status
-	need_update = true
-	if updating:
-		return
-	updating = true
-	while need_update:
-		need_update = false
-		status = update_preview_3d([ preview_3d, preview_3d_background ])
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-	updating = false
+	update_preview_3d([ preview_3d, preview_3d_background ])
 
 func get_current_node(graph_edit : MMGraphEdit) -> Node:
 	for n in graph_edit.get_children():
