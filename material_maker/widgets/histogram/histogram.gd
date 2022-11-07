@@ -66,7 +66,7 @@ func on_parameter_changed(n : String, v) -> void:
 			_:
 				set_generator(generator, output, true)
 
-func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	$ViewportImage/ColorRect.material.set_shader_param(parameter_name, value)
 	return false
 

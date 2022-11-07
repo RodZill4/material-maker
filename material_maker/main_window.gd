@@ -921,7 +921,7 @@ func update_preview_2d() -> void:
 					preview_2d_background.set_generator(null)
 
 var current_gen_material = null
-func update_preview_3d(previews : Array, sequential = false) -> void:
+func update_preview_3d(previews : Array, _sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var gen_material = null
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
