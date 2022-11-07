@@ -14,12 +14,10 @@ const VERSION_COMPLEX : int = 2
 
 
 var version : int = VERSION_OLD
+var exiting : bool = false
 
 var material : ShaderMaterial = null
 var is_paused : bool = false
-var need_update : bool = false
-var updating : bool = false
-var update_again : bool = true
 
 var current_renderer = null
 
@@ -32,6 +30,7 @@ func _ready() -> void:
 	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)
 
 func _exit_tree() -> void:
+	exiting = true
 	if current_renderer != null:
 		current_renderer.release(self)
 
@@ -83,7 +82,7 @@ func set_parameter(n : String, v) -> void:
 		if n == "size":
 			var param_name = "o%d_tex_size" % get_instance_id()
 			var param_value = pow(2, v)
-			mm_deps.dependencies_update({ param_name:param_value })
+			mm_deps.dependency_update(param_name, param_value)
 	.set_parameter(n, v)
 
 var updating_shader : bool = false
@@ -93,6 +92,8 @@ func update_shader() -> void:
 		call_deferred("do_update_shader")
 
 func do_update_shader() -> void:
+	if ! is_instance_valid(self) or exiting:
+		return
 	updating_shader = false
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
@@ -106,7 +107,6 @@ func do_update_shader() -> void:
 		print("Incorrect shader generated for "+get_hier_name())
 		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
 	material.shader.code = shader_code
-	update_again = true
 	var buffer_name = "o%d_tex" % get_instance_id()
 	mm_deps.buffer_clear_dependencies(buffer_name)
 	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
@@ -122,7 +122,6 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
-		need_update = true
 		return false
 	assert(current_renderer == null)
 	current_renderer = mm_renderer.request(self)

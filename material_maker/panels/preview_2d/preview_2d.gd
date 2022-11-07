@@ -47,13 +47,7 @@ func do_update_material(source, target_material : ShaderMaterial, template):
 	# Update shader
 	var code = generate_preview_shader(source, template)
 	target_material.shader.code = code
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters(target_material.shader.code, target_material)
-	# Set texture params
-	if source.has("textures"):
-		for k in source.textures.keys():
-			target_material.set_shader_param(k, source.textures[k])
-	# Setup dependencies
+	# Setup dependencies and set parameters
 	var buffer_name : String = "preview_"+str(get_instance_id())
 	mm_deps.buffer_clear_dependencies(buffer_name)
 	for p in VisualServer.shader_get_param_list(target_material.shader.get_rid()):

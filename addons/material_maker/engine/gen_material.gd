@@ -94,7 +94,9 @@ func update_shaders() -> void:
 		preview_textures[t].material = material
 		mm_deps.buffer_clear_dependencies(preview_textures[t].buffer)
 		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-			mm_deps.buffer_add_dependency(preview_textures[t].buffer, p.name)
+			var value = mm_deps.buffer_add_dependency(preview_textures[t].buffer, p.name)
+			if value != null:
+				preview_textures[t].material.set_shader_param(p.name, value)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -167,6 +169,9 @@ func update() -> void:
 	mm_deps.buffer_clear_dependencies(buffer_name_prefix)
 	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
 		mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
+		var value = mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
+		if value != null:
+			preview_material.set_shader_param(p.name, value)
 	update_external_previews()
 
 class CustomOptions:

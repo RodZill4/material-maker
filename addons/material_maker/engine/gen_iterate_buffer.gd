@@ -7,12 +7,11 @@ Iterate buffers, that render their input in a specific resolution and apply
 a loop n times on the result.
 """
 
+var exiting : bool = false
+
 var material : ShaderMaterial = null
 var loop_material : ShaderMaterial = null
 var is_paused : bool = false
-var need_update : bool = false
-var updating : bool = false
-var update_again : bool = false
 var current_iteration : int = 0
 
 var current_renderer = null
@@ -40,14 +39,8 @@ func _init():
 	mm_deps.create_buffer(buffer_names[3], self)
 	set_current_iteration(0)
 
-func set_paused(v : bool) -> void:
-	if v == is_paused:
-		return
-	is_paused = v
-	if ! v:
-		mm_deps.update()
-
 func _exit_tree() -> void:
+	exiting = true
 	if current_renderer != null:
 		current_renderer.release(self)
 
@@ -56,6 +49,13 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "Iterate Buffer"
+
+func set_paused(v : bool) -> void:
+	if v == is_paused:
+		return
+	is_paused = v
+	if ! v:
+		mm_deps.update()
 
 func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 	if ( is_paused and flags == BUFFERS_RUNNING ) or ( ! is_paused and flags == BUFFERS_PAUSED ):
@@ -91,7 +91,7 @@ func follow_input(input_index : int) -> Array:
 		return .follow_input(input_index)
 
 func update_shader(input_port_index : int) -> void:
-	if ! is_instance_valid(self):
+	if ! is_instance_valid(self) or exiting:
 		return
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
@@ -127,7 +127,6 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
-		need_update = true
 		return false
 	if current_renderer != null:
 		return false
@@ -152,15 +151,26 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		iterations = 1
 	if current_iteration > iterations:
 		return false
+	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
 	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
 	current_renderer = mm_renderer.request(self)
 	while current_renderer is GDScriptFunctionState:
 		current_renderer = yield(current_renderer, "completed")
+	if check_current_iteration != current_iteration:
+		current_renderer.release(self)
+		current_renderer = null
+		mm_deps.dependency_update(buffer_name, texture)
+		return false
 	var time = OS.get_ticks_msec()
 	current_renderer = current_renderer.render_material(self, m, pow(2, get_parameter("size")))
 	while current_renderer is GDScriptFunctionState:
 		current_renderer = yield(current_renderer, "completed")
+	if check_current_iteration != current_iteration:
+		current_renderer.release(self)
+		current_renderer = null
+		mm_deps.dependency_update(buffer_name, texture)
+		return false
 	current_renderer.copy_to_texture(texture)
 	texture.flags = 0
 	current_renderer.release(self)
@@ -179,12 +189,13 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	return true
 
 func set_current_iteration(i : int) -> void:
+	if i == current_iteration:
+		return
 	current_iteration = i
 	var iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.dependency_update(iteration_param_name, current_iteration)
 	if current_iteration == 0:
 		mm_deps.buffer_invalidate(buffer_names[3])
-	mm_deps.call_deferred("update")
 
 func get_globals(texture_name : String) -> Array:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")), get_instance_id() ]
@@ -192,8 +203,6 @@ func get_globals(texture_name : String) -> Array:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
-	if updating or update_again:
-		shader_code.pending_textures = shader_code.textures.keys()
 	match output_index:
 		1:
 			shader_code.global = [ "uniform int o%d_iteration = 0;" % get_instance_id() ]

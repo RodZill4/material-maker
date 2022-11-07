@@ -110,7 +110,7 @@ func dependency_update(dependency_name : String, value = null):
 	var is_buffer_just_updated : bool = false
 	if value != null:
 		dependencies_values[dependency_name] = value
-	print("%s = %s" % [ dependency_name, str(value) ])
+	#print("%s = %s" % [ dependency_name, str(value) ])
 	if buffers.has(dependency_name):
 		var b : Buffer = buffers[dependency_name]
 		match b.status:
@@ -171,8 +171,10 @@ func do_update():
 				if status is bool and ! status:
 					buffer.status = Buffer.Invalidated
 
-func print_stats():
+func print_stats(object = null):
 	for b in buffers.keys():
+		if object != null and object != buffers[b].object:
+			continue
 		print("Buffer "+b+":")
 		print("  Dependencies: "+str(buffers[b].dependencies))
 		print("  Status: "+["Invalidated","Updating","UpdatingInvalidated","Updated"][buffers[b].status])
