@@ -1,5 +1,6 @@
 extends Control
 
+
 var last_value : int = 0
 var start_time : int = 0
 var max_render_queue_size : int = 0
@@ -12,9 +13,12 @@ onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
 onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
 onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
-const ITEM_AUTO : int           = 1000
-const ITEM_RENDER_ENABLED : int = 1001
-const ITEM_MATERIAL_STATS : int = 1002
+
+const ITEM_AUTO : int                       = 1000
+const ITEM_RENDER_ENABLED : int             = 1001
+const ITEM_MATERIAL_STATS : int             = 1002
+const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
+
 
 func _ready() -> void:
 	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
@@ -42,8 +46,10 @@ func _ready() -> void:
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
-	menu.add_separator()
-	menu.add_item("Material stats", ITEM_MATERIAL_STATS)
+	if OS.is_debug_build():
+		menu.add_separator()
+		menu.add_item("Material stats", ITEM_MATERIAL_STATS)
+		menu.add_item("Trigger dependency manager", ITEM_TRIGGER_DEPENDENCY_MANAGER)
 	# GPU RAM tooltip
 	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
 
@@ -126,6 +132,8 @@ func _on_PopupMenu_id_pressed(id):
 			var material = mm_globals.main_window.get_current_graph_edit().top_generator
 			print("Buffers: "+str(count_buffers(material)))
 			mm_deps.print_stats()
+		ITEM_TRIGGER_DEPENDENCY_MANAGER:
+			mm_deps.update()
 
 func count_buffers(material) -> int:
 	var buffers = 0
