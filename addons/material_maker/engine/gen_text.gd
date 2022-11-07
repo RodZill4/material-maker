@@ -35,19 +35,18 @@ func update_buffer() -> void:
 	update_again = true
 	if !updating:
 		updating = true
+		var renderer = mm_renderer.request(self)
+		while renderer is GDScriptFunctionState:
+			renderer = yield(renderer, "completed")
 		while update_again:
 			update_again = false
-			var renderer = mm_renderer.request(self)
-			while renderer is GDScriptFunctionState:
-				renderer = yield(renderer, "completed")
 			renderer = renderer.render_text(self, get_parameter("text"), get_parameter("font"), get_parameter("font_size"), get_parameter("x"), get_parameter("y"), get_parameter("center"))
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
-			if !update_again:
-				renderer.copy_to_texture(texture)
-			renderer.release(self)
+		renderer.copy_to_texture(texture)
+		renderer.release(self)
+		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 		updating = false
-		mm_deps.dependency_update("o%s_tex")
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

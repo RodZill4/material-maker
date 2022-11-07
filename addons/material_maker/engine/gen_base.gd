@@ -206,10 +206,10 @@ func set_parameter(n : String, v) -> void:
 					var parameter_changes = {}
 					for i in range(old_value.points.size()):
 						if v.points[i].v != old_value.points[i].v:
-							var parameter_name = "p_o%s_%s_%d_pos" % [ str(get_instance_id()), n, i ]
+							var parameter_name = "p_o%d_%s_%d_pos" % [ get_instance_id(), n, i ]
 							parameter_changes[parameter_name] = v.points[i].v
 						if v.points[i].c != old_value.points[i].c:
-							var parameter_name = "p_o%s_%s_%d_col" % [ str(get_instance_id()), n, i ]
+							var parameter_name = "p_o%d_%s_%d_col" % [ get_instance_id(), n, i ]
 							parameter_changes[parameter_name] = v.points[i].c
 					mm_deps.dependencies_update(parameter_changes)
 					return
@@ -219,11 +219,11 @@ func set_parameter(n : String, v) -> void:
 					for i in range(old_value.points.size()):
 						for f in [ "x", "y" ]:
 							if v.points[i].p[f] != old_value.points[i].p[f]:
-								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i].p[f]
 						for f in [ "ls", "rs" ]:
 							if v.points[i][f] != old_value.points[i][f]:
-								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
+								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i][f]
 					mm_deps.dependencies_update(parameter_changes)
 					return
@@ -318,7 +318,7 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
-	return { shader=shader, output_type=output_type, textures=source.textures }
+	return { shader=shader, output_type=output_type }
 
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)

@@ -46,7 +46,7 @@ func _on_timeout() -> void:
 		image.load(file_path)
 		texture.create_from_image(image)
 		.set_parameter("image", file_path)
-		mm_deps.dependency_update("o%s_tex")
+		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

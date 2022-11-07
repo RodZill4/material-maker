@@ -40,7 +40,7 @@ func update_export_menu() -> void:
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.type, template)
 
-func do_update_material(source, target_material, template):
+func do_update_material(source, target_material : ShaderMaterial, template):
 	if ! source.has("type"):
 		return
 	is_greyscale = source.type == "f"
@@ -57,8 +57,9 @@ func do_update_material(source, target_material, template):
 	var buffer_name : String = "preview_"+str(get_instance_id())
 	mm_deps.buffer_clear_dependencies(buffer_name)
 	for p in VisualServer.shader_get_param_list(target_material.shader.get_rid()):
-		print(buffer_name+" depends on "+p.name)
-		mm_deps.buffer_add_dependency(buffer_name, p.name)
+		var value = mm_deps.buffer_add_dependency(buffer_name, p.name)
+		if value != null:
+			target_material.set_shader_param(p.name, value)
 	# Make sure position/size parameters are setup
 	on_resized()
 
@@ -119,7 +120,7 @@ func on_parameter_changed(n : String, v) -> void:
 func get_preview_material():
 	return material
 
-func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	get_preview_material().set_shader_param(parameter_name, value)
 	return false
 

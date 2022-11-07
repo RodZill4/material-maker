@@ -86,14 +86,11 @@ func set_shader_model(data: Dictionary) -> void:
 func update_shaders() -> void:
 	for t in preview_textures.keys():
 		var output_shader = generate_output_shader(preview_textures[t].output)
-		preview_textures[t].textures = output_shader.textures
 		preview_textures[t].output_type = output_shader.output_type
 		var material = ShaderMaterial.new()
 		material.shader = Shader.new()
 		material.shader.code = output_shader.shader
 		define_shader_float_parameters(output_shader.shader, material)
-		for k in output_shader.textures.keys():
-			material.set_shader_param(k, output_shader.textures[k])
 		preview_textures[t].material = material
 		mm_deps.buffer_clear_dependencies(preview_textures[t].buffer)
 		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
@@ -113,7 +110,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:
-		return false
+		return true
 	var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
 	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("material"):
 		print("Cannot update "+buffer_name)
@@ -129,7 +126,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	# Abort rendering if material changed
 	renderer.copy_to_texture(preview_textures[texture_name].texture)
 	renderer.release(self)
-	mm_deps.buffer_updated(preview_textures[texture_name].buffer)
+	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture)
 	if size <= TEXTURE_FILTERING_LIMIT:
 		preview_textures[texture_name].texture.flags &= ~Texture.FLAG_FILTER
 	else:
@@ -217,12 +214,6 @@ func process_shader(shader_text : String):
 					elif custom_options.has_method("process_option_"+o):
 						new_code = custom_options.call("process_option_"+o, new_code)
 				shader_code += new_code
-				# process textures
-				for t in subst_code.textures.keys():
-					rv.textures[t] = subst_code.textures[t]
-				for t in subst_code.pending_textures:
-					if rv.pending_textures.find(t) == -1:
-						rv.pending_textures.push_back(t)
 				generating = false
 			else:
 				gen_buffer += l+"\n"

@@ -3,9 +3,6 @@ extends Control
 var generator : MMGenBase = null
 var output : int = 0
 
-var updating : bool = false
-var update_again : bool = false
-
 func _enter_tree():
 	mm_deps.create_buffer("histogram_"+str(get_instance_id()), self)
 
@@ -74,8 +71,8 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	return false
 
 func on_dep_update_buffer(buffer_name) -> bool:
-	if !is_visible_in_tree():
-		return false
+	if ! is_visible_in_tree():
+		return true
 	$ViewportImage.render_target_update_mode = Viewport.UPDATE_ONCE
 	$ViewportImage.update_worlds()
 	yield(get_tree(), "idle_frame")
@@ -88,5 +85,5 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	$ViewportHistogram2.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	mm_deps.buffer_updated("histogram_"+str(get_instance_id()))
+	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null)
 	return true

@@ -7,9 +7,11 @@ Texture generator buffers, that render their input in a specific resolution and 
 This is useful when using generators that sample their inputs several times
 """
 
+
 const VERSION_OLD     : int = 0
 const VERSION_SIMPLE  : int = 1
 const VERSION_COMPLEX : int = 2
+
 
 var version : int = VERSION_OLD
 
@@ -20,24 +22,18 @@ var updating : bool = false
 var update_again : bool = true
 
 var current_renderer = null
-var is_pending : bool = false
 
-var pending_textures = []
 
 func _ready() -> void:
 	material = ShaderMaterial.new()
 	material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
-	#add_to_group("preview")
-	mm_deps.create_buffer("o%s_tex" % str(get_instance_id()), self)
+	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)
 
 func _exit_tree() -> void:
 	if current_renderer != null:
 		current_renderer.release(self)
-	if is_pending:
-		mm_renderer.remove_pending_request()
-	mm_deps.delete_buffer("o%s_tex" % str(get_instance_id()))
 
 func get_type() -> String:
 	return "buffer"
@@ -85,7 +81,7 @@ func all_sources_changed() -> void:
 func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		if n == "size":
-			var param_name = "o%s_tex_size" % str(get_instance_id())
+			var param_name = "o%d_tex_size" % get_instance_id()
 			var param_value = pow(2, v)
 			mm_deps.dependencies_update({ param_name:param_value })
 	.set_parameter(n, v)
@@ -111,15 +107,12 @@ func do_update_shader() -> void:
 		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
 	material.shader.code = shader_code
 	update_again = true
-	var buffer_name = "o%s_tex" % str(get_instance_id())
+	var buffer_name = "o%d_tex" % get_instance_id()
 	mm_deps.buffer_clear_dependencies(buffer_name)
 	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-		mm_deps.buffer_add_dependency(buffer_name, p.name)
-	if source.has("textures"):
-		for k in source.textures.keys():
-			material.set_shader_param(k, source.textures[k])
-	pending_textures = []
-	yield(get_tree(), "idle_frame")
+		var value = mm_deps.buffer_add_dependency(buffer_name, p.name)
+		if value != null:
+			material.set_shader_param(p.name, value)
 	mm_deps.update()
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
@@ -127,7 +120,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		material.set_shader_param(parameter_name, value)
 	return false
 
-func on_dep_update_buffer(buffer_name) -> bool:
+func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		need_update = true
 		return false
@@ -153,7 +146,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 		_:
 			texture.flags = Texture.FLAGS_DEFAULT
 	emit_signal("rendering_time", OS.get_ticks_msec() - time)
-	mm_deps.buffer_updated(buffer_name)
+	mm_deps.dependency_update(buffer_name, texture)
 	return true
 
 func get_globals(texture_name : String) -> Array:
@@ -162,14 +155,12 @@ func get_globals(texture_name : String) -> Array:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
-	if updating or update_again or !pending_textures.empty():
-		shader_code.pending_textures = shader_code.textures.keys()
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:
 	var attributes : Dictionary = {}
-	attributes.texture = "o%s_tex" % str(get_instance_id())
-	attributes.texture_size = "o%s_tex_size" % str(get_instance_id())
+	attributes.texture = "o%d_tex" % get_instance_id()
+	attributes.texture_size = "o%d_tex_size" % get_instance_id()
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:

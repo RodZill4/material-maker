@@ -24,8 +24,8 @@ func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenConte
 		if lod < 0.0:
 			rv.code = "vec4 %s_%d = textureLod(%s, %s, 0.0);\n" % [ genname, variant_index, texture_name, uv ]
 		else:
-			rv.defs = "uniform float p_o%s_lod = %.09f;\n" % [ str(get_instance_id()), lod ]
-			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%s_lod);\n" % [ genname, variant_index, texture_name, uv, str(get_instance_id()) ]
+			rv.defs = "uniform float p_o%d_lod = %.09f;\n" % [ get_instance_id(), lod ]
+			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%d_lod);\n" % [ genname, variant_index, texture_name, uv, get_instance_id() ]
 	rv.rgba = "%s_%d" % [ genname, variant_index ]
 	rv.globals = get_globals(texture_name)
 	rv.textures = { texture_name:texture }
