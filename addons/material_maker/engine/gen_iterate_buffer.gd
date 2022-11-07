@@ -13,6 +13,7 @@ var material : ShaderMaterial = null
 var loop_material : ShaderMaterial = null
 var is_paused : bool = false
 var current_iteration : int = 0
+var shader_generations : Array = [ 0, 0 ]
 
 var current_renderer = null
 
@@ -78,11 +79,11 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(input_port_index : int) -> void:
-	call_deferred("update_shader", input_port_index)
+	update_shader(input_port_index)
 
 func all_sources_changed() -> void:
-	call_deferred("update_shader", 0)
-	call_deferred("update_shader", 1)
+	update_shader(0)
+	update_shader(1)
 
 func follow_input(input_index : int) -> Array:
 	if input_index == 1:
@@ -90,9 +91,22 @@ func follow_input(input_index : int) -> Array:
 	else:
 		return .follow_input(input_index)
 
+var required_shader_updates : int = 0
+
 func update_shader(input_port_index : int) -> void:
+	if required_shader_updates == 0:
+		call_deferred("do_update_shaders")
+	required_shader_updates = required_shader_updates | (1 << input_port_index)
+
+func do_update_shaders() -> void:
 	if ! is_instance_valid(self) or exiting:
 		return
+	for i in range(2):
+		if required_shader_updates & (1 << i):
+			do_update_shader(i)
+	required_shader_updates = 0
+
+func do_update_shader(input_port_index : int) -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source = {}
 	var source_output = get_source(input_port_index)
@@ -110,6 +124,7 @@ func update_shader(input_port_index : int) -> void:
 		if value != null:
 			m.set_shader_param(p.name, value)
 	set_current_iteration(0)
+	shader_generations[input_port_index] += 1
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
@@ -187,6 +202,13 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 	mm_deps.dependency_update(buffer_name, texture)
 	return true
+
+func on_dep_shader_generations(buffer : String) -> int:
+	if buffer == buffer_names[0]:
+		return shader_generations[0]
+	if buffer == buffer_names[1]:
+		return shader_generations[1]
+	return 0
 
 func set_current_iteration(i : int) -> void:
 	if i == current_iteration:

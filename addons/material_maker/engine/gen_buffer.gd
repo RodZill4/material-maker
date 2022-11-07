@@ -18,6 +18,7 @@ var exiting : bool = false
 
 var material : ShaderMaterial = null
 var is_paused : bool = false
+var shader_generations : int = 0
 
 var current_renderer = null
 
@@ -114,6 +115,7 @@ func do_update_shader() -> void:
 		if value != null:
 			material.set_shader_param(p.name, value)
 	mm_deps.update()
+	shader_generations += 1
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value != null:
@@ -147,6 +149,9 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	emit_signal("rendering_time", OS.get_ticks_msec() - time)
 	mm_deps.dependency_update(buffer_name, texture)
 	return true
+
+func on_dep_shader_generations(buffer : String) -> int:
+	return shader_generations
 
 func get_globals(texture_name : String) -> Array:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]

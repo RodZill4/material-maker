@@ -187,3 +187,7 @@ func print_stats(object = null):
 		else:
 			print("  Pending: 0")
 		print("  Renders: %d" % buffers[b].renders)
+		if buffers[b].object.has_method("on_dep_shader_generations"):
+			var count = buffers[b].object.on_dep_shader_generations(b)
+			if count > 0:
+				print("  Shader generations: %d" % count)
