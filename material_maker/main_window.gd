@@ -451,20 +451,31 @@ func new_paint_project(obj_file_name = null) -> void:
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILES
-	dialog.add_filter("*.ptex;Procedural Textures File")
-	dialog.add_filter("*.mmpp;Model Painting File")
-	if mm_globals.config.has_section_key("path", "project"):
-		dialog.current_dir = mm_globals.config.get_value("path", "project")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
-	if files.size() > 0:
-		do_load_projects(files)
+	if OS.get_name() == "HTML5":
+		if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
+			Html5.connect("file_loaded", self, "on_html5_load_file")
+		Html5.load_file()
+	else:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		add_child(dialog)
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_OPEN_FILES
+		dialog.add_filter("*.ptex;Procedural Textures File")
+		dialog.add_filter("*.mmpp;Model Painting File")
+		if mm_globals.config.has_section_key("path", "project"):
+			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() > 0:
+			do_load_projects(files)
+
+func on_html5_load_file(file_name, file_type, file_data):
+	match file_name.get_extension():
+		"ptex":
+			if do_load_material_from_data(file_name, file_data, false):
+				hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
@@ -492,7 +503,7 @@ func do_load_project(file_name) -> bool:
 		remove_recent(file_name)
 	return status
 
-func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
+func create_new_graph_edit_if_needed() -> MMGraphEdit:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -504,7 +515,18 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 					break
 	if node_count > 1:
 		graph_edit = new_graph_panel()
+	return graph_edit
+
+func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
+	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
 	graph_edit.load_file(filename)
+	if update_hierarchy:
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
+	return true
+
+func do_load_material_from_data(filename : String, data : String, update_hierarchy : bool = true) -> bool:
+	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
+	graph_edit.load_from_data(filename, data)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 	return true

@@ -144,7 +144,7 @@ func read_hdr(index : int, url : String) -> bool:
 		yield(get_tree(), "idle_frame")
 	environment_textures[index].erase("hdri")
 	var dir : Directory = Directory.new()
-	var file_path
+	var file_path : String
 	file_path = base_dir+"/environments/hdris/"+url.get_file()
 	if dir.file_exists(file_path):
 		set_hdr(index, file_path)
@@ -153,10 +153,13 @@ func read_hdr(index : int, url : String) -> bool:
 	if dir.file_exists(file_path):
 		set_hdr(index, file_path)
 		return true
+	set_hdr(index, file_path)
 	file_path = "user://hdris/"+url.get_file()
 	if dir.file_exists(file_path):
 		set_hdr(index, file_path)
 		return true
+	if OS.get_name() == "HTML5":
+		return false
 	Directory.new().make_dir_recursive("user://hdris")
 	$HTTPRequest.download_file = file_path
 	var error = $HTTPRequest.request(url)

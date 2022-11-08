@@ -539,6 +539,16 @@ func load_file(filename) -> bool:
 		dialog.popup_centered()
 		return false
 
+func load_from_data(filename, data) -> bool:
+	var json = parse_json(data)
+	if json != null:
+		var new_generator = mm_loader.create_gen(json)
+		if new_generator != null:
+			set_save_path(filename)
+			set_new_generator(new_generator)
+			return true
+	return false
+
 # Save
 
 func save() -> bool:
