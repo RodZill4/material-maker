@@ -562,36 +562,49 @@ func save() -> bool:
 	return status
 
 func save_as() -> bool:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = mm_globals.main_window
-	if mm_globals.config.has_section_key("path", "project"):
-		dialog.current_dir = mm_globals.config.get_value("path", "project")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
-	if files.size() == 1:
-		if save_file(files[0]):
-			main_window.add_recent(save_path)
-			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
-			top_generator.emit_signal("hierarchy_changed")
-			return true
+	if OS.get_name() == "HTML5":
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+		add_child(dialog)
+		var status = dialog.enter_text("Save", "Select a file name", save_path.get_file() if save_path != null else "")
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		if status.ok:
+			if save_file(status.text.get_file().get_basename()+".ptex"):
+				top_generator.emit_signal("hierarchy_changed")
+	else:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		add_child(dialog)
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_SAVE_FILE
+		dialog.add_filter("*.ptex;Procedural Textures File")
+		var main_window = mm_globals.main_window
+		if mm_globals.config.has_section_key("path", "project"):
+			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() == 1:
+			if save_file(files[0]):
+				main_window.add_recent(save_path)
+				mm_globals.config.set_value("path", "project", save_path.get_base_dir())
+				top_generator.emit_signal("hierarchy_changed")
+				return true
 	return false
 
 func save_file(filename) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
-	var file = File.new()
-	if file.open(filename, File.WRITE) == OK:
-		file.store_string(JSON.print(data, "\t", true))
-		file.close()
+	if OS.get_name() == "HTML5":
+		JavaScript.download_buffer(JSON.print(data, "\t", true).to_ascii(), filename)
 	else:
-		return false
+		var file = File.new()
+		if file.open(filename, File.WRITE) == OK:
+			file.store_string(JSON.print(data, "\t", true))
+			file.close()
+		else:
+			return false
 	set_save_path(filename)
 	set_need_save(false)
 	remove_crash_recovery_file()
