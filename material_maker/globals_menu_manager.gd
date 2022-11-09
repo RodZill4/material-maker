@@ -29,7 +29,12 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	menu.clear()
 	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
 		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
+	var last_is_separator : bool = false
 	for i in menu_def.size():
+		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
+			continue
+		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
+			continue
 		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
 			continue
 		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
@@ -39,6 +44,7 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 		if ! menu_def[i].menu.begins_with(menu_name):
 			continue
 		var menu_item_name = menu_def[i].menu.right(menu_name_length)
+		var is_separator = false
 		if menu_item_name.find("/") != -1:
 			var submenu_name = menu_item_name.split("/")[0]
 			if ! submenus.has(submenu_name):
@@ -65,7 +71,9 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				menu.add_child(submenu)
 			menu.add_submenu_item(menu_item_name, submenu_name)
 		elif menu_item_name == "" or menu_item_name == "-":
-			menu.add_separator()
+			if !last_is_separator:
+				menu.add_separator()
+			is_separator = true
 		else:
 			var shortcut = 0
 			if menu_def[i].has("shortcut"):
@@ -82,6 +90,9 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				menu.add_check_item(menu_item_name, i, shortcut)
 			else:
 				menu.add_item(menu_item_name, i, shortcut)
+		last_is_separator = is_separator
+	if last_is_separator:
+		menu.remove_item(menu.get_item_count()-1)
 	on_menu_about_to_show(menu_def, object, menu_name, menu)
 	return menu
 
