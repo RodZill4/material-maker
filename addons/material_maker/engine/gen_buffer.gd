@@ -104,16 +104,7 @@ func do_update_shader() -> void:
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader_code = mm_renderer.generate_shader(source)
-	if shader_code.find("$") != -1:
-		print("Incorrect shader generated for "+get_hier_name())
-		#shader_code = mm_renderer.generate_shader({ rgba="vec4(0.0, 0.0, 0.0, 1.0)" })
-	material.shader.code = shader_code
-	var buffer_name = "o%d_tex" % get_instance_id()
-	mm_deps.buffer_clear_dependencies(buffer_name)
-	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-		var value = mm_deps.buffer_add_dependency(buffer_name, p.name)
-		if value != null:
-			material.set_shader_param(p.name, value)
+	material = mm_deps.buffer_create_shader_material("o%d_tex" % get_instance_id(), material, shader_code)
 	mm_deps.update()
 	shader_generations += 1
 

@@ -16,6 +16,9 @@ var generator : MMGenBase = null
 
 var gizmo_is_local = false
 
+func _enter_tree():
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+
 func _ready():
 	_on_Preview3D_resized()
 
@@ -46,7 +49,8 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.DIST_FCT = node_prefix+"_d"
 		variables.COLOR_FCT = node_prefix+"_c"
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
-		material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
+		var shader_code : String = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
+		material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), material, shader_code)
 
 var setup_controls_filter : String = ""
 func setup_controls(filter : String = "") -> void:
@@ -98,18 +102,10 @@ func _on_Gizmo_rotated(v, a):
 	get_node(control_target).set_node_parameters(generator, parameters)
 	update_viewport()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var return_value : bool = false
-	var m : ShaderMaterial = plane.get_surface_material(0)
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				m.set_shader_param(n, parameter_changes[n])
-				break
-	if return_value:
-		update_viewport()
-	return return_value
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+	plane.get_surface_material(0).set_shader_param(parameter_name, value)
+	update_viewport()
+	return false
 
 func _on_Preview3D_resized():
 	if viewport != null:

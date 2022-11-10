@@ -171,6 +171,23 @@ func do_update():
 				if status is bool and ! status:
 					buffer.status = Buffer.Invalidated
 
+
+func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
+	if material == null:
+		material = ShaderMaterial.new()
+	if material.shader == null:
+		material.shader = Shader.new()
+	if shader.find("$") != -1:
+		print("Incorrect shader generated for "+buffer_name)
+	material.shader.code = shader
+	buffer_clear_dependencies(buffer_name)
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		var value = buffer_add_dependency(buffer_name, p.name)
+		if value != null:
+			material.set_shader_param(p.name, value)
+	return material
+
+
 func print_stats(object = null):
 	for b in buffers.keys():
 		if object != null and object != buffers[b].object:

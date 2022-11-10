@@ -20,9 +20,6 @@ const MENU_EXPORT_ANIMATION : int = 1001
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
 
-func _exit_tree():
-	mm_deps.delete_buffer("preview_"+str(get_instance_id()))
-
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
@@ -46,14 +43,7 @@ func do_update_material(source, target_material : ShaderMaterial, template):
 	is_greyscale = source.type == "f"
 	# Update shader
 	var code = generate_preview_shader(source, template)
-	target_material.shader.code = code
-	# Setup dependencies and set parameters
-	var buffer_name : String = "preview_"+str(get_instance_id())
-	mm_deps.buffer_clear_dependencies(buffer_name)
-	for p in VisualServer.shader_get_param_list(target_material.shader.get_rid()):
-		var value = mm_deps.buffer_add_dependency(buffer_name, p.name)
-		if value != null:
-			target_material.set_shader_param(p.name, value)
+	target_material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), target_material, code)
 	# Make sure position/size parameters are setup
 	on_resized()
 

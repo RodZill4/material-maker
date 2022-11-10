@@ -33,18 +33,9 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader
-	var input_material = $ViewportImage/ColorRect.material
-	input_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters(input_material.shader.code, input_material)
-	# Set texture params
-	if source.has("textures"):
-		for k in source.textures.keys():
-			input_material.set_shader_param(k, source.textures[k])
+	var shader_code : String = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
 	var buffer_name : String = "histogram_"+str(get_instance_id())
-	mm_deps.buffer_clear_dependencies(buffer_name)
-	for p in VisualServer.shader_get_param_list(input_material.shader.get_rid()):
-		mm_deps.buffer_add_dependency(buffer_name, p.name)
+	$ViewportImage/ColorRect.material = mm_deps.buffer_create_shader_material(buffer_name, $ViewportImage/ColorRect.material, shader_code)
 	mm_deps.update()
 
 var refreshing_generator : bool = false

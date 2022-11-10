@@ -117,12 +117,8 @@ func do_update_shader(input_port_index : int) -> void:
 		source = DEFAULT_GENERATED_SHADER
 	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
-	m.shader.code = mm_renderer.generate_shader(source)
-	mm_deps.buffer_clear_dependencies(buffer_name)
-	for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-		var value = mm_deps.buffer_add_dependency(buffer_name, p.name)
-		if value != null:
-			m.set_shader_param(p.name, value)
+	assert(m != null && m.shader != null)
+	mm_deps.buffer_create_shader_material(buffer_name, m, mm_renderer.generate_shader(source))
 	set_current_iteration(0)
 	shader_generations[input_port_index] += 1
 

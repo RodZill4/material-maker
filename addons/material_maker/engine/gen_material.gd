@@ -87,16 +87,7 @@ func update_shaders() -> void:
 	for t in preview_textures.keys():
 		var output_shader = generate_output_shader(preview_textures[t].output)
 		preview_textures[t].output_type = output_shader.output_type
-		var material = ShaderMaterial.new()
-		material.shader = Shader.new()
-		material.shader.code = output_shader.shader
-		define_shader_float_parameters(output_shader.shader, material)
-		preview_textures[t].material = material
-		mm_deps.buffer_clear_dependencies(preview_textures[t].buffer)
-		for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
-			var value = mm_deps.buffer_add_dependency(preview_textures[t].buffer, p.name)
-			if value != null:
-				preview_textures[t].material.set_shader_param(p.name, value)
+		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.shader)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -163,15 +154,9 @@ func update() -> void:
 		return
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
-	preview_material.shader.code = result.shader_code
+	preview_material = mm_deps.buffer_create_shader_material(buffer_name_prefix, preview_material, result.shader_code)
 	preview_texture_dependencies = result.texture_dependencies
 	update_shaders()
-	mm_deps.buffer_clear_dependencies(buffer_name_prefix)
-	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
-		mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
-		var value = mm_deps.buffer_add_dependency(buffer_name_prefix, p.name)
-		if value != null:
-			preview_material.set_shader_param(p.name, value)
 	update_external_previews()
 
 class CustomOptions:

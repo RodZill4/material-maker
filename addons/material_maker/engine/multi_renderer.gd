@@ -111,7 +111,7 @@ func request(object : Object) -> Object:
 	emit_signal("render_queue", render_queue_size, pending_requests)
 	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
 		yield(self, "free_renderer")
-	if !is_instance_valid(object) || !object.is_inside_tree():
+	if ! is_instance_valid(object) or ! object.is_inside_tree():
 		render_queue_size -= 1
 		emit_signal("render_queue", render_queue_size, pending_requests)
 		return null
@@ -125,11 +125,3 @@ func release(renderer : Object) -> void:
 	emit_signal("render_queue", render_queue_size, pending_requests)
 	if render_queue_size == 0 and pending_requests == 0:
 		emit_signal("render_queue_empty")
-
-func add_pending_request() -> void:
-	pending_requests += 1
-
-func remove_pending_request() -> void:
-	assert(pending_requests > 0)
-	pending_requests -= 1
-
