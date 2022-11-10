@@ -18,16 +18,18 @@ func create_library(path : String, name : String) -> void:
 	library_icons = {}
 	read_only = false
 
-func load_library(path : String, ro : bool = false) -> bool:
-	var file : File = File.new()
-	if OS.get_name() == "Android":
-		path = path.replace("root://", "res://material_maker/")
-	else:
-		path = path.replace("root://", MMPaths.get_resource_dir()+"/")
-	if ! file.open(path, File.READ) == OK:
-		print("Failed to open "+path)
-		return false
-	var data = parse_json(file.get_as_text())
+func load_library(path : String, ro : bool = false, raw_data : String = "") -> bool:
+	if raw_data == "":
+		var file : File = File.new()
+		if OS.get_name() == "Android":
+			path = path.replace("root://", "res://material_maker/")
+		else:
+			path = path.replace("root://", MMPaths.get_resource_dir()+"/")
+		if ! file.open(path, File.READ) == OK:
+			print("Failed to open "+path)
+			return false
+		raw_data = file.get_as_text()
+	var data : Dictionary = parse_json(raw_data)
 	library_path = path
 	library_name = data.name if data.has("name") else ""
 	library_items = data.lib

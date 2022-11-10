@@ -15,10 +15,13 @@ func _ready() -> void:
 				var fileType;
 				var fileName;
 				var canceled;
-				function loadFile() {
+				function loadFile(accept = "") {
 					canceled = true;
 					var input = document.createElement('INPUT');
 					input.setAttribute("type", "file");
+					if (accept != "") {
+						input.setAttribute("accept", accept);
+					}
 					input.click();
 					input.addEventListener('change', event => {
 						if (event.target.files.length > 0) {
@@ -44,11 +47,14 @@ func _notification(notification: int) -> void:
 	if notification == MainLoop.NOTIFICATION_WM_FOCUS_IN:
 		emit_signal("in_focus")
 
-func load_file(load_directly : bool = true):
+func load_file(accept : String = ""):
 	if OS.get_name() != "HTML5" or !OS.has_feature("JavaScript"):
 		return
 
-	JavaScript.eval("loadFile();", true)
+	if accept == "":
+		JavaScript.eval("loadFile();", true)
+	else:
+		JavaScript.eval("loadFile(\""+accept+"\");", true)
 
 	yield(self, "in_focus")  # Wait until JS prompt is closed
 

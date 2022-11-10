@@ -454,7 +454,7 @@ func load_project() -> void:
 	if OS.get_name() == "HTML5":
 		if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
 			Html5.connect("file_loaded", self, "on_html5_load_file")
-		Html5.load_file()
+		Html5.load_file(".ptex")
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 		add_child(dialog)
