@@ -36,6 +36,7 @@ func set_parameter(n : String, v) -> void:
 	if n == "image":
 		filetime = get_filetime(v)
 		texture.load(v)
+		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
 func _on_timeout() -> void:
 	var file_path : String = get_parameter("image")
