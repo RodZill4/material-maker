@@ -1,0 +1,124 @@
+{
+	"name": "normal2height_base",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cbs": 0,
+		"center_height": 1,
+		"keep": 0,
+		"pbs": 0.5,
+		"points": 1,
+		"scale": 25,
+		"size": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$center_height",
+				"function": true,
+				"label": "",
+				"name": "h",
+				"type": "f"
+			},
+			{
+				"default": "vec3(0.5)",
+				"function": true,
+				"label": "",
+				"name": "nm",
+				"type": "rgb"
+			}
+		],
+		"instance": "float find_height_$name(vec2 uv, vec2 center, float center_height, int steps) {\n\tvec2 p;\n\tfloat height = 0.0;\n\tfloat weight = 1.0;\n\tfloat sum = 0.0;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tp = mix(center, uv, float(i)/float(steps));\n\t\theight += weight*$h(p);\n\t\tsum += weight;\n\t\tweight *= $keep;\n\t\tvec2 nm = $nm(p).xy-vec2(0.5);\n\t\theight += sum*$scale*dot((uv-center)/float(steps), nm);\n\t}\n\treturn height/sum;\n}\n\nfloat height_from_point_$name(vec2 uv, vec2 c) {\n\tfloat center_height = $h(c);\n\tfloat l = length(uv-c)*$size;\n\tfloat lx = abs(uv.x-c.x)*$size;\n\tfloat ly = abs(uv.y-c.y)*$size;\n\tfloat h = find_height_$name(uv, c, center_height, int(l)+1);\n\tfloat hxi = find_height_$name(vec2(c.x, uv.y), c, center_height, int(ly)+1);\n\tfloat hx = find_height_$name(uv, vec2(c.x, uv.y), hxi, int(lx)+1);\n\tfloat hyi = find_height_$name(vec2(uv.x, c.y), c, center_height, int(lx)+1);\n\tfloat hy = find_height_$name(uv, vec2(uv.x, c.y), hyi, int(ly)+1);\n\treturn 0.5*h+0.25*(hx+hy);\n}\n\nfloat height_$name(vec2 uv, vec4 box, float count) {\n\tcount = floor(count);\n\tif (count <= 1.0) {\n\t\treturn height_from_point_$name(uv, box.xy);\n\t}\n\tfloat height = 0.0;\n\tvec2 d = (box.zw-box.xy) / (count-1.0);\n\tfor (float x = 0.0; x < count; x += 1.0) {\n\t\tfor (float y = 0.0; y < count; y += 1.0) {\n\t\t\theight += height_from_point_$name(uv, box.xy+d*vec2(x, y));\n\t\t}\n\t}\n\treturn height / (count*count);\n}\n",
+		"name": "Basic Normal to Height",
+		"outputs": [
+			{
+				"f": "height_$name($uv, vec4(max(vec2(0.5-$cbs), $uv-vec2($pbs)), min(vec2(0.5+$cbs), $uv+vec2($pbs))), $points)",
+				"type": "f"
+			},
+			{
+				"rgba": " vec4(max(vec2(0.5-$cbs), $uv-vec2($pbs)), min(vec2(0.5+$cbs), $uv+vec2($pbs)))",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 10,
+				"first": 6,
+				"label": "",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "center_height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 20,
+				"label": "",
+				"max": 50,
+				"min": 0,
+				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "",
+				"max": 3,
+				"min": 1,
+				"name": "points",
+				"shortdesc": "Point count",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"max": 0.5,
+				"min": 0,
+				"name": "cbs",
+				"shortdesc": "Center box size",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "",
+				"max": 0.5,
+				"min": 0,
+				"name": "pbs",
+				"shortdesc": "Point Box Size",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "",
+				"max": 1,
+				"min": 0,
+				"name": "keep",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
