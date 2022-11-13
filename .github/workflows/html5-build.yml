@@ -34,7 +34,7 @@ jobs:
         env:
           WEBSITE_SSH_ADDRESS: ${{ secrets.WEBSITE_SSH_ADDRESS }}
           WEBSITE_SSH_PORT: ${{ secrets.WEBSITE_SSH_PORT }}
-          WEBSITE_SSH_ADDRESS: ${{ secrets.WEBSITE_SSH_ADDRESS }}
+          WEBSITE_SSH_KEY: ${{ secrets.WEBSITE_SSH_KEY }}
         run: |
           apt-get update && apt-get -y install openssh-client
           echo -e "${{ env.WEBSITE_SSH_KEY }}" >__TEMP_INPUT_KEY_FILE
