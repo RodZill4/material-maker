@@ -31,6 +31,10 @@ jobs:
         run: godot -v --export "HTML5" build/export_html5/index.html
       - name: Deploy 💾
         if: ${{ github.event.inputs.deploy == 'true' }}
+        env:
+          WEBSITE_SSH_ADDRESS: ${{ secrets.WEBSITE_SSH_ADDRESS }}
+          WEBSITE_SSH_PORT: ${{ secrets.WEBSITE_SSH_PORT }}
+          WEBSITE_SSH_ADDRESS: ${{ secrets.WEBSITE_SSH_ADDRESS }}
         run: |
           apt-get update && apt-get -y install openssh-client
           echo -e "${{ env.WEBSITE_SSH_KEY }}" >__TEMP_INPUT_KEY_FILE
