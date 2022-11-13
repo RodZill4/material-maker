@@ -31,13 +31,11 @@ jobs:
         run: godot -v --export "HTML5" build/export_html5/index.html
       - name: Deploy 💾
         if: ${{ github.event.inputs.deploy == 'true' }}
-        env:
-          WEBSITE_SSH_ADDRESS: ${{ secrets.WEBSITE_SSH_ADDRESS }}
-          WEBSITE_SSH_PORT: ${{ secrets.WEBSITE_SSH_PORT }}
-          WEBSITE_SSH_KEY: ${{ secrets.WEBSITE_SSH_KEY }}
-        run: |
-          apt-get update && apt-get -y install openssh-client
-          echo -e "${{ env.WEBSITE_SSH_KEY }}" >__TEMP_INPUT_KEY_FILE
-          chmod 600 __TEMP_INPUT_KEY_FILE
-          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "${{ env.WEBSITE_SSH_PORT }}" -r build/export_html5/* "${{ env.WEBSITE_SSH_ADDRESS }}":material_maker/material_maker_web/public/mm_web
-          rm -f __TEMP_INPUT_KEY_FILE
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.WEBSITE_SSH_HOST }}
+          username: ${{ secrets.WEBSITE_SSH_USERNAME }}
+          key : ${{ secrets.WEBSITE_SSH_KEY }}
+          port: ${{ secrets.WEBSITE_SSH_PORT }}
+          source: "build/export_html5/*"
+          target: "material_maker/material_maker_web/public/mm_web"
