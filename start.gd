@@ -84,7 +84,7 @@ func start_ui():
 	if OS.get_name() == "HTML5":
 		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
 		dialog.dialog_text = """
-			This HTML5 version of Material Maker has many limitations and is meant for evaluation only.
+			This HTML5 version of Material Maker has many limitations (such as lack of export, 16 bits rendering and 3D model painting) and is meant for evaluation only.
 			If you intend to use this software seriously, it is recommended to download a Windows, MacOS or Linux version.
 			Note there's a known 3D preview rendering problem in Chrome.
 		"""
