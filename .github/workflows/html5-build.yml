@@ -1,0 +1,41 @@
+name: "dev-desktop-builds"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to website'     
+        type: boolean
+        required: true
+        default: 'false'
+
+env:
+  GODOT_VERSION: 3.5
+  GODOT_VERSION_MAC: 3.5
+  EXPORT_NAME: material_maker
+  MM_RELEASE: 1_1
+
+jobs:
+  export_windows_linux:
+    name: Html5 export 🗔
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:3.5.1
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup 💻
+        run: |
+          mkdir -v -p build/export_html5 ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+      - name: Html5 Build 🗔
+        run: godot -v --export "HTML5" build/export_html5/index.html
+      - name: Deploy 💾
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        run: |
+          echo -e "${WEBSITE_SSH_KEY}" >__TEMP_INPUT_KEY_FILE
+          chmod 600 __TEMP_INPUT_KEY_FILE
+          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "${WEBSITE_SSH_PORT}" -r build/export_html5/* "${WEBSITE_SSH_ADDRESS}":material_maker/material_maker_web/public/mm_web
+          rm -f __TEMP_INPUT_KEY_FILE

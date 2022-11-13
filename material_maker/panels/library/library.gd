@@ -265,6 +265,11 @@ func _on_Libraries_about_to_show():
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
 
+func on_html5_load_file(file_name, file_type, file_data):
+	match file_name.get_extension():
+		"json":
+			library_manager.load_library(file_name, file_data)
+
 func _on_Libraries_id_pressed(id : int) -> void:
 	match id:
 		MENU_CREATE_LIBRARY:
@@ -276,17 +281,22 @@ func _on_Libraries_id_pressed(id : int) -> void:
 			if status.ok:
 				library_manager.create_library(status.path, status.name)
 		MENU_LOAD_LIBRARY:
-			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-			add_child(dialog)
-			dialog.rect_min_size = Vector2(500, 500)
-			dialog.access = FileDialog.ACCESS_FILESYSTEM
-			dialog.mode = FileDialog.MODE_OPEN_FILE
-			dialog.add_filter("*.json;Material Maker Library")
-			var files = dialog.select_files()
-			while files is GDScriptFunctionState:
-				files = yield(files, "completed")
-			if files.size() == 1:
-				library_manager.load_library(files[0])
+			if OS.get_name() == "HTML5":
+				if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
+					Html5.connect("file_loaded", self, "on_html5_load_file")
+				Html5.load_file(".json")
+			else:
+				var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+				add_child(dialog)
+				dialog.rect_min_size = Vector2(500, 500)
+				dialog.access = FileDialog.ACCESS_FILESYSTEM
+				dialog.mode = FileDialog.MODE_OPEN_FILE
+				dialog.add_filter("*.json;Material Maker Library")
+				var files = dialog.select_files()
+				while files is GDScriptFunctionState:
+					files = yield(files, "completed")
+				if files.size() == 1:
+					library_manager.load_library(files[0])
 		_:
 			library_manager.toggle_library(id)
 

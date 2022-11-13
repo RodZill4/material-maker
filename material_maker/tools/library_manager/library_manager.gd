@@ -142,11 +142,11 @@ func create_library(path : String, name : String) -> void:
 	add_child(library)
 	save_library_list()
 
-func load_library(path : String) -> void:
+func load_library(path : String, data : String = "") -> void:
 	if has_library(path):
 		return
 	var library = LIBRARY.new()
-	library.load_library(path)
+	library.load_library(path, false, data)
 	add_child(library)
 	if disabled_libraries.find(path) != -1:
 		disabled_libraries.erase(path)
