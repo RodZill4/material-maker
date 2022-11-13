@@ -39,3 +39,4 @@ jobs:
           port: ${{ secrets.WEBSITE_SSH_PORT }}
           source: "build/export_html5/*"
           target: "material_maker/material_maker_web/public/mm_web"
+          strip_components: 2
