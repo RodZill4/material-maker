@@ -33,7 +33,7 @@ jobs:
         if: ${{ github.event.inputs.deploy == 'true' }}
         run: |
           apt-get update && apt-get -y install openssh-client
-          echo -e "${WEBSITE_SSH_KEY}" >__TEMP_INPUT_KEY_FILE
+          echo -e "${{ env.WEBSITE_SSH_KEY }}" >__TEMP_INPUT_KEY_FILE
           chmod 600 __TEMP_INPUT_KEY_FILE
-          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "${WEBSITE_SSH_PORT}" -r build/export_html5/* "${WEBSITE_SSH_ADDRESS}":material_maker/material_maker_web/public/mm_web
+          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "${{ env.WEBSITE_SSH_PORT }}" -r build/export_html5/* "${{ env.WEBSITE_SSH_ADDRESS }}":material_maker/material_maker_web/public/mm_web
           rm -f __TEMP_INPUT_KEY_FILE
