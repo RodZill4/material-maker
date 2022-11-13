@@ -69,7 +69,10 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
-	hdr = with_hdr
+	if OS.get_name() == "HTML5":
+		hdr = false
+	else:
+		hdr = with_hdr
 	if chunk_count == 1:
 		material.set_shader_param("mm_chunk_size", 1.0)
 		material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
