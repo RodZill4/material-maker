@@ -2,8 +2,8 @@
 
 [ext_resource path="res://material_maker/widgets/render_counter/render_counter.gd" type="Script" id=1]
 
-[node name="RenderCounter" type="HBoxContainer"]
-margin_right = 170.0
+[node name="RenderCounter" type="HBoxContainer" groups=["render_counter"]]
+margin_right = 158.0
 margin_bottom = 20.0
 script = ExtResource( 1 )
 

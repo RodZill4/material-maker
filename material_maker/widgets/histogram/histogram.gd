@@ -61,7 +61,7 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	$ViewportImage/ColorRect.material.set_shader_param(parameter_name, value)
 	return false
 
-func on_dep_update_buffer(buffer_name) -> bool:
+func on_dep_update_buffer(_buffer_name) -> bool:
 	if ! is_visible_in_tree():
 		return true
 	$ViewportImage.render_target_update_mode = Viewport.UPDATE_ONCE
@@ -76,5 +76,5 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	$ViewportHistogram2.update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
-	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null)
+	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null, true)
 	return true

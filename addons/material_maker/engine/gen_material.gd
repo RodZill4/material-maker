@@ -103,6 +103,8 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:
+		yield(get_tree(), "idle_frame")
+		mm_deps.dependency_update(buffer_name, null, true)
 		return true
 	var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
 	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("material"):
@@ -119,7 +121,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	# Abort rendering if material changed
 	renderer.copy_to_texture(preview_textures[texture_name].texture)
 	renderer.release(self)
-	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture)
+	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
 	if size <= TEXTURE_FILTERING_LIMIT:
 		preview_textures[texture_name].texture.flags &= ~Texture.FLAG_FILTER
 	else:

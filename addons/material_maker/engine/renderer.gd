@@ -95,12 +95,10 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	$ColorRect.material = shader_material
 	return self
 
-func render_shader(object : Object, shader : String, textures : Dictionary, render_size : int, with_hdr : bool = true) -> Object:
+func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
 	var shader_material = $ColorRect.material
 	shader_material.shader.code = shader
-	if textures != null:
-		for k in textures.keys():
-			shader_material.set_shader_param(k, textures[k])
+	mm_deps.material_update_params(shader_material)
 	var status = render_material(object, shader_material, render_size, with_hdr)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")

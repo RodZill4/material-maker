@@ -1,7 +1,6 @@
 extends Control
 
 
-var last_value : int = 0
 var start_time : int = 0
 var max_render_queue_size : int = 0
 
@@ -54,28 +53,20 @@ func _ready() -> void:
 	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
 
 func on_counter_change(count : int, pending : int) -> void:
-	if count == 0 and pending == 0:
+	if pending == 0:
 		$ProgressBar.max_value = 1
 		$ProgressBar.value = 1
 		$ProgressBar/Label.text = ""
-		start_time = OS.get_ticks_msec()
+		print("Rendered in %f s" % ( 0.001*(OS.get_ticks_msec()-start_time) ) )
 	else:
-		if count > last_value:
-			if $ProgressBar.value == $ProgressBar.max_value:
-				$ProgressBar.value = 0
-				max_render_queue_size = 1
-			else:
-				max_render_queue_size += 1
+		if count == pending:
+			$ProgressBar.max_value = count
+			start_time = OS.get_ticks_msec()
+			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
-			$ProgressBar.value += 1
-		assert(max_render_queue_size-$ProgressBar.value == count)
-		$ProgressBar.max_value = max_render_queue_size + pending
-		if $ProgressBar.value > 0:
-			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*(count+pending)/$ProgressBar.value
-			$ProgressBar/Label.text = "%d/%d - %d s" % [ $ProgressBar.value, $ProgressBar.max_value, remaining_time_msec/1000 ]
-		else:
-			$ProgressBar/Label.text = "%d/%d - ? s" % [ $ProgressBar.value, $ProgressBar.max_value ]
-	last_value = count
+			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*pending/(count-pending)
+			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
+		$ProgressBar.value = count-pending
 
 func e3tok(value : float) -> String:
 	var unit_modifier : String = ""

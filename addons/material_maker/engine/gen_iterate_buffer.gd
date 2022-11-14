@@ -13,7 +13,6 @@ var material : ShaderMaterial = null
 var loop_material : ShaderMaterial = null
 var is_paused : bool = false
 var current_iteration : int = 0
-var shader_generations : Array = [ 0, 0 ]
 
 var current_renderer = null
 
@@ -35,9 +34,9 @@ func _init():
 		"o%d_loop_tex" % get_instance_id(),
 		"o%d_tex" % get_instance_id()
 	]
+	mm_deps.create_buffer(buffer_names[3], self)
 	mm_deps.create_buffer(buffer_names[0], self)
 	mm_deps.create_buffer(buffer_names[1], self)
-	mm_deps.create_buffer(buffer_names[3], self)
 	set_current_iteration(0)
 
 func _exit_tree() -> void:
@@ -120,7 +119,6 @@ func do_update_shader(input_port_index : int) -> void:
 	assert(m != null && m.shader != null)
 	mm_deps.buffer_create_shader_material(buffer_name, m, mm_renderer.generate_shader(source))
 	set_current_iteration(0)
-	shader_generations[input_port_index] += 1
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
@@ -136,22 +134,18 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 			loop_material.set_shader_param(parameter_name, value)
 	return false
 
+func on_dep_buffer_invalidated(buffer_name : String):
+	if !exiting and (buffer_name == buffer_names[0] or buffer_name == buffer_names[1]):
+		mm_deps.buffer_invalidate(buffer_names[3])
+
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if current_renderer != null:
 		return false
-	var m : Material
-	if buffer_name == buffer_names[0]:
-		if current_iteration != 0:
-			return false
-		m = material
-	elif buffer_name == buffer_names[1]:
-		if current_iteration == 0:
-			return false
-		m = loop_material
-	else:
+	if buffer_name == buffer_names[3]:
 		return false
+	var m : Material = material if current_iteration == 0 else loop_material
 	# Calculate iteration count
 	var iterations = calculate_float_parameter("iterations")
 	if iterations.has("used_named_parameters"):
@@ -161,6 +155,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		iterations = 1
 	if current_iteration > iterations:
+		yield(get_tree(), "idle_frame")
+		mm_deps.dependency_update(buffer_name, null, true)
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
@@ -169,18 +165,20 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	while current_renderer is GDScriptFunctionState:
 		current_renderer = yield(current_renderer, "completed")
 	if check_current_iteration != current_iteration:
+		print("Iteration changed")
 		current_renderer.release(self)
 		current_renderer = null
-		mm_deps.dependency_update(buffer_name, texture)
+		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
 	var time = OS.get_ticks_msec()
 	current_renderer = current_renderer.render_material(self, m, pow(2, get_parameter("size")))
 	while current_renderer is GDScriptFunctionState:
 		current_renderer = yield(current_renderer, "completed")
 	if check_current_iteration != current_iteration:
+		print("Iteration changed")
 		current_renderer.release(self)
 		current_renderer = null
-		mm_deps.dependency_update(buffer_name, texture)
+		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
 	current_renderer.copy_to_texture(texture)
 	texture.flags = 0
@@ -193,25 +191,18 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		set_current_iteration(current_iteration+1)
 	if current_iteration <= iterations:
-		mm_deps.dependency_update("o%d_loop_tex" % get_instance_id(), texture)
+		mm_deps.dependency_update("o%d_loop_tex" % get_instance_id(), texture, true)
 	else:
-		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
-	mm_deps.dependency_update(buffer_name, texture)
+		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture, true)
+	mm_deps.dependency_update(buffer_name, texture, true)
 	return true
-
-func on_dep_shader_generations(buffer : String) -> int:
-	if buffer == buffer_names[0]:
-		return shader_generations[0]
-	if buffer == buffer_names[1]:
-		return shader_generations[1]
-	return 0
 
 func set_current_iteration(i : int) -> void:
 	if i == current_iteration:
 		return
 	current_iteration = i
 	var iteration_param_name = "o%d_iteration" % get_instance_id()
-	mm_deps.dependency_update(iteration_param_name, current_iteration)
+	mm_deps.dependency_update(iteration_param_name, current_iteration, true)
 	if current_iteration == 0:
 		mm_deps.buffer_invalidate(buffer_names[3])
 

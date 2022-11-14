@@ -188,8 +188,6 @@ func _ready() -> void:
 
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
-	mm_renderer.connect("render_queue", $VBoxContainer/StatusBar/RenderCounter, "on_counter_change")
-
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
 	mm_globals.config.set_value("window", "screen", OS.current_screen)

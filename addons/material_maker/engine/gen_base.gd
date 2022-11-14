@@ -37,6 +37,22 @@ class OutputPort:
 	func to_str() -> String:
 		return generator.name+".out("+str(output_index)+")"
 
+class Renderer:
+	var material : ShaderMaterial
+	var with_hdr : bool
+	
+	func _init(shader : String, wh : bool) -> void:
+		var buffer_name : String = "renderer_%d" % get_instance_id()
+		mm_deps.create_buffer(buffer_name, self)
+		material = mm_deps.buffer_create_shader_material(buffer_name, material, shader)
+	
+	func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+		material.set_shader_param(parameter_name, value)
+		return false
+	
+	func on_dep_update_buffer(buffer_name) -> bool:
+		return false
+
 var position : Vector2 = Vector2(0, 0)
 var model = null
 var orig_name = null
@@ -90,9 +106,6 @@ func get_description() -> String:
 
 func has_randomness() -> bool:
 	return false
-
-func update_float_parameters(parameter_values : Dictionary):
-	mm_deps.dependencies_update(parameter_values)
 
 func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
@@ -327,7 +340,7 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, output_shader.textures, size, output_type != "rgba")
+	renderer = renderer.render_shader(object, shader, size, output_type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer

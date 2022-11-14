@@ -63,8 +63,8 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
 	if output >= preview:
 		return
-	if mm_renderer.render_queue_size > 0:
-		yield(mm_renderer, "render_queue_empty")
+	if mm_deps.get_render_queue_size() > 0:
+		yield(mm_deps, "render_queue_empty")
 	var result = generator.render(self, output, 24, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")

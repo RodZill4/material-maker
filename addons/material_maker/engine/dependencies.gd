@@ -15,6 +15,9 @@ class Buffer:
 	var pending_dependencies : int
 	var status : int
 	var renders : int
+	var shader_generations : int
+	
+	const STATUS = ["Invalidated","Updating","UpdatingInvalidated","Updated"]
 	
 	func _init(n : String, o : Object = null):
 		name = n
@@ -23,11 +26,18 @@ class Buffer:
 		pending_dependencies = 0
 		status = Updated
 		renders = 0
+		shader_generations = 0
 
 
 var dependencies : Dictionary = {}
 var dependencies_values : Dictionary = {}
 var buffers : Dictionary = {}
+
+var reset_stats : bool = true
+var render_queue_size : int = 0
+
+
+signal render_queue_empty
 
 
 func _ready():
@@ -56,6 +66,7 @@ func delete_buffers_from_object(object : Object):
 
 func buffer_clear_dependencies(buffer_name : String):
 	assert(buffers.has(buffer_name))
+	reset_stats = true
 	var b : Buffer = buffers[buffer_name]
 	for d in b.dependencies:
 		if dependencies.has(d):
@@ -75,6 +86,7 @@ func buffer_add_dependency(buffer_name : String, dependency_name : String):
 	var buffer : Buffer = buffers[buffer_name]
 	if buffer.dependencies.find(dependency_name) != -1:
 		return null
+	reset_stats = true
 	buffer.dependencies.append(dependency_name)
 	if ! dependencies.has(dependency_name):
 		dependencies[dependency_name] = []
@@ -104,8 +116,10 @@ func buffer_invalidate(buffer_name):
 		_:
 			buffer.status = Buffer.UpdatingInvalidated
 	update()
+	if buffer.object != null and buffer.object.has_method("on_dep_buffer_invalidated"):
+		buffer.object.on_dep_buffer_invalidated(buffer_name)
 
-func dependency_update(dependency_name : String, value = null):
+func dependency_update(dependency_name : String, value = null, internal : bool = false):
 	var need_update : bool = false
 	var is_buffer_just_updated : bool = false
 	if value != null:
@@ -130,6 +144,9 @@ func dependency_update(dependency_name : String, value = null):
 				is_buffer_just_updated = true
 		b.status = Buffer.Updated
 		b.renders += 1
+	if ! internal:
+		#print("Resetting stats because of %s" % dependency_name)
+		reset_stats = true
 	if dependencies.has(dependency_name):
 		for d in dependencies[dependency_name]:
 			assert(buffers.has(d))
@@ -142,8 +159,7 @@ func dependency_update(dependency_name : String, value = null):
 				continue
 			buffer_invalidate(d)
 			need_update = true
-	if need_update:
-		update()
+	update()
 
 func dependencies_update(dependency_values : Dictionary):
 	for k in dependency_values.keys():
@@ -162,39 +178,66 @@ func update():
 
 func do_update():
 	update_scheduled = false
+	var invalidated_buffers : int = 0
 	for b in buffers.keys():
 		var buffer : Buffer = buffers[b]
-		if buffer.status == Buffer.Invalidated and buffer.pending_dependencies == 0:
+		if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
+			invalidated_buffers += 1
+		if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
 			if buffer.object.has_method("on_dep_update_buffer"):
 				var status = buffer.object.on_dep_update_buffer(b)
 				buffer.status = Buffer.Updating
 				if status is bool and ! status:
 					buffer.status = Buffer.Invalidated
+	if reset_stats:
+		render_queue_size = invalidated_buffers
+		reset_stats = false
+	get_tree().call_group("render_counter", "on_counter_change", render_queue_size, invalidated_buffers)
+	if render_queue_size == 0:
+		emit_signal("render_queue_empty")
 
+func get_render_queue_size() -> int:
+	var invalidated_buffers : int = 0
+	for b in buffers.keys():
+		var buffer : Buffer = buffers[b]
+		if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
+			invalidated_buffers += 1
+	return invalidated_buffers
+
+func material_update_params(material : ShaderMaterial):
+	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+		if dependencies_values.has(p.name):
+			material.set_shader_param(p.name, dependencies_values[p.name])
 
 func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
 	if material == null:
 		material = ShaderMaterial.new()
 	if material.shader == null:
 		material.shader = Shader.new()
-	if shader.find("$") != -1:
-		print("Incorrect shader generated for "+buffer_name)
 	material.shader.code = shader
 	buffer_clear_dependencies(buffer_name)
 	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
 		var value = buffer_add_dependency(buffer_name, p.name)
 		if value != null:
 			material.set_shader_param(p.name, value)
+	buffers[buffer_name].shader_generations += 1
 	return material
 
 
 func print_stats(object = null):
+	var statuses : Dictionary = {}
+	for s in Buffer.STATUS:
+		statuses[s] = PoolStringArray()
 	for b in buffers.keys():
 		if object != null and object != buffers[b].object:
 			continue
 		print("Buffer "+b+":")
 		print("  Dependencies: "+str(buffers[b].dependencies))
-		print("  Status: "+["Invalidated","Updating","UpdatingInvalidated","Updated"][buffers[b].status])
+		print("  Status: "+Buffer.STATUS[buffers[b].status])
+		var a = statuses[Buffer.STATUS[buffers[b].status]]
+		a.append(b)
+		statuses[Buffer.STATUS[buffers[b].status]] = a
+		print(statuses[Buffer.STATUS[buffers[b].status]])
 		var pending : PoolStringArray = PoolStringArray()
 		if buffers[b].pending_dependencies > 0:
 			for d in buffers[b].dependencies:
@@ -204,7 +247,8 @@ func print_stats(object = null):
 		else:
 			print("  Pending: 0")
 		print("  Renders: %d" % buffers[b].renders)
+		print("  Shader generations: %d" % buffers[b].shader_generations)
 		if buffers[b].object.has_method("on_dep_shader_generations"):
 			var count = buffers[b].object.on_dep_shader_generations(b)
-			if count > 0:
-				print("  Shader generations: %d" % count)
+	for s in Buffer.STATUS:
+		print("%s: %s" % [ s, statuses[s].join(", ") ])
