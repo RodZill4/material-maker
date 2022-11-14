@@ -57,7 +57,6 @@ func on_counter_change(count : int, pending : int) -> void:
 		$ProgressBar.max_value = 1
 		$ProgressBar.value = 1
 		$ProgressBar/Label.text = ""
-		print("Rendered in %f s" % ( 0.001*(OS.get_ticks_msec()-start_time) ) )
 	else:
 		if count == pending:
 			$ProgressBar.max_value = count

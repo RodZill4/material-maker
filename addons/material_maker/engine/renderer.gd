@@ -13,11 +13,6 @@ signal done
 func _ready() -> void:
 	$ColorRect.material = $ColorRect.material.duplicate(true)
 
-func setup_material(shader_material, textures, shader_code) -> void:
-	shader_material.shader.code = shader_code
-	for k in textures.keys():
-		shader_material.set_shader_param(k+"_tex", textures[k])
-
 func request(object : Object) -> Object:
 	assert(render_owner == null)
 	render_owner = object
