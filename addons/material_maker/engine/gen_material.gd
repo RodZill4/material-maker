@@ -9,7 +9,6 @@ var uids = {}
 
 var updating : bool = false
 var update_again : bool = false
-var render_not_ready : bool = false
 
 var preview_material : ShaderMaterial = null
 var preview_parameters : Dictionary = {}
@@ -518,18 +517,27 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 			result = yield(result, "completed")
 		if result == "ok":
 			exported_files.append_array(overwrite_files)
+	var progress_dialog = null
+	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
+	if progress_dialog_scene != null:
+		progress_dialog = progress_dialog_scene.instance()
+	get_tree().get_root().add_child(progress_dialog)
+	progress_dialog.set_text("Exporting material")
+	progress_dialog.set_progress(0)
+	var total_files : int = 0
+	for f in exported_files:
+		match f.type:
+			"texture", "template":
+				total_files += 1
+			"buffers", "buffer_templates":
+				total_files += preview_texture_dependencies.size()
+	var saved_files = 0
 	for f in exported_files:
 		match f.type:
 			"texture":
-				# Wait until no buffer has been updated for 5 frames
-				render_not_ready = true
-				while render_not_ready:
-					render_not_ready = false
-					yield(get_tree(), "idle_frame")
-					yield(get_tree(), "idle_frame")
-					yield(get_tree(), "idle_frame")
-					yield(get_tree(), "idle_frame")
-					yield(get_tree(), "idle_frame")
+				# Wait until the render queue is empty
+				if mm_deps.get_render_queue_size() > 0:
+					yield(mm_deps, "render_queue_empty")
 				var file_name = subst_string(f.file_name, export_context)
 				var result = render(self, f.output, size)
 				while result is GDScriptFunctionState:
@@ -540,6 +548,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					is_greyscale = output.has("type") and output.type == "f"
 				result.save_to_file(file_name, is_greyscale)
 				result.release(self)
+				saved_files += 1
+				progress_dialog.set_progress(float(saved_files)/float(total_files))
 			"template":
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
@@ -547,13 +557,19 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 				var file_name = subst_string(f.file_name, export_context)
 				create_file_from_template(f.template, file_name, file_export_context)
+				saved_files += 1
+				progress_dialog.set_progress(float(saved_files)/float(total_files))
 			"buffers":
 				var index : int = 1
+				if mm_deps.get_render_queue_size() > 0:
+					yield(mm_deps, "render_queue_empty")
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					preview_texture_dependencies[t].get_data().save_png(file_name)
 					index += 1
+					saved_files += 1
+					progress_dialog.set_progress(float(saved_files)/float(total_files))
 			"buffer_templates":
 				var index : int = 1
 				for t in preview_texture_dependencies.keys():
@@ -566,6 +582,10 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					create_file_from_template(f.template, file_name, file_export_context)
 					index += 1
+					saved_files += 1
+					progress_dialog.set_progress(float(saved_files)/float(total_files))
+	if progress_dialog != null:
+		progress_dialog.queue_free()
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
