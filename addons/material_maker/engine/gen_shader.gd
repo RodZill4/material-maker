@@ -5,10 +5,12 @@ class_name MMGenShader
 
 var shader_model : Dictionary = {}
 var shader_model_preprocessed : Dictionary = {}
-var model_uses_seed = false
-var params_use_seed = false
+var model_uses_seed : bool = false
+var params_use_seed : bool = false
+var generic_size : int = 1
 
-var editable = false
+var editable : bool = false
+
 
 func toggle_editable() -> bool:
 	editable = !editable
@@ -40,10 +42,10 @@ func get_type_name() -> String:
 	return .get_type_name()
 
 func get_parameter_defs() -> Array:
-	if shader_model == null or !shader_model.has("parameters"):
+	if shader_model_preprocessed == null or !shader_model_preprocessed.has("parameters"):
 		return []
 	else:
-		return shader_model.parameters
+		return shader_model_preprocessed.parameters
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
@@ -71,16 +73,16 @@ func set_parameter(n : String, v) -> void:
 		get_tree().call_group("generator_node", "on_generator_changed", self)
 
 func get_input_defs() -> Array:
-	if shader_model == null or !shader_model.has("inputs"):
+	if shader_model_preprocessed == null or !shader_model_preprocessed.has("inputs"):
 		return []
 	else:
-		return shader_model.inputs
+		return shader_model_preprocessed.inputs
 
 func get_output_defs(_show_hidden : bool = false) -> Array:
-	if shader_model == null or !shader_model.has("outputs"):
+	if shader_model_preprocessed == null or !shader_model_preprocessed.has("outputs"):
 		return []
 	else:
-		return shader_model.outputs
+		return shader_model_preprocessed.outputs
 
 
 func find_instance_functions(code : String):
@@ -170,17 +172,133 @@ func preprocess_shader_model(data : Dictionary):
 							o.type = f
 				preprocessed.outputs.push_back(o)
 	else:
-		if data.has("code"):
-			preprocessed.code = data.code
 		if data.has("parameters"):
 			preprocessed.parameters = data.parameters
+		if data.has("inputs"):
+			preprocessed.inputs = data.inputs
+		if data.has("code"):
+			preprocessed.code = data.code
 		if data.has("outputs"):
 			preprocessed.outputs = data.outputs
+		if data.has("includes"):
+			preprocessed.includes = data.includes
+		if data.has("global"):
+			preprocessed.global = data.global
 	return preprocessed
+
+func is_generic() -> bool:
+	if shader_model.has("parameters"):
+		for p in shader_model.parameters:
+			if p.name.find("#") != -1:
+				return true
+	return false
+
+func set_generic_size(size : int) -> void:
+	if generic_size == size or ! is_generic():
+		return
+	generic_size = size
+	set_shader_model(shader_model)
+
+func expand_generic_code(code : String, first_generic_value : int = 1) -> String:
+	var rv : String = ""
+	while code != "":
+		var for_position : int = code.find("#for")
+		if for_position == -1:
+			rv += code
+			break
+		rv += code.left(for_position)
+		code = code.right(for_position+4)
+		var end_position : int = code.find("#end")
+		var generic_code : String
+		if end_position == -1:
+			generic_code = code
+			code = ""
+		else:
+			generic_code = code.left(end_position)
+			code = code.right(end_position+4)
+		for gi in generic_size:
+			rv += generic_code.replace("#", str(gi+first_generic_value))
+	return rv
+
+func expand_generic() -> void:
+	# Find generic inputs
+	var first_generic_input = -1
+	var last_generic_input = -1
+	for i in shader_model.inputs.size():
+		var p = shader_model.inputs[i]
+		if p.name.find("#") != -1:
+			if first_generic_input == -1:
+				first_generic_input = i
+			elif last_generic_input != -1:
+				print("incorrect generic inputs")
+				return
+		elif first_generic_input != -1 and last_generic_input == -1:
+			last_generic_input = i
+	if first_generic_input != -1 and last_generic_input == -1:
+		last_generic_input = shader_model.inputs.size()
+	# Find generic parameters
+	var first_generic_parameter = -1
+	var last_generic_parameter = -1
+	for i in shader_model.parameters.size():
+		var p = shader_model.parameters[i]
+		if p.name.find("#") != -1:
+			if first_generic_parameter == -1:
+				first_generic_parameter = i
+			elif last_generic_parameter != -1:
+				print("incorrect generic parameters")
+				return
+		elif first_generic_parameter != -1 and last_generic_parameter == -1:
+			last_generic_parameter = i
+	if first_generic_parameter != -1 and last_generic_parameter == -1:
+		last_generic_parameter = shader_model.parameters.size()
+	# Build the model
+	var first_generic_value : int = 1
+	# Build inputs
+	if first_generic_input != -1:
+		var inputs = []
+		for i in first_generic_input:
+			inputs.append(shader_model.inputs[i])
+		for gi in generic_size:
+			var gv = first_generic_value + gi
+			print(gv)
+			for i in range(first_generic_input, last_generic_input):
+				var input = shader_model.inputs[i].duplicate()
+				input.name = input.name.replace("#", str(gv))
+				input.label = input.label.replace("#", str(gv))
+				inputs.append(input)
+		for i in range(last_generic_input, shader_model.inputs.size()):
+			inputs.append(shader_model.inputs[i])
+		shader_model_preprocessed.inputs = inputs
+	# Build parameters
+	if first_generic_parameter != -1:
+		var parameters = []
+		for i in first_generic_parameter:
+			parameters.append(shader_model.parameters[i])
+		for gi in generic_size:
+			var gv = first_generic_value + gi
+			for i in range(first_generic_parameter, last_generic_parameter):
+				var parameter = shader_model.parameters[i].duplicate()
+				parameter.name = parameter.name.replace("#", str(gv))
+				var label : String = parameter.label
+				var colon_position = label.find(":")
+				if colon_position != -1 and label.left(colon_position).is_valid_integer():
+					var param_position : int = label.left(colon_position).to_int()
+					if param_position > first_generic_input and param_position <= last_generic_input:
+						param_position += gi*(last_generic_input-first_generic_input)
+						parameter.label = str(param_position)+label.right(colon_position)
+				parameters.append(parameter)
+		for i in range(last_generic_parameter, shader_model.parameters.size()):
+			parameters.append(shader_model.parameters[i])
+		shader_model_preprocessed.parameters = parameters
+	# Build code
+	shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
 
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
 	shader_model_preprocessed = preprocess_shader_model(data)
+	if is_generic():
+		print("Expanding generic")
+		expand_generic()
 	init_parameters()
 	model_uses_seed = false
 	if shader_model.has("outputs"):
@@ -420,9 +538,9 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 		else:
 			variables["uv"] = "("+uv+")"
 	variables["time"] = "elapsed_time"
-	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
-		for i in range(shader_model.inputs.size()):
-			var input = shader_model.inputs[i]
+	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
+		for i in range(shader_model_preprocessed.inputs.size()):
+			var input = shader_model_preprocessed.inputs[i]
 			var source = get_source(i)
 			if source == null:
 				continue
@@ -438,13 +556,13 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				else:
 					variables[input.name+"."+a] = src_attributes[a]
 	string = replace_variables(string, variables)
-	if shader_model.has("inputs") and typeof(shader_model.inputs) == TYPE_ARRAY:
+	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
 		var cont = true
 		while cont:
 			var changed = false
 			var new_pass_required = false
-			for i in range(shader_model.inputs.size()):
-				var input = shader_model.inputs[i]
+			for i in range(shader_model_preprocessed.inputs.size()):
+				var input = shader_model_preprocessed.inputs[i]
 				var source = get_source(i)
 				if input.has("function") and input.function:
 					string = replace_input_with_function_call(string, input.name)
@@ -510,9 +628,9 @@ func generate_parameter_declarations(rv : Dictionary):
 
 func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 	var genname = "o"+str(get_instance_id())
-	if shader_model.has("inputs"):
-		for i in range(shader_model.inputs.size()):
-			var input = shader_model.inputs[i]
+	if shader_model_preprocessed.has("inputs"):
+		for i in range(shader_model_preprocessed.inputs.size()):
+			var input = shader_model_preprocessed.inputs[i]
 			if input.has("function") and input.function:
 				var source = get_source(i)
 				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
@@ -614,21 +732,25 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 		rv.type = output.type
-		if shader_model.has("includes"):
-			for i in shader_model.includes:
+		if shader_model_preprocessed.has("includes"):
+			for i in shader_model_preprocessed.includes:
 				var g = mm_loader.get_predefined_global(i)
 				if g != "" and rv.globals.find(g) == -1:
 					rv.globals.push_back(g)
-		if shader_model.has("global") and rv.globals.find(shader_model.global) == -1:
-			rv.globals.push_back(shader_model.global)
+		if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
+			rv.globals.push_back(shader_model_preprocessed.global)
 	return rv
 
 
 func _serialize(data: Dictionary) -> Dictionary:
+	if is_generic():
+		data.generic_size = generic_size
 	data.shader_model = shader_model
 	return data
 
 func _deserialize(data : Dictionary) -> void:
+	if data.has("generic_size"):
+		generic_size = data.generic_size
 	if data.has("shader_model"):
 		set_shader_model(data.shader_model)
 	elif data.has("model_data"):

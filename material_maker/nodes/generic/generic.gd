@@ -8,9 +8,14 @@ var output_count = 0
 
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
+var generic_button : NodeButton
+
+
+const GENERIC_ICON : Texture = preload("res://material_maker/icons/add.tres")
 
 
 func _ready() -> void:
+	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
 
 func _draw() -> void:
@@ -23,6 +28,41 @@ func _draw() -> void:
 func set_generator(g : MMGenBase) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
+	update_node()
+
+func update():
+	if generator != null and generator.has_method("is_generic") and generator.is_generic():
+		generic_button.hidden = false
+	else:
+		generic_button.hidden = true
+	.update()
+
+var next_generic : int = 1
+
+func on_node_button(b : NodeButton, event : InputEvent) -> bool:
+	if b == generic_button:
+		var popup : PopupPanel = PopupPanel.new()
+		var spinbox : SpinBox = SpinBox.new()
+		spinbox.min_value = 1
+		spinbox.max_value = 32
+		spinbox.value = generator.generic_size
+		popup.add_child(spinbox)
+		add_child(popup)
+		popup.connect("popup_hide", popup, "queue_free")
+		spinbox.connect("value_changed", self, "update_generic")
+		popup.connect("tree_exited", self, "commit_generic")
+		next_generic = generator.generic_size
+		popup.popup(Rect2(get_global_mouse_position(), popup.get_minimum_size()))
+	else:
+		return .on_node_button(b, event)
+	return false
+
+func update_generic(size : float) -> void:
+	next_generic = int(size)
+
+func commit_generic() -> void:
+	print("Hello")
+	generator.set_generic_size(next_generic)
 	update_node()
 
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
