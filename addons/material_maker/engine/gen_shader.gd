@@ -258,6 +258,21 @@ func expand_generic() -> void:
 			last_generic_parameter = i
 	if first_generic_parameter != -1 and last_generic_parameter == -1:
 		last_generic_parameter = shader_model.parameters.size()
+	# Find generic outputs
+	var first_generic_output = -1
+	var last_generic_output = -1
+	for i in shader_model.outputs.size():
+		var p = shader_model.outputs[i]
+		if p[p.type].find("#") != -1:
+			if first_generic_output == -1:
+				first_generic_output = i
+			elif last_generic_output != -1:
+				print("incorrect generic outputs")
+				return
+		elif first_generic_output != -1 and last_generic_output == -1:
+			last_generic_output = i
+	if first_generic_output != -1 and last_generic_output == -1:
+		last_generic_output = shader_model.outputs.size()
 	# Build the model
 	var first_generic_value : int = 1
 	# Build inputs
@@ -267,36 +282,73 @@ func expand_generic() -> void:
 			inputs.append(shader_model.inputs[i])
 		for gi in generic_size:
 			var gv = first_generic_value + gi
-			print(gv)
 			for i in range(first_generic_input, last_generic_input):
 				var input = shader_model.inputs[i].duplicate()
 				input.name = input.name.replace("#", str(gv))
 				input.label = input.label.replace("#", str(gv))
+				input.shortdesc = input.shortdesc.replace("#", str(gv))
+				input.longdesc = input.longdesc.replace("#", str(gv))
 				inputs.append(input)
 		for i in range(last_generic_input, shader_model.inputs.size()):
 			inputs.append(shader_model.inputs[i])
 		shader_model_preprocessed.inputs = inputs
 	# Build parameters
+	var parameters_ranges = []
 	if first_generic_parameter != -1:
-		var parameters = []
-		for i in first_generic_parameter:
-			parameters.append(shader_model.parameters[i])
-		for gi in generic_size:
-			var gv = first_generic_value + gi
-			for i in range(first_generic_parameter, last_generic_parameter):
-				var parameter = shader_model.parameters[i].duplicate()
-				parameter.name = parameter.name.replace("#", str(gv))
+		if first_generic_parameter > 0:
+			parameters_ranges.append({ begin = 0, end = first_generic_parameter, generic = false })
+		parameters_ranges.append({ begin = first_generic_parameter, end = last_generic_parameter, generic = true })
+		if last_generic_parameter < shader_model.parameters.size():
+			parameters_ranges.append({ begin = last_generic_parameter, end = shader_model.parameters.size(), generic = false })
+	else:
+		parameters_ranges.append({ begin = 0, end = shader_model.parameters.size(), generic = false })
+	var parameters = []
+	for r in parameters_ranges:
+		if r.generic:
+			for gi in generic_size:
+				var gv = first_generic_value + gi
+				for i in range(r.begin, r.end):
+					var parameter = shader_model.parameters[i].duplicate()
+					parameter.name = parameter.name.replace("#", str(gv))
+					parameter.shortdesc = parameter.shortdesc.replace("#", str(gv))
+					parameter.longdesc = parameter.longdesc.replace("#", str(gv))
+					var label : String = parameter.label
+					var colon_position = label.find(":")
+					if colon_position != -1 and label.left(colon_position).is_valid_integer():
+						var param_position : int = label.left(colon_position).to_int()
+						if param_position > first_generic_input and param_position <= last_generic_input:
+							param_position += gi*(last_generic_input-first_generic_input)
+							parameter.label = str(param_position)+label.right(colon_position)
+					parameters.append(parameter)
+		else:
+			for i in range(r.begin, r.end):
+				var parameter = shader_model.parameters[i]
 				var label : String = parameter.label
 				var colon_position = label.find(":")
 				if colon_position != -1 and label.left(colon_position).is_valid_integer():
 					var param_position : int = label.left(colon_position).to_int()
-					if param_position > first_generic_input and param_position <= last_generic_input:
-						param_position += gi*(last_generic_input-first_generic_input)
+					if param_position >= last_generic_input:
+						param_position += (generic_size-1)*(last_generic_input-first_generic_input)
+						parameter = parameter.duplicate()
 						parameter.label = str(param_position)+label.right(colon_position)
 				parameters.append(parameter)
-		for i in range(last_generic_parameter, shader_model.parameters.size()):
-			parameters.append(shader_model.parameters[i])
-		shader_model_preprocessed.parameters = parameters
+	shader_model_preprocessed.parameters = parameters
+	# Build outputs
+	if first_generic_output != -1:
+		var outputs = []
+		for i in first_generic_output:
+			outputs.append(shader_model.outputs[i])
+		for gi in generic_size:
+			var gv = first_generic_value + gi
+			for i in range(first_generic_output, last_generic_output):
+				var output = shader_model.outputs[i].duplicate()
+				output[output.type] = output[output.type].replace("#", str(gv))
+				output.shortdesc = output.shortdesc.replace("#", str(gv))
+				output.longdesc = output.longdesc.replace("#", str(gv))
+				outputs.append(output)
+		for i in range(last_generic_output, shader_model.outputs.size()):
+			outputs.append(shader_model.outputs[i])
+		shader_model_preprocessed.outputs = outputs
 	# Build code
 	shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
 
