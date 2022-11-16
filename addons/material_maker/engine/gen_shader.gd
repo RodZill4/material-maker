@@ -139,6 +139,8 @@ func fix_instance_functions(code : String, instance_functions : Array):
 func preprocess_shader_model(data : Dictionary):
 	var preprocessed = {}
 	if data.has("instance") and data.instance != "":
+		# if the instance section is not empty, parameters, code and instance sections must
+		# be preprocessed (add variations parameter to instance functions)
 		var instance_functions = find_instance_functions(data.instance)
 		preprocessed.instance = fix_instance_functions(instance_functions.code, instance_functions.functions)
 		if data.has("code"):
@@ -172,24 +174,29 @@ func preprocess_shader_model(data : Dictionary):
 							o.type = f
 				preprocessed.outputs.push_back(o)
 	else:
+		# otherwise just copy those sections
 		if data.has("parameters"):
 			preprocessed.parameters = data.parameters
-		if data.has("inputs"):
-			preprocessed.inputs = data.inputs
 		if data.has("code"):
 			preprocessed.code = data.code
 		if data.has("outputs"):
 			preprocessed.outputs = data.outputs
-		if data.has("includes"):
-			preprocessed.includes = data.includes
-		if data.has("global"):
-			preprocessed.global = data.global
+	if data.has("inputs"):
+		preprocessed.inputs = data.inputs
+	if data.has("includes"):
+		preprocessed.includes = data.includes
+	if data.has("global"):
+		preprocessed.global = data.global
 	return preprocessed
 
 func is_generic() -> bool:
 	if shader_model.has("parameters"):
 		for p in shader_model.parameters:
 			if p.name.find("#") != -1:
+				return true
+	if shader_model.has("inputs"):
+		for i in shader_model.inputs:
+			if i.name.find("#") != -1:
 				return true
 	return false
 
