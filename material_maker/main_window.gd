@@ -497,6 +497,9 @@ func do_load_project(file_name) -> bool:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
+	var dir = Directory.new()
+	if !dir.file_exists(file_name):
+		status = false
 	if status:
 		add_recent(file_name)
 	else:
