@@ -227,52 +227,40 @@ func expand_generic_code(code : String, first_generic_value : int = 1) -> String
 			rv += generic_code.replace("#", str(gi+first_generic_value))
 	return rv
 
+func get_generic_range(array : Array, field : String, indirect : bool = false) -> Dictionary:
+	var rv : Dictionary = { first = -1, last = -1 }
+	for i in array.size():
+		var p = array[i]
+		var string : String
+		if indirect:
+			string = p[p[field]]
+		else:
+			string = p[field]
+		if string.find("#") != -1:
+			if rv.first == -1:
+				rv.first = i
+			elif rv.last != -1:
+				print("incorrect generic inputs")
+				return { first = -1, last = -1 }
+		elif rv.first != -1 and rv.last == -1:
+			rv.last = i
+	if rv.first != -1 and rv.last == -1:
+		rv.last = array.size()
+	return rv
+
 func expand_generic() -> void:
 	# Find generic inputs
-	var first_generic_input = -1
-	var last_generic_input = -1
-	for i in shader_model.inputs.size():
-		var p = shader_model.inputs[i]
-		if p.name.find("#") != -1:
-			if first_generic_input == -1:
-				first_generic_input = i
-			elif last_generic_input != -1:
-				print("incorrect generic inputs")
-				return
-		elif first_generic_input != -1 and last_generic_input == -1:
-			last_generic_input = i
-	if first_generic_input != -1 and last_generic_input == -1:
-		last_generic_input = shader_model.inputs.size()
+	var generic_inputs = get_generic_range(shader_model.inputs, "name")
+	var first_generic_input = generic_inputs.first
+	var last_generic_input = generic_inputs.last
 	# Find generic parameters
-	var first_generic_parameter = -1
-	var last_generic_parameter = -1
-	for i in shader_model.parameters.size():
-		var p = shader_model.parameters[i]
-		if p.name.find("#") != -1:
-			if first_generic_parameter == -1:
-				first_generic_parameter = i
-			elif last_generic_parameter != -1:
-				print("incorrect generic parameters")
-				return
-		elif first_generic_parameter != -1 and last_generic_parameter == -1:
-			last_generic_parameter = i
-	if first_generic_parameter != -1 and last_generic_parameter == -1:
-		last_generic_parameter = shader_model.parameters.size()
+	var generic_parameters = get_generic_range(shader_model.parameters, "name")
+	var first_generic_parameter = generic_parameters.first
+	var last_generic_parameter = generic_parameters.last
 	# Find generic outputs
-	var first_generic_output = -1
-	var last_generic_output = -1
-	for i in shader_model.outputs.size():
-		var p = shader_model.outputs[i]
-		if p[p.type].find("#") != -1:
-			if first_generic_output == -1:
-				first_generic_output = i
-			elif last_generic_output != -1:
-				print("incorrect generic outputs")
-				return
-		elif first_generic_output != -1 and last_generic_output == -1:
-			last_generic_output = i
-	if first_generic_output != -1 and last_generic_output == -1:
-		last_generic_output = shader_model.outputs.size()
+	var generic_outputs = get_generic_range(shader_model.outputs, "type", 1)
+	var first_generic_output = generic_outputs.first
+	var last_generic_output = generic_outputs.last
 	# Build the model
 	var first_generic_value : int = 1
 	# Build inputs
@@ -285,9 +273,12 @@ func expand_generic() -> void:
 			for i in range(first_generic_input, last_generic_input):
 				var input = shader_model.inputs[i].duplicate()
 				input.name = input.name.replace("#", str(gv))
-				input.label = input.label.replace("#", str(gv))
-				input.shortdesc = input.shortdesc.replace("#", str(gv))
-				input.longdesc = input.longdesc.replace("#", str(gv))
+				if input.has("label"):
+					input.label = input.label.replace("#", str(gv))
+				if input.has("shortdesc"):
+					input.shortdesc = input.shortdesc.replace("#", str(gv))
+				if input.has("longdesc"):
+					input.longdesc = input.longdesc.replace("#", str(gv))
 				inputs.append(input)
 		for i in range(last_generic_input, shader_model.inputs.size()):
 			inputs.append(shader_model.inputs[i])
@@ -310,8 +301,10 @@ func expand_generic() -> void:
 				for i in range(r.begin, r.end):
 					var parameter = shader_model.parameters[i].duplicate()
 					parameter.name = parameter.name.replace("#", str(gv))
-					parameter.shortdesc = parameter.shortdesc.replace("#", str(gv))
-					parameter.longdesc = parameter.longdesc.replace("#", str(gv))
+					if parameter.has("shortdesc"):
+						parameter.shortdesc = parameter.shortdesc.replace("#", str(gv))
+					if parameter.has("longdesc"):
+						parameter.longdesc = parameter.longdesc.replace("#", str(gv))
 					var label : String = parameter.label
 					var colon_position = label.find(":")
 					if colon_position != -1 and label.left(colon_position).is_valid_integer():
@@ -343,20 +336,24 @@ func expand_generic() -> void:
 			for i in range(first_generic_output, last_generic_output):
 				var output = shader_model.outputs[i].duplicate()
 				output[output.type] = output[output.type].replace("#", str(gv))
-				output.shortdesc = output.shortdesc.replace("#", str(gv))
-				output.longdesc = output.longdesc.replace("#", str(gv))
+				if output.has("shortdesc"):
+					output.shortdesc = output.shortdesc.replace("#", str(gv))
+				if output.has("longdesc"):
+					output.longdesc = output.longdesc.replace("#", str(gv))
 				outputs.append(output)
 		for i in range(last_generic_output, shader_model.outputs.size()):
 			outputs.append(shader_model.outputs[i])
 		shader_model_preprocessed.outputs = outputs
 	# Build code
-	shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
+	if shader_model_preprocessed.has("code"):
+		shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
+	if shader_model_preprocessed.has("instance"):
+		shader_model_preprocessed.instance = expand_generic_code(shader_model.code, first_generic_value)
 
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
 	shader_model_preprocessed = preprocess_shader_model(data)
 	if is_generic():
-		print("Expanding generic")
 		expand_generic()
 	init_parameters()
 	model_uses_seed = false

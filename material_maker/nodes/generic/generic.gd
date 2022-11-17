@@ -41,27 +41,48 @@ var next_generic : int = 1
 
 func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 	if b == generic_button:
-		var popup : PopupPanel = PopupPanel.new()
-		var spinbox : SpinBox = SpinBox.new()
-		spinbox.min_value = 1
-		spinbox.max_value = 32
-		spinbox.value = generator.generic_size
-		popup.add_child(spinbox)
-		add_child(popup)
-		popup.connect("popup_hide", popup, "queue_free")
-		spinbox.connect("value_changed", self, "update_generic")
-		popup.connect("tree_exited", self, "commit_generic")
-		next_generic = generator.generic_size
-		popup.popup(Rect2(get_global_mouse_position(), popup.get_minimum_size()))
+		if ! event is InputEventMouseButton or ! event.pressed:
+			return false
+		match event.button_index:
+			BUTTON_LEFT:
+				generator.set_generic_size(generator.generic_size+1)
+				update_node()
+			BUTTON_RIGHT:
+				get_generic_minimum()
+				var popup : PopupPanel = PopupPanel.new()
+				var spinbox : SpinBox = SpinBox.new()
+				spinbox.min_value = get_generic_minimum()
+				spinbox.max_value = 32
+				spinbox.value = generator.generic_size
+				popup.add_child(spinbox)
+				add_child(popup)
+				popup.connect("popup_hide", popup, "queue_free")
+				spinbox.connect("value_changed", self, "update_generic")
+				popup.connect("tree_exited", self, "commit_generic")
+				next_generic = generator.generic_size
+				popup.popup(Rect2(get_global_mouse_position(), popup.get_minimum_size()))
+				accept_event()
 	else:
 		return .on_node_button(b, event)
 	return false
+
+func get_generic_minimum():
+	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
+	var generic_input_count = generic_inputs.last-generic_inputs.first
+	var rv : int = 0
+	for i in generator.generic_size:
+		for p in generic_input_count:
+			if generator.get_source(generic_inputs.first+i*generic_input_count+p) != null:
+				rv = i+1
+				break
+	if rv < 1:
+		rv = 1
+	return rv
 
 func update_generic(size : float) -> void:
 	next_generic = int(size)
 
 func commit_generic() -> void:
-	print("Hello")
 	generator.set_generic_size(next_generic)
 	update_node()
 
