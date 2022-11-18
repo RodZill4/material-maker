@@ -339,25 +339,25 @@ func expand_generic() -> void:
 	if first_generic_output != -1:
 		var outputs = []
 		for i in first_generic_output:
-			outputs.append(shader_model.outputs[i])
+			outputs.append(shader_model_preprocessed.outputs[i])
 		for gi in generic_size:
 			var gv = first_generic_value + gi
 			for i in range(first_generic_output, last_generic_output):
-				var output = shader_model.outputs[i].duplicate()
+				var output = shader_model_preprocessed.outputs[i].duplicate()
 				output[output.type] = output[output.type].replace("#", str(gv))
 				if output.has("shortdesc"):
 					output.shortdesc = output.shortdesc.replace("#", str(gv))
 				if output.has("longdesc"):
 					output.longdesc = output.longdesc.replace("#", str(gv))
 				outputs.append(output)
-		for i in range(last_generic_output, shader_model.outputs.size()):
-			outputs.append(shader_model.outputs[i])
+		for i in range(last_generic_output, shader_model_preprocessed.outputs.size()):
+			outputs.append(shader_model_preprocessed.outputs[i])
 		shader_model_preprocessed.outputs = outputs
 	# Build code
 	if shader_model_preprocessed.has("code"):
-		shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
+		shader_model_preprocessed.code = expand_generic_code(shader_model_preprocessed.code, first_generic_value)
 	if shader_model_preprocessed.has("instance"):
-		shader_model_preprocessed.instance = expand_generic_code(shader_model.instance, first_generic_value)
+		shader_model_preprocessed.instance = expand_generic_code(shader_model_preprocessed.instance, first_generic_value)
 
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
