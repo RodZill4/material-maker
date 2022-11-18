@@ -241,6 +241,20 @@ func add_node(node) -> void:
 	move_child(node, 0)
 	node.connect("close_request", self, "remove_node", [ node ])
 
+func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	var from_gen = from_node.generator
+	var to_gen = to_node.generator
+	if generator.connect_children(from_gen, from_slot, to_gen, to_slot):
+		.connect_node(from, from_slot, to, to_slot)
+		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
+		return true
+	return false
+
 func connect_node(from : String, from_slot : int, to : String, to_slot : int):
 	var from_node : MMGraphNodeMinimal = get_node(from)
 	var to_node : MMGraphNodeMinimal = get_node(to)
@@ -975,6 +989,13 @@ func undoredo_command(command : Dictionary) -> void:
 			var g = get_node_from_hier_name(command.node)
 			for p in command.params.keys():
 				g.set_parameter(p, MMType.deserialize_value(command.params[p]))
+		"setgenericsize":
+			var g = get_node_from_hier_name(command.node)
+			g.set_generic_size(command.size)
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		"setseed":
 			var g = get_node_from_hier_name(command.node)
 			g.set_seed(command.seed)

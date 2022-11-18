@@ -37,30 +37,25 @@ func update():
 		generic_button.hidden = true
 	.update()
 
-var next_generic : int = 1
-
 func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 	if b == generic_button:
 		if ! event is InputEventMouseButton or ! event.pressed:
 			return false
 		match event.button_index:
 			BUTTON_LEFT:
-				generator.set_generic_size(generator.generic_size+1)
-				update_node()
+				update_generic(generator.generic_size+1)
 			BUTTON_RIGHT:
-				get_generic_minimum()
-				var popup : PopupPanel = PopupPanel.new()
-				var spinbox : SpinBox = SpinBox.new()
-				spinbox.min_value = get_generic_minimum()
-				spinbox.max_value = 32
-				spinbox.value = generator.generic_size
-				popup.add_child(spinbox)
-				add_child(popup)
-				popup.connect("popup_hide", popup, "queue_free")
-				spinbox.connect("value_changed", self, "update_generic")
-				popup.connect("tree_exited", self, "commit_generic")
-				next_generic = generator.generic_size
-				popup.popup(Rect2(get_global_mouse_position(), popup.get_minimum_size()))
+				var popup_menu : PopupMenu = PopupMenu.new()
+				var minimum = get_generic_minimum()
+				if minimum < generator.generic_size:
+					popup_menu.add_item(str(minimum), minimum)
+					popup_menu.add_separator()
+				for c in range(generator.generic_size+1, generator.generic_size+4):
+					popup_menu.add_item(str(c), c)
+				add_child(popup_menu)
+				popup_menu.connect("popup_hide", popup_menu, "queue_free")
+				popup_menu.connect("id_pressed", self, "update_generic")
+				popup_menu.popup(Rect2(get_global_mouse_position(), popup_menu.get_minimum_size()))
 				accept_event()
 	else:
 		return .on_node_button(b, event)
@@ -79,12 +74,37 @@ func get_generic_minimum():
 		rv = 1
 	return rv
 
-func update_generic(size : float) -> void:
-	next_generic = int(size)
-
-func commit_generic() -> void:
-	generator.set_generic_size(next_generic)
-	update_node()
+func update_generic(size : int) -> void:
+	if size == generator.generic_size:
+		return
+	yield(get_tree(), "idle_frame")
+	var generator_hier_name : String = generator.get_hier_name()
+	var parent_hier_name : String = generator.get_parent().get_hier_name()
+	var before_connections = []
+	var after_connections = []
+	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
+	var gi_count = generic_inputs.last-generic_inputs.first
+	var first_after_gi = generic_inputs.first+gi_count*generator.generic_size
+	var connected : Dictionary = {}
+	var ports_offset = gi_count*(size-generator.generic_size)
+	for i in range(first_after_gi, generator.get_input_defs().size()):
+		var source = generator.get_source(i)
+		if source != null:
+			before_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i})
+			after_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i+ports_offset})
+	var undo_actions = [
+		{ type="remove_connections", parent=parent_hier_name, connections=after_connections },
+		{ type="setgenericsize", node=generator_hier_name, size=generator.generic_size },
+		{ type="add_to_graph", parent=parent_hier_name, generators=[], connections=before_connections }
+	]
+	var redo_actions = [
+		{ type="remove_connections", parent=parent_hier_name, connections=before_connections },
+		{ type="setgenericsize", node=generator_hier_name, size=size },
+		{ type="add_to_graph", parent=parent_hier_name, generators=[], connections=after_connections }
+	]
+	get_parent().undoredo.add("Disconnect nodes", undo_actions, redo_actions)
+	for c in redo_actions:
+		get_parent().undoredo_command(c)
 
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
