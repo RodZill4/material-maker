@@ -84,6 +84,12 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	else:
 		return shader_model_preprocessed.outputs
 
+#
+# Shader model preprocessing
+#
+
+# Instance functions fixing
+# This adds the variations parameter to all instance functions (defs and calls)
 
 func find_instance_functions(code : String):
 	var functions : Array = []
@@ -189,6 +195,8 @@ func preprocess_shader_model(data : Dictionary):
 		preprocessed.global = data.global
 	return preprocessed
 
+# Shader model genericity
+
 func is_generic() -> bool:
 	if shader_model.has("parameters"):
 		for p in shader_model.parameters:
@@ -227,6 +235,7 @@ func expand_generic_code(code : String, first_generic_value : int = 1) -> String
 			rv += generic_code.replace("#", str(gi+first_generic_value))
 	return rv
 
+# Get the range of generic inputs/parameters/outputs (see how it's called)
 func get_generic_range(array : Array, field : String, indirect : bool = false) -> Dictionary:
 	var rv : Dictionary = { first = -1, last = -1 }
 	for i in array.size():
@@ -348,7 +357,7 @@ func expand_generic() -> void:
 	if shader_model_preprocessed.has("code"):
 		shader_model_preprocessed.code = expand_generic_code(shader_model.code, first_generic_value)
 	if shader_model_preprocessed.has("instance"):
-		shader_model_preprocessed.instance = expand_generic_code(shader_model.code, first_generic_value)
+		shader_model_preprocessed.instance = expand_generic_code(shader_model.instance, first_generic_value)
 
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
@@ -379,6 +388,10 @@ func set_shader_model(data: Dictionary) -> void:
 	if get_parent() != null and get_parent().has_method("check_input_connects"):
 		get_parent().check_input_connects(self)
 	all_sources_changed()
+
+#
+# Shader generation
+#
 
 func find_matching_parenthesis(string : String, i : int) -> int:
 	var parenthesis_level = 0
