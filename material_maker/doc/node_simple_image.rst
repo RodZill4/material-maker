@@ -19,7 +19,11 @@ The image node provides a single color texture.
 Parameters
 ++++++++++
 
-The image node has a single parameter that defines the image file the node provides.
-It can be modified by clicking the thumbnail and selecting a new image file.
+The **Image** node has two parameters:
+
+* The first parameter defines the image file the node provides.
+  It can be modified by clicking the thumbnail and selecting a new image file.
+* **Fix Aspect Ratio** will scale the height of non-square images to maintain the
+  correct aspect ratio.
 
 The supported formats are BMP, HDR, JPEG, PNG, SVG, TGA and WebP.

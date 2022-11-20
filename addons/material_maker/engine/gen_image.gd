@@ -23,13 +23,24 @@ func get_type_name() -> String:
 	return "Image"
 
 func get_parameter_defs() -> Array:
-	return [ { name="image", type="image_path", label="", default="" } ]
+	return [
+		{ name="image", type="image_path", label="", default="" },
+		{ name="fix_ar", type="boolean", label="Fix Aspect Ratio", default=false }
+	]
 
 func get_filetime(file_path : String) -> int:
 	var f : File = File.new()
 	if f.file_exists(file_path):
 		return f.get_modified_time(file_path)
 	return 0
+
+func get_adjusted_uv(uv : String) -> String:
+	if !get_parameter("fix_ar"):
+		return uv
+
+	var ar : float = texture.get_height()
+	ar /= texture.get_width()
+	return "((%s) - vec2(0.0, %f)) * vec2(1.0, %f)" % [uv, (1-ar)/2, 1/ar]
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
