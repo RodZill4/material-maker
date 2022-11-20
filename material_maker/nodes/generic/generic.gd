@@ -11,7 +11,7 @@ var preview_timer : Timer = Timer.new()
 var generic_button : NodeButton
 
 
-const GENERIC_ICON : Texture = preload("res://material_maker/icons/add.tres")
+const GENERIC_ICON : Texture = preload("res://material_maker/icons/add_generic.tres")
 
 
 func _ready() -> void:
@@ -60,6 +60,12 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 	else:
 		return .on_node_button(b, event)
 	return false
+
+func update_button_tooltip(b : NodeButton) -> bool:
+	if b == generic_button:
+		hint_tooltip = tr("Add more ports/parameters (left mouse button) / Variadic node menu (right mouse button)")
+		return true
+	return .update_button_tooltip(b)
 
 func get_generic_minimum():
 	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")

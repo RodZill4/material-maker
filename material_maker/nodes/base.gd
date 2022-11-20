@@ -230,6 +230,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 
 func update_button_tooltip(b : NodeButton) -> bool:
 	if b == minimize_button:
+		hint_tooltip = tr("Minimize the node")
 		return true
 	elif b == randomness_button:
 		hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
