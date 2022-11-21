@@ -10,9 +10,6 @@ var texture : Texture
 signal done
 
 
-func _ready() -> void:
-	$ColorRect.material = $ColorRect.material.duplicate(true)
-
 func request(object : Object) -> Object:
 	assert(render_owner == null)
 	render_owner = object
@@ -51,7 +48,6 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
-	var shader_material = $ColorRect.material
 	var chunk_count : int = 1
 	var render_scale : float = 1.0
 	var max_viewport_size : int = mm_renderer.max_viewport_size
@@ -87,11 +83,12 @@ func render_material(object : Object, material : Material, render_size : int, wi
 				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
 		texture = ImageTexture.new()
 		texture.create_from_image(image)
-	$ColorRect.material = shader_material
+	$ColorRect.material = null
 	return self
 
 func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
-	var shader_material = $ColorRect.material
+	var shader_material = ShaderMaterial.new()
+	shader_material.shader = Shader.new() 
 	shader_material.shader.code = shader
 	mm_deps.material_update_params(shader_material)
 	var status = render_material(object, shader_material, render_size, with_hdr)
