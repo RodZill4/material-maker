@@ -65,6 +65,7 @@ func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 func get_parameter_defs() -> Array:
 	return [
 		{ name="size", type="size", first=4, last=13, default=4 },
+		{ name="shrink", type="boolean", default=false },
 		{ name="autostop", type="boolean", default=false },
 		{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
 		{ name="filter", type="boolean", default=true },
@@ -171,11 +172,16 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
 	var time = OS.get_ticks_msec()
-	current_renderer = current_renderer.render_material(self, m, pow(2, get_parameter("size")))
+	var size = pow(2, get_parameter("size"))
+	if get_parameter("shrink"):
+		size = int(size)
+		size >>= current_iteration
+		if size < 4:
+			size = 4
+	current_renderer = current_renderer.render_material(self, m, size)
 	while current_renderer is GDScriptFunctionState:
 		current_renderer = yield(current_renderer, "completed")
 	if check_current_iteration != current_iteration:
-		print("Iteration changed")
 		current_renderer.release(self)
 		current_renderer = null
 		mm_deps.dependency_update(buffer_name, texture, true)
