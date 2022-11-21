@@ -1,6 +1,6 @@
 {
 	"generic_size": 1,
-	"name": "blend2",
+	"name": "blend",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -18,25 +18,25 @@
 			{
 				"default": "vec4($uv.x, 1.0, 1.0, 1.0)",
 				"label": "Background",
-				"longdesc": "The foreground input",
+				"longdesc": "The background input",
 				"name": "b",
-				"shortdesc": "Foreground",
+				"shortdesc": "Background",
 				"type": "rgba"
 			},
 			{
 				"default": "vec4(1.0, $uv.y, 1.0, 1.0)",
 				"label": "Layer#",
-				"longdesc": "The background input",
+				"longdesc": "A layer input",
 				"name": "l#",
-				"shortdesc": "Background",
+				"shortdesc": "Layer#",
 				"type": "rgba"
 			},
 			{
 				"default": "1.0",
 				"label": "Opacity#",
-				"longdesc": "The optional opacity mask",
+				"longdesc": "An optional opacity mask",
 				"name": "a#",
-				"shortdesc": "Mask",
+				"shortdesc": "Mask#",
 				"type": "f"
 			}
 		],
