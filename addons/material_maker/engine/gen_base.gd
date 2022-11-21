@@ -6,6 +6,8 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
+const MAX_SEED : int = 4294967296
+
 const BUFFERS_ALL     : int = 0
 const BUFFERS_PAUSED  : int = 1
 const BUFFERS_RUNNING : int = 2
@@ -386,8 +388,12 @@ func serialize() -> Dictionary:
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
 		elif p.has("default"):
 			rv.parameters[p.name] = p.default
-	rv.seed = seed_value
-	rv.seed_locked = seed_locked
+	if seed_value >= 0.0 and seed_value <= 1.0:
+		rv.seed_int = int(round(seed_value*MAX_SEED))
+	else:
+		rv.seed = seed_value
+	if seed_locked:
+		rv.seed_locked = seed_locked
 	if preview >= 0:
 		rv.preview = preview
 	if minimized:
@@ -416,12 +422,16 @@ func deserialize(data : Dictionary) -> void:
 		for p in get_parameter_defs():
 			if data.has(p.name) and p.name != "type":
 				set_parameter(p.name, MMType.deserialize_value(data[p.name]))
-	if data.has("seed_value"):
-		seed_locked = true
-		seed_value = data.seed_value
+	seed_locked = false
+	if data.has("seed_locked"):
+		seed_locked = data.seed_locked
+	if data.has("seed_int"):
+		seed_value = float(data.seed_int)/MAX_SEED
 	elif data.has("seed"):
 		seed_value = data.seed
-		seed_locked = data.seed_locked
+	elif data.has("seed_value"):
+		seed_locked = true
+		seed_value = data.seed_value
 	else:
 		seed_locked = false
 		seed_value = get_seed_from_position(position)
