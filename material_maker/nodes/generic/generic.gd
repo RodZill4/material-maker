@@ -91,13 +91,21 @@ func update_generic(size : int) -> void:
 	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
 	var gi_count = generic_inputs.last-generic_inputs.first
 	var first_after_gi = generic_inputs.first+gi_count*generator.generic_size
-	var connected : Dictionary = {}
-	var ports_offset = gi_count*(size-generator.generic_size)
+	var gi_ports_offset = gi_count*(size-generator.generic_size)
 	for i in range(first_after_gi, generator.get_input_defs().size()):
 		var source = generator.get_source(i)
 		if source != null:
 			before_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i})
-			after_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i+ports_offset})
+			after_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i+gi_ports_offset})
+	var generic_outputs = generator.get_generic_range(generator.shader_model.outputs, "type", 1)
+	var go_count = generic_outputs.last-generic_outputs.first
+	var first_after_go = generic_outputs.first+go_count*generator.generic_size
+	var go_ports_offset = go_count*(size-generator.generic_size)
+	for o in range(first_after_go, generator.get_output_defs().size()):
+		for target in generator.get_targets(o):
+			before_connections.append({from=generator.name, from_port=o, to=target.generator.name, to_port=target.input_index})
+			after_connections.append({from=generator.name, from_port=o+go_ports_offset, to=target.generator.name, to_port=target.input_index})
+
 	var undo_actions = [
 		{ type="remove_connections", parent=parent_hier_name, connections=after_connections },
 		{ type="setgenericsize", node=generator_hier_name, size=generator.generic_size },
