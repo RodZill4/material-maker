@@ -894,6 +894,7 @@ func about() -> void:
 # Preview
 
 func update_preview() -> void:
+	update_preview_2d()
 	update_preview_3d([ preview_3d, preview_3d_background ])
 
 func get_current_node(graph_edit : MMGraphEdit) -> Node:
