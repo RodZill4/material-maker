@@ -238,8 +238,8 @@ func notify_output_change(output_index : int) -> void:
 
 func source_changed(input_index : int) -> void:
 	emit_signal("parameter_changed", "__input_changed__", input_index)
-	for i in range(get_output_defs().size()):
-		notify_output_change(i)
+	for o in follow_input(input_index):
+		notify_output_change(o.output_index)
 
 func all_sources_changed() -> void:
 	for input_index in get_input_defs().size():
