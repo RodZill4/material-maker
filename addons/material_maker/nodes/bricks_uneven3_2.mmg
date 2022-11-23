@@ -24,7 +24,7 @@
 		"inputs": [
 			{
 				"default": "1.0",
-				"label": "5:",
+				"label": "4:",
 				"longdesc": "A map that affects the Mortar parameter",
 				"name": "mortar_map",
 				"shortdesc": "Mortar map",
