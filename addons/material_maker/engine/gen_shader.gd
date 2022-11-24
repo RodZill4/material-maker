@@ -812,14 +812,17 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 
 
 func _serialize(data: Dictionary) -> Dictionary:
+	data.shader_model = shader_model
+	return data
+
+func _serialize_data(data: Dictionary) -> Dictionary:
 	if is_generic():
 		data.generic_size = generic_size
-	data.shader_model = shader_model
 	return data
 
 func _deserialize(data : Dictionary) -> void:
 	if data.has("generic_size"):
-		generic_size = data.generic_size
+		set_generic_size(data.generic_size)
 	if data.has("shader_model"):
 		set_shader_model(data.shader_model)
 	elif data.has("model_data"):
