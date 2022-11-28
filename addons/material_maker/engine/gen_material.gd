@@ -16,6 +16,8 @@ var preview_textures = {}
 var preview_texture_dependencies = {}
 
 var external_previews : Array = []
+var export_output_def : Dictionary
+
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_SIZE_MIN = 4  # 16x16
@@ -28,6 +30,8 @@ const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
 
 # The minimum allowed texture size as a power-of-two exponent
 const TEXTURE_FILTERING_LIMIT = 256
+
+const EXPORT_OUTPUT_DEF_INDEX = 12345
 
 
 func _ready() -> void:
@@ -53,6 +57,11 @@ func get_type_name() -> String:
 
 func get_output_defs(show_hidden : bool = false) -> Array:
 	return .get_output_defs() if show_hidden else []
+
+func get_preprocessed_output_def(output_index : int):
+	if output_index == EXPORT_OUTPUT_DEF_INDEX:
+		return export_output_def
+	return .get_preprocessed_output_def(output_index)
 
 func get_image_size() -> int:
 	var rv : int
@@ -539,12 +548,32 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				if mm_deps.get_render_queue_size() > 0:
 					yield(mm_deps, "render_queue_empty")
 				var file_name = subst_string(f.file_name, export_context)
-				var result = render(self, f.output, size)
+				var output_index : int
+				if f.has("output"):
+					output_index = f.output
+				elif f.has("expression"):
+					var type = "rgba"
+					var expression = f.expression
+					var equal_position = expression.find("=")
+					if equal_position != -1:
+						var type_string = expression.left(equal_position)
+						type_string = type_string.strip_edges()
+						if type_string == "f" or type_string == "rgb" or type_string == "rgba":
+							type = type_string
+							expression = expression.right(equal_position+1)
+					export_output_def = { type: expression, type=type }
+					output_index = EXPORT_OUTPUT_DEF_INDEX
+				else:
+					# Error! Just ignore it
+					saved_files += 1
+					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					continue
+				var result = render(self, EXPORT_OUTPUT_DEF_INDEX, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				var is_greyscale : bool = false
-				if get_output_defs(true).size() > f.output:
-					var output : Dictionary = get_output_defs(true)[f.output]
+				var output : Dictionary = get_preprocessed_output_def(output_index)
+				if output != null:
 					is_greyscale = output.has("type") and output.type == "f"
 				result.save_to_file(file_name, is_greyscale)
 				result.release(self)
@@ -602,11 +631,9 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
 
+
 func edit(node) -> void:
-	if shader_model != null:
-		var edit_window = load("res://material_maker/windows/material_editor/material_editor.tscn").instance()
-		node.get_parent().add_child(edit_window)
-		edit_window.set_model_data(shader_model)
-		edit_window.connect("node_changed", node, "update_shader_generator")
-		edit_window.connect("popup_hide", edit_window, "queue_free")
-		edit_window.popup_centered()
+	do_edit(node, load("res://material_maker/windows/material_editor/material_editor.tscn"))
+
+func edit_export_targets(node) -> void:
+	do_edit(node, load("res://material_maker/windows/material_editor/export_editor.tscn"))
