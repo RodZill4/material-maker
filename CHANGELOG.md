@@ -1,6 +1,20 @@
-# Material Maker 1.1
+# Material Maker 1.2
 
-Updated 2022/10/05
+## General
+
+- Added a dependency manager to avoid useless renders
+
+## Nodes
+
+## Miscellaneous
+
+- Added an experimental HTML5 version
+
+## Fixes, optimizations
+
+- Fixed alignment of inputs in the Uneven Bricks 2 node (contributed by Arnklit)
+
+# Material Maker 1.1
 
 ## General
 
