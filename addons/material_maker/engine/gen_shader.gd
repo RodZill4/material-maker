@@ -255,8 +255,6 @@ func replace_input(string : String, context, input : String, type : String, src 
 	var required_globals = []
 	var required_defs = ""
 	var required_code = ""
-	var required_textures = {}
-	var required_pending_textures = []
 	var new_pass_required = false
 	while true:
 		var uv = find_keyword_call(string, input)
@@ -292,13 +290,8 @@ func replace_input(string : String, context, input : String, type : String, src 
 		# Add generated code
 		if src_code.has("code"):
 			required_code += src_code.code
-		# Add textures
-		if src_code.has("textures"):
-			required_textures = src_code.textures
-		if src_code.has("pending_textures"):
-			required_pending_textures = src_code.pending_textures
 		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, pending_textures=required_pending_textures, new_pass_required=new_pass_required }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code, new_pass_required=new_pass_required }
 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -353,8 +346,6 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 		required_globals = [ parent.get_globals() ]
 	var required_defs = ""
 	var required_code = ""
-	var required_textures = {}
-	var required_pending_textures = []
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
 	var variables = {}
@@ -394,11 +385,14 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
-				if value < 0 or value >= p.values.size():
-					value = 0
-				value_string = p.values[value].value
+				if p.values.empty():
+					value_string = ""
+				else:
+					if ! ( value is int or value is float ) or value < 0 or value >= p.values.size():
+						value = 0
+					value_string = p.values[value].value
 			elif p.type == "color":
-				value_string = "vec4(p_%s_%s_r, p_%s_%s_g, p_%s_%s_b, p_%s_%s_a)" % [ genname, p.name, genname, p.name, genname, p.name, genname, p.name ]
+				value_string = "p_%s_%s" % [ genname, p.name ]
 			elif p.type == "gradient":
 				value_string = genname+"_"+p.name+"_gradient_fct"
 			elif p.type == "curve":
@@ -467,14 +461,9 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					required_defs += result.defs
 					# Add generated code
 					required_code += result.code
-					for t in result.textures.keys():
-						required_textures[t] = result.textures[t]
-					for t in result.pending_textures:
-						if required_pending_textures.find(t) == -1:
-							required_pending_textures.push_back(t)
 			cont = changed and new_pass_required
 			string = replace_variables(string, variables)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code, textures=required_textures, pending_textures=required_pending_textures }
+	return { string=string, globals=required_globals, defs=required_defs, code=required_code }
 
 func generate_parameter_declarations(rv : Dictionary):
 	var genname = "o"+str(get_instance_id())
@@ -484,18 +473,13 @@ func generate_parameter_declarations(rv : Dictionary):
 		if p.type == "float" and parameters[p.name] is float:
 			rv.defs += "uniform float p_%s_%s = %.9f;\n" % [ genname, p.name, parameters[p.name] ]
 		elif p.type == "color":
-			rv.defs += "uniform float p_%s_%s_r = %.9f;\n" % [ genname, p.name, parameters[p.name].r ]
-			rv.defs += "uniform float p_%s_%s_g = %.9f;\n" % [ genname, p.name, parameters[p.name].g ]
-			rv.defs += "uniform float p_%s_%s_b = %.9f;\n" % [ genname, p.name, parameters[p.name].b ]
-			rv.defs += "uniform float p_%s_%s_a = %.9f;\n" % [ genname, p.name, parameters[p.name].a ]
+			rv.defs += "uniform vec4 p_%s_%s = vec4(%.9f, %.9f, %.9f, %.9f);\n" % [ genname, p.name, parameters[p.name].r, parameters[p.name].g, parameters[p.name].b, parameters[p.name].a ]
 		elif p.type == "gradient":
 			var g = parameters[p.name]
 			if !(g is MMGradient):
 				g = MMGradient.new()
 				g.deserialize(parameters[p.name])
-			var params = g.get_shader_params(genname+"_"+p.name)
-			for sp in params.keys():
-				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
+			rv.defs += g.get_shader_params(genname+"_"+p.name)
 			rv.defs += g.get_shader(genname+"_"+p.name)
 		elif p.type == "curve":
 			var g = parameters[p.name]
@@ -527,12 +511,6 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 						rv.globals.push_back(d)
 				# Add generated definitions
 				rv.defs += result.defs
-				# Add textures
-				for t in result.textures.keys():
-					rv.textures[t] = result.textures[t]
-				for t in result.pending_textures:
-					if rv.pending_textures.find(t) == -1:
-						rv.pending_textures.push_back(t)
 				rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 				rv.defs += "%s\n" % result.code
 				rv.defs += "return %s;\n}\n" % result.string
@@ -540,7 +518,7 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
-	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
+	var rv = { globals=[], defs="", code="" }
 	if shader_model_preprocessed != null and shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
 		var output = shader_model_preprocessed.outputs[output_index]
 		if !context.has_variant(self):
@@ -554,12 +532,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				while subst_output is GDScriptFunctionState:
 					subst_output = yield(subst_output, "completed")
 				rv.defs += subst_output.string
-				# process textures
-				for t in subst_output.textures.keys():
-					rv.textures[t] = subst_output.textures[t]
-				for t in subst_output.pending_textures:
-					if rv.pending_textures.find(t) == -1:
-						rv.pending_textures.push_back(t)
 		# Add inline code
 		if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
 			var variant_index = context.get_variant(self, uv)
@@ -578,12 +550,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				# Add generated code
 				rv.code += subst_code.code
 				rv.code += subst_code.string
-				# process textures
-				for t in subst_code.textures.keys():
-					rv.textures[t] = subst_code.textures[t]
-				for t in subst_code.pending_textures:
-					if rv.pending_textures.find(t) == -1:
-						rv.pending_textures.push_back(t)
 		# Add output_code
 		var variant_string = uv+","+str(output_index)
 		var variant_index = context.get_variant(self, variant_string)
@@ -604,12 +570,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 					# Add generated code
 					rv.code += subst_output.code
 					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
-					# Textures
-					for t in subst_output.textures.keys():
-						rv.textures[t] = subst_output.textures[t]
-					for t in subst_output.pending_textures:
-						if rv.pending_textures.find(t) == -1:
-							rv.pending_textures.push_back(t)
 		for f in mm_io_types.types.keys():
 			if output.has(f):
 				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]

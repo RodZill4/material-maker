@@ -3,8 +3,11 @@ extends Control
 var generator : MMGenBase = null
 var output : int = 0
 
-var updating : bool = false
-var update_again : bool = false
+func _enter_tree():
+	mm_deps.create_buffer("histogram_"+str(get_instance_id()), self)
+
+func _exit_tree():
+	mm_deps.delete_buffer("histogram_"+str(get_instance_id()))
 
 func get_image_texture() -> ImageTexture:
 	return $ViewportImage/ColorRect.material.get_shader_param("tex")
@@ -30,15 +33,10 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			if source.empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader
-	$ViewportImage/ColorRect.material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters($ViewportImage/ColorRect.material.shader.code, $ViewportImage/ColorRect.material)
-	# Set texture params
-	if source.has("textures"):
-		for k in source.textures.keys():
-			$ViewportImage/ColorRect.material.set_shader_param(k, source.textures[k])
-	update_histogram()
-
+	var shader_code : String = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
+	var buffer_name : String = "histogram_"+str(get_instance_id())
+	$ViewportImage/ColorRect.material = mm_deps.buffer_create_shader_material(buffer_name, $ViewportImage/ColorRect.material, shader_code)
+	mm_deps.update()
 
 var refreshing_generator : bool = false
 func on_parameter_changed(n : String, v) -> void:
@@ -59,39 +57,24 @@ func on_parameter_changed(n : String, v) -> void:
 			_:
 				set_generator(generator, output, true)
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var need_update : bool = false
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list($ViewportImage/ColorRect.material.shader.get_rid()):
-			if p.name == n:
-				$ViewportImage/ColorRect.material.set_shader_param(n, parameter_changes[n])
-				need_update = true
-				break
-	if need_update:
-		update_histogram()
-		return true
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+	$ViewportImage/ColorRect.material.set_shader_param(parameter_name, value)
 	return false
 
-func update_histogram() -> void:
-	update_again = true
-	if !updating && is_visible_in_tree():
-		updating = true
-		while update_again:
-			update_again = false
-			$ViewportImage.render_target_update_mode = Viewport.UPDATE_ONCE
-			$ViewportImage.update_worlds()
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			$ViewportHistogram1.render_target_update_mode = Viewport.UPDATE_ONCE
-			$ViewportHistogram1.update_worlds()
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			$ViewportHistogram2.render_target_update_mode = Viewport.UPDATE_ONCE
-			$ViewportHistogram2.update_worlds()
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-		updating = false
-
-func _on_Histogram_visibility_changed():
-	if is_visible_in_tree():
-		update_histogram()
+func on_dep_update_buffer(_buffer_name) -> bool:
+	if ! is_visible_in_tree():
+		return true
+	$ViewportImage.render_target_update_mode = Viewport.UPDATE_ONCE
+	$ViewportImage.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	$ViewportHistogram1.render_target_update_mode = Viewport.UPDATE_ONCE
+	$ViewportHistogram1.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	$ViewportHistogram2.render_target_update_mode = Viewport.UPDATE_ONCE
+	$ViewportHistogram2.update_worlds()
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null, true)
+	return true

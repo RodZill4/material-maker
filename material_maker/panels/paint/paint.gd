@@ -554,14 +554,10 @@ func _on_Texture_resized():
 var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
-	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and !procedural_update_changed_scheduled:
+	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
+		for i in range(10):
+			yield(get_tree(), "idle_frame")
 		do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
@@ -569,13 +565,6 @@ func do_update_procedural_layer() -> void:
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
-
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	update_procedural_layer()
-	return true
-
-func on_texture_changed(n : String) -> void:
-	update_procedural_layer()
 
 var saved_brush = null
 

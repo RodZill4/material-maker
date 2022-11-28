@@ -46,7 +46,7 @@ var has_channel : Dictionary = {}
 
 var brush_preview_material : ShaderMaterial
 var pattern_shown : bool = false
-var brush_textures : Dictionary = {}
+#var brush_textures : Dictionary = {}
 
 var mesh_aabb : AABB
 var mesh_inv_uv_tex : ImageTexture = null
@@ -70,8 +70,10 @@ func _ready():
 	# add View2Texture as input of Texture2View (to ignore non-visible parts of the mesh)
 	texture_to_view_mesh.get_surface_material(0).set_shader_param("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
+	mm_deps.create_buffer("painter_%d:brush" % get_instance_id(), self)
 	for v in viewports.keys():
 		viewports[v].set_intermediate_textures(texture_to_view_texture, mesh_seams_tex)
+		mm_deps.create_buffer("painter_%d:%s" % [ get_instance_id(), v ], self)
 
 func update_seams_texture(_m : Mesh = null) -> void:
 	texture_to_view_viewport.render_target_update_mode = Viewport.UPDATE_ONCE
@@ -279,7 +281,7 @@ func update_brush(update_shaders : bool = false):
 			#var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush_%s.shader" % get_brush_mode()
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.shader"
 			var code : String = get_output_code(1)
-			update_shader(brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
+			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
 		var v2t_tex = view_to_texture_viewport.get_texture()
 		brush_preview_material.set_shader_param("rect_size", viewport_size)
 		brush_preview_material.set_shader_param("view2tex_tex", v2t_tex)
@@ -308,14 +310,15 @@ func update_brush(update_shaders : bool = false):
 	# Update shaders
 	if update_shaders:
 		for index in viewport_names.size():
-			var viewport = viewports[viewport_names[index]]
+			var viewport_name = viewport_names[index]
+			var viewport = viewports[viewport_name]
 			var shader_file : String = "res://material_maker/tools/painter/shaders/paint.shader"
 			var code : String = get_output_code(index+1)
 			var defines : Dictionary = {}
 			defines.GENERATED_CODE = code
 			defines.TEXTURE_TYPE = "\""+viewport.get_shader_prefix()+"\""
 			defines.BRUSH_MODE = "\""+mode+"\""
-			update_shader(viewport.get_paint_material(), shader_file, defines)
+			update_shader("painter_%d:%s" % [ get_instance_id(), viewport_name ], viewport.get_paint_material(), shader_file, defines)
 			viewport.set_mesh_textures(mesh_aabb, mesh_inv_uv_tex, mesh_normal_tex, mesh_tangent_tex)
 			viewport.set_layer_textures( { albedo=get_albedo_texture(), mr=get_mr_texture(), emission=get_emission_texture(), normal=get_normal_texture(), do=get_do_texture(), mask=get_mask_texture()} )
 	for v in viewports.keys():
@@ -336,10 +339,12 @@ func get_output_code(index : int) -> String:
 			source_mask.globals.append(g)
 	for g in source_mask.globals:
 		new_code += g
+	"""
 	for t in source.textures.keys():
 		if !source_mask.textures.has(t):
 			source_mask.textures[t] = source.textures[t]
 	brush_textures = source_mask.textures
+	"""
 	new_code += source_mask.defs+"\n"
 	new_code += "\nfloat brush_function(vec2 uv) {\n"
 	new_code += "float _seed_variation_ = 0.0;\n"
@@ -355,21 +360,24 @@ func get_output_code(index : int) -> String:
 	new_code += "}\n"
 	return new_code
 
-func update_shader(shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
+func update_shader(buffer_name : String, shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
-	shader_material.shader.code = mm_preprocessor.preprocess_file(shader_file, defines)
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters(shader_material.shader.code, shader_material)
-	for t in brush_textures.keys():
-		shader_material.set_shader_param(t, brush_textures[t])
+	mm_deps.buffer_create_shader_material(buffer_name, shader_material, mm_preprocessor.preprocess_file(shader_file, defines))
+	if get_parent().has_method("update_procedural_layer"):
+		get_parent().update_procedural_layer()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	for v in viewports.keys():
-		mm_renderer.update_float_parameters(viewports[v].paint_material, parameter_changes)
-	mm_renderer.update_float_parameters(brush_preview_material, parameter_changes)
-	return true
+func on_dep_update_value(buffer_name : String, parameter_name : String, value) -> bool:
+	if value != null:
+		var suffix = buffer_name.right(buffer_name.find(":")+1)
+		if suffix == "brush":
+			brush_preview_material.set_shader_param(parameter_name, value)
+		else:
+			viewports[suffix].paint_material.set_shader_param(parameter_name, value)
+	if get_parent().has_method("update_procedural_layer"):
+		get_parent().update_procedural_layer()
+	return false
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true) -> void:
 	var active_viewports : Array = []

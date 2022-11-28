@@ -42,6 +42,12 @@ const MENU = [
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
 
+func _enter_tree():
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+
+func _exit_tree():
+	mm_deps.delete_buffer("preview_"+str(get_instance_id()))
+
 func _ready() -> void:
 	ui = get_node(ui_path)
 	mm_globals.menu_manager.create_menus(MENU, self, ui)
@@ -155,16 +161,10 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var return_value : bool = false
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	var preview_material = current_object.get_surface_material(0)
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				preview_material.set_shader_param(n, parameter_changes[n])
-				break
-	return return_value
+	preview_material.set_shader_param(parameter_name, value)
+	return false
 
 func zoom(amount : float):
 	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
