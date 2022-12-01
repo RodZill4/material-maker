@@ -25,7 +25,8 @@ func get_type_name() -> String:
 func get_parameter_defs() -> Array:
 	return [
 		{ name="image", type="image_path", label="", default="" },
-		{ name="fix_ar", type="boolean", label="Fix Aspect Ratio", default=false }
+		{ name="fix_ar", type="boolean", label="Fix Aspect Ratio", default=false },
+		{ name="clamp", type="boolean", label="Clamp", default=false }
 	]
 
 func get_filetime(file_path : String) -> int:
@@ -35,12 +36,15 @@ func get_filetime(file_path : String) -> int:
 	return 0
 
 func get_adjusted_uv(uv : String) -> String:
-	if !get_parameter("fix_ar"):
-		return uv
+	if get_parameter("fix_ar"):
+		var ar : float = texture.get_height()
+		ar /= texture.get_width()
+		uv = "((%s) - vec2(0.0, %f)) * vec2(1.0, %f)" % [uv, (1-ar)/2, 1/ar]
 
-	var ar : float = texture.get_height()
-	ar /= texture.get_width()
-	return "((%s) - vec2(0.0, %f)) * vec2(1.0, %f)" % [uv, (1-ar)/2, 1/ar]
+	if get_parameter("clamp"):
+		uv = "clamp(%s, 0.0, 1.0)" % uv
+
+	return uv
 
 func set_parameter(n : String, v) -> void:
 	.set_parameter(n, v)
