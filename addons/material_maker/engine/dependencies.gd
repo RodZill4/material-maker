@@ -55,6 +55,7 @@ func delete_buffer(buffer_name : String):
 	if dependencies.has(buffer_name):
 		for b in dependencies[buffer_name]:
 			buffers[b].dependencies.erase(buffer_name)
+	dependencies_values.erase(buffer_name)
 
 func delete_buffers_from_object(object : Object):
 	var remove_buffers : Array = []
