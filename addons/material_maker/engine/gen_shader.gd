@@ -821,13 +821,12 @@ func _serialize_data(data: Dictionary) -> Dictionary:
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	if data.has("generic_size"):
-		set_generic_size(data.generic_size)
 	if data.has("shader_model"):
 		set_shader_model(data.shader_model)
 	elif data.has("model_data"):
 		set_shader_model(data.model_data)
-
+	if data.has("generic_size"):
+		set_generic_size(data.generic_size)
 
 func edit(node) -> void:
 	if shader_model != null:
