@@ -44,9 +44,6 @@ func _ready():
 					_:
 						files.push_back(OS.get_cmdline_args()[i])
 				i += 1
-			if !dir.dir_exists(output_dir):
-				show_error("ERROR: Output directory '%s' does not exist" % output_dir)
-				return
 			var expanded_files = []
 			for f in files:
 				var basedir : String = f.get_base_dir()
@@ -66,7 +63,15 @@ func _ready():
 							file_name = dir.get_next()
 				else:
 					expanded_files.push_back(f)
-			export_files(expanded_files, output_dir, target, size)
+
+			var result = null
+			if OS.get_environment("MM_FIND_LEAKS") == "":
+				result = export_files(expanded_files, output_dir, target, size)
+			else:
+				result = export_files_and_find_leaks(expanded_files, output_dir, target, size)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			get_tree().quit()
 			return
 		else:
 			resource_path = "res://material_maker/main_window.tscn"
@@ -115,7 +120,31 @@ func _process(delta) -> void:
 	elif err == OK:
 		progress_bar.value = 100.0*float(loader.get_stage()) / loader.get_stage_count()
 
+func export_files_and_find_leaks(files, output_dir, target, size) -> void:
+	var mem_history = []
+	for export_iter in range(5):
+		var result = export_files(files, "%s_%d" % [output_dir, export_iter], target, size)
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+		var mem_stat = Performance.get_monitor(Performance.MEMORY_STATIC)
+		var mem_dyn = Performance.get_monitor(Performance.MEMORY_DYNAMIC)
+		var mem_gpu = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
+		mem_history.push_back(mem_stat + mem_dyn + mem_gpu)
+		print("Memory usage MB: %.2f, %.2f, %.2f" % [mem_stat/1e6,mem_dyn/1e6,mem_gpu/1e6])
+
+	var mem_mid = mem_history[mem_history.size() / 2]
+	var mem_end = mem_history[-1]
+
+	# Allow some room for error
+	if (mem_mid * 1.2 + 10e6) < mem_end:
+		show_error("WARNING: Likely leak found")
+		OS.set_exit_code(2)
+	else:
+		print("No leaks found!")
+
 func export_files(files, output_dir, target, size) -> void:
+	if Directory.new().make_dir(output_dir) == OK:
+		print("Output directory '%s' does not exist, creating..." % output_dir)
 	$VBoxContainer/ProgressBar.min_value = 0
 	$VBoxContainer/ProgressBar.max_value = files.size()
 	$VBoxContainer/ProgressBar.value = 0
@@ -136,7 +165,6 @@ func export_files(files, output_dir, target, size) -> void:
 						result = yield(result, "completed")
 			gen.queue_free()
 		$VBoxContainer/ProgressBar.value += 1
-	get_tree().quit()
 
 func show_error(message : String):
 	$ErrorPanel.show()
