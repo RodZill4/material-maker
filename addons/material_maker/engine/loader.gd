@@ -78,7 +78,7 @@ func generator_name_from_path(path : String) -> String:
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
-static func string_to_dict_tree(string_data : String) -> Dictionary:
+static func string_to_dict_tree_old(string_data : String) -> Dictionary:
 	var file_data = string_data.split("\n########################################")
 	var data = parse_json(file_data[0])
 	file_data.remove(0)
@@ -114,6 +114,48 @@ static func string_to_dict_tree(string_data : String) -> Dictionary:
 
 	return data
 
+const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "instance", "global", "preview_shader", "template" ]
+const REPLACE_MULTILINE_STRINGS_WALK_ITEMS : Array = [ "shader_model", "nodes", "template", "files" ]
+const REPLACE_MULTILINE_STRINGS_WALK_CHILDREN : Array = [ "exports" ]
+
+static func replace_multiline_strings_with_arrays(data, walk_children : bool = false):
+	if data is Dictionary:
+		for k in data.keys():
+			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
+				if data[k] is String:
+					data[k] = data[k].replace("    ", "\t")
+					if data[k].find("\n") != -1:
+						data[k] = Array(data[k].split("\n"))
+			elif walk_children or k in REPLACE_MULTILINE_STRINGS_WALK_ITEMS:
+				data[k] = replace_multiline_strings_with_arrays(data[k])
+			elif k in REPLACE_MULTILINE_STRINGS_WALK_CHILDREN:
+				data[k] = replace_multiline_strings_with_arrays(data[k], true)
+	elif data is Array:
+		for i in data.size():
+			data[i] = replace_multiline_strings_with_arrays(data[i])
+	return data
+
+static func replace_arrays_with_multiline_strings(data, walk_children : bool = false):
+	if data is Dictionary:
+		for k in data.keys():
+			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
+				if data[k] is Array:
+					data[k] = PoolStringArray(data[k]).join("\n")
+			elif walk_children or k in REPLACE_MULTILINE_STRINGS_WALK_ITEMS:
+				data[k] = replace_arrays_with_multiline_strings(data[k])
+			elif k in REPLACE_MULTILINE_STRINGS_WALK_CHILDREN:
+				data[k] = replace_arrays_with_multiline_strings(data[k], true)
+	elif data is Array:
+		for i in data.size():
+			data[i] = replace_arrays_with_multiline_strings(data[i])
+	return data
+
+static func string_to_dict_tree(string_data : String):
+	return replace_arrays_with_multiline_strings(parse_json(string_data))
+
+static func dict_tree_to_string(data):
+	return JSON.print(replace_multiline_strings_with_arrays(data), "\t", true)
+
 func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()
 	if file.open(filename, File.READ) == OK:
@@ -124,6 +166,20 @@ func load_gen(filename: String) -> MMGenBase:
 			current_project_path = ""
 			return generator
 	return null
+
+func save_gen(filename : String, generator : MMGenBase) -> void:
+	var file = File.new()
+	if file.open(filename, File.WRITE) == OK:
+		var data = generator.serialize()
+		data.name = filename.get_file().get_basename()
+		data.node_position = { x=0, y=0 }
+		for k in [ "uids", "export_paths" ]:
+			if data.has(k):
+				data.erase(k)
+		file.store_string(dict_tree_to_string(data))
+		file.close()
+		mm_loader.update_predefined_generators()
+
 
 func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = Vector2(0, 0)) -> Dictionary:
 	var rv = { generators=[], connections=[] }

@@ -512,30 +512,9 @@ static func extract_verbose_values(path : String, data : Dictionary) -> Array:
 				rv.append_array(extract_verbose_values(mpath, v))
 	return rv
 
-static func dict_tree_to_string(data : Dictionary) -> String:
-	data = data.duplicate(true)
-
-	var rv = ""
-	if OS.get_environment("MM_WRITE_NEW_FORMAT") != "":
-		var keyvals = extract_verbose_values("", data)
-		keyvals.push_front("")
-		rv = PoolStringArray(keyvals).join("\n########################################")
-
-	return JSON.print(data, "\t", true) + "\n" + rv
-
-static func do_save_generator(file_name : String, _generator : MMGenBase) -> void:
+static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		var data = _generator.serialize()
-		data.name = file_name.get_file().get_basename()
-		data.node_position = { x=0, y=0 }
-		for k in [ "uids", "export_paths" ]:
-			if data.has(k):
-				data.erase(k)
-		file.store_string(dict_tree_to_string(data))
-		file.close()
-		mm_loader.update_predefined_generators()
+	mm_loader.save_gen(file_name, gen)
 
 func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if .on_clicked_output(index, with_shift):
