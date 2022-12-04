@@ -193,7 +193,7 @@ func do_update():
 		render_queue_size = invalidated_buffers
 		reset_stats = false
 	get_tree().call_group("render_counter", "on_counter_change", render_queue_size, invalidated_buffers)
-	if render_queue_size == 0:
+	if invalidated_buffers == 0:
 		emit_signal("render_queue_empty")
 
 func get_render_queue_size() -> int:
