@@ -33,7 +33,7 @@ visible = false
 mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 3 )
-uv_scale = Vector2( 2, 2 )
+uv_scale = Vector2( 3, 2 )
 
 [node name="Sphere" type="MeshInstance" parent="."]
 visible = false
