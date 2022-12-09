@@ -180,6 +180,10 @@
 					{
 						"name": "exp(A)",
 						"value": "exp($in1($uv))"
+					},
+					{
+						"name": "snap(A,B)",
+						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
 					}
 				]
 			},
