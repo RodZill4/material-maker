@@ -233,15 +233,12 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				var new_code : String = subst_code.code+"\n"
 				new_code += subst_code.string+"\n"
 				for o in gen_options:
-					print(o)
 					if has_method("process_option_"+o):
-						print("Got from default")
 						new_code = call("process_option_"+o, new_code)
 					elif custom_options.has_method("process_option_"+o):
-						print("Got from custom")
 						new_code = custom_options.call("process_option_"+o, new_code)
 					else:
-						print("No implementation")
+						print("No implementation of option %s" % o)
 				shader_code += new_code
 				generating = false
 			else:
@@ -697,8 +694,10 @@ func _deserialize(data : Dictionary) -> void:
 func get_shader_model_for_edit():
 	var edit_shader_model = shader_model.duplicate()
 	edit_shader_model.exports = edit_shader_model.exports.duplicate() if edit_shader_model.has("exports") else {}
-	if get_template_name() != null:
-		var external_export_targets = mm_loader.get_external_export_targets(get_template_name())
+	var template_name : String = get_template_name()
+	if template_name != null:
+		edit_shader_model.template_name = template_name
+		var external_export_targets = mm_loader.get_external_export_targets(template_name)
 		for e in external_export_targets.keys():
 			edit_shader_model.exports[e] = external_export_targets[e]
 			edit_shader_model.exports[e].external = true

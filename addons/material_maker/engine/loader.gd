@@ -213,14 +213,16 @@ func load_external_export_targets():
 		if file_name.get_extension() == "mme":
 			var file : File = File.new()
 			if file.open(USER_EXPORT_DIR.plus_file(file_name), File.READ) == OK:
-				var export_data : Dictionary = parse_json(file.get_as_text())
-				var material : String = export_data.material
-				if file_name != get_export_file_name(material, export_data.name):
-					print("Warning, %s has an incorrect name" % file_name)
-				if ! external_export_targets.has(material):
-					external_export_targets[material] = { exports={}, files=[] }
-				external_export_targets[material].exports[export_data.name] = export_data
-				external_export_targets[material].files.append(file_name)
+				var json : JSONParseResult = JSON.parse(file.get_as_text())
+				if json.error == OK and json.result is Dictionary:
+					var export_data : Dictionary = json.result
+					var material : String = export_data.material
+					if file_name != get_export_file_name(material, export_data.name):
+						print("Warning, %s has an incorrect name" % file_name)
+					if ! external_export_targets.has(material):
+						external_export_targets[material] = { exports={}, files=[] }
+					external_export_targets[material].exports[export_data.name] = export_data
+					external_export_targets[material].files.append(file_name)
 		file_name = dir.get_next()
 
 func get_external_export_targets(material_name : String) -> Dictionary:
@@ -237,6 +239,8 @@ func update_external_export_targets(material_name : String, export_targets : Dic
 		if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
 			file.store_string(JSON.print(e, "\t", true))
 		files.append(file_name)
+	if ! external_export_targets.has(material_name):
+		external_export_targets[material_name] = { exports={}, files=[] }
 	external_export_targets[material_name].exports = export_targets
 	for f in external_export_targets[material_name].files:
 		if files.find(f) == -1:

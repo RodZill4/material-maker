@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/windows/material_editor/export_editor.gd" type="Script" id=2]
@@ -8,12 +8,22 @@ flags = 4
 atlas = ExtResource( 1 )
 region = Rect2( 48, 0, 16, 16 )
 
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 48, 16, 16, 16 )
+
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
 atlas = ExtResource( 1 )
 region = Rect2( 16, 16, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 48, 64, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
 flags = 4
 atlas = ExtResource( 1 )
 region = Rect2( 32, 16, 16, 16 )
@@ -36,6 +46,7 @@ size = 12
 font_data = SubResource( 1 )
 
 [node name="ExportEditor" type="WindowDialog"]
+visible = true
 anchor_right = 0.521
 anchor_bottom = 0.539
 margin_right = 0.119995
@@ -55,13 +66,13 @@ custom_constants/margin_bottom = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 664.0
-margin_bottom = 384.0
+margin_right = 690.0
+margin_bottom = 435.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Export" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 661.0
+margin_right = 687.0
 margin_bottom = 24.0
 
 [node name="Create" type="Button" parent="MarginContainer/VBoxContainer/Export"]
@@ -70,80 +81,97 @@ margin_bottom = 24.0
 hint_tooltip = "New export target"
 icon = SubResource( 2 )
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Load" type="Button" parent="MarginContainer/VBoxContainer/Export"]
 margin_left = 32.0
+margin_right = 60.0
+margin_bottom = 24.0
+hint_tooltip = "Load export target from file"
+icon = SubResource( 9 )
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+margin_left = 64.0
 margin_top = 5.0
-margin_right = 117.0
+margin_right = 149.0
 margin_bottom = 19.0
 text = "Export target:"
 
 [node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 121.0
+margin_left = 153.0
 margin_top = 2.0
-margin_right = 271.0
+margin_right = 303.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_vertical = 4
 
 [node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 275.0
-margin_right = 303.0
+margin_left = 307.0
+margin_right = 335.0
 margin_bottom = 24.0
 hint_tooltip = "Rename export target"
 icon = SubResource( 3 )
 
 [node name="External" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-margin_right = 12.0
-margin_bottom = 20.0
-hint_tooltip = "Save to file"
+margin_left = 339.0
+margin_right = 367.0
+margin_bottom = 24.0
+hint_tooltip = "Store as separate file"
 toggle_mode = true
 icon = SubResource( 7 )
 
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+margin_left = 371.0
+margin_right = 399.0
+margin_bottom = 24.0
+hint_tooltip = "Save to file"
+icon = SubResource( 8 )
+
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Export"]
-margin_right = 4.0
-margin_bottom = 40.0
+margin_left = 403.0
+margin_right = 407.0
+margin_bottom = 24.0
 
 [node name="Duplicate" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 307.0
-margin_right = 335.0
+margin_left = 411.0
+margin_right = 439.0
 margin_bottom = 24.0
 hint_tooltip = "Duplicate export target"
 icon = SubResource( 4 )
 
 [node name="Delete" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 339.0
-margin_right = 367.0
+margin_left = 443.0
+margin_right = 471.0
 margin_bottom = 24.0
 hint_tooltip = "Delete export target"
 icon = SubResource( 5 )
 
 [node name="Space" type="Control" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 371.0
-margin_right = 391.0
+margin_left = 475.0
+margin_right = 495.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 20, 0 )
 
 [node name="ExtensionLabel" type="Label" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 395.0
+margin_left = 499.0
 margin_top = 5.0
-margin_right = 521.0
+margin_right = 625.0
 margin_bottom = 19.0
 text = "Main file extension:"
 
 [node name="ExtensionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Export"]
-margin_left = 525.0
-margin_right = 583.0
+margin_left = 629.0
+margin_right = 687.0
 margin_bottom = 24.0
 size_flags_vertical = 4
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
 margin_top = 28.0
-margin_right = 661.0
+margin_right = 687.0
 margin_bottom = 32.0
 
 [node name="Tabs" type="TabContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 8.0
-margin_bottom = 36.0
+margin_top = 36.0
+margin_right = 687.0
+margin_bottom = 408.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
@@ -166,13 +194,13 @@ size_flags_vertical = 3
 
 [node name="File" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Tabs/Files"]
 margin_left = 204.0
-margin_right = 661.0
+margin_right = 679.0
 margin_bottom = 336.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Common" type="GridContainer" parent="MarginContainer/VBoxContainer/Tabs/Files/File"]
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 132.0
 columns = 2
 
@@ -184,7 +212,7 @@ text = "Name:"
 
 [node name="name" type="LineEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
 margin_left = 119.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -197,7 +225,7 @@ text = "Prompt overwrite:"
 [node name="prompt_overwrite" type="CheckBox" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
 margin_left = 119.0
 margin_top = 28.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 52.0
 
 [node name="LabelCondition" type="Label" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
@@ -209,7 +237,7 @@ text = "Condition:"
 [node name="conditions" type="LineEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
 margin_left = 119.0
 margin_top = 56.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 80.0
 size_flags_horizontal = 3
 
@@ -222,7 +250,7 @@ text = "Type:"
 [node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
 margin_left = 119.0
 margin_top = 84.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 104.0
 size_flags_horizontal = 3
 text = "Texture"
@@ -238,13 +266,13 @@ text = "Output:"
 [node name="expression" type="LineEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
 margin_left = 119.0
 margin_top = 108.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 132.0
 size_flags_horizontal = 3
 
 [node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File"]
 margin_top = 136.0
-margin_right = 457.0
+margin_right = 475.0
 margin_bottom = 336.0
 rect_min_size = Vector2( 100, 200 )
 mouse_default_cursor_shape = 0
@@ -258,6 +286,7 @@ __meta__ = {
 }
 
 [node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/Tabs"]
+visible = false
 margin_top = 136.0
 margin_right = 457.0
 margin_bottom = 336.0
@@ -273,10 +302,10 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_left = 221.0
-margin_top = 376.0
-margin_right = 439.0
-margin_bottom = 396.0
+margin_left = 234.0
+margin_top = 412.0
+margin_right = 452.0
+margin_bottom = 432.0
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
@@ -301,9 +330,11 @@ text = "Cancel"
 
 [connection signal="minimum_size_changed" from="MarginContainer" to="." method="_on_MarginContainer_minimum_size_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Create" to="." method="_on_Create_Export_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Load" to="." method="_on_Load_Export_pressed"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/Export/Option" to="." method="select_export"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Rename" to="." method="_on_Rename_Export_pressed"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/Export/External" to="." method="_on_External_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Save" to="." method="_on_Save_Export_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Duplicate" to="." method="_on_Duplicate_Export_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Delete" to="." method="_on_Delete_Export_pressed"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/Export/ExtensionEdit" to="." method="_on_ExportExtensionEdit_focus_exited"]

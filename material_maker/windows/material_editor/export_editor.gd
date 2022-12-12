@@ -115,6 +115,53 @@ func _on_Create_Export_pressed():
 		update_export_list()
 		select_export(get_export_index(status.text))
 
+func _on_Load_Export_pressed():
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_OPEN_FILES
+	dialog.window_title = "Load export target from file"
+	dialog.add_filter("*.mme;Material Maker Export target")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		var last_export_name : String = ""
+		for i in files.size():
+			var file : File = File.new()
+			if file.open(files[0], File.READ) != OK:
+				return
+			var export_data = parse_json(file.get_as_text())
+			if export_data.has("name") and export_data.has("files"):
+				export_data.external = true
+				exports[export_data.name] = export_data
+				last_export_name = export_data.name
+		if last_export_name != "":
+			update_export_list()
+			select_export(get_export_index(last_export_name))
+
+func _on_Save_Export_pressed():
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	add_child(dialog)
+	dialog.rect_min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.window_title = "Save export target to file"
+	dialog.add_filter("*.mme;Material Maker Export target")
+	var files = dialog.select_files()
+	while files is GDScriptFunctionState:
+		files = yield(files, "completed")
+	if files.size() > 0:
+		var export_name : String = export_target.get_item_text(export_target.selected)
+		var export_data : Dictionary = exports[export_name].duplicate()
+		if data.has("template_name"):
+			export_data.material = data.template_name
+		var file : File = File.new()
+		if file.open(files[0], File.WRITE) != OK:
+			return
+		file.store_string(JSON.print(export_data))
+
 func _on_Rename_Export_pressed():
 	var old_export_index = export_target.selected
 	if old_export_index < 0:
@@ -261,6 +308,7 @@ func set_model_data(d) -> void:
 		select_export(0)
 
 func get_model_data() -> Dictionary:
+	data.erase("template_name")
 	data.exports = exports
 	return data
 
