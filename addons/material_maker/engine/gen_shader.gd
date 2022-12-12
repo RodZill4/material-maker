@@ -602,12 +602,14 @@ func _deserialize(data : Dictionary) -> void:
 	elif data.has("model_data"):
 		set_shader_model(data.model_data)
 
+func get_shader_model_for_edit():
+	return shader_model
 
 func do_edit(node, edit_window_scene : PackedScene) -> void:
 	if shader_model != null:
 		var edit_window = edit_window_scene.instance()
 		node.get_parent().add_child(edit_window)
-		edit_window.set_model_data(shader_model)
+		edit_window.set_model_data(get_shader_model_for_edit())
 		edit_window.connect("node_changed", node, "update_shader_generator")
 		edit_window.connect("popup_hide", edit_window, "queue_free")
 		edit_window.popup_centered()

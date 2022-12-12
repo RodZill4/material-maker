@@ -2,6 +2,7 @@ extends WindowDialog
 
 
 onready var export_target : OptionButton = $MarginContainer/VBoxContainer/Export/Option
+onready var export_external_button : Button = $MarginContainer/VBoxContainer/Export/External
 onready var export_extension_edit : LineEdit = $MarginContainer/VBoxContainer/Export/ExtensionEdit
 
 onready var export_files : ItemList = $MarginContainer/VBoxContainer/Tabs/Files/Files
@@ -46,6 +47,7 @@ func select_export(i : int) -> void:
 		return
 	export_target.selected = i
 	var e : String = export_target.get_item_text(i)
+	export_external_button.pressed = exports[e].has("external") and exports[e].external
 	export_extension_edit.text = exports[e].export_extension if exports[e].has("export_extension") else ""
 	update_files(e)
 
@@ -125,9 +127,18 @@ func _on_Rename_Export_pressed():
 		if get_export_index(status.text) != -1:
 			return
 		exports[status.text] = exports[old_export]
+		exports[status.text].name = status.text
 		exports.erase(old_export)
 		update_export_list()
 		select_export(get_export_index(status.text))
+
+func _on_External_toggled(button_pressed):
+	var export_index : int= export_target.selected
+	var export_name : String = export_target.get_item_text(export_index)
+	if button_pressed:
+		exports[export_name].external = true
+	else:
+		exports[export_name].erase("external")
 
 func _on_Duplicate_Export_pressed():
 	var old_export_index = export_target.selected
@@ -258,7 +269,7 @@ func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data())
 
 func _on_OK_pressed() -> void:
-	emit_signal("node_changed", get_model_data())
+	_on_Apply_pressed()
 	_on_Cancel_pressed()
 
 func _on_Cancel_pressed() -> void:

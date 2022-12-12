@@ -2,9 +2,11 @@ tool
 extends MMGenShader
 class_name MMGenMaterial
 
+
 var buffer_name_prefix : String
 
-var export_paths = {}
+var export_last_target : String = ""
+var export_paths : Dictionary = {}
 var uids = {}
 
 var updating : bool = false
@@ -20,18 +22,18 @@ var export_output_def : Dictionary
 
 
 # The minimum allowed texture size as a power-of-two exponent
-const TEXTURE_SIZE_MIN = 4  # 16x16
+const TEXTURE_SIZE_MIN : int = 4  # 16x16
 
 # The maximum allowed texture size as a power-of-two exponent
-const TEXTURE_SIZE_MAX = 13  # 8192x8192
+const TEXTURE_SIZE_MAX : int = 13  # 8192x8192
 
 # The default texture size as a power-of-two exponent
-const TEXTURE_SIZE_DEFAULT = 10  # 1024x1024
+const TEXTURE_SIZE_DEFAULT : int = 10  # 1024x1024
 
 # The minimum allowed texture size as a power-of-two exponent
-const TEXTURE_FILTERING_LIMIT = 256
+const TEXTURE_FILTERING_LIMIT : int = 256
 
-const EXPORT_OUTPUT_DEF_INDEX = 12345
+const EXPORT_OUTPUT_DEF_INDEX : int = 12345
 
 
 func _ready() -> void:
@@ -63,6 +65,7 @@ func get_preprocessed_output_def(output_index : int):
 		return export_output_def
 	return .get_preprocessed_output_def(output_index)
 
+
 func get_image_size() -> int:
 	var rv : int
 	if parameters.has("size"):
@@ -88,6 +91,19 @@ func all_sources_changed() -> void:
 	update()
 
 func set_shader_model(data: Dictionary) -> void:
+	var has_externals : bool = false
+	var export_names = data.exports.keys()
+	var external_export_targets : Dictionary = {}
+	if data.has("exports") and is_template():
+		for k in export_names:
+			var e = data.exports[k]
+			if e.has("external") and e.external:
+				e.material = get_template_name()
+				e.erase("external")
+				data.exports.erase(k)
+				external_export_targets[k] = e
+	if ! external_export_targets.empty():
+		mm_loader.update_external_export_targets(get_template_name(), external_export_targets)
 	.set_shader_model(data)
 	update()
 
@@ -288,6 +304,7 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 
 func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("uniform float", "const float")
+	s = s.replace("uniform vec4", "const vec4")
 	s = s.replace("uniform int", "const int")
 	return s
 
@@ -312,14 +329,31 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 # Export
 
 func get_export_profiles() -> Array:
-	var export_profiles = shader_model.exports.keys()
+	var export_profiles : Array = []
+	if shader_model.has("exports"):
+		export_profiles = shader_model.exports.keys()
+	for k in mm_loader.get_external_export_targets(get_template_name()).keys():
+		if export_profiles.find(k) == -1:
+			export_profiles.append(k)
 	export_profiles.sort()
 	return export_profiles
 
+func get_export(profile : String) -> Dictionary:
+	var external_export_targets = mm_loader.get_external_export_targets(get_template_name())
+	if external_export_targets.has(profile):
+		return external_export_targets[profile]
+	if shader_model.has("exports") and shader_model.exports.has(profile):
+		return shader_model.exports[profile]
+	return {}
+
 func get_export_extension(profile : String) -> String:
-	if shader_model.exports[profile].has("export_extension"):
-		return shader_model.exports[profile].export_extension
+	var export_profile : Dictionary = get_export(profile)
+	if export_profile.has("export_extension"):
+		return export_profile.export_extension
 	return ""
+
+func get_last_export_target() -> String:
+	return export_last_target
 
 func get_export_path(profile : String) -> String:
 	if export_paths.has(profile):
@@ -455,14 +489,17 @@ func process_uids(template : String) -> String:
 
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	template = get_template_text(template)
-	var out_file = File.new()
-	Directory.new().remove(file_name)
-	if out_file.open(file_name, File.WRITE) != OK:
-		print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
-		return false
 	var processed_template = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
 	processed_template = process_shader(processed_template).shader_code
-	out_file.store_string(processed_template)
+	if file_name == "clipboard":
+		OS.clipboard = processed_template
+	else:
+		var out_file = File.new()
+		Directory.new().remove(file_name)
+		if out_file.open(file_name, File.WRITE) != OK:
+			print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
+			return false
+		out_file.store_string(processed_template)
 	return true
 
 func get_connections_and_parameters_context() -> Dictionary:
@@ -490,6 +527,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	reset_uids()
 	if size == 0:
 		size = get_image_size()
+	export_last_target = profile
 	export_paths[profile] = prefix
 	var export_context : Dictionary = get_connections_and_parameters_context()
 	export_context["$(path_prefix)"] = prefix
@@ -497,7 +535,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var exported_files : Array = []
 	var overwrite_files : Array = []
 	var dir : Directory = Directory.new()
-	for f in shader_model.exports[profile].files:
+	var export_profile = get_export(profile)
+	for f in export_profile.files:
 		if f.has("conditions"):
 			var condition = subst_string(f.conditions, export_context)
 			var expr = Expression.new()
@@ -568,7 +607,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					saved_files += 1
 					progress_dialog.set_progress(float(saved_files)/float(total_files))
 					continue
-				var result = render(self, EXPORT_OUTPUT_DEF_INDEX, size)
+				var result = render(self, output_index, size)
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				var is_greyscale : bool = false
@@ -618,6 +657,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = ._serialize_data(data)
+	if export_last_target != "":
+		data.export_last_target = export_last_target
 	data.export_paths = export_paths
 	return data
 
@@ -628,9 +669,20 @@ func _serialize(data: Dictionary) -> Dictionary:
 
 func _deserialize(data : Dictionary) -> void:
 	._deserialize(data)
+	if data.has("export_last_target") and data.export_last_target != null:
+		export_last_target = data.export_last_target
 	if data.has("export_paths"):
 		export_paths = data.export_paths.duplicate()
 
+func get_shader_model_for_edit():
+	var edit_shader_model = shader_model.duplicate()
+	edit_shader_model.exports = edit_shader_model.exports.duplicate() if edit_shader_model.has("exports") else {}
+	if get_template_name() != null:
+		var external_export_targets = mm_loader.get_external_export_targets(get_template_name())
+		for e in external_export_targets.keys():
+			edit_shader_model.exports[e] = external_export_targets[e]
+			edit_shader_model.exports[e].external = true
+	return edit_shader_model
 
 func edit(node) -> void:
 	do_edit(node, load("res://material_maker/windows/material_editor/material_editor.tscn"))

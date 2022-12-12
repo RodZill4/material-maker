@@ -4,12 +4,19 @@ extends Node
 var predefined_generators : Dictionary = {}
 var predefined_functions : Dictionary = {}
 
+var external_export_targets : Dictionary = {}
+
 var current_project_path : String = ""
+
 
 const CHECK_PREDEFINED : bool = false
 
+const USER_EXPORT_DIR : String = "user://export_targets"
+
+
 func _ready()-> void:
 	update_predefined_generators()
+	load_external_export_targets()
 
 func update_predefined_generators()-> void:
 	var parser
@@ -184,3 +191,54 @@ func get_generator_list() -> Array:
 					rv.push_back(n)
 	rv.sort()
 	return rv
+
+# External export targets
+
+static func get_export_file_name(material_name : String, export_name : String) -> String:
+	export_name = export_name.to_lower()
+	export_name = export_name.replace(" ", "_")
+	export_name = export_name.replace("/", "_")
+	export_name = export_name.replace(".", "_")
+	return material_name+"_export_"+export_name+".mme"
+
+func load_external_export_targets():
+	var dir = Directory.new()
+	if dir.open(USER_EXPORT_DIR) != OK:
+		print("Cannot open "+USER_EXPORT_DIR)
+		return
+	var rv : Dictionary = {}
+	dir.list_dir_begin()
+	var file_name : String = dir.get_next()
+	while file_name != "":
+		if file_name.get_extension() == "mme":
+			var file : File = File.new()
+			if file.open(USER_EXPORT_DIR.plus_file(file_name), File.READ) == OK:
+				var export_data : Dictionary = parse_json(file.get_as_text())
+				var material : String = export_data.material
+				if file_name != get_export_file_name(material, export_data.name):
+					print("Warning, %s has an incorrect name" % file_name)
+				if ! external_export_targets.has(material):
+					external_export_targets[material] = { exports={}, files=[] }
+				external_export_targets[material].exports[export_data.name] = export_data
+				external_export_targets[material].files.append(file_name)
+		file_name = dir.get_next()
+
+func get_external_export_targets(material_name : String) -> Dictionary:
+	return external_export_targets[material_name].exports if external_export_targets.has(material_name) else {}
+
+func update_external_export_targets(material_name : String, export_targets : Dictionary):
+	var dir : Directory = Directory.new()
+	dir.make_dir_recursive(USER_EXPORT_DIR)
+	var files = []
+	for k in export_targets.keys():
+		var e = export_targets[k]
+		var file : File = File.new()
+		var file_name : String = get_export_file_name(material_name, k)
+		if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
+			file.store_string(JSON.print(e, "\t", true))
+		files.append(file_name)
+	external_export_targets[material_name].exports = export_targets
+	for f in external_export_targets[material_name].files:
+		if files.find(f) == -1:
+			dir.remove(USER_EXPORT_DIR.plus_file(f))
+	external_export_targets[material_name].files = files

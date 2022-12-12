@@ -60,8 +60,8 @@ const MENU = [
 	{ menu="File/Save as...", command="save_project_as", shortcut="Control+Shift+S" },
 	{ menu="File/Save all...", command="save_all_projects", not_in_ports=["HTML5"] },
 	{ menu="File/-" },
+	{ menu="File/Export again", command="export_again", shortcut="Control+E", not_in_ports=["HTML5"] },
 	{ menu="File/Export material", submenu="export_material", not_in_ports=["HTML5"] },
-	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File/-" },
 	{ menu="File/Close", command="close_project", shortcut="Control+Shift+Q" },
 	{ menu="File/Quit", command="quit", shortcut="Control+Q", not_in_ports=["HTML5"] },
@@ -179,12 +179,12 @@ func _ready() -> void:
 	# Load recent projects
 	load_recents()
 
-	# Create menus
-	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
-
 	new_material()
 
 	do_load_projects(OS.get_cmdline_args())
+
+	# Create menus
+	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
 	get_tree().connect("files_dropped", self, "on_files_dropped")
 
@@ -296,7 +296,42 @@ func remove_recent(path, save = true) -> void:
 	if save:
 		save_recents()
 
-func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void:
+func export_profile_config_key(profile : String) -> String:
+	var key = "export_"+profile.to_lower().replace(" ", "_")
+	return key
+
+func export_material(file_path : String, profile : String) -> void:
+	var project = get_current_project()
+	if project == null:
+		return
+	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
+	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
+	project.export_material(export_prefix, profile)
+
+func export_again_is_disabled() -> bool:
+	print("export_again_is_disabled")
+	var project = get_current_project()
+	if project == null:
+		return true
+	var material_node = project.get_material_node()
+	if material_node == null or material_node.get_last_export_target() == "":
+		return true
+	return false
+
+func export_again() -> void:
+	var project = get_current_project()
+	if project == null:
+		return
+	var material_node = project.get_material_node()
+	if material_node == null:
+		return
+	var export_target : String = material_node.get_last_export_target()
+	if export_target == "":
+		return
+	var export_path : String = material_node.get_export_path(export_target)
+	export_material(export_path, export_target)
+
+func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_profiles = null) -> void:
 	if prefix == "":
 		menu.clear()
 		menu.set_size(Vector2(0, 0))
@@ -311,8 +346,10 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void
 		return
 	var prefix_len = prefix.length()
 	var submenus = []
-	for id in range(material_node.get_export_profiles().size()):
-		var p : String = material_node.get_export_profiles()[id]
+	if export_profiles == null:
+		export_profiles = material_node.get_export_profiles()
+	for id in range(export_profiles.size()):
+		var p : String = export_profiles[id]
 		if p.left(prefix_len) != prefix:
 			continue
 		p = p.right(prefix_len)
@@ -325,23 +362,11 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "") -> void
 				var submenu = PopupMenu.new()
 				submenu.name = submenu_name
 				menu.add_child(submenu)
-				create_menu_export_material(submenu, p.left(slash_position+1))
+				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
 				menu.add_submenu_item(submenu_name, submenu_name, id)
 				submenus.push_back(submenu_name)
 	if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
 		menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
-
-func export_profile_config_key(profile : String) -> String:
-	var key = "export_"+profile.to_lower().replace(" ", "_")
-	return key
-
-func export_material(file_path : String, profile : String) -> void:
-	var project = get_current_project()
-	if project == null:
-		return
-	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
-	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
-	project.export_material(export_prefix, profile)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var project = get_current_project()
@@ -351,24 +376,32 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if material_node == null:
 		return
 	var profile = material_node.get_export_profiles()[id]
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	var profile_name : String = profile
-	var last_profile_name_slash : int = profile_name.rfind("/")
-	if last_profile_name_slash != -1:
-		profile_name = profile_name.right(last_profile_name_slash+1)
-	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile_name+" Material")
-	var config_key = export_profile_config_key(profile)
-	if mm_globals.config.has_section_key("path", config_key):
-		dialog.current_dir = mm_globals.config.get_value("path", config_key)
-	add_child(dialog)
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
-	if files.size() > 0:
-		export_material(files[0], profile)
+	var export_extension : String = material_node.get_export_extension(profile)
+	if export_extension == "":
+		export_material("", profile)
+	else:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_SAVE_FILE
+		var profile_name : String = profile
+		var last_profile_name_slash : int = profile_name.rfind("/")
+		if last_profile_name_slash != -1:
+			profile_name = profile_name.right(last_profile_name_slash+1)
+		dialog.add_filter("*."+export_extension+";"+profile_name+" Material")
+		var last_export_path = material_node.get_export_path(profile)
+		if last_export_path != "":
+			dialog.current_path = last_export_path
+		else:
+			var config_key = export_profile_config_key(profile)
+			if mm_globals.config.has_section_key("path", config_key):
+				dialog.current_dir = mm_globals.config.get_value("path", config_key)
+		add_child(dialog)
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() > 0:
+			export_material(files[0], profile)
 
 
 func create_menu_set_theme(menu) -> void:
@@ -685,7 +718,7 @@ func edit_select_connected(end1 : String, end2 : String) -> void:
 
 func edit_select_sources_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit.get_selected_nodes().empty()
+	return graph_edit == null or graph_edit.get_selected_nodes().empty()
 
 func edit_select_sources() -> void:
 	edit_select_connected("to", "from")
