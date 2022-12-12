@@ -13,6 +13,7 @@ onready var export_file_label_expression : Label = $MarginContainer/VBoxContaine
 onready var export_file_expression : LineEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression
 onready var export_file_type : OptionButton = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/type
 onready var export_file_template : TextEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/template
+onready var export_custom_script : TextEdit = $"MarginContainer/VBoxContainer/Tabs/Custom Script"
 
 var data : Dictionary = {}
 var exports : Dictionary = {}
@@ -49,6 +50,7 @@ func select_export(i : int) -> void:
 	var e : String = export_target.get_item_text(i)
 	export_external_button.pressed = exports[e].has("external") and exports[e].external
 	export_extension_edit.text = exports[e].export_extension if exports[e].has("export_extension") else ""
+	export_custom_script.text = exports[e].custom if exports[e].has("custom") else ""
 	update_files(e)
 
 func update_files(e : String):
@@ -169,6 +171,10 @@ func _on_ExportExtensionEdit_text_entered(new_text):
 
 func _on_ExportExtensionEdit_focus_exited():
 	_on_ExportExtensionEdit_text_entered(export_extension_edit.text)
+
+func _on_Custom_Script_focus_exited():
+	var e : String = export_target.get_item_text(export_target.selected)
+	exports[e].custom = export_custom_script.text
 
 func _on_Files_gui_input(event):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:

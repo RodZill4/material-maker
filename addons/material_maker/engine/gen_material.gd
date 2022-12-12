@@ -188,11 +188,19 @@ func update() -> void:
 class CustomOptions:
 	extends Object
 
-func process_shader(shader_text : String):
+func check_custom_script(custom_script : String) -> bool:
+	for s in [ "OS", "Directory", "File" ]:
+		if custom_script.find(s) != -1:
+			print("Invalid custom script (found '%s')" % s)
+			return false
+	return true
+
+func process_shader(shader_text : String, custom_script : String = ""):
 	var custom_options = CustomOptions.new()
-	if shader_model.has("custom"):
+	if custom_script != "" and check_custom_script(custom_script):
+		print("Using custom script")
 		var custom_options_script = GDScript.new()
-		custom_options_script.source_code = "extends Object\n\n"+shader_model.custom
+		custom_options_script.source_code = "extends Object\n\n"+custom_script
 		custom_options_script.reload()
 		custom_options.set_script(custom_options_script)
 	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
@@ -225,10 +233,15 @@ func process_shader(shader_text : String):
 				var new_code : String = subst_code.code+"\n"
 				new_code += subst_code.string+"\n"
 				for o in gen_options:
+					print(o)
 					if has_method("process_option_"+o):
+						print("Got from default")
 						new_code = call("process_option_"+o, new_code)
 					elif custom_options.has_method("process_option_"+o):
+						print("Got from custom")
 						new_code = custom_options.call("process_option_"+o, new_code)
+					else:
+						print("No implementation")
 				shader_code += new_code
 				generating = false
 			else:
@@ -332,16 +345,18 @@ func get_export_profiles() -> Array:
 	var export_profiles : Array = []
 	if shader_model.has("exports"):
 		export_profiles = shader_model.exports.keys()
-	for k in mm_loader.get_external_export_targets(get_template_name()).keys():
-		if export_profiles.find(k) == -1:
-			export_profiles.append(k)
+	if get_template_name() != null:
+		for k in mm_loader.get_external_export_targets(get_template_name()).keys():
+			if export_profiles.find(k) == -1:
+				export_profiles.append(k)
 	export_profiles.sort()
 	return export_profiles
 
 func get_export(profile : String) -> Dictionary:
-	var external_export_targets = mm_loader.get_external_export_targets(get_template_name())
-	if external_export_targets.has(profile):
-		return external_export_targets[profile]
+	if get_template_name() != null:
+		var external_export_targets = mm_loader.get_external_export_targets(get_template_name())
+		if external_export_targets.has(profile):
+			return external_export_targets[profile]
 	if shader_model.has("exports") and shader_model.exports.has(profile):
 		return shader_model.exports[profile]
 	return {}
@@ -490,7 +505,10 @@ func process_uids(template : String) -> String:
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	template = get_template_text(template)
 	var processed_template = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
-	processed_template = process_shader(processed_template).shader_code
+	var custom_script = ""
+	if export_context.has("@mm_custom_script"):
+		custom_script = export_context["@mm_custom_script"]
+	processed_template = process_shader(processed_template, custom_script).shader_code
 	if file_name == "clipboard":
 		OS.clipboard = processed_template
 	else:
@@ -536,6 +554,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var overwrite_files : Array = []
 	var dir : Directory = Directory.new()
 	var export_profile = get_export(profile)
+	if export_profile.has("custom"):
+		export_context["@mm_custom_script"] = export_profile.custom
 	for f in export_profile.files:
 		if f.has("conditions"):
 			var condition = subst_string(f.conditions, export_context)

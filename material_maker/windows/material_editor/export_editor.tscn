@@ -258,9 +258,19 @@ __meta__ = {
 }
 
 [node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/Tabs"]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
+margin_top = 136.0
+margin_right = 457.0
+margin_bottom = 336.0
+rect_min_size = Vector2( 100, 200 )
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 6 )
+syntax_highlighting = true
+show_line_numbers = true
+__meta__ = {
+"_editor_description_": ""
+}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 margin_left = 221.0
@@ -308,6 +318,7 @@ text = "Cancel"
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression" to="." method="_on_expression_focus_exited"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression" to="." method="_on_expression_text_entered"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Files/File/template" to="." method="_on_template_focus_exited"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Custom Script" to="." method="_on_Custom_Script_focus_exited"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
