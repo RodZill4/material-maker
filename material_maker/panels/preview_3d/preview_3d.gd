@@ -30,7 +30,7 @@ const MENU = [
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
 	{ menu="Environment/Select", submenu="environment_list" },
 	{ menu="Environment/Tonemap", submenu="tonemap_list" },
-	{ menu="Environment/Navigation Styles", submenu="navigation_styles_list" },
+	{ menu="Environment/Navigation", submenu="navigation_styles_list" },
 ]
 
 const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
