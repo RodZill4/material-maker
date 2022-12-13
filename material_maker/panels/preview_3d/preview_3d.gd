@@ -36,7 +36,7 @@ const MENU = [
 const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
 
 const NAVIGATION_STYLES: Dictionary = {
-	"Default": DefaultNavigationStyle3D,
+	"Classic": ClassicNavigationStyle3D,
 	"Turntable": TurntableNavigationStyle3D,
 }
 

@@ -1,5 +1,5 @@
 extends NavigationStyle3D
-class_name DefaultNavigationStyle3D
+class_name ClassicNavigationStyle3D
 
 
 var moving = false

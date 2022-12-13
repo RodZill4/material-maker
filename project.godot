@@ -10,9 +10,9 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "NavigationStyle3D",
-"class": "DefaultNavigationStyle3D",
+"class": "ClassicNavigationStyle3D",
 "language": "GDScript",
-"path": "res://material_maker/panels/preview_3d/navigation_styles/default.gd"
+"path": "res://material_maker/panels/preview_3d/navigation_styles/classic.gd"
 }, {
 "base": "Button",
 "class": "FilePickerButton",
@@ -190,7 +190,7 @@ _global_script_classes=[ {
 "path": "res://material_maker/panels/preview_3d/navigation_styles/turntable.gd"
 } ]
 _global_script_class_icons={
-"DefaultNavigationStyle3D": "",
+"ClassicNavigationStyle3D": "",
 "FilePickerButton": "",
 "MMCurve": "",
 "MMGenBase": "",
