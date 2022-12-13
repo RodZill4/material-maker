@@ -4,7 +4,7 @@ func _ready():
 	pass # Replace with function body.
 
 func get_children_types():
-	return [ "SDF2D" ]
+	return [ "SDF2D", "SDF3D_COLOR" ]
 
 func get_parameter_defs():
 	return [
@@ -28,12 +28,28 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[], outputs=[ { sdf3d=output_name, type="sdf3d" } ] }
 	mm_sdf_builder.add_parameters(scene, data, get_parameter_defs())
-	data.code = "vec3 %s_p = %s - vec3($position_x, $position_y, $position_z);\n" % [ output_name, uv ]
-	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene)
-	data.code += "%s_p /= $scale;\n" % [ output_name ]
+	data.code = "vec3 %s_p = %s;\n" % [ output_name, uv ]
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "position_x") or mm_sdf_builder.check_non_zero_param(scene, "position_y") or mm_sdf_builder.check_non_zero_param(scene, "position_z"):
+		data.code += "%s_p -= vec3($position_x, $position_y, $position_z);\n" % output_name
+	data.code += mm_sdf_builder.generate_rotate_3d("%s_p" % output_name, scene, editor)
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "scale", 1.0):
+		data.code += "%s_p /= $scale;\n" % [ output_name ]
 	shape_and_children_code(scene, data, "%s_p.xy" % output_name, editor)
 	data.code += "vec2 %s_w = vec2(%s, abs(%s_p.z) - $length);\n" % [ output_name, output_name, output_name ]
-	data.code += "%s = min(max(%s_w.x, %s_w.y),0.0) + length(max(%s_w,0.0))*$scale;\n" % [ output_name, output_name, output_name, output_name ] 
+	data.code += "%s = min(max(%s_w.x, %s_w.y),0.0) + length(max(%s_w,0.0));\n" % [ output_name, output_name, output_name, output_name ] 
+	if editor or mm_sdf_builder.check_non_zero_param(scene, "scale", 1.0):
+		data.code += "%s *= $scale;\n" % output_name
 	if editor:
 		data.code += "if (index == %d) return %s;\n" % [ scene.index, output_name ]
 	return data
+
+func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false) -> Dictionary:
+	var ctxt2 : Dictionary = ctxt.duplicate()
+	ctxt2.local_uv = "$(name_uv)_n%d_p.xy" % scene.index
+	ctxt2.uv = "$(name_uv)_n%d_p.xy" % scene.index
+	ctxt2.check = false
+	var color_code : Dictionary = .get_color_code(scene, ctxt2, editor)
+	if color_code.has("color"):
+		return { color = color_code.color, distance = "_n%d" % scene.index }
+	else:
+		return { distance = "_n%d" % scene.index }

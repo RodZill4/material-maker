@@ -48,40 +48,35 @@ GENERATED_GLOBALS
 
 GENERATED_INSTANCE
 
-vec2 GetDist(vec3 uv) {
-	float _seed_variation_ = 0.0;
-
-GENERATED_CODE
-
-	return vec2(GENERATED_OUTPUT, 0.0);
+float GetDist(vec3 uv) {
+	return DIST_FCT(uv, 0, 0.0);
 }
 
-vec2 RayMarch(vec3 ro, vec3 rd) {
+float RayMarch(vec3 ro, vec3 rd) {
 	float dO = 0.0;
 	float color = 0.0;
-	vec2 dS;
+	float dS;
 	
 	for (int i = 0; i < MAX_STEPS; i++)
 	{
 		vec3 p = ro + dO * rd;
 		dS = GetDist(p);
-		dO += dS.x;
+		dO += dS;
 		
-		if (dS.x < SURF_DIST || dO > MAX_DIST) {
-			color = dS.y;
+		if (abs(dS) < SURF_DIST || dO > MAX_DIST) {
 			break;
 		}
 	}
-	return vec2(dO, color);
+	return dO;
 }
 
 vec3 GetNormal(vec3 p) {
 	vec2 e = vec2(1e-2, 0);
 	
-	vec3 n = GetDist(p).x - vec3(
-		GetDist(p - e.xyy).x,
-		GetDist(p - e.yxy).x,
-		GetDist(p - e.yyx).x
+	vec3 n = GetDist(p) - vec3(
+		GetDist(p - e.xyy),
+		GetDist(p - e.yxy),
+		GetDist(p - e.yyx)
 	);
 	
 	return normalize(n);
@@ -100,16 +95,21 @@ void fragment() {
 	vec3 ro = world_camera;
 	vec3 rd =  normalize(world_position - world_camera);
 	
-	vec2 rm  = RayMarch(ro, rd);
-	float d = rm.x;
+	float d = RayMarch(ro, rd);
 
 	if (d >= MAX_DIST) {
 		discard;
 	} else {
 		vec3 p = ro + rd * d;
-		ALBEDO = vec3(1.0);
-		ROUGHNESS = 0.2;
-		METALLIC = 0.0;
+		vec4 albedo;
+		float metallic;
+		float roughness;
+		vec3 emission;
+		COLOR_FCT(p, albedo, metallic, roughness, emission, _seed_variation_);
+		ALBEDO = albedo.rgb;
+		ROUGHNESS = roughness;
+		METALLIC = metallic;
 		NORMAL = (INV_CAMERA_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
+		EMISSION = emission;
 	}
 }

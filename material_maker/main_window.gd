@@ -39,6 +39,7 @@ onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPan
 onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
 const IDLE_FPS_LIMIT_MIN = 1
@@ -50,20 +51,20 @@ const THEMES = [ "Dark", "Default", "Light" ]
 
 const MENU = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
-	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N" },
+	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
 	{ menu="File/Load", command="load_project", shortcut="Control+O" },
 	{ menu="File/Load material from website", command="load_material_from_website" },
-	{ menu="File/Load recent", submenu="load_recent", standalone_only=true },
+	{ menu="File/Load recent", submenu="load_recent", standalone_only=true, not_in_ports=["HTML5"] },
 	{ menu="File/-" },
 	{ menu="File/Save", command="save_project", shortcut="Control+S" },
 	{ menu="File/Save as...", command="save_project_as", shortcut="Control+Shift+S" },
-	{ menu="File/Save all...", command="save_all_projects" },
+	{ menu="File/Save all...", command="save_all_projects", not_in_ports=["HTML5"] },
 	{ menu="File/-" },
-	{ menu="File/Export material", submenu="export_material" },
+	{ menu="File/Export material", submenu="export_material", not_in_ports=["HTML5"] },
 	#{ menu="File", command="export_material", shortcut="Control+E", description="Export material" },
 	{ menu="File/-" },
 	{ menu="File/Close", command="close_project", shortcut="Control+Shift+Q" },
-	{ menu="File/Quit", command="quit", shortcut="Control+Q" },
+	{ menu="File/Quit", command="quit", shortcut="Control+Q", not_in_ports=["HTML5"] },
 
 	{ menu="Edit/Undo", command="edit_undo", shortcut="Control+Z" },
 	{ menu="Edit/Redo", command="edit_redo", shortcut="Control+Shift+Z" },
@@ -79,8 +80,8 @@ const MENU = [
 	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
 	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
 	{ menu="Edit/-" },
-	{ menu="Edit/Load Selection", command="edit_load_selection" },
-	{ menu="Edit/Save Selection", command="edit_save_selection" },
+	{ menu="Edit/Load Selection", command="edit_load_selection", not_in_ports=["HTML5"] },
+	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/-" },
 	{ menu="Edit/Set theme", submenu="set_theme" },
 	{ menu="Edit/Preferences", command="edit_preferences" },
@@ -96,13 +97,13 @@ const MENU = [
 	{ menu="Tools/Make selected nodes editable", command="make_selected_nodes_editable", shortcut="Control+W" },
 	{ menu="Tools/-" },
 	{ menu="Tools/Add selected node to library", submenu="add_selection_to_library", mode="material" },
-	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint" },
+	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint", not_in_ports=["HTML5"] },
 	{ menu="Tools/Create a screenshot of the current graph", command="generate_graph_screenshot", mode="material" },
-	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint" },
-	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint" },
+	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint", not_in_ports=["HTML5"] },
+	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint", not_in_ports=["HTML5"] },
 	{ menu="Tools/-" },
-	{ menu="Tools/Environment editor", command="environment_editor" },
-	#{ menu="Tools", command="generate_screenshots", description="Generate screenshots for the library nodes", mode="material" },
+	{ menu="Tools/Environment editor", command="environment_editor", not_in_ports=["HTML5"] },
+	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
@@ -186,8 +187,6 @@ func _ready() -> void:
 	do_load_projects(OS.get_cmdline_args())
 
 	get_tree().connect("files_dropped", self, "on_files_dropped")
-
-	mm_renderer.connect("render_queue", $VBoxContainer/TopBar/RenderCounter, "on_counter_change")
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -356,7 +355,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	dialog.rect_min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile+" Material")
+	var profile_name : String = profile
+	var last_profile_name_slash : int = profile_name.rfind("/")
+	if last_profile_name_slash != -1:
+		profile_name = profile_name.right(last_profile_name_slash+1)
+	dialog.add_filter("*."+material_node.get_export_extension(profile)+";"+profile_name+" Material")
 	var config_key = export_profile_config_key(profile)
 	if mm_globals.config.has_section_key("path", config_key):
 		dialog.current_dir = mm_globals.config.get_value("path", config_key)
@@ -446,20 +449,31 @@ func new_paint_project(obj_file_name = null) -> void:
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILES
-	dialog.add_filter("*.ptex;Procedural Textures File")
-	dialog.add_filter("*.mmpp;Model Painting File")
-	if mm_globals.config.has_section_key("path", "project"):
-		dialog.current_dir = mm_globals.config.get_value("path", "project")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
-	if files.size() > 0:
-		do_load_projects(files)
+	if OS.get_name() == "HTML5":
+		if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
+			Html5.connect("file_loaded", self, "on_html5_load_file")
+		Html5.load_file(".ptex")
+	else:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		add_child(dialog)
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_OPEN_FILES
+		dialog.add_filter("*.ptex;Procedural Textures File")
+		dialog.add_filter("*.mmpp;Model Painting File")
+		if mm_globals.config.has_section_key("path", "project"):
+			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() > 0:
+			do_load_projects(files)
+
+func on_html5_load_file(file_name, file_type, file_data):
+	match file_name.get_extension():
+		"ptex":
+			if do_load_material_from_data(file_name, file_data, false):
+				hierarchy.update_from_graph_edit(get_current_graph_edit())
 
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
@@ -487,7 +501,7 @@ func do_load_project(file_name) -> bool:
 		remove_recent(file_name)
 	return status
 
-func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
+func create_new_graph_edit_if_needed() -> MMGraphEdit:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var node_count = 2 # So test below succeeds if graph_edit is null...
 	if graph_edit != null:
@@ -499,7 +513,18 @@ func do_load_material(filename : String, update_hierarchy : bool = true) -> bool
 					break
 	if node_count > 1:
 		graph_edit = new_graph_panel()
+	return graph_edit
+
+func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
+	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
 	graph_edit.load_file(filename)
+	if update_hierarchy:
+		hierarchy.update_from_graph_edit(get_current_graph_edit())
+	return true
+
+func do_load_material_from_data(filename : String, data : String, update_hierarchy : bool = true) -> bool:
+	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
+	graph_edit.load_from_data(filename, data)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 	return true
@@ -891,21 +916,8 @@ func about() -> void:
 # Preview
 
 func update_preview() -> void:
-	var status
-	need_update = true
-	if updating:
-		return
-	updating = true
-	while need_update:
-		need_update = false
-# warning-ignore:void_assignment
-		status = update_preview_2d()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-		status = update_preview_3d([ preview_3d, preview_3d_background ])
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
-	updating = false
+	update_preview_2d()
+	update_preview_3d([ preview_3d, preview_3d_background ])
 
 func get_current_node(graph_edit : MMGraphEdit) -> Node:
 	for n in graph_edit.get_children():
@@ -929,19 +941,21 @@ func update_preview_2d() -> void:
 					histogram.set_generator(null)
 					preview_2d_background.set_generator(null)
 
-func update_preview_3d(previews : Array, sequential = false) -> void:
+var current_gen_material = null
+func update_preview_3d(previews : Array, _sequential = false) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	var gen_material = null
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
-		var gen_material = graph_edit.top_generator.get_node("Material")
-		var status = gen_material.update()
-		if sequential:
-			while status is GDScriptFunctionState:
-				yield(status, "completed")
+		gen_material = graph_edit.top_generator.get_node("Material")
+	if gen_material != current_gen_material:
+		if current_gen_material != null and is_instance_valid(current_gen_material):
+			current_gen_material.set_3d_previews([])
+		current_gen_material = gen_material
+	if current_gen_material != null:
+		var materials : Array = []
 		for p in previews:
-			status = gen_material.update_materials(p.get_materials(), sequential)
-			if sequential:
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
+			materials.append_array(p.get_materials())
+		current_gen_material.set_3d_previews(materials)
 
 func on_preview_changed(graph) -> void:
 	if graph == get_current_graph_edit():
@@ -1089,6 +1103,7 @@ func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
 	return return_value
 
 func on_files_dropped(files : PoolStringArray, _screen) -> void:
+	yield(get_tree(), "idle_frame")
 	var file : File = File.new()
 	for f in files:
 		if file.open(f, File.READ) != OK:
@@ -1114,6 +1129,21 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 						if control.get_parent() != self:
 							next_controls.append(control.get_parent())
 					controls = next_controls
+
+func set_tip_text(tip : String, timeout : float = 0.0):
+	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
+	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
+	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
+	$VBoxContainer/StatusBar/Tip.bbcode_text = tip
+	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
+	tip_timer.stop()
+	if timeout > 0.0:
+		tip_timer.one_shot = true
+		tip_timer.wait_time = timeout
+		tip_timer.start()
+
+func _on_Tip_Timer_timeout():
+	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
 
 # Use this to investigate the connect bug
 

@@ -4,17 +4,11 @@ extends Viewport
 
 var render_owner : Object = null
 
+var texture : Texture
+
 
 signal done
 
-
-func _ready() -> void:
-	$ColorRect.material = $ColorRect.material.duplicate(true)
-
-func setup_material(shader_material, textures, shader_code) -> void:
-	shader_material.shader.code = shader_code
-	for k in textures.keys():
-		shader_material.set_shader_param(k+"_tex", textures[k])
 
 func request(object : Object) -> Object:
 	assert(render_owner == null)
@@ -45,59 +39,78 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	update_worlds()
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
+	texture = get_texture()
 	$Font.visible = false
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size, with_hdr = true) -> Object:
+func render_material(object : Object, material : Material, render_size : int, with_hdr : bool = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
-	var shader_material = $ColorRect.material
-	size = Vector2(render_size, render_size)
+	var chunk_count : int = 1
+	var render_scale : float = 1.0
+	var max_viewport_size : int = mm_renderer.max_viewport_size
+	if render_size <= max_viewport_size:
+		size = Vector2(render_size, render_size)
+	else:
+		chunk_count = render_size/max_viewport_size
+		render_scale = float(max_viewport_size)/float(render_size)
+		size = Vector2(max_viewport_size, max_viewport_size)
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
-	hdr = with_hdr
-	render_target_update_mode = Viewport.UPDATE_ONCE
-	update_worlds()
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	$ColorRect.material = shader_material
+	if OS.get_name() == "HTML5":
+		hdr = false
+	else:
+		hdr = with_hdr
+	if chunk_count == 1:
+		material.set_shader_param("mm_chunk_size", 1.0)
+		material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
+		render_target_update_mode = Viewport.UPDATE_ONCE
+		update_worlds()
+		yield(get_tree(), "idle_frame")
+		yield(get_tree(), "idle_frame")
+		texture = get_texture()
+	else:
+		var image : Image = Image.new()
+		image.create(render_size, render_size, false, get_texture().get_data().get_format())
+		material.set_shader_param("mm_chunk_size", render_scale)
+		for x in range(chunk_count):
+			for y in range(chunk_count):
+				material.set_shader_param("mm_chunk_offset", render_scale*Vector2(x, y))
+				render_target_update_mode = Viewport.UPDATE_ONCE
+				update_worlds()
+				yield(get_tree(), "idle_frame")
+				yield(get_tree(), "idle_frame")
+				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
+		texture = ImageTexture.new()
+		texture.create_from_image(image)
+	$ColorRect.material = null
 	return self
 
-func render_shader(object : Object, shader, textures, render_size, with_hdr = true) -> Object:
-	assert(render_owner == object, "Invalid renderer use")
-	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
-		render_size = mm_renderer.max_buffer_size
-	size = Vector2(render_size, render_size)
-	$ColorRect.rect_position = Vector2(0, 0)
-	$ColorRect.rect_size = size
-	var shader_material = $ColorRect.material
+func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
+	var shader_material = ShaderMaterial.new()
+	shader_material.shader = Shader.new() 
 	shader_material.shader.code = shader
-	if textures != null:
-		for k in textures.keys():
-			shader_material.set_shader_param(k, textures[k])
-	shader_material.set_shader_param("preview_size", render_size)
-	hdr = with_hdr
-	render_target_update_mode = Viewport.UPDATE_ONCE
-	update_worlds()
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	mm_deps.material_update_params(shader_material)
+	var status = render_material(object, shader_material, render_size, with_hdr)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:
-	var image : Image = get_texture().get_data()
+	var image : Image = texture.get_data()
 	if image != null:
 		t.create_from_image(image)
 
 func get_image() -> Image:
 	var image : Image = Image.new()
-	image.copy_from(get_texture().get_data())
+	image.copy_from(texture.get_data())
 	return image
 
 func save_to_file(fn : String, is_greyscale : bool = false) -> void:
-	var image : Image = get_texture().get_data()
+	var image : Image = texture.get_data()
 	if image != null:
 		image.lock()
 		var export_image : Image = image
@@ -117,4 +130,5 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 func release(object : Object) -> void:
 	assert(render_owner == object, "Invalid renderer release")
 	render_owner = null
+	texture = null
 	get_parent().release(self)

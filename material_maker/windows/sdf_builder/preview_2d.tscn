@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://material_maker/windows/sdf_builder/preview_2d.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=2]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=3]
+resource_local_to_scene = true
+shader = SubResource( 2 )
+
+[sub_resource type="Shader" id=4]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = SubResource( 4 )
+
+[node name="Preview2D" instance=ExtResource( 1 )]
+material = SubResource( 3 )
+script = ExtResource( 2 )
+shader_accumulate = ""
+shader_divide = ""
+
+[node name="ContextMenu" parent="." index="15"]
+items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
+
+[node name="View" parent="ContextMenu" index="0"]
+items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
+
+[node name="Iteration" parent="Accumulate" index="0"]
+material = SubResource( 5 )
+
+[node name="UI" type="HBoxContainer" parent="." index="17"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="View" type="OptionButton" parent="UI" index="0"]
+margin_right = 106.0
+margin_bottom = 40.0
+text = "SDF+Albedo"
+items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null, "Roughness", null, false, 4, null, "Emission", null, false, 5, null ]
+selected = 0
+
+[connection signal="item_selected" from="UI/View" to="." method="_on_View_item_selected"]

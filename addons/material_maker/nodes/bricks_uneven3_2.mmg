@@ -1,0 +1,162 @@
+{
+	"name": "bricks_uneven3_2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.1,
+		"corner": 0.3,
+		"iterations": 8,
+		"min_size": 0.3,
+		"mortar": 0.1,
+		"round": 0,
+		"rows": 6
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "vec4 $(name_uv)_rect = bricks_uneven2($uv, $rows, int($iterations), $min_size, float($seed));\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)), 1.0 / $rows);",
+		"global": "vec4 bricks_uneven2(vec2 uv, float rows, int iterations, float min_size, float seed) {\n\tvec4 bb;\n\tfloat random_offset = rand( vec2( seed - floor( fract(uv.y) * rows ) ) );\n\tuv.x += random_offset;\n\tbb.xy = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows);\n\tbb.zw = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows) + vec2(1.0, 1.0 / rows);\n\t\n\tfor (int i = 0; i < iterations; ++i) {\n\t\tfloat cut = rand(vec2(seed + float(i * 100) + floor( fract(uv.y) * rows ) ));\n\t\tcut += floor(uv.x);\n\t\tif ( bb.z - cut < min_size || cut - bb.x < min_size)\n\t\t\tcontinue;\n\t\tif ( uv.x < cut) {\n\t\t\tbb.z = cut;\n\t\t} else {\n\t\t\tbb.x = cut;\n\t\t}\n\t}\n\t\n\tbb.xz -= random_offset;\n\t\n\treturn bb;\n}",
+		"includes": [
+			"bricks2"
+		],
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "4:",
+				"longdesc": "A map that affects the Mortar parameter",
+				"name": "mortar_map",
+				"shortdesc": "Mortar map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Round parameter",
+				"name": "round_map",
+				"shortdesc": "Round map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates an uneven bricks pattern in rows.",
+		"name": "Uneven Bricks 2",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"longdesc": "A greyscale image that shows the bricks pattern",
+				"shortdesc": "Bricks pattern",
+				"type": "f"
+			},
+			{
+				"fill": "vec4( fract(round($(name_uv)_rect.xy*4096.0)/4096.0), $(name_uv)_rect.zw - $(name_uv)_rect.xy )",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Brick Fill",
+				"type": "fill"
+			},
+			{
+				"fill": "brick_corner_bb($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $corner, 1.0 / $rows)",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Corner Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 6,
+				"label": "Rows",
+				"longdesc": "The number of rows of a pattern",
+				"max": 64,
+				"min": 1,
+				"name": "rows",
+				"shortdesc": "Rows",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 8,
+				"label": "Iterations",
+				"longdesc": "The number of iterations of the brick split operation",
+				"max": 16,
+				"min": 0,
+				"name": "iterations",
+				"shortdesc": "Iterations",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Min size",
+				"longdesc": "The minimum size of a brick",
+				"max": 0.5,
+				"min": 0,
+				"name": "min_size",
+				"shortdesc": "Minimum size",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.05,
+				"label": "Mortar",
+				"longdesc": "The width of the space between bricks",
+				"max": 0.5,
+				"min": 0,
+				"name": "mortar",
+				"shortdesc": "Mortar",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.05,
+				"label": "Bevel",
+				"longdesc": "The width of the edge of each brick",
+				"max": 0.5,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Round",
+				"longdesc": "The radius of the round corners of bricks",
+				"max": 0.5,
+				"min": 0,
+				"name": "round",
+				"shortdesc": "Round",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Corner",
+				"longdesc": "The size of the corner part of each brick (only used by the Corner UV output)",
+				"max": 0.5,
+				"min": 0,
+				"name": "corner",
+				"shortdesc": "Corner",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Uneven bricks 2"
+	},
+	"type": "shader"
+}

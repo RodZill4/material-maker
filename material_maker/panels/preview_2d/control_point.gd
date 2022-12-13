@@ -155,7 +155,9 @@ func update_parameters(value : Vector2) -> void:
 	if parameter_a != "":
 		parameters[parameter_a] = atan2(value.y, value.x)*57.2957795131
 	if ! parameters.empty():
-		var control_target = get_parent().get_node(get_parent().control_target)
+		var control_target = null
+		if get_parent().has_node(get_parent().control_target):
+			control_target = get_parent().get_node(get_parent().control_target)
 		if control_target == null:
 			var main_window = mm_globals.main_window
 			control_target = main_window.get_current_graph_edit()

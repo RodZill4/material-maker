@@ -6,6 +6,12 @@ class_name MMGenBase
 Base class for texture generators, that defines their API
 """
 
+const MAX_SEED : int = 4294967296
+
+const BUFFERS_ALL     : int = 0
+const BUFFERS_PAUSED  : int = 1
+const BUFFERS_RUNNING : int = 2
+
 signal parameter_changed(n, v)
 signal rendering_time(t)
 
@@ -32,6 +38,22 @@ class OutputPort:
 
 	func to_str() -> String:
 		return generator.name+".out("+str(output_index)+")"
+
+class Renderer:
+	var material : ShaderMaterial
+	var with_hdr : bool
+	
+	func _init(shader : String, wh : bool) -> void:
+		var buffer_name : String = "renderer_%d" % get_instance_id()
+		mm_deps.create_buffer(buffer_name, self)
+		material = mm_deps.buffer_create_shader_material(buffer_name, material, shader)
+	
+	func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+		material.set_shader_param(parameter_name, value)
+		return false
+	
+	func on_dep_update_buffer(buffer_name) -> bool:
+		return false
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
@@ -91,8 +113,7 @@ func set_seed(s : float) -> bool:
 	if !has_randomness() or is_seed_locked():
 		return false
 	seed_value = s
-	if is_inside_tree():
-		get_tree().call_group("preview", "on_float_parameters_changed", { "seed_o"+str(get_instance_id()): get_seed() })
+	mm_deps.dependencies_update({ "seed_o"+str(get_instance_id()): get_seed() })
 	return true
 
 func reroll_seed():
@@ -113,6 +134,9 @@ func toggle_lock_seed() -> bool:
 
 func is_seed_locked() -> bool:
 	return seed_locked
+
+func get_buffers(flags : int = BUFFERS_ALL) -> Array:
+	return []
 
 func init_parameters() -> void:
 	for p in get_parameter_defs():
@@ -185,14 +209,10 @@ func set_parameter(n : String, v) -> void:
 		if parameter_def.has("type"):
 			if parameter_def.type == "float" and v is float and old_value is float:
 				var parameter_name = "p_o"+str(get_instance_id())+"_"+n
-				get_tree().call_group("preview", "on_float_parameters_changed", { parameter_name:v })
+				mm_deps.dependencies_update({ parameter_name:v })
 				return
 			elif parameter_def.type == "color":
-				var parameter_changes = {}
-				for f in [ "r", "g", "b", "a" ]:
-					var parameter_name = "p_o"+str(get_instance_id())+"_"+n+"_"+f
-					parameter_changes[parameter_name] = v[f]
-				get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+				mm_deps.dependency_update("p_o"+str(get_instance_id())+"_"+n, v)
 				return
 			elif parameter_def.type == "gradient":
 				if old_value is MMGradient and v is MMGradient and old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
@@ -201,13 +221,26 @@ func set_parameter(n : String, v) -> void:
 					var parameter_changes = {}
 					for i in range(old_value.points.size()):
 						if v.points[i].v != old_value.points[i].v:
-							var parameter_name = "p_o%s_%s_%d_pos" % [ str(get_instance_id()), n, i ]
+							var parameter_name = "p_o%d_%s_%d_pos" % [ get_instance_id(), n, i ]
 							parameter_changes[parameter_name] = v.points[i].v
-						for f in [ "r", "g", "b", "a" ]:
-							if v.points[i].c[f] != old_value.points[i].c[f]:
-								var parameter_name = "p_o%s_%s_%d_%s" % [ str(get_instance_id()), n, i, f ]
-								parameter_changes[parameter_name] = v.points[i].c[f]
-					get_tree().call_group("preview", "on_float_parameters_changed", parameter_changes)
+						if v.points[i].c != old_value.points[i].c:
+							var parameter_name = "p_o%d_%s_%d_col" % [ get_instance_id(), n, i ]
+							parameter_changes[parameter_name] = v.points[i].c
+					mm_deps.dependencies_update(parameter_changes)
+					return
+			elif parameter_def.type == "curve":
+				if old_value is MMCurve and v is MMCurve and old_value != null and v.points.size() == old_value.points.size():
+					var parameter_changes = {}
+					for i in range(old_value.points.size()):
+						for f in [ "x", "y" ]:
+							if v.points[i].p[f] != old_value.points[i].p[f]:
+								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i].p[f]
+						for f in [ "ls", "rs" ]:
+							if v.points[i][f] != old_value.points[i][f]:
+								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
+								parameter_changes[parameter_name] = v.points[i][f]
+					mm_deps.dependencies_update(parameter_changes)
 					return
 		all_sources_changed()
 
@@ -300,7 +333,7 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = generate_preview_shader(source, output_type)
 	else:
 		shader = mm_renderer.generate_shader(source)
-	return { shader=shader, output_type=output_type, textures=source.textures }
+	return { shader=shader, output_type=output_type }
 
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
@@ -309,7 +342,7 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	var renderer = mm_renderer.request(object)
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, output_shader.textures, size, output_type != "rgba")
+	renderer = renderer.render_shader(object, shader, size, output_type != "rgba")
 	while renderer is GDScriptFunctionState:
 		renderer = yield(renderer, "completed")
 	return renderer
@@ -365,8 +398,12 @@ func serialize() -> Dictionary:
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
 		elif p.has("default"):
 			rv.parameters[p.name] = p.default
-	rv.seed = seed_value
-	rv.seed_locked = seed_locked
+	if seed_value >= 0.0 and seed_value <= 1.0:
+		rv.seed_int = int(round(seed_value*MAX_SEED))
+	else:
+		rv.seed = seed_value
+	if seed_locked:
+		rv.seed_locked = seed_locked
 	if preview >= 0:
 		rv.preview = preview
 	if minimized:
@@ -395,12 +432,16 @@ func deserialize(data : Dictionary) -> void:
 		for p in get_parameter_defs():
 			if data.has(p.name) and p.name != "type":
 				set_parameter(p.name, MMType.deserialize_value(data[p.name]))
-	if data.has("seed_value"):
-		seed_locked = true
-		seed_value = data.seed_value
+	seed_locked = false
+	if data.has("seed_locked"):
+		seed_locked = data.seed_locked
+	if data.has("seed_int"):
+		seed_value = float(data.seed_int)/MAX_SEED
 	elif data.has("seed"):
 		seed_value = data.seed
-		seed_locked = data.seed_locked
+	elif data.has("seed_value"):
+		seed_locked = true
+		seed_value = data.seed_value
 	else:
 		seed_locked = false
 		seed_value = get_seed_from_position(position)
@@ -411,6 +452,9 @@ func deserialize(data : Dictionary) -> void:
 
 static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
 	var regex = RegEx.new()
-	regex.compile("uniform\\s+(\\w+)\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
+	regex.compile("uniform\\s+float\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
 	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[2], float(p.strings[3]))
+		material.set_shader_param(p.strings[1], float(p.strings[2]))
+	regex.compile("uniform\\s+vec4\\s+([\\w_\\d]+)\\s*=\\s*vec4\\s*\\(\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^\\)\\s]+)\\s*\\);")
+	for p in regex.search_all(code):
+		material.set_shader_param(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))

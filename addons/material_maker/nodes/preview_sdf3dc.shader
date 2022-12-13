@@ -14,7 +14,7 @@ vec2 raymarch(vec3 ro, vec3 rd) {
 		vec3 p = ro + rd*d;
 		vec2 dstep = calcdist(p);
 		d += dstep.x;
-		if (dstep.x < 0.0001) {
+		if (abs(dstep.x) < 0.001) {
 			color = dstep.y;
 			break;
 		}

@@ -9,9 +9,11 @@
 		"axis": 2,
 		"r": 0.15
 	},
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_q = vec2($axis);\n",
-		"global": "",
+		"code": "",
+		"global": "float sdTorus(vec3 p, vec2 t) {\n  vec2 q = vec2(length(p.xz)-t.x,p.y);\n  return length(q)-t.y;\n}\n",
 		"inputs": [
 
 		],
@@ -21,14 +23,14 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the torus",
-				"sdf3d": "length($(name_uv)_q)-$r",
+				"sdf3d": "sdTorus($uv.$axis, vec2($R, $r))",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": 2,
 				"label": "Axis",
 				"longdesc": "The axis of the torus",
 				"name": "axis",
@@ -37,15 +39,15 @@
 				"values": [
 					{
 						"name": "X",
-						"value": "length($uv.yz)-$R,$uv.x"
+						"value": "zxy"
 					},
 					{
 						"name": "Y",
-						"value": "length($uv.zx)-$R,$uv.y"
+						"value": "xyz"
 					},
 					{
 						"name": "Z",
-						"value": "length($uv.xy)-$R,$uv.z"
+						"value": "yzx"
 					}
 				]
 			},

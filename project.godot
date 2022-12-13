@@ -240,8 +240,8 @@ boot_splash/fullsize=false
 boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.0.0.0"
-config/actual_release="1.0"
+config/release="1.1.0.0"
+config/actual_release="1.1"
 
 [audio]
 
@@ -252,9 +252,11 @@ driver="Dummy"
 mm_globals="*res://material_maker/globals.tscn"
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
+mm_deps="*res://addons/material_maker/engine/dependencies.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
 mm_sdf_builder="*res://addons/material_maker/sdf_builder/sdf_builder.tscn"
 mm_preprocessor="*res://addons/material_maker/engine/preprocessor.gd"
+Html5="*res://material_maker/html5.gd"
 
 [debug]
 
@@ -337,5 +339,9 @@ limits/debugger_stdout/max_chars_per_second=204800000
 [rendering]
 
 quality/shadows/filter_mode=2
+quality/shading/force_vertex_shading.mobile=false
+quality/shading/force_lambert_over_burley.mobile=false
+quality/shading/force_blinn_over_ggx.mobile=false
 quality/filters/anisotropic_filter_level=16
+quality/depth/hdr.mobile=true
 environment/default_environment="res://default_env.tres"

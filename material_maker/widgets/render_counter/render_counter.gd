@@ -1,6 +1,6 @@
 extends Control
 
-var last_value : int = 0
+
 var start_time : int = 0
 var max_render_queue_size : int = 0
 
@@ -9,51 +9,76 @@ var fast_counter : int = 0
 
 onready var menu : PopupMenu = $PopupMenu
 onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
+onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
 onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
-const ITEM_AUTO : int           = 1000
-const ITEM_RENDER_ENABLED : int = 1001
+
+const ITEM_AUTO : int                       = 1000
+const ITEM_RENDER_ENABLED : int             = 1001
+const ITEM_MATERIAL_STATS : int             = 1002
+const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
+
 
 func _ready() -> void:
 	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
 	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
 	menu.add_check_item("Auto", ITEM_AUTO)
 	menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
+	# Renderers menu
 	menu.add_submenu_item("Renderers", "Renderers")
 	for i in range(8):
 		renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
 	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
 	menu.add_separator()
+	# Render size limit menu
+	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
+	var render_size = mm_globals.get_config("max_viewport_size")
+	for i in range(4):
+		var size : int = 512 << i
+		render_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
+	mm_renderer.max_viewport_size = render_size
+	render_menu.set_item_checked(render_menu.get_item_index(render_size), true)
+	# Buffer size limit menu
 	menu.add_submenu_item("Maximum buffer size", "MaxBufferSize")
 	buffers_menu.add_radio_check_item("Unlimited", 0)
 	for i in range(7):
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
+	if OS.is_debug_build():
+		menu.add_separator()
+		menu.add_item("Material stats", ITEM_MATERIAL_STATS)
+		menu.add_item("Trigger dependency manager", ITEM_TRIGGER_DEPENDENCY_MANAGER)
+	# GPU RAM tooltip
+	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
 
 func on_counter_change(count : int, pending : int) -> void:
-	if count == 0 and pending == 0:
+	if pending == 0:
 		$ProgressBar.max_value = 1
 		$ProgressBar.value = 1
 		$ProgressBar/Label.text = ""
-		start_time = OS.get_ticks_msec()
 	else:
-		if count > last_value:
-			if $ProgressBar.value == $ProgressBar.max_value:
-				$ProgressBar.value = 0
-				max_render_queue_size = 1
-			else:
-				max_render_queue_size += 1
+		if count == pending:
+			$ProgressBar.max_value = count
+			start_time = OS.get_ticks_msec()
+			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
-			$ProgressBar.value += 1
-		assert(max_render_queue_size-$ProgressBar.value == count)
-		$ProgressBar.max_value = max_render_queue_size + pending
-		if $ProgressBar.value > 0:
-			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*(count+pending)/$ProgressBar.value
-			$ProgressBar/Label.text = "%d/%d - %d s" % [ $ProgressBar.value, $ProgressBar.max_value, remaining_time_msec/1000 ]
-		else:
-			$ProgressBar/Label.text = "%d/%d - ? s" % [ $ProgressBar.value, $ProgressBar.max_value ]
-	last_value = count
+			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*pending/(count-pending)
+			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
+		$ProgressBar.value = count-pending
+
+func e3tok(value : float) -> String:
+	var unit_modifier : String = ""
+	if value > 100000000:
+		value *= 0.000000001
+		unit_modifier = "G"
+	elif value > 100000:
+		value *= 0.000001
+		unit_modifier = "M"
+	elif value > 100:
+		value *= 0.001
+		unit_modifier = "k"
+	return "%.1f %sb " % [ value, unit_modifier ]
 
 func _process(_delta):
 	var fps : float = Performance.get_monitor(Performance.TIME_FPS)
@@ -67,6 +92,14 @@ func _process(_delta):
 			fast_counter = 0
 			if fps < 20.0:
 				set_max_renderers(1)
+
+func _on_MemUpdateTimer_timeout():
+	$GpuRam.text = e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+	var tooltip : String = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
+	tooltip += "\nVideo mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
+	tooltip += "\nTexture mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
+	tooltip += "\nVertex mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VERTEX_MEM_USED))
+	$GpuRam.hint_tooltip = tooltip
 
 func set_max_renderers(max_renderers : int):
 	if mm_renderer.max_renderers == max_renderers:
@@ -85,9 +118,33 @@ func _on_PopupMenu_id_pressed(id):
 			var b : bool = ! menu.is_item_checked(index)
 			menu.set_item_checked(index, b)
 			mm_renderer.enable_renderers(b)
+		ITEM_MATERIAL_STATS:
+			var material = mm_globals.main_window.get_current_graph_edit().top_generator
+			print("Buffers: "+str(count_buffers(material)))
+			mm_deps.print_stats()
+		ITEM_TRIGGER_DEPENDENCY_MANAGER:
+			mm_deps.update()
+
+func count_buffers(material) -> int:
+	var buffers = 0
+	for c in material.get_children():
+		if c.get_type() == "buffer":
+			buffers += 1
+		elif c.get_type() == "iterate_buffer":
+			buffers += 1
+			print("iterate_buffer: "+str(c.parameters["iterations"]))
+		elif c.get_type() == "graph":
+			buffers += count_buffers(c)
+	return buffers
 
 func _on_Renderers_id_pressed(id):
 	set_max_renderers(id)
+
+func _on_MaxRenderSize_id_pressed(id):
+	render_menu.set_item_checked(render_menu.get_item_index(mm_renderer.max_viewport_size), false)
+	mm_renderer.max_viewport_size = id
+	render_menu.set_item_checked(render_menu.get_item_index(id), true)
+	mm_globals.set_config("max_viewport_size", id)
 
 func _on_MaxBufferSize_id_pressed(id):
 	if mm_renderer.max_buffer_size == id:

@@ -1,0 +1,42 @@
+name: "html5-build"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to website'     
+        type: boolean
+        required: true
+        default: 'false'
+
+env:
+  GODOT_VERSION: 3.5.1
+
+jobs:
+  export_windows_linux:
+    name: Html5 export 🗔
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:3.5.1
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup 💻
+        run: |
+          mkdir -v -p build/export_html5 ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+      - name: Html5 Build 🗔
+        run: godot -v --export "HTML5" build/export_html5/index.html
+      - name: Deploy 💾
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.WEBSITE_SSH_HOST }}
+          username: ${{ secrets.WEBSITE_SSH_USERNAME }}
+          key : ${{ secrets.WEBSITE_SSH_KEY }}
+          port: ${{ secrets.WEBSITE_SSH_PORT }}
+          source: "build/export_html5/*"
+          target: "material_maker/material_maker_web/public/mm_web"
+          strip_components: 2

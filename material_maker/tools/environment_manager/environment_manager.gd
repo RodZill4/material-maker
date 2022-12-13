@@ -144,19 +144,15 @@ func read_hdr(index : int, url : String) -> bool:
 		yield(get_tree(), "idle_frame")
 	environment_textures[index].erase("hdri")
 	var dir : Directory = Directory.new()
-	var file_path
-	file_path = base_dir+"/environments/hdris/"+url.get_file()
-	if dir.file_exists(file_path):
-		set_hdr(index, file_path)
+	if set_hdr(index, base_dir+"/environments/hdris/"+url.get_file()):
 		return true
-	file_path = "res://material_maker/environments/hdris/"+url.get_file()
-	if dir.file_exists(file_path):
-		set_hdr(index, file_path)
+	if set_hdr(index, "res://material_maker/environments/hdris/"+url.get_file()):
 		return true
-	file_path = "user://hdris/"+url.get_file()
-	if dir.file_exists(file_path):
-		set_hdr(index, file_path)
+	var file_path : String = "user://hdris/"+url.get_file()
+	if set_hdr(index, file_path):
 		return true
+	if OS.get_name() == "HTML5":
+		return false
 	Directory.new().make_dir_recursive("user://hdris")
 	$HTTPRequest.download_file = file_path
 	var error = $HTTPRequest.request(url)
@@ -170,8 +166,7 @@ func read_hdr(index : int, url : String) -> bool:
 		progress_window.queue_free()
 		progress_window = null
 		set_physics_process(false)
-		if Directory.new().file_exists(file_path):
-			set_hdr(index, file_path)
+		if set_hdr(index, file_path):
 			update_thumbnail(index)
 			return true
 	if accept_dialog == null:
@@ -188,10 +183,15 @@ func read_hdr(index : int, url : String) -> bool:
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 
-func set_hdr(index, hdr_path) -> void:
-	var hdr : ImageTexture = ImageTexture.new()
-	hdr.load(hdr_path)
+func set_hdr(index, hdr_path) -> bool:
+	print("Setting hdr "+hdr_path)
+	var hdr : Texture = load(hdr_path)
+	if hdr == null:
+		hdr = ImageTexture.new()
+		if hdr.load(hdr_path) != OK:
+			return false
 	environment_textures[index].hdri = hdr
+	return true
 
 func new_environment(index : int) -> void:
 	var new_environment : Dictionary

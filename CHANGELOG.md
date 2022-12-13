@@ -1,3 +1,73 @@
+# Material Maker 1.2
+
+## General
+
+- Added a dependency manager to avoid useless renders
+
+## Nodes
+
+## Miscellaneous
+
+- Added an experimental HTML5 version
+
+## Fixes, optimizations
+
+- Fixed alignment of inputs in the Uneven Bricks 2 node (contributed by Arnklit)
+
+# Material Maker 1.1
+
+## General
+
+- Updated renderer to limit the size of rendering viewports (big textures are rendered in chunks and reassembled).
+  This can be used to avoid crashes on lower end GPU and/or when generating high resolution textures. The maximum
+  render size can be configured in the progress counter context menu.
+- Added GPU memory information near the progress counter, with a tooltip that shows the GPU interface name (this
+  can be used to know if Material Maker runs on the integrated graphics on a laptop).
+- In Graph views, added support for arrow keys to scroll in all directions (useful when connecting nodes that
+  are far from each other).
+- Buffer nodes and nodes that contain buffers are now shown with a specific icon. Right clicking that icon
+  show a context menu that can pause and resume the buffers (making it possible to disable useless rendering
+  of parts of the material).
+- The FPS counter, the GPU memory counter and the rendering progress bar have been moved to a status bar at
+  the bottom of the user interface.
+- Added a small icon in the status bar that shows the status of the clipboard (and if it can be pasted into
+  a graph view).
+- Started adding tips to the status bar.
+- Added an option for Tonemaps in the 3D Preview panel.
+- Added an option to overwrite existing material files (.tres for Godot engine, .mat and .meta for
+  Unity engine) when re-exporting materials.
+- Added Godot 4 export targets to all material types (contributed by Arnklit).
+
+## Nodes
+
+- Updated the EasySDF node with support for coloring (of albedo, roughness, metallic and emission channels)
+  and node parameters, and added more shapes and operators.
+- Added additional modes to **Math** node (contributed by williamchange).
+- Updated the **Iteration Buffer** with an autostop parameter. When set, the Iteration Buffer will stop iterating
+  as soon as 2 consecutive results are identical.
+- Added a Fill port type that is used as output of the **Fill** node (and nodes that generate fill information)
+  and input of the Fill companion nodes.
+- Removed the Iterations parameter from the **Fill** node, and added parameters to remove the edges and adjust
+  the generated bounding box.
+- Added a new **Fill from colors** node that generates fill information from the color islands in its input.
+- Updated the **Beehive** and **Voronoi** nodes to output Fill information instead of a random color.
+- Added **Spiral Gradient** node (contributed by Theaninova).
+- Added **Diagonal Weave** node (contributed by williamchange).
+- Added **Triangle Voronoi** node (contributed by williamchange).
+- Added **Sixteen Segment Display** and **Roman Numerals** nodes (contributed by williamchange).
+- Added **Japanese Glyphs** node (contributed by williamchange).
+- Added **Uneven Bricks 3**, **Uneven Bricks 4** and **Uneven Bricks 5** nodes (contributed by Arnklit).
+- Added **Swirl** node.
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 3.5.
+
+## Fixes, optimizations
+
+- Fixed crash that occurred when **Material** node was fed incorrect Depth values.
+- Optimized curve parameter editor
+
 # Material Maker 1.0
 
 ## General

@@ -1,0 +1,67 @@
+{
+	"name": "sdshow2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"base": 0,
+		"bevel": 0.1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input shape",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "float $(name)_d(vec2 uv) {\n\tfloat e = 0.0001;\n\tfloat d = $in(uv);\n\tfloat k = length(vec2($in(uv+vec2(e, 0.0))-d, $in(uv+vec2(0.0, e))-d))/e;\n\treturn d/k;\n}\n",
+		"longdesc": "Creates a greyscale image from a shape described as a 2D Signed Distance Function",
+		"name": "sdShow 2",
+		"outputs": [
+			{
+				"f": "clamp($base-$(name)_d($uv)/max($bevel, 0.00001), 0.0, 1.0)",
+				"longdesc": "Shows the shape as a greyscale image",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Bevel",
+				"longdesc": "The width of the gradient at the edges of the shape",
+				"max": 1,
+				"min": 0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Base",
+				"longdesc": "The base value of the output",
+				"max": 1,
+				"min": 0,
+				"name": "base",
+				"shortdesc": "Base",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdShow"
+	},
+	"type": "shader"
+}

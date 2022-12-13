@@ -2,7 +2,7 @@ extends ViewportContainer
 
 
 export var control_target : NodePath
-export(int, "SDF2D", "SDF3D") var mode = 1 setget set_mode
+export(int, "NONE", "SDF2D", "SDF3D") var mode = 1 setget set_mode
 
 onready var viewport = $Viewport
 onready var camera_position = $Viewport/CameraPosition
@@ -16,12 +16,20 @@ var generator : MMGenBase = null
 
 var gizmo_is_local = false
 
+func _enter_tree():
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+
 func _ready():
 	_on_Preview3D_resized()
+
+func update_viewport():
+	viewport.render_target_update_mode = Viewport.UPDATE_ONCE
+	viewport.update_worlds()
 
 func set_mode(m):
 	mode = m
 	$Viewport/Gizmo.mode = mode
+	update_viewport()
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(g) and (force or g != generator):
@@ -37,7 +45,12 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.GENERATED_INSTANCE = source.defs
 		variables.GENERATED_CODE = source.code
 		variables.GENERATED_OUTPUT = source.sdf3d
-		material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
+		var node_prefix = source.sdf3d.left(source.sdf3d.find("_"))
+		variables.DIST_FCT = node_prefix+"_d"
+		variables.COLOR_FCT = node_prefix+"_c"
+		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
+		var shader_code : String = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.shader", variables)
+		material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), material, shader_code)
 
 var setup_controls_filter : String = ""
 func setup_controls(filter : String = "") -> void:
@@ -45,12 +58,6 @@ func setup_controls(filter : String = "") -> void:
 		filter = setup_controls_filter
 	else:
 		setup_controls_filter = filter
-	var param_defs = []
-	if is_instance_valid(generator):
-		if filter != "":
-			param_defs = generator.get_filtered_parameter_defs(filter)
-		else:
-			param_defs = generator.get_parameter_defs()
 
 var parent_transform : Transform
 var local_transform : Transform
@@ -82,6 +89,7 @@ func _on_Gizmo_translated(_v : Vector3):
 	parameters[setup_controls_filter+"_position_y"] = local_position.y
 	parameters[setup_controls_filter+"_position_z"] = local_position.z
 	get_node(control_target).set_node_parameters(generator, parameters)
+	update_viewport()
 
 func _on_Gizmo_rotated(v, a):
 	var axis : Vector3 = parent_transform.affine_inverse().basis.xform(v).normalized()
@@ -92,27 +100,24 @@ func _on_Gizmo_rotated(v, a):
 	parameters[setup_controls_filter+"_angle_z"] = rad2deg(local_rotation.z)
 	parameters[setup_controls_filter+"_angle"] = rad2deg(local_rotation.z)
 	get_node(control_target).set_node_parameters(generator, parameters)
+	update_viewport()
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var return_value : bool = false
-	var m : ShaderMaterial = plane.get_surface_material(0)
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				m.set_shader_param(n, parameter_changes[n])
-				break
-	return return_value
-
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+	plane.get_surface_material(0).set_shader_param(parameter_name, value)
+	update_viewport()
+	return false
 
 func _on_Preview3D_resized():
 	if viewport != null:
 		viewport.size = rect_size
+		update_viewport()
 
 func _input(ev):
 	_unhandled_input(ev)
 	
 func navigation_input(ev) -> bool:
+	if ! get_global_rect().has_point(get_global_mouse_position()):
+		return false
 	if ev is InputEventMouseMotion:
 		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
 			if ev.shift:
@@ -144,9 +149,10 @@ func navigation_input(ev) -> bool:
 	return false
 
 
-func _on_Background_input_event(camera, event, position, normal, shape_idx):
+func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 	if navigation_input(event):
 		accept_event()
+		update_viewport()
 
 func _on_GizmoButton_toggled(button_pressed):
 	gizmo.visible = button_pressed

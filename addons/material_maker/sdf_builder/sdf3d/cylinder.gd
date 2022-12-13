@@ -1,16 +1,18 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Cylinder", "Capsule", "Pyramid") var shape
+export(int, "Cylinder", "Capsule", "Pyramid", "Cone") var shape
 
 const INCLUDES : Array = [
 	[ "rotate", "sdf3d_cylinder" ],
 	[ "rotate", "sdf3d_capsule2" ],
-	[ "rotate", "sdf3d_pyramid" ]
+	[ "rotate", "sdf3d_pyramid" ],
+	[ "rotate", "sdf3d_cone2" ]
 ]
 const FUNCTIONS : Array = [
 	"sdCylinder(%s, $height, $radius)",
 	"sdCapsule(%s, $height, $radius)",
-	"sdPyramid(0.5*%s/$radius, $height/$radius)*$radius*2.0"
+	"sdPyramid(0.5*%s/$radius, $height/$radius)*$radius*2.0",
+	"sdCone(vec3(0.0, $height, 0.0)-%s, vec2($radius, 2.0*$height))"
 ]
 
 func _ready():

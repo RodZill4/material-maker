@@ -6,6 +6,7 @@ onready var export_files : ItemList = $Sizer/Tabs/Export/Edit/Files
 onready var export_extension_edit : LineEdit = $Sizer/Tabs/Export/Export/ExtensionEdit
 
 onready var export_file_name : LineEdit = $Sizer/Tabs/Export/Edit/File/Common/name
+onready var export_file_prompt_overwrite : CheckBox = $Sizer/Tabs/Export/Edit/File/Common/prompt_overwrite
 onready var export_file_conditions : LineEdit = $Sizer/Tabs/Export/Edit/File/Common/conditions
 onready var export_file_output : SpinBox = $Sizer/Tabs/Export/Edit/File/Common/output
 onready var export_file_type : OptionButton = $Sizer/Tabs/Export/Edit/File/Common/type
@@ -110,6 +111,7 @@ func update_files(e : String):
 func select_file(i : int) -> void:
 	if i < 0:
 		export_file_name.text = ""
+		export_file_prompt_overwrite.pressed = false
 		export_file_conditions.text = ""
 		$Sizer/Tabs/Export/Edit/File/Common/LabelOutput.visible = false
 		export_file_output.visible = false
@@ -125,6 +127,7 @@ func select_file(i : int) -> void:
 		export_files.select(i)
 		var f = exports[e].files[i]
 		export_file_name.text = f.file_name if f.has("file_name") else ""
+		export_file_prompt_overwrite.pressed = f.prompt_overwrite if f.has("prompt_overwrite") else false
 		export_file_conditions.text = f.conditions if f.has("conditions") else ""
 		$Sizer/Tabs/Export/Edit/File/Common/LabelOutput.visible = (f.type == "texture")
 		export_file_output.visible = (f.type == "texture")
@@ -156,6 +159,11 @@ func _on_name_text_entered(new_text):
 
 func _on_name_focus_exited():
 	_on_name_text_entered(export_file_name.text)
+
+func _on_prompt_overwrite_toggled(button_pressed):
+	var e : String = export_target.get_item_text(export_target.selected)
+	var i = export_files.get_selected_items()[0]
+	exports[e].files[i].prompt_overwrite = button_pressed
 
 func _on_conditions_text_entered(new_text):
 	var e : String = export_target.get_item_text(export_target.selected)

@@ -30,6 +30,7 @@ const VIEW_EXTEND : int = 0
 const VIEW_REPEAT : int = 1
 const VIEW_CLAMP : int = 2
 const VIEW_TEMPORAL_AA : int = 3
+const VIEW_TEMPORAL_AA22 : int = 4
 
 
 func _ready():
@@ -89,16 +90,17 @@ var started : bool = false
 var divide : int = 0
 
 func set_temporal_aa(v : bool):
-	if v == temporal_aa:
-		return
-	temporal_aa = v
-	if ! temporal_aa:
-		# stop AA loop
-		started = false
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-	set_generator(generator, output, true)
+	if v != temporal_aa:
+		temporal_aa = v
+		if ! temporal_aa:
+			# stop AA loop
+			started = false
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+		set_generator(generator, output, true)
+	if temporal_aa:
+		material.set_shader_param("exponent", 1.0/2.2 if view_mode == VIEW_TEMPORAL_AA22 else 1.0 )
 
 var start_accumulate_trigger : bool = false
 
@@ -133,10 +135,9 @@ func do_start_accumulate():
 func get_preview_material():
 	return $Accumulate/Iteration.material if temporal_aa_current else material
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	if .on_float_parameters_changed(parameter_changes):
-		start_accumulate()
-		return true
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+	.on_dep_update_value(buffer_name, parameter_name, value)
+	start_accumulate()
 	return false
 
 var setup_controls_filter : String = ""
@@ -266,11 +267,8 @@ func _on_View_id_pressed(id):
 	if id == view_mode:
 		return
 	$ContextMenu/View.set_item_checked(view_mode, false)
-	if view_mode == VIEW_TEMPORAL_AA:
-		set_temporal_aa(false)
 	view_mode = id
-	if view_mode == VIEW_TEMPORAL_AA:
-		set_temporal_aa(true)
+	set_temporal_aa(view_mode >= VIEW_TEMPORAL_AA)
 	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_param("mode", view_mode)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
@@ -296,3 +294,6 @@ func _on_PostProcess_id_pressed(id):
 	current_postprocess_option = id
 	set_generator(generator, output, true)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", current_postprocess_option)
+
+func _on_Preview2D_mouse_entered():
+	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom, #RMB: Context menu", 3)

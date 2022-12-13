@@ -29,14 +29,23 @@ const MENU = [
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
 	{ menu="Environment/Select", submenu="environment_list" },
+	{ menu="Environment/Tonemap", submenu="tonemap_list" },
 	{ menu="Environment/Navigation Styles", submenu="navigation_styles_list" },
 ]
+
+const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
 
 const NAVIGATION_STYLES: Dictionary = {
 	"Default": DefaultNavigationStyle3D,
 	"Turntable": TurntableNavigationStyle3D,
 }
 
+
+func _enter_tree():
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+
+func _exit_tree():
+	mm_deps.delete_buffer("preview_"+str(get_instance_id()))
 
 func _ready() -> void:
 	ui = get_node(ui_path)
@@ -49,7 +58,8 @@ func _ready() -> void:
 
 	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
 
-	navigation_style = NAVIGATION_STYLES["Default"].new(self)
+	var config_navigation_style = NAVIGATION_STYLES.keys()[mm_globals.get_config("ui_3d_preview_navigation_style")]
+	navigation_style = NAVIGATION_STYLES[config_navigation_style].new(self)
 	initial_camera_stand_transform = camera_stand.get_global_transform()
 
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
@@ -77,12 +87,24 @@ func create_menu_environment_list(menu : PopupMenu) -> void:
 	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
 		menu.connect("id_pressed", self, "_on_Environment_item_selected")
 
+func create_menu_tonemap_list(menu : PopupMenu) -> void:
+	var tonemap_mode : int = mm_globals.get_config("ui_3d_preview_tonemap")
+	menu.clear()
+	for i in TONEMAPS.size():
+		menu.add_radio_check_item(TONEMAPS[i], i)
+		if i == tonemap_mode:
+			menu.set_item_checked(i, true)
+	if !menu.is_connected("id_pressed", self, "_on_Tonemaps_item_selected"):
+		menu.connect("id_pressed", self, "_on_Tonemaps_item_selected")
 
 func create_menu_navigation_styles_list(menu : PopupMenu) -> void:
-	menu.clear()
+	var config_navigation_style : int = mm_globals.get_config("ui_3d_preview_navigation_style")
 	var labels = NAVIGATION_STYLES.keys()
+	menu.clear()
 	for i in labels.size():
-		menu.add_item(labels[i], i)
+		menu.add_radio_check_item(labels[i], i)
+		if i == config_navigation_style:
+			menu.set_item_checked(i, true)
 	if !menu.is_connected("id_pressed", self, "_on_NavigationStyles_item_selected"):
 		menu.connect("id_pressed", self, "_on_NavigationStyles_item_selected")
 
@@ -125,8 +147,15 @@ func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
 	environment_manager.apply_environment(id, environment, sun)
+	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
+
+func _on_Tonemaps_item_selected(id) -> void:
+	mm_globals.set_config("ui_3d_preview_tonemap", id)
+	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
+	environment.tonemap_mode = id
 
 func _on_NavigationStyles_item_selected(id) -> void:
+	mm_globals.set_config("ui_3d_preview_navigation_style", id)
 	camera_stand.set_global_transform(initial_camera_stand_transform)
 	navigation_style = NAVIGATION_STYLES.values()[id].new(self)
 
@@ -152,16 +181,10 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_material(0) ]
 	return []
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var return_value : bool = false
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	var preview_material = current_object.get_surface_material(0)
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				preview_material.set_shader_param(n, parameter_changes[n])
-				break
-	return return_value
+	preview_material.set_shader_param(parameter_name, value)
+	return false
 
 func on_gui_input(event) -> void:
 	navigation_style.handle_input(event)
