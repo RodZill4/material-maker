@@ -1,44 +1,53 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdtrapezoid",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0,
+		"cy": 0,
+		"height": 0.433489,
+		"r1": 0.152504,
+		"r2": 0.39
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float sdTriangleIsosceles( in vec2 p, in vec2 q )\n{\n    p.x = abs(p.x);\n    vec2 a = p - q*clamp( dot(p,q)/dot(q,q), 0.0, 1.0 );\n    vec2 b = p - q*vec2( clamp( p.x/q.x, 0.0, 1.0 ), 1.0 );\n    float s = -sign( q.y );\n    vec2 d = min( vec2( dot(a,a), s*(p.x*q.y-p.y*q.x) ),\n                  vec2( dot(b,b), s*(p.y-q.y)  ));\n    return -sqrt(d.x)*sign(d.y);\n}",
+		"global": "float sdTrapezoid( in vec2 p, in float r1, float r2, float he )\n{\n    vec2 k1 = vec2(r2,he);\n    vec2 k2 = vec2(r2-r1,2.0*he);\n    p.x = abs(p.x);\n    vec2 ca = vec2(p.x-min(p.x,(p.y<0.0)?r1:r2), abs(p.y)-he);\n    vec2 cb = p - k1 + k2*clamp( dot(k1-p,k2)/dot2(k2), 0.0, 1.0 );\n    float s = (cb.x<0.0 && ca.y<0.0) ? -1.0 : 1.0;\n    return s*sqrt( min(dot2(ca),dot2(cb)) );\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdTrapezoid",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdTrapezoid($uv - 0.5 - vec2($cx, $cy), $r1, $r2, $height)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Rect1.x",
+				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
+				"label": "Top Width",
 				"max": 1,
 				"min": 0,
-				"name": "width",
-				"shortdesc": "Rotation",
+				"name": "r1",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.x",
+				"default": 0.3,
+				"label": "Bottom Width",
+				"max": 1,
+				"min": 0,
+				"name": "r2",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -49,7 +58,7 @@
 				"max": 1,
 				"min": 0,
 				"name": "height",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{

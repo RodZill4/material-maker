@@ -1,55 +1,44 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdequilateraltriangle",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0.020211,
+		"cy": 0.072986,
+		"r": 0.364409
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float sdTriangleIsosceles( in vec2 p, in vec2 q )\n{\n    p.x = abs(p.x);\n    vec2 a = p - q*clamp( dot(p,q)/dot(q,q), 0.0, 1.0 );\n    vec2 b = p - q*vec2( clamp( p.x/q.x, 0.0, 1.0 ), 1.0 );\n    float s = -sign( q.y );\n    vec2 d = min( vec2( dot(a,a), s*(p.x*q.y-p.y*q.x) ),\n                  vec2( dot(b,b), s*(p.y-q.y)  ));\n    return -sqrt(d.x)*sign(d.y);\n}",
+		"global": "float sdEquilateralTriangle( in vec2 p )\n{\n    float k = sqrt(3.0);\n    p.x = abs(p.x) - 1.0;\n    p.y = -p.y + 1.0/k;\n    if( p.x+k*p.y>0.0 ) p = vec2(p.x-k*p.y,-k*p.x-p.y)/2.0;\n    p.x -= clamp( p.x, -2.0, 0.0 );\n    return -length(p)*sign(p.y);\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdEquilateralTriangle",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdEquilateralTriangle(($uv - 0.5 - vec2($cx, $cy)) / $r) * $r",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Rect1.x",
+				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "Width",
+				"label": "Radius",
 				"longdesc": "The rotation of the n-gon",
 				"max": 1,
 				"min": 0,
-				"name": "width",
+				"name": "r",
 				"shortdesc": "Rotation",
 				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "Rect1.y",
-				"default": 0.5,
-				"label": "Height",
-				"max": 1,
-				"min": 0,
-				"name": "height",
-				"step": 0.1,
 				"type": "float"
 			},
 			{

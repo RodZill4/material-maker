@@ -1,30 +1,31 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdparallelogram",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0.070722,
+		"cy": 0.004563,
+		"height": 0.4,
+		"skew": 0.104071,
+		"width": 0.287452
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float sdTriangleIsosceles( in vec2 p, in vec2 q )\n{\n    p.x = abs(p.x);\n    vec2 a = p - q*clamp( dot(p,q)/dot(q,q), 0.0, 1.0 );\n    vec2 b = p - q*vec2( clamp( p.x/q.x, 0.0, 1.0 ), 1.0 );\n    float s = -sign( q.y );\n    vec2 d = min( vec2( dot(a,a), s*(p.x*q.y-p.y*q.x) ),\n                  vec2( dot(b,b), s*(p.y-q.y)  ));\n    return -sqrt(d.x)*sign(d.y);\n}",
+		"global": "float sdParallelogram( in vec2 p, float wi, float he, float sk )\n{\n    vec2 e = vec2(-sk,he);\n    p = (p.y<0.0)?-p:p;\n    vec2  w = p - e; w.x -= clamp(w.x,-wi,wi);\n    vec2  d = vec2(dot(w,w), -w.y);\n    float s = p.x*e.y - p.y*e.x;\n    p = (s<0.0)?-p:p;\n    vec2  v = p - vec2(wi,0); v -= e*clamp(dot(v,e)/dot(e,e),-1.0,1.0);\n    d = min( d, vec2(dot(v,v), wi*he-abs(s)));\n    return sqrt(d.x)*sign(-d.y);\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdParallelogram",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdParallelogram($uv - 0.5 - vec2($cx, $cy), $width, $height, $skew)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -34,12 +35,10 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
 				"max": 1,
 				"min": 0,
 				"name": "width",
-				"shortdesc": "Rotation",
-				"step": 0.01,
+				"step": 0.1,
 				"type": "float"
 			},
 			{
@@ -49,6 +48,16 @@
 				"max": 1,
 				"min": 0,
 				"name": "height",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Skew",
+				"max": 1,
+				"min": 0,
+				"name": "skew",
 				"step": 0.1,
 				"type": "float"
 			},
