@@ -182,11 +182,35 @@ func _ready() -> void:
 	# Create menus
 	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
 
-	new_material()
+	get_tree().connect("files_dropped", self, "on_files_dropped")
 
 	do_load_projects(OS.get_cmdline_args())
 
-	get_tree().connect("files_dropped", self, "on_files_dropped")
+	var dir : Directory = Directory.new()
+	if dir.open("user://unsaved_projects") == OK:
+		var files : Array = []
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			file_name = dir.get_next()
+			if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
+				files.append("user://unsaved_projects".plus_file(file_name))
+				print(file_name)
+		if ! files.empty():
+			for f in files:
+				var graph_edit = new_graph_panel()
+				graph_edit.load_from_recovery(f)
+				graph_edit.update_tab_title()
+			hierarchy.update_from_graph_edit(get_current_graph_edit())
+			var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
+			add_child(dialog)
+			var result = dialog.ask()
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+	
+	if get_current_graph_edit() == null:
+		new_material()
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
