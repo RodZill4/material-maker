@@ -8,10 +8,17 @@
 	"parameters": {
 
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_out = vec3(-1.0);\n#for\nvec3 $(name_uv)_in# = $in#($uv);\nif ($(name_uv)_in#.x > $(name_uv)_out.x) {\n\t$(name_uv)_out = $(name_uv)_in#;\n}\n#end",
+		"code": [
+			"vec3 $(name_uv)_out = vec3(-1.0);",
+			"#for",
+			"vec3 $(name_uv)_in# = $in#($uv);",
+			"if ($(name_uv)_in#.x > $(name_uv)_out.x) {",
+			"\t$(name_uv)_out = $(name_uv)_in#;",
+			"}",
+			"#end"
+		],
 		"global": "",
 		"inputs": [
 			{

@@ -7,6 +7,7 @@
 	"parameters": {
 		"refract": 1.2
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -29,7 +30,20 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec2 $(name)_refract(vec2 uv, float refract) {\n\tvec2 eps = vec2(0.001, 0.0);\n\tvec3 n = normalize(vec3($s(uv+eps)-$s(uv-eps), $s(uv+eps.yx)-$s(uv-eps.yx), -10.0*eps.x));\n\tfloat h = $s(uv);\n    vec3 i = vec3(0.0, 0.0, -1.0);\n    float mu = 1.0/refract;\n    \n    float dot_n_i = dot(n, i);\n    vec3 t = sqrt(max(0.0, 1.0-mu*mu*(1.0-dot_n_i*dot_n_i)))*n+mu*(i-dot_n_i*n);\n    \n\treturn uv+h*t.xy/t.z;\n}",
+		"instance": [
+			"vec2 $(name)_refract(vec2 uv, float refract) {",
+			"\tvec2 eps = vec2(0.001, 0.0);",
+			"\tvec3 n = normalize(vec3($s(uv+eps)-$s(uv-eps), $s(uv+eps.yx)-$s(uv-eps.yx), -10.0*eps.x));",
+			"\tfloat h = $s(uv);",
+			"\tvec3 i = vec3(0.0, 0.0, -1.0);",
+			"\tfloat mu = 1.0/refract;",
+			"\t",
+			"\tfloat dot_n_i = dot(n, i);",
+			"\tvec3 t = sqrt(max(0.0, 1.0-mu*mu*(1.0-dot_n_i*dot_n_i)))*n+mu*(i-dot_n_i*n);",
+			"\t",
+			"\treturn uv+h*t.xy/t.z;",
+			"}"
+		],
 		"longdesc": "Magnifying glass effect",
 		"name": "Refract",
 		"outputs": [

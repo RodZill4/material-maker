@@ -9,11 +9,20 @@
 		"l": 0.3,
 		"r": 0.2
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);\n",
-		"global": "float sdCapsule(vec3 p, float h, float r) {\n\tp.y -= clamp(p.y, -h, h);\n\treturn length(p)-r;\n}\n",
+		"code": [
+			"vec3 $(name_uv)_p = $uv;",
+			"$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);",
+			""
+		],
+		"global": [
+			"float sdCapsule(vec3 p, float h, float r) {",
+			"\tp.y -= clamp(p.y, -h, h);",
+			"\treturn length(p)-r;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "1.0",

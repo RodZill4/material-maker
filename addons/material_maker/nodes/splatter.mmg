@@ -14,10 +14,12 @@
 		"value": 0,
 		"variations": false
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), $(name_uv)_instance_uv, vec2(float($seed)));",
+		"code": [
+			"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+			"vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), $(name_uv)_instance_uv, vec2(float($seed)));"
+		],
 		"global": "",
 		"includes": [
 			"custom_uv"
@@ -42,7 +44,42 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 splatter_$(name)(vec2 uv, int count, inout vec3 instance_uv, vec2 seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\trc1 = rand3(seed);\n\t\tfloat mask = $mask(fract(seed+vec2(0.5)));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\tpv += vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\tvec2 full_uv = pv;\n\t\t\tpv = get_from_tileset($inputs, seed.x, pv);\n\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);\n\t\t\tc = max(c, c1);\n\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, seed.x), step(c, c1));\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}\n",
+		"instance": [
+			"vec4 splatter_$(name)(vec2 uv, int count, inout vec3 instance_uv, vec2 seed) {",
+			"\tfloat c = 0.0;",
+			"\tvec3 rc = vec3(0.0);",
+			"\tvec3 rc1;",
+			"\tfor (int i = 0; i < count; ++i) {",
+			"\t\tseed = rand2(seed);",
+			"\t\trc1 = rand3(seed);",
+			"\t\tfloat mask = $mask(fract(seed+vec2(0.5)));",
+			"\t\tif (mask > 0.01) {",
+			"\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);",
+			"\t\t\tseed = rand2(seed);",
+			"\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+			"\t\t\tfloat ca = cos(angle);",
+			"\t\t\tfloat sa = sin(angle);",
+			"\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+			"\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+			"\t\t\tpv /= vec2($scale_x, $scale_y);",
+			"\t\t\tpv += vec2(0.5);",
+			"\t\t\tseed = rand2(seed);",
+			"\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+			"\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+			"\t\t\t\tcontinue;",
+			"\t\t\t}",
+			"\t\t\tvec2 full_uv = pv;",
+			"\t\t\tpv = get_from_tileset($inputs, seed.x, pv);",
+			"\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*(1.0-$value*seed.x);",
+			"\t\t\tc = max(c, c1);",
+			"\t\t\trc = mix(rc, rc1, step(c, c1));",
+			"\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, seed.x), step(c, c1));",
+			"\t\t}",
+			"\t}",
+			"\treturn vec4(rc, c);",
+			"}",
+			""
+		],
 		"longdesc": "Spreads several occurences of an input image randomly.",
 		"name": "Splatter",
 		"outputs": [

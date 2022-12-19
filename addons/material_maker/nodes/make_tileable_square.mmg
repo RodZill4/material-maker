@@ -160,6 +160,7 @@
 	},
 	"nodes": [
 		{
+			"generic_size": 1,
 			"name": "translate_2",
 			"node_position": {
 				"x": -500,
@@ -169,11 +170,11 @@
 				"translate_x": -1,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "translate"
 		},
 		{
+			"generic_size": 1,
 			"name": "translate_3",
 			"node_position": {
 				"x": -500,
@@ -183,11 +184,11 @@
 				"translate_x": 0,
 				"translate_y": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "translate"
 		},
 		{
+			"generic_size": 1,
 			"name": "translate_4",
 			"node_position": {
 				"x": -500,
@@ -197,11 +198,11 @@
 				"translate_x": 0,
 				"translate_y": -1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "translate"
 		},
 		{
+			"generic_size": 1,
 			"name": "translate",
 			"node_position": {
 				"x": -500,
@@ -211,11 +212,11 @@
 				"translate_x": 1,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "translate"
 		},
 		{
+			"generic_size": 1,
 			"name": "translate_5",
 			"node_position": {
 				"x": 100,
@@ -225,11 +226,11 @@
 				"translate_x": 0.5,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "translate"
 		},
 		{
+			"generic_size": 1,
 			"name": "scale",
 			"node_position": {
 				"x": -500,
@@ -241,8 +242,7 @@
 				"scale_x": "1.0+$fw",
 				"scale_y": "1.0+$fw"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "scale"
 		},
 		{
@@ -255,8 +255,7 @@
 				"amount": 1,
 				"blend_type": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "blend"
 		},
 		{
@@ -270,8 +269,7 @@
 				"value": 0.5,
 				"width": "$fw"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "tones_step"
 		},
 		{
@@ -291,8 +289,7 @@
 					"type": "rgba"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -312,8 +309,7 @@
 					"type": "rgba"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -325,8 +321,7 @@
 			"parameters": {
 				"fw": 0.1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -351,11 +346,11 @@
 				"amount": 1,
 				"blend_type": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "blend"
 		},
 		{
+			"generic_size": 1,
 			"name": "rotate",
 			"node_position": {
 				"x": 100,
@@ -366,11 +361,11 @@
 				"cy": 0,
 				"rotate": 180
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "rotate"
 		},
 		{
+			"generic_size": 1,
 			"name": "rotate_2",
 			"node_position": {
 				"x": 100,
@@ -381,8 +376,7 @@
 				"cy": 0,
 				"rotate": 90
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "rotate"
 		},
 		{
@@ -395,8 +389,7 @@
 				"amount": 1,
 				"blend_type": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "blend"
 		},
 		{
@@ -409,11 +402,11 @@
 				"amount": 1,
 				"blend_type": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "blend"
 		},
 		{
+			"generic_size": 1,
 			"name": "rotate_3",
 			"node_position": {
 				"x": 100,
@@ -424,11 +417,11 @@
 				"cy": 0,
 				"rotate": -90
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "rotate"
 		},
 		{
+			"generic_size": 1,
 			"name": "transform2",
 			"node_position": {
 				"x": 100,
@@ -442,8 +435,7 @@
 				"translate_x": 0,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "transform2"
 		},
 		{
@@ -455,8 +447,7 @@
 			"parameters": {
 				"color": "$uv.x"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "uniform_greyscale"
 		},
 		{
@@ -471,16 +462,14 @@
 				"default_in2": 0,
 				"op": 20
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		}
 	],
 	"parameters": {
 		"fw": 0.1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Make Tileable Square",
 	"type": "graph"
 }

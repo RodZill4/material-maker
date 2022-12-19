@@ -11,11 +11,17 @@
 		"by": 0.3,
 		"r": 0.1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec2 $(name_uv)_sdl = sdLine($uv, vec2($ax+0.5, $ay+0.5), vec2($bx+0.5, $by+0.5));",
-		"global": "vec2 sdLine(vec2 p, vec2 a, vec2 b) {\n    vec2 pa = p-a, ba = b-a;\n    float h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0);\n    return vec2(length(pa-ba*h), h);\n}\n",
+		"global": [
+			"vec2 sdLine(vec2 p, vec2 a, vec2 b) {",
+			"\tvec2 pa = p-a, ba = b-a;",
+			"\tfloat h = clamp(dot(pa,ba)/dot(ba,ba), 0.0, 1.0);",
+			"\treturn vec2(length(pa-ba*h), h);",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "1.0",

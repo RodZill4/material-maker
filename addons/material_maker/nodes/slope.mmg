@@ -86,7 +86,6 @@
 				"size": 11
 			},
 			"seed": 32897,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -100,7 +99,6 @@
 				"size": 11
 			},
 			"seed": 65434,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -115,7 +113,6 @@
 				"slope": 1
 			},
 			"seed": 1419,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -230,7 +227,6 @@
 				}
 			],
 			"seed": 317,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -269,7 +265,10 @@
 			"seed": 71939,
 			"seed_locked": true,
 			"shader_model": {
-				"code": "vec2 $(name_uv)_dist = $(name)_distance_h($uv);\n",
+				"code": [
+					"vec2 $(name_uv)_dist = $(name)_distance_h($uv);",
+					""
+				],
 				"global": "",
 				"includes": [
 					"pack_1x32_to_2x16"
@@ -283,7 +282,31 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec2 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(1.0/$s, 0.0);\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfloat source_h;\n\tfloat best_source_h = 0.0;\n\tfloat h;\n\tfloat best_h = 0.0;\n\tfloat best_x = 0.0;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-abs(float(i))*e.x/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_x = source_uv.x;\n\t\t}\n\t}\n\treturn vec2(best_source_h, best_x);\n}\n",
+				"instance": [
+					"vec2 $(name)_distance_h(vec2 uv) {",
+					"\tvec2 e = vec2(1.0/$s, 0.0);",
+					"\tint steps = int($s*$d/max(1.0, $p));",
+					"\tfloat rv = 0.0;",
+					"\tvec2 source_uv;",
+					"\tfloat source_h;",
+					"\tfloat best_source_h = 0.0;",
+					"\tfloat h;",
+					"\tfloat best_h = 0.0;",
+					"\tfloat best_x = 0.0;",
+					"\tfor (int i = -steps; i <= steps; ++i) {",
+					"\t\tsource_uv = uv+float(i)*e;",
+					"\t\tsource_h = $in(source_uv);",
+					"\t\th = source_h-abs(float(i))*e.x/$d;",
+					"\t\tif (h > best_h) {",
+					"\t\t\tbest_h = h;",
+					"\t\t\tbest_source_h = source_h;",
+					"\t\t\tbest_x = source_uv.x;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(best_source_h, best_x);",
+					"}",
+					""
+				],
 				"name": "Dilate pass 1",
 				"outputs": [
 					{
@@ -340,7 +363,6 @@
 				"s": 11
 			},
 			"seed": 50297,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -356,7 +378,28 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "float $(name)_distance_v(vec2 uv) {\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat best_h = 0.0;\n\tfloat l;\n\tfloat h;\n\tvec2 in_uv = uv;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tin_uv.y = uv.y+float(i)/$s;\n\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));\n\t\tl = length(vec2(h_x.y-uv.x, float(i)/$s));\n\t\tif (l < $d) {\n\t\t\th = h_x.x-l*$p/$d;\n\t\t\tif (h > best_h) {\n\t\t\t\tbest_h = h;\n\t\t\t}\n\t\t}\n\t}\n\treturn best_h;\n}\n",
+				"instance": [
+					"float $(name)_distance_v(vec2 uv) {",
+					"\tint steps = int($s*$d/max(1.0, $p));",
+					"\tfloat best_h = 0.0;",
+					"\tfloat l;",
+					"\tfloat h;",
+					"\tvec2 in_uv = uv;",
+					"\tfor (int i = -steps; i <= steps; ++i) {",
+					"\t\tin_uv.y = uv.y+float(i)/$s;",
+					"\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));",
+					"\t\tl = length(vec2(h_x.y-uv.x, float(i)/$s));",
+					"\t\tif (l < $d) {",
+					"\t\t\th = h_x.x-l*$p/$d;",
+					"\t\t\tif (h > best_h) {",
+					"\t\t\t\tbest_h = h;",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn best_h;",
+					"}",
+					""
+				],
 				"name": "Dilate pass 2",
 				"outputs": [
 					{
@@ -406,8 +449,7 @@
 			"parameters": {
 				"size": 11
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 1
 		},
@@ -422,7 +464,6 @@
 				"size": 11
 			},
 			"seed": 65434,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -439,7 +480,10 @@
 			"seed": 71939,
 			"seed_locked": true,
 			"shader_model": {
-				"code": "vec2 $(name_uv)_dist = $(name)_distance_h($uv);\n",
+				"code": [
+					"vec2 $(name_uv)_dist = $(name)_distance_h($uv);",
+					""
+				],
 				"global": "",
 				"includes": [
 					"pack_1x32_to_2x16"
@@ -453,7 +497,39 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec2 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfloat source_h;\n\tfloat best_source_h = 0.0;\n\tfloat h;\n\tfloat best_h = 0.0;\n\tfloat best_y = 0.0;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-float(i)*e.y/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_y = source_uv.y;\n\t\t}\n\t\tsource_uv = uv-float(i)*e;\n\t\tsource_h = $in(source_uv);\n\t\th = source_h-float(i)*e.y/$d;\n\t\tif (h > best_h) {\n\t\t\tbest_h = h;\n\t\t\tbest_source_h = source_h;\n\t\t\tbest_y = source_uv.y;\n\t\t}\n\t}\n\treturn vec2(best_source_h, best_y);\n}\n",
+				"instance": [
+					"vec2 $(name)_distance_h(vec2 uv) {",
+					"\tvec2 e = vec2(0.0, 1.0/$s);",
+					"\tint steps = int($s*$d/max(1.0, $p));",
+					"\tfloat rv = 0.0;",
+					"\tvec2 source_uv;",
+					"\tfloat source_h;",
+					"\tfloat best_source_h = 0.0;",
+					"\tfloat h;",
+					"\tfloat best_h = 0.0;",
+					"\tfloat best_y = 0.0;",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tsource_uv = uv+float(i)*e;",
+					"\t\tsource_h = $in(source_uv);",
+					"\t\th = source_h-float(i)*e.y/$d;",
+					"\t\tif (h > best_h) {",
+					"\t\t\tbest_h = h;",
+					"\t\t\tbest_source_h = source_h;",
+					"\t\t\tbest_y = source_uv.y;",
+					"\t\t}",
+					"\t\tsource_uv = uv-float(i)*e;",
+					"\t\tsource_h = $in(source_uv);",
+					"\t\th = source_h-float(i)*e.y/$d;",
+					"\t\tif (h > best_h) {",
+					"\t\t\tbest_h = h;",
+					"\t\t\tbest_source_h = source_h;",
+					"\t\t\tbest_y = source_uv.y;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(best_source_h, best_y);",
+					"}",
+					""
+				],
 				"name": "Dilate pass 1",
 				"outputs": [
 					{
@@ -510,7 +586,6 @@
 				"s": 11
 			},
 			"seed": 50297,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -526,7 +601,28 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "float $(name)_distance_v(vec2 uv) {\n\tint steps = int($s*$d/max(1.0, $p));\n\tfloat best_h = 0.0;\n\tfloat l;\n\tfloat h;\n\tvec2 in_uv = uv;\n\tfor (int i = -steps; i <= steps; ++i) {\n\t\tin_uv.x = uv.x+float(i)/$s;\n\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));\n\t\tl = length(vec2(h_x.y-uv.y, float(i)/$s));\n\t\tif (l < $d) {\n\t\t\th = h_x.x-l*$p/$d;\n\t\t\tif (h > best_h) {\n\t\t\t\tbest_h = h;\n\t\t\t}\n\t\t}\n\t}\n\treturn best_h;\n}\n",
+				"instance": [
+					"float $(name)_distance_v(vec2 uv) {",
+					"\tint steps = int($s*$d/max(1.0, $p));",
+					"\tfloat best_h = 0.0;",
+					"\tfloat l;",
+					"\tfloat h;",
+					"\tvec2 in_uv = uv;",
+					"\tfor (int i = -steps; i <= steps; ++i) {",
+					"\t\tin_uv.x = uv.x+float(i)/$s;",
+					"\t\tvec2 h_x = pack_4x16_to_2x32($in(in_uv));",
+					"\t\tl = length(vec2(h_x.y-uv.y, float(i)/$s));",
+					"\t\tif (l < $d) {",
+					"\t\t\th = h_x.x-l*$p/$d;",
+					"\t\t\tif (h > best_h) {",
+					"\t\t\t\tbest_h = h;",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn best_h;",
+					"}",
+					""
+				],
 				"name": "Dilate pass 2",
 				"outputs": [
 					{
@@ -579,8 +675,7 @@
 				"default_in2": 0,
 				"op": 14
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		}
 	],
@@ -589,8 +684,7 @@
 		"size": 11,
 		"slope": 1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Dilate",
 	"type": "graph"
 }

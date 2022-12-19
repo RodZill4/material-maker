@@ -9,6 +9,7 @@
 		"frequency": 4,
 		"phase": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

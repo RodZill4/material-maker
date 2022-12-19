@@ -9,11 +9,16 @@
 		"l": 0.25,
 		"r": 0.25
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdCylinder(vec3 p, float h, float r) {\n\tvec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);\n\treturn min(max(d.x, d.y),0.0) + length(max(d, 0.0));\n}\n",
+		"global": [
+			"float sdCylinder(vec3 p, float h, float r) {",
+			"\tvec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);",
+			"\treturn min(max(d.x, d.y),0.0) + length(max(d, 0.0));",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

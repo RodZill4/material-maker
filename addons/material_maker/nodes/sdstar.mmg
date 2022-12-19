@@ -12,11 +12,26 @@
 		"r": 0.5,
 		"rot": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// https://www.shadertoy.com/view/3tSGDy\n\nfloat sdStar(vec2 p, float r, int n, float m) {\n    float an = 3.141593/float(n);\n    float en = 3.141593/m;\n    vec2  acs = vec2(cos(an),sin(an));\n    vec2  ecs = vec2(cos(en),sin(en));\n    float bn = mod(atan(p.x,p.y),2.0*an) - an;\n    p = length(p)*vec2(cos(bn),abs(sin(bn)));\n    p -= r*acs;\n    p += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);\n    return length(p)*sign(p.x);\n}\n",
+		"global": [
+			"// The MIT License, Copyright © 2019 Inigo Quilez",
+			"// https://www.shadertoy.com/view/3tSGDy",
+			"",
+			"float sdStar(vec2 p, float r, int n, float m) {",
+			"\tfloat an = 3.141593/float(n);",
+			"\tfloat en = 3.141593/m;",
+			"\tvec2  acs = vec2(cos(an),sin(an));",
+			"\tvec2  ecs = vec2(cos(en),sin(en));",
+			"\tfloat bn = mod(atan(p.x,p.y),2.0*an) - an;",
+			"\tp = length(p)*vec2(cos(bn),abs(sin(bn)));",
+			"\tp -= r*acs;",
+			"\tp += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);",
+			"\treturn length(p)*sign(p.x);",
+			"}",
+			""
+		],
 		"includes": [
 			"sdrotate",
 			"sdcirclerepeat"

@@ -7,9 +7,18 @@
 	"parameters": {
 		"size": 6
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 truchet_generic_uv(vec2 uv, vec2 seed) {\n    vec2 i = floor(uv);\n    vec2 f = fract(uv);\n\tvec2 invert = step(rand2(seed+i), vec2(0.5));\n    return f*(vec2(1.0)-invert)+(vec2(1.0)-f)*invert;\n}\n",
+		"global": [
+			"vec2 truchet_generic_uv(vec2 uv, vec2 seed) {",
+			"\tvec2 i = floor(uv);",
+			"\tvec2 f = fract(uv);",
+			"\tvec2 invert = step(rand2(seed+i), vec2(0.5));",
+			"\treturn f*(vec2(1.0)-invert)+(vec2(1.0)-f)*invert;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec4(1.0)",

@@ -8,6 +8,7 @@
 		"quality": 1,
 		"sigma": 100
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -20,7 +21,26 @@
 				"type": "rgba"
 			}
 		],
-		"instance": "vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {\n    vec4 O = vec4(0.0);\n\tfloat samples = sigma * 4.0; \n\tint LOD = max(0, int(log2(float(samples)))-quality-2);\n\tint sLOD = 1 << LOD;\n    int s = max(1, int(samples/float(sLOD)));\n\tfloat sum = 0.0;\n    for (int i = 0; i < s*s; i++) {\n        vec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);\n\t\tvec2 dd = d / sigma;\n\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);\n        O += g * textureLod($in.texture, uv + scale * d, float(LOD));\n\t\tsum += g;\n    }\n    \n    return O / sum;\n}\n",
+		"instance": [
+			"vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {",
+			"\tvec4 O = vec4(0.0);",
+			"\tfloat samples = sigma * 4.0; ",
+			"\tint LOD = max(0, int(log2(float(samples)))-quality-2);",
+			"\tint sLOD = 1 << LOD;",
+			"\tint s = max(1, int(samples/float(sLOD)));",
+			"\tfloat sum = 0.0;",
+			"\tfor (int i = 0; i < s*s; i++) {",
+			"\t\tvec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);",
+			"\t\tvec2 dd = d / sigma;",
+			"\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);",
+			"\t\tO += g * textureLod($in.texture, uv + scale * d, float(LOD));",
+			"\t\tsum += g;",
+			"\t}",
+			"\t",
+			"\treturn O / sum;",
+			"}",
+			""
+		],
 		"name": "Fast Blur",
 		"outputs": [
 			{

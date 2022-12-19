@@ -8,6 +8,7 @@
 		"d": 0.15,
 		"s": 9
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -20,7 +21,20 @@
 				"type": "f"
 			}
 		],
-		"instance": "float $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dx = min(25.0, floor($d/e))*e;\n\tfloat v = 0.0;\n\tfor (float x = -dx; x <= dx; x += e) {\n\t\tfloat dy = min(25.0*e, sqrt(dx*dx-x*x));\n\t\tfor (float y = -dy; y <= dy; y += e) {\n\t\t\tv = max(v, $in(uv+vec2(x, y)));\n\t\t}\n\t}\n\treturn v;\n}",
+		"instance": [
+			"float $(name)_dilate(vec2 uv) {",
+			"\tfloat e = 1.0/$s;",
+			"\tfloat dx = min(25.0, floor($d/e))*e;",
+			"\tfloat v = 0.0;",
+			"\tfor (float x = -dx; x <= dx; x += e) {",
+			"\t\tfloat dy = min(25.0*e, sqrt(dx*dx-x*x));",
+			"\t\tfor (float y = -dy; y <= dy; y += e) {",
+			"\t\t\tv = max(v, $in(uv+vec2(x, y)));",
+			"\t\t}",
+			"\t}",
+			"\treturn v;",
+			"}"
+		],
 		"name": "Morphology Dilation",
 		"outputs": [
 			{

@@ -121,6 +121,7 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": -9684,
 			"type": "colorize"
 		},
 		{
@@ -133,6 +134,7 @@
 				"param0": 10,
 				"param2": 1
 			},
+			"seed": -54608,
 			"type": "occlusion"
 		},
 		{
@@ -144,6 +146,7 @@
 			"parameters": {
 
 			},
+			"seed": -20954,
 			"type": "decompose"
 		},
 		{
@@ -156,6 +159,7 @@
 				"amount": 1,
 				"blend_type": 4
 			},
+			"seed": -12058,
 			"type": "blend"
 		},
 		{
@@ -194,6 +198,7 @@
 					"type": "rgb"
 				}
 			],
+			"seed": -43142,
 			"type": "ios"
 		},
 		{
@@ -256,6 +261,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -13234,
 			"type": "ios"
 		},
 		{
@@ -268,6 +274,7 @@
 				"param0": 1,
 				"param2": 1
 			},
+			"seed": -13319,
 			"type": "remote",
 			"widgets": [
 				{
@@ -308,6 +315,7 @@
 				"brightness": 0,
 				"contrast": 1
 			},
+			"seed": -5924,
 			"type": "brightness_contrast"
 		},
 		{
@@ -322,6 +330,7 @@
 				"param2": 0,
 				"param4": 1
 			},
+			"seed": -2400,
 			"type": "normal_map"
 		}
 	],
@@ -329,6 +338,7 @@
 		"param0": 1,
 		"param2": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "Output",
 	"type": "graph"
 }

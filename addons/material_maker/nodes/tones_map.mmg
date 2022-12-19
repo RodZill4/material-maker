@@ -10,6 +10,7 @@
 		"out_max": 1,
 		"out_min": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

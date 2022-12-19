@@ -10,6 +10,7 @@
 		"sy": 1,
 		"sz": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec2 $(name_uv)_in = $in(($uv)/vec3($sx*$s,$sy*$s,$sz*$s));",
 		"global": "",

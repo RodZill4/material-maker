@@ -429,8 +429,7 @@
 				"default_in2": 0,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -445,8 +444,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -469,10 +467,12 @@
 				"value": 0.52,
 				"variations": false
 			},
-			"seed": 0.446249,
-			"seed_locked": false,
+			"seed_int": 1916624861,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
+				"code": [
+					"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+					"vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));"
+				],
 				"global": "",
 				"includes": [
 					"custom_uv"
@@ -497,7 +497,47 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;\n\t\t\t\t//c1 = (c1 - 0.5) * 2.0;\n\t\t\t\tc += c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"instance": [
+					"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {",
+					"\tfloat c = 0.0;",
+					"\tvec3 rc = vec3(0.0);",
+					"\tvec3 rc1;",
+					"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+					"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+					"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+					"\t\t\tvec2 seed = rand2(pos+_seed);",
+					"\t\t\trc1 = rand3(seed);",
+					"\t\t\tfloat uv_rand = rand(seed.yx);",
+					"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+					"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+					"\t\t\tif (mask > 0.01) {",
+					"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+					"\t\t\t\tfloat ca = cos(angle);",
+					"\t\t\t\tfloat sa = sin(angle);",
+					"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+					"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+					"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+					"\t\t\t\tpv += vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+					"\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+					"\t\t\t\t\tcontinue;",
+					"\t\t\t\t}",
+					"\t\t\t\tvec2 full_uv = pv;",
+					"\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);",
+					"\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;",
+					"\t\t\t\t//c1 = (c1 - 0.5) * 2.0;",
+					"\t\t\t\tc += c1;",
+					"\t\t\t\trc = mix(rc, rc1, step(c, c1));",
+					"\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn vec4(rc, c);",
+					"}"
+				],
 				"longdesc": "Tiles several occurences of an input image while adding randomness.",
 				"name": "Tiler",
 				"outputs": [
@@ -683,8 +723,7 @@
 			"parameters": {
 				"size": 11
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 1
 		},
@@ -708,10 +747,12 @@
 				"value": 0.76,
 				"variations": false
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
+				"code": [
+					"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+					"vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));"
+				],
 				"global": "",
 				"includes": [
 					"custom_uv"
@@ -736,7 +777,47 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;\n\t\t\t\t//c1 = (c1 - 0.5) * 2.0;\n\t\t\t\tc += c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"instance": [
+					"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {",
+					"\tfloat c = 0.0;",
+					"\tvec3 rc = vec3(0.0);",
+					"\tvec3 rc1;",
+					"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+					"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+					"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+					"\t\t\tvec2 seed = rand2(pos+_seed);",
+					"\t\t\trc1 = rand3(seed);",
+					"\t\t\tfloat uv_rand = rand(seed.yx);",
+					"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+					"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+					"\t\t\tif (mask > 0.01) {",
+					"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+					"\t\t\t\tfloat ca = cos(angle);",
+					"\t\t\t\tfloat sa = sin(angle);",
+					"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+					"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+					"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+					"\t\t\t\tpv += vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+					"\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+					"\t\t\t\t\tcontinue;",
+					"\t\t\t\t}",
+					"\t\t\t\tvec2 full_uv = pv;",
+					"\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);",
+					"\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;",
+					"\t\t\t\t//c1 = (c1 - 0.5) * 2.0;",
+					"\t\t\t\tc += c1;",
+					"\t\t\t\trc = mix(rc, rc1, step(c, c1));",
+					"\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn vec4(rc, c);",
+					"}"
+				],
 				"longdesc": "Tiles several occurences of an input image while adding randomness.",
 				"name": "Tiler",
 				"outputs": [
@@ -925,8 +1006,7 @@
 				"default_in2": 0.5,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -949,10 +1029,12 @@
 				"value": 0.52,
 				"variations": false
 			},
-			"seed": 0.231214,
-			"seed_locked": false,
+			"seed_int": 993056568,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
+				"code": [
+					"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+					"vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));"
+				],
 				"global": "",
 				"includes": [
 					"custom_uv"
@@ -977,7 +1059,47 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;\n\t\t\t\t//c1 = (c1 - 0.5) * 2.0;\n\t\t\t\tc += c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"instance": [
+					"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {",
+					"\tfloat c = 0.0;",
+					"\tvec3 rc = vec3(0.0);",
+					"\tvec3 rc1;",
+					"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+					"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+					"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+					"\t\t\tvec2 seed = rand2(pos+_seed);",
+					"\t\t\trc1 = rand3(seed);",
+					"\t\t\tfloat uv_rand = rand(seed.yx);",
+					"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+					"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+					"\t\t\tif (mask > 0.01) {",
+					"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+					"\t\t\t\tfloat ca = cos(angle);",
+					"\t\t\t\tfloat sa = sin(angle);",
+					"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+					"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+					"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+					"\t\t\t\tpv += vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+					"\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+					"\t\t\t\t\tcontinue;",
+					"\t\t\t\t}",
+					"\t\t\t\tvec2 full_uv = pv;",
+					"\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);",
+					"\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;",
+					"\t\t\t\t//c1 = (c1 - 0.5) * 2.0;",
+					"\t\t\t\tc += c1;",
+					"\t\t\t\trc = mix(rc, rc1, step(c, c1));",
+					"\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn vec4(rc, c);",
+					"}"
+				],
 				"longdesc": "Tiles several occurences of an input image while adding randomness.",
 				"name": "Tiler",
 				"outputs": [
@@ -1166,8 +1288,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1182,8 +1303,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1206,10 +1326,12 @@
 				"value": 1,
 				"variations": false
 			},
-			"seed": 0.3039,
-			"seed_locked": false,
+			"seed_int": 1305240561,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
+				"code": [
+					"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+					"vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));"
+				],
 				"global": "",
 				"includes": [
 					"custom_uv"
@@ -1234,7 +1356,47 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;\n\t\t\t\t//c1 = (c1 - 0.5) * 2.0;\n\t\t\t\tc += c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"instance": [
+					"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {",
+					"\tfloat c = 0.0;",
+					"\tvec3 rc = vec3(0.0);",
+					"\tvec3 rc1;",
+					"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+					"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+					"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+					"\t\t\tvec2 seed = rand2(pos+_seed);",
+					"\t\t\trc1 = rand3(seed);",
+					"\t\t\tfloat uv_rand = rand(seed.yx);",
+					"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+					"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+					"\t\t\tif (mask > 0.01) {",
+					"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+					"\t\t\t\tfloat ca = cos(angle);",
+					"\t\t\t\tfloat sa = sin(angle);",
+					"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+					"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+					"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+					"\t\t\t\tpv += vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+					"\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+					"\t\t\t\t\tcontinue;",
+					"\t\t\t\t}",
+					"\t\t\t\tvec2 full_uv = pv;",
+					"\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);",
+					"\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;",
+					"\t\t\t\t//c1 = (c1 - 0.5) * 2.0;",
+					"\t\t\t\tc += c1;",
+					"\t\t\t\trc = mix(rc, rc1, step(c, c1));",
+					"\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn vec4(rc, c);",
+					"}"
+				],
 				"longdesc": "Tiles several occurences of an input image while adding randomness.",
 				"name": "Tiler",
 				"outputs": [
@@ -1421,8 +1583,7 @@
 				"brightness": 1,
 				"contrast": 1.63
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1434,8 +1595,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "invert"
 		},
 		{
@@ -1447,8 +1607,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "invert"
 		},
 		{
@@ -1463,8 +1622,7 @@
 				"default_in2": 0.5,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1482,8 +1640,7 @@
 				"scale_x": "12.0*$n_scale",
 				"scale_y": "12.0*$n_scale"
 			},
-			"seed": 0.449893,
-			"seed_locked": false,
+			"seed_int": 1932275722,
 			"type": "fbm2"
 		},
 		{
@@ -1501,8 +1658,7 @@
 				"scale_x": "24.0*$n_scale",
 				"scale_y": "24.0*$n_scale"
 			},
-			"seed": 0.802937,
-			"seed_locked": false,
+			"seed_int": 3448588156,
 			"type": "fbm2"
 		},
 		{
@@ -1517,8 +1673,7 @@
 				"default_in2": 0.87,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1533,8 +1688,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1547,8 +1701,7 @@
 				"brightness": -0.42,
 				"contrast": 0.07
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1563,8 +1716,7 @@
 				"default_in2": 0.5,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1579,8 +1731,7 @@
 				"default_in2": 0,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1593,8 +1744,7 @@
 				"brightness": 1,
 				"contrast": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1609,8 +1759,7 @@
 				"default_in2": 0,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1628,8 +1777,7 @@
 				"scale_x": "4.0*$n_scale",
 				"scale_y": "4.0*$n_scale"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fbm2"
 		},
 		{
@@ -1644,8 +1792,7 @@
 				"default_in2": 0,
 				"op": 19
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1658,8 +1805,7 @@
 				"brightness": -0.32,
 				"contrast": 0.53
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1674,8 +1820,7 @@
 				"default_in2": 0,
 				"op": 19
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -1693,8 +1838,7 @@
 				"scale_x": "4.0*$n_scale",
 				"scale_y": "4.0*$n_scale"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fbm2"
 		},
 		{
@@ -1712,8 +1856,7 @@
 				"scale_x": "8.0*$n_scale",
 				"scale_y": "8.0*$n_scale"
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fbm2"
 		},
 		{
@@ -1726,8 +1869,7 @@
 				"brightness": -0.39,
 				"contrast": 1.74
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1740,8 +1882,7 @@
 				"brightness": 0.34,
 				"contrast": 0.09
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -1764,10 +1905,12 @@
 				"value": 0.52,
 				"variations": false
 			},
-			"seed": 0.446249,
-			"seed_locked": false,
+			"seed_int": 1916624861,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_instance_uv = vec3(0.0);\nvec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));",
+				"code": [
+					"vec3 $(name_uv)_instance_uv = vec3(0.0);",
+					"vec4 $(name_uv)_rch = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), $(name_uv)_instance_uv, vec2(float($seed)));"
+				],
 				"global": "",
 				"includes": [
 					"custom_uv"
@@ -1792,7 +1935,47 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {\n\tfloat c = 0.0;\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tfloat uv_rand = rand(seed.yx);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\tvec2 full_uv = pv;\n\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);\n\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;\n\t\t\t\t//c1 = (c1 - 0.5) * 2.0;\n\t\t\t\tc += c1;\n\t\t\t\trc = mix(rc, rc1, step(c, c1));\n\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));\n\t\t\t}\n\t\t}\n\t}\n\treturn vec4(rc, c);\n}",
+				"instance": [
+					"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, inout vec3 instance_uv, vec2 _seed) {",
+					"\tfloat c = 0.0;",
+					"\tvec3 rc = vec3(0.0);",
+					"\tvec3 rc1;",
+					"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+					"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+					"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+					"\t\t\tvec2 seed = rand2(pos+_seed);",
+					"\t\t\trc1 = rand3(seed);",
+					"\t\t\tfloat uv_rand = rand(seed.yx);",
+					"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+					"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+					"\t\t\tif (mask > 0.01) {",
+					"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+					"\t\t\t\tfloat ca = cos(angle);",
+					"\t\t\t\tfloat sa = sin(angle);",
+					"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+					"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+					"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+					"\t\t\t\tpv += vec2(0.5);",
+					"\t\t\t\tseed = rand2(seed);",
+					"\t\t\t\tvec2 clamped_pv = clamp(pv, vec2(0.0), vec2(1.0));",
+					"\t\t\t\tif (pv.x != clamped_pv.x || pv.y != clamped_pv.y) {",
+					"\t\t\t\t\tcontinue;",
+					"\t\t\t\t}",
+					"\t\t\t\tvec2 full_uv = pv;",
+					"\t\t\t\tpv = get_from_tileset($inputs, uv_rand, pv);",
+					"\t\t\t\tfloat c1 = $in.variation(pv, $variations ? seed.x : 0.0)*mask*  ((1.0-$value*seed.x) - 0.5) * 2.0;",
+					"\t\t\t\t//c1 = (c1 - 0.5) * 2.0;",
+					"\t\t\t\tc += c1;",
+					"\t\t\t\trc = mix(rc, rc1, step(c, c1));",
+					"\t\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, uv_rand), step(c, c1));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn vec4(rc, c);",
+					"}"
+				],
 				"longdesc": "Tiles several occurences of an input image while adding randomness.",
 				"name": "Tiler",
 				"outputs": [
@@ -1981,8 +2164,7 @@
 				"shape": 1,
 				"sides": 4
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "shape"
 		},
 		{
@@ -1997,8 +2179,7 @@
 				"default_in2": 0,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2013,8 +2194,7 @@
 				"default_in2": 0,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2029,8 +2209,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2042,12 +2221,12 @@
 			"parameters": {
 				"size": 11
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 1
 		},
 		{
+			"generic_size": 1,
 			"name": "transform2",
 			"node_position": {
 				"x": -900,
@@ -2061,11 +2240,11 @@
 				"translate_x": 0,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "transform2"
 		},
 		{
+			"generic_size": 1,
 			"name": "transform2_2",
 			"node_position": {
 				"x": -900,
@@ -2079,8 +2258,7 @@
 				"translate_x": 0,
 				"translate_y": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "transform2"
 		},
 		{
@@ -2095,8 +2273,7 @@
 				"default_in2": 0.5,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2111,8 +2288,7 @@
 				"default_in2": 0.06,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2124,8 +2300,7 @@
 			"parameters": {
 				"size": 11
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "noise_white"
 		},
 		{
@@ -2143,8 +2318,7 @@
 				"scale_x": "16.0*$n_scale",
 				"scale_y": "16.0*$n_scale"
 			},
-			"seed": 0.622585,
-			"seed_locked": false,
+			"seed_int": 2673982214,
 			"type": "fbm2"
 		},
 		{
@@ -2159,8 +2333,7 @@
 				"default_in2": 0.5,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2175,8 +2348,7 @@
 				"default_in2": 2.81,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2191,8 +2363,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2210,8 +2381,7 @@
 				"scale_x": "8.0*$n_scale",
 				"scale_y": "8.0*$n_scale"
 			},
-			"seed": 0.176128,
-			"seed_locked": false,
+			"seed_int": 756464000,
 			"type": "fbm2"
 		},
 		{
@@ -2229,8 +2399,7 @@
 				"scale_x": "4.0*$n_scale",
 				"scale_y": "4.0*$n_scale"
 			},
-			"seed": 0.639473,
-			"seed_locked": false,
+			"seed_int": 2746515622,
 			"type": "fbm2"
 		},
 		{
@@ -2245,8 +2414,7 @@
 				"default_in2": 0.5,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2261,8 +2429,7 @@
 				"default_in2": 2,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2277,8 +2444,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2324,8 +2490,7 @@
 					"type": "Color"
 				}
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "tones"
 		},
 		{
@@ -2340,8 +2505,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2354,8 +2518,7 @@
 				"brightness": -0.67,
 				"contrast": 0.29
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "brightness_contrast"
 		},
 		{
@@ -2370,8 +2533,7 @@
 				"default_in2": 0,
 				"op": 20
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2383,8 +2545,7 @@
 			"parameters": {
 				"size": 11
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 1
 		},
@@ -2399,8 +2560,7 @@
 				"outputs": 1,
 				"source": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "switch"
 		},
 		{
@@ -2415,8 +2575,7 @@
 			"ports": [
 
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -2437,8 +2596,7 @@
 					"type": "f"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -2452,8 +2610,7 @@
 				"param0": 11,
 				"param1": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -2545,8 +2702,7 @@
 				"param1": 8,
 				"param2": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fast_blur"
 		},
 		{
@@ -2561,8 +2717,7 @@
 				"default_in2": 0,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -2577,8 +2732,7 @@
 				"default_in2": 0,
 				"op": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		}
 	],
@@ -2587,8 +2741,7 @@
 		"param0": 11,
 		"param1": 0
 	},
-	"seed": 0.34118,
-	"seed_locked": false,
+	"seed_int": 1465356942,
 	"shortdesc": "Clouds",
 	"type": "graph"
 }

@@ -7,8 +7,7 @@
 	"parameters": {
 		"width": 0.05
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "float $(name_uv)_a1 = smoothstep(0.0, 1.0, ($h2($uv)-$h1($uv))/max($width, 0.0001));",
 		"global": "",

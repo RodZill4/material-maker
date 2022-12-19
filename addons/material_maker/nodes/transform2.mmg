@@ -13,11 +13,25 @@
 		"translate_x": 0,
 		"translate_y": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 transform2_clamp(vec2 uv) {\n\treturn clamp(uv, vec2(0.0), vec2(1.0));\n}\n\nvec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {\n \tvec2 rv;\n\tuv -= translate;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv /= scale;\n\trv += vec2(0.5);\n\treturn rv;\t\n}",
+		"global": [
+			"vec2 transform2_clamp(vec2 uv) {",
+			"\treturn clamp(uv, vec2(0.0), vec2(1.0));",
+			"}",
+			"",
+			"vec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {",
+			" \tvec2 rv;",
+			"\tuv -= translate;",
+			"\tuv -= vec2(0.5);",
+			"\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;",
+			"\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;",
+			"\trv /= scale;",
+			"\trv += vec2(0.5);",
+			"\treturn rv;\t",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",

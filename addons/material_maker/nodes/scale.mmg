@@ -11,11 +11,17 @@
 		"scale_x": 1,
 		"scale_y": 1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 scale(vec2 uv, vec2 center, vec2 scale) {\n\tuv -= center;\n\tuv /= scale;\n\tuv += center;\n    return uv;\n}",
+		"global": [
+			"vec2 scale(vec2 uv, vec2 center, vec2 scale) {",
+			"\tuv -= center;",
+			"\tuv /= scale;",
+			"\tuv += center;",
+			"\treturn uv;",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",

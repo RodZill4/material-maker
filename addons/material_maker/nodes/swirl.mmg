@@ -11,11 +11,30 @@
 		"radius": 0.5,
 		"tile": false
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 swirl_tile_false(vec2 uv, vec2 center, float radius, float angle) {\n\tvec2 v = uv-center;\n\tfloat l = length(v);\n\tif (l > radius) {\n\t\treturn uv;\n\t} else {\n\t\treturn rotate(v, angle*(1.0-l/radius)*(1.0-l/radius))+center;\n\t}\n}\n\nvec2 swirl_tile_true(vec2 uv, vec2 center, float radius, float angle) {\n\tcenter = fract(center);\n\tvec2 tile_offset = 2.0*(step(vec2(0.5), uv)-vec2(0.5));\n\tuv = swirl_tile_false(uv, center, radius, angle);\n\tuv = swirl_tile_false(uv, center+tile_offset, radius, angle);\n\tuv = swirl_tile_false(uv, center+vec2(tile_offset.x, 0.0), radius, angle);\n\treturn swirl_tile_false(uv, center+vec2(0.0, tile_offset.y), radius, angle);\n}\n",
+		"global": [
+			"vec2 swirl_tile_false(vec2 uv, vec2 center, float radius, float angle) {",
+			"\tvec2 v = uv-center;",
+			"\tfloat l = length(v);",
+			"\tif (l > radius) {",
+			"\t\treturn uv;",
+			"\t} else {",
+			"\t\treturn rotate(v, angle*(1.0-l/radius)*(1.0-l/radius))+center;",
+			"\t}",
+			"}",
+			"",
+			"vec2 swirl_tile_true(vec2 uv, vec2 center, float radius, float angle) {",
+			"\tcenter = fract(center);",
+			"\tvec2 tile_offset = 2.0*(step(vec2(0.5), uv)-vec2(0.5));",
+			"\tuv = swirl_tile_false(uv, center, radius, angle);",
+			"\tuv = swirl_tile_false(uv, center+tile_offset, radius, angle);",
+			"\tuv = swirl_tile_false(uv, center+vec2(tile_offset.x, 0.0), radius, angle);",
+			"\treturn swirl_tile_false(uv, center+vec2(0.0, tile_offset.y), radius, angle);",
+			"}",
+			""
+		],
 		"includes": [
 			"rotate"
 		],

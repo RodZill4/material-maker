@@ -37,6 +37,7 @@
 				"quality": 1,
 				"sigma": 100
 			},
+			"seed": -27696,
 			"type": "fast_blur_shader"
 		},
 		{
@@ -48,6 +49,7 @@
 			"parameters": {
 				"size": 11
 			},
+			"seed": -48026,
 			"type": "buffer",
 			"version": 1
 		},
@@ -69,6 +71,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": -11967,
 			"type": "ios"
 		},
 		{
@@ -89,6 +92,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": 45717,
 			"type": "ios"
 		},
 		{
@@ -102,6 +106,7 @@
 				"param1": 100,
 				"param2": 1
 			},
+			"seed": 57528,
 			"type": "remote",
 			"widgets": [
 				{
@@ -151,6 +156,7 @@
 		"param1": 100,
 		"param2": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"
 }

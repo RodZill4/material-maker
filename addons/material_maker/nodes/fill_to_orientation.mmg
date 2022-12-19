@@ -7,10 +7,12 @@
 	"parameters": {
 		"invert": false
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_size = $in($uv).zw;\nfloat $(name_uv)orientation = $(name_uv)_size.x < $(name_uv)_size.y ? 0.0 : 1.0;",
+		"code": [
+			"vec2 $(name_uv)_size = $in($uv).zw;",
+			"float $(name_uv)orientation = $(name_uv)_size.x < $(name_uv)_size.y ? 0.0 : 1.0;"
+		],
 		"global": "",
 		"inputs": [
 			{

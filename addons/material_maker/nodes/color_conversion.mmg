@@ -7,11 +7,30 @@
 	"parameters": {
 		"mode": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "// Converts a color from linear light gamma to sRGB gamma\nvec4 fromLinear(vec4 linearRGB)\n{\n    bvec3 cutoff = lessThan(linearRGB.rgb, vec3(0.0031308));\n    vec3 higher = vec3(1.055)*pow(linearRGB.rgb, vec3(1.0/2.4)) - vec3(0.055);\n    vec3 lower = linearRGB.rgb * vec3(12.92);\n\n    return vec4(mix(higher, lower, cutoff), linearRGB.a);\n}\n\n// Converts a color from sRGB gamma to linear light gamma\nvec4 toLinear(vec4 sRGB)\n{\n    bvec3 cutoff = lessThan(sRGB.rgb, vec3(0.04045));\n    vec3 higher = pow((sRGB.rgb + vec3(0.055))/vec3(1.055), vec3(2.4));\n    vec3 lower = sRGB.rgb/vec3(12.92);\n\n    return vec4(mix(higher, lower, cutoff), sRGB.a);\n}",
+		"global": [
+			"// Converts a color from linear light gamma to sRGB gamma",
+			"vec4 fromLinear(vec4 linearRGB)",
+			"{",
+			"\tbvec3 cutoff = lessThan(linearRGB.rgb, vec3(0.0031308));",
+			"\tvec3 higher = vec3(1.055)*pow(linearRGB.rgb, vec3(1.0/2.4)) - vec3(0.055);",
+			"\tvec3 lower = linearRGB.rgb * vec3(12.92);",
+			"",
+			"\treturn vec4(mix(higher, lower, cutoff), linearRGB.a);",
+			"}",
+			"",
+			"// Converts a color from sRGB gamma to linear light gamma",
+			"vec4 toLinear(vec4 sRGB)",
+			"{",
+			"\tbvec3 cutoff = lessThan(sRGB.rgb, vec3(0.04045));",
+			"\tvec3 higher = pow((sRGB.rgb + vec3(0.055))/vec3(1.055), vec3(2.4));",
+			"\tvec3 lower = sRGB.rgb/vec3(12.92);",
+			"",
+			"\treturn vec4(mix(higher, lower, cutoff), sRGB.a);",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4(vec3(0.0), 1.0)",

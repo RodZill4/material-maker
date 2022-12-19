@@ -10,11 +10,16 @@
 		"sy": 0.25,
 		"sz": 0.25
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float box3d(vec3 uv, vec3 s) {\n\tvec3 q = abs(uv) - s;\n\treturn length(max(q, 0.0))+min(max(q.x, max(q.y, q.z)), 0.0);\n}\n",
+		"global": [
+			"float box3d(vec3 uv, vec3 s) {",
+			"\tvec3 q = abs(uv) - s;",
+			"\treturn length(max(q, 0.0))+min(max(q.x, max(q.y, q.z)), 0.0);",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

@@ -55,6 +55,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 3065,
 			"type": "buffer"
 		},
 		{
@@ -67,6 +68,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 20826,
 			"type": "buffer"
 		},
 		{
@@ -79,6 +81,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 12578,
 			"type": "buffer"
 		},
 		{
@@ -93,6 +96,7 @@
 				"mode": 0,
 				"s": 9
 			},
+			"seed": 7232,
 			"type": "warp_dilation_nobuf"
 		},
 		{
@@ -116,6 +120,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 503,
 			"type": "ios"
 		},
 		{
@@ -134,6 +139,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 33280,
 			"type": "ios"
 		},
 		{
@@ -148,6 +154,7 @@
 				"mode": 0,
 				"s": 9
 			},
+			"seed": 18589,
 			"type": "remote",
 			"widgets": [
 				{
@@ -215,6 +222,7 @@
 		"mode": 0,
 		"s": 9
 	},
+	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"
 }

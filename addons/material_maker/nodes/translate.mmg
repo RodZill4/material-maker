@@ -9,8 +9,7 @@
 		"translate_x": 0,
 		"translate_y": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

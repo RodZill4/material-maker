@@ -11,8 +11,10 @@
 		"scale": 0,
 		"scale_x": 1,
 		"scale_y": 1,
-		"select_inputs": 0
+		"select_inputs": 0,
+		"variations": false
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -36,7 +38,37 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 splatter_$(name)(vec2 uv, int count, vec2 seed) {\n\tvec4 c = vec4(0.0);\n\tfor (int i = 0; i < count; ++i) {\n\t\tseed = rand2(seed);\n\t\tfloat mask = $mask(fract(seed+vec2(0.5)));\n\t\tif (mask > 0.01) {\n\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\tfloat ca = cos(angle);\n\t\t\tfloat sa = sin(angle);\n\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\tpv += vec2(0.5);\n\t\t\tseed = rand2(seed);\n\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\t$select_inputs\n\t\t\tvec4 n = $in.variation(pv, $variations ? seed.x : 0.0);\n\t\t\tfloat na = n.a*mask*(1.0-$opacity*seed.x);\n\t\t\tfloat a = (1.0-c.a)*(1.0*na);\n\t\t\tc = mix(c, n, na);\n\t\t}\n\t}\n\treturn c;\n}\n",
+		"instance": [
+			"vec4 splatter_$(name)(vec2 uv, int count, vec2 seed) {",
+			"\tvec4 c = vec4(0.0);",
+			"\tfor (int i = 0; i < count; ++i) {",
+			"\t\tseed = rand2(seed);",
+			"\t\tfloat mask = $mask(fract(seed+vec2(0.5)));",
+			"\t\tif (mask > 0.01) {",
+			"\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);",
+			"\t\t\tseed = rand2(seed);",
+			"\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+			"\t\t\tfloat ca = cos(angle);",
+			"\t\t\tfloat sa = sin(angle);",
+			"\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+			"\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+			"\t\t\tpv /= vec2($scale_x, $scale_y);",
+			"\t\t\tpv += vec2(0.5);",
+			"\t\t\tseed = rand2(seed);",
+			"\t\t\tif (pv != clamp(pv, vec2(0.0), vec2(1.0))) {",
+			"\t\t\t\tcontinue;",
+			"\t\t\t}",
+			"\t\t\t$select_inputs",
+			"\t\t\tvec4 n = $in.variation(pv, $variations ? seed.x : 0.0);",
+			"\t\t\tfloat na = n.a*mask*(1.0-$opacity*seed.x);",
+			"\t\t\tfloat a = (1.0-c.a)*(1.0*na);",
+			"\t\t\tc = mix(c, n, na);",
+			"\t\t}",
+			"\t}",
+			"\treturn c;",
+			"}",
+			""
+		],
 		"longdesc": "Spreads several occurences of an input image randomly.",
 		"name": "Color Splatter",
 		"outputs": [

@@ -7,11 +7,27 @@
 	"parameters": {
 		"r": 0.4
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// https://www.shadertoy.com/view/wsSGDG\nfloat sdOctahedron(vec3 p, float s) {\n    p = abs(p);\n    float m = p.x + p.y + p.z - s;\n    vec3 r = 3.0*p - m;\n\tvec3 q;\n         if( r.x < 0.0 ) q = p.xyz;\n    else if( r.y < 0.0 ) q = p.yzx;\n    else if( r.z < 0.0 ) q = p.zxy;\n    else return m*0.57735027;\n    float k = clamp(0.5*(q.z-q.y+s),0.0,s); \n    return length(vec3(q.x,q.y-s+k,q.z-k)); \n}\n\n",
+		"global": [
+			"// The MIT License, Copyright © 2019 Inigo Quilez",
+			"// https://www.shadertoy.com/view/wsSGDG",
+			"float sdOctahedron(vec3 p, float s) {",
+			"\tp = abs(p);",
+			"\tfloat m = p.x + p.y + p.z - s;",
+			"\tvec3 r = 3.0*p - m;",
+			"\tvec3 q;",
+			"\t\t if( r.x < 0.0 ) q = p.xyz;",
+			"\telse if( r.y < 0.0 ) q = p.yzx;",
+			"\telse if( r.z < 0.0 ) q = p.zxy;",
+			"\telse return m*0.57735027;",
+			"\tfloat k = clamp(0.5*(q.z-q.y+s),0.0,s); ",
+			"\treturn length(vec3(q.x,q.y-s+k,q.z-k)); ",
+			"}",
+			"",
+			""
+		],
 		"inputs": [
 
 		],

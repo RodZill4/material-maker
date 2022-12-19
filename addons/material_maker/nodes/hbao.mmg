@@ -59,7 +59,6 @@
 				"radius": 0.1
 			},
 			"seed": 49449,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -72,7 +71,77 @@
 						"type": "f"
 					}
 				],
-				"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n    vec2(cosMaxRot, -sinMaxROt),\n    vec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise    = rand3(uv * noiseScale);\n  sampleNoise.xy      = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n                             vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n    // incrementally rotate sample direction\n    offset_uv = deltaRotationMatrix * offset_uv;\n    float oldAngle   = angleBias;\n    for (int j = 0; j < steps; ++j) {\n      //add jitter & distance to offset UV\n      vec2 sample_uv     = uv + (jitter + float(j)) * offset_uv;\n      vec3 s_point     = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n      vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n      // 90 deg - (angle between normal from current point &  sampled tangent)\n      //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n      float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n      \n      if (gamma > oldAngle) {\n        float value = sin(gamma) - sin(oldAngle);\n        float attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n        occlusion += attenuation * value;\n\t\t//occlusion += value;\n        oldAngle = gamma;\n      }\n    }\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
+				"instance": [
+					"//inspired by:",
+					"//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf",
+					"//https://gist.github.com/dotModded/981206ae1f4e760b7348",
+					"//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl",
+					"//radius - radius of influence in screen space",
+					"//angleBiasDeg - ~minimum angle for AO",
+					"//intensity - increase strength of caclulated AO",
+					"//noiseScale - for randomization values",
+					"float $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {",
+					"  int samplig_directions = 8;",
+					"  int steps = int($quality);",
+					"",
+					"  float angleBias = 0.0174532925 * angleBiasDeg;",
+					"",
+					"  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);",
+					"  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177",
+					"  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));",
+					"",
+					"",
+					"  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));",
+					"  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));",
+					"  ",
+					"  // it should be faster than standard rotation in each iteartion",
+					"  mat2 deltaRotationMatrix = mat2(",
+					"\tvec2(cosMaxRot, -sinMaxROt),",
+					"\tvec2(sinMaxROt, cosMaxRot)",
+					"  );",
+					"  ",
+					"  // calculate starting offset, as the smallest step",
+					"  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));",
+					"",
+					"  //randomize angle",
+					"  vec3 sampleNoise\t= rand3(uv * noiseScale);",
+					"  sampleNoise.xy\t  = sampleNoise.xy * 2.0 - vec2(1.0);",
+					"  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), ",
+					"\t\t\t\t\t\t\t vec2(sampleNoise.y,  sampleNoise.x));",
+					"  ",
+					"  // apply a random rotation to the base step vector",
+					"  offset_uv = rotationMatrix * offset_uv;",
+					"  ",
+					"  float jitter = sampleNoise.z;",
+					"  float occlusion = 0.0;",
+					"  ",
+					"  for (int i = 0; i < samplig_directions; ++i) {",
+					"\t// incrementally rotate sample direction",
+					"\toffset_uv = deltaRotationMatrix * offset_uv;",
+					"\tfloat oldAngle   = angleBias;",
+					"\tfor (int j = 0; j < steps; ++j) {",
+					"\t  //add jitter & distance to offset UV",
+					"\t  vec2 sample_uv\t = uv + (jitter + float(j)) * offset_uv;",
+					"\t  vec3 s_point\t = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);",
+					"\t  vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok",
+					"\t  // 90 deg - (angle between normal from current point &  sampled tangent)",
+					"\t  //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors",
+					"\t  float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));",
+					"\t  ",
+					"\t  if (gamma > oldAngle) {",
+					"\t\tfloat value = sin(gamma) - sin(oldAngle);",
+					"\t\tfloat attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);",
+					"\t\tocclusion += attenuation * value;",
+					"\t\t//occlusion += value;",
+					"\t\toldAngle = gamma;",
+					"\t  }",
+					"\t}",
+					"  }",
+					"  ",
+					"  occlusion = 1.0 - occlusion / float(samplig_directions);",
+					"  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);",
+					"}"
+				],
 				"longdesc": "A node that generates several images from a tileable voronoi noise",
 				"name": "HBAO",
 				"outputs": [
@@ -168,7 +237,6 @@
 				}
 			],
 			"seed": 43798,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -190,7 +258,6 @@
 				}
 			],
 			"seed": 42623,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -208,7 +275,6 @@
 				"param5": 1
 			},
 			"seed": 58911,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -308,7 +374,6 @@
 				"size": 10
 			},
 			"seed": 6771,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
 		},
@@ -322,7 +387,6 @@
 				"size": 10
 			},
 			"seed": 16139,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
 		},
@@ -336,7 +400,6 @@
 				"size": 10
 			},
 			"seed": 42465,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
 		},
@@ -352,8 +415,7 @@
 				"param2": 4,
 				"param3": 0.7
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "denoiser"
 		}
 	],
@@ -366,7 +428,6 @@
 		"param5": 1
 	},
 	"seed": 6741,
-	"seed_locked": false,
 	"shortdesc": "",
 	"type": "graph"
 }

@@ -8,9 +8,20 @@
 		"columns": 4,
 		"rows": 4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float IChing(vec2 uv, float seed) {\n\tint value = int(32.0*rand(floor(uv)+vec2(seed)));\n\tfloat base = step(0.5, fract(fract(uv.y)*6.5))*step(0.04, fract(uv.y+0.02))*step(0.2, fract(uv.x+0.1));\n\tint bit = int(fract(uv.y)*6.5);\n\treturn base*step(0.1*step(float(bit & value), 0.5), fract(uv.x+0.55));\n}\n\n\n",
+		"global": [
+			"float IChing(vec2 uv, float seed) {",
+			"\tint value = int(32.0*rand(floor(uv)+vec2(seed)));",
+			"\tfloat base = step(0.5, fract(fract(uv.y)*6.5))*step(0.04, fract(uv.y+0.02))*step(0.2, fract(uv.x+0.1));",
+			"\tint bit = int(fract(uv.y)*6.5);",
+			"\treturn base*step(0.1*step(float(bit & value), 0.5), fract(uv.x+0.55));",
+			"}",
+			"",
+			"",
+			""
+		],
 		"inputs": [
 
 		],

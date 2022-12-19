@@ -8,7 +8,6 @@
 
 	},
 	"seed": -57344,
-	"seed_locked": false,
 	"shader_model": {
 		"code": "",
 		"global": "",

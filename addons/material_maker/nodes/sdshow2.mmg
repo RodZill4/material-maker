@@ -8,8 +8,7 @@
 		"base": 0,
 		"bevel": 0.1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -24,7 +23,15 @@
 				"type": "sdf2d"
 			}
 		],
-		"instance": "float $(name)_d(vec2 uv) {\n\tfloat e = 0.0001;\n\tfloat d = $in(uv);\n\tfloat k = length(vec2($in(uv+vec2(e, 0.0))-d, $in(uv+vec2(0.0, e))-d))/e;\n\treturn d/k;\n}\n",
+		"instance": [
+			"float $(name)_d(vec2 uv) {",
+			"\tfloat e = 0.0001;",
+			"\tfloat d = $in(uv);",
+			"\tfloat k = length(vec2($in(uv+vec2(e, 0.0))-d, $in(uv+vec2(0.0, e))-d))/e;",
+			"\treturn d/k;",
+			"}",
+			""
+		],
 		"longdesc": "Creates a greyscale image from a shape described as a 2D Signed Distance Function",
 		"name": "sdShow 2",
 		"outputs": [

@@ -44,7 +44,6 @@
 				"size": 9
 			},
 			"seed": 20527,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -60,7 +59,6 @@
 				"param3": 0
 			},
 			"seed": 343,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -169,7 +167,6 @@
 				}
 			],
 			"seed": 30896,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -205,7 +202,20 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec4 $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;\n\tvec4 rv = vec4(0.0);\n\tfloat sum = 0.0;\n\tfloat sigma = $sigma*$amount(uv);\n\tfor (float i = $mode; i <= 50.0; i += 1.0) {\n\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);\n\t\trv += $in(uv+i*e)*coef;\n\t\tsum += coef;\n\t}\n\treturn rv/sum;\n}",
+				"instance": [
+					"vec4 $(name)_fct(vec2 uv) {",
+					"\tvec2 e = vec2(cos($angle*0.01745329251), -sin($angle*0.01745329251))/$size;",
+					"\tvec4 rv = vec4(0.0);",
+					"\tfloat sum = 0.0;",
+					"\tfloat sigma = $sigma*$amount(uv);",
+					"\tfor (float i = $mode; i <= 50.0; i += 1.0) {",
+					"\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);",
+					"\t\trv += $in(uv+i*e)*coef;",
+					"\t\tsum += coef;",
+					"\t}",
+					"\treturn rv/sum;",
+					"}"
+				],
 				"name": "Directional Blur",
 				"outputs": [
 					{
@@ -269,8 +279,7 @@
 		"param2": 45,
 		"param3": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Directional blur",
 	"type": "graph"
 }

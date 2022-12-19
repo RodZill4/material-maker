@@ -8,10 +8,15 @@
 		"angle": 135,
 		"axis": 2
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_uv = $uv.$axis;\nfloat $(name_uv)_rotated = rotate3d($(name_uv)_uv, vec3(($angle-180.0)*0.01745329251, 0.0, 0.0)).y;\nfloat $(name_uv)_d1 = max($(name_uv)_uv.y, $(name_uv)_rotated);\nfloat $(name_uv)_d2 = min($(name_uv)_uv.y, $(name_uv)_rotated);\nfloat $(name_uv)_d = (mod($angle, 360.0) < 180.0) ? $(name_uv)_d1 : $(name_uv)_d2;",
+		"code": [
+			"vec3 $(name_uv)_uv = $uv.$axis;",
+			"float $(name_uv)_rotated = rotate3d($(name_uv)_uv, vec3(($angle-180.0)*0.01745329251, 0.0, 0.0)).y;",
+			"float $(name_uv)_d1 = max($(name_uv)_uv.y, $(name_uv)_rotated);",
+			"float $(name_uv)_d2 = min($(name_uv)_uv.y, $(name_uv)_rotated);",
+			"float $(name_uv)_d = (mod($angle, 360.0) < 180.0) ? $(name_uv)_d1 : $(name_uv)_d2;"
+		],
 		"global": "",
 		"includes": [
 			"sdf3d_rotate"

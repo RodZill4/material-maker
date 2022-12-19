@@ -8,6 +8,7 @@
 		"brightness": 0,
 		"contrast": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

@@ -7,11 +7,27 @@
 	"parameters": {
 		"r": 0.4
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// https://www.shadertoy.com/view/Ws3SDl\nfloat sdPyramid(vec3 p, float h) {\n    float m2 = h*h + 0.25;\n    p.xz = abs(p.xz);\n    p.xz = (p.z>p.x) ? p.zx : p.xz;\n    p.xz -= 0.5;\n    vec3 q = vec3( p.z, h*p.y-0.5*p.x, h*p.x+0.5*p.y);  \n    float s = max(-q.x,0.0);\n    float t = clamp( (q.y-0.5*q.x)/(m2+0.25), 0.0, 1.0 );\n    float a = m2*(q.x+s)*(q.x+s) + q.y*q.y;\n\tfloat b = m2*(q.x+0.5*t)*(q.x+0.5*t) + (q.y-m2*t)*(q.y-m2*t);\n    float d2 = max(-q.y,q.x*m2+q.y*0.5) < 0.0 ? 0.0 : min(a,b);\n    return sqrt( (d2+q.z*q.z)/m2 ) * sign(max(q.z,-p.y));\n}\n",
+		"global": [
+			"// The MIT License, Copyright © 2019 Inigo Quilez",
+			"// https://www.shadertoy.com/view/Ws3SDl",
+			"float sdPyramid(vec3 p, float h) {",
+			"\tfloat m2 = h*h + 0.25;",
+			"\tp.xz = abs(p.xz);",
+			"\tp.xz = (p.z>p.x) ? p.zx : p.xz;",
+			"\tp.xz -= 0.5;",
+			"\tvec3 q = vec3( p.z, h*p.y-0.5*p.x, h*p.x+0.5*p.y);  ",
+			"\tfloat s = max(-q.x,0.0);",
+			"\tfloat t = clamp( (q.y-0.5*q.x)/(m2+0.25), 0.0, 1.0 );",
+			"\tfloat a = m2*(q.x+s)*(q.x+s) + q.y*q.y;",
+			"\tfloat b = m2*(q.x+0.5*t)*(q.x+0.5*t) + (q.y-m2*t)*(q.y-m2*t);",
+			"\tfloat d2 = max(-q.y,q.x*m2+q.y*0.5) < 0.0 ? 0.0 : min(a,b);",
+			"\treturn sqrt( (d2+q.z*q.z)/m2 ) * sign(max(q.z,-p.y));",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

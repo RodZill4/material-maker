@@ -51,8 +51,7 @@
 				"param2": 0,
 				"param3": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "dilate"
 		},
 		{
@@ -80,8 +79,7 @@
 					"type": "Curve"
 				}
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "tonality"
 		},
 		{
@@ -102,8 +100,7 @@
 					"type": "f"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -124,8 +121,7 @@
 					"type": "f"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -155,8 +151,7 @@
 				"distance": 0.1,
 				"size": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -209,8 +204,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -245,8 +239,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -294,8 +287,7 @@
 		"distance": 0.1,
 		"size": 10
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Bevel",
 	"type": "graph"
 }

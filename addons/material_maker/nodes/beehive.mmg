@@ -8,6 +8,7 @@
 		"sx": 4,
 		"sy": 4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": [
 			"vec2 $(name_uv)_uv = $uv*vec2($sx, $sy*1.73205080757);",

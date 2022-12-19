@@ -9,11 +9,16 @@
 		"axis": 2,
 		"r": 0.15
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdTorus(vec3 p, vec2 t) {\n  vec2 q = vec2(length(p.xz)-t.x,p.y);\n  return length(q)-t.y;\n}\n",
+		"global": [
+			"float sdTorus(vec3 p, vec2 t) {",
+			"  vec2 q = vec2(length(p.xz)-t.x,p.y);",
+			"  return length(q)-t.y;",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

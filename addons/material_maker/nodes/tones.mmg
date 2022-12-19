@@ -1,5 +1,5 @@
 {
-	"name": "levels",
+	"name": "tones",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -41,9 +41,19 @@
 			"type": "Color"
 		}
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec4 adjust_levels(vec4 input, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {\n\tinput = clamp((input-in_min)/(in_max-in_min), 0.0, 1.0);\n\tin_mid = (in_mid-in_min)/(in_max-in_min);\n\tvec4 dark = step(in_mid, input);\n\tinput = 0.5*mix(input/(in_mid), 1.0+(input-in_mid)/(1.0-in_mid), dark);\n\treturn out_min+input*(out_max-out_min);\n}\n",
+		"global": [
+			"vec4 adjust_levels(vec4 input, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {",
+			"\tinput = clamp((input-in_min)/(in_max-in_min), 0.0, 1.0);",
+			"\tin_mid = (in_mid-in_min)/(in_max-in_min);",
+			"\tvec4 dark = step(in_mid, input);",
+			"\tinput = 0.5*mix(input/(in_mid), 1.0+(input-in_mid)/(1.0-in_mid), dark);",
+			"\treturn out_min+input*(out_max-out_min);",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec4(1.0)",

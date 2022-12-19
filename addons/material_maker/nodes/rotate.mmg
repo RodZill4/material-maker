@@ -10,11 +10,17 @@
 		"cy": 0,
 		"rotate": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec2 $(name_uv)_c = vec2(0.5+$cx, 0.5+$cy);",
-		"global": "vec2 rotate(vec2 uv, float rotate) {\n \tvec2 rv;\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n    return rv;\t\n}",
+		"global": [
+			"vec2 rotate(vec2 uv, float rotate) {",
+			" \tvec2 rv;",
+			"\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;",
+			"\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;",
+			"\treturn rv;\t",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",

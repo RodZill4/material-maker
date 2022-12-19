@@ -73,7 +73,8 @@
 				"lod": 0,
 				"size": 8
 			},
-			"seed_value": 61344,
+			"seed": 61344,
+			"seed_locked": true,
 			"type": "buffer"
 		},
 		{
@@ -86,7 +87,8 @@
 				"lod": 0,
 				"size": 8
 			},
-			"seed_value": 53030,
+			"seed": 53030,
+			"seed_locked": true,
 			"type": "buffer"
 		},
 		{
@@ -99,6 +101,7 @@
 				"param0": 8,
 				"param2": 1.5
 			},
+			"seed": 18543,
 			"type": "remote",
 			"widgets": [
 				{
@@ -159,6 +162,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 11188,
 			"type": "ios"
 		},
 		{
@@ -179,6 +183,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -637,
 			"type": "ios"
 		},
 		{
@@ -191,6 +196,7 @@
 				"amount": 1,
 				"blend_type": 11
 			},
+			"seed": -19751,
 			"type": "blend"
 		},
 		{
@@ -221,7 +227,8 @@
 					"type": "Gradient"
 				}
 			},
-			"seed_value": 33856,
+			"seed": 33856,
+			"seed_locked": true,
 			"type": "colorize"
 		},
 		{
@@ -233,6 +240,7 @@
 			"parameters": {
 				"g": 1.5
 			},
+			"seed": 41185,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -276,6 +284,7 @@
 				"sigma": 50,
 				"size": 8
 			},
+			"seed": 13758,
 			"type": "gaussian_blur_x"
 		},
 		{
@@ -288,6 +297,7 @@
 				"sigma": 50,
 				"size": 8
 			},
+			"seed": 15390,
 			"type": "gaussian_blur_y"
 		}
 	],
@@ -295,6 +305,7 @@
 		"param0": 8,
 		"param2": 1.5
 	},
+	"seed_int": 0,
 	"shortdesc": "Occlusion",
 	"type": "graph"
 }

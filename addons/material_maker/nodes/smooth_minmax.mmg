@@ -11,11 +11,23 @@
 		"k": 0,
 		"op": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_clamp_false = $op($in1($uv), $in2($uv), $k);\nfloat $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);",
-		"global": "float smin(float d1, float d2, float k) {\n    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );\n    return mix( d2, d1, h ) - k*h*(1.0-h);\n}\n\nfloat smax(float d1, float d2, float k) {\n\tfloat h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );\n\treturn mix( d2, d1, h ) + k*h*(1.0-h); \n}",
+		"code": [
+			"float $(name_uv)_clamp_false = $op($in1($uv), $in2($uv), $k);",
+			"float $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);"
+		],
+		"global": [
+			"float smin(float d1, float d2, float k) {",
+			"\tfloat h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );",
+			"\treturn mix( d2, d1, h ) - k*h*(1.0-h);",
+			"}",
+			"",
+			"float smax(float d1, float d2, float k) {",
+			"\tfloat h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );",
+			"\treturn mix( d2, d1, h ) + k*h*(1.0-h); ",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "$default_in1",

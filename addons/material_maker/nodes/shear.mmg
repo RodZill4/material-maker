@@ -9,6 +9,7 @@
 		"center": 0,
 		"direction": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

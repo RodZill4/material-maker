@@ -80,7 +80,6 @@
 				"size": 11
 			},
 			"seed": 32897,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -94,7 +93,6 @@
 				"size": 11
 			},
 			"seed": 65434,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -110,7 +108,6 @@
 				"param3": 0
 			},
 			"seed": 1419,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -216,7 +213,6 @@
 				}
 			],
 			"seed": 317,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -252,7 +248,6 @@
 				"size": 11
 			},
 			"seed": 65483,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -282,7 +277,28 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(1.0/$s, 0.0);\n\tint steps = int($s*$d);\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t\tsource_uv = uv-float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec3(rv, source_uv);\n}\n",
+				"instance": [
+					"vec3 $(name)_distance_h(vec2 uv) {",
+					"\tvec2 e = vec2(1.0/$s, 0.0);",
+					"\tint steps = int($s*$d);",
+					"\tfloat rv = 0.0;",
+					"\tvec2 source_uv;",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tsource_uv = uv+float(i)*e;",
+					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t\tsource_uv = uv-float(i)*e;",
+					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec3(rv, source_uv);",
+					"}",
+					""
+				],
 				"name": "Dilate pass 1",
 				"outputs": [
 					{
@@ -325,10 +341,23 @@
 				"s": 11
 			},
 			"seed": 50297,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
-				"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
+				"global": [
+					"float dilate_distance_euclidian(float x, float y, float d) {",
+					"\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);",
+					"}",
+					"",
+					"float dilate_distance_manhattan(float x, float y, float d) {",
+					"\treturn 1.0-(abs(1.0-x)+abs(y)/d);",
+					"}",
+					"",
+					"float dilate_distance_chebyshev(float x, float y, float d) {",
+					"\treturn 1.0-max(abs(1.0-x), abs(y)/d);",
+					"}",
+					"",
+					""
+				],
 				"includes": [
 					"pack_1x32_to_2x16"
 				],
@@ -341,7 +370,28 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(uv+dx)), (uv+dx).y);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = vec3(pack_4x16_to_2x32($in(uv-dx)), (uv-dx).y);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
+				"instance": [
+					"vec3 $(name)_distance_v(vec2 uv) {",
+					"\tvec2 e = vec2(0.0, 1.0/$s);",
+					"\tint steps = int($s*$d);",
+					"\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tvec2 dx = float(i)*e;",
+					"\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(uv+dx)), (uv+dx).y);",
+					"\t\tif (p2.x > p.x) {",
+					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t}",
+					"\t\tp2 = vec3(pack_4x16_to_2x32($in(uv-dx)), (uv-dx).y);",
+					"\t\tif (p2.x > p.x) {",
+					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t}",
+					"\t}",
+					"\treturn p;",
+					"}",
+					""
+				],
 				"name": "Dilate pass 2",
 				"outputs": [
 					{
@@ -403,7 +453,6 @@
 				"size": 11
 			},
 			"seed": -38802,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -422,7 +471,6 @@
 				}
 			},
 			"seed": 939,
-			"seed_locked": false,
 			"type": "default_color"
 		},
 		{
@@ -435,7 +483,6 @@
 				"amount": 0
 			},
 			"seed": 50311,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -483,8 +530,7 @@
 		"param2": 0,
 		"param3": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Dilate",
 	"type": "graph"
 }

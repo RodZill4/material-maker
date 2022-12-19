@@ -9,6 +9,7 @@
 		"cy": 0,
 		"r": 0.4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

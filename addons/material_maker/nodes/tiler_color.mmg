@@ -15,10 +15,15 @@
 		"scale_y": 1,
 		"select_inputs": 0,
 		"tx": 4,
-		"ty": 4
+		"ty": 4,
+		"variations": false
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_random_color;\nvec4 $(name_uv)_tiled_output = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)), $(name_uv)_random_color);",
+		"code": [
+			"vec3 $(name_uv)_random_color;",
+			"vec4 $(name_uv)_tiled_output = tiler_$(name)($uv, vec2($tx, $ty), int($overlap), vec2(float($seed)), $(name_uv)_random_color);"
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -40,7 +45,44 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed, out vec3 random_color) {\n\tvec4 c = vec4(0.0);\n\tvec3 rc = vec3(0.0);\n\tvec3 rc1;\n\tfor (int dx = -overlap; dx <= overlap; ++dx) {\n\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {\n\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);\n\t\t\tvec2 seed = rand2(pos+_seed);\n\t\t\trc1 = rand3(seed);\n\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);\n\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));\n\t\t\tif (mask > 0.01) {\n\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;\n\t\t\t\tfloat ca = cos(angle);\n\t\t\t\tfloat sa = sin(angle);\n\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);\n\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;\n\t\t\t\tpv /= vec2($scale_x, $scale_y);\n\t\t\t\tpv += vec2(0.5);\n\t\t\t\tpv = clamp(pv, vec2(0.0), vec2(1.0));\n\t\t\t\t$select_inputs\n\t\t\t\tvec4 n = $in.variation(pv, $variations ? seed.x : 0.0);\n\t\t\t\tseed = rand2(seed);\n\t\t\t\tfloat na = n.a*mask*(1.0-$opacity*seed.x);\n\t\t\t\tfloat a = (1.0-c.a)*(1.0*na);\n\t\t\t\tc = mix(c, n, na);\n\t\t\t\trc = mix(rc, rc1, n.a);\n\t\t\t}\n\t\t}\n\t}\n\trandom_color = rc;\n\treturn c;\n}\n",
+		"instance": [
+			"vec4 tiler_$(name)(vec2 uv, vec2 tile, int overlap, vec2 _seed, out vec3 random_color) {",
+			"\tvec4 c = vec4(0.0);",
+			"\tvec3 rc = vec3(0.0);",
+			"\tvec3 rc1;",
+			"\tfor (int dx = -overlap; dx <= overlap; ++dx) {",
+			"\t\tfor (int dy = -overlap; dy <= overlap; ++dy) {",
+			"\t\t\tvec2 pos = uv*tile+vec2(float(dx), float(dy)); pos = fract((floor(mod(pos, tile))+vec2(0.5))/tile)-vec2(0.5);",
+			"\t\t\tvec2 seed = rand2(pos+_seed);",
+			"\t\t\trc1 = rand3(seed);",
+			"\t\t\tpos = fract(pos+vec2($fixed_offset/tile.x, 0.0)*floor(mod(pos.y*tile.y, 2.0))+$offset*seed/tile);",
+			"\t\t\tfloat mask = $mask(fract(pos+vec2(0.5)));",
+			"\t\t\tif (mask > 0.01) {",
+			"\t\t\t\tvec2 pv = fract(uv - pos)-vec2(0.5);",
+			"\t\t\t\tseed = rand2(seed);",
+			"\t\t\t\tfloat angle = (seed.x * 2.0 - 1.0) * $rotate * 0.01745329251;",
+			"\t\t\t\tfloat ca = cos(angle);",
+			"\t\t\t\tfloat sa = sin(angle);",
+			"\t\t\t\tpv = vec2(ca*pv.x+sa*pv.y, -sa*pv.x+ca*pv.y);",
+			"\t\t\t\tpv *= (seed.y-0.5)*2.0*$scale+1.0;",
+			"\t\t\t\tpv /= vec2($scale_x, $scale_y);",
+			"\t\t\t\tpv += vec2(0.5);",
+			"\t\t\t\tpv = clamp(pv, vec2(0.0), vec2(1.0));",
+			"\t\t\t\t$select_inputs",
+			"\t\t\t\tvec4 n = $in.variation(pv, $variations ? seed.x : 0.0);",
+			"\t\t\t\tseed = rand2(seed);",
+			"\t\t\t\tfloat na = n.a*mask*(1.0-$opacity*seed.x);",
+			"\t\t\t\tfloat a = (1.0-c.a)*(1.0*na);",
+			"\t\t\t\tc = mix(c, n, na);",
+			"\t\t\t\trc = mix(rc, rc1, n.a);",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\trandom_color = rc;",
+			"\treturn c;",
+			"}",
+			""
+		],
 		"longdesc": "Tiles several occurences of an input image while adding randomness.",
 		"name": "Color Tiler",
 		"outputs": [

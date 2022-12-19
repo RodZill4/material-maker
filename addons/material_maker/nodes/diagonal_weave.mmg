@@ -1,44 +1,50 @@
 {
-    "name": "diagonal_weave",
-    "node_position": {
-        "x": 0,
-        "y": 0
-    },
-    "parameters": {
-        "size": 4
-    },
-    "shader_model": {
-        "code": "",
-        "global": "float diagonal_weave(vec2 uv, float seed)\n{\n    return 1.0-abs(fract(dot(vec2((floor(rand(floor(uv)-seed)*2.0-0.5)),1.0),uv))-0.5);\n}",
-        "inputs": [
+	"name": "diagonal_weave",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"size": 4
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float diagonal_weave(vec2 uv, float seed)",
+			"{",
+			"\treturn 1.0-abs(fract(dot(vec2((floor(rand(floor(uv)-seed)*2.0-0.5)),1.0),uv))-0.5);",
+			"}"
+		],
+		"inputs": [
 
 		],
-        "instance": "",
-        "longdesc": "Generates a weaving pipes pattern.",
-        "name": "Diagonal Weave",
-        "outputs": [
-            {
-                "f": "diagonal_weave($uv*$size,$seed)",
-                "longdesc": "Shows a greyscale image of the diagonal weave pattern.",
-                "shortdesc": "Output",
-                "type": "f"
-            }
-        ],
-        "parameters": [
-            {
-                "control": "None",
-                "default": 4,
-                "label": "Size",
-                "longdesc": "The number of rows and columns of the diagonal weave pattern.",
-                "max": 64,
-                "min": 2,
-                "name": "size",
-                "shortdesc": "Size",
-                "step": 1,
-                "type": "float"
-            }
-        ],
-        "shortdesc": "Diagonal Weave"
-    },
-    "type": "shader"
+		"instance": "",
+		"longdesc": "Generates a weaving pipes pattern.",
+		"name": "Diagonal Weave",
+		"outputs": [
+			{
+				"f": "diagonal_weave($uv*$size,$seed)",
+				"longdesc": "Shows a greyscale image of the diagonal weave pattern.",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Size",
+				"longdesc": "The number of rows and columns of the diagonal weave pattern.",
+				"max": 64,
+				"min": 2,
+				"name": "size",
+				"shortdesc": "Size",
+				"step": 1,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Diagonal Weave"
+	},
+	"type": "shader"
 }

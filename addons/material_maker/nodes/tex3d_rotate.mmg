@@ -9,9 +9,33 @@
 		"ay": 0,
 		"az": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec3 tex3d_rotate(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
+		"global": [
+			"vec3 tex3d_rotate(vec3 p, vec3 a) {",
+			"\tvec3 rv;",
+			"\tfloat c;",
+			"\tfloat s;",
+			"\tc = cos(a.x);",
+			"\ts = sin(a.x);",
+			"\trv.x = p.x;",
+			"\trv.y = p.y*c+p.z*s;",
+			"\trv.z = -p.y*s+p.z*c;",
+			"\tc = cos(a.y);",
+			"\ts = sin(a.y);",
+			"\tp.x = rv.x*c+rv.z*s;",
+			"\tp.y = rv.y;",
+			"\tp.z = -rv.x*s+rv.z*c;",
+			"\tc = cos(a.z);",
+			"\ts = sin(a.z);",
+			"\trv.x = p.x*c+p.y*s;",
+			"\trv.y = -p.x*s+p.y*c;",
+			"\trv.z = p.z;",
+			"\treturn rv;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec3(1.0)",

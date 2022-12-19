@@ -49,6 +49,7 @@
 				"lod": 0,
 				"size": 10
 			},
+			"seed": -32011,
 			"type": "buffer"
 		},
 		{
@@ -63,6 +64,7 @@
 				"param2": 0,
 				"param4": 1
 			},
+			"seed": 56582,
 			"type": "remote",
 			"widgets": [
 				{
@@ -157,6 +159,7 @@
 					"type": "rgb"
 				}
 			],
+			"seed": -6314,
 			"type": "ios"
 		},
 		{
@@ -177,7 +180,8 @@
 					"type": "f"
 				}
 			],
-			"seed_value": 12483,
+			"seed": 12483,
+			"seed_locked": true,
 			"type": "ios"
 		},
 		{
@@ -191,6 +195,7 @@
 				"outputs": 1,
 				"source": 1
 			},
+			"seed": -53264,
 			"type": "switch"
 		},
 		{
@@ -204,9 +209,23 @@
 				"format": 0,
 				"size": 10
 			},
+			"seed": -11547,
 			"shader_model": {
 				"code": "",
-				"global": "vec3 process_normal_default(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, -1.0))+vec3(0.5);\n}\n\nvec3 process_normal_opengl(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n\nvec3 process_normal_directx(vec3 v, float multiplier) {\n\treturn 0.5*normalize(v.xyz*vec3(1.0, -1.0, 1.0)*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);\n}\n",
+				"global": [
+					"vec3 process_normal_default(vec3 v, float multiplier) {",
+					"\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, -1.0))+vec3(0.5);",
+					"}",
+					"",
+					"vec3 process_normal_opengl(vec3 v, float multiplier) {",
+					"\treturn 0.5*normalize(v.xyz*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);",
+					"}",
+					"",
+					"vec3 process_normal_directx(vec3 v, float multiplier) {",
+					"\treturn 0.5*normalize(v.xyz*vec3(1.0, -1.0, 1.0)*multiplier+vec3(0.0, 0.0, 1.0))+vec3(0.5);",
+					"}",
+					""
+				],
 				"inputs": [
 					{
 						"default": "0.0",
@@ -216,7 +235,20 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 $(name)_fct(vec2 uv) {\n\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);\n\tvec2 rv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\treturn vec3(rv, 0.0);\n}",
+				"instance": [
+					"vec3 $(name)_fct(vec2 uv) {",
+					"\tvec3 e = vec3(1.0/$size, -1.0/$size, 0);",
+					"\tvec2 rv = vec2(1.0, -1.0)*$in(uv+e.xy);",
+					"\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);",
+					"\trv += vec2(1.0, 1.0)*$in(uv+e.xx);",
+					"\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);",
+					"\trv += vec2(2.0, 0.0)*$in(uv+e.xz);",
+					"\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);",
+					"\trv += vec2(0.0, 2.0)*$in(uv+e.zx);",
+					"\trv += vec2(0.0, -2.0)*$in(uv-e.zx);",
+					"\treturn vec3(rv, 0.0);",
+					"}"
+				],
 				"name": "Normal map",
 				"outputs": [
 					{
@@ -274,6 +306,7 @@
 		"param2": 0,
 		"param4": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "Normal map",
 	"type": "graph"
 }
