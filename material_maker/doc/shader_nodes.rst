@@ -150,3 +150,14 @@ Maker provides the name_uv implicit variable for this.
 
 .. image:: images/node_editor_main.png
 	:align: center
+
+Variadic shader nodes
+~~~~~~~~~~~~~~~~~~~~~
+
+When specifying an input, and output or a parameter, it is possible to add use a number sign (#) in their
+name. This makes the node variadic, and all such inputs, parameters and outputs can automatically be
+repeated (depending on the variadic size of the node instance).
+
+In the *Main Code* and *Instance Functions* sections, parts of the generated code loccated inside a
+**#for** / **#end** block will be repeated. The occurences of the hash character (#) in those blocks
+will be replaced in each repetition with the repetition index.
