@@ -64,19 +64,19 @@ jobs:
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Documentation
+          name: documentation
           path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Windows snapshot
+          name: windows_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Linux snapshot
+          name: linux_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
   export-mac:
     name: Mac Export 🍎
@@ -145,9 +145,9 @@ jobs:
       - name: Fix application icon 🖼
         run: sips -s format icns ./build/mac/material_maker.app/Contents/Resources/icon.icns --out ./build/mac/material_maker.app/Contents/Resources/icon.icns
       - name: Get documentation 🚀
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
-          name: Documentation
+          name: documentation
           path: doc
       - name: Copy data folder 📁
         run: |
@@ -178,7 +178,7 @@ jobs:
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Mac OSX snapshot
+          name: macos_snapshot
           path: ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg

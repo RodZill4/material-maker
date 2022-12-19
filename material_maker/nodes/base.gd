@@ -35,6 +35,9 @@ const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/previe
 
 const MENU_PROPAGATE_CHANGES : int = 1000
 
+const MENU_BUFFER_PAUSE : int  = 0
+const MENU_BUFFER_RESUME : int = 1
+const MENU_BUFFER_DUMP : int   = 2
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -179,14 +182,17 @@ func _on_seed_menu(id):
 
 func _on_buffer_menu(id):
 	match id:
-		0:
+		MENU_BUFFER_PAUSE:
 			for b in generator.get_buffers(MMGenBase.BUFFERS_RUNNING):
 				b.set_paused(true)
 			update()
-		1:
+		MENU_BUFFER_RESUME:
 			for b in generator.get_buffers(MMGenBase.BUFFERS_PAUSED):
 				b.set_paused(false)
 			update()
+		MENU_BUFFER_DUMP:
+			for b in generator.get_buffers():
+				mm_deps.print_stats(b)
 
 func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 	if b == minimize_button:
@@ -217,10 +223,13 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 		match event.button_index:
 			BUTTON_RIGHT:
 				var menu : PopupMenu = PopupMenu.new()
-				menu.add_item(tr("Pause buffers"), 0)
-				menu.set_item_disabled(0, generator.get_buffers(MMGenBase.BUFFERS_RUNNING).empty())
-				menu.add_item(tr("Resume buffers"), 1)
-				menu.set_item_disabled(1, generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty())
+				menu.add_item(tr("Pause buffers"), MENU_BUFFER_PAUSE)
+				menu.set_item_disabled(MENU_BUFFER_PAUSE, generator.get_buffers(MMGenBase.BUFFERS_RUNNING).empty())
+				menu.add_item(tr("Resume buffers"), MENU_BUFFER_RESUME)
+				menu.set_item_disabled(MENU_BUFFER_RESUME, generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty())
+				if OS.is_debug_build():
+					menu.add_separator()
+					menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
 				menu.connect("popup_hide", menu, "queue_free")
@@ -230,6 +239,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 
 func update_button_tooltip(b : NodeButton) -> bool:
 	if b == minimize_button:
+		hint_tooltip = tr("Minimize the node")
 		return true
 	elif b == randomness_button:
 		hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")

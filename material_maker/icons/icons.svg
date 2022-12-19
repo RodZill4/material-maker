@@ -211,9 +211,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="20.130932"
-     inkscape:cx="130.14797"
-     inkscape:cy="131.19114"
+     inkscape:zoom="3.5586796"
+     inkscape:cx="81.771901"
+     inkscape:cy="83.738923"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -4347,5 +4347,29 @@
        id="path3056"
        style="fill:#838383;stroke:#848484;stroke-width:0.958593;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000;fill-opacity:1"
        d="m 151.88744,217.64869 a 6.1911581,6.4035381 0 0 0 -1.55697,0.21504 v 5.02504 h 3.03375 v -5.0555 a 6.1911581,6.4035381 0 0 0 -1.47678,-0.18458 z" />
+    <g
+       transform="translate(-843.99983,-291.94975)"
+       id="g4047"
+       style="clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2">
+        <g
+   transform="translate(172)"
+   id="g4045">
+            <g
+   transform="translate(-172)"
+   id="g4043">
+                <g
+   id="layers">
+                    <path
+   d="m 1017,519.01 -5,2.292 -5,-2.292 -3,1.375 8,3.667 8,-3.667 z m 3,-2.292 -8,-3.666 -8,3.666 8,3.667 z M 1017,510 v -2 h -2 v 2 h -2 v 2 h 2 v 2 h 2 v -2 h 2 v -2 z"
+   style="fill:#ffffff"
+   id="path4040" />
+
+                </g>
+
+            </g>
+
+        </g>
+
+    </g>
   </g>
 </svg>

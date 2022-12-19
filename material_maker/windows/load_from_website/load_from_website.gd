@@ -2,7 +2,7 @@ extends WindowDialog
 
 var assets : Array = []
 var displayed_assets : Array = []
-var thumbnail_update_thread : Thread
+var thumbnail_update_thread : Thread = null
 
 onready var item_list : ItemList = $VBoxContainer/ItemList
 
@@ -71,8 +71,11 @@ func select_material(type : int = 0) -> String:
 					m.texture.create_from_image(image)
 					assets.push_back(m)
 			fill_list("")
-			thumbnail_update_thread = Thread.new()
-			thumbnail_update_thread.start(self, "update_thumbnails", null, 0)
+			if OS.get_name() == "HTML5":
+				update_thumbnails()
+			else:
+				thumbnail_update_thread = Thread.new()
+				thumbnail_update_thread.start(self, "update_thumbnails", null, 0)
 			var result = yield(self, "return_asset")
 			queue_free()
 			return result

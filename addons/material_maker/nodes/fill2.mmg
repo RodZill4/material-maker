@@ -31,12 +31,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "dilate_pass_3",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 1
-		},
-		{
 			"from": "switch",
 			"from_port": 0,
 			"to": "shape",
@@ -82,6 +76,18 @@
 			"from": "fill_iterate_2",
 			"from_port": 0,
 			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "dilate_pass_3",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "switch",
 			"to_port": 1
 		}
 	],
@@ -129,7 +135,6 @@
 				}
 			],
 			"seed": 58064,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -151,14 +156,13 @@
 				}
 			],
 			"seed": -4244,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -261.110138,
-				"y": -575.509705
+				"x": -122.110138,
+				"y": -589.509705
 			},
 			"parameters": {
 				"adjust": 0,
@@ -166,7 +170,6 @@
 				"size": 8
 			},
 			"seed": 52136,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -183,6 +186,22 @@
 						{
 							"node": "fill_iterate_2",
 							"widget": "s"
+						},
+						{
+							"node": "dilate_pass_1",
+							"widget": "s"
+						},
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
 						}
 					],
 					"longdesc": "The resolution of the input image",
@@ -243,8 +262,7 @@
 			"parameters": {
 				"grow": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "vec4 $(name_uv)_v = $in($(uv));\nvec2 $(name_uv)_a = 1.0-step(vec2(1.0), $(name_uv)_v.zw);",
 				"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
@@ -289,7 +307,6 @@
 				"amount": 1
 			},
 			"seed": 50311,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -339,10 +356,9 @@
 			"parameters": {
 				"d": 1,
 				"distance": 0,
-				"s": 11
+				"s": 8
 			},
 			"seed": 50297,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
@@ -417,7 +433,7 @@
 			},
 			"parameters": {
 				"d": 1,
-				"s": 11
+				"s": 8
 			},
 			"seed": 71939,
 			"seed_locked": true,
@@ -476,8 +492,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -514,8 +529,7 @@
 				"outputs": 1,
 				"source": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "switch"
 		},
 		{
@@ -527,10 +541,9 @@
 			"parameters": {
 				"filter": false,
 				"mipmap": false,
-				"size": 11
+				"size": 8
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 2
 		},
@@ -543,8 +556,7 @@
 			"parameters": {
 				"s": 8
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fill_preprocess"
 		},
 		{
@@ -556,9 +568,23 @@
 			"parameters": {
 				"s": 8
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "fill_iterate"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": 381.312256,
+				"y": -318.4729
+			},
+			"parameters": {
+				"filter": false,
+				"mipmap": false,
+				"size": 8
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
 		}
 	],
 	"parameters": {
@@ -566,8 +592,7 @@
 		"remove_edges": 0,
 		"size": 8
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Fill",
 	"type": "graph"
 }

@@ -5,6 +5,7 @@ var common_shader : String
 
 var global_parameters : Dictionary = {}
 
+
 const total_renderers = 8
 var free_renderers = []
 
@@ -14,12 +15,8 @@ var max_viewport_size : int = 2048
 
 var max_buffer_size = 0
 
-var render_queue_size = 0
-var pending_requests = 0
-
 signal free_renderer
-signal render_queue(count, pending)
-signal render_queue_empty
+
 
 func _ready() -> void:
 	var file = File.new()
@@ -43,7 +40,7 @@ func get_global_parameter(n : String):
 
 func set_global_parameter(n : String, value):
 	global_parameters[n] = value
-	get_tree().call_group("preview", "on_float_parameters_changed", { "mm_global_"+n:value })
+	mm_deps.dependency_update("mm_global_"+n, value)
 
 func get_global_parameter_declaration(n : String) -> String:
 	if global_parameters.has(n):
@@ -107,29 +104,13 @@ func enable_renderers(b : bool) -> void:
 			emit_signal("free_renderer")
 
 func request(object : Object) -> Object:
-	render_queue_size += 1
-	emit_signal("render_queue", render_queue_size, pending_requests)
 	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
 		yield(self, "free_renderer")
-	if !is_instance_valid(object) || !object.is_inside_tree():
-		render_queue_size -= 1
-		emit_signal("render_queue", render_queue_size, pending_requests)
+	if ! is_instance_valid(object) or ! object.is_inside_tree():
 		return null
 	var renderer = free_renderers.pop_back()
 	return renderer.request(object)
 
 func release(renderer : Object) -> void:
 	free_renderers.append(renderer)
-	emit_signal("free_renderer", render_queue_size, pending_requests)
-	render_queue_size -= 1
-	emit_signal("render_queue", render_queue_size, pending_requests)
-	if render_queue_size == 0 and pending_requests == 0:
-		emit_signal("render_queue_empty")
-
-func add_pending_request() -> void:
-	pending_requests += 1
-
-func remove_pending_request() -> void:
-	assert(pending_requests > 0)
-	pending_requests -= 1
-
+	emit_signal("free_renderer")

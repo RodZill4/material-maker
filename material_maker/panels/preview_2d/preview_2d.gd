@@ -17,6 +17,9 @@ const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
 
 
+func _enter_tree():
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+
 func update_export_menu() -> void:
 	$ContextMenu/Export.clear()
 	$ContextMenu/Reference.clear()
@@ -34,19 +37,14 @@ func update_export_menu() -> void:
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.type, template)
 
-func do_update_material(source, target_material, template):
+func do_update_material(source, target_material : ShaderMaterial, template):
 	if ! source.has("type"):
 		return
 	is_greyscale = source.type == "f"
 	# Update shader
 	var code = generate_preview_shader(source, template)
-	target_material.shader.code = code
-	# Get parameter values from the shader code
-	MMGenBase.define_shader_float_parameters(target_material.shader.code, target_material)
-	# Set texture params
-	if source.has("textures"):
-		for k in source.textures.keys():
-			target_material.set_shader_param(k, source.textures[k])
+	target_material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), target_material, code)
+	# Make sure position/size parameters are setup
 	on_resized()
 
 func update_material(source):
@@ -67,7 +65,6 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
 		generator.disconnect("parameter_changed", self, "on_parameter_changed")
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
-	
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -107,16 +104,9 @@ func on_parameter_changed(n : String, v) -> void:
 func get_preview_material():
 	return material
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	var return_value : bool = false
-	var m : ShaderMaterial = get_preview_material()
-	for n in parameter_changes.keys():
-		for p in VisualServer.shader_get_param_list(m.shader.get_rid()):
-			if p.name == n:
-				return_value = true
-				m.set_shader_param(n, parameter_changes[n])
-				break
-	return return_value
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+	get_preview_material().set_shader_param(parameter_name, value)
+	return false
 
 func on_resized() -> void:
 	material.set_shader_param("preview_2d_size", rect_size)

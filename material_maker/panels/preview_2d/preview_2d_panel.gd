@@ -135,10 +135,9 @@ func do_start_accumulate():
 func get_preview_material():
 	return $Accumulate/Iteration.material if temporal_aa_current else material
 
-func on_float_parameters_changed(parameter_changes : Dictionary) -> bool:
-	if .on_float_parameters_changed(parameter_changes):
-		start_accumulate()
-		return true
+func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+	.on_dep_update_value(buffer_name, parameter_name, value)
+	start_accumulate()
 	return false
 
 var setup_controls_filter : String = ""

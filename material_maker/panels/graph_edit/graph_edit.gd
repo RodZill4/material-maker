@@ -18,6 +18,7 @@ var node_factory = null
 
 var save_path = null setget set_save_path
 var need_save : bool = false
+var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
 
 var top_generator = null
@@ -241,6 +242,20 @@ func add_node(node) -> void:
 	move_child(node, 0)
 	node.connect("close_request", self, "remove_node", [ node ])
 
+func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	var from_gen = from_node.generator
+	var to_gen = to_node.generator
+	if generator.connect_children(from_gen, from_slot, to_gen, to_slot):
+		.connect_node(from, from_slot, to, to_slot)
+		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
+		return true
+	return false
+
 func connect_node(from : String, from_slot : int, to : String, to_slot : int):
 	var from_node : MMGraphNodeMinimal = get_node(from)
 	var to_node : MMGraphNodeMinimal = get_node(to)
@@ -350,17 +365,14 @@ func set_need_save(ns = true) -> void:
 	if ns != need_save:
 		need_save = ns
 		update_tab_title()
-	if save_path != null:
-		if ns:
-			need_save_crash_recovery = true
-		else:
-			need_save_crash_recovery = false
+	need_save_crash_recovery = true
 
 func set_save_path(path) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
 		save_path = path
+		save_crash_recovery_path = save_path+".mmcr"
 		update_tab_title()
 		emit_signal("save_path_changed", self, path)
 
@@ -376,17 +388,26 @@ func clear_view() -> void:
 func crash_recovery_save() -> void:
 	if !need_save_crash_recovery:
 		return
+	if save_crash_recovery_path == "":
+		var dir : Directory = Directory.new()
+		dir.make_dir_recursive("user://unsaved_projects")
+		var i : int = 0
+		while true:
+			save_crash_recovery_path = "user://unsaved_projects/unsaved_%03d.mmcr" % i
+			if ! dir.file_exists(save_crash_recovery_path):
+				break
+			i += 1
 	var data = top_generator.serialize()
 	var file = File.new()
-	if file.open(save_path+".mmcr", File.WRITE) == OK:
+	if file.open(save_crash_recovery_path, File.WRITE) == OK:
 		file.store_string(JSON.print(data))
 		file.close()
 		need_save_crash_recovery = false
 
 func remove_crash_recovery_file() -> void:
-	if save_path != null:
+	if save_crash_recovery_path != "":
 		var dir = Directory.new()
-		dir.remove(save_path+".mmcr")
+		dir.remove(save_crash_recovery_path)
 
 # Center view
 
@@ -508,7 +529,8 @@ func load_file(filename) -> bool:
 	var rescued = false
 	var new_generator = null
 	var file = File.new()
-	if filename != null and file.file_exists(filename+".mmcr"):
+	var recovery_path = filename+".mmcr"
+	if filename != null and file.file_exists(recovery_path):
 		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
 		dialog.dialog_text = "Rescue file for "+filename.get_file()+" was found.\nLoad it?"
 		dialog.get_ok().text = "Rescue"
@@ -518,7 +540,7 @@ func load_file(filename) -> bool:
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if result == "ok":
-			new_generator = mm_loader.load_gen(filename+".mmcr")
+			new_generator = mm_loader.load_gen(recovery_path)
 	if new_generator != null:
 		rescued = true
 	else:
@@ -539,6 +561,25 @@ func load_file(filename) -> bool:
 		dialog.popup_centered()
 		return false
 
+func load_from_data(filename, data) -> bool:
+	var json = parse_json(data)
+	if json != null:
+		var new_generator = mm_loader.create_gen(json)
+		if new_generator != null:
+			set_save_path(filename)
+			set_new_generator(new_generator)
+			return true
+	return false
+
+func load_from_recovery(filename) -> bool:
+	save_crash_recovery_path = filename
+	var new_generator = mm_loader.load_gen(save_crash_recovery_path)
+	if new_generator != null:
+		set_new_generator(new_generator)
+		set_need_save(true)
+		return true
+	return false
+
 # Save
 
 func save() -> bool:
@@ -552,36 +593,49 @@ func save() -> bool:
 	return status
 
 func save_as() -> bool:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
-	dialog.add_filter("*.ptex;Procedural Textures File")
-	var main_window = mm_globals.main_window
-	if mm_globals.config.has_section_key("path", "project"):
-		dialog.current_dir = mm_globals.config.get_value("path", "project")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
-	if files.size() == 1:
-		if save_file(files[0]):
-			main_window.add_recent(save_path)
-			mm_globals.config.set_value("path", "project", save_path.get_base_dir())
-			top_generator.emit_signal("hierarchy_changed")
-			return true
+	if OS.get_name() == "HTML5":
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+		add_child(dialog)
+		var status = dialog.enter_text("Save", "Select a file name", save_path.get_file() if save_path != null else "")
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+		if status.ok:
+			if save_file(status.text.get_file().get_basename()+".ptex"):
+				top_generator.emit_signal("hierarchy_changed")
+	else:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		add_child(dialog)
+		dialog.rect_min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.mode = FileDialog.MODE_SAVE_FILE
+		dialog.add_filter("*.ptex;Procedural Textures File")
+		var main_window = mm_globals.main_window
+		if mm_globals.config.has_section_key("path", "project"):
+			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		var files = dialog.select_files()
+		while files is GDScriptFunctionState:
+			files = yield(files, "completed")
+		if files.size() == 1:
+			if save_file(files[0]):
+				main_window.add_recent(save_path)
+				mm_globals.config.set_value("path", "project", save_path.get_base_dir())
+				top_generator.emit_signal("hierarchy_changed")
+				return true
 	return false
 
 func save_file(filename) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
-	var file = File.new()
-	if file.open(filename, File.WRITE) == OK:
-		file.store_string(JSON.print(data, "\t", true))
-		file.close()
+	if OS.get_name() == "HTML5":
+		JavaScript.download_buffer(JSON.print(data, "\t", true).to_ascii(), filename)
 	else:
-		return false
+		var file = File.new()
+		if file.open(filename, File.WRITE) == OK:
+			file.store_string(JSON.print(data, "\t", true))
+			file.close()
+		else:
+			return false
 	set_save_path(filename)
 	set_need_save(false)
 	remove_crash_recovery_file()
@@ -952,6 +1006,13 @@ func undoredo_command(command : Dictionary) -> void:
 			var g = get_node_from_hier_name(command.node)
 			for p in command.params.keys():
 				g.set_parameter(p, MMType.deserialize_value(command.params[p]))
+		"setgenericsize":
+			var g = get_node_from_hier_name(command.node)
+			g.set_generic_size(command.size)
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		"setseed":
 			var g = get_node_from_hier_name(command.node)
 			g.set_seed(command.seed)

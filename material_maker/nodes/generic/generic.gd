@@ -8,9 +8,14 @@ var output_count = 0
 
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
+var generic_button : NodeButton
+
+
+const GENERIC_ICON : Texture = preload("res://material_maker/icons/add_generic.tres")
 
 
 func _ready() -> void:
+	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
 
 func _draw() -> void:
@@ -24,6 +29,96 @@ func set_generator(g : MMGenBase) -> void:
 	.set_generator(g)
 	generator.connect("parameter_changed", self, "on_parameter_changed")
 	update_node()
+
+func update():
+	if generator != null and generator.has_method("is_generic") and generator.is_generic():
+		generic_button.hidden = false
+	else:
+		generic_button.hidden = true
+	.update()
+
+func on_node_button(b : NodeButton, event : InputEvent) -> bool:
+	if b == generic_button:
+		if ! event is InputEventMouseButton or ! event.pressed:
+			return false
+		match event.button_index:
+			BUTTON_LEFT:
+				update_generic(generator.generic_size+1)
+			BUTTON_RIGHT:
+				var popup_menu : PopupMenu = PopupMenu.new()
+				var minimum = get_generic_minimum()
+				if minimum < generator.generic_size:
+					popup_menu.add_item(str(minimum), minimum)
+					popup_menu.add_separator()
+				for c in range(generator.generic_size+1, generator.generic_size+4):
+					popup_menu.add_item(str(c), c)
+				add_child(popup_menu)
+				popup_menu.connect("popup_hide", popup_menu, "queue_free")
+				popup_menu.connect("id_pressed", self, "update_generic")
+				popup_menu.popup(Rect2(get_global_mouse_position(), popup_menu.get_minimum_size()))
+				accept_event()
+	else:
+		return .on_node_button(b, event)
+	return false
+
+func update_button_tooltip(b : NodeButton) -> bool:
+	if b == generic_button:
+		hint_tooltip = tr("Add more ports/parameters (left mouse button) / Variadic node menu (right mouse button)")
+		return true
+	return .update_button_tooltip(b)
+
+func get_generic_minimum():
+	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
+	var generic_input_count = generic_inputs.last-generic_inputs.first
+	var rv : int = 0
+	for i in generator.generic_size:
+		for p in generic_input_count:
+			if generator.get_source(generic_inputs.first+i*generic_input_count+p) != null:
+				rv = i+1
+				break
+	if rv < 1:
+		rv = 1
+	return rv
+
+func update_generic(size : int) -> void:
+	if size == generator.generic_size:
+		return
+	yield(get_tree(), "idle_frame")
+	var generator_hier_name : String = generator.get_hier_name()
+	var parent_hier_name : String = generator.get_parent().get_hier_name()
+	var before_connections = []
+	var after_connections = []
+	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
+	var gi_count = generic_inputs.last-generic_inputs.first
+	var first_after_gi = generic_inputs.first+gi_count*generator.generic_size
+	var gi_ports_offset = gi_count*(size-generator.generic_size)
+	for i in range(first_after_gi, generator.get_input_defs().size()):
+		var source = generator.get_source(i)
+		if source != null:
+			before_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i})
+			after_connections.append({from=source.generator.name, from_port=source.output_index, to=generator.name, to_port=i+gi_ports_offset})
+	var generic_outputs = generator.get_generic_range(generator.shader_model.outputs, "type", 1)
+	var go_count = generic_outputs.last-generic_outputs.first
+	var first_after_go = generic_outputs.first+go_count*generator.generic_size
+	var go_ports_offset = go_count*(size-generator.generic_size)
+	for o in range(first_after_go, generator.get_output_defs().size()):
+		for target in generator.get_targets(o):
+			before_connections.append({from=generator.name, from_port=o, to=target.generator.name, to_port=target.input_index})
+			after_connections.append({from=generator.name, from_port=o+go_ports_offset, to=target.generator.name, to_port=target.input_index})
+
+	var undo_actions = [
+		{ type="remove_connections", parent=parent_hier_name, connections=after_connections },
+		{ type="setgenericsize", node=generator_hier_name, size=generator.generic_size },
+		{ type="add_to_graph", parent=parent_hier_name, generators=[], connections=before_connections }
+	]
+	var redo_actions = [
+		{ type="remove_connections", parent=parent_hier_name, connections=before_connections },
+		{ type="setgenericsize", node=generator_hier_name, size=size },
+		{ type="add_to_graph", parent=parent_hier_name, generators=[], connections=after_connections }
+	]
+	get_parent().undoredo.add("Disconnect nodes", undo_actions, redo_actions)
+	for c in redo_actions:
+		get_parent().undoredo_command(c)
 
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
@@ -494,21 +589,27 @@ func save_generator() -> void:
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() > 0:
-		do_save_generator(files[0])
+		do_save_generator(files[0], generator)
 
-func do_save_generator(file_name : String) -> void:
+static func extract_verbose_values(path : String, data : Dictionary) -> Array:
+	var rv = []
+	var keys = data.keys().duplicate()
+	keys.sort()
+	for key in keys:
+		var v = data[key]
+		var mpath = path + "." + key
+		match typeof(v):
+			TYPE_STRING:
+				if "\n" in v:
+					data.erase(key)
+					rv.append("string:" + mpath.substr(1) + "\n" + v)
+			TYPE_DICTIONARY:
+				rv.append_array(extract_verbose_values(mpath, v))
+	return rv
+
+static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		var data = generator.serialize()
-		data.name = file_name.get_file().get_basename()
-		data.node_position = { x=0, y=0 }
-		for k in [ "uids", "export_paths" ]:
-			if data.has(k):
-				data.erase(k)
-		file.store_string(JSON.print(data, "\t", true))
-		file.close()
-		mm_loader.update_predefined_generators()
+	mm_loader.save_gen(file_name, gen)
 
 func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if .on_clicked_output(index, with_shift):

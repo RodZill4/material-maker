@@ -80,6 +80,28 @@ func _ready():
 	if loader != null: # check for errors
 		set_process(true)
 
+func start_ui():
+	if OS.get_name() == "HTML5":
+		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		dialog.dialog_text = """
+			This HTML5 version of Material Maker has many limitations (such as lack of export, 16 bits rendering and 3D model painting) and is meant for evaluation only.
+			If you intend to use this software seriously, it is recommended to download a Windows, MacOS or Linux version.
+			Note there's a known 3D preview rendering problem in Safari.
+		"""
+		add_child(dialog)
+		var result = dialog.ask()
+		while result is GDScriptFunctionState:
+			result = yield(result, "completed")
+	var root = get_tree().root
+	# Remove the current scene
+	root.remove_child(self)
+	call_deferred("free")
+	# Add the next scene
+	progress_bar.value = 100.0
+	var scene = loader.get_resource()
+	var instance = scene.instance()
+	root.add_child(instance)
+	
 var wait : float = 0.0
 func _process(delta) -> void:
 	wait += delta
@@ -88,16 +110,8 @@ func _process(delta) -> void:
 	wait = 0.0
 	var err = loader.poll()
 	if err == ERR_FILE_EOF:
-		var root = get_tree().root
 		set_process(false)
-		# Remove the current scene
-		root.remove_child(self)
-		call_deferred("free")
-		# Add the next scene
-		progress_bar.value = 100.0
-		var scene = loader.get_resource()
-		var instance = scene.instance()
-		root.add_child(instance)
+		start_ui()
 	elif err == OK:
 		progress_bar.value = 100.0*float(loader.get_stage()) / loader.get_stage_count()
 

@@ -1,6 +1,6 @@
 extends Control
 
-var last_value : int = 0
+
 var start_time : int = 0
 var max_render_queue_size : int = 0
 
@@ -12,8 +12,12 @@ onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
 onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
 onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
-const ITEM_AUTO : int           = 1000
-const ITEM_RENDER_ENABLED : int = 1001
+
+const ITEM_AUTO : int                       = 1000
+const ITEM_RENDER_ENABLED : int             = 1001
+const ITEM_MATERIAL_STATS : int             = 1002
+const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
+
 
 func _ready() -> void:
 	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
@@ -41,31 +45,27 @@ func _ready() -> void:
 		var size : int = 32 << i
 		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
+	if OS.is_debug_build():
+		menu.add_separator()
+		menu.add_item("Material stats", ITEM_MATERIAL_STATS)
+		menu.add_item("Trigger dependency manager", ITEM_TRIGGER_DEPENDENCY_MANAGER)
+	# GPU RAM tooltip
 	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
 
 func on_counter_change(count : int, pending : int) -> void:
-	if count == 0 and pending == 0:
+	if pending == 0:
 		$ProgressBar.max_value = 1
 		$ProgressBar.value = 1
 		$ProgressBar/Label.text = ""
-		start_time = OS.get_ticks_msec()
 	else:
-		if count > last_value:
-			if $ProgressBar.value == $ProgressBar.max_value:
-				$ProgressBar.value = 0
-				max_render_queue_size = 1
-			else:
-				max_render_queue_size += 1
+		if count == pending:
+			$ProgressBar.max_value = count
+			start_time = OS.get_ticks_msec()
+			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
-			$ProgressBar.value += 1
-		assert(max_render_queue_size-$ProgressBar.value == count)
-		$ProgressBar.max_value = max_render_queue_size + pending
-		if $ProgressBar.value > 0:
-			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*(count+pending)/$ProgressBar.value
-			$ProgressBar/Label.text = "%d/%d - %d s" % [ $ProgressBar.value, $ProgressBar.max_value, remaining_time_msec/1000 ]
-		else:
-			$ProgressBar/Label.text = "%d/%d - ? s" % [ $ProgressBar.value, $ProgressBar.max_value ]
-	last_value = count
+			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*pending/(count-pending)
+			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
+		$ProgressBar.value = count-pending
 
 func e3tok(value : float) -> String:
 	var unit_modifier : String = ""
@@ -118,6 +118,24 @@ func _on_PopupMenu_id_pressed(id):
 			var b : bool = ! menu.is_item_checked(index)
 			menu.set_item_checked(index, b)
 			mm_renderer.enable_renderers(b)
+		ITEM_MATERIAL_STATS:
+			var material = mm_globals.main_window.get_current_graph_edit().top_generator
+			print("Buffers: "+str(count_buffers(material)))
+			mm_deps.print_stats()
+		ITEM_TRIGGER_DEPENDENCY_MANAGER:
+			mm_deps.update()
+
+func count_buffers(material) -> int:
+	var buffers = 0
+	for c in material.get_children():
+		if c.get_type() == "buffer":
+			buffers += 1
+		elif c.get_type() == "iterate_buffer":
+			buffers += 1
+			print("iterate_buffer: "+str(c.parameters["iterations"]))
+		elif c.get_type() == "graph":
+			buffers += count_buffers(c)
+	return buffers
 
 func _on_Renderers_id_pressed(id):
 	set_max_renderers(id)

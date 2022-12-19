@@ -430,6 +430,7 @@ margin_bottom = 25.0
 script = ExtResource( 9 )
 
 [node name="AddNodePopup" parent="." instance=ExtResource( 7 )]
+visible = false
 margin_left = 138.0
 margin_top = 32.0
 margin_right = 413.0

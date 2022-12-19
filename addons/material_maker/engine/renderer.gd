@@ -10,14 +10,6 @@ var texture : Texture
 signal done
 
 
-func _ready() -> void:
-	$ColorRect.material = $ColorRect.material.duplicate(true)
-
-func setup_material(shader_material, textures, shader_code) -> void:
-	shader_material.shader.code = shader_code
-	for k in textures.keys():
-		shader_material.set_shader_param(k+"_tex", textures[k])
-
 func request(object : Object) -> Object:
 	assert(render_owner == null)
 	render_owner = object
@@ -56,7 +48,6 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	assert(render_owner == object, "Invalid renderer use")
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
-	var shader_material = $ColorRect.material
 	var chunk_count : int = 1
 	var render_scale : float = 1.0
 	var max_viewport_size : int = mm_renderer.max_viewport_size
@@ -69,7 +60,10 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material
-	hdr = with_hdr
+	if OS.get_name() == "HTML5":
+		hdr = false
+	else:
+		hdr = with_hdr
 	if chunk_count == 1:
 		material.set_shader_param("mm_chunk_size", 1.0)
 		material.set_shader_param("mm_chunk_offset", Vector2(0.0, 0.0))
@@ -92,15 +86,14 @@ func render_material(object : Object, material : Material, render_size : int, wi
 				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
 		texture = ImageTexture.new()
 		texture.create_from_image(image)
-	$ColorRect.material = shader_material
+	$ColorRect.material = null
 	return self
 
-func render_shader(object : Object, shader : String, textures : Dictionary, render_size : int, with_hdr : bool = true) -> Object:
-	var shader_material = $ColorRect.material
+func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
+	var shader_material = ShaderMaterial.new()
+	shader_material.shader = Shader.new() 
 	shader_material.shader.code = shader
-	if textures != null:
-		for k in textures.keys():
-			shader_material.set_shader_param(k, textures[k])
+	mm_deps.material_update_params(shader_material)
 	var status = render_material(object, shader_material, render_size, with_hdr)
 	while status is GDScriptFunctionState:
 		status = yield(status, "completed")

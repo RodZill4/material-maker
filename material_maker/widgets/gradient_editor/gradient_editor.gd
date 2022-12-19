@@ -67,7 +67,7 @@ class GradientCursor:
 		set_color(data)
 
 
-var value = null setget set_value
+var value : MMGradient = null setget set_value
 export var embedded : bool = true
 
 var continuous_change = true
@@ -106,7 +106,7 @@ func drop_data(_position : Vector2, data) -> void:
 	if gradient != null:
 		set_value_and_update(MMType.deserialize_value(gradient), false)
 
-func set_value(v, from_popup : bool = false) -> void:
+func set_value(v : MMGradient, from_popup : bool = false) -> void:
 	value = v
 	for c in get_children():
 		if c is GradientCursor:
@@ -120,11 +120,24 @@ func set_value(v, from_popup : bool = false) -> void:
 		popup.init(value)
 
 func update_from_value() -> void:
-	value.clear()
+	var cursors : Array = []
 	for c in get_children():
 		if c is GradientCursor:
-			value.add_point(c.rect_position.x/(rect_size.x-GradientCursor.WIDTH), c.color)
-	update_shader()
+			cursors.append(c)
+	if true or cursors.size() != value.points.size():
+		value.clear()
+		for c in get_children():
+			if c is GradientCursor:
+				value.add_point(c.rect_position.x/(rect_size.x-GradientCursor.WIDTH), c.color)
+		update_shader()
+	else:
+		for i in cursors.size():
+			var c = cursors[i]
+			var p : float = c.rect_position.x/(rect_size.x-GradientCursor.WIDTH)
+			value.points[i].v = p
+			$Gradient.material.set_shader_param("p__%d_pos" % i, p)
+			value.points[i].c = c.color
+			$Gradient.material.set_shader_param("p__%d_col" % i, c.color)
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
 
@@ -189,9 +202,7 @@ func get_gradient_color(x) -> Color:
 func update_shader() -> void:
 	var shader
 	shader = "shader_type canvas_item;\n"
-	var params = value.get_shader_params("")
-	for sp in params.keys():
-		shader += "uniform float "+sp+" = "+str(params[sp])+";\n"
+	shader += value.get_shader_params("")
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)

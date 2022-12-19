@@ -971,7 +971,7 @@
 				"scale_z": 8
 			},
 			"tree_item": "3D/Texture/FBM",
-			"type": "tex3d_fbm"
+			"type": "tex3d_fbm_2"
 		},
 		{
 			"icon": "3d_texture_blend",
@@ -2362,7 +2362,7 @@
 				"blend_type": 0
 			},
 			"tree_item": "Filter/Blend",
-			"type": "blend"
+			"type": "blend2"
 		},
 		{
 			"tree_item": "Filter/Combine",
