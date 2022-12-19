@@ -589,21 +589,27 @@ func save_generator() -> void:
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() > 0:
-		do_save_generator(files[0])
+		do_save_generator(files[0], generator)
 
-func do_save_generator(file_name : String) -> void:
+static func extract_verbose_values(path : String, data : Dictionary) -> Array:
+	var rv = []
+	var keys = data.keys().duplicate()
+	keys.sort()
+	for key in keys:
+		var v = data[key]
+		var mpath = path + "." + key
+		match typeof(v):
+			TYPE_STRING:
+				if "\n" in v:
+					data.erase(key)
+					rv.append("string:" + mpath.substr(1) + "\n" + v)
+			TYPE_DICTIONARY:
+				rv.append_array(extract_verbose_values(mpath, v))
+	return rv
+
+static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		var data = generator.serialize()
-		data.name = file_name.get_file().get_basename()
-		data.node_position = { x=0, y=0 }
-		for k in [ "uids", "export_paths" ]:
-			if data.has(k):
-				data.erase(k)
-		file.store_string(JSON.print(data, "\t", true))
-		file.close()
-		mm_loader.update_predefined_generators()
+	mm_loader.save_gen(file_name, gen)
 
 func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if .on_clicked_output(index, with_shift):
