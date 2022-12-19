@@ -78,42 +78,6 @@ func generator_name_from_path(path : String) -> String:
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
-static func string_to_dict_tree_old(string_data : String) -> Dictionary:
-	var file_data = string_data.split("\n########################################")
-	var data = parse_json(file_data[0])
-	file_data.remove(0)
-
-	if not data:
-		return data
-
-	var re = RegEx.new()
-	re.compile("^(?<type>.+?):(?<path>.+)\n(?<val>(.|\n)*)")
-
-	for f in file_data:
-		var result = re.search(f)
-		if not result:
-			print("File appears to be corrupt, some data will be missing")
-			break
-
-		var val = result.get_string("val")
-		match result.get_string("type"):
-			"string":
-				val = val.replace("    ", "    ") #TODO: Pick tab vs space
-			var path_type:
-				print("Unrecognized type %s, this file may have been written by a newer version of Material Maker" % path_type)
-
-		var data_dict = data
-		var path = result.get_string("path")
-		while true:
-			var path_split = path.split(".", true, 1)
-			if path_split.size() == 1:
-				break
-			data_dict = data_dict[path_split[0]]
-			path = path_split[1]
-		data_dict[path] = val
-
-	return data
-
 const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "instance", "global", "preview_shader", "template" ]
 const REPLACE_MULTILINE_STRINGS_WALK_ITEMS : Array = [ "shader_model", "nodes", "template", "files" ]
 const REPLACE_MULTILINE_STRINGS_WALK_CHILDREN : Array = [ "exports" ]
