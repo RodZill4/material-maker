@@ -1,7 +1,7 @@
 Translate node
 ~~~~~~~~~~~~~~
 
-The **Translate** node applies a translation to the input image.
+The **Translate** node applies a translation to one or more input images.
 
 .. image:: images/node_transform_translate.png
 	:align: center
@@ -9,12 +9,12 @@ The **Translate** node applies a translation to the input image.
 Inputs
 ++++++
 
-The **Translate** node accepts a color image as input.
+The **Translate** node accepts color images as input.
 
 Outputs
 +++++++
 
-The **Translate** node outputs the transformed image.
+The **Translate** node outputs the transformed images.
 
 Parameters
 ++++++++++

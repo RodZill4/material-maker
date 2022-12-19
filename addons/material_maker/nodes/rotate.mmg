@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "rotate",
 	"node_position": {
 		"x": 0,
@@ -18,9 +19,9 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
-				"longdesc": "The input image",
-				"name": "i",
-				"shortdesc": "Input",
+				"longdesc": "An input image",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -29,9 +30,9 @@
 		"name": "Rotate",
 		"outputs": [
 			{
-				"longdesc": "Shows the rotated image",
-				"rgba": "$i(rotate($uv-$(name_uv)_c, $rotate*0.01745329251)+$(name_uv)_c)",
-				"shortdesc": "Output",
+				"longdesc": "Shows a rotated image",
+				"rgba": "$i#(rotate($uv-$(name_uv)_c, $rotate*0.01745329251)+$(name_uv)_c)",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],

@@ -1,7 +1,7 @@
 Scale node
 ~~~~~~~~~~~
 
-The **Scale** node applies a scale transform to the input image.
+The **Scale** node applies a scale transform to one or more input images.
 
 .. image:: images/node_transform_scale.png
 	:align: center
@@ -9,12 +9,12 @@ The **Scale** node applies a scale transform to the input image.
 Inputs
 ++++++
 
-The **Scale** node accepts a color image as input.
+The **Scale** node accepts color images as input.
 
 Outputs
 +++++++
 
-The **Scale** node outputs the transformed image.
+The **Scale** node outputs the transformed images.
 
 Parameters
 ++++++++++
