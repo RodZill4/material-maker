@@ -3,7 +3,7 @@ Blend node
 
 The **Blend** node blends two or more inputs using an optional opacity. It performs a blend operation
 defined by the blend mode between the inputs, and mixes the result with the background input
-using the opacity (defined by the *opacity* parameter, or the optional greyscale input).
+using the opacity (defined by the *opacity* parameter multiplied by the greyscale input).
 
 .. image:: images/node_filter_blend.png
 	:align: center
@@ -17,7 +17,7 @@ The **Blend** node accepts three or more inputs:
 
 * The second input is the first layer.
 
-* The third input is an optional mask that will be use instead of the
+* The third input is an optional mask that will be multiplied by the
   opacity parameter for the first layer.
 
 This node is variadic, and more layers and associated masks can be added.
@@ -36,7 +36,7 @@ The **Blend** node has two or more parameters:
   *Overlay*, *Hard Light*, *Soft Light*, *Linear Light*, *Vivid Light*, *Pin Light*, *Burn*, *Dodge*,
   *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*, *Hard Mix*, *Exclusion*.
 
-* The *opacity* used when mixing the result of the blend operation with the background input
+* The *opacity* is used when mixing the result of the blend operation with the background input
   when the corresponding input is not connected. When connected, the opacity channel is
   multiplied with that parameter.
 
