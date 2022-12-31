@@ -15,6 +15,12 @@
 		{
 			"from": "fast_blur_shader",
 			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
 		}
@@ -30,8 +36,8 @@
 		{
 			"name": "fast_blur_shader",
 			"node_position": {
-				"x": -168,
-				"y": 120
+				"x": -160,
+				"y": 123
 			},
 			"parameters": {
 				"quality": 1,
@@ -115,6 +121,10 @@
 						{
 							"node": "buffer_2",
 							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
 						}
 					],
 					"longdesc": "The resolution used to sample the input image",
@@ -149,6 +159,19 @@
 					"type": "linked_control"
 				}
 			]
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -194.700012,
+				"y": 213.5
+			},
+			"parameters": {
+				"size": 11
+			},
+			"seed": -48026,
+			"type": "buffer",
+			"version": 1
 		}
 	],
 	"parameters": {
