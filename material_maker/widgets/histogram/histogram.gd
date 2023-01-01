@@ -16,6 +16,8 @@ func get_histogram_texture() -> ImageTexture:
 	return $Control.material.get_shader_param("tex")
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
+	if ! is_inside_tree():
+		return
 	if !force and generator == g and output == o:
 		return
 	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
