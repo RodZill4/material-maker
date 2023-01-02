@@ -419,7 +419,7 @@ func deserialize(data : Dictionary) -> void:
 			if data.has(p.name) and p.name != "type":
 				set_parameter(p.name, MMType.deserialize_value(data[p.name]))
 	seed_locked = false
-	if data.has("seed_locked"):
+	if data.has("seed_locked") and data.seed_locked is bool:
 		seed_locked = data.seed_locked
 	if data.has("seed_int"):
 		seed_value = float(data.seed_int)/MAX_SEED
