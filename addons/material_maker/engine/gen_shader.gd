@@ -414,13 +414,13 @@ func find_matching_parenthesis(string : String, i : int) -> int:
 		i = max_p if min_p < 0 else min_p
 	return i
 
-func find_keyword_call(string, keyword):
-	var search_string = "$%s(" % keyword
-	var position = string.find(search_string)
+func find_keyword_call(string : String, keyword : String):
+	var search_string : String = "$%s(" % keyword
+	var position : int = string.find(search_string)
 	if position == -1:
 		return null
-	var parameter_begin = position+search_string.length()
-	var end = find_matching_parenthesis(string, parameter_begin-1)
+	var parameter_begin : int = position+search_string.length()
+	var end : int = find_matching_parenthesis(string, parameter_begin-1)
 	if end < string.length():
 		return string.substr(parameter_begin, end-parameter_begin)
 	return null
@@ -459,9 +459,6 @@ func replace_input(string : String, context, input : String, type : String, src 
 			src_code = subst(default, context, "(%s)" % uv)
 		else:
 			src_code = src.generator.get_shader_code(uv, src.output_index, context)
-			assert(! (src_code is GDScriptFunctionState))
-			while src_code is GDScriptFunctionState:
-				src_code = yield(src_code, "completed")
 			if src_code.has(type):
 				src_code.string = src_code[type]
 			else:
@@ -499,7 +496,7 @@ func replace_rnd(string : String, offset : int = 0) -> String:
 
 func replace_variables(string : String, variables : Dictionary) -> String:
 	while true:
-		var old_string = string
+		var old_string : String = string
 		for variable in variables.keys():
 			string = string.replace("$(%s)" % variable, variables[variable])
 			var keyword_size : int = variable.length()+1
@@ -526,13 +523,13 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 	return string
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
-	var genname = "o"+str(get_instance_id())
+	var genname : String = "o"+str(get_instance_id())
 	var parent = get_parent()
-	var required_globals = []
+	var required_globals : Array = []
 	if parent.has_method("get_globals"):
 		required_globals = [ parent.get_globals() ]
-	var required_defs = ""
-	var required_code = ""
+	var required_defs : String = ""
+	var required_code : String = ""
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
 	var variables = {}
@@ -540,13 +537,12 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 		for gp in mm_renderer.get_global_parameters():
 			variables[gp] = "mm_global_"+gp
 	if parent.has_method("get_named_parameters"):
-		var named_parameters = {}
-		named_parameters = parent.get_named_parameters()
+		var named_parameters : Dictionary = parent.get_named_parameters()
 		for np in named_parameters.keys():
 			variables[np] = named_parameters[np].id
 	variables["name"] = genname
 	if uv != "":
-		var genname_uv = genname+"_"+str(context.get_variant(self, uv))
+		var genname_uv : String = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
@@ -622,8 +618,8 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
 		var cont = true
 		while cont:
-			var changed = false
-			var new_pass_required = false
+			var changed : bool = false
+			var new_pass_required : bool = false
 			for i in range(shader_model_preprocessed.inputs.size()):
 				var input = shader_model_preprocessed.inputs[i]
 				var source = get_source(i)
@@ -632,9 +628,6 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					string = replace_input_with_function_call(string, input.name, "", ".variation")
 				else:
 					var result = replace_input(string, context, input.name, input.type, source, input.default)
-					assert(! (result is GDScriptFunctionState))
-					while result is GDScriptFunctionState:
-						result = yield(result, "completed")
 					if string != result.string:
 						changed = true
 					if result.new_pass_required:
@@ -689,9 +682,6 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
 				var local_context = MMGenContext.new(context)
 				var result = replace_input(string, local_context, input.name, input.type, source, input.default)
-				assert(! (result is GDScriptFunctionState))
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
 				# Add global definitions
 				for d in result.globals:
 					if rv.globals.find(d) == -1:
@@ -715,9 +705,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			rv = generate_input_declarations(rv, context)
 			if shader_model_preprocessed.has("instance"):
 				var subst_output = subst(shader_model_preprocessed.instance, context, "")
-				assert(! (subst_output is GDScriptFunctionState))
-				while subst_output is GDScriptFunctionState:
-					subst_output = yield(subst_output, "completed")
 				rv.defs += subst_output.string
 		# Add inline code
 		if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
@@ -725,9 +712,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			if variant_index == -1:
 				variant_index = context.get_variant(self, uv)
 				var subst_code = subst(shader_model_preprocessed.code, context, uv)
-				assert(! (subst_code is GDScriptFunctionState))
-				while subst_code is GDScriptFunctionState:
-					subst_code = yield(subst_code, "completed")
 				# Add global definitions
 				for d in subst_code.globals:
 					if rv.globals.find(d) == -1:
@@ -745,9 +729,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			for f in mm_io_types.types.keys():
 				if output.has(f):
 					var subst_output = subst(output[f].replace("@NOCODE", ""), context, uv)
-					assert(! (subst_output is GDScriptFunctionState))
-					while subst_output is GDScriptFunctionState:
-						subst_output = yield(subst_output, "completed")
 					# Add global definitions
 					for d in subst_output.globals:
 						if rv.globals.find(d) == -1:
