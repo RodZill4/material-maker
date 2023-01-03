@@ -31,7 +31,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null:
+	if current_renderer != null and ! (current_renderer is GDScriptFunctionState):
 		current_renderer.release(self)
 
 func get_type() -> String:

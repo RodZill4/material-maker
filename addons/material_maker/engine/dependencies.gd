@@ -75,7 +75,8 @@ func buffer_clear_dependencies(buffer_name : String):
 			assert(dep_index != -1)
 			if dependencies[d].size() == 1:
 				dependencies.erase(d)
-				dependencies_values.erase(d)
+				if dependencies_values.has(d) and ! (dependencies_values[d] is Texture):
+					dependencies_values.erase(d)
 			else:
 				dependencies[d].remove(dep_index)
 				assert(dependencies[d].find(buffer_name) == -1)
@@ -221,6 +222,8 @@ func buffer_create_shader_material(buffer_name : String, material : ShaderMateri
 		var value = buffer_add_dependency(buffer_name, p.name)
 		if value != null:
 			material.set_shader_param(p.name, value)
+		else:
+			print(p.name+" value not found")
 	buffers[buffer_name].shader_generations += 1
 	return material
 
