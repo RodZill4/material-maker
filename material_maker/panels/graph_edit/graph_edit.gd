@@ -847,9 +847,18 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 	if node.comment:
+		# Need to account for zoom level when checking for contained nodes within comment
+		var current_zoom = get_zoom()
+		var node_rect = node.get_rect()
+		node_rect.size = node_rect.size * current_zoom
+		
 		for c in get_children():
-			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
-				c.selected = true
+			if c is GraphNode and c != node:
+				var c_rect = c.get_rect()
+				c_rect.size = c_rect.size * current_zoom
+				
+				if node_rect.encloses(c_rect):
+					c.selected = true
 	else:
 		highlight_connections()
 		yield(get_tree(), "idle_frame")
