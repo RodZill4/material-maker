@@ -1,0 +1,66 @@
+{
+	"name": "normal2height_simple",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"center_height": 0.5,
+		"scale": 25,
+		"size": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5)",
+				"function": true,
+				"label": "",
+				"name": "nm",
+				"type": "rgb"
+			}
+		],
+		"instance": "float find_height_$name(vec2 uv, vec2 center, float center_height, int steps) {\n\tvec2 p;\n\tfloat height = center_height;\n\tfloat sum = 0.0;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tp = mix(center, uv, float(i)/float(steps));\n\t\tvec2 nm = $nm(p).xy-vec2(0.5);\n\t\theight += $scale*dot((uv-center)/float(steps), nm);\n\t}\n\treturn height;\n}\n\nfloat height_$name(vec2 uv) {\n\tconst vec2 c = vec2(0.5);\n\tfloat center_height = $center_height;\n\tfloat l = length(uv-c)*$size;\n\tfloat lx = abs(uv.x-c.x)*$size;\n\tfloat ly = abs(uv.y-c.y)*$size;\n\tfloat h = find_height_$name(uv, c, center_height, int(l)+1);\n\tfloat hxi = find_height_$name(vec2(c.x, uv.y), c, center_height, int(ly)+1);\n\tfloat hx = find_height_$name(uv, vec2(c.x, uv.y), hxi, int(lx)+1);\n\tfloat hyi = find_height_$name(vec2(uv.x, c.y), c, center_height, int(lx)+1);\n\tfloat hy = find_height_$name(uv, vec2(uv.x, c.y), hyi, int(ly)+1);\n\treturn 0.5*h+0.25*(hx+hy);\n}\n",
+		"name": "Normal to Height",
+		"outputs": [
+			{
+				"f": "height_$name($uv)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 10,
+				"first": 6,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Base Height",
+				"max": 1,
+				"min": 0,
+				"name": "center_height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 20,
+				"label": "Strength",
+				"max": 50,
+				"min": 0,
+				"name": "scale",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}
