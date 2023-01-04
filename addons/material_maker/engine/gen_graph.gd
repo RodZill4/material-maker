@@ -226,7 +226,8 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	if from == null or to == null:
 		return false
 	# check the new connection does not create a loop
-	var spreadlist = [ InputPort.new(to, to_port) ]
+	var spreadlist : Array = [ InputPort.new(to, to_port) ]
+	var found_ports : Dictionary = {}
 	var index = 0
 	while index < spreadlist.size():
 		var input : InputPort = spreadlist[index]
@@ -234,7 +235,14 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 			for o in input.generator.follow_input(input.input_index):
 				if o.generator == from and o.output_index == from_port:
 					return false
-				spreadlist.append_array(o.generator.get_parent().get_port_targets(o.generator.name, o.output_index))
+				for i in o.generator.get_parent().get_port_targets(o.generator.name, o.output_index):
+					if found_ports.has(i.generator.name):
+						if ! found_ports[i.generator.name].has(i.input_index):
+							found_ports[i.generator.name][i.input_index] = true
+							spreadlist.append(i)
+					else:
+						found_ports[i.generator.name] = { i.input_index:true }
+						spreadlist.append(i)
 		index += 1
 	# disconnect target
 	while true:

@@ -222,8 +222,6 @@ func buffer_create_shader_material(buffer_name : String, material : ShaderMateri
 		var value = buffer_add_dependency(buffer_name, p.name)
 		if value != null:
 			material.set_shader_param(p.name, value)
-		else:
-			print(p.name+" value not found")
 	buffers[buffer_name].shader_generations += 1
 	return material
 
