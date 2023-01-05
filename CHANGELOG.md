@@ -6,6 +6,8 @@
 
 ## Nodes
 
+- Added a parameter to the image node to keep the image's aspect ratio (contributed by myaaaaaaaaa)
+
 ## Miscellaneous
 
 - Added an experimental HTML5 version

@@ -11,6 +11,9 @@ var texture : ImageTexture = ImageTexture.new()
 func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type="rgba" } ]
 
+func get_adjusted_uv(uv : String) -> String:
+	return uv
+
 func get_globals(texture_name : String) -> Array:
 	return [ "uniform sampler2D "+texture_name+";\n" ]
 
@@ -22,10 +25,10 @@ func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenConte
 	if variant_index == -1:
 		variant_index = context.get_variant(self, uv)
 		if lod < 0.0:
-			rv.code = "vec4 %s_%d = textureLod(%s, %s, 0.0);\n" % [ genname, variant_index, texture_name, uv ]
+			rv.code = "vec4 %s_%d = textureLod(%s, %s, 0.0);\n" % [ genname, variant_index, texture_name, get_adjusted_uv(uv) ]
 		else:
 			rv.defs = "uniform float p_o%d_lod = %.09f;\n" % [ get_instance_id(), lod ]
-			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%d_lod);\n" % [ genname, variant_index, texture_name, uv, get_instance_id() ]
+			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%d_lod);\n" % [ genname, variant_index, texture_name, get_adjusted_uv(uv), get_instance_id() ]
 	rv.rgba = "%s_%d" % [ genname, variant_index ]
 	rv.globals = get_globals(texture_name)
 	rv.textures = { texture_name:texture }
