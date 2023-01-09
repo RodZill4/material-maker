@@ -141,9 +141,9 @@ func follow_input(_input_index : int) -> Array:
 	for port in follow_connections_find_matching(start_port, get_node("gen_outputs")):
 		rv.push_back(OutputPort.new(self, port.input_index))
 
-	print("The input %s connects to:" % InputPort.new(self, _input_index).to_str())
-	for r in rv:
-		print("\t%s" % r.to_str())
+#	print("The input %s connects to:" % InputPort.new(self, _input_index).to_str())
+#	for r in rv:
+#		print("\t%s" % r.to_str())
 
 	return rv
 
