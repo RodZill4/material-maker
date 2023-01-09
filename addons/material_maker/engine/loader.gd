@@ -228,17 +228,19 @@ func load_external_export_targets():
 func get_external_export_targets(material_name : String) -> Dictionary:
 	return external_export_targets[material_name].exports if external_export_targets.has(material_name) else {}
 
+func save_export_target(material_name : String, export_target_name : String, export_target : Dictionary) -> String:
+	var file : File = File.new()
+	var file_name : String = get_export_file_name(material_name, export_target_name)
+	if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
+		file.store_string(JSON.print(export_target, "\t", true))
+	return file_name
+
 func update_external_export_targets(material_name : String, export_targets : Dictionary):
 	var dir : Directory = Directory.new()
 	dir.make_dir_recursive(USER_EXPORT_DIR)
 	var files = []
 	for k in export_targets.keys():
-		var e = export_targets[k]
-		var file : File = File.new()
-		var file_name : String = get_export_file_name(material_name, k)
-		if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
-			file.store_string(JSON.print(e, "\t", true))
-		files.append(file_name)
+		files.append(save_export_target(material_name, k, export_targets[k]))
 	if ! external_export_targets.has(material_name):
 		external_export_targets[material_name] = { exports={}, files=[] }
 	external_export_targets[material_name].exports = export_targets
