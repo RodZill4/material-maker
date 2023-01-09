@@ -7,9 +7,17 @@
 	"parameters": {
 		"size": 9
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec3 color_dots(vec2 uv, float size, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\treturn rand3(seed2+point_pos);\n}",
+		"global": [
+			"vec3 color_dots(vec2 uv, float size, float seed) {",
+			"\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));",
+			"\tuv /= size;",
+			"\tvec2 point_pos = floor(uv)+vec2(0.5);",
+			"\treturn rand3(seed2+point_pos);",
+			"}"
+		],
 		"inputs": [
 
 		],

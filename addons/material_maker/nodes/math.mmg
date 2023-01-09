@@ -10,11 +10,19 @@
 		"default_in2": 0,
 		"op": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_clamp_false = $op;\nfloat $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);\n",
-		"global": "float pingpong(float a, float b)\n{\n  return (b != 0.0) ? abs(fract((a - b) / (b * 2.0)) * b * 2.0 - b) : 0.0;\n}",
+		"code": [
+			"float $(name_uv)_clamp_false = $op;",
+			"float $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);",
+			""
+		],
+		"global": [
+			"float pingpong(float a, float b)",
+			"{",
+			"  return (b != 0.0) ? abs(fract((a - b) / (b * 2.0)) * b * 2.0 - b) : 0.0;",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "$default_in1",
@@ -180,6 +188,10 @@
 					{
 						"name": "exp(A)",
 						"value": "exp($in1($uv))"
+					},
+					{
+						"name": "snap(A,B)",
+						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
 					}
 				]
 			},

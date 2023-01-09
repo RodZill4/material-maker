@@ -1,4 +1,5 @@
 {
+	"generic_size": 2,
 	"name": "mwf_mix",
 	"node_position": {
 		"x": 0,
@@ -7,99 +8,120 @@
 	"parameters": {
 
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_a1 = step($h1($uv), $h2($uv));",
+		"code": [
+			"float $(name_uv)_h = 0.0;",
+			"int $(name_uv)_i = 0;",
+			"#for",
+			"float $(name_uv)_h# = $h#($uv);",
+			"if ($(name_uv)_h# > $(name_uv)_h) {",
+			"\t$(name_uv)_h = $(name_uv)_h#;",
+			"\t$(name_uv)_i = #;",
+			"}",
+			"#end"
+		],
 		"global": "",
 		"inputs": [
 			{
 				"default": "0.0",
 				"group_size": 5,
-				"label": "Height 1",
-				"longdesc": "The height map of the first input",
-				"name": "h1",
-				"shortdesc": "Height1",
+				"label": "Height #",
+				"longdesc": "An height map",
+				"name": "h#",
+				"shortdesc": "Height#",
 				"type": "f"
 			},
 			{
 				"default": "vec3(0.0)",
-				"label": "Albedo 1",
-				"longdesc": "The albedo channel of the first input",
-				"name": "c1",
-				"shortdesc": "Albedo1",
+				"function": true,
+				"label": "Albedo #",
+				"longdesc": "An albedo channel",
+				"name": "c#",
+				"shortdesc": "Albedo#",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
-				"label": "ORM 1",
-				"longdesc": "The ambient occlusion, roughness and metallic channels of the first input",
-				"name": "orm1",
-				"shortdesc": "ORM1",
+				"function": true,
+				"label": "ORM #",
+				"longdesc": "A combination of ambient occlusion, roughness and metallic channels",
+				"name": "orm#",
+				"shortdesc": "ORM#",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.0)",
-				"label": "Emission 1",
-				"longdesc": "The emission channel of the first input",
-				"name": "em1",
-				"shortdesc": "Emission1",
+				"function": true,
+				"label": "Emission #",
+				"longdesc": "An emission channel",
+				"name": "em#",
+				"shortdesc": "Emission#",
 				"type": "rgb"
 			},
 			{
 				"default": "vec3(0.5, 0.5, 1.0)",
-				"label": "Normal 1",
-				"longdesc": "The normal map of the first input",
-				"name": "nm1",
-				"shortdesc": "Normal1",
-				"type": "rgb"
-			},
-			{
-				"default": "0.0",
-				"group_size": 5,
-				"label": "Height 2",
-				"longdesc": "The height map of the second input",
-				"name": "h2",
-				"shortdesc": "Height2",
-				"type": "f"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "Albedo 2",
-				"longdesc": "The albedo channel of the second input",
-				"name": "c2",
-				"shortdesc": "Albedo2",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "ORM 2",
-				"longdesc": "The ambient occlusion, roughness and metallic channels of the second input",
-				"name": "orm2",
-				"shortdesc": "ORM2",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "Emission 2",
-				"longdesc": "The emission channel of the second input",
-				"name": "em2",
-				"shortdesc": "Emission2",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.5, 0.5, 1.0)",
-				"label": "Normal 2",
-				"longdesc": "The normal map of the second input",
-				"name": "nm2",
-				"shortdesc": "Normal2",
+				"function": true,
+				"label": "Normal #",
+				"longdesc": "A normal map",
+				"name": "nm#",
+				"shortdesc": "Normal#",
 				"type": "rgb"
 			}
 		],
-		"instance": "",
-		"longdesc": "Combines the outputs of 2 mapped base materials (keeping the \"highest\" material).",
+		"instance": [
+			"vec3 mix_c_$name(vec2 uv, int i) {",
+			"#for",
+			"\tif (i == #) {",
+			"\t\treturn $c#(uv);",
+			"\t} else",
+			"#end",
+			"\t{",
+			"\t\treturn vec3(0.0);",
+			"\t}",
+			"}",
+			"",
+			"vec3 mix_orm_$name(vec2 uv, int i) {",
+			"#for",
+			"\tif (i == #) {",
+			"\t\treturn $orm#(uv);",
+			"\t} else",
+			"#end",
+			"\t{",
+			"\t\treturn vec3(0.0);",
+			"\t}",
+			"}",
+			"",
+			"vec3 mix_em_$name(vec2 uv, int i) {",
+			"#for",
+			"\tif (i == #) {",
+			"\t\treturn $em#(uv);",
+			"\t} else",
+			"#end",
+			"\t{",
+			"\t\treturn vec3(0.0);",
+			"\t}",
+			"}",
+			"",
+			"vec3 mix_nm_$name(vec2 uv, int i) {",
+			"#for",
+			"\tif (i == #) {",
+			"\t\treturn $nm#(uv);",
+			"\t} else",
+			"#end",
+			"\t{",
+			"\t\treturn vec3(0.5, 0.5, 1.0);",
+			"\t}",
+			"}",
+			"",
+			"",
+			""
+		],
+		"longdesc": "Combines the outputs of several mapped base materials, keeping the \"highest\" material",
 		"name": "Mix",
 		"outputs": [
 			{
-				"f": "max($h1($uv), $h2($uv))",
+				"f": "$(name_uv)_h",
 				"group_size": 5,
 				"longdesc": "Generates the height of the result",
 				"shortdesc": "Height",
@@ -107,25 +129,25 @@
 			},
 			{
 				"longdesc": "Shows the output albedo channel",
-				"rgb": "mix($c1($uv), $c2($uv), $(name_uv)_a1)",
+				"rgb": "mix_c_$name($uv, $(name_uv)_i)",
 				"shortdesc": "Albedo",
 				"type": "rgb"
 			},
 			{
 				"longdesc": "Shows the output ambient occlusion, roughness and metallic channels",
-				"rgb": "mix($orm1($uv), $orm2($uv), $(name_uv)_a1)",
+				"rgb": "mix_orm_$name($uv, $(name_uv)_i)",
 				"shortdesc": "ORM",
 				"type": "rgb"
 			},
 			{
 				"longdesc": "Shows the output emission channel",
-				"rgb": "mix($em1($uv), $em2($uv), $(name_uv)_a1)",
+				"rgb": "mix_em_$name($uv, $(name_uv)_i)",
 				"shortdesc": "Emission",
 				"type": "rgb"
 			},
 			{
 				"longdesc": "Shows the output normal map",
-				"rgb": "mix($nm1($uv), $nm2($uv), $(name_uv)_a1)",
+				"rgb": "mix_nm_$name($uv, $(name_uv)_i)",
 				"shortdesc": "Normal",
 				"type": "rgb"
 			}

@@ -37,7 +37,8 @@
 				"lod": 0,
 				"size": 9
 			},
-			"seed_value": 10109,
+			"seed": 10109,
+			"seed_locked": true,
 			"type": "buffer"
 		},
 		{
@@ -52,6 +53,7 @@
 				"size": 9,
 				"width": 1
 			},
+			"seed": 24130,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -67,7 +69,21 @@
 						"type": "f"
 					}
 				],
-				"instance": "float $(name)_fct(vec2 uv) {\n\tfloat pixels = max(1.0, $width);\n\tfloat e = 1.0/$size;\n\tfloat rv = 0.0;\n\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {\n\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {\n\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {\n\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));\n\t\t\t}\n\t\t}\n\t}\n\treturn $amount*rv/pixels+0.5;\n}",
+				"instance": [
+					"float $(name)_fct(vec2 uv) {",
+					"\tfloat pixels = max(1.0, $width);",
+					"\tfloat e = 1.0/$size;",
+					"\tfloat rv = 0.0;",
+					"\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {",
+					"\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {",
+					"\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {",
+					"\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn $amount*rv/pixels+0.5;",
+					"}"
+				],
 				"name": "Emboss",
 				"outputs": [
 					{
@@ -136,6 +152,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 2287,
 			"type": "ios"
 		},
 		{
@@ -156,6 +173,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -47498,
 			"type": "ios"
 		},
 		{
@@ -170,6 +188,7 @@
 				"param2": 5,
 				"param3": 1
 			},
+			"seed": 32120,
 			"type": "remote",
 			"widgets": [
 				{
@@ -237,6 +256,7 @@
 		"param2": 5,
 		"param3": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "Emboss",
 	"type": "graph"
 }

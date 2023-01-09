@@ -41,7 +41,7 @@ func _init():
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null:
+	if current_renderer != null and ! (current_renderer is GDScriptFunctionState):
 		current_renderer.release(self)
 
 func get_type() -> String:
@@ -213,7 +213,7 @@ func set_current_iteration(i : int) -> void:
 		mm_deps.buffer_invalidate(buffer_names[3])
 
 func get_globals(texture_name : String) -> Array:
-	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")), get_instance_id() ]
+	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
@@ -228,10 +228,10 @@ func get_output_attributes(output_index : int) -> Dictionary:
 	match output_index:
 		0:
 			attributes.texture = "o%d_tex" % get_instance_id()
-			attributes.texture_size = pow(2, get_parameter("size"))
+			attributes.texture_size = "o%d_tex_size" % get_instance_id()
 		1:
 			attributes.texture = "o%d_loop_tex" % get_instance_id()
-			attributes.texture_size = pow(2, get_parameter("size"))
+			attributes.texture_size = "o%d_tex_size" % get_instance_id()
 			attributes.iteration = "o%d_iteration" % get_instance_id()
 	return attributes
 

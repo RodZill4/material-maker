@@ -7,15 +7,26 @@
 	"parameters": {
 		"size": 11
 	},
-	"seed": 0.561617,
-	"seed_locked": false,
+	"seed_int": 2412126648,
 	"shader_model": {
 		"code": "",
-		"global": "float white_noise(vec2 uv, float size, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\tuv /= size;\n\tvec2 point_pos = floor(uv)+vec2(0.5);\n\tfloat color = rand(seed2+point_pos);\n    return color;\n}",
+		"global": [
+			"float white_noise(vec2 uv, float size, float seed) {",
+			"\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));",
+			"\tuv /= size;",
+			"\tvec2 point_pos = floor(uv)+vec2(0.5);",
+			"\tfloat color = rand(seed2+point_pos);",
+			"\treturn color;",
+			"}"
+		],
 		"inputs": [
 
 		],
-		"instance": "float $(name)_f(vec2 uv) {\n\treturn white_noise(uv, 1.0/$(size), $(seed));\n}",
+		"instance": [
+			"float $(name)_f(vec2 uv) {",
+			"\treturn white_noise(uv, 1.0/$(size), $(seed));",
+			"}"
+		],
 		"longdesc": "Generates white noise in a given resolution",
 		"name": "White Noise",
 		"outputs": [

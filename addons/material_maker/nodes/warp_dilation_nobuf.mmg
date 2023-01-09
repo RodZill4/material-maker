@@ -1,5 +1,5 @@
 {
-	"name": "warp_dilation",
+	"name": "warp_dilation_nobuf",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -10,6 +10,7 @@
 		"mode": 0,
 		"s": 9
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -33,7 +34,23 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec2 $(name)_slope(vec2 uv, float epsilon) {\n\tfloat dx = $hm(fract(uv+vec2(epsilon, 0.0)))-$hm(fract(uv-vec2(epsilon, 0.0)));\n\tfloat dy = $hm(fract(uv+vec2(0.0, epsilon)))-$hm(fract(uv-vec2(0.0, epsilon)));\n\treturn vec2($mode);\n}\n\nfloat $(name)_dilate(vec2 uv, vec2 slope) {\n\tfloat e = 1.0/$s;\n\tfloat v = 0.0;\n\tfor (float x = 0.0; x <= $d; x += e) {\n\t\tv = max(v, $in(fract(uv))*(1.0-x/$d*$a));\n\t\tuv += e*normalize($(name)_slope(uv, 0.0001));\n\t}\n\treturn v;\n}",
+		"instance": [
+			"vec2 $(name)_slope(vec2 uv, float epsilon) {",
+			"\tfloat dx = $hm(fract(uv+vec2(epsilon, 0.0)))-$hm(fract(uv-vec2(epsilon, 0.0)));",
+			"\tfloat dy = $hm(fract(uv+vec2(0.0, epsilon)))-$hm(fract(uv-vec2(0.0, epsilon)));",
+			"\treturn vec2($mode);",
+			"}",
+			"",
+			"float $(name)_dilate(vec2 uv, vec2 slope) {",
+			"\tfloat e = 1.0/$s;",
+			"\tfloat v = 0.0;",
+			"\tfor (float x = 0.0; x <= $d; x += e) {",
+			"\t\tv = max(v, $in(fract(uv))*(1.0-x/$d*$a));",
+			"\t\tuv += e*normalize($(name)_slope(uv, 0.0001));",
+			"\t}",
+			"\treturn v;",
+			"}"
+		],
 		"longdesc": "Dilates its input following the contours or slope of an input heightmap",
 		"name": "Warp Dilation",
 		"outputs": [

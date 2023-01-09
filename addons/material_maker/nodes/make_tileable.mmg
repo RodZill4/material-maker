@@ -7,9 +7,9 @@
 	"parameters": {
 		"w": 0.1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"longdesc": "Creates a tileable version of its input image by moving different parts around to hide seams.",
 		"global": "",
 		"inputs": [
 			{
@@ -22,7 +22,18 @@
 				"type": "rgba"
 			}
 		],
-		"instance": "vec4 make_tileable_$(name)(vec2 uv, float w) {\n\tvec4 a = $in(uv);\n\tvec4 b = $in(fract(uv+vec2(0.5)));\n\tfloat coef_ab = sin(1.57079632679*clamp((length(uv-vec2(0.5))-0.5+w)/w, 0.0, 1.0));\n\tvec4 c = $in(fract(uv+vec2(0.25)));\n\tfloat coef_abc = sin(1.57079632679*clamp((min(min(length(uv-vec2(0.0, 0.5)), length(uv-vec2(0.5, 0.0))), min(length(uv-vec2(1.0, 0.5)), length(uv-vec2(0.5, 1.0))))-w)/w, 0.0, 1.0));\n\treturn mix(c, mix(a, b, coef_ab), coef_abc);\n}\n",
+		"instance": [
+			"vec4 make_tileable_$(name)(vec2 uv, float w) {",
+			"\tvec4 a = $in(uv);",
+			"\tvec4 b = $in(fract(uv+vec2(0.5)));",
+			"\tfloat coef_ab = sin(1.57079632679*clamp((length(uv-vec2(0.5))-0.5+w)/w, 0.0, 1.0));",
+			"\tvec4 c = $in(fract(uv+vec2(0.25)));",
+			"\tfloat coef_abc = sin(1.57079632679*clamp((min(min(length(uv-vec2(0.0, 0.5)), length(uv-vec2(0.5, 0.0))), min(length(uv-vec2(1.0, 0.5)), length(uv-vec2(0.5, 1.0))))-w)/w, 0.0, 1.0));",
+			"\treturn mix(c, mix(a, b, coef_ab), coef_abc);",
+			"}",
+			""
+		],
+		"longdesc": "Creates a tileable version of its input image by moving different parts around to hide seams.",
 		"name": "Make Tileable",
 		"outputs": [
 			{

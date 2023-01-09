@@ -128,7 +128,6 @@
 				"size": 10
 			},
 			"seed": 3065,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -142,7 +141,6 @@
 				"size": 10
 			},
 			"seed": 20826,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -156,7 +154,6 @@
 				"size": 10
 			},
 			"seed": 12578,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -181,7 +178,6 @@
 				}
 			],
 			"seed": 503,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -201,7 +197,6 @@
 				}
 			],
 			"seed": 33280,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -218,7 +213,6 @@
 				"s": 10
 			},
 			"seed": 18589,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -343,7 +337,6 @@
 				"s": 10
 			},
 			"seed": 7232,
-			"seed_locked": false,
 			"type": "warp_dilation2_nobuf"
 		},
 		{
@@ -357,8 +350,7 @@
 				"outputs": 4,
 				"source": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "switch"
 		},
 		{
@@ -370,8 +362,7 @@
 			"parameters": {
 				"color": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "uniform_greyscale"
 		},
 		{
@@ -385,8 +376,7 @@
 				"outputs": 2,
 				"source": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "switch"
 		}
 	],
@@ -397,8 +387,7 @@
 		"param0": 1,
 		"s": 10
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Warp Dilation 2",
 	"type": "graph"
 }

@@ -62,7 +62,6 @@
 				"size": 10
 			},
 			"seed": -32011,
-			"seed_locked": false,
 			"type": "buffer"
 		},
 		{
@@ -78,7 +77,6 @@
 				"strength": 1
 			},
 			"seed": 56582,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -174,7 +172,6 @@
 				}
 			],
 			"seed": -6314,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -211,7 +208,6 @@
 				"source": 1
 			},
 			"seed": -53264,
-			"seed_locked": false,
 			"type": "switch"
 		},
 		{
@@ -226,7 +222,6 @@
 				"size": 10
 			},
 			"seed": -11547,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -239,7 +234,46 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 nm_$name(vec2 uv, float amount, float size) {\n\tvec3 e = vec3(1.0/size, -1.0/size, 0);\n\tvec2 rv;\n\tif ($algo == 0) {\n\t\trv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\t\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\t\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\t\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/128.0;\n\t} else if ($algo == 1) {\n\t\trv = vec2(3.0, -3.0)*$in(uv+e.xy);\n\t\trv += vec2(-3.0, 3.0)*$in(uv-e.xy);\n\t\trv += vec2(3.0, 3.0)*$in(uv+e.xx);\n\t\trv += vec2(-3.0, -3.0)*$in(uv-e.xx);\n\t\trv += vec2(10.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-10.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 10.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -10.0)*$in(uv-e.zx);\n\t\trv *= size*amount/512.0;\n\t} else if ($algo == 2) {\n\t\trv = vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/64.0;\n\t} else {\n\t\trv = vec2(1.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(0.0, 1.0)*$in(uv+e.zx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv);\n\t\trv *= size*amount/20.0;\n\t}\n\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));\n}\n",
+				"instance": [
+					"vec3 nm_$name(vec2 uv, float amount, float size) {",
+					"\tvec3 e = vec3(1.0/size, -1.0/size, 0);",
+					"\tvec2 rv;",
+					"\tif ($algo == 0) {",
+					"\t\trv = vec2(1.0, -1.0)*$in(uv+e.xy);",
+					"\t\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);",
+					"\t\trv += vec2(1.0, 1.0)*$in(uv+e.xx);",
+					"\t\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);",
+					"\t\trv += vec2(2.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/128.0;",
+					"\t} else if ($algo == 1) {",
+					"\t\trv = vec2(3.0, -3.0)*$in(uv+e.xy);",
+					"\t\trv += vec2(-3.0, 3.0)*$in(uv-e.xy);",
+					"\t\trv += vec2(3.0, 3.0)*$in(uv+e.xx);",
+					"\t\trv += vec2(-3.0, -3.0)*$in(uv-e.xx);",
+					"\t\trv += vec2(10.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-10.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 10.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -10.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/512.0;",
+					"\t} else if ($algo == 2) {",
+					"\t\trv = vec2(2.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/64.0;",
+					"\t} else {",
+					"\t\trv = vec2(1.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(0.0, 1.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(-1.0, -1.0)*$in(uv);",
+					"\t\trv *= size*amount/20.0;",
+					"\t}",
+					"\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));",
+					"}",
+					""
+				],
 				"name": "Normal map",
 				"outputs": [
 					{
@@ -303,8 +337,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_1x32_to_2x16"
 		},
 		{
@@ -316,8 +349,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_2x16_to_1x32"
 		}
 	],
@@ -327,8 +359,7 @@
 		"size": 10,
 		"strength": 1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Normal map",
 	"type": "graph"
 }

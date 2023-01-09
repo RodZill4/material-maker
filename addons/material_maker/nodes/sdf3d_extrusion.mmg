@@ -7,8 +7,12 @@
 	"parameters": {
 		"d": 0.3
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_w = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);\n",
+		"code": [
+			"vec2 $(name_uv)_w = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);",
+			""
+		],
 		"global": "",
 		"inputs": [
 			{

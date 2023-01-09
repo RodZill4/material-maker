@@ -8,10 +8,13 @@
 		"angle": 0,
 		"axis": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_p = $uv;\n$axis;\n",
+		"code": [
+			"vec3 $(name_uv)_p = $uv;",
+			"$axis;",
+			""
+		],
 		"global": "",
 		"includes": [
 			"rotate"

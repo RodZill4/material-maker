@@ -93,8 +93,7 @@
 				"default_in2": 0,
 				"op": 13
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -109,8 +108,7 @@
 				"default_in2": 0,
 				"op": 19
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -127,8 +125,7 @@
 				"stretch_x": 0.85,
 				"stretch_y": 0.85
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "voronoi"
 		},
 		{
@@ -145,8 +142,7 @@
 				"stretch_x": 0.85,
 				"stretch_y": 0.85
 			},
-			"seed": 0.465376,
-			"seed_locked": false,
+			"seed_int": 1998774700,
 			"type": "voronoi"
 		},
 		{
@@ -161,8 +157,7 @@
 				"default_in2": 0,
 				"op": 19
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -177,8 +172,7 @@
 				"default_in2": 0,
 				"op": 14
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -193,8 +187,7 @@
 				"default_in2": 0,
 				"op": 1
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -209,8 +202,7 @@
 				"default_in2": 0,
 				"op": 3
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		},
 		{
@@ -225,8 +217,7 @@
 			"ports": [
 
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -247,8 +238,7 @@
 					"type": "f"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -261,8 +251,7 @@
 				"param0": 16,
 				"param1": 16
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -313,8 +302,7 @@
 				"default_in2": 1.45,
 				"op": 2
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "math"
 		}
 	],
@@ -322,8 +310,7 @@
 		"param0": 16,
 		"param1": 16
 	},
-	"seed": 0.014224,
-	"seed_locked": false,
+	"seed_int": 61091615,
 	"shortdesc": "Crystal",
 	"type": "graph"
 }

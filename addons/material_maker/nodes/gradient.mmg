@@ -28,6 +28,7 @@
 		"repeat": 1,
 		"rotate": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "float $(name_uv)_r = 0.5+(cos($rotate*0.01745329251)*($uv.x-0.5)+sin($rotate*0.01745329251)*($uv.y-0.5))/(cos(abs(mod($rotate, 90.0)-45.0)*0.01745329251)*1.41421356237);",
 		"global": "",

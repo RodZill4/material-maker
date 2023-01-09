@@ -42,6 +42,7 @@
 			"parameters": {
 				"size": 10
 			},
+			"seed": 64852,
 			"type": "buffer",
 			"version": 1
 		},
@@ -57,6 +58,7 @@
 				"size": 10,
 				"threshold": 0.7
 			},
+			"seed": 52770,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -69,7 +71,66 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  Copyright (c) 2018-2019 Michele Morrone\n//  All rights reserved.\n//\n//  https://michelemorrone.eu - https://BrutPitt.com\n//\n//  me@michelemorrone.eu - brutpitt@gmail.com\n//  twitter: @BrutPitt - github: BrutPitt\n//  \n//  https://github.com/BrutPitt/glslSmartDeNoise/\n//\n//  This software is distributed under the terms of the BSD 2-Clause license\n//  Adapted for Material Maker by wojtekpil\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  smartDeNoise - parameters\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//\n//  sampler2D tex     - sampler image / texture\n//  vec2 uv           - actual fragment coord\n//  float sigma  >  0 - sigma Standard Deviation\n//  float kSigma >= 0 - sigma coefficient \n//      kSigma * sigma  -->  radius of the circular kernel\n//  float threshold   - edge sharpening threshold \nvec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)\n{\n\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI\n\tfloat INV_PI = 0.31830988618379067153776752674503;\n    float radius = round(kSigma*sigma);\n    float radQ = radius * radius;\n\n    float invSigmaQx2 = .5 / (sigma * sigma);      // 1.0 / (sigma^2 * 2.0)\n    float invSigmaQx2PI = INV_PI * invSigmaQx2;    // 1/(2 * PI * sigma^2)\n\n    float invThresholdSqx2 = .5 / (threshold * threshold);     // 1.0 / (sigma^2 * 2.0)\n    float invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)\n\n    vec4 centrPx = $in(uv); \n\n    float zBuff = 0.0;\n    vec4 aBuff = vec4(0.0);\n    vec2 size = vec2($size, $size);\n\n    vec2 d;\n    for (d.x=-radius; d.x <= radius; d.x++) {\n        float pt = sqrt(radQ-d.x*d.x);       // pt = yRadius: have circular trend\n        for (d.y=-pt; d.y <= pt; d.y++) {\n            float blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;\n\n            vec4 walkPx =  $in(uv+d/size);\n            vec4 dC = walkPx-centrPx;\n            float deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;\n\n            zBuff += deltaFactor;\n            aBuff += deltaFactor*walkPx;\n        }\n    }\n    return aBuff/zBuff;\n}",
+				"instance": [
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  Copyright (c) 2018-2019 Michele Morrone",
+					"//  All rights reserved.",
+					"//",
+					"//  https://michelemorrone.eu - https://BrutPitt.com",
+					"//",
+					"//  me@michelemorrone.eu - brutpitt@gmail.com",
+					"//  twitter: @BrutPitt - github: BrutPitt",
+					"//  ",
+					"//  https://github.com/BrutPitt/glslSmartDeNoise/",
+					"//",
+					"//  This software is distributed under the terms of the BSD 2-Clause license",
+					"//  Adapted for Material Maker by wojtekpil",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  smartDeNoise - parameters",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//",
+					"//  sampler2D tex\t - sampler image / texture",
+					"//  vec2 uv\t\t   - actual fragment coord",
+					"//  float sigma  >  0 - sigma Standard Deviation",
+					"//  float kSigma >= 0 - sigma coefficient ",
+					"//\t  kSigma * sigma  -->  radius of the circular kernel",
+					"//  float threshold   - edge sharpening threshold ",
+					"vec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)",
+					"{",
+					"\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI",
+					"\tfloat INV_PI = 0.31830988618379067153776752674503;",
+					"\tfloat radius = round(kSigma*sigma);",
+					"\tfloat radQ = radius * radius;",
+					"",
+					"\tfloat invSigmaQx2 = .5 / (sigma * sigma);\t  // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invSigmaQx2PI = INV_PI * invSigmaQx2;\t// 1/(2 * PI * sigma^2)",
+					"",
+					"\tfloat invThresholdSqx2 = .5 / (threshold * threshold);\t // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)",
+					"",
+					"\tvec4 centrPx = $in(uv); ",
+					"",
+					"\tfloat zBuff = 0.0;",
+					"\tvec4 aBuff = vec4(0.0);",
+					"\tvec2 size = vec2($size, $size);",
+					"",
+					"\tvec2 d;",
+					"\tfor (d.x=-radius; d.x <= radius; d.x++) {",
+					"\t\tfloat pt = sqrt(radQ-d.x*d.x);\t   // pt = yRadius: have circular trend",
+					"\t\tfor (d.y=-pt; d.y <= pt; d.y++) {",
+					"\t\t\tfloat blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;",
+					"",
+					"\t\t\tvec4 walkPx =  $in(uv+d/size);",
+					"\t\t\tvec4 dC = walkPx-centrPx;",
+					"\t\t\tfloat deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;",
+					"",
+					"\t\t\tzBuff += deltaFactor;",
+					"\t\t\taBuff += deltaFactor*walkPx;",
+					"\t\t}",
+					"\t}",
+					"\treturn aBuff/zBuff;",
+					"}"
+				],
 				"longdesc": "Fast  spatial deNoise filter, with circular gaussian kernel.",
 				"name": "Denoiser",
 				"outputs": [
@@ -140,6 +201,7 @@
 			"parameters": {
 				"size": 10
 			},
+			"seed": 16139,
 			"type": "buffer",
 			"version": 1
 		},
@@ -161,6 +223,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": 12817,
 			"type": "ios"
 		},
 		{
@@ -179,6 +242,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": 63204,
 			"type": "ios"
 		},
 		{
@@ -193,6 +257,7 @@
 				"param2": 4,
 				"param3": 0.7
 			},
+			"seed": 64995,
 			"type": "remote",
 			"widgets": [
 				{
@@ -264,6 +329,7 @@
 		"param2": 4,
 		"param3": 0.7
 	},
+	"seed_int": 0,
 	"shortdesc": "Denoiser",
 	"type": "graph"
 }

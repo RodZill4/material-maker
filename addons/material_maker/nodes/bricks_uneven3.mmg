@@ -13,11 +13,37 @@
 		"round": 0,
 		"rows": 6
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rect = bricks_uneven2($uv, $rows, int($iterations), $min_size, float($seed));\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)), 1.0 / $rows);",
-		"global": "vec4 bricks_uneven2(vec2 uv, float rows, int iterations, float min_size, float seed) {\n\tvec4 bb;\n\tfloat random_offset = rand( vec2( seed - floor( fract(uv.y) * rows ) ) );\n\tuv.x += random_offset;\n\tbb.xy = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows);\n\tbb.zw = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows) + vec2(1.0, 1.0 / rows);\n\t\n\tfor (int i = 0; i < iterations; ++i) {\n\t\tfloat cut = rand(vec2(seed + float(i * 100) + floor( fract(uv.y) * rows ) ));\n\t\tcut += floor(uv.x);\n\t\tif ( bb.z - cut < min_size || cut - bb.x < min_size)\n\t\t\tcontinue;\n\t\tif ( uv.x < cut) {\n\t\t\tbb.z = cut;\n\t\t} else {\n\t\t\tbb.x = cut;\n\t\t}\n\t}\n\t\n\tbb.xz -= random_offset;\n\t\n\treturn bb;\n}",
+		"code": [
+			"vec4 $(name_uv)_rect = bricks_uneven2($uv, $rows, int($iterations), $min_size, float($seed));",
+			"vec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)), 1.0 / $rows);"
+		],
+		"global": [
+			"vec4 bricks_uneven2(vec2 uv, float rows, int iterations, float min_size, float seed) {",
+			"\tvec4 bb;",
+			"\tfloat random_offset = rand( vec2( seed - floor( fract(uv.y) * rows ) ) );",
+			"\tuv.x += random_offset;",
+			"\tbb.xy = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows);",
+			"\tbb.zw = floor(uv * vec2(1.0, rows)) / vec2(1.0, rows) + vec2(1.0, 1.0 / rows);",
+			"\t",
+			"\tfor (int i = 0; i < iterations; ++i) {",
+			"\t\tfloat cut = rand(vec2(seed + float(i * 100) + floor( fract(uv.y) * rows ) ));",
+			"\t\tcut += floor(uv.x);",
+			"\t\tif ( bb.z - cut < min_size || cut - bb.x < min_size)",
+			"\t\t\tcontinue;",
+			"\t\tif ( uv.x < cut) {",
+			"\t\t\tbb.z = cut;",
+			"\t\t} else {",
+			"\t\t\tbb.x = cut;",
+			"\t\t}",
+			"\t}",
+			"\t",
+			"\tbb.xz -= random_offset;",
+			"\t",
+			"\treturn bb;",
+			"}"
+		],
 		"includes": [
 			"bricks2"
 		],

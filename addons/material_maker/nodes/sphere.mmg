@@ -9,9 +9,17 @@
 		"cy": 0.5,
 		"r": 0.5
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sphere(vec2 uv, vec2 c, float r) {\n\tuv -= c;\n\tuv /= r;\n\treturn 2.0*r*sqrt(max(0.0, 1.0-dot(uv, uv)));\n}\n",
+		"global": [
+			"float sphere(vec2 uv, vec2 c, float r) {",
+			"\tuv -= c;",
+			"\tuv /= r;",
+			"\treturn 2.0*r*sqrt(max(0.0, 1.0-dot(uv, uv)));",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

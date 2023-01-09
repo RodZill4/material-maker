@@ -10,10 +10,16 @@
 		"saturation": 0.1,
 		"value": 0.1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rbga = $in($(uv));\nvec3 $(name_uv)_hsv = rgb_to_hsv($(name_uv)_rbga.rgb);\n$(name_uv)_hsv.x = fract($(name_uv)_hsv.x+$(hue)*$all*($hmap($uv)-0.5));\n$(name_uv)_hsv.y = clamp($(name_uv)_hsv.y+$(saturation)*$all*($smap($uv)-0.5), 0.0, 1.0);\n$(name_uv)_hsv.z = clamp($(name_uv)_hsv.z+$(value)*$all*($vmap($uv)-0.5), 0.0, 1.0);\n\t",
+		"code": [
+			"vec4 $(name_uv)_rbga = $in($(uv));",
+			"vec3 $(name_uv)_hsv = rgb_to_hsv($(name_uv)_rbga.rgb);",
+			"$(name_uv)_hsv.x = fract($(name_uv)_hsv.x+$(hue)*$all*($hmap($uv)-0.5));",
+			"$(name_uv)_hsv.y = clamp($(name_uv)_hsv.y+$(saturation)*$all*($smap($uv)-0.5), 0.0, 1.0);",
+			"$(name_uv)_hsv.z = clamp($(name_uv)_hsv.z+$(value)*$all*($vmap($uv)-0.5), 0.0, 1.0);",
+			"\t"
+		],
 		"global": "",
 		"includes": [
 			"adjust_hsv"

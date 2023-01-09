@@ -1,5 +1,5 @@
 {
-	"name": "fill_to_uv",
+	"name": "fill_to_uv2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -7,9 +7,29 @@
 	"parameters": {
 		"mode": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
-		"global": "vec3 fill_to_uv_stretch(vec2 coord, vec4 bb, float seed) {\n\tvec2 uv_islands = fract(coord-bb.xy)/bb.zw;\n\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);\n\treturn vec3(uv_islands, random_value);\n}\n\nvec3 fill_to_uv_square(vec2 coord, vec4 bb, float seed) {\n\tvec2 uv_islands;\n\tif (bb.z > bb.w) {\n\t\tvec2 adjusted_coord = coord + vec2(0.0, (bb.z - bb.w) / 2.0);\n\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.zz;\n\t} else {\n\t\tvec2 adjusted_coord = coord + vec2((bb.w - bb.z) / 2.0, 0.0);\n\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.ww;\n\t}\n\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);\n\treturn vec3(uv_islands, random_value);\n}",
+		"global": [
+			"vec3 fill_to_uv_stretch(vec2 coord, vec4 bb, float seed) {",
+			"\tvec2 uv_islands = fract(coord-bb.xy)/bb.zw;",
+			"\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);",
+			"\treturn vec3(uv_islands, random_value);",
+			"}",
+			"",
+			"vec3 fill_to_uv_square(vec2 coord, vec4 bb, float seed) {",
+			"\tvec2 uv_islands;",
+			"\tif (bb.z > bb.w) {",
+			"\t\tvec2 adjusted_coord = coord + vec2(0.0, (bb.z - bb.w) / 2.0);",
+			"\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.zz;",
+			"\t} else {",
+			"\t\tvec2 adjusted_coord = coord + vec2((bb.w - bb.z) / 2.0, 0.0);",
+			"\t\tuv_islands = fract(adjusted_coord-bb.xy)/bb.ww;",
+			"\t}",
+			"\tfloat random_value = rand(vec2(seed)+bb.xy+bb.zw);",
+			"\treturn vec3(uv_islands, random_value);",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4(0.0)",

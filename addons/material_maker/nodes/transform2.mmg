@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "transform2",
 	"node_position": {
 		"x": 0,
@@ -12,17 +13,32 @@
 		"translate_x": 0,
 		"translate_y": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"longdesc": "Translates, rotates and scales its input",
-		"global": "vec2 transform2_clamp(vec2 uv) {\n\treturn clamp(uv, vec2(0.0), vec2(1.0));\n}\n\nvec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {\n \tvec2 rv;\n\tuv -= translate;\n\tuv -= vec2(0.5);\n\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;\n\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;\n\trv /= scale;\n\trv += vec2(0.5);\n\treturn rv;\t\n}",
+		"global": [
+			"vec2 transform2_clamp(vec2 uv) {",
+			"\treturn clamp(uv, vec2(0.0), vec2(1.0));",
+			"}",
+			"",
+			"vec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {",
+			" \tvec2 rv;",
+			"\tuv -= translate;",
+			"\tuv -= vec2(0.5);",
+			"\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;",
+			"\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;",
+			"\trv /= scale;",
+			"\trv += vec2(0.5);",
+			"\treturn rv;\t",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
-				"longdesc": "The input image to be transformed",
-				"name": "i",
-				"shortdesc": "Input",
+				"longdesc": "An  input image to be transformed",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			},
 			{
@@ -67,12 +83,13 @@
 			}
 		],
 		"instance": "",
+		"longdesc": "Translates, rotates and scales its input",
 		"name": "Transform",
 		"outputs": [
 			{
-				"longdesc": "Shows the transformed image",
-				"rgba": "$i($mode(transform2($uv, vec2($translate_x*(2.0*$tx($uv)-1.0), $translate_y*(2.0*$ty($uv)-1.0)), $rotate*0.01745329251*(2.0*$r($uv)-1.0), vec2($scale_x*(2.0*$sx($uv)-1.0), $scale_y*(2.0*$sy($uv)-1.0)))))",
-				"shortdesc": "Output",
+				"longdesc": "Shows a transformed image",
+				"rgba": "$i#($mode(transform2($uv, vec2($translate_x*(2.0*$tx($uv)-1.0), $translate_y*(2.0*$ty($uv)-1.0)), $rotate*0.01745329251*(2.0*$r($uv)-1.0), vec2($scale_x*(2.0*$sx($uv)-1.0), $scale_y*(2.0*$sy($uv)-1.0)))))",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],

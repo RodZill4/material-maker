@@ -1,5 +1,5 @@
 {
-	"name": "fill_to_position",
+	"name": "fill_to_position2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -7,8 +7,7 @@
 	"parameters": {
 		"axis": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec2 $(name_uv)_c = fract($in($uv).xy+0.5*$in($uv).zw);",
 		"global": "",

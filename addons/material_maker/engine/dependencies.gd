@@ -55,6 +55,7 @@ func delete_buffer(buffer_name : String):
 	if dependencies.has(buffer_name):
 		for b in dependencies[buffer_name]:
 			buffers[b].dependencies.erase(buffer_name)
+	dependencies_values.erase(buffer_name)
 
 func delete_buffers_from_object(object : Object):
 	var remove_buffers : Array = []
@@ -74,7 +75,8 @@ func buffer_clear_dependencies(buffer_name : String):
 			assert(dep_index != -1)
 			if dependencies[d].size() == 1:
 				dependencies.erase(d)
-				dependencies_values.erase(d)
+				if dependencies_values.has(d) and ! (dependencies_values[d] is Texture):
+					dependencies_values.erase(d)
 			else:
 				dependencies[d].remove(dep_index)
 				assert(dependencies[d].find(buffer_name) == -1)
@@ -193,7 +195,7 @@ func do_update():
 		render_queue_size = invalidated_buffers
 		reset_stats = false
 	get_tree().call_group("render_counter", "on_counter_change", render_queue_size, invalidated_buffers)
-	if render_queue_size == 0:
+	if invalidated_buffers == 0:
 		emit_signal("render_queue_empty")
 
 func get_render_queue_size() -> int:

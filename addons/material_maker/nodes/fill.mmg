@@ -46,10 +46,15 @@
 				"y": -370.480591
 			},
 			"parameters": {
+				"autostop": false,
+				"filter": true,
 				"iterations": 10,
+				"mipmap": true,
+				"shrink": false,
 				"size": 8
 			},
-			"seed_value": 29168,
+			"seed": 29168,
+			"seed_locked": true,
 			"type": "iterate_buffer"
 		},
 		{
@@ -70,6 +75,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 58064,
 			"type": "ios"
 		},
 		{
@@ -90,6 +96,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": -4244,
 			"type": "ios"
 		},
 		{
@@ -102,6 +109,7 @@
 				"param0": 8,
 				"param1": 10
 			},
+			"seed": 52136,
 			"type": "remote",
 			"widgets": [
 				{
@@ -149,6 +157,7 @@
 			"parameters": {
 				"s": 8
 			},
+			"seed": 11778,
 			"type": "fill_iterate"
 		},
 		{
@@ -160,6 +169,7 @@
 			"parameters": {
 				"s": 8
 			},
+			"seed": 24315,
 			"type": "fill_preprocess"
 		}
 	],
@@ -167,6 +177,7 @@
 		"param0": 8,
 		"param1": 10
 	},
+	"seed_int": 0,
 	"shortdesc": "Fill",
 	"type": "graph"
 }

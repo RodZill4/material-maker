@@ -13,11 +13,35 @@
 		"z_scale": 2,
 		"z_wave": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float mix3d_mul(float x, float y, float z) {\n\treturn x*y*z;\n}\n\nfloat mix3d_add(float x, float y, float z) {\n\treturn min(x+y+z, 1.0);\n}\n\nfloat mix3d_max(float x, float y, float z) {\n\treturn max(max(x, y), z);\n}\n\nfloat mix3d_min(float x, float y, float z) {\n\treturn min(min(x, y), z);\n}\n\nfloat mix3d_xor(float x, float y, float z) {\n\tfloat xy = min(x+y, 2.0-x-y);\n\treturn min(xy+z, 2.0-xy-z);\n}\n\nfloat mix3d_pow(float x, float y, float z) {\n\treturn pow(pow(x, y), z);\n}",
+		"global": [
+			"float mix3d_mul(float x, float y, float z) {",
+			"\treturn x*y*z;",
+			"}",
+			"",
+			"float mix3d_add(float x, float y, float z) {",
+			"\treturn min(x+y+z, 1.0);",
+			"}",
+			"",
+			"float mix3d_max(float x, float y, float z) {",
+			"\treturn max(max(x, y), z);",
+			"}",
+			"",
+			"float mix3d_min(float x, float y, float z) {",
+			"\treturn min(min(x, y), z);",
+			"}",
+			"",
+			"float mix3d_xor(float x, float y, float z) {",
+			"\tfloat xy = min(x+y, 2.0-x-y);",
+			"\treturn min(xy+z, 2.0-xy-z);",
+			"}",
+			"",
+			"float mix3d_pow(float x, float y, float z) {",
+			"\treturn pow(pow(x, y), z);",
+			"}"
+		],
 		"includes": [
 			"pattern"
 		],

@@ -8,6 +8,7 @@
 		"direction": 0,
 		"offset": 0.5
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

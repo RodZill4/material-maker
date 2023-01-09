@@ -10,9 +10,18 @@
 		"h": 0.2,
 		"w": 0.3
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdr_ndot(vec2 a, vec2 b) { return a.x*b.x - a.y*b.y; }\nfloat sdRhombus(in vec2 p, in vec2 b) {\n    vec2 q = abs(p);\n    float h = clamp((-2.0*sdr_ndot(q,b)+sdr_ndot(b,b))/dot(b,b),-1.0,1.0);\n    float d = length( q - 0.5*b*vec2(1.0-h,1.0+h) );\n    return d * sign( q.x*b.y + q.y*b.x - b.x*b.y );\n}",
+		"global": [
+			"float sdr_ndot(vec2 a, vec2 b) { return a.x*b.x - a.y*b.y; }",
+			"float sdRhombus(in vec2 p, in vec2 b) {",
+			"\tvec2 q = abs(p);",
+			"\tfloat h = clamp((-2.0*sdr_ndot(q,b)+sdr_ndot(b,b))/dot(b,b),-1.0,1.0);",
+			"\tfloat d = length( q - 0.5*b*vec2(1.0-h,1.0+h) );",
+			"\treturn d * sign( q.x*b.y + q.y*b.x - b.x*b.y );",
+			"}"
+		],
 		"inputs": [
 
 		],

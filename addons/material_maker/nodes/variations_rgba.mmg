@@ -11,8 +11,7 @@
 		"v4": 0.3,
 		"v5": 0.4
 	},
-	"seed": 0.960089,
-	"seed_locked": false,
+	"seed_int": 4123550856,
 	"shader_model": {
 		"code": "",
 		"inputs": [

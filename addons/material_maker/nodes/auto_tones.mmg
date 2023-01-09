@@ -107,6 +107,7 @@
 					"parameters": {
 						"size": 10
 					},
+					"seed": 53617,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -119,7 +120,30 @@
 								"type": "rgb"
 							}
 						],
-						"instance": "vec3 $(name)_compare(vec2 uv, float size) {\n\tfloat iter = $in(uv).b;\n\tsize = size / pow(2.0, (iter * 100.0) );\n\titer += 0.01;\n\tfloat pixel_offset = 1.0 / size;\n\tvec2 half_res_uv = floor(uv * size / 2.0) / size * 2.0 + pixel_offset / 2.0;\n\tvec3 values[4];\n\tvalues[0] = $in(half_res_uv);\n\tvalues[1] = $in(half_res_uv + vec2(pixel_offset, 0.0));\n\tvalues[2] = $in(half_res_uv + vec2(0.0, pixel_offset));\n\tvalues[3] = $in(half_res_uv + vec2(pixel_offset, pixel_offset));\n\t\n\tfloat lowest = 1.0;\n\tfloat highest = 0.0;\n\t\n\tfor (int i = 0; i < 4; i++) {\n\t\tlowest = values[i].r < lowest ? values[i].r : lowest;\n\t\thighest = values[i].g > highest ? values[i].g : highest;\n\t}\n\t\n\treturn vec3( lowest, highest , iter);\n}",
+						"instance": [
+							"vec3 $(name)_compare(vec2 uv, float size) {",
+							"\tfloat iter = $in(uv).b;",
+							"\tsize = size / pow(2.0, (iter * 100.0) );",
+							"\titer += 0.01;",
+							"\tfloat pixel_offset = 1.0 / size;",
+							"\tvec2 half_res_uv = floor(uv * size / 2.0) / size * 2.0 + pixel_offset / 2.0;",
+							"\tvec3 values[4];",
+							"\tvalues[0] = $in(half_res_uv);",
+							"\tvalues[1] = $in(half_res_uv + vec2(pixel_offset, 0.0));",
+							"\tvalues[2] = $in(half_res_uv + vec2(0.0, pixel_offset));",
+							"\tvalues[3] = $in(half_res_uv + vec2(pixel_offset, pixel_offset));",
+							"\t",
+							"\tfloat lowest = 1.0;",
+							"\tfloat highest = 0.0;",
+							"\t",
+							"\tfor (int i = 0; i < 4; i++) {",
+							"\t\tlowest = values[i].r < lowest ? values[i].r : lowest;",
+							"\t\thighest = values[i].g > highest ? values[i].g : highest;",
+							"\t}",
+							"\t",
+							"\treturn vec3( lowest, highest , iter);",
+							"}"
+						],
 						"name": "Compare Neighbor",
 						"outputs": [
 							{
@@ -147,12 +171,15 @@
 						"y": 63
 					},
 					"parameters": {
+						"autostop": false,
 						"filter": false,
 						"iterations": 13,
 						"mipmap": false,
+						"shrink": false,
 						"size": 10
 					},
-					"seed_value": 29168,
+					"seed": 29168,
+					"seed_locked": true,
 					"type": "iterate_buffer"
 				},
 				{
@@ -164,6 +191,7 @@
 					"parameters": {
 
 					},
+					"seed": -46531,
 					"type": "combine"
 				},
 				{
@@ -175,6 +203,7 @@
 					"parameters": {
 
 					},
+					"seed": 35843,
 					"type": "decompose"
 				},
 				{
@@ -195,6 +224,7 @@
 							"type": "f"
 						}
 					],
+					"seed": -12560,
 					"type": "ios"
 				},
 				{
@@ -222,6 +252,7 @@
 							"type": "f"
 						}
 					],
+					"seed": 1419,
 					"type": "ios"
 				},
 				{
@@ -233,6 +264,7 @@
 					"parameters": {
 						"param0": 10
 					},
+					"seed": -10028,
 					"type": "remote",
 					"widgets": [
 						{
@@ -256,6 +288,7 @@
 			"parameters": {
 				"param0": 10
 			},
+			"seed": -21630,
 			"shortdesc": "",
 			"type": "graph"
 		},
@@ -268,6 +301,7 @@
 			"parameters": {
 
 			},
+			"seed": -54302,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -329,6 +363,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -55041,
 			"type": "ios"
 		},
 		{
@@ -349,6 +384,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -15114,
 			"type": "ios"
 		},
 		{
@@ -360,6 +396,7 @@
 			"parameters": {
 				"param0": 10
 			},
+			"seed": -32042,
 			"type": "remote",
 			"widgets": [
 				{
@@ -381,6 +418,7 @@
 	"parameters": {
 		"param0": 10
 	},
+	"seed_int": 0,
 	"shortdesc": "Auto Tones",
 	"type": "graph"
 }

@@ -11,11 +11,17 @@
 		"r": 0.4,
 		"rot": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdNgon(vec2 p, float r, float n) {\n\tfloat PI = 3.1415926535;\n\tp = circle_repeat_transform_2d(p, n);\n\tvec2 d = abs(p)-vec2(r*tan(3.14159265359/n), r);\n\treturn p.y < r ? p.y-r : length(max(d,vec2(0)))+min(max(d.x,d.y),0.0);\n}",
+		"global": [
+			"float sdNgon(vec2 p, float r, float n) {",
+			"\tfloat PI = 3.1415926535;",
+			"\tp = circle_repeat_transform_2d(p, n);",
+			"\tvec2 d = abs(p)-vec2(r*tan(3.14159265359/n), r);",
+			"\treturn p.y < r ? p.y-r : length(max(d,vec2(0)))+min(max(d.x,d.y),0.0);",
+			"}"
+		],
 		"includes": [
 			"sdrotate",
 			"sdcirclerepeat"

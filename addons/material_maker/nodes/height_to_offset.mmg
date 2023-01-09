@@ -7,10 +7,12 @@
 	"parameters": {
 		"target": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_xy = $(name)_fct($uv, $target, 0.001);\n",
+		"code": [
+			"vec2 $(name_uv)_xy = $(name)_fct($uv, $target, 0.001);",
+			""
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -23,7 +25,18 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec2 $(name)_fct(vec2 uv, float target, float epsilon) {\n\tvec3 e = vec3(epsilon, -epsilon, 0);\n\tfloat start = $in(uv);\n\tvec2 dh = vec2(1.0, 0.0)*$in(uv+e.xz);\n\tdh += vec2(0.0, 1.0)*$in(uv+e.zx);\n\tdh -= vec2(1.0, 0.0)*$in(uv-e.xz);\n\tdh -= vec2(0.0, 1.0)*$in(uv-e.zx);\n\tdh /= 2.0*epsilon;\n\treturn 16.0*dh/dot(dh,dh)*(target-start);\n}",
+		"instance": [
+			"vec2 $(name)_fct(vec2 uv, float target, float epsilon) {",
+			"\tvec3 e = vec3(epsilon, -epsilon, 0);",
+			"\tfloat start = $in(uv);",
+			"\tvec2 dh = vec2(1.0, 0.0)*$in(uv+e.xz);",
+			"\tdh += vec2(0.0, 1.0)*$in(uv+e.zx);",
+			"\tdh -= vec2(1.0, 0.0)*$in(uv-e.xz);",
+			"\tdh -= vec2(0.0, 1.0)*$in(uv-e.zx);",
+			"\tdh /= 2.0*epsilon;",
+			"\treturn 16.0*dh/dot(dh,dh)*(target-start);",
+			"}"
+		],
 		"longdesc": "Generates an offset map to be used by Advanced Tiler nodes from a heightmap",
 		"name": "Height To Offset",
 		"outputs": [

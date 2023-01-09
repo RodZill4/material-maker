@@ -1,5 +1,5 @@
 {
-	"name": "sdisocelestriangle",
+	"name": "sdisoscelestriangle",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -10,11 +10,22 @@
 		"h": 0.3,
 		"w": 0.3
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sd_isosceles_triangle(vec2 uv, vec2 size)\n{\n    uv.x = abs(uv.x);\n\tuv.y += size.y; size.y *= 2.0;\n    vec2 a = uv - size*clamp(dot(uv,size)/dot(size,size), 0.0, 1.0);\n    vec2 b = uv - size*vec2(clamp(uv.x/size.x, 0.0, 1.0), 1.0);\n    float s = -sign(size.y);\n    vec2 d = min(vec2(dot(a,a), s*(uv.x*size.y-uv.y*size.x)),\n                 vec2(dot(b,b), s*(uv.y-size.y)));\n    return -sqrt(d.x)*sign(d.y);\n}",
+		"global": [
+			"float sd_isosceles_triangle(vec2 uv, vec2 size)",
+			"{",
+			"\tuv.x = abs(uv.x);",
+			"\tuv.y += size.y; size.y *= 2.0;",
+			"\tvec2 a = uv - size*clamp(dot(uv,size)/dot(size,size), 0.0, 1.0);",
+			"\tvec2 b = uv - size*vec2(clamp(uv.x/size.x, 0.0, 1.0), 1.0);",
+			"\tfloat s = -sign(size.y);",
+			"\tvec2 d = min(vec2(dot(a,a), s*(uv.x*size.y-uv.y*size.x)),",
+			"\t\t\t\t vec2(dot(b,b), s*(uv.y-size.y)));",
+			"\treturn -sqrt(d.x)*sign(d.y);",
+			"}"
+		],
 		"inputs": [
 
 		],

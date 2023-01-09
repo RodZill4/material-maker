@@ -91,6 +91,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 33146,
 			"type": "buffer"
 		},
 		{
@@ -104,6 +105,7 @@
 				"outputs": 1,
 				"source": 0
 			},
+			"seed": 19598,
 			"type": "switch"
 		},
 		{
@@ -117,6 +119,7 @@
 				"outputs": 1,
 				"source": 0
 			},
+			"seed": 11659,
 			"type": "switch"
 		},
 		{
@@ -129,6 +132,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 57239,
 			"type": "buffer"
 		},
 		{
@@ -142,6 +146,7 @@
 				"param1": 50,
 				"param2": 0
 			},
+			"seed": 24559,
 			"type": "remote",
 			"widgets": [
 				{
@@ -272,6 +277,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 53476,
 			"type": "ios"
 		},
 		{
@@ -292,7 +298,8 @@
 					"type": "rgba"
 				}
 			],
-			"seed_value": 77778,
+			"seed": 77778,
+			"seed_locked": true,
 			"type": "ios"
 		},
 		{
@@ -305,6 +312,7 @@
 				"sigma": 50,
 				"size": 9
 			},
+			"seed": 5439,
 			"type": "gaussian_blur_x"
 		},
 		{
@@ -317,7 +325,8 @@
 				"sigma": 50,
 				"size": 9
 			},
-			"seed_value": 12279,
+			"seed": 12279,
+			"seed_locked": true,
 			"type": "gaussian_blur_y"
 		},
 		{
@@ -330,6 +339,7 @@
 				"lod": 0,
 				"size": 9
 			},
+			"seed": 5257,
 			"type": "buffer"
 		}
 	],
@@ -338,6 +348,7 @@
 		"param1": 50,
 		"param2": 0
 	},
+	"seed_int": 0,
 	"shortdesc": "Gaussian blur",
 	"type": "graph"
 }

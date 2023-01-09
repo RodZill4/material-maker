@@ -8,6 +8,7 @@
 		"t": 0.01,
 		"v": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "float $(name_uv)_d = ($uv.w-$v)/$t;",
 		"global": "",

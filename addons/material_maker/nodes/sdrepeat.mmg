@@ -9,11 +9,23 @@
 		"rx": 3,
 		"ry": 3
 	},
-	"seed": 0.793648,
-	"seed_locked": false,
+	"seed_int": 3408692205,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 repeat_2d(vec2 p, vec2 r, float seed, float randomness) {\n\tp -= vec2(0.5);\n\tfloat a = (rand(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy))+vec2(seed))-0.5)*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec2 rv;\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\treturn rv+vec2(0.5);\n}\n",
+		"global": [
+			"vec2 repeat_2d(vec2 p, vec2 r, float seed, float randomness) {",
+			"\tp -= vec2(0.5);",
+			"\tfloat a = (rand(floor(mod((p.xy+0.5*r.xy)/r.xy, 1.0/r.xy))+vec2(seed))-0.5)*6.28*randomness;",
+			"\tp = mod(p+0.5*r,r)-0.5*r;",
+			"\tvec2 rv;",
+			"\tfloat c = cos(a);",
+			"\tfloat s = sin(a);",
+			"\trv.x = p.x*c+p.y*s;",
+			"\trv.y = -p.x*s+p.y*c;",
+			"\treturn rv+vec2(0.5);",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "0.0",

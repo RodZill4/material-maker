@@ -14,8 +14,13 @@
 		"d_in2_z": 0,
 		"op": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_clamp_false = $op;\nvec3 $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, vec3(0.0), vec3(1.0));\n",
+		"code": [
+			"vec3 $(name_uv)_clamp_false = $op;",
+			"vec3 $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, vec3(0.0), vec3(1.0));",
+			""
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -162,6 +167,10 @@
 					{
 						"name": "mod(A, B)",
 						"value": "mod($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "snap(A,B)",
+						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
 					}
 				]
 			},

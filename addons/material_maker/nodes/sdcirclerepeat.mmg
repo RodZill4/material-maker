@@ -7,9 +7,23 @@
 	"parameters": {
 		"c": 6
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 circle_repeat_transform_2d(vec2 p, float count) {\n\tfloat r = 6.28/count;\n\tfloat pa = atan(p.x, p.y);\n\tfloat a = mod(pa+0.5*r, r)-0.5*r;\n\tvec2 rv;\n\tfloat c = cos(a-pa);\n\tfloat s = sin(a-pa);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\treturn rv;\n}\n",
+		"global": [
+			"vec2 circle_repeat_transform_2d(vec2 p, float count) {",
+			"\tfloat r = 6.28/count;",
+			"\tfloat pa = atan(p.x, p.y);",
+			"\tfloat a = mod(pa+0.5*r, r)-0.5*r;",
+			"\tvec2 rv;",
+			"\tfloat c = cos(a-pa);",
+			"\tfloat s = sin(a-pa);",
+			"\trv.x = p.x*c+p.y*s;",
+			"\trv.y = -p.x*s+p.y*c;",
+			"\treturn rv;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "0.0",

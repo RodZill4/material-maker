@@ -10,8 +10,13 @@
 		"value": 0.5,
 		"width": 0.25
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_step = clamp(($in($uv) - ($value))/max(0.0001, $width)+0.5, 0.0, 1.0);\nfloat $(name_uv)_false = clamp((min($(name_uv)_step, 1.0-$(name_uv)_step) * 2.0) / (1.0 - $contrast), 0.0, 1.0);\nfloat $(name_uv)_true = 1.0-$(name_uv)_false;",
+		"code": [
+			"float $(name_uv)_step = clamp(($in($uv) - ($value))/max(0.0001, $width)+0.5, 0.0, 1.0);",
+			"float $(name_uv)_false = clamp((min($(name_uv)_step, 1.0-$(name_uv)_step) * 2.0) / (1.0 - $contrast), 0.0, 1.0);",
+			"float $(name_uv)_true = 1.0-$(name_uv)_false;"
+		],
 		"global": "",
 		"inputs": [
 			{

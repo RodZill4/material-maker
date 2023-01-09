@@ -7,11 +7,18 @@
 	"parameters": {
 		"r": 0.5
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec3 Bend3d(vec3 uv, float r) {\n    const float k = 10.0;\n    float c = cos(r*uv.x);\n    float s = sin(r*uv.x);\n    mat2  m = mat2(vec2(c,-s),vec2(s,c));\n    return vec3(m*uv.xy, uv.z);\n}",
+		"global": [
+			"vec3 Bend3d(vec3 uv, float r) {",
+			"\tconst float k = 10.0;",
+			"\tfloat c = cos(r*uv.x);",
+			"\tfloat s = sin(r*uv.x);",
+			"\tmat2  m = mat2(vec2(c,-s),vec2(s,c));",
+			"\treturn vec3(m*uv.xy, uv.z);",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "0.0",

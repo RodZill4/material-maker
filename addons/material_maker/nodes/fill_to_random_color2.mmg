@@ -13,8 +13,7 @@
 			"type": "Color"
 		}
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
 		"global": "",

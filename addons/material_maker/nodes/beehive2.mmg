@@ -8,11 +8,28 @@
 		"sx": 4,
 		"sy": 4
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_uv = $uv*vec2($sx, $sy*1.73205080757);\nvec4 $(name_uv)_center = beehive_center($(name_uv)_uv);",
-		"global": "float beehive_dist(vec2 p){\n\tvec2 s = vec2(1.0, 1.73205080757);\n    p = abs(p);\n    return max(dot(p, s*.5), p.x);\n}\n\nvec4 beehive_center(vec2 p) {\n\tvec2 s = vec2(1.0, 1.73205080757);\n    vec4 hC = floor(vec4(p, p - vec2(.5, 1))/vec4(s,s)) + .5;\n    vec4 h = vec4(p - hC.xy*s, p - (hC.zw + .5)*s);\n    return dot(h.xy, h.xy)<dot(h.zw, h.zw) ? vec4(h.xy, hC.xy) : vec4(h.zw, hC.zw + 9.73);\n}\n",
+		"code": [
+			"vec2 $(name_uv)_scale = vec2($sx, $sy*1.73205080757);",
+			"vec2 $(name_uv)_uv = $uv*$(name_uv)_scale;",
+			"vec4 $(name_uv)_center = beehive_center($(name_uv)_uv);"
+		],
+		"global": [
+			"float beehive_dist(vec2 p){",
+			"\tvec2 s = vec2(1.0, 1.73205080757);",
+			"\tp = abs(p);",
+			"\treturn max(dot(p, s*.5), p.x);",
+			"}",
+			"",
+			"vec4 beehive_center(vec2 p) {",
+			"\tvec2 s = vec2(1.0, 1.73205080757);",
+			"\tvec4 hC = floor(vec4(p, p - vec2(.5, 1))/vec4(s,s)) + .5;",
+			"\tvec4 h = vec4(p - hC.xy*s, p - (hC.zw + .5)*s);",
+			"\treturn dot(h.xy, h.xy)<dot(h.zw, h.zw) ? vec4(h.xy, hC.xy) : vec4(h.zw, hC.zw + 9.73);",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],
@@ -27,7 +44,7 @@
 				"type": "f"
 			},
 			{
-				"fill": "vec4($(name_uv)_uv-$(name_uv)_center.xy-vec2(0.5), vec2(1.0))/vec4($sx, $sy*1.73205080757, $sx, $sy*1.73205080757)",
+				"fill": "vec4($(name_uv)_uv-$(name_uv)_center.xy-vec2(0.5, 0.57735026919), vec2(1.0, 1.15470053838))/$(name_uv)_scale.xyxy",
 				"longdesc": "An output that should be plugged into a Fill companion node",
 				"shortdesc": "Fill",
 				"type": "fill"

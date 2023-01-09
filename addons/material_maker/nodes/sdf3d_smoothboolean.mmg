@@ -8,9 +8,26 @@
 		"k": 0.15,
 		"op": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 sdf3d_smooth_union(vec2 d1, vec2 d2, float k) {\n    float h = clamp(0.5+0.5*(d2.x-d1.x)/k, 0.0, 1.0);\n    return vec2(mix(d2.x, d1.x, h)-k*h*(1.0-h), mix(d2.y, d1.y, step(d1.x, d2.x)));\n}\n\nvec2 sdf3d_smooth_subtraction(vec2 d1, vec2 d2, float k ) {\n    float h = clamp(0.5-0.5*(d2.x+d1.x)/k, 0.0, 1.0);\n    return vec2(mix(d2.x, -d1.x, h )+k*h*(1.0-h), d2.y);\n}\n\nvec2 sdf3d_smooth_intersection(vec2 d1, vec2 d2, float k ) {\n    float h = clamp(0.5-0.5*(d2.x-d1.x)/k, 0.0, 1.0);\n    return vec2(mix(d2.x, d1.x, h)+k*h*(1.0-h), mix(d1.y, d2.y, step(d1.x, d2.x)));\n}\n",
+		"global": [
+			"vec2 sdf3d_smooth_union(vec2 d1, vec2 d2, float k) {",
+			"\tfloat h = clamp(0.5+0.5*(d2.x-d1.x)/k, 0.0, 1.0);",
+			"\treturn vec2(mix(d2.x, d1.x, h)-k*h*(1.0-h), mix(d2.y, d1.y, step(d1.x, d2.x)));",
+			"}",
+			"",
+			"vec2 sdf3d_smooth_subtraction(vec2 d1, vec2 d2, float k ) {",
+			"\tfloat h = clamp(0.5-0.5*(d2.x+d1.x)/k, 0.0, 1.0);",
+			"\treturn vec2(mix(d2.x, -d1.x, h )+k*h*(1.0-h), d2.y);",
+			"}",
+			"",
+			"vec2 sdf3d_smooth_intersection(vec2 d1, vec2 d2, float k ) {",
+			"\tfloat h = clamp(0.5-0.5*(d2.x-d1.x)/k, 0.0, 1.0);",
+			"\treturn vec2(mix(d2.x, d1.x, h)+k*h*(1.0-h), mix(d1.y, d2.y, step(d1.x, d2.x)));",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec2(100.0, 0.0)",

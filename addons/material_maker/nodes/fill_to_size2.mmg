@@ -1,5 +1,5 @@
 {
-	"name": "fill_to_size",
+	"name": "fill_to_size2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -7,7 +7,8 @@
 	"parameters": {
 		"formula": 0
 	},
-	"seed_value": -52887,
+	"seed": -52887,
+	"seed_locked": true,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
 		"global": "",

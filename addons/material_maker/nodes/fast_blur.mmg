@@ -15,8 +15,26 @@
 		{
 			"from": "fast_blur_shader",
 			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "fast_blur_shader",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 1
+		},
+		{
+			"from": "fast_blur_shader",
+			"from_port": 2,
+			"to": "gen_outputs",
+			"to_port": 2
 		}
 	],
 	"label": "Fast Blur",
@@ -30,13 +48,15 @@
 		{
 			"name": "fast_blur_shader",
 			"node_position": {
-				"x": -168,
-				"y": 120
+				"x": -160,
+				"y": 123
 			},
 			"parameters": {
 				"quality": 1,
-				"sigma": 100
+				"sigma": 100,
+				"strength": 1
 			},
+			"seed": -27696,
 			"type": "fast_blur_shader"
 		},
 		{
@@ -48,6 +68,7 @@
 			"parameters": {
 				"size": 11
 			},
+			"seed": -48026,
 			"type": "buffer",
 			"version": 1
 		},
@@ -69,6 +90,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": -11967,
 			"type": "ios"
 		},
 		{
@@ -83,12 +105,25 @@
 			"ports": [
 				{
 					"group_size": 0,
-					"longdesc": "The generated blurred image",
-					"name": "output",
-					"shortdesc": "Output",
+					"longdesc": "The input image with high frequency details blurred away",
+					"name": "Blurred",
+					"shortdesc": "Blurred",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "The input image with only high frequency details kept.\nNote that all channels including alpha will be centered at 0, so this will need to be connected to a SwapChannels node to be seen in previews.",
+					"name": "High Pass",
+					"shortdesc": "High Pass",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "The input image with high frequency details strengthened",
+					"name": "Sharpened",
+					"shortdesc": "Sharpened",
 					"type": "rgba"
 				}
 			],
+			"seed": 45717,
 			"type": "ios"
 		},
 		{
@@ -100,8 +135,10 @@
 			"parameters": {
 				"param0": 11,
 				"param1": 100,
-				"param2": 1
+				"param2": 1,
+				"param3": 1
 			},
+			"seed": 57528,
 			"type": "remote",
 			"widgets": [
 				{
@@ -109,6 +146,10 @@
 					"linked_widgets": [
 						{
 							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
 							"widget": "size"
 						}
 					],
@@ -142,15 +183,43 @@
 					"name": "param2",
 					"shortdesc": "Quality",
 					"type": "linked_control"
+				},
+				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "fast_blur_shader",
+							"widget": "strength"
+						}
+					],
+					"longdesc": "High pass multiplier. Unused for low pass output.",
+					"name": "param3",
+					"shortdesc": "Strength",
+					"type": "linked_control"
 				}
 			]
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -194.700012,
+				"y": 213.5
+			},
+			"parameters": {
+				"size": 11
+			},
+			"seed": -48026,
+			"type": "buffer",
+			"version": 1
 		}
 	],
 	"parameters": {
 		"param0": 11,
 		"param1": 100,
-		"param2": 1
+		"param2": 1,
+		"param3": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"
 }

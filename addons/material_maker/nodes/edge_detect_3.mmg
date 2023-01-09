@@ -7,6 +7,7 @@
 	"parameters": {
 		"size": 6
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -21,7 +22,18 @@
 				"type": "rgb"
 			}
 		],
-		"instance": "float $(name)_fct(vec2 uv) {\n\tvec2 e = vec2(1.0/$size, -1.0/$size);\n\tvec3 rv = 4.0*$in(uv);\n\trv -= $in(uv+e.xy);\n\trv -= $in(uv-e.xy);\n\trv -= $in(uv+e.xx);\n\trv -= $in(uv-e.xx);\n\trv = abs(rv);\n\treturn max(rv.x, max(rv.y ,rv.z))*$size;\n}",
+		"instance": [
+			"float $(name)_fct(vec2 uv) {",
+			"\tvec2 e = vec2(1.0/$size, -1.0/$size);",
+			"\tvec3 rv = 4.0*$in(uv);",
+			"\trv -= $in(uv+e.xy);",
+			"\trv -= $in(uv-e.xy);",
+			"\trv -= $in(uv+e.xx);",
+			"\trv -= $in(uv-e.xx);",
+			"\trv = abs(rv);",
+			"\treturn max(rv.x, max(rv.y ,rv.z))*$size;",
+			"}"
+		],
 		"longdesc": "An edge detect filter that detects edges along diagonals and draws them in white on a black background",
 		"name": "Edge detect 3",
 		"outputs": [

@@ -39,21 +39,6 @@ class OutputPort:
 	func to_str() -> String:
 		return generator.name+".out("+str(output_index)+")"
 
-class Renderer:
-	var material : ShaderMaterial
-	var with_hdr : bool
-	
-	func _init(shader : String, wh : bool) -> void:
-		var buffer_name : String = "renderer_%d" % get_instance_id()
-		mm_deps.create_buffer(buffer_name, self)
-		material = mm_deps.buffer_create_shader_material(buffer_name, material, shader)
-	
-	func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
-		material.set_shader_param(parameter_name, value)
-		return false
-	
-	func on_dep_update_buffer(buffer_name) -> bool:
-		return false
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
@@ -65,6 +50,7 @@ var seed_value : float = 0
 
 var preview : int = -1
 var minimized : bool = false
+
 
 func _ready() -> void:
 	init_parameters()
@@ -252,8 +238,8 @@ func notify_output_change(output_index : int) -> void:
 
 func source_changed(input_index : int) -> void:
 	emit_signal("parameter_changed", "__input_changed__", input_index)
-	for i in range(get_output_defs().size()):
-		notify_output_change(i)
+	for o in follow_input(input_index):
+		notify_output_change(o.output_index)
 
 func all_sources_changed() -> void:
 	for input_index in get_input_defs().size():
@@ -445,7 +431,7 @@ func deserialize(data : Dictionary) -> void:
 			if data.has(p.name) and p.name != "type":
 				set_parameter(p.name, MMType.deserialize_value(data[p.name]))
 	seed_locked = false
-	if data.has("seed_locked"):
+	if data.has("seed_locked") and data.seed_locked is bool:
 		seed_locked = data.seed_locked
 	if data.has("seed_int"):
 		seed_value = float(data.seed_int)/MAX_SEED

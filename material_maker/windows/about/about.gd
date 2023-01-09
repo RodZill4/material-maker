@@ -13,6 +13,7 @@ const CONTRIBUTORS = [
 	{ name="williamchange", contribution="Several nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates" },
 	{ name="GoldenThumbs", contribution="Wavefront (OBJ) model loader" },
 	{ name="Bonbonmiel", contribution="Many user interface improvements (in Nodes popup, 3D preview...)" },
+	{ name="myaaaaaaaaa", contribution="Many improvements and bug fixes including better and faster connection loop detection, nicer file format for shader nodes, as well as colorspace nodes" },
 	{ name="Donald Mull Jr.", contribution="Export for Unity HDRP" },
 	{ name="Metin ÇETİN", contribution="Add node popup menu" },
 	{ name="Jack Perkins", contribution="User interface improvements" },

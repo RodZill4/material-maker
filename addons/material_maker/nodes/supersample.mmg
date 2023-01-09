@@ -9,6 +9,7 @@
 		"size": 9,
 		"width": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -23,7 +24,19 @@
 				"type": "rgba"
 			}
 		],
-		"instance": "vec4 supersample_$(name)(vec2 uv, float size, int count, float width) {\n\tvec4 rv = vec4(0.0);\n\tvec2 step_size = vec2(width)/size/float(count);\n\tuv -= vec2(0.5)/size;\n\tfor (int x = 0; x < count; ++x) {\n\t\tfor (int y = 0; y < count; ++y) {\n\t\t\trv += $in(uv+(vec2(float(x), float(y))+vec2(0.5))*step_size);\n\t\t}\n\t}\n\treturn rv/float(count*count);\n}",
+		"instance": [
+			"vec4 supersample_$(name)(vec2 uv, float size, int count, float width) {",
+			"\tvec4 rv = vec4(0.0);",
+			"\tvec2 step_size = vec2(width)/size/float(count);",
+			"\tuv -= vec2(0.5)/size;",
+			"\tfor (int x = 0; x < count; ++x) {",
+			"\t\tfor (int y = 0; y < count; ++y) {",
+			"\t\t\trv += $in(uv+(vec2(float(x), float(y))+vec2(0.5))*step_size);",
+			"\t\t}",
+			"\t}",
+			"\treturn rv/float(count*count);",
+			"}"
+		],
 		"longdesc": "A filter that samples sub-pixel details to make them visible",
 		"name": "Supersample",
 		"outputs": [
