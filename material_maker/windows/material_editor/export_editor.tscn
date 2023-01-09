@@ -46,7 +46,6 @@ size = 12
 font_data = SubResource( 1 )
 
 [node name="ExportEditor" type="WindowDialog"]
-visible = true
 anchor_right = 0.521
 anchor_bottom = 0.539
 margin_right = 0.119995
@@ -67,7 +66,7 @@ custom_constants/margin_bottom = 3
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 690.0
-margin_bottom = 435.0
+margin_bottom = 384.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

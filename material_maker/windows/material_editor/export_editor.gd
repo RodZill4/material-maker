@@ -302,6 +302,8 @@ func _on_template_focus_exited():
 
 func set_model_data(d) -> void:
 	data = d.duplicate(true)
+	if ! data.has("template_name"):
+		export_external_button.visible = false
 	if data.has("exports"):
 		exports = data.exports
 		update_export_list()
