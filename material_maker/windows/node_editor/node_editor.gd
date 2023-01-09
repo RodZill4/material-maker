@@ -1,5 +1,6 @@
 extends WindowDialog
 
+
 onready var parameter_list : VBoxContainer = $Sizer/Tabs/General/Parameters/Sizer
 onready var input_list : VBoxContainer = $Sizer/Tabs/General/Inputs/Sizer
 onready var output_list : VBoxContainer = $Sizer/Tabs/Outputs/Outputs/Sizer
@@ -15,8 +16,10 @@ const ParameterEditor = preload("res://material_maker/windows/node_editor/parame
 const InputEditor = preload("res://material_maker/windows/node_editor/input.tscn")
 const OutputEditor = preload("res://material_maker/windows/node_editor/output.tscn")
 
+
 signal node_changed(model_data)
 signal editor_window_closed
+
 
 func _ready() -> void:
 	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:

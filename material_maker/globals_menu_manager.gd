@@ -111,8 +111,9 @@ func on_menu_about_to_show(menu_def, object, name : String, menu : PopupMenu) ->
 	var mode = ""
 	if object.has_method("get_current_mode"):
 		mode = object.get_current_mode()
+	var name_length : int = name.length()
 	for i in menu_def.size():
-		if menu_def[i].menu != name:
+		if menu_def[i].menu.left(name_length) != name:
 			continue
 		if menu_def[i].has("submenu"):
 			pass

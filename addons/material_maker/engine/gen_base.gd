@@ -321,6 +321,18 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = mm_renderer.generate_shader(source)
 	return { shader=shader, output_type=output_type }
 
+func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+	var output_shader : Dictionary = generate_output_shader(output_index, preview)
+	var shader : String = output_shader.shader
+	var output_type : String = output_shader.output_type
+	var renderer = mm_renderer.request(object)
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	renderer = renderer.render_shader(object, shader, size, output_type != "rgba")
+	while renderer is GDScriptFunctionState:
+		renderer = yield(renderer, "completed")
+	return renderer
+
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
 	var shader : String = output_shader.shader

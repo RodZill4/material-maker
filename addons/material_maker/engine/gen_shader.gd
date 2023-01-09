@@ -84,6 +84,12 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	else:
 		return shader_model_preprocessed.outputs
 
+func get_preprocessed_output_def(output_index : int):
+	if shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
+		return shader_model_preprocessed.outputs[output_index]
+	else:
+		return null
+
 #
 # Shader model preprocessing
 #
@@ -696,59 +702,62 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var rv = { globals=[], defs="", code="" }
-	if shader_model_preprocessed != null and shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
-		var output = shader_model_preprocessed.outputs[output_index]
-		if !context.has_variant(self):
-			# Generate parameter declarations
-			rv = generate_parameter_declarations(rv)
-			# Generate functions for inputs
-			rv = generate_input_declarations(rv, context)
-			if shader_model_preprocessed.has("instance"):
-				var subst_output = subst(shader_model_preprocessed.instance, context, "")
-				rv.defs += subst_output.string
-		# Add inline code
-		if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
-			var variant_index = context.get_variant(self, uv)
-			if variant_index == -1:
-				variant_index = context.get_variant(self, uv)
-				var subst_code = subst(shader_model_preprocessed.code, context, uv)
+	if shader_model_preprocessed == null:
+		return rv
+	var output = get_preprocessed_output_def(output_index)
+	if output == null:
+		return rv
+	if !context.has_variant(self):
+		# Generate parameter declarations
+		rv = generate_parameter_declarations(rv)
+		# Generate functions for inputs
+		rv = generate_input_declarations(rv, context)
+		if shader_model_preprocessed.has("instance"):
+			var subst_output = subst(shader_model_preprocessed.instance, context, "")
+			rv.defs += subst_output.string
+	# Add inline code
+	if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
+		var variant_index = context.get_variant(self, uv)
+		if variant_index == -1:
+			variant_index = context.get_variant(self, uv)
+			var subst_code = subst(shader_model_preprocessed.code, context, uv)
+			# Add global definitions
+			for d in subst_code.globals:
+				if rv.globals.find(d) == -1:
+					rv.globals.push_back(d)
+			# Add generated definitions
+			rv.defs += subst_code.defs
+			# Add generated code
+			rv.code += subst_code.code
+			rv.code += subst_code.string
+	# Add output_code
+	var variant_string = uv+","+str(output_index)
+	var variant_index = context.get_variant(self, variant_string)
+	if variant_index == -1:
+		variant_index = context.get_variant(self, variant_string)
+		for f in mm_io_types.types.keys():
+			if output.has(f):
+				var subst_output = subst(output[f].replace("@NOCODE", ""), context, uv)
 				# Add global definitions
-				for d in subst_code.globals:
+				for d in subst_output.globals:
 					if rv.globals.find(d) == -1:
 						rv.globals.push_back(d)
 				# Add generated definitions
-				rv.defs += subst_code.defs
+				rv.defs += subst_output.defs
 				# Add generated code
-				rv.code += subst_code.code
-				rv.code += subst_code.string
-		# Add output_code
-		var variant_string = uv+","+str(output_index)
-		var variant_index = context.get_variant(self, variant_string)
-		if variant_index == -1:
-			variant_index = context.get_variant(self, variant_string)
-			for f in mm_io_types.types.keys():
-				if output.has(f):
-					var subst_output = subst(output[f].replace("@NOCODE", ""), context, uv)
-					# Add global definitions
-					for d in subst_output.globals:
-						if rv.globals.find(d) == -1:
-							rv.globals.push_back(d)
-					# Add generated definitions
-					rv.defs += subst_output.defs
-					# Add generated code
-					rv.code += subst_output.code
-					rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
-		for f in mm_io_types.types.keys():
-			if output.has(f):
-				rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
-		rv.type = output.type
-		if shader_model_preprocessed.has("includes"):
-			for i in shader_model_preprocessed.includes:
-				var g = mm_loader.get_predefined_global(i)
-				if g != "" and rv.globals.find(g) == -1:
-					rv.globals.push_back(g)
-		if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
-			rv.globals.push_back(shader_model_preprocessed.global)
+				rv.code += subst_output.code
+				rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
+	for f in mm_io_types.types.keys():
+		if output.has(f):
+			rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+	rv.type = output.type
+	if shader_model_preprocessed.has("includes"):
+		for i in shader_model_preprocessed.includes:
+			var g = mm_loader.get_predefined_global(i)
+			if g != "" and rv.globals.find(g) == -1:
+				rv.globals.push_back(g)
+	if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
+		rv.globals.push_back(shader_model_preprocessed.global)
 	return rv
 
 
@@ -769,11 +778,17 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("generic_size"):
 		set_generic_size(data.generic_size)
 
-func edit(node) -> void:
+func get_shader_model_for_edit():
+	return shader_model
+
+func do_edit(node, edit_window_scene : PackedScene) -> void:
 	if shader_model != null:
-		var edit_window = load("res://material_maker/windows/node_editor/node_editor.tscn").instance()
+		var edit_window = edit_window_scene.instance()
 		node.get_parent().add_child(edit_window)
-		edit_window.set_model_data(shader_model)
+		edit_window.set_model_data(get_shader_model_for_edit())
 		edit_window.connect("node_changed", node, "update_shader_generator")
-		edit_window.connect("editor_window_closed", node, "finalize_generator_update")
+		edit_window.connect("popup_hide", edit_window, "queue_free")
 		edit_window.popup_centered()
+
+func edit(node) -> void:
+	do_edit(node, load("res://material_maker/windows/node_editor/node_editor.tscn"))
