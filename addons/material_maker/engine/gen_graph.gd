@@ -105,6 +105,48 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 		return get_node("gen_outputs").get_input_defs()
 	return []
 
+func follow_connections_find_matching(start_port, match_gen) -> Array:
+	var port_list = [start_port]
+	var visited = {}
+	var rv = []
+	while port_list:
+		var port = port_list.pop_back()
+		if port.generator == null:
+			continue
+
+		if visited.get(port.to_str()):
+			continue
+		visited[port.to_str()] = true
+
+		if port != start_port:
+			if port.generator == match_gen:
+				rv.push_back(port)
+
+		if port is InputPort:
+			port_list.append_array(port.generator.follow_input(port.input_index))
+		elif port is OutputPort:
+			port_list.append_array(port.generator.get_parent().get_port_targets(port.generator.name, port.output_index))
+		else:
+			print("follow_connections_find_matching(): Invalid type, this shouldn't happen")
+
+	return rv
+
+func follow_input(_input_index : int) -> Array:
+	if !has_node("gen_inputs") or !has_node("gen_outputs"):
+		return []
+
+	var rv = []
+
+	var start_port = OutputPort.new(get_node("gen_inputs"), _input_index)
+	for port in follow_connections_find_matching(start_port, get_node("gen_outputs")):
+		rv.push_back(OutputPort.new(self, port.input_index))
+
+#	print("The input %s connects to:" % InputPort.new(self, _input_index).to_str())
+#	for r in rv:
+#		print("\t%s" % r.to_str())
+
+	return rv
+
 func source_changed(input_index : int) -> void:
 	if has_node("gen_inputs"):
 		get_node("gen_inputs").source_changed(input_index)
@@ -226,24 +268,10 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 	if from == null or to == null:
 		return false
 	# check the new connection does not create a loop
-	var spreadlist : Array = [ InputPort.new(to, to_port) ]
-	var found_ports : Dictionary = {}
-	var index = 0
-	while index < spreadlist.size():
-		var input : InputPort = spreadlist[index]
-		if input.generator != null:
-			for o in input.generator.follow_input(input.input_index):
-				if o.generator == from and o.output_index == from_port:
-					return false
-				for i in o.generator.get_parent().get_port_targets(o.generator.name, o.output_index):
-					if found_ports.has(i.generator.name):
-						if ! found_ports[i.generator.name].has(i.input_index):
-							found_ports[i.generator.name][i.input_index] = true
-							spreadlist.append(i)
-					else:
-						found_ports[i.generator.name] = { i.input_index:true }
-						spreadlist.append(i)
-		index += 1
+	for port in follow_connections_find_matching(InputPort.new(to, to_port), from):
+		if port is OutputPort and port.output_index == from_port:
+			print("Loop detected, aborting connection")
+			return false
 	# disconnect target
 	while true:
 		var remove = -1
