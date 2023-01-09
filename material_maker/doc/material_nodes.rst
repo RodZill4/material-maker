@@ -90,7 +90,9 @@ The export editor toolbar has buttons and controls, from left to right, to:
 * Specify if the current export target should be stored in the material or as a separate
   file (this option is only available for default material types)
 
-* Save the current export target to a file
+* Save the current export target to a file. Files saved using this option can be loaded
+  using the load button of the Export Editor, or installed by dropping the file into
+  the Material Maker application window
 
 * Duplicate the current export target
 

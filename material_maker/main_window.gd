@@ -1162,6 +1162,13 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 						if control.get_parent() != self:
 							next_controls.append(control.get_parent())
 					controls = next_controls
+			"mme":
+				var parse_result = JSON.parse(file.get_as_text())
+				if parse_result.error == OK:
+					var data = parse_result.result
+					if data.has("material") and data.has("name"):
+						mm_loader.save_export_target(data.material, data.name, data)
+						mm_loader.load_external_export_targets()
 
 func set_tip_text(tip : String, timeout : float = 0.0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
