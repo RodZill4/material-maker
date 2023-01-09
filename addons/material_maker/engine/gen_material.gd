@@ -694,7 +694,7 @@ func _deserialize(data : Dictionary) -> void:
 func get_shader_model_for_edit():
 	var edit_shader_model = shader_model.duplicate()
 	edit_shader_model.exports = edit_shader_model.exports.duplicate() if edit_shader_model.has("exports") else {}
-	var template_name : String = get_template_name()
+	var template_name = get_template_name()
 	if template_name != null:
 		edit_shader_model.template_name = template_name
 		var external_export_targets = mm_loader.get_external_export_targets(template_name)
