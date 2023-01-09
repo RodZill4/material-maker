@@ -1,0 +1,115 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "convert_colorspace",
+			"to_port": 0
+		},
+		{
+			"from": "convert_colorspace",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Convert from RGB",
+	"longdesc": "",
+	"name": "convert_from_rgb",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "convert_colorspace",
+			"node_position": {
+				"x": -473.64032,
+				"y": 229.566681
+			},
+			"parameters": {
+				"colorspace": 1,
+				"direction": 0
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "convert_colorspace"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -973.64032,
+				"y": 229.566681
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "Input (RGBA)",
+					"name": "RGBA",
+					"shortdesc": "RGBA",
+					"type": "rgba"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -173.64032,
+				"y": 229.566681
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "Output (Selected colorspace)",
+					"name": "XYZA",
+					"shortdesc": "XYZA",
+					"type": "rgba"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -673.64032,
+				"y": -70.433319
+			},
+			"parameters": {
+				"param0": 1
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "To",
+					"linked_widgets": [
+						{
+							"node": "convert_colorspace",
+							"widget": "colorspace"
+						}
+					],
+					"longdesc": "Colorspace of the output. Select RGB to pass through the input unchanged.",
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		}
+	],
+	"parameters": {
+		"param0": 1
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "",
+	"type": "graph"
+}
