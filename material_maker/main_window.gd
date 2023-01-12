@@ -576,9 +576,9 @@ func create_new_graph_edit_if_needed() -> MMGraphEdit:
 		graph_edit = new_graph_panel()
 	return graph_edit
 
-func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
+func do_load_material(filename : String, update_hierarchy : bool = true, try_to_rescue : bool = true) -> bool:
 	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
-	graph_edit.load_file(filename)
+	graph_edit.load_file(filename, try_to_rescue)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
 	return true

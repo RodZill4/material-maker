@@ -171,8 +171,8 @@ func send_image_data(id : int, image_name : String, map : String, resolution : i
 	_server.get_peer(id).put_packet(response)
 	
 func load_ptex(filepath : String) -> void:
-	#var material_loaded = mm_globals.main_window.do_load_material(filepath, true, false)
-	var material_loaded = mm_globals.main_window.do_load_material(filepath, true)
+	var material_loaded = mm_globals.main_window.do_load_material(filepath, true, false)
+	#var material_loaded = mm_globals.main_window.do_load_material(filepath, true)
 	project = mm_globals.main_window.get_current_project()
 	var material_node = project.get_material_node()
 	_remote = get_remote()
@@ -251,7 +251,6 @@ func inform_and_send(id : int, message : String) -> void:
 	
 func change_parameter_and_render(node_name : String, param_name : String, parameter_value : String, map : String, resolution : int, is_remote : bool) -> void:
 	set_parameter_value(node_name, param_name, parameter_value, is_remote)
-	print("ResolutioN: ", resolution)
 	var result = render(map_to_output_index[map], resolution)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
