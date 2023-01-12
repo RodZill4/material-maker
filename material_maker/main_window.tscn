@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/tools/library_manager/library_manager.gd" type="Script" id=14]
 [ext_resource path="res://material_maker/icons/paste_none.tres" type="Texture" id=15]
+[ext_resource path="res://material_maker/inform_label.gd" type="Script" id=16]
 [ext_resource path="res://mml_linker/server.gd" type="Script" id=17]
 [ext_resource path="res://mml_linker/PortLineEdit.gd" type="Script" id=18]
 
@@ -205,6 +206,15 @@ margin_bottom = 25.0
 text = "6001"
 placeholder_text = "Port"
 script = ExtResource( 18 )
+
+[node name="InformLabel" type="Label" parent="VBoxContainer/TopBar/Server"]
+visible = false
+margin_left = 184.0
+margin_right = 560.0
+margin_bottom = 25.0
+text = "The quick brown fox jumps over the lazy dog"
+clip_text = true
+script = ExtResource( 16 )
 
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
 margin_left = 1181.0

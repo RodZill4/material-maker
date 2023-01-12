@@ -40,8 +40,6 @@ func start():
 	_server.connect("client_disconnected", self, "_disconnected")
 	_server.connect("client_close_request", self, "_close_request")
 	_server.connect("data_received", self, "_on_data")
-	#var info_node = get_parent().info_node.connect("informing", self)
-	connect("informing", get_parent(), "_on_informing")
 	set_process(true)
 	
 func stop():
@@ -65,7 +63,6 @@ func _disconnected(id, was_clean = false):
 	inform("Client %d disconnected, clean: %s" % [id, str(was_clean)])
 	
 func _on_data(id):
-	### TODO: Authentication 
 	print("Packet received.")
 	var pkt : PoolByteArray = _server.get_peer(id).get_packet()
 	var pkt_string : String = pkt.get_string_from_ascii()
@@ -183,7 +180,6 @@ func load_ptex(filepath : String) -> void:
 
 
 func render(output_index : int, resolution : int):
-	# Too similar to load_ptex()
 	var material_node = project.get_material_node()
 	var result = material_node.render(material_node, output_index, resolution)
 	while result is GDScriptFunctionState:
@@ -222,8 +218,6 @@ func find_local_parameters() -> Array:
 			continue
 		for param in child.parameters:
 			var identifier = "{}/{}".format([child.get_hier_name(), param], "{}")
-			#if identifier in local_params_gens_dict:
-			#	inform("Repeated node parameter name ".format([identifier], "{}"))
 			local_params_gens_dict[identifier] = child
 			output.push_back( { 'node' : child.get_hier_name(), 'param_name' : param, 'param_label':"", 'param_value' : child.get_parameter(param), 'param_type':child.get_parameter_def(param) } )
 	print("local_params_gens_dict: ", local_params_gens_dict)
@@ -246,14 +240,9 @@ func set_parameter_value(node_name : String, param_name : String, value : String
 		return
 	gen.set_parameter(param_name, typed_value)
 	
-#func close(id) -> void:
-#	print("Close()")
-#	_server.stop()
-#	get_parent().queue_free()
-	
 func inform(message : String) -> void:
 	print(message)
-	emit_signal("informing", message)
+	mm_globals.set_tip_text(message)
 	
 func inform_and_send(id : int, message : String) -> void:
 	inform(message)
@@ -271,8 +260,8 @@ func change_parameter_and_render(node_name : String, param_name : String, parame
 var i = 0
 func _process(delta):
 	# DEBUG:
-	if i % 30 == 0:
-		print("Connection status: ", _server.get_connection_status())
+	#if i % 30 == 0:
+	#	print("Connection status: ", _server.get_connection_status())
 	i += 1
 	_server.poll()
 
