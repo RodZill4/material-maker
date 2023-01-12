@@ -103,6 +103,7 @@ const MENU = [
 	{ menu="Tools/Set painting environment", submenu="paint_environment", mode="paint", not_in_ports=["HTML5"] },
 	{ menu="Tools/-" },
 	{ menu="Tools/Environment editor", command="environment_editor", not_in_ports=["HTML5"] },
+	{ menu="Tools/Start server", command="start_server" },
 	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
@@ -919,9 +920,12 @@ func _on_PaintEnvironment_id_pressed(id) -> void:
 	if paint != null:
 		paint.set_environment(id)
 
-
 func environment_editor() -> void:
 	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instance())
+	
+func start_server() -> void:
+	add_child(load("res://mml_linker/server.tscn").instance())
+
 
 # -----------------------------------------------------------------------
 #                             Help menu
