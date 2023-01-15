@@ -1,7 +1,8 @@
 extends Viewport
 
-export(ShaderMaterial) var mesh_normal_material
-export(ShaderMaterial) var mesh_tangent_material
+export(ShaderMaterial) var position_material
+export(ShaderMaterial) var normal_material
+export(ShaderMaterial) var tangent_material
 export(ShaderMaterial) var inv_uv_material
 export(ShaderMaterial) var white_material
 export(ShaderMaterial) var curvature_material
@@ -18,13 +19,13 @@ func _ready():
 
 func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
 	var bake_passes =  {
-		mesh_normal =  { first=mesh_normal_material, second=dilate_pass1, third=dilate_pass2 },
-		mesh_tangent = { first=mesh_tangent_material, second=dilate_pass1, third=dilate_pass2 },
-		inv_uv =       { first=inv_uv_material, second=dilate_pass1, third=dilate_pass2 },
-		curvature =    { first=curvature_material, second=dilate_pass1, third=dilate_pass2 },
-		thickness =    { first=thickness_material, second=dilate_pass1, third=dilate_pass2, map_name="Thickness" },
-		ao =           { first=ao_material, second=dilate_pass1, third=dilate_pass2, map_name="Ambient Occlusion" },
-		seams =        { first=white_material, second=seams_pass1, third=seams_pass2 }
+		position =  { first=position_material, second=dilate_pass1, third=dilate_pass2 },
+		normal =    { first=normal_material, second=dilate_pass1, third=dilate_pass2 },
+		tangent =   { first=tangent_material, second=dilate_pass1, third=dilate_pass2 },
+		curvature = { first=curvature_material, second=dilate_pass1, third=dilate_pass2 },
+		thickness = { first=thickness_material, second=dilate_pass1, third=dilate_pass2, map_name="Thickness" },
+		ao =        { first=ao_material, second=dilate_pass1, third=dilate_pass2, map_name="Ambient Occlusion" },
+		seams =     { first=white_material, second=seams_pass1, third=seams_pass2 }
 	}
 	var passes = bake_passes[map]
 	size = Vector2(map_size, map_size)

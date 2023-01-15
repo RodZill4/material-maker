@@ -6,6 +6,31 @@
 
 [sub_resource type="World" id=1]
 
+[sub_resource type="Shader" id=4]
+code = "shader_type spatial;
+render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+
+uniform vec3 position = vec3(0.0);
+uniform vec3 size = vec3(1.0);
+
+varying vec3 p;
+
+void vertex() {
+	p = (VERTEX-position)/size;
+	VERTEX=vec3(UV, 0.5);
+}
+
+
+void fragment() {
+	ALBEDO = p;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+shader_param/position = Vector3( 0, 0, 0 )
+shader_param/size = Vector3( 1, 1, 1 )
+
 [sub_resource type="Shader" id=2]
 code = "shader_type spatial;
 render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
@@ -43,31 +68,6 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=25]
 shader = SubResource( 24 )
-
-[sub_resource type="Shader" id=4]
-code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
-
-uniform vec3 position = vec3(0.0);
-uniform vec3 size = vec3(1.0);
-
-varying vec3 p;
-
-void vertex() {
-	p = (VERTEX-position)/size;
-	VERTEX=vec3(UV, 0.5);
-}
-
-
-void fragment() {
-	ALBEDO = p;
-}
-"
-
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
-shader_param/position = Vector3( 0, 0, 0 )
-shader_param/size = Vector3( 1, 1, 1 )
 
 [sub_resource type="Shader" id=6]
 code = "shader_type spatial;
@@ -896,8 +896,9 @@ transparent_bg = true
 keep_3d_linear = true
 render_target_update_mode = 0
 script = ExtResource( 2 )
-mesh_normal_material = SubResource( 3 )
-mesh_tangent_material = SubResource( 25 )
+position_material = SubResource( 5 )
+normal_material = SubResource( 3 )
+tangent_material = SubResource( 25 )
 inv_uv_material = SubResource( 5 )
 white_material = SubResource( 7 )
 curvature_material = SubResource( 9 )
