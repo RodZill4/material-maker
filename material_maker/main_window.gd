@@ -333,7 +333,6 @@ func export_material(file_path : String, profile : String) -> void:
 	project.export_material(export_prefix, profile)
 
 func export_again_is_disabled() -> bool:
-	print("export_again_is_disabled")
 	var project = get_current_project()
 	if project == null:
 		return true

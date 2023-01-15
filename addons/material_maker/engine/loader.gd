@@ -85,7 +85,7 @@ func generator_name_from_path(path : String) -> String:
 	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
-const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "instance", "global", "preview_shader", "template" ]
+const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "custom", "global", "instance", "preview_shader", "template" ]
 const REPLACE_MULTILINE_STRINGS_WALK_ITEMS : Array = [ "shader_model", "nodes", "template", "files" ]
 const REPLACE_MULTILINE_STRINGS_WALK_CHILDREN : Array = [ "exports" ]
 
@@ -121,10 +121,13 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 			data[i] = replace_arrays_with_multiline_strings(data[i])
 	return data
 
-static func string_to_dict_tree(string_data : String):
-	return replace_arrays_with_multiline_strings(parse_json(string_data))
+static func string_to_dict_tree(string_data : String) -> Dictionary:
+	var json : JSONParseResult = JSON.parse(string_data)
+	if json.error == OK and json.result is Dictionary:
+		return replace_arrays_with_multiline_strings(json.result)
+	return {}
 
-static func dict_tree_to_string(data):
+static func dict_tree_to_string(data : Dictionary) -> String:
 	return JSON.print(replace_multiline_strings_with_arrays(data), "\t", true)
 
 func load_gen(filename: String) -> MMGenBase:
@@ -269,9 +272,8 @@ func load_external_export_targets():
 		if file_name.get_extension() == "mme":
 			var file : File = File.new()
 			if file.open(USER_EXPORT_DIR.plus_file(file_name), File.READ) == OK:
-				var json : JSONParseResult = JSON.parse(file.get_as_text())
-				if json.error == OK and json.result is Dictionary:
-					var export_data : Dictionary = json.result
+				var export_data : Dictionary = string_to_dict_tree(file.get_as_text())
+				if export_data != {}:
 					var material : String = export_data.material
 					if file_name != get_export_file_name(material, export_data.name):
 						print("Warning, %s has an incorrect name" % file_name)
@@ -288,7 +290,7 @@ func save_export_target(material_name : String, export_target_name : String, exp
 	var file : File = File.new()
 	var file_name : String = get_export_file_name(material_name, export_target_name)
 	if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
-		file.store_string(JSON.print(export_target, "\t", true))
+		file.store_string(dict_tree_to_string(export_target))
 	return file_name
 
 func update_external_export_targets(material_name : String, export_targets : Dictionary):
