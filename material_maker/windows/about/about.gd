@@ -24,17 +24,19 @@ const CONTRIBUTORS = [
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes" },
 	{ name="Zhibade", contribution="Auto size new comment nodes to current selection" },
 	{ name="Theaninova", contribution="Spiral Gradient node" },
+	{ name="paddy-exe", contribution="New modes in the Blend node" },
 	{ name="Variable", contribution="UI fixes" },
 	{ name="jeremybeier", contribution="Unity export fixes" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly" },
 ]
 
 const PATRONS = [
-	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo", "nargacu83",
-	"Interstice", "Rafe Hall", "rustweaver", "Harken", "BasicIncomePlz", "Adam Nakonieczny",
-	"The5", "Andres Hernandez", "Preclude Interactive", "Hanzhong Wang", "Ryan Roden-Corrent",
-	"Micha Grandel",
-	"Shikher Pandey", "a critter in flux", "Tom Wor"
+	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo", "Andres Hernandez",
+	"Interstice", "Preclude Interactive", "Rafe Hall", "rustweaver", "Harken", "BasicIncomePlz",
+	"AdamRatai", "Hanzhong Wang", "Ryan Roden-Corrent", "Micha Grandel", "Ian Genskowsky Chang",
+	"Andreas Ratchev",
+	
+	"The5", "nargacu83", "Shikher Pandey", "a critter in flux", "Tom Wor"
 ]
 
 func _ready() -> void:
