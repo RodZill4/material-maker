@@ -11,12 +11,12 @@ onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").n
 func _ready():
 	pass # Replace with function body.
 
-func edit_parameter(object_name : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
+func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
 	method = m
 	extra_parameters = ep
 	accept_empty = ae
-	window_title = "Expression editor - "+object_name
+	window_title = wt
 	editor.text = value
 	popup_centered()
 	editor.cursor_set_column(editor.text.length())

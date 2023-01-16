@@ -502,7 +502,7 @@ func on_parameter_expression_button(param_full_name : String):
 		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
 		add_child(expression_editor)
 		var param_value : String = item_scene.parmexprs[param_name] if ( item_scene.has("parmexprs") and item_scene.parmexprs.has(param_name) ) else ""
-		expression_editor.edit_parameter(param_name, param_value, self, "set_parameter_expression", [ item_scene, param_name ], true)
+		expression_editor.edit_parameter("Expression editor - "+param_name, param_value, self, "set_parameter_expression", [ item_scene, param_name ], true)
 
 func set_parameter_expression(value : String, item_scene : Dictionary, param_name : String):
 	if not item_scene.has("parmexprs"):

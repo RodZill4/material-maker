@@ -85,7 +85,7 @@ func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed() and !float_only:
 		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
 		add_child(expression_editor)
-		expression_editor.edit_parameter(name, text, self, "set_value_from_expression_editor")
+		expression_editor.edit_parameter("Expression editor - "+name, text, self, "set_value_from_expression_editor")
 		accept_event()
 	if !slider.visible or !sliding and !editable:
 		return
