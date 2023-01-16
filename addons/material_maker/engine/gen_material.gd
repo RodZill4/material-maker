@@ -628,7 +628,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				while result is GDScriptFunctionState:
 					result = yield(result, "completed")
 				var is_greyscale : bool = false
-				var output : Dictionary = get_preprocessed_output_def(output_index)
+				var output = get_preprocessed_output_def(output_index)
 				if output != null:
 					is_greyscale = output.has("type") and output.type == "f"
 				result.save_to_file(file_name, is_greyscale)

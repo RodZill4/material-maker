@@ -2,27 +2,28 @@
 	"export": {
 
 	},
+	"export_last_target": "Godot",
 	"name": "material_raymarching",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"flip_y": true
+		"flip_y": false
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"custom": "",
 		"exports": {
-			"Godot": {
+			"Godot/Godot 3": {
 				"export_extension": "tres",
 				"files": [
 					{
 						"file_name": "$(path_prefix).tres",
 						"template": [
 							"[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]",
-							"[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]",
+							"[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]",
 							"$begin_buffers",
 							"[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]",
 							"$end_buffers",
@@ -36,7 +37,7 @@
 						"type": "template"
 					},
 					{
-						"file_name": "$(path_prefix).shader",
+						"file_name": "$(path_prefix).gdshader",
 						"template": [
 							"shader_type spatial;",
 							"uniform float seed_variation = 0.0;",
@@ -127,13 +128,125 @@
 					{
 						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
 						"type": "buffers"
+					}
+				],
+				"name": "Godot/Godot 3"
+			},
+			"Godot/Godot 4": {
+				"export_extension": "tres",
+				"files": [
+					{
+						"file_name": "$(path_prefix).tres",
+						"template": [
+							"[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]",
+							"[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]",
+							"$begin_buffers",
+							"[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]",
+							"$end_buffers",
+							"[resource]",
+							"shader = ExtResource( 1 )",
+							"$begin_buffers",
+							"shader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )",
+							"$end_buffers",
+							""
+						],
+						"type": "template"
 					},
 					{
-						"file_name": "$(path_prefix)_foo.png",
-						"output": 0,
-						"type": "texture"
+						"file_name": "$(path_prefix).gdshader",
+						"template": [
+							"shader_type spatial;",
+							"uniform float seed_variation = 0.0;",
+							"varying float elapsed_time;",
+							"varying vec3 world_camera;",
+							"varying vec3 world_position;",
+							"const int MAX_STEPS = 100;",
+							"const float MAX_DIST = 100.0;",
+							"const float SURF_DIST = 1e-3;",
+							"$definitions float_uniform_to_const,rename_buffers",
+							"vec2 GetDist(vec3 p) {",
+							"\tfloat _seed_variation_ = seed_variation;",
+							"$begin_generate",
+							"\tif ($flip_y) {",
+							"\t\tp *= vec3(1.0, -1.0, 1.0);",
+							"\t}",
+							"$end_generate",
+							"$begin_generate rename_buffers",
+							"\tvec2 d = $distance(p);",
+							"$end_generate",
+							"\treturn d;",
+							"}",
+							"vec2 RayMarch(vec3 ro, vec3 rd) {",
+							"\tfloat dO = 0.0;",
+							"\tfloat color = 0.0;",
+							"\tvec2 dS;",
+							"\t",
+							"\tfor (int i = 0; i < MAX_STEPS; i++) {",
+							"\t\tvec3 p = ro + dO * rd;",
+							"\t\tdS = GetDist(p);",
+							"\t\tdO += dS.x;",
+							"\t\t",
+							"\t\tif (dS.x < SURF_DIST || dO > MAX_DIST) {",
+							"\t\t\tcolor = dS.y;",
+							"\t\t\tbreak;",
+							"\t\t}",
+							"\t}",
+							"\treturn vec2(dO, color);",
+							"}",
+							"vec3 GetNormal(vec3 p) {",
+							"\tvec2 e = vec2(1e-2, 0);",
+							"\t",
+							"\tvec3 n = GetDist(p).x - vec3(",
+							"\t\tGetDist(p - e.xyy).x,",
+							"\t\tGetDist(p - e.yxy).x,",
+							"\t\tGetDist(p - e.yyx).x",
+							"\t);",
+							"\t",
+							"\treturn normalize(n);",
+							"}",
+							"void vertex() {",
+							"\telapsed_time = TIME;",
+							"\tworld_position = VERTEX;",
+							"\tworld_camera = (inverse(MODELVIEW_MATRIX) * vec4(0, 0, 0, 1)).xyz; //object space",
+							"\t//world_camera = ( CAMERA_MATRIX  * vec4(0, 0, 0, 1)).xyz; //uncomment this to raymarch in world space",
+							"}",
+							"void fragment() {",
+							"\tfloat _seed_variation_ = seed_variation;",
+							"\tvec3 ro = world_camera;",
+							"\tvec3 rd =  normalize(world_position - ro);",
+							"\t",
+							"\tvec2 rm  = RayMarch(ro, rd);",
+							"\tfloat d = rm.x;",
+							"\tif (d >= MAX_DIST) {",
+							"\t\tdiscard;",
+							"\t} else {",
+							"\t\tvec3 p = ro + rd * d;",
+							"\t\tvec3 n = GetNormal(p);",
+							"$begin_generate",
+							"\t\tif ($flip_y) {",
+							"\t\t\tp *= vec3(1.0, -1.0, 1.0);",
+							"\t\t\tn *= vec3(1.0, -1.0, 1.0);",
+							"\t\t} ",
+							"$end_generate",
+							"$begin_generate",
+							"\t\tALBEDO = $albedo(vec4(p, rm.y));",
+							"\t\tROUGHNESS = $roughness(vec4(p, rm.y));",
+							"\t\tMETALLIC = $metallic(vec4(p, rm.y));",
+							"\t\tEMISSION = $emission(vec4(p, rm.y));",
+							"$end_generate",
+							"\t\tNORMAL = (INV_VIEW_MATRIX*vec4(n, 0.0)).xyz;",
+							"\t}",
+							"}",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
 					}
-				]
+				],
+				"name": "Godot/Godot 3"
 			},
 			"Unity": {
 				"export_extension": "mat",
