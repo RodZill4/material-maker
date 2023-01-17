@@ -31,6 +31,7 @@
 - The interpolation code has been improved in the 3D FBM node (contributed by Arnklit).
 - The random color output of the **Triangle Voronoi** node, that did not always tile, depending
   on the scale parameters, has been fixed (contributed by williamchange).
+- The **Dilate** node can now create (optionally) a non-tileable result.
 
 ## Miscellaneous
 
