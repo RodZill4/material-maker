@@ -388,6 +388,9 @@ func clear_view() -> void:
 func crash_recovery_save() -> void:
 	if !need_save_crash_recovery:
 		return
+	# don't save if there's only a single node
+	if top_generator.get_child_count() < 2:
+		return
 	if save_crash_recovery_path == "":
 		var dir : Directory = Directory.new()
 		dir.make_dir_recursive("user://unsaved_projects")
