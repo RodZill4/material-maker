@@ -11,6 +11,8 @@ var material_node : MMGenMaterial
 var remote_parameters
 var local_parameters
 
+signal warning
+
 func init(project : MMGraphEdit):
 	self.project = project
 	material_node = project.get_material_node()
@@ -18,14 +20,13 @@ func init(project : MMGraphEdit):
 	remote_parameters = find_remote_parameters()
 	local_parameters = find_local_parameters()
 	
-func inform(text):
-	print("Unimplemented")
-	
 func find_remote() -> MMGenRemote:
 	for child in project.top_generator.get_children():
 		if child.get_type() == "remote":
+			print("\n\n\nRemote node found.\n\n\n")
+			emit_signal("\n\n\nRemote node found.\n\n\n")
 			return child
-	inform("Warning: Remote node not found.")
+	emit_signal("warning", "Warning: Remote node not found.")
 	return null
 	
 func find_remote_parameters() -> Array:
@@ -33,7 +34,7 @@ func find_remote_parameters() -> Array:
 
 	var output = []
 	if remote_gen == null:
-		inform("No remote node found.")
+		emit_signal("warning", "\n\n\nRemote node not found.\n\n\n")
 		return output
 	for widget in remote_gen.widgets:
 		for lw in widget.linked_widgets:
@@ -68,6 +69,6 @@ func set_parameter_value(node_name : String, param_name : String, value : String
 	elif value.is_valid_integer():
 		typed_value = value
 	else:
-		inform("Invalid parameter value input.")
+		emit_signal("warning", "Warning: Invalid parameter value input.")
 		return
 	gen.set_parameter(param_name, typed_value)

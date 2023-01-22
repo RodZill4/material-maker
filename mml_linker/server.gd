@@ -172,6 +172,7 @@ func load_ptex(image_name : String, filepath : String) -> void:
 	var material_node = project.get_material_node()
 	var project_container = MMLProjectContainer.new();
 	project_container.init(project)
+	project_container.connect("warning", self, "inform")
 	name_to_project_container[image_name] = project_container
 
 func render(material_node : MMGenMaterial, output_index : int, resolution : int):
