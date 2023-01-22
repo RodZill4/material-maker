@@ -144,6 +144,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://material_maker/nodes/remote/remote.gd"
 }, {
+"base": "Node",
+"class": "MMLProjectContainer",
+"language": "GDScript",
+"path": "res://mml_linker/ProjectContainer.gd"
+}, {
 "base": "Control",
 "class": "MMLServer",
 "language": "GDScript",
@@ -207,6 +212,7 @@ _global_script_class_icons={
 "MMGraphNodeGeneric": "",
 "MMGraphNodeMinimal": "",
 "MMGraphNodeRemote": "",
+"MMLProjectContainer": "",
 "MMLServer": "",
 "MMNodeLink": "",
 "MMPaths": "",
