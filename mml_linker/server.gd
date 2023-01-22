@@ -3,10 +3,6 @@ class_name MMLServer
 
 var _server : WebSocketServer = WebSocketServer.new()
 var port = 6001
-#var project : MMGraphEdit
-#var _remote : MMGenRemote
-#var name_to_material_data = {}
-#var name_to_param_dicts = {}
 var name_to_project_container = {}
 
 signal informing
@@ -83,17 +79,10 @@ func _on_data(id):
 			var filepath : String = data["filepath"]
 			load_ptex(data["image_name"], filepath)
 			inform_and_send(id, "Finished loading ptex file.")
-			#print("mat_data: ", name_to_material_data)
-			#var remote_parameters = find_parameters_in_remote(name_to_material_data[data["image_name"]].project)		
-			#var local_parameters = find_local_parameters(name_to_material_data['image_name'].project)
-			#project_container.find_parameters_in_remote()		
-			#project_container.find_local_parameters()
 			if data["reset_parameters"]:
 				var project_container = name_to_project_container[data['image_name']]
-				#var set_remote_parameters_command = { "command":"init_parameters", "image_name":data["image_name"], "parameters_type":"remote", "parameters":remote_parameters}		
 				var set_remote_parameters_command = { "command":"init_parameters", "image_name":data["image_name"], "parameters_type":"remote", "parameters":project_container.remote_parameters}		
 				send_json_data(id, set_remote_parameters_command)
-				#var set_local_parameters_command = { "command":"init_parameters", "image_name":data["image_name"], "parameters_type":"local", "parameters":local_parameters}
 				var set_local_parameters_command = { "command":"init_parameters", "image_name":data["image_name"], "parameters_type":"local", "parameters":project_container.local_parameters}
 				send_json_data(id, set_local_parameters_command)
 				var parameters_loaded_notify_command = { "command":"parameters_loaded"}
@@ -105,7 +94,6 @@ func _on_data(id):
 		"request_render":
 			inform("Performing render")
 			var render_result
-			#var material = name_to_material_data[data['image_name']]
 			var material = name_to_project_container[data['image_name']].material_node
 			for map in data['maps']:
 				render_result = render(material, map_to_output_index[map], data["resolution"])
@@ -121,12 +109,11 @@ func _on_data(id):
 				inform("Error interpreting 'parameter_type' argument.")
 				return
 			var is_remote = data["parameter_type"] == "remote"
-			#var material = name_to_material_data[data['image_name']]
 			var project_container = name_to_project_container[data['image_name']]
 			var material = project_container.material_node
 			print("parameter_change")
 			if data["render"] == 'False':
-				project_container.set_parameter_value(material, node_name, parameter_name, data['param_value'], is_remote)
+				project_container.set_parameter_value(node_name, parameter_name, data['param_value'], is_remote)
 				return
 			if data["render"] != 'True':
 				inform("Error interpreting 'render' argument.")
@@ -145,11 +132,6 @@ func _on_data(id):
 			inform_and_send(id, "Parameter changed, render finished and transfered.")
 			
 		"set_multiple_parameters":
-			print(data)
-#			if local_params_gens_dict.empty() and remote_params_gens_dict.empty():
-#				inform("Finding parameters")
-#				find_parameters_in_remote(name_to_material_data[data["image_name"]].remote)		
-#				find_local_parameters(name_to_material_data['image_name'].project)
 			for parameter_string in data["parameters"]:
 				var material = "dummy"
 				var parameter = parse_json(parameter_string)
@@ -186,28 +168,13 @@ func send_image_data(id : int, image_name : String, map : String, resolution : i
 	
 func load_ptex(image_name : String, filepath : String) -> void:
 	var material_loaded = mm_globals.main_window.do_load_material(filepath, true, false)
-	
 	var project = mm_globals.main_window.get_current_project()
 	var material_node = project.get_material_node()
-	#_remote = get_remote(_project)
-	#var material_data = { material=material_node, project = _project, remote_node= _remote}
-	
 	var project_container = MMLProjectContainer.new();
-	project_container.init(project, image_name)
+	project_container.init(project)
 	name_to_project_container[image_name] = project_container
-	
-	#project_container.image_name = image_name
-	#project_container.project = project
-	#project_container.remote = _remote
-	#name_to_material_data['image_name'] = material_data
-	#name_to_material_data['image_name'].material = material
-	#name_to_material_data['image_name'].project = project
-	#name_to_material_data['image_name']._remote = _remote
-	#find_local_parameters(_project)
-
 
 func render(material_node : MMGenMaterial, output_index : int, resolution : int):
-	#var material_node = project.get_material_node()
 	var result = material_node.render(material_node, output_index, resolution)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
@@ -216,60 +183,6 @@ func render(material_node : MMGenMaterial, output_index : int, resolution : int)
 	var output = image_output.get_data()
 	result.release(material_node)
 	return output
-		
-#func get_remote(project : MMGraphEdit) -> MMGenRemote:
-#	for child in project.top_generator.get_children():
-#		if child.get_type() == "remote":
-#			return child
-#	inform("Warning: Remote node not found.")
-#	return null
-
-#func find_parameters_in_remote(remote_gen : MMGenRemote) -> Array:
-#func find_parameters_in_remote(image_name : String) -> Array:
-#	remote_params_gens_dict.clear()
-#
-#	var output = []
-#	#if not remote_gen:
-#	var remote_gen = name_to_material_data[image_name].remote
-#	if remote_gen == null:
-#		inform("No remote node found.")
-#		return output
-#	for widget in remote_gen.widgets:
-#		for lw in widget.linked_widgets:
-#			var top_gen = name_to_material_data[image_name].project.top_generator.get_node(lw.node)
-#			var param = top_gen.get_parameter(lw.widget)
-#			output.push_back( { 'node' : lw.node, 'param_name' : lw.widget, 'param_value' : param, 'param_label':widget.label } )
-#			remote_params_gens_dict["{}/{}".format([lw.node, lw.widget], "{}")] = top_gen
-#	return output
-	
-#func find_local_parameters(image_name) -> Array:
-#	var output = []
-#	for child in project.top_generator.get_children():
-#		if child.get_type() == "remote":
-#			continue
-#		for param in child.parameters:
-#			var identifier = "{}/{}".format([child.get_hier_name(), param], "{}")
-#			local_params_gens_dict[identifier] = child
-#			output.push_back( { 'node' : child.get_hier_name(), 'param_name' : param, 'param_label':"", 'param_value' : child.get_parameter(param), 'param_type':child.get_parameter_def(param) } )
-#	print("local_params_gens_dict: ", local_params_gens_dict)
-#	return output
-#
-#func set_parameter_value(material : MMGenMaterial, node_name : String, param_name : String, value : String, is_remote : bool):
-#	var dict = remote_params_gens_dict if is_remote else local_params_gens_dict
-#	var identifier = "{}/{}".format([node_name, param_name], "{}")
-#	var gen = dict[identifier]
-#	var type = gen.get_parameter_def(param_name).type
-#	var typed_value = null
-#	if  type == "enum" or type == "boolean" or type == "size":
-#		typed_value = int(value)
-#	elif type == "float":
-#		typed_value = float(value)
-#	elif value.is_valid_integer():
-#		typed_value = value
-#	else:
-#		inform("Invalid parameter value input.")
-#		return
-#	gen.set_parameter(param_name, typed_value)
 	
 func inform(message : String) -> void:
 	print(message)
@@ -281,7 +194,7 @@ func inform_and_send(id : int, message : String) -> void:
 	send_json_data(id, data)
 	
 func change_parameter_and_render(project_container, node_name : String, param_name : String, parameter_value : String, map : String, resolution : int, is_remote : bool) -> void:
-	project_container.set_parameter_value(material, node_name, param_name, parameter_value, is_remote)
+	project_container.set_parameter_value(node_name, param_name, parameter_value, is_remote)
 	var result = render(project_container.material_node, map_to_output_index[map], resolution)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")

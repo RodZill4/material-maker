@@ -1,5 +1,4 @@
 extends Node
-#class_name MMLProjectContainer
 class_name MMLProjectContainer
 
 # Class that finds and contains data from MM projects to be used along MMLServer
@@ -8,14 +7,11 @@ var remote_params_gens_dict : Dictionary = {}
 var local_params_gens_dict : Dictionary = {}
 var project : MMGraphEdit
 var remote_gen : MMGenRemote
-#var _image_name : String
 var material_node : MMGenMaterial
-#var server : MMLServer
 var remote_parameters
 var local_parameters
 
-func init(project : MMGraphEdit, _image_name : String):
-	#image_name = _image_name
+func init(project : MMGraphEdit):
 	self.project = project
 	material_node = project.get_material_node()
 	remote_gen = find_remote()
@@ -36,7 +32,6 @@ func find_remote_parameters() -> Array:
 	remote_params_gens_dict.clear()
 
 	var output = []
-	#if not remote_gen:
 	if remote_gen == null:
 		inform("No remote node found.")
 		return output
