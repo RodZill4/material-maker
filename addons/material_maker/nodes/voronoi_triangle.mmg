@@ -182,7 +182,7 @@
 			},
 			{
 				"longdesc": "Shows a random color for each cell",
-				"rgb": "rand3(fract($(name_uv)_m3[2].xy/vec2($scale_x,$scale_y)))",
+				"rgb": "rand3(floor(fract($(name_uv)_m3[2].xy/vec2($scale_x,$scale_y))*vec2($scale_x,$scale_y)))",
 				"shortdesc": "Random color",
 				"type": "rgb"
 			},

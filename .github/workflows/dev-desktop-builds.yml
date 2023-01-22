@@ -17,7 +17,7 @@ env:
   GODOT_VERSION: 3.5
   GODOT_VERSION_MAC: 3.5
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_1
+  MM_RELEASE: 1_2
 
 jobs:
   export_windows_linux:

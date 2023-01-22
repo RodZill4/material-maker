@@ -120,13 +120,14 @@ exported material).
 
 There are 4 types of generated files:
 
-* Texture files, that are defined by an output index. The corresponding output
+* Texture files, that are defined by an output index or an expression that uses
+  inputs and parameters of the material node. The corresponding output or expression
   will be rendered and saved as a file. Supported formats are PNG and EXR.
 
 * Template files are text files, modified using the following directives:
 
   * **$begin_generate** / **$end_generate** can be used to define sections where
-    parameters and inputs (prtefixed with a $ character) are replaced with
+    parameters and inputs (prefixed with a $ character) are replaced with
     corresponding generated code. Those sections accept a list of keywords that
     describe text filters to be applied to the section. Predefined filters are
     **float_uniform_to_const**, **rename_buffers**, **unity**, **unreal**...
@@ -140,8 +141,6 @@ There are 4 types of generated files:
   * **$begin_buffers** / **$end_buffers** sections repeat their contents for each
     buffer used in generated shaders. In those sections, **$(file_prefix)** and 
     **$(buffer_index)** will be replaced with their values.
-
-* All files have a 
   
 * Buffer files are similar to Texture files and are generated for each
   buffer used in generated shaders. In the file name, **$(file_prefix)** and 

@@ -229,7 +229,7 @@ boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="1.2.0.0"
-config/actual_release="1.2pre"
+config/actual_release="1.2"
 
 [audio]
 

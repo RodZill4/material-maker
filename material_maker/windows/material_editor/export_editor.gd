@@ -28,7 +28,7 @@ signal editor_window_closed
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	export_file_expression.parent_dialog = self
 
 func update_export_list() -> void:
 	export_target.clear()
@@ -279,6 +279,15 @@ func _on_expression_value_changed(value):
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].output = int(value)
+
+func get_expression_from_output(text : String) -> String:
+	if text.is_valid_integer():
+		var index = text.to_int()
+		if data.has("outputs") and data.outputs.size() > index:
+			var output = data.outputs[index]
+			return output[output.type]
+		return ""
+	return text
 
 func _on_expression_text_entered(new_text : String):
 	var e : String = export_target.get_item_text(export_target.selected)

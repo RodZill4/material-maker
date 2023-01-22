@@ -2,6 +2,7 @@
 	"export": {
 
 	},
+	"export_last_target": "Godot/Godot 4",
 	"name": "material_3d",
 	"node_position": {
 		"x": 0,
@@ -19,21 +20,21 @@
 		"emission_energy": 1,
 		"metallic": 0,
 		"roughness": 1,
-		"world": true
+		"world": false
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"custom": "",
 		"exports": {
-			"Godot": {
+			"Godot/Godot 3": {
 				"export_extension": "tres",
 				"files": [
 					{
 						"file_name": "$(path_prefix).tres",
 						"template": [
 							"[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]",
-							"[ext_resource path=\"$(file_prefix).shader\" type=\"Shader\" id=1]",
+							"[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]",
 							"$begin_buffers",
 							"[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]",
 							"$end_buffers",
@@ -47,7 +48,7 @@
 						"type": "template"
 					},
 					{
-						"file_name": "$(path_prefix).shader",
+						"file_name": "$(path_prefix).gdshader",
 						"template": [
 							"shader_type spatial;",
 							"render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;",
@@ -80,7 +81,65 @@
 						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
 						"type": "buffers"
 					}
-				]
+				],
+				"name": "Godot/Godot 3"
+			},
+			"Godot/Godot 4": {
+				"export_extension": "tres",
+				"files": [
+					{
+						"file_name": "$(path_prefix).tres",
+						"template": [
+							"[gd_resource type=\"ShaderMaterial\" load_steps=2 format=2]",
+							"[ext_resource path=\"$(file_prefix).gdshader\" type=\"Shader\" id=1]",
+							"$begin_buffers",
+							"[ext_resource path=\"$(file_prefix)_texture_$(buffer_index).png\" type=\"Texture\" id=$(expr:$(buffer_index)+1)]",
+							"$end_buffers",
+							"[resource]",
+							"shader = ExtResource( 1 )",
+							"$begin_buffers",
+							"shader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )",
+							"$end_buffers",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix).gdshader",
+						"template": [
+							"shader_type spatial;",
+							"render_mode blend_mix,depth_prepass_alpha,cull_back,diffuse_burley,specular_schlick_ggx;",
+							"varying vec3 texcoords_3d;",
+							"$definitions",
+							"void vertex() {",
+							"$if $(param:world)",
+							"\ttexcoords_3d = (vec4(VERTEX, 1.0)*WORLD_MATRIX).xyz;",
+							"$else",
+							"\ttexcoords_3d = VERTEX;",
+							"$fi",
+							"}",
+							"void fragment() {",
+							"\tfloat _seed_variation_ = 0.0;",
+							"$begin_generate",
+							"\tALBEDO = $albedo_color.rgb*$albedo_tex(vec4(texcoords_3d, 0.0));",
+							"\tMETALLIC = $metallic*$metallic_tex(vec4(texcoords_3d, 0.0));",
+							"\tROUGHNESS = $roughness*$roughness_tex(vec4(texcoords_3d, 0.0));",
+							"\tSPECULAR = 0.5;",
+							"\tEMISSION = $emission_energy*$emission_tex(vec4(texcoords_3d, 0.0));",
+							"\tAO = $ao_tex(vec4(texcoords_3d, 0.0));",
+							"\tAO_LIGHT_AFFECT = $ao;",
+							"$end_generate",
+							"}",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					}
+				],
+				"name": "Godot/Godot 3"
 			},
 			"Unity": {
 				"export_extension": "mat",

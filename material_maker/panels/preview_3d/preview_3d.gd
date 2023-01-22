@@ -29,8 +29,8 @@ const MENU = [
 	{ menu="Model/Rotate/Slow", command="set_rotate_model_speed", command_parameter=0.01 },
 	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
 	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
-	{ menu="Model/Generate map/Mesh normal", submenu="generate_mesh_normal_map" },
-	{ menu="Model/Generate map/Inverse UV", submenu="generate_inverse_uv_map" },
+	{ menu="Model/Generate map/Position", submenu="generate_position_map" },
+	{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
 	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
@@ -262,14 +262,14 @@ func generate_map(generate_function : String, size : int) -> void:
 		call(generate_function, files[0], size)
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
-	var mesh_normal_mapper = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
-	add_child(mesh_normal_mapper)
+	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
+	add_child(map_renderer)
 	var id = objects.get_child_count()-1
 	var object : MeshInstance = objects.get_child(id)
-	var result = mesh_normal_mapper.gen(object.mesh, map, "save_to_file", [ file_name ], size)
+	var result = map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
-	mesh_normal_mapper.queue_free()
+	map_renderer.queue_free()
 	OS.clipboard = "{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name
 
 func create_menu_map(menu : PopupMenu, function : String) -> void:
@@ -279,23 +279,23 @@ func create_menu_map(menu : PopupMenu, function : String) -> void:
 	if !menu.is_connected("id_pressed", self, function):
 		menu.connect("id_pressed", self, function)
 
-func create_menu_generate_mesh_normal_map(menu) -> void:
-	create_menu_map(menu, "generate_mesh_normal_map")
+func create_menu_generate_normal_map(menu) -> void:
+	create_menu_map(menu, "generate_normal_map")
 
-func generate_mesh_normal_map(i : int) -> void:
-	generate_map("do_generate_mesh_normal_map", 256 << i)
+func generate_normal_map(i : int) -> void:
+	generate_map("do_generate_normal_map", 256 << i)
 
-func do_generate_mesh_normal_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "mesh_normal", size)
+func do_generate_normal_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "normal", size)
 
-func create_menu_generate_inverse_uv_map(menu) -> void:
-	create_menu_map(menu, "generate_inverse_uv_map")
+func create_menu_generate_position_map(menu) -> void:
+	create_menu_map(menu, "generate_position_map")
 
-func generate_inverse_uv_map(i : int) -> void:
-	generate_map("do_generate_inverse_uv_map", 256 << i)
+func generate_position_map(i : int) -> void:
+	generate_map("do_generate_position_map", 256 << i)
 
-func do_generate_inverse_uv_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "inv_uv", size)
+func do_generate_position_map(file_name : String, size : int) -> void:
+	do_generate_map(file_name, "position", size)
 
 func create_menu_generate_curvature_map(menu) -> void:
 	create_menu_map(menu, "generate_curvature_map")

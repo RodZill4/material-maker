@@ -105,7 +105,8 @@
 				"param0": 11,
 				"param1": 0.1,
 				"param2": 0,
-				"param3": 0
+				"param3": 0,
+				"param4": true
 			},
 			"seed": 1419,
 			"type": "remote",
@@ -184,6 +185,21 @@
 					"name": "param3",
 					"shortdesc": "Distance function",
 					"type": "linked_control"
+				},
+				{
+					"label": "Tile",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "tile"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "tile"
+						}
+					],
+					"name": "param4",
+					"type": "linked_control"
 				}
 			]
 		},
@@ -253,12 +269,13 @@
 		{
 			"name": "dilate_pass_1",
 			"node_position": {
-				"x": 548.301208,
+				"x": 547.301208,
 				"y": -542.369019
 			},
 			"parameters": {
-				"d": 0.1,
-				"s": 11
+				"d": 0.18,
+				"s": 11,
+				"tile": true
 			},
 			"seed": 71939,
 			"seed_locked": true,
@@ -278,19 +295,19 @@
 					}
 				],
 				"instance": [
-					"vec3 $(name)_distance_h(vec2 uv) {",
+					"vec3 $(name)_distance_h(vec2 uv, bool tile) {",
 					"\tvec2 e = vec2(1.0/$s, 0.0);",
 					"\tint steps = int($s*$d);",
 					"\tfloat rv = 0.0;",
 					"\tvec2 source_uv;",
 					"\tfor (int i = 0; i < steps; ++i) {",
 					"\t\tsource_uv = uv+float(i)*e;",
-					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\tif ((tile || (source_uv.x >= 0.0 && source_uv.x <= 1.0)) && $in(source_uv) > 0.5) {",
 					"\t\t\trv = 1.0-float(i)*e.x/$d;",
 					"\t\t\tbreak;",
 					"\t\t}",
 					"\t\tsource_uv = uv-float(i)*e;",
-					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\tif ((tile || (source_uv.x >= 0.0 && source_uv.x <= 1.0)) && $in(source_uv) > 0.5) {",
 					"\t\t\trv = 1.0-float(i)*e.x/$d;",
 					"\t\t\tbreak;",
 					"\t\t}",
@@ -302,7 +319,7 @@
 				"name": "Dilate pass 1",
 				"outputs": [
 					{
-						"rgba": "pack_2x32_to_4x16($(name)_distance_h($uv).xy)",
+						"rgba": "pack_2x32_to_4x16($(name)_distance_h($uv, $tile).xy)",
 						"type": "rgba"
 					}
 				],
@@ -324,6 +341,12 @@
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
+					},
+					{
+						"default": true,
+						"label": "Tile",
+						"name": "tile",
+						"type": "boolean"
 					}
 				]
 			},
@@ -336,9 +359,10 @@
 				"y": -294.577271
 			},
 			"parameters": {
-				"d": 0.1,
+				"d": 0.18,
 				"distance": 0,
-				"s": 11
+				"s": 11,
+				"tile": true
 			},
 			"seed": 50297,
 			"shader_model": {
@@ -371,21 +395,28 @@
 					}
 				],
 				"instance": [
-					"vec3 $(name)_distance_v(vec2 uv) {",
+					"vec3 $(name)_distance_v(vec2 uv, bool tile) {",
 					"\tvec2 e = vec2(0.0, 1.0/$s);",
 					"\tint steps = int($s*$d);",
 					"\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);",
+					"\tvec2 source_uv;",
 					"\tfor (int i = 0; i < steps; ++i) {",
 					"\t\tvec2 dx = float(i)*e;",
-					"\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(uv+dx)), (uv+dx).y);",
-					"\t\tif (p2.x > p.x) {",
-					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
-					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\tsource_uv = uv+dx;",
+					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
+					"\t\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(source_uv)), source_uv.y);",
+					"\t\t\tif (p2.x > p.x) {",
+					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t\t}",
 					"\t\t}",
-					"\t\tp2 = vec3(pack_4x16_to_2x32($in(uv-dx)), (uv-dx).y);",
-					"\t\tif (p2.x > p.x) {",
-					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
-					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\tsource_uv = uv-dx;",
+					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
+					"\t\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(source_uv)), source_uv.y);",
+					"\t\t\tif (p2.x > p.x) {",
+					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t\t}",
 					"\t\t}",
 					"\t}",
 					"\treturn p;",
@@ -395,7 +426,7 @@
 				"name": "Dilate pass 2",
 				"outputs": [
 					{
-						"rgb": "$(name)_distance_v($uv)",
+						"rgb": "$(name)_distance_v($uv, $tile)",
 						"type": "rgb"
 					}
 				],
@@ -437,6 +468,12 @@
 								"value": "chebyshev"
 							}
 						]
+					},
+					{
+						"default": true,
+						"label": "Tile",
+						"name": "tile",
+						"type": "boolean"
 					}
 				]
 			},
@@ -526,9 +563,10 @@
 	],
 	"parameters": {
 		"param0": 11,
-		"param1": 0.1,
+		"param1": 0.18,
 		"param2": 0,
-		"param3": 0
+		"param3": 0,
+		"param4": true
 	},
 	"seed_int": 0,
 	"shortdesc": "Dilate",

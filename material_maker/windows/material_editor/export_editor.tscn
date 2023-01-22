@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/windows/material_editor/export_editor.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/windows/material_editor/expression_line_edit.tscn" type="PackedScene" id=3]
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
@@ -262,12 +263,7 @@ margin_right = 115.0
 margin_bottom = 127.0
 text = "Output:"
 
-[node name="expression" type="LineEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common"]
-margin_left = 119.0
-margin_top = 108.0
-margin_right = 475.0
-margin_bottom = 132.0
-size_flags_horizontal = 3
+[node name="expression" parent="MarginContainer/VBoxContainer/Tabs/Files/File/Common" instance=ExtResource( 3 )]
 
 [node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/Tabs/Files/File"]
 margin_top = 136.0
@@ -345,8 +341,6 @@ text = "Cancel"
 [connection signal="toggled" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/prompt_overwrite" to="." method="_on_prompt_overwrite_toggled"]
 [connection signal="text_entered" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/conditions" to="." method="_on_conditions_text_entered"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/type" to="." method="_on_type_item_selected"]
-[connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression" to="." method="_on_expression_focus_exited"]
-[connection signal="text_entered" from="MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression" to="." method="_on_expression_text_entered"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Files/File/template" to="." method="_on_template_focus_exited"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/Tabs/Custom Script" to="." method="_on_Custom_Script_focus_exited"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]

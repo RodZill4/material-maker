@@ -2,19 +2,54 @@
 
 ## General
 
-- Added a dependency manager to avoid useless renders
+- Added a dependency manager that handles all parameter changes, buffers and previews to
+  avoid useless renders (myaaaaaaaaa helped hunting and fixing memory leaks on this).
+- Material export has been updated:
+  - custom export targets can now be added to predefined **Material** nodes,
+  - a new **Export again** menu item has been added to repeat the last export operation.
+- Unsaved projects are now rescued when Material Maker crashes and automatically reopened
+  at startup.
 
 ## Nodes
 
-- Added a parameter to the image node to keep the image's aspect ratio (contributed by myaaaaaaaaa)
+- Shader nodes can now be variadic, i.e. have a number of parameters, inputs and outputs that
+  are repeated. A new icon in the node titlebar shows the variadic aspect and can be used to
+  increase or decrease the number of occurences of those parameters and ports.
+  A few nodes have been updated accordingly, so **Blend** now supports several layers,
+  **Transform** can apply to several channels and workflow nodes can mix more raw materials.
+- A new **Normal to Height** node has been added.
+- Parameters have been added to the **Image** node to keep the image's aspect ratio (contributed
+  by myaaaaaaaaa).
+- New colorspace related nodes have been added, such as **Colorspace Roundtrip** that
+  make it possible to perform computations in other colorspaces (contributed
+  by myaaaaaaaaa).
+- The **Fast Blur** node now has high pass and sharpened outputs (contributed
+  by myaaaaaaaaa).
+- A snap operation has been added to **Math** nodes (contributed by williamchange).
+- The **Blend** node now has additional modes: Linear Light, Vivid Light, Pin Light, Hard Mix
+  and Exclusion (contributed by paddy-exe).
+- The interpolation code has been improved in the 3D FBM node (contributed by Arnklit).
+- The random color output of the **Triangle Voronoi** node, that did not always tile, depending
+  on the scale parameters, has been fixed (contributed by williamchange).
+- The **Dilate** node can now create (optionally) a non-tileable result.
 
 ## Miscellaneous
 
-- Added an experimental HTML5 version
+- An [experimental HTML5](https://www.materialmaker.org/public/mm_web/) version has been added.
+  Although it has a lot of limitations, it is a good way of trying Material Maker without
+  installing it.
+- Self-connections of subgraphs are now allowed if they don't form a loop, and loop
+  detection has been optimized (contributed by myaaaaaaaaa).
+- The .mmg format (used for predefined nodes) has been modified to be more Version Control
+  System friendly (contributed by myaaaaaaaaa).
 
 ## Fixes, optimizations
 
-- Fixed alignment of inputs in the Uneven Bricks 2 node (contributed by Arnklit)
+- Files are now removed from the recent projects list when they fail to load (contributed by Arnklit).
+- The **Comment** node now selects correctly its children, regardless of the current zoom level (contributed
+  by Zhibade).
+- The alignment of inputs in the Uneven Bricks 2 node has been fixed (contributed by Arnklit).
+- Command line exporting has been fixed (contributed by myaaaaaaaaa).
 
 # Material Maker 1.1
 

@@ -92,17 +92,17 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	add_child(map_renderer)
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
-	var result = map_renderer.gen(m, "inv_uv", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
+	var result = map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
-	result = map_renderer.gen(m, "mesh_normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
+	result = map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if mesh_tangent_tex == null:
 		mesh_tangent_tex = ImageTexture.new()
-	result = map_renderer.gen(m, "mesh_tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
+	result = map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	map_renderer.queue_free()

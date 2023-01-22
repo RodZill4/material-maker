@@ -32,7 +32,9 @@ The **Dilate** node accepts the following parameters:
 * *length* is the length of the dilate effect
 * when *mode* is set to 0, the dilate effect generates a gradient around (based on the
   distance to) the white parts of the mask. When set to 1, the dilate effect just dilates
-  the source (or the white color). Values in between mix both methods.
+  the source (or the white color). Values in between mix both methods
+* the *distance* function used for the Dilate operation (Euclidian, Manhattan or Chebyshev)
+* a *tile* option to create a tileable result
 
 Example images
 ++++++++++++++
