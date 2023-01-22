@@ -132,6 +132,7 @@ func _on_data(id):
 			inform_and_send(id, "Parameter changed, render finished and transfered.")
 			
 		"set_multiple_parameters":
+			# Unfortunately, something changed with 1.2 that this (from the "Submit Ptex to MM" button in Blender) causes MM to hang until an error occurs (still works after that)
 			for parameter_string in data["parameters"]:
 				var material = "dummy"
 				var parameter = parse_json(parameter_string)
