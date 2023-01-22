@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -112,6 +112,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#global-functions">Global functions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#instance-functions">Instance functions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#main-code">Main code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#variadic-shader-nodes">Variadic shader nodes</a></li>
 </ul>
 </li>
 </ul>
@@ -312,6 +313,15 @@ to have a unique name for each (node instance, UV expression) pair. Material
 Maker provides the name_uv implicit variable for this.</p>
 <img alt="_images/node_editor_main.png" class="align-center" src="_images/node_editor_main.png" />
 </div>
+<div class="section" id="variadic-shader-nodes">
+<h3>Variadic shader nodes<a class="headerlink" href="#variadic-shader-nodes" title="Permalink to this headline">¶</a></h3>
+<p>When specifying an input, and output or a parameter, it is possible to add use a number sign (#) in their
+name. This makes the node variadic, and all such inputs, parameters and outputs can automatically be
+repeated (depending on the variadic size of the node instance).</p>
+<p>In the <em>Main Code</em> and <em>Instance Functions</em> sections, parts of the generated code loccated inside a
+<strong>#for</strong> / <strong>#end</strong> block will be repeated. The occurences of the hash character (#) in those blocks
+will be replaced in each repetition with the repetition index.</p>
+</div>
 </div>
 </div>
 
@@ -329,7 +339,7 @@ Maker provides the name_uv implicit variable for this.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

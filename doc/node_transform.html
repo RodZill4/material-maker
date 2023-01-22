@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -213,11 +213,12 @@
             
   <div class="section" id="transform-node">
 <h1>Transform node<a class="headerlink" href="#transform-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>Transform</strong> node applies a scale operation, a rotation and a translation to the input image.</p>
+<p>The <strong>Transform</strong> node is variadic and applies a scale operation, a rotation and a
+translation to the input images.</p>
 <img alt="_images/node_transform.png" class="align-center" src="_images/node_transform.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Transform</strong> node accepts a color image as input.</p>
+<p>The <strong>Transform</strong> node accepts one or more color images as input.</p>
 <p>It also accepts a greyscale input image for each transform parameter. In that case,
 instead of applying a uniform transform to the input image, the transform parameter
 will, for each pixel, be multiplied by a value from -1 to 1 that depends linearly
@@ -226,8 +227,8 @@ by -1, a white pixel will not change the parameter, a grey50 pixel will set it t
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Transform</strong> node outputs the transformed image.</p>
-<p>The input image is first rotated around its center, then the scale operation is applied and
+<p>The <strong>Transform</strong> node outputs the transformed inputs images.</p>
+<p>The input images are first rotated around its center, then the scale operation is applied and
 finally the translation.</p>
 <p>Using the scale operation to zoom on a detail of the input image is only recommended if the
 input does not rely on resolution dependant nodes.</p>
@@ -262,7 +263,7 @@ input does not rely on resolution dependant nodes.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

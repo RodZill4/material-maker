@@ -9,7 +9,7 @@ extension so double-clicking on them will directly open them.
 
 Material Maker can also be used to export several .ptex file with the following command line:
 
- material_maker --export -t <engine> -o <output_path> <input_files>
+ material_maker --export-material --target <engine> -o <output_path> <input_files>
 
 Where:
 

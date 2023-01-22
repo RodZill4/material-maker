@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -110,6 +110,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_convert_from_to_rgb.html">Convert from/to RGB nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
@@ -123,6 +125,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blending-modes">Blending modes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
 </ul>
@@ -167,7 +170,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_binary_smooth.html">Binary Smooth node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_hbao.html">HBAO node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_color_conversion.html">Color Conversion node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_to_height.html">Normal to Height node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_colorspace_roundtrip.html">Colorspace Roundtrip node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -248,18 +252,20 @@
             
   <div class="section" id="blend-node">
 <h1>Blend node<a class="headerlink" href="#blend-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>Blend</strong> node blends two inputs using an optional opacity. It performs a blend operation
-defined by the blend mode between both inputs, and mixes the result with the bottom input
-using the opacity (defines by the <em>opacity</em> parameter, or the optional greyscale input).</p>
+<p>The <strong>Blend</strong> node blends two or more inputs using an optional opacity. It performs a blend operation
+defined by the blend mode between the inputs, and mixes the result with the background input
+using the opacity (defined by the <em>opacity</em> parameter multiplied by the greyscale input).</p>
 <img alt="_images/node_filter_blend.png" class="align-center" src="_images/node_filter_blend.png" />
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Blend</strong> node accepts three inputs:</p>
+<p>The <strong>Blend</strong> node accepts three or more inputs:</p>
 <ul class="simple">
-<li><p>The first input is the top layer.</p></li>
-<li><p>The second input is the bottom layer.</p></li>
-<li><p>The third input is an optional mask that will be use instead of the opacity parameter.</p></li>
+<li><p>The first input is the background layer.</p></li>
+<li><p>The second input is the first layer.</p></li>
+<li><p>The third input is an optional mask that will be multiplied by the
+opacity parameter for the first layer.</p></li>
 </ul>
+<p>This node is variadic, and more layers and associated masks can be added.</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
@@ -267,14 +273,110 @@ using the opacity (defines by the <em>opacity</em> parameter, or the optional gr
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Blend</strong> node has two parameters:</p>
+<p>The <strong>Blend</strong> node has two or more parameters:</p>
 <ul class="simple">
 <li><p>The <em>blend mode</em>, that can be one of the following: <em>Normal</em>, <em>Dissolve</em>, <em>Multiply</em>, <em>Screen</em>,
-<em>Overlay</em>, <em>Hard Light</em>, <em>Soft Light</em>, <em>Burn</em>, <em>Dodge</em>, <em>Lighten</em>, <em>Darken</em>, <em>Difference</em>, <em>Additive</em>, <em>AddSub</em>.</p></li>
-<li><p>The <em>opacity</em> used when mixing the result of the blend operation with the bottom input
+<em>Overlay</em>, <em>Hard Light</em>, <em>Soft Light</em>, <em>Linear Light</em>, <em>Vivid Light</em>, <em>Pin Light</em>, <em>Burn</em>, <em>Dodge</em>,
+<em>Lighten</em>, <em>Darken</em>, <em>Difference</em>, <em>Additive</em>, <em>AddSub</em>, <em>Hard Mix</em>, <em>Exclusion</em>.</p></li>
+<li><p>The <em>opacity</em> is used when mixing the result of the blend operation with the background input
 when the corresponding input is not connected. When connected, the opacity channel is
 multiplied with that parameter.</p></li>
 </ul>
+<p>Both parameters are repeated for each additional layer.</p>
+</div>
+<div class="section" id="blending-modes">
+<h2>Blending modes<a class="headerlink" href="#blending-modes" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 17%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Blend mode</p></th>
+<th class="head"><p>Example</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Normal</p></td>
+<td><p><img alt="blend_normal" src="_images/blend_normal.png" /></p></td>
+<td><p>This is the default blend mode. It simply displays the top layer over the bottom layer without any blending</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dissolve</p></td>
+<td><p><img alt="blend_dissolve" src="_images/blend_dissolve.png" /></p></td>
+<td><p>This blend mode randomly replaces the pixels of the top layer with the pixels of the bottom layer</p></td>
+</tr>
+<tr class="row-even"><td><p>Multiply</p></td>
+<td><p><img alt="blend_multiply" src="_images/blend_multiply.png" /></p></td>
+<td><p>This blend mode multiplies the colors of the two layers, resulting in a darker image</p></td>
+</tr>
+<tr class="row-odd"><td><p>Screen</p></td>
+<td><p><img alt="blend_screen" src="_images/blend_screen.png" /></p></td>
+<td><p>This blend mode multiplies the inverse of the colors of the two layers, resulting in a lighter image</p></td>
+</tr>
+<tr class="row-even"><td><p>Overlay</p></td>
+<td><p><img alt="blend_overlay" src="_images/blend_overlay.png" /></p></td>
+<td><p>This blend mode multiplies the darker colors and screens the lighter colors. It increases the contrast of the image</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hard Light</p></td>
+<td><p><img alt="blend_hard_light" src="_images/blend_hard_light.png" /></p></td>
+<td><p>This blend mode is similar to Overlay, but it is more intense</p></td>
+</tr>
+<tr class="row-even"><td><p>Soft Light</p></td>
+<td><p><img alt="blend_soft_light" src="_images/blend_soft_light.png" /></p></td>
+<td><p>This blend mode multiplies the darker colors and screens the lighter colors, but it is less intense than Overlay</p></td>
+</tr>
+<tr class="row-odd"><td><p>Burn</p></td>
+<td><p><img alt="blend_burn" src="_images/blend_burn.png" /></p></td>
+<td><p>This blend mode darkens the bottom layer to reflect the top layer. It increases the contrast between the two layers</p></td>
+</tr>
+<tr class="row-even"><td><p>Dodge</p></td>
+<td><p><img alt="blend_dodge" src="_images/blend_dodge.png" /></p></td>
+<td><p>This blend mode lightens the bottom layer to reflect the top layer. It decreases the contrast between the two layers</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lighten</p></td>
+<td><p><img alt="blend_lighten" src="_images/blend_lighten.png" /></p></td>
+<td><p>This blend mode compares the colors of the two layers and keeps the lighter of the two colors</p></td>
+</tr>
+<tr class="row-even"><td><p>Darken</p></td>
+<td><p><img alt="blend_darken" src="_images/blend_darken.png" /></p></td>
+<td><p>This blend mode compares the colors of the two layers and keeps the darker of the two colors</p></td>
+</tr>
+<tr class="row-odd"><td><p>Difference</p></td>
+<td><p><img alt="blend_difference" src="_images/blend_difference.png" /></p></td>
+<td><p>This blend mode substracts the color of the two layers</p></td>
+</tr>
+<tr class="row-even"><td><p>Additive</p></td>
+<td><p><img alt="blend_additive" src="_images/blend_additive.png" /></p></td>
+<td><p>This blend mode adds the color of the two layers</p></td>
+</tr>
+<tr class="row-odd"><td><p>AddSub</p></td>
+<td><p><img alt="blend_addsub" src="_images/blend_addsub.png" /></p></td>
+<td><p>This blend mode adds or substract the foreground layer depending on its luminosity</p></td>
+</tr>
+<tr class="row-even"><td><p>Linear Light</p></td>
+<td><p><img alt="blend_linear_light" src="_images/blend_linear_light.png" /></p></td>
+<td><p>This blend mode is a combination of Linear Dodge and Linear Burn</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vivid Light</p></td>
+<td><p><img alt="blend_vivid_light" src="_images/blend_vivid_light.png" /></p></td>
+<td><p>This blend mode is similar to Color Dodge and Color Burn, but it is more intense</p></td>
+</tr>
+<tr class="row-even"><td><p>Pin Light</p></td>
+<td><p><img alt="blend_pin_light" src="_images/blend_pin_light.png" /></p></td>
+<td><p>This blend mode replaces colors of the bottom layer with those of the top layer depending on the luminosity of the top layer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hard Mix</p></td>
+<td><p><img alt="blend_hard_mix" src="_images/blend_hard_mix.png" /></p></td>
+<td><p>This blend mode multiplies the colors of the two layers, and maps the resulting color to the nearest primary color</p></td>
+</tr>
+<tr class="row-even"><td><p>Exclusion</p></td>
+<td><p><img alt="blend_exclusion" src="_images/blend_exclusion.png" /></p></td>
+<td><p>This blend mode is similar to Difference, but it is less intense</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
@@ -300,7 +402,7 @@ multiplied with that parameter.</p></li>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

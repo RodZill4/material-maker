@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -105,6 +105,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#randomness">Randomness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variadic-nodes">Variadic nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#modifying-nodes">Modifying nodes</a></li>
 </ul>
 </li>
@@ -222,7 +223,7 @@ output slot will have a circle around it, and clicking it again will hide the pr
 </div>
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>Inputs are images the node will transform (if any). An input is always connected to at most
+<p>Inputs (if any) can have the same types as outputs. An input is always connected to at most
 one output. Inputs generally have a default value that is used when it is not connected.</p>
 </div>
 <div class="section" id="parameters">
@@ -304,6 +305,17 @@ parents and will have the same seed in all variations.</p>
 <p>Subgraphs also have their seed and transmit it to their children unless not configured to
 do so, or the children’s seeds are frozen.</p>
 </div>
+<div class="section" id="variadic-nodes">
+<h2>Variadic nodes<a class="headerlink" href="#variadic-nodes" title="Permalink to this headline">¶</a></h2>
+<p>Nodes can have a variable number of inputs, parameters and outputs depending on the
+context.</p>
+<img alt="_images/variadic_node.png" class="align-center" src="_images/variadic_node.png" />
+<p>Such nodes have a specific icon in their title bar. Clicking tht icon with the left mouse
+button will increase their variadic size, and the right mouse button will show a menu
+with the minimum size (depending on current connections) and a few other choices.</p>
+<p>The variadic size of the node in the number of instances of its variadic parameters
+and ports.</p>
+</div>
 <div class="section" id="modifying-nodes">
 <h2>Modifying nodes<a class="headerlink" href="#modifying-nodes" title="Permalink to this headline">¶</a></h2>
 <p>Most nodes in Material Maker can be modified, but they first have to be made editable.
@@ -348,7 +360,7 @@ outputs) may break existing materials, and should thus be avoided.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

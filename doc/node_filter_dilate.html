@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -110,6 +110,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_convert_from_to_rgb.html">Convert from/to RGB nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
@@ -166,7 +168,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_binary_smooth.html">Binary Smooth node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_hbao.html">HBAO node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_color_conversion.html">Color Conversion node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_to_height.html">Normal to Height node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_colorspace_roundtrip.html">Colorspace Roundtrip node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -273,7 +276,9 @@ textures resolution.</p></li>
 <li><p><em>length</em> is the length of the dilate effect</p></li>
 <li><p>when <em>mode</em> is set to 0, the dilate effect generates a gradient around (based on the
 distance to) the white parts of the mask. When set to 1, the dilate effect just dilates
-the source (or the white color). Values in between mix both methods.</p></li>
+the source (or the white color). Values in between mix both methods</p></li>
+<li><p>the <em>distance</em> function used for the Dilate operation (Euclidian, Manhattan or Chebyshev)</p></li>
+<li><p>a <em>tile</em> option to create a tileable result</p></li>
 </ul>
 </div>
 <div class="section" id="example-images">
@@ -296,7 +301,7 @@ the source (or the white color). Values in between mix both methods.</p></li>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

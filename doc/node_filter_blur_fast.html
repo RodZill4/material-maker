@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -110,6 +110,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_invert.html">Invert node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_brightnesscontrast.html">BrightnessContrast node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_adjusthsv.html">AdjustHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_convert_from_to_rgb.html">Convert from/to RGB nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones.html">Tones node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_map.html">Tones Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_tones_step.html">Tones Step node</a></li>
@@ -167,7 +169,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_binary_smooth.html">Binary Smooth node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_hbao.html">HBAO node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_color_conversion.html">Color Conversion node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_filter_alterhsv.html">AlterHSV node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_normal_to_height.html">Normal to Height node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_colorspace_roundtrip.html">Colorspace Roundtrip node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
@@ -257,15 +260,26 @@ that defines the intensity of the blur effect.</p>
 </div>
 <div class="section" id="outputs">
 <h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Fast Blur</strong> node outputs the result of the blur operation.</p>
+<p>The <strong>Fast Blur</strong> node has three outputs:</p>
+<ul class="simple">
+<li><p>The first output is the result of the blur operation.</p></li>
+<li><p>The second output is the high frequency details removed by the blur.
+In other words, the first output subtracted from the original image.
+Note that all channels including alpha will be centered at 0,
+so this will need to be connected to a SwapChannels node to be seen in previews.</p></li>
+<li><p>The third output is the original image sharpened.
+In other words, this is the second output added back to the original image.</p></li>
+</ul>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Fast Blur</strong> node has three parameters:</p>
+<p>The <strong>Fast Blur</strong> node has four parameters:</p>
 <ul class="simple">
 <li><p>The <em>resolution</em> defines the size of the output image.</p></li>
 <li><p>The <em>sigma</em> parameter defines how smooth the output will be.</p></li>
 <li><p>The <em>quality</em> can be modified to choose between nicer result and rendering time.</p></li>
+<li><p>The <em>strength</em> parameter is a multiplier for the high-pass and sharpened outputs.
+It is unused for the blur output.</p></li>
 </ul>
 </div>
 <div class="section" id="notes">
@@ -292,7 +306,7 @@ that defines the intensity of the blur effect.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>

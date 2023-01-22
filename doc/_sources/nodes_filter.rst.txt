@@ -9,6 +9,8 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_invert
 	node_filter_brightnesscontrast
 	node_filter_adjusthsv
+	node_filter_alterhsv
+	node_filter_convert_from_to_rgb
 	node_filter_tones
 	node_filter_tones_map
 	node_filter_tones_step
@@ -59,4 +61,5 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_binary_smooth
 	node_filter_hbao
 	node_filter_color_conversion
-	node_filter_alterhsv
+	node_filter_normal_to_height
+	node_filter_colorspace_roundtrip

@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.1
+                1.2
               </div>
             
           
@@ -218,8 +218,14 @@
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The image node has a single parameter that defines the image file the node provides.
-It can be modified by clicking the thumbnail and selecting a new image file.</p>
+<p>The <strong>Image</strong> node has three parameters:</p>
+<ul class="simple">
+<li><p>The first parameter defines the image file the node provides.
+It can be modified by clicking the thumbnail and selecting a new image file.</p></li>
+<li><p><strong>Fix Aspect Ratio</strong> will scale the height of non-square images to maintain the correct aspect ratio.</p></li>
+<li><p><strong>Clamp</strong> will disable the default tiling behavior.
+Useful when dealing with non-square images as they cannot easily be clamped further down the graph.</p></li>
+</ul>
 <p>The supported formats are BMP, HDR, JPEG, PNG, SVG, TGA and WebP.</p>
 </div>
 </div>
@@ -238,7 +244,7 @@ It can be modified by clicking the thumbnail and selecting a new image file.</p>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2018-2022, Rodolphe Suescun.
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
 
     </p>
   </div>
