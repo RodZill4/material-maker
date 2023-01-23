@@ -47,7 +47,10 @@ func has_config(key : String) -> bool:
 
 func get_config(key : String):
 	if ! config.has_section_key("config", key):
-		return DEFAULT_CONFIG[key]
+		if DEFAULT_CONFIG.has(key):
+			return DEFAULT_CONFIG[key]
+		else:
+			return ""
 	return config.get_value("config", key)
 
 func set_config(key : String, value):

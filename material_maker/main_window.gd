@@ -636,12 +636,8 @@ func quit() -> void:
 	if quitting:
 		return
 	quitting = true
-	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
-	dialog.dialog_text = "Quit Material Maker?"
-	dialog.add_cancel("Cancel")
-	add_child(dialog)
 	if mm_globals.get_config("confirm_quit"):
-		var result = dialog.ask()
+		var result = accept_dialog("Quit Material Maker?", true)
 		while result is GDScriptFunctionState:
 			result = yield(result, "completed")
 		if result == "cancel":
@@ -1210,6 +1206,19 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 
 func _on_Tip_Timer_timeout():
 	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
+
+# Accept dialog
+
+func accept_dialog(dialog_text : String, cancel_button : bool = false):
+	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	dialog.dialog_text = dialog_text
+	if cancel_button:
+		dialog.add_cancel("Cancel")
+	add_child(dialog)
+	var result = dialog.ask()
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	return result
 
 # Use this to investigate the connect bug
 

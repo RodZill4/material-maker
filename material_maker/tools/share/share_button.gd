@@ -1,41 +1,109 @@
 extends HBoxContainer
 
-var websocket_server : WebSocketServer
-var websocket_port : int
-var websocket_id : int = -1
 
-var is_multipart : bool = false
-var multipart_message : String = ""
+var website_address : String = "http://localhost:3000"
+var request_type : String = ""
+var cookies : PoolStringArray = PoolStringArray()
+
 
 var preview_viewport : Viewport = null
-
-func _ready():
-	set_process(false)
-
-func create_server() -> void:
-	if websocket_server == null:
-		websocket_server = WebSocketServer.new()
-		websocket_server.connect("client_connected", self, "_on_client_connected")
-		websocket_server.connect("client_disconnected", self, "_on_client_disconnected")
-		websocket_server.connect("data_received", self, "_on_data_received")
-		websocket_port = 8000
-		while true:
-			if websocket_server.listen(websocket_port) == OK:
-				break
-			websocket_port += 1
-		if websocket_server.is_listening():
-			print_debug("Listening on port %d..." % websocket_port)
-			set_process(true)
 
 func create_preview_viewport():
 	if preview_viewport == null:
 		preview_viewport = load("res://material_maker/tools/share/preview_viewport.tscn").instance()
 		add_child(preview_viewport)
 
+func http_request(path : String, custom_headers: PoolStringArray = PoolStringArray(), ssl_validate_domain: bool = true, method = 0, request_data_raw: String = "") -> bool:
+	var headers = PoolStringArray()
+	headers.append_array(custom_headers)
+	headers.append("Cookie: %s" % cookies.join("; "))
+	var error = $HTTPRequest.request(website_address+path, headers, true, method, request_data_raw)
+	return error == OK
+
 func _on_ConnectButton_pressed() -> void:
-	if websocket_id == -1:
-		create_server()
-		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
+	var dialog = load("res://material_maker/tools/share/login_dialog.tscn").instance()
+	add_child(dialog)
+	var saved_login = mm_globals.get_config("website_login")
+	var saved_password = mm_globals.get_config("website_password")
+	var login_info = dialog.ask(saved_login, saved_password)
+	while login_info is GDScriptFunctionState:
+		login_info = yield(login_info, "completed")
+	if login_info.has("user") and login_info.has("password"):
+		if login_info.has("save_user"):
+			if login_info.save_user:
+				mm_globals.set_config("website_login", login_info.user)
+			else:
+				mm_globals.set_config("website_login", "")
+			login_info.erase("save_user")
+		if login_info.has("save_password"):
+			if login_info.save_password:
+				mm_globals.set_config("website_password", login_info.password)
+			else:
+				mm_globals.set_config("website_password", "")
+			login_info.erase("save_password")
+		var body : String = JSON.print(login_info)
+		if http_request("/login", [ "Content-Type: application/json" ], true, HTTPClient.METHOD_POST, body):
+			request_type = "login"
+		else:
+			set_logged_out()
+
+func split_headers(headers : PoolStringArray) -> Dictionary:
+	var rv : Dictionary = {}
+	for h in headers:
+		var s = h.split(":", true, 1)
+		var n : String = s[0].to_lower()
+		var v : String = s[1].strip_edges()
+		if n == "set-cookie":
+			for c in v.split("; "):
+				var found : bool = false
+				for i in range(cookies.size()):
+					if c.split("=", true, 0)[0] == cookies[i].split("=", true, 0)[0]:
+						cookies[i] = c
+						found = true
+						break
+				if !found:
+					cookies.append(c)
+		else:
+			rv[n] = v
+	return rv
+
+func _on_HTTPRequest_request_completed(result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray):
+	match response_code:
+		200:
+			var rt : String = request_type
+			request_type = ""
+			match rt:
+				"login":
+					var re : RegEx = RegEx.new()
+					re.compile("<div class=\"error\">((?:.*))</div>")
+					var re_match : RegExMatch = re.search(body.get_string_from_ascii())
+					if re_match != null:
+						set_logged_out()
+						mm_globals.main_window.accept_dialog(re_match.strings[1], false)
+					else:
+						set_logged_in()
+						if http_request("/api/isConnected", [ "Content-Type: application/json" ]):
+							request_type = "isConnected"
+						else:
+							set_logged_out()
+				"isConnected":
+					var status_parse_result : JSONParseResult = JSON.parse(body.get_string_from_ascii())
+					if status_parse_result == null:
+						set_logged_out()
+					else:
+						var status = status_parse_result.result
+						if !status.connected:
+							set_logged_out()
+						else:
+							set_logged_in(status.displayed_name)
+		302:
+			# Redirection
+			var loc = ""
+			var header_dict = split_headers(headers)
+			if header_dict.has("location"):
+				http_request(header_dict.location)
+		_:
+			print("Unexpected status: %d" % response_code)
 
 func update_preview_texture():
 	create_preview_viewport()
@@ -91,95 +159,23 @@ func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : 
 	var png_image = preview_texture.get_data().save_png_to_buffer()
 	var png_data = Marshalls.raw_to_base64(png_image)
 	var data = { type=asset_type, image=png_data, json=JSON.print(asset_data) }
-	send_data(JSON.print(data))
+	#send_data(JSON.print(data))
 
-func _process(_delta):
-	websocket_server.poll()
 
-const PACKET_SIZE : int = 64000
-func send_data(data : String):
-	if (data.length() < PACKET_SIZE):
-		websocket_server.get_peer(websocket_id).put_packet(data.to_utf8())
+func set_logged_in(user_name : String = "") -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
+	if user_name == "":
+		$ConnectButton.hint_tooltip = "Logged in.\nMaterials can be submitted."
 	else:
-		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_BEGIN%".to_utf8())
-		for s in range(0, data.length(), PACKET_SIZE):
-			yield(get_tree(), "idle_frame")
-			websocket_server.get_peer(websocket_id).put_packet(data.substr(s, PACKET_SIZE).to_utf8())
-		yield(get_tree(), "idle_frame")
-		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_END%".to_utf8())
+		$ConnectButton.hint_tooltip = "Logged in as "+user_name+".\nMaterials can be submitted."
+	$SendButton.disabled = false
 
-# warning-ignore:unused_argument
-func _on_client_connected(id: int, protocol: String) -> void:
-	if websocket_id == -1:
-		websocket_id = id
-		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/link.tres")
-		$ConnectButton.hint_tooltip = "Connected to the web site.\nLog in to submit materials."
-		$SendButton.disabled = true
-		is_multipart = false
-		var data = {
-			type="mm_release",
-			release=ProjectSettings.get_setting("application/config/actual_release"),
-			features=[ "share_environments" ]
-		}
-		send_data(JSON.print(data))
-
-
-# warning-ignore:unused_argument
-func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
-	if websocket_id == id:
-		websocket_id = -1
-		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
-		$ConnectButton.hint_tooltip = "Disconnected. Click to connect to the web site."
-		$SendButton.disabled = true
+func set_logged_out() -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
+	$ConnectButton.hint_tooltip = "Click to log in and submit assets"
+	$SendButton.disabled = true
 
 func bring_to_top() -> void:
 	var is_always_on_top = OS.is_window_always_on_top()
 	OS.set_window_always_on_top(true)
 	OS.set_window_always_on_top(is_always_on_top)
-
-func _on_data_received(id: int) -> void:
-	var message = websocket_server.get_peer(id).get_packet().get_string_from_utf8()
-	if is_multipart:
-		if message == "%MULTIPART_END%":
-			is_multipart = false
-			process_message(multipart_message)
-		else:
-			multipart_message += message
-	elif message == "%MULTIPART_BEGIN%":
-		is_multipart = true
-		multipart_message = ""
-	else:
-		process_message(message)
-
-func process_message(message : String) -> void:
-	print("received message (%d)" % message.length())
-	var json = JSON.parse(message)
-	if json.error == OK:
-		var data = json.result
-		match data.action:
-			"logged_in":
-				$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
-				$ConnectButton.hint_tooltip = "Connected and logged in.\nMaterials can be submitted."
-				$SendButton.disabled = false
-			"load_material":
-				var main_window = mm_globals.main_window
-				main_window.new_material()
-				var graph_edit = main_window.get_current_graph_edit()
-				var new_generator = mm_loader.create_gen(JSON.parse(data.json).result)
-				graph_edit.set_new_generator(new_generator)
-				main_window.hierarchy.update_from_graph_edit(graph_edit)
-				bring_to_top()
-			"load_brush":
-				var main_window = mm_globals.main_window
-				var project_panel = main_window.get_current_project()
-				if not project_panel.has_method("set_brush"):
-					print("Cannot load brush")
-					return
-				project_panel.set_brush(JSON.parse(data.json).result)
-				bring_to_top()
-			"load_environment":
-				var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-				environment_manager.add_environment(JSON.parse(data.json).result)
-	else:
-		print("Incorrect JSON")
-
