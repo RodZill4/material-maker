@@ -1207,6 +1207,14 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 func _on_Tip_Timer_timeout():
 	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
 
+# Add dialog
+
+func add_dialog(dialog : Control):
+	var background : ColorRect = load("res://material_maker/darken.tscn").instance()
+	add_child(background)
+	add_child(dialog)
+	dialog.connect("tree_exited", background, "queue_free")
+
 # Accept dialog
 
 func accept_dialog(dialog_text : String, cancel_button : bool = false):

@@ -11,10 +11,11 @@ func _ready():
 func _on_LoginButton_pressed():
 	emit_signal("return_status", "ok")
 
-func _on_AcceptDialog_popup_hide() -> void:
+func _on_LoginDialog_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
 func ask(user : String, password : String) -> String:
+	mm_globals.main_window.add_dialog(self)
 	if user != "":
 		$MarginContainer/VBoxContainer/UserName.text = user
 		$MarginContainer/VBoxContainer/SaveUser.pressed = true

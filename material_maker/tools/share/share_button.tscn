@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://material_maker/tools/share/broken_link.tres" type="Texture" id=1]
 [ext_resource path="res://material_maker/tools/share/share_button.gd" type="Script" id=2]
+[ext_resource path="res://material_maker/tools/share/share_http_request.gd" type="Script" id=3]
 [ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=4]
 
 [sub_resource type="AtlasTexture" id=1]
@@ -54,7 +55,8 @@ rect_min_size = Vector2( 15, 0 )
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 max_redirects = 0
+script = ExtResource( 3 )
 
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
 [connection signal="pressed" from="SendButton" to="." method="_on_SendButton_pressed"]
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="request_completed" from="HTTPRequest" to="HTTPRequest" method="_on_request_completed"]
