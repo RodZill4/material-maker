@@ -12,54 +12,84 @@ var current_project_path : String = ""
 const CHECK_PREDEFINED : bool = false
 
 const USER_EXPORT_DIR : String = "user://export_targets"
+const SHARED_NODES_DIR : String = "user://shared_nodes"
 
 
 func _ready()-> void:
 	update_predefined_generators()
 	load_external_export_targets()
 
-func update_predefined_generators()-> void:
+func get_predefined_generators_from_dir(path : String) -> void:
 	var parser
 	if CHECK_PREDEFINED:
 		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if !dir.current_is_dir() and file_name.get_extension() == "mmg":
+				var file : File = File.new()
+				if file.open(path+"/"+file_name, File.READ) == OK:
+					var generator = string_to_dict_tree(file.get_as_text())
+					if CHECK_PREDEFINED:
+						if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
+							var parse_result = parser.parse(generator.shader_model.global)
+							if parse_result.status != "OK":
+								print(file_name+" has errors in global")
+							elif parse_result.value.type == "translation_unit":
+								for definition in parse_result.value.value:
+									if definition.type == "function_definition":
+										var function_name = definition.value[0].value[0].value.name
+										if function_name.type == "IDENTIFIER":
+											if predefined_functions.has(function_name.value):
+												print(str(function_name.value)+" is defined in "+file_name.get_basename()+" and "+predefined_functions[function_name.value])
+											else:
+												predefined_functions[function_name.value] = file_name.get_basename()
+										else:
+											print(definition)
+									else:
+										print(definition.type)
+					var node_name : String = file_name.get_basename()
+					if node_name.left(8) == "website_":
+						print(node_name.right(8))
+						node_name[7] = ":"
+					predefined_generators[node_name] = generator
+					file.close()
+			file_name = dir.get_next()
+
+func update_predefined_generators() -> void:
 	predefined_generators = {}
 	predefined_functions = {}
 	for path in MMPaths.get_nodes_paths():
-		var dir = Directory.new()
-		if dir.open(path) == OK:
-			dir.list_dir_begin()
-			var file_name = dir.get_next()
-			while file_name != "":
-				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
-					var file : File = File.new()
-					if file.open(path+"/"+file_name, File.READ) == OK:
-						var generator = string_to_dict_tree(file.get_as_text())
-						if CHECK_PREDEFINED:
-							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
-								var parse_result = parser.parse(generator.shader_model.global)
-								if parse_result.status != "OK":
-									print(file_name+" has errors in global")
-								elif parse_result.value.type == "translation_unit":
-									for definition in parse_result.value.value:
-										if definition.type == "function_definition":
-											var function_name = definition.value[0].value[0].value.name
-											if function_name.type == "IDENTIFIER":
-												if predefined_functions.has(function_name.value):
-													print(str(function_name.value)+" is defined in "+file_name.get_basename()+" and "+predefined_functions[function_name.value])
-												else:
-													predefined_functions[function_name.value] = file_name.get_basename()
-											else:
-												print(definition)
-										else:
-											print(definition.type)
-						predefined_generators[file_name.get_basename()] = generator
-						file.close()
-				file_name = dir.get_next()
+		get_predefined_generators_from_dir(path)
 	if false:
 		var file : File = File.new()
 		if file.open("predefined_nodes.json", File.WRITE) == OK:
 			file.store_string(to_json(predefined_generators))
 			file.close()
+
+func get_node_from_website(node_name : String) -> bool:
+	var node_id : String = node_name.right(8)
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
+	var error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+node_id)
+	if error != OK:
+		return false
+	var result = yield(http_request, "request_completed")
+	if ! result is Array or result[0] != 0 or result[1] != 200:
+		return false
+	var json : JSONParseResult = JSON.parse(result[3].get_string_from_ascii())
+	if json.error != OK or ! json.result is Dictionary:
+		return false
+	predefined_generators[node_name] = string_to_dict_tree(json.result.json)
+	var dir : Directory = Directory.new()
+	dir.make_dir_recursive(SHARED_NODES_DIR)
+	var file : File = File.new()
+	if file.open(SHARED_NODES_DIR+"/website_"+node_id+".mmg", File.WRITE) == OK:
+		file.store_string(dict_tree_to_string(predefined_generators[node_name].duplicate(true)))
+		file.close()
+	return true
 
 func get_material_nodes() -> Array:
 	var rv : Array = Array()
@@ -137,6 +167,8 @@ func load_gen(filename: String) -> MMGenBase:
 		if data != null:
 			current_project_path = filename.get_base_dir()
 			var generator = create_gen(data)
+			while generator is GDScriptFunctionState:
+				generator = yield(generator, "completed")
 			current_project_path = ""
 			return generator
 	return null
@@ -160,6 +192,8 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 	var gennames = {}
 	for n in generators:
 		var g = create_gen(n)
+		while g is GDScriptFunctionState:
+			g = yield(g, "completed")
 		if g != null:
 			g.orig_name = g.name
 			var orig_name = g.name
@@ -220,18 +254,27 @@ func create_gen(data) -> MMGenBase:
 	if generator == null and data.has("type"):
 		if types.has(data.type):
 			generator = types[data.type].new()
-		elif predefined_generators.has(data.type):
-			generator = create_gen(predefined_generators[data.type])
-			if generator == null:
-				print("Cannot find description for "+data.type)
-			else:
-				generator.model = data.type
+		else:
+			if !predefined_generators.has(data.type) and data.type.left(8) == "website:":
+				var status = get_node_from_website(data.type)
+				while status is GDScriptFunctionState:
+					status = yield(status, "completed")
+			if predefined_generators.has(data.type):
+				generator = create_gen(predefined_generators[data.type])
+				while generator is GDScriptFunctionState:
+					generator = yield(generator, "completed")
+				if generator == null:
+					print("Cannot find description for "+data.type)
+				else:
+					generator.model = data.type
 		if generator != null:
 			generator.name = data.type
 	if generator == null:
 		print("LOADER: data not supported:"+str(data))
 	if generator != null:
-		generator.deserialize(data)
+		var status = generator.deserialize(data)
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
 	return generator
 
 func get_generator_list() -> Array:

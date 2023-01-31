@@ -14,6 +14,8 @@ func set_ptex(s : String) -> void :
 
 func update_texture() -> void:
 	var mm_graph = mm_loader.create_gen(parse_json(ptex))
+	while mm_graph is GDScriptFunctionState:
+		mm_graph = yield(mm_graph, "completed")
 	if mm_graph == null:
 		return
 	var mm_material : MMGenMaterial = mm_graph.get_node("Material")

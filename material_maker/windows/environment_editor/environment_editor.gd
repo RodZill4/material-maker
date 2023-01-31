@@ -179,6 +179,5 @@ func _on_Share_pressed():
 	env.erase("thumbnail")
 	share_button.send_asset("environment", env, preview_texture)
 
-
 func _on_Main_minimum_size_changed():
 	rect_size = $Main.rect_size+Vector2(4, 4)

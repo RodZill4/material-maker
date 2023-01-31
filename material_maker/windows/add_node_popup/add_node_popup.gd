@@ -18,21 +18,17 @@ onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
 
-
 func _ready() -> void:
 	filter.connect("text_changed", self, "update_list")
 	filter.connect("text_entered", self, "filter_entered")
 	list.connect("object_selected", self, "object_selected")
 	update_list()
 
-
 func _draw() -> void:
 	draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), Color(1, 0.56, 0.56, 1), false, 2)
 
-
 func filter_entered(_filter) -> void:
 	list.select_first()
-
 
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
@@ -61,16 +57,13 @@ func add_node(node_data) -> void:
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()
 
-
 func object_selected(obj) -> void:
 	add_node(obj)
 	hide()
 
-
 func hide() -> void:
 	.hide()
 	get_current_graph().grab_focus()
-
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
 	insert_position = get_current_graph().offset_from_global_position(get_global_mouse_position())

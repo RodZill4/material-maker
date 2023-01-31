@@ -1,12 +1,16 @@
 extends WindowDialog
 
+
 var assets : Array = []
 var displayed_assets : Array = []
 var thumbnail_update_thread : Thread = null
+var only_return_index : bool = false
 
 onready var item_list : ItemList = $VBoxContainer/ItemList
 
+
 signal return_asset(json)
+
 
 func _ready() -> void:
 	Directory.new().make_dir_recursive("user://website_cache")
@@ -18,14 +22,17 @@ func _exit_tree():
 	print("Finished")
 
 func _on_ItemList_item_activated(index) -> void:
-	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
-	if error != OK:
-		return
-	var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
-	var parse_result : JSONParseResult = JSON.parse(data)
-	if parse_result == null or ! parse_result.result is Dictionary:
-		return
-	emit_signal("return_asset", parse_result.result.json)
+	if only_return_index:
+		emit_signal("return_asset", { index=displayed_assets[index] })
+	else:
+		var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(displayed_assets[index]))
+		if error != OK:
+			return
+		var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
+		var parse_result : JSONParseResult = JSON.parse(data)
+		if parse_result == null or ! parse_result.result is Dictionary:
+			return
+		emit_signal("return_asset", parse_result.result.json)
 
 func _on_LoadFromWebsite_popup_hide() -> void:
 	emit_signal("return_asset", "")
@@ -52,12 +59,13 @@ func fill_list(filter : String):
 			displayed_assets.push_back(m.id)
 			item_index += 1
 
-func select_material(type : int = 0) -> String:
-	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
+func select_material(type : int = 0, return_index : bool = false) -> String:
+	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
 		var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
 		var parse_result : JSONParseResult = JSON.parse(data)
 		if parse_result != null and parse_result.result is Array:
+			only_return_index = return_index
 			popup_centered()
 			var tmp_assets = parse_result.result
 			tmp_assets.invert()
@@ -92,7 +100,7 @@ func update_thumbnails() -> void:
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
 		if ! File.new().file_exists(cache_filename) or image.load(cache_filename) != OK:
-			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
+			var error = $ImageHTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp")
 			if error == OK:
 				var data : PoolByteArray = yield($ImageHTTPRequest, "request_completed")[3]
 				image.load_webp_from_buffer(data)

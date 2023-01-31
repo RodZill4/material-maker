@@ -472,6 +472,8 @@ func update_graph(generators, connections) -> Array:
 func new_material(init_nodes = {nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]}) -> void:
 	clear_material()
 	top_generator = mm_loader.create_gen(init_nodes)
+	while top_generator is GDScriptFunctionState:
+		top_generator = yield(top_generator, "completed")
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -496,6 +498,8 @@ func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
 		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
+		while new_stuff is GDScriptFunctionState:
+			new_stuff = yield(new_stuff, "completed")
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
 		return return_value
 	return []
@@ -503,13 +507,17 @@ func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	var prev = generator.serialize().duplicate(true)
 	var nodes = do_create_nodes(data, position)
+	while nodes is GDScriptFunctionState:
+		nodes = yield(nodes, "completed")
 	if !nodes.empty():
 		var next = generator.serialize()
 		undoredo_create_step("Add and connect nodes", generator.get_hier_name(), prev, next)
 	return nodes
 
 func create_gen_from_type(gen_name) -> void:
-	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
+	var nodes = create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
+	while nodes is GDScriptFunctionState:
+		nodes = yield(nodes, "completed")
 
 func set_new_generator(new_generator) -> void:
 	clear_material()
@@ -548,6 +556,8 @@ func load_file(filename) -> bool:
 		rescued = true
 	else:
 		new_generator = mm_loader.load_gen(filename)
+		while new_generator is GDScriptFunctionState:
+			new_generator = yield(new_generator, "completed")
 	if new_generator != null:
 		set_save_path(filename)
 		set_new_generator(new_generator)
@@ -568,6 +578,8 @@ func load_from_data(filename, data) -> bool:
 	var json = parse_json(data)
 	if json != null:
 		var new_generator = mm_loader.create_gen(json)
+		while new_generator is GDScriptFunctionState:
+			new_generator = yield(new_generator, "completed")
 		if new_generator != null:
 			set_save_path(filename)
 			set_new_generator(new_generator)
@@ -742,6 +754,8 @@ func paste() -> void:
 			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_graph_panel()
 			var new_generator = mm_loader.create_gen(graph)
+			while new_generator is GDScriptFunctionState:
+				new_generator = yield(new_generator, "completed")
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
@@ -972,6 +986,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var generators = command.generators if command.has("generators") else []
 			var connections = command.connections if command.has("connections") else []
 			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
+			while new_stuff is GDScriptFunctionState:
+				new_stuff = yield(new_stuff, "completed")
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:

@@ -34,6 +34,7 @@ const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
+const MENU_SHARE_NODE : int        = 1001
 
 const MENU_BUFFER_PAUSE : int  = 0
 const MENU_BUFFER_RESUME : int = 1
@@ -267,11 +268,9 @@ func _on_gui_input(event) -> void:
 			if event.doubleclick:
 				doubleclicked = true
 			if event.button_index == BUTTON_RIGHT:
-				if generator is MMGenGraph:
-					accept_event()
-					var menu : PopupMenu = PopupMenu.new()
-					if !get_parent().get_propagation_targets(generator).empty():
-						menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
+				accept_event()
+				var menu = create_context_menu()
+				if menu != null:
 					if menu.get_item_count() != 0:
 						add_child(menu)
 						menu.connect("modal_closed", menu, "queue_free")
@@ -390,6 +389,16 @@ func clear_connection_labels() -> void:
 		show_outputs = false
 		update()
 
+func create_context_menu():
+	var menu : PopupMenu = PopupMenu.new()
+	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
+		var share_button = mm_globals.main_window.get_share_button()
+		if share_button.can_share():
+			menu.add_item(tr("Share node on website"), MENU_SHARE_NODE)
+	if generator is MMGenGraph and !get_parent().get_propagation_targets(generator).empty():
+		menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
+	return menu
+
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
 		MENU_PROPAGATE_CHANGES:
@@ -402,6 +411,15 @@ func _on_menu_id_pressed(id : int) -> void:
 				result = yield(result, "completed")
 			if result == "ok":
 				get_parent().call_deferred("propagate_node_changes", generator)
+		MENU_SHARE_NODE:
+			var share_button = mm_globals.main_window.get_share_button()
+			var node = generator.serialize()
+			var preview = generator.render(self, 0, 1024, true)
+			while preview is GDScriptFunctionState:
+				preview = yield(preview, "completed")
+			var preview_texture : ImageTexture = ImageTexture.new()
+			preview_texture.create_from_image(preview.get_image())
+			share_button.send_asset("node", node, preview_texture)
 
 var edit_generator_prev_state : Dictionary
 var edit_generator_next_state : Dictionary

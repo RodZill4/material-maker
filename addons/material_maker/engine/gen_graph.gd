@@ -521,8 +521,9 @@ func _deserialize(data : Dictionary) -> void:
 			connection_array = data.connections
 		elif data.connections is Dictionary:
 			connection_array = connections_from_compact(data.connections)
-	mm_loader.add_to_gen_graph(self, nodes, connection_array)
-
+	var new_stuff = mm_loader.add_to_gen_graph(self, nodes, connection_array)
+	while new_stuff is GDScriptFunctionState:
+		new_stuff = yield(new_stuff, "completed")
 
 func apply_diff_from(graph : MMGenGraph) -> void:
 	shortdesc = graph.shortdesc
@@ -557,7 +558,10 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 			idx1 += 1
 		else:
 			var gen = graph.get_node(other_child_names[idx2][0]).serialize()
-			add_generator(mm_loader.create_gen(gen))
+			var generator = mm_loader.create_gen(gen)
+			while generator is GDScriptFunctionState:
+				generator = yield(generator, "completed")
+			add_generator(generator)
 			idx2 += 1
 	
 	while idx1 < child_names.size():
@@ -566,7 +570,10 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	
 	while idx2 < other_child_names.size():
 		var gen = graph.get_node(other_child_names[idx2][0]).serialize()
-		add_generator(mm_loader.create_gen(gen))
+		var generator = mm_loader.create_gen(gen)
+		while generator is GDScriptFunctionState:
+			generator = yield(generator, "completed")
+		add_generator(generator)
 		idx2 += 1
 		
 	for child in maybe_changed:

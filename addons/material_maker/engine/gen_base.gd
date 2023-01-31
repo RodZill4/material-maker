@@ -305,9 +305,7 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 func generate_output_shader(output_index : int, preview : bool = false):
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
-	while source is GDScriptFunctionState:
-		assert(false)
-		source = yield(source, "completed")
+	assert(! source is GDScriptFunctionState)
 	if source.empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader : String
@@ -417,7 +415,9 @@ func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
-	_deserialize(data)
+	var status = _deserialize(data)
+	while status is GDScriptFunctionState:
+		status = yield(status, "completed")
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):

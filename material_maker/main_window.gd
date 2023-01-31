@@ -13,12 +13,12 @@ var need_update : bool = false
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
 # specular/parallax mapping and when viewed at oblique angles.
-var preview_rendering_scale_factor := 2.0
+var preview_rendering_scale_factor : float = 2.0
 
 # The number of subdivisions to use for tesselated 3D previews. Higher values
 # result in more detailed bumps but are more demanding to render.
 # This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
-var preview_tesselation_detail := 256
+var preview_tesselation_detail : int = 256
 
 onready var node_library_manager = $NodeLibraryManager
 onready var brush_library_manager = $BrushLibraryManager
@@ -606,6 +606,8 @@ func load_material_from_website() -> void:
 	new_material()
 	var graph_edit = get_current_graph_edit()
 	var new_generator = mm_loader.create_gen(JSON.parse(result).result)
+	while new_generator is GDScriptFunctionState:
+		new_generator = yield(new_generator, "completed")
 	graph_edit.set_new_generator(new_generator)
 	hierarchy.update_from_graph_edit(graph_edit)
 

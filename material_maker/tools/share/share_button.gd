@@ -137,7 +137,20 @@ func _on_SendButton_pressed():
 			return
 	send_asset(asset_type, main_window.get_current_graph_edit().top_generator.serialize(), preview_texture)
 
-func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture):
+func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
+	if node.has("parameters") and node.parameters is Dictionary:
+		for p in node.parameters.keys():
+			if node.parameters[p] is String:
+				for k in keywords:
+					if node.parameters[p].find(k) != -1:
+						return true
+	if node.has("nodes") and node.nodes is Array:
+		for n in node.nodes:
+			if find_in_parameter_values(n, keywords):
+				return true
+	return false
+
+func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture) -> void:
 	var data = { type=asset_type, preview=preview_texture, licenses=licenses, my_assets=my_assets }
 	var upload_dialog = load("res://material_maker/tools/share/upload_dialog.tscn").instance()
 	var asset_info = upload_dialog.ask(data)
@@ -156,6 +169,27 @@ func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : 
 		asset_info.doupdate = "on"
 	else:
 		url = "/api/addMaterial"
+	match asset_type:
+		"material":
+			asset_info.type = 0
+		"brush":
+			var type_options : int = 0
+			for n in asset_data.nodes:
+				if n.name == "Brush":
+					if n.has("parameters"):
+						var channels : Array = [ "albedo", "metallic", "roughness", "emission", "depth" ]
+						for ci in channels.size():
+							var parameter_name = "has_"+channels[ci]
+							if n.parameters.has(parameter_name) and n.parameters[parameter_name] is bool and n.parameters[parameter_name]:
+								type_options |= 1 << ci
+					break
+			if find_in_parameter_values(asset_data, [ "pressure", "tilt" ]):
+				type_options |= 1 << 5
+			asset_info.type = 1 | (type_options << 4)
+		"environment":
+			asset_info.type = 2
+		"node":
+			asset_info.type = 3
 	var request_status = http_request.do_request(url, [ "Content-Type: application/json" ], true, HTTPClient.METHOD_POST, JSON.print(asset_info))
 	while request_status is GDScriptFunctionState:
 		request_status = yield(request_status, "completed")
