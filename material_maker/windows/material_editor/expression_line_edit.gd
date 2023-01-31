@@ -13,4 +13,4 @@ func _on_Button_pressed():
 
 func set_value_from_expression_editor(v : String):
 	text = v
-	emit_signal("text_entered")
+	emit_signal("text_entered", v)

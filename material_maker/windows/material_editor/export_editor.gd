@@ -155,6 +155,7 @@ func _on_Save_Export_pressed():
 	if files.size() > 0:
 		var export_name : String = export_target.get_item_text(export_target.selected)
 		var export_data : Dictionary = exports[export_name].duplicate()
+		export_data.name = export_name
 		if data.has("template_name"):
 			export_data.material = data.template_name
 		var file : File = File.new()
