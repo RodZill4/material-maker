@@ -290,6 +290,7 @@ func save_export_target(material_name : String, export_target_name : String, exp
 	var file : File = File.new()
 	var file_name : String = get_export_file_name(material_name, export_target_name)
 	if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
+		export_target.name = export_target_name
 		file.store_string(dict_tree_to_string(export_target))
 	return file_name
 

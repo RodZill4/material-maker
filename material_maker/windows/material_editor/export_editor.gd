@@ -232,6 +232,8 @@ func _on_Files_gui_input(event):
 			export_files.unselect_all()
 
 func _on_name_text_entered(new_text):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].file_name = new_text
@@ -241,11 +243,15 @@ func _on_name_focus_exited():
 	_on_name_text_entered(export_file_name.text)
 
 func _on_prompt_overwrite_toggled(button_pressed):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].prompt_overwrite = button_pressed
 
 func _on_conditions_text_entered(new_text):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].conditions = new_text
@@ -254,6 +260,8 @@ func _on_conditions_focus_exited():
 	_on_conditions_text_entered(export_file_conditions.text)
 
 func _on_type_item_selected(index):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	match index:
@@ -276,6 +284,8 @@ func _on_type_item_selected(index):
 	select_file(i)
 
 func _on_expression_value_changed(value):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].output = int(value)
@@ -290,6 +300,8 @@ func get_expression_from_output(text : String) -> String:
 	return text
 
 func _on_expression_text_entered(new_text : String):
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	if new_text.is_valid_integer():
@@ -304,6 +316,8 @@ func _on_expression_focus_exited():
 
 
 func _on_template_focus_exited():
+	if export_files.get_selected_items().empty():
+		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].template = export_file_template.text

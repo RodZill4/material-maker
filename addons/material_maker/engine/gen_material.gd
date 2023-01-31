@@ -547,6 +547,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var export_context : Dictionary = get_connections_and_parameters_context()
 	export_context["$(path_prefix)"] = prefix
 	export_context["$(file_prefix)"] = prefix.get_file()
+	export_context["$(dir_prefix)"] = prefix.get_base_dir()
 	var exported_files : Array = []
 	var overwrite_files : Array = []
 	var dir : Directory = Directory.new()
