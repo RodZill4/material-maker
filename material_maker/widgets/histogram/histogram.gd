@@ -1,13 +1,36 @@
+tool
 extends Control
+
+export var texture_size : int = 256 setget set_texture_size
 
 var generator : MMGenBase = null
 var output : int = 0
 
+func _ready():
+	set_texture_size(texture_size)
+
+func get_buffer_name() -> String:
+	return "histogram_"+str(get_instance_id())
+
+func set_texture_size(ts : int):
+	if ! is_inside_tree():
+		return
+	texture_size = ts
+	$ViewportImage.size = Vector2(texture_size, texture_size)
+	$ViewportImage/ColorRect.rect_size = Vector2(texture_size, texture_size)
+	$ViewportHistogram1.size = Vector2(texture_size, 256)
+	$ViewportHistogram1/ColorRect.rect_size = Vector2(texture_size, 256)
+	$ViewportHistogram1/ColorRect.material.set_shader_param("size", texture_size)
+	$ViewportHistogram2.size = Vector2(256, 2)
+	$ViewportHistogram2/ColorRect.rect_size = Vector2(256, 2)
+	$ViewportHistogram2/ColorRect.material.set_shader_param("size", texture_size)
+	on_dep_update_buffer(get_buffer_name())
+
 func _enter_tree():
-	mm_deps.create_buffer("histogram_"+str(get_instance_id()), self)
+	mm_deps.create_buffer(get_buffer_name(), self)
 
 func _exit_tree():
-	mm_deps.delete_buffer("histogram_"+str(get_instance_id()))
+	mm_deps.delete_buffer(get_buffer_name())
 
 func get_image_texture() -> ImageTexture:
 	return $ViewportImage/ColorRect.material.get_shader_param("tex")
@@ -36,8 +59,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader
 	var shader_code : String = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
-	var buffer_name : String = "histogram_"+str(get_instance_id())
-	$ViewportImage/ColorRect.material = mm_deps.buffer_create_shader_material(buffer_name, $ViewportImage/ColorRect.material, shader_code)
+	$ViewportImage/ColorRect.material = mm_deps.buffer_create_shader_material(get_buffer_name(), $ViewportImage/ColorRect.material, shader_code)
 	mm_deps.update()
 
 var refreshing_generator : bool = false
@@ -65,7 +87,7 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 
 func on_dep_update_buffer(_buffer_name) -> bool:
 	if ! is_visible_in_tree():
-		return true
+		return false
 	$ViewportImage.render_target_update_mode = Viewport.UPDATE_ONCE
 	$ViewportImage.update_worlds()
 	yield(get_tree(), "idle_frame")

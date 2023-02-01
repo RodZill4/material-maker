@@ -7,10 +7,8 @@ resource_local_to_scene = true
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
-uniform sampler2D tex;
-
 void fragment() {
-	COLOR = texture(tex, UV);
+	COLOR = vec4(0.0);
 }
 "
 
@@ -23,13 +21,15 @@ code = "shader_type canvas_item;
 render_mode blend_disabled;
 
 uniform sampler2D tex;
+uniform float size = 256;
 
 void fragment() {
+	float e = 1.0/size;
 	vec4 sum = vec4(0.0);
-	for (int i = 0; i < 128; ++i) {
-		sum += step(abs(texture(tex, vec2(UV.x, float(i)/127.0))-UV.y), vec4(0.02));
+	for (float y = 0.5*e; y < 1.0; y += e) {
+		sum += max(vec4(0.0), vec4(1.0)-16.0*abs(texture(tex, vec2(UV.x, y))-UV.y));
 	}
-	COLOR = sum/255.0;
+	COLOR = sum/size;
 }
 "
 
@@ -39,6 +39,7 @@ viewport_path = NodePath("ViewportImage")
 [sub_resource type="ShaderMaterial" id=6]
 resource_local_to_scene = true
 shader = SubResource( 4 )
+shader_param/size = 256
 shader_param/tex = SubResource( 5 )
 
 [sub_resource type="Shader" id=7]
@@ -46,13 +47,15 @@ code = "shader_type canvas_item;
 render_mode blend_disabled;
 
 uniform sampler2D tex;
+uniform float size = 256;
 
 void fragment() {
+	float e = 1.0/size;
 	vec4 sum = vec4(0.0);
-	for (int i = 0; i < 128; ++i) {
-		sum += texture(tex, vec2(float(i)/127.0, UV.x));
+	for (float y = 0.5*e; y < 1.0; y += e) {
+		sum += texture(tex, vec2(y, UV.x));
 	}
-	COLOR = sum/255.0;
+	COLOR = sum/size;
 }"
 
 [sub_resource type="ViewportTexture" id=8]
@@ -61,6 +64,7 @@ viewport_path = NodePath("ViewportHistogram1")
 [sub_resource type="ShaderMaterial" id=9]
 resource_local_to_scene = true
 shader = SubResource( 7 )
+shader_param/size = 256
 shader_param/tex = SubResource( 8 )
 
 [sub_resource type="Shader" id=10]
@@ -74,11 +78,13 @@ void fragment() {
 	if (abs(fract(UV.y+gradient_width)) < 2.0*gradient_width) {
 		COLOR = vec4(vec3(UV.x), 1.0);
 	} else {
+		float e = 1.0/256.0;
 		vec4 highest = vec4(0.0);
-		for (int i = 0; i < 128; ++i) {
-			highest = max(highest, texture(tex, vec2(float(i)/128.0, 0.0)));
+		for (float x = 0.5*e; x < 1.0; x += e) {
+			highest = max(highest, texture(tex, vec2(x, 0.0)));
 		}
-		vec4 value = step(vec4(1.0-gradient_width-UV.y)*highest/(1.0-2.0*gradient_width), texture(tex, vec2(UV.x, 0.0)));
+		vec4 raw_value = texture(tex, vec2(UV.x, 0.0));
+		vec4 value = step(vec4(1.0-gradient_width-UV.y)*highest/(1.0-2.0*gradient_width), raw_value);
 		float alpha = step(2.0*gradient_width, dot(value, vec4(1.0)));
 		COLOR = vec4(mix(value.rgb, vec3(0.5), 0.3*value.a), alpha);
 	}
@@ -110,11 +116,10 @@ render_target_update_mode = 1
 [node name="ColorRect" type="ColorRect" parent="ViewportImage"]
 material = SubResource( 3 )
 margin_right = 256.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 256, 256 )
+margin_bottom = 256.0
 
 [node name="ViewportHistogram1" type="Viewport" parent="."]
-size = Vector2( 128, 128 )
+size = Vector2( 256, 256 )
 own_world = true
 transparent_bg = true
 disable_3d = true
@@ -124,23 +129,21 @@ render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
 material = SubResource( 6 )
-margin_right = 128.0
-margin_bottom = 128.0
-rect_min_size = Vector2( 128, 128 )
+margin_right = 256.0
+margin_bottom = 256.0
 
 [node name="ViewportHistogram2" type="Viewport" parent="."]
-size = Vector2( 128, 2 )
+size = Vector2( 256, 2 )
 transparent_bg = true
 disable_3d = true
 keep_3d_linear = true
 render_target_v_flip = true
-render_target_update_mode = 3
+render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram2"]
 material = SubResource( 9 )
-margin_right = 128.0
+margin_right = 256.0
 margin_bottom = 2.0
-rect_min_size = Vector2( 128, 2 )
 
 [node name="Control" type="ColorRect" parent="."]
 material = SubResource( 12 )
