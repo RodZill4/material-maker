@@ -356,10 +356,19 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 
 var unreal5_decls : Array
 
+func sort_fct_longest_name(a, b) -> bool:
+	var la : int = a.strings[2].length()
+	var lb : int = b.strings[2].length()
+	return lb<la
+
 func preprocess_option_unreal5(s : String) -> void:
 	var re = RegEx.new()
-	re.compile("uniform\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);")
+	re.compile("(?:uniform|const)\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);")
 	unreal5_decls = re.search_all(process_option_hlsl_base(s))
+	unreal5_decls.sort_custom(self, "sort_fct_longest_name")
+	print("---------------------")
+	for v in unreal5_decls:
+		print(v.strings[2])
 
 func process_option_unreal5(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("elapsed_time", "Time")

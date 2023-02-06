@@ -83,6 +83,9 @@ class Material:
     def clear(self):
         self.MEL.delete_all_material_expressions(self.material)
 
+    def set_editor_property(self, n, v):
+        self.material.set_editor_property(n, v)
+
     def add_node(self, type, x=0, y=0):
         return self.MEL.create_material_expression(self.material, getattr(unreal, "MaterialExpression"+type), x, y)
 
