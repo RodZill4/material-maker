@@ -98,6 +98,32 @@ def find_object_by_fname(n):
         if x.get_fname() == n:
             return x
 
+def custom_input(n):
+    ci = unreal.CustomInput()
+    ci.set_editor_property('input_name', n)
+    return ci
+
+def custom_output(n, t):
+    co = unreal.CustomOutput()
+    co.set_editor_property('output_name', n)
+    type = unreal.CustomMaterialOutputType.CMOT_FLOAT1
+    if t == 2:
+        type = unreal.CustomMaterialOutputType.CMOT_FLOAT2
+    elif t == 3:
+        type = unreal.CustomMaterialOutputType.CMOT_FLOAT3
+    elif t == 4:
+        type = unreal.CustomMaterialOutputType.CMOT_FLOAT4
+    co.set_editor_property('output_type', type)
+    return co
+
+def import_texture(src, dest):
+    import_task = unreal.AssetImportTask()
+    import_task.set_editor_property('filename', src)
+    import_task.set_editor_property('destination_path', dest)
+    import_task.set_editor_property('save', True)
+    unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([import_task])
+    return import_task.get_objects()[0]
+
 def read_text_file(path):
     with open(path, 'r') as f:
         return f.read()

@@ -181,7 +181,11 @@ func update() -> void:
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
 	preview_material = mm_deps.buffer_create_shader_material(buffer_name_prefix, preview_material, result.shader_code)
-	preview_texture_dependencies = result.texture_dependencies
+	preview_texture_dependencies = {}
+	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+		var value = preview_material.get_shader_param(p.name)
+		if value is Texture:
+			preview_texture_dependencies[p.name] = value
 	update_shaders()
 	update_external_previews()
 
@@ -233,6 +237,14 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				var new_code : String = subst_code.code+"\n"
 				new_code += subst_code.string+"\n"
 				for o in gen_options:
+					for so in [ self, custom_options ]:
+						if so.has_method("preprocess_option_"+o):
+							var definitions : String = ""
+							for d in rv.globals:
+								definitions += d+"\n"
+							definitions += rv.defs+"\n"
+							so.call("preprocess_option_"+o, definitions)
+							break
 					if has_method("process_option_"+o):
 						new_code = call("process_option_"+o, new_code)
 					elif custom_options.has_method("process_option_"+o):
@@ -274,8 +286,10 @@ func process_shader(shader_text : String, custom_script : String = ""):
 					processed_definitions = call("process_option_"+o, processed_definitions, true)
 				elif custom_options.has_method("process_option_"+o):
 					processed_definitions = custom_options.call("process_option_"+o, processed_definitions, true)
-			shader_code += processed_definitions
-			shader_code += "\n"
+			for dl in processed_definitions.split("\n"):
+				if dl.replace(" ", "") != "":
+					shader_code += dl
+					shader_code += "\n"
 		else:
 			shader_code += l
 			shader_code += "\n"
@@ -342,14 +356,17 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 
 var unreal5_decls : Array
 
+func preprocess_option_unreal5(s : String) -> void:
+	var re = RegEx.new()
+	re.compile("uniform\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);")
+	unreal5_decls = re.search_all(process_option_hlsl_base(s))
+
 func process_option_unreal5(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("elapsed_time", "Time")
 	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
 	if is_declaration:
 		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
-		var re = RegEx.new()
-		re.compile("uniform\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);[\\r\\n]*")
-		unreal5_decls = re.search_all(s)
+		preprocess_option_unreal5(s)
 		for d in unreal5_decls:
 			s = s.replace(d.strings[0], "")
 	for d in unreal5_decls:
@@ -528,7 +545,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 		custom_script = export_context["@mm_custom_script"]
 	processed_template = process_shader(processed_template, custom_script).shader_code
 	if file_name == "clipboard":
-		OS.clipboard = processed_template
+		OS.clipboard = processed_template.split("\n", false).join("\n")
 	else:
 		var out_file = File.new()
 		Directory.new().remove(file_name)
