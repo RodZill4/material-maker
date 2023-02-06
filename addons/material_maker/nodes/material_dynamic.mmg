@@ -445,11 +445,12 @@
 					}
 				]
 			},
-			"Unreal": {
+			"Unreal/Unreal Engine 4": {
 				"export_extension": "mm2ue",
 				"files": [
 					{
 						"file_name": "$(path_prefix).mm2ue",
+						"prompt_overwrite": false,
 						"template": [
 							"/*",
 							"Instructions to setup this material:",
@@ -485,7 +486,102 @@
 						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
 						"type": "buffers"
 					}
-				]
+				],
+				"name": "Unreal/Unreal Engine 4"
+			},
+			"Unreal/Unreal Engine 5": {
+				"export_extension": "py",
+				"external": true,
+				"files": [
+					{
+						"file_name": "$(path_prefix).py",
+						"prompt_overwrite": false,
+						"template": [
+							"import unreal",
+							"import mm",
+							"from importlib import reload",
+							"reload(mm)",
+							"mat = mm.Material('$(file_prefix)', True)",
+							"mat.clear()",
+							"Custom_0 = mat.add_node('Custom', -264, 80)",
+							"Custom_0.set_editor_property('code', mm.read_text_file('$(path_prefix).shader'))",
+							"Custom_0.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT4)",
+							"co1 = unreal.CustomOutput()",
+							"co1.set_editor_property('output_name', 'metallic')",
+							"co1.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)",
+							"co2 = unreal.CustomOutput()",
+							"co2.set_editor_property('output_name', 'roughness')",
+							"co2.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)",
+							"co3 = unreal.CustomOutput()",
+							"co3.set_editor_property('output_name', 'normal')",
+							"co3.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)",
+							"co4 = unreal.CustomOutput()",
+							"co4.set_editor_property('output_name', 'emission')",
+							"co4.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)",
+							"Custom_0.set_editor_property('additional_outputs', [co1, co2, co3, co4])",
+							"ci1 = unreal.CustomInput()",
+							"ci1.set_editor_property('input_name', 'TexCoords')",
+							"ci2 = unreal.CustomInput()",
+							"ci2.set_editor_property('input_name', 'Time')",
+							"Custom_0.set_editor_property('inputs', [ci1, ci2])",
+							"TextureCoordinate_0 = mat.add_node('TextureCoordinate', -472, 80)",
+							"Time_0 = mat.add_node('Time', -456, 160)",
+							"mat.connect_property(Custom_0, 'return', unreal.MaterialProperty.MP_BASE_COLOR)",
+							"mat.connect_property(Custom_0, 'metallic', unreal.MaterialProperty.MP_METALLIC)",
+							"mat.connect_property(Custom_0, 'roughness', unreal.MaterialProperty.MP_ROUGHNESS)",
+							"mat.connect_property(Custom_0, 'normal', unreal.MaterialProperty.MP_NORMAL)",
+							"mat.connect_property(Custom_0, 'emission', unreal.MaterialProperty.MP_EMISSIVE_COLOR)",
+							"mat.connect_nodes(TextureCoordinate_0, '', Custom_0, 'TexCoords')",
+							"mat.connect_nodes(Time_0, '', Custom_0, 'Time')",
+							"mat.save()",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					},
+					{
+						"file_name": "$(path_prefix).shader",
+						"template": [
+							"struct Functions {",
+							"\tfloat Time;",
+							"\t",
+							"$definitions hlsl_base,rename_buffers,unreal5",
+							"\tfixed4 generated_shader(float2 uv, float _time, out float metallic, out float roughness, out float3 normal, out float3 emission) {",
+							"\t  \tfloat _seed_variation_ = 0.0;",
+							"\t\tTime = _time;",
+							"\t\t",
+							"$begin_generate hlsl_base,rename_buffers,unreal5",
+							"\t\t// sample the generated texture",
+							"\t\tfixed4 rv = tofloat4($albedo_tex(uv), 1.0)*$albedo_color;",
+							"\t\tmetallic = $metallic_tex(uv)*$metallic;",
+							"\t\troughness = $roughness_tex(uv)*$roughness;",
+							"\t\tnormal = $normal_tex(uv)*float3(-1.0, -1.0, -1.0)+float3(1.0, 1.0, 1.0);",
+							"\t\temission = $emission_tex(uv)*$emission_energy;",
+							"\t\treturn rv;",
+							"$end_generate",
+							"\t}",
+							"};",
+							"Functions f;",
+							"fixed4 albedo = f.generated_shader(TexCoords, Time, metallic, roughness, normal, emission);",
+							"return albedo;",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "clipboard",
+						"template": [
+							"\"$(path_prefix).py\"",
+							""
+						],
+						"type": "template"
+					}
+				],
+				"material": "material_dynamic",
+				"name": "Unreal/Unreal Engine 5"
 			}
 		},
 		"global": "",

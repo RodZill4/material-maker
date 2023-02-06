@@ -287,7 +287,7 @@ func set_3d_previews(previews : Array):
 
 # Export filters
 
-func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
+func process_option_hlsl_base(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
 	s = s.replace("vec4(", "tofloat4(")
@@ -299,8 +299,6 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("mix", "lerp")
 	s = s.replace("fract", "frac")
 	s = s.replace("atan", "hlsl_atan")
-	s = s.replace("uniform float", "static const float")
-	s = s.replace("uniform int", "static const int")
 	var re : RegEx = RegEx.new()
 	re.compile("(\\w+)\\s*\\*=\\s*tofloat2x2([^;]+);")
 	while true:
@@ -310,6 +308,12 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
 	if is_declaration:
 		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
+	return s
+
+func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
+	s = process_option_hlsl_base(s, is_declaration)
+	s = s.replace("uniform float", "static const float")
+	s = s.replace("uniform int", "static const int")
 	return s
 
 func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
@@ -334,6 +338,23 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
 	if is_declaration:
 		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
+	return s
+
+var unreal5_decls : Array
+
+func process_option_unreal5(s : String, is_declaration : bool = false) -> String:
+	s = s.replace("elapsed_time", "Time")
+	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
+	if is_declaration:
+		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
+		var re = RegEx.new()
+		re.compile("uniform\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);[\\r\\n]*")
+		unreal5_decls = re.search_all(s)
+		for d in unreal5_decls:
+			s = s.replace(d.strings[0], "")
+	for d in unreal5_decls:
+		s = s.replace(d.strings[2], d.strings[3])
+	s = s.replace("sampler2D", "sampler")
 	return s
 
 # Export
