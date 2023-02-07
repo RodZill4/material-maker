@@ -45,7 +45,7 @@ class Material:
                 name = n.get_name()[18:]
                 node_dict[n] = name
                 f.write(name+" = mat.add_node('"+n.__class__.__name__[18:]+"', "+str(n.material_expression_editor_x)+", "+str(n.material_expression_editor_y)+")\n")
-                for p in [ "material_function", "code", "output_type", "additional_defines", "additional_outputs", "inputs" ]:
+                for p in [ "material_function", "code", "output_type", "additional_defines", "additional_outputs", "inputs", "r", "constant" ]:
                     try:
                         pv = n.get_editor_property(p)
                     except:
@@ -135,5 +135,5 @@ def read_text_file(path):
 def read_texture_file(path):
     return None
 
-#mat = Material("material_dynamic")
+#mat = Material("material")
 #mat.dump("D:\\Dev\\Godot\\material-maker-bugfix\\material_maker\\misc\\export\\test.py")

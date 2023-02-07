@@ -132,7 +132,7 @@ func _on_Load_Export_pressed():
 			var file : File = File.new()
 			if file.open(files[0], File.READ) != OK:
 				return
-			var export_data = parse_json(file.get_as_text())
+			var export_data = mm_loader.string_to_dict_tree(file.get_as_text())
 			if export_data.has("name") and export_data.has("files"):
 				export_data.external = true
 				exports[export_data.name] = export_data
