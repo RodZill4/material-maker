@@ -47,3 +47,12 @@ This will generally consist in:
 
 .. image:: images/unreal_export.png
   :align: center
+
+Qt Quick 3D
+------------
+
+When exporting to Qt Quick 3D, Material Maker will generate a QML file that describes the
+material as well as PNG texture sources. Since Qt Quick components are referenced by the
+name of the QML file, it is important when specifying the name of the file that the
+first letter is a capital letter. Once exported it should be possible to reference the
+generated QML component anywhere in your Qt Quick 3D project that requires a material.

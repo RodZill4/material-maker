@@ -1,0 +1,73 @@
+import QtQuick
+import QtQuick3D
+
+PrincipledMaterial {
+
+$if $(connected:albedo_tex)
+    Texture {
+        id: baseColorTexture
+        source: "$(file_prefix)_baseColor.png"
+        generateMipmaps: true
+        mipFilter: Texture.Linear
+    }
+$fi
+$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)
+    Texture {
+        id: occlusionRoughnessMetallicTexture
+        source: "$(file_prefix)_occlusionRoughnessMetallic.png"
+        generateMipmaps: true
+        mipFilter: Texture.Linear
+    }
+$fi
+$if $(connected:emission_tex)
+    Texture {
+        id: emissionTexture
+        source: "$(file_prefix)_emission.png"
+        generateMipmaps: true
+        mipFilter: Texture.Linear
+    }
+$fi
+$if $(connected:normal_tex)
+    Texture {
+        id: normalTexture
+        source: "$(file_prefix)_normal.png"
+        generateMipmaps: true
+        mipFilter: Texture.Linear
+    }
+$fi
+$if $(connected:depth_tex)
+    Texture {
+        id: heightTexture
+        source: "$(file_prefix)_height.png"
+        generateMipmaps: true
+        mipFilter: Texture.Linear
+    }
+$fi
+    baseColor: Qt.rgba($(param:albedo_color.r), $(param:albedo_color.g), $(param:albedo_color.b), $(param:albedo_color.a))
+$if $(connected:albedo_tex)
+    baseColorMap: baseColorTexture
+$fi
+    occlusionAmount: $(param:ao)
+$if $(connected:ao_tex)
+    occlusionMap: occlusionRoughnessMetallicTexture
+$fi
+    roughness: $(param:roughness)
+$if $(connected:roughness_tex)
+    roughnessMap: occlusionRoughnessMetallicTexture
+$fi
+    metalness: $(param:metallic)
+$if $(connected:metallic_tex)
+    metalnessMap: occlusionRoughnessMetallicTexture
+$fi
+$if $(connected:emission_tex)
+    emissionMap: emissionTexture
+$fi
+    normalStrength: $(param:normal)
+$if $(connected:normal_tex)
+    normalMap: normalTexture
+$fi
+$if $(connected:depth_tex)
+    heightMap: heightTexture
+    heightAmount: $(expr:0.2*$(param:depth_scale))
+$fi
+}
