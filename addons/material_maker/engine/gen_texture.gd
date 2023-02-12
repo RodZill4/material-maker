@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenTexture
 
-"""
-Base class for texture generators that provide a texture as output
-"""
+
+# Base class for texture generators that provide a texture as output
+
 
 var texture : ImageTexture = ImageTexture.new()
 

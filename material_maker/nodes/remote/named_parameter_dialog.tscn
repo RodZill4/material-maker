@@ -3,11 +3,11 @@
 [ext_resource path="res://material_maker/nodes/remote/named_parameter_dialog.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=2]
 
-[node name="PopupDialog" type="WindowDialog"]
+[node name="Popup" type="Window"]
 visible = true
-margin_right = 490.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 500, 70 )
+offset_right = 490.0
+offset_bottom = 62.0
+custom_minimum_size = Vector2( 500, 70 )
 window_title = "Named parameter configuration"
 script = ExtResource( 1 )
 __meta__ = {
@@ -23,116 +23,116 @@ __meta__ = {
 }
 
 [node name="float" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 50.0
-margin_right = 450.0
-margin_bottom = 24.0
+offset_left = 50.0
+offset_right = 450.0
+offset_bottom = 24.0
 size_flags_horizontal = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="LabelMin" type="Label" parent="VBoxContainer/float"]
-margin_top = 5.0
-margin_right = 28.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 28.0
+offset_bottom = 19.0
 text = "Min:"
 
 [node name="Min" parent="VBoxContainer/float" instance=ExtResource( 2 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 32.0
-margin_right = 90.0
-margin_bottom = 24.0
+offset_left = 32.0
+offset_right = 90.0
+offset_bottom = 24.0
 text = "0"
-caret_blink_speed = 0.5
+caret_blink_interval = 0.5
 value = 0.0
 min_value = -65536.0
 max_value = 65536.0
 step = 0.005
 
 [node name="LabelMax" type="Label" parent="VBoxContainer/float"]
-margin_left = 94.0
-margin_top = 5.0
-margin_right = 124.0
-margin_bottom = 19.0
+offset_left = 94.0
+offset_top = 5.0
+offset_right = 124.0
+offset_bottom = 19.0
 text = "Max:"
 
 [node name="Max" parent="VBoxContainer/float" instance=ExtResource( 2 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 128.0
-margin_right = 186.0
-margin_bottom = 24.0
+offset_left = 128.0
+offset_right = 186.0
+offset_bottom = 24.0
 text = "1"
-caret_blink_speed = 0.5
+caret_blink_interval = 0.5
 value = 1.0
 min_value = -65536.0
 max_value = 65536.0
 step = 0.005
 
 [node name="LabelStep" type="Label" parent="VBoxContainer/float"]
-margin_left = 190.0
-margin_top = 5.0
-margin_right = 222.0
-margin_bottom = 19.0
+offset_left = 190.0
+offset_top = 5.0
+offset_right = 222.0
+offset_bottom = 19.0
 text = "Step:"
 
 [node name="Step" parent="VBoxContainer/float" instance=ExtResource( 2 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 226.0
-margin_right = 284.0
-margin_bottom = 24.0
+offset_left = 226.0
+offset_right = 284.0
+offset_bottom = 24.0
 text = "0.1"
-caret_blink_speed = 0.5
+caret_blink_interval = 0.5
 value = 0.1
 max_value = 10.0
 step = 0.005
 
 [node name="LabelDefault" type="Label" parent="VBoxContainer/float"]
-margin_left = 288.0
-margin_top = 5.0
-margin_right = 338.0
-margin_bottom = 19.0
+offset_left = 288.0
+offset_top = 5.0
+offset_right = 338.0
+offset_bottom = 19.0
 text = "Default:"
 
 [node name="Default" parent="VBoxContainer/float" instance=ExtResource( 2 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 342.0
-margin_right = 400.0
-margin_bottom = 24.0
-caret_blink_speed = 0.5
+offset_left = 342.0
+offset_right = 400.0
+offset_bottom = 24.0
+caret_blink_interval = 0.5
 step = 0.1
 
 [node name="Spacer" type="Control" parent="VBoxContainer"]
-margin_top = 24.0
-margin_right = 500.0
-margin_bottom = 50.0
+offset_top = 24.0
+offset_right = 500.0
+offset_bottom = 50.0
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 188.0
-margin_top = 50.0
-margin_right = 312.0
-margin_bottom = 70.0
+offset_left = 188.0
+offset_top = 50.0
+offset_right = 312.0
+offset_bottom = 70.0
 size_flags_horizontal = 4
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_right = 60.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 64.0
-margin_right = 124.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 64.0
+offset_right = 124.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "Cancel"
 
 [connection signal="popup_hide" from="." to="." method="_on_PopupDialog_popup_hide"]

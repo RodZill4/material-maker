@@ -8,8 +8,8 @@ viewport_path = NodePath("PreviewViewport")
 [node name="PreviewSceneViewer" type="Node"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_right = 512.0
-margin_bottom = 512.0
+offset_right = 512.0
+offset_bottom = 512.0
 texture = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

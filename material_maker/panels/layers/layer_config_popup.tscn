@@ -6,137 +6,137 @@
 [node name="LayerConfigPopup" type="PopupPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -1099.0
-margin_bottom = -576.0
+offset_right = -1099.0
+offset_bottom = -576.0
 script = ExtResource( 2 )
 
 [node name="GridContainer" type="GridContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AlbedoLabel" type="Label" parent="GridContainer"]
-margin_top = 5.0
-margin_right = 111.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 111.0
+offset_bottom = 19.0
 text = "Albedo alpha:"
 
 [node name="Albedo" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_right = 173.0
-margin_bottom = 24.0
+offset_left = 115.0
+offset_right = 173.0
+offset_bottom = 24.0
 value = 1.0
 step = 0.01
 
 [node name="MetallicLabel" type="Label" parent="GridContainer"]
-margin_top = 33.0
-margin_right = 111.0
-margin_bottom = 47.0
+offset_top = 33.0
+offset_right = 111.0
+offset_bottom = 47.0
 text = "Metallic alpha:"
 
 [node name="Metallic" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 28.0
-margin_right = 173.0
-margin_bottom = 52.0
+offset_left = 115.0
+offset_top = 28.0
+offset_right = 173.0
+offset_bottom = 52.0
 value = 1.0
 step = 0.01
 
 [node name="RoughnessLabel" type="Label" parent="GridContainer"]
-margin_top = 61.0
-margin_right = 111.0
-margin_bottom = 75.0
+offset_top = 61.0
+offset_right = 111.0
+offset_bottom = 75.0
 text = "Roughness alpha:"
 
 [node name="Roughness" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 56.0
-margin_right = 173.0
-margin_bottom = 80.0
+offset_left = 115.0
+offset_top = 56.0
+offset_right = 173.0
+offset_bottom = 80.0
 value = 1.0
 step = 0.01
 
 [node name="EmissionLabel" type="Label" parent="GridContainer"]
-margin_top = 89.0
-margin_right = 111.0
-margin_bottom = 103.0
+offset_top = 89.0
+offset_right = 111.0
+offset_bottom = 103.0
 text = "Emission alpha:"
 
 [node name="Emission" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 84.0
-margin_right = 173.0
-margin_bottom = 108.0
+offset_left = 115.0
+offset_top = 84.0
+offset_right = 173.0
+offset_bottom = 108.0
 value = 1.0
 step = 0.01
 
 [node name="NormalLabel" type="Label" parent="GridContainer"]
-margin_top = 89.0
-margin_right = 111.0
-margin_bottom = 103.0
+offset_top = 89.0
+offset_right = 111.0
+offset_bottom = 103.0
 text = "Normal map alpha:"
 
 [node name="Normal" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 84.0
-margin_right = 173.0
-margin_bottom = 108.0
+offset_left = 115.0
+offset_top = 84.0
+offset_right = 173.0
+offset_bottom = 108.0
 value = 1.0
 step = 0.01
 
 [node name="DepthLabel" type="Label" parent="GridContainer"]
-margin_top = 117.0
-margin_right = 111.0
-margin_bottom = 131.0
+offset_top = 117.0
+offset_right = 111.0
+offset_bottom = 131.0
 text = "Depth alpha:"
 
 [node name="Depth" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 112.0
-margin_right = 173.0
-margin_bottom = 136.0
+offset_left = 115.0
+offset_top = 112.0
+offset_right = 173.0
+offset_bottom = 136.0
 value = 1.0
 step = 0.01
 
 [node name="OcclusionLabel" type="Label" parent="GridContainer"]
-margin_top = 117.0
-margin_right = 111.0
-margin_bottom = 131.0
+offset_top = 117.0
+offset_right = 111.0
+offset_bottom = 131.0
 text = "Occlusion alpha:"
 
 [node name="Occlusion" parent="GridContainer" instance=ExtResource( 1 )]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 115.0
-margin_top = 112.0
-margin_right = 173.0
-margin_bottom = 136.0
+offset_left = 115.0
+offset_top = 112.0
+offset_right = 173.0
+offset_bottom = 136.0
 value = 1.0
 step = 0.01
 

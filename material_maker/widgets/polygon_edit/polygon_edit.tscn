@@ -7,10 +7,10 @@
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -1280.0
-margin_right = -1248.0
-margin_bottom = -688.0
-rect_min_size = Vector2( 32, 32 )
+offset_left = -1280.0
+offset_right = -1248.0
+offset_bottom = -688.0
+custom_minimum_size = Vector2( 32, 32 )
 focus_mode = 1
 script = ExtResource( 1 )
 __meta__ = {
@@ -20,7 +20,7 @@ __meta__ = {
 [node name="PolygonView" parent="." instance=ExtResource( 2 )]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 0.0
-margin_bottom = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [connection signal="pressed" from="." to="." method="_on_PolygonEdit_pressed"]

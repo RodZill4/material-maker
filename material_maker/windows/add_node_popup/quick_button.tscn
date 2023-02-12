@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://material_maker/windows/add_node_popup/quick_button.gd" type="Script" id=1]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture2D" id=2]
 
 [sub_resource type="Shader" id=11]
 code = "shader_type canvas_item;
@@ -27,9 +27,9 @@ shader_param/tex = ExtResource( 2 )
 
 [node name="QuickButton" type="ColorRect"]
 material = SubResource( 12 )
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+offset_right = 24.0
+offset_bottom = 24.0
+custom_minimum_size = Vector2( 24, 24 )
 size_flags_horizontal = 5
 script = ExtResource( 1 )
 __meta__ = {

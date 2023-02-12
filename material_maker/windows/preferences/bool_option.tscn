@@ -3,8 +3,8 @@
 [ext_resource path="res://material_maker/windows/preferences/bool_option.gd" type="Script" id=1]
 
 [node name="BooleanOption" type="CheckBox"]
-margin_right = 308.0
-margin_bottom = 24.0
+offset_right = 308.0
+offset_bottom = 24.0
 text = "Confirm when quitting the application"
 flat = true
 script = ExtResource( 1 )

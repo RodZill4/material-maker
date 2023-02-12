@@ -5,10 +5,10 @@
 [sub_resource type="Theme" id=1]
 
 [node name="Switch" type="GraphNode"]
-margin_left = -1.0
-margin_top = -1.0
-margin_right = 150.0
-margin_bottom = 78.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 150.0
+offset_bottom = 78.0
 mouse_filter = 1
 size_flags_stretch_ratio = 0.13
 theme = SubResource( 1 )
@@ -38,70 +38,70 @@ __meta__ = {
 }
 
 [node name="HBox1" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 135.0
-margin_bottom = 40.0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 135.0
+offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="HBox1"]
-margin_top = 1.0
-margin_right = 20.0
-margin_bottom = 15.0
-rect_min_size = Vector2( 20, 0 )
+offset_top = 1.0
+offset_right = 20.0
+offset_bottom = 15.0
+custom_minimum_size = Vector2( 20, 0 )
 text = "A0"
 
 [node name="outputs" type="HSlider" parent="HBox1"]
-margin_left = 24.0
-margin_right = 99.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 75, 0 )
-hint_tooltip = "Output count"
+offset_left = 24.0
+offset_right = 99.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 75, 0 )
+tooltip_text = "Output count"
 min_value = 1.0
 max_value = 5.0
 value = 2.0
 
 [node name="HBox2" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 41.0
-margin_right = 135.0
-margin_bottom = 57.0
+offset_left = 16.0
+offset_top = 41.0
+offset_right = 135.0
+offset_bottom = 57.0
 
 [node name="Label" type="Label" parent="HBox2"]
-margin_top = 1.0
-margin_right = 20.0
-margin_bottom = 15.0
-rect_min_size = Vector2( 20, 0 )
+offset_top = 1.0
+offset_right = 20.0
+offset_bottom = 15.0
+custom_minimum_size = Vector2( 20, 0 )
 text = "A0"
 
 [node name="choices" type="HSlider" parent="HBox2"]
-margin_left = 24.0
-margin_right = 99.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 75, 0 )
-hint_tooltip = "Choice count"
+offset_left = 24.0
+offset_right = 99.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 75, 0 )
+tooltip_text = "Choice count"
 min_value = 2.0
 max_value = 5.0
 value = 2.0
 
 [node name="HBox3" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 58.0
-margin_right = 135.0
-margin_bottom = 74.0
+offset_left = 16.0
+offset_top = 58.0
+offset_right = 135.0
+offset_bottom = 74.0
 
 [node name="Label" type="Label" parent="HBox3"]
-margin_top = 1.0
-margin_right = 20.0
-margin_bottom = 15.0
-rect_min_size = Vector2( 20, 0 )
+offset_top = 1.0
+offset_right = 20.0
+offset_bottom = 15.0
+custom_minimum_size = Vector2( 20, 0 )
 text = "A0"
 
 [node name="source" type="HSlider" parent="HBox3"]
-margin_left = 24.0
-margin_right = 99.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 75, 0 )
-hint_tooltip = "Choice"
+offset_left = 24.0
+offset_right = 99.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 75, 0 )
+tooltip_text = "Choice"
 max_value = 4.0
 value = 1.0
 ticks_on_borders = true

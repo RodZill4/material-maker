@@ -1,10 +1,10 @@
-tool
+@tool
 extends Node
 class_name MMGenBase
 
-"""
-Base class for texture generators, that defines their API
-"""
+
+# Base class for texture generators, that defines their API
+
 
 const MAX_SEED : int = 4294967296
 
@@ -12,32 +12,34 @@ const BUFFERS_ALL     : int = 0
 const BUFFERS_PAUSED  : int = 1
 const BUFFERS_RUNNING : int = 2
 
+const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
+
+
 signal parameter_changed(n, v)
 signal rendering_time(t)
 
-const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
 
 class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
 
-	func _init(g : MMGenBase, i : int) -> void:
+	func _init(g : MMGenBase,i : int):
 		generator = g
 		input_index = i
 
 	func to_str() -> String:
-		return generator.name+".in("+str(input_index)+")"
+		return str(generator.name)+".in("+str(input_index)+")"
 
 class OutputPort:
 	var generator : MMGenBase = null
 	var output_index : int = 0
 
-	func _init(g : MMGenBase, o : int) -> void:
+	func _init(g : MMGenBase,o : int):
 		generator = g
 		output_index = o
 
 	func to_str() -> String:
-		return generator.name+".out("+str(output_index)+")"
+		return str(generator.name)+".out("+str(output_index)+")"
 
 
 var position : Vector2 = Vector2(0, 0)
@@ -59,14 +61,13 @@ func _post_load() -> void:
 	pass
 
 func get_hier_name() -> String:
-	var type = load("res://addons/material_maker/engine/gen_base.gd")
-	if not get_parent() is type:
+	if not get_parent() is MMGenBase:
 		return ""
 	var rv = name
 	var node = self
 	while true:
 		node = node.get_parent()
-		if not node.get_parent() is type:
+		if not node.get_parent() is MMGenBase:
 			break
 		rv = node.name+"/"+rv
 	return rv
@@ -83,7 +84,7 @@ func toggle_editable() -> bool:
 func is_template() -> bool:
 	return model != null
 
-func get_template_name() -> String:
+func get_template_name():
 	return model
 
 func is_editable() -> bool:
@@ -262,7 +263,7 @@ func get_targets(output_index : int) -> Array:
 		return parent.get_port_targets(name, output_index)
 	return []
 
-# get the list of outputs that depend on the input whose index is passed as parameter
+# get the list of outputs that depend checked the input whose index is passed as parameter
 func follow_input(_input_index : int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
@@ -305,10 +306,7 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 func generate_output_shader(output_index : int, preview : bool = false):
 	var context : MMGenContext = MMGenContext.new()
 	var source = get_shader_code("uv", output_index, context)
-	while source is GDScriptFunctionState:
-		assert(false)
-		source = yield(source, "completed")
-	if source.empty():
+	if source.is_empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader : String
 	var output_type = "rgba"
@@ -323,33 +321,22 @@ func generate_output_shader(output_index : int, preview : bool = false):
 
 func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
+	var shader : String = output_shader.gdshader
 	var output_type : String = output_shader.output_type
-	var renderer = mm_renderer.request(object)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, size, output_type != "rgba")
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
+	var renderer = await mm_renderer.request(object)
+	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
+	var shader : String = output_shader.gdshader
 	var output_type : String = output_shader.output_type
-	var renderer = mm_renderer.request(object)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer = renderer.render_shader(object, shader, size, output_type != "rgba")
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
+	var renderer = await mm_renderer.request(object)
+	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var rv = _get_shader_code(uv, output_index, context)
-	assert(! (rv is GDScriptFunctionState))
-	while rv is GDScriptFunctionState:
-		rv = yield(rv, "completed")
 	for v in mm_renderer.get_global_parameters():
 		var variable_name : String = "mm_global_"+v
 		var found : bool = false
@@ -383,7 +370,7 @@ func _get_shader_code(_uv, _output_index, _context) -> Dictionary:
 
 
 func _serialize(data: Dictionary) -> Dictionary:
-	print("cannot save "+name)
+	print("cannot save "+str(name))
 	return data
 
 func _serialize_data(data: Dictionary) -> Dictionary:
@@ -452,7 +439,7 @@ static func define_shader_float_parameters(code : String, material : ShaderMater
 	var regex = RegEx.new()
 	regex.compile("uniform\\s+float\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
 	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[1], float(p.strings[2]))
+		material.set_shader_parameter(p.strings[1], float(p.strings[2]))
 	regex.compile("uniform\\s+vec4\\s+([\\w_\\d]+)\\s*=\\s*vec4\\s*\\(\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^\\)\\s]+)\\s*\\);")
 	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))
+		material.set_shader_parameter(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))

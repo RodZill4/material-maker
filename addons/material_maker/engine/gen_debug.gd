@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenDebug
 
-"""
-Can be used to get generated shader
-"""
+
+# Can be used to get generated shader
+
 
 func get_type() -> String:
 	return "debug"

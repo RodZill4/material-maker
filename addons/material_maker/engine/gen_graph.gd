@@ -1,4 +1,4 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenGraph
 
@@ -42,7 +42,7 @@ func set_position(p, force_recalc_seed = false) -> void:
 	position = p
 
 func set_seed(s : float) -> bool:
-	if .set_seed(s) and transmits_seed:
+	if super.set_seed(s) and transmits_seed:
 		for c in get_children():
 			if c is MMGenBase:
 				c.set_seed(c.seed_value)
@@ -77,12 +77,12 @@ func is_editable() -> bool:
 	return editable
 
 func get_description() -> String:
-	var desc_list : PoolStringArray = PoolStringArray()
+	var desc_list : PackedStringArray = PackedStringArray()
 	if shortdesc == "":
 		desc_list.push_back(TranslationServer.translate(shortdesc))
 	if longdesc == "":
 		desc_list.push_back(TranslationServer.translate(longdesc))
-	return desc_list.join("\n")
+	return "\n".join(desc_list)
 
 
 func get_parameter_defs() -> Array:
@@ -91,7 +91,7 @@ func get_parameter_defs() -> Array:
 	return []
 
 func set_parameter(n : String, v) -> void:
-	.set_parameter(n, v)
+	super.set_parameter(n, v)
 	if has_node("gen_parameters"):
 		get_node("gen_parameters").set_parameter(n, v)
 
@@ -157,7 +157,7 @@ func all_sources_changed() -> void:
 		for i in inputs.get_input_defs().size():
 			inputs.source_changed(i)
 
-func get_port_source(gen_name: String, input_index: int) -> OutputPort:
+func get_port_source(gen_name: String, input_index: int) -> MMGenBase.OutputPort:
 	var rv = null
 	if gen_name == "gen_inputs":
 		var parent = get_parent()
@@ -188,7 +188,7 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 func add_generator(generator : MMGenBase) -> bool:
 	var name = generator.name
 	if generator.name == "Material" or generator.name == "Brush" :
-		if has_node(generator.name):
+		if has_node(NodePath(generator.name)):
 			# Cannot create a material if it exists already
 			return false
 		else:
@@ -206,7 +206,7 @@ func add_generator(generator : MMGenBase) -> bool:
 		if result:
 			name_prefix = result.get_string(1)
 		else:
-			name_prefix = generator.name + "_"
+			name_prefix = String(generator.name) + "_"
 		var index = 1
 		while has_node(name):
 			index += 1
@@ -274,14 +274,14 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 			return false
 	# disconnect target
 	while true:
-		var remove = -1
+		var remove_at = -1
 		for i in connections.size():
 			if connections[i].to == to.name and connections[i].to_port == to_port:
-				remove = i
+				remove_at = i
 				break
-		if remove == -1:
+		if remove_at == -1:
 			break
-		connections.remove(remove)
+		connections.remove_at(remove_at)
 	# create new connection
 	connections.append({from=from.name, from_port=from_port, to=to.name, to_port=to_port})
 	to.source_changed(to_port)
@@ -320,7 +320,7 @@ func reconnect_inputs(generator, reconnects : Dictionary) -> bool:
 			added_connections.push_back(c.duplicate(true))
 		new_connections.push_back(c)
 	connections = new_connections
-	if !removed_connections.empty():
+	if !removed_connections.is_empty():
 		emit_signal("connections_changed", removed_connections, added_connections)
 	return true
 
@@ -337,7 +337,7 @@ func reconnect_outputs(generator, reconnects : Dictionary) -> bool:
 			added_connections.push_back(c.duplicate(true))
 		new_connections.push_back(c)
 	connections = new_connections
-	if !removed_connections.empty():
+	if !removed_connections.is_empty():
 		emit_signal("connections_changed", removed_connections, added_connections)
 	return true
 
@@ -361,9 +361,6 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
-		while rv is GDScriptFunctionState:
-			print("This should never NEVER happen")
-			rv = yield(rv, "completed")
 		return rv
 	return { globals=[], defs="", code="", textures={} }
 
@@ -385,7 +382,7 @@ func check_input_connects(node) -> void:
 				removed_connections.push_back(c.duplicate(true))
 				continue
 		new_connections.push_back(c)
-	if !removed_connections.empty():
+	if !removed_connections.is_empty():
 		emit_signal("connections_changed", removed_connections, [])
 		connections = new_connections
 
@@ -532,13 +529,13 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	for c in get_children():
 		child_names.append([c.name, c.get_type()])
 	
-	child_names.sort_custom(self, "compare_name_and_type")
+	child_names.sort_custom(Callable(self,"compare_name_and_type"))
 	
 	var other_child_names = []
 	for c in graph.get_children():
 		other_child_names.append([c.name, c.get_type()])
 	
-	other_child_names.sort_custom(self, "compare_name_and_type")
+	other_child_names.sort_custom(Callable(self,"compare_name_and_type"))
 	
 	var added = []
 	var removed = []
@@ -602,9 +599,9 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	
 func diff_connections(graph : MMGenGraph):
 	var cons = [] + connections
-	cons.sort_custom(self, "compare_connection")
+	cons.sort_custom(Callable(self,"compare_connection"))
 	var other_cons = [] + graph.connections
-	other_cons.sort_custom(self, "compare_connection")
+	other_cons.sort_custom(Callable(self,"compare_connection"))
 	
 	var new_connections : Array = []
 	var added_connections : Array = []

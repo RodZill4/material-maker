@@ -84,9 +84,9 @@ vec3 GetNormal(vec3 p) {
 
 void vertex() {
 	elapsed_time = TIME;
-	vec4 world_position_xyzw = WORLD_MATRIX*vec4(VERTEX, 1.0);
+	vec4 world_position_xyzw = MODEL_MATRIX*vec4(VERTEX, 1.0);
 	world_position = world_position_xyzw.xyz/world_position_xyzw.w;
-	vec4 world_camera_xyzw = CAMERA_MATRIX * vec4(0, 0, 0, 1);
+	vec4 world_camera_xyzw = INV_VIEW_MATRIX * vec4(0, 0, 0, 1);
 	world_camera = world_camera_xyzw.xyz/world_camera_xyzw.w;
 }
 
@@ -109,7 +109,7 @@ void fragment() {
 		ALBEDO = albedo.rgb;
 		ROUGHNESS = roughness;
 		METALLIC = metallic;
-		NORMAL = (INV_CAMERA_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
+		NORMAL = (VIEW_MATRIX*vec4(GetNormal(p), 0.0)).xyz;
 		EMISSION = emission;
 	}
 }

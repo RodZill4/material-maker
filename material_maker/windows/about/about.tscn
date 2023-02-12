@@ -1,21 +1,21 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://material_maker/windows/about/about.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/about/github.png" type="Texture" id=2]
-[ext_resource path="res://material_maker/windows/about/twitter.png" type="Texture" id=3]
-[ext_resource path="res://material_maker/windows/about/icon.png" type="Texture" id=4]
-[ext_resource path="res://material_maker/windows/about/itchio.png" type="Texture" id=5]
-[ext_resource path="res://icon.png" type="Texture" id=6]
-[ext_resource path="res://material_maker/windows/about/youtube.png" type="Texture" id=7]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=8]
-[ext_resource path="res://material_maker/windows/about/facebook.png" type="Texture" id=9]
-[ext_resource path="res://material_maker/windows/about/discord.png" type="Texture" id=10]
-[ext_resource path="res://material_maker/windows/about/patreon.png" type="Texture" id=11]
-[ext_resource path="res://material_maker/windows/about/epic_megagrant.svg" type="Texture" id=12]
+[ext_resource path="res://material_maker/windows/about/github.png" type="Texture2D" id=2]
+[ext_resource path="res://material_maker/windows/about/twitter.png" type="Texture2D" id=3]
+[ext_resource path="res://material_maker/windows/about/icon.png" type="Texture2D" id=4]
+[ext_resource path="res://material_maker/windows/about/itchio.png" type="Texture2D" id=5]
+[ext_resource path="res://icon.png" type="Texture2D" id=6]
+[ext_resource path="res://material_maker/windows/about/youtube.png" type="Texture2D" id=7]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture2D" id=8]
+[ext_resource path="res://material_maker/windows/about/facebook.png" type="Texture2D" id=9]
+[ext_resource path="res://material_maker/windows/about/discord.png" type="Texture2D" id=10]
+[ext_resource path="res://material_maker/windows/about/patreon.png" type="Texture2D" id=11]
+[ext_resource path="res://material_maker/windows/about/epic_megagrant.svg" type="Texture2D" id=12]
 
-[node name="About" type="WindowDialog"]
-margin_right = 664.0
-margin_bottom = 377.0
+[node name="About" type="Window"]
+offset_right = 664.0
+offset_bottom = 377.0
 window_title = "About..."
 script = ExtResource( 1 )
 __meta__ = {
@@ -30,8 +30,8 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_right = 628.0
-margin_bottom = 377.0
+offset_right = 628.0
+offset_bottom = 377.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 8
@@ -40,15 +40,15 @@ __meta__ = {
 }
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-margin_left = 102.0
-margin_right = 525.0
-margin_bottom = 80.0
+offset_left = 102.0
+offset_right = 525.0
+offset_bottom = 80.0
 size_flags_horizontal = 6
 
 [node name="MMLogo" type="TextureRect" parent="HBoxContainer/VBoxContainer/HBoxContainer3"]
-margin_right = 80.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 80, 80 )
+offset_right = 80.0
+offset_bottom = 80.0
+custom_minimum_size = Vector2( 80, 80 )
 size_flags_horizontal = 4
 size_flags_vertical = 3
 texture = ExtResource( 6 )
@@ -56,91 +56,91 @@ expand = true
 stretch_mode = 1
 
 [node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/HBoxContainer3"]
-margin_left = 84.0
-margin_right = 104.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 20, 0 )
+offset_left = 84.0
+offset_right = 104.0
+offset_bottom = 80.0
+custom_minimum_size = Vector2( 20, 0 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer3"]
-margin_left = 108.0
-margin_top = 20.0
-margin_right = 423.0
-margin_bottom = 59.0
+offset_left = 108.0
+offset_top = 20.0
+offset_right = 423.0
+offset_bottom = 59.0
 size_flags_vertical = 4
 
 [node name="ApplicationName" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-margin_right = 95.0
-margin_bottom = 14.0
+offset_right = 95.0
+offset_bottom = 14.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Material Maker"
 align = 1
 
 [node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-margin_top = 18.0
-margin_right = 315.0
-margin_bottom = 21.0
-rect_min_size = Vector2( 0, 3 )
+offset_top = 18.0
+offset_right = 315.0
+offset_bottom = 21.0
+custom_minimum_size = Vector2( 0, 3 )
 
 [node name="Copyright" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer3/VBoxContainer"]
-margin_top = 25.0
-margin_right = 315.0
-margin_bottom = 39.0
+offset_top = 25.0
+offset_right = 315.0
+offset_bottom = 39.0
 size_flags_horizontal = 0
 size_flags_vertical = 6
 text = "© 2018-2023 Rodolphe Suescun and contributors"
 align = 1
 
 [node name="VBoxContainer" type="TabContainer" parent="HBoxContainer/VBoxContainer"]
-margin_top = 88.0
-margin_right = 628.0
-margin_bottom = 369.0
+offset_top = 88.0
+offset_right = 628.0
+offset_bottom = 369.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Authors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 scroll_horizontal_enabled = false
 
 [node name="List" type="GridContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors"]
-margin_right = 620.0
-margin_bottom = 245.0
+offset_right = 620.0
+offset_bottom = 245.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/hseparation = 30
+custom_constants/h_separation = 30
 columns = 2
 
 [node name="Godot" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List"]
-margin_right = 125.0
-margin_bottom = 32.0
+offset_right = 125.0
+offset_bottom = 32.0
 
 [node name="Godot" type="TextureButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
+offset_right = 32.0
+offset_bottom = 32.0
+custom_minimum_size = Vector2( 32, 32 )
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource( 4 )
 expand = true
 stretch_mode = 4
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot"]
-margin_left = 36.0
-margin_top = 9.0
-margin_right = 125.0
-margin_bottom = 23.0
+offset_left = 36.0
+offset_top = 9.0
+offset_right = 125.0
+offset_bottom = 23.0
 text = " Godot Engine"
 align = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List"]
-margin_left = 155.0
-margin_top = 9.0
-margin_right = 620.0
-margin_bottom = 23.0
+offset_left = 155.0
+offset_top = 9.0
+offset_right = 620.0
+offset_bottom = 23.0
 size_flags_horizontal = 3
 text = "99% of Material Maker's code is the awesome Godot Engine"
 autowrap = true
@@ -149,42 +149,42 @@ autowrap = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors"]
-margin_right = 620.0
-margin_bottom = 245.0
+offset_right = 620.0
+offset_bottom = 245.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
-margin_left = 128.0
-margin_right = 491.0
-margin_bottom = 96.0
+offset_left = 128.0
+offset_right = 491.0
+offset_bottom = 96.0
 size_flags_horizontal = 4
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/HBoxContainer"]
-margin_right = 96.0
-margin_bottom = 96.0
-rect_min_size = Vector2( 96, 96 )
+offset_right = 96.0
+offset_bottom = 96.0
+custom_minimum_size = Vector2( 96, 96 )
 texture = ExtResource( 12 )
 expand = true
 stretch_mode = 1
 
 [node name="Node" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/HBoxContainer"]
-margin_left = 100.0
-margin_right = 100.0
-margin_bottom = 96.0
+offset_left = 100.0
+offset_right = 100.0
+offset_bottom = 96.0
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/HBoxContainer"]
-margin_left = 104.0
-margin_top = 32.0
-margin_right = 363.0
-margin_bottom = 63.0
+offset_left = 104.0
+offset_top = 32.0
+offset_right = 363.0
+offset_bottom = 63.0
 text = "Megathanks to Epic Games for selecting
 this small project for an Epic MegaGrant!"
 __meta__ = {
@@ -192,17 +192,17 @@ __meta__ = {
 }
 
 [node name="PatronsLabel" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
-margin_left = 281.0
-margin_top = 119.0
-margin_right = 339.0
-margin_bottom = 133.0
+offset_left = 281.0
+offset_top = 119.0
+offset_right = 339.0
+offset_bottom = 133.0
 size_flags_horizontal = 4
 text = "Sponsors"
 
 [node name="Patrons" type="ItemList" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
-margin_top = 137.0
-margin_right = 620.0
-margin_bottom = 245.0
+offset_top = 137.0
+offset_right = 620.0
+offset_bottom = 245.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 max_columns = 4
@@ -213,10 +213,10 @@ fixed_column_width = 190
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Copyright (c) 2018-2023 Rodolphe Suescun and contributors
@@ -231,34 +231,34 @@ wrap_enabled = true
 scroll_vertical = 3.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
-margin_top = 377.0
-margin_right = 628.0
-margin_bottom = 377.0
+offset_top = 377.0
+offset_right = 628.0
+offset_bottom = 377.0
 size_flags_horizontal = 3
 
 [node name="SocialNetworks" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 632.0
-margin_right = 664.0
-margin_bottom = 377.0
+offset_left = 632.0
+offset_right = 664.0
+offset_bottom = 377.0
 size_flags_vertical = 3
 
 [node name="RZLogo" type="TextureRect" parent="HBoxContainer/SocialNetworks"]
 visible = false
-margin_top = 9.0
-margin_right = 32.0
-margin_bottom = 41.0
-rect_min_size = Vector2( 32, 32 )
+offset_top = 9.0
+offset_right = 32.0
+offset_bottom = 41.0
+custom_minimum_size = Vector2( 32, 32 )
 size_flags_horizontal = 4
 size_flags_vertical = 6
 texture = ExtResource( 8 )
 expand = true
 
 [node name="Patreon" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 13.0
-margin_right = 32.0
-margin_bottom = 45.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Patreon"
+offset_top = 13.0
+offset_right = 32.0
+offset_bottom = 45.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "Patreon"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -267,11 +267,11 @@ expand = true
 stretch_mode = 4
 
 [node name="ItchIo" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 77.0
-margin_right = 32.0
-margin_bottom = 109.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "itch.io"
+offset_top = 77.0
+offset_right = 32.0
+offset_bottom = 109.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "itch.io"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -280,11 +280,11 @@ expand = true
 stretch_mode = 4
 
 [node name="Github" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 140.0
-margin_right = 32.0
-margin_bottom = 172.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "GitHub"
+offset_top = 140.0
+offset_right = 32.0
+offset_bottom = 172.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "GitHub"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -293,11 +293,11 @@ expand = true
 stretch_mode = 4
 
 [node name="Discord" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 204.0
-margin_right = 32.0
-margin_bottom = 236.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Discord"
+offset_top = 204.0
+offset_right = 32.0
+offset_bottom = 236.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "Discord"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -306,11 +306,11 @@ expand = true
 stretch_mode = 4
 
 [node name="Twitter" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 267.0
-margin_right = 32.0
-margin_bottom = 299.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Twitter"
+offset_top = 267.0
+offset_right = 32.0
+offset_bottom = 299.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "Twitter"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -319,11 +319,11 @@ expand = true
 stretch_mode = 4
 
 [node name="Youtube" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
-margin_top = 331.0
-margin_right = 32.0
-margin_bottom = 363.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "YouTube"
+offset_top = 331.0
+offset_right = 32.0
+offset_bottom = 363.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "YouTube"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
@@ -333,11 +333,11 @@ stretch_mode = 4
 
 [node name="Facebook" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
 visible = false
-margin_top = 339.0
-margin_right = 32.0
-margin_bottom = 371.0
-rect_min_size = Vector2( 32, 32 )
-hint_tooltip = "Facebook"
+offset_top = 339.0
+offset_right = 32.0
+offset_bottom = 371.0
+custom_minimum_size = Vector2( 32, 32 )
+tooltip_text = "Facebook"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6

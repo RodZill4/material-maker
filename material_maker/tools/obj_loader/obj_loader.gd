@@ -14,9 +14,8 @@ func load_obj_file(path : String) -> ArrayMesh:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	var mdlFile := File.new()
-	var errorCheck = mdlFile.open(path, File.READ)
-	if errorCheck != OK:
+	var mdlFile := FileAccess.open(path, FileAccess.READ)
+	if ! mdlFile.is_open():
 		print("cannot open file at path[", path,"]")
 		mdlFile.close()
 		return null
@@ -63,7 +62,7 @@ func _obj_rel_indice(indice : Vector3, cur_vArr_size : int) -> Vector3:
 	
 	return output
 
-func _import_obj(mdlFile : File) -> TriMesh:
+func _import_obj(mdlFile : FileAccess) -> TriMesh:
 	var newMsh := TriMesh.new()
 	
 	while !mdlFile.eof_reached():

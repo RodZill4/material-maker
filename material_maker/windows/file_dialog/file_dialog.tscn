@@ -3,8 +3,8 @@
 [ext_resource path="res://material_maker/windows/file_dialog/file_dialog.gd" type="Script" id=1]
 
 [node name="FileDialog" type="FileDialog"]
-margin_right = 360.0
-margin_bottom = 130.0
+offset_right = 360.0
+offset_bottom = 130.0
 window_title = "Enregistrer un fichier"
 resizable = true
 script = ExtResource( 1 )

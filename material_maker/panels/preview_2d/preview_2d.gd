@@ -1,7 +1,7 @@
 extends ColorRect
 
-export(String, MULTILINE) var shader_context_defs : String = ""
-export(String, MULTILINE) var shader : String = ""
+@export var shader_context_defs : String = "" # (String, MULTILINE)
+@export var shader : String = "" # (String, MULTILINE)
 
 var generator : MMGenBase = null
 var output : int = 0
@@ -62,19 +62,18 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if !force and generator == g and output == o:
 		return
 	need_generate = false
-	if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
-		generator.disconnect("parameter_changed", self, "on_parameter_changed")
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed",Callable(self,"on_parameter_changed")):
+		generator.disconnect("parameter_changed",Callable(self,"on_parameter_changed"))
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if is_instance_valid(g):
 		generator = g
 		output = o
-		generator.connect("parameter_changed", self, "on_parameter_changed")
+		generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))
 		var gen_output_defs = generator.get_output_defs()
-		if ! gen_output_defs.empty():
+		if ! gen_output_defs.is_empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			assert(!(source is GDScriptFunctionState))
-			if source.empty():
+			if source.is_empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	else:
 		generator = null
@@ -89,7 +88,7 @@ func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
 		if ! refreshing_generator:
 			refreshing_generator = true
-			yield(get_tree(), "idle_frame")
+			await get_tree().process_frame
 			set_generator(generator, output, true)
 			refreshing_generator = false
 		return
@@ -105,11 +104,11 @@ func get_preview_material():
 	return material
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
-	get_preview_material().set_shader_param(parameter_name, value)
+	get_preview_material().set_shader_parameter(parameter_name, value)
 	return false
 
 func on_resized() -> void:
-	material.set_shader_param("preview_2d_size", rect_size)
+	material.set_shader_parameter("preview_2d_size", size)
 
 func export_again() -> void:
 	if last_export_filename == "":
@@ -118,7 +117,6 @@ func export_again() -> void:
 	var extension = filename.get_extension()
 	var regex : RegEx = RegEx.new()
 	regex.compile("(.*)_(\\d+)$")
-	var file : File = File.new()
 	var re_match : RegExMatch = regex.search(filename.get_basename())
 	if re_match != null:
 		var value = re_match.strings[2].to_int()
@@ -126,31 +124,29 @@ func export_again() -> void:
 		while true:
 			value += 1
 			filename = "%s_%0*d.%s" % [ re_match.strings[1], value_length, value, extension ]
-			if !file.file_exists(filename):
+			if ! FileAccess.file_exists(filename):
 				break
 	export_as_image_file(filename, last_export_size)
 
 func export_animation() -> void:
 	if generator == null:
 		return
-	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instance()
+	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instantiate()
 	add_child(window)
 	window.set_source(generator, output)
 	window.popup_centered()
 
 func _on_Export_id_pressed(id : int) -> void:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
 	dialog.add_filter("*.exr;EXR image file")
 	if mm_globals.config.has_section_key("path", "save_preview"):
 		dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		export_as_image_file(files[0], 64 << id)
 
@@ -158,23 +154,18 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if generator != null:
 		var gen_output_defs = generator.get_output_defs()
-		if ! gen_output_defs.empty():
+		if ! gen_output_defs.is_empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			assert(!(source is GDScriptFunctionState))
-			if source.empty():
+			if source.is_empty():
 				source = MMGenBase.DEFAULT_GENERATED_SHADER
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
-	tmp_material.shader = Shader.new()
-	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
+	tmp_material.gdshader = Shader.new()
+	tmp_material.gdshader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
 	mm_deps.material_update_params(tmp_material)
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	renderer = renderer.render_material(self, tmp_material, size, source.type != "rgba")
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
+	var renderer = await mm_renderer.request(self)
+	renderer = await renderer.render_material(self, tmp_material, size, source.type != "rgba")
 	renderer.callv(renderer_function, params)
 	renderer.release(self)
 
@@ -187,9 +178,7 @@ func export_as_image_file(file_name : String, size : int) -> void:
 
 func _on_Reference_id_pressed(id : int):
 	var texture : ImageTexture = ImageTexture.new()
-	var status = create_image("copy_to_texture", [ texture ], 64 << id)
-	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+	var status = await create_image("copy_to_texture", [ texture ], 64 << id)
 	mm_globals.main_window.get_panel("Reference").add_reference(texture)
 
 func _on_Preview2D_visibility_changed():

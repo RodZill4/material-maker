@@ -6,9 +6,9 @@ signal drop_item(item, dest, position)
 
 func _ready():
 	set_column_expand(1, false)
-	set_column_min_width(1, 28)
+	set_column_custom_minimum_width(1, 28)
 	set_column_expand(2, false)
-	set_column_min_width(2, 28)
+	set_column_custom_minimum_width(2, 28)
 
 func get_sdf_item_type(item : TreeItem) -> Object:
 	if item == null or not item.has_meta("scene"):
@@ -29,7 +29,7 @@ func get_nearest_parent(item : TreeItem, type : String) -> TreeItem:
 		item = item.get_parent()
 	return item
 
-func get_drag_data(position):
+func _get_drag_data(position):
 	var item : TreeItem = get_item_at_position(position)
 	if item == null:
 		return null
@@ -63,7 +63,7 @@ func get_valid_children_types(parent : TreeItem):
 		valid_children_types.push_back(parent_type.item_category)
 	return valid_children_types
 
-func can_drop_data(position, data):
+func _can_drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var destination : TreeItem = get_item_at_position(position)
 		if destination != null and get_drop_section_at_position(position) != 0:
@@ -85,7 +85,7 @@ func get_item_index(item : TreeItem) -> int:
 		index += 1
 	return -1
 
-func drop_data(position, data):
+func _drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var item = get_item_at_position(position)
 		match get_drop_section_at_position(position):

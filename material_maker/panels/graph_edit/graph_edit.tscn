@@ -1,16 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://dy1u50we7gtru"]
 
-[ext_resource path="res://material_maker/panels/graph_edit/graph_edit.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
-[ext_resource path="res://material_maker/tools/undo_redo/undo_redo.gd" type="Script" id=3]
-[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_edit.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 
-[sub_resource type="Theme" id=1]
-GraphEdit/colors/activity = Color( 1, 1, 1, 1 )
-GraphEdit/colors/grid_major = Color( 1, 1, 1, 0.2 )
-GraphEdit/colors/grid_minor = Color( 1, 1, 1, 0.05 )
-GraphEdit/colors/selection_fill = Color( 1, 1, 1, 0.3 )
-GraphEdit/colors/selection_stroke = Color( 1, 1, 1, 0.8 )
+[sub_resource type="Theme" id="1"]
+GraphEdit/colors/activity = Color(1, 1, 1, 1)
+GraphEdit/colors/grid_major = Color(1, 1, 1, 0.2)
+GraphEdit/colors/grid_minor = Color(1, 1, 1, 0.05)
+GraphEdit/colors/selection_fill = Color(1, 1, 1, 0.3)
+GraphEdit/colors/selection_stroke = Color(1, 1, 1, 0.8)
 GraphEdit/constants/bezier_len_neg = 160
 GraphEdit/constants/bezier_len_pos = 80
 GraphEdit/constants/port_grab_distance_horizontal = 6
@@ -20,110 +20,89 @@ GraphEdit/icons/minus = null
 GraphEdit/icons/more = null
 GraphEdit/icons/reset = null
 GraphEdit/icons/snap = null
-GraphEdit/styles/bg = null
+GraphEdit/styles/panel = null
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("2")
+region = Rect2(64, 32, 16, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 64, 32, 16, 16 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("2")
+region = Rect2(15.4016, 47.1451, 16.7512, 17.8319)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 15.4016, 47.1451, 16.7512, 17.8319 )
-
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 48, 16, 16 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("2")
+region = Rect2(0, 48, 16, 16)
 
 [node name="GraphEdit" type="GraphEdit" groups=["mm_graphedit"]]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.49829
-margin_bottom = -1.49829
-theme = SubResource( 1 )
-custom_styles/bg = SubResource( 2 )
+offset_top = -1.49829
+offset_bottom = -1.49829
+theme = SubResource("1")
 right_disconnects = true
 use_snap = false
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
 
 [node name="GraphUI" type="HBoxContainer" parent="."]
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -698.0
-margin_top = 11.0
-margin_bottom = 24.0
+offset_left = -698.0
+offset_top = 11.0
+offset_bottom = 24.0
 alignment = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
-margin_left = 402.0
-margin_right = 648.0
-margin_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 9
 
 [node name="Label" type="LineEdit" parent="GraphUI/SubGraphUI"]
-margin_right = 150.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 150, 0 )
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 size_flags_horizontal = 9
 
-[node name="Description" parent="GraphUI/SubGraphUI" instance=ExtResource( 4 )]
-margin_left = 154.0
-margin_right = 182.0
-margin_bottom = 24.0
+[node name="Description" parent="GraphUI/SubGraphUI" instance=ExtResource("4")]
+layout_mode = 2
 
 [node name="ButtonTransmitsSeed" type="Button" parent="GraphUI/SubGraphUI"]
-margin_left = 186.0
-margin_right = 214.0
-margin_bottom = 24.0
-hint_tooltip = "Affect children seeds"
+layout_mode = 2
 size_flags_horizontal = 9
+tooltip_text = "Affect children seeds"
 toggle_mode = true
-icon = SubResource( 3 )
+icon = SubResource("3")
 
 [node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
-margin_left = 218.0
-margin_right = 246.0
-margin_bottom = 24.0
-hint_tooltip = "Back to parent"
+layout_mode = 2
 size_flags_horizontal = 9
-icon = SubResource( 4 )
+tooltip_text = "Back to parent"
+icon = SubResource("4")
 
 [node name="ButtonShowTree" type="Button" parent="GraphUI"]
-margin_left = 652.0
-margin_right = 680.0
-margin_bottom = 24.0
-hint_tooltip = "Show hierarchy"
-icon = SubResource( 5 )
+layout_mode = 2
+tooltip_text = "Show hierarchy"
+icon = SubResource("5")
 
 [node name="Control" type="Control" parent="GraphUI"]
-margin_left = 684.0
-margin_right = 698.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 14, 0 )
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
 
 [node name="UndoRedo" type="Node" parent="."]
-script = ExtResource( 3 )
+script = ExtResource("3")
 
-[connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [ true ]]
+[connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [true]]
 [connection signal="connection_request" from="." to="." method="connect_node"]
-[connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [ false ]]
+[connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [false]]
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
 [connection signal="disconnection_request" from="." to="." method="disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
+[connection signal="node_deselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]
-[connection signal="node_unselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="paste_nodes_request" from="." to="." method="paste"]
 [connection signal="visibility_changed" from="." to="." method="_on_GraphEdit_visibility_changed"]
 [connection signal="timeout" from="Timer" to="." method="do_send_changed_signal"]

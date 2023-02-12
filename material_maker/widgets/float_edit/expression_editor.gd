@@ -1,12 +1,12 @@
-extends WindowDialog
+extends Window
 
 var object : Object = null
 var method : String
 var extra_parameters : Array = []
 var accept_empty : bool = false
 
-onready var editor = $MarginContainer/VBoxContainer/TextEdit
-onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
+@onready var editor = $MarginContainer/VBoxContainer/TextEdit
+@onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
 func _ready():
 	pass # Replace with function body.
@@ -19,7 +19,7 @@ func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Ar
 	window_title = wt
 	editor.text = value
 	popup_centered()
-	editor.cursor_set_column(editor.text.length())
+	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()
 
 func _on_Apply_pressed():

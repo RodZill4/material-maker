@@ -4,7 +4,7 @@ class_name MMGradient
 class Point:
 	var v : float
 	var c : Color
-	func _init(pos : float, color : Color):
+	func _init(pos : float,color : Color):
 		v = pos
 		c = color
 
@@ -17,10 +17,10 @@ var interpolation = 1
 var sorted = true
 
 func to_string() -> String:
-	var rv = PoolStringArray()
+	var rv = PackedStringArray()
 	for p in points:
 		rv.append("("+str(p.v)+","+str(p.c)+")")
-	return rv.join(",")
+	return ",".join(rv)
 
 func duplicate() -> Object:
 	var copy = get_script().new()
@@ -49,7 +49,7 @@ func set_point_position(i : int, v : float) -> void:
 
 func sort() -> void:
 	if !sorted:
-		points.sort_custom(CustomSorter, "compare")
+		points.sort_custom(Callable(CustomSorter,"compare"))
 		for i in range(points.size()-1):
 			if points[i].v+0.0000005 >= points[i+1].v:
 				points[i+1].v = points[i].v+0.000001

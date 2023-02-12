@@ -32,17 +32,17 @@ GraphNode/icons/port = null
 GraphNode/icons/resizer = null
 GraphNode/styles/breakpoint = null
 GraphNode/styles/comment = null
-GraphNode/styles/commentfocus = null
+GraphNode/styles/comment_focus = null
 GraphNode/styles/defaultfocus = null
 GraphNode/styles/defaultframe = null
 GraphNode/styles/frame = SubResource( 1 )
 GraphNode/styles/position = null
-GraphNode/styles/selectedframe = SubResource( 2 )
+GraphNode/styles/selected_frame = SubResource( 2 )
 
 [node name="reroute" type="GraphNode"]
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+offset_right = 24.0
+offset_bottom = 24.0
+custom_minimum_size = Vector2( 24, 24 )
 theme = SubResource( 3 )
 custom_constants/port_offset = 0
 slot/0/left_enabled = true
@@ -57,7 +57,7 @@ __meta__ = {
 }
 
 [node name="Foo" type="Control" parent="."]
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+offset_right = 24.0
+offset_bottom = 24.0
+custom_minimum_size = Vector2( 24, 24 )
 mouse_filter = 2

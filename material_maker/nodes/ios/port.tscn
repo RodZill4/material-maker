@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource path="res://material_maker/nodes/ios/port.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
-[ext_resource path="res://material_maker/widgets/linked_widgets/editable_label.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=4]
-[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=5]
+[ext_resource type="Script" path="res://material_maker/nodes/ios/port.gd" id="1"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/linked_widgets/editable_label.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="5"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -23,54 +23,54 @@ region = Rect2( 34, 49, 12, 14 )
 
 [node name="Port" type="HBoxContainer"]
 anchor_right = 1.0
-margin_bottom = 20.0
+offset_bottom = 20.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Delete" type="Button" parent="."]
-margin_right = 24.0
-margin_bottom = 22.0
+offset_right = 24.0
+offset_bottom = 22.0
 icon = SubResource( 1 )
 
 [node name="Up" type="Button" parent="."]
-margin_left = 28.0
-margin_right = 52.0
-margin_bottom = 22.0
+offset_left = 28.0
+offset_right = 52.0
+offset_bottom = 22.0
 icon = SubResource( 2 )
 
 [node name="Down" type="Button" parent="."]
-margin_left = 56.0
-margin_right = 80.0
-margin_bottom = 22.0
+offset_left = 56.0
+offset_right = 80.0
+offset_bottom = 22.0
 icon = SubResource( 3 )
 
 [node name="Name" parent="." instance=ExtResource( 3 )]
-margin_left = 84.0
-margin_right = 1122.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 30, 0 )
+offset_left = 84.0
+offset_right = 1122.0
+offset_bottom = 22.0
+custom_minimum_size = Vector2( 30, 0 )
 size_flags_horizontal = 3
 
 [node name="Description" parent="." instance=ExtResource( 5 )]
-margin_left = 1126.0
-margin_right = 1154.0
-margin_bottom = 22.0
+offset_left = 1126.0
+offset_right = 1154.0
+offset_bottom = 22.0
 
 [node name="Type" type="OptionButton" parent="."]
-margin_left = 1158.0
-margin_right = 1260.0
-margin_bottom = 22.0
-rect_min_size = Vector2( 102, 0 )
-hint_tooltip = "Port type"
+offset_left = 1158.0
+offset_right = 1260.0
+offset_bottom = 22.0
+custom_minimum_size = Vector2( 102, 0 )
+tooltip_text = "Port type"
 text = "Greyscale"
 
 [node name="PortGroupButton" parent="." instance=ExtResource( 4 )]
-margin_left = 1264.0
-margin_top = 3.0
-margin_right = 1280.0
-margin_bottom = 19.0
+offset_left = 1264.0
+offset_top = 3.0
+offset_right = 1280.0
+offset_bottom = 19.0
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]

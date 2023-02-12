@@ -2,7 +2,7 @@ extends Node
 
 
 # warning-ignore:unused_class_variable
-onready var menu_manager = $MenuManager
+@onready var menu_manager = $MenuManager
 
 # warning-ignore:unused_class_variable
 var main_window
@@ -104,12 +104,17 @@ func parse_paste_data(data : String):
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
 		else:
-			var downloaded_data = yield(http_request, "request_completed")[3].get_string_from_utf8()
-			if not validate_json(downloaded_data):
-				graph = parse_json(downloaded_data)
+			var downloaded_data = await http_request.request_completed[3].get_string_from_utf8()
+			var test_json_conv = JSON.new()
+			error = test_json_conv.parse(downloaded_data)
+			if error == OK:
+				graph = test_json_conv.get_data()
 		http_request.queue_free()
-	elif not validate_json(data):
-		graph = parse_json(data)
+	else:
+		var test_json_conv = JSON.new()
+		var error = test_json_conv.parse(data)
+		if error == OK:
+			graph = test_json_conv.get_data()
 	if graph != null and graph is Dictionary:
 		if graph.has("nodes"):
 			if graph.has("type") and graph.type == "graph":
@@ -123,7 +128,7 @@ func parse_paste_data(data : String):
 			graph = null
 	if graph == null or ! graph is Dictionary:
 		var palette = try_parse_palette(data)
-		if not palette.empty():
+		if not palette.is_empty():
 			graph = palette
 			type = "palette"
 		else:

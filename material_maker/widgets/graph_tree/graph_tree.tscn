@@ -24,11 +24,11 @@ Tree/constants/button_margin = 4
 Tree/constants/draw_guides = 1
 Tree/constants/draw_relationship_lines = 0
 Tree/constants/guide_width = 2
-Tree/constants/hseparation = 4
+Tree/constants/h_separation = 4
 Tree/constants/item_margin = 12
 Tree/constants/scroll_border = 4
 Tree/constants/scroll_speed = 12
-Tree/constants/vseparation = 4
+Tree/constants/v_separation = 4
 Tree/fonts/font = null
 Tree/fonts/title_button_font = null
 Tree/icons/arrow = null
@@ -37,8 +37,8 @@ Tree/icons/checked = null
 Tree/icons/select_arrow = null
 Tree/icons/unchecked = null
 Tree/icons/updown = null
-Tree/styles/bg = SubResource( 1 )
-Tree/styles/bg_focus = null
+Tree/styles/panel = SubResource( 1 )
+Tree/styles/focus = null
 Tree/styles/button_pressed = null
 Tree/styles/cursor = null
 Tree/styles/cursor_unfocused = null
@@ -52,8 +52,8 @@ Tree/styles/title_button_normal = null
 Tree/styles/title_button_pressed = null
 
 [node name="GraphTree" type="Popup"]
-margin_right = 335.0
-margin_bottom = 339.0
+offset_right = 335.0
+offset_bottom = 339.0
 script = ExtResource( 1 )
 
 [node name="Tree" type="Tree" parent="."]
@@ -61,4 +61,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource( 2 )
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_double_clicked"]
-[connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]
+[connection signal="item_icon_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

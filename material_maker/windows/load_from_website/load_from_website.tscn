@@ -2,13 +2,13 @@
 
 [ext_resource path="res://material_maker/windows/load_from_website/load_from_website.gd" type="Script" id=1]
 
-[node name="LoadFromWebsite" type="WindowDialog"]
+[node name="LoadFromWebsite" type="Window"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 340.0
-margin_top = 188.0
-margin_right = -362.0
-margin_bottom = -134.0
+offset_left = 340.0
+offset_top = 188.0
+offset_right = -362.0
+offset_bottom = -134.0
 window_title = "Load from website"
 resizable = true
 script = ExtResource( 1 )
@@ -24,23 +24,23 @@ __meta__ = {
 }
 
 [node name="Filter" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Filter"]
-margin_right = 40.0
-margin_bottom = 14.0
+offset_right = 40.0
+offset_bottom = 14.0
 text = "Filter:"
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/Filter"]
-margin_right = 58.0
-margin_bottom = 24.0
+offset_right = 58.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="ItemList" type="ItemList" parent="VBoxContainer"]
-margin_right = 578.0
-margin_bottom = 366.0
+offset_right = 578.0
+offset_bottom = 366.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 max_columns = 0
@@ -49,29 +49,29 @@ icon_mode = 0
 icon_scale = 0.5
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 370.0
-margin_right = 578.0
-margin_bottom = 374.0
+offset_top = 370.0
+offset_right = 578.0
+offset_bottom = 374.0
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 207.0
-margin_top = 378.0
-margin_right = 371.0
-margin_bottom = 398.0
+offset_left = 207.0
+offset_top = 378.0
+offset_right = 371.0
+offset_bottom = 398.0
 size_flags_horizontal = 4
 
 [node name="OK" type="Button" parent="VBoxContainer/Buttons"]
-margin_right = 80.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 80, 0 )
+offset_right = 80.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 80, 0 )
 disabled = true
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 84.0
-margin_right = 164.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 80, 0 )
+offset_left = 84.0
+offset_right = 164.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 80, 0 )
 text = "Cancel"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]

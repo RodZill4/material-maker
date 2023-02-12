@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource path="res://material_maker/nodes/edit_buttons.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
+[ext_resource type="Script" path="res://material_maker/nodes/edit_buttons.gd" id="1"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -20,26 +20,26 @@ atlas = ExtResource( 2 )
 region = Rect2( 32, 16, 16, 16 )
 
 [node name="NodeEditButtons" type="HBoxContainer"]
-margin_right = 65.0
-margin_bottom = 22.0
+offset_right = 65.0
+offset_bottom = 22.0
 script = ExtResource( 1 )
 
 [node name="Edit" type="Button" parent="."]
-margin_right = 28.0
-margin_bottom = 22.0
+offset_right = 28.0
+offset_bottom = 22.0
 icon = SubResource( 1 )
 flat = true
 
 [node name="Load" type="Button" parent="."]
-margin_left = 32.0
-margin_right = 60.0
-margin_bottom = 22.0
+offset_left = 32.0
+offset_right = 60.0
+offset_bottom = 22.0
 icon = SubResource( 2 )
 flat = true
 
 [node name="Save" type="Button" parent="."]
-margin_left = 64.0
-margin_right = 92.0
-margin_bottom = 22.0
+offset_left = 64.0
+offset_right = 92.0
+offset_bottom = 22.0
 icon = SubResource( 3 )
 flat = true

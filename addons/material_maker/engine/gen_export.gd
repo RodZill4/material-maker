@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenExport
 
-"""
-Can be used to export an additional texture
-"""
+
+# Can be used to export an additional texture
+
 
 var texture = null
 
@@ -39,9 +39,7 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 		size = get_image_size()
 	var source = get_source(0)
 	if source != null:
-		var result = source.generator.render(self, source.output_index, size)
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await source.generator.render(self, source.output_index, size)
 		if parameters.suffix != "":
 			result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix ])
 		else:

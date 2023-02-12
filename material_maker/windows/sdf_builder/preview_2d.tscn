@@ -39,12 +39,12 @@ items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null,
 material = SubResource( 5 )
 
 [node name="UI" type="HBoxContainer" parent="." index="17"]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="View" type="OptionButton" parent="UI" index="0"]
-margin_right = 106.0
-margin_bottom = 40.0
+offset_right = 106.0
+offset_bottom = 40.0
 text = "SDF+Albedo"
 items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null, "Roughness", null, false, 4, null, "Emission", null, false, 5, null ]
 selected = 0

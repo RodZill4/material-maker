@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenIOs
 
-"""
-IOs just forward their inputs to their outputs and are used to specify graph interfaces
-"""
+
+# IOs just forward their inputs to their outputs and are used to specify graph interfaces
+
 
 var ports : Array = []
 
@@ -67,7 +67,7 @@ func set_port_groups_sizes(g : Dictionary) -> void:
 			ports[i].group_size = 0
 
 func delete_port(i : int) -> void:
-	ports.remove(i)
+	ports.remove_at(i)
 	var input_gen = get_parent() if name == "gen_inputs" else self
 	var output_gen = get_parent() if name == "gen_outputs" else self
 	var port_reconnects = { i:-1 }
@@ -108,10 +108,7 @@ func all_sources_changed() -> void:
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
 	var source = get_source(output_index)
 	if source != null:
-		var rv = source.generator._get_shader_code(uv, source.output_index, context)
-		while rv is GDScriptFunctionState:
-			rv = yield(rv, "completed")
-		return rv
+		return source.generator._get_shader_code(uv, source.output_index, context)
 	return DEFAULT_GENERATED_SHADER
 
 func _serialize(data: Dictionary) -> Dictionary:

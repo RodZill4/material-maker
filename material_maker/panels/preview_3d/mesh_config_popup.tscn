@@ -4,8 +4,8 @@
 [ext_resource path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" type="Script" id=2]
 
 [node name="MeshConfiguration" type="PopupPanel"]
-margin_right = 284.0
-margin_bottom = 127.0
+offset_right = 284.0
+offset_bottom = 127.0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -14,23 +14,23 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
-margin_right = 276.0
-margin_bottom = 28.0
+offset_right = 276.0
+offset_bottom = 28.0
 
 [node name="Label" type="Label" parent="VBoxContainer/Panel"]
-margin_left = 77.0
-margin_top = 7.0
-margin_right = 199.0
-margin_bottom = 21.0
+offset_left = 77.0
+offset_top = 7.0
+offset_right = 199.0
+offset_bottom = 21.0
 size_flags_horizontal = 4
 text = "Mesh configuration"
 __meta__ = {
@@ -38,15 +38,15 @@ __meta__ = {
 }
 
 [node name="UVScale" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 32.0
-margin_right = 276.0
-margin_bottom = 56.0
+offset_top = 32.0
+offset_right = 276.0
+offset_bottom = 56.0
 
 [node name="Label" type="Label" parent="VBoxContainer/UVScale"]
-margin_top = 5.0
-margin_right = 59.0
-margin_bottom = 19.0
-hint_tooltip = "The texture's display scale on the 3D preview.
+offset_top = 5.0
+offset_right = 59.0
+offset_bottom = 19.0
+tooltip_text = "The texture's display scale checked the 3D preview.
 Higher values will make the texture span a smaller area.
 The texture will repeat automatically to cover the whole mesh.
 This can be used to check how well a material tiles."
@@ -57,9 +57,9 @@ text = "UV Scale:"
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 63.0
-margin_right = 121.0
-margin_bottom = 24.0
+offset_left = 63.0
+offset_right = 121.0
+offset_bottom = 24.0
 value = 1.0
 max_value = 5.0
 step = 0.01
@@ -69,19 +69,19 @@ float_only = true
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 125.0
-margin_right = 183.0
-margin_bottom = 24.0
+offset_left = 125.0
+offset_right = 183.0
+offset_bottom = 24.0
 value = 1.0
 max_value = 5.0
 step = 0.01
 float_only = true
 
 [node name="Tesselated" type="CheckBox" parent="VBoxContainer"]
-margin_top = 60.0
-margin_right = 276.0
-margin_bottom = 84.0
-hint_tooltip = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
+offset_top = 60.0
+offset_right = 276.0
+offset_bottom = 84.0
+tooltip_text = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
 text = "Tesselated"
 
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]

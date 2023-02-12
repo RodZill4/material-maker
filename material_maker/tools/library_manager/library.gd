@@ -20,16 +20,18 @@ func create_library(path : String, name : String) -> void:
 
 func load_library(path : String, ro : bool = false, raw_data : String = "") -> bool:
 	if raw_data == "":
-		var file : File = File.new()
 		if OS.get_name() == "Android":
 			path = path.replace("root://", "res://material_maker/")
 		else:
 			path = path.replace("root://", MMPaths.get_resource_dir()+"/")
-		if ! file.open(path, File.READ) == OK:
+		var file : FileAccess = FileAccess.open(path, FileAccess.READ)
+		if file == null:
 			print("Failed to open "+path)
 			return false
 		raw_data = file.get_as_text()
-	var data : Dictionary = parse_json(raw_data)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(raw_data)
+	var data : Dictionary = test_json_conv.get_data()
 	library_path = path
 	library_name = data.name if data.has("name") else ""
 	library_items = data.lib
@@ -101,10 +103,10 @@ func get_sections() -> Array:
 	return Array(sections)
 
 func save_library() -> void:
-	Directory.new().make_dir_recursive(library_path.get_base_dir())
-	var file = File.new()
-	if file.open(library_path, File.WRITE) == OK:
-		file.store_string(JSON.print({name=library_name, lib=library_items}, "\t", true))
+	DirAccess.open("res://").make_dir_recursive(library_path.get_base_dir())
+	var file : FileAccess = FileAccess.open(library_path, FileAccess.WRITE)
+	if file.is_open():
+		file.store_string(JSON.stringify({name=library_name, lib=library_items}, "\t", true))
 		file.close()
 
 func add_item(item_name : String, image : Image, data : Dictionary) -> void:

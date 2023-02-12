@@ -1,7 +1,7 @@
 extends TextureButton
 class_name PortGroupButton
 
-export var group_parent : int = 2
+@export var group_parent : int = 2
 
 var state : int = 0
 # warning-ignore:unused_class_variable
@@ -45,7 +45,7 @@ static func update_groups(parent : Control):
 			p.button = b
 			p.erase("parent")
 			buttons.append(p)
-	buttons.sort_custom(MyCustomSorter, "sort")
+	buttons.sort_custom(Callable(MyCustomSorter,"sort"))
 	var in_group : bool = false
 	var current_group : int = -1
 	var group_sizes = {}

@@ -46,32 +46,32 @@ var pattern_angle : float = 0.0
 var idmap_filename : String = ""
 var mask : ImageTexture
 
-onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
-onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
-onready var camera : Camera = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera
-onready var camera_position = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition
-onready var camera_rotation1 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
-onready var camera_rotation2 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
-onready var painted_mesh = $VSplitContainer/HSplitContainer/Painter/View/MainView/PaintedMesh
-onready var painter = $Painter
-onready var tools = $VSplitContainer/HSplitContainer/Painter/Tools
-onready var layers = $PaintLayers
-onready var paint_engine_button = $VSplitContainer/HSplitContainer/Painter/Tools/Engine
-onready var eraser_button = $VSplitContainer/HSplitContainer/Painter/Tools/Eraser
-onready var graph_edit = $VSplitContainer/GraphEdit
-onready var undoredo = $UndoRedo
+@onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
+@onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
+@onready var camera : Camera3D = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D
+@onready var camera_position = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition
+@onready var camera_rotation1 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
+@onready var camera_rotation2 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
+@onready var painted_mesh = $VSplitContainer/HSplitContainer/Painter/View/MainView/PaintedMesh
+@onready var painter = $Painter
+@onready var tools = $VSplitContainer/HSplitContainer/Painter/Tools
+@onready var layers = $PaintLayers
+@onready var paint_engine_button = $VSplitContainer/HSplitContainer/Painter/Tools/Engine
+@onready var eraser_button = $VSplitContainer/HSplitContainer/Painter/Tools/Eraser
+@onready var graph_edit = $VSplitContainer/GraphEdit
+@onready var undoredo = $UndoRedo
 
-onready var brush_view_3d = $VSplitContainer/HSplitContainer/Painter/BrushView
+@onready var brush_view_3d = $VSplitContainer/HSplitContainer/Painter/BrushView
 var brush_view_3d_shown = false
 
-onready var view_2d : ColorRect = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture
-onready var brush_view_2d = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture/BrushView
+@onready var view_2d : ColorRect = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D
+@onready var brush_view_2d = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D/BrushView
 var brush_view_2d_shown = false
 
-onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize
-onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushStrength
-onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity
-onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSpacing
+@onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize
+@onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushStrength
+@onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity
+@onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSpacing
 
 var last_motion_position : Vector2
 var last_motion_vector : Vector2 = Vector2(0, 0)
@@ -88,7 +88,7 @@ signal update_material
 
 func _ready():
 	# Assign all textures to painted mesh
-	painted_mesh.set_surface_material(0, SpatialMaterial.new())
+	painted_mesh.set_surface_override_material(0, StandardMaterial3D.new())
 	# Updated Texture2View wrt current camera position
 	update_view()
 	# Disable physics process so we avoid useless updates of tex2view textures
@@ -116,7 +116,7 @@ func update_tab_title() -> void:
 		return
 	var title = "[unnamed]"
 	if save_path != null:
-		title = save_path.right(save_path.rfind("/")+1)
+		title = save_path.right(-(save_path.rfind("/")+1))
 	if need_save:
 		title += " *"
 	if get_parent().has_method("set_tab_title"):
@@ -143,7 +143,7 @@ func get_remote():
 func update_brush_graph():
 	if brush_graph != graph_edit.top_generator:
 		brush_graph = graph_edit.top_generator
-		brush_graph.connect("graph_changed", self, "on_brush_graph_changed")
+		brush_graph.connect("graph_changed",Callable(self,"on_brush_graph_changed"))
 		on_brush_graph_changed()
 
 func on_brush_graph_changed() -> void:
@@ -161,7 +161,7 @@ func project_selected() -> void:
 
 func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
-	brush_node.connect("parameter_changed", self, "on_brush_changed")
+	brush_node.connect("parameter_changed",Callable(self,"on_brush_changed"))
 	painter.set_brush_preview_material(brush_view_3d.material)
 	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
 
@@ -172,16 +172,16 @@ func set_brush(data) -> void:
 	update_brush()
 	update_brush_graph()
 
-func get_brush_preview() -> Texture:
+func get_brush_preview() -> Texture2D:
 	var preview = get_tree().get_root().get_node("BrushPreviewGenerator")
 	if preview == null:
 		print("Create preview")
-		preview = load("res://material_maker/tools/painter/brush_preview.tscn").instance()
+		preview = load("res://material_maker/tools/painter/brush_preview.tscn").instantiate()
 		preview.name = "BrushPreviewGenerator"
 		get_tree().get_root().add_child(preview)
 	var status = preview.set_brush(graph_edit.generator.get_node("Brush"))
 	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+		status = await status.completed
 	return status
 
 func get_graph_edit():
@@ -190,7 +190,7 @@ func get_graph_edit():
 func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, project_file_path : String):
 	settings.texture_size = int(round(log(resolution)/log(2)))
 	layers.set_texture_size(resolution)
-	var mi = MeshInstance.new()
+	var mi = MeshInstance3D.new()
 	mi.mesh = mesh
 	layers.add_layer()
 	model_path = mesh_file_path
@@ -201,39 +201,39 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 func set_object(o):
 	object_name = o.name
 	set_project_path(null)
-	var mat = o.get_surface_material(0)
+	var mat = o.get_surface_override_material(0)
 	if mat == null:
 		mat = o.mesh.surface_get_material(0)
 	if mat == null:
-		mat = SpatialMaterial.new()
-	preview_material = SpatialMaterial.new()
+		mat = StandardMaterial3D.new()
+	preview_material = StandardMaterial3D.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
-	preview_material.albedo_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.metallic = 1.0
 	preview_material.metallic_texture = layers.get_metallic_texture()
-	preview_material.metallic_texture.flags = Texture.FLAGS_DEFAULT
-	preview_material.metallic_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
+	preview_material.metallic_texture.flags = Texture2D.FLAGS_DEFAULT
+	preview_material.metallic_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	preview_material.roughness = 1.0
 	preview_material.roughness_texture = layers.get_roughness_texture()
-	preview_material.roughness_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_GREEN
+	preview_material.roughness_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_GREEN
 	preview_material.emission_enabled = true
 	preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)
 	preview_material.emission_texture = layers.get_emission_texture()
-	preview_material.emission_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.emission_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.normal_enabled = true
 	preview_material.normal_texture = layers.get_normal_map()
-	preview_material.normal_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.depth_enabled = true
 	preview_material.depth_deep_parallax = true
 	preview_material.depth_texture = layers.get_depth_texture()
-	preview_material.depth_texture.flags = Texture.FLAGS_DEFAULT
+	preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.ao_enabled = true
 	preview_material.ao_light_affect = 1.0
 	preview_material.ao_texture = layers.get_occlusion_texture()
-	preview_material.ao_texture_channel = SpatialMaterial.TEXTURE_CHANNEL_RED
+	preview_material.ao_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
-	painted_mesh.set_surface_material(0, preview_material)
-	# Center camera on  mesh
+	painted_mesh.set_surface_override_material(0, preview_material)
+	# Center camera checked  mesh
 	var aabb : AABB = painted_mesh.get_aabb()
 	camera_position.transform.origin = aabb.position+0.5*aabb.size
 	# Set the painter target mesh
@@ -245,19 +245,19 @@ func get_settings() -> Dictionary:
 	return settings
 
 func set_settings(s : Dictionary):
-	var settings_changed = false
+	var changed = false
 	if s.has("texture_size") and (s.texture_size is int or s.texture_size is float) and s.texture_size != settings.texture_size:
 		settings.texture_size = s.texture_size
 		layers.set_texture_size(1 << int(settings.texture_size))
-		settings_changed = true
+		changed = true
 	for v in [ "paint_emission", "paint_normal", "paint_depth", "paint_depth_as_bump" ]:
 		if s.has(v) and s[v] is bool and s[v] != settings[v]:
 			settings[v] = s[v]
-			settings_changed = true
+			changed = true
 	if s.has("bump_strength") and s.bump_strength is float and s.bump_strength != settings.bump_strength:
 		settings.bump_strength = s.bump_strength
-		settings_changed = true
-	if settings_changed:
+		changed = true
+	if changed:
 		preview_material.emission_enabled = settings.paint_emission
 		preview_material.normal_enabled = settings.paint_normal or settings.paint_depth_as_bump
 		layers.set_normal_options(settings.paint_normal, settings.paint_depth_as_bump, settings.bump_strength)
@@ -279,14 +279,14 @@ func get_texture_size() -> int:
 
 func _on_Engine_toggled(button_pressed):
 	if button_pressed:
-		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.hint_tooltip = "Texture space paint engine"
+		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.tooltip_text = "Texture2D space paint engine"
 	else:
-		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.hint_tooltip = "View space paint engine"
+		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.tooltip_text = "View space paint engine"
 
 func set_current_tool(m):
 	current_tool = m
 	for i in range(MODE_COUNT):
-		tools.get_node(MODE_NAMES[i]).pressed = (i == m)
+		tools.get_node(MODE_NAMES[i]).button_pressed = (i == m)
 
 func _on_Fill_pressed():
 	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
@@ -298,11 +298,11 @@ func _on_Eraser_toggled(button_pressed):
 	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
 
 func _on_MaskSelector_pressed():
-	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instance()
+	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instantiate()
 	add_child(dialog)
 	var result = dialog.ask({ mesh=painted_mesh.mesh, idmap_filename=idmap_filename, mask=mask })
 	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+		result = await result.completed
 	if result != null and result.has("idmap_filename"):
 		idmap_filename = result.idmap_filename
 
@@ -313,7 +313,7 @@ func _physics_process(delta):
 
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
-		if ev.scancode == KEY_CONTROL:
+		if ev.scancode == KEY_CTRL:
 			#TODO: move this to another shortcut, this is too annoying
 			#painter.show_pattern(ev.pressed)
 			accept_event()
@@ -364,7 +364,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			if mouse_position == Vector2(-1, -1):
 				dont_paint = true
 			else:
-				mouse_position *= min(view_3d.rect_size.x, view_3d.rect_size.y)
+				mouse_position *= min(view_3d.size.x, view_3d.size.y)
 	if ev is InputEventMouseMotion:
 		var pos_delta = mouse_position-last_motion_position
 		stroke_length += pos_delta.length()
@@ -383,7 +383,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				show_brush(null, null)
 			else:
 				show_brush(mouse_position, previous_position)
-		elif current_tool == MODE_STAMP and ev.button_mask & BUTTON_MASK_LEFT != 0:
+		elif current_tool == MODE_STAMP and ev.button_mask & MOUSE_BUTTON_MASK_LEFT != 0:
 			var stamp_offset = mouse_position - stamp_center
 			var stamp_size = stamp_offset.length()
 			var stamp_angle = -stamp_offset.angle()
@@ -394,8 +394,8 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				show_brush(null, null)
 			else:
 				show_brush(mouse_position, mouse_position)
-		if ev.button_mask & BUTTON_MASK_LEFT != 0:
-			if ev.shift:
+		if ev.button_mask & MOUSE_BUTTON_MASK_LEFT != 0:
+			if ev.shift_pressed:
 				reset_stroke()
 				brush_parameters.brush_size += ev.relative.x*0.1
 				brush_parameters.brush_size = clamp(brush_parameters.brush_size, 0.0, 250.0)
@@ -419,8 +419,8 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			reset_stroke()
 		painter.update_brush()
 	elif ev is InputEventMouseButton:
-		if !ev.control and !ev.shift:
-			if ev.button_index == BUTTON_LEFT:
+		if !ev.control and !ev.shift_pressed:
+			if ev.button_index == MOUSE_BUTTON_LEFT:
 				if ev.pressed:
 					stroke_length = 0.0
 					previous_position = mouse_position
@@ -457,9 +457,9 @@ func _on_View_gui_input(ev : InputEvent):
 		update_view()
 		accept_event()
 	elif ev is InputEventMouseMotion:
-		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
-			if ev.shift:
-				var factor = 0.0025*camera.translation.z
+		if ev.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
+			if ev.shift_pressed:
+				var factor = 0.0025*camera.position.z
 				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
 				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
 			elif ev.control:
@@ -471,13 +471,13 @@ func _on_View_gui_input(ev : InputEvent):
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 	elif ev is InputEventMouseButton:
 		var pos = ev.position
-		if !ev.pressed and ev.button_index == BUTTON_MIDDLE:
+		if !ev.pressed and ev.button_index == MOUSE_BUTTON_MIDDLE:
 			update_view()
 		# Mouse wheel
 		if ev.control:
-			if ev.button_index == BUTTON_WHEEL_UP:
+			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
-			elif ev.button_index == BUTTON_WHEEL_DOWN:
+			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
 				return
@@ -485,12 +485,12 @@ func _on_View_gui_input(ev : InputEvent):
 			accept_event()
 		else:
 			var zoom = 0.0
-			if ev.button_index == BUTTON_WHEEL_UP:
+			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				zoom -= 1.0
-			elif ev.button_index == BUTTON_WHEEL_DOWN:
+			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				zoom += 1.0
 			if zoom != 0.0:
-				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
+				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
 				update_view()
 				accept_event()
 	else:
@@ -513,17 +513,17 @@ func _on_Texture_gui_input(event):
 	handle_stroke_input(event, PAINTING_MODE_TEXTURE)
 	var need_update : bool = false
 	var new_center : Vector2 = view_2d_center
-	var multiplier : float = min(rect_size.x, rect_size.y)
+	var multiplier : float = min(size.x, size.y)
 	var image_rect : Rect2 = view_2d.get_global_rect()
 	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
 	var new_scale : float = view_2d_scale
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if event.button_index == BUTTON_WHEEL_DOWN:
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				new_scale = min(new_scale*1.05, 5.0)
-			elif event.button_index == BUTTON_WHEEL_UP:
+			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				new_scale = max(new_scale*0.95, 0.005)
-			elif event.button_index == BUTTON_MIDDLE:
+			elif event.button_index == MOUSE_BUTTON_MIDDLE:
 				view_2d_dragging = true
 		else:
 			view_2d_dragging = false
@@ -545,9 +545,9 @@ func _on_Texture_gui_input(event):
 		_on_Texture_resized()
 
 func _on_Texture_resized():
-	view_2d.material.set_shader_param("preview_2d_size", view_2d.rect_size)
-	view_2d.material.set_shader_param("preview_2d_center", view_2d_center)
-	view_2d.material.set_shader_param("preview_2d_scale", view_2d_scale)
+	view_2d.material.set_shader_parameter("preview_2d_size", view_2d.size)
+	view_2d.material.set_shader_parameter("preview_2d_center", view_2d_center)
+	view_2d.material.set_shader_parameter("preview_2d_scale", view_2d_scale)
 
 # Automatically apply brush to procedural layer
 
@@ -557,7 +557,7 @@ func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
 		for i in range(10):
-			yield(get_tree(), "idle_frame")
+			await get_tree().process_frame
 		do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
@@ -572,7 +572,7 @@ func _on_PaintLayers_layer_selected(layer):
 	if layer.get_layer_type() == Layer.LAYER_PROC:
 		if saved_brush == null:
 			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
-		if ! layer.material.empty():
+		if ! layer.material.is_empty():
 			set_brush(layer.material)
 	elif saved_brush != null:
 		set_brush(saved_brush)
@@ -601,10 +601,10 @@ func show_brush(p, op = null):
 		brush_view_3d_shown = true
 		if op == null:
 			op = p
-		brush_view_3d.material.set_shader_param("texture_space", paint_engine_button.pressed)
-		brush_view_3d.material.set_shader_param("brush_pos", p)
-		brush_view_3d.material.set_shader_param("brush_ppos", op)
-		brush_view_3d.material.set_shader_param("mask_tex", mask)
+		brush_view_3d.material.set_shader_parameter("texture_space", paint_engine_button.pressed)
+		brush_view_3d.material.set_shader_parameter("brush_pos", p)
+		brush_view_3d.material.set_shader_parameter("brush_ppos", op)
+		brush_view_3d.material.set_shader_parameter("mask_tex", mask)
 	update_brush_view_3d_visibility()
 
 func update_brush_view_3d_visibility():
@@ -660,22 +660,22 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 	}
 	match painting_mode:
 		PAINTING_MODE_VIEW:
-			paint_options.rect_size = view_3d.rect_size
+			paint_options.size = view_3d.size
 		PAINTING_MODE_TEXTURE_FROM_VIEW:
-			var min_size = min(view_3d.rect_size.x, view_3d.rect_size.y)
+			var min_size = min(view_3d.size.x, view_3d.size.y)
 			paint_options.texture_center = Vector2(0.5, 0.5)
 			paint_options.texture_scale = 1.0
-			paint_options.rect_size = Vector2(min_size, min_size)
+			paint_options.size = Vector2(min_size, min_size)
 		PAINTING_MODE_TEXTURE:
-			paint_options.rect_size = view_2d.rect_size
+			paint_options.size = view_2d.size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
 	var result = painter.paint(paint_options, end_of_stroke)
 	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+		result = await result.completed
 	previous_position = pos
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
+	await get_tree().process_frame
 	painting = false
 	set_need_save()
 	# execute recorded paint order if any
@@ -697,10 +697,10 @@ func update_view():
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
-		# DEBUG: show tex2view texture on model
+		# DEBUG: show tex2view texture checked model
 		#for i in range(10):
-		#	yield(get_tree(), "idle_frame")
-		#painted_mesh.get_surface_material(0).albedo_texture = painter.debug_get_texture(1)
+		#	await get_tree().process_frame
+		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
 	_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
@@ -716,34 +716,34 @@ func pick_color(position : Vector2):
 	var uv = painter.view_to_texture(position)
 	var colors = {}
 	var albedo_image = layers.get_albedo_texture().get_data()
-	albedo_image.lock()
+	false # albedo_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Albedo"] = albedo_image.get_pixelv(uv*albedo_image.get_size())
-	albedo_image.unlock()
+	false # albedo_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var metallic_image = layers.get_metallic_texture().get_data()
-	metallic_image.lock()
+	false # metallic_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Metallic"] = metallic_image.get_pixelv(uv*metallic_image.get_size()).r
-	metallic_image.unlock()
+	false # metallic_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var roughness_image = layers.get_roughness_texture().get_data()
-	roughness_image.lock()
+	false # roughness_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Roughness"] = roughness_image.get_pixelv(uv*roughness_image.get_size()).r
-	roughness_image.unlock()
+	false # roughness_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	var emission_image = layers.get_emission_texture().get_data()
-	emission_image.lock()
+	false # emission_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Emission"] = emission_image.get_pixelv(uv*emission_image.get_size())
-	emission_image.unlock()
+	false # emission_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	var depth_image = layers.get_depth_texture().get_data()
-	depth_image.lock()
+	false # depth_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Depth"] = depth_image.get_pixelv(uv*depth_image.get_size()).r
-	depth_image.unlock()
+	false # depth_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var occlusion_image = layers.get_occlusion_texture().get_data()
-	occlusion_image.lock()
+	false # occlusion_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Occlusion"] = occlusion_image.get_pixelv(uv*occlusion_image.get_size()).r
-	occlusion_image.unlock()
+	false # occlusion_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	for p in remote_node.get_parameter_defs():
 		if colors.has(p.label):
@@ -756,15 +756,15 @@ func dump_texture(texture, filename):
 	image.save_png(filename)
 
 func show_file_dialog(mode, filter, callback):
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.mode = mode
 	dialog.add_filter(filter)
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+		files = await files.completed
 	if files.size() == 1:
 		call(callback, files[0])
 
@@ -772,7 +772,9 @@ func load_project(file_name) -> bool:
 	var f : File = File.new()
 	if f.open(file_name, File.READ) != OK:
 		return false
-	var data = parse_json(f.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(f.get_as_text())
+	var data = test_json_conv.get_data()
 	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd").new()
 	add_child(obj_loader)
 	var mesh : Mesh = obj_loader.load_obj_file(data.model)
@@ -780,9 +782,9 @@ func load_project(file_name) -> bool:
 	if mesh == null:
 		return false
 	model_path = data.model
-	var mi = MeshInstance.new()
+	var mi = MeshInstance3D.new()
 	mi.mesh = mesh
-	mi.set_surface_material(0, SpatialMaterial.new())
+	mi.set_surface_override_material(0, StandardMaterial3D.new())
 	set_object(mi)
 	set_project_path(file_name)
 	if data.has("settings"):
@@ -803,7 +805,7 @@ func save():
 		save_as()
 
 func save_as():
-	show_file_dialog(FileDialog.MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")
+	show_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")
 
 func do_save_project(file_name):
 	var data = layers.save(file_name)
@@ -813,7 +815,7 @@ func do_save_project(file_name):
 		data.idmap = idmap_filename
 	var file = File.new()
 	if file.open(file_name, File.WRITE) == OK:
-		file.store_string(to_json(data))
+		file.store_string(JSON.new().stringify(data))
 		file.close()
 	set_project_path(file_name)
 	set_need_save(false)
@@ -854,7 +856,7 @@ func _on_ChannelSelect_item_selected(ID):
 	for p in get_2D_paint_select_texture_sources():
 		var textures_count = p.debug_get_texture_names().size()
 		if ID < textures_count:
-			view_2d.material.set_shader_param("tex", p.debug_get_texture(ID))
+			view_2d.material.set_shader_parameter("tex", p.debug_get_texture(ID))
 			return
 		ID -= textures_count
 
@@ -902,10 +904,10 @@ func _on_Button_toggled(button_pressed : bool, button : String):
 		panel.visible = shown
 		ignore_button_toggle = true
 		for c in buttons.get_children():
-			c.pressed = (button == c.name)
+			c.button_pressed = (button == c.name)
 		ignore_button_toggle = false
-		$VSplitContainer/HSplitContainer/Painter/Options.margin_left = -3-$VSplitContainer/HSplitContainer/Painter/Options.get_minimum_size().x
-		$VSplitContainer/HSplitContainer/Painter/Options.margin_right = -3
+		$VSplitContainer/HSplitContainer/Painter/Options.offset_left = -3-$VSplitContainer/HSplitContainer/Painter/Options.get_minimum_size().x
+		$VSplitContainer/HSplitContainer/Painter/Options.offset_right = -3
 	else:
 		panel.visible = false
 
@@ -916,7 +918,7 @@ func _on_Brush_value_changed(value, brush_parameter):
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera.environment
+	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D.environment
 	var sun = $VSplitContainer/HSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
 
@@ -933,12 +935,12 @@ func undoredo_command(command : Dictionary) -> void:
 				painter.set_state(state)
 			else:
 				layer.set_state(state)
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
-			yield(get_tree(), "idle_frame")
+			await get_tree().process_frame
+			await get_tree().process_frame
+			await get_tree().process_frame
+			await get_tree().process_frame
+			await get_tree().process_frame
+			await get_tree().process_frame
 			layers._on_layers_changed()
 			stroke_history.layers[layer].current = command.index
 
@@ -946,25 +948,25 @@ func initialize_layer_history(layer):
 	if stroke_history.layers.has(layer):
 		return
 	var channels = {}
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
 	for c in layer.get_channels():
 		var texture = layer.get_channel_texture(c)
 		if texture is ViewportTexture:
 			var image = texture.get_data()
-			image.lock()
+			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			texture = ImageTexture.new()
 			texture.create_from_image(image)
-			image.unlock()
+			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 		channels[c] = texture
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 
 func initialize_layers_history(layer_list = null):
 	if layer_list == null:
 		for i in range(20):
-			yield(get_tree(), "idle_frame")
+			await get_tree().process_frame
 		layer_list = layers.layers
 	for l in layer_list:
 		initialize_layer_history(l)

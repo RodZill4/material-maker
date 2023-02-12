@@ -12,14 +12,14 @@ func _ready() -> void:
 	var hbox = HSplitContainer.new()
 	add_child(hbox)
 	remove_child(vbox)
-	left_panel = preload("res://material_maker/windows/file_dialog/left_panel.tscn").instance()
+	left_panel = preload("res://material_maker/windows/file_dialog/left_panel.tscn").instantiate()
 	hbox.add_child(left_panel)
-	left_panel.connect("open_directory", self, "set_current_dir")
+	left_panel.connect("open_directory",Callable(self,"set_current_dir"))
 	hbox.add_child(vbox)
-	vbox.size_flags_horizontal = SIZE_EXPAND_FILL
-	var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instance()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instantiate()
 	vbox.get_child(0).add_child(fav_button)
-	fav_button.connect("pressed", self, "add_favorite")
+	fav_button.connect("pressed",Callable(self,"add_favorite"))
 	if OS.get_name() == "Windows":
 		volume_option = vbox.get_child(0).get_child(3)
 		if ! volume_option is OptionButton:
@@ -48,7 +48,7 @@ func _on_FileDialog_popup_hide() -> void:
 
 func select_files() -> Array:
 	popup_centered()
-	var result = yield(self, "return_paths")
+	var result = await self.return_paths
 	queue_free()
 	return result
 

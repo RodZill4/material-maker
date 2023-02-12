@@ -10,22 +10,22 @@ class Cursor:
 	const WIDTH : int = 12
 	const HEIGHT : int = 12
 
-	func _init(c, p, t = true):
+	func _init(c,p,t = true):
 		color = c
 		position = p
 		top = t
 
 	func _ready() -> void:
-		rect_position.y = -2 if top else get_parent().rect_size.y+2-HEIGHT
+		position.y = -2 if top else get_parent().size.y+2-HEIGHT
 		set_value(position)
-		rect_size = Vector2(WIDTH, HEIGHT)
+		size = Vector2(WIDTH, HEIGHT)
 
 	func _draw() -> void:
-		var polygon : PoolVector2Array
+		var polygon : PackedVector2Array
 		if top:
-			polygon = PoolVector2Array([Vector2(0, 0), Vector2(WIDTH/2.0, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)])
+			polygon = PackedVector2Array([Vector2(0, 0), Vector2(WIDTH/2.0, HEIGHT), Vector2(WIDTH, 0), Vector2(0, 0)])
 		else:
-			polygon = PoolVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2.0, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
+			polygon = PackedVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2.0, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
@@ -34,9 +34,9 @@ class Cursor:
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
-			rect_position.x += ev.relative.x
-			rect_position.x = min(max(-0.5*WIDTH, rect_position.x), get_parent().rect_size.x-0.5*WIDTH)
-			update_value((rect_position.x+0.5*WIDTH)/get_parent().rect_size.x)
+			position.x += ev.relative.x
+			position.x = min(max(-0.5*WIDTH, position.x), get_parent().size.x-0.5*WIDTH)
+			update_value((position.x+0.5*WIDTH)/get_parent().size.x)
 
 	func update_value(p : float) -> void:
 		if p != position:
@@ -46,7 +46,7 @@ class Cursor:
 
 	func set_value(v : float):
 		position = v
-		rect_position.x = position * get_parent().rect_size.x - 0.5*WIDTH
+		position.x = position * get_parent().size.x - 0.5*WIDTH
 
 var cursor_in_min : Cursor
 var cursor_in_mid : Cursor
@@ -145,7 +145,7 @@ func update_value(control : Cursor, value : float) -> void:
 
 func _on_Auto_pressed():
 	var histogram = $Histogram.get_histogram_texture().get_data()
-	histogram.lock()
+	false # histogram.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	var in_min : int = -1
 	var in_mid : int = -1
 	var in_mid_value : float = 0
@@ -172,7 +172,7 @@ func _on_Auto_pressed():
 			if in_mid_value < value:
 				in_mid = i
 				in_mid_value = value
-	histogram.unlock()
+	false # histogram.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	cursor_in_min.update_value(in_min/(histogram_size-1))
 	cursor_in_mid.update_value(in_mid/(histogram_size-1))
 	cursor_in_max.update_value(in_max/(histogram_size-1))

@@ -1,19 +1,19 @@
-extends ViewportContainer
+extends SubViewportContainer
 
 const CAMERA_DISTANCE_MIN = 0.5
 const CAMERA_DISTANCE_MAX = 150.0
 const CAMERA_FOV_MIN = 10
 const CAMERA_FOV_MAX = 90
 
-export var ui_path : String = "UI/Preview3DUI"
+@export var ui_path : String = "UI/Preview3DUI"
 
-onready var objects_pivot = $MaterialPreview/Preview3d/ObjectsPivot
-onready var objects = $MaterialPreview/Preview3d/ObjectsPivot/Objects
-onready var current_object = objects.get_child(0)
+@onready var objects_pivot = $MaterialPreview/Preview3d/ObjectsPivot
+@onready var objects = $MaterialPreview/Preview3d/ObjectsPivot/Objects
+@onready var current_object = objects.get_child(0)
 
-onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
-onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera
-onready var sun = $MaterialPreview/Preview3d/Sun
+@onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
+@onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera3D
+@onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
 var trigger_on_right_click = true
@@ -55,13 +55,13 @@ func _ready() -> void:
 	_on_Environment_item_selected(0)
 
 	# Required for supersampling to work.
-	$MaterialPreview.get_texture().flags = Texture.FLAG_FILTER
+	#$MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
 
-	$MaterialPreview.connect("size_changed", self, "_on_material_preview_size_changed")
+	$MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
 
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
 	# attempts to read the setting before the configuration file is loaded.
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
 
 func create_menu_model_list(menu : PopupMenu) -> void:
@@ -73,13 +73,13 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 			menu.add_icon_item(thumbnail, "", i)
 		else:
 			menu.add_item(o.name, i)
-	if !menu.is_connected("id_pressed", self, "_on_Model_item_selected"):
-		menu.connect("id_pressed", self, "_on_Model_item_selected")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_Model_item_selected")):
+		menu.connect("id_pressed",Callable(self,"_on_Model_item_selected"))
 
 func create_menu_environment_list(menu : PopupMenu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", self, "_on_Environment_item_selected"):
-		menu.connect("id_pressed", self, "_on_Environment_item_selected")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_Environment_item_selected")):
+		menu.connect("id_pressed",Callable(self,"_on_Environment_item_selected"))
 
 const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
 
@@ -90,22 +90,20 @@ func create_menu_tonemap_list(menu : PopupMenu) -> void:
 		menu.add_radio_check_item(TONEMAPS[i], i)
 		if i == tonemap_mode:
 			menu.set_item_checked(i, true)
-	if !menu.is_connected("id_pressed", self, "_on_Tonemaps_item_selected"):
-		menu.connect("id_pressed", self, "_on_Tonemaps_item_selected")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_Tonemaps_item_selected")):
+		menu.connect("id_pressed",Callable(self,"_on_Tonemaps_item_selected"))
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		add_child(dialog)
-		dialog.rect_min_size = Vector2(500, 500)
+		dialog.custom_minimum_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_OPEN_FILE
+		dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
 		dialog.add_filter("*.obj;OBJ model File")
 		if mm_globals.config.has_section_key("path", "mesh"):
 			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
+		var files = await dialog.select_files()
 		if files.size() == 1:
 			do_load_custom_mesh(files[0])
 	else:
@@ -116,7 +114,7 @@ func do_load_custom_mesh(file_path) -> void:
 	var id = objects.get_child_count()-1
 	var mesh = $ObjLoader.load_obj_file(file_path)
 	if mesh != null:
-		var object : MeshInstance = objects.get_child(id)
+		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
 		select_object(id)
 
@@ -130,21 +128,21 @@ func select_object(id) -> void:
 
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
+	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera3D.environment
 	environment_manager.apply_environment(id, environment, sun)
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
 
 func _on_Tonemaps_item_selected(id) -> void:
 	mm_globals.set_config("ui_3d_preview_tonemap", id)
-	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera.environment
+	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera3D.environment
 	environment.tonemap_mode = id
 
 func _on_material_preview_size_changed() -> void:
 	# Apply supersampling to the new viewport size.
-	$MaterialPreview.size = rect_size * mm_globals.main_window.preview_rendering_scale_factor
+	$MaterialPreview.size = size * mm_globals.main_window.preview_rendering_scale_factor
 
 func configure_model() -> void:
-	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instance()
+	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instantiate()
 	add_child(popup)
 	popup.configure_mesh(current_object)
 
@@ -157,17 +155,17 @@ func set_rotate_model_speed(speed: float) -> void:
 		object_rotate.play("rotate")
 
 func get_materials() -> Array:
-	if current_object != null and current_object.get_surface_material(0) != null:
-		return [ current_object.get_surface_material(0) ]
+	if current_object != null and current_object.get_surface_override_material(0) != null:
+		return [ current_object.get_surface_override_material(0) ]
 	return []
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	var preview_material = current_object.get_surface_material(0)
-	preview_material.set_shader_param(parameter_name, value)
+	var preview_material = current_object.get_surface_override_material(0)
+	preview_material.set_shader_parameter(parameter_name, value)
 	return false
 
 func zoom(amount : float):
-	camera.translation.z = clamp(camera.translation.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
+	camera.position.z = clamp(camera.position.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
 
 func on_gui_input(event) -> void:
 	if event is InputEventPanGesture:
@@ -179,25 +177,25 @@ func on_gui_input(event) -> void:
 	elif event is InputEventMagnifyGesture:
 		zoom(event.factor)
 	elif event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT or event.button_index == BUTTON_MIDDLE:
-			# Don't stop rotating the preview on mouse wheel usage (zoom change).
+		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
+			# Don't stop rotating the preview checked mouse wheel usage (zoom change).
 			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 
 		match event.button_index:
-			BUTTON_WHEEL_UP:
-				if event.command:
+			MOUSE_BUTTON_WHEEL_UP:
+				if event.is_command_or_control_pressed():
 					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 				else:
-					zoom(1.0 / (1.01 if event.shift else 1.1))
-			BUTTON_WHEEL_DOWN:
-				if event.command:
+					zoom(1.0 / (1.01 if event.shift_pressed else 1.1))
+			MOUSE_BUTTON_WHEEL_DOWN:
+				if event.is_command_or_control_pressed():
 					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 				else:
-					zoom(1.01 if event.shift else 1.1)
-			BUTTON_LEFT, BUTTON_RIGHT:
+					zoom(1.01 if event.shift_pressed else 1.1)
+			MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT:
 				var mask : int = Input.get_mouse_button_mask()
-				var lpressed : bool = (mask & BUTTON_MASK_LEFT) != 0
-				var rpressed : bool = (mask & BUTTON_MASK_RIGHT) != 0
+				var lpressed : bool = (mask & MOUSE_BUTTON_MASK_LEFT) != 0
+				var rpressed : bool = (mask & MOUSE_BUTTON_MASK_RIGHT) != 0
 
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -208,7 +206,7 @@ func on_gui_input(event) -> void:
 					get_viewport().warp_mouse(_mouse_start_position)
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 					moving = false
-				if event.button_index == BUTTON_RIGHT:
+				if event.button_index == MOUSE_BUTTON_RIGHT:
 					if event.pressed:
 						trigger_on_right_click = true
 					elif trigger_on_right_click:
@@ -230,14 +228,14 @@ func on_gui_input(event) -> void:
 			else:
 				motion.y = 0
 			var camera_basis = camera.global_transform.basis
-			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CONTROL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
-			if event.button_mask & BUTTON_MASK_LEFT:
+			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
+			if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
 				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
 				if objects_rotation != 1:
 					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
 					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
-			elif event.button_mask & BUTTON_MASK_RIGHT:
+			elif event.button_mask & MOUSE_BUTTON_MASK_RIGHT:
 				objects_pivot.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
 				if objects_rotation != 1:
 					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
@@ -246,38 +244,34 @@ func on_right_click():
 	pass
 
 func generate_map(generate_function : String, size : int) -> void:
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image File")
 	dialog.add_filter("*.exr;EXR image File")
 	if mm_globals.config.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		call(generate_function, files[0], size)
 
 func do_generate_map(file_name : String, map : String, size : int) -> void:
-	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instance()
+	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
 	add_child(map_renderer)
 	var id = objects.get_child_count()-1
-	var object : MeshInstance = objects.get_child(id)
-	var result = map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], size)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var object : MeshInstance3D = objects.get_child(id)
+	var result = await map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], size)
 	map_renderer.queue_free()
-	OS.clipboard = "{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name
+	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
 func create_menu_map(menu : PopupMenu, function : String) -> void:
 	menu.clear()
 	for i in range(5):
 		menu.add_item(str(256 << i)+"x"+str(256 << i), i)
-	if !menu.is_connected("id_pressed", self, function):
-		menu.connect("id_pressed", self, function)
+	if !menu.is_connected("id_pressed",Callable(self,function)):
+		menu.connect("id_pressed",Callable(self,function))
 
 func create_menu_generate_normal_map(menu) -> void:
 	create_menu_map(menu, "generate_normal_map")

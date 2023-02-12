@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
-[ext_resource path="res://material_maker/widgets/desc_button/desc_button.gd" type="Script" id=2]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="1"]
+[ext_resource type="Script" path="res://material_maker/widgets/desc_button/desc_button.gd" id="2"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -9,8 +9,8 @@ atlas = ExtResource( 1 )
 region = Rect2( 64, 80, 16, 16 )
 
 [node name="Button" type="Button"]
-margin_right = 12.0
-margin_bottom = 20.0
+offset_right = 12.0
+offset_bottom = 20.0
 icon = SubResource( 1 )
 script = ExtResource( 2 )
 __meta__ = {

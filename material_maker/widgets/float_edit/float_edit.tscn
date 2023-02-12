@@ -6,9 +6,9 @@
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -1280.0
-margin_right = -1222.0
-margin_bottom = -696.0
+offset_left = -1280.0
+offset_right = -1222.0
+offset_bottom = -696.0
 focus_mode = 1
 text = "0.5"
 context_menu_enabled = false
@@ -24,23 +24,23 @@ __meta__ = {
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = -3.0
-margin_right = -2.0
-margin_bottom = -3.0
-rect_min_size = Vector2( 0, 2 )
+offset_left = 2.0
+offset_top = -3.0
+offset_right = -2.0
+offset_bottom = -3.0
+custom_minimum_size = Vector2( 0, 2 )
 mouse_filter = 2
 color = Color( 0.501961, 0.501961, 0.501961, 1 )
 
 [node name="Cursor" type="ColorRect" parent="Slider"]
-margin_right = 3.0
-margin_bottom = 1.0
-rect_min_size = Vector2( 3, 2 )
+offset_right = 3.0
+offset_bottom = 1.0
+custom_minimum_size = Vector2( 3, 2 )
 mouse_filter = 2
 
 [connection signal="focus_entered" from="." to="." method="_on_FloatEdit_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_LineEdit_focus_exited"]
 [connection signal="resized" from="." to="." method="do_update"]
 [connection signal="text_changed" from="." to="." method="_on_LineEdit_text_changed"]
-[connection signal="text_entered" from="." to="." method="_on_LineEdit_text_entered"]
+[connection signal="text_submitted" from="." to="." method="_on_LineEdit_text_entered"]
 [connection signal="resized" from="Slider" to="." method="do_update"]

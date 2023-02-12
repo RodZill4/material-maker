@@ -3,10 +3,10 @@
 [ext_resource path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" type="Script" id=2]
 
 [node name="ImagePicker" type="TextureButton"]
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-rect_clip_content = true
+offset_right = 64.0
+offset_bottom = 64.0
+custom_minimum_size = Vector2( 64, 64 )
+clip_contents = true
 expand = true
 stretch_mode = 5
 script = ExtResource( 2 )

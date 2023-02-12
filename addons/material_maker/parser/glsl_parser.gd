@@ -29,17 +29,17 @@ func _init():
 func create_token(type : String, value, pos_begin : int, pos_end : int) -> Token:
 	match type:
 		"FLOATCONSTANT":
-			return .create_token(type, value.to_float(), pos_begin, pos_end)
+			return super.create_token(type, value.to_float(), pos_begin, pos_end)
 		"IDENTIFIER":
 			if value in KEYWORDS:
-				return .create_token(value.to_upper(), null, pos_begin, pos_end)
+				return super.create_token(value.to_upper(), null, pos_begin, pos_end)
 			if value in TYPES:
-				return .create_token("TYPE", value.to_upper(), pos_begin, pos_end)
-			return .create_token(type, value, pos_begin, pos_end)
+				return super.create_token("TYPE", value.to_upper(), pos_begin, pos_end)
+			return super.create_token(type, value, pos_begin, pos_end)
 		"SYMBOLS":
-			return .create_token(value, null, pos_begin, pos_end)
+			return super.create_token(value, null, pos_begin, pos_end)
 		_:
-			return .create_token(type, value, pos_begin, pos_end)
+			return super.create_token(type, value, pos_begin, pos_end)
 
 var selection_regex : RegEx
 

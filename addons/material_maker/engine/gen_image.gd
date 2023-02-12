@@ -1,20 +1,21 @@
-tool
+@tool
 extends MMGenTexture
 class_name MMGenImage
+
+
+# Texture generator from image
+
 
 var timer : Timer
 var filetime : int = 0
 
-"""
-Texture generator from image
-"""
 
 func _ready() -> void:
 	timer = Timer.new()
 	add_child(timer)
 	timer.wait_time = 2
 	timer.start()
-	timer.connect("timeout", self, "_on_timeout")
+	timer.connect("timeout",Callable(self,"_on_timeout"))
 
 func get_type() -> String:
 	return "image"
@@ -30,9 +31,8 @@ func get_parameter_defs() -> Array:
 	]
 
 func get_filetime(file_path : String) -> int:
-	var f : File = File.new()
-	if f.file_exists(file_path):
-		return f.get_modified_time(file_path)
+	if FileAccess.file_exists(file_path):
+		return FileAccess.get_modified_time(file_path)
 	return 0
 
 func get_adjusted_uv(uv : String) -> String:
@@ -47,7 +47,7 @@ func get_adjusted_uv(uv : String) -> String:
 	return uv
 
 func set_parameter(n : String, v) -> void:
-	.set_parameter(n, v)
+	super.set_parameter(n, v)
 	if n == "image":
 		filetime = get_filetime(v)
 		texture.load(v)
@@ -61,7 +61,7 @@ func _on_timeout() -> void:
 		var image : Image = Image.new()
 		image.load(file_path)
 		texture.create_from_image(image)
-		.set_parameter("image", file_path)
+		super.set_parameter("image", file_path)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
 func _serialize(data: Dictionary) -> Dictionary:

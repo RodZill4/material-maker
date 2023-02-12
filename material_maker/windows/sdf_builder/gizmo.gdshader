@@ -1,6 +1,6 @@
 shader_type spatial;
 render_mode blend_mix,depth_draw_opaque,cull_back,unshaded;
-uniform vec4 color : hint_color;
+uniform vec4 color : source_color;
 uniform float highlight = 0.0;
 
 varying float center_depth;

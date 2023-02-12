@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorScript
 
 # This script grabs all textures from a theme and throws them into the icons
@@ -13,7 +13,7 @@ func optimize_theme(theme_path):
 	Directory.new().make_dir(icon_dir)
 	var theme : Theme = load(theme_path)
 	var new_theme : Theme = Theme.new()
-	for stylebox_name in theme.get_stylebox_types():
+	for stylebox_name in theme.get_stylebox_type_list():
 		for color_name in theme.get_color_list(stylebox_name):
 			new_theme.set_color(color_name, stylebox_name, theme.get_color(color_name, stylebox_name))
 		for constant_name in theme.get_constant_list(stylebox_name):

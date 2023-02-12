@@ -3,16 +3,16 @@
 [ext_resource path="res://material_maker/tools/share/preview_viewport.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/tools/share/preview_scene.tscn" type="PackedScene" id=2]
 
-[sub_resource type="ProceduralSky" id=1]
+[sub_resource type="Sky" id=1]
 
 [sub_resource type="Environment" id=2]
 background_sky = SubResource( 1 )
 ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
 
-[sub_resource type="World" id=3]
+[sub_resource type="World3D" id=3]
 environment = SubResource( 2 )
 
-[node name="PreviewViewport" type="Viewport"]
+[node name="PreviewViewport" type="SubViewport"]
 size = Vector2( 512, 512 )
 own_world = true
 world = SubResource( 3 )

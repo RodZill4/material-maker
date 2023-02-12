@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://material_maker/windows/material_editor/expression_line_edit.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/edit.tres" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/edit.tres" type="Texture2D" id=2]
 
 [node name="expression" type="LineEdit"]
-margin_left = 119.0
-margin_top = 108.0
-margin_right = 475.0
-margin_bottom = 132.0
+offset_left = 119.0
+offset_top = 108.0
+offset_right = 475.0
+offset_bottom = 132.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 
@@ -16,10 +16,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_left = -20.0
-margin_top = -8.0
-margin_right = -4.0
-margin_bottom = 8.0
+offset_left = -20.0
+offset_top = -8.0
+offset_right = -4.0
+offset_bottom = 8.0
 texture_normal = ExtResource( 2 )
 
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

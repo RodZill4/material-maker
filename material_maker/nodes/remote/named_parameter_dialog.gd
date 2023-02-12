@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 signal return_values(values)
 
@@ -20,6 +20,6 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 	$VBoxContainer/float/Step.set_value(step)
 	$VBoxContainer/float/Default.set_value(default)
 	popup_centered()
-	var result = yield(self, "return_values")
+	var result = await self.return_values
 	queue_free()
 	return result

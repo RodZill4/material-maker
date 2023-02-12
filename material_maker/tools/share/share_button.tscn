@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource path="res://material_maker/tools/share/broken_link.tres" type="Texture" id=1]
-[ext_resource path="res://material_maker/tools/share/share_button.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=4]
+[ext_resource type="Texture2D" path="res://material_maker/tools/share/broken_link.tres" id="1"]
+[ext_resource type="Script" path="res://material_maker/tools/share/share_button.gd" id="2"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="4"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -15,16 +15,16 @@ atlas = ExtResource( 4 )
 region = Rect2( 224, 16, 32, 16 )
 
 [node name="Share" type="HBoxContainer"]
-margin_right = 40.0
-margin_bottom = 40.0
-hint_tooltip = "Open Material Maker web site"
+offset_right = 40.0
+offset_bottom = 40.0
+tooltip_text = "Open Material Maker web site"
 script = ExtResource( 2 )
 
 [node name="ConnectButton" type="TextureButton" parent="."]
-margin_top = 12.0
-margin_right = 32.0
-margin_bottom = 28.0
-hint_tooltip = "Connect to web site"
+offset_top = 12.0
+offset_right = 32.0
+offset_bottom = 28.0
+tooltip_text = "Connect to web site"
 size_flags_vertical = 4
 texture_normal = ExtResource( 1 )
 __meta__ = {
@@ -32,11 +32,11 @@ __meta__ = {
 }
 
 [node name="SendButton" type="TextureButton" parent="."]
-margin_left = 36.0
-margin_top = 12.0
-margin_right = 68.0
-margin_bottom = 28.0
-hint_tooltip = "Send material to web site"
+offset_left = 36.0
+offset_top = 12.0
+offset_right = 68.0
+offset_bottom = 28.0
+tooltip_text = "Send material to web site"
 size_flags_vertical = 4
 disabled = true
 texture_normal = SubResource( 1 )
@@ -47,10 +47,10 @@ __meta__ = {
 }
 
 [node name="Space" type="Control" parent="."]
-margin_left = 72.0
-margin_right = 87.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 15, 0 )
+offset_left = 72.0
+offset_right = 87.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2( 15, 0 )
 
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
 [connection signal="pressed" from="SendButton" to="." method="_on_SendButton_pressed"]

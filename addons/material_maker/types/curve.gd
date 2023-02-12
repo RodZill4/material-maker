@@ -5,7 +5,7 @@ class Point:
 	var p : Vector2
 	var ls : float
 	var rs : float
-	func _init(x : float, y : float, nls : float, nrs : float) -> void:
+	func _init(x : float,y : float,nls : float,nrs : float):
 		p = Vector2(x, y)
 		ls = nls
 		rs = nrs
@@ -15,10 +15,10 @@ class Point:
 var points = [ Point.new(0.0, 0.0, 0.0, 1.0), Point.new(1.0, 1.0, 1.0, 0.0) ]
 
 func to_string() -> String:
-	var rv = PoolStringArray()
+	var rv = PackedStringArray()
 	for p in points:
 		rv.append("("+str(p.x)+","+str(p.y)+","+str(p.ls)+","+str(p.rs)+")")
-	return rv.join(",")
+	return ",".join(rv)
 
 func duplicate() -> Object:
 	var copy = get_script().new()
@@ -53,7 +53,7 @@ func remove_point(index : int) -> bool:
 	if index <= 0 or index >= points.size() - 1:
 		return false
 	else:
-		points.remove(index)
+		points.remove_at(index)
 	return true
 
 func get_point_count() -> int:

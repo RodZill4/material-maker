@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 7
@@ -14,21 +14,21 @@ region = Rect2( 48, 80, 16, 16 )
 
 [node name="Preview3DUI" type="HBoxContainer"]
 anchor_right = 1.0
-margin_bottom = 20.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Model" type="MenuButton" parent="."]
-margin_right = 71.0
-margin_bottom = 22.0
+offset_right = 71.0
+offset_bottom = 22.0
 text = "Model"
 icon = SubResource( 1 )
 
 [node name="Environment" type="MenuButton" parent="."]
-margin_left = 75.0
-margin_right = 187.0
-margin_bottom = 22.0
+offset_left = 75.0
+offset_right = 187.0
+offset_bottom = 22.0
 text = "Environment"
 icon = SubResource( 2 )

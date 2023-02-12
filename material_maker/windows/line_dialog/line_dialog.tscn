@@ -2,9 +2,9 @@
 
 [ext_resource path="res://material_maker/windows/line_dialog/line_dialog.gd" type="Script" id=1]
 
-[node name="LineDialog" type="WindowDialog"]
-margin_right = 332.0
-margin_bottom = 80.0
+[node name="LineDialog" type="Window"]
+offset_right = 332.0
+offset_bottom = 80.0
 window_title = "blah"
 script = ExtResource( 1 )
 __meta__ = {
@@ -14,51 +14,51 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 10.0
-margin_right = -10.0
+offset_left = 10.0
+offset_right = -10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 312.0
-margin_bottom = 14.0
+offset_right = 312.0
+offset_bottom = 14.0
 text = "blah"
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
-margin_top = 18.0
-margin_right = 312.0
-margin_bottom = 42.0
+offset_top = 18.0
+offset_right = 312.0
+offset_bottom = 42.0
 
 [node name="Container" type="Container" parent="VBoxContainer"]
-margin_top = 46.0
-margin_right = 312.0
-margin_bottom = 51.0
-rect_min_size = Vector2( 0, 5 )
+offset_top = 46.0
+offset_right = 312.0
+offset_bottom = 51.0
+custom_minimum_size = Vector2( 0, 5 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 94.0
-margin_top = 55.0
-margin_right = 218.0
-margin_bottom = 75.0
+offset_left = 94.0
+offset_top = 55.0
+offset_right = 218.0
+offset_bottom = 75.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_right = 60.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 64.0
-margin_right = 124.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 64.0
+offset_right = 124.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "Cancel"
 
 [connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="text_entered" from="VBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="text_submitted" from="VBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenShader
 class_name MMGenSDF
 
 
-export var editor : bool = false
-export var expressions : bool = false
+@export var editor : bool = false
+@export var expressions : bool = false
 var node_parameters : Array = []
 var scene : Array = []
 
@@ -29,7 +29,7 @@ func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 		return defs
 
 func get_scene_type() -> String:
-	if scene.empty():
+	if scene.is_empty():
 		return ""
 	return mm_sdf_builder.item_types[mm_sdf_builder.item_ids[scene[0].type]].item_category
 
@@ -188,10 +188,10 @@ func _deserialize(data : Dictionary) -> void:
 
 func edit(node) -> void:
 	if scene != null:
-		var edit_window = load("res://material_maker/windows/sdf_builder/sdf_builder.tscn").instance()
+		var edit_window = load("res://material_maker/windows/sdf_builder/sdf_builder.tscn").instantiate()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_node_parameter_defs(node_parameters)
 		edit_window.set_sdf_scene(scene)
-		edit_window.connect("node_changed", node, "update_sdf_generator")
-		edit_window.connect("editor_window_closed", node, "finalize_generator_update")
+		edit_window.connect("node_changed",Callable(node,"update_sdf_generator"))
+		edit_window.connect("editor_window_closed",Callable(node,"finalize_generator_update"))
 		edit_window.popup_centered()

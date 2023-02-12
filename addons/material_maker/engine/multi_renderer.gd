@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 var common_shader : String
@@ -19,11 +19,10 @@ signal free_renderer
 
 
 func _ready() -> void:
-	var file = File.new()
-	file.open("res://addons/material_maker/common.shader", File.READ)
+	var file = FileAccess.open("res://addons/material_maker/common.gdshader", FileAccess.READ)
 	common_shader = file.get_as_text()
 	for i in total_renderers:
-		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instance()
+		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instantiate()
 		add_child(renderer)
 		free_renderers.append(renderer)
 
@@ -87,7 +86,7 @@ func enable_renderers(b : bool) -> void:
 
 func request(object : Object) -> Object:
 	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
-		yield(self, "free_renderer")
+		await self.free_renderer
 	if ! is_instance_valid(object) or ! object.is_inside_tree():
 		return null
 	var renderer = free_renderers.pop_back()

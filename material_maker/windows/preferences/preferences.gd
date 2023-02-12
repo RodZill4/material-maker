@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 var config : ConfigFile
 
@@ -39,23 +39,23 @@ func _on_Cancel_pressed():
 
 
 func _on_Preferences_about_to_show():
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	_on_VBoxContainer_minimum_size_changed()
 
 func _on_VBoxContainer_minimum_size_changed():
-	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+	size = $VBoxContainer.size+Vector2(4, 4)
 
 
 func _on_InstallLanguage_pressed():
-	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILE
-	dialog.add_filter("*.po,*.translation,*.csv;Translation file")
+	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.add_filter("*.po,*.position,*.csv;Translation file")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+		files = await files.completed
 	if files.size() > 0:
 		var locale = load("res://material_maker/locale/locale.gd").new()
 		locale.install_translation(files[0])
@@ -66,9 +66,9 @@ func update_language_list():
 	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
 
 func _on_DownloadLanguage_pressed():
-	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instance()
+	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
 	mm_globals.main_window.add_child(download_popup)
-	download_popup.connect("tree_exited", self, "_on_DownloadLanguage_closed")
+	download_popup.connect("tree_exited",Callable(self,"_on_DownloadLanguage_closed"))
 
 func _on_DownloadLanguage_closed():
 	var locale = load("res://material_maker/locale/locale.gd").new()

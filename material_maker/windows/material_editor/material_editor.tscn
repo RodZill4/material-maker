@@ -3,10 +3,10 @@
 [ext_resource path="res://material_maker/windows/node_editor/node_editor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/windows/material_editor/material_editor.gd" type="Script" id=2]
 
-[sub_resource type="DynamicFontData" id=7]
+[sub_resource type="FontFile" id=7]
 font_path = "res://material_maker/fonts/hack.ttf"
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="FontFile" id=2]
 size = 12
 font_data = SubResource( 7 )
 
@@ -14,27 +14,27 @@ font_data = SubResource( 7 )
 window_title = "Material Editor"
 script = ExtResource( 2 )
 
-[node name="LabelOutputs" parent="Sizer/Tabs/Outputs" index="0"]
-margin_right = 942.0
+[node name="LabelOutputs" parent="Sizer/TabBar/Outputs" index="0"]
+offset_right = 942.0
 
-[node name="Outputs" parent="Sizer/Tabs/Outputs" index="1"]
-margin_right = 942.0
-margin_bottom = 414.0
+[node name="Outputs" parent="Sizer/TabBar/Outputs" index="1"]
+offset_right = 942.0
+offset_bottom = 414.0
 
-[node name="Sizer" parent="Sizer/Tabs/Outputs/Outputs" index="0"]
-margin_right = 942.0
+[node name="Sizer" parent="Sizer/TabBar/Outputs/Outputs" index="0"]
+offset_right = 942.0
 
-[node name="Preview" type="TextEdit" parent="Sizer/Tabs" index="5"]
+[node name="Preview" type="TextEdit" parent="Sizer/TabBar" index="5"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 mouse_default_cursor_shape = 0
 custom_fonts/font = SubResource( 2 )
-syntax_highlighting = true
+syntax_highlighter = true
 show_line_numbers = true
 __meta__ = {
 "_editor_description_": ""

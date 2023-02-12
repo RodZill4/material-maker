@@ -31,12 +31,12 @@ func get_items_menu(category : String, target : Object, method : String, binds :
 				submenu.free()
 				submenu = null
 		elif c.item_category in filter:
-			var icon : Texture = c.get("icon")
+			var icon : Texture2D = c.get("icon")
 			if icon != null:
 				menu.add_icon_item(icon, c.name, item_ids[c.item_type])
 			else:
 				menu.add_item(c.name, item_ids[c.item_type])
-	menu.connect("id_pressed", target, method, binds)
+	menu.connect("id_pressed",Callable(target,method).bind(binds))
 	if menu.get_item_count() == 1 and sole_submenu != null:
 		menu.clear()
 		menu.remove_child(sole_submenu)
@@ -161,7 +161,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String, editor : bool) -> Di
 	else:
 		if shader_model.has("code"):
 			shader_model.code = replace_parameter_values(scene, shader_model.code)
-	if ! shader_model.empty():
+	if ! shader_model.is_empty():
 		shader_model.includes = get_includes(scene)
 	return shader_model
 

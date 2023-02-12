@@ -1,11 +1,11 @@
-tool
+@tool
 extends MMGenTexture
 class_name MMGenIterateBuffer
 
-"""
-Iterate buffers, that render their input in a specific resolution and apply
-a loop n times on the result.
-"""
+
+# Iterate buffers, that render their input in a specific resolution and apply
+# a loop n times checked the result.
+
 
 var exiting : bool = false
 
@@ -21,11 +21,11 @@ var used_named_parameters : Array = []
 var pending_textures = [[], []]
 
 func _init():
-	texture.flags = Texture.FLAG_REPEAT
+	#texture.flags = Texture2D.FLAG_REPEAT
 	material = ShaderMaterial.new()
-	material.shader = Shader.new()
+	material.gdshader = Shader.new()
 	loop_material = ShaderMaterial.new()
-	loop_material.shader = Shader.new()
+	loop_material.gdshader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
 	buffer_names = [
@@ -41,7 +41,7 @@ func _init():
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null and ! (current_renderer is GDScriptFunctionState):
+	if current_renderer != null:
 		current_renderer.release(self)
 
 func get_type() -> String:
@@ -89,7 +89,7 @@ func follow_input(input_index : int) -> Array:
 	if input_index == 1:
 		return [ OutputPort.new(self, 0) ]
 	else:
-		return .follow_input(input_index)
+		return super.follow_input(input_index)
 
 var required_shader_updates : int = 0
 
@@ -112,17 +112,16 @@ func do_update_shader(input_port_index : int) -> void:
 	var source_output = get_source(input_port_index)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-		assert(! source is GDScriptFunctionState)
-	if source.empty():
+	if source.is_empty():
 		source = DEFAULT_GENERATED_SHADER
 	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
-	assert(m != null && m.shader != null)
+	assert(m != null && m.gdshader != null)
 	mm_deps.buffer_create_shader_material(buffer_name, m, mm_renderer.generate_shader(source))
 	set_current_iteration(0)
 
 func set_parameter(n : String, v) -> void:
-	.set_parameter(n, v)
+	super.set_parameter(n, v)
 	set_current_iteration(0)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
@@ -130,9 +129,9 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		set_current_iteration(0)
 	if value != null:
 		if buffer_name == buffer_names[0]:
-			material.set_shader_param(parameter_name, value)
+			material.set_shader_parameter(parameter_name, value)
 		elif buffer_name == buffer_names[1]:
-			loop_material.set_shader_param(parameter_name, value)
+			loop_material.set_shader_parameter(parameter_name, value)
 	return false
 
 func on_dep_buffer_invalidated(buffer_name : String):
@@ -156,31 +155,27 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		iterations = 1
 	if current_iteration > iterations:
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
 	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
-	current_renderer = mm_renderer.request(self)
-	while current_renderer is GDScriptFunctionState:
-		current_renderer = yield(current_renderer, "completed")
+	current_renderer = await mm_renderer.request(self)
 	if check_current_iteration != current_iteration:
 		print("Iteration changed")
 		current_renderer.release(self)
 		current_renderer = null
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
-	var time = OS.get_ticks_msec()
+	var time = Time.get_ticks_msec()
 	var size = pow(2, get_parameter("size"))
 	if get_parameter("shrink"):
 		size = int(size)
 		size >>= current_iteration
 		if size < 4:
 			size = 4
-	current_renderer = current_renderer.render_material(self, m, size)
-	while current_renderer is GDScriptFunctionState:
-		current_renderer = yield(current_renderer, "completed")
+	current_renderer = await current_renderer.render_material(self, m, size)
 	if check_current_iteration != current_iteration:
 		current_renderer.release(self)
 		current_renderer = null

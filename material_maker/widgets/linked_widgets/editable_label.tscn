@@ -3,23 +3,23 @@
 [ext_resource path="res://material_maker/widgets/linked_widgets/editable_label.gd" type="Script" id=1]
 
 [node name="EditableLabel" type="HBoxContainer"]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 script = ExtResource( 1 )
 
 [node name="Label" type="Label" parent="."]
-margin_top = 13.0
-margin_right = 40.0
-margin_bottom = 27.0
+offset_top = 13.0
+offset_right = 40.0
+offset_bottom = 27.0
 mouse_filter = 0
 size_flags_horizontal = 3
 
 [node name="Editor" type="LineEdit" parent="."]
 visible = false
-margin_left = 4.0
-margin_right = 62.0
-margin_bottom = 40.0
+offset_left = 4.0
+offset_right = 62.0
+offset_bottom = 40.0
 size_flags_horizontal = 3
 [connection signal="gui_input" from="Label" to="." method="_on_gui_input"]
 [connection signal="focus_exited" from="Editor" to="." method="_on_Editor_focus_exited"]
-[connection signal="text_entered" from="Editor" to="." method="_on_Editor_text_entered"]
+[connection signal="text_submitted" from="Editor" to="." method="_on_Editor_text_entered"]

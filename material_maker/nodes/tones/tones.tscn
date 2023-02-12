@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource path="res://material_maker/widgets/histogram/histogram.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/nodes/tones/tones.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/histogram/histogram.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/nodes/tones/tones.gd" id="2"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -10,8 +10,8 @@ atlas = ExtResource( 3 )
 region = Rect2( 16, 80, 16, 16 )
 
 [node name="Tones" type="GraphNode"]
-margin_right = 192.0
-margin_bottom = 141.0
+offset_right = 192.0
+offset_bottom = 141.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 title = "Tones"
@@ -46,54 +46,54 @@ __meta__ = {
 }
 
 [node name="Bar" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 176.0
-margin_bottom = 44.0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 176.0
+offset_bottom = 44.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Mode" type="OptionButton" parent="Bar"]
-margin_right = 140.0
-margin_bottom = 20.0
+offset_right = 140.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
 text = "Luminance"
 items = [ "Luminance", null, false, 0, null, "Red", null, false, 1, null, "Green", null, false, 2, null, "Blue", null, false, 3, null, "Alpha", null, false, 4, null ]
 selected = 0
 
 [node name="Auto" type="TextureButton" parent="Bar"]
-margin_left = 144.0
-margin_top = 2.0
-margin_right = 160.0
-margin_bottom = 18.0
-hint_tooltip = "Set levels automatically"
+offset_left = 144.0
+offset_top = 2.0
+offset_right = 160.0
+offset_bottom = 18.0
+tooltip_text = "Set levels automatically"
 size_flags_vertical = 4
 texture_normal = SubResource( 1 )
 
 [node name="Spacer1" type="Control" parent="."]
-margin_left = 16.0
-margin_top = 45.0
-margin_right = 176.0
-margin_bottom = 49.0
-rect_min_size = Vector2( 0, 4 )
+offset_left = 16.0
+offset_top = 45.0
+offset_right = 176.0
+offset_bottom = 49.0
+custom_minimum_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Histogram" parent="." instance=ExtResource( 1 )]
-margin_left = 16.0
-margin_top = 50.0
-margin_right = 176.0
-margin_bottom = 150.0
-rect_min_size = Vector2( 160, 100 )
+offset_left = 16.0
+offset_top = 50.0
+offset_right = 176.0
+offset_bottom = 150.0
+custom_minimum_size = Vector2( 160, 100 )
 
 [node name="Spacer2" type="Control" parent="."]
-margin_left = 16.0
-margin_top = 151.0
-margin_right = 176.0
-margin_bottom = 155.0
-rect_min_size = Vector2( 0, 4 )
+offset_left = 16.0
+offset_top = 151.0
+offset_right = 176.0
+offset_bottom = 155.0
+custom_minimum_size = Vector2( 0, 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

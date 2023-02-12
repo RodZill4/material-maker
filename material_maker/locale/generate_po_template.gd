@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorScript
 
 class TranslationString:
@@ -40,27 +40,27 @@ class TranslationStrings:
 				print("Reading %s" % fn)
 				input_translation = load(fn)
 			_:
-				print("Unsupported translation file %s" % fn)
+				print("Unsupported position file %s" % fn)
 				return
 		
-		var translation : Translation = Translation.new()
-		translation.locale = input_translation.locale
+		var position : Translation = Translation.new()
+		position.locale = input_translation.locale
 		var translated_string : Array = []
 		for s in strings:
 			if input_translation.get_message(s.string) != "":
 				translated_string.push_back(s.string)
-				translation.add_message(s.string, input_translation.get_message(s.string))
+				position.add_message(s.string, input_translation.get_message(s.string))
 			else:
 				var found : bool = false
 				for k in input_translation.get_message_list():
 					if s.string.to_lower() == k.to_lower():
 						found = true
 						translated_string.push_back(k)
-						translation.add_message(s.string, input_translation.get_message(k))
+						position.add_message(s.string, input_translation.get_message(k))
 						break
 				if !found:
 					found = true
-					var t : PoolStringArray = PoolStringArray()
+					var t : PackedStringArray = PackedStringArray()
 					for subs in s.string.split("\n"):
 						if input_translation.get_message(subs) != "":
 							t.push_back(input_translation.get_message(subs))
@@ -69,11 +69,11 @@ class TranslationStrings:
 							found = false
 							break
 					if found:
-						translation.add_message(s.string, t.join("\n"))
+						position.add_message(s.string, "\n".join(t))
 					else:
 						pass
-						#print("no translation for '%s'" % s.string)
-		return translation
+						#print("no position for '%s'" % s.string)
+		return position
 	
 	func read_language_file_csv(fn : String):
 		var input_translation : Translation = Translation.new()
@@ -92,7 +92,7 @@ class TranslationStrings:
 				line = l.split(sep)
 				if line.size() == 2:
 					if sep[0] == "\"":
-						line[0] = line[0].right(1)
+						line[0] = line[0].right(-1)
 					if sep[sep.length()-1] == "\"":
 						line[1] = line[1].left(line[1].length()-1)
 					break
@@ -107,14 +107,14 @@ class TranslationStrings:
 		print("Extracted %d strings from %s" % [ count, fn ])
 		return input_translation
 
-	func save_csv(fn : String, translation : Translation = null):
-		if translation == null:
+	func save_csv(fn : String, position : Translation = null):
+		if position == null:
 			return
 		var f : File = File.new()
 		if f.open(fn, File.WRITE) == OK:
-			f.store_line("id|"+translation.locale)
+			f.store_line("id|"+position.locale)
 			for s in strings:
-				f.store_line("%s|%s" % [ s.string.replace("\n", "\\n"), translation.get_message(s.string).replace("\n", "\\n") ])
+				f.store_line("%s|%s" % [ s.string.replace("\n", "\\n"), position.get_message(s.string).replace("\n", "\\n") ])
 			f.close()
 		if f.open(fn+".report", File.WRITE) == OK:
 			var string_list = []
@@ -122,15 +122,15 @@ class TranslationStrings:
 				string_list.push_back(s.string)
 			f.store_line("Missing strings:")
 			for s in string_list:
-				if translation.get_message_list().find(s) == -1:
+				if position.get_message_list().find(s) == -1:
 					f.store_line("- "+s)
 			f.store_line("Extra strings:")
-			for s in translation.get_message_list():
+			for s in position.get_message_list():
 				if ! (s in string_list):
 					f.store_line("- "+s)
 			f.close()
 
-	func save(fn : String, translation = null):
+	func save(fn : String, position = null):
 		var f : File = File.new()
 		if f.open(fn, File.WRITE) == OK:
 			f.store_line("# Translations template for Material Maker.")
@@ -143,7 +143,7 @@ class TranslationStrings:
 			f.store_line("msgstr \"\"")
 			f.store_line("\"Project-Id-Version: PROJECT VERSION\\n\"")
 			f.store_line("\"Report-Msgid-Bugs-To: rodzilla@free.fr\\n\"")
-			var dt = OS.get_datetime()
+			var dt = Time.get_datetime_dict_from_system()
 			f.store_line("\"POT-Creation-Date: %04d-%02d-%02d %02d:%02d\\n\"" % [ dt.year, dt.month, dt.day, dt.hour, dt.minute ])
 			f.store_line("\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"")
 			f.store_line("\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"")
@@ -157,8 +157,8 @@ class TranslationStrings:
 				for r in s.references:
 					f.store_line("#: "+r)
 				f.store_line("msgid \""+s.string.replace("\n", "\\n")+"\"")
-				if translation != null:
-					f.store_line("msgstr \""+translation.get_message(s.string).replace("\n", "\\n")+"\"")
+				if position != null:
+					f.store_line("msgstr \""+position.get_message(s.string).replace("\n", "\\n")+"\"")
 				else:
 					f.store_line("msgstr \"\"")
 				f.store_line("")
@@ -189,7 +189,7 @@ class TranslationStrings:
 			while ! f.eof_reached():
 				var l : String = f.get_line()
 				var result = tr_regex.search_all(l)
-				if !result.empty():
+				if !result.is_empty():
 					for r in result:
 						if add_string(r.strings[1], fn+":"+str(line_number)):
 							string_count += 1
@@ -244,7 +244,9 @@ class TranslationStrings:
 		var string_count : int = 0
 		var f : File = File.new()
 		if f.open(fn, File.READ) == OK:
-			var json_parse_result : JSONParseResult = JSON.parse(f.get_as_text())
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(f.get_as_text())
+			var json_parse_result : JSON = test_json_conv.get_data()
 			if json_parse_result != null:
 				var json = json_parse_result.result
 				if json.has("type"):
@@ -306,7 +308,9 @@ class TranslationStrings:
 		var string_count : int = 0
 		var f : File = File.new()
 		if f.open(fn, File.READ) == OK:
-			var json_parse_result : JSONParseResult = JSON.parse(f.get_as_text())
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(f.get_as_text())
+			var json_parse_result : JSON = test_json_conv.get_data()
 			if json_parse_result != null:
 				var json = json_parse_result.result
 				if json.has("name") and add_string(json.name, fn):
@@ -323,10 +327,10 @@ class TranslationStrings:
 
 func find_files(path, extensions):
 	var file_names : Array = []
-	var dir = Directory.new()
-	if dir.open(path) == OK:
+	var dir : DirAccess = DirAccess.open(path)
+	if dir!= null:
 		var dir_names : Array = []
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir() and file_name[0] != ".":
@@ -360,18 +364,18 @@ func _run():
 		string_count += ts.extract_strings_from_library(f)
 	ts.save("res://material_maker/locale/material-maker-all.pot")
 	
-	var dir : Directory = Directory.new()
 	var path = "res://material_maker/locale/translations"
-	if dir.open("res://material_maker/locale/translations") == OK:
+	var dir : DirAccess = DirAccess.open("res://material_maker/locale/translations")
+	if dir!= null:
 		var languages : Dictionary = {}
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		while file_name != "":
 			match file_name.get_extension():
-				"csv", "po", "translation":
+				"csv", "po", "position":
 					var language = file_name.get_basename()
 					if ! languages.has(language) or file_name.get_extension() != "csv":
-						languages[language] = path.plus_file(file_name)
+						languages[language] = path.path_join(file_name)
 			file_name = dir.get_next()
 		for l in languages.keys():
 			print("Processing %s" % l)

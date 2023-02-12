@@ -21,7 +21,7 @@ func set_model_data(data, remaining_group_size = 0) -> int:
 	$Description.update_tooltip()
 	$Type.selected = mm_io_types.type_names.find(data.type)
 	$Default.text = data.default
-	$Function.pressed = data.has("function") and data.function
+	$Function.button_pressed = data.has("function") and data.function
 	if data.has("group_size") and data.group_size > 1:
 		$PortGroupButton.set_state(1)
 		return data.group_size-1

@@ -18,8 +18,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 5 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
 }
@@ -29,31 +29,31 @@ resource_name = "move"
 length = 50.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("CamPivot:translation")
+tracks/0/path = NodePath("CamPivot:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 4, 5, 9, 10, 14, 15, 19, 20, 24, 25, 29, 30, 34, 35, 39, 40, 44, 45, 49 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PackedFloat32Array( 0, 4, 5, 9, 10, 14, 15, 19, 20, 24, 25, 29, 30, 34, 35, 39, 40, 44, 45, 49 ),
+"transitions": PackedFloat32Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -25 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -20 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -15 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -10 ), Vector3( 0, 0, -5 ), Vector3( 0, 0, -5 ) ]
 }
 
-[sub_resource type="ProceduralSky" id=3]
+[sub_resource type="Sky" id=3]
 
 [sub_resource type="Environment" id=4]
 background_mode = 2
 background_sky = SubResource( 3 )
 
-[node name="Spatial" type="Spatial"]
+[node name="Node3D" type="Node3D"]
 
-[node name="CamPivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
+[node name="CamPivot" type="Node3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
 
-[node name="Camera" type="Camera" parent="CamPivot"]
-transform = Transform( 0.999487, 0.0319038, 0.00268748, -0.0319038, 0.985399, 0.167245, 0.00268751, -0.167245, 0.985912, 0.28563, 0.826821, 2.79088 )
+[node name="Camera3D" type="Camera3D" parent="CamPivot"]
+transform = Transform3D( 0.999487, 0.0319038, 0.00268748, -0.0319038, 0.985399, 0.167245, 0.00268751, -0.167245, 0.985912, 0.28563, 0.826821, 2.79088 )
 
 [node name="CamRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"
@@ -66,23 +66,23 @@ anims/move = SubResource( 2 )
 [node name="Skulls" parent="." instance=ExtResource( 3 )]
 
 [node name="Bricks" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5 )
 material/0 = ExtResource( 1 )
 
 [node name="Floor" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10 )
 material/0 = ExtResource( 6 )
 
 [node name="Marble" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15 )
 material/0 = ExtResource( 4 )
 
 [node name="MedievalWall" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20 )
 material/0 = ExtResource( 5 )
 
 [node name="BeeHive" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25 )
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25 )
 material/0 = ExtResource( 7 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

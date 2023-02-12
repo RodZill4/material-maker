@@ -14,9 +14,9 @@ func create_node(generator : MMGenBase) -> Node:
 	if ResourceLoader.exists(file_name):
 		node_type = load(file_name)
 	if node_type != null:
-		node = node_type.instance()
+		node = node_type.instantiate()
 	if node == null:
-		node = preload("res://material_maker/nodes/generic/generic.tscn").instance()
+		node = preload("res://material_maker/nodes/generic/generic.tscn").instantiate()
 	set_theme_overrides(node, generator)
 	return node
 
@@ -41,13 +41,13 @@ func set_theme_overrides(node, generator : MMGenBase = null) -> void:
 			theme_overrides[section] = {}
 			var color = library_manager.get_section_color(section)
 			if color != null:
-				for s in [ "frame", "selectedframe" ]:
+				for s in [ "frame", "selected_frame" ]:
 					var frame : StyleBoxFlat = theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
 					color.a = frame.border_color.a
 					frame.border_color = color
 					theme_overrides[section][s] = frame
 		for s in theme_overrides[section].keys():
-			node.add_stylebox_override(s, theme_overrides[section][s])
+			node.add_theme_stylebox_override(s, theme_overrides[section][s])
 
 func on_theme_changed():
 	theme_overrides = {}

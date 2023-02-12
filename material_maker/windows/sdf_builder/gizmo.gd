@@ -1,8 +1,8 @@
-tool
-extends Spatial
+@tool
+extends Node3D
 
 
-export(int, "NONE", "SDF2D", "SDF3D") var mode = 1 setget set_mode
+@export var mode = 1 setget set_mode # (int, "NONE", "SDF2D", "SDF3D")
 
 
 signal translated(v)
@@ -30,7 +30,7 @@ func set_mode(m):
 				$ArrowZ.mode = 0
 
 func _on_Arrow_move(v):
-	translation += v
+	position += v
 	emit_signal("translated", v)
 
 func _on_Arrow_rotate(v, a):

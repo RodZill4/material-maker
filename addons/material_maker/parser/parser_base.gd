@@ -14,7 +14,7 @@ class Token:
 	var pos_begin : int
 	var pos_end : int
 	
-	func _init(t, v, b, e):
+	func _init(t,v,b,e):
 		type = t
 		value = v
 		pos_begin = b
@@ -27,7 +27,7 @@ class StackElement:
 	var state : int
 	var token : Token
 	
-	func _init(s, t):
+	func _init(s,t):
 		state = s
 		token = t
 	
@@ -56,11 +56,11 @@ func lex(s : String) -> Array:
 				position += length
 				if r.type != "ignore":
 					tokens.push_back(create_token(r.type, s.left(length), pos_begin, position-1))
-				s = s.right(length)
+				s = s.right(-length)
 				found = true
 				break
 		if !found:
-			print("Token not found "+s.right(position))
+			print("Token not found "+s.right(-position))
 			break
 	tokens.push_back(Token.new("$end", null, position, position))
 	return tokens
@@ -74,17 +74,17 @@ func parse(s : String):
 	var penultimate_nt : String
 	while true:
 		if ! actions[state].has(next_token.type):
-			return { status="ERROR", state=state, msg="near '%s' (expected '%s')" % [ next_token.value, PoolStringArray(actions[state].keys()).join("', '") ], pos=next_token.pos_begin }
+			return { status="ERROR", state=state, msg="near '%s' (expected '%s')" % [ next_token.value, PackedStringArray(actions[state]."', '".join(keys())) ], pos=next_token.pos_begin }
 		var action = actions[state][next_token.type]
 		match action[0]:
 			"s":
 				stack.push_back(StackElement.new(state, next_token))
-				state = action.right(1).to_int()
-				if tokens.empty():
+				state = action.right(-1).to_int()
+				if tokens.is_empty():
 					return { status="ERROR", msg="Reached end of file", pos=next_token.pos_end+1 }
 				next_token = tokens.pop_front()
 			"r":
-				var rule : Dictionary = rules[action.right(1).to_int()]
+				var rule : Dictionary = rules[action.right(-1).to_int()]
 				var reduce_tokens = []
 				for i in rule.rule.size():
 					var stack_element : StackElement = stack.pop_back()
@@ -92,7 +92,7 @@ func parse(s : String):
 					reduce_tokens.push_front(stack_element.token)
 				var pos_begin = -1
 				var pos_end = -1
-				if ! reduce_tokens.empty():
+				if ! reduce_tokens.is_empty():
 					pos_begin = reduce_tokens[0].pos_begin
 					pos_end = reduce_tokens[reduce_tokens.size()-1].pos_end
 				var new_token : Token

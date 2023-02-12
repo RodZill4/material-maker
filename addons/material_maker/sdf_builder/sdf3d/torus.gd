@@ -1,6 +1,6 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Cylinder", "Capsule", "Pyramid", "Cone") var shape
+@export var shape # (int, "Cylinder", "Capsule", "Pyramid", "Cone")
 
 func _ready():
 	pass # Replace with function body.

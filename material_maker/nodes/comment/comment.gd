@@ -1,7 +1,7 @@
 extends MMGraphNodeMinimal
 
-onready var label = $VBox/Label
-onready var editor = $VBox/TextEdit
+@onready var label = $VBox/Label
+@onready var editor = $VBox/TextEdit
 
 var pallette_colors = [
 	Color("F8B8B3"),
@@ -15,20 +15,20 @@ var pallette_colors = [
 const AUTO_SIZE_PADDING : int = 22
 
 func _ready():
-	for s in [ "comment", "commentfocus" ]:
+	for s in [ "comment", "comment_focus" ]:
 		var frame : StyleBoxFlat = mm_globals.main_window.theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
-		add_stylebox_override(s, frame);
+		add_theme_stylebox_override(s, frame);
 
 func _draw() -> void:
 	var icon = preload("res://material_maker/icons/color_palette.png")
-	draw_texture_rect(icon, Rect2(rect_size.x-40, 4, 16, 16), false)
-	if !is_connected("gui_input", self, "_on_gui_input"):
-		connect("gui_input", self, "_on_gui_input")
+	draw_texture_rect(icon, Rect2(size.x-40, 4, 16, 16), false)
+	if !is_connected("gui_input",Callable(self,"_on_gui_input")):
+		connect("gui_input",Callable(self,"_on_gui_input"))
 
 func set_generator(g) -> void:
 	generator = g
 	label.text = generator.text
-	rect_size = generator.size
+	size = generator.size
 	title = generator.title
 
 	set_stylebox_color(generator.color)
@@ -40,20 +40,20 @@ func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
 	if parent.use_snap:
 		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
-	if rect_size == new_size:
+	if size == new_size:
 		return
-	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=rect_size }
+	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
 	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
 	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
-	rect_size = new_size
+	size = new_size
 	generator.size = new_size
 
 func resize_to_selection() -> void:
-	# If any nodes are selected on initialization automatically adjust size to match
+	# If any nodes are selected checked initialization automatically adjust size to match
 	var parent : GraphEdit = get_parent()
 	var selected_nodes : Array = parent.get_selected_nodes()
 	
-	if not selected_nodes.empty():
+	if not selected_nodes.is_empty():
 		var min_bounds : Vector2 = Vector2(INF, INF)
 		var max_bounds : Vector2 = Vector2(-INF, -INF)
 		for node in selected_nodes:
@@ -79,12 +79,12 @@ func resize_to_selection() -> void:
 		var new_size : Vector2 = Vector2(max_bounds.x - min_bounds.x + AUTO_SIZE_PADDING * 2,
 										 max_bounds.y - min_bounds.y + AUTO_SIZE_PADDING * 2)
 		
-		rect_size = new_size
+		size = new_size
 		generator.size = new_size
 
 func _on_Label_gui_input(ev) -> void:
-	if ev is InputEventMouseButton and ev.doubleclick and ev.button_index == BUTTON_LEFT:
-		editor.rect_min_size = label.rect_size + Vector2(0, rect_size.y - get_minimum_size().y)
+	if ev is InputEventMouseButton and ev.double_click and ev.button_index == MOUSE_BUTTON_LEFT:
+		editor.custom_minimum_size = label.size + Vector2(0, size.y - get_minimum_size().y)
 		editor.text = label.text
 		label.visible = false
 		editor.visible = true
@@ -98,7 +98,7 @@ func _on_TextEdit_focus_entered():
 
 func _on_TextEdit_focus_exited() -> void:
 	focus_lost = true
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	if focus_lost:
 		label.text = editor.text
 		generator.text = editor.text
@@ -106,38 +106,38 @@ func _on_TextEdit_focus_exited() -> void:
 		editor.visible = false
 
 func _on_gui_input(event) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
-		if Rect2(rect_size.x-40, 4, 16, 16).has_point(event.position):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if Rect2(size.x-40, 4, 16, 16).has_point(event.position):
 			var light_theme = "light" in mm_globals.main_window.theme.resource_path
 			accept_event()
-			$Popup.rect_position = event.global_position
+			$Popup.position = event.global_position
 			$Popup.popup()
 			var corrected_color = pallette_colors.duplicate(true)
 			if !light_theme:
 				for i in corrected_color.size():
 					corrected_color[i] = corrected_color[i].darkened(0.5)
-			corrected_color.push_front(Color.webgray)
-			corrected_color.push_front(Color.white if light_theme else Color.black)
+			corrected_color.push_front(Color.WEB_GRAY)
+			corrected_color.push_front(Color.WHITE if light_theme else Color.BLACK)
 			var palette_rects = $Popup/GridContainer.get_children()
 			palette_rects.pop_back()
 			for i in palette_rects.size():
 				palette_rects[i].color = corrected_color[i]
-				if !palette_rects[i].is_connected("pressed", self, "set_color"):
-					palette_rects[i].connect("pressed", self, "set_color")
-		elif event.doubleclick:
+				if !palette_rects[i].is_connected("pressed",Callable(self,"set_color")):
+					palette_rects[i].connect("pressed",Callable(self,"set_color"))
+		elif event.double_click:
 			name_change_popup()
 
 func update_node() -> void:
-	rect_size = generator.size
+	size = generator.size
 	set_stylebox_color(generator.color)
 
 func name_change_popup() -> void:
 	accept_event()
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
 	var status = dialog.enter_text("Comment", "Enter the comment node title", generator.title)
 	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+		status = await status.completed
 	if status.ok:
 		title = status.text
 		generator.title = status.text
@@ -157,13 +157,13 @@ func set_color(c):
 func set_stylebox_color(c):
 	c.a = 0.3
 	get_stylebox("comment").bg_color = c
-	get_stylebox("commentfocus").bg_color = c
+	get_stylebox("comment_focus").bg_color = c
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
 		$PopupSelector.popup(Rect2(event.global_position, $PopupSelector.get_minimum_size()))
 		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
-		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed", self, "set_color"):
-			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed", self, "set_color")
+		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed",Callable(self,"set_color")):
+			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed",Callable(self,"set_color"))

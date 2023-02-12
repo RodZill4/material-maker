@@ -29,7 +29,7 @@ func set_model_data(data) -> void:
 func update_enum_list() -> void:
 	var options = $EnumValues
 	options.clear()
-	if !enum_values.empty():
+	if !enum_values.is_empty():
 		for i in range(enum_values.size()):
 			var v = enum_values[i]
 			options.add_item(v.name+" ("+v.value+")", i)
@@ -50,21 +50,21 @@ func _on_EnumValues_item_selected(id) -> void:
 	if id >= 0 and id < enum_values.size():
 		enum_current = id
 	elif id == ENUM_EDIT:
-		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instance()
+		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instantiate()
 		var v = enum_values[enum_current]
 		add_child(dialog)
 		dialog.set_value(v.name, v.value)
-		dialog.connect("ok", self, "update_enum_value", [ enum_current ])
-		dialog.connect("popup_hide", dialog, "queue_free")
+		dialog.connect("ok",Callable(self,"update_enum_value").bind( enum_current ))
+		dialog.connect("popup_hide",Callable(dialog,"queue_free"))
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
-		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instance()
+		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instantiate()
 		add_child(dialog)
-		dialog.connect("ok", self, "update_enum_value", [ -1 ])
-		dialog.connect("popup_hide", dialog, "queue_free")
+		dialog.connect("ok",Callable(self,"update_enum_value").bind( -1 ))
+		dialog.connect("popup_hide",Callable(dialog,"queue_free"))
 		dialog.popup_centered()
 	elif id == ENUM_REMOVE:
-		enum_values.remove(enum_current)
+		enum_values.remove_at(enum_current)
 		enum_current = 0
 	elif id == ENUM_UP:
 		var tmp = enum_values[enum_current]

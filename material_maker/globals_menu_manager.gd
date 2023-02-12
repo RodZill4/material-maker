@@ -16,7 +16,7 @@ func create_menus(menu_def, object, menu_bar) -> void:
 		if ! m is MenuButton:
 			continue
 		var menu = m.get_popup()
-		menu.connect("about_to_show", self, "create_menu", [ menu_def, object, menu, m.name+"/" ])
+		menu.connect("about_to_popup",Callable(self,"create_menu").bind( menu_def, object, menu, m.name+"/" ))
 		create_menu(menu_def, object, menu, m.name+"/")
 
 func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
@@ -27,23 +27,23 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	if !menu.is_connected("id_pressed", self, "on_menu_id_pressed"):
-		menu.connect("id_pressed", self, "on_menu_id_pressed", [ menu_def, object ])
+	if !menu.is_connected("id_pressed",Callable(self,"on_menu_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"on_menu_id_pressed").bind( menu_def, object ))
 	var last_is_separator : bool = false
 	for i in menu_def.size():
 		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
 			continue
 		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
 			continue
-		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.editor_hint:
+		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.is_editor_hint():
 			continue
-		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.editor_hint:
+		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.is_editor_hint():
 			continue
 		if menu_def[i].has("mode") and menu_def[i].mode != mode:
 			continue
 		if ! menu_def[i].menu.begins_with(menu_name):
 			continue
-		var menu_item_name = menu_def[i].menu.right(menu_name_length)
+		var menu_item_name = menu_def[i].menu.right(-menu_name_length)
 		var is_separator = false
 		if menu_item_name.find("/") != -1:
 			var submenu_name = menu_item_name.split("/")[0]
@@ -65,9 +65,9 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 				submenu.name = submenu_name
 				var submenu_function = "create_menu_"+menu_def[i].submenu
 				if object.has_method(submenu_function):
-					submenu.connect("about_to_show", object, submenu_function, [ submenu ]);
+					submenu.connect("about_to_popup",Callable(object,submenu_function).bind( submenu ));
 				else:
-					submenu.connect("about_to_show", self, "create_menu", [ menu_def, object, submenu, menu_def[i].submenu ])
+					submenu.connect("about_to_popup",Callable(self,"create_menu").bind( menu_def, object, submenu, menu_def[i].submenu ))
 				menu.add_child(submenu)
 			menu.add_submenu_item(menu_item_name, submenu_name)
 		elif menu_item_name == "" or menu_item_name == "-":
@@ -81,11 +81,11 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 					if s == "Alt":
 						shortcut |= KEY_MASK_ALT
 					elif s == "Control":
-						shortcut |= KEY_MASK_CMD if is_mac else KEY_MASK_CTRL
+						shortcut |= KEY_MASK_CMD_OR_CTRL
 					elif s == "Shift":
 						shortcut |= KEY_MASK_SHIFT
 					else:
-						shortcut |= OS.find_scancode_from_string(s)
+						shortcut |= OS.find_keycode_from_string(s)
 			if menu_def[i].has("toggle") and menu_def[i].toggle:
 				menu.add_check_item(menu_item_name, i, shortcut)
 			else:

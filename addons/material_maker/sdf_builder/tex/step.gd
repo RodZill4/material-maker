@@ -8,7 +8,7 @@ func get_parameter_defs():
 	return [
 		{ default=0.5, label="Value", max=1, min=0, name="value", step=0.01, type="float" },
 		{ default=0.1, label="Width", max=0.5, min=0, name="width", step=0.01, type="float" },
-		{ label="Invert", name="invert", type="boolean", default=false }
+		{ label="Invert", name="reverse", type="boolean", default=false }
 	]
 
 func get_includes():
@@ -24,14 +24,14 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
 	var child : String
-	if scene.children.empty():
+	if scene.children.is_empty():
 		child = "0.0"
 	else:
 		var ctxt2 : Dictionary = ctxt.duplicate()
 		ctxt2.type = "float"
 		child = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor).color
 	var tex : String = "clamp(("+child+"-$value)/max(0.0001, $width)+0.5, 0.0, 1.0)"
-	if scene.parameters.has("invert") && scene.parameters.invert:
+	if scene.parameters.has("reverse") && scene.parameters.reverse:
 		tex = "(1.0-"+tex+")"
 	match ctxt.type:
 		"rgba":

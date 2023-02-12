@@ -1,18 +1,17 @@
-[gd_resource type="ProxyTexture" load_steps=3 format=2]
+[gd_resource type="ImageTexture" load_steps=2 format=3 uid="uid://c0j4px4n72di5"]
 
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=1]
-
-[sub_resource type="GDScript" id=1]
-script/source = "extends ProxyTexture
+[sub_resource type="GDScript" id="GDScript_c6lv3"]
+script/source = "extends ImageTexture
 
 func _init():
-	if Directory.new().file_exists(\"user://icons.svg\"):
-		var t : ImageTexture = ImageTexture.new()
-		t.load(\"user://icons.svg\")
-		base = t
+	var image : Image = Image.new()
+	if FileAccess.file_exists(\"user://icons.svg\"):
+		image.load_from_file(\"user://icons.svg\")
+	else:
+		image.load_from_file(\"res://material_maker/icons/icons.svg\")
+	create_from_image(image)
+	print(\"icon atlas initialized\")
 "
 
 [resource]
-flags = 4
-base = ExtResource( 1 )
-script = SubResource( 1 )
+script = SubResource("GDScript_c6lv3")

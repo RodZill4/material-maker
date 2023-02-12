@@ -4,16 +4,16 @@
 [ext_resource path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
 
-[sub_resource type="World" id=1]
+[sub_resource type="World3D" id=1]
 
-[node name="Preview3D" type="ViewportContainer" groups=["preview"]]
+[node name="Preview3D" type="SubViewportContainer" groups=["preview"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-rect_min_size = Vector2( 200, 200 )
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
+custom_minimum_size = Vector2( 200, 200 )
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -23,7 +23,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MaterialPreview" type="Viewport" parent="."]
+[node name="MaterialPreview" type="SubViewport" parent="."]
 size = Vector2( 1272, 684 )
 own_world = true
 world = SubResource( 1 )

@@ -24,7 +24,7 @@ func do_set_image_path(path) -> void:
 		return
 	image_path = path
 	update_image()
-	hint_tooltip = path
+	tooltip_text = path
 	filetime = get_filetime(image_path)
 
 func set_image_path(path) -> void:
@@ -44,11 +44,11 @@ func _on_Timer_timeout():
 		filetime = new_filetime
 
 func _on_ImagePicker_pressed():
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.bmp;BMP Image")
 	dialog.add_filter("*.exr;EXR Image")
 	dialog.add_filter("*.hdr;Radiance HDR Image")
@@ -59,7 +59,7 @@ func _on_ImagePicker_pressed():
 	dialog.add_filter("*.webp;WebP Image")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+		files = await files.completed
 	if files.size() > 0:
 		set_image_path(files[0])
 

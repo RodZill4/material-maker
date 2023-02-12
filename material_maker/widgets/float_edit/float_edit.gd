@@ -1,10 +1,12 @@
 extends LineEdit
 
-export var value : float = 0.5 setget set_value
-export var min_value : float = 0.0 setget set_min_value
-export var max_value : float = 1.0 setget set_max_value
-export var step : float = 0.0 setget set_step
-export var float_only : bool = false
+@export var value : float = 0.5 :
+	set(new_value):
+		todo_rename_set_value(new_value)
+@export var min_value : float = 0.0 : set = set_min_value
+@export var max_value : float = 1.0 : set = set_max_value
+@export var step : float = 0.0 : set = set_step
+@export var float_only : bool = false
 
 var sliding : bool = false
 var start_position : float
@@ -14,8 +16,8 @@ var modifiers : int
 var from_lower_bound : bool = false
 var from_upper_bound : bool = false
 
-onready var slider = $Slider
-onready var cursor = $Slider/Cursor
+@onready var slider = $Slider
+@onready var cursor = $Slider/Cursor
 
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
@@ -26,7 +28,9 @@ func _ready() -> void:
 func get_value() -> String:
 	return text
 	
-func set_value(v, notify = false) -> void:
+func todo_rename_set_value(v, notify = false) -> void:
+	#todo
+	return
 	if v is int:
 		v = float(v)
 	if v is float:
@@ -46,9 +50,9 @@ func set_value(v, notify = false) -> void:
 
 func set_value_from_expression_editor(v : String):
 	if v.is_valid_float():
-		set_value(float(v), true)
+		todo_rename_set_value(float(v), true)
 	else:
-		set_value(v, true)
+		todo_rename_set_value(v, true)
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -67,13 +71,13 @@ func do_update(update_text : bool = true) -> void:
 		text = str(value)
 		if cursor != null:
 			if max_value != min_value:
-				cursor.rect_position.x = (clamp(value, min_value, max_value)-min_value)*(slider.rect_size.x-cursor.rect_size.x)/(max_value-min_value)
+				cursor.position.x = (clamp(value, min_value, max_value)-min_value)*(slider.size.x-cursor.size.x)/(max_value-min_value)
 			else:
-				cursor.rect_position.x = 0
+				cursor.position.x = 0
 
 func get_modifiers(event):
 	var new_modifiers = 0
-	if event.shift:
+	if event.shift_pressed:
 		new_modifiers |= 1
 	if event.control:
 		new_modifiers |= 2
@@ -82,17 +86,17 @@ func get_modifiers(event):
 	return new_modifiers
 
 func _gui_input(event : InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.is_pressed() and !float_only:
-		var expression_editor : WindowDialog = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instance()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed() and !float_only:
+		var expression_editor : Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
 		add_child(expression_editor)
 		expression_editor.edit_parameter("Expression editor - "+name, text, self, "set_value_from_expression_editor")
 		accept_event()
 	if !slider.visible or !sliding and !editable:
 		return
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
-			if event.doubleclick:
-				yield(get_tree(), "idle_frame")
+			if event.double_click:
+				await get_tree().process_frame
 				select_all()
 			else:
 				last_position = event.position.x
@@ -109,7 +113,7 @@ func _gui_input(event : InputEvent) -> void:
 			sliding = false
 			editable = true
 			selecting_enabled = true
-	elif sliding and event is InputEventMouseMotion and event.button_mask == BUTTON_MASK_LEFT:
+	elif sliding and event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 		var new_modifiers = get_modifiers(event)
 		if new_modifiers != modifiers:
 			start_position = last_position
@@ -121,7 +125,7 @@ func _gui_input(event : InputEvent) -> void:
 			var current_step = step
 			if event.control:
 				delta *= 0.2
-			elif event.shift:
+			elif event.shift_pressed:
 				delta *= 5.0
 			if event.alt:
 				current_step *= 0.01
@@ -132,13 +136,13 @@ func _gui_input(event : InputEvent) -> void:
 				v = min_value
 			if !from_upper_bound and v > max_value:
 				v = max_value
-			set_value(v)
+			todo_rename_set_value(v)
 			emit_signal("value_changed", value)
 			emit_signal("value_changed_undo", value, true)
 		accept_event()
 	elif event is InputEventKey and !event.echo:
 		match event.scancode:
-			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
+			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				start_position = last_position
 				start_value = value
 				modifiers = get_modifiers(event)

@@ -28,16 +28,16 @@ void fragment() {
 }"
 
 [node name="ContextMenu" type="PopupMenu" parent="." index="0"]
-margin_right = 109.0
-margin_bottom = 52.0
+offset_right = 109.0
+offset_bottom = 52.0
 
 [node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
-margin_right = 91.0
-margin_bottom = 88.0
+offset_right = 91.0
+offset_bottom = 88.0
 
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="2"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="RefCounted" type="PopupMenu" parent="ContextMenu" index="2"]
+offset_right = 91.0
+offset_bottom = 88.0
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
+[connection signal="id_pressed" from="ContextMenu/RefCounted" to="." method="_on_Reference_id_pressed"]

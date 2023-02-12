@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/port_group_0.tres" type="Texture" id=2]
+[ext_resource path="res://material_maker/icons/port_group_0.tres" type="Texture2D" id=2]
 
 [node name="PortGroupButton" type="TextureButton" groups=["port_group_button"]]
-margin_right = 16.0
-margin_bottom = 16.0
-hint_tooltip = "Click to define port groups"
+offset_right = 16.0
+offset_bottom = 16.0
+tooltip_text = "Click to define port groups"
 size_flags_vertical = 4
 texture_normal = ExtResource( 2 )
 stretch_mode = 2

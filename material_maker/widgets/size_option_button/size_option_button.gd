@@ -1,14 +1,14 @@
 extends OptionButton
 class_name SizeOptionButton
 
-export var min_size : int = 4 setget set_min_size
-export var max_size : int = 13 setget set_max_size
-export var size_value : int = 10 setget set_size_value
+@export var min_size : int = 4 : set = set_min_size
+@export var max_size : int = 13 : set = set_max_size
+@export var size_value : int = 10 : set = set_size_value
 
 signal size_value_changed(s)
 
 func _ready() -> void:
-	connect("item_selected", self, "_on_item_selected")
+	connect("item_selected",Callable(self,"_on_item_selected"))
 	update_options()
 
 func set_min_size(m : int) -> void:

@@ -20,12 +20,12 @@ var preview_rendering_scale_factor := 2.0
 # This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
 var preview_tesselation_detail := 256
 
-onready var node_library_manager = $NodeLibraryManager
-onready var brush_library_manager = $BrushLibraryManager
+@onready var node_library_manager = $NodeLibraryManager
+@onready var brush_library_manager = $BrushLibraryManager
 
-onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
+@onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
 
-onready var layout = $VBoxContainer/Layout
+@onready var layout = $VBoxContainer/Layout
 var library
 var preview_2d : Array
 var histogram
@@ -33,11 +33,11 @@ var preview_3d
 var hierarchy
 var brushes
 
-onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
-onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
-onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
-onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
-onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
+@onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
+@onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
+@onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
+@onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
+@onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
 
 const FPS_LIMIT_MIN = 20
@@ -126,31 +126,31 @@ func _ready() -> void:
 
 	on_config_changed()
 
+	#todo removed
 	# Restore the window position/size if values are present in the configuration cache
-	if mm_globals.config.has_section_key("window", "screen"):
-		OS.current_screen = mm_globals.config.get_value("window", "screen")
-	if mm_globals.config.has_section_key("window", "maximized"):
-		OS.window_maximized = mm_globals.config.get_value("window", "maximized")
+	#if mm_globals.config.has_section_key("window", "screen"):
 
-	if !OS.window_maximized:
-		if mm_globals.config.has_section_key("window", "position"):
-			OS.window_position = mm_globals.config.get_value("window", "position")
-		if mm_globals.config.has_section_key("window", "size"):
-			OS.window_size = mm_globals.config.get_value("window", "size")
+	#if mm_globals.config.has_section_key("window", "maximized"):
+	#	get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
+
+	#if !(get_window().mode == Window.MODE_MAXIMIZED):
+	#	if mm_globals.config.has_section_key("window", "position"):
+
+	#	if mm_globals.config.has_section_key("window", "size"):
+
 
 	# Restore the theme
 	var theme_name : String = "default"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
-	set_theme(theme_name)
+	change_theme(theme_name)
 
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
 		print("Copying samples")
-		var dir : Directory = Directory.new()
-		dir.make_dir("/examples")
-		dir.open("res://material_maker/examples/")
-		dir.list_dir_begin(true)
+		DirAccess.open("res://").make_dir("/examples")
+		var dir : DirAccess = DirAccess.open("res://material_maker/examples/")
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		while true:
 			var f = dir.get_next()
 			if f == "":
@@ -160,51 +160,49 @@ func _ready() -> void:
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
 
-	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	OS.min_window_size = Vector2(1024, 600)
+	# Set a minimum window size to prevent UI elements from collapsing checked each other.
+
 
 	# Set window title
-	OS.set_window_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
+	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
 
 	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
-	preview_3d.connect("need_update", self, "update_preview_3d")
+	preview_3d.connect("need_update",Callable(self,"update_preview_3d"))
 	hierarchy = get_panel("Hierarchy")
-	hierarchy.connect("group_selected", self, "on_group_selected")
+	hierarchy.connect("group_selected",Callable(self,"on_group_selected"))
 	brushes = get_panel("Brushes")
 
 	# Load recent projects
 	load_recents()
 
-	get_tree().connect("files_dropped", self, "on_files_dropped")
+	get_tree().connect("files_dropped",Callable(self,"on_files_dropped"))
 
 	do_load_projects(OS.get_cmdline_args())
 
-	var dir : Directory = Directory.new()
-	if dir.open("user://unsaved_projects") == OK:
+	var dir : DirAccess = DirAccess.open("user://unsaved_projects")
+	if dir != null:
 		var files : Array = []
-		dir.list_dir_begin()
+		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 		var file_name = dir.get_next()
 		while file_name != "":
 			file_name = dir.get_next()
 			if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
-				files.append("user://unsaved_projects".plus_file(file_name))
+				files.append("user://unsaved_projects".path_join(file_name))
 				print(file_name)
-		if ! files.empty():
+		if ! files.is_empty():
 			for f in files:
 				var graph_edit = new_graph_panel()
 				graph_edit.load_from_recovery(f)
 				graph_edit.update_tab_title()
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
-			var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 			dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
 			add_child(dialog)
-			var result = dialog.ask()
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+			var result = await dialog.ask()
 	
 	if get_current_graph_edit() == null:
 		new_material()
@@ -214,18 +212,18 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
-	mm_globals.config.set_value("window", "screen", OS.current_screen)
-	mm_globals.config.set_value("window", "maximized", OS.window_maximized || OS.window_fullscreen)
-	mm_globals.config.set_value("window", "position", OS.window_position)
-	mm_globals.config.set_value("window", "size", OS.window_size)
+
+	mm_globals.config.set_value("window", "maximized", (get_window().mode == Window.MODE_MAXIMIZED) || ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
+
+
 	layout.save_config()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
-		OS.window_fullscreen = !OS.window_fullscreen
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 
 func on_config_changed() -> void:
-	OS.vsync_enabled = mm_globals.get_config("vsync")
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
 # warning-ignore:narrowing_conversion
@@ -239,11 +237,11 @@ func on_config_changed() -> void:
 	var scale = mm_globals.get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
-		# This prevents UI elements from being too small on hiDPI displays.
-		scale = 2 if OS.get_screen_dpi() >= 192 and OS.get_screen_size().x >= 2048 else 1
-	get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
+		# This prevents UI elements from being too small checked hiDPI displays.
+		scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
+	# todo get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
-	# Clamp to reasonable values to avoid crashes on startup.
+	# Clamp to reasonable values to avoid crashes checked startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
@@ -278,29 +276,29 @@ func set_current_mode(mode : String) -> void:
 
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
-	if recent_files.empty():
+	if recent_files.is_empty():
 		menu.add_item("No items found", 0)
 		menu.set_item_disabled(0, true)
 	else:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
-		if !menu.is_connected("id_pressed", self, "_on_LoadRecent_id_pressed"):
-			menu.connect("id_pressed", self, "_on_LoadRecent_id_pressed")
+		if !menu.is_connected("id_pressed",Callable(self,"_on_LoadRecent_id_pressed")):
+			menu.connect("id_pressed",Callable(self,"_on_LoadRecent_id_pressed"))
 
 func _on_LoadRecent_id_pressed(id) -> void:
 	do_load_project(recent_files[id])
 
 func load_recents() -> void:
-	var f = File.new()
-	if f.open("user://recent_files.bin", File.READ) == OK:
-		recent_files = parse_json(f.get_as_text())
-		f.close()
+	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
+	if f.is_open():
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(f.get_as_text())
+		recent_files = test_json_conv.get_data()
 
 func save_recents() -> void:
-	var f = File.new()
-	f.open("user://recent_files.bin", File.WRITE)
-	f.store_string(to_json(recent_files))
-	f.close()
+	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
+	if f.is_open():
+		f.store_string(JSON.new().stringify(recent_files))
 
 func add_recent(path, save = true) -> void:
 	remove_recent(path, false)
@@ -314,7 +312,7 @@ func remove_recent(path, save = true) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
-			recent_files.remove(index)
+			recent_files.remove_at(index)
 		else:
 			break
 	if save:
@@ -375,7 +373,7 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 		var p : String = export_profiles[id]
 		if p.left(prefix_len) != prefix:
 			continue
-		p = p.right(prefix_len)
+		p = p.right(-prefix_len)
 		var slash_position = p.find("/")
 		if slash_position == -1:
 			menu.add_item(p, id)
@@ -388,8 +386,8 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
 				menu.add_submenu_item(submenu_name, submenu_name, id)
 				submenus.push_back(submenu_name)
-	if !menu.is_connected("id_pressed", self, "_on_ExportMaterial_id_pressed"):
-		menu.connect("id_pressed", self, "_on_ExportMaterial_id_pressed")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_ExportMaterial_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"_on_ExportMaterial_id_pressed"))
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var project = get_current_project()
@@ -403,14 +401,14 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if export_extension == "":
 		export_material("", profile)
 	else:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-		dialog.rect_min_size = Vector2(500, 500)
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+		dialog.custom_minimum_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_SAVE_FILE
+		dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 		var profile_name : String = profile
 		var last_profile_name_slash : int = profile_name.rfind("/")
 		if last_profile_name_slash != -1:
-			profile_name = profile_name.right(last_profile_name_slash+1)
+			profile_name = profile_name.right(-(last_profile_name_slash+1))
 		dialog.add_filter("*."+export_extension+";"+profile_name+" Material")
 		var last_export_path = material_node.get_export_path(profile)
 		if last_export_path != "":
@@ -420,9 +418,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 			if mm_globals.config.has_section_key("path", config_key):
 				dialog.current_dir = mm_globals.config.get_value("path", config_key)
 		add_child(dialog)
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
+		var files = await dialog.select_files()
 		if files.size() > 0:
 			export_material(files[0], profile)
 
@@ -431,16 +427,16 @@ func create_menu_set_theme(menu) -> void:
 	menu.clear()
 	for t in THEMES:
 		menu.add_item(t)
-	if !menu.is_connected("id_pressed", self, "_on_SetTheme_id_pressed"):
-		menu.connect("id_pressed", self, "_on_SetTheme_id_pressed")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_SetTheme_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"_on_SetTheme_id_pressed"))
 
-func set_theme(theme_name) -> void:
+func change_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
 	var theme_name : String = THEMES[id].to_lower()
-	set_theme(theme_name)
+	change_theme(theme_name)
 	mm_globals.config.set_value("window", "theme", theme_name)
 
 
@@ -450,8 +446,8 @@ func create_menu_show_panels(menu : PopupMenu) -> void:
 	for i in range(panels.size()):
 		menu.add_check_item(panels[i], i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
-	if !menu.is_connected("id_pressed", self, "_on_ShowPanels_id_pressed"):
-		menu.connect("id_pressed", self, "_on_ShowPanels_id_pressed")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_ShowPanels_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"_on_ShowPanels_id_pressed"))
 
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
@@ -461,11 +457,11 @@ func _on_ShowPanels_id_pressed(id) -> void:
 func create_menu_create(menu : PopupMenu) -> void:
 	var gens = mm_loader.get_generator_list()
 	menu.clear()
-	menu.rect_size = Vector2(0, 0)
+	menu.size = Vector2(0, 0)
 	for i in gens.size():
 		menu.add_item(gens[i], i)
-	if !menu.is_connected("id_pressed", self, "_on_Create_id_pressed"):
-		menu.connect("id_pressed", self, "_on_Create_id_pressed")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_Create_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"_on_Create_id_pressed"))
 
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -475,7 +471,7 @@ func _on_Create_id_pressed(id) -> void:
 
 
 func new_graph_panel() -> GraphEdit:
-	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instance()
+	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instantiate()
 	graph_edit.node_factory = $NodeFactory
 	projects.add_child(graph_edit)
 	projects.current_tab = graph_edit.get_index()
@@ -492,36 +488,32 @@ func new_paint_project(obj_file_name = null) -> void:
 	if get_node_or_null("NewPainterWindow") != null:
 		return
 
-	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instance()
+	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instantiate()
 	add_child(new_painter_dialog)
-	var result = new_painter_dialog.ask(obj_file_name)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var result = await new_painter_dialog.ask(obj_file_name)
 	if result == null:
 		return
-	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
 	projects.add_child(paint_panel)
 	paint_panel.init_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
 	if OS.get_name() == "HTML5":
-		if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
-			Html5.connect("file_loaded", self, "on_html5_load_file")
+		if ! Html5.is_connected("file_loaded",Callable(self,"on_html5_load_file")):
+			Html5.connect("file_loaded",Callable(self,"on_html5_load_file"))
 		Html5.load_file(".ptex")
 	else:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		add_child(dialog)
-		dialog.rect_min_size = Vector2(500, 500)
+		dialog.custom_minimum_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_OPEN_FILES
+		dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		dialog.add_filter("*.mmpp;Model Painting File")
 		if mm_globals.config.has_section_key("path", "project"):
 			dialog.current_dir = mm_globals.config.get_value("path", "project")
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
+		var files = await dialog.select_files()
 		if files.size() > 0:
 			do_load_projects(files)
 
@@ -534,11 +526,10 @@ func on_html5_load_file(file_name, file_type, file_data):
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
 	for f in filenames:
-		var file = File.new()
-		if file.open(f, File.READ) != OK:
+		var file : FileAccess = FileAccess.open(f, FileAccess.READ)
+		if ! file.is_open():
 			continue
 		file_name = file.get_path_absolute()
-		file.close()
 		do_load_project(file_name)
 	if file_name != "":
 		mm_globals.config.set_value("path", "project", file_name.get_base_dir())
@@ -551,8 +542,7 @@ func do_load_project(file_name) -> bool:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
-	var dir = Directory.new()
-	if !dir.file_exists(file_name):
+	if ! DirAccess.open("res://").file_exists(file_name):
 		status = false
 	if status:
 		add_recent(file_name)
@@ -589,23 +579,23 @@ func do_load_material_from_data(filename : String, data : String, update_hierarc
 	return true
 
 func do_load_painting(filename : String) -> bool:
-	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instance()
+	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
 	projects.add_child(paint_panel)
 	var status : bool = paint_panel.load_project(filename)
 	projects.current_tab = paint_panel.get_index()
 	return status
 
 func load_material_from_website() -> void:
-	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
 	add_child(dialog)
-	var result = dialog.select_material()
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var result = await dialog.select_material()
 	if result == "":
 		return
 	new_material()
 	var graph_edit = get_current_graph_edit()
-	var new_generator = mm_loader.create_gen(JSON.parse(result).result)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(result)
+	var new_generator = mm_loader.create_gen(test_json_conv.get_data())
 	graph_edit.set_new_generator(new_generator)
 	hierarchy.update_from_graph_edit(graph_edit)
 
@@ -625,9 +615,7 @@ func save_project_as(project : Control = null) -> bool:
 
 func save_all_projects() -> void:
 	for i in range(projects.get_tab_count()):
-		var result = projects.get_tab(i).save()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await projects.get_tab(i).save()
 
 func close_project() -> void:
 	projects.close_tab()
@@ -636,21 +624,17 @@ func quit() -> void:
 	if quitting:
 		return
 	quitting = true
-	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = "Quit Material Maker?"
-	dialog.add_cancel("Cancel")
+	dialog.add_cancel_button("Cancel")
 	add_child(dialog)
 	if mm_globals.get_config("confirm_quit"):
-		var result = dialog.ask()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await dialog.ask()
 		if result == "cancel":
 			quitting = false
 			return
 	if mm_globals.get_config("confirm_close_project"):
-		var result = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
 		if !result:
 			quitting = false
 			return
@@ -704,7 +688,7 @@ func edit_paste() -> void:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
-	return validate_json(OS.clipboard) != ""
+	return false # todo validate_json(DisplayServer.clipboard_get()) != ""
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -732,7 +716,7 @@ func edit_select_connected(end1 : String, end2 : String) -> void:
 	for n in graph_edit.get_selected_nodes():
 		node_list.push_back(n.name)
 	print(node_list)
-	while !node_list.empty():
+	while !node_list.is_empty():
 		var new_node_list = []
 		for c in graph_edit.get_connection_list():
 			if c[end1] in node_list:
@@ -744,14 +728,14 @@ func edit_select_connected(end1 : String, end2 : String) -> void:
 
 func edit_select_sources_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit == null or graph_edit.get_selected_nodes().empty()
+	return graph_edit == null or graph_edit.get_selected_nodes().is_empty()
 
 func edit_select_sources() -> void:
 	edit_select_connected("to", "from")
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit.get_selected_nodes().empty()
+	return graph_edit.get_selected_nodes().is_empty()
 
 func edit_select_targets() -> void:
 	edit_select_connected("from", "to")
@@ -763,50 +747,48 @@ func edit_load_selection() -> void:
 	var graph_edit = get_current_graph_edit()
 	if graph_edit == null:
 		return
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILE
+	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
 	if mm_globals.config.has_section_key("path", "selection"):
 		dialog.current_dir = mm_globals.config.get_value("path", "selection")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
-		var file = File.new()
-		if file.open(files[0], File.READ) == OK:
-			graph_edit.do_paste(parse_json(file.get_as_text()))
+		var file : FileAccess = FileAccess.open(files[0], FileAccess.READ)
+		if file.is_open():
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(file.get_as_text())
+			graph_edit.do_paste(test_json_conv.get_data())
 			file.close()
 
 func edit_save_selection() -> void:
 	var graph_edit = get_current_graph_edit()
 	if graph_edit == null:
 		return
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
 	if mm_globals.config.has_section_key("path", "selection"):
 		dialog.current_dir = mm_globals.config.get_value("path", "selection")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
-		var file = File.new()
-		if file.open(files[0], File.WRITE) == OK:
-			file.store_string(to_json(graph_edit.serialize_selection()))
+		var file : FileAccess = FileAccess.open(files[0], FileAccess.WRITE)
+		if file.is_open():
+			file.store_string(JSON.new().stringify(graph_edit.serialize_selection()))
 			file.close()
 
 func edit_preferences() -> void:
-	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instance()
+	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
 	add_child(dialog)
-	dialog.connect("config_changed", self, "on_config_changed")
+	dialog.connect("config_changed",Callable(self,"on_config_changed"))
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
@@ -835,7 +817,7 @@ func create_subgraph() -> void:
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
-	if !selected_nodes.empty():
+	if !selected_nodes.is_empty():
 		for n in selected_nodes:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
@@ -846,24 +828,22 @@ func create_menu_add_to_library(menu, manager, function) -> void:
 		var lib = manager.get_child(i)
 		if ! lib.read_only:
 			menu.add_item(lib.library_name, i)
-	if !menu.is_connected("id_pressed", self, function):
-		menu.connect("id_pressed", self, function)
+	if !menu.is_connected("id_pressed",Callable(self,function)):
+		menu.connect("id_pressed",Callable(self,function))
 
 func create_menu_add_selection_to_library(menu) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
 func add_selection_to_library(index) -> void:
 	var selected_nodes = get_selected_nodes()
-	if selected_nodes.empty():
+	if selected_nodes.is_empty():
 		return
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
 	var current_item_name = ""
 	if library.is_inside_tree():
 		current_item_name = library.get_selected_item_name()
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
-	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+	var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 	if ! status.ok:
 		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -874,9 +854,7 @@ func add_selection_to_library(index) -> void:
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	# Create thumbnail
-	var result = selected_nodes[0].generator.render(self, 0, 64, true)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
 	var image : Image = result.get_image()
 	result.release(self)
 	node_library_manager.add_item_to_library(index, status.text, image, data)
@@ -885,33 +863,29 @@ func create_menu_add_brush_to_library(menu) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
 
 func add_brush_to_library(index) -> void:
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
-	var status = dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
-	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
 	if ! status.ok:
 		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var data = graph_edit.top_generator.serialize()
 	# Create thumbnail
-	var result = get_current_project().get_brush_preview()
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var result = await get_current_project().get_brush_preview()
 	var image : Image = Image.new()
 	image.copy_from(result.get_data())
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
 func paint_project_settings():
-	var dialog = load("res://material_maker/panels/paint/paint_project_settings.tscn").instance()
+	var dialog = load("res://material_maker/panels/paint/paint_project_settings.tscn").instantiate()
 	add_child(dialog)
 	dialog.edit_settings(get_current_project())
 
 func create_menu_paint_environment(menu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", self, "_on_PaintEnvironment_id_pressed"):
-		menu.connect("id_pressed", self, "_on_PaintEnvironment_id_pressed")
+	if !menu.is_connected("id_pressed",Callable(self,"_on_PaintEnvironment_id_pressed")):
+		menu.connect("id_pressed",Callable(self,"_on_PaintEnvironment_id_pressed"))
 
 func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
@@ -920,7 +894,7 @@ func _on_PaintEnvironment_id_pressed(id) -> void:
 
 
 func environment_editor() -> void:
-	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instance())
+	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate())
 
 # -----------------------------------------------------------------------
 #                             Help menu
@@ -930,13 +904,12 @@ func get_doc_dir() -> String:
 	var base_dir = MMPaths.get_resource_dir().replace("\\", "/")
 	# In release builds, documentation is expected to be located in
 	# a subdirectory of the program directory
-	var release_doc_path = base_dir.plus_file("doc")
+	var release_doc_path = base_dir.path_join("doc")
 	# In development, documentation is part of the project files.
 	# We can use a globalized `res://` path here as the project isn't exported.
 	var devel_doc_path = ProjectSettings.globalize_path("res://material_maker/doc/_build/html")
 	for p in [ release_doc_path, devel_doc_path ]:
-		var file = File.new()
-		if file.file_exists(p+"/index.html"):
+		if FileAccess.file_exists(p+"/index.html"):
 			return p
 	return ""
 
@@ -951,11 +924,10 @@ func show_doc_is_disabled() -> bool:
 func show_library_item_doc() -> void:
 	var doc_dir : String = get_doc_dir()
 	if doc_dir != "":
-		var dir : Directory = Directory.new()
 		var doc_name = library.get_selected_item_doc_name()
 		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			if dir.file_exists(doc_path):
+			if DirAccess.open("res://").file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
@@ -967,9 +939,9 @@ func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
 
 func about() -> void:
-	var about_box = preload("res://material_maker/windows/about/about.tscn").instance()
+	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.connect("popup_hide", about_box, "queue_free")
+	about_box.connect("popup_hide",Callable(about_box,"queue_free"))
 	about_box.popup_centered()
 
 # Preview
@@ -1028,7 +1000,7 @@ func _on_Projects_tab_changed(_tab) -> void:
 	if new_tab != current_tab:
 		for c in get_incoming_connections():
 			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-				c.source.disconnect(c.signal_name, self, c.method_name)
+				c.source.disconnect(c.signal_name,Callable(self,c.method_name))
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab
@@ -1043,9 +1015,9 @@ func _on_Projects_tab_changed(_tab) -> void:
 			set_current_mode("paint")
 		current_tab = new_tab
 		if new_graph_edit != null:
-			new_graph_edit.connect("graph_changed", self, "update_preview")
-			if !new_graph_edit.is_connected("preview_changed", self, "on_preview_changed"):
-				new_graph_edit.connect("preview_changed", self, "on_preview_changed")
+			new_graph_edit.connect("graph_changed",Callable(self,"update_preview"))
+			if !new_graph_edit.is_connected("preview_changed",Callable(self,"on_preview_changed")):
+				new_graph_edit.connect("preview_changed",Callable(self,"on_preview_changed"))
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -1057,17 +1029,18 @@ func on_group_selected(generator) -> void:
 
 func _notification(what : int) -> void:
 	match what:
-		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
 			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
 # warning-ignore:narrowing_conversion
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
-		MainLoop.NOTIFICATION_WM_FOCUS_IN:
+		MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 			# Return to the normal FPS limit when the window is focused.
 # warning-ignore:narrowing_conversion
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
-		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-			yield(get_tree(), "idle_frame")
-			quit()
+# todo
+#		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+#			await get_tree().process_frame
+#			quit()
 
 
 func dim_window() -> void:
@@ -1078,32 +1051,28 @@ func dim_window() -> void:
 func show_background_preview_2d(button_pressed):
 	preview_2d_background.visible = button_pressed
 	if button_pressed:
-		preview_3d_background_button.pressed = false
+		preview_3d_background_button.button_pressed = false
 
 func show_background_preview_3d(button_pressed):
 	preview_3d_background.visible = button_pressed
 	preview_3d_background_panel.visible = button_pressed
 	if button_pressed:
-		preview_2d_background_button.pressed = false
+		preview_2d_background_button.button_pressed = false
 
 
 func generate_screenshots():
-	var result = library.generate_screenshots(get_current_graph_edit())
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var result = await library.generate_screenshots(get_current_graph_edit())
 	print(result)
 
 func generate_graph_screenshot():
 	# Prompt for a target PNG file
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+	var files = await dialog.select_files()
 	if files.size() != 1:
 		return
 	# Generate the image
@@ -1113,13 +1082,13 @@ func generate_graph_screenshot():
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
 	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(30, 180))
 	var graph_rect = null
 	for c in graph_edit.get_children():
 		if c is GraphNode:
-			var node_rect = Rect2(c.rect_global_position, c.rect_size)
+			var node_rect = Rect2(c.global_position, c.size)
 			if graph_rect == null:
 				graph_rect = node_rect
 			else:
@@ -1139,7 +1108,7 @@ func generate_graph_screenshot():
 			timer.wait_time = 0.05
 			timer.one_shot = true
 			timer.start()
-			yield(timer, "timeout")
+			await timer.timeout
 			timer.queue_free()
 			small_image.blit_rect(get_viewport().get_texture().get_data(), graph_edit_rect, Vector2(0, 0))
 			small_image.flip_y()
@@ -1157,27 +1126,25 @@ func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
 		if c is Control and c.visible and c.get_global_rect().has_point(pos):
 			for n in get_controls_at_position(pos, c):
 				return_value.append(n)
-	if return_value.empty():
+	if return_value.is_empty():
 		return_value.append(parent)
 	return return_value
 
-func on_files_dropped(files : PoolStringArray, _screen) -> void:
-	yield(get_tree(), "idle_frame")
-	var file : File = File.new()
+func on_files_dropped(files : PackedStringArray, _screen) -> void:
+	await get_tree().process_frame
 	for f in files:
-		if file.open(f, File.READ) != OK:
+		var file : FileAccess = FileAccess.open(f, FileAccess.READ)
+		if ! file.is_open():
 			continue
 		f = file.get_path_absolute()
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
 			"obj":
-				var result = new_paint_project(f)
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
+				var result = await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				var controls : Array = get_controls_at_position(get_global_mouse_position(), self)
-				while ! controls.empty():
+				while ! controls.is_empty():
 					var next_controls = []
 					for control in controls:
 						if control == null:
@@ -1189,7 +1156,9 @@ func on_files_dropped(files : PoolStringArray, _screen) -> void:
 							next_controls.append(control.get_parent())
 					controls = next_controls
 			"mme":
-				var parse_result = JSON.parse(file.get_as_text())
+				var test_json_conv = JSON.new()
+				test_json_conv.parse(file.get_as_text())
+				var parse_result = test_json_conv.get_data()
 				if parse_result.error == OK:
 					var data = parse_result.result
 					if data.has("material") and data.has("name"):
@@ -1200,7 +1169,7 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
-	$VBoxContainer/StatusBar/Tip.bbcode_text = tip
+	$VBoxContainer/StatusBar/Tip.text = tip
 	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
 	tip_timer.stop()
 	if timeout > 0.0:
@@ -1209,7 +1178,7 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 		tip_timer.start()
 
 func _on_Tip_Timer_timeout():
-	$VBoxContainer/StatusBar/Tip.bbcode_text = ""
+	$VBoxContainer/StatusBar/Tip.text = ""
 
 # Use this to investigate the connect bug
 

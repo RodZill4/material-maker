@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource path="res://material_maker/panels/library/library_tree.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/panels/library/library.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
+[ext_resource type="Script" path="res://material_maker/panels/library/library_tree.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/panels/library/library.gd" id="2"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -14,7 +14,7 @@ region = Rect2( 0, 0, 16, 16 )
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 200, 200 )
+custom_minimum_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 2 )
@@ -24,45 +24,45 @@ __meta__ = {
 library_manager_name = "NodeLibraryManager"
 
 [node name="Libraries" type="MenuButton" parent="."]
-margin_left = 570.0
-margin_right = 709.0
-margin_bottom = 22.0
+offset_left = 570.0
+offset_right = 709.0
+offset_bottom = 22.0
 size_flags_horizontal = 4
 text = "Manage Libraries"
 icon = SubResource( 1 )
 
 [node name="SectionButtons" type="GridContainer" parent="."]
-margin_top = 26.0
-margin_right = 1280.0
-margin_bottom = 26.0
-custom_constants/vseparation = 1
-custom_constants/hseparation = 1
+offset_top = 26.0
+offset_right = 1280.0
+offset_bottom = 26.0
+custom_constants/v_separation = 1
+custom_constants/h_separation = 1
 columns = 5
 
 [node name="Filter" type="HBoxContainer" parent="."]
-margin_top = 30.0
-margin_right = 1280.0
-margin_bottom = 54.0
+offset_top = 30.0
+offset_right = 1280.0
+offset_bottom = 54.0
 size_flags_horizontal = 3
 
 [node name="FilterLabel" type="Label" parent="Filter"]
-margin_top = 5.0
-margin_right = 37.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 37.0
+offset_bottom = 19.0
 text = "Filter:"
 
 [node name="Filter" type="LineEdit" parent="Filter"]
-margin_left = 41.0
-margin_right = 1280.0
-margin_bottom = 24.0
+offset_left = 41.0
+offset_right = 1280.0
+offset_bottom = 24.0
 size_flags_horizontal = 3
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 58.0
-margin_right = 1280.0
-margin_bottom = 720.0
-rect_min_size = Vector2( 100, 100 )
+offset_top = 58.0
+offset_right = 1280.0
+offset_bottom = 720.0
+custom_minimum_size = Vector2( 100, 100 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
@@ -72,14 +72,14 @@ select_mode = 1
 script = ExtResource( 1 )
 
 [node name="ItemMenu" type="PopupMenu" parent="."]
-margin_right = 20.0
-margin_bottom = 20.0
+offset_right = 20.0
+offset_bottom = 20.0
 items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Remove item", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, false, 3, 0, null, "", true, "Define aliases", null, 0, false, false, 4, 0, null, "", false ]
 
-[connection signal="about_to_show" from="Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="about_to_popup" from="Libraries" to="." method="_on_Libraries_about_to_show"]
 [connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_rmb_selected" from="Tree" to="." method="_on_Tree_item_rmb_selected"]
-[connection signal="about_to_show" from="ItemMenu" to="." method="_on_PopupMenu_about_to_show"]
+[connection signal="about_to_popup" from="ItemMenu" to="." method="_on_PopupMenu_about_to_show"]
 [connection signal="index_pressed" from="ItemMenu" to="." method="_on_PopupMenu_index_pressed"]

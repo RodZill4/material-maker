@@ -1,19 +1,19 @@
-extends WindowDialog
+extends Window
 
 
-onready var export_target : OptionButton = $MarginContainer/VBoxContainer/Export/Option
-onready var export_external_button : Button = $MarginContainer/VBoxContainer/Export/External
-onready var export_extension_edit : LineEdit = $MarginContainer/VBoxContainer/Export/ExtensionEdit
+@onready var export_target : OptionButton = $MarginContainer/VBoxContainer/Export/Option
+@onready var export_external_button : Button = $MarginContainer/VBoxContainer/Export/External
+@onready var export_extension_edit : LineEdit = $MarginContainer/VBoxContainer/Export/ExtensionEdit
 
-onready var export_files : ItemList = $MarginContainer/VBoxContainer/Tabs/Files/Files
-onready var export_file_name : LineEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/name
-onready var export_file_prompt_overwrite : CheckBox = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/prompt_overwrite
-onready var export_file_conditions : LineEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/conditions
-onready var export_file_label_expression : Label = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/LabelExpression
-onready var export_file_expression : LineEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/expression
-onready var export_file_type : OptionButton = $MarginContainer/VBoxContainer/Tabs/Files/File/Common/type
-onready var export_file_template : TextEdit = $MarginContainer/VBoxContainer/Tabs/Files/File/template
-onready var export_custom_script : TextEdit = $"MarginContainer/VBoxContainer/Tabs/Custom Script"
+@onready var export_files : ItemList = $MarginContainer/VBoxContainer/TabBar/Files/Files
+@onready var export_file_name : LineEdit = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/name
+@onready var export_file_prompt_overwrite : CheckBox = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/prompt_overwrite
+@onready var export_file_conditions : LineEdit = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/conditions
+@onready var export_file_label_expression : Label = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/LabelExpression
+@onready var export_file_expression : LineEdit = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/expression
+@onready var export_file_type : OptionButton = $MarginContainer/VBoxContainer/TabBar/Files/File/Common/type
+@onready var export_file_template : TextEdit = $MarginContainer/VBoxContainer/TabBar/Files/File/template
+@onready var export_custom_script : TextEdit = $"MarginContainer/VBoxContainer/TabBar/Custom Script"
 
 var data : Dictionary = {}
 var exports : Dictionary = {}
@@ -48,14 +48,14 @@ func select_export(i : int) -> void:
 		return
 	export_target.selected = i
 	var e : String = export_target.get_item_text(i)
-	export_external_button.pressed = exports[e].has("external") and exports[e].external
+	export_external_button.button_pressed = exports[e].has("external") and exports[e].external
 	export_extension_edit.text = exports[e].export_extension if exports[e].has("export_extension") else ""
 	export_custom_script.text = exports[e].custom if exports[e].has("custom") else ""
 	update_files(e)
 
 func update_files(e : String):
 	export_files.clear()
-	if ! exports[e].files.empty():
+	if ! exports[e].files.is_empty():
 		for f in exports[e].files:
 			export_files.add_item(f.file_name)
 		select_file(0)
@@ -64,7 +64,7 @@ func update_files(e : String):
 func select_file(i : int) -> void:
 	if i < 0:
 		export_file_name.text = ""
-		export_file_prompt_overwrite.pressed = false
+		export_file_prompt_overwrite.button_pressed = false
 		export_file_conditions.text = ""
 		export_file_label_expression.visible = false
 		export_file_expression.visible = false
@@ -80,7 +80,7 @@ func select_file(i : int) -> void:
 		export_files.select(i)
 		var f = exports[e].files[i]
 		export_file_name.text = f.file_name if f.has("file_name") else ""
-		export_file_prompt_overwrite.pressed = f.prompt_overwrite if f.has("prompt_overwrite") else false
+		export_file_prompt_overwrite.button_pressed = f.prompt_overwrite if f.has("prompt_overwrite") else false
 		export_file_conditions.text = f.conditions if f.has("conditions") else ""
 		export_file_label_expression.visible = (f.type == "texture")
 		export_file_expression.visible = (f.type == "texture")
@@ -105,34 +105,36 @@ func select_file(i : int) -> void:
 				export_file_type.select(2)
 
 func _on_Create_Export_pressed():
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
 	var status = dialog.enter_text("Export", "Enter the export target name", "")
 	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+		status = await status.completed
 	if status.ok and get_export_index(status.text) == -1:
 		exports[status.text] = { files=[] }
 		update_export_list()
 		select_export(get_export_index(status.text))
 
 func _on_Load_Export_pressed():
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_OPEN_FILES
+	dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
 	dialog.window_title = "Load export target from file"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+		files = await files.completed
 	if files.size() > 0:
 		var last_export_name : String = ""
 		for i in files.size():
 			var file : File = File.new()
 			if file.open(files[0], File.READ) != OK:
 				return
-			var export_data = parse_json(file.get_as_text())
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(file.get_as_text())
+			var export_data = test_json_conv.get_data()
 			if export_data.has("name") and export_data.has("files"):
 				export_data.external = true
 				exports[export_data.name] = export_data
@@ -142,16 +144,16 @@ func _on_Load_Export_pressed():
 			select_export(get_export_index(last_export_name))
 
 func _on_Save_Export_pressed():
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	add_child(dialog)
-	dialog.rect_min_size = Vector2(500, 500)
+	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.MODE_SAVE_FILE
+	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.window_title = "Save export target to file"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = dialog.select_files()
 	while files is GDScriptFunctionState:
-		files = yield(files, "completed")
+		files = await files.completed
 	if files.size() > 0:
 		var export_name : String = export_target.get_item_text(export_target.selected)
 		var export_data : Dictionary = exports[export_name].duplicate()
@@ -161,18 +163,18 @@ func _on_Save_Export_pressed():
 		var file : File = File.new()
 		if file.open(files[0], File.WRITE) != OK:
 			return
-		file.store_string(JSON.print(export_data))
+		file.store_string(JSON.stringify(export_data))
 
 func _on_Rename_Export_pressed():
 	var old_export_index = export_target.selected
 	if old_export_index < 0:
 		return
 	var old_export : String = export_target.get_item_text(old_export_index)
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
 	var status = dialog.enter_text("Export", "Enter the export target name", old_export)
 	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+		status = await status.completed
 	if status.ok and get_export_index(status.text) == -1:
 		if get_export_index(status.text) != -1:
 			return
@@ -195,11 +197,11 @@ func _on_Duplicate_Export_pressed():
 	if old_export_index < 0:
 		return
 	var old_export : String = export_target.get_item_text(old_export_index)
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
 	var status = dialog.enter_text("Export", "Enter the export target name", old_export)
 	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+		status = await status.completed
 	if status.ok and get_export_index(status.text) == -1:
 		if get_export_index(status.text) != -1:
 			return
@@ -226,14 +228,14 @@ func _on_Custom_Script_focus_exited():
 
 func _on_Files_gui_input(event):
 	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
-		if ! export_files.get_selected_items().empty():
+		if ! export_files.get_selected_items().is_empty():
 			var current_export = export_target.get_item_text(export_target.selected)
-			exports[current_export].files.remove(export_files.get_selected_items()[0])
+			exports[current_export].files.remove_at(export_files.get_selected_items()[0])
 			update_files(current_export)
-			export_files.unselect_all()
+			export_files.deselect_all()
 
 func _on_name_text_entered(new_text):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
@@ -244,14 +246,14 @@ func _on_name_focus_exited():
 	_on_name_text_entered(export_file_name.text)
 
 func _on_prompt_overwrite_toggled(button_pressed):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].prompt_overwrite = button_pressed
 
 func _on_conditions_text_entered(new_text):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
@@ -261,7 +263,7 @@ func _on_conditions_focus_exited():
 	_on_conditions_text_entered(export_file_conditions.text)
 
 func _on_type_item_selected(index):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
@@ -285,14 +287,14 @@ func _on_type_item_selected(index):
 	select_file(i)
 
 func _on_expression_value_changed(value):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
 	exports[e].files[i].output = int(value)
 
 func get_expression_from_output(text : String) -> String:
-	if text.is_valid_integer():
+	if text.is_valid_int():
 		var index = text.to_int()
 		if data.has("outputs") and data.outputs.size() > index:
 			var output = data.outputs[index]
@@ -301,11 +303,11 @@ func get_expression_from_output(text : String) -> String:
 	return text
 
 func _on_expression_text_entered(new_text : String):
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
-	if new_text.is_valid_integer():
+	if new_text.is_valid_int():
 		exports[e].files[i].output = new_text.to_int()
 		exports[e].files[i].erase("expression")
 	else:
@@ -317,7 +319,7 @@ func _on_expression_focus_exited():
 
 
 func _on_template_focus_exited():
-	if export_files.get_selected_items().empty():
+	if export_files.get_selected_items().is_empty():
 		return
 	var e : String = export_target.get_item_text(export_target.selected)
 	var i = export_files.get_selected_items()[0]
@@ -340,7 +342,7 @@ func get_model_data() -> Dictionary:
 
 
 func _on_MarginContainer_minimum_size_changed():
-	rect_min_size = $MarginContainer.get_minimum_size()
+	custom_minimum_size = $MarginContainer.get_minimum_size()
 
 
 # OK/Apply/Cancel buttons

@@ -19,7 +19,7 @@ class Buffer:
 	
 	const STATUS = ["Invalidated","Updating","UpdatingInvalidated","Updated"]
 	
-	func _init(n : String, o : Object = null):
+	func _init(n : String,o : Object = null):
 		name = n
 		object = o
 		dependencies = []
@@ -46,8 +46,8 @@ func _ready():
 func create_buffer(buffer_name : String, object : Object = null):
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
 	buffer_invalidate(buffer_name)
-	if object is Node and not object.is_connected("tree_exiting", self, "delete_buffers_from_object"):
-		object.connect("tree_exiting", self, "delete_buffers_from_object", [ object ])
+	if object is Node and not object.is_connected("tree_exiting",Callable(self,"delete_buffers_from_object")):
+		object.connect("tree_exiting",Callable(self,"delete_buffers_from_object").bind( object ))
 
 func delete_buffer(buffer_name : String):
 	buffer_clear_dependencies(buffer_name)
@@ -75,10 +75,10 @@ func buffer_clear_dependencies(buffer_name : String):
 			assert(dep_index != -1)
 			if dependencies[d].size() == 1:
 				dependencies.erase(d)
-				if dependencies_values.has(d) and ! (dependencies_values[d] is Texture):
+				if dependencies_values.has(d) and ! (dependencies_values[d] is Texture2D):
 					dependencies_values.erase(d)
 			else:
-				dependencies[d].remove(dep_index)
+				dependencies[d].remove_at(dep_index)
 				assert(dependencies[d].find(buffer_name) == -1)
 	b.dependencies = []
 	b.pending_dependencies = 0
@@ -207,21 +207,23 @@ func get_render_queue_size() -> int:
 	return invalidated_buffers
 
 func material_update_params(material : ShaderMaterial):
-	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+	# TODO: FIX THIS!
+	for p in material.get_property_list():
 		if dependencies_values.has(p.name):
-			material.set_shader_param(p.name, dependencies_values[p.name])
+			material.set_shader_parameter(p.name, dependencies_values[p.name])
 
 func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
 	if material == null:
 		material = ShaderMaterial.new()
-	if material.shader == null:
-		material.shader = Shader.new()
-	material.shader.code = shader
+	if material.gdshader == null:
+		material.gdshader = Shader.new()
+	material.gdshader.code = shader
 	buffer_clear_dependencies(buffer_name)
-	for p in VisualServer.shader_get_param_list(material.shader.get_rid()):
+	# TODO: FIX THIS!
+	for p in material.get_property_list():
 		var value = buffer_add_dependency(buffer_name, p.name)
 		if value != null:
-			material.set_shader_param(p.name, value)
+			material.set_shader_parameter(p.name, value)
 	buffers[buffer_name].shader_generations += 1
 	return material
 
@@ -229,7 +231,7 @@ func buffer_create_shader_material(buffer_name : String, material : ShaderMateri
 func print_stats(object = null):
 	var statuses : Dictionary = {}
 	for s in Buffer.STATUS:
-		statuses[s] = PoolStringArray()
+		statuses[s] = PackedStringArray()
 	for b in buffers.keys():
 		if object != null and object != buffers[b].object:
 			continue
@@ -240,12 +242,12 @@ func print_stats(object = null):
 		a.append(b)
 		statuses[Buffer.STATUS[buffers[b].status]] = a
 		print(statuses[Buffer.STATUS[buffers[b].status]])
-		var pending : PoolStringArray = PoolStringArray()
+		var pending : PackedStringArray = PackedStringArray()
 		if buffers[b].pending_dependencies > 0:
 			for d in buffers[b].dependencies:
 				if buffers.has(d) and buffers[d].status != Buffer.Updated:
 					pending.append(d)
-			print("  Pending: %d (%s)" % [ buffers[b].pending_dependencies, pending.join(", ") ])
+			print("  Pending: %d (%s)" % [ buffers[b].pending_dependencies, ", ".join(pending) ])
 		else:
 			print("  Pending: 0")
 		print("  Renders: %d" % buffers[b].renders)

@@ -101,11 +101,11 @@ shader_param/gradient_width = 0.1
 shader_param/tex = SubResource( 11 )
 
 [node name="Histogram" type="Control" groups=["preview"]]
-margin_right = 64.0
-margin_bottom = 64.0
+offset_right = 64.0
+offset_bottom = 64.0
 script = ExtResource( 1 )
 
-[node name="ViewportImage" type="Viewport" parent="."]
+[node name="ViewportImage" type="SubViewport" parent="."]
 size = Vector2( 256, 256 )
 transparent_bg = true
 hdr = false
@@ -115,10 +115,10 @@ render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportImage"]
 material = SubResource( 3 )
-margin_right = 256.0
-margin_bottom = 256.0
+offset_right = 256.0
+offset_bottom = 256.0
 
-[node name="ViewportHistogram1" type="Viewport" parent="."]
+[node name="ViewportHistogram1" type="SubViewport" parent="."]
 size = Vector2( 256, 256 )
 own_world = true
 transparent_bg = true
@@ -129,10 +129,10 @@ render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram1"]
 material = SubResource( 6 )
-margin_right = 256.0
-margin_bottom = 256.0
+offset_right = 256.0
+offset_bottom = 256.0
 
-[node name="ViewportHistogram2" type="Viewport" parent="."]
+[node name="ViewportHistogram2" type="SubViewport" parent="."]
 size = Vector2( 256, 2 )
 transparent_bg = true
 disable_3d = true
@@ -142,8 +142,8 @@ render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="ViewportHistogram2"]
 material = SubResource( 9 )
-margin_right = 256.0
-margin_bottom = 2.0
+offset_right = 256.0
+offset_bottom = 2.0
 
 [node name="Control" type="ColorRect" parent="."]
 material = SubResource( 12 )

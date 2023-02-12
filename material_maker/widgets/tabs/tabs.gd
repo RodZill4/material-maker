@@ -1,36 +1,32 @@
 extends Panel
 
-var current_tab = -1 setget set_current_tab
+var current_tab = -1 : set = set_current_tab
 
 signal tab_changed
 signal no_more_tabs
 
-func add_child(control, legible_unique_name = false) -> void:
-	.add_child(control, legible_unique_name)
-	if !(control is Tabs):
-		$Tabs.add_tab(control.name)
-		move_child(control, $Tabs.get_tab_count()-1)
+func todo_renamed_add_child(control, legible_unique_name = false) -> void:
+	super.add_child(control, legible_unique_name)
+	if !(control is TabBar):
+		$TabBar.add_tab(control.name)
+		move_child(control, $TabBar.get_tab_count()-1)
 
 func close_tab(tab = null) -> void:
 	if tab == null:
-		tab = $Tabs.get_current_tab()
-	var result = check_save_tab(tab)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+		tab = $TabBar.get_current_tab()
+	var result = await check_save_tab(tab)
 	if result:
 		do_close_tab(tab)
 
 func get_tab_count() -> int:
-	return $Tabs.get_tab_count()
+	return $TabBar.get_tab_count()
 
 func get_tab(i : int) -> Control:
-	return $Tabs.get_child(i) as Control
+	return $TabBar.get_child(i) as Control
 
 func check_save_tabs() -> bool:
-	for i in range($Tabs.get_tab_count()):
-		var result = check_save_tab(i)
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+	for i in range($TabBar.get_tab_count()):
+		var result = await check_save_tab(i)
 		if !result:
 			return false
 	return true
@@ -38,7 +34,7 @@ func check_save_tabs() -> bool:
 func check_save_tab(tab) -> bool:
 	var tab_control = get_child(tab)
 	if tab_control.need_save and mm_globals.get_config("confirm_close_project"):
-		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		var save_path = tab_control.save_path
 		if save_path == null:
 			save_path = "[unnamed]"
@@ -46,18 +42,14 @@ func check_save_tab(tab) -> bool:
 			save_path = save_path.get_file()
 		dialog.dialog_text = "Save "+save_path+" before closing?"
 		#dialog.dialog_autowrap = true
-		dialog.get_ok().text = "Save and close"
+		dialog.get_ok_button().text = "Save and close"
 		dialog.add_button("Discard changes", true, "discard")
-		dialog.add_cancel("Cancel")
+		dialog.add_cancel_button("Cancel")
 		get_parent().add_child(dialog)
-		var result = dialog.ask()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await dialog.ask()
 		match result:
 			"ok":
-				var status = mm_globals.main_window.save_project(tab_control)
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
+				var status = await mm_globals.main_window.save_project(tab_control)
 				if !status:
 					return false
 			"cancel":
@@ -73,38 +65,38 @@ func do_close_custom_action(_action : String, _tab : int, dialog : AcceptDialog)
 
 func do_close_tab(tab = null) -> void:
 	get_child(tab).queue_free()
-	$Tabs.remove_tab(tab)
+	$TabBar.remove_tab(tab)
 	var control = get_child(tab)
 	remove_child(control)
 	control.free()
 	current_tab = -1
-	if $Tabs.get_tab_count() == 0:
+	if $TabBar.get_tab_count() == 0:
 		emit_signal("no_more_tabs")
 	else:
 		set_current_tab(0)
 
 func move_active_tab_to(idx_to) -> void:
-	$Tabs.move_tab(current_tab, idx_to)
+	$TabBar.move_tab(current_tab, idx_to)
 	move_child(get_child(current_tab), idx_to)
 	set_current_tab(idx_to)
 
 func set_current_tab(t) -> void:
-	if t == current_tab or t < 0 or t >= $Tabs.get_tab_count():
+	if t == current_tab or t < 0 or t >= $TabBar.get_tab_count():
 		return
 	var node
-	if current_tab >= 0 && current_tab < $Tabs.get_tab_count():
+	if current_tab >= 0 && current_tab < $TabBar.get_tab_count():
 		node = get_child(current_tab)
 		node.visible = false
 	current_tab = t
 	node = get_child(current_tab)
 	node.visible = true
-	node.rect_position = Vector2(0, $Tabs.rect_size.y)
-	node.rect_size = rect_size - node.rect_position
-	$Tabs.current_tab = current_tab
+	node.position = Vector2(0, $TabBar.size.y)
+	node.size = size - node.position
+	$TabBar.current_tab = current_tab
 	emit_signal("tab_changed", current_tab)
 
 func set_tab_title(index, title) -> void:
-	$Tabs.set_tab_title(index, title)
+	$TabBar.set_tab_title(index, title)
 
 func get_current_tab_control() -> Node:
 	return get_child(current_tab)
@@ -113,11 +105,11 @@ func _on_Tabs_tab_changed(tab) -> void:
 	set_current_tab(tab)
 
 func _on_Projects_resized() -> void:
-	$Tabs.rect_size.x = rect_size.x
+	$TabBar.size.x = size.x
 
 
 func _on_CrashRecoveryTimer_timeout():
-	for i in range($Tabs.get_tab_count()):
+	for i in range($TabBar.get_tab_count()):
 		var tab_control = get_child(i)
 		if tab_control.has_method("crash_recovery_save"):
 			tab_control.crash_recovery_save()
@@ -125,19 +117,19 @@ func _on_CrashRecoveryTimer_timeout():
 func _input(event: InputEvent) -> void:
 	# Navigate between tabs using keyboard shortcuts.
 	if event.is_action_pressed("ui_previous_tab"):
-		set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
+		set_current_tab(wrapi(current_tab - 1, 0, $TabBar.get_tab_count()))
 	elif event.is_action_pressed("ui_next_tab"):
-		set_current_tab(wrapi(current_tab + 1, 0, $Tabs.get_tab_count()))
+		set_current_tab(wrapi(current_tab + 1, 0, $TabBar.get_tab_count()))
 
 func _gui_input(event: InputEvent) -> void:
 	# Navigate between tabs by hovering tabs then using the mouse wheel.
-	# Only take into account the mouse wheel scrolling on the tabs themselves,
+	# Only take into account the mouse wheel scrolling checked the tabs themselves,
 	# not their content.
 	var rect := get_global_rect()
 	# Roughly matches the height of the tabs bar itself (with some additional tolerance for better usability).
 	rect.size.y = 30
 	if event is InputEventMouseButton and event.pressed and rect.has_point(get_global_mouse_position()):
-		if event.button_index == BUTTON_WHEEL_UP:
-			set_current_tab(wrapi(current_tab - 1, 0, $Tabs.get_tab_count()))
-		elif event.button_index == BUTTON_WHEEL_DOWN:
-			set_current_tab(wrapi(current_tab + 1, 0, $Tabs.get_tab_count()))
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			set_current_tab(wrapi(current_tab - 1, 0, $TabBar.get_tab_count()))
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			set_current_tab(wrapi(current_tab + 1, 0, $TabBar.get_tab_count()))

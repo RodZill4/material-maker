@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://material_maker/windows/node_editor/output.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
-[ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/output.gd" id="1"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -20,16 +20,16 @@ flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 34, 48, 12, 16 )
 
-[sub_resource type="DynamicFontData" id=4]
+[sub_resource type="FontFile" id=4]
 font_path = "res://material_maker/fonts/hack.ttf"
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="FontFile" id=5]
 size = 12
 font_data = SubResource( 4 )
 
 [node name="Output" type="HBoxContainer"]
-margin_right = 251.0
-margin_bottom = 22.0
+offset_right = 251.0
+offset_bottom = 22.0
 size_flags_horizontal = 3
 script = ExtResource( 1 )
 __meta__ = {
@@ -37,56 +37,56 @@ __meta__ = {
 }
 
 [node name="Delete" type="Button" parent="."]
-margin_right = 28.0
-margin_bottom = 25.0
+offset_right = 28.0
+offset_bottom = 25.0
 icon = SubResource( 1 )
 flat = true
 
 [node name="Up" type="Button" parent="."]
-margin_left = 32.0
-margin_right = 56.0
-margin_bottom = 25.0
+offset_left = 32.0
+offset_right = 56.0
+offset_bottom = 25.0
 icon = SubResource( 2 )
 flat = true
 
 [node name="Down" type="Button" parent="."]
-margin_left = 60.0
-margin_right = 84.0
-margin_bottom = 25.0
+offset_left = 60.0
+offset_right = 84.0
+offset_bottom = 25.0
 icon = SubResource( 3 )
 flat = true
 
 [node name="Description" parent="." instance=ExtResource( 4 )]
-margin_left = 88.0
-margin_right = 116.0
-margin_bottom = 25.0
+offset_left = 88.0
+offset_right = 116.0
+offset_bottom = 25.0
 description_type = "Output"
 
 [node name="Type" type="OptionButton" parent="."]
-margin_left = 120.0
-margin_right = 222.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 102, 0 )
-hint_tooltip = "Input flag"
+offset_left = 120.0
+offset_right = 222.0
+offset_bottom = 25.0
+custom_minimum_size = Vector2( 102, 0 )
+tooltip_text = "Input flag"
 text = "Greyscale"
 items = [ "Greyscale", null, false, 0, null, "Color", null, false, 1, null, "RGBA", null, false, 2, null, "SDF2D", null, false, 3, null, "SDF3D", null, false, 4, null, "SDF3D-C", null, false, 5, null ]
 selected = 0
 
 [node name="Value" type="LineEdit" parent="."]
-margin_left = 226.0
-margin_right = 320.0
-margin_bottom = 25.0
-hint_tooltip = "Default value"
+offset_left = 226.0
+offset_right = 320.0
+offset_bottom = 25.0
+tooltip_text = "Default value"
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 5 )
 text = "0.0"
 context_menu_enabled = false
 
 [node name="PortGroupButton" parent="." instance=ExtResource( 3 )]
-margin_left = 324.0
-margin_top = 4.0
-margin_right = 340.0
-margin_bottom = 20.0
+offset_left = 324.0
+offset_top = 4.0
+offset_right = 340.0
+offset_bottom = 20.0
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]

@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 func generate(mesh: Mesh) -> ImageTexture:
@@ -27,23 +27,23 @@ func generate(mesh: Mesh) -> ImageTexture:
 	bvh.vertices = vertices
 	bvh.triangles = triangles
 	print("Generating BVH...")
-	var time := OS.get_ticks_msec()
+	var time := Time.get_ticks_msec()
 	var max_node_level := bvh.generate()
 	print("BVH Generated!")
 	print("Maximum Node Level: %d" % max_node_level)
-	print("Time to generate BVH: %f" % ((OS.get_ticks_msec() - time) / 1000.0))
+	print("Time to generate BVH: %f" % ((Time.get_ticks_msec() - time) / 1000.0))
 
 	var tex := ImageTexture.new()
-	tex.create_from_image(bvh.image, 0)
+	tex.create_from_image(bvh.image) #,0
 	return tex
 
 
-# The BVH (Bounding Volume Hierarchy) is used to making ray tracing on the GPU much more efficient.
+# The BVH (Bounding Volume Hierarchy) is used to making ray tracing checked the GPU much more efficient.
 class BVHNode:
 	const MAX_TRIANGLES = 8
 	const DATA_HEADER_SIZE = 1
 
-	var node_debug: Spatial
+	var node_debug: Node3D
 
 	var aabb := AABB()
 	var center: Vector3
@@ -139,9 +139,9 @@ class BVHNode:
 		# Check which splits have failed.
 		# If they all have, we can't split any further.
 		var split_failed = [false, false, false]
-		split_failed[0] = left_nodes[0].empty() or right_nodes[0].empty()
-		split_failed[1] = left_nodes[1].empty() or right_nodes[1].empty()
-		split_failed[2] = left_nodes[2].empty() or right_nodes[2].empty()
+		split_failed[0] = left_nodes[0].is_empty() or right_nodes[0].is_empty()
+		split_failed[1] = left_nodes[1].is_empty() or right_nodes[1].is_empty()
+		split_failed[2] = left_nodes[2].is_empty() or right_nodes[2].is_empty()
 		if split_failed[0] and split_failed[1] and split_failed[2]:
 			root._node_data[-1] = triangles.size()
 			for tri in triangles:
@@ -156,7 +156,7 @@ class BVHNode:
 			return level
 
 		var split_order := [0, 1, 2]
-		split_order.sort_custom(self, "_sort_by_extents")
+		split_order.sort_custom(Callable(self,"_sort_by_extents"))
 
 		var left_triangles := []
 		var right_triangles := []
@@ -195,10 +195,10 @@ class BVHNode:
 			_finalize_data()
 		return int(max(left_max_level, right_max_level))
 
-	# This function is a one-to-one translation of the shader function.
+	# This function is a one-to-one position of the shader function.
 	# Not really used in this project, but makes debugging much easier.
 	func traverse(ray_start: Vector3, ray_dir: Vector3) -> float:
-		if _data.empty():
+		if _data.is_empty():
 			return 65536.0
 
 		var offset_to_nodes: int = _get_data(0)[0]
@@ -238,7 +238,7 @@ class BVHNode:
 						var tri_a = _get_data(j)
 						var tri_b = _get_data(j + 1)
 						var tri_c = _get_data(j + 2)
-						var tri_t = Geometry.ray_intersects_triangle(ray_start, ray_dir,
+						var tri_t = Geometry2D.ray_intersects_triangle(ray_start, ray_dir,
 							Vector3(tri_a[0], tri_a[1], tri_a[2]),
 							Vector3(tri_b[0], tri_b[1], tri_b[2]),
 							Vector3(tri_c[0], tri_c[1], tri_c[2])
@@ -330,7 +330,7 @@ class BVHNode:
 				curr_node_idx = node_stack[max(stack_point, 0)][2]
 
 		var tri_normal: Vector3 = (tri[2] - tri[0]).cross(tri[1] - tri[0])
-		var imm: ImmediateGeometry = node_debug.get_node_or_null("../DebugBVHHit")
+		var imm: ImmediateMesh = node_debug.get_node_or_null("../DebugBVHHit")
 		imm.clear()
 		imm.begin(Mesh.PRIMITIVE_TRIANGLES)
 		imm.set_normal(tri_normal)
@@ -353,7 +353,7 @@ class BVHNode:
 	func debug_aabb() -> Array:
 		var aabbs := []
 
-		var aabb_shape := CollisionShape.new()
+		var aabb_shape := CollisionShape3D.new()
 		aabb_shape.name = "BVHNode-" + str(root._node_ids[self])
 #		if parent:
 #			aabb_shape.name = "Left-" if parent.left_node == self else "Right-"
@@ -361,21 +361,21 @@ class BVHNode:
 #			aabb_shape.name = "Root-"
 #		aabb_shape.name += str(level)
 
-		aabb_shape.shape = BoxShape.new()
+		aabb_shape.shape = BoxShape3D.new()
 		aabb_shape.shape.extents = aabb.size * 0.5
-		aabb_shape.translation = aabb.position + aabb.size * 0.5
+		aabb_shape.position = aabb.position + aabb.size * 0.5
 		aabbs.append(aabb_shape)
 
 		if left_node:
 			var left_aabbs := left_node.debug_aabb()
 			aabbs += left_aabbs
 			aabb_shape.add_child(left_aabbs[0])
-			left_aabbs[0].translation -= aabb_shape.translation
+			left_aabbs[0].position -= aabb_shape.position
 		if right_node:
 			var right_aabbs := right_node.debug_aabb()
 			aabbs += right_aabbs
 			aabb_shape.add_child(right_aabbs[0])
-			right_aabbs[0].translation -= aabb_shape.translation
+			right_aabbs[0].position -= aabb_shape.position
 
 		return aabbs
 
@@ -396,7 +396,7 @@ class BVHNode:
 
 	# All the stuff in _data and _node_data are appended and put into image.
 	func _finalize_data() -> void:
-#		var time := OS.get_ticks_msec()
+#		var time := Time.get_ticks_msec()
 		_data[0] = _node_ids.size() + DATA_HEADER_SIZE
 
 		_data += _node_data
@@ -408,7 +408,7 @@ class BVHNode:
 
 		image = Image.new()
 		image.create(img_width, img_height, false, Image.FORMAT_RGBAF)
-		image.lock()
+		false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 		var i = 0
 		for y in img_height:
 			for x in img_width:
@@ -421,8 +421,8 @@ class BVHNode:
 					_data[i * 4 + 3]
 				))
 				i += 1
-		image.unlock()
-#		print((OS.get_ticks_msec() - time) / 1000.0)
+		false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+#		print((Time.get_ticks_msec() - time) / 1000.0)
 
 	func _sort_by_extents(a: int, b: int) -> bool:
 		return aabb.size[a] > aabb.size[b]

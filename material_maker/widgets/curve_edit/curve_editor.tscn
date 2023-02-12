@@ -4,10 +4,10 @@
 [ext_resource path="res://material_maker/widgets/curve_edit/curve_editor.gd" type="Script" id=2]
 
 [node name="CurveEditor" instance=ExtResource( 1 )]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
 mouse_filter = 0
 script = ExtResource( 2 )
 [connection signal="gui_input" from="." to="." method="_on_CurveEditor_gui_input"]

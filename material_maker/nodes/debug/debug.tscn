@@ -3,8 +3,8 @@
 [ext_resource path="res://material_maker/nodes/debug/debug.gd" type="Script" id=1]
 
 [node name="Debug" type="GraphNode"]
-margin_right = 124.0
-margin_bottom = 49.0
+offset_right = 124.0
+offset_bottom = 49.0
 title = "Debug"
 show_close = true
 slot/0/left_enabled = true
@@ -19,9 +19,9 @@ __meta__ = {
 }
 
 [node name="Button" type="Button" parent="."]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 108.0
-margin_bottom = 44.0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 108.0
+offset_bottom = 44.0
 text = "Show shader"
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

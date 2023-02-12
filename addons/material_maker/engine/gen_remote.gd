@@ -1,10 +1,10 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenRemote
 
-"""
-Remote can be used to control parameters from several generators in the same graph
-"""
+
+# Remote can be used to control parameters from several generators in the same graph
+
 
 var widgets = []
 
@@ -96,7 +96,7 @@ func get_parameter_defs() -> Array:
 					for c in configurations:
 						p.values.push_back({ name=c, value=c })
 			"linked_control":
-				if ! w.linked_widgets.empty():
+				if ! w.linked_widgets.is_empty():
 					var linked = w.linked_widgets[0]
 					if linked != null and is_inside_tree():
 						var gen = get_parent().get_node(linked.node)
@@ -125,7 +125,7 @@ func set_parameter(p : String, v) -> void:
 	var parent = get_parent()
 	if parent != null:
 		var widget = get_widget(p)
-		if !widget.empty():
+		if !widget.is_empty():
 			match widget.type:
 				"linked_control":
 					for w in widget.linked_widgets:
@@ -150,7 +150,7 @@ func set_parameter(p : String, v) -> void:
 					var param_name : String = "o"+str(get_instance_id())+"_"+p
 					if is_inside_tree():
 						mm_deps.dependency_update(param_name, v)
-	.set_parameter(p, v)
+	super.set_parameter(p, v)
 	if parent != null and name == "gen_parameters":
 		parent.parameters[p] = v
 
@@ -226,7 +226,7 @@ func can_link_parameter(widget_name : String, generator : MMGenBase, param : Str
 	if generator == self:
 		return false
 	var widget : Dictionary = get_widget(widget_name)
-	if !widget.linked_widgets.empty():
+	if !widget.linked_widgets.is_empty():
 		# Check if the param is already linked
 		for lw in widget.linked_widgets:
 			if lw.node == generator.name and lw.widget == param:
@@ -241,7 +241,7 @@ func can_link_parameter(widget_name : String, generator : MMGenBase, param : Str
 				return false
 			match parameter.type:
 				"enum":
-					if to_json(linked_parameter.values) != to_json(parameter.values):
+					if JSON.new().stringify(linked_parameter.values) != JSON.new().stringify(parameter.values):
 						return false
 	return true
 
@@ -271,7 +271,7 @@ func move_parameter(widget_name : String, offset : int) -> void:
 func remove_parameter(widget_name : String) -> void:
 	for i in range(widgets.size()):
 		if widgets[i].name == widget_name:
-			widgets.remove(i)
+			widgets.remove_at(i)
 			break
 	parameters.erase(widget_name)
 	emit_signal("parameter_changed", "__update_all__", null)

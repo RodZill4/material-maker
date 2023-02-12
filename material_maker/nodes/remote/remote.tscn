@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource path="res://material_maker/nodes/remote/remote.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=2]
+[ext_resource type="Script" path="res://material_maker/nodes/remote/remote.gd" id="1"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="Theme" id=1]
 
@@ -16,8 +16,8 @@ atlas = ExtResource( 2 )
 region = Rect2( 32, 32, 16, 16 )
 
 [node name="Remote" type="GraphNode"]
-margin_right = 95.0
-margin_bottom = 52.0
+offset_right = 95.0
+offset_bottom = 52.0
 mouse_filter = 1
 theme = SubResource( 1 )
 title = "Remote"
@@ -40,37 +40,37 @@ __meta__ = {
 }
 
 [node name="Controls" type="GridContainer" parent="."]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 107.0
-margin_bottom = 24.0
+offset_left = 16.0
+offset_top = 24.0
+offset_right = 107.0
+offset_bottom = 24.0
 columns = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 25.0
-margin_right = 107.0
-margin_bottom = 47.0
+offset_left = 16.0
+offset_top = 25.0
+offset_right = 107.0
+offset_bottom = 47.0
 
 [node name="AddLink" type="Button" parent="HBoxContainer"]
-margin_right = 28.0
-margin_bottom = 22.0
-hint_tooltip = "Add linked control"
+offset_right = 28.0
+offset_bottom = 22.0
+tooltip_text = "Add linked control"
 size_flags_horizontal = 0
 icon = SubResource( 2 )
 
 [node name="AddConfig" type="Button" parent="HBoxContainer"]
-margin_left = 32.0
-margin_right = 60.0
-margin_bottom = 22.0
-hint_tooltip = "Add configurations"
+offset_left = 32.0
+offset_right = 60.0
+offset_bottom = 22.0
+tooltip_text = "Add configurations"
 icon = SubResource( 3 )
 
 [node name="AddNamed" type="Button" parent="HBoxContainer"]
-margin_left = 64.0
-margin_right = 91.0
-margin_bottom = 22.0
-hint_tooltip = "Add named parameter"
+offset_left = 64.0
+offset_right = 91.0
+offset_bottom = 22.0
+tooltip_text = "Add named parameter"
 text = "ab"
 
 [connection signal="pressed" from="HBoxContainer/AddLink" to="." method="_on_AddLink_pressed"]

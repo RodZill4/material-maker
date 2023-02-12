@@ -1,36 +1,35 @@
 [remap]
 
 importer="texture"
-type="StreamTexture"
-path.s3tc="res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.stex"
-path.etc2="res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.etc2.stex"
+type="CompressedTexture2D"
+uid="uid://d2aeyi0d5c0rw"
+path.s3tc="res://.godot/imported/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.ctex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://rodz_labs_logo.png"
-dest_files=[ "res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.stex", "res://.import/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.etc2.stex" ]
+dest_files=["res://.godot/imported/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.ctex"]
 
 [params]
 
 compress/mode=2
+compress/high_quality=false
 compress/lossy_quality=0.7
-compress/hdr_mode=0
-compress/bptc_ldr=0
+compress/hdr_compression=1
 compress/normal_map=0
-flags/repeat=1
-flags/filter=true
-flags/mipmaps=true
-flags/anisotropic=false
-flags/srgb=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
-process/HDR_as_SRGB=false
-process/invert_color=false
-stream=false
-size_limit=0
-detect_3d=false
-svg/scale=1.0
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

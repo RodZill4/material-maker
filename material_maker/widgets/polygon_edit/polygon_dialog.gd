@@ -1,6 +1,6 @@
-extends WindowDialog
+extends Window
 
-export var closed : bool = true setget set_closed
+@export var closed : bool = true : set = set_closed
 var previous_value
 
 signal polygon_changed(polygon)
@@ -24,7 +24,7 @@ func edit_polygon(polygon : MMPolygon) -> Array:
 	previous_value = polygon.duplicate()
 	$VBoxContainer/EditorContainer/PolygonEditor.set_polygon(polygon)
 	popup_centered()
-	var result = yield(self, "return_polygon")
+	var result = await self.return_polygon
 	queue_free()
 	return { value=result, previous_value=previous_value }
 

@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 var predefined_generators : Dictionary = {}
@@ -25,14 +25,14 @@ func update_predefined_generators()-> void:
 	predefined_generators = {}
 	predefined_functions = {}
 	for path in MMPaths.get_nodes_paths():
-		var dir = Directory.new()
-		if dir.open(path) == OK:
-			dir.list_dir_begin()
+		var dir : DirAccess = DirAccess.open(path)
+		if dir != null:
+			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var file_name = dir.get_next()
 			while file_name != "":
 				if !dir.current_is_dir() and file_name.get_extension() == "mmg":
-					var file : File = File.new()
-					if file.open(path+"/"+file_name, File.READ) == OK:
+					var file : FileAccess = FileAccess.open(path+"/"+file_name, FileAccess.READ)
+					if file.is_open():
 						var generator = string_to_dict_tree(file.get_as_text())
 						if CHECK_PREDEFINED:
 							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
@@ -53,12 +53,12 @@ func update_predefined_generators()-> void:
 										else:
 											print(definition.type)
 						predefined_generators[file_name.get_basename()] = generator
-						file.close()
+						file = null
 				file_name = dir.get_next()
 	if false:
-		var file : File = File.new()
-		if file.open("predefined_nodes.json", File.WRITE) == OK:
-			file.store_string(to_json(predefined_generators))
+		var file : FileAccess = FileAccess.open("predefined_nodes.json", FileAccess.WRITE)
+		if file.is_open():
+			file.store_string(JSON.new().stringify(predefined_generators))
 			file.close()
 
 func get_material_nodes() -> Array:
@@ -111,7 +111,7 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 		for k in data.keys():
 			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
 				if data[k] is Array:
-					data[k] = PoolStringArray(data[k]).join("\n")
+					data[k] = "\n".join(PackedStringArray(data[k]))
 			elif walk_children or k in REPLACE_MULTILINE_STRINGS_WALK_ITEMS:
 				data[k] = replace_arrays_with_multiline_strings(data[k])
 			elif k in REPLACE_MULTILINE_STRINGS_WALK_CHILDREN:
@@ -122,17 +122,17 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 	return data
 
 static func string_to_dict_tree(string_data : String) -> Dictionary:
-	var json : JSONParseResult = JSON.parse(string_data)
-	if json.error == OK and json.result is Dictionary:
-		return replace_arrays_with_multiline_strings(json.result)
+	var test_json_conv : JSON = JSON.new()
+	if test_json_conv.parse(string_data) and test_json_conv.data is Dictionary:
+		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
 static func dict_tree_to_string(data : Dictionary) -> String:
-	return JSON.print(replace_multiline_strings_with_arrays(data), "\t", true)
+	return JSON.stringify(replace_multiline_strings_with_arrays(data), "\t", true)
 
 func load_gen(filename: String) -> MMGenBase:
-	var file = File.new()
-	if file.open(filename, File.READ) == OK:
+	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
+	if file.is_open():
 		var data = string_to_dict_tree(file.get_as_text())
 		if data != null:
 			current_project_path = filename.get_base_dir()
@@ -142,8 +142,8 @@ func load_gen(filename: String) -> MMGenBase:
 	return null
 
 func save_gen(filename : String, generator : MMGenBase) -> void:
-	var file = File.new()
-	if file.open(filename, File.WRITE) == OK:
+	var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
+	if file.is_open():
 		var data = generator.serialize()
 		data.name = filename.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
@@ -236,18 +236,17 @@ func create_gen(data) -> MMGenBase:
 
 func get_generator_list() -> Array:
 	var rv = []
-	var dir : Directory = Directory.new()
 	for p in MMPaths.get_nodes_paths():
-		dir.open(p)
-		dir.list_dir_begin(true)
-		while true:
+		var dir : DirAccess = DirAccess.open(p)
+		if dir != null:
+			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var f = dir.get_next()
-			if f == "":
-				break
-			if f.right(f.length()-4) == ".mmg":
-				var n = f.left(f.length()-4)
-				if rv.find(n) == -1:
-					rv.push_back(n)
+			while f != "":
+				if f.right(4) == ".mmg":
+					var n = f.left(f.length()-4)
+					if rv.find(n) == -1:
+						rv.push_back(n)
+				f = dir.get_next()
 	rv.sort()
 	return rv
 
@@ -261,17 +260,17 @@ static func get_export_file_name(material_name : String, export_name : String) -
 	return material_name+"_export_"+export_name+".mme"
 
 func load_external_export_targets():
-	var dir = Directory.new()
-	if dir.open(USER_EXPORT_DIR) != OK:
+	var dir = DirAccess.open(USER_EXPORT_DIR)
+	if ! dir:
 		print("Cannot open "+USER_EXPORT_DIR)
 		return
 	var rv : Dictionary = {}
-	dir.list_dir_begin()
+	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	var file_name : String = dir.get_next()
 	while file_name != "":
 		if file_name.get_extension() == "mme":
-			var file : File = File.new()
-			if file.open(USER_EXPORT_DIR.plus_file(file_name), File.READ) == OK:
+			var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.READ)
+			if file.is_open():
 				var export_data : Dictionary = string_to_dict_tree(file.get_as_text())
 				if export_data != {}:
 					var material : String = export_data.material
@@ -287,15 +286,15 @@ func get_external_export_targets(material_name : String) -> Dictionary:
 	return external_export_targets[material_name].exports if external_export_targets.has(material_name) else {}
 
 func save_export_target(material_name : String, export_target_name : String, export_target : Dictionary) -> String:
-	var file : File = File.new()
 	var file_name : String = get_export_file_name(material_name, export_target_name)
-	if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
+	var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.WRITE)
+	if file.is_open():
 		export_target.name = export_target_name
 		file.store_string(dict_tree_to_string(export_target))
 	return file_name
 
 func update_external_export_targets(material_name : String, export_targets : Dictionary):
-	var dir : Directory = Directory.new()
+	var dir : DirAccess = DirAccess.open("")
 	dir.make_dir_recursive(USER_EXPORT_DIR)
 	var files = []
 	for k in export_targets.keys():
@@ -305,5 +304,5 @@ func update_external_export_targets(material_name : String, export_targets : Dic
 	external_export_targets[material_name].exports = export_targets
 	for f in external_export_targets[material_name].files:
 		if files.find(f) == -1:
-			dir.remove(USER_EXPORT_DIR.plus_file(f))
+			dir.remove_at(USER_EXPORT_DIR.path_join(f))
 	external_export_targets[material_name].files = files

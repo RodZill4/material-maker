@@ -1,4 +1,4 @@
-extends Viewport
+extends SubViewport
 
 func get_materials() -> Array:
-	return [ $PreviewScene/Pivot/Sphere.get_surface_material(0) ]
+	return [ $PreviewScene/Pivot/Sphere.get_surface_override_material(0) ]

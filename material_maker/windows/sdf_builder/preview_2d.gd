@@ -9,7 +9,7 @@ func _ready():
 
 func generate_preview_shader(source, _template) -> String:
 	var variables : Dictionary = {}
-	variables.GENERATED_GLOBALS = PoolStringArray(source.globals).join("\n") if source.has("globals") else ""
+	variables.GENERATED_GLOBALS = PackedStringArray(source."\n".join(globals)) if source.has("globals") else ""
 	variables.GENERATED_INSTANCE = source.defs
 	variables.GENERATED_CODE = source.code
 	if source.has("sdf2d"):
@@ -19,9 +19,9 @@ func generate_preview_shader(source, _template) -> String:
 		variables.DIST_FCT = node_prefix+"_d"
 		variables.COLOR_FCT = node_prefix+"_c"
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
-	return mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_2d.shader", variables)
+	return mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_2d.gdshader", variables)
 
 
 func _on_View_item_selected(index):
 	view_style = index
-	material.set_shader_param("view_style", view_style)
+	material.set_shader_parameter("view_style", view_style)

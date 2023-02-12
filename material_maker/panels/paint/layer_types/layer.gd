@@ -24,7 +24,7 @@ func duplicate():
 	return layer
 
 
-func get_channel_texture(channel_name : String) -> Texture:
+func get_channel_texture(channel_name : String) -> Texture2D:
 	return get(channel_name)
 
 func get_channels() -> Array:
@@ -55,14 +55,14 @@ func save_layer(path : String) -> Dictionary:
 	for c in get_channels():
 		if get(c) != null:
 			var file_name : String = "%s_%d.png" % [ c, index ]
-			var file_path : String = path.plus_file(file_name)
+			var file_path : String = path.path_join(file_name)
 			var image : Image = get(c).get_data()
-			image.lock()
+			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			image.save_png(file_path)
-			image.unlock()
+			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			layer_data[c] = file_name
 	_save_layer(layer_data)
-	if !layers.empty():
+	if !layers.is_empty():
 		layer_data.layers = save_layers(layers, path)
 	return layer_data
 

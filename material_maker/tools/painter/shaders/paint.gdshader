@@ -8,7 +8,7 @@ uniform float     texture_scale = 1.0;
 
 uniform sampler2D tex2view_tex;
 uniform float     texture_size = 512.0;
-uniform sampler2D seams : hint_white;
+uniform sampler2D seams : hint_default_white;
 uniform float     seams_multiplier = 256.0;
 uniform sampler2D mesh_normal_tex;
 uniform sampler2D mesh_tangent_tex;

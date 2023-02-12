@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture" id=1]
+[ext_resource path="res://material_maker/icons/icons.svg" type="Texture2D" id=1]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -8,8 +8,8 @@ atlas = ExtResource( 1 )
 region = Rect2( 80, 80, 16, 16 )
 
 [node name="FavButton" type="Button"]
-margin_right = 12.0
-margin_bottom = 20.0
+offset_right = 12.0
+offset_bottom = 20.0
 icon = SubResource( 1 )
 flat = true
 __meta__ = {

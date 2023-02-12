@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 var previous_value
 
@@ -22,7 +22,7 @@ func edit_curve(curve : MMCurve) -> Array:
 	previous_value = curve.duplicate()
 	$VBoxContainer/EditorContainer/CurveEditor.set_curve(curve)
 	popup_centered()
-	var result = yield(self, "return_curve")
+	var result = await self.return_curve
 	queue_free()
 	return { value=result, previous_value=previous_value }
 

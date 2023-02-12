@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource path="res://material_maker/panels/layers/layers_tree.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/panels/layers/layers.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
+[ext_resource type="Script" path="res://material_maker/panels/layers/layers_tree.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/panels/layers/layers.gd" id="2"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -35,79 +35,79 @@ atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
 [node name="Layers" type="VBoxContainer"]
-margin_right = 150.0
-margin_bottom = 224.0
+offset_right = 150.0
+offset_bottom = 224.0
 script = ExtResource( 2 )
 
 [node name="Buttons" type="HBoxContainer" parent="."]
-margin_right = 150.0
-margin_bottom = 16.0
+offset_right = 150.0
+offset_bottom = 16.0
 size_flags_horizontal = 3
 
 [node name="Add" type="TextureButton" parent="Buttons"]
-margin_right = 21.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_right = 21.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 1 )
 expand = true
 stretch_mode = 3
 
 [node name="Duplicate" type="TextureButton" parent="Buttons"]
-margin_left = 25.0
-margin_right = 47.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_left = 25.0
+offset_right = 47.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 2 )
 expand = true
 stretch_mode = 3
 
 [node name="Remove" type="TextureButton" parent="Buttons"]
-margin_left = 51.0
-margin_right = 72.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_left = 51.0
+offset_right = 72.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 3 )
 expand = true
 stretch_mode = 3
 
 [node name="Up" type="TextureButton" parent="Buttons"]
-margin_left = 76.0
-margin_right = 98.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_left = 76.0
+offset_right = 98.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 4 )
 expand = true
 stretch_mode = 3
 
 [node name="Down" type="TextureButton" parent="Buttons"]
-margin_left = 102.0
-margin_right = 124.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_left = 102.0
+offset_right = 124.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 5 )
 expand = true
 stretch_mode = 3
 
 [node name="Config" type="TextureButton" parent="Buttons"]
-margin_left = 128.0
-margin_right = 150.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+offset_left = 128.0
+offset_right = 150.0
+offset_bottom = 16.0
+custom_minimum_size = Vector2( 0, 16 )
 size_flags_horizontal = 3
 texture_normal = SubResource( 6 )
 expand = true
 stretch_mode = 3
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 20.0
-margin_right = 150.0
-margin_bottom = 224.0
-rect_min_size = Vector2( 150, 200 )
+offset_top = 20.0
+offset_right = 150.0
+offset_bottom = 224.0
+custom_minimum_size = Vector2( 150, 200 )
 focus_mode = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3

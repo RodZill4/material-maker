@@ -3,22 +3,22 @@
 [ext_resource path="res://material_maker/tools/painter/painter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://material_maker/tools/painter/brush_preview.gd" type="Script" id=2]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="StandardMaterial3D" id=1]
 albedo_color = Color( 0.25098, 0.25098, 0.25098, 1 )
 
-[sub_resource type="ProceduralSky" id=2]
+[sub_resource type="Sky" id=2]
 
 [sub_resource type="Environment" id=3]
 background_mode = 2
 background_sky = SubResource( 2 )
 ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
 
-[sub_resource type="World" id=4]
+[sub_resource type="World3D" id=4]
 environment = SubResource( 3 )
 
 [sub_resource type="SphereMesh" id=5]
 
-[sub_resource type="SpatialMaterial" id=6]
+[sub_resource type="StandardMaterial3D" id=6]
 metallic = 1.0
 metallic_texture_channel = 2
 roughness_texture_channel = 1
@@ -38,7 +38,7 @@ depth_flip_binormal = false
 uv1_scale = Vector3( 4, 2, 4 )
 uv1_offset = Vector3( 0, 0.5, 0 )
 
-[sub_resource type="ProceduralSky" id=7]
+[sub_resource type="Sky" id=7]
 sky_energy = 0.75
 
 [sub_resource type="Environment" id=8]
@@ -50,7 +50,7 @@ tonemap_mode = 2
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
 
-uniform sampler2D seams : hint_white;
+uniform sampler2D seams : hint_default_white;
 uniform sampler2D tex;
 uniform float epsilon = 0.00048828125 ;
 
@@ -91,7 +91,7 @@ background_material = SubResource( 1 )
 
 [node name="Painter" parent="." instance=ExtResource( 1 )]
 
-[node name="Viewport" type="Viewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="."]
 size = Vector2( 512, 512 )
 own_world = true
 world = SubResource( 4 )
@@ -106,25 +106,25 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Object" type="MeshInstance" parent="Viewport"]
+[node name="Object" type="MeshInstance3D" parent="SubViewport"]
 mesh = SubResource( 5 )
 material/0 = SubResource( 6 )
 __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Camera" type="Camera" parent="Viewport"]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.8, 0, 0 )
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.8, 0, 0 )
 environment = SubResource( 8 )
 __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="DirectionalLight" type="DirectionalLight" parent="Viewport"]
-transform = Transform( 0.5, -0.224144, 0.836516, 0, 0.965926, 0.258819, -0.866025, -0.12941, 0.482963, 0, 0, 0 )
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport"]
+transform = Transform3D( 0.5, -0.224144, 0.836516, 0, 0.965926, 0.258819, -0.866025, -0.12941, 0.482963, 0, 0, 0 )
 shadow_enabled = true
 
-[node name="NormalMap" type="Viewport" parent="."]
+[node name="NormalMap" type="SubViewport" parent="."]
 size = Vector2( 512, 512 )
 own_world = true
 transparent_bg = true
@@ -136,5 +136,5 @@ render_target_update_mode = 0
 
 [node name="Rect" type="ColorRect" parent="NormalMap"]
 material = SubResource( 12 )
-margin_right = 512.0
-margin_bottom = 512.0
+offset_right = 512.0
+offset_bottom = 512.0

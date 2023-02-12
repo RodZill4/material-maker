@@ -1,11 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=12 format=3]
 
-[ext_resource path="res://addons/material_maker/engine/gen_sdf.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/sdf_builder/preview_2d.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder.gd" type="Script" id=3]
-[ext_resource path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" type="Script" id=4]
-[ext_resource path="res://material_maker/windows/sdf_builder/preview_3d.tscn" type="PackedScene" id=5]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=6]
+[ext_resource type="Script" path="res://addons/material_maker/engine/gen_sdf.gd" id="1"]
+[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/preview_2d.tscn" id="2"]
+[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder.gd" id="3"]
+[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" id="4"]
+[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/preview_3d.tscn" id="5"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="6"]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -29,14 +29,14 @@ region = Rect2( 48, 0, 16, 16 )
 
 [sub_resource type="ButtonGroup" id=5]
 
-[node name="Control" type="WindowDialog"]
+[node name="Control" type="Window"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 106.503
-margin_top = 99.6447
-margin_right = -118.498
-margin_bottom = -96.3553
-popup_exclusive = true
+offset_left = 106.503
+offset_top = 99.6447
+offset_right = -118.498
+offset_bottom = -96.3553
+exclusive = true
 window_title = "SDF Builder"
 resizable = true
 script = ExtResource( 3 )
@@ -51,12 +51,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Toolbar" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 1054.0
+offset_right = 1054.0
 
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 4.0
-margin_right = 1054.0
-margin_bottom = 500.0
+offset_top = 4.0
+offset_right = 1054.0
+offset_bottom = 500.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -64,9 +64,9 @@ __meta__ = {
 }
 
 [node name="Tree" type="Tree" parent="VBoxContainer/Main"]
-margin_right = 302.0
-margin_bottom = 496.0
-rect_min_size = Vector2( 200, 200 )
+offset_right = 302.0
+offset_bottom = 496.0
+custom_minimum_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 3
@@ -77,9 +77,9 @@ script = ExtResource( 4 )
 material = SubResource( 2 )
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 306.0
-margin_right = 911.0
-margin_bottom = 496.0
+offset_left = 306.0
+offset_right = 911.0
+offset_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
@@ -87,89 +87,89 @@ control_target = NodePath("../../..")
 
 [node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource( 5 )]
 visible = false
-margin_left = 265.0
-margin_right = 265.0
-margin_bottom = 0.0
-rect_min_size = Vector2( 200, 200 )
+offset_left = 265.0
+offset_right = 265.0
+offset_bottom = 0.0
+custom_minimum_size = Vector2( 200, 200 )
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Main"]
-margin_left = 915.0
-margin_right = 1054.0
-margin_bottom = 496.0
+offset_left = 915.0
+offset_right = 1054.0
+offset_bottom = 496.0
 scroll_horizontal_enabled = false
 
 [node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main/ScrollContainer"]
-margin_right = 139.0
-margin_bottom = 79.0
+offset_right = 139.0
+offset_bottom = 79.0
 custom_constants/separation = 1
 
 [node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_right = 139.0
-margin_bottom = 24.0
+offset_right = 139.0
+offset_bottom = 24.0
 group = SubResource( 4 )
 text = "Node Parameters"
 
 [node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_top = 25.0
-margin_right = 139.0
-margin_bottom = 25.0
+offset_top = 25.0
+offset_right = 139.0
+offset_bottom = 25.0
 columns = 7
 
 [node name="Button" type="Button" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_top = 26.0
-margin_right = 28.0
-margin_bottom = 48.0
+offset_top = 26.0
+offset_right = 28.0
+offset_bottom = 48.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = SubResource( 3 )
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_top = 49.0
-margin_right = 139.0
-margin_bottom = 53.0
+offset_top = 49.0
+offset_right = 139.0
+offset_bottom = 53.0
 
 [node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_top = 54.0
-margin_right = 139.0
-margin_bottom = 78.0
+offset_top = 54.0
+offset_right = 139.0
+offset_bottom = 78.0
 group = SubResource( 5 )
 text = "Item Parameters"
 
 [node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-margin_top = 79.0
-margin_right = 139.0
-margin_bottom = 79.0
+offset_top = 79.0
+offset_right = 139.0
+offset_bottom = 79.0
 columns = 3
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 432.0
-margin_top = 504.0
-margin_right = 622.0
-margin_bottom = 524.0
+offset_left = 432.0
+offset_top = 504.0
+offset_right = 622.0
+offset_bottom = 524.0
 size_flags_horizontal = 4
 size_flags_vertical = 5
 custom_constants/separation = 5
 
 [node name="Apply" type="Button" parent="VBoxContainer/Buttons"]
-margin_right = 60.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_right = 60.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "Apply"
 
 [node name="OK" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 65.0
-margin_right = 125.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 65.0
+offset_right = 125.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 130.0
-margin_right = 190.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 130.0
+offset_right = 190.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2( 60, 0 )
 text = "Cancel"
 
 [node name="GenSDF" type="Node" parent="."]

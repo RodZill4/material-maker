@@ -1,8 +1,8 @@
 extends VBoxContainer
 
-export(int, 0, 3) var preview : int = 0
+@export var preview : int = 0 # (int, 0, 3)
 
-onready var tree = $Tree
+@onready var tree = $Tree
 
 var default_texture : ImageTexture = null
 var current_graph_edit = null
@@ -23,7 +23,7 @@ func _ready() -> void:
 	default_texture = ImageTexture.new()
 	default_texture.create_from_image(default_image)
 
-	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed", self, "_on_PreviewMenu_id_pressed")
+	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
 
 func update_from_graph_edit(graph_edit) -> void:
 	if tree == null:
@@ -33,27 +33,27 @@ func update_from_graph_edit(graph_edit) -> void:
 	update_index += 1
 	for g in item_from_gen.keys():
 		if is_instance_valid(g):
-			g.disconnect("parameter_changed", self, "on_gen_parameter_changed")
+			g.disconnect("parameter_changed",Callable(self,"on_gen_parameter_changed"))
 	item_from_gen = {}
 	tree.set_column_expand(0, true)
 	tree.columns = preview+1
 	for i in range(1, tree.columns):
 		tree.set_column_expand(i, false)
-		tree.set_column_min_width(i, 28)
+		tree.set_column_custom_minimum_width(i, 28)
 	tree.clear()
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
-		current_graph_edit.disconnect("view_updated", self, "on_view_updated")
-	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed", self, "on_hierarchy_changed"):
-		current_generator.disconnect("hierarchy_changed", self, "on_hierarchy_changed")
+		current_graph_edit.disconnect("view_updated",Callable(self,"on_view_updated"))
+	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed",Callable(self,"on_hierarchy_changed")):
+		current_generator.disconnect("hierarchy_changed",Callable(self,"on_hierarchy_changed"))
 	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
 		current_graph_edit = null
 		current_generator = null
 		return
 	current_graph_edit = graph_edit
-	current_graph_edit.connect("view_updated", self, "on_view_updated")
+	current_graph_edit.connect("view_updated",Callable(self,"on_view_updated"))
 	current_generator = graph_edit.generator
-	current_generator.connect("hierarchy_changed", self, "on_hierarchy_changed")
+	current_generator.connect("hierarchy_changed",Callable(self,"on_hierarchy_changed"))
 	var file_name = "PTex"
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
@@ -64,10 +64,8 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	if output >= preview:
 		return
 	if mm_deps.get_render_queue_size() > 0:
-		yield(mm_deps, "render_queue_empty")
-	var result = generator.render(self, output, 24, true)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+		await mm_deps.render_queue_empty
+	var result = await generator.render(self, output, 24, true)
 	if index == update_index:
 		var tex = ImageTexture.new()
 		result.copy_to_texture(tex)
@@ -85,7 +83,7 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, n
 		item.clear_custom_color(0)
 	item.set_metadata(0, generator)
 	item_from_gen[generator] = item
-	generator.connect("parameter_changed", self, "on_gen_parameter_changed", [ generator ])
+	generator.connect("parameter_changed",Callable(self,"on_gen_parameter_changed").bind( generator ))
 	if preview > 0 and generator.get_output_defs().size() > 0:
 		for i in range(min(preview, generator.get_output_defs().size())):
 			item.set_icon(i+1, default_texture)
@@ -141,10 +139,8 @@ func _on_PreviewMenu_id_pressed(id):
 
 
 func expand_all(item : TreeItem, expand : bool) -> void:
-	item = item.get_children()
-	while item != null:
-		item.collapsed = !expand
-		item = item.get_next()
+	for i in item.get_children():
+		i.collapsed = !expand
 
 func _on_Expand_pressed():
 	expand_all(tree.get_root(), true)

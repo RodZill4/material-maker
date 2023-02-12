@@ -1,4 +1,4 @@
-tool
+@tool
 extends MMGenShader
 class_name MMGenBrush
 

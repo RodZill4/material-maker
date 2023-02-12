@@ -7,10 +7,10 @@ var max_render_queue_size : int = 0
 var auto : bool = true
 var fast_counter : int = 0
 
-onready var menu : PopupMenu = $PopupMenu
-onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
-onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
-onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
+@onready var menu : PopupMenu = $PopupMenu
+@onready var renderers_menu : PopupMenu = $PopupMenu/Renderers
+@onready var render_menu : PopupMenu = $PopupMenu/MaxRenderSize
+@onready var buffers_menu : PopupMenu = $PopupMenu/MaxBufferSize
 
 
 const ITEM_AUTO : int                       = 1000
@@ -50,7 +50,7 @@ func _ready() -> void:
 		menu.add_item("Material stats", ITEM_MATERIAL_STATS)
 		menu.add_item("Trigger dependency manager", ITEM_TRIGGER_DEPENDENCY_MANAGER)
 	# GPU RAM tooltip
-	$GpuRam.hint_tooltip = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
+	$GpuRam.tooltip_text = "Adapter: %s\nVendor: %s" % [ RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_vendor() ]
 
 func on_counter_change(count : int, pending : int) -> void:
 	if pending == 0:
@@ -60,10 +60,10 @@ func on_counter_change(count : int, pending : int) -> void:
 	else:
 		if count == pending:
 			$ProgressBar.max_value = count
-			start_time = OS.get_ticks_msec()
+			start_time = Time.get_ticks_msec()
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
-			var remaining_time_msec = (OS.get_ticks_msec()-start_time)*pending/(count-pending)
+			var remaining_time_msec = (Time.get_ticks_msec()-start_time)*pending/(count-pending)
 			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
 		$ProgressBar.value = count-pending
 
@@ -95,11 +95,11 @@ func _process(_delta):
 
 func _on_MemUpdateTimer_timeout():
 	$GpuRam.text = e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
-	var tooltip : String = "Adapter: %s\nVendor: %s" % [ VisualServer.get_video_adapter_name(), VisualServer.get_video_adapter_vendor() ]
+	var tooltip : String = "Adapter: %s\nVendor: %s" % [ RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_vendor() ]
 	tooltip += "\nVideo mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
 	tooltip += "\nTexture mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
-	tooltip += "\nVertex mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VERTEX_MEM_USED))
-	$GpuRam.hint_tooltip = tooltip
+	# todo tooltip += "\nVertex mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VERTEX_MEM_USED))
+	$GpuRam.tooltip_text = tooltip
 
 func set_max_renderers(max_renderers : int):
 	if mm_renderer.max_renderers == max_renderers:
@@ -154,6 +154,6 @@ func _on_MaxBufferSize_id_pressed(id):
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(mm_renderer.max_buffer_size), true)
 
 func _on_RenderCounter_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
-		menu.rect_global_position = get_global_mouse_position()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		menu.position = get_global_mouse_position()
 		menu.popup()

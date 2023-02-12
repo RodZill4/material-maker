@@ -1,4 +1,4 @@
-tool
+@tool
 extends MMGenShader
 class_name MMGenMaterial
 
@@ -38,7 +38,7 @@ const EXPORT_OUTPUT_DEF_INDEX : int = 12345
 
 func _ready() -> void:
 	preview_material = ShaderMaterial.new()
-	preview_material.shader = Shader.new()
+	preview_material.gdshader = Shader.new()
 	buffer_name_prefix = "material_%d" % get_instance_id()
 	mm_deps.create_buffer(buffer_name_prefix, self)
 	update()
@@ -58,12 +58,12 @@ func get_type_name() -> String:
 	return "Material"
 
 func get_output_defs(show_hidden : bool = false) -> Array:
-	return .get_output_defs() if show_hidden else []
+	return super.get_output_defs() if show_hidden else []
 
 func get_preprocessed_output_def(output_index : int):
 	if output_index == EXPORT_OUTPUT_DEF_INDEX:
 		return export_output_def
-	return .get_preprocessed_output_def(output_index)
+	return super.get_preprocessed_output_def(output_index)
 
 
 func get_image_size() -> int:
@@ -82,7 +82,7 @@ func update_preview() -> void:
 		graph_edit.send_changed_signal()
 
 func set_parameter(p, v) -> void:
-	.set_parameter(p, v)
+	super.set_parameter(p, v)
 
 func source_changed(input_index : int) -> void:
 	update()
@@ -102,16 +102,16 @@ func set_shader_model(data: Dictionary) -> void:
 				e.erase("external")
 				data.exports.erase(k)
 				external_export_targets[k] = e
-	if ! external_export_targets.empty():
+	if ! external_export_targets.is_empty():
 		mm_loader.update_external_export_targets(get_template_name(), external_export_targets)
-	.set_shader_model(data)
+	super.set_shader_model(data)
 	update()
 
 func update_shaders() -> void:
 	for t in preview_textures.keys():
 		var output_shader = generate_output_shader(preview_textures[t].output)
 		preview_textures[t].output_type = output_shader.output_type
-		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.shader)
+		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.gdshader)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -119,61 +119,56 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if buffer_name == buffer_name_prefix:
 		preview_parameters[parameter_name] = value
 		for p in external_previews:
-			p.set_shader_param(parameter_name, value)
+			p.set_shader_parameter(parameter_name, value)
 	else:
-		var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
-		preview_textures[texture_name].material.set_shader_param(parameter_name, value)
+		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
+		preview_textures[texture_name].material.set_shader_parameter(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		return true
-	var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
+	var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("material"):
 		print("Cannot update "+buffer_name)
 		print(preview_textures[texture_name])
 		return false
 	var size = get_image_size()
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = yield(renderer, "completed")
-	var status = renderer.render_material(self, preview_textures[texture_name].material, size, preview_textures[texture_name].output_type != "rgba")
-	while status is GDScriptFunctionState:
-		status = yield(status, "completed")
+	var renderer = await mm_renderer.request(self)
+	var status = await renderer.render_material(self, preview_textures[texture_name].material, size, preview_textures[texture_name].output_type != "rgba")
 	# Abort rendering if material changed
 	renderer.copy_to_texture(preview_textures[texture_name].texture)
 	renderer.release(self)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
 	if size <= TEXTURE_FILTERING_LIMIT:
-		preview_textures[texture_name].texture.flags &= ~Texture.FLAG_FILTER
+		pass
+		#preview_textures[texture_name].texture.flags &= ~Texture2D.FLAG_FILTER
 	else:
-		preview_textures[texture_name].texture.flags |= Texture.FLAG_FILTER
+		pass
+		#preview_textures[texture_name].texture.flags |= Texture2D.FLAG_FILTER
 	return true
 
 func update_materials(material_list, sequential : bool = false) -> void:
 	for m in material_list:
-		var status = update_material(m, sequential)
-		if sequential:
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+		update_material(m, sequential)
 
 func update_material(m, sequential : bool = false) -> void:
-	if m is SpatialMaterial:
+	if m is StandardMaterial3D:
 		pass
 	elif m is ShaderMaterial:
-		m.shader.code = preview_material.shader.code
+		m.gdshader.code = preview_material.gdshader.code
 		for p in preview_parameters.keys():
-			m.set_shader_param(p, preview_parameters[p])
+			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for p in external_previews:
-		p.shader.code = preview_material.shader.code
+		p.gdshader.code = preview_material.gdshader.code
 		for t in preview_textures.keys():
-			p.set_shader_param(t, preview_textures[t].texture)
+			p.set_shader_parameter(t, preview_textures[t].texture)
 		for t in preview_texture_dependencies.keys():
-			p.set_shader_param(t, preview_texture_dependencies[t])
+			p.set_shader_parameter(t, preview_texture_dependencies[t])
 
 func update() -> void:
 	if preview_material == null:
@@ -409,10 +404,9 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 	return s
 
 static func get_template_text(template : String) -> String:
-	var in_file = File.new()
-	if in_file.open(MMPaths.STD_GENDEF_PATH+"/"+template, File.READ) != OK:
-		if in_file.open(MMPaths.get_resource_dir()+"/nodes/"+template, File.READ) != OK:
-			return template
+	var in_file = FileAccess.open(MMPaths.STD_GENDEF_PATH+"/"+template, FileAccess.READ)
+	if ! in_file.is_open():
+		return template
 	return in_file.get_as_text()
 
 func process_conditionals(template : String) -> String:
@@ -423,7 +417,7 @@ func process_conditionals(template : String) -> String:
 		if l == "":
 			continue
 		elif l.left(4) == "$if ":
-			var condition = subst_string(l.right(4), context)
+			var condition = subst_string(l.right(-4), context)
 			var expr = Expression.new()
 			var error = expr.parse(condition, [])
 			if error != OK:
@@ -507,11 +501,11 @@ func create_file_from_template(template : String, file_name : String, export_con
 		custom_script = export_context["@mm_custom_script"]
 	processed_template = process_shader(processed_template, custom_script).shader_code
 	if file_name == "clipboard":
-		OS.clipboard = processed_template
+		DisplayServer.clipboard_set(processed_template)
 	else:
-		var out_file = File.new()
-		Directory.new().remove(file_name)
-		if out_file.open(file_name, File.WRITE) != OK:
+		DirAccess.open("").remove(file_name)
+		var out_file = FileAccess.open(file_name, FileAccess.WRITE)
+		if ! out_file.is_open():
 			print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
 			return false
 		out_file.store_string(processed_template)
@@ -550,7 +544,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	export_context["$(dir_prefix)"] = prefix.get_base_dir()
 	var exported_files : Array = []
 	var overwrite_files : Array = []
-	var dir : Directory = Directory.new()
+	var dir : DirAccess = DirAccess.open("")
 	var export_profile = get_export(profile)
 	if export_profile.has("custom"):
 		export_context["@mm_custom_script"] = export_profile.custom
@@ -570,23 +564,21 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				overwrite_files.push_back(f)
 				continue
 		exported_files.push_back(f)
-	if ! overwrite_files.empty():
-		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	if ! overwrite_files.is_empty():
+		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = "Overwrite existing files?"
 		for f in overwrite_files:
 			var file_name = subst_string(f.file_name, export_context)
 			dialog.dialog_text += "\n- "+file_name.get_file()
-		dialog.add_cancel("Keep existing file(s)");
+		dialog.add_cancel_button("Keep existing file(s)");
 		mm_globals.main_window.add_child(dialog)
-		var result = dialog.ask()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await dialog.ask()
 		if result == "ok":
 			exported_files.append_array(overwrite_files)
 	var progress_dialog = null
 	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
 	if progress_dialog_scene != null:
-		progress_dialog = progress_dialog_scene.instance()
+		progress_dialog = progress_dialog_scene.instantiate()
 	get_tree().get_root().add_child(progress_dialog)
 	progress_dialog.set_text("Exporting material")
 	progress_dialog.set_progress(0)
@@ -603,7 +595,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 			"texture":
 				# Wait until the render queue is empty
 				if mm_deps.get_render_queue_size() > 0:
-					yield(mm_deps, "render_queue_empty")
+					await mm_deps.render_queue_empty
 				var file_name = subst_string(f.file_name, export_context)
 				var output_index : int
 				if f.has("output"):
@@ -617,17 +609,15 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 						type_string = type_string.strip_edges()
 						if type_string == "f" or type_string == "rgb" or type_string == "rgba":
 							type = type_string
-							expression = expression.right(equal_position+1)
-					export_output_def = { type: expression, type=type }
+							expression = expression.right(-(equal_position+1))
+					export_output_def = { type: expression, "type":type }
 					output_index = EXPORT_OUTPUT_DEF_INDEX
 				else:
 					# Error! Just ignore it
 					saved_files += 1
 					progress_dialog.set_progress(float(saved_files)/float(total_files))
 					continue
-				var result = render(self, output_index, size)
-				while result is GDScriptFunctionState:
-					result = yield(result, "completed")
+				var result = await render(self, output_index, size)
 				var is_greyscale : bool = false
 				var output = get_preprocessed_output_def(output_index)
 				if output != null:
@@ -648,7 +638,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 			"buffers":
 				var index : int = 1
 				if mm_deps.get_render_queue_size() > 0:
-					yield(mm_deps, "render_queue_empty")
+					await mm_deps.render_queue_empty
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
@@ -674,19 +664,19 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 		progress_dialog.queue_free()
 
 func _serialize_data(data: Dictionary) -> Dictionary:
-	data = ._serialize_data(data)
+	data = super._serialize_data(data)
 	if export_last_target != "":
 		data.export_last_target = export_last_target
 	data.export_paths = export_paths
 	return data
 
 func _serialize(data: Dictionary) -> Dictionary:
-	._serialize(data)
+	super._serialize(data)
 	data.export = {}
 	return data
 
 func _deserialize(data : Dictionary) -> void:
-	._deserialize(data)
+	super._deserialize(data)
 	if data.has("export_last_target") and data.export_last_target != null:
 		export_last_target = data.export_last_target
 	if data.has("export_paths"):

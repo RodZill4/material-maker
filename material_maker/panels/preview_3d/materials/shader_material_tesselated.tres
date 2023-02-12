@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=2]
 
-[ext_resource path="res://addons/material_maker/import_plugin/tesselated.shader" type="Shader" id=1]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=2]
+[ext_resource path="res://addons/material_maker/import_plugin/tesselated.gdshader" type="Shader" id=1]
+[ext_resource path="res://rodz_labs_logo.png" type="Texture2D" id=2]
 
 [resource]
 shader = ExtResource( 1 )

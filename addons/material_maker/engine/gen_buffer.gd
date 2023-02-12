@@ -1,11 +1,11 @@
-tool
+@tool
 extends MMGenTexture
 class_name MMGenBuffer
 
-"""
-Texture generator buffers, that render their input in a specific resolution and provide the result as output.
-This is useful when using generators that sample their inputs several times
-"""
+
+# Texture generator buffers, that render their input in a specific resolution and
+# provide the result as output.
+# This is useful when using generators that sample their inputs several times
 
 
 const VERSION_OLD     : int = 0
@@ -24,14 +24,14 @@ var current_renderer = null
 
 func _ready() -> void:
 	material = ShaderMaterial.new()
-	material.shader = Shader.new()
+	material.gdshader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
 	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null and ! (current_renderer is GDScriptFunctionState):
+	if current_renderer != null:
 		current_renderer.release(self)
 
 func get_type() -> String:
@@ -83,7 +83,7 @@ func set_parameter(n : String, v) -> void:
 			var param_name = "o%d_tex_size" % get_instance_id()
 			var param_value = pow(2, v)
 			mm_deps.dependency_update(param_name, param_value)
-	.set_parameter(n, v)
+	super.set_parameter(n, v)
 
 var updating_shader : bool = false
 func update_shader() -> void:
@@ -100,7 +100,7 @@ func do_update_shader() -> void:
 	var source_output = get_source(0)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-	if source.empty():
+	if source.is_empty():
 		source = DEFAULT_GENERATED_SHADER
 	var shader_code = mm_renderer.generate_shader(source)
 	material = mm_deps.buffer_create_shader_material("o%d_tex" % get_instance_id(), material, shader_code)
@@ -108,34 +108,30 @@ func do_update_shader() -> void:
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value != null:
-		material.set_shader_param(parameter_name, value)
+		material.set_shader_parameter(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	assert(current_renderer == null)
-	current_renderer = mm_renderer.request(self)
-	while current_renderer is GDScriptFunctionState:
-		current_renderer = yield(current_renderer, "completed")
-	var time = OS.get_ticks_msec()
-	current_renderer = current_renderer.render_material(self, material, pow(2, get_parameter("size")))
-	while current_renderer is GDScriptFunctionState:
-		current_renderer = yield(current_renderer, "completed")
+	current_renderer = await mm_renderer.request(self)
+	var time = Time.get_ticks_msec()
+	current_renderer = await current_renderer.render_material(self, material, pow(2, get_parameter("size")))
 	current_renderer.copy_to_texture(texture)
 	current_renderer.release(self)
 	current_renderer = null
-	match version:
-		VERSION_COMPLEX:
-			var flags = Texture.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
-			if ! parameters.has("filter") or parameters.filter:
-				flags |= Texture.FLAG_FILTER
-			if ! parameters.has("mipmap") or parameters.mipmap:
-				flags |= Texture.FLAG_MIPMAPS
-			texture.flags = flags
-		_:
-			texture.flags = Texture.FLAGS_DEFAULT
-	emit_signal("rendering_time", OS.get_ticks_msec() - time)
+#	match version:
+#		VERSION_COMPLEX:
+#			var flags = Texture2D.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
+#			if ! parameters.has("filter") or parameters.filter:
+#				flags |= Texture2D.FLAG_FILTER
+#			if ! parameters.has("mipmap") or parameters.mipmap:
+#				flags |= Texture2D.FLAG_MIPMAPS
+#			texture.flags = flags
+#		_:
+#			texture.flags = Texture2D.FLAGS_DEFAULT
+	emit_signal("rendering_time", Time.get_ticks_msec() - time)
 	mm_deps.dependency_update(buffer_name, texture, true)
 	return true
 

@@ -7,4 +7,4 @@ func get_model_data() -> Dictionary:
 
 func set_model_data(data) -> void:
 	if data.has("default"):
-		$Default.pressed = data.default
+		$Default.button_pressed = data.default

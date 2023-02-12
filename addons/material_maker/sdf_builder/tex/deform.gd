@@ -22,7 +22,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
 	var tex : String
-	if scene.children.empty():
+	if scene.children.is_empty():
 		tex = "1.0"
 		match ctxt.type:
 			"rgba":

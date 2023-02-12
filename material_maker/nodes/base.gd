@@ -4,10 +4,10 @@ class_name MMGraphNodeBase
 
 class NodeButton:
 	var hidden : bool = false
-	var texture : Texture
+	var texture : Texture2D
 	var modulate_texture : bool = false
 
-	func _init(t : Texture, m : bool = false):
+	func _init(t : Texture2D,m : bool = false):
 		hidden = false
 		texture = t
 		modulate_texture = m
@@ -24,14 +24,14 @@ var buffer_button : NodeButton
 var rendering_time : int = -1
 
 
-const MINIMIZE_ICON : Texture = preload("res://material_maker/icons/minimize.tres")
-const RANDOMNESS_ICON : Texture = preload("res://material_maker/icons/randomness_unlocked.tres")
-const RANDOMNESS_LOCKED_ICON : Texture = preload("res://material_maker/icons/randomness_locked.tres")
-const BUFFER_ICON : Texture = preload("res://material_maker/icons/buffer.tres")
-const BUFFER_PAUSED_ICON : Texture = preload("res://material_maker/icons/buffer_paused.tres")
-const CUSTOM_ICON : Texture = preload("res://material_maker/icons/custom.png")
-const PREVIEW_ICON : Texture = preload("res://material_maker/icons/preview.png")
-const PREVIEW_LOCKED_ICON : Texture = preload("res://material_maker/icons/preview_locked.png")
+const MINIMIZE_ICON : Texture2D = preload("res://material_maker/icons/minimize.tres")
+const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomness_unlocked.tres")
+const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
+const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
+const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
+const CUSTOM_ICON : Texture2D = preload("res://material_maker/icons/custom.png")
+const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png")
+const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
 
@@ -62,10 +62,10 @@ func _init():
 	buffer_button.hidden = true
 
 func _ready() -> void:
-	connect("gui_input", self, "_on_gui_input")
+	connect("gui_input",Callable(self,"_on_gui_input"))
 	call_deferred("update")
 
-func add_button(texture : Texture, modulate_texture : bool = false) -> NodeButton:
+func add_button(texture : Texture2D, modulate_texture : bool = false) -> NodeButton:
 	var button : NodeButton = NodeButton.new(texture, modulate_texture)
 	buttons.push_back(button)
 	return button
@@ -80,15 +80,15 @@ func update():
 		randomness_button.texture = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
 	else:
 		randomness_button.hidden = true
-	buffer_button.hidden = generator.get_buffers().empty()
+	buffer_button.hidden = generator.get_buffers().is_empty()
 	if ! buffer_button.hidden:
-		buffer_button.texture = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty() else BUFFER_PAUSED_ICON
-	.update()
+		buffer_button.texture = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
+	super.update()
 
 func _draw() -> void:
 	var color : Color = get_color("title_color")
 # warning-ignore:narrowing_conversion
-	var button_x : int = rect_size.x-40
+	var button_x : int = size.x-40
 	for b in buttons:
 		if b.hidden:
 			continue
@@ -145,11 +145,11 @@ func _draw() -> void:
 			var string_size : Vector2 = font.get_string_size(string)
 			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
 	if (selected):
-		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, rect_size))
+		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 
 func set_generator(g) -> void:
-	.set_generator(g)
-	g.connect("rendering_time", self, "update_rendering_time")
+	super.set_generator(g)
+	g.connect("rendering_time",Callable(self,"update_rendering_time"))
 
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
@@ -175,10 +175,10 @@ func _on_seed_menu(id):
 			var hier_name = generator.get_hier_name()
 			get_parent().undoredo.add("Lock/unlock seed", [{ type="setseedlocked", node=hier_name, seedlocked=old_seed_locked }], [{ type="setseedlocked", node=hier_name, seedlocked=!old_seed_locked }], false)
 		1:
-			OS.clipboard = "seed=%.9f" % generator.seed_value
+			DisplayServer.clipboard_set("seed=%.9f" % generator.seed_value)
 		2:
-			if OS.clipboard.left(5) == "seed=":
-				set_generator_seed(OS.clipboard.right(5).to_float())
+			if DisplayServer.clipboard_get().left(5) == "seed=":
+				set_generator_seed(DisplayServer.clipboard_get().right(-5).to_float())
 
 func _on_buffer_menu(id):
 	match id:
@@ -196,7 +196,7 @@ func _on_buffer_menu(id):
 
 func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 	if b == minimize_button:
-		if event.button_index == BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_LEFT:
 			generator.minimized = !generator.minimized
 			var hier_name = generator.get_hier_name()
 			get_parent().undoredo.add("Minimize node", [{ type="setminimized", node=hier_name, minimized=!generator.minimized }], [{ type="setminimized", node=hier_name, minimized=generator.minimized }], false)
@@ -204,10 +204,10 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 			return true
 	elif b == randomness_button:
 		match event.button_index:
-			BUTTON_LEFT:
+			MOUSE_BUTTON_LEFT:
 				reroll_generator_seed()
 				return true
-			BUTTON_RIGHT:
+			MOUSE_BUTTON_RIGHT:
 				var menu : PopupMenu = PopupMenu.new()
 				menu.add_item(tr("Unlock seed") if generator.is_seed_locked() else tr("Lock seed"), 0)
 				menu.add_separator()
@@ -216,36 +216,36 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 					menu.add_item(tr("Paste seed"), 2)
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-				menu.connect("popup_hide", menu, "queue_free")
-				menu.connect("id_pressed", self, "_on_seed_menu")
+				menu.connect("popup_hide",Callable(menu,"queue_free"))
+				menu.connect("id_pressed",Callable(self,"_on_seed_menu"))
 				return true
 	elif b == buffer_button:
 		match event.button_index:
-			BUTTON_RIGHT:
+			MOUSE_BUTTON_RIGHT:
 				var menu : PopupMenu = PopupMenu.new()
 				menu.add_item(tr("Pause buffers"), MENU_BUFFER_PAUSE)
-				menu.set_item_disabled(MENU_BUFFER_PAUSE, generator.get_buffers(MMGenBase.BUFFERS_RUNNING).empty())
+				menu.set_item_disabled(MENU_BUFFER_PAUSE, generator.get_buffers(MMGenBase.BUFFERS_RUNNING).is_empty())
 				menu.add_item(tr("Resume buffers"), MENU_BUFFER_RESUME)
-				menu.set_item_disabled(MENU_BUFFER_RESUME, generator.get_buffers(MMGenBase.BUFFERS_PAUSED).empty())
+				menu.set_item_disabled(MENU_BUFFER_RESUME, generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty())
 				if OS.is_debug_build():
 					menu.add_separator()
 					menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-				menu.connect("popup_hide", menu, "queue_free")
-				menu.connect("id_pressed", self, "_on_buffer_menu")
+				menu.connect("popup_hide",Callable(menu,"queue_free"))
+				menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
 				return true
 	return false
 
 func update_button_tooltip(b : NodeButton) -> bool:
 	if b == minimize_button:
-		hint_tooltip = tr("Minimize the node")
+		tooltip_text = tr("Minimize the node")
 		return true
 	elif b == randomness_button:
-		hint_tooltip = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
+		tooltip_text = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 		return true
 	elif b == buffer_button:
-		hint_tooltip = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
+		tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
 		return true
 	return false
 
@@ -255,7 +255,7 @@ func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
 # warning-ignore:narrowing_conversion
-			var button_x : int = rect_size.x-40
+			var button_x : int = size.x-40
 			for b in buttons:
 				if b.hidden:
 					continue
@@ -264,18 +264,18 @@ func _on_gui_input(event) -> void:
 						accept_event()
 						return
 				button_x -= 16
-			if event.doubleclick:
+			if event.double_click:
 				doubleclicked = true
-			if event.button_index == BUTTON_RIGHT:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
 				if generator is MMGenGraph:
 					accept_event()
 					var menu : PopupMenu = PopupMenu.new()
-					if !get_parent().get_propagation_targets(generator).empty():
+					if !get_parent().get_propagation_targets(generator).is_empty():
 						menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
 					if menu.get_item_count() != 0:
 						add_child(menu)
-						menu.connect("modal_closed", menu, "queue_free")
-						menu.connect("id_pressed", self, "_on_menu_id_pressed")
+						menu.connect("modal_closed",Callable(menu,"queue_free"))
+						menu.connect("id_pressed",Callable(self,"_on_menu_id_pressed"))
 						menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
 					else:
 						menu.free()
@@ -288,7 +288,7 @@ func _on_gui_input(event) -> void:
 	elif event is InputEventMouseMotion:
 		var epos : Vector2 = event.position
 # warning-ignore:narrowing_conversion
-		var button_x : int = rect_size.x-40
+		var button_x : int = size.x-40
 		for b in buttons:
 			if b.hidden:
 				continue
@@ -297,17 +297,17 @@ func _on_gui_input(event) -> void:
 					accept_event()
 					return
 			button_x -= 16
-		if Rect2(0, 0, rect_size.x-56, 16).has_point(epos):
+		if Rect2(0, 0, size.x-56, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
-				hint_tooltip = wrap_string(description)
+				tooltip_text = wrap_string(description)
 			elif generator.model != null:
-				hint_tooltip = TranslationServer.translate(generator.model)
+				tooltip_text = TranslationServer.translate(generator.model)
 			return
-		hint_tooltip = ""
+		tooltip_text = ""
 
 func get_input_slot(pos : Vector2) -> int:
-	var return_value = .get_input_slot(pos)
+	var return_value = super.get_input_slot(pos)
 	var new_show_inputs : bool = (return_value != -2)
 	if new_show_inputs != show_inputs:
 		show_inputs = new_show_inputs
@@ -315,7 +315,7 @@ func get_input_slot(pos : Vector2) -> int:
 	return return_value
 
 func get_output_slot(pos : Vector2) -> int:
-	var return_value = .get_output_slot(pos)
+	var return_value = super.get_output_slot(pos)
 	var new_show_outputs : bool = (return_value != -2)
 	if new_show_outputs != show_outputs:
 		show_outputs = new_show_outputs
@@ -349,7 +349,7 @@ func get_slot_from_position(pos : Vector2) -> Dictionary:
 	return { type="none", index=-1 }
 
 func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
-	if io.empty():
+	if io.is_empty():
 		io = get_slot_from_position(pos)
 	match io.type:
 		"input":
@@ -367,11 +367,11 @@ func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
 	return ""
 
 func set_slot_tip_text(pos : Vector2, io : Dictionary = {}):
-	if io.empty():
+	if io.is_empty():
 		io = get_slot_from_position(pos)
 	match io.type:
 		"output":
-			if Input.is_key_pressed(KEY_CONTROL):
+			if Input.is_key_pressed(KEY_CTRL):
 				if Input.is_key_pressed(KEY_SHIFT):
 					mm_globals.set_tip_text("#LMB: Lock/Unlock in 2D preview (2), #RMB: Add/Remove reroute node")
 				else:
@@ -393,13 +393,13 @@ func clear_connection_labels() -> void:
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
 		MENU_PROPAGATE_CHANGES:
-			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
-			dialog.add_cancel("Cancel");
+			dialog.add_cancel_button("Cancel");
 			add_child(dialog)
 			var result = dialog.ask()
 			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+				result = await result.completed
 			if result == "ok":
 				get_parent().call_deferred("propagate_node_changes", generator)
 
@@ -426,7 +426,7 @@ func update_sdf_generator(sdf_scene) -> void:
 	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)
 
 func finalize_generator_update() -> void:
-	if ! edit_generator_next_state.empty():
+	if ! edit_generator_next_state.is_empty():
 		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
 		edit_generator_prev_state = {}
 		edit_generator_next_state = {}

@@ -1,6 +1,6 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Cylinder", "Capsule", "Pyramid", "Cone") var shape
+@export var shape # (int, "Cylinder", "Capsule", "Pyramid", "Cone")
 
 const INCLUDES : Array = [
 	[ "rotate", "sdf3d_cylinder" ],

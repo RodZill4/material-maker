@@ -1,4 +1,4 @@
-tool
+@tool
 extends MMGenBase
 class_name MMGenShader
 
@@ -10,6 +10,7 @@ var params_use_seed : bool = false
 var generic_size : int = 1
 
 var editable : bool = false
+
 
 
 func toggle_editable() -> bool:
@@ -26,12 +27,12 @@ func has_randomness() -> bool:
 	return model_uses_seed or params_use_seed
 
 func get_description() -> String:
-	var desc_list : PoolStringArray = PoolStringArray()
+	var desc_list : PackedStringArray = PackedStringArray()
 	if shader_model.has("shortdesc"):
 		desc_list.push_back(TranslationServer.translate(shader_model.shortdesc))
 	if shader_model.has("longdesc"):
 		desc_list.push_back(TranslationServer.translate(shader_model.longdesc))
-	return desc_list.join("\n")
+	return "\n".join(desc_list)
 
 func get_type() -> String:
 	return "shader"
@@ -39,7 +40,7 @@ func get_type() -> String:
 func get_type_name() -> String:
 	if shader_model.has("name"):
 		return shader_model.name
-	return .get_type_name()
+	return super.get_type_name()
 
 func get_parameter_defs() -> Array:
 	if shader_model_preprocessed == null or !shader_model_preprocessed.has("parameters"):
@@ -64,7 +65,7 @@ func set_parameter(n : String, v) -> void:
 		if params_use_seed != new_params_use_seed:
 			uses_seed_updated = true
 			params_use_seed = new_params_use_seed
-	.set_parameter(n, v)
+	super.set_parameter(n, v)
 	var had_rnd : bool = false
 	if old_value is String and old_value.find("$rnd(") != -1:
 		had_rnd = true
@@ -88,7 +89,7 @@ func get_preprocessed_output_def(output_index : int):
 	if shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
 		return shader_model_preprocessed.outputs[output_index]
 	else:
-		return null
+		return "#error"
 
 #
 # Shader model preprocessing
@@ -228,7 +229,7 @@ func expand_generic_code(code : String, first_generic_value : int = 1) -> String
 			rv += code
 			break
 		rv += code.left(for_position)
-		code = code.right(for_position+4)
+		code = code.right(-(for_position+4))
 		var end_position : int = code.find("#end")
 		var generic_code : String
 		if end_position == -1:
@@ -236,7 +237,7 @@ func expand_generic_code(code : String, first_generic_value : int = 1) -> String
 			code = ""
 		else:
 			generic_code = code.left(end_position)
-			code = code.right(end_position+4)
+			code = code.right(-(end_position+4))
 		for gi in generic_size:
 			rv += generic_code.replace("#", str(gi+first_generic_value))
 	return rv
@@ -322,23 +323,23 @@ func expand_generic() -> void:
 						parameter.longdesc = parameter.longdesc.replace("#", str(gv))
 					var label : String = parameter.label
 					var colon_position = label.find(":")
-					if colon_position != -1 and label.left(colon_position).is_valid_integer():
+					if colon_position != -1 and label.left(colon_position).is_valid_int():
 						var param_position : int = label.left(colon_position).to_int()
 						if param_position > first_generic_input and param_position <= last_generic_input:
 							param_position += gi*(last_generic_input-first_generic_input)
-							parameter.label = str(param_position)+label.right(colon_position)
+							parameter.label = str(param_position)+label.right(-colon_position)
 					parameters.append(parameter)
 		else:
 			for i in range(r.begin, r.end):
 				var parameter = shader_model.parameters[i]
 				var label : String = parameter.label
 				var colon_position = label.find(":")
-				if colon_position != -1 and label.left(colon_position).is_valid_integer():
+				if colon_position != -1 and label.left(colon_position).is_valid_int():
 					var param_position : int = label.left(colon_position).to_int()
 					if param_position >= last_generic_input:
 						param_position += (generic_size-1)*(last_generic_input-first_generic_input)
 						parameter = parameter.duplicate()
-						parameter.label = str(param_position)+label.right(colon_position)
+						parameter.label = str(param_position)+label.right(-colon_position)
 				parameters.append(parameter)
 	shader_model_preprocessed.parameters = parameters
 	# Build outputs
@@ -429,13 +430,13 @@ func find_keyword_call(string : String, keyword : String):
 	var end : int = find_matching_parenthesis(string, parameter_begin-1)
 	if end < string.length():
 		return string.substr(parameter_begin, end-parameter_begin)
-	return null
+	return "#error"
 
 func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
 	while true:
-		var uv = find_keyword_call(string, input+input_suffix)
-		if uv == null:
+		var uv : String = find_keyword_call(string, input+input_suffix)
+		if uv == "#error":
 			break
 		elif uv == "":
 			print("syntax error")
@@ -444,7 +445,7 @@ func replace_input_with_function_call(string : String, input : String, seed_para
 		string = string.replace("$%s(%s)" % [ input+input_suffix, uv ], "%s_input_%s(%s%s)" % [ genname, input, uv, seed_parameter ])
 	return string
 
-func replace_input(string : String, context, input : String, type : String, src : OutputPort, default : String) -> Dictionary:
+func replace_input(string : String, context, input : String, type : String, src : MMGenBase.OutputPort, default : String) -> Dictionary:
 	var required_globals = []
 	var required_defs = ""
 	var required_code = ""
@@ -468,7 +469,7 @@ func replace_input(string : String, context, input : String, type : String, src 
 			if src_code.has(type):
 				src_code.string = src_code[type]
 			else:
-				src_code.string = "*error missing "+type+"*\n"+JSON.print(src_code)
+				src_code.string = "*error missing "+type+"*\n"+JSON.stringify(src_code)
 		# Add global definitions
 		if src_code.has("globals"):
 			for d in src_code.globals:
@@ -507,22 +508,22 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 			string = string.replace("$(%s)" % variable, variables[variable])
 			var keyword_size : int = variable.length()+1
 			var new_string : String = ""
-			while !string.empty():
+			while !string.is_empty():
 				var pos : int = string.find("$"+variable)
 				if pos == -1:
 					new_string += string
 					break
 				new_string += string.left(pos)
-				string = string.right(pos)
+				string = string.right(-pos)
 				if string.length() > keyword_size and is_word_letter(string[keyword_size]):
 					new_string += string.left(keyword_size)
-					string = string.right(keyword_size)
+					string = string.right(-keyword_size)
 					continue
-				if string.empty() or !is_word_letter(string[0]):
+				if string.is_empty() or !is_word_letter(string[0]):
 					new_string += variables[variable]
 				else:
 					new_string += "$"+variable
-				string = string.right(keyword_size)
+				string = string.right(-keyword_size)
 			string = new_string
 		if string == old_string:
 			break
@@ -539,7 +540,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	# Named parameters from parent graph are specified first so they don't
 	# hide locals
 	var variables = {}
-	if ! mm_renderer.get_global_parameters().empty():
+	if ! mm_renderer.get_global_parameters().is_empty():
 		for gp in mm_renderer.get_global_parameters():
 			variables[gp] = "mm_global_"+gp
 	if parent.has_method("get_named_parameters"):
@@ -574,7 +575,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
-				if p.values.empty():
+				if p.values.is_empty():
 					value_string = ""
 				else:
 					if ! ( value is int or value is float ) or value < 0 or value >= p.values.size():
@@ -783,11 +784,11 @@ func get_shader_model_for_edit():
 
 func do_edit(node, edit_window_scene : PackedScene) -> void:
 	if shader_model != null:
-		var edit_window = edit_window_scene.instance()
+		var edit_window = edit_window_scene.instantiate()
 		node.get_parent().add_child(edit_window)
 		edit_window.set_model_data(get_shader_model_for_edit())
-		edit_window.connect("node_changed", node, "update_shader_generator")
-		edit_window.connect("popup_hide", edit_window, "queue_free")
+		edit_window.connect("node_changed",Callable(node,"update_shader_generator"))
+		edit_window.connect("popup_hide",Callable(edit_window,"queue_free"))
 		edit_window.popup_centered()
 
 func edit(node) -> void:

@@ -1,8 +1,8 @@
 extends Popup
 
 
-onready var list := $PanelContainer/VBoxContainer/ScrollContainer/List
-onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
+@onready var list := $PanelContainer/VBoxContainer/ScrollContainer/List
+@onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
 
 
 var insert_position : Vector2
@@ -12,7 +12,7 @@ var qc_slot : int
 var qc_slot_type : int
 var qc_is_output : bool
 
-onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
+@onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
 
 func get_current_graph():
@@ -20,14 +20,15 @@ func get_current_graph():
 
 
 func _ready() -> void:
-	filter.connect("text_changed", self, "update_list")
-	filter.connect("text_entered", self, "filter_entered")
-	list.connect("object_selected", self, "object_selected")
+	filter.connect("text_changed",Callable(self,"update_list"))
+	filter.connect("text_submitted",Callable(self,"filter_entered"))
+	list.connect("object_selected",Callable(self,"object_selected"))
 	update_list()
 
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), Color(1, 0.56, 0.56, 1), false, 2)
+	pass
+	# todo draw_rect(Rect2(0, 0, size.x, size.y), Color(1, 0.56, 0.56, 1), false, 2)
 
 
 func filter_entered(_filter) -> void:
@@ -38,7 +39,7 @@ func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
 	current_graph.undoredo.start_group()
 	var nodes : Array = current_graph.create_nodes(node_data, insert_position)
-	if not nodes.empty():
+	if not nodes.is_empty():
 		var node : GraphNode = nodes[0]
 		if qc_node != "": # dragged from port
 			var port_position : Vector2
@@ -67,13 +68,13 @@ func object_selected(obj) -> void:
 	hide()
 
 
-func hide() -> void:
-	.hide()
+func todo_renamed_hide() -> void:
+	super.hide()
 	get_current_graph().grab_focus()
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
-	insert_position = get_current_graph().offset_from_global_position(get_global_mouse_position())
+	insert_position = Vector2(0, 0) # todo get_current_graph().offset_from_global_position(get_global_mouse_position())
 	popup()
 	qc_node = node_name
 	qc_slot = slot
@@ -98,11 +99,11 @@ func check_quick_connect(obj) -> bool:
 	if mm_loader.predefined_generators.has(obj.type):
 		ref_obj = mm_loader.predefined_generators[obj.type]
 	# comment and remote nodes have neither input nor output
-	if ref_obj.type == "comment" or ref_obj.type == "remote":
+	if ! ref_obj.has("type") or ref_obj.type == "comment" or ref_obj.type == "remote":
 		return false
 	if qc_is_output:
 		if ref_obj.has("shader_model"):
-			if ! ref_obj.shader_model.has("outputs") or ref_obj.shader_model.outputs.empty():
+			if ! ref_obj.shader_model.has("outputs") or ref_obj.shader_model.outputs.is_empty():
 				return false
 			else:
 				var found : bool = false
@@ -126,7 +127,7 @@ func check_quick_connect(obj) -> bool:
 					break
 			if !found:
 				return false
-			if output_ports.empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
+			if output_ports.is_empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
 				return false
 		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0:
 			return false
@@ -134,7 +135,7 @@ func check_quick_connect(obj) -> bool:
 			return false
 	else:
 		if ref_obj.has("shader_model"):
-			if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.empty():
+			if ! ref_obj.shader_model.has("inputs") or ref_obj.shader_model.inputs.is_empty():
 				return false
 			else:
 				var found : bool = false
@@ -158,7 +159,7 @@ func check_quick_connect(obj) -> bool:
 					break
 			if !found:
 				return false
-			if input_ports.empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
+			if input_ports.is_empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
 				return false
 		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf":
 			return false
@@ -168,7 +169,7 @@ func check_quick_connect(obj) -> bool:
 
 func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
-	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scrollbar().value = 0.0
+	$PanelContainer/VBoxContainer/ScrollContainer.get_v_scroll_bar().value = 0.0
 	list.clear()
 	for i in library_manager.get_items(filter_text, true):
 		var obj = i.item
@@ -185,7 +186,7 @@ func update_list(filter_text : String = "") -> void:
 
 func _input(event) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
-		if !get_rect().has_point(event.position):
+		if false: #todo !get_rect().has_point(event.position):
 			hide()
 
 func _unhandled_input(event) -> void:

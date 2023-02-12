@@ -1,6 +1,6 @@
 extends CheckBox
 
-export var config_variable : String
+@export var config_variable : String
 
 func _ready() -> void:
 	pass
