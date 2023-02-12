@@ -38,7 +38,7 @@ const EXPORT_OUTPUT_DEF_INDEX : int = 12345
 
 func _ready() -> void:
 	preview_material = ShaderMaterial.new()
-	preview_material.gdshader = Shader.new()
+	preview_material.shader = Shader.new()
 	buffer_name_prefix = "material_%d" % get_instance_id()
 	mm_deps.create_buffer(buffer_name_prefix, self)
 	update()
@@ -111,7 +111,7 @@ func update_shaders() -> void:
 	for t in preview_textures.keys():
 		var output_shader = generate_output_shader(preview_textures[t].output)
 		preview_textures[t].output_type = output_shader.output_type
-		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.gdshader)
+		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.shader)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -158,13 +158,13 @@ func update_material(m, sequential : bool = false) -> void:
 	if m is StandardMaterial3D:
 		pass
 	elif m is ShaderMaterial:
-		m.gdshader.code = preview_material.gdshader.code
+		m.shader.code = preview_material.shader.code
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for p in external_previews:
-		p.gdshader.code = preview_material.gdshader.code
+		p.shader.code = preview_material.shader.code
 		for t in preview_textures.keys():
 			p.set_shader_parameter(t, preview_textures[t].texture)
 		for t in preview_texture_dependencies.keys():

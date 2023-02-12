@@ -205,7 +205,7 @@ func update_shader() -> void:
 	shader += value.get_shader_params("")
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
-	$Gradient.material.gdshader.set_code(shader)
+	$Gradient.material.shader.set_code(shader)
 
 func _on_Interpolation_item_selected(ID) -> void:
 	value.interpolation = ID

@@ -34,6 +34,8 @@ func update_predefined_generators()-> void:
 					var file : FileAccess = FileAccess.open(path+"/"+file_name, FileAccess.READ)
 					if file.is_open():
 						var generator = string_to_dict_tree(file.get_as_text())
+						print(file_name)
+						print(generator)
 						if CHECK_PREDEFINED:
 							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
 								var parse_result = parser.parse(generator.shader_model.global)
@@ -53,7 +55,6 @@ func update_predefined_generators()-> void:
 										else:
 											print(definition.type)
 						predefined_generators[file_name.get_basename()] = generator
-						file = null
 				file_name = dir.get_next()
 	if false:
 		var file : FileAccess = FileAccess.open("predefined_nodes.json", FileAccess.WRITE)
@@ -123,7 +124,7 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 
 static func string_to_dict_tree(string_data : String) -> Dictionary:
 	var test_json_conv : JSON = JSON.new()
-	if test_json_conv.parse(string_data) and test_json_conv.data is Dictionary:
+	if test_json_conv.parse(string_data) == OK and test_json_conv.data is Dictionary:
 		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
@@ -181,6 +182,7 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 	return rv
 
 func create_gen(data) -> MMGenBase:
+	print(data)
 	var guess = [
 		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
@@ -221,6 +223,8 @@ func create_gen(data) -> MMGenBase:
 		if types.has(data.type):
 			generator = types[data.type].new()
 		elif predefined_generators.has(data.type):
+			print(data.type)
+			print(predefined_generators[data.type])
 			generator = create_gen(predefined_generators[data.type])
 			if generator == null:
 				print("Cannot find description for "+data.type)

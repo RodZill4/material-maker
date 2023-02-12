@@ -48,7 +48,7 @@ func load_library(path : String, ro : bool = false, raw_data : String = "") -> b
 		else:
 			library_icons[i.tree_item] = null
 			continue
-		texture.create_from_image(image)
+		texture = ImageTexture.create_from_image(image)
 		library_icons[i.tree_item] = texture
 	return true
 

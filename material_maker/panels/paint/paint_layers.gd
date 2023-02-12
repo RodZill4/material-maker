@@ -299,7 +299,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = albedo.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.albedo
+		color_rect.material.shader = layer_shaders.albedo
 		color_rect.material.set_shader_parameter("input_tex", l.albedo)
 		color_rect.material.set_shader_parameter("modulate", l.albedo_alpha)
 		apply_masks(color_rect.material, m)
@@ -309,7 +309,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = metallic.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.metallic
+		color_rect.material.shader = layer_shaders.metallic
 		color_rect.material.set_shader_parameter("input_tex", l.mr)
 		color_rect.material.set_shader_parameter("modulate", l.metallic_alpha)
 		apply_masks(color_rect.material, m)
@@ -319,7 +319,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = roughness.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.roughness
+		color_rect.material.shader = layer_shaders.roughness
 		color_rect.material.set_shader_parameter("input_tex", l.mr)
 		color_rect.material.set_shader_parameter("modulate", l.roughness_alpha)
 		apply_masks(color_rect.material, m)
@@ -329,7 +329,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = emission.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.albedomask
+		color_rect.material.shader = layer_shaders.albedomask
 		color_rect.material.set_shader_parameter("input_tex", l.albedo)
 		color_rect.material.set_shader_parameter("modulate", l.albedo_alpha)
 		apply_masks(color_rect.material, m)
@@ -338,7 +338,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = emission.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.albedo
+		color_rect.material.shader = layer_shaders.albedo
 		color_rect.material.set_shader_parameter("input_tex", l.emission)
 		color_rect.material.set_shader_parameter("modulate", l.emission_alpha)
 		apply_masks(color_rect.material, m)
@@ -348,7 +348,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = normal.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.albedo
+		color_rect.material.shader = layer_shaders.albedo
 		color_rect.material.set_shader_parameter("input_tex", l.normal)
 		color_rect.material.set_shader_parameter("modulate", l.normal_alpha)
 		apply_masks(color_rect.material, m)
@@ -358,7 +358,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = depth.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.metallic
+		color_rect.material.shader = layer_shaders.metallic
 		color_rect.material.set_shader_parameter("input_tex", l.do)
 		color_rect.material.set_shader_parameter("modulate", l.depth_alpha)
 		apply_masks(color_rect.material, m)
@@ -368,7 +368,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		color_rect = ColorRect.new()
 		color_rect.size = occlusion.size
 		color_rect.material = ShaderMaterial.new()
-		color_rect.material.gdshader = layer_shaders.roughness
+		color_rect.material.shader = layer_shaders.roughness
 		color_rect.material.set_shader_parameter("input_tex", l.do)
 		color_rect.material.set_shader_parameter("modulate", l.occlusion_alpha)
 		apply_masks(color_rect.material, m)

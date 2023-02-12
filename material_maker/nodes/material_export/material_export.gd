@@ -23,7 +23,7 @@ func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 		var can_copy = ( generator.model == null )
 		var can_paste = false
 		var test_json_conv = JSON.new()
-		test_json_conv.parse(OS.clipboard)
+		test_json_conv.parse(DisplayServer.clipboard_get())
 		var graph = test_json_conv.get_data()
 		if graph != null and graph is Dictionary and graph.has("nodes"):
 			if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export" and graph.nodes[0].has("shader_model"):
@@ -46,10 +46,10 @@ func _on_menu_id_pressed(id : int) -> void:
 	await get_tree().process_frame
 	match id:
 		MATERIAL_MENU_COPY:
-			OS.clipboard = JSON.new().stringify(get_parent().serialize_selection([ self ]))
+			DisplayServer.clipboard_set(JSON.new().stringify(get_parent().serialize_selection([ self ])))
 		MATERIAL_MENU_PASTE:
 			var test_json_conv = JSON.new()
-			test_json_conv.parse(OS.clipboard)
+			test_json_conv.parse(DisplayServer.clipboard_get())
 			var graph = test_json_conv.get_data()
 			if graph != null:
 				if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export":

@@ -4,15 +4,6 @@ extends Tree
 
 var scroll_position = 0.0
 
-func _ready():
-	for c in get_children():
-		if c.get_class() == "VScrollBar":
-			c.connect("value_changed",Callable(self,"on_scrollbar"))
-
-func on_scrollbar(value : float):
-	scroll_position = value
-	queue_redraw()
-
 func get_last_item(parent : TreeItem):
 	while true:
 		var items : Array[TreeItem] = parent.get_children()
@@ -24,7 +15,7 @@ func get_last_item(parent : TreeItem):
 
 func _draw():
 	var bottom_rect = get_item_area_rect(get_last_item(get_root()))
-	var sp : float = scroll_position
+	var sp : float = get_scroll().y
 	if bottom_rect.position.y + bottom_rect.size.y < size.y:
 		sp = 0
 	var library_manager = get_parent().library_manager

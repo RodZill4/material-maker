@@ -93,14 +93,14 @@ func render_material(object : Object, material : Material, render_size : int, wi
 
 func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
 	var shader_material = ShaderMaterial.new()
-	shader_material.gdshader = Shader.new() 
-	shader_material.gdshader.code = shader
+	shader_material.shader = Shader.new() 
+	shader_material.shader.code = shader
 	mm_deps.material_update_params(shader_material)
 	var status = await render_material(object, shader_material, render_size, with_hdr)
 	return self
 
 func copy_to_texture(t : ImageTexture) -> void:
-	var image : Image = texture.get_data()
+	var image : Image = texture.get_image()
 	if image != null:
 		t.create_from_image(image)
 

@@ -1,17 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dtwvi2fjeoop3"]
 
-[ext_resource path="res://material_maker/icons/icons.svg" type="Texture2D" id=1]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1_otvgg"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 80, 80, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("1_otvgg")
+region = Rect2(80, 80, 16, 16)
 
 [node name="FavButton" type="Button"]
 offset_right = 12.0
 offset_bottom = 20.0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
-__meta__ = {
-"_edit_use_anchors_": false
-}

@@ -1,7 +1,7 @@
 extends Node
 class_name MMType
 
-static func serialize_value(value) -> Dictionary:
+static func serialize_value(value):
 	if typeof(value) == TYPE_COLOR:
 		return { type="Color", r=value.r, g=value.g, b=value.b, a=value.a }
 	elif typeof(value) == TYPE_OBJECT and value.has_method("serialize"):

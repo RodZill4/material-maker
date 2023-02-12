@@ -23,9 +23,9 @@ var pending_textures = [[], []]
 func _init():
 	#texture.flags = Texture2D.FLAG_REPEAT
 	material = ShaderMaterial.new()
-	material.gdshader = Shader.new()
+	material.shader = Shader.new()
 	loop_material = ShaderMaterial.new()
-	loop_material.gdshader = Shader.new()
+	loop_material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
 	buffer_names = [
@@ -116,7 +116,7 @@ func do_update_shader(input_port_index : int) -> void:
 		source = DEFAULT_GENERATED_SHADER
 	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
-	assert(m != null && m.gdshader != null)
+	assert(m != null && m.shader != null)
 	mm_deps.buffer_create_shader_material(buffer_name, m, mm_renderer.generate_shader(source))
 	set_current_iteration(0)
 

@@ -321,7 +321,7 @@ func generate_output_shader(output_index : int, preview : bool = false):
 
 func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.gdshader
+	var shader : String = output_shader.shader
 	var output_type : String = output_shader.output_type
 	var renderer = await mm_renderer.request(object)
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
@@ -329,7 +329,7 @@ func render_expression(object: Object, output_index : int, size : int, preview :
 
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.gdshader
+	var shader : String = output_shader.shader
 	var output_type : String = output_shader.output_type
 	var renderer = await mm_renderer.request(object)
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")

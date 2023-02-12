@@ -198,7 +198,7 @@ func add_generator(generator : MMGenBase) -> bool:
 				return false
 	elif name == "":
 		name = generator.get_type()+"_1"
-	if has_node(name):
+	if has_node(NodePath(name)):
 		var name_prefix : String
 		var regex = RegEx.new()
 		regex.compile("^(.*_)\\d+$")

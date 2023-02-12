@@ -77,7 +77,7 @@ func update_material(source):
 	# Here we could detect $time to disable temporal AA
 	if temporal_aa_current:
 		do_update_material(source, $Accumulate/Iteration.material, shader_context_defs+shader_accumulate)
-		material.gdshader.code = shader_divide
+		material.shader.code = shader_divide
 		material.set_shader_parameter("sum", $Accumulate.get_texture())
 		start_accumulate()
 	else:

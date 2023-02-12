@@ -13,7 +13,7 @@ func set_gradient(g) -> void:
 	shadertext += gradient.get_shader_params("my")
 	shadertext += gradient.get_shader("my")
 	shadertext += "void fragment() {\nCOLOR = my_gradient_fct(UV.x);\n}\n"
-	$ColorRect.material.gdshader.code = shadertext
+	$ColorRect.material.shader.code = shadertext
 
 func select(b : bool) -> void:
 	color = Color(1.0, 1.0, 1.0, 1.0) if b else Color(1.0, 1.0, 1.0, 0.0)

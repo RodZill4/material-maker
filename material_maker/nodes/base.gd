@@ -83,10 +83,10 @@ func update():
 	buffer_button.hidden = generator.get_buffers().is_empty()
 	if ! buffer_button.hidden:
 		buffer_button.texture = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
-	super.update()
+	queue_redraw()
 
 func _draw() -> void:
-	var color : Color = get_color("title_color")
+	var color : Color = get_theme_color("title_color")
 # warning-ignore:narrowing_conversion
 	var button_x : int = size.x-40
 	for b in buttons:
@@ -95,7 +95,7 @@ func _draw() -> void:
 		draw_texture_rect(b.texture, Rect2(button_x, 4, 16, 16), false, color if b.modulate_texture else Color(1, 1, 1, 1))
 		button_x -= 16
 	var inputs = generator.get_input_defs()
-	var font : Font = get_font("default_font")
+	var font : Font = get_theme_font("default_font")
 	var scale = get_global_transform().get_scale()
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
@@ -110,7 +110,7 @@ func _draw() -> void:
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, color)
+			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, 0, -1, 16, color)
 	var outputs = generator.get_output_defs()
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
@@ -143,9 +143,9 @@ func _draw() -> void:
 		if show_outputs:
 			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else (tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, color)
+			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
 	if (selected):
-		draw_style_box(get_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
+		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 
 func set_generator(g) -> void:
 	super.set_generator(g)
@@ -212,7 +212,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 				menu.add_item(tr("Unlock seed") if generator.is_seed_locked() else tr("Lock seed"), 0)
 				menu.add_separator()
 				menu.add_item(tr("Copy seed"), 1)
-				if ! generator.is_seed_locked() and OS.clipboard.left(5) == "seed=":
+				if ! generator.is_seed_locked() and DisplayServer.clipboard_get().left(5) == "seed=":
 					menu.add_item(tr("Paste seed"), 2)
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
@@ -397,9 +397,7 @@ func _on_menu_id_pressed(id : int) -> void:
 			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
 			dialog.add_cancel_button("Cancel");
 			add_child(dialog)
-			var result = dialog.ask()
-			while result is GDScriptFunctionState:
-				result = await result.completed
+			var result = await dialog.ask()
 			if result == "ok":
 				get_parent().call_deferred("propagate_node_changes", generator)
 

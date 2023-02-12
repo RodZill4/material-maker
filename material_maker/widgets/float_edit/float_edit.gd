@@ -79,7 +79,7 @@ func get_modifiers(event):
 	var new_modifiers = 0
 	if event.shift_pressed:
 		new_modifiers |= 1
-	if event.control:
+	if event.control_pressed:
 		new_modifiers |= 2
 	if event.alt:
 		new_modifiers |= 4

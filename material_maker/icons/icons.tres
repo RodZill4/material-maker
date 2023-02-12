@@ -1,17 +1,6 @@
 [gd_resource type="ImageTexture" load_steps=2 format=3 uid="uid://c0j4px4n72di5"]
 
-[sub_resource type="GDScript" id="GDScript_c6lv3"]
-script/source = "extends ImageTexture
-
-func _init():
-	var image : Image = Image.new()
-	if FileAccess.file_exists(\"user://icons.svg\"):
-		image.load_from_file(\"user://icons.svg\")
-	else:
-		image.load_from_file(\"res://material_maker/icons/icons.svg\")
-	create_from_image(image)
-	print(\"icon atlas initialized\")
-"
+[ext_resource type="Script" path="res://material_maker/icons/icons.gd" id="1_vcwwg"]
 
 [resource]
-script = SubResource("GDScript_c6lv3")
+script = ExtResource("1_vcwwg")

@@ -419,7 +419,7 @@ func center_view() -> void:
 	var node_count = 0
 	for c in get_children():
 		if c is GraphNode:
-			center += c.offset + 0.5*c.size
+			center += c.position_offset + 0.5*c.size
 			node_count += 1
 	if node_count > 0:
 		center /= node_count
@@ -680,11 +680,11 @@ func serialize_selection(nodes = []) -> Dictionary:
 		return {}
 	var center = Vector2(0, 0)
 	for n in nodes:
-		center += n.offset+0.5*n.size
+		center += n.position_offset+0.5*n.size
 	center /= nodes.size()
 	for n in nodes:
 		var s = n.generator.serialize()
-		var p = n.offset-center
+		var p = n.position_offset-center
 		s.node_position = { x=p.x, y=p.y }
 		data.nodes.append(s)
 	for c in get_connection_list():
@@ -1284,7 +1284,7 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 			break
 	if ! removed:
 		var scale = node.get_global_transform().get_scale()
-		var port_position = node.offset+node.get_connection_input_position(port_index)/scale
+		var port_position = node.position_offset+node.get_connection_input_position(port_index)/scale
 		var reroute_position = port_position+Vector2(-74, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		for c2 in get_connection_list():
@@ -1317,7 +1317,7 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 				destinations.push_back(c.duplicate())
 	if !reroutes:
 		var scale = node.get_global_transform().get_scale()
-		var port_position = node.offset+node.get_connection_output_position(port_index)/scale
+		var port_position = node.position_offset+node.get_connection_output_position(port_index)/scale
 		var reroute_position = port_position+Vector2(50, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]

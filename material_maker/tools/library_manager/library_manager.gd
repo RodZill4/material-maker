@@ -205,7 +205,7 @@ func init_section_icons() -> void:
 		texture.atlas = atlas
 		texture.region = Rect2(x, y, 32, 32)
 		section_icons[sections[i]] = texture
-		# todo section_colors[sections[i]] = atlas_image.get_pixel(x, y)
+		section_colors[sections[i]] = atlas_image.get_pixel(x, y)
 
 
 func get_sections() -> Array:

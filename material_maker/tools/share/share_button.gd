@@ -1,6 +1,7 @@
 extends HBoxContainer
 
 var websocket_server : WebSocketServer
+
 var websocket_port : int
 var websocket_id : int = -1
 
@@ -167,9 +168,8 @@ func process_message(message : String) -> void:
 				var main_window = mm_globals.main_window
 				main_window.new_material()
 				var graph_edit = main_window.get_current_graph_edit()
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(data.json).result)
-				var new_generator = mm_loader.create_gen(test_json_conv.get_data()
+				test_json_conv.parse(data.json)
+				var new_generator = mm_loader.create_gen(test_json_conv.get_data())
 				graph_edit.set_new_generator(new_generator)
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
 				bring_to_top()
@@ -179,15 +179,13 @@ func process_message(message : String) -> void:
 				if not project_panel.has_method("set_brush"):
 					print("Cannot load brush")
 					return
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(data.json).result)
-				project_panel.set_brush(test_json_conv.get_data()
+				test_json_conv.parse(data.json)
+				project_panel.set_brush(test_json_conv.get_data())
 				bring_to_top()
 			"load_environment":
 				var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(data.json).result)
-				environment_manager.add_environment(test_json_conv.get_data()
+				test_json_conv.parse(data.json)
+				environment_manager.add_environment(test_json_conv.get_data())
 	else:
 		print("Incorrect JSON")
 

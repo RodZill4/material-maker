@@ -34,15 +34,15 @@ func set_source(g, o):
 	var ends_code = code;
 	ends_code = ends_code.replace("varying float elapsed_time;", "uniform float elapsed_time;");
 	ends_code = ends_code.replace("elapsed_time = TIME;", "");
-	image_begin.material.gdshader.code = ends_code
-	image_end.material.gdshader.code = ends_code
+	image_begin.material.shader.code = ends_code
+	image_end.material.shader.code = ends_code
 	var anim_code = code;
 	anim_code = anim_code.replace("varying float elapsed_time;", "uniform float begin;\nuniform float end;\nvarying float elapsed_time;");
 	anim_code = anim_code.replace("elapsed_time = TIME;", "elapsed_time = (begin == end) ? begin : begin+sign(end-begin)*mod(TIME, abs(end-begin));");
-	image_anim.material.gdshader.code = anim_code
+	image_anim.material.shader.code = anim_code
 	for i in [ image_begin, image_anim, image_end ]:
 		# Get parameter values from the shader code
-		MMGenBase.define_shader_float_parameters(i.material.gdshader.code, i.material)
+		MMGenBase.define_shader_float_parameters(i.material.shader.code, i.material)
 		# Set texture params
 		if source.has("textures"):
 			for k in source.textures.keys():

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
-[ext_resource type="PackedScene" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="5"]
 [ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="6"]
@@ -19,7 +19,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xdl40"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbgqo"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -129,7 +129,7 @@ base_lib = "root://library/base.json"
 alt_base_lib = "res://material_maker/library/base.json"
 user_lib_name = "User library"
 user_lib = "user://library/user.json"
-sections = PackedStringArray("Simple", "Pattern", "Noise", "Filter", "Transform3D", "Workflow", "3D", "Miscellaneous")
+sections = PackedStringArray("Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous")
 config_section = "node_lib"
 base_aliases_file_name = "root://library/aliases.json"
 alt_base_aliases_file_name = "res://material_maker/library/aliases.json"
@@ -213,8 +213,11 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_xdl40")
+material = SubResource("ShaderMaterial_xbgqo")
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
@@ -234,6 +237,8 @@ void fragment() {
 [node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("4")]
 visible = false
 layout_mode = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0

@@ -31,23 +31,23 @@ var painting : int = 0
 func _ready() -> void:
 	# paint material
 	paint_material = ShaderMaterial.new()
-	paint_material.gdshader = Shader.new()
+	paint_material.shader = Shader.new()
 	# layer material in layer viewport
 	layer_material = ShaderMaterial.new()
-	layer_material.gdshader = Shader.new()
-	layer_material.gdshader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/paint_apply_background.gdshader")
+	layer_material.shader = Shader.new()
+	layer_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/paint_apply_background.gdshader")
 	layerpaint_layerrect.material = layer_material
 	# stroke material in layer viewport
 	stroke_material = ShaderMaterial.new()
-	stroke_material.gdshader = Shader.new()
-	stroke_material.gdshader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
+	stroke_material.shader = Shader.new()
+	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
 	stroke_material.set_shader_parameter("tex", strokepaint_viewport.get_texture())
 	layerpaint_strokerect.material = stroke_material
 
 func set_shader_prefix(p):
 	shader_prefix = p
 	if is_inside_tree():
-		stroke_material.gdshader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
+		stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
 		stroke_material.set_shader_parameter("tex", strokepaint_viewport.get_texture())
 
 func get_paint_material() -> ShaderMaterial:
@@ -159,7 +159,7 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 	painting += 1
 	strokepaint_rect.material = paint_material
 	layerpaint_strokerect.visible = true
-	stroke_material.gdshader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
+	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
 	stroke_material.set_shader_parameter("tex", strokepaint_viewport.get_texture())
 	for p in shader_params.keys():
 		match p:

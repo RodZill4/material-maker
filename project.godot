@@ -54,7 +54,7 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/material_maker/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 

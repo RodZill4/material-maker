@@ -24,7 +24,7 @@ var current_renderer = null
 
 func _ready() -> void:
 	material = ShaderMaterial.new()
-	material.gdshader = Shader.new()
+	material.shader = Shader.new()
 	if !parameters.has("size"):
 		parameters.size = 9
 	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)

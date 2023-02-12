@@ -23,7 +23,7 @@ func _draw() -> void:
 	if generator != null and generator.preview >= 0 and get_connection_output_count() > 0:
 		var conn_pos = get_connection_output_position(generator.preview)
 		conn_pos /= get_global_transform().get_scale()
-		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_color("title_color"))
+		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_theme_color("title_color"))
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
@@ -123,7 +123,7 @@ func update_generic(size : int) -> void:
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
 		var o = parameter_controls[p]
-		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.value = v
 		elif o is HSlider:
 			o.value = v
@@ -137,19 +137,19 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.button_pressed = v
 		elif o is ColorPickerButton:
 			o.color = MMType.deserialize_value(v)
-		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.path = v
-		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.do_set_image_path(v)
-		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
-		elif o is Button and o.filename == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			var curve : MMCurve = MMCurve.new()
 			curve.deserialize(v)
 			o.value = curve
-		elif o is Button and o.filename == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
 			var polygon : MMPolygon = MMPolygon.new()
 			polygon.deserialize(v)
 			o.value = polygon
@@ -176,7 +176,7 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 		var o = control_list[c]
 		if generator.parameters.has(c):
 			object.on_parameter_changed(c, generator.get_parameter(c))
-		if o is Control and o.filename == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
 		elif o is LineEdit:
 			o.connect("text_changed",Callable(object,"_on_text_changed").bind( o.name ))
@@ -188,15 +188,15 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 			o.connect("toggled",Callable(object,"_on_value_changed").bind( o.name ))
 		elif o is ColorPickerButton:
 			o.connect("color_changed_undo",Callable(object,"_on_color_changed").bind( o.name ))
-		elif o is Control and o.filename == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.filename == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.filename == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))
-		elif o is Button and o.filename == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			o.connect("updated",Callable(object,"_on_curve_changed").bind( o.name ))
-		elif o is Button and o.filename == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
 			o.connect("updated",Callable(object,"_on_polygon_changed").bind( o.name ))
 		else:
 			print("unsupported widget "+str(o))
@@ -381,7 +381,7 @@ func update_title() -> void:
 	if rendering_time > 0:
 		title += " ("+str(rendering_time)+"ms)"
 	if generator == null or generator.minimized:
-		var font : Font = get_font("default_font")
+		var font : Font = get_theme_font("default_font")
 		var max_title_width = 28
 		if font.get_string_size(title).x > max_title_width:
 			for i in range(1, title.length()-1):
@@ -550,9 +550,7 @@ func load_generator() -> void:
 	dialog.add_filter("*.mmg;Material Maker Generator")
 	if mm_globals.config.has_section_key("path", "template"):
 		dialog.current_dir = mm_globals.config.get_value("path", "template")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		do_load_generator(files[0])
 
@@ -560,13 +558,13 @@ func do_load_generator(file_name : String) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
-		var file = File.new()
-		if file.open(file_name, File.READ) == OK:
+		var file : FileAccess = FileAccess.open(file_name, FileAccess.READ)
+		if file.is_open():
 			new_generator = MMGenShader.new()
 			var test_json_conv = JSON.new()
-			test_json_conv.parse(file.get_as_text()))
-			new_generator.set_shader_model(test_json_conv.get_data()
-			file.close()
+			test_json_conv.parse(file.get_as_text())
+			new_generator.set_shader_model(test_json_conv.get_data())
+
 	else:
 		new_generator = mm_loader.load_gen(file_name)
 	if new_generator != null:
@@ -587,9 +585,7 @@ func save_generator() -> void:
 	dialog.add_filter("*.mmg;Material Maker Generator")
 	if mm_globals.config.has_section_key("path", "template"):
 		dialog.current_dir = mm_globals.config.get_value("path", "template")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		do_save_generator(files[0], generator)
 
@@ -628,8 +624,8 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 		return true
 	return false
 
-func preview_connect_node(node : Control) -> void:
-	if node is Control and !node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
+func preview_connect_node(node) -> void:
+	if !node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
 		if node is Popup:
 			node.connect("mouse_entered",Callable(self,"on_mouse_entered"))
 			node.connect("popup_hide",Callable(self,"on_mouse_exited"))
@@ -639,8 +635,8 @@ func preview_connect_node(node : Control) -> void:
 		for child in node.get_children():
 			preview_connect_node(child)
 
-func preview_disconnect_node(node : Control) -> void:
-	if node is Control and node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
+func preview_disconnect_node(node) -> void:
+	if node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
 		if node is Popup:
 			node.disconnect("mouse_entered",Callable(self,"on_mouse_entered"))
 			node.disconnect("popup_hide",Callable(self,"on_mouse_exited"))

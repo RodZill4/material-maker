@@ -187,7 +187,7 @@ func do_update():
 			invalidated_buffers += 1
 		if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
 			if buffer.object.has_method("on_dep_update_buffer"):
-				var status = buffer.object.on_dep_update_buffer(b)
+				var status = await buffer.object.on_dep_update_buffer(b)
 				buffer.status = Buffer.Updating
 				if status is bool and ! status:
 					buffer.status = Buffer.Invalidated
@@ -215,9 +215,9 @@ func material_update_params(material : ShaderMaterial):
 func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
 	if material == null:
 		material = ShaderMaterial.new()
-	if material.gdshader == null:
-		material.gdshader = Shader.new()
-	material.gdshader.code = shader
+	if material.shader == null:
+		material.shader = Shader.new()
+	material.shader.code = shader
 	buffer_clear_dependencies(buffer_name)
 	# TODO: FIX THIS!
 	for p in material.get_property_list():

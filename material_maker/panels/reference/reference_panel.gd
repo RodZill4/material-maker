@@ -35,9 +35,7 @@ func get_color_under_cursor() -> Color:
 	pos *= image.get_size()
 	pos /= get_viewport_rect().size
 	pos.y = image.get_height() - pos.y
-	false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	var c = image.get_pixelv(pos)
-	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	return c
 
 func _on_Image_gui_input(event) -> void:
