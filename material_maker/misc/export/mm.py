@@ -95,11 +95,9 @@ class Material:
     def connect_nodes(self, source, source_output, dest, dest_input):
         return self.MEL.connect_material_expressions(source, source_output, dest, dest_input)
 
-def find_object_by_fname(n):
-    it = unreal.ObjectIterator()
-    for x in it:
-        if x.get_fname() == n:
-            return x
+def get_object_from_path(p):
+    AR = unreal.AssetRegistryHelpers.get_asset_registry()
+    return AR.get_asset_by_object_path(p).get_asset()
 
 def custom_input(n):
     ci = unreal.CustomInput()

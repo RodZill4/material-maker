@@ -492,7 +492,6 @@
 			},
 			"Unreal/Unreal Engine 5": {
 				"export_extension": "py",
-				"external": true,
 				"files": [
 					{
 						"file_name": "$(path_prefix).py",
