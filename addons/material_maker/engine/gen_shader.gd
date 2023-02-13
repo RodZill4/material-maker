@@ -399,23 +399,23 @@ func set_shader_model(data: Dictionary) -> void:
 # Shader generation
 #
 
-func find_matching_parenthesis(string : String, i : int) -> int:
+func find_matching_parenthesis(string : String, i : int, op : String = '(', cp : String = ')') -> int:
 	var parenthesis_level = 0
 	var length : int = string.length()
 	while i < length:
 		var c = string[i]
-		if c == '(':
+		if c == op:
 			parenthesis_level += 1
-		elif c == ')':
+		elif c == cp:
 			parenthesis_level -= 1
 			if parenthesis_level == 0:
 				return i
 		i += 1
-		var next_op = string.find("(", i)
-		var next_cp = string.find(")", i)
+		var next_op = string.find(op, i)
+		var next_cp = string.find(cp, i)
 		var max_p = max(next_op, next_cp)
 		if max_p < 0:
-			return length
+			return -1
 		var min_p = min(next_op, next_cp)
 		i = max_p if min_p < 0 else min_p
 	return i
@@ -427,7 +427,7 @@ func find_keyword_call(string : String, keyword : String):
 		return null
 	var parameter_begin : int = position+search_string.length()
 	var end : int = find_matching_parenthesis(string, parameter_begin-1)
-	if end < string.length():
+	if end > 0:
 		return string.substr(parameter_begin, end-parameter_begin)
 	return null
 
@@ -759,6 +759,34 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
 		rv.globals.push_back(shader_model_preprocessed.global)
 	return rv
+
+func remove_comments(s : String) -> String:
+	var re : RegEx = RegEx.new()
+	re.compile("/\\*(.*?)\\*/")
+	s = re.sub(s, "", true)
+	re.compile("//([^\\n]*)\\n")
+	s = re.sub(s, "", true)
+	return s
+
+func split_glsl(s : String) -> Array:
+	s = remove_comments(s)
+	var a : Array = []
+	s = s.strip_edges()
+	while s != "":
+		var next_semicolon = s.find(";")
+		var next_bracket = s.find("{")
+		if next_semicolon != -1 and (next_bracket == -1 or next_semicolon < next_bracket):
+			a.append(s.left(next_semicolon+1))
+			s = s.right(next_semicolon+1)
+		elif next_bracket != -1:
+			var closing_bracket = find_matching_parenthesis(s, next_bracket, '{', '}')
+			a.append(s.left(closing_bracket+1))
+			s = s.right(closing_bracket+1)
+		else:
+			print("Error: "+s)
+			break
+		s = s.strip_edges()
+	return a
 
 
 func _serialize(data: Dictionary) -> Dictionary:

@@ -354,7 +354,7 @@
 					}
 				]
 			},
-			"Unreal": {
+			"Unreal/Unreal Engine 4": {
 				"export_extension": "mm2ue",
 				"files": [
 					{
@@ -384,8 +384,106 @@
 							""
 						],
 						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
 					}
 				]
+			},
+			"Unreal/Unreal Engine 5": {
+				"export_extension": "py",
+				"files": [
+					{
+						"file_name": "$(path_prefix).py",
+						"prompt_overwrite": false,
+						"template": [
+							"import unreal",
+							"import mm",
+							"from importlib import reload",
+							"reload(mm)",
+							"mat = mm.Material('$(file_prefix)', True)",
+							"mat.clear()",
+							"Custom_0 = mat.add_node('Custom', -264, 80)",
+							"Custom_0.set_editor_property('code', mm.read_text_file('$(path_prefix).shader'))",
+							"Custom_0.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT4)",
+							"Custom_0.set_editor_property('additional_outputs', [ mm.custom_output('metallic', 1), mm.custom_output('roughness', 1), mm.custom_output('normal', 3), mm.custom_output('emission', 3)])",
+							"inputs = [mm.custom_input('TexCoords'), mm.custom_input('Time')]",
+							"$begin_buffers",
+							"inputs.append(mm.custom_input('texture_$(buffer_index)'))",
+							"$end_buffers",
+							"Custom_0.set_editor_property('inputs', inputs)",
+							"TextureCoordinate_0 = mat.add_node('TextureCoordinate', -472, 80)",
+							"Time_0 = mat.add_node('Time', -456, 180)",
+							"$begin_buffers",
+							"Texture_$(buffer_index) = mat.add_node('TextureObject', -456, $(expr:110+170*$(buffer_index)))",
+							"Texture_$(buffer_index).set_editor_property('texture', mm.import_texture('$(path_prefix)_texture_$(buffer_index).png', '/Game/Textures'))",
+							"$end_buffers",
+							"mat.connect_property(Custom_0, 'return', unreal.MaterialProperty.MP_BASE_COLOR)",
+							"mat.connect_nodes(TextureCoordinate_0, '', Custom_0, 'TexCoords')",
+							"mat.connect_nodes(Time_0, '', Custom_0, 'Time')",
+							"$begin_buffers",
+							"mat.connect_nodes(Texture_$(buffer_index), '', Custom_0, 'texture_$(buffer_index)')",
+							"$end_buffers",
+							"mat.save()",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "$(path_prefix)_texture_$(buffer_index).png",
+						"type": "buffers"
+					},
+					{
+						"file_name": "$(path_prefix).shader",
+						"template": [
+							"struct Functions {",
+							"\tfloat Time;",
+							"$begin_buffers",
+							"\tTexture2D texture_$(buffer_index);",
+							"\tSamplerState texture_$(buffer_index)Sampler;",
+							"$end_buffers",
+							"\t",
+							"$definitions hlsl_base,rename_buffers,unreal5",
+							"\tfixed4 generated_shader(float2 uv, float _time,",
+							"$begin_buffers",
+							"\t\t\t\t\t\t\tTexture2D _texture_$(buffer_index), SamplerState _texture_$(buffer_index)Sampler,",
+							"$end_buffers",
+							"\t\t\t\t\t\t\t) {",
+							"\t  \tfloat _seed_variation_ = 0.0;",
+							"\t\tTime = _time;",
+							"$begin_buffers",
+							"\t\ttexture_$(buffer_index) = _texture_$(buffer_index);",
+							"\t\ttexture_$(buffer_index)Sampler = _texture_$(buffer_index)Sampler;",
+							"$end_buffers",
+							"\t\t",
+							"$begin_generate hlsl_base,rename_buffers,unreal5",
+							"\t\t// sample the generated texture",
+							"\t\treturn $color_tex(uv);",
+							"$end_generate",
+							"\t}",
+							"};",
+							"Functions f;",
+							"return f.generated_shader(TexCoords, Time",
+							"$begin_buffers",
+							"\t\t\t\t\t\t\t\t  , texture_$(buffer_index), texture_$(buffer_index)Sampler",
+							"$end_buffers",
+							"\t\t\t\t\t\t\t\t   );",
+							""
+						],
+						"type": "template"
+					},
+					{
+						"file_name": "clipboard",
+						"template": [
+							"\"$(path_prefix).py\"",
+							""
+						],
+						"type": "template"
+					}
+				],
+				"material": "material_dynamic",
+				"name": "Unreal/Unreal Engine 5"
 			}
 		},
 		"global": "",
