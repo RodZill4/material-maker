@@ -23,12 +23,16 @@ func _on_UploadDialog_popup_hide() -> void:
 
 func ask(data : Dictionary) -> String:
 	mm_globals.main_window.add_dialog(self)
-	asset_target.clear()
-	my_assets = data.my_assets
-	asset_target.add_item("Upload as new asset", 0)
-	for a in my_assets:
-		if a.type == data.type:
-			asset_target.add_item("Update - %s (%d)" % [ a.name, a.id ], a.id)
+	print(data)
+	if data.type == "node":
+		asset_target.visible = false
+	else:
+		asset_target.clear()
+		my_assets = data.my_assets
+		asset_target.add_item("Upload as new asset", 0)
+		for a in my_assets:
+			if a.type == data.type:
+				asset_target.add_item("Update - %s (%d)" % [ a.name, a.id ], a.id)
 	asset_preview.material.set_shader_param("tex", data.preview)
 	asset_license.clear()
 	for l in data.licenses:
