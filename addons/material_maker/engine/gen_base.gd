@@ -446,13 +446,3 @@ func deserialize(data : Dictionary) -> void:
 	preview = data.preview if data.has("preview") else -1
 	minimized = data.has("minimized") and data.minimized
 	_post_load()
-
-
-static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
-	var regex = RegEx.new()
-	regex.compile("uniform\\s+float\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
-	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[1], float(p.strings[2]))
-	regex.compile("uniform\\s+vec4\\s+([\\w_\\d]+)\\s*=\\s*vec4\\s*\\(\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^\\)\\s]+)\\s*\\);")
-	for p in regex.search_all(code):
-		material.set_shader_param(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))

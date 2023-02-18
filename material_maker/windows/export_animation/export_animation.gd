@@ -1,6 +1,8 @@
 extends WindowDialog
 
+
 export(String, MULTILINE) var shader : String = ""
+
 
 var generator
 var output : int
@@ -15,12 +17,18 @@ onready var image_begin = $VBox/Images/HBox/Begin/Viewport/Image
 onready var image_end = $VBox/Images/HBox/End/Viewport/Image
 onready var image_diff = $VBox/Images/HBox/Animated/Diff
 onready var image_anim = $VBox/Images/HBox/Animated
+onready var buffer_images : Array = [ image_begin, image_end, image_anim ]
 
 onready var animation_player = $VBox/Images/HBox/Animated/AnimationPlayer
 onready var timer = $VBox/Images/HBox/Animated/Timer
 
+
+const BUFFER_NAMES = [ "export_animation_buffer_begin", "export_animation_buffer_end", "export_animation_buffer_anim" ]
+
+
 func _ready():
-	pass # Replace with function body.
+	for i in range(BUFFER_NAMES.size()):
+		mm_deps.create_buffer(BUFFER_NAMES[i], self)
 
 func set_source(g, o):
 	generator = g
@@ -40,13 +48,11 @@ func set_source(g, o):
 	anim_code = anim_code.replace("varying float elapsed_time;", "uniform float begin;\nuniform float end;\nvarying float elapsed_time;");
 	anim_code = anim_code.replace("elapsed_time = TIME;", "elapsed_time = (begin == end) ? begin : begin+sign(end-begin)*mod(TIME, abs(end-begin));");
 	image_anim.material.shader.code = anim_code
-	for i in [ image_begin, image_anim, image_end ]:
+	for image_index in range(BUFFER_NAMES.size()):
+		var i = buffer_images[image_index]
+		var b : String = BUFFER_NAMES[image_index]
 		# Get parameter values from the shader code
-		MMGenBase.define_shader_float_parameters(i.material.shader.code, i.material)
-		# Set texture params
-		if source.has("textures"):
-			for k in source.textures.keys():
-				i.material.set_shader_param(k, source.textures[k])
+		i.material = mm_deps.buffer_create_shader_material(b, i.material, i.material.shader.code)
 	var begin : float = value_begin.value
 	var end : float = value_end.value
 	image_begin.material.set_shader_param("elapsed_time", begin)
