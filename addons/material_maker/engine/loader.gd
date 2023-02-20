@@ -128,7 +128,7 @@ static func string_to_dict_tree(string_data : String) -> Dictionary:
 	return {}
 
 static func dict_tree_to_string(data : Dictionary) -> String:
-	return JSON.print(replace_multiline_strings_with_arrays(data), "\t", true)
+	return JSON.print(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
 
 func load_gen(filename: String) -> MMGenBase:
 	var file = File.new()

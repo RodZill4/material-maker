@@ -120,6 +120,8 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		preview_parameters[parameter_name] = value
 		for p in external_previews:
 			p.set_shader_param(parameter_name, value)
+		if preview_texture_dependencies.has(parameter_name):
+			preview_texture_dependencies[parameter_name] = value
 	else:
 		var texture_name : String = buffer_name.right(buffer_name_prefix.length()+1)
 		preview_textures[texture_name].material.set_shader_param(parameter_name, value)
@@ -181,7 +183,11 @@ func update() -> void:
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
 	preview_material = mm_deps.buffer_create_shader_material(buffer_name_prefix, preview_material, result.shader_code)
-	preview_texture_dependencies = result.texture_dependencies
+	preview_texture_dependencies = {}
+	for p in VisualServer.shader_get_param_list(preview_material.shader.get_rid()):
+		if p.hint_string == "Texture" and preview_textures.keys().find(p.name) == -1:
+			var value = preview_material.get_shader_param(p.name)
+			preview_texture_dependencies[p.name] = value
 	update_shaders()
 	update_external_previews()
 
@@ -194,6 +200,29 @@ func check_custom_script(custom_script : String) -> bool:
 			print("Invalid custom script (found '%s')" % s)
 			return false
 	return true
+
+func apply_gen_options(s : String, gen_options : Array, custom_options, definitions : String, is_definitions : bool = false):
+	var found_option : bool = false
+	for o in gen_options:
+		for so in [ self, custom_options ]:
+			var method_name : String = "process_option_"+o
+			var params : int = 0
+			for m in so.get_method_list():
+				if m.name == method_name:
+					params = m.args.size()
+					break
+			match params:
+				2:
+					s = so.call(method_name, s, is_definitions)
+					found_option = true
+					break
+				3:
+					s = so.call(method_name, s, is_definitions, definitions)
+					found_option = true
+					break
+		if ! found_option:
+			print("No implementation of option '%s'" % o)
+	return s
 
 func process_shader(shader_text : String, custom_script : String = ""):
 	var custom_options = CustomOptions.new()
@@ -232,21 +261,18 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				# Add generated code
 				var new_code : String = subst_code.code+"\n"
 				new_code += subst_code.string+"\n"
-				for o in gen_options:
-					if has_method("process_option_"+o):
-						new_code = call("process_option_"+o, new_code)
-					elif custom_options.has_method("process_option_"+o):
-						new_code = custom_options.call("process_option_"+o, new_code)
-					else:
-						print("No implementation of option %s" % o)
-				shader_code += new_code
+				var definitions : String = ""
+				for d in rv.globals:
+					definitions += d+"\n"
+				definitions += rv.defs+"\n"
+				shader_code += apply_gen_options(new_code, gen_options, custom_options, definitions)
 				generating = false
 			else:
 				gen_buffer += l+"\n"
 		elif l.find("$begin_generate") != -1:
 			generating = true
 			gen_buffer = ""
-			gen_options = l.replace(" ", "").replace("$begin_generate", "").split(",")
+			gen_options = l.replace(" ", "").replace("$begin_generate", "").split(",", false)
 		else:
 			var result = texture_regexp.search(l)
 			if result:
@@ -268,14 +294,12 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	for l in shader_text.split("\n"):
 		if l.find("$definitions") != -1:
 			var processed_definitions = definitions
-			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
-			for o in gen_options:
-				if has_method("process_option_"+o):
-					processed_definitions = call("process_option_"+o, processed_definitions, true)
-				elif custom_options.has_method("process_option_"+o):
-					processed_definitions = custom_options.call("process_option_"+o, processed_definitions, true)
-			shader_code += processed_definitions
-			shader_code += "\n"
+			gen_options = l.replace(" ", "").replace("$definitions", "").split(",", false)
+			processed_definitions = apply_gen_options(processed_definitions, gen_options, custom_options, definitions, true)
+			for dl in processed_definitions.split("\n"):
+				if dl.replace(" ", "") != "":
+					shader_code += dl
+					shader_code += "\n"
 		else:
 			shader_code += l
 			shader_code += "\n"
@@ -287,7 +311,7 @@ func set_3d_previews(previews : Array):
 
 # Export filters
 
-func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
+func process_option_hlsl_base(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
 	s = s.replace("vec4(", "tofloat4(")
@@ -299,8 +323,6 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("mix", "lerp")
 	s = s.replace("fract", "frac")
 	s = s.replace("atan", "hlsl_atan")
-	s = s.replace("uniform float", "static const float")
-	s = s.replace("uniform int", "static const int")
 	var re : RegEx = RegEx.new()
 	re.compile("(\\w+)\\s*\\*=\\s*tofloat2x2([^;]+);")
 	while true:
@@ -310,6 +332,13 @@ func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
 	if is_declaration:
 		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
+	return s
+
+func process_option_hlsl(s : String, is_declaration : bool = false) -> String:
+	s = process_option_hlsl_base(s, is_declaration)
+	s = s.replace("uniform float", "static const float")
+	s = s.replace("uniform vec4", "static const vec4")
+	s = s.replace("uniform int", "static const int")
 	return s
 
 func process_option_float_uniform_to_const(s : String, is_declaration : bool = false) -> String:
@@ -334,6 +363,37 @@ func process_option_unreal(s : String, is_declaration : bool = false) -> String:
 	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
 	if is_declaration:
 		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
+	return s
+
+func sort_fct_longest_name(a, b) -> bool:
+	var la : int = a.strings[2].length()
+	var lb : int = b.strings[2].length()
+	return lb<la
+
+func preprocess_option_unreal5(s : String) -> Array:
+	var unreal5_decls : Array
+	var re = RegEx.new()
+	re.compile("(?:uniform|const)\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);")
+	for d in split_glsl(s):
+		if d.find("{") == -1:
+			d = process_option_hlsl_base(d)
+			var extracted = re.search_all(d)
+			unreal5_decls.append_array(extracted)
+	unreal5_decls.sort_custom(self, "sort_fct_longest_name")
+	return unreal5_decls
+
+func process_option_unreal5(s : String, is_declaration : bool = false, declarations : String = "") -> String:
+	s = s.replace("elapsed_time", "Time")
+	s = s.replace("uniform sampler2D", "// uniform sampler2D ")
+	if is_declaration:
+		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
+		for d in preprocess_option_unreal5(s):
+			s = s.replace(d.strings[0], "")
+			s = s.replace(d.strings[2], d.strings[3])
+	else:
+		for d in preprocess_option_unreal5(declarations):
+			s = s.replace(d.strings[2], d.strings[3])
+	s = s.replace("sampler2D", "sampler")
 	return s
 
 # Export
@@ -507,7 +567,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 		custom_script = export_context["@mm_custom_script"]
 	processed_template = process_shader(processed_template, custom_script).shader_code
 	if file_name == "clipboard":
-		OS.clipboard = processed_template
+		OS.clipboard = processed_template.split("\n", false).join("\n")
 	else:
 		var out_file = File.new()
 		Directory.new().remove(file_name)
