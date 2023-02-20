@@ -7,8 +7,11 @@
 
 # Bug Fixes
 
+- Fixed several small problems in the Export Editor window
 - Fixed a problem that caused the 3D preview to update incorrectly
 - Fixed a problem in the Tones Map node that could cause incorrect shader code generation
+- Fixed a problem in the animation export tool that occurred when exporting graphs with buffers
+- Fixed Histogram panel (not updating correctly) and improved histogram rendering
 
 # Material Maker 1.2
 
