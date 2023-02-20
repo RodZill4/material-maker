@@ -221,9 +221,8 @@ func apply_gen_options(s : String, gen_options : Array, custom_options, definiti
 					found_option = true
 					break
 		if ! found_option:
-			print("No implementation of option %s" % o)
+			print("No implementation of option '%s'" % o)
 	return s
-
 
 func process_shader(shader_text : String, custom_script : String = ""):
 	var custom_options = CustomOptions.new()
@@ -295,7 +294,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	for l in shader_text.split("\n"):
 		if l.find("$definitions") != -1:
 			var processed_definitions = definitions
-			gen_options = l.replace(" ", "").replace("$definitions", "").split(",")
+			gen_options = l.replace(" ", "").replace("$definitions", "").split(",", false)
 			processed_definitions = apply_gen_options(processed_definitions, gen_options, custom_options, definitions, true)
 			for dl in processed_definitions.split("\n"):
 				if dl.replace(" ", "") != "":
