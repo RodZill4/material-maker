@@ -1,3 +1,15 @@
+# Material Maker 1.2p1
+
+# New features
+
+- Added Unreal Engine 5 export targets that generate a Python script for UE5 to
+  build automatically the generated material
+
+# Bug Fixes
+
+- Fixed a problem that caused the 3D preview to update incorrectly
+- Fixed a problem in the Tones Map node that could cause incorrect shader code generation
+
 # Material Maker 1.2
 
 ## General
