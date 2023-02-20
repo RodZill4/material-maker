@@ -346,7 +346,7 @@ func _on_MarginContainer_minimum_size_changed():
 # OK/Apply/Cancel buttons
 
 func _on_Apply_pressed() -> void:
-	emit_signal("node_changed", get_model_data())
+	emit_signal("node_changed", get_model_data().duplicate(true))
 
 func _on_OK_pressed() -> void:
 	_on_Apply_pressed()
