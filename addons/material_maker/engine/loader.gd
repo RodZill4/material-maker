@@ -34,8 +34,6 @@ func update_predefined_generators()-> void:
 					var file : FileAccess = FileAccess.open(path+"/"+file_name, FileAccess.READ)
 					if file.is_open():
 						var generator = string_to_dict_tree(file.get_as_text())
-						print(file_name)
-						print(generator)
 						if CHECK_PREDEFINED:
 							if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
 								var parse_result = parser.parse(generator.shader_model.global)
@@ -81,9 +79,6 @@ func get_predefined_global(g : String) -> String:
 	return predefined_generators[g].shader_model.global
 
 func generator_name_from_path(path : String) -> String:
-	for p in MMPaths.get_nodes_paths():
-		print(p)
-	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
 const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "custom", "global", "instance", "preview_shader", "template" ]
@@ -175,14 +170,13 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 			c.from = gennames[c.from]
 		if gennames.has(c.to):
 			c.to = gennames[c.to]
-		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+		if gen_graph.connect_children(gen_graph.get_node(NodePath(c.from)), c.from_port, gen_graph.get_node(NodePath(c.to)), c.to_port):
 			rv.connections.append(c)
 		else:
 			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
 func create_gen(data) -> MMGenBase:
-	print(data)
 	var guess = [
 		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
@@ -223,8 +217,6 @@ func create_gen(data) -> MMGenBase:
 		if types.has(data.type):
 			generator = types[data.type].new()
 		elif predefined_generators.has(data.type):
-			print(data.type)
-			print(predefined_generators[data.type])
 			generator = create_gen(predefined_generators[data.type])
 			if generator == null:
 				print("Cannot find description for "+data.type)

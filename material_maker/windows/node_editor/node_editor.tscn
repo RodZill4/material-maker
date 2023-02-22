@@ -1,234 +1,148 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://cbpg2wtvf7fc1"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 [ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 48, 0, 16, 16 )
-
-[sub_resource type="FontFile" id=2]
-font_path = "res://material_maker/fonts/hack.ttf"
-
-[sub_resource type="FontFile" id=3]
-size = 12
-font_data = SubResource( 2 )
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 0.768627 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("3")
+region = Rect2(48, 0, 16, 16)
 
 [node name="NodeEditor" type="Window"]
-offset_right = 950.0
-offset_bottom = 450.0
-custom_minimum_size = Vector2( 950, 450 )
+initial_position = 2
 exclusive = true
-window_title = "Node Editor"
-resizable = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Sizer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TabBar" type="TabContainer" parent="Sizer"]
-offset_right = 950.0
-offset_bottom = 426.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tab_alignment = 0
 
 [node name="General" type="VBoxContainer" parent="Sizer/TabBar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 
 [node name="Name" type="HBoxContainer" parent="Sizer/TabBar/General"]
-offset_right = 942.0
-offset_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelName" type="Label" parent="Sizer/TabBar/General/Name"]
-offset_top = 5.0
-offset_right = 42.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Name:"
 
 [node name="Name" type="LineEdit" parent="Sizer/TabBar/General/Name"]
-offset_left = 46.0
-offset_right = 246.0
-offset_bottom = 24.0
-custom_minimum_size = Vector2( 200, 0 )
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 
-[node name="Description" parent="Sizer/TabBar/General/Name" instance=ExtResource( 4 )]
-offset_left = 250.0
-offset_right = 278.0
-offset_bottom = 24.0
+[node name="Description" parent="Sizer/TabBar/General/Name" instance=ExtResource("4")]
+layout_mode = 2
 description_type = "Node"
 
 [node name="LabelParameters" type="Label" parent="Sizer/TabBar/General"]
-offset_top = 28.0
-offset_right = 942.0
-offset_bottom = 42.0
+layout_mode = 2
 text = "Parameters:"
 
 [node name="Parameters" type="ScrollContainer" parent="Sizer/TabBar/General"]
-offset_top = 46.0
-offset_right = 942.0
-offset_bottom = 207.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/General/Parameters"]
-offset_right = 942.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="AddParameter" type="Button" parent="Sizer/TabBar/General/Parameters/Sizer"]
-offset_right = 28.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
 [node name="LabelInputs" type="Label" parent="Sizer/TabBar/General"]
-offset_top = 211.0
-offset_right = 942.0
-offset_bottom = 225.0
+layout_mode = 2
 text = "Inputs:"
 
 [node name="Inputs" type="ScrollContainer" parent="Sizer/TabBar/General"]
-offset_top = 229.0
-offset_right = 942.0
-offset_bottom = 390.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/General/Inputs"]
-offset_right = 942.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="AddInput" type="Button" parent="Sizer/TabBar/General/Inputs/Sizer"]
-offset_right = 28.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
 [node name="Outputs" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 
 [node name="LabelOutputs" type="Label" parent="Sizer/TabBar/Outputs"]
-offset_right = 825.0
-offset_bottom = 14.0
+layout_mode = 2
 text = "Outputs:"
 
 [node name="Outputs" type="ScrollContainer" parent="Sizer/TabBar/Outputs"]
-offset_top = 18.0
-offset_right = 825.0
-offset_bottom = 338.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/Outputs/Outputs"]
-offset_right = 825.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="AddOutput" type="Button" parent="Sizer/TabBar/Outputs/Outputs/Sizer"]
-offset_right = 28.0
-offset_bottom = 22.0
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
 [node name="Main Code" type="TextEdit" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 mouse_default_cursor_shape = 0
-custom_fonts/font = SubResource( 3 )
-syntax_highlighter = true
-show_line_numbers = true
 
 [node name="Instance Functions" type="TextEdit" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 mouse_default_cursor_shape = 0
-custom_fonts/font = SubResource( 3 )
-syntax_highlighter = true
-show_line_numbers = true
 
 [node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 
 [node name="Includes" type="HBoxContainer" parent="Sizer/TabBar/Global Functions"]
-offset_right = 942.0
-offset_bottom = 24.0
+layout_mode = 2
 
 [node name="LabelIncludes" type="Label" parent="Sizer/TabBar/Global Functions/Includes"]
-offset_top = 5.0
-offset_right = 59.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Includes:"
 
 [node name="Includes" type="LineEdit" parent="Sizer/TabBar/Global Functions/Includes"]
-offset_left = 63.0
-offset_right = 942.0
-offset_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Functions" type="TextEdit" parent="Sizer/TabBar/Global Functions"]
-offset_top = 28.0
-offset_right = 942.0
-offset_bottom = 390.0
-mouse_default_cursor_shape = 0
+layout_mode = 2
 size_flags_vertical = 3
-custom_colors/safe_line_number_color = Color( 1, 0, 0, 1 )
-custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
-custom_colors/executing_line_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = SubResource( 3 )
-syntax_highlighter = true
-show_line_numbers = true
+mouse_default_cursor_shape = 0
 minimap_draw = true
 
 [node name="ErrorLabel" type="Label" parent="Sizer/TabBar/Global Functions/Functions"]
 visible = false
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -236,41 +150,27 @@ offset_left = 2.0
 offset_top = -17.0
 offset_right = -2.0
 offset_bottom = -7.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_styles/normal = SubResource( 4 )
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
-offset_left = 366.0
-offset_top = 430.0
-offset_right = 584.0
-offset_bottom = 450.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="Sizer/HBoxContainer"]
-offset_right = 70.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Apply"
 
 [node name="OK" type="Button" parent="Sizer/HBoxContainer"]
-offset_left = 74.0
-offset_right = 144.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="Sizer/HBoxContainer"]
-offset_left = 148.0
-offset_right = 218.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Cancel"
 
-[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
 [connection signal="pressed" from="Sizer/TabBar/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
 [connection signal="pressed" from="Sizer/TabBar/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]

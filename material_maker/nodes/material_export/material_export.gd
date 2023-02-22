@@ -15,7 +15,7 @@ func get_material_nodes() -> Array:
 	return material_nodes
 
 func _on_MaterialExport_gui_input(event : InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.button_pressed == true:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed == true:
 		accept_event()
 		var menu = PopupMenu.new()
 		for n in get_material_nodes():
@@ -40,7 +40,7 @@ func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 		add_child(menu)
 		menu.connect("modal_closed",Callable(menu,"queue_free"))
 		menu.connect("id_pressed",Callable(self,"_on_menu_id_pressed"))
-		menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+		menu.popup(Rect2(get_global_mouse_position(), menu.get_contents_minimum_size()))
 
 func _on_menu_id_pressed(id : int) -> void:
 	await get_tree().process_frame

@@ -74,7 +74,7 @@ func parse(s : String):
 	var penultimate_nt : String
 	while true:
 		if ! actions[state].has(next_token.type):
-			return { status="ERROR", state=state, msg="near '%s' (expected '%s')" % [ next_token.value, PackedStringArray(actions[state]."', '".join(keys())) ], pos=next_token.pos_begin }
+			return { status="ERROR", state=state, msg="near '%s' (expected '%s')" % [ next_token.value, "', '".join(PackedStringArray(actions[state].keys())) ], pos=next_token.pos_begin }
 		var action = actions[state][next_token.type]
 		match action[0]:
 			"s":

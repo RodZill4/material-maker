@@ -6,18 +6,13 @@ var favorites : Array = []
 signal open_directory(dirpath)
 
 func _ready():
+	var json = JSON.new()
 	if mm_globals.config.has_section_key("file_dialog", "recents"):
-		var test_json_conv = JSON.new()
-		test_json_conv.parse(mm_globals.config.get_value("file_dialog", "recents"))
-		var parse_result = test_json_conv.get_data()
-		if parse_result != null:
-			recents = parse_result.result
+		if json.parse(mm_globals.config.get_value("file_dialog", "recents")) == OK:
+			recents = json.data
 	if mm_globals.config.has_section_key("file_dialog", "favorites"):
-		var test_json_conv = JSON.new()
-		test_json_conv.parse(mm_globals.config.get_value("file_dialog", "favorites"))
-		var parse_result = test_json_conv.get_data()
-		if parse_result != null:
-			favorites = parse_result.result
+		if json.parse(mm_globals.config.get_value("file_dialog", "favorites")) == OK:
+			favorites = json.data
 	update_lists()
 
 func _exit_tree():

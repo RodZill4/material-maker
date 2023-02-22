@@ -57,7 +57,7 @@ func add_node(node_data) -> void:
 						current_graph.connect_node(qc_node, qc_slot, node.name, new_slot)
 						port_position = node.get_connection_input_position(new_slot)
 						break
-			node.offset -= port_position/current_graph.zoom
+			node.position_offset -= port_position/current_graph.zoom
 	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	hide()

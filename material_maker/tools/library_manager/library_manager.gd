@@ -44,7 +44,6 @@ func _exit_tree():
 	var file = FileAccess.open(item_usage_file, FileAccess.WRITE)
 	if file.is_open():
 		file.store_string(JSON.stringify(item_usage, "\t", true))
-		file.close()
 
 # Libraries
 
@@ -287,11 +286,10 @@ func set_aliases(item : String, aliases : String) -> void:
 
 func init_usage() -> void:
 	var file = FileAccess.open(item_usage_file, FileAccess.READ)
-	if file == null:
-		return
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(file.get_as_text())
-	item_usage = test_json_conv.get_data()
+	if file != null:
+		var json = JSON.new()
+		if json.parse(file.get_as_text()) == OK:
+			item_usage = json.get_data()
 
 func item_created(item : String) -> void:
 	if item_usage.has(item):

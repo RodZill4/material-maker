@@ -12,7 +12,6 @@ var generic_size : int = 1
 var editable : bool = false
 
 
-
 func toggle_editable() -> bool:
 	editable = !editable
 	if editable:
@@ -425,7 +424,7 @@ func find_keyword_call(string : String, keyword : String):
 	var search_string : String = "$%s(" % keyword
 	var position : int = string.find(search_string)
 	if position == -1:
-		return null
+		return ""
 	var parameter_begin : int = position+search_string.length()
 	var end : int = find_matching_parenthesis(string, parameter_begin-1)
 	if end < string.length():
@@ -452,11 +451,11 @@ func replace_input(string : String, context, input : String, type : String, src 
 	var new_pass_required = false
 	while true:
 		var uv = find_keyword_call(string, input)
-		if uv == null:
-			break
-		elif uv == "":
+		if uv == "#error":
 			print("syntax error")
 			print(string)
+			break
+		elif uv == "":
 			break
 		elif uv.find("$") != -1:
 			new_pass_required = true
@@ -490,7 +489,7 @@ func is_word_letter(l) -> bool:
 func replace_rnd(string : String, offset : int = 0) -> String:
 	while true:
 		var params = find_keyword_call(string, "rnd")
-		if params == null:
+		if params == "" or params == "#error":
 			break
 		var replace = "$rnd(%s)" % params
 		while true:
@@ -513,8 +512,9 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 				if pos == -1:
 					new_string += string
 					break
-				new_string += string.left(pos)
-				string = string.right(-pos)
+				if pos > 0:
+					new_string += string.left(pos)
+					string = string.right(-pos)
 				if string.length() > keyword_size and is_word_letter(string[keyword_size]):
 					new_string += string.left(keyword_size)
 					string = string.right(-keyword_size)

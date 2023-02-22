@@ -8,7 +8,7 @@ var curve : MMCurve
 func _ready() -> void:
 	curve = MMCurve.new()
 	connect("resized",Callable(self,"_on_resize"))
-	update()
+	queue_redraw()
 
 func transform_point(p : Vector2) -> Vector2:
 	return (Vector2(0.0, 1.0)+Vector2(1.0, -1.0)*p)*size
@@ -51,4 +51,4 @@ func _draw():
 	draw_polyline(points, curve_color)
 
 func _on_resize() -> void:
-	update()
+	queue_redraw()

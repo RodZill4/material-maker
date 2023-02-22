@@ -166,7 +166,7 @@ func get_port_source(gen_name: String, input_index: int) -> MMGenBase.OutputPort
 	else:
 		for c in connections:
 			if c.to == gen_name and c.to_port == input_index:
-				var src_gen = get_node(c.from)
+				var src_gen = get_node(NodePath(c.from))
 				if src_gen != null:
 					if src_gen.get_script() == get_script():
 						rv = src_gen.get_port_source("gen_outputs", c.from_port)
@@ -180,7 +180,7 @@ func get_port_targets(gen_name: String, output_index: int) -> Array:
 	var rv = []
 	for c in connections:
 		if c.from == gen_name and c.from_port == output_index:
-			var tgt_gen = get_node(c.to)
+			var tgt_gen = get_node(NodePath(c.to))
 			if tgt_gen != null:
 				rv.push_back(InputPort.new(tgt_gen, c.to_port))
 	return rv
@@ -208,7 +208,7 @@ func add_generator(generator : MMGenBase) -> bool:
 		else:
 			name_prefix = String(generator.name) + "_"
 		var index = 1
-		while has_node(name):
+		while has_node(NodePath(name)):
 			index += 1
 			name = name_prefix + str(index)
 	generator.name = name
@@ -377,7 +377,7 @@ func check_input_connects(node) -> void:
 				removed_connections.push_back(c.duplicate(true))
 				continue
 			var input_type = node.get_input_defs()[c.to_port].type
-			var output_type = get_node(c.from).get_output_defs()[c.from_port].type
+			var output_type = get_node(NodePath(c.from)).get_output_defs()[c.from_port].type
 			if mm_io_types.types[input_type].slot_type != mm_io_types.types[output_type].slot_type and mm_io_types.types[output_type].slot_type != 42:
 				removed_connections.push_back(c.duplicate(true))
 				continue

@@ -17,8 +17,7 @@ signal group_selected
 func _ready() -> void:
 	if mm_globals.config.has_section_key("hierarchy", "previews"):
 		preview = mm_globals.config.get_value("hierarchy", "previews")
-	var default_image = Image.new()
-	default_image.create(24, 24, false, Image.FORMAT_RGBA8)
+	var default_image = Image.create(24, 24, false, Image.FORMAT_RGBA8)
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
 	default_texture = ImageTexture.new()
 	default_texture.create_from_image(default_image)

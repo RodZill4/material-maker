@@ -5,25 +5,29 @@ var left_panel = null
 var volume_option = null
 
 
+const DIALOG_HACK : bool = false
+
+
 signal return_paths(path_list)
 
 func _ready() -> void:
-	var vbox = get_child(3)
-	var hbox = HSplitContainer.new()
-	add_child(hbox)
-	remove_child(vbox)
-	left_panel = preload("res://material_maker/windows/file_dialog/left_panel.tscn").instantiate()
-	hbox.add_child(left_panel)
-	left_panel.connect("open_directory",Callable(self,"set_current_dir"))
-	hbox.add_child(vbox)
-	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instantiate()
-	vbox.get_child(0).add_child(fav_button)
-	fav_button.connect("pressed",Callable(self,"add_favorite"))
-	if OS.get_name() == "Windows":
-		volume_option = vbox.get_child(0).get_child(3)
-		if ! volume_option is OptionButton:
-			volume_option = null
+	if DIALOG_HACK:
+		var vbox = get_child(3)
+		var hbox = HSplitContainer.new()
+		add_child(hbox)
+		remove_child(vbox)
+		left_panel = preload("res://material_maker/windows/file_dialog/left_panel.tscn").instantiate()
+		hbox.add_child(left_panel)
+		left_panel.connect("open_directory",Callable(self,"set_current_dir"))
+		hbox.add_child(vbox)
+		# todo vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instantiate()
+		vbox.get_child(0).add_child(fav_button)
+		fav_button.connect("pressed",Callable(self,"add_favorite"))
+		if OS.get_name() == "Windows":
+			volume_option = vbox.get_child(0).get_child(3)
+			if ! volume_option is OptionButton:
+				volume_option = null
 
 
 func get_full_current_dir() -> String:
@@ -33,11 +37,13 @@ func get_full_current_dir() -> String:
 	return prefix+get_current_dir()
 
 func _on_FileDialog_file_selected(path) -> void:
-	left_panel.add_recent(get_full_current_dir())
+	if DIALOG_HACK:
+		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", [ path ])
 
 func _on_FileDialog_files_selected(paths) -> void:
-	left_panel.add_recent(get_full_current_dir())
+	if DIALOG_HACK:
+		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", paths)
 
 func _on_FileDialog_dir_selected(dir) -> void:
@@ -53,4 +59,5 @@ func select_files() -> Array:
 	return result
 
 func add_favorite():
-	left_panel.add_favorite(get_full_current_dir())
+	if DIALOG_HACK:
+		left_panel.add_favorite(get_full_current_dir())

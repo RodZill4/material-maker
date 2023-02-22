@@ -75,8 +75,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 		await get_tree().process_frame
 		texture = get_texture()
 	else:
-		var image : Image = Image.new()
-		image.create(render_size, render_size, false, get_texture().get_data().get_format())
+		var image : Image = Image.create(render_size, render_size, false, get_texture().get_data().get_format())
 		material.set_shader_parameter("mm_chunk_size", render_scale)
 		for x in range(chunk_count):
 			for y in range(chunk_count):

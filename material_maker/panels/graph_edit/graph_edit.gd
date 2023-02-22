@@ -256,7 +256,7 @@ func do_connect_node(from : String, from_slot : int, to : String, to_slot : int)
 		return true
 	return false
 
-func todo_renamed_connect_node(from : String, from_slot : int, to : String, to_slot : int):
+func on_connect_node(from : String, from_slot : int, to : String, to_slot : int):
 	var from_node : MMGraphNodeMinimal = get_node(from)
 	var to_node : MMGraphNodeMinimal = get_node(to)
 	var connect_count = 1
@@ -306,7 +306,7 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 		return true
 	return false
 
-func todo_renamed_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
+func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
 	var from_gen = get_node(from).generator
 	var to_gen = get_node(to).generator
 	if do_disconnect_node(from, from_slot, to, to_slot):
@@ -404,7 +404,6 @@ func crash_recovery_save() -> void:
 	var file : FileAccess = FileAccess.open(save_crash_recovery_path, FileAccess.WRITE)
 	if file.is_open():
 		file.store_string(JSON.stringify(data))
-		file.close()
 		need_save_crash_recovery = false
 
 func remove_crash_recovery_file() -> void:
@@ -629,7 +628,6 @@ func save_file(filename) -> bool:
 		var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
 		if file.is_open():
 			file.store_string(JSON.stringify(data, "\t", true))
-			file.close()
 		else:
 			return false
 	set_save_path(filename)
@@ -708,7 +706,7 @@ func cut() -> void:
 	remove_selection()
 
 func copy() -> void:
-	DisplayServer.clipboard_set(JSON.new().stringify(serialize_selection()))
+	DisplayServer.clipboard_set(JSON.stringify(serialize_selection()))
 
 func do_paste(data) -> void:
 	var position = scroll_offset+0.5*size
@@ -834,7 +832,7 @@ func highlight_connections() -> void:
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
 	for c in get_connection_list():
-		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
+		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(NodePath(c.from)).selected or get_node(NodePath(c.to)).selected else 0.0)
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphNode) -> void:
@@ -901,7 +899,7 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	if node == null:
 		return
 	# Request the popup
-	node_popup.global_position = get_global_mouse_position()
+	node_popup.position = get_global_mouse_position()
 	var slot_type
 	if connect_output:
 		slot_type = mm_io_types.types[node.generator.get_input_defs()[slot_index].type].slot_type

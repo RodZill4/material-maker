@@ -6,7 +6,7 @@ class GradientCursor:
 	var color : Color
 	var sliding : bool = false
 
-	onready var label : Label = get_parent().get_node("Value")
+	@onready var label : Label = get_parent().get_node("Value")
 
 	const WIDTH : int = 10
 
@@ -55,7 +55,7 @@ class GradientCursor:
 	func set_color(c) -> void:
 		color = c
 		get_parent().update_from_value()
-		update()
+		queue_redraw()
 
 	static func sort(a, b) -> bool:
 		return a.get_position() < b.get_position()
@@ -67,7 +67,12 @@ class GradientCursor:
 		set_color(data)
 
 
-var value : MMGradient = null : set = set_value
+var actual_value : MMGradient = null
+var value : MMGradient = null :
+	get:
+		return actual_value
+	set(new_value):
+		set_value(new_value)
 @export var embedded : bool = true
 
 var continuous_change = true
@@ -107,7 +112,7 @@ func _drop_data(_position : Vector2, data) -> void:
 		set_value_and_update(MMType.deserialize_value(gradient), false)
 
 func set_value(v : MMGradient, from_popup : bool = false) -> void:
-	value = v
+	actual_value = v
 	for c in get_children():
 		if c is GradientCursor:
 			remove_child(c)

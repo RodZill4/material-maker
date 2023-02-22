@@ -182,7 +182,7 @@ func _on_Point_gui_input(event : InputEvent):
 		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
 		if parent_control_node != null:
 			value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
-		if event.control:
+		if event.control_pressed:
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
 			if grid != null and grid.visible:

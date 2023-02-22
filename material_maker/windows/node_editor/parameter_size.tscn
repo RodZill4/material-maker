@@ -1,62 +1,37 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://da6i1l17ydbri"]
 
-[ext_resource path="res://material_maker/windows/node_editor/parameter_size.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=2]
-
-
-
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_size.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="2"]
 
 [node name="size" type="HBoxContainer"]
 offset_right = 148.0
 offset_bottom = 24.0
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="LabelFirst" type="Label" parent="."]
-offset_top = 5.0
-offset_right = 28.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Min:"
 
 [node name="First" type="OptionButton" parent="."]
-offset_left = 32.0
-offset_right = 84.0
-offset_bottom = 24.0
-text = "1x1"
-items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
-selected = 0
-script = ExtResource( 2 )
+layout_mode = 2
+script = ExtResource("2")
 
 [node name="LabelLast" type="Label" parent="."]
-offset_left = 88.0
-offset_top = 5.0
-offset_right = 118.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Max:"
 
 [node name="Last" type="OptionButton" parent="."]
-offset_left = 122.0
-offset_right = 222.0
-offset_bottom = 24.0
-text = "8192x8192"
-items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
-selected = 13
-script = ExtResource( 2 )
+layout_mode = 2
+script = ExtResource("2")
 
 [node name="LabelDefault" type="Label" parent="."]
-offset_left = 226.0
-offset_top = 5.0
-offset_right = 276.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Default:"
 
 [node name="Default" type="OptionButton" parent="."]
-offset_left = 280.0
-offset_right = 380.0
-offset_bottom = 24.0
-text = "1024x1024"
-items = [ "1x1", null, false, 0, null, "2x2", null, false, 1, null, "4x4", null, false, 2, null, "8x8", null, false, 3, null, "16x16", null, false, 4, null, "32x32", null, false, 5, null, "64x64", null, false, 6, null, "128x128", null, false, 7, null, "256x256", null, false, 8, null, "512x512", null, false, 9, null, "1024x1024", null, false, 10, null, "2048x2048", null, false, 11, null, "4096x4096", null, false, 12, null, "8192x8192", null, false, 13, null ]
-selected = 10
-script = ExtResource( 2 )
+layout_mode = 2
+script = ExtResource("2")
+
 [connection signal="size_value_changed" from="First" to="." method="_on_First_item_selected"]
 [connection signal="size_value_changed" from="Last" to="." method="_on_Last_item_selected"]
 [connection signal="size_value_changed" from="Default" to="." method="_on_Default_item_selected"]

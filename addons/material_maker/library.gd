@@ -63,7 +63,7 @@ func _exit_tree() -> void:
 		f.store_string(JSON.new().stringify(expanded_items))
 
 func _unhandled_input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.is_command_or_control_pressed() and event.scancode == KEY_F:
+	if event is InputEventKey and event.pressed and event.is_command_or_control_pressed() and event.keycode == KEY_F:
 		filter_line_edit.grab_focus()
 		filter_line_edit.select_all()
 

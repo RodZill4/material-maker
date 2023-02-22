@@ -5,11 +5,11 @@ var current_tab = -1 : set = set_current_tab
 signal tab_changed
 signal no_more_tabs
 
-func todo_renamed_add_child(control, legible_unique_name = false) -> void:
-	super.add_child(control, legible_unique_name)
-	if !(control is TabBar):
-		$TabBar.add_tab(control.name)
-		move_child(control, $TabBar.get_tab_count()-1)
+func add_tab(control, legible_unique_name = false) -> void:
+	add_child(control, legible_unique_name)
+	assert(! control is TabBar)
+	move_child(control, $TabBar.get_tab_count())
+	$TabBar.add_tab(control.name)
 
 func close_tab(tab = null) -> void:
 	if tab == null:
@@ -85,7 +85,7 @@ func set_current_tab(t) -> void:
 		return
 	var node
 	if current_tab >= 0 && current_tab < $TabBar.get_tab_count():
-		node = get_child(current_tab)
+		node = get_child(current_tab+2)
 		node.visible = false
 	current_tab = t
 	node = get_child(current_tab)

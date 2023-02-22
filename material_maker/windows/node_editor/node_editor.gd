@@ -63,7 +63,7 @@ func set_model_data(data) -> void:
 		output_list.update_up_down_buttons()
 		PortGroupButton.update_groups(output_list)
 	if data.has("includes"):
-		includes_editor.text = PackedStringArray(data.",".join(includes))
+		includes_editor.text = ",".join(PackedStringArray(data.includes))
 	if data.has("global"):
 		global_functions_editor.text = data.global
 		global_functions_editor.clear_undo_history()

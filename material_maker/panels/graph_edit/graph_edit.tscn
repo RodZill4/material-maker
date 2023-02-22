@@ -96,10 +96,10 @@ layout_mode = 2
 script = ExtResource("3")
 
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [true]]
-[connection signal="connection_request" from="." to="." method="connect_node"]
+[connection signal="connection_request" from="." to="." method="on_connect_node"]
 [connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [false]]
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
-[connection signal="disconnection_request" from="." to="." method="disconnect_node"]
+[connection signal="disconnection_request" from="." to="." method="on_disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
 [connection signal="node_deselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]

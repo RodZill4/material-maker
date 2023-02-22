@@ -39,7 +39,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 		button.connect("pressed",Callable(self,"_on_Link_pressed").bind( control.name ))
 		button.tooltip_text = "Link another parameter"
 	button = Button.new()
-	button.icon = preload("res://material_maker/icons/remove_at.tres")
+	button.icon = preload("res://material_maker/icons/remove.tres")
 	button.tooltip_text = "Remove parameter"
 	grid.add_child(button)
 	button.connect("pressed",Callable(self,"remove_parameter").bind( control.name ))
@@ -115,9 +115,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 					1:
 						var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 						add_child(dialog)
-						var status = dialog.enter_text("Configuration", "Enter a name for the new configuration", "")
-						while status is GDScriptFunctionState:
-							status = await status.completed
+						var status = await dialog.enter_text("Configuration", "Enter a name for the new configuration", "")
 						if status.ok:
 							generator.add_configuration(variable, status.text)
 					3:
@@ -220,9 +218,7 @@ func _on_Edit_pressed(param_name) -> void:
 		if p.name == param_name:
 			var dialog = preload("res://material_maker/nodes/remote/named_parameter_dialog.tscn").instantiate()
 			add_child(dialog)
-			var result = dialog.configure_param(p.min, p.max, p.step, p.default)
-			while result is GDScriptFunctionState:
-				result = await result.completed
+			var result = await dialog.configure_param(p.min, p.max, p.step, p.default)
 			if result.keys().size() == 4:
 				old_state = generator.serialize().duplicate(true)
 				generator.configure_named_parameter(param_name, result.min, result.max, result.step, result.default)

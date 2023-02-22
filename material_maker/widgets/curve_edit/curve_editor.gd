@@ -1,13 +1,15 @@
 extends "res://material_maker/widgets/curve_edit/curve_view.gd"
 
+
 signal value_changed(value)
+
 
 func _ready():
 	update_controls()
 
 func set_curve(c : MMCurve) -> void:
 	curve = c
-	update()
+	queue_redraw()
 	update_controls()
 
 func update_controls() -> void:
@@ -44,12 +46,12 @@ func _on_ControlPoint_moved(index):
 		var slope_vector = control_point.get_node("RightSlope").position/size
 		if slope_vector.x != 0:
 			curve.points[index].rs = -slope_vector.y / slope_vector.x
-	update()
+	queue_redraw()
 	emit_signal("value_changed", curve)
 
 func _on_ControlPoint_removed(index):
 	if curve.remove_point(index):
-		update()
+		queue_redraw()
 		update_controls()
 
 func _on_CurveEditor_gui_input(event):

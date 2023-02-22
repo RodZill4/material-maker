@@ -117,6 +117,8 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	get_viewport().gui_embed_subwindows = false
+	
 	for m in MENU:
 		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
@@ -473,7 +475,7 @@ func _on_Create_id_pressed(id) -> void:
 func new_graph_panel() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instantiate()
 	graph_edit.node_factory = $NodeFactory
-	projects.add_child(graph_edit)
+	projects.add_tab(graph_edit)
 	projects.current_tab = graph_edit.get_index()
 	return graph_edit
 
@@ -494,7 +496,7 @@ func new_paint_project(obj_file_name = null) -> void:
 	if result == null:
 		return
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
-	projects.add_child(paint_panel)
+	projects.add_tab(paint_panel)
 	paint_panel.init_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
 	projects.current_tab = paint_panel.get_index()
 
@@ -506,7 +508,7 @@ func load_project() -> void:
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		add_child(dialog)
-		dialog.custom_minimum_size = Vector2(500, 500)
+		#dialog.custom_minimum_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
@@ -580,7 +582,7 @@ func do_load_material_from_data(filename : String, data : String, update_hierarc
 
 func do_load_painting(filename : String) -> bool:
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
-	projects.add_child(paint_panel)
+	projects.add_tab(paint_panel)
 	var status : bool = paint_panel.load_project(filename)
 	projects.current_tab = paint_panel.get_index()
 	return status
@@ -782,7 +784,7 @@ func edit_save_selection() -> void:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file : FileAccess = FileAccess.open(files[0], FileAccess.WRITE)
 		if file.is_open():
-			file.store_string(JSON.new().stringify(graph_edit.serialize_selection()))
+			file.store_string(JSON.stringify(graph_edit.serialize_selection()))
 			file.close()
 
 func edit_preferences() -> void:
@@ -998,9 +1000,10 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects.get_current_tab_control()
 	if new_tab != current_tab:
-		for c in get_incoming_connections():
-			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-				c.source.disconnect(c.signal_name,Callable(self,c.method_name))
+# TODO: ???
+#		for c in get_incoming_connections():
+#			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
+#				c.source.disconnect(c.signal_name,Callable(self,c.method_name))
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab
@@ -1095,11 +1098,9 @@ func generate_graph_screenshot():
 				graph_rect = graph_rect.expand(node_rect.position)
 				graph_rect = graph_rect.expand(node_rect.end)
 	graph_rect = graph_rect.grow_individual(50, 20, 50, 80)
-	var image : Image = Image.new()
-	image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
 	var origin = graph_edit.scroll_offset+graph_rect.position-graph_edit_rect.position
-	var small_image : Image = Image.new()
-	small_image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
 	for x in range(0, graph_rect.size.x, graph_edit_rect.size.x):
 		for y in range(0, graph_rect.size.y, graph_edit_rect.size.y):
 			graph_edit.scroll_offset = origin+Vector2(x, y)

@@ -18,7 +18,7 @@ func _on_OK_pressed():
 func _on_Cancel_pressed():
 	emit_signal("return_curve", previous_value)
 
-func edit_curve(curve : MMCurve) -> Array:
+func edit_curve(curve : MMCurve) -> Dictionary:
 	previous_value = curve.duplicate()
 	$VBoxContainer/EditorContainer/CurveEditor.set_curve(curve)
 	popup_centered()

@@ -16,7 +16,7 @@ func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Ar
 	method = m
 	extra_parameters = ep
 	accept_empty = ae
-	window_title = wt
+	title = wt
 	editor.text = value
 	popup_centered()
 	editor.set_caret_column(editor.text.length())

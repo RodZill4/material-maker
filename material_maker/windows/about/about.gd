@@ -49,7 +49,7 @@ func _ready() -> void:
 		label.text = c.name
 		authors_grid.add_child(label)
 		label = Label.new()
-		label.autowrap = true
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.text = c.contribution
 		authors_grid.add_child(label)
 	for p in PATRONS:

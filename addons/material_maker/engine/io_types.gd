@@ -17,9 +17,9 @@ func _ready():
 					type_names.push_back(t.name)
 				var c = t.color
 				t.color = Color(c.r, c.g, c.b, c.a)
-				file = FileAccess.open(p+"/preview_"+t.name+".shader", FileAccess.READ)
-				if file and file.is_open():
+				file = FileAccess.open(p+"/preview_"+t.name+".gdshader", FileAccess.READ)
+				if file != null and file.is_open():
 					t.preview = file.get_as_text()
-					file = null
 				types[t.name] = t
-			break
+			return
+	print("Failed to load io types")

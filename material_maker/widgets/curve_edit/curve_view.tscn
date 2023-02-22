@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://yeaj0tj7b08i"]
 
-[ext_resource path="res://material_maker/widgets/curve_edit/curve_view.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_view.gd" id="1"]
 
 [node name="CurveView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
@@ -10,7 +12,4 @@ offset_top = 4.0
 offset_right = -4.0
 offset_bottom = -4.0
 mouse_filter = 2
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")

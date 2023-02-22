@@ -35,10 +35,10 @@ func on_right_click():
 	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
-	var position : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
-	position -= Vector3(0.5, 0.5, 0.5)
-	position *= aabb.size
-	new_pivot_position = -position
+	var pos : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
+	pos -= Vector3(0.5, 0.5, 0.5)
+	pos *= aabb.size
+	new_pivot_position = -pos
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$MaterialPreview.keep_3d_linear = false

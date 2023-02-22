@@ -187,8 +187,8 @@ func do_update():
 			invalidated_buffers += 1
 		if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
 			if buffer.object.has_method("on_dep_update_buffer"):
-				var status = await buffer.object.on_dep_update_buffer(b)
 				buffer.status = Buffer.Updating
+				var status = await buffer.object.on_dep_update_buffer(b)
 				if status is bool and ! status:
 					buffer.status = Buffer.Invalidated
 	if reset_stats:

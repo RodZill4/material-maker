@@ -73,11 +73,11 @@ func resize_to_selection() -> void:
 			if bottom_right.y > max_bounds.y:
 				max_bounds.y = bottom_right.y
 				
-		offset = Vector2(min_bounds.x - AUTO_SIZE_PADDING, min_bounds.y - AUTO_SIZE_PADDING)
+		position_offset = Vector2(min_bounds.x - AUTO_SIZE_PADDING, min_bounds.y - AUTO_SIZE_PADDING)
 		
 		# Size needs to account for offset padding as well (Padding * 2)
 		var new_size : Vector2 = Vector2(max_bounds.x - min_bounds.x + AUTO_SIZE_PADDING * 2,
-										 max_bounds.y - min_bounds.y + AUTO_SIZE_PADDING * 2)
+											max_bounds.y - min_bounds.y + AUTO_SIZE_PADDING * 2)
 		
 		size = new_size
 		generator.size = new_size
@@ -135,9 +135,7 @@ func name_change_popup() -> void:
 	accept_event()
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
-	var status = dialog.enter_text("Comment", "Enter the comment node title", generator.title)
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await dialog.enter_text("Comment", "Enter the comment node title", generator.title)
 	if status.ok:
 		title = status.text
 		generator.title = status.text
@@ -156,8 +154,8 @@ func set_color(c):
 
 func set_stylebox_color(c):
 	c.a = 0.3
-	get_stylebox("comment").bg_color = c
-	get_stylebox("comment_focus").bg_color = c
+	get_theme_stylebox("comment").bg_color = c
+	get_theme_stylebox("comment_focus").bg_color = c
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

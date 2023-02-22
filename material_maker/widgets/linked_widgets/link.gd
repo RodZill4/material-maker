@@ -18,7 +18,7 @@ func _init(parent):
 
 func pick(s, n, pn : String, c : bool = false) -> void:
 	source = s
-	end = get_global_transform()source.get_global_transform() * 0.5*source.size * 
+	end = source.get_global_transform() * 0.5*source.size * get_global_transform()
 	node = n
 	param_name = pn
 	creating = c
@@ -29,7 +29,7 @@ func show_link(s, t) -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	source = s
 	target = t
-	update()
+	queue_redraw()
 
 func closest(rect, point) -> Vector2:
 	return Vector2(max(rect.position.x, min(rect.end.x, point.x)), max(rect.position.y, min(rect.end.y, point.y)))
@@ -47,15 +47,15 @@ func find_control(gp) -> Dictionary:
 func _draw() -> void:
 	if ! ( is_instance_valid(source) and is_instance_valid(self) ):
 		return
-	var start = get_global_transform()source.get_global_transform() * 0.5*source.size * 
+	var start = source.get_global_transform() * 0.5*source.size * get_global_transform()
 	var color = Color(1, 0.5, 0.5, 0.5)
 	var rect
 	if target != null:
 		color = Color(0.5, 1, 0.5, 0.5)
-		rect = get_global_transform()target.get_global_transform() * Rect2(Vector2(0, 0), target.size) * 
+		rect = target.get_global_transform() * Rect2(Vector2(0, 0), target.size) * get_global_transform()
 		draw_rect(rect, color, false, 2)
 		end = closest(rect, start)
-	rect = get_global_transform()source.get_global_transform() * Rect2(Vector2(0, 0), source.size) * 
+	rect = source.get_global_transform() * Rect2(Vector2(0, 0), source.size) * get_global_transform()
 	draw_rect(rect, color, false, 2)
 	start = closest(rect, end)
 	draw_line(start,end,color,1.5)
@@ -70,7 +70,7 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var mouse_global_position = get_global_mouse_position()
 		var control = find_control(mouse_global_position)
-		end = get_global_transform()mouse_global_position * 
+		end = mouse_global_position * get_global_transform()
 		target = control.widget if control != null and !control.is_empty() and node.generator.can_link_parameter(param_name, control.node.generator, control.widget.name) else null
 		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseButton:

@@ -85,19 +85,15 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	return false
 
 func on_dep_update_buffer(_buffer_name) -> bool:
-	if ! is_visible_in_tree():
+	if ! ( is_inside_tree() and is_visible_in_tree() ):
 		return false
-	$ViewportImage.render_target_update_mode = SubViewport.UPDATE_ONCE
-	#todo $ViewportImage.update_worlds()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	$ViewportHistogram1.render_target_update_mode = SubViewport.UPDATE_ONCE
-	#todo $ViewportHistogram1.update_worlds()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	$ViewportHistogram2.render_target_update_mode = SubViewport.UPDATE_ONCE
-	#todo $ViewportHistogram2.update_worlds()
-	await get_tree().process_frame
-	await get_tree().process_frame
+	for v in [ $ViewportImage, $ViewportHistogram1, $ViewportHistogram2 ]:
+		v.render_target_update_mode = SubViewport.UPDATE_ONCE
+		if get_tree() == null:
+			return false
+		await get_tree().process_frame
+		if get_tree() == null:
+			return false
+		await get_tree().process_frame
 	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null, true)
 	return true

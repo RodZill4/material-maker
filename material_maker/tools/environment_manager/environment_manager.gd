@@ -55,19 +55,19 @@ func load_environment(file_path : String) -> Array:
 	var array : Array = []
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if file != null:
-		var test_json_conv = JSON.new()
-		test_json_conv.parse(file.get_as_text())
-		array = test_json_conv.get_data()
+		var json = JSON.new()
+		if json.parse(file.get_as_text()) == OK:
+			array = json.get_data()
 	return array
 
 func _exit_tree() -> void:
 	for i in environments.size():
-		var image : Image = environment_textures[i].thumbnail.get_data()
-		environments[i].thumbnail = Marshalls.raw_to_base64(image.save_png_to_buffer())
+		var image : Image = environment_textures[i].thumbnail.get_image()
+		if image != null:
+			environments[i].thumbnail = Marshalls.raw_to_base64(image.save_png_to_buffer())
 	var file = FileAccess.open("user://environments.json", FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		file.store_string(JSON.stringify(environments.slice(3, environments.size()-1)))
-		file.close()
 
 func get_environment_list() -> Array:
 	var list = []

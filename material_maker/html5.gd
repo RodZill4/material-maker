@@ -7,7 +7,7 @@ signal in_focus
 signal file_loaded(file_name, file_type, file_data)
 
 class JS:
-	func eval(a, b):
+	func eval(_a, _b):
 		pass
 
 var JavaScript : JS
@@ -48,8 +48,8 @@ func _ready() -> void:
 			true
 		)
 
-func _notification(notification: int) -> void:
-	if notification == MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
+func _notification(notification_id: int) -> void:
+	if notification_id == MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 		emit_signal("in_focus")
 
 func load_file(accept : String = ""):

@@ -6,7 +6,8 @@ var exports : Dictionary = {}
 
 
 func _ready():
-	preview_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
+	pass
+	#preview_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
 
 
 func set_model_data(data) -> void:

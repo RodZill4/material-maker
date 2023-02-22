@@ -21,13 +21,12 @@ func _on_ItemList_item_activated(index) -> void:
 	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
 	if error != OK:
 		return
-	var data = await $HTTPRequest.request_completed[3].get_string_from_utf8()
+	var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
 	var test_json_conv = JSON.new()
-	test_json_conv.parse(data)
-	var parse_result : JSON = test_json_conv.get_data()
-	if parse_result == null or ! parse_result.result is Dictionary:
+	if test_json_conv.parse(data) != OK or ! test_json_conv.get_data() is Dictionary:
 		return
-	emit_signal("return_asset", parse_result.result.json)
+	var parse_result : Dictionary = test_json_conv.get_data()
+	emit_signal("return_asset", parse_result.json)
 
 func _on_LoadFromWebsite_popup_hide() -> void:
 	emit_signal("return_asset", "")
@@ -57,13 +56,12 @@ func fill_list(filter : String):
 func select_material(type : int = 0) -> String:
 	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
 	if error == OK:
-		var data = await $HTTPRequest.request_completed[3].get_string_from_utf8()
+		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
 		var test_json_conv = JSON.new()
-		test_json_conv.parse(data)
-		var parse_result : JSON = test_json_conv.get_data()
-		if parse_result != null and parse_result.result is Array:
+		if test_json_conv.parse(data) == OK and test_json_conv.get_data() is Array:
+			var parse_result : Array = test_json_conv.get_data()
 			popup_centered()
-			var tmp_assets = parse_result.result
+			var tmp_assets = parse_result
 			tmp_assets.reverse()
 			assets = []
 			var image : Image = Image.new()

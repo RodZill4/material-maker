@@ -30,7 +30,7 @@ func add_reference(t : Texture2D) -> void:
 	change_image(1)
 
 func get_color_under_cursor() -> Color:
-	var image : Image = get_viewport().get_texture().get_data()
+	var image : Image = get_viewport().get_texture().get_image()
 	var pos = get_global_mouse_position()
 	pos *= image.get_size()
 	pos /= get_viewport_rect().size

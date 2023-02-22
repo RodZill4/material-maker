@@ -1,135 +1,102 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=16 format=3 uid="uid://bg24jri8a0t08"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter.gd" id="1"]
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_float.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_size.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_enum.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_boolean.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_color.tscn" id="7"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_gradient.tscn" id="8"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="PackedScene" uid="uid://dn13ybhfpg52k" path="res://material_maker/windows/node_editor/parameter_float.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://da6i1l17ydbri" path="res://material_maker/windows/node_editor/parameter_size.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://34lhxbvmlgsl" path="res://material_maker/windows/node_editor/parameter_enum.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://bv38uib754hon" path="res://material_maker/windows/node_editor/parameter_boolean.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://42kwj2l3x2of" path="res://material_maker/windows/node_editor/parameter_color.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://c6pc6upxc23kc" path="res://material_maker/windows/node_editor/parameter_gradient.tscn" id="8"]
 [ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="9"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_curve.tscn" id="10"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_polygon.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://ew3gj3j2u7w2" path="res://material_maker/windows/node_editor/parameter_curve.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://dffueustyojkh" path="res://material_maker/windows/node_editor/parameter_polygon.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://dij6o75etamwy" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 0, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("2")
+region = Rect2(0, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 18, 48, 12, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("2")
+region = Rect2(18, 48, 12, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 2 )
-region = Rect2( 34, 48, 12, 16 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("2")
+region = Rect2(34, 48, 12, 16)
 
 [node name="Parameter" type="HBoxContainer"]
 offset_right = 201.0
 offset_bottom = 24.0
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Delete" type="Button" parent="."]
-offset_right = 28.0
-offset_bottom = 32.0
-icon = SubResource( 1 )
+layout_mode = 2
+icon = SubResource("1")
 flat = true
 
 [node name="Up" type="Button" parent="."]
-offset_left = 32.0
-offset_right = 56.0
-offset_bottom = 32.0
-icon = SubResource( 2 )
+layout_mode = 2
+icon = SubResource("2")
 flat = true
 
 [node name="Down" type="Button" parent="."]
-offset_left = 60.0
-offset_right = 84.0
-offset_bottom = 32.0
-icon = SubResource( 3 )
+layout_mode = 2
+icon = SubResource("3")
 flat = true
 
 [node name="Name" type="LineEdit" parent="."]
-offset_left = 88.0
-offset_right = 158.0
-offset_bottom = 32.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "name"
 
 [node name="Label" type="LineEdit" parent="."]
-offset_left = 162.0
-offset_right = 232.0
-offset_bottom = 32.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Label"
 
-[node name="Description" parent="." instance=ExtResource( 9 )]
-offset_left = 236.0
-offset_right = 264.0
-offset_bottom = 32.0
+[node name="Description" parent="." instance=ExtResource("9")]
+layout_mode = 2
 description_type = "Parameter"
 
 [node name="Type" type="OptionButton" parent="."]
-offset_left = 268.0
-offset_right = 325.0
-offset_bottom = 32.0
-text = "float"
-items = [ "float", null, false, 0, null, "size", null, false, 1, null, "enum", null, false, 2, null, "boolean", null, false, 3, null, "color", null, false, 4, null, "gradient", null, false, 5, null ]
-selected = 0
+layout_mode = 2
 
 [node name="Types" type="HBoxContainer" parent="."]
-offset_left = 329.0
-offset_right = 505.0
-offset_bottom = 32.0
+layout_mode = 2
 
-[node name="float" parent="Types" instance=ExtResource( 3 )]
+[node name="float" parent="Types" instance=ExtResource("3")]
 visible = false
-offset_right = 521.0
-offset_bottom = 32.0
+layout_mode = 2
 
-[node name="size" parent="Types" instance=ExtResource( 4 )]
+[node name="size" parent="Types" instance=ExtResource("4")]
 visible = false
-offset_left = 551.0
-offset_right = 796.0
+layout_mode = 2
 
-[node name="enum" parent="Types" instance=ExtResource( 5 )]
+[node name="enum" parent="Types" instance=ExtResource("5")]
 visible = false
-offset_left = 800.0
-offset_right = 839.0
+layout_mode = 2
 
-[node name="boolean" parent="Types" instance=ExtResource( 6 )]
-offset_left = 843.0
-offset_right = 917.0
+[node name="boolean" parent="Types" instance=ExtResource("6")]
+layout_mode = 2
 
-[node name="color" parent="Types" instance=ExtResource( 7 )]
+[node name="color" parent="Types" instance=ExtResource("7")]
 visible = false
-offset_left = 551.0
-offset_right = 563.0
+layout_mode = 2
 
-[node name="gradient" parent="Types" instance=ExtResource( 8 )]
+[node name="gradient" parent="Types" instance=ExtResource("8")]
 visible = false
-offset_left = 551.0
-offset_right = 725.0
-offset_bottom = 30.0
+layout_mode = 2
 
-[node name="curve" parent="Types" instance=ExtResource( 10 )]
+[node name="curve" parent="Types" instance=ExtResource("10")]
 visible = false
-offset_left = 525.0
-offset_right = 639.0
-offset_bottom = 30.0
+layout_mode = 2
 
-[node name="polygon" parent="Types" instance=ExtResource( 11 )]
-offset_right = 86.0
-offset_bottom = 32.0
+[node name="polygon" parent="Types" instance=ExtResource("11")]
+layout_mode = 2
 
-[node name="polyline" parent="Types" instance=ExtResource( 12 )]
-offset_left = 90.0
-offset_right = 176.0
-offset_bottom = 32.0
+[node name="polyline" parent="Types" instance=ExtResource("12")]
+layout_mode = 2
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
 [connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
