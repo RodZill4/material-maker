@@ -1,0 +1,114 @@
+{
+	"generic_size": 1,
+	"name": "spherize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 1,
+		"r": 0.9,
+		"s": 1,
+		"x": 0.5,
+		"y": 0.5
+	},
+	"seed": 0,
+	"shader_model": {
+		"code": "float $(name_uv)_f = dot(2.0*($uv - vec2($x,$y)),2.0*($uv - vec2($x,$y)));",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv,0.0,1.0)",
+				"label": "",
+				"longdesc": "Input image to be distorted",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Spherize",
+		"outputs": [
+			{
+				"longdesc": "Shows the distorted image",
+				"rgba": "clamp(mix($in#(vec2($x,$y)-(vec2($x,$y)-$uv)*$s/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			},
+			{
+				"f": "clamp(step($(name_uv)_f,$r),0.0,1.0)",
+				"shortdesc": "Mask",
+				"type": "f"
+			},
+			{
+				"f": "clamp($r-$(name_uv)_f,0.0,1.0)",
+				"shortdesc": "Falloff",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.9,
+				"label": "2:Radius",
+				"longdesc": "Sphere radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Amount",
+				"longdesc": "Distortion amount",
+				"max": 1,
+				"min": 0,
+				"name": "a",
+				"shortdesc": "Amount",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Scale",
+				"longdesc": "Scale of the input image on the sphere",
+				"max": 1,
+				"min": 0,
+				"name": "s",
+				"shortdesc": "Scale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Offset X",
+				"longdesc": "Location of the sphere on the X axis",
+				"max": 1,
+				"min": 0,
+				"name": "x",
+				"shortdesc": "Offset X",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Offset Y",
+				"longdesc": "Location of the sphere on the X axis",
+				"max": 1,
+				"min": 0,
+				"name": "y",
+				"shortdesc": "Offset Y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Distorts an image as if it was wrapped around a sphere"
+	},
+	"type": "shader"
+}
