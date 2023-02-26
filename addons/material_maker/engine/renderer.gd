@@ -70,10 +70,10 @@ func render_material(object : Object, material : Material, render_size : int, wi
 		material.set_shader_parameter("mm_chunk_size", 1.0)
 		material.set_shader_parameter("mm_chunk_offset", Vector2(0.0, 0.0))
 		render_target_update_mode = SubViewport.UPDATE_ONCE
-		#update_worlds()
 		await get_tree().process_frame
 		await get_tree().process_frame
-		texture = get_texture()
+		await RenderingServer.frame_post_draw
+		texture = ImageTexture.create_from_image(get_texture().get_image())
 	else:
 		var image : Image = Image.create(render_size, render_size, false, get_texture().get_data().get_format())
 		material.set_shader_parameter("mm_chunk_size", render_scale)
@@ -101,7 +101,7 @@ func render_shader(object : Object, shader : String, render_size : int, with_hdr
 func copy_to_texture(t : ImageTexture) -> void:
 	var image : Image = texture.get_image()
 	if image != null:
-		t.create_from_image(image)
+		t.set_image(image)
 
 func get_image() -> Image:
 	var image : Image = Image.new()

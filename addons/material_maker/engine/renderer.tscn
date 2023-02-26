@@ -1,24 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cysjccd1x5mpk"]
 
-[ext_resource path="res://addons/material_maker/engine/renderer.gd" type="Script" id=1]
-
-[sub_resource type="FontFile" id=3]
-font_path = "res://material_maker/fonts/vegur_regular.otf"
-
-[sub_resource type="FontFile" id=4]
-resource_local_to_scene = true
-font_data = SubResource( 3 )
+[ext_resource type="Script" path="res://addons/material_maker/engine/renderer.gd" id="1"]
 
 [node name="Renderer" type="SubViewport"]
-size = Vector2( 256, 256 )
-own_world = true
+disable_3d = true
 transparent_bg = true
-hdr = false
-keep_3d_linear = true
-render_target_v_flip = true
-render_target_update_mode = 1
 gui_disable_input = true
-script = ExtResource( 1 )
+size = Vector2i(256, 256)
+render_target_update_mode = 1
+script = ExtResource("1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 40.0
@@ -28,9 +18,9 @@ offset_bottom = 40.0
 visible = false
 offset_right = 200.0
 offset_bottom = 200.0
-color = Color( 0, 0, 0, 1 )
+color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="Font"]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 14.0
-custom_fonts/font = SubResource( 4 )

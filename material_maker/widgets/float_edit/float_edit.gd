@@ -1,8 +1,11 @@
 extends LineEdit
 
+var float_value : float = 0.5
 @export var value : float = 0.5 :
+	get:
+		return float_value
 	set(new_value):
-		todo_rename_set_value(new_value)
+		set_value(new_value)
 @export var min_value : float = 0.0 : set = set_min_value
 @export var max_value : float = 1.0 : set = set_max_value
 @export var step : float = 0.0 : set = set_step
@@ -28,19 +31,17 @@ func _ready() -> void:
 func get_value() -> String:
 	return text
 	
-func todo_rename_set_value(v, notify = false) -> void:
-	#todo
-	return
+func set_value(v, notify = false) -> void:
 	if v is int:
 		v = float(v)
 	if v is float:
-		value = v
+		float_value = v
 		text = str(v)
 		do_update()
 		$Slider.visible = true
 		if notify:
-			emit_signal("value_changed", value)
-			emit_signal("value_changed_undo", value, false)
+			emit_signal("value_changed", float_value)
+			emit_signal("value_changed_undo", float_value, false)
 	elif v is String and !float_only:
 		text = v
 		$Slider.visible = false
@@ -50,9 +51,9 @@ func todo_rename_set_value(v, notify = false) -> void:
 
 func set_value_from_expression_editor(v : String):
 	if v.is_valid_float():
-		todo_rename_set_value(float(v), true)
+		set_value(float(v), true)
 	else:
-		todo_rename_set_value(v, true)
+		set_value(v, true)
 
 func set_min_value(v : float) -> void:
 	min_value = v
@@ -68,10 +69,10 @@ func set_step(v : float) -> void:
 
 func do_update(update_text : bool = true) -> void:
 	if update_text and $Slider.visible:
-		text = str(value)
+		text = str(float_value)
 		if cursor != null:
 			if max_value != min_value:
-				cursor.position.x = (clamp(value, min_value, max_value)-min_value)*(slider.size.x-cursor.size.x)/(max_value-min_value)
+				cursor.position.x = (clamp(float_value, min_value, max_value)-min_value)*(slider.size.x-cursor.size.x)/(max_value-min_value)
 			else:
 				cursor.position.x = 0
 
@@ -101,12 +102,12 @@ func _gui_input(event : InputEvent) -> void:
 			else:
 				last_position = event.position.x
 				start_position = last_position
-				start_value = value
+				start_value = float_value
 				sliding = true
-				from_lower_bound = value <= min_value
-				from_upper_bound = value >= max_value
+				from_lower_bound = float_value <= min_value
+				from_upper_bound = float_value >= max_value
 				modifiers = get_modifiers(event)
-				emit_signal("value_changed_undo", value, false)
+				emit_signal("value_changed_undo", float_value, false)
 				editable = false
 				selecting_enabled = false
 		else:
@@ -117,7 +118,7 @@ func _gui_input(event : InputEvent) -> void:
 		var new_modifiers = get_modifiers(event)
 		if new_modifiers != modifiers:
 			start_position = last_position
-			start_value = value
+			start_value = float_value
 			modifiers = new_modifiers
 		else:
 			last_position = event.position.x
@@ -136,18 +137,16 @@ func _gui_input(event : InputEvent) -> void:
 				v = min_value
 			if !from_upper_bound and v > max_value:
 				v = max_value
-			todo_rename_set_value(v)
-			emit_signal("value_changed", value)
-			emit_signal("value_changed_undo", value, true)
+			set_value(v)
+			emit_signal("value_changed", float_value)
+			emit_signal("value_changed_undo", float_value, true)
 		accept_event()
 	elif event is InputEventKey and !event.echo:
-		print(event.as_text_keycode())
-		#TODO
-#		match event.scancode:
-#			KEY_SHIFT, KEY_CTRL, KEY_ALT:
-#				start_position = last_position
-#				start_value = value
-#				modifiers = get_modifiers(event)
+		match event.keycode:
+			KEY_SHIFT, KEY_CTRL, KEY_ALT:
+				start_position = last_position
+				start_value = float_value
+				modifiers = get_modifiers(event)
 
 func _on_LineEdit_text_changed(_new_text : String) -> void:
 	pass
@@ -155,16 +154,16 @@ func _on_LineEdit_text_changed(_new_text : String) -> void:
 func _on_LineEdit_text_entered(new_text : String, release = true) -> void:
 	if new_text.is_valid_float():
 		var new_value : float = new_text.to_float()
-		if abs(value-new_value) > 0.00001:
-			value = new_value
+		if abs(float_value-new_value) > 0.00001:
+			float_value = new_value
 			do_update()
-			emit_signal("value_changed", value)
-			emit_signal("value_changed_undo", value, false)
+			emit_signal("value_changed", float_value)
+			emit_signal("value_changed_undo", float_value, false)
 			$Slider.visible = true
 	elif float_only or new_text == "":
 		do_update()
-		emit_signal("value_changed", value)
-		emit_signal("value_changed_undo", value, false)
+		emit_signal("value_changed", float_value)
+		emit_signal("value_changed_undo", float_value, false)
 		$Slider.visible = true
 	else:
 		emit_signal("value_changed", new_text)

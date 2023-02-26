@@ -9,7 +9,7 @@ var closed : bool = true
 
 func set_closed(c : bool = true):
 	closed = c
-	update()
+	queue_redraw()
 
 func _ready() -> void:
 	polygon = MMPolygon.new()
@@ -39,4 +39,4 @@ func _on_resize() -> void:
 	var ds : float = min(size.x, size.y)
 	draw_size = Vector2(ds, ds)
 	draw_offset = 0.5*(size-draw_size)
-	update()
+	queue_redraw()

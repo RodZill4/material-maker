@@ -104,7 +104,7 @@ func parse_paste_data(data : String):
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
 		else:
-			var downloaded_data = await http_request.request_completed[3].get_string_from_utf8()
+			var downloaded_data = (await http_request.request_completed)[3].get_string_from_utf8()
 			var test_json_conv = JSON.new()
 			error = test_json_conv.parse(downloaded_data)
 			if error == OK:

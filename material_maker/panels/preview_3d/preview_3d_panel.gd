@@ -30,11 +30,9 @@ func on_right_click():
 	# Pick position in image
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_image()
-	false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	var mouse_position = get_local_mouse_position()*$MaterialPreview.size/size
 	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
-	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	var pos : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
 	pos -= Vector3(0.5, 0.5, 0.5)
 	pos *= aabb.size

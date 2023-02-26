@@ -40,9 +40,6 @@ var render_queue_size : int = 0
 signal render_queue_empty
 
 
-func _ready():
-	pass # Replace with function body.
-
 func create_buffer(buffer_name : String, object : Object = null):
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
 	buffer_invalidate(buffer_name)
@@ -182,6 +179,8 @@ func do_update():
 	update_scheduled = false
 	var invalidated_buffers : int = 0
 	for b in buffers.keys():
+		if !buffers.has(b):
+			continue
 		var buffer : Buffer = buffers[b]
 		if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
 			invalidated_buffers += 1
@@ -209,8 +208,12 @@ func get_render_queue_size() -> int:
 func material_update_params(material : ShaderMaterial):
 	# TODO: FIX THIS!
 	for p in material.get_property_list():
-		if dependencies_values.has(p.name):
-			material.set_shader_parameter(p.name, dependencies_values[p.name])
+		if p.name.left(17) != "shader_parameter/":
+			continue
+		var parameter_name : String = p.name.right(-17)
+		print(parameter_name)
+		if dependencies_values.has(parameter_name):
+			material.set_shader_parameter(parameter_name, dependencies_values[parameter_name])
 
 func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
 	if material == null:
@@ -221,9 +224,12 @@ func buffer_create_shader_material(buffer_name : String, material : ShaderMateri
 	buffer_clear_dependencies(buffer_name)
 	# TODO: FIX THIS!
 	for p in material.get_property_list():
-		var value = buffer_add_dependency(buffer_name, p.name)
+		if p.name.left(17) != "shader_parameter/":
+			continue
+		var parameter_name : String = p.name.right(-17)
+		var value = buffer_add_dependency(buffer_name, parameter_name)
 		if value != null:
-			material.set_shader_parameter(p.name, value)
+			material.set_shader_parameter(parameter_name, value)
 	buffers[buffer_name].shader_generations += 1
 	return material
 
@@ -255,4 +261,4 @@ func print_stats(object = null):
 		if buffers[b].object.has_method("on_dep_shader_generations"):
 			var count = buffers[b].object.on_dep_shader_generations(b)
 	for s in Buffer.STATUS:
-		print("%s: %s" % [ s, statuses[s].join(", ") ])
+		print("%s: %s" % [ s, ", ".join(statuses[s]) ])

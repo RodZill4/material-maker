@@ -272,7 +272,7 @@ func on_connect_node(from : String, from_slot : int, to : String, to_slot : int)
 			var disconnect = get_source(to, to_slot+i)
 			if !disconnect.is_empty():
 				super.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
-				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
+				disconnect_list.push_back({from=get_node(NodePath(disconnect.node)).generator.name, from_port=disconnect.slot, to=get_node(NodePath(to)).generator.name, to_port=to_slot+i})
 			super.connect_node(from, from_slot+i, to, to_slot+i)
 			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})
 			connected = true
@@ -408,8 +408,7 @@ func crash_recovery_save() -> void:
 
 func remove_crash_recovery_file() -> void:
 	if save_crash_recovery_path != "":
-		var dir : DirAccess = DirAccess.open("res://")
-		dir.remove_at(save_crash_recovery_path)
+		DirAccess.remove_absolute(save_crash_recovery_path)
 
 # Center view
 
@@ -686,8 +685,8 @@ func serialize_selection(nodes = []) -> Dictionary:
 		s.node_position = { x=p.x, y=p.y }
 		data.nodes.append(s)
 	for c in get_connection_list():
-		var from = get_node(c.from)
-		var to = get_node(c.to)
+		var from = get_node(NodePath(c.from))
+		var to = get_node(NodePath(c.to))
 		if from != null and from.selected and to != null and to.selected:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name

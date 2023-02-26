@@ -59,5 +59,5 @@ func _on_ControlPoint_gui_input(event):
 		emit_signal("moved", get_index())
 
 func update_tangents() -> void:
-	update()
+	queue_redraw()
 	emit_signal("moved", get_index())

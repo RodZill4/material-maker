@@ -8,7 +8,7 @@ signal return_polygon(polygon)
 
 func set_closed(c : bool = true):
 	closed = c
-	window_title = "Edit polygon" if closed else "Edit polyline"
+	title = "Edit polygon" if closed else "Edit polyline"
 	$VBoxContainer/EditorContainer/PolygonEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():
@@ -20,7 +20,7 @@ func _on_OK_pressed():
 func _on_Cancel_pressed():
 	emit_signal("return_polygon", previous_value)
 
-func edit_polygon(polygon : MMPolygon) -> Array:
+func edit_polygon(polygon : MMPolygon) -> Dictionary:
 	previous_value = polygon.duplicate()
 	$VBoxContainer/EditorContainer/PolygonEditor.set_polygon(polygon)
 	popup_centered()

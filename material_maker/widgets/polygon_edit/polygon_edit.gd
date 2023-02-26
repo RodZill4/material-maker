@@ -16,16 +16,14 @@ func _ready():
 func set_value(v) -> void:
 	value = v.duplicate()
 	$PolygonView.polygon = value
-	$PolygonView.update()
+	$PolygonView.queue_redraw()
 
 func _on_PolygonEdit_pressed():
 	var dialog = preload("res://material_maker/widgets/polygon_edit/polygon_dialog.tscn").instantiate()
 	dialog.set_closed(closed)
 	add_child(dialog)
 	dialog.connect("polygon_changed",Callable(self,"on_value_changed"))
-	var new_polygon = dialog.edit_polygon(value)
-	while new_polygon is GDScriptFunctionState:
-		new_polygon = await new_polygon.completed
+	var new_polygon = await dialog.edit_polygon(value)
 	if new_polygon != null:
 		set_value(new_polygon.value)
 		emit_signal("updated", new_polygon.value.duplicate(), null if new_polygon.value.compare(new_polygon.previous_value) else new_polygon.previous_value)

@@ -160,7 +160,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
-	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
+	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
 	current_renderer = await mm_renderer.request(self)
 	if check_current_iteration != current_iteration:
 		print("Iteration changed")
@@ -182,11 +182,11 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
 	current_renderer.copy_to_texture(texture)
-	texture.flags = 0
+	#todo texture.flags = 0
 	current_renderer.release(self)
 	current_renderer = null
 	# Calculate iteration index
-	var hash_value : int = 1 if ( not autostop or current_iteration == 0 or texture == null or texture.get_data() == null ) else hash(texture.get_data().get_data())
+	var hash_value : int = 1 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
 	if autostop and hash_value == previous_hash_value:
 		set_current_iteration(iterations+1)
 	else:

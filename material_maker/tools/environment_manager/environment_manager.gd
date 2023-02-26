@@ -37,8 +37,12 @@ func _ready():
 			var texture : ImageTexture = ImageTexture.new()
 			if environments[i].has("thumbnail"):
 				var image : Image = Image.new()
-				image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail))
-				texture.create_from_image(image)
+				if image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail)) == OK:
+					texture.create_from_image(image)
+					print("created thumbnail")
+					print(texture.get_size())
+				else:
+					print("Failed to read thumbnail for environment")
 			environment_textures.push_back({ thumbnail=texture })
 
 func add_environment(data : Dictionary):
@@ -109,26 +113,26 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight3D) -> 
 		return
 	var env : Dictionary = environments[index]
 	var env_textures : Dictionary = environment_textures[index]
-	#todo e.background_mode = Environment.BG_COLOR_SKY if env.show_color else Environment.BG_SKY
+	e.background_mode = Environment.BG_COLOR if env.show_color else Environment.BG_SKY
 	e.background_color = MMType.deserialize_value(env.color)
 	if !e.has_meta("hdri") or e.get_meta("hdri") != env.hdri_url:
 		if !env_textures.has("hdri"):
 			var status = await read_hdr(index, env.hdri_url)
 		if env_textures.has("hdri"):
+			e.background_mode = Environment.BG_SKY
 			e.sky = Sky.new()
 			e.sky.sky_material = PanoramaSkyMaterial.new()
 			e.sky.sky_material.panorama = env_textures.hdri
 		e.set_meta("hdri", env.hdri_url)
-# todo
-#	e.background_energy = env.sky_energy
-#	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
-#	e.ambient_light_energy = env.ambient_light_energy
-#	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
-#	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
-#	s.light_color = MMType.deserialize_value(env.sun_color)
-#	s.light_energy = env.sun_energy
-#	s.rotation_degrees.y = env.sun_direction
-#	s.rotation_degrees.x = -env.sun_angle
+	e.background_energy_multiplier = env.sky_energy
+	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
+	e.ambient_light_energy = env.ambient_light_energy
+	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
+	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution
+	s.light_color = MMType.deserialize_value(env.sun_color)
+	s.light_energy = env.sun_energy
+	s.rotation_degrees.y = env.sun_direction
+	s.rotation_degrees.x = -env.sun_angle
 
 var progress_window = null
 
@@ -182,12 +186,10 @@ func _physics_process(_delta) -> void:
 
 func set_hdr(index, hdr_path) -> bool:
 	print("Setting hdr "+hdr_path)
-	var hdr : Texture2D = load(hdr_path)
-# todo
-#	if hdr == null:
-#		hdr = ImageTexture.new()
-#		if hdr.load_fr(hdr_path) != OK:
-#			return false
+	var hdr_image : Image = Image.load_from_file(hdr_path)
+	if hdr_image == null:
+		return false
+	var hdr : ImageTexture = ImageTexture.create_from_image(hdr_image)
 	environment_textures[index].hdri = hdr
 	return true
 
@@ -226,10 +228,9 @@ func create_preview(index : int, size : int = 64) -> Image:
 	apply_environment(index, $PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2/Camera3D.environment, $PreviewGenerator/Sun)
 	preview_generator.size = Vector2(size, size)
 	preview_generator.render_target_update_mode = SubViewport.UPDATE_ONCE
-	preview_generator.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	return preview_generator.get_texture().get_data()
+	return preview_generator.get_texture().get_image()
 
 func do_update_thumbnail() -> void:
 	rendering = true

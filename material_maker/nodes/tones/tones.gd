@@ -5,19 +5,19 @@ class Cursor:
 
 	var color : Color
 	var top : bool = true
-	var position : float
+	var pos : float
 
 	const WIDTH : int = 12
 	const HEIGHT : int = 12
 
 	func _init(c,p,t = true):
 		color = c
-		position = p
+		pos = p
 		top = t
 
 	func _ready() -> void:
 		position.y = -2 if top else get_parent().size.y+2-HEIGHT
-		set_value(position)
+		set_value(pos)
 		size = Vector2(WIDTH, HEIGHT)
 
 	func _draw() -> void:
@@ -29,7 +29,7 @@ class Cursor:
 		var c = color
 		c.a = 1.0
 		draw_colored_polygon(polygon, c)
-		var outline_color = 0.0 if position > 0.5 else 1.0
+		var outline_color = 0.0 if pos > 0.5 else 1.0
 		draw_polyline(polygon, Color(outline_color, outline_color, outline_color), 1.0, true)
 
 	func _gui_input(ev) -> void:
@@ -39,14 +39,14 @@ class Cursor:
 			update_value((position.x+0.5*WIDTH)/get_parent().size.x)
 
 	func update_value(p : float) -> void:
-		if p != position:
+		if p != pos:
 			set_value(p)
-			get_parent().get_parent().update_value(self, position)
-			update()
+			get_parent().get_parent().update_value(self, pos)
+			queue_redraw()
 
 	func set_value(v : float):
-		position = v
-		position.x = position * get_parent().size.x - 0.5*WIDTH
+		pos = v
+		position.x = pos * get_parent().size.x - 0.5*WIDTH
 
 var cursor_in_min : Cursor
 var cursor_in_mid : Cursor
@@ -132,15 +132,15 @@ func set_parameter(n : String, v : float, d : float) -> void:
 func update_value(control : Cursor, value : float) -> void:
 	match control:
 		cursor_in_min:
-			 set_parameter("in_min", value, 0)
+			set_parameter("in_min", value, 0)
 		cursor_in_mid:
-			 set_parameter("in_mid", value, 0.5)
+			set_parameter("in_mid", value, 0.5)
 		cursor_in_max:
-			 set_parameter("in_max", value, 1)
+			set_parameter("in_max", value, 1)
 		cursor_out_min:
-			 set_parameter("out_min", value, 0)
+			set_parameter("out_min", value, 0)
 		cursor_out_max:
-			 set_parameter("out_max", value, 1)
+			set_parameter("out_max", value, 1)
 	get_parent().send_changed_signal()
 
 func _on_Auto_pressed():

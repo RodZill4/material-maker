@@ -19,7 +19,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbgqo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_npndv"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -213,7 +213,7 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_xbgqo")
+material = SubResource("ShaderMaterial_npndv")
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0

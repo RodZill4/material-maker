@@ -120,6 +120,7 @@ func on_menu_about_to_show(menu_def, object, menu_name : String, menu : PopupMen
 		elif menu_def[i].has("command"):
 			var item : int = menu.get_item_index(i)
 			var command = menu_def[i].command+"_is_disabled"
+			menu.set_item_disabled(item, false)
 			if object.has_method(command):
 				var is_disabled = object.call(command)
 				menu.set_item_disabled(item, is_disabled)

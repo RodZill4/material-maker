@@ -9,7 +9,7 @@ func _ready():
 
 func set_polygon(p : MMPolygon) -> void:
 	polygon = p
-	update()
+	queue_redraw()
 	update_controls()
 
 func update_controls() -> void:
@@ -28,12 +28,12 @@ func update_controls() -> void:
 func _on_ControlPoint_moved(index):
 	var control_point = get_child(index)
 	polygon.points[index] = reverse_transform_point(control_point.position+control_point.OFFSET)
-	update()
+	queue_redraw()
 	emit_signal("value_changed", polygon)
 
 func _on_ControlPoint_removed(index):
 	if polygon.remove_point(index):
-		update()
+		queue_redraw()
 		update_controls()
 
 func _on_PolygonEditor_gui_input(event):

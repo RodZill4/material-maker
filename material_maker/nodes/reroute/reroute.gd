@@ -13,13 +13,13 @@ func on_connections_changed():
 	var port_type : String = "any"
 	for c in graph_edit.get_connection_list():
 		if c.to == name:
-			var node : GraphNode = graph_edit.get_node(c.from)
+			var node : GraphNode = graph_edit.get_node(NodePath(c.from))
 			color = node.get_slot_color_right(c.from_port)
 			type = node.get_slot_type_right(c.from_port)
 			port_type = node.generator.get_output_defs()[c.from_port].type
 			break
 		if c.from == name:
-			var node : GraphNode = graph_edit.get_node(c.to)
+			var node : GraphNode = graph_edit.get_node(NodePath(c.to))
 			color = node.get_slot_color_left(c.to_port)
 			type = node.get_slot_type_left(c.to_port)
 			port_type = node.generator.get_input_defs()[c.from_port].type

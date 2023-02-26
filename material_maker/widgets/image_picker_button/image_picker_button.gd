@@ -17,7 +17,7 @@ func update_image() -> void:
 	var image : Image = Image.new()
 	image.load(image_path)
 	texture_normal.create_from_image(image)
-	update()
+	queue_redraw()
 
 func do_set_image_path(path) -> void:
 	if path == null:
@@ -32,9 +32,8 @@ func set_image_path(path) -> void:
 	emit_signal("on_file_selected", path)
 
 func get_filetime(file_path : String) -> int:
-	var f : File = File.new()
-	if f.file_exists(file_path):
-		return f.get_modified_time(file_path)
+	if FileAccess.file_exists(file_path):
+		return FileAccess.get_modified_time(file_path)
 	return 0
 
 func _on_Timer_timeout():
@@ -57,9 +56,7 @@ func _on_ImagePicker_pressed():
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		set_image_path(files[0])
 

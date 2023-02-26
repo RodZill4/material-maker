@@ -57,23 +57,22 @@ func select_material(type : int = 0) -> String:
 	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
 	if error == OK:
 		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
-		var test_json_conv = JSON.new()
-		if test_json_conv.parse(data) == OK and test_json_conv.get_data() is Array:
-			var parse_result : Array = test_json_conv.get_data()
+		var json = JSON.new()
+		if json.parse(data) == OK and json.get_data() is Array:
+			var parse_result : Array = json.get_data()
 			popup_centered()
 			var tmp_assets = parse_result
 			tmp_assets.reverse()
 			assets = []
-			var image : Image = Image.new()
-			image.create(256, 256, false, Image.FORMAT_RGBA8)
+			var image : Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
 				if m.type == type:
 					m.texture = ImageTexture.new()
-					m.texture.create_from_image(image)
+					m.texture.set_image(image)
 					assets.push_back(m)
 			fill_list("")
-			if OS.get_name() == "HTML5":
+			if true or OS.get_name() == "HTML5":
 				update_thumbnails()
 			else:
 				thumbnail_update_thread = Thread.new()
@@ -92,6 +91,7 @@ func update_thumbnails() -> void:
 	for i in range(assets.size()):
 		var m = assets[i]
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+		print(cache_filename)
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
 			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
@@ -101,7 +101,7 @@ func update_thumbnails() -> void:
 				image.save_png(cache_filename)
 			else:
 				continue
-		m.texture.create_from_image(image)
+		m.texture.set_image(image)
 
 func _on_ItemList_item_selected(_index):
 	$VBoxContainer/Buttons/OK.disabled = false

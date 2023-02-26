@@ -21,12 +21,12 @@ func _ready():
 	popup_centered()
 	_on_ViewportContainer_resized()
 	connect_controls()
-	environment_manager.connect("environment_updated",Callable(self,"on_environment_updated"))
-	environment_manager.connect("name_updated",Callable(self,"on_name_updated"))
-	environment_manager.connect("thumbnail_updated",Callable(self,"on_thumbnail_updated"))
+	environment_manager.environment_updated.connect(self.on_environment_updated)
+	environment_manager.name_updated.connect(self.on_name_updated)
+	environment_manager.thumbnail_updated.connect(self.on_thumbnail_updated)
 	read_environment_list()
 	share_button = mm_globals.main_window.get_share_button()
-	$Main/Buttons/Share.disabled = ! share_button.can_share()
+	# todo  $Main/Buttons/Share.disabled = ! share_button.can_share()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -88,14 +88,14 @@ func _on_ViewportContainer_gui_input(ev : InputEvent):
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 	elif ev is InputEventMouseButton:
-		if ev.control:
+		if ev.is_command_or_control_pressed():
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
 			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
 				return
-			accept_event()
+			$Main.accept_event()
 		else:
 			var zoom = 0.0
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -104,7 +104,7 @@ func _on_ViewportContainer_gui_input(ev : InputEvent):
 				zoom += 1.0
 			if zoom != 0.0:
 				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
-				accept_event()
+				$Main.accept_event()
 
 func _update_environment_variable(value, variable):
 	environment.set(variable, value)
@@ -144,10 +144,10 @@ func _on_Environments_item_selected(index):
 func _on_Environments_gui_input(event):
 	if ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
 		return
-	var context_menu = $Main/HSplitContainer/Environments/ContextMenu
+	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
-		context_menu.popup(Rect2(get_global_mouse_position(), context_menu.get_minimum_size()))
+		context_menu.popup(Rect2($Main.get_global_mouse_position(), context_menu.get_contents_minimum_size()))
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]
@@ -159,28 +159,23 @@ func _on_ContextMenu_id_pressed(id):
 func _on_Download_pressed():
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
 	add_child(dialog)
-	var result = dialog.select_material(2)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	var result = await dialog.select_material(2)
 	if result == "":
 		return
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(result).result
-	var new_environment = test_json_conv.get_data()
-	new_environment.erase("thumbnail")
-	environment_manager.add_environment(new_environment)
-	read_environment_list(-1)
+	var json = JSON.new()
+	if json.parse(result) == OK:
+		var new_environment = json.get_data()
+		new_environment.erase("thumbnail")
+		environment_manager.add_environment(new_environment)
+		read_environment_list(-1)
 
 func _on_Share_pressed():
-	var image = environment_manager.create_preview(current_environment, 512)
-	while image is GDScriptFunctionState:
-		image = await image.completed
+	var image = await environment_manager.create_preview(current_environment, 512)
 	var preview_texture : ImageTexture = ImageTexture.new()
 	preview_texture.create_from_image(image)
 	var env = environment_manager.get_environment(current_environment).duplicate()
 	env.erase("thumbnail")
 	share_button.send_asset("environment", env, preview_texture)
-
 
 func _on_Main_minimum_size_changed():
 	size = $Main.size+Vector2(4, 4)

@@ -1,6 +1,6 @@
 extends HBoxContainer
 
-var websocket_server : WebSocketServer
+var websocket_server : WebSocketMultiplayerPeer
 
 var websocket_port : int
 var websocket_id : int = -1
@@ -15,16 +15,16 @@ func _ready():
 
 func create_server() -> void:
 	if websocket_server == null:
-		websocket_server = WebSocketServer.new()
-		websocket_server.connect("client_connected",Callable(self,"_on_client_connected"))
-		websocket_server.connect("client_disconnected",Callable(self,"_on_client_disconnected"))
-		websocket_server.connect("data_received",Callable(self,"_on_data_received"))
+		websocket_server = WebSocketMultiplayerPeer.new()
+		websocket_server.peer_connected.connect(self._on_client_connected)
+		websocket_server.peer_disconnected.connect(self._on_client_disconnected)
+		websocket_server.data_received.connect(self._on_data_received)
 		websocket_port = 8000
 		while true:
-			if websocket_server.listen(websocket_port) == OK:
+			if websocket_server.create_server(websocket_port) == OK:
 				break
 			websocket_port += 1
-		if websocket_server.is_listening():
+		if true or websocket_server.is_listening():
 			print_debug("Listening checked port %d..." % websocket_port)
 			set_process(true)
 
@@ -40,9 +40,7 @@ func _on_ConnectButton_pressed() -> void:
 
 func update_preview_texture():
 	create_preview_viewport()
-	var status = mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
 	preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
 	preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
 	preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
@@ -66,9 +64,7 @@ func _on_SendButton_pressed():
 		"material":
 			asset_type = "material"
 			create_preview_viewport()
-			var status = main_window.update_preview_3d([ preview_viewport ], true)
-			while status is GDScriptFunctionState:
-				status = await status.completed
+			var status = await main_window.update_preview_3d([ preview_viewport ], true)
 			preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
 			preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
 			preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
@@ -80,9 +76,7 @@ func _on_SendButton_pressed():
 			preview_texture = preview_viewport.get_texture()
 		"paint":
 			asset_type = "brush"
-			var status = main_window.get_current_project().get_brush_preview()
-			while status is GDScriptFunctionState:
-				status = await status.completed
+			var status = await main_window.get_current_project().get_brush_preview()
 			preview_texture = status
 		_:
 			return
@@ -154,11 +148,9 @@ func _on_data_received(id: int) -> void:
 
 func process_message(message : String) -> void:
 	print("received message (%d)" % message.length())
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(message)
-	var json = test_json_conv.get_data()
-	if json.error == OK:
-		var data = json.result
+	var json = JSON.new()
+	if json.parse(message) == OK:
+		var data = json.get_data()
 		match data.action:
 			"logged_in":
 				$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
@@ -168,24 +160,24 @@ func process_message(message : String) -> void:
 				var main_window = mm_globals.main_window
 				main_window.new_material()
 				var graph_edit = main_window.get_current_graph_edit()
-				test_json_conv.parse(data.json)
-				var new_generator = mm_loader.create_gen(test_json_conv.get_data())
-				graph_edit.set_new_generator(new_generator)
-				main_window.hierarchy.update_from_graph_edit(graph_edit)
-				bring_to_top()
+				if json.parse(data.json) == OK:
+					var new_generator = mm_loader.create_gen(json.get_data())
+					graph_edit.set_new_generator(new_generator)
+					main_window.hierarchy.update_from_graph_edit(graph_edit)
+					bring_to_top()
 			"load_brush":
 				var main_window = mm_globals.main_window
 				var project_panel = main_window.get_current_project()
 				if not project_panel.has_method("set_brush"):
 					print("Cannot load brush")
 					return
-				test_json_conv.parse(data.json)
-				project_panel.set_brush(test_json_conv.get_data())
+				if json.parse(data.json) == OK:
+					project_panel.set_brush(json.get_data())
 				bring_to_top()
 			"load_environment":
 				var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-				test_json_conv.parse(data.json)
-				environment_manager.add_environment(test_json_conv.get_data())
+				if json.parse(data.json) == OK:
+					environment_manager.add_environment(json.get_data())
 	else:
 		print("Incorrect JSON")
 
