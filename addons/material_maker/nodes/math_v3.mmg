@@ -145,15 +145,15 @@
 						"value": "vec3(length($in1($uv)))"
 					},
 					{
-						"name": "distance(A,B)",
+						"name": "distance(A, B)",
 						"value": "vec3(distance($in1($uv),$in2($uv)))"
 					},
 					{
-						"name": "dot(A,B)",
+						"name": "dot(A, B)",
 						"value": "vec3(dot($in1(uv),$in2($uv)))"
 					},
 					{
-						"name": "cross(A,B)",
+						"name": "cross(A, B)",
 						"value": "cross($in1($uv),$in2($uv))"
 					},
 					{
@@ -169,7 +169,7 @@
 						"value": "mod($in1($uv),$in2($uv))"
 					},
 					{
-						"name": "snap(A,B)",
+						"name": "snap(A, B)",
 						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
 					}
 				]
