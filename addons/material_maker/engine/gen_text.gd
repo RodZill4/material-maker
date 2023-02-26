@@ -31,6 +31,24 @@ func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		update_buffer()
 
+func calculate_float_param(n : String, default_value : float = 0.0) -> float:
+	var param_value = get_parameter(n)
+	if param_value is int:
+		return float(param_value)
+	elif param_value is float:
+		return param_value
+	elif param_value is String:
+		var expression = Expression.new()
+		var error = expression.parse(param_value, [])
+		if error == OK:
+			var result = expression.execute([], null, true)
+			if not expression.has_execute_failed():
+				if result is int:
+					return float(result)
+				elif result is float:
+					return result
+	return default_value
+
 func update_buffer() -> void:
 	update_again = true
 	if !updating:
@@ -40,7 +58,7 @@ func update_buffer() -> void:
 			renderer = yield(renderer, "completed")
 		while update_again:
 			update_again = false
-			renderer = renderer.render_text(self, get_parameter("text"), get_parameter("font"), get_parameter("font_size"), get_parameter("x"), get_parameter("y"), get_parameter("center"))
+			renderer = renderer.render_text(self, get_parameter("text"), get_parameter("font"), int(calculate_float_param("font_size", 64)), calculate_float_param("x"), calculate_float_param("y"), get_parameter("center"))
 			while renderer is GDScriptFunctionState:
 				renderer = yield(renderer, "completed")
 		renderer.copy_to_texture(texture)
