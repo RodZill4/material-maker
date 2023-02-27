@@ -104,7 +104,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Exporting Materials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#godot-game-engine">Godot game engine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#unity-game-engine">Unity game engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#unreal-game-engine">Unreal game engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unreal-game-engine">Unreal game engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unreal-engine-4">Unreal Engine 4</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unreal-engine-5">Unreal Engine 5</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#initial-setup">Initial setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Exporting materials</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
@@ -195,9 +203,11 @@ exported materials.</p>
 </div>
 <div class="section" id="unreal-game-engine">
 <h2>Unreal game engine<a class="headerlink" href="#unreal-game-engine" title="Permalink to this headline">¶</a></h2>
-<p>When exporting for the Unreal game engine, Material Maker will only generate PNG
-images and a .mm2ue file. The material must be built manually inside the Unreal
-Engine editor by following the instructions in this file.</p>
+<div class="section" id="unreal-engine-4">
+<h3>Unreal Engine 4<a class="headerlink" href="#unreal-engine-4" title="Permalink to this headline">¶</a></h3>
+<p>When exporting for the Unreal game engine versions 4.x, Material Maker will only
+generate PNG images and a .mm2ue file. The material must be built manually inside
+the Unreal Engine editor by following the instructions in this file.</p>
 <p>This will generally consist in:</p>
 <ul class="simple">
 <li><p>Copying a material file from the <strong>export</strong> directory in Material Maker installation</p></li>
@@ -210,6 +220,32 @@ Engine editor by following the instructions in this file.</p>
 </li>
 </ul>
 <img alt="_images/unreal_export.png" class="align-center" src="_images/unreal_export.png" />
+</div>
+<div class="section" id="unreal-engine-5">
+<h3>Unreal Engine 5<a class="headerlink" href="#unreal-engine-5" title="Permalink to this headline">¶</a></h3>
+<p>When exporting for the Unreal game engine versions 5.x, Material Maker will generate a
+Python script that creates the material in Unreal.</p>
+<div class="section" id="initial-setup">
+<h4>Initial setup<a class="headerlink" href="#initial-setup" title="Permalink to this headline">¶</a></h4>
+<p>Before exporting a material, it is necessary to configure a python path in Unreal for
+Material Maker:</p>
+<ul class="simple">
+<li><p>in Unreal Engine, open the Project Settings window using the <strong>Edit/Project Settings…</strong> menu</p></li>
+<li><p>in this window, type “Python” in the search bar or select the <strong>Plugins/Python</strong> section</p></li>
+<li><p>in the <strong>Additional paths</strong> array, add the full path of the <strong>export</strong> directory of your Material Maker installation</p></li>
+<li><p>Unreal Engine will prompt to restart. When this is done, the project is ready to import generated materials</p></li>
+</ul>
+<img alt="_images/ue5_setup.png" class="align-center" src="_images/ue5_setup.png" />
+</div>
+<div class="section" id="id1">
+<h4>Exporting materials<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>When exporting a material for Unreal Engine 5, Material Maker will generate a python script,
+texture files and a shader file, and will store the full path of the script into the clipboard,
+so you just have to paste it into Unreal’s 5 Python prompt and execute it to create the material.</p>
+<p>When exporting, the target path is not that important (all necessary files will be imported into
+the Unreal project), but the file name will be used as material name.</p>
+</div>
+</div>
 </div>
 </div>
 
