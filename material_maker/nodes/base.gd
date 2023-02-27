@@ -412,8 +412,52 @@ func _on_menu_id_pressed(id : int) -> void:
 			if result == "ok":
 				get_parent().call_deferred("propagate_node_changes", generator)
 		MENU_SHARE_NODE:
-			var share_button = mm_globals.main_window.get_share_button()
+			# Prepare warning dialog
+			var status : Array = []
+			if generator.get_description() == "":
+				status.append({ ok=false, message="The node does not have a description"})
+			else:
+				status.append({ ok=true, message="The node has a description" })
+			var bad : PoolStringArray
+			# Parameters
+			bad = PoolStringArray()
+			for p in generator.get_parameter_defs():
+				if p.has("longdesc") and p.has("shortdesc") and p.longdesc != "" and p.shortdesc != "":
+					continue
+				bad.append(p.name)
+			if bad.empty():
+				status.append({ ok=true, message="All parameters have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following parameters do not have a short and a long description: "+bad.join(", ") })
+			# Inputs
+			bad = PoolStringArray()
+			for i in generator.get_input_defs():
+				if i.has("longdesc") and i.has("shortdesc") and i.longdesc != "" and i.shortdesc != "":
+					continue
+				bad.append(i.name)
+			if bad.empty():
+				status.append({ ok=true, message="All inputs have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following inputs do not have a short and a long description: "+bad.join(", ") })
+			# Outputs
+			bad = PoolStringArray()
+			for o in generator.get_output_defs():
+				if o.has("longdesc") and o.has("shortdesc") and o.longdesc != "" and o.shortdesc != "":
+					continue
+				bad.append(o.name)
+			if bad.empty():
+				status.append({ ok=true, message="All outputs have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following outputs do not have a short and a long description: "+bad.join(", ") })
+			# Show warning dialog
+			var dialog = preload("res://material_maker/tools/share/share_node_dialog.tscn").instance()
+			var result = dialog.ask(status)
+			while result is GDScriptFunctionState:
+				result = yield(result, "completed")
+			if result != "ok":
+				return
 			var node = generator.serialize()
+			var share_button = mm_globals.main_window.get_share_button()
 			var preview = generator.render(self, 0, 1024, true)
 			while preview is GDScriptFunctionState:
 				preview = yield(preview, "completed")

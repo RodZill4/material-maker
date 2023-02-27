@@ -36,3 +36,6 @@ func ask(user : String, password : String) -> String:
 
 func _on_MarginContainer_minimum_size_changed():
 	rect_size = $MarginContainer.get_minimum_size()
+
+func _on_RegisterButton_pressed():
+	OS.shell_open(MMPaths.WEBSITE_ADDRESS+"/register")

@@ -71,7 +71,12 @@ margin_right = 155.0
 margin_bottom = 160.0
 rect_min_size = Vector2( 0, 4 )
 
-[node name="LoginButton" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 4
+
+[node name="LoginButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
 margin_left = 52.0
 margin_top = 164.0
 margin_right = 102.0
@@ -79,6 +84,15 @@ margin_bottom = 184.0
 size_flags_horizontal = 4
 text = "Log in"
 
+[node name="RegisterButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+margin_left = 52.0
+margin_top = 164.0
+margin_right = 102.0
+margin_bottom = 184.0
+size_flags_horizontal = 4
+text = "Register"
+
 [connection signal="popup_hide" from="." to="." method="_on_LoginDialog_popup_hide"]
 [connection signal="minimum_size_changed" from="MarginContainer" to="." method="_on_MarginContainer_minimum_size_changed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/LoginButton" to="." method="_on_LoginButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/LoginButton" to="." method="_on_LoginButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/RegisterButton" to="." method="_on_RegisterButton_pressed"]

@@ -1,8 +1,6 @@
 extends HTTPRequest
 
 
-export var website_address : String = "http://localhost:3000"
-
 var cookies : PoolStringArray = PoolStringArray()
 
 
@@ -16,7 +14,7 @@ func request(path : String, custom_headers: PoolStringArray = PoolStringArray(),
 	var headers = PoolStringArray()
 	headers.append_array(custom_headers)
 	headers.append("Cookie: %s" % cookies.join("; "))
-	return .request(website_address+path, headers, true, method, request_data_raw)
+	return .request(MMPaths.WEBSITE_ADDRESS+path, headers, true, method, request_data_raw)
 
 func do_request(path : String, custom_headers: PoolStringArray = PoolStringArray(), ssl_validate_domain: bool = true, method = 0, request_data_raw: String = "") -> Dictionary:
 	var error = request(path, custom_headers, true, method, request_data_raw)
