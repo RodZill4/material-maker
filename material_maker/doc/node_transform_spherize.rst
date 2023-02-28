@@ -25,7 +25,7 @@ The **Spherize** node has the following parameters:
 
 * *Amount* defines the strength of the distortion
 
-* *Offset X* and *Offset Y* define the location of the sphere along the X and Y axes.
+* *Center X* and *Center Y* define the location of the sphere center along the X and Y axes.
 
 Example images
 ++++++++++++++

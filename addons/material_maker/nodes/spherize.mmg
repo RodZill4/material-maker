@@ -7,13 +7,16 @@
 	},
 	"parameters": {
 		"a": 1,
-		"r": 0.9,
-		"x": 0.5,
-		"y": 0.5
+		"cx": 0,
+		"cy": 0,
+		"r": 0.9
 	},
 	"seed": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_f = dot(2.0*($uv - vec2($x,$y)),2.0*($uv - vec2($x,$y)));",
+		"code": [
+			"vec2 $(name_uv)_co = vec2($cx+0.5,$cy+0.5);",
+			"float $(name_uv)_f = dot(2.0*($uv - $(name_uv)_co),2.0*($uv - $(name_uv)_co));"
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -30,7 +33,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the distorted image",
-				"rgba": "clamp(mix($in#(vec2($x,$y)-(vec2($x,$y)-$uv)/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
+				"rgba": "clamp(mix($in#($(name_uv)_co-($(name_uv)_co-$uv)/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
 				"shortdesc": "Output#",
 				"type": "rgba"
 			},
@@ -72,25 +75,25 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
-				"label": "Offset X",
-				"longdesc": "Location of the sphere on the X axis",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "Location of the sphere center",
 				"max": 1,
-				"min": 0,
-				"name": "x",
-				"shortdesc": "Offset X",
+				"min": -1,
+				"name": "cx",
+				"shortdesc": "Center.x",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "None",
-				"default": 0.5,
-				"label": "Offset Y",
-				"longdesc": "Location of the sphere on the X axis",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "Location of the sphere center",
 				"max": 1,
-				"min": 0,
-				"name": "y",
-				"shortdesc": "Offset Y",
+				"min": -1,
+				"name": "cy",
+				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			}

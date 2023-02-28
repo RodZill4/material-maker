@@ -7443,8 +7443,8 @@
 			"parameters": {
 				"a": 1,
 				"r": 0.9,
-				"x": 0.5,
-				"y": 0.5
+				"cx": 0,
+				"cy": 0
 			},
 			"tree_item": "Transform/Spherize",
 			"type":"spherize" 
