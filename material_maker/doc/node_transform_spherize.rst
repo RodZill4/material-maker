@@ -1,5 +1,5 @@
 Spherize node
-~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 The **Spherize** node is variadic and distort images as if they were wrapped around a sphere.
 
@@ -24,8 +24,6 @@ The **Spherize** node has the following parameters:
 * *Radius* define the scale of the sphere.
 
 * *Amount* defines the strength of the distortion
-
-* *Scale* defines the scale of the input image on the sphere
 
 * *Offset X* and *Offset Y* define the location of the sphere along the X and Y axes.
 

@@ -8,7 +8,6 @@
 	"parameters": {
 		"a": 1,
 		"r": 0.9,
-		"s": 1,
 		"x": 0.5,
 		"y": 0.5
 	},
@@ -31,7 +30,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the distorted image",
-				"rgba": "clamp(mix($in#(vec2($x,$y)-(vec2($x,$y)-$uv)*$s/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
+				"rgba": "clamp(mix($in#(vec2($x,$y)-(vec2($x,$y)-$uv)/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
 				"shortdesc": "Output#",
 				"type": "rgba"
 			},
@@ -68,18 +67,6 @@
 				"min": 0,
 				"name": "a",
 				"shortdesc": "Amount",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 1,
-				"label": "Scale",
-				"longdesc": "Scale of the input image on the sphere",
-				"max": 1,
-				"min": 0,
-				"name": "s",
-				"shortdesc": "Scale",
 				"step": 0.01,
 				"type": "float"
 			},
