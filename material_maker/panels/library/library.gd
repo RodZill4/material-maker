@@ -361,7 +361,7 @@ func update_from_locale() -> void:
 func _on_GetFromWebsite_pressed():
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
 	add_child(dialog)
-	var result = dialog.select_material(3, true)
+	var result = dialog.select_asset(3, true)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if result is Dictionary and result.has("index"):

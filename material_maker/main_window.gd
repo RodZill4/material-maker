@@ -598,7 +598,7 @@ func do_load_painting(filename : String) -> bool:
 func load_material_from_website() -> void:
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
 	add_child(dialog)
-	var result = dialog.select_material()
+	var result = dialog.select_asset()
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if result == "":

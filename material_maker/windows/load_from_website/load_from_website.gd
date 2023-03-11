@@ -59,7 +59,7 @@ func fill_list(filter : String):
 			displayed_assets.push_back(m.id)
 			item_index += 1
 
-func select_material(type : int = 0, return_index : bool = false) -> String:
+func select_asset(type : int = 0, return_index : bool = false) -> String:
 	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
 		var data = yield($HTTPRequest, "request_completed")[3].get_string_from_utf8()
@@ -74,7 +74,7 @@ func select_material(type : int = 0, return_index : bool = false) -> String:
 			image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
-				if m.type == type:
+				if int(m.type) & 15 == type:
 					m.texture = ImageTexture.new()
 					m.texture.create_from_image(image)
 					assets.push_back(m)

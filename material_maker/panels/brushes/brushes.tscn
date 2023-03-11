@@ -6,10 +6,19 @@
 [node name="Library" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 library_manager_name = "BrushLibraryManager"
-base_library_name = "base_brushes.json"
-user_library_name = "user_brushes.json"
+
+[node name="Control" parent="HBoxContainer" index="1"]
+margin_right = 1160.0
+
+[node name="GetFromWebsite" parent="HBoxContainer" index="2"]
+margin_left = 1164.0
+text = "Get more brushes"
 
 [node name="Tree" parent="." index="3"]
 supports_drag = false
+
+[node name="ItemMenu" parent="." index="4"]
+items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Remove item", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, false, 3, 0, null, "", true, "Define aliases", null, 0, false, false, 4, 0, null, "", false ]
+
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_activated"]
 [connection signal="item_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

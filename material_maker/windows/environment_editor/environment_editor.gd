@@ -159,7 +159,7 @@ func _on_ContextMenu_id_pressed(id):
 func _on_Download_pressed():
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
 	add_child(dialog)
-	var result = dialog.select_material(2)
+	var result = dialog.select_asset(2)
 	while result is GDScriptFunctionState:
 		result = yield(result, "completed")
 	if result == "":

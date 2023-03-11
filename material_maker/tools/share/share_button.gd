@@ -3,6 +3,7 @@ extends HBoxContainer
 
 onready var http_request : HTTPRequest = $HTTPRequest
 var request_type : String = ""
+onready var connect_button : TextureButton = $ConnectButton
 
 var licenses : Array = []
 var my_assets : Array = []
@@ -27,7 +28,27 @@ func update_my_assets():
 			for a in my_assets:
 				a.type = asset_types[int(a.type) & 15]
 
+func set_logged_in(user_name : String) -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
+	if user_name == "":
+		$ConnectButton.hint_tooltip = "Logged in.\nMaterials can be submitted."
+	else:
+		$ConnectButton.hint_tooltip = "Logged in as "+user_name+".\nMaterials can be submitted."
+	$SendButton.disabled = false
+	connect_button.disabled = false
+
+func set_logged_out(message : String = "") -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
+	$ConnectButton.hint_tooltip = "Click to log in and submit assets"
+	$SendButton.disabled = true
+	if message != "":
+		var status = mm_globals.main_window.accept_dialog(message, false)
+		while status is GDScriptFunctionState:
+			status = yield(status, "completed")
+	connect_button.disabled = false
+
 func _on_ConnectButton_pressed() -> void:
+	connect_button.disabled = true
 	var dialog = load("res://material_maker/tools/share/login_dialog.tscn").instance()
 	var saved_login = mm_globals.get_config("website_login")
 	var saved_password = mm_globals.get_config("website_password")
@@ -52,28 +73,27 @@ func _on_ConnectButton_pressed() -> void:
 		while request_status is GDScriptFunctionState:
 			request_status = yield(request_status, "completed")
 		if request_status.has("error"):
-			set_logged_out()
+			set_logged_out("Failed to connect to the website")
 		else:
 			var re : RegEx = RegEx.new()
 			re.compile("<div class=\"error\">((?:.*))</div>")
 			var re_match : RegExMatch = re.search(request_status.body)
 			if re_match != null:
-				set_logged_out()
-				mm_globals.main_window.accept_dialog(re_match.strings[1], false)
+				set_logged_out(re_match.strings[1])
 				return
 			request_status = http_request.do_request("/api/isConnected", [ "Content-Type: application/json" ])
 			while request_status is GDScriptFunctionState:
 				request_status = yield(request_status, "completed")
 			if request_status.has("error"):
-				set_logged_out()
+				set_logged_out("Failed to connect to the website")
 				return
 			var status_parse_result : JSONParseResult = JSON.parse(request_status.body)
 			if status_parse_result == null:
-				set_logged_out()
+				set_logged_out("Failed to connect to the website")
 				return
 			var status = status_parse_result.result
 			if !status.connected:
-				set_logged_out()
+				set_logged_out("Failed to connect to the website")
 				return
 			set_logged_in(status.displayed_name)
 			if licenses.empty():
@@ -194,19 +214,6 @@ func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : 
 	while request_status is GDScriptFunctionState:
 		request_status = yield(request_status, "completed")
 	update_my_assets()
-
-func set_logged_in(user_name : String) -> void:
-	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
-	if user_name == "":
-		$ConnectButton.hint_tooltip = "Logged in.\nMaterials can be submitted."
-	else:
-		$ConnectButton.hint_tooltip = "Logged in as "+user_name+".\nMaterials can be submitted."
-	$SendButton.disabled = false
-
-func set_logged_out() -> void:
-	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
-	$ConnectButton.hint_tooltip = "Click to log in and submit assets"
-	$SendButton.disabled = true
 
 func bring_to_top() -> void:
 	var is_always_on_top = OS.is_window_always_on_top()

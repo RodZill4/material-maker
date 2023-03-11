@@ -55,6 +55,7 @@ rect_min_size = Vector2( 15, 0 )
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 max_redirects = 0
+timeout = 2.0
 script = ExtResource( 3 )
 
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
