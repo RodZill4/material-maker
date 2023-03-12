@@ -78,9 +78,9 @@ func is_editable() -> bool:
 
 func get_description() -> String:
 	var desc_list : PoolStringArray = PoolStringArray()
-	if shortdesc == "":
+	if shortdesc != "":
 		desc_list.push_back(TranslationServer.translate(shortdesc))
-	if longdesc == "":
+	if longdesc != "":
 		desc_list.push_back(TranslationServer.translate(longdesc))
 	return desc_list.join("\n")
 
