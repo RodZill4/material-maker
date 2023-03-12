@@ -106,6 +106,7 @@ func _on_ConnectButton_pressed() -> void:
 						licenses = status_parse_result.result
 			if my_assets.empty():
 				update_my_assets()
+	connect_button.disabled = false
 
 func update_preview_texture():
 	create_preview_viewport()
