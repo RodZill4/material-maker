@@ -3,7 +3,6 @@
 [ext_resource path="res://material_maker/tools/share/login_dialog.gd" type="Script" id=1]
 
 [node name="LoginDialog" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1115.0

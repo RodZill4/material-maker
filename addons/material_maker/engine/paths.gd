@@ -1,8 +1,8 @@
 tool
 class_name MMPaths
 
-#const WEBSITE_ADDRESS : String = "https://www.materialmaker.org"
-const WEBSITE_ADDRESS : String = "http://localhost:3000"
+const WEBSITE_ADDRESS : String = "https://www.materialmaker.org"
+#const WEBSITE_ADDRESS : String = "http://localhost:3000"
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
