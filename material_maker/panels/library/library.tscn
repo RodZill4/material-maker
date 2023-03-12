@@ -9,27 +9,39 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
-[node name="Library" type="VBoxContainer" groups=[
-"updated_from_locale",
-]]
+[node name="Library" type="VBoxContainer" groups=["updated_from_locale"]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 200, 200 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 library_manager_name = "NodeLibraryManager"
 
-[node name="Libraries" type="MenuButton" parent="."]
-margin_left = 570.0
-margin_right = 709.0
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 22.0
+
+[node name="Libraries" type="MenuButton" parent="HBoxContainer"]
+margin_right = 139.0
 margin_bottom = 22.0
 size_flags_horizontal = 4
 text = "Manage Libraries"
 icon = SubResource( 1 )
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+margin_left = 143.0
+margin_right = 1172.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+
+[node name="GetFromWebsite" type="LinkButton" parent="HBoxContainer"]
+margin_left = 1176.0
+margin_top = 4.0
+margin_right = 1280.0
+margin_bottom = 18.0
+size_flags_vertical = 4
+text = "Get more nodes"
 
 [node name="SectionButtons" type="GridContainer" parent="."]
 margin_top = 26.0
@@ -42,24 +54,24 @@ columns = 5
 [node name="Filter" type="HBoxContainer" parent="."]
 margin_top = 30.0
 margin_right = 1280.0
-margin_bottom = 54.0
+margin_bottom = 56.0
 size_flags_horizontal = 3
 
 [node name="FilterLabel" type="Label" parent="Filter"]
-margin_top = 5.0
+margin_top = 6.0
 margin_right = 37.0
-margin_bottom = 19.0
+margin_bottom = 20.0
 text = "Filter:"
 
 [node name="Filter" type="LineEdit" parent="Filter"]
 margin_left = 41.0
 margin_right = 1280.0
-margin_bottom = 24.0
+margin_bottom = 26.0
 size_flags_horizontal = 3
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 58.0
+margin_top = 60.0
 margin_right = 1280.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 100, 100 )
@@ -76,7 +88,8 @@ margin_right = 20.0
 margin_bottom = 20.0
 items = [ "Rename item", null, 0, false, false, 0, 0, null, "", false, "Update thumbnail", null, 0, false, false, 1, 0, null, "", false, "Remove item", null, 0, false, false, 2, 0, null, "", false, "", null, 0, false, false, 3, 0, null, "", true, "Define aliases", null, 0, false, false, 4, 0, null, "", false ]
 
-[connection signal="about_to_show" from="Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="about_to_show" from="HBoxContainer/Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="pressed" from="HBoxContainer/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
 [connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]

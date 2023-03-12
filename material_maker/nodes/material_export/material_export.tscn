@@ -5,5 +5,3 @@
 
 [node name="MaterialExport" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-
-[connection signal="gui_input" from="." to="." method="_on_MaterialExport_gui_input"]

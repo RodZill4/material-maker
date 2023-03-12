@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://material_maker/tools/share/login_dialog.gd" type="Script" id=1]
+
+[node name="LoginDialog" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1115.0
+margin_bottom = -526.0
+rect_min_size = Vector2( 300, 0 )
+window_title = "Login to website"
+script = ExtResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -12.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 295.0
+margin_bottom = 189.0
+
+[node name="UserNameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+margin_right = 290.0
+margin_bottom = 14.0
+text = "User name:"
+
+[node name="UserName" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 290.0
+margin_bottom = 42.0
+
+[node name="SaveUser" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+margin_top = 46.0
+margin_right = 290.0
+margin_bottom = 70.0
+text = "Save user name"
+
+[node name="Space1" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_top = 74.0
+margin_right = 290.0
+margin_bottom = 78.0
+rect_min_size = Vector2( 0, 4 )
+
+[node name="PasswordLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+margin_top = 82.0
+margin_right = 290.0
+margin_bottom = 96.0
+text = "Password:"
+
+[node name="Password" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+margin_top = 100.0
+margin_right = 290.0
+margin_bottom = 124.0
+secret = true
+
+[node name="SavePassword" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+margin_top = 128.0
+margin_right = 290.0
+margin_bottom = 152.0
+text = "Save password"
+
+[node name="Space2" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_top = 156.0
+margin_right = 290.0
+margin_bottom = 160.0
+rect_min_size = Vector2( 0, 4 )
+
+[node name="Buttons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_left = 86.0
+margin_top = 164.0
+margin_right = 204.0
+margin_bottom = 184.0
+size_flags_horizontal = 4
+
+[node name="LoginButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+margin_right = 50.0
+margin_bottom = 20.0
+size_flags_horizontal = 4
+text = "Log in"
+
+[node name="RegisterButton" type="Button" parent="MarginContainer/VBoxContainer/Buttons"]
+margin_left = 54.0
+margin_right = 118.0
+margin_bottom = 20.0
+size_flags_horizontal = 4
+text = "Register"
+
+[connection signal="popup_hide" from="." to="." method="_on_LoginDialog_popup_hide"]
+[connection signal="minimum_size_changed" from="MarginContainer" to="." method="_on_MarginContainer_minimum_size_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/LoginButton" to="." method="_on_LoginButton_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/RegisterButton" to="." method="_on_RegisterButton_pressed"]
