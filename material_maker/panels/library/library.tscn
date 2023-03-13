@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bl5t1ns3g4tvo"]
+[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" path="res://material_maker/panels/library/library_tree.gd" id="1"]
-[ext_resource type="Script" path="res://addons/material_maker/library.gd" id="1_dfc7x"]
+[ext_resource type="Script" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -15,7 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("1_dfc7x")
+script = ExtResource("1_748nq")
 library_manager_name = "NodeLibraryManager"
 
 [node name="Libraries" type="MenuButton" parent="."]
