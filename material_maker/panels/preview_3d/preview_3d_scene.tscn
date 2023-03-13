@@ -1,14 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpulty2lkvcht"]
+[gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
 
 [ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
-
-[sub_resource type="Sky" id="1"]
-resource_local_to_scene = true
-
-[sub_resource type="Environment" id="2"]
-resource_local_to_scene = true
-background_mode = 2
-sky = SubResource("1")
 
 [sub_resource type="Animation" id="3"]
 tracks/0/type = "value"
@@ -29,6 +21,15 @@ _data = {
 "rotate": SubResource("3")
 }
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
+
+[sub_resource type="Sky" id="Sky_wye7d"]
+sky_material = SubResource("PanoramaSkyMaterial_40ogr")
+
+[sub_resource type="Environment" id="Environment_qxxdb"]
+background_mode = 2
+sky = SubResource("Sky_wye7d")
+
 [node name="Preview3dScene" type="Node3D"]
 
 [node name="ObjectsPivot" type="Node3D" parent="."]
@@ -40,7 +41,6 @@ transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
-environment = SubResource("2")
 current = true
 fov = 50.0
 
@@ -55,3 +55,6 @@ shadow_enabled = true
 shadow_bias = 0.03
 directional_shadow_mode = 0
 directional_shadow_max_distance = 5.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qxxdb")

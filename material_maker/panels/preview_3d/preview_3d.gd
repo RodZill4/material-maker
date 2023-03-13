@@ -128,13 +128,13 @@ func select_object(id) -> void:
 
 func _on_Environment_item_selected(id) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera3D.environment
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	environment_manager.apply_environment(id, environment, sun)
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
 
 func _on_Tonemaps_item_selected(id) -> void:
 	mm_globals.set_config("ui_3d_preview_tonemap", id)
-	var environment = $MaterialPreview/Preview3d/CameraPivot/Camera3D.environment
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	environment.tonemap_mode = id
 
 func _on_material_preview_size_changed() -> void:

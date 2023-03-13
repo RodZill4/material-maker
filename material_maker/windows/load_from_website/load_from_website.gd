@@ -96,7 +96,7 @@ func update_thumbnails() -> void:
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
 			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
 			if error == OK:
-				var data : PackedByteArray = await $ImageHTTPRequest.request_completed[3]
+				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
 				image.load_webp_from_buffer(data)
 				image.save_png(cache_filename)
 			else:
