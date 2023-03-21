@@ -14,33 +14,32 @@ func get_material_nodes() -> Array:
 		material_nodes = mm_loader.get_material_nodes()
 	return material_nodes
 
+func create_context_menu():
+	var menu = PopupMenu.new()
+	for n in get_material_nodes():
+		menu.add_item(n.label)
+	var can_copy = ( generator.model == null )
+	var can_paste = false
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(DisplayServer.clipboard_get())
+	var graph = test_json_conv.get_data()
+	if graph != null and graph is Dictionary and graph.has("nodes"):
+		if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export" and graph.nodes[0].has("shader_model"):
+			can_paste = true
+	if can_copy:
+		menu.add_separator()
+		menu.add_item("Copy", MATERIAL_MENU_COPY)
+	if can_paste:
+		if !can_copy:
+			menu.add_separator()
+		menu.add_item("Paste", MATERIAL_MENU_PASTE)
+	menu.add_separator()
+	menu.add_item("Edit export targets", MATERIAL_MENU_EDIT_EXPORTS)
+	return menu
+
 func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed == true:
 		accept_event()
-		var menu = PopupMenu.new()
-		for n in get_material_nodes():
-			menu.add_item(n.label)
-		var can_copy = ( generator.model == null )
-		var can_paste = false
-		var test_json_conv = JSON.new()
-		test_json_conv.parse(DisplayServer.clipboard_get())
-		var graph = test_json_conv.get_data()
-		if graph != null and graph is Dictionary and graph.has("nodes"):
-			if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export" and graph.nodes[0].has("shader_model"):
-				can_paste = true
-		if can_copy:
-			menu.add_separator()
-			menu.add_item("Copy", MATERIAL_MENU_COPY)
-		if can_paste:
-			if !can_copy:
-				menu.add_separator()
-			menu.add_item("Paste", MATERIAL_MENU_PASTE)
-		menu.add_separator()
-		menu.add_item("Edit export targets", MATERIAL_MENU_EDIT_EXPORTS)
-		add_child(menu)
-		menu.connect("modal_closed",Callable(menu,"queue_free"))
-		menu.connect("id_pressed",Callable(self,"_on_menu_id_pressed"))
-		menu.popup(Rect2(get_global_mouse_position(), menu.get_contents_minimum_size()))
 
 func _on_menu_id_pressed(id : int) -> void:
 	await get_tree().process_frame

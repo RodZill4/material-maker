@@ -63,8 +63,8 @@ func _init():
 	buffer_button.hidden = true
 
 func _ready() -> void:
-	connect("gui_input",Callable(self,"_on_gui_input"))
-	call_deferred("update")
+	gui_input.connect(self._on_gui_input)
+	update.call_deferred()
 
 func add_button(texture : Texture2D, modulate_texture : bool = false) -> NodeButton:
 	var button : NodeButton = NodeButton.new(texture, modulate_texture)
@@ -275,7 +275,7 @@ func _on_gui_input(event) -> void:
 						add_child(menu)
 						menu.connect("modal_closed",Callable(menu,"queue_free"))
 						menu.connect("id_pressed",Callable(self,"_on_menu_id_pressed"))
-						menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+						menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 					else:
 						menu.free()
 		elif doubleclicked:

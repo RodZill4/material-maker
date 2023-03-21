@@ -108,7 +108,7 @@ func update_node_parameters_grid():
 		button.connect("pressed",Callable(self,"edit_node_parameter").bind( pi ))
 		button.tooltip_text = "Configure parameter "+p.name
 		button = Button.new()
-		button.icon = preload("res://material_maker/icons/remove_at.tres")
+		button.icon = preload("res://material_maker/icons/remove.tres")
 		button.tooltip_text = "Remove parameter"
 		node_parameters_panel.add_child(button)
 		button.connect("pressed",Callable(self,"remove_node_parameter").bind( pi ))
@@ -676,7 +676,7 @@ func _on_Cancel_pressed() -> void:
 func _input(event):
 	if event is InputEventKey:
 		if event.pressed:
-			match event.scancode:
+			match event.keycode:
 				KEY_DELETE:
 					var item : TreeItem = tree.get_selected()
 					if item != null:

@@ -15,6 +15,7 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 
 
 func _ready() -> void:
+	super._ready()
 	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
 
