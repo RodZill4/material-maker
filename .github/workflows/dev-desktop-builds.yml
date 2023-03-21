@@ -22,7 +22,7 @@ jobs:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
     container:
-      image: docker://barichello/godot-ci:4.0.1-stable
+      image: docker://barichello/godot-ci:4.0.1
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
