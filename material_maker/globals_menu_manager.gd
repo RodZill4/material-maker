@@ -23,7 +23,6 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 	var mode = ""
 	if object.has_method("get_current_mode"):
 		mode = object.get_current_mode()
-	var is_mac : bool = OS.get_name() == "OSX"
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()

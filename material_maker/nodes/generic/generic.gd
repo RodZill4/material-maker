@@ -566,7 +566,7 @@ func do_load_generator(file_name : String) -> void:
 			new_generator.set_shader_model(test_json_conv.get_data())
 
 	else:
-		new_generator = mm_loader.load_gen(file_name)
+		new_generator = await mm_loader.load_gen(file_name)
 	if new_generator != null:
 		var gen_name = mm_loader.generator_name_from_path(file_name)
 		if gen_name != "":

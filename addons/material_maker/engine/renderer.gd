@@ -17,22 +17,20 @@ func request(object : Object) -> Object:
 
 var current_font : String = ""
 func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
-	assert(render_owner == object) #,"Invalid renderer use")
+	assert(render_owner == object) # Invalid renderer use
 	size = Vector2(2048, 2048)
 	$Font.visible = true
 	$Font.position = Vector2(0, 0)
 	$Font.size = size
 	$Font/Label.text = text
 	$Font/Label.position = Vector2(2048*(0.5+x), 2048*(0.5+y))
-	var font : Font = $Font/Label.get_font("font")
-	if font_path != "" and font_path != current_font:
-		var font_data = load(font_path)
-		if font_data != null:
-			font.font_data = font_data
-			current_font = font_path
-	font.size = font_size
+	var font : Font = load(font_path)
+	if font == null:
+		font = $Font/Label.get_theme_font("font")
+	$Font/Label.add_theme_font_override("font", font)
+	$Font/Label.add_theme_font_size_override("font_size", font_size)
 	if center:
-		$Font/Label.position -= 0.5*font.get_string_size(text)
+		$Font/Label.position -= 0.5*font.get_string_size(text, 0, -1, font_size)
 	$ColorRect.visible = false
 	#hdr = true
 	render_target_update_mode = SubViewport.UPDATE_ONCE

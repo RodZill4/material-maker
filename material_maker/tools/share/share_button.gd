@@ -1,42 +1,99 @@
 extends HBoxContainer
 
-var websocket_server : WebSocketMultiplayerPeer
 
-var websocket_port : int
-var websocket_id : int = -1
+@onready var http_request : HTTPRequest = $HTTPRequest
+var request_type : String = ""
+@onready var connect_button : TextureButton = $ConnectButton
 
-var is_multipart : bool = false
-var multipart_message : String = ""
+var licenses : Array = []
+var my_assets : Array = []
 
 var preview_viewport : SubViewport = null
 
-func _ready():
-	set_process(false)
-
-func create_server() -> void:
-	if websocket_server == null:
-		websocket_server = WebSocketMultiplayerPeer.new()
-		websocket_server.peer_connected.connect(self._on_client_connected)
-		websocket_server.peer_disconnected.connect(self._on_client_disconnected)
-		websocket_server.data_received.connect(self._on_data_received)
-		websocket_port = 8000
-		while true:
-			if websocket_server.create_server(websocket_port) == OK:
-				break
-			websocket_port += 1
-		if true or websocket_server.is_listening():
-			print_debug("Listening checked port %d..." % websocket_port)
-			set_process(true)
 
 func create_preview_viewport():
 	if preview_viewport == null:
 		preview_viewport = load("res://material_maker/tools/share/preview_viewport.tscn").instantiate()
 		add_child(preview_viewport)
 
+func update_my_assets():
+	var request_status = await http_request.do_request("/api/getMyMaterials")
+	if ! request_status.has("error"):
+		var json = JSON.new()
+		if json.parse(request_status.body) == OK:
+			var asset_types = [ "material", "brush", "environment", "node" ]
+			my_assets = json.data
+			for a in my_assets:
+				a.type = asset_types[int(a.type) & 15]
+
+func set_logged_in(user_name : String) -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
+	if user_name == "":
+		$ConnectButton.tooltip_text = "Logged in.\nMaterials can be submitted."
+	else:
+		$ConnectButton.tooltip_text = "Logged in as "+user_name+".\nMaterials can be submitted."
+	$SendButton.disabled = false
+	connect_button.disabled = false
+
+func set_logged_out(message : String = "") -> void:
+	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
+	$ConnectButton.tooltip_text = "Click to log in and submit assets"
+	$SendButton.disabled = true
+	if message != "":
+		var status = await mm_globals.main_window.accept_dialog(message, false)
+	connect_button.disabled = false
+
 func _on_ConnectButton_pressed() -> void:
-	if websocket_id == -1:
-		create_server()
-		OS.shell_open("https://www.materialmaker.org?mm_port=%d" % websocket_port)
+	connect_button.disabled = true
+	var dialog = load("res://material_maker/tools/share/login_dialog.tscn").instantiate()
+	var saved_login = mm_globals.get_config("website_login")
+	var saved_password = mm_globals.get_config("website_password")
+	var login_info = await dialog.ask(saved_login, saved_password)
+	if login_info.has("user") and login_info.has("password"):
+		if login_info.has("save_user"):
+			if login_info.save_user:
+				mm_globals.set_config("website_login", login_info.user)
+			else:
+				mm_globals.set_config("website_login", "")
+			login_info.erase("save_user")
+		if login_info.has("save_password"):
+			if login_info.save_password:
+				mm_globals.set_config("website_password", login_info.password)
+			else:
+				mm_globals.set_config("website_password", "")
+			login_info.erase("save_password")
+		var body : String = JSON.stringify(login_info)
+		var request_status = await http_request.do_request("/login", [ "Content-Type: application/json" ], HTTPClient.METHOD_POST, body)
+		if request_status.has("error"):
+			set_logged_out("Failed to connect to the website")
+		else:
+			var re : RegEx = RegEx.new()
+			re.compile("<div class=\"error\">((?:.*))</div>")
+			var re_match : RegExMatch = re.search(request_status.body)
+			if re_match != null:
+				set_logged_out(re_match.strings[1])
+				return
+			request_status = await http_request.do_request("/api/isConnected", [ "Content-Type: application/json" ])
+			if request_status.has("error"):
+				set_logged_out("Failed to connect to the website")
+				return
+			var json = JSON.new()
+			if json.parse(request_status.body) != OK:
+				set_logged_out("Failed to connect to the website")
+				return
+			var status = json.data
+			if !status.connected:
+				set_logged_out("Failed to connect to the website")
+				return
+			set_logged_in(status.displayed_name)
+			if licenses.is_empty():
+				request_status = await http_request.do_request("/api/getLicenses")
+				if ! request_status.has("error"):
+					if json.parse(request_status.body) == OK:
+						licenses = json.data
+			if my_assets.is_empty():
+				update_my_assets()
+	connect_button.disabled = false
 
 func update_preview_texture():
 	create_preview_viewport()
@@ -47,8 +104,8 @@ func update_preview_texture():
 	preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
 	preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	preview_viewport.update_worlds()
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await get_tree().idle_frame
+	await get_tree().idle_frame
 
 func get_preview_texture():
 	return preview_viewport.get_texture()
@@ -71,8 +128,8 @@ func _on_SendButton_pressed():
 			preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
 			preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			preview_viewport.update_worlds()
-			await get_tree().process_frame
-			await get_tree().process_frame
+			await get_tree().idle_frame
+			await get_tree().idle_frame
 			preview_texture = preview_viewport.get_texture()
 		"paint":
 			asset_type = "brush"
@@ -82,102 +139,61 @@ func _on_SendButton_pressed():
 			return
 	send_asset(asset_type, main_window.get_current_graph_edit().top_generator.serialize(), preview_texture)
 
-func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture2D):
+func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
+	if node.has("parameters") and node.parameters is Dictionary:
+		for p in node.parameters.keys():
+			if node.parameters[p] is String:
+				for k in keywords:
+					if node.parameters[p].find(k) != -1:
+						return true
+	if node.has("nodes") and node.nodes is Array:
+		for n in node.nodes:
+			if find_in_parameter_values(n, keywords):
+				return true
+	return false
+
+func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture2D) -> void:
+	var data = { type=asset_type, preview=preview_texture, licenses=licenses, my_assets=my_assets }
+	var upload_dialog = load("res://material_maker/tools/share/upload_dialog.tscn").instantiate()
+	var asset_info = await upload_dialog.ask(data)
+	if asset_info.is_empty():
+		return
 	var png_image = preview_texture.get_data().save_png_to_buffer()
-	var png_data = Marshalls.raw_to_base64(png_image)
-	var data = { type=asset_type, image=png_data, json=JSON.stringify(asset_data) }
-	send_data(JSON.stringify(data))
-
-func _process(_delta):
-	websocket_server.poll()
-
-const PACKET_SIZE : int = 64000
-func send_data(data : String):
-	if (data.length() < PACKET_SIZE):
-		websocket_server.get_peer(websocket_id).put_packet(data.to_utf8_buffer())
+	asset_info.type = asset_type
+	asset_info.mm_version = ProjectSettings.get_setting("application/config/actual_release")
+	asset_info.image_text = "data:image/png;base64,"+Marshalls.raw_to_base64(png_image)
+	asset_info.json = JSON.stringify(asset_data)
+	var url : String
+	if asset_info.has("id"):
+		url = "/api/updateMaterial"
+		asset_info.doupdate = "on"
 	else:
-		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_BEGIN%".to_utf8_buffer())
-		for s in range(0, data.length(), PACKET_SIZE):
-			await get_tree().process_frame
-			websocket_server.get_peer(websocket_id).put_packet(data.substr(s, PACKET_SIZE).to_utf8_buffer())
-		await get_tree().process_frame
-		websocket_server.get_peer(websocket_id).put_packet("%MULTIPART_END%".to_utf8_buffer())
-
-# warning-ignore:unused_argument
-func _on_client_connected(id: int, protocol: String) -> void:
-	if websocket_id == -1:
-		websocket_id = id
-		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/link.tres")
-		$ConnectButton.tooltip_text = "Connected to the web site.\nLog in to submit materials."
-		$SendButton.disabled = true
-		is_multipart = false
-		var data = {
-			type="mm_release",
-			release=ProjectSettings.get_setting("application/config/actual_release"),
-			features=[ "share_environments" ]
-		}
-		send_data(JSON.stringify(data))
-
-
-# warning-ignore:unused_argument
-func _on_client_disconnected(id: int, was_clean_close: bool) -> void:
-	if websocket_id == id:
-		websocket_id = -1
-		$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
-		$ConnectButton.tooltip_text = "Disconnected. Click to connect to the web site."
-		$SendButton.disabled = true
+		url = "/api/addMaterial"
+	match asset_type:
+		"material":
+			asset_info.type = 0
+		"brush":
+			var type_options : int = 0
+			for n in asset_data.nodes:
+				if n.name == "Brush":
+					if n.has("parameters"):
+						var channels : Array = [ "albedo", "metallic", "roughness", "emission", "depth" ]
+						for ci in channels.size():
+							var parameter_name = "has_"+channels[ci]
+							if n.parameters.has(parameter_name) and n.parameters[parameter_name] is bool and n.parameters[parameter_name]:
+								type_options |= 1 << ci
+					break
+			if find_in_parameter_values(asset_data, [ "pressure", "tilt" ]):
+				type_options |= 1 << 5
+			asset_info.type = 1 | (type_options << 4)
+		"environment":
+			asset_info.type = 2
+		"node":
+			asset_info.type = 3
+	var request_status = await http_request.do_request(url, [ "Content-Type: application/json" ], HTTPClient.METHOD_POST, JSON.stringify(asset_info))
+	update_my_assets()
 
 func bring_to_top() -> void:
 	var is_always_on_top = get_window().always_on_top
 	get_window().always_on_top = (true)
 	get_window().always_on_top = (is_always_on_top)
-
-func _on_data_received(id: int) -> void:
-	var message = websocket_server.get_peer(id).get_packet().get_string_from_utf8()
-	if is_multipart:
-		if message == "%MULTIPART_END%":
-			is_multipart = false
-			process_message(multipart_message)
-		else:
-			multipart_message += message
-	elif message == "%MULTIPART_BEGIN%":
-		is_multipart = true
-		multipart_message = ""
-	else:
-		process_message(message)
-
-func process_message(message : String) -> void:
-	print("received message (%d)" % message.length())
-	var json = JSON.new()
-	if json.parse(message) == OK:
-		var data = json.get_data()
-		match data.action:
-			"logged_in":
-				$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
-				$ConnectButton.tooltip_text = "Connected and logged in.\nMaterials can be submitted."
-				$SendButton.disabled = false
-			"load_material":
-				var main_window = mm_globals.main_window
-				main_window.new_material()
-				var graph_edit = main_window.get_current_graph_edit()
-				if json.parse(data.json) == OK:
-					var new_generator = mm_loader.create_gen(json.get_data())
-					graph_edit.set_new_generator(new_generator)
-					main_window.hierarchy.update_from_graph_edit(graph_edit)
-					bring_to_top()
-			"load_brush":
-				var main_window = mm_globals.main_window
-				var project_panel = main_window.get_current_project()
-				if not project_panel.has_method("set_brush"):
-					print("Cannot load brush")
-					return
-				if json.parse(data.json) == OK:
-					project_panel.set_brush(json.get_data())
-				bring_to_top()
-			"load_environment":
-				var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-				if json.parse(data.json) == OK:
-					environment_manager.add_environment(json.get_data())
-	else:
-		print("Incorrect JSON")
-

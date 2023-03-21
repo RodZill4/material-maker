@@ -122,7 +122,6 @@ func do_start_accumulate():
 	started = true
 	while started:
 		$Accumulate.render_target_update_mode = SubViewport.UPDATE_ONCE
-		$Accumulate.update_worlds()
 		material.set_shader_parameter("divide", divide)
 		await get_tree().process_frame
 		await get_tree().process_frame
@@ -209,21 +208,24 @@ func _on_gui_input(event):
 	var new_center : Vector2 = center
 	var multiplier : float = min(size.x, size.y)
 	var image_rect : Rect2 = get_global_rect()
-	var offset_from_center : Vector2 = get_global_mouse_position()-(image_rect.position+0.5*image_rect.size)
+	var offset_from_center : Vector2 = get_viewport().get_mouse_position()-(image_rect.position+0.5*image_rect.size)
 	var new_scale : float = view_scale
 	if event is InputEventMouseButton:
 		if event.pressed:
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				new_scale = min(new_scale*1.05, 5.0)
-			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				new_scale = max(new_scale*0.95, 0.005)
-			elif event.button_index == MOUSE_BUTTON_MIDDLE:
-				dragging = true
-			elif event.button_index == MOUSE_BUTTON_LEFT:
-				if event.shift_pressed:
+			match event.button_index:
+				MOUSE_BUTTON_WHEEL_DOWN:
+					new_scale = min(new_scale*1.05, 5.0)
+				MOUSE_BUTTON_WHEEL_UP:
+					new_scale = max(new_scale*0.95, 0.005)
+				MOUSE_BUTTON_MIDDLE:
 					dragging = true
-				elif event.is_command_or_control_pressed():
-					zooming = true
+				MOUSE_BUTTON_LEFT:
+					if event.shift_pressed:
+						dragging = true
+					elif event.is_command_or_control_pressed():
+						zooming = true
+				MOUSE_BUTTON_RIGHT:
+					$ContextMenu.popup(Rect2(get_viewport().get_mouse_position(), Vector2(0, 0)))
 		else:
 			dragging = false
 			zooming = false
@@ -244,9 +246,6 @@ func _on_gui_input(event):
 		center.x = clamp(new_center.x, 0.0, 1.0)
 		center.y = clamp(new_center.y, 0.0, 1.0)
 		need_update = true
-	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-			$ContextMenu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 	if need_update:
 		on_resized()
 
@@ -280,7 +279,7 @@ func _on_Guides_id_pressed(id):
 		var color_picker = color_picker_popup.get_node("ColorPicker")
 		color_picker.color = $Guides.color
 		color_picker.connect("color_changed",Callable($Guides,"set_color"))
-		color_picker_popup.position = get_global_mouse_position()
+		color_picker_popup.position = get_viewport().get_mouse_position()
 		color_picker_popup.connect("popup_hide",Callable(color_picker_popup,"queue_free"))
 		color_picker_popup.popup()
 	else:

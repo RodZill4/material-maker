@@ -100,7 +100,7 @@ func generate(mesh: Mesh) -> Mesh:
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		if orig_index != vert_index:
-			# Skip duplicates, they'll be overwritten later checked.
+			# Skip duplicates, they'll be overwritten later on.
 			continue
 		if counter[vert_index] > 0:
 			var normal: Vector3 = vert_normal[vert_index]

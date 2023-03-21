@@ -4,7 +4,7 @@
 [ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
 [ext_resource path="res://material_maker/tools/map_renderer/bvh_generator.gd" type="Script" id=3]
 
-[sub_resource type="World3D" id=1]
+[sub_resource type="World" id=1]
 
 [sub_resource type="Shader" id=4]
 code = "shader_type spatial;
@@ -176,7 +176,7 @@ float intersects_triangle(vec3 ray_start, vec3 ray_dir, vec3 v0, vec3 v1, vec3 v
 	}
 
 	// At this stage we can compute t to find out where
-	// the intersection point is checked the line.
+	// the intersection point is on the line.
 	float t = f * dot(e2, q);
 	return t > 0.0000001 ? t : -1.0;
 }
@@ -452,7 +452,7 @@ float intersects_triangle(vec3 ray_start, vec3 ray_dir, vec3 v0, vec3 v1, vec3 v
 	}
 
 	// At this stage we can compute t to find out where
-	// the intersection point is checked the line.
+	// the intersection point is on the line.
 	float t = f * dot(e2, q);
 	return t > 0.0000001 ? t : -1.0;
 }

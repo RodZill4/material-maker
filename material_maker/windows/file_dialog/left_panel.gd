@@ -53,13 +53,13 @@ func _on_RecentList_item_activated(index):
 	emit_signal("open_directory", $RecentList.get_item_tooltip(index))
 
 func _on_FavList_gui_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
 		if ! $FavList.get_selected_items().is_empty():
 			favorites.remove_at($FavList.get_selected_items()[0])
 			update_lists()
 
 func _on_RecentList_gui_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
 		if ! $RecentList.get_selected_items().is_empty():
 			recents.remove_at($RecentList.get_selected_items()[0])
 			update_lists()

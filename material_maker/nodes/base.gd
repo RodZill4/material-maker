@@ -34,6 +34,7 @@ const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png
 const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
+const MENU_SHARE_NODE : int        = 1001
 
 const MENU_BUFFER_PAUSE : int  = 0
 const MENU_BUFFER_RESUME : int = 1
@@ -267,11 +268,9 @@ func _on_gui_input(event) -> void:
 			if event.double_click:
 				doubleclicked = true
 			if event.button_index == MOUSE_BUTTON_RIGHT:
-				if generator is MMGenGraph:
-					accept_event()
-					var menu : PopupMenu = PopupMenu.new()
-					if !get_parent().get_propagation_targets(generator).is_empty():
-						menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
+				accept_event()
+				var menu = create_context_menu()
+				if menu != null:
 					if menu.get_item_count() != 0:
 						add_child(menu)
 						menu.connect("modal_closed",Callable(menu,"queue_free"))
@@ -390,6 +389,16 @@ func clear_connection_labels() -> void:
 		show_outputs = false
 		update()
 
+func create_context_menu():
+	var menu : PopupMenu = PopupMenu.new()
+	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
+		var share_button = mm_globals.main_window.get_share_button()
+		if share_button.can_share():
+			menu.add_item(tr("Share node on website"), MENU_SHARE_NODE)
+	if generator is MMGenGraph and !get_parent().get_propagation_targets(generator).is_empty():
+		menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
+	return menu
+
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
 		MENU_PROPAGATE_CHANGES:
@@ -400,6 +409,55 @@ func _on_menu_id_pressed(id : int) -> void:
 			var result = await dialog.ask()
 			if result == "ok":
 				get_parent().call_deferred("propagate_node_changes", generator)
+		MENU_SHARE_NODE:
+			# Prepare warning dialog
+			var status : Array = []
+			if generator.get_description() == "":
+				status.append({ ok=false, message="The node does not have a description"})
+			else:
+				status.append({ ok=true, message="The node has a description" })
+			var bad : PackedStringArray
+			# Parameters
+			bad = PackedStringArray()
+			for p in generator.get_parameter_defs():
+				if p.has("longdesc") and p.has("shortdesc") and p.longdesc != "" and p.shortdesc != "":
+					continue
+				bad.append(p.name)
+			if bad.is_empty():
+				status.append({ ok=true, message="All parameters have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following parameters do not have a short and a long description: "+", ".join(bad) })
+			# Inputs
+			bad = PackedStringArray()
+			for i in generator.get_input_defs():
+				if i.has("longdesc") and i.has("shortdesc") and i.longdesc != "" and i.shortdesc != "":
+					continue
+				bad.append(i.name)
+			if bad.is_empty():
+				status.append({ ok=true, message="All inputs have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following inputs do not have a short and a long description: "+", ".join(bad) })
+			# Outputs
+			bad = PackedStringArray()
+			for o in generator.get_output_defs():
+				if o.has("longdesc") and o.has("shortdesc") and o.longdesc != "" and o.shortdesc != "":
+					continue
+				bad.append(o.name)
+			if bad.is_empty():
+				status.append({ ok=true, message="All outputs have a short and a long description" })
+			else:
+				status.append({ ok=false, message="The following outputs do not have a short and a long description: "+", ".join(bad) })
+			# Show warning dialog
+			var dialog = preload("res://material_maker/tools/share/share_node_dialog.tscn").instantiate()
+			var result = await dialog.ask(status)
+			if result != "ok":
+				return
+			var node = generator.serialize()
+			var share_button = mm_globals.main_window.get_share_button()
+			var preview = await generator.render(self, 0, 1024, true)
+			var preview_texture : ImageTexture = ImageTexture.new()
+			preview_texture.create_from_image(preview.get_image())
+			share_button.send_asset("node", node, preview_texture)
 
 var edit_generator_prev_state : Dictionary
 var edit_generator_next_state : Dictionary

@@ -18,10 +18,10 @@ func reverse_transform_point(p : Vector2) -> Vector2:
 
 func _draw():
 	var current_theme : Theme = mm_globals.main_window.theme
-	var panel = current_theme.get_stylebox("panel", "Panel").bg_color
+	var bg = current_theme.get_stylebox("panel", "Panel").bg_color
 	var fg = current_theme.get_color("font_color", "Label")
-	var axes_color : Color = panel.lerp(fg, 0.25)
-	var curve_color : Color = panel.lerp(fg, 0.75)
+	var axes_color : Color = bg.lerp(fg, 0.25)
+	var curve_color : Color = bg.lerp(fg, 0.75)
 	if show_axes:
 		for i in range(5):
 			var p = transform_point(0.25*Vector2(i, i))

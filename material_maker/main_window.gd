@@ -13,12 +13,12 @@ var need_update : bool = false
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
 # specular/parallax mapping and when viewed at oblique angles.
-var preview_rendering_scale_factor := 2.0
+var preview_rendering_scale_factor : float = 2.0
 
 # The number of subdivisions to use for tesselated 3D previews. Higher values
 # result in more detailed bumps but are more demanding to render.
 # This doesn't apply to non-tesselated 3D previews which use parallax occlusion mapping.
-var preview_tesselation_detail := 256
+var preview_tesselation_detail : int = 256
 
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
@@ -119,6 +119,8 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	get_viewport().gui_embed_subwindows = false
 	
+	get_window().close_requested.connect(self.on_close_requested)
+	
 	for m in MENU:
 		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
@@ -128,18 +130,18 @@ func _ready() -> void:
 
 	on_config_changed()
 
-	#todo removed
 	# Restore the window position/size if values are present in the configuration cache
-	#if mm_globals.config.has_section_key("window", "screen"):
-
-	#if mm_globals.config.has_section_key("window", "maximized"):
-	#	get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
-
-	#if !(get_window().mode == Window.MODE_MAXIMIZED):
-	#	if mm_globals.config.has_section_key("window", "position"):
-
-	#	if mm_globals.config.has_section_key("window", "size"):
-
+	if mm_globals.config.has_section_key("window", "screen"):
+		get_window().current_screen = mm_globals.config.get_value("window", "screen")
+	
+	if mm_globals.config.has_section_key("window", "maximized"):
+		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
+	
+	if get_window().mode != Window.MODE_MAXIMIZED:
+		if mm_globals.config.has_section_key("window", "position"):
+			get_window().position = mm_globals.config.get_value("window", "position")
+		if mm_globals.config.has_section_key("window", "size"):
+			get_window().size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
 	var theme_name : String = "default"
@@ -162,8 +164,8 @@ func _ready() -> void:
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
 
-	# Set a minimum window size to prevent UI elements from collapsing checked each other.
-
+	# Set a minimum window size to prevent UI elements from collapsing on each other.
+	get_window().min_size = Vector2(1024, 600)
 
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
@@ -214,10 +216,10 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
-
+	mm_globals.config.set_value("window", "screen", get_window().current_screen)
 	mm_globals.config.set_value("window", "maximized", (get_window().mode == Window.MODE_MAXIMIZED) || ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
-
-
+	mm_globals.config.set_value("window", "position", get_window().position)
+	mm_globals.config.set_value("window", "size", get_window().size)
 	layout.save_config()
 
 func _input(event: InputEvent) -> void:
@@ -239,11 +241,11 @@ func on_config_changed() -> void:
 	var scale = mm_globals.get_config("ui_scale")
 	if scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
-		# This prevents UI elements from being too small checked hiDPI displays.
+		# This prevents UI elements from being too small on hiDPI displays.
 		scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	# todo get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
 
-	# Clamp to reasonable values to avoid crashes checked startup.
+	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
@@ -314,7 +316,7 @@ func remove_recent(path, save = true) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
-			recent_files.remove_at(index)
+			recent_files.remove(index)
 		else:
 			break
 	if save:
@@ -590,14 +592,12 @@ func do_load_painting(filename : String) -> bool:
 func load_material_from_website() -> void:
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
 	add_child(dialog)
-	var result = await dialog.select_material()
-	if result == "":
+	var result = await dialog.select_asset()
+	if result == {}:
 		return
 	new_material()
 	var graph_edit = get_current_graph_edit()
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(result)
-	var new_generator = mm_loader.create_gen(test_json_conv.get_data())
+	var new_generator = await mm_loader.create_gen(result)
 	graph_edit.set_new_generator(new_generator)
 	hierarchy.update_from_graph_edit(graph_edit)
 
@@ -626,12 +626,8 @@ func quit() -> void:
 	if quitting:
 		return
 	quitting = true
-	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-	dialog.dialog_text = "Quit Material Maker?"
-	dialog.add_cancel_button("Cancel")
-	add_child(dialog)
 	if mm_globals.get_config("confirm_quit"):
-		var result = await dialog.ask()
+		var result = await accept_dialog("Quit Material Maker?", true)
 		if result == "cancel":
 			quitting = false
 			return
@@ -1040,11 +1036,10 @@ func _notification(what : int) -> void:
 			# Return to the normal FPS limit when the window is focused.
 # warning-ignore:narrowing_conversion
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
-# todo
-#		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-#			await get_tree().process_frame
-#			quit()
 
+func on_close_requested():
+			await get_tree().process_frame
+			quit()
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting
@@ -1180,6 +1175,25 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 
 func _on_Tip_Timer_timeout():
 	$VBoxContainer/StatusBar/Tip.text = ""
+
+# Add dialog
+
+func add_dialog(dialog : Window):
+	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
+	add_child(background)
+	add_child(dialog)
+	dialog.connect("tree_exited",Callable(background,"queue_free"))
+
+# Accept dialog
+
+func accept_dialog(dialog_text : String, cancel_button : bool = false):
+	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+	dialog.dialog_text = dialog_text
+	if cancel_button:
+		dialog.add_cancel_button("Cancel")
+	add_child(dialog)
+	var result = await dialog.ask()
+	return result
 
 # Use this to investigate the connect bug
 

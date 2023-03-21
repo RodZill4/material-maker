@@ -4,7 +4,7 @@ class_name MMGenIterateBuffer
 
 
 # Iterate buffers, that render their input in a specific resolution and apply
-# a loop n times checked the result.
+# a loop n times on the result.
 
 
 var exiting : bool = false

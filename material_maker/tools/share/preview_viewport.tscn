@@ -9,7 +9,7 @@
 background_sky = SubResource( 1 )
 ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
 
-[sub_resource type="World3D" id=3]
+[sub_resource type="World" id=3]
 environment = SubResource( 2 )
 
 [node name="PreviewViewport" type="SubViewport"]

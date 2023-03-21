@@ -49,7 +49,7 @@ func _on_resize_request(new_size : Vector2) -> void:
 	generator.size = new_size
 
 func resize_to_selection() -> void:
-	# If any nodes are selected checked initialization automatically adjust size to match
+	# If any nodes are selected on initialization automatically adjust size to match
 	var parent : GraphEdit = get_parent()
 	var selected_nodes : Array = parent.get_selected_nodes()
 	

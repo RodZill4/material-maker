@@ -32,7 +32,7 @@ func _ready() -> void:
 
 func toggle_side_panels() -> void:
 	# Toggle side docks' visibility to maximize the space available
-	# for the graph panel. This is useful checked smaller displays.
+	# for the graph panel. This is useful on smaller displays.
 	$Left.visible = not $Left.visible
 	$SplitRight/Right.visible = not $SplitRight/Right.visible
 

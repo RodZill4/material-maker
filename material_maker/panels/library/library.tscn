@@ -18,12 +18,24 @@ size_flags_vertical = 3
 script = ExtResource("1_748nq")
 library_manager_name = "NodeLibraryManager"
 
-[node name="Libraries" type="MenuButton" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Libraries" type="MenuButton" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 text = "Manage Libraries"
 icon = SubResource("1")
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GetFromWebsite" type="LinkButton" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Get more nodes"
 
 [node name="SectionButtons" type="GridContainer" parent="."]
 layout_mode = 2
@@ -67,7 +79,7 @@ item_3/separator = true
 item_4/text = "Define aliases"
 item_4/id = 4
 
-[connection signal="about_to_popup" from="Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="pressed" from="HBoxContainer/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
 [connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]

@@ -1,6 +1,22 @@
 extends Panel
 
-var current_tab = -1 : set = set_current_tab
+var current_tab : int = -1 : 
+	get:
+		return current_tab
+	set(new_value):
+		if new_value == current_tab or new_value < 0 or new_value >= $TabBar.get_tab_count():
+			return
+		var node
+		if current_tab >= 0 && current_tab < $TabBar.get_tab_count():
+			node = get_child(current_tab)
+			node.visible = false
+		current_tab = new_value
+		node = get_child(current_tab)
+		node.visible = true
+		node.position = Vector2(0, $TabBar.size.y)
+		node.size = size - node.position
+		$TabBar.current_tab = current_tab
+		emit_signal("tab_changed", current_tab)
 
 signal tab_changed
 signal no_more_tabs
@@ -10,6 +26,7 @@ func add_tab(control, legible_unique_name = false) -> void:
 	assert(! control is TabBar)
 	move_child(control, $TabBar.get_tab_count())
 	$TabBar.add_tab(control.name)
+	control.visible = false
 
 func close_tab(tab = null) -> void:
 	if tab == null:
@@ -73,27 +90,12 @@ func do_close_tab(tab = null) -> void:
 	if $TabBar.get_tab_count() == 0:
 		emit_signal("no_more_tabs")
 	else:
-		set_current_tab(0)
+		current_tab = 0
 
 func move_active_tab_to(idx_to) -> void:
 	$TabBar.move_tab(current_tab, idx_to)
 	move_child(get_child(current_tab), idx_to)
-	set_current_tab(idx_to)
-
-func set_current_tab(t) -> void:
-	if t == current_tab or t < 0 or t >= $TabBar.get_tab_count():
-		return
-	var node
-	if current_tab >= 0 && current_tab < $TabBar.get_tab_count():
-		node = get_child(current_tab+2)
-		node.visible = false
-	current_tab = t
-	node = get_child(current_tab)
-	node.visible = true
-	node.position = Vector2(0, $TabBar.size.y)
-	node.size = size - node.position
-	$TabBar.current_tab = current_tab
-	emit_signal("tab_changed", current_tab)
+	current_tab = idx_to
 
 func set_tab_title(index, title) -> void:
 	$TabBar.set_tab_title(index, title)
@@ -102,7 +104,7 @@ func get_current_tab_control() -> Node:
 	return get_child(current_tab)
 
 func _on_Tabs_tab_changed(tab) -> void:
-	set_current_tab(tab)
+	current_tab = tab
 
 func _on_Projects_resized() -> void:
 	$TabBar.size.x = size.x
@@ -117,19 +119,19 @@ func _on_CrashRecoveryTimer_timeout():
 func _input(event: InputEvent) -> void:
 	# Navigate between tabs using keyboard shortcuts.
 	if event.is_action_pressed("ui_previous_tab"):
-		set_current_tab(wrapi(current_tab - 1, 0, $TabBar.get_tab_count()))
+		current_tab = wrapi(current_tab - 1, 0, $TabBar.get_tab_count())
 	elif event.is_action_pressed("ui_next_tab"):
-		set_current_tab(wrapi(current_tab + 1, 0, $TabBar.get_tab_count()))
+		current_tab = wrapi(current_tab + 1, 0, $TabBar.get_tab_count())
 
 func _gui_input(event: InputEvent) -> void:
 	# Navigate between tabs by hovering tabs then using the mouse wheel.
-	# Only take into account the mouse wheel scrolling checked the tabs themselves,
+	# Only take into account the mouse wheel scrolling on the tabs themselves,
 	# not their content.
 	var rect := get_global_rect()
 	# Roughly matches the height of the tabs bar itself (with some additional tolerance for better usability).
 	rect.size.y = 30
 	if event is InputEventMouseButton and event.pressed and rect.has_point(get_global_mouse_position()):
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			set_current_tab(wrapi(current_tab - 1, 0, $TabBar.get_tab_count()))
+			current_tab = wrapi(current_tab - 1, 0, $TabBar.get_tab_count())
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			set_current_tab(wrapi(current_tab + 1, 0, $TabBar.get_tab_count()))
+			current_tab = wrapi(current_tab + 1, 0, $TabBar.get_tab_count())

@@ -347,7 +347,7 @@ func do_remove_node(node) -> void:
 		node.queue_free()
 		send_changed_signal()
 
-# Global operations checked graph
+# Global operations on graph
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -469,7 +469,7 @@ func update_graph(generators, connections) -> Array:
 
 func new_material(init_nodes = {nodes=[{name="Material", type="material",parameters={size=11}}], connections=[]}) -> void:
 	clear_material()
-	top_generator = mm_loader.create_gen(init_nodes)
+	top_generator = await mm_loader.create_gen(init_nodes)
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -493,21 +493,21 @@ func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
+		var new_stuff = await mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
 		return return_value
 	return []
 
 func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
 	var prev = generator.serialize().duplicate(true)
-	var nodes = do_create_nodes(data, position)
+	var nodes = await do_create_nodes(data, position)
 	if !nodes.is_empty():
 		var next = generator.serialize()
 		undoredo_create_step("Add and connect nodes", generator.get_hier_name(), prev, next)
 	return nodes
 
 func create_gen_from_type(gen_name) -> void:
-	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*size)
+	var nodes = await create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*size)
 
 func set_new_generator(new_generator) -> void:
 	clear_material()
@@ -538,11 +538,11 @@ func load_file(filename) -> bool:
 		add_child(dialog)
 		var result = await dialog.ask()
 		if result == "ok":
-			new_generator = mm_loader.load_gen(recovery_path)
+			new_generator = await mm_loader.load_gen(recovery_path)
 	if new_generator != null:
 		rescued = true
 	else:
-		new_generator = mm_loader.load_gen(filename)
+		new_generator = await mm_loader.load_gen(filename)
 	if new_generator != null:
 		set_save_path(filename)
 		set_new_generator(new_generator)
@@ -564,7 +564,7 @@ func load_from_data(filename, data) -> bool:
 	test_json_conv.parse(data)
 	var json = test_json_conv.get_data()
 	if json != null:
-		var new_generator = mm_loader.create_gen(json)
+		var new_generator = await mm_loader.create_gen(json)
 		if new_generator != null:
 			set_save_path(filename)
 			set_new_generator(new_generator)
@@ -573,7 +573,7 @@ func load_from_data(filename, data) -> bool:
 
 func load_from_recovery(filename) -> bool:
 	save_crash_recovery_path = filename
-	var new_generator = mm_loader.load_gen(save_crash_recovery_path)
+	var new_generator = await mm_loader.load_gen(save_crash_recovery_path)
 	if new_generator != null:
 		set_new_generator(new_generator)
 		set_need_save(true)
@@ -714,7 +714,7 @@ func do_paste(data) -> void:
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = false
-	var new_nodes = create_nodes(data, position)
+	var new_nodes = await create_nodes(data, position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
@@ -727,7 +727,7 @@ func paste() -> void:
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_graph_panel()
-			var new_generator = mm_loader.create_gen(graph)
+			var new_generator = await mm_loader.create_gen(graph)
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
@@ -957,7 +957,7 @@ func undoredo_command(command : Dictionary) -> void:
 			var position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
 			var generators = command.generators if command.has("generators") else []
 			var connections = command.connections if command.has("connections") else []
-			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
+			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:

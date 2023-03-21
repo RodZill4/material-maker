@@ -1,6 +1,8 @@
 extends Window
 
+
 @export var shader : String = "" # (String, MULTILINE)
+
 
 var generator
 var output : int
@@ -15,19 +17,24 @@ var output : int
 @onready var image_end = $VBox/Images/HBox/End/SubViewport/Image
 @onready var image_diff = $VBox/Images/HBox/Animated/Diff
 @onready var image_anim = $VBox/Images/HBox/Animated
+@onready var buffer_images : Array = [ image_begin, image_end, image_anim ]
 
 @onready var animation_player = $VBox/Images/HBox/Animated/AnimationPlayer
 @onready var timer = $VBox/Images/HBox/Animated/Timer
 
+
+const BUFFER_NAMES = [ "export_animation_buffer_begin", "export_animation_buffer_end", "export_animation_buffer_anim" ]
+
+
 func _ready():
-	pass # Replace with function body.
+	for i in range(BUFFER_NAMES.size()):
+		mm_deps.create_buffer(BUFFER_NAMES[i], self)
 
 func set_source(g, o):
 	generator = g
 	output = o
 	var context : MMGenContext = MMGenContext.new()
 	var source = generator.get_shader_code("uv", output, context)
-	assert(!(source is GDScriptFunctionState))
 	if source.is_empty():
 		source = MMGenBase.DEFAULT_GENERATED_SHADER
 	var code = MMGenBase.generate_preview_shader(source, source.type, shader)
@@ -81,9 +88,7 @@ func _on_Export_pressed():
 	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image files")
 	add_child(dialog)
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		var filename : String = files[0]
 		var size : int = 1 << value_size.size_value
@@ -94,9 +99,7 @@ func _on_Export_pressed():
 		if spritesheet_lines > 500:
 			spritesheet_lines = 1000-spritesheet_lines
 		var spritesheet_columns : int
-		var renderer = mm_renderer.request(self)
-		while renderer is GDScriptFunctionState:
-			renderer = await renderer.completed
+		var renderer = await mm_renderer.request(self)
 		image_anim.material.set_shader_parameter("begin", begin)
 		image_anim.material.set_shader_parameter("end", begin)
 		var spritesheet : Image
@@ -124,9 +127,7 @@ func _on_Export_pressed():
 			var time : float = begin+(end-begin)*float(i)/float(images)
 			image_anim.material.set_shader_parameter("begin", time)
 			image_anim.material.set_shader_parameter("end", time)
-			renderer = renderer.render_material(self, image_anim.material, size, false)
-			while renderer is GDScriptFunctionState:
-				renderer = await renderer.completed
+			renderer = await renderer.render_material(self, image_anim.material, size, false)
 			if spritesheet_lines > 0:
 				var image : Image = renderer.get_image()
 				spritesheet.blit_rect(image, Rect2(0, 0, size, size), Vector2(size*(i%spritesheet_columns), size*(i/spritesheet_columns)))

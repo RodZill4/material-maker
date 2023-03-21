@@ -169,7 +169,7 @@ offset_top = 5.0
 offset_right = 191.0
 offset_bottom = 19.0
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
-Don't increase this setting above 256 checked slower machines!
+Don't increase this setting above 256 on slower machines!
 This only affects the 3D preview when using tesselation, not parallax occlusion mapping."
 mouse_filter = 1
 text = "3D preview tesselation detail:"
@@ -182,7 +182,7 @@ offset_left = 195.0
 offset_right = 253.0
 offset_bottom = 24.0
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
-Don't increase this setting above 256 checked slower machines!
+Don't increase this setting above 256 on slower machines!
 This only affects the 3D preview when using tesselation, not parallax occlusion mapping."
 text = "256"
 value = 256.0
@@ -198,7 +198,7 @@ offset_right = 296.0
 offset_bottom = 216.0
 tooltip_text = "If enabled, the DirectionalLight3D will cast shadows in the 3D preview. This has a moderate performance cost.
 The effect of this shadow is only visible when using a tesselated mesh or a custom object.
-Changes to this setting are only applied checked application restart."
+Changes to this setting are only applied on application restart."
 text = "3D preview sun shadow (requires restart)"
 config_variable = "ui_3d_preview_sun_shadow"
 
@@ -225,7 +225,7 @@ offset_top = 5.0
 offset_right = 60.0
 offset_bottom = 19.0
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life checked laptops."
+Higher values may increase power usage, leading to reduced battery life on laptops."
 mouse_filter = 1
 text = "FPS limit:"
 
@@ -237,7 +237,7 @@ offset_left = 64.0
 offset_right = 122.0
 offset_bottom = 24.0
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life checked laptops."
+Higher values may increase power usage, leading to reduced battery life on laptops."
 text = "145"
 value = 145.0
 min_value = 20.0
@@ -258,7 +258,7 @@ offset_top = 5.0
 offset_right = 234.0
 offset_bottom = 19.0
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life checked laptops."
+Higher values may increase power usage, leading to reduced battery life on laptops."
 mouse_filter = 1
 text = "Idle FPS limit:"
 
@@ -270,7 +270,7 @@ offset_left = 238.0
 offset_right = 296.0
 offset_bottom = 24.0
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life checked laptops."
+Higher values may increase power usage, leading to reduced battery life on laptops."
 text = "145"
 value = 20.0
 min_value = 1.0

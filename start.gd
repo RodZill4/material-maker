@@ -132,7 +132,7 @@ func export_files(files, output_dir, target, size) -> void:
 	$VBoxContainer/ProgressBar.max_value = files.size()
 	$VBoxContainer/ProgressBar.value = 0
 	for f in files:
-		var gen = mm_loader.load_gen(f)
+		var gen = await mm_loader.load_gen(f)
 		if gen != null:
 			add_child(gen)
 			for c in gen.get_children():

@@ -1,12 +1,16 @@
 extends Window
 
+
 var assets : Array = []
 var displayed_assets : Array = []
 var thumbnail_update_thread : Thread = null
+var only_return_index : bool = false
 
 @onready var item_list : ItemList = $VBoxContainer/ItemList
 
-signal return_asset(json)
+
+signal return_asset(json : Dictionary)
+
 
 func _ready() -> void:
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
@@ -18,27 +22,33 @@ func _exit_tree():
 	print("Finished")
 
 func _on_ItemList_item_activated(index) -> void:
-	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
-	if error != OK:
-		return
-	var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
-	var test_json_conv = JSON.new()
-	if test_json_conv.parse(data) != OK or ! test_json_conv.get_data() is Dictionary:
-		return
-	var parse_result : Dictionary = test_json_conv.get_data()
-	emit_signal("return_asset", parse_result.json)
+	if only_return_index:
+		emit_signal("return_asset", { index=displayed_assets[index] })
+	else:
+		var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
+		if error != OK:
+			return
+		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
+		var json : JSON = JSON.new()
+		if json.parse(data) != OK or ! json.data is Dictionary:
+			return
+		var parse_result : Dictionary = json.data
+		if json.parse(parse_result.json) == OK and json.data is Dictionary:
+			emit_signal("return_asset", json.data)
+		else:
+			print(parse_result.json)
 
 func _on_LoadFromWebsite_popup_hide() -> void:
-	emit_signal("return_asset", "")
+	emit_signal("return_asset", {})
 
 func _on_OK_pressed() -> void:
 	if item_list.get_selected_items().is_empty():
-		emit_signal("return_asset", "")
+		emit_signal("return_asset", {})
 		return
 	_on_ItemList_item_activated(item_list.get_selected_items()[0])
 
 func _on_Cancel_pressed() -> void:
-	emit_signal("return_asset", "")
+	emit_signal("return_asset", {})
 
 func fill_list(filter : String):
 	item_list.clear()
@@ -53,12 +63,13 @@ func fill_list(filter : String):
 			displayed_assets.push_back(m.id)
 			item_index += 1
 
-func select_material(type : int = 0) -> String:
-	var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterials")
+func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
+	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
 		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
 		var json = JSON.new()
 		if json.parse(data) == OK and json.get_data() is Array:
+			only_return_index = return_index
 			var parse_result : Array = json.get_data()
 			popup_centered()
 			var tmp_assets = parse_result
@@ -67,7 +78,7 @@ func select_material(type : int = 0) -> String:
 			var image : Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
-				if m.type == type:
+				if int(m.type) & 15 == type:
 					m.texture = ImageTexture.new()
 					m.texture.set_image(image)
 					assets.push_back(m)
@@ -76,7 +87,7 @@ func select_material(type : int = 0) -> String:
 				update_thumbnails()
 			else:
 				thumbnail_update_thread = Thread.new()
-				thumbnail_update_thread.start(Callable(self,"update_thumbnails").bind(null),0)
+				thumbnail_update_thread.start(Callable(self,"update_thumbnails").bind(null), 0)
 			var result = await self.return_asset
 			queue_free()
 			return result
@@ -85,7 +96,7 @@ func select_material(type : int = 0) -> String:
 	dialog.dialog_text = "Cannot get assets from the website"
 	mm_globals.main_window.add_child(dialog)
 	dialog.ask()
-	return ""
+	return {}
 
 func update_thumbnails() -> void:
 	for i in range(assets.size()):
@@ -94,7 +105,7 @@ func update_thumbnails() -> void:
 		print(cache_filename)
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
-			var error = $ImageHTTPRequest.request("https://www.materialmaker.org/data/materials/material_"+str(m.id)+".webp")
+			var error = $ImageHTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp")
 			if error == OK:
 				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
 				image.load_webp_from_buffer(data)

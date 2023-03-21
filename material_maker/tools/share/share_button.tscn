@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnttargjmhjh8"]
+[gd_scene load_steps=7 format=3 uid="uid://dnttargjmhjh8"]
 
 [ext_resource type="Texture2D" path="res://material_maker/tools/share/broken_link.tres" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/share/share_button.gd" id="2"]
+[ext_resource type="Script" path="res://material_maker/tools/share/share_http_request.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="4"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -36,5 +37,11 @@ texture_disabled = SubResource("2")
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+max_redirects = 0
+timeout = 2.0
+script = ExtResource("3")
+
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
 [connection signal="pressed" from="SendButton" to="." method="_on_SendButton_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="HTTPRequest" method="_on_request_completed"]

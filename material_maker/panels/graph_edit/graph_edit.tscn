@@ -20,7 +20,7 @@ GraphEdit/icons/minus = null
 GraphEdit/icons/more = null
 GraphEdit/icons/reset = null
 GraphEdit/icons/snap = null
-GraphEdit/styles/panel = null
+GraphEdit/styles/bg = null
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2")

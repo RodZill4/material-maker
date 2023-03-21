@@ -178,7 +178,7 @@ func on_gui_input(event) -> void:
 		zoom(event.factor)
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
-			# Don't stop rotating the preview checked mouse wheel usage (zoom change).
+			# Don't stop rotating the preview on mouse wheel usage (zoom change).
 			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 
 		match event.button_index:

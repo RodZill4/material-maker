@@ -14,7 +14,12 @@ func get_last_item(parent : TreeItem):
 			parent = last_item
 
 func _draw():
-	var bottom_rect = get_item_area_rect(get_last_item(get_root()))
+	if get_root() == null:
+		return
+	var last_tree_item = get_last_item(get_root())
+	if last_tree_item == null:
+		return
+	var bottom_rect = get_item_area_rect(last_tree_item)
 	var sp : float = get_scroll().y
 	if bottom_rect.position.y + bottom_rect.size.y < size.y:
 		sp = 0

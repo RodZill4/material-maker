@@ -24,10 +24,10 @@ func reverse_transform_point(p : Vector2) -> Vector2:
 
 func _draw():
 	var current_theme : Theme = mm_globals.main_window.theme
-	var panel = current_theme.get_stylebox("panel", "Panel").bg_color
+	var bg = current_theme.get_stylebox("panel", "Panel").bg_color
 	var fg = current_theme.get_color("font_color", "Label")
-	var axes_color : Color = panel.lerp(fg, 0.25)
-	var curve_color : Color = panel.lerp(fg, 0.75)
+	var axes_color : Color = bg.lerp(fg, 0.25)
+	var curve_color : Color = bg.lerp(fg, 0.75)
 	draw_rect(Rect2(draw_offset, draw_size), axes_color, false)
 	var tp : Vector2 = transform_point(polygon.points[polygon.points.size()-1 if closed else 0])
 	for p in polygon.points:

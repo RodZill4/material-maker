@@ -78,9 +78,9 @@ func is_editable() -> bool:
 
 func get_description() -> String:
 	var desc_list : PackedStringArray = PackedStringArray()
-	if shortdesc == "":
+	if shortdesc != "":
 		desc_list.push_back(TranslationServer.translate(shortdesc))
-	if longdesc == "":
+	if longdesc != "":
 		desc_list.push_back(TranslationServer.translate(longdesc))
 	return "\n".join(desc_list)
 
@@ -274,14 +274,14 @@ func connect_children(from, from_port : int, to, to_port : int) -> bool:
 			return false
 	# disconnect target
 	while true:
-		var remove_at = -1
+		var remove = -1
 		for i in connections.size():
 			if connections[i].to == to.name and connections[i].to_port == to_port:
-				remove_at = i
+				remove = i
 				break
-		if remove_at == -1:
+		if remove == -1:
 			break
-		connections.remove_at(remove_at)
+		connections.remove_at(remove)
 	# create new connection
 	connections.append({from=from.name, from_port=from_port, to=to.name, to_port=to_port})
 	to.source_changed(to_port)
@@ -518,8 +518,7 @@ func _deserialize(data : Dictionary) -> void:
 			connection_array = data.connections
 		elif data.connections is Dictionary:
 			connection_array = connections_from_compact(data.connections)
-	mm_loader.add_to_gen_graph(self, nodes, connection_array)
-
+	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
 
 func apply_diff_from(graph : MMGenGraph) -> void:
 	shortdesc = graph.shortdesc
@@ -554,7 +553,8 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 			idx1 += 1
 		else:
 			var gen = graph.get_node(other_child_names[idx2][0]).serialize()
-			add_generator(mm_loader.create_gen(gen))
+			var generator = await mm_loader.create_gen(gen)
+			add_generator(generator)
 			idx2 += 1
 	
 	while idx1 < child_names.size():
@@ -563,7 +563,8 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	
 	while idx2 < other_child_names.size():
 		var gen = graph.get_node(other_child_names[idx2][0]).serialize()
-		add_generator(mm_loader.create_gen(gen))
+		var generator = await mm_loader.create_gen(gen)
+		add_generator(generator)
 		idx2 += 1
 		
 	for child in maybe_changed:

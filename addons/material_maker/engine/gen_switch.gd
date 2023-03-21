@@ -78,7 +78,7 @@ func set_parameter(p, v) -> void:
 		for i in range(int(parameters.outputs)):
 			notify_output_change(i)
 
-# get the list of outputs that depend checked the input whose index is passed as parameter
+# get the list of outputs that depend on the input whose index is passed as parameter
 func follow_input(input_index : int) -> Array:
 	return [ OutputPort.new(self, input_index % int(parameters.outputs)) ]
 

@@ -16,11 +16,8 @@ func install_translation(fn : String):
 		read_translations()
 
 func uninstall_translation(tn : String):
-	var dir : DirAccess = DirAccess.open(LOCALE_DIR)
-	if dir != null:
-		return
 	for ext in [ "po", "position", "csv" ]:
-		dir.remove_at(LOCALE_DIR+"/"+tn+"."+ext)
+		DirAccess.remove_absolute(LOCALE_DIR+"/"+tn+"."+ext)
 
 func add_translations(dest : Translation, src : Translation):
 	for m in src.get_message_list():

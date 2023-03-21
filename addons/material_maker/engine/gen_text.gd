@@ -20,7 +20,7 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return [
-		{ name="text", type="string", default="Hello World3D" },
+		{ name="text", type="string", default="Text" },
 		{ name="font", type="file", filters=[ "*.otf,*.ttf,*.fnt;Font file" ], default="" },
 		{ name="font_size", type="float", min=0, max=128, step=1, default=32 },
 		{ name="center", type="boolean", default=false },
@@ -33,6 +33,24 @@ func set_parameter(n : String, v) -> void:
 	if is_inside_tree():
 		update_buffer()
 
+func calculate_float_param(n : String, default_value : float = 0.0) -> float:
+	var param_value = get_parameter(n)
+	if param_value is int:
+		return float(param_value)
+	elif param_value is float:
+		return param_value
+	elif param_value is String:
+		var expression = Expression.new()
+		var error = expression.parse(param_value, [])
+		if error == OK:
+			var result = expression.execute([], null, true)
+			if not expression.has_execute_failed():
+				if result is int:
+					return float(result)
+				elif result is float:
+					return result
+	return default_value
+
 func update_buffer() -> void:
 	update_again = true
 	if !updating:
@@ -40,7 +58,7 @@ func update_buffer() -> void:
 		var renderer = await mm_renderer.request(self)
 		while update_again:
 			update_again = false
-			renderer = await renderer.render_text(self, get_parameter("text"), get_parameter("font"), get_parameter("font_size"), get_parameter("x"), get_parameter("y"), get_parameter("center"))
+			renderer = await renderer.render_text(self, get_parameter("text"), get_parameter("font"), int(calculate_float_param("font_size", 64)), calculate_float_param("x"), calculate_float_param("y"), get_parameter("center"))
 		renderer.copy_to_texture(texture)
 		renderer.release(self)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)

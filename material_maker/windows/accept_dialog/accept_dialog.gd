@@ -1,6 +1,8 @@
 extends AcceptDialog
 
+
 signal return_status(status)
+
 
 func _ready() -> void:
 	pass

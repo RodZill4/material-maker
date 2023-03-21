@@ -263,7 +263,7 @@ func get_targets(output_index : int) -> Array:
 		return parent.get_port_targets(name, output_index)
 	return []
 
-# get the list of outputs that depend checked the input whose index is passed as parameter
+# get the list of outputs that depend on the input whose index is passed as parameter
 func follow_input(_input_index : int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
@@ -404,7 +404,7 @@ func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
-	_deserialize(data)
+	await _deserialize(data)
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):
@@ -433,13 +433,3 @@ func deserialize(data : Dictionary) -> void:
 	preview = data.preview if data.has("preview") else -1
 	minimized = data.has("minimized") and data.minimized
 	_post_load()
-
-
-static func define_shader_float_parameters(code : String, material : ShaderMaterial) -> void:
-	var regex = RegEx.new()
-	regex.compile("uniform\\s+float\\s+([\\w_\\d]+)\\s*=\\s*([^;]+);")
-	for p in regex.search_all(code):
-		material.set_shader_parameter(p.strings[1], float(p.strings[2]))
-	regex.compile("uniform\\s+vec4\\s+([\\w_\\d]+)\\s*=\\s*vec4\\s*\\(\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^,\\s]+)\\s*,\\s*([^\\)\\s]+)\\s*\\);")
-	for p in regex.search_all(code):
-		material.set_shader_parameter(p.strings[1], Color(float(p.strings[2]), float(p.strings[3]), float(p.strings[4]), float(p.strings[5])))

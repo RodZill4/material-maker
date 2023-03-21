@@ -33,7 +33,7 @@ func undo() -> void:
 			state = parent.undoredo_pre()
 		for a in stack[step].undo_actions:
 			if OS.is_debug_build():
-				print("Executing undo action checked %s:" % str(parent))
+				print("Executing undo action on %s:" % str(parent))
 				print(a)
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):
@@ -54,7 +54,7 @@ func redo() -> void:
 			state = parent.undoredo_pre()
 		for a in stack[step].redo_actions:
 			if OS.is_debug_build():
-				print("Executing redo action checked %s:" % str(parent))
+				print("Executing redo action on %s:" % str(parent))
 				print(a)
 			parent.undoredo_command(a)
 		if parent.has_method("undoredo_post"):

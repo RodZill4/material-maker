@@ -13,7 +13,7 @@ ambient_light_energy = 0.32
 tonemap_mode = 2
 ssr_enabled = true
 
-[sub_resource type="World3D" id=3]
+[sub_resource type="World" id=3]
 environment = SubResource( 2 )
 
 [sub_resource type="PlaneMesh" id=4]

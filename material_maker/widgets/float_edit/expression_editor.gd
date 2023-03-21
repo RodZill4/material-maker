@@ -37,7 +37,7 @@ func _on_Cancel_pressed():
 
 func _on_TextEdit_gui_input(event):
 	if event is InputEventKey and event.pressed:
-		match event.scancode:
+		match event.keycode:
 			KEY_ENTER:
 				_on_OK_pressed()
 			KEY_ESCAPE:

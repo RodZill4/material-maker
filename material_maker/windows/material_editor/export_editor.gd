@@ -132,9 +132,7 @@ func _on_Load_Export_pressed():
 			var file : File = File.new()
 			if file.open(files[0], File.READ) != OK:
 				return
-			var test_json_conv = JSON.new()
-			test_json_conv.parse(file.get_as_text())
-			var export_data = test_json_conv.get_data()
+			var export_data = mm_loader.string_to_dict_tree(file.get_as_text())
 			if export_data.has("name") and export_data.has("files"):
 				export_data.external = true
 				exports[export_data.name] = export_data
@@ -227,10 +225,10 @@ func _on_Custom_Script_focus_exited():
 	exports[e].custom = export_custom_script.text
 
 func _on_Files_gui_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
 		if ! export_files.get_selected_items().is_empty():
 			var current_export = export_target.get_item_text(export_target.selected)
-			exports[current_export].files.remove_at(export_files.get_selected_items()[0])
+			exports[current_export].files.remove(export_files.get_selected_items()[0])
 			update_files(current_export)
 			export_files.deselect_all()
 
@@ -348,7 +346,7 @@ func _on_MarginContainer_minimum_size_changed():
 # OK/Apply/Cancel buttons
 
 func _on_Apply_pressed() -> void:
-	emit_signal("node_changed", get_model_data())
+	emit_signal("node_changed", get_model_data().duplicate(true))
 
 func _on_OK_pressed() -> void:
 	_on_Apply_pressed()

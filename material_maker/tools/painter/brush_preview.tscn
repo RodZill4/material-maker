@@ -13,7 +13,7 @@ background_mode = 2
 background_sky = SubResource( 2 )
 ambient_light_color = Color( 0.254902, 0.254902, 0.254902, 1 )
 
-[sub_resource type="World3D" id=4]
+[sub_resource type="World" id=4]
 environment = SubResource( 3 )
 
 [sub_resource type="SphereMesh" id=5]
