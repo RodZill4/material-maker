@@ -1,0 +1,125 @@
+{
+	"name": "weave_random",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"random": 0.5,
+		"scale_x": 4,
+		"scale_y": 4,
+		"stitch": 2,
+		"width_x": 0.9,
+		"width_y": 0.9
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "vec3 $(name_uv) = random_weave($(uv), vec2($(scale_x), $(scale_y)), vec2($width_x, $width_y) * $width_map($uv), $stitch, $random, $(seed));",
+		"global": "vec3 random_weave(vec2 uv, vec2 size, vec2 width, float stitch, float random, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\t\n\tvec2 offset = vec2(0.5, 0.0);\n\tvec2 xy_offset = floor(uv * size * stitch + offset );\n\t\n\tvec2 offset2 = vec2(1.0, -0.5);\n\tvec2 xy_offset2 = floor(uv * size * stitch + offset2 );\n\t\n\tfloat f0 = rand(seed2+mod(xy_offset, size * stitch));\n\tfloat checker0 = mod(mod(xy_offset.x + xy_offset.y, size.x * stitch), stitch * 2.0) < stitch ? 0.0 : 1.0;\n\tchecker0 = f0 > random ? checker0 : floor(f0 * 2.0);\n\t\n\tfloat f1 = rand(seed2+mod(xy_offset+vec2(1.0, 0.0), size * stitch));\n\tfloat checker1 = mod(mod(xy_offset.x + 1.0 + xy_offset.y, size.x * stitch), stitch * 2.0) < stitch ? 0.0 : 1.0;\n\tchecker1 = f1 > random ? checker1 : floor(f1 * 2.0);\n\t\n\tfloat f2 = rand(seed2+mod(xy_offset2, size * stitch));\n\tfloat checker2 = mod(mod(xy_offset2.x + xy_offset2.y, size.x * stitch), stitch * 2.0) < stitch ? 1.0 : 0.0;\n\tchecker2 = f2 > random ? checker2 : 1.0 - floor(f2 * 2.0);\n\t\n\tfloat f3 = rand(seed2+mod(xy_offset2+vec2(0.0, 1.0), size * stitch));\n\tfloat checker3 = mod(mod(xy_offset2.x + 1.0 + xy_offset2.y, size.x * stitch), stitch * 2.0) < stitch ? 1.0 : 0.0;\n\tchecker3 = f3 > random ? checker3 : 1.0 - floor(f3 * 2.0);\n\n\tfloat mixer = clamp( (fract(uv.x*size.x*stitch+offset.x) -.5) + .5, 0.0, 1.0 );\n\tfloat mixer2 = clamp( (fract(uv.y*size.y*stitch+offset2.y) -.5) + .5, 0.0, 1.0 );\n\t\n\tvec2 bands = fract(uv * size * stitch);\n\tbands = min(bands, 1.0 - bands) * 2.0;\n\tbands = step(1.0 - width, bands);\n\t\n\tfloat h_bands = mix(checker0, checker1, smoothstep(0.0, 1.0, mixer)) * 0.5 + 0.5;\n\th_bands = min(h_bands, bands.y);\n\tfloat v_bands = mix(checker2, checker3, smoothstep(0.0, 1.0, mixer2)) * 0.5 + 0.5;\n\tv_bands = min(v_bands, bands.x);\n\t\n\treturn vec3(max(h_bands, v_bands), 1.0-step(h_bands, v_bands), 1.0-step(v_bands, h_bands));\n}\n",
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "3:",
+				"longdesc": "An input map that affects the width parameter",
+				"name": "width_map",
+				"shortdesc": "Width map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates a random weave pattern.",
+		"name": "Random Weave",
+		"outputs": [
+			{
+				"f": "$(name_uv).x",
+				"longdesc": "Shows the generated greyscale weave pattern.",
+				"shortdesc": "Output",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).y",
+				"longdesc": "Mask for horizontal stripes",
+				"shortdesc": "Horizontal Mask",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv).z",
+				"longdesc": "Mask for vertical stripes",
+				"shortdesc": "Vertical Mask",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Size X",
+				"longdesc": "The number of columns of the pattern",
+				"max": 32,
+				"min": 2,
+				"name": "scale_x",
+				"shortdesc": "Size X",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Size Y",
+				"longdesc": "The number of rows of the pattern",
+				"max": 32,
+				"min": 2,
+				"name": "scale_y",
+				"shortdesc": "Size Y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.9,
+				"label": "Width X",
+				"longdesc": "The width of each row/column",
+				"max": 1,
+				"min": 0,
+				"name": "width_x",
+				"shortdesc": "Width X",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.9,
+				"label": "Width Y",
+				"longdesc": "The width of each row/column",
+				"max": 1,
+				"min": 0,
+				"name": "width_y",
+				"shortdesc": "Width Y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Stitch",
+				"max": 10,
+				"min": 1,
+				"name": "stitch",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Random",
+				"max": 1,
+				"min": 0,
+				"name": "random",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Random Weave"
+	},
+	"type": "shader"
+}
