@@ -544,10 +544,9 @@ func update_node() -> void:
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
 	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
 	if mm_globals.config.has_section_key("path", "template"):
 		dialog.current_dir = mm_globals.config.get_value("path", "template")
@@ -579,10 +578,9 @@ func do_load_generator(file_name : String) -> void:
 
 func save_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
 	dialog.custom_minimum_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
 	if mm_globals.config.has_section_key("path", "template"):
 		dialog.current_dir = mm_globals.config.get_value("path", "template")

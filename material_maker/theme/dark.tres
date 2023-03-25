@@ -463,9 +463,9 @@ border_color = Color(0.14902, 0.14902, 0.14902, 1)
 
 [sub_resource type="StyleBoxFlat" id="59"]
 content_margin_left = 6.0
-content_margin_top = 4.0
+content_margin_top = 0.0
 content_margin_right = 6.0
-content_margin_bottom = 4.0
+content_margin_bottom = 0.0
 bg_color = Color(0.111765, 0.111765, 0.111765, 1)
 border_width_left = 1
 border_width_top = 1
@@ -475,9 +475,9 @@ border_color = Color(0.828125, 0.906524, 1, 1)
 
 [sub_resource type="StyleBoxFlat" id="61"]
 content_margin_left = 6.0
-content_margin_top = 4.0
+content_margin_top = 0.0
 content_margin_right = 6.0
-content_margin_bottom = 4.0
+content_margin_bottom = 0.0
 bg_color = Color(0.111765, 0.111765, 0.111765, 1)
 border_width_left = 1
 border_width_top = 1
@@ -487,9 +487,9 @@ border_color = Color(0.0931373, 0.0931373, 0.0931373, 1)
 
 [sub_resource type="StyleBoxFlat" id="58"]
 content_margin_left = 6.0
-content_margin_top = 4.0
+content_margin_top = 0.0
 content_margin_right = 6.0
-content_margin_bottom = 4.0
+content_margin_bottom = 0.0
 bg_color = Color(0.134118, 0.134118, 0.134118, 1)
 border_width_left = 1
 border_width_top = 1
@@ -706,7 +706,6 @@ Button/colors/font_color_hover = Color(0.872353, 0.872353, 0.872353, 1)
 Button/colors/font_color_pressed = Color(0.828125, 0.906524, 1, 1)
 Button/colors/icon_color_hover = Color(1.15, 1.15, 1.15, 1)
 Button/colors/icon_color_pressed = Color(0.952344, 1.0425, 1.15, 1)
-Button/constants/hseparation = 2
 Button/fonts/font = ExtResource("58")
 Button/styles/disabled = SubResource("65")
 Button/styles/focus = SubResource("65")
@@ -872,7 +871,6 @@ LineEdit/colors/font_color = Color(0.787255, 0.787255, 0.787255, 1)
 LineEdit/colors/font_color_selected = Color(1, 1, 1, 1)
 LineEdit/colors/read_only = Color(1, 1, 1, 0.3)
 LineEdit/colors/selection_color = Color(0.828125, 0.906524, 1, 0.4)
-LineEdit/constants/minimum_spaces = 12
 LineEdit/fonts/font = ExtResource("58")
 LineEdit/icons/clear = ExtResource("17")
 LineEdit/styles/focus = SubResource("59")

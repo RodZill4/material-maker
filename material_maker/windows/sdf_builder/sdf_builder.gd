@@ -713,4 +713,4 @@ func _input(event):
 		accept_event()
 
 func _on_VBoxContainer_minimum_size_changed():
-	custom_minimum_size = $VBoxContainer.get_minimum_size()+Vector2(4, 4)
+	min_size = $VBoxContainer.get_minimum_size()+Vector2(4, 4)

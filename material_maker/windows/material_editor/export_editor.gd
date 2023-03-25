@@ -107,9 +107,7 @@ func select_file(i : int) -> void:
 func _on_Create_Export_pressed():
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
-	var status = dialog.enter_text("Export", "Enter the export target name", "")
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await dialog.enter_text("Export", "Enter the export target name", "")
 	if status.ok and get_export_index(status.text) == -1:
 		exports[status.text] = { files=[] }
 		update_export_list()
@@ -117,20 +115,17 @@ func _on_Create_Export_pressed():
 
 func _on_Load_Export_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
 	dialog.window_title = "Load export target from file"
 	dialog.add_filter("*.mme;Material Maker Export target")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		var last_export_name : String = ""
 		for i in files.size():
-			var file : File = File.new()
-			if file.open(files[0], File.READ) != OK:
+			var file : FileAccess = FileAccess.open(files[0], FileAccess.READ)
+			if file == null:
 				return
 			var export_data = mm_loader.string_to_dict_tree(file.get_as_text())
 			if export_data.has("name") and export_data.has("files"):
@@ -143,23 +138,20 @@ func _on_Load_Export_pressed():
 
 func _on_Save_Export_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.window_title = "Save export target to file"
 	dialog.add_filter("*.mme;Material Maker Export target")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		var export_name : String = export_target.get_item_text(export_target.selected)
 		var export_data : Dictionary = exports[export_name].duplicate()
 		export_data.name = export_name
 		if data.has("template_name"):
 			export_data.material = data.template_name
-		var file : File = File.new()
-		if file.open(files[0], File.WRITE) != OK:
+		var file : FileAccess = FileAccess.open(files[0], FileAccess.WRITE)
+		if file != null:
 			return
 		file.store_string(JSON.stringify(export_data))
 
@@ -170,9 +162,7 @@ func _on_Rename_Export_pressed():
 	var old_export : String = export_target.get_item_text(old_export_index)
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
-	var status = dialog.enter_text("Export", "Enter the export target name", old_export)
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await dialog.enter_text("Export", "Enter the export target name", old_export)
 	if status.ok and get_export_index(status.text) == -1:
 		if get_export_index(status.text) != -1:
 			return
@@ -197,9 +187,7 @@ func _on_Duplicate_Export_pressed():
 	var old_export : String = export_target.get_item_text(old_export_index)
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 	add_child(dialog)
-	var status = dialog.enter_text("Export", "Enter the export target name", old_export)
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await dialog.enter_text("Export", "Enter the export target name", old_export)
 	if status.ok and get_export_index(status.text) == -1:
 		if get_export_index(status.text) != -1:
 			return
@@ -340,7 +328,7 @@ func get_model_data() -> Dictionary:
 
 
 func _on_MarginContainer_minimum_size_changed():
-	custom_minimum_size = $MarginContainer.get_minimum_size()
+	min_size = $MarginContainer.get_minimum_size()
 
 
 # OK/Apply/Cancel buttons

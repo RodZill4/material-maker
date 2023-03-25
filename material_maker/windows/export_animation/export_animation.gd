@@ -47,13 +47,11 @@ func set_source(g, o):
 	anim_code = anim_code.replace("varying float elapsed_time;", "uniform float begin;\nuniform float end;\nvarying float elapsed_time;");
 	anim_code = anim_code.replace("elapsed_time = TIME;", "elapsed_time = (begin == end) ? begin : begin+sign(end-begin)*mod(TIME, abs(end-begin));");
 	image_anim.material.shader.code = anim_code
-	for i in [ image_begin, image_anim, image_end ]:
+	for image_index in range(BUFFER_NAMES.size()):
+		var i = buffer_images[image_index]
+		var b : String = BUFFER_NAMES[image_index]
 		# Get parameter values from the shader code
-		MMGenBase.define_shader_float_parameters(i.material.shader.code, i.material)
-		# Set texture params
-		if source.has("textures"):
-			for k in source.textures.keys():
-				i.material.set_shader_parameter(k, source.textures[k])
+		i.material = mm_deps.buffer_create_shader_material(b, i.material, i.material.shader.code)
 	var begin : float = value_begin.value
 	var end : float = value_end.value
 	image_begin.material.set_shader_parameter("elapsed_time", begin)
@@ -83,9 +81,9 @@ func _on_Timer_timeout():
 
 func _on_Export_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image files")
 	add_child(dialog)
 	var files = await dialog.select_files()

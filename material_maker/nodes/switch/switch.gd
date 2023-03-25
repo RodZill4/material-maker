@@ -14,9 +14,9 @@ func update_node() -> void:
 		fixed_lines = new_fixed_lines
 		# Remove all lines
 		while get_child_count() > 0:
-			var remove_at = get_child(0)
-			remove_child(remove_at)
-			remove_at.free()
+			var remove = get_child(0)
+			remove_child(remove)
+			remove.free()
 		var lines_list = []
 		if generator.editable:
 			lines_list.push_back( { name="outputs", tooltip="Outputs count", min=1, max=5 } )
@@ -46,9 +46,9 @@ func update_node() -> void:
 	else:
 		# Keep lines with controls
 		while get_child_count() > output_count and get_child_count() > fixed_lines:
-			var remove_at = get_child(get_child_count()-1)
-			remove_child(remove_at)
-			remove_at.free()
+			var remove = get_child(get_child_count()-1)
+			remove_child(remove)
+			remove.free()
 	# Populate the GraphNode
 	var output_count : int = generator.parameters.outputs
 	var input_count : int = output_count * generator.parameters.choices

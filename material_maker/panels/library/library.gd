@@ -279,10 +279,9 @@ func _on_Libraries_id_pressed(id : int) -> void:
 #				Html5.load_file(".json")
 			else:
 				var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-				add_child(dialog)
-				dialog.custom_minimum_size = Vector2(500, 500)
+				dialog.min_size = Vector2(500, 500)
 				dialog.access = FileDialog.ACCESS_FILESYSTEM
-				dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+				dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 				dialog.add_filter("*.json;Material Maker Library")
 				var files = await dialog.select_files()
 				if files.size() == 1:

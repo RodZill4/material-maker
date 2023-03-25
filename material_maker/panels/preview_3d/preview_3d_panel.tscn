@@ -57,7 +57,7 @@ layout_mode = 2
 item_count = 2
 item_0/text = "Reset center"
 item_0/id = 0
-item_1/text = "Center checked clicked surface"
+item_1/text = "Center on clicked surface"
 item_1/id = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]

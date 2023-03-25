@@ -17,10 +17,9 @@ func _on_ViewportContainer_resized():
 
 func _on_ModelFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.obj;Wavefront OBJ file")
 	var files = await dialog.select_files()
 	if files.size() == 1:
@@ -53,10 +52,9 @@ func set_mesh(file_name : String) -> void:
 
 func _on_ProjectFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmpp;Material Maker paint project file")
 	#if mm_globals.config.has_section_key("path", "material"):
 	#	dialog.current_dir = mm_globals.config.get_value("path", "material")

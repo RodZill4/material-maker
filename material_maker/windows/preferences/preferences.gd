@@ -48,14 +48,11 @@ func _on_VBoxContainer_minimum_size_changed():
 
 func _on_InstallLanguage_pressed():
 	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.po,*.position,*.csv;Translation file")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() > 0:
 		var locale = load("res://material_maker/locale/locale.gd").new()
 		locale.install_translation(files[0])

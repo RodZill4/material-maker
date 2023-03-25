@@ -102,7 +102,6 @@ func update_thumbnails() -> void:
 	for i in range(assets.size()):
 		var m = assets[i]
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
-		print(cache_filename)
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
 			var error = $ImageHTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp")

@@ -316,7 +316,7 @@ func remove_recent(path, save = true) -> void:
 	while true:
 		var index = recent_files.find(path)
 		if index >= 0:
-			recent_files.remove(index)
+			recent_files.remove_at(index)
 		else:
 			break
 	if save:
@@ -406,9 +406,9 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		export_material("", profile)
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		dialog.custom_minimum_size = Vector2(500, 500)
+		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		var profile_name : String = profile
 		var last_profile_name_slash : int = profile_name.rfind("/")
 		if last_profile_name_slash != -1:
@@ -509,10 +509,9 @@ func load_project() -> void:
 		Html5.load_file(".ptex")
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		add_child(dialog)
-		#dialog.custom_minimum_size = Vector2(500, 500)
+		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		dialog.add_filter("*.mmpp;Model Painting File")
 		if mm_globals.config.has_section_key("path", "project"):
@@ -746,10 +745,9 @@ func edit_load_selection() -> void:
 	if graph_edit == null:
 		return
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
 	if mm_globals.config.has_section_key("path", "selection"):
 		dialog.current_dir = mm_globals.config.get_value("path", "selection")
@@ -768,10 +766,9 @@ func edit_save_selection() -> void:
 	if graph_edit == null:
 		return
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
 	if mm_globals.config.has_section_key("path", "selection"):
 		dialog.current_dir = mm_globals.config.get_value("path", "selection")
@@ -1065,10 +1062,9 @@ func generate_screenshots():
 func generate_graph_screenshot():
 	# Prompt for a target PNG file
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image file")
 	var files = await dialog.select_files()
 	if files.size() != 1:
@@ -1182,7 +1178,7 @@ func add_dialog(dialog : Window):
 	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 	add_child(background)
 	add_child(dialog)
-	dialog.connect("tree_exited",Callable(background,"queue_free"))
+	dialog.connect("tree_exited", background.queue_free)
 
 # Accept dialog
 

@@ -600,10 +600,9 @@ func save_as() -> bool:
 				top_generator.emit_signal("hierarchy_changed")
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		add_child(dialog)
-		dialog.custom_minimum_size = Vector2(500, 500)
+		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		var main_window = mm_globals.main_window
 		if mm_globals.config.has_section_key("path", "project"):

@@ -1,15 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://lys85a60larh"]
 
-[ext_resource path="res://material_maker/windows/file_dialog/file_dialog.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/file_dialog/file_dialog.gd" id="1"]
 
 [node name="FileDialog" type="FileDialog"]
-offset_right = 360.0
-offset_bottom = 130.0
-window_title = "Enregistrer un fichier"
-resizable = true
-script = ExtResource( 1 )
+initial_position = 2
+title = "Open a File"
+size = Vector2i(500, 400)
+visible = true
+ok_button_text = "Ouvrir"
+file_mode = 0
+access = 2
+script = ExtResource("1")
 
+[connection signal="canceled" from="." to="." method="_on_FileDialog_popup_hide"]
+[connection signal="close_requested" from="." to="." method="_on_FileDialog_popup_hide"]
 [connection signal="dir_selected" from="." to="." method="_on_FileDialog_dir_selected"]
 [connection signal="file_selected" from="." to="." method="_on_FileDialog_file_selected"]
 [connection signal="files_selected" from="." to="." method="_on_FileDialog_files_selected"]
-[connection signal="popup_hide" from="." to="." method="_on_FileDialog_popup_hide"]

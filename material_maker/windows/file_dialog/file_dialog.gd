@@ -10,6 +10,7 @@ const DIALOG_HACK : bool = false
 
 signal return_paths(path_list)
 
+
 func _ready() -> void:
 	if DIALOG_HACK:
 		var vbox = get_child(3)
@@ -54,6 +55,7 @@ func _on_FileDialog_popup_hide() -> void:
 
 func select_files() -> Array:
 	popup_centered()
+	mm_globals.main_window.add_dialog(self)
 	var result = await self.return_paths
 	queue_free()
 	return result

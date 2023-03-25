@@ -71,7 +71,7 @@ func update_predefined_generators()-> void:
 			file.close()
 
 func get_node_from_website(node_name : String) -> bool:
-	var node_id : String = node_name.right(8)
+	var node_id : String = node_name.right(-8)
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	var error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+node_id)

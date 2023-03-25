@@ -91,7 +91,7 @@ func update_node() -> void:
 				if current != null:
 					control.add_separator()
 					control.add_item("<update "+current+">")
-					control.add_item("<remove_at "+current+">")
+					control.add_item("<remove "+current+">")
 	size = Vector2(0, 0)
 	initialize_properties()
 
@@ -107,7 +107,7 @@ func _on_value_changed(new_value, variable : String) -> void:
 				super._on_value_changed(new_value, variable)
 				var current = control.get_item_text(new_value)
 				control.set_item_text(configuration_count+3, "<update "+current+">")
-				control.set_item_text(configuration_count+4, "<remove_at "+current+">")
+				control.set_item_text(configuration_count+4, "<remove "+current+">")
 			else:
 				var current = control.get_item_text(generator.parameters[variable])
 				var command = new_value - widget.configurations.size()

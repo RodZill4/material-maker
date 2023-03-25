@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=27 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
@@ -12,6 +12,7 @@
 [ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
 [ext_resource type="PackedScene" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
+[ext_resource type="Script" path="res://material_maker/panel_container.gd" id="12_7mn0u"]
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
 [ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
@@ -19,7 +20,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pxdnq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aharp"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -189,11 +190,13 @@ split_offset = 312
 layout_mode = 2
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="SplitRight" type="HSplitContainer" parent="VBoxContainer/Layout"]
 layout_mode = 2
@@ -213,7 +216,7 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_pxdnq")
+material = SubResource("ShaderMaterial_aharp")
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
@@ -321,11 +324,13 @@ split_offset = 312
 layout_mode = 2
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="StatusBar" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

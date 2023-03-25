@@ -96,10 +96,9 @@ func create_menu_tonemap_list(menu : PopupMenu) -> void:
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		add_child(dialog)
-		dialog.custom_minimum_size = Vector2(500, 500)
+		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 		dialog.add_filter("*.obj;OBJ model File")
 		if mm_globals.config.has_section_key("path", "mesh"):
 			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
@@ -245,10 +244,9 @@ func on_right_click():
 
 func generate_map(generate_function : String, size : int) -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image File")
 	dialog.add_filter("*.exr;EXR image File")
 	if mm_globals.config.has_section_key("path", "maps"):
