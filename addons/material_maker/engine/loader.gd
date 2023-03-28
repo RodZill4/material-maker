@@ -52,7 +52,6 @@ func get_predefined_generators_from_dir(path : String) -> void:
 										print(definition.type)
 					var node_name : String = file_name.get_basename()
 					if node_name.left(8) == "website_":
-						print(node_name.right(8))
 						node_name[7] = ":"
 					predefined_generators[node_name] = generator
 					file.close()

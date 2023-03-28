@@ -117,8 +117,6 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
-	for m in MENU:
-		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
 
 	if mm_globals.get_config("locale") == "":
