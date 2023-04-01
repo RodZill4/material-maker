@@ -42,3 +42,7 @@ vec3 hsv2rgb(vec3 c) {
 float param_rnd(float minimum, float maximum, float seed) {
 	return minimum+(maximum-minimum)*rand(vec2(seed));
 }
+
+float param_rndi(float minimum, float maximum, float seed) {
+	return round(param_rnd(minimum, maximum, seed));
+}

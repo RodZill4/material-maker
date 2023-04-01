@@ -47,16 +47,16 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
-	var parameter_uses_seed : bool = (v is String and v.find("$rnd(") != -1)
+	var parameter_uses_seed : bool = (v is String and (v.find("$rnd(") != -1 or v.find("$rndi(") != -1))
 	var uses_seed_updated : bool = false
 	if parameter_uses_seed:
 		if ! params_use_seed:
 			uses_seed_updated = true
 		params_use_seed = true
-	elif old_value is String and old_value.find("$rnd(") != -1:
+	elif old_value is String and (old_value.find("$rnd(") != -1 or old_value.find("$rndi(") != -1):
 		var new_params_use_seed : bool = false
 		for k in parameters.keys():
-			if k != n and parameters[k] is String and parameters[k].find("$rnd(") != -1:
+			if k != n and parameters[k] is String and (parameters[k].find("$rnd(") != -1 or parameters[k].find("$rndi(") != -1):
 				new_params_use_seed = true
 				break
 		if params_use_seed != new_params_use_seed:
@@ -64,7 +64,7 @@ func set_parameter(n : String, v) -> void:
 			params_use_seed = new_params_use_seed
 	.set_parameter(n, v)
 	var had_rnd : bool = false
-	if old_value is String and old_value.find("$rnd(") != -1:
+	if old_value is String and (old_value.find("$rnd(") != -1 or old_value.find("$rndi(") != -1):
 		had_rnd = true
 	var has_rnd : bool = false
 	if uses_seed_updated and is_inside_tree():
@@ -310,6 +310,20 @@ func replace_rnd(string : String, offset : int = 0) -> String:
 			string = string.replace(replace, with)
 	return string
 
+func replace_rndi(string : String, offset : int = 0) -> String:
+	while true:
+		var params = find_keyword_call(string, "rndi")
+		if params == null:
+			break
+		var replace = "$rndi(%s)" % params
+		while true:
+			var position : int = string.find(replace)
+			if position == -1:
+				break
+			var with = "param_rndi(%s, $seed+%f)" % [ params, sin(position)+offset ]
+			string = string.replace(replace, with)
+	return string
+
 func replace_variables(string : String, variables : Dictionary) -> String:
 	while true:
 		var old_string = string
@@ -368,6 +382,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	variables["node_id"] = str(get_instance_id())
 	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
+		var rndi_offset : int = 0
 		for p in shader_model_preprocessed.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -376,12 +391,15 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if p.type == "float":
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]
-				elif parameters[p.name] is String:
+				elif parameters[p.name] is String and parameters[p.name].find("$rnd(") != -1:
 					value_string = "("+replace_rnd(parameters[p.name], rnd_offset)+")"
+				elif parameters[p.name] is String and parameters[p.name].find("$rndi(") != -1:
+					value_string = "("+replace_rndi(parameters[p.name], rndi_offset)+")"
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"
 				rnd_offset += 17
+				rndi_offset += 18
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":
