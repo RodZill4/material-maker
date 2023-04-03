@@ -382,7 +382,6 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 	variables["node_id"] = str(get_instance_id())
 	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
 		var rnd_offset : int = 0
-		var rndi_offset : int = 0
 		for p in shader_model_preprocessed.parameters:
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -394,12 +393,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				elif parameters[p.name] is String and parameters[p.name].find("$rnd(") != -1:
 					value_string = "("+replace_rnd(parameters[p.name], rnd_offset)+")"
 				elif parameters[p.name] is String and parameters[p.name].find("$rndi(") != -1:
-					value_string = "("+replace_rndi(parameters[p.name], rndi_offset)+")"
+					value_string = "("+replace_rndi(parameters[p.name], rnd_offset)+")"
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"
 				rnd_offset += 17
-				rndi_offset += 18
 			elif p.type == "size":
 				value_string = "%.9f" % pow(2, value)
 			elif p.type == "enum":

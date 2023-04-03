@@ -44,5 +44,5 @@ float param_rnd(float minimum, float maximum, float seed) {
 }
 
 float param_rndi(float minimum, float maximum, float seed) {
-	return round(param_rnd(minimum, maximum, seed));
+	return floor(param_rnd(minimum, maximum + 1.0, seed));
 }
