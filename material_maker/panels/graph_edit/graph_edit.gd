@@ -28,7 +28,7 @@ const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
-@onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
+@onready var node_popup : Popup = get_node("/root/MainWindow/AddNodePopup")
 @onready var timer : Timer = $Timer
 
 @onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
@@ -125,7 +125,7 @@ func _gui_input(event) -> void:
 	):
 		# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 		# with the Ctrl + Space shortcut.
-		node_popup.global_position = get_global_mouse_position()
+		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -170,7 +170,7 @@ func _gui_input(event) -> void:
 								return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
-			node_popup.position = Vector2i(get_global_mouse_position())
+			node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 			node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -897,7 +897,7 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	if node == null:
 		return
 	# Request the popup
-	node_popup.position = get_global_mouse_position()
+	node_popup.position = get_screen_transform()*get_local_mouse_position()
 	var slot_type
 	if connect_output:
 		slot_type = mm_io_types.types[node.generator.get_input_defs()[slot_index].type].slot_type

@@ -360,10 +360,9 @@ func expand_generic() -> void:
 			outputs.append(shader_model_preprocessed.outputs[i])
 		shader_model_preprocessed.outputs = outputs
 	# Build code
-	if shader_model_preprocessed.has("code"):
-		shader_model_preprocessed.code = expand_generic_code(shader_model_preprocessed.code, first_generic_value)
-	if shader_model_preprocessed.has("instance"):
-		shader_model_preprocessed.instance = expand_generic_code(shader_model_preprocessed.instance, first_generic_value)
+	for f in [ "code", "instance" ]:
+		if shader_model_preprocessed.has(f):
+			shader_model_preprocessed[f] = expand_generic_code(shader_model_preprocessed[f], first_generic_value)
 
 func set_shader_model(data: Dictionary) -> void:
 	shader_model = data
@@ -385,12 +384,10 @@ func set_shader_model(data: Dictionary) -> void:
 				print("Unsupported output type")
 			if output_code.find("$seed") != -1 or output_code.find("$(seed)") != -1:
 				model_uses_seed = true
-	if shader_model.has("code"):
-		if shader_model.code.find("$seed") != -1 or shader_model.code.find("$(seed)") != -1:
+	for f in [ "code", "instance" ]:
+		if shader_model.has(f) and shader_model[f].find("$seed") != -1 or shader_model[f].find("$(seed)") != -1:
 			model_uses_seed = true
-	if shader_model.has("instance"):
-		if shader_model.instance.find("$seed") != -1 or shader_model.instance.find("$(seed)") != -1:
-			model_uses_seed = true
+			break
 	if get_parent() != null and get_parent().has_method("check_input_connects"):
 		get_parent().check_input_connects(self)
 	all_sources_changed()

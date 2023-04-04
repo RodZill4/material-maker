@@ -2,17 +2,16 @@ extends Button
 
 var path : String
 
-func todo_rename_set_name(name: String) -> void:
-	$HBoxContainer/HBoxContainer/Name.text = name
-
-func set_path(p: String) -> void:
-	path = p
+func set_node(node_name: String, node_path: String, node_icon: Texture2D) -> void:
+	$HBoxContainer/HBoxContainer/Name.text = node_name
+	
+	path = node_path
 	if path == "":
 		$HBoxContainer/Arrow.hide()
-		$HBoxContainer/Path3D.hide()
+		$HBoxContainer/Path.hide()
 	else:
 		$HBoxContainer/Arrow.show()
-		$HBoxContainer/Path3D.show()
+		$HBoxContainer/Path.show()
 		var slash_position = path.find("/")
 		var section : String
 		if slash_position == -1:
@@ -23,13 +22,12 @@ func set_path(p: String) -> void:
 			for i in path_elements.size():
 				path_elements[i] = String(TranslationServer.translate(path_elements[i]))
 			path = "/".join(path_elements)
-		$HBoxContainer/Path3D.text = path
+		$HBoxContainer/Path.text = path
 		var color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
 		if color != null:
-			$HBoxContainer/Path3D.add_theme_color_override("font_color", color)
-
-func set_icon(icon: Texture2D) -> void:
-	$HBoxContainer/HBoxContainer/Icon.texture = icon
+			$HBoxContainer/Path.add_theme_color_override("font_color", color)
+	
+	$HBoxContainer/HBoxContainer/Icon.texture = node_icon
 
 func _get_drag_data(_position):
 	var texture_rect : TextureRect = TextureRect.new()
