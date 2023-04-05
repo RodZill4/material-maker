@@ -86,12 +86,11 @@ func source_changed(input_index : int) -> void:
 	if parameters.has("outputs"):
 		notify_output_change(input_index % int(parameters.outputs))
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var source = get_source(output_index+parameters.source*parameters.outputs)
 	if source != null:
-		var rv = source.generator._get_shader_code(uv, source.output_index, context)
-		return rv
-	return { globals=[], defs="", code="", textures={}, type="f", f="0.0" }
+		return source.generator._get_shader_code(uv, source.output_index, context)
+	return get_default_generated_shader()
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

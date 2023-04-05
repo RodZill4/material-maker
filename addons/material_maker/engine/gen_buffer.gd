@@ -96,12 +96,12 @@ func do_update_shader() -> void:
 		return
 	updating_shader = false
 	var context : MMGenContext = MMGenContext.new()
-	var source = {}
+	var source : ShaderCode
 	var source_output = get_source(0)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-	if source.is_empty():
-		source = DEFAULT_GENERATED_SHADER
+	else:
+		source = get_default_generated_shader()
 	var shader_code = mm_renderer.generate_shader(source)
 	material = mm_deps.buffer_create_shader_material("o%d_tex" % get_instance_id(), material, shader_code)
 	mm_deps.update()
@@ -135,11 +135,11 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	mm_deps.dependency_update(buffer_name, texture, true)
 	return true
 
-func get_globals(texture_name : String) -> Array:
+func get_globals(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]
 	return [ texture_globals ]
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
 	return shader_code
 

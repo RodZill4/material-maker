@@ -460,13 +460,17 @@ func replace_input(string : String, context, input : String, type : String, src 
 		elif uv.find("$") != -1:
 			new_pass_required = true
 			break
-		var src_code
+		var src_code : Dictionary
 		if src == null:
 			src_code = subst(default, context, "(%s)" % uv)
 		else:
-			src_code = src.generator.get_shader_code(uv, src.output_index, context)
-			if src_code.has(type):
-				src_code.string = src_code[type]
+			src_code = {}
+			var src_shader : ShaderCode = src.generator.get_shader_code(uv, src.output_index, context)
+			src_code.globals = src_shader.globals
+			src_code.defs = src_shader.defs
+			src_code.code = src_shader.code
+			if src_shader.output_values.has(type):
+				src_code.string = src_shader.output_values[type]
 			else:
 				src_code.string = "*error missing "+type+"*\n"+JSON.stringify(src_code)
 		# Add global definitions
@@ -652,7 +656,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			string = replace_variables(string, variables)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code }
 
-func generate_parameter_declarations(rv : Dictionary):
+func generate_parameter_declarations(rv : ShaderCode) -> void:
 	var genname = "o"+str(get_instance_id())
 	if has_randomness():
 		rv.defs += "uniform float seed_%s = %.9f;\n" % [ genname, get_seed() ]
@@ -677,9 +681,8 @@ func generate_parameter_declarations(rv : Dictionary):
 			for sp in params.keys():
 				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
 			rv.defs += g.get_shader(genname+"_"+p.name)
-	return rv
 
-func generate_input_declarations(rv : Dictionary, context : MMGenContext):
+func generate_input_declarations(rv : ShaderCode, context : MMGenContext) -> void:
 	var genname = "o"+str(get_instance_id())
 	if shader_model_preprocessed.has("inputs"):
 		for i in range(shader_model_preprocessed.inputs.size()):
@@ -698,11 +701,10 @@ func generate_input_declarations(rv : Dictionary, context : MMGenContext):
 				rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 				rv.defs += "%s\n" % result.code
 				rv.defs += "return %s;\n}\n" % result.string
-	return rv
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
-	var rv = { globals=[], defs="", code="" }
+	var rv : ShaderCode = ShaderCode.new()
 	if shader_model_preprocessed == null:
 		return rv
 	var output = get_preprocessed_output_def(output_index)
@@ -710,9 +712,9 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		return rv
 	if !context.has_variant(self):
 		# Generate parameter declarations
-		rv = generate_parameter_declarations(rv)
+		generate_parameter_declarations(rv)
 		# Generate functions for inputs
-		rv = generate_input_declarations(rv, context)
+		generate_input_declarations(rv, context)
 		if shader_model_preprocessed.has("instance"):
 			var subst_output = subst(shader_model_preprocessed.instance, context, "")
 			rv.defs += subst_output.string
@@ -750,8 +752,8 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 				rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
 	for f in mm_io_types.types.keys():
 		if output.has(f):
-			rv[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
-	rv.type = output.type
+			rv.output_values[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+	rv.output_type = output.type
 	if shader_model_preprocessed.has("includes"):
 		for i in shader_model_preprocessed.includes:
 			var g = mm_loader.get_predefined_global(i)

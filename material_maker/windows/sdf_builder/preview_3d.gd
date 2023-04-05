@@ -38,7 +38,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		var source = g.get_shader_code("uv", o, context)
 		assert(!(source is GDScriptFunctionState))
 		if source.is_empty():
-			source = MMGenBase.DEFAULT_GENERATED_SHADER
+			source = MMGenBase.get_default_generated_shader()
 		var material = plane.get_surface_override_material(0)
 		var variables : Dictionary = {}
 		variables.GENERATED_GLOBALS = PackedStringArray(source."\n".join(globals))

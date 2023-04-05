@@ -35,12 +35,12 @@ func update_export_menu() -> void:
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func generate_preview_shader(source, template) -> String:
-	return MMGenBase.generate_preview_shader(source, source.type, template)
+	return MMGenBase.generate_preview_shader(source, source.output_type, template)
 
 func do_update_material(source, target_material : ShaderMaterial, template):
-	if ! source.has("type"):
+	if source.output_type == "":
 		return
-	is_greyscale = source.type == "f"
+	is_greyscale = source.output_type == "f"
 	# Update shader
 	var code = generate_preview_shader(source, template)
 	target_material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), target_material, code)
@@ -64,7 +64,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	need_generate = false
 	if is_instance_valid(generator) and generator.is_connected("parameter_changed",Callable(self,"on_parameter_changed")):
 		generator.disconnect("parameter_changed",Callable(self,"on_parameter_changed"))
-	var source = MMGenBase.DEFAULT_GENERATED_SHADER
+	var source = MMGenBase.get_default_generated_shader()
 	if is_instance_valid(g):
 		generator = g
 		output = o
@@ -73,8 +73,8 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		if ! gen_output_defs.is_empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			if source.is_empty():
-				source = MMGenBase.DEFAULT_GENERATED_SHADER
+			if source.output_type == "":
+				source = MMGenBase.get_default_generated_shader()
 	else:
 		generator = null
 	if get_node_or_null("ContextMenu") != null:
@@ -150,14 +150,14 @@ func _on_Export_id_pressed(id : int) -> void:
 		export_as_image_file(files[0], 64 << id)
 
 func create_image(renderer_function : String, params : Array, size : int) -> void:
-	var source = MMGenBase.DEFAULT_GENERATED_SHADER
+	var source = MMGenBase.get_default_generated_shader()
 	if generator != null:
 		var gen_output_defs = generator.get_output_defs()
 		if ! gen_output_defs.is_empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
 			if source.is_empty():
-				source = MMGenBase.DEFAULT_GENERATED_SHADER
+				source = MMGenBase.get_default_generated_shader()
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
 	tmp_material.shader = Shader.new()

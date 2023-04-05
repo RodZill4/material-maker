@@ -6,19 +6,6 @@ class_name MMGenBase
 # Base class for texture generators, that defines their API
 
 
-const MAX_SEED : int = 4294967296
-
-const BUFFERS_ALL     : int = 0
-const BUFFERS_PAUSED  : int = 1
-const BUFFERS_RUNNING : int = 2
-
-const DEFAULT_GENERATED_SHADER : Dictionary = { defs="", code="", textures={}, type="f", f="0.0" }
-
-
-signal parameter_changed(n, v)
-signal rendering_time(t)
-
-
 class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
@@ -41,6 +28,14 @@ class OutputPort:
 	func to_str() -> String:
 		return str(generator.name)+".out("+str(output_index)+")"
 
+class ShaderCode:
+	var globals : Array[String] = []
+	var defs : String = ""
+	var code : String = ""
+	var textures : Dictionary = {}
+	var output_type : String = ""
+	var output_values : Dictionary = {}
+
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
@@ -54,8 +49,26 @@ var preview : int = -1
 var minimized : bool = false
 
 
+const MAX_SEED : int = 4294967296
+
+const BUFFERS_ALL     : int = 0
+const BUFFERS_PAUSED  : int = 1
+const BUFFERS_RUNNING : int = 2
+
+
+
+signal parameter_changed(n, v)
+signal rendering_time(t)
+
+
 func _ready() -> void:
 	init_parameters()
+
+static func get_default_generated_shader() -> ShaderCode:
+	var rv : ShaderCode = ShaderCode.new()
+	rv.output_type = "f"
+	rv.output_values.f = "1.0"
+	return rv
 
 func _post_load() -> void:
 	pass
@@ -270,16 +283,16 @@ func follow_input(_input_index : int) -> Array:
 		rv.push_back(OutputPort.new(self, i))
 	return rv
 
-func get_input_shader(input_index : int) -> Dictionary:
+func get_input_shader(input_index : int) -> ShaderCode:
 	var source = get_source(input_index)
 	if source != null:
 		return source.get_shader()
-	return {}
+	return ShaderCode.new()
 
-func get_shader(output_index : int, context) -> Dictionary:
+func get_shader(output_index : int, context) -> ShaderCode:
 	return get_shader_code("UV", output_index, context)
 
-static func generate_preview_shader(src_code, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
+static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
@@ -289,14 +302,14 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 	code += "uniform vec3 mesh_aabb_size;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	if src_code.has("globals"):
-		for g in src_code.globals:
-			code += g
+	for g in src_code.globals:
+		code += g
+		code += "\n"
 	var shader_code = src_code.defs
-	if src_code.has(type):
+	if src_code.output_type != "":
 		var preview_code : String = mm_io_types.types[type].preview
 		preview_code = preview_code.replace("$(code)", src_code.code)
-		preview_code = preview_code.replace("$(value)", src_code[type])
+		preview_code = preview_code.replace("$(value)", src_code.output_values[type])
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
@@ -305,9 +318,9 @@ static func generate_preview_shader(src_code, type, main_fct = "void fragment() 
 
 func generate_output_shader(output_index : int, preview : bool = false):
 	var context : MMGenContext = MMGenContext.new()
-	var source = get_shader_code("uv", output_index, context)
-	if source.is_empty():
-		source = DEFAULT_GENERATED_SHADER
+	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	if source.output_type == "":
+		source = get_default_generated_shader()
 	var shader : String
 	var output_type = "rgba"
 	var outputs = get_output_defs(true)
@@ -335,7 +348,7 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
-func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var rv = _get_shader_code(uv, output_index, context)
 	for v in mm_renderer.get_global_parameters():
 		var variable_name : String = "mm_global_"+v
@@ -351,12 +364,12 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
 			if rv.globals.find(declaration) == -1:
 				rv.globals.push_front(declaration)
-	if rv.has("type") and mm_io_types.types.has(rv.type):
-		if mm_io_types.types[rv.type].has("convert"):
-			for c in mm_io_types.types[rv.type].convert:
-				if !rv.has(c.type):
-					var expr = c.expr.replace("$(value)", rv[rv.type])
-					rv[c.type] = expr
+	if mm_io_types.types.has(rv.output_type):
+		if mm_io_types.types[rv.output_type].has("convert"):
+			for c in mm_io_types.types[rv.output_type].convert:
+				if ! rv.output_values.has(c.type):
+					var expr = c.expr.replace("$(value)", rv.output_values[rv.output_type])
+					rv.output_values[c.type] = expr
 	else:
 		print("Missing type for node ")
 		print(rv)
@@ -365,8 +378,8 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 func get_output_attributes(output_index : int) -> Dictionary:
 	return {}
 
-func _get_shader_code(_uv, _output_index, _context) -> Dictionary:
-	return {}
+func _get_shader_code(_uv, _output_index, _context) -> ShaderCode:
+	return ShaderCode.new()
 
 
 func _serialize(data: Dictionary) -> Dictionary:

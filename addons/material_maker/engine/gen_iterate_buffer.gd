@@ -113,7 +113,7 @@ func do_update_shader(input_port_index : int) -> void:
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
 	if source.is_empty():
-		source = DEFAULT_GENERATED_SHADER
+		source = get_default_generated_shader()
 	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
 	assert(m != null && m.shader != null)
@@ -207,11 +207,11 @@ func set_current_iteration(i : int) -> void:
 	if current_iteration == 0:
 		mm_deps.buffer_invalidate(buffer_names[3])
 
-func get_globals(texture_name : String) -> Array:
+func get_globals(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
 	match output_index:
 		1:

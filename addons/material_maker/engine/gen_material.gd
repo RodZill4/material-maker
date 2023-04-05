@@ -227,7 +227,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 		custom_options_script.source_code = "extends Object\n\n"+custom_script
 		custom_options_script.reload()
 		custom_options.set_script(custom_options_script)
-	var rv = { globals=[], defs="", code="", textures={}, pending_textures=[] }
+	var rv : ShaderCode = ShaderCode.new()
 	var shader_code = ""
 	for t in preview_textures.keys():
 		mm_deps.delete_buffer(preview_textures[t].buffer)
@@ -236,9 +236,9 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	var texture_regexp : RegEx = RegEx.new()
 	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d+)\\)")
 	# Generate parameter declarations
-	rv = generate_parameter_declarations(rv)
+	generate_parameter_declarations(rv)
 	# Generate functions for inputs
-	rv = generate_input_declarations(rv, context)
+	generate_input_declarations(rv, context)
 	# Generate shader
 	var generating : bool = false
 	var gen_buffer : String = ""
@@ -298,7 +298,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 		else:
 			shader_code += l
 			shader_code += "\n"
-	return { shader_code = shader_code, texture_dependencies=rv.textures }
+	return { shader_code = shader_code }
 
 func set_3d_previews(previews : Array):
 	external_previews = previews

@@ -357,12 +357,12 @@ func get_globals() -> String:
 			globals += c.get_globals()
 	return globals
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var outputs = get_node("gen_outputs")
 	if outputs != null:
 		var rv = outputs._get_shader_code(uv, output_index, context)
 		return rv
-	return { globals=[], defs="", code="", textures={} }
+	return ShaderCode.new()
 
 
 func edit(node) -> void:

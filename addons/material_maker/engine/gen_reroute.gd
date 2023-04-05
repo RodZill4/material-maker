@@ -22,12 +22,11 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 func get_parameter_defs() -> Array:
 	return []
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var source = get_source(0)
 	if source != null:
-		var rv = source.generator._get_shader_code(uv, source.output_index, context)
-		return rv
-	return { globals=[], defs="", code="", textures={}, type="f", f="0.0" }
+		return source.generator._get_shader_code(uv, source.output_index, context)
+	return get_default_generated_shader()
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data

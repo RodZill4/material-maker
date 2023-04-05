@@ -14,12 +14,13 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 func get_adjusted_uv(uv : String) -> String:
 	return uv
 
-func get_globals(texture_name : String) -> Array:
+func get_globals(texture_name : String) -> Array[String]:
 	return [ "uniform sampler2D "+texture_name+";\n" ]
 
-func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenContext, lod : float = -1.0, texture_suffix : String = "_tex") -> Dictionary:
+func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenContext, lod : float = -1.0, texture_suffix : String = "_tex") -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
-	var rv = { globals=[], defs="", code="", type="rgba" }
+	var rv = ShaderCode.new()
+	rv.output_type = "rgba"
 	var texture_name = genname+texture_suffix
 	var variant_index = context.get_variant(self, uv)
 	if variant_index == -1:
@@ -29,10 +30,10 @@ func _get_shader_code_lod(uv : String, _output_index : int, context : MMGenConte
 		else:
 			rv.defs = "uniform float p_o%d_lod = %.09f;\n" % [ get_instance_id(), lod ]
 			rv.code = "vec4 %s_%d = textureLod(%s, %s, p_o%d_lod);\n" % [ genname, variant_index, texture_name, get_adjusted_uv(uv), get_instance_id() ]
-	rv.rgba = "%s_%d" % [ genname, variant_index ]
+	rv.output_values.rgba = "%s_%d" % [ genname, variant_index ]
 	rv.globals = get_globals(texture_name)
 	rv.textures = { texture_name:texture }
 	return rv
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	return _get_shader_code_lod(uv, output_index, context)

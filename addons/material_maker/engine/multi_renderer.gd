@@ -48,28 +48,29 @@ func get_global_parameter_declaration(n : String) -> String:
 
 # General_purpose shader functions
 
-func generate_shader(src_code : Dictionary) -> String:
+func generate_shader(src_code : MMGenBase.ShaderCode) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
 	code += "render_mode blend_disabled;\n"
 	code += common_shader
 	code += "\n"
-	if src_code.has("globals"):
-		for g in src_code.globals:
-			code += g
+	for g in src_code.globals:
+		code += g
 	var shader_code = ""
-	if src_code.has("defs"):
-		shader_code = src_code.defs
+	if src_code.defs != "":
+		shader_code += src_code.defs
+		shader_code += "\n"
 	shader_code += "\nuniform float mm_chunk_size = 1.0;\n"
 	shader_code += "\nuniform vec2 mm_chunk_offset = vec2(0.0);\n"
 	shader_code += "\nuniform float variation = 0.0;\n"
 	shader_code += "\nvoid fragment() {\n"
 	shader_code += "float _seed_variation_ = variation;\n"
 	shader_code += "vec2 uv = mm_chunk_offset+mm_chunk_size*UV;\n"
-	if src_code.has("code"):
+	if src_code.code != "":
 		shader_code += src_code.code
-	if src_code.has("rgba"):
-		shader_code += "COLOR = "+src_code.rgba+";\n"
+		shader_code += "\n"
+	if src_code.output_values.has("rgba"):
+		shader_code += "COLOR = "+src_code.output_values.rgba+";\n"
 	else:
 		shader_code += "COLOR = vec4(1.0, 0.0, 0.0, 1.0);\n"
 	shader_code += "}\n"

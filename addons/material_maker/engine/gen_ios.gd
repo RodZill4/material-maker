@@ -105,11 +105,11 @@ func all_sources_changed() -> void:
 		for i in ports.size():
 			notify_output_change(i)
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> Dictionary:
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var source = get_source(output_index)
 	if source != null:
 		return source.generator._get_shader_code(uv, source.output_index, context)
-	return DEFAULT_GENERATED_SHADER
+	return get_default_generated_shader()
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "ios"
