@@ -112,7 +112,7 @@ func do_update_shader(input_port_index : int) -> void:
 	var source_output = get_source(input_port_index)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-	if source.is_empty():
+	if source.output_type == "":
 		source = get_default_generated_shader()
 	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
