@@ -156,15 +156,15 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 		if ! gen_output_defs.is_empty():
 			var context : MMGenContext = MMGenContext.new()
 			source = generator.get_shader_code("uv", output, context)
-			if source.is_empty():
+			if source.output_type == "":
 				source = MMGenBase.get_default_generated_shader()
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
 	tmp_material.shader = Shader.new()
-	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
+	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
 	mm_deps.material_update_params(tmp_material)
 	var renderer = await mm_renderer.request(self)
-	renderer = await renderer.render_material(self, tmp_material, size, source.type != "rgba")
+	renderer = await renderer.render_material(self, tmp_material, size, source.output_type != "rgba")
 	renderer.callv(renderer_function, params)
 	renderer.release(self)
 

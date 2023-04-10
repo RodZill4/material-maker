@@ -35,9 +35,9 @@ func set_source(g, o):
 	output = o
 	var context : MMGenContext = MMGenContext.new()
 	var source = generator.get_shader_code("uv", output, context)
-	if source.is_empty():
+	if source.output_type == "":
 		source = MMGenBase.get_default_generated_shader()
-	var code = MMGenBase.generate_preview_shader(source, source.type, shader)
+	var code = MMGenBase.generate_preview_shader(source, source.output_type, shader)
 	var ends_code = code;
 	ends_code = ends_code.replace("varying float elapsed_time;", "uniform float elapsed_time;");
 	ends_code = ends_code.replace("elapsed_time = TIME;", "");

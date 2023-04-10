@@ -159,7 +159,7 @@ static func dict_tree_to_string(data : Dictionary) -> String:
 
 func load_gen(filename: String) -> MMGenBase:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
-	if file.is_open():
+	if file != null:
 		var data = string_to_dict_tree(file.get_as_text())
 		if data != null:
 			current_project_path = filename.get_base_dir()

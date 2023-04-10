@@ -299,7 +299,7 @@ func _on_gui_input(event) -> void:
 		if Rect2(0, 0, size.x-56, 16).has_point(epos):
 			var description = generator.get_description()
 			if description != "":
-				tooltip_text = wrap_string(description)
+				tooltip_text = MMGraphNodeBase.wrap_string(description)
 			elif generator.model != null:
 				tooltip_text = TranslationServer.translate(generator.model)
 			return
@@ -355,12 +355,12 @@ func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
 			mm_globals.set_tip_text("")
 			var input_def = generator.get_input_defs()[io.index]
 			if input_def.has("longdesc"):
-				return wrap_string(TranslationServer.translate(input_def.longdesc))
+				return MMGraphNodeBase.wrap_string(TranslationServer.translate(input_def.longdesc))
 		"output":
 			
 			var output_def = generator.get_output_defs()[io.index]
 			if output_def.has("longdesc"):
-				return wrap_string(TranslationServer.translate(output_def.longdesc))
+				return MMGraphNodeBase.wrap_string(TranslationServer.translate(output_def.longdesc))
 		_:
 			mm_globals.set_tip_text("")
 	return ""

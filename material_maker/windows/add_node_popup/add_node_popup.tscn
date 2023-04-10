@@ -1,11 +1,11 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=16 format=3 uid="uid://clw8sb0p8webl"]
 
-[ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/add_node_popup/quick_button.tscn" type="PackedScene" id=2]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture2D" id=3]
-[ext_resource path="res://material_maker/windows/add_node_popup/list.gd" type="Script" id=4]
+[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://rodz_labs_logo.png" id="3"]
+[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/list.gd" id="4"]
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;
 
 uniform bool disabled = false;
@@ -20,49 +20,49 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
-[sub_resource type="ShaderMaterial" id=13]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hmlvl"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=14]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mk1of"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l2y3r"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=16]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a5kdh"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=17]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aokw5"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=18]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jpk1u"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="Shader" id=19]
+[sub_resource type="Shader" id="19"]
 code = "shader_type canvas_item;
 
 uniform bool disabled = false;
@@ -77,140 +77,114 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s2hw7"]
 resource_local_to_scene = true
-shader = SubResource( 19 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("19")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=20]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnk5p"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=21]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3av7t"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
 [node name="AddNodePopup" type="Popup"]
+size = Vector2i(248, 100)
 visible = true
-offset_top = 4.0
-offset_right = 266.0
-offset_bottom = 372.0
-mouse_filter = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-offset_left = 7.0
-offset_top = 7.0
-offset_right = 259.0
-offset_bottom = 361.0
+layout_mode = 2
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-offset_right = 252.0
-offset_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 13 )
+[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_hmlvl")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Miscellaneous/Reroute"
 
-[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 14 )
-offset_left = 28.0
-offset_right = 52.0
+[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_mk1of")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Simple/Shape3D"
 
-[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 15 )
-offset_left = 56.0
-offset_right = 80.0
+[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_l2y3r")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Noise/FBM"
 
-[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 16 )
-offset_left = 85.0
-offset_right = 109.0
+[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_a5kdh")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Colorize"
 
-[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 17 )
-offset_left = 113.0
-offset_right = 137.0
+[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_aokw5")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Transform3D"
 
-[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 18 )
-offset_left = 142.0
-offset_right = 166.0
+[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_jpk1u")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Transform3D/Tiler"
 
-[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 12 )
-offset_left = 170.0
-offset_right = 194.0
+[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_s2hw7")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Blend"
 
-[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 20 )
-offset_left = 199.0
-offset_right = 223.0
+[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_xnk5p")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Math"
 
-[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 21 )
-offset_left = 227.0
-offset_right = 251.0
+[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_3av7t")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Normal map"
 
 [node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
-offset_top = 28.0
-offset_right = 252.0
-offset_bottom = 52.0
-custom_minimum_size = Vector2( 0, 20 )
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 size_flags_horizontal = 3
-clear_button_enabled = true
 placeholder_text = "Search..."
+clear_button_enabled = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
-offset_top = 56.0
-offset_right = 252.0
-offset_bottom = 354.0
+layout_mode = 2
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="List" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
-offset_right = 252.0
-offset_bottom = 298.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 0
-script = ExtResource( 4 )
+script = ExtResource("4")
 
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button1" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button2" to="." method="add_node"]

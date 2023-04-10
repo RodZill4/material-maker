@@ -138,7 +138,7 @@ func change_image(offset = 0):
 	var i = images[current_image]
 	var t = i.texture
 	m.set_shader_parameter("image", t)
-	m.set_shader_parameter("image_size", t.get_data().get_size())
+	m.set_shader_parameter("image_size", t.get_image().get_size())
 	m.set_shader_parameter("scale", i.scale)
 	m.set_shader_parameter("center", i.center)
 
