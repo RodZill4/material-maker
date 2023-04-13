@@ -6,11 +6,11 @@ signal close(apply)
 
 func ask() -> Dictionary:
 	window_title = "Custom size"
-	_on_WindowDialog_minimum_size_changed()
 	popup_centered()
+	_on_WindowDialog_minimum_size_changed()
 	var rv : Dictionary
 	if yield(self, "close"):
-		rv = { size = Vector2($VBoxContainer/GridContainer/Width.value, $VBoxContainer/GridContainer/Height.value) }
+		rv = { size = Vector2($MarginContainer/VBoxContainer/GridContainer/Width.value, $MarginContainer/VBoxContainer/GridContainer/Height.value) }
 	queue_free()
 	return rv
 
@@ -25,4 +25,4 @@ func _on_WindowDialog_popup_hide():
 
 
 func _on_WindowDialog_minimum_size_changed():
-	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+	rect_size = $MarginContainer.get_combined_minimum_size()
