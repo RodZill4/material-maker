@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
@@ -15,6 +15,9 @@
 [ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
 [ext_resource path="res://material_maker/tools/library_manager/library_manager.gd" type="Script" id=14]
 [ext_resource path="res://material_maker/icons/paste_none.tres" type="Texture" id=15]
+[ext_resource path="res://material_maker/inform_label.gd" type="Script" id=16]
+[ext_resource path="res://mml_linker/server.gd" type="Script" id=17]
+[ext_resource path="res://mml_linker/PortLineEdit.gd" type="Script" id=18]
 
 [sub_resource type="Shader" id=1]
 resource_local_to_scene = true
@@ -167,7 +170,7 @@ margin_right = 1268.0
 margin_bottom = 25.0
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 1177.0
+margin_right = 993.0
 margin_bottom = 25.0
 size_flags_horizontal = 3
 
@@ -177,6 +180,41 @@ margin_bottom = 25.0
 text = "File"
 items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 4, 268435539, null, "", false, "Save material as...", null, 0, false, false, 5, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 8, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 10, 0, null, "", false, "Quit", null, 0, false, false, 11, 268435537, null, "", false ]
 switch_on_hover = true
+
+[node name="Server" type="HBoxContainer" parent="VBoxContainer/TopBar"]
+margin_left = 997.0
+margin_right = 1177.0
+margin_bottom = 25.0
+script = ExtResource( 17 )
+
+[node name="ServerStartCheckBox" type="CheckBox" parent="VBoxContainer/TopBar/Server"]
+margin_right = 71.0
+margin_bottom = 25.0
+text = "Server"
+
+[node name="PortLabel" type="Label" parent="VBoxContainer/TopBar/Server"]
+margin_left = 75.0
+margin_right = 116.0
+margin_bottom = 25.0
+text = "Port:"
+align = 2
+
+[node name="PortLineEdit" type="LineEdit" parent="VBoxContainer/TopBar/Server"]
+margin_left = 120.0
+margin_right = 180.0
+margin_bottom = 25.0
+text = "6001"
+placeholder_text = "Port"
+script = ExtResource( 18 )
+
+[node name="InformLabel" type="Label" parent="VBoxContainer/TopBar/Server"]
+visible = false
+margin_left = 184.0
+margin_right = 560.0
+margin_bottom = 25.0
+text = "The quick brown fox jumps over the lazy dog"
+clip_text = true
+script = ExtResource( 16 )
 
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
 margin_left = 1181.0
@@ -453,6 +491,9 @@ __meta__ = {
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UndoRedoLabel"]
 anims/show = SubResource( 7 )
 
+[connection signal="toggled" from="VBoxContainer/TopBar/Server/ServerStartCheckBox" to="VBoxContainer/TopBar/Server" method="toggle"]
+[connection signal="text_entered" from="VBoxContainer/TopBar/Server/PortLineEdit" to="VBoxContainer/TopBar/Server/PortLineEdit" method="_on_PortLineEdit_text_entered"]
+[connection signal="valid_port_entered" from="VBoxContainer/TopBar/Server/PortLineEdit" to="VBoxContainer/TopBar/Server" method="set_port"]
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Layout_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]

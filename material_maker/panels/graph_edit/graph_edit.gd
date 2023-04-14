@@ -536,12 +536,12 @@ func find_buffers(g) -> int:
 		rv += find_buffers(c)
 	return rv
 
-func load_file(filename) -> bool:
+func load_file(filename, try_to_rescue : bool = true) -> bool:
 	var rescued = false
 	var new_generator = null
 	var file = File.new()
 	var recovery_path = filename+".mmcr"
-	if filename != null and file.file_exists(recovery_path):
+	if filename != null and file.file_exists(recovery_path) and try_to_rescue:
 		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
 		dialog.dialog_text = "Rescue file for "+filename.get_file()+" was found.\nLoad it?"
 		dialog.get_ok().text = "Rescue"

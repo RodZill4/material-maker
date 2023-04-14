@@ -144,6 +144,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://material_maker/nodes/remote/remote.gd"
 }, {
+"base": "Node",
+"class": "MMLProjectContainer",
+"language": "GDScript",
+"path": "res://mml_linker/ProjectContainer.gd"
+}, {
+"base": "Control",
+"class": "MMLServer",
+"language": "GDScript",
+"path": "res://mml_linker/server.gd"
+}, {
 "base": "Control",
 "class": "MMNodeLink",
 "language": "GDScript",
@@ -202,6 +212,8 @@ _global_script_class_icons={
 "MMGraphNodeGeneric": "",
 "MMGraphNodeMinimal": "",
 "MMGraphNodeRemote": "",
+"MMLProjectContainer": "",
+"MMLServer": "",
 "MMNodeLink": "",
 "MMPaths": "",
 "MMPolygon": "",
@@ -317,6 +329,7 @@ limits/message_queue/max_size_kb=16384
 [network]
 
 limits/debugger_stdout/max_chars_per_second=204800000
+limits/websocket_server/max_out_buffer_kb=4700
 
 [rendering]
 
