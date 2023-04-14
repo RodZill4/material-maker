@@ -1,9 +1,121 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/fonts/vegur_regular.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://material_maker/icons/godot_logo.svg" type="Texture" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://material_maker/loading_screen/tile01.png" type="Texture" id=5]
+[ext_resource path="res://material_maker/loading_screen/tile04.png" type="Texture" id=6]
+[ext_resource path="res://material_maker/loading_screen/tile03.png" type="Texture" id=7]
+[ext_resource path="res://material_maker/loading_screen/tile02.png" type="Texture" id=8]
+[ext_resource path="res://material_maker/loading_screen/tile06.png" type="Texture" id=9]
+[ext_resource path="res://material_maker/loading_screen/tile05.png" type="Texture" id=10]
+[ext_resource path="res://material_maker/loading_screen/tile07.png" type="Texture" id=11]
+[ext_resource path="res://material_maker/loading_screen/tile08.png" type="Texture" id=12]
+[ext_resource path="res://material_maker/loading_screen/tile12.png" type="Texture" id=13]
+[ext_resource path="res://material_maker/loading_screen/tile14.png" type="Texture" id=14]
+[ext_resource path="res://material_maker/loading_screen/tile15.png" type="Texture" id=15]
+[ext_resource path="res://material_maker/loading_screen/tile11.png" type="Texture" id=16]
+[ext_resource path="res://material_maker/loading_screen/tile10.png" type="Texture" id=17]
+[ext_resource path="res://material_maker/loading_screen/tile09.png" type="Texture" id=18]
+[ext_resource path="res://material_maker/loading_screen/tile13.png" type="Texture" id=19]
+[ext_resource path="res://material_maker/loading_screen/tile16.png" type="Texture" id=20]
+[ext_resource path="res://material_maker/loading_screen/tile19.png" type="Texture" id=21]
+[ext_resource path="res://material_maker/loading_screen/tile18.png" type="Texture" id=22]
+[ext_resource path="res://material_maker/loading_screen/tile20.png" type="Texture" id=23]
+[ext_resource path="res://material_maker/loading_screen/tile17.png" type="Texture" id=24]
+[ext_resource path="res://material_maker/loading_screen/tile24.png" type="Texture" id=25]
+[ext_resource path="res://material_maker/loading_screen/tile22.png" type="Texture" id=26]
+[ext_resource path="res://material_maker/loading_screen/tile21.png" type="Texture" id=27]
+[ext_resource path="res://material_maker/loading_screen/tile23.png" type="Texture" id=28]
+
+[sub_resource type="GDScript" id=7]
+script/source = "tool
+extends Control
+
+export var textures : Array = []
+export var count_x : int = 5 setget set_count_x
+export var count_y : int = 5 setget set_count_y
+export var step_x : int = 5 setget set_step_x
+export var step_y : int = 5 setget set_step_y
+export var empty_space : int = 5 setget set_empty_space
+
+func set_count_x(v : int):
+	count_x = v
+	rebuild()
+
+func set_count_y(v : int):
+	count_y = v
+	rebuild()
+
+func set_step_x(v : int):
+	step_x = v
+	rebuild()
+
+func set_step_y(v : int):
+	step_y = v
+	rebuild()
+
+func set_empty_space(v : int):
+	empty_space = v
+	rebuild()
+
+func rebuild():
+	if !is_inside_tree():
+		return
+	for c in get_children():
+		if c != $Tile:
+			remove_child(c)
+			c.free()
+	var texture_count = textures.size()
+	print(texture_count)
+	var reorder : Array = range(texture_count)
+	for i in texture_count-1:
+		var pi : int = randi() % (texture_count - i)
+		var tmp = reorder[pi]
+		reorder[pi] = reorder[texture_count - i - 1]
+		reorder[texture_count - i - 1] = tmp
+		print(reorder)
+	var texture_index = 0
+	$Tile.texture = textures[reorder[texture_index]]
+	for x in count_x:
+		for y in count_y:
+			if x == 0 and y == 0:
+				continue
+			var pos = $Tile.rect_position+Vector2(x*step_x, y*step_y+(x&1)*(step_y>>1))
+			var center = pos+0.5*$Tile.rect_size
+			if abs(center.x-0.5*rect_size.x) < empty_space:
+				continue
+			texture_index += 1
+			if texture_index >= textures.size():
+				texture_index = 0
+			var t : TextureRect = $Tile.duplicate()
+			t.texture = textures[reorder[texture_index]]
+			t.rect_position += Vector2(x*step_x, y*step_y+(x&1)*(step_y>>1))
+			add_child(t)
+	print(get_children().size())
+
+func _on_Background_resized():
+	rebuild()
+"
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+void fragment() {
+	const vec3 k = vec3(-0.866025404, 0.5, 0.577350269);
+	const float r = 0.41;
+	vec2 p = abs(UV-0.5)*vec2(1.0, 0.866025404);
+	p -= 2.0*min(dot(k.xy,p),0.0)*k.xy;
+	p -= vec2(clamp(p.x, -k.z*r, k.z*r), r);
+	float hex = clamp(1.0-50.0*length(p)*sign(p.y), 0.0, 1.0);
+	COLOR = vec4(texture(TEXTURE, UV).rgb, hex);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 72
@@ -40,6 +152,29 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Background" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -23, 13 )
+script = SubResource( 7 )
+textures = [ ExtResource( 5 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 16 ), ExtResource( 13 ), ExtResource( 19 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 20 ), ExtResource( 24 ), ExtResource( 22 ), ExtResource( 21 ), ExtResource( 23 ), ExtResource( 27 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 25 ) ]
+count_x = 11
+count_y = 6
+step_x = 122
+step_y = 142
+empty_space = 300
+
+[node name="Tile" type="TextureRect" parent="Background"]
+material = SubResource( 9 )
+margin_left = -156.0
+margin_top = -252.0
+margin_right = 164.0
+margin_bottom = 26.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 212, 330 )
+texture = ExtResource( 9 )
+stretch_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
@@ -101,23 +236,23 @@ percent_visible = false
 
 [node name="Space3" type="Control" parent="VBoxContainer"]
 margin_top = 477.0
-margin_bottom = 551.0
+margin_bottom = 542.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
-margin_top = 555.0
+margin_top = 546.0
 margin_right = 442.0
-margin_bottom = 569.0
+margin_bottom = 560.0
 text = "Powered by"
 align = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 margin_left = 127.0
-margin_top = 573.0
+margin_top = 564.0
 margin_right = 314.0
-margin_bottom = 642.0
+margin_bottom = 633.0
 size_flags_horizontal = 4
 texture = ExtResource( 3 )
 __meta__ = {
@@ -125,11 +260,17 @@ __meta__ = {
 }
 
 [node name="Space4" type="Control" parent="VBoxContainer"]
-margin_top = 646.0
-margin_bottom = 720.0
+margin_top = 637.0
+margin_bottom = 702.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
+
+[node name="Patreon" type="Label" parent="VBoxContainer"]
+margin_top = 706.0
+margin_right = 442.0
+margin_bottom = 720.0
+align = 1
 
 [node name="ErrorPanel" type="Panel" parent="."]
 visible = false
@@ -153,3 +294,5 @@ margin_right = -10.0
 margin_bottom = -10.0
 align = 1
 valign = 1
+
+[connection signal="resized" from="Background" to="Background" method="_on_Background_resized"]
