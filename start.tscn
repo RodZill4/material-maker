@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://start.gd" type="Script" id=1]
 [ext_resource path="res://material_maker/fonts/vegur_regular.otf" type="DynamicFontData" id=2]
@@ -28,6 +28,18 @@
 [ext_resource path="res://material_maker/loading_screen/tile22.png" type="Texture" id=26]
 [ext_resource path="res://material_maker/loading_screen/tile21.png" type="Texture" id=27]
 [ext_resource path="res://material_maker/loading_screen/tile23.png" type="Texture" id=28]
+[ext_resource path="res://material_maker/loading_screen/tile28.png" type="Texture" id=29]
+[ext_resource path="res://material_maker/loading_screen/tile29.png" type="Texture" id=30]
+[ext_resource path="res://material_maker/loading_screen/tile33.png" type="Texture" id=31]
+[ext_resource path="res://material_maker/loading_screen/tile34.png" type="Texture" id=32]
+[ext_resource path="res://material_maker/loading_screen/tile35.png" type="Texture" id=33]
+[ext_resource path="res://material_maker/loading_screen/tile36.png" type="Texture" id=34]
+[ext_resource path="res://material_maker/loading_screen/tile30.png" type="Texture" id=35]
+[ext_resource path="res://material_maker/loading_screen/tile31.png" type="Texture" id=36]
+[ext_resource path="res://material_maker/loading_screen/tile27.png" type="Texture" id=37]
+[ext_resource path="res://material_maker/loading_screen/tile32.png" type="Texture" id=38]
+[ext_resource path="res://material_maker/loading_screen/tile25.png" type="Texture" id=39]
+[ext_resource path="res://material_maker/loading_screen/tile26.png" type="Texture" id=40]
 
 [sub_resource type="GDScript" id=7]
 script/source = "tool
@@ -68,14 +80,15 @@ func rebuild():
 			remove_child(c)
 			c.free()
 	var texture_count = textures.size()
-	print(texture_count)
+	seed(OS.get_ticks_usec())
 	var reorder : Array = range(texture_count)
 	for i in texture_count-1:
+		var last : int = texture_count - i - 1
 		var pi : int = randi() % (texture_count - i)
-		var tmp = reorder[pi]
-		reorder[pi] = reorder[texture_count - i - 1]
-		reorder[texture_count - i - 1] = tmp
-		print(reorder)
+		if pi != last:
+			var tmp = reorder[pi]
+			reorder[pi] = reorder[last]
+			reorder[last] = tmp
 	var texture_index = 0
 	$Tile.texture = textures[reorder[texture_index]]
 	for x in count_x:
@@ -93,7 +106,8 @@ func rebuild():
 			t.texture = textures[reorder[texture_index]]
 			t.rect_position += Vector2(x*step_x, y*step_y+(x&1)*(step_y>>1))
 			add_child(t)
-	print(get_children().size())
+	if get_child_count() > texture_count:
+		print(\"WARNING: More textures are needed for the loading screen\")
 
 func _on_Background_resized():
 	rebuild()
@@ -158,7 +172,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( -23, 13 )
 script = SubResource( 7 )
-textures = [ ExtResource( 5 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 16 ), ExtResource( 13 ), ExtResource( 19 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 20 ), ExtResource( 24 ), ExtResource( 22 ), ExtResource( 21 ), ExtResource( 23 ), ExtResource( 27 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 25 ) ]
+textures = [ ExtResource( 5 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 6 ), ExtResource( 10 ), ExtResource( 9 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 18 ), ExtResource( 17 ), ExtResource( 16 ), ExtResource( 13 ), ExtResource( 19 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 20 ), ExtResource( 24 ), ExtResource( 22 ), ExtResource( 21 ), ExtResource( 23 ), ExtResource( 27 ), ExtResource( 26 ), ExtResource( 28 ), ExtResource( 25 ), ExtResource( 39 ), ExtResource( 40 ), ExtResource( 37 ), ExtResource( 29 ), ExtResource( 30 ), ExtResource( 35 ), ExtResource( 36 ), ExtResource( 38 ), ExtResource( 31 ), ExtResource( 32 ), ExtResource( 33 ), ExtResource( 34 ) ]
 count_x = 11
 count_y = 6
 step_x = 122
@@ -173,7 +187,7 @@ margin_right = 164.0
 margin_bottom = 26.0
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 212, 330 )
-texture = ExtResource( 9 )
+texture = ExtResource( 34 )
 stretch_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
