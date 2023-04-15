@@ -52,6 +52,7 @@ func _ready() -> void:
 
 func _exit_tree():
 	save_config()
+	remove_crash_recovery_file()
 
 func load_config():
 	if mm_globals.has_config("graphedit_use_snap"):
