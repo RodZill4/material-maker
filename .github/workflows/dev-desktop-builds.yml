@@ -30,15 +30,16 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
+          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
           unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
           # chown root:root -R ~
-          wget https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
+          wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
           mv rcedit-x64.exe ~/.local/share/rcedit
           ls -la
           ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
+          ls -la ~/.config/godot
           echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-3.tres
           echo 'export/windows/rcedit = "/github/home/.local/share/rcedit/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
@@ -136,7 +137,7 @@ jobs:
           mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
       - name: Download Godot headless binary 🤖
         run: |
-          wget https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
+          wget -q https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
           unzip -a Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
       - name: Setup 💻
         run: mkdir -v -p ./build/mac
