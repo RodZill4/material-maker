@@ -72,6 +72,18 @@ func set_empty_space(v : int):
 	empty_space = v
 	rebuild()
 
+static func permutations(a : Array, s : int = -1):
+	var size : int = a.size()
+	if s < 0:
+		s = size-1
+	for i in s:
+		var pi : int = i+(randi() % (size - i))
+		if pi != i:
+			var tmp = a[pi]
+			a[pi] = a[i]
+			a[i] = tmp
+	return a
+
 func rebuild():
 	if !is_inside_tree():
 		return
@@ -81,14 +93,7 @@ func rebuild():
 			c.free()
 	var texture_count = textures.size()
 	seed(OS.get_ticks_usec())
-	var reorder : Array = range(texture_count)
-	for i in texture_count-1:
-		var last : int = texture_count - i - 1
-		var pi : int = randi() % (texture_count - i)
-		if pi != last:
-			var tmp = reorder[pi]
-			reorder[pi] = reorder[last]
-			reorder[last] = tmp
+	var reorder : Array = permutations(range(texture_count))
 	var texture_index = 0
 	$Tile.texture = textures[reorder[texture_index]]
 	for x in count_x:
@@ -119,7 +124,7 @@ render_mode blend_mix;
 
 void fragment() {
 	const vec3 k = vec3(-0.866025404, 0.5, 0.577350269);
-	const float r = 0.41;
+	float r = 0.4;
 	vec2 p = abs(UV-0.5)*vec2(1.0, 0.866025404);
 	p -= 2.0*min(dot(k.xy,p),0.0)*k.xy;
 	p -= vec2(clamp(p.x, -k.z*r, k.z*r), r);
@@ -163,9 +168,6 @@ border_color = Color( 1, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Background" type="Control" parent="."]
 anchor_right = 1.0
@@ -187,19 +189,16 @@ margin_right = 164.0
 margin_bottom = 26.0
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 212, 330 )
-texture = ExtResource( 34 )
+texture = ExtResource( 15 )
 stretch_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -221.0
-margin_right = 221.0
+margin_left = -275.0
+margin_right = 275.0
 alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Space1" type="Control" parent="VBoxContainer"]
 margin_bottom = 40.0
@@ -208,9 +207,9 @@ size_flags_horizontal = 0
 size_flags_stretch_ratio = 2.0
 
 [node name="Icon" type="TextureRect" parent="VBoxContainer"]
-margin_left = 93.0
+margin_left = 147.0
 margin_top = 44.0
-margin_right = 349.0
+margin_right = 403.0
 margin_bottom = 300.0
 size_flags_horizontal = 4
 texture = ExtResource( 4 )
@@ -225,7 +224,7 @@ size_flags_stretch_ratio = 2.0
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 margin_top = 348.0
-margin_right = 442.0
+margin_right = 550.0
 margin_bottom = 435.0
 custom_fonts/font = SubResource( 3 )
 text = "Material Maker"
@@ -233,14 +232,14 @@ align = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 margin_top = 439.0
-margin_right = 442.0
+margin_right = 550.0
 margin_bottom = 453.0
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
-margin_left = 96.0
+margin_left = 150.0
 margin_top = 457.0
-margin_right = 346.0
+margin_right = 400.0
 margin_bottom = 473.0
 rect_min_size = Vector2( 250, 16 )
 size_flags_horizontal = 4
@@ -250,23 +249,23 @@ percent_visible = false
 
 [node name="Space3" type="Control" parent="VBoxContainer"]
 margin_top = 477.0
-margin_bottom = 542.0
+margin_bottom = 524.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
-margin_top = 546.0
-margin_right = 442.0
-margin_bottom = 560.0
+margin_top = 528.0
+margin_right = 550.0
+margin_bottom = 542.0
 text = "Powered by"
 align = 1
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-margin_left = 127.0
-margin_top = 564.0
-margin_right = 314.0
-margin_bottom = 633.0
+margin_left = 181.0
+margin_top = 546.0
+margin_right = 368.0
+margin_bottom = 615.0
 size_flags_horizontal = 4
 texture = ExtResource( 3 )
 __meta__ = {
@@ -274,17 +273,22 @@ __meta__ = {
 }
 
 [node name="Space4" type="Control" parent="VBoxContainer"]
-margin_top = 637.0
-margin_bottom = 702.0
+margin_top = 619.0
+margin_bottom = 666.0
 size_flags_horizontal = 0
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="Patreon" type="Label" parent="VBoxContainer"]
-margin_top = 706.0
-margin_right = 442.0
+margin_top = 670.0
+margin_right = 550.0
 margin_bottom = 720.0
+rect_min_size = Vector2( 550, 50 )
+mouse_filter = 0
+size_flags_horizontal = 5
 align = 1
+valign = 2
+autowrap = true
 
 [node name="ErrorPanel" type="Panel" parent="."]
 visible = false
@@ -310,3 +314,4 @@ align = 1
 valign = 1
 
 [connection signal="resized" from="Background" to="Background" method="_on_Background_resized"]
+[connection signal="gui_input" from="VBoxContainer/Patreon" to="." method="_on_Patreon_gui_input"]
