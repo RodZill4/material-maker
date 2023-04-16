@@ -73,10 +73,8 @@ func _ready():
 	else:
 		resource_path = "res://demo/demo.tscn"
 	
-	for i in 10:
-		var patrons = $Background.permutations(preload("res://material_maker/windows/about/about.gd").PATRONS, 3)
-		print(patrons)
-		$VBoxContainer/Patreon.text = "Join %s, %s and %s in supporting this project on Patreon and help us continue to improve our software." % [patrons[0], patrons[1], patrons[2]]
+	var patrons = $Background.permutations(preload("res://material_maker/windows/about/about.gd").PATRONS, 3)
+	$VBoxContainer/Patreon.text = "Join %s, %s and %s in supporting this project on Patreon and help us continue to improve our software." % [patrons[0], patrons[1], patrons[2]]
 	
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
