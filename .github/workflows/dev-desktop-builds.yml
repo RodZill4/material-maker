@@ -39,6 +39,7 @@ jobs:
           mv rcedit-x64.exe ~/.local/share/rcedit
           ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
           mkdir -p ~/.config/godot
+          pwd
           echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-3.tres
           echo 'export/windows/rcedit = "/github/home/.local/share/rcedit/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
