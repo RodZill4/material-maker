@@ -62,6 +62,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
 
+	if mm_globals.config.has_section_key("path", "mesh"):
+		do_load_custom_mesh(mm_globals.config.get_value("path", "mesh"))
+
 func update_menu():
 	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 
@@ -100,7 +103,7 @@ func _on_Model_item_selected(id) -> void:
 		for f in MMMeshLoader.get_file_dialog_filters():
 			dialog.add_filter(f)
 		if mm_globals.config.has_section_key("path", "mesh"):
-			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
+			dialog.current_dir = mm_globals.config.get_value("path", "mesh").get_base_dir()
 		var files = await dialog.select_files()
 		if files.size() == 1:
 			do_load_custom_mesh(files[0])
@@ -108,11 +111,11 @@ func _on_Model_item_selected(id) -> void:
 		select_object(id)
 
 func do_load_custom_mesh(file_path) -> void:
-	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	var mesh : Mesh = null
 	mesh = MMMeshLoader.load_mesh(file_path)
 	if mesh != null:
+		mm_globals.config.set_value("path", "mesh", file_path)
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
 		mm_globals.main_window.set_current_mesh(mesh)
