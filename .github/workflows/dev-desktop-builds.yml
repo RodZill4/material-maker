@@ -37,7 +37,8 @@ jobs:
           wget https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
           mv rcedit-x64.exe ~/.local/share/rcedit
-          Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
+          ls -la
+          ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
           echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-3.tres
           echo 'export/windows/rcedit = "/github/home/.local/share/rcedit/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
@@ -46,9 +47,9 @@ jobs:
         with:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
-        run: Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
-        run: Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
