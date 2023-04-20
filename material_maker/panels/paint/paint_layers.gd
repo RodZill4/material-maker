@@ -122,6 +122,7 @@ func select_layer(layer : Layer) -> void:
 			if old_texture != null:
 				new_texture.create_from_image(old_texture.get_data())
 			selected_layer.set(c, new_texture)
+	selected_layer = layer
 	if layer != null:
 		for c in layer.get_channels():
 			if layer.get(c) != null:
@@ -130,7 +131,6 @@ func select_layer(layer : Layer) -> void:
 				painter_node.call("init_"+c+"_texture")
 			layer.set(c, painter_node.call("get_"+c+"_texture"))
 		emit_signal("layer_selected", layer)
-	selected_layer = layer
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
