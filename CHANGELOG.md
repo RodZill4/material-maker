@@ -1,3 +1,10 @@
+# Material Maker 1.3
+
+- Updated interface to the website to login and upload assets without the need
+  of a web browser
+- Added custom nodes sharing on the website (connect to the website and right
+  click a custom node to share it)
+
 # Material Maker 1.2p1
 
 # New features
