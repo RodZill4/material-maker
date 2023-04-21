@@ -17,6 +17,7 @@ var current_iteration : int = 0
 var current_renderer = null
 
 var buffer_names : Array
+var iteration_param_name : String
 var used_named_parameters : Array = []
 var pending_textures = [[], []]
 
@@ -34,6 +35,7 @@ func _init():
 		"o%d_loop_tex" % get_instance_id(),
 		"o%d_tex" % get_instance_id()
 	]
+	iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.create_buffer(buffer_names[3], self)
 	mm_deps.create_buffer(buffer_names[0], self)
 	mm_deps.create_buffer(buffer_names[1], self)
@@ -126,7 +128,7 @@ func set_parameter(n : String, v) -> void:
 	set_current_iteration(0)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	if parameter_name != "o%d_loop_tex" % get_instance_id() and parameter_name != "o%d_iteration" % get_instance_id():
+	if parameter_name != buffer_names[2] and parameter_name != iteration_param_name and (buffer_name != buffer_names[1] or ! value is Texture):
 		set_current_iteration(0)
 	if value != null:
 		if buffer_name == buffer_names[0]:
@@ -207,7 +209,6 @@ func set_current_iteration(i : int) -> void:
 	if i == current_iteration:
 		return
 	current_iteration = i
-	var iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.dependency_update(iteration_param_name, current_iteration, true)
 	if current_iteration == 0:
 		mm_deps.buffer_invalidate(buffer_names[3])
@@ -232,7 +233,7 @@ func get_output_attributes(output_index : int) -> Dictionary:
 		1:
 			attributes.texture = "o%d_loop_tex" % get_instance_id()
 			attributes.texture_size = "o%d_tex_size" % get_instance_id()
-			attributes.iteration = "o%d_iteration" % get_instance_id()
+			attributes.iteration = iteration_param_name
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:

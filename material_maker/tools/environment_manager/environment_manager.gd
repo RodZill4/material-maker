@@ -184,13 +184,14 @@ func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 
 func set_hdr(index, hdr_path) -> bool:
-	print("Setting hdr "+hdr_path)
-	var hdr : Texture = load(hdr_path)
-	if hdr == null:
-		hdr = ImageTexture.new()
-		if hdr.load(hdr_path) != OK:
-			return false
+	var hdr_image : Image = Image.new()
+	if hdr_image.load(hdr_path) != OK:
+		return false
+	var hdr : ImageTexture = ImageTexture.new()
+	hdr.storage = ImageTexture.STORAGE_COMPRESS_LOSSLESS
+	hdr.create_from_image(hdr_image)
 	environment_textures[index].hdri = hdr
+	print(hdr.storage)
 	return true
 
 func new_environment(index : int) -> void:

@@ -154,11 +154,11 @@
 						"value": "sign($in1($uv))"
 					},
 					{
-						"name": "mod(A,B)",
+						"name": "mod(A, B)",
 						"value": "mod($in1($uv), $in2($uv))"
 					},
 					{
-						"name": "atan2(A,B)",
+						"name": "atan2(A, B)",
 						"value": "atan($in1($uv),$in2($uv))"
 					},
 					{
@@ -190,7 +190,7 @@
 						"value": "exp($in1($uv))"
 					},
 					{
-						"name": "snap(A,B)",
+						"name": "snap(A, B)",
 						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
 					}
 				]

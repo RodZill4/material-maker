@@ -44,19 +44,24 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = true
 	return self
 
-func render_material(object : Object, material : Material, render_size : int, with_hdr : bool = true) -> Object:
+func render_material(object : Object, material : Material, render_size, with_hdr : bool = true) -> Object:
 	assert(render_owner == object, "Invalid renderer use")
-	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
-		render_size = mm_renderer.max_buffer_size
 	var chunk_count : int = 1
 	var render_scale : float = 1.0
-	var max_viewport_size : int = mm_renderer.max_viewport_size
-	if render_size <= max_viewport_size:
-		size = Vector2(render_size, render_size)
+	if render_size is int or render_size is float:
+		if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
+			render_size = mm_renderer.max_buffer_size
+		var max_viewport_size : int = mm_renderer.max_viewport_size
+		if render_size <= max_viewport_size:
+			size = Vector2(render_size, render_size)
+		else:
+			chunk_count = render_size/max_viewport_size
+			render_scale = float(max_viewport_size)/float(render_size)
+			size = Vector2(max_viewport_size, max_viewport_size)
+	elif render_size is Vector2:
+		size = render_size
 	else:
-		chunk_count = render_size/max_viewport_size
-		render_scale = float(max_viewport_size)/float(render_size)
-		size = Vector2(max_viewport_size, max_viewport_size)
+		return null
 	$ColorRect.rect_position = Vector2(0, 0)
 	$ColorRect.rect_size = size
 	$ColorRect.material = material

@@ -72,10 +72,13 @@ func _ready():
 			resource_path = "res://material_maker/main_window.tscn"
 	else:
 		resource_path = "res://demo/demo.tscn"
-
+	
+	var patrons = $Background.permutations(preload("res://material_maker/windows/about/about.gd").PATRONS, 3)
+	$VBoxContainer/Patreon.text = "Join %s, %s and %s in supporting this project on Patreon and help us continue to improve our software." % [patrons[0], patrons[1], patrons[2]]
+	
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
-
+	
 	loader = ResourceLoader.load_interactive(resource_path)
 	if loader != null: # check for errors
 		set_process(true)
@@ -144,3 +147,8 @@ func show_error(message : String):
 	print(message)
 	$ErrorPanel.show()
 	$ErrorPanel/Label.text = message
+
+
+func _on_Patreon_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		OS.shell_open("https://www.patreon.com/rodzlabs")

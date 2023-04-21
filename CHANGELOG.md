@@ -1,9 +1,17 @@
+# Material Maker 1.3
+
+- Updated interface to the website to login and upload assets without the need
+  of a web browser
+- Added custom nodes sharing on the website (connect to the website and right
+  click a custom node to share it)
+
 # Material Maker 1.2p1
 
 # New features
 
 - Added Unreal Engine 5 export targets that generate a Python script for UE5 to
-  build automatically the generated material
+  build automatically the generated material (it's necessary to setup a path for
+  Python in UE, this is described in the documentation)
 
 # Bug Fixes
 
@@ -12,6 +20,8 @@
 - Fixed a problem in the Tones Map node that could cause incorrect shader code generation
 - Fixed a problem in the animation export tool that occurred when exporting graphs with buffers
 - Fixed Histogram panel (not updating correctly) and improved histogram rendering
+- Updated the Math nodes to improve parameters consistency (contributed by williamchange)
+- Fixed a bug that caused Material Maker to crash when entering an expression as parameter in the Text node
 
 # Material Maker 1.2
 

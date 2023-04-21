@@ -1,5 +1,6 @@
 extends VBoxContainer
 
+
 export var library_manager_name = ""
 
 var expanded_items : Array = []
@@ -9,6 +10,7 @@ onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
 var category_buttons = {}
 
 onready var tree : Tree = $Tree
+onready var libraries_button : MenuButton = $HBoxContainer/Libraries
 onready var filter_line_edit : LineEdit = $Filter/Filter
 onready var item_menu : PopupMenu = $ItemMenu
 #onready var dir_menu : PopupMenu = $DirMenu
@@ -35,7 +37,7 @@ func _ready() -> void:
 		category_buttons[s] = button
 		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
 		button.connect("gui_input", self, "_on_Section_Button_event", [ s ])
-	$Libraries.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
+	libraries_button.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
 	init_expanded_items()
 	update_tree()
 
@@ -242,7 +244,7 @@ func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 				current_category = ""
 
 func _on_Libraries_about_to_show():
-	var popup : PopupMenu = $Libraries.get_popup()
+	var popup : PopupMenu = libraries_button.get_popup()
 	var unload : PopupMenu = null
 	for c in popup.get_children():
 		if c is PopupMenu:
@@ -353,6 +355,17 @@ func _on_PopupMenu_index_pressed(index):
 				return
 			library_manager.set_aliases(item_path, status.text)
 
-
 func update_from_locale() -> void:
 	update_tree()
+
+func _on_GetFromWebsite_pressed():
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
+	add_child(dialog)
+	var result = dialog.select_asset(3, true)
+	while result is GDScriptFunctionState:
+		result = yield(result, "completed")
+	if result is Dictionary and result.has("index"):
+		var graph_edit : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+		if graph_edit != null:
+			var gens = mm_loader.get_generator_list()
+			graph_edit.create_gen_from_type("website:%d" % result.index)

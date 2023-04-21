@@ -7,6 +7,8 @@ func _ready():
 	graph.name = "graph"
 	add_child(graph)
 	var material = mm_loader.create_gen({ name="material", type="material" })
+	while material is GDScriptFunctionState:
+		material = yield(material, "completed")
 	graph.add_child(material)
 	for i in CHANNELS.size():
 		if CHANNELS[i] == null:

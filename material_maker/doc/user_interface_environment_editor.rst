@@ -15,3 +15,6 @@ New environments can be created by clicking the **New...** item at the bottom of
 Environments consist of an HDRI image, ambient light settings and a directional light.
 To specify a new HDRI, just enter its URL in the corresponding field (the HDRI file must be
 available via http or https, and will automatically be downloaded when needed).
+
+Buttons in the bottom of the dialog can be used to download or upload environments from the website,
+and to close the window.
