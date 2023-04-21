@@ -39,7 +39,9 @@ func get_adjusted_uv(uv : String) -> String:
 	if get_parameter("fix_ar"):
 		var ar : float = 1.0
 		if texture.get_width() != 0 and texture.get_height() != 0:
-			ar = texture.get_width() / texture.get_width()
+			# Cast int to float
+			ar = texture.get_height()
+			ar /= texture.get_width()
 		uv = "((%s) - vec2(0.0, %f)) * vec2(1.0, %f)" % [uv, (1-ar)/2, 1/ar]
 
 	if get_parameter("clamp"):
