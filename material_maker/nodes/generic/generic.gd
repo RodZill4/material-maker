@@ -591,22 +591,6 @@ func save_generator() -> void:
 	if files.size() > 0:
 		do_save_generator(files[0], generator)
 
-static func extract_verbose_values(path : String, data : Dictionary) -> Array:
-	var rv = []
-	var keys = data.keys().duplicate()
-	keys.sort()
-	for key in keys:
-		var v = data[key]
-		var mpath = path + "." + key
-		match typeof(v):
-			TYPE_STRING:
-				if "\n" in v:
-					data.erase(key)
-					rv.append("string:" + mpath.substr(1) + "\n" + v)
-			TYPE_DICTIONARY:
-				rv.append_array(extract_verbose_values(mpath, v))
-	return rv
-
 static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
 	mm_loader.save_gen(file_name, gen)
