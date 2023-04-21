@@ -138,9 +138,11 @@
 				"control": "None",
 				"default": 30,
 				"label": "Angle",
+				"longdesc": "The angle of the pentagons that form the pattern",
 				"max": 90,
 				"min": 0,
 				"name": "angle",
+				"shortdesc": "Angle",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -148,9 +150,11 @@
 				"control": "None",
 				"default": 0,
 				"label": "Round",
+				"longdesc": "The roundness of the corners",
 				"max": 1,
 				"min": 0,
 				"name": "round",
+				"shortdesc": "Round",
 				"step": 0.01,
 				"type": "float"
 			}
