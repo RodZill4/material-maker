@@ -1,6 +1,8 @@
 extends Node
 
+
 const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth" ]
+
 
 func _ready():
 	var graph = MMGenGraph.new()
@@ -25,8 +27,8 @@ func setup_material(material_textures : Dictionary) -> void:
 			continue
 		var channel_node = graph.get_node(c)
 		channel_node.texture.create_from_image(material_textures[c].get_data())
+		mm_deps.dependency_update("o%d_tex" % channel_node.get_instance_id(), channel_node.texture)
 	graph.get_node("material").all_sources_changed()
-
 
 func get_material_node() -> Node:
 	return get_node("graph/material")
