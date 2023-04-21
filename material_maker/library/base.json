@@ -2406,7 +2406,7 @@
 				"amount": 0.5
 			},
 			"tree_item": "Filter/Normal map/Blend",
-			"type": "normal_blend"
+			"type": "normal_blend2"
 		},
 		{
 			"icon": "filter_blur",
