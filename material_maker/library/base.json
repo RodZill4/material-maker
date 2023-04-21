@@ -1259,6 +1259,21 @@
 			"type": "weave2"
 		},
 		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAeVJREFUaIHtml2OgjAUhe0gIUCX4VJMXIVsRVyGr7oK9uIyioQQwjyYoQkMtedq04vp90Sa05+TQkLvqdj8UVXVZpnD4TBpQfWn08mgP5/PNP12bFJKGTrMQfWO0AbquoZ6onpHiGEYfK/hLX58L+BdggHfBAO+CQZ8Ewz4RoxP1+vVoCuKYtLCRK//hfI8N3SYw0SvDUgpoQmY6L/IAJNXAtWvfwfGk1uWZQbd/IDHRK93IE1TQ4c5TPTaQJIk0ARM9NpAHMfQBEz02kAURdAETPTb15IFhBCvRe7RBvq+dzoTOr6lXhvoug5bEQg6vqVeG2jbFlsRCDq+pV4baJoGWxEIOr6lXn+I9/vdoNvtdpMWc0lv/omj41vq6cVdFEfFY3pxF8VR8fiLdmD1Blb6Ci3mA8Mw9H3fdV3btk3TPB4PpVRd10qp58PxeDSMe7vd8jyXUkopnw9ZlqVpmiRJHMdRFH3qT2T1daFgwDfBgG+CAd8EA76h5wPoecD5ZQ+0+MoEenGXCV9kILxCfhBVVT3/7/f7vUF3uVwmLWVZGvQfPw8snU/o+QAT6PkAE+j5ABPo+QAT6PkAk9uC9HzAdZ5gCT0fcJ0nWELPB1znCZbQ8wHXeYIl9HwA1YfL3/+z+svfv05tGU5A9ty4AAAAAElFTkSuQmCC",
+			"name": "weave_random",
+			"parameters": {
+				"random": 0.5,
+				"scale_x": 4,
+				"scale_y": 4,
+				"stitch": 2,
+				"width_x": 0.9,
+				"width_y": 0.9
+			},
+			"seed_int": 0,
+			"tree_item": "Pattern/Random Weave",
+			"type": "weave_random"
+		},
+		{
 			"icon": "pattern_truchet",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAAXNSR0IArs4c6QAAAW9JREFUWIWVl1FuwzAMQ7WCB/DNd1UdYR9JBpdG+VT9FKxCJrIdhfr5XVf0HbXsD8DydHVdse5fwHJ5ZBiWPx7f8x3Lyxs89RuWL8+k7h3Ll3dS947l2zOpe8fy7a0vFWT8nu7/g+XHa3yCbiw/npO6dyw/3pO6dyx/PSZ171j+ek3q3rH89ZzUvWOVhV9BoUX3gPYi7CDQnoQdJPOXsINk/iUQFaC9CjtI5j8CQSHz/wU+KlTmLzUpZH4LO0jmt7CDZH4LO0jmXwJRAT6vwg6S+Y9AUMj8fhWE8z1/+APC6A8Ioz8g7Ot0+APCvtKHPyDse3X4A8K+24c/IOzn5fAHhMsUDn9AGP0BYfQHhMsUDn9AuEzh8AeEyxQOf0C4TOHwB4TLFF5+fVlQnucFeD6eF6A+nhdgfXhegPXleQH9geXLFTJ/8byQ+TwvsD+w/Pf+wPLf+wPLlytkfvO8kPnN8wL6A8uXK2R+87yQ+f0Hel7RtddtwFUAAAAASUVORK5CYII=",
 			"name": "truchet",
