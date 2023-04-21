@@ -10,11 +10,12 @@ var is_greyscale : bool = false
 var need_generate : bool = false
 
 var last_export_filename : String = ""
-var last_export_size : int = 0
+var last_export_size = 0
 
 
 const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
+const MENU_CUSTOM_SIZE : int = 1002
 
 
 func _enter_tree():
@@ -27,6 +28,7 @@ func update_export_menu() -> void:
 		var s = 64 << i
 		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
 		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
+	$ContextMenu/Export.add_item("Custom size...", MENU_CUSTOM_SIZE)
 	$ContextMenu.add_submenu_item("Export", "Export")
 	$ContextMenu.add_item("Export again", MENU_EXPORT_AGAIN)
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), true)
@@ -139,6 +141,18 @@ func export_animation() -> void:
 	window.popup_centered()
 
 func _on_Export_id_pressed(id : int) -> void:
+	var size
+	if id == MENU_CUSTOM_SIZE:
+		var dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instance()
+		mm_globals.main_window.add_dialog(dialog)
+		size = dialog.ask()
+		while size is GDScriptFunctionState:
+			size = yield(size, "completed")
+		if ! size.has("size"):
+			return
+		size = size.size
+	else:
+		size = 64 << id
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
 	add_child(dialog)
 	dialog.rect_min_size = Vector2(500, 500)
@@ -152,9 +166,9 @@ func _on_Export_id_pressed(id : int) -> void:
 	while files is GDScriptFunctionState:
 		files = yield(files, "completed")
 	if files.size() == 1:
-		export_as_image_file(files[0], 64 << id)
+		export_as_image_file(files[0], size)
 
-func create_image(renderer_function : String, params : Array, size : int) -> void:
+func create_image(renderer_function : String, params : Array, size) -> void:
 	var source = MMGenBase.DEFAULT_GENERATED_SHADER
 	if generator != null:
 		var gen_output_defs = generator.get_output_defs()
@@ -178,7 +192,7 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	renderer.callv(renderer_function, params)
 	renderer.release(self)
 
-func export_as_image_file(file_name : String, size : int) -> void:
+func export_as_image_file(file_name : String, size) -> void:
 	mm_globals.config.set_value("path", "save_preview", file_name.get_base_dir())
 	create_image("save_to_file", [ file_name, is_greyscale ], size)
 	last_export_filename = file_name
