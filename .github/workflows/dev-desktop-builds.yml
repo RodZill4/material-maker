@@ -14,8 +14,8 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 3.5
-  GODOT_VERSION_MAC: 3.5
+  GODOT_VERSION: 3.5.2
+  GODOT_VERSION_MAC: 3.5.2
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_3a1
 
@@ -23,8 +23,6 @@ jobs:
   export_windows_linux:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
-    container:
-      image: docker://barichello/godot-ci:3.5
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -32,16 +30,29 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux build/${EXPORT_NAME}_${MM_RELEASE}_macosx ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
+          unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
+          dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
+          # chown root:root -R ~
+          wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
+          mkdir -v -p ~/.local/share/rcedit
+          mv rcedit-x64.exe ~/.local/share/rcedit
+          ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
+          mkdir -p ~/.config/godot
+          cd ~/.local/share/rcedit
+          RCEDIT_PATH=`pwd`
+          cd -
+          echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-3.tres
+          echo 'export/windows/rcedit = "$RCEDIT_PATH/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
+          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Generate Documentation
         uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
-        run: godot -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
-        run: godot -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -128,7 +139,7 @@ jobs:
           mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
       - name: Download Godot headless binary 🤖
         run: |
-          wget https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
+          wget -q https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
           unzip -a Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
       - name: Setup 💻
         run: mkdir -v -p ./build/mac
