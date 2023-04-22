@@ -45,7 +45,7 @@ jobs:
           echo '[gd_resource type="EditorSettings" format=2]' >> ~/.config/godot/editor_settings-3.tres
           echo '[resource]' >> ~/.config/godot/editor_settings-3.tres
           echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-3.tres
-          echo 'export/windows/rcedit = "$RCEDIT_PATH/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
+          echo 'export/windows/rcedit = "'$RCEDIT_PATH'/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-3.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Generate Documentation
         uses: ammaraskar/sphinx-action@master
