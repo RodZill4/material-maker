@@ -579,10 +579,12 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if p.type == "float":
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]
-				elif parameters[p.name] is String and parameters[p.name].find("$rnd(") != -1:
-					value_string = "("+replace_rnd(parameters[p.name], rnd_offset)+")"
-				elif parameters[p.name] is String and parameters[p.name].find("$rndi(") != -1:
-					value_string = "("+replace_rndi(parameters[p.name], rnd_offset)+")"
+				elif parameters[p.name] is String:
+					value_string = "("+parameters[p.name]+")"
+					if parameters[p.name].find("$rnd(") != -1:
+						value_string = replace_rnd(value_string, rnd_offset)
+					if parameters[p.name].find("$rndi(") != -1:
+						value_string = replace_rndi(value_string, rnd_offset)
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"
