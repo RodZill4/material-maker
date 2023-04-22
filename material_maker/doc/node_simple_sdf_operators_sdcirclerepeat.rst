@@ -21,8 +21,10 @@ repeated pattern.
 Parameters
 ::::::::::
 
-The **sdCircleRepeat** node accepts *the number of repetitions*
-of the input as parameter.
+The **sdCircleRepeat** node accepts the following parameters:
+
+* The **Count** controls the number of repetitions of the input.
+* The **Variations** control enables variation sampling on the input
 
 Example images
 ::::::::::::::

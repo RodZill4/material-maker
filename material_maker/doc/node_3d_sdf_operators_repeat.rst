@@ -26,6 +26,7 @@ The **Repeat** node accepts the following parameters:
 
 * *the repetition offset* for both X and Y axes
 * *the amount of random rotation* applied to all instances
+* *variation* controls whether the input is sampled with variations
 
 Example images
 ::::::::::::::
