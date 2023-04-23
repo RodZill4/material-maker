@@ -1,9 +1,35 @@
 # Material Maker 1.3
 
+# General
+
 - Updated interface to the website to login and upload assets without the need
   of a web browser
 - Added custom nodes sharing on the website (connect to the website and right
   click a custom node to share it)
+- Added support for the $rndi (that returns a random integer value) parameter
+  expression function (contributed by Arnklit)
+- Added an option in the 2D Preview panel to export non square textures
+
+## Nodes
+
+- Added a Random Weave node (contributed by Arnklit)
+- Added variations controls to all SDF repeat (2D and 3D, grid and circle)
+  nodes (contributed by Arnklit)
+- Updated the Normal Blend node to make it variadic (contributed by Arnklit)
+- Added Cairo tiles node
+- Added a Spherize node (contributed by williamchange)
+
+# Bug Fixes
+
+- Fixed an update problem in the Iterate Buffer node
+- Fixed a NaN problem in the sdArc node (contributed by myaaaaaaaaa)
+- Fixed a problem where the recovery file was not deleted when closing a tab
+- Fixed an export problem in the Painting tool
+- Fixed a problem with the Fill nodes where areas could leak though corners
+
+# Miscellaneous
+
+- Material Maker is now based on Godot 3.5.2
 
 # Material Maker 1.2p1
 
