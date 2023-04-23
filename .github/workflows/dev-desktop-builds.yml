@@ -23,6 +23,8 @@ jobs:
   export_windows_linux:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:3.5
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -34,7 +36,7 @@ jobs:
           unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
           ls -la /usr/bin
-          # chown root:root -R ~
+          chown root:root -R ~
           wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
           mv rcedit-x64.exe ~/.local/share/rcedit
