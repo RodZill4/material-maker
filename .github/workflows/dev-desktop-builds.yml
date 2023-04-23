@@ -33,6 +33,7 @@ jobs:
           wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
           unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
+          ls -la /usr/bin
           # chown root:root -R ~
           wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
