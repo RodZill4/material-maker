@@ -32,7 +32,7 @@ Unreal game engine
 Unreal Engine 4
 ^^^^^^^^^^^^^^^
 
-When exporting for the Unreal game engine versions 4.x, Material Maker will only
+When exporting for the Unreal game engine version 4.x, Material Maker will only
 generate PNG images and a .mm2ue file. The material must be built manually inside
 the Unreal Engine editor by following the instructions in this file.
 
@@ -54,7 +54,7 @@ This will generally consist in:
 Unreal Engine 5
 ^^^^^^^^^^^^^^^
 
-When exporting for the Unreal game engine versions 5.x, Material Maker will generate a
+When exporting for the Unreal game engine version 5.x, Material Maker will generate a
 Python script that creates the material in Unreal.
 
 Initial setup

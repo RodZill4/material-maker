@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Sharing materials and brushes &mdash; Material Maker  documentation</title>
+  <title>Sharing assets &mdash; Material Maker  documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                1.2
+                1.3
               </div>
             
           
@@ -103,9 +103,12 @@
 <li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_main_menu.html">Main menu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_panels.html">Panels</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Sharing materials and brushes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#importing-materials-and-brushes">Importing materials and brushes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Sharing materials and brushes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sharing assets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-materials">Downloading materials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-brushes">Downloading brushes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-environments">Downloading environments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-custom-nodes">Downloading custom nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uploading-assets-to-the-website">Uploading assets to the website</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_performance.html">Performance meter and tools</a></li>
@@ -166,7 +169,7 @@
         
           <li><a href="user_interface.html">User interface</a> &raquo;</li>
         
-      <li>Sharing materials and brushes</li>
+      <li>Sharing assets</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -183,39 +186,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sharing-materials-and-brushes">
-<h1>Sharing materials and brushes<a class="headerlink" href="#sharing-materials-and-brushes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="sharing-assets">
+<h1>Sharing assets<a class="headerlink" href="#sharing-assets" title="Permalink to this headline">¶</a></h1>
 <p>Material Maker has a website where users can share their materials and brushes
-at the following address: <a class="reference external" href="https://www.materialmaker.org">https://www.materialmaker.org</a>
-Pages of this website can communicate with Material Maker to transfer
-materials and brushes.</p>
-<div class="section" id="importing-materials-and-brushes">
-<h2>Importing materials and brushes<a class="headerlink" href="#importing-materials-and-brushes" title="Permalink to this headline">¶</a></h2>
-<p>To import materials into Material Maker, it is first necessary to open this
-website using the Open Website (broken link) button in the top right corner
-of the user interface. This will open this web page in your default web browser.
-In the Material Maker user interface, the broken link button will change to
-connected link when the page is loaded.</p>
-<img alt="_images/share_open_website_button.png" class="align-center" src="_images/share_open_website_button.png" />
-<p>Opening the web site this way makes it possible to import a material from the
-Materials page by simply clicking on the Open in Material Maker button. Material
-Maker will automatically open the selected material in a new Project tab.</p>
-<img alt="_images/share_import_material.png" class="align-center" src="_images/share_import_material.png" />
-<p>Likewise, a brush can be imported from the Brushes page if the active project
-in Material Maker is a model painting project.</p>
+at the following address: <a class="reference external" href="https://www.materialmaker.org">https://www.materialmaker.org</a></p>
+<div class="section" id="downloading-materials">
+<h2>Downloading materials<a class="headerlink" href="#downloading-materials" title="Permalink to this headline">¶</a></h2>
+<p>To import a material from the website, use the <strong>File -&gt; Load material from
+website</strong> menu entry, and select a material from the list.</p>
+<img alt="_images/load_material_from_website.png" class="align-center" src="_images/load_material_from_website.png" />
+<p>The <strong>Filter</strong> field can be used to filter materials using their name, description,
+or associated tags.</p>
 </div>
-<div class="section" id="id1">
-<h2>Sharing materials and brushes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>To share a material or a brush, it first necessary to create and account (using
-the Register button) and be connected to the site (using the Log in button).
-In the Material Maker interface, the connect button will be shown in yellow.</p>
-<img alt="_images/share_send_to_website.png" class="align-center" src="_images/share_send_to_website.png" />
-<p>When you are connected, clicking on the Send material to web site button opens
-a form in the web browser, where you can specify a name for your material, a few
-keywords, a license and a description, and submit it. Be aware this will share
-the whole graph of your material, and other Material Maker users will be able
-to reuse and modify your work (which is the main purpose of the website).</p>
-<img alt="_images/share_submit.png" class="align-center" src="_images/share_submit.png" />
+<div class="section" id="downloading-brushes">
+<h2>Downloading brushes<a class="headerlink" href="#downloading-brushes" title="Permalink to this headline">¶</a></h2>
+<p>To import brushes from the website, just use the <strong>Get more brushes</strong> button
+in the top right corner of the <strong>Brushes</strong> panel (only available for painting
+projects). A <strong>load from website</strong> dialog will be shown with all available
+brushes, and selecting one will download it and set it as current brush.
+It can then be modified and saved into a library using the <strong>Tools -&gt; Add
+current brush to library</strong> menu.</p>
+</div>
+<div class="section" id="downloading-environments">
+<h2>Downloading environments<a class="headerlink" href="#downloading-environments" title="Permalink to this headline">¶</a></h2>
+<p>Environments can be imported from the <strong>Environment Editor</strong> using the <strong>Download
+environment</strong> button at the bottom of the dialog.</p>
+</div>
+<div class="section" id="downloading-custom-nodes">
+<h2>Downloading custom nodes<a class="headerlink" href="#downloading-custom-nodes" title="Permalink to this headline">¶</a></h2>
+<p>To import nodes from the website, just use the <strong>Get more nodes</strong> button
+in the top right corner of the <strong>Library</strong> panel. A <strong>load from website</strong>
+dialog will be shown with all available brushes, and selecting one will
+download it and add it into the current graph (in the center of the
+graph view).
+It can then be modified and saved into a library using the <strong>Tools -&gt; Add
+selected node to library</strong> menu.</p>
+</div>
+<div class="section" id="uploading-assets-to-the-website">
+<h2>Uploading assets to the website<a class="headerlink" href="#uploading-assets-to-the-website" title="Permalink to this headline">¶</a></h2>
+<p>Before uploading assets to the website, it is necessary to create an account
+and log in.
+Accounts are created on the website using the <strong>Register</strong> link. Please make
+sure you don’t use your email address as user name, since this name is
+visible from other users. The email address is optional and will only be used
+to recover your account.</p>
+<img alt="_images/share_open_website_button.png" class="align-center" src="_images/share_open_website_button.png" />
+<p>To log in, use the connect button, enter your account name and password in the
+<strong>Login to website</strong> dialog and use the <strong>Log in</strong> button. The <strong>Register</strong>
+button can be used to open a web browser on the Register page of the website.</p>
+<p>When logged in, it is possible to upload assets to the website:</p>
+<ul class="simple">
+<li><p>The current material can be uploaded using the <strong>Send material to website</strong> next
+to the connect button</p></li>
+<li><p>When the active project is a painting project, the current brush will be shared
+using the same button</p></li>
+<li><p>Environments can be uploaded using the <strong>Upload environment</strong> button at the bottom
+of the <strong>Environment editor</strong></p></li>
+<li><p>Custom nodes can be shared using the <strong>Share node on website</strong> item of the context
+menu.</p></li>
+</ul>
+<p>When uploading an asset, the <strong>Share asset</strong> dialog will be shown to select a name,
+a license, tags, and a description for the asset. For materials, brushes and
+environment, it is possible to update an existing asset or create a new one.</p>
+<img alt="_images/share_asset_dialog.png" class="align-center" src="_images/share_asset_dialog.png" />
+<p>When uploading a custom node, the <strong>Share custom node</strong> dialog will be shown before
+the <strong>Share asset</strong> window, to verify that all requirements for sharing a node
+are met (the node must be documented as well as all its parameters, inputs and
+outputs).</p>
+<img alt="_images/share_custom_node.png" class="align-center" src="_images/share_custom_node.png" />
 </div>
 </div>
 

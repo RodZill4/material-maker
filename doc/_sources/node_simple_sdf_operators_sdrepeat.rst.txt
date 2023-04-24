@@ -21,8 +21,11 @@ repeated pattern.
 Parameters
 ::::::::::
 
-The **sdRepeat** node accepts *the number of lines and columns*
-of the repeat grid, as well as the *rotation randomness* as parameters.
+The **sdRepeat** node accepts the following parameters:
+
+* The **X** and **Y** controls the rows and columns amount to repeat the input
+* The **R** controls the random rotation of the repeated shape
+* The **Variations** control enables variation sampling on the input
 
 Example images
 ::::::::::::::

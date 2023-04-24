@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Random Weave node &mdash; Material Maker  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/js/custom.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Truchet node" href="node_pattern_truchet.html" />
+    <link rel="prev" title="Weave node" href="node_pattern_weave.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Material Maker
+          
+
+          
+            
+            <img src="_static/icon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_material.html">Material nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_generic.html">Pattern node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_bricks.html">Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_arc_pavement.html">Arc Pavement node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_unevenbricks.html">Uneven Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_unevenbricks2.html">Uneven Bricks 2 node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_unevenbricks3.html">Uneven Bricks 3 node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_skewed_bricks.html">Skewed Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_skewed_unevenbricks.html">Skewed Uneven Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_weave.html">Weave node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Random Weave node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_runes.html">Runes node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_runes_i_ching.html">I Ching node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_scratches.html">Scratches node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_beehive.html">Beehive node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_sine_wave.html">Sine Wave node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_mesh.html">Mesh node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_diagonal_weave.html">Diagonal Weave node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_cairo.html">Cairo node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
+        
+          <li><a href="nodes_pattern.html">Pattern nodes</a> &raquo;</li>
+        
+      <li>Random Weave node</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="random-weave-node">
+<h1>Random Weave node<a class="headerlink" href="#random-weave-node" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Random Weave</strong> node outputs a randomizable weave pattern, that can be used for cloth.</p>
+<img alt="_images/node_pattern_random_weave.png" class="align-center" src="_images/node_pattern_random_weave.png" />
+<div class="section" id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Random Weave</strong> node accepts an optional greyscale input map for the width parameter
+(whose value is multiplied by the map value).</p>
+</div>
+<div class="section" id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Random Weave</strong> generates a greyscale heightmap for the pattern as well as masks
+for the horizontal and vertical stripes.</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>Weave</strong> node accepts the following parameters:</p>
+<ul class="simple">
+<li><p>the <em>Size X</em> and <em>Size Y</em> parameters define the number of patterns that will be generated.</p></li>
+<li><p>the <em>Width X</em> and <em>Width Y</em> parameters define the width of stitches.</p></li>
+<li><p>the <em>Stitch</em> parameter sets the length of the stitch.</p></li>
+<li><p>the <em>Random</em> parameter controls how much the stitches get randomized.</p></li>
+</ul>
+</div>
+<div class="section" id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+<img alt="_images/node_random_weave_samples.png" class="align-center" src="_images/node_random_weave_samples.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="node_pattern_truchet.html" class="btn btn-neutral float-right" title="Truchet node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="node_pattern_weave.html" class="btn btn-neutral float-left" title="Weave node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-2023, Rodolphe Suescun.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
