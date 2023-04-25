@@ -30,7 +30,7 @@ func on_right_click():
 	# Pick position in image
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_image()
-	var mouse_position = get_local_mouse_position()*$MaterialPreview.size/size
+	var mouse_position = get_local_mouse_position()*Vector2($MaterialPreview.size)/size
 	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	var pos : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)

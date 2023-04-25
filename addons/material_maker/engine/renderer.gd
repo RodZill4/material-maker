@@ -73,7 +73,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 		await RenderingServer.frame_post_draw
 		texture = ImageTexture.create_from_image(get_texture().get_image())
 	else:
-		var image : Image = Image.create(render_size, render_size, false, get_texture().get_data().get_format())
+		var image : Image = Image.create(render_size, render_size, false, get_texture().get_image().get_format())
 		material.set_shader_parameter("mm_chunk_size", render_scale)
 		for x in range(chunk_count):
 			for y in range(chunk_count):
@@ -82,7 +82,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 				#update_worlds()
 				await get_tree().process_frame
 				await get_tree().process_frame
-				image.blit_rect(get_texture().get_data(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
+				image.blit_rect(get_texture().get_image(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
 		texture = ImageTexture.new()
 		texture.create_from_image(image)
 	$ColorRect.material = null

@@ -18,12 +18,12 @@ func _ready():
 	change_image(0)
 
 func on_drop_image_file(file_name : String) -> void:
-	var t : ImageTexture = ImageTexture.new()
-	var status = t.load(file_name)
-	if status == OK:
+	var image : Image = Image.load_from_file(file_name)
+	if image != null:
+		var t : ImageTexture = ImageTexture.create_from_image(image)
 		add_reference(t)
 	else:
-		print("Error loading %s (%d)"% [ file_name, status ])
+		print("Error loading %s" % file_name)
 
 func add_reference(t : Texture2D) -> void:
 	images.insert(current_image+1, { texture=t, scale=1.0, center=Vector2(0.5, 0.5) })
@@ -31,10 +31,9 @@ func add_reference(t : Texture2D) -> void:
 
 func get_color_under_cursor() -> Color:
 	var image : Image = get_viewport().get_texture().get_image()
-	var pos = get_global_mouse_position()
-	pos *= image.get_size()
+	var pos : Vector2 = get_global_mouse_position()
+	pos *= Vector2(image.get_size())
 	pos /= get_viewport_rect().size
-	pos.y = image.get_height() - pos.y
 	var c = image.get_pixelv(pos)
 	return c
 
@@ -60,7 +59,7 @@ func _on_Image_gui_input(event) -> void:
 				elif selected_slot.get_parent() == $VBoxContainer/Colors:
 					color_count = 1
 					color = get_color_under_cursor()
-					selected_slot.set_color(color)
+					selected_slot.set_slot_color(color)
 				else:
 					gradient = selected_slot.gradient
 					gradient.clear()
@@ -74,7 +73,7 @@ func _on_Image_gui_input(event) -> void:
 			elif event.button_index == MOUSE_BUTTON_MIDDLE:
 				dragging = true
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
-				$ContextMenu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+				$ContextMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
 		elif event.button_index == MOUSE_BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == MOUSE_BUTTON_LEFT:
@@ -90,7 +89,7 @@ func _on_Image_gui_input(event) -> void:
 		elif color_count > 0 and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0 and selected_slot.get_parent() == $VBoxContainer/Colors:
 			color_count += 1
 			color += get_color_under_cursor()
-			selected_slot.set_color(color/color_count)
+			selected_slot.set_slot_color(color/color_count)
 		elif gradient != null:
 			var new_gradient_length = gradient_length + event.relative.length()
 			if gradient_length > 0.0:

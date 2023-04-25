@@ -1,11 +1,13 @@
 extends ColorRect
 
+
 signal clicked
+
 
 func _ready() -> void:
 	pass # Replace with function body.
 
-func todo_renamed_set_color(c) -> void:
+func set_slot_color(c) -> void:
 	$ColorRect.color = c
 
 func select(b : bool) -> void:
