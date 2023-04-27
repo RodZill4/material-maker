@@ -434,6 +434,7 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.125, 0.14375, 0.19375, 1)
+corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="1"]
 content_margin_left = 6.0
@@ -446,6 +447,7 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.14, 0.161, 0.217, 1)
+corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="2"]
 content_margin_left = 6.0
