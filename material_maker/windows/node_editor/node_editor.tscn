@@ -244,11 +244,11 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
-margin_left = 366.0
+margin_left = 724.0
 margin_top = 430.0
-margin_right = 584.0
+margin_right = 950.0
 margin_bottom = 450.0
-size_flags_horizontal = 4
+size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="Sizer/HBoxContainer"]
 margin_right = 70.0
@@ -257,15 +257,15 @@ rect_min_size = Vector2( 70, 0 )
 text = "Apply"
 
 [node name="OK" type="Button" parent="Sizer/HBoxContainer"]
-margin_left = 74.0
-margin_right = 144.0
+margin_left = 78.0
+margin_right = 148.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 text = "OK"
 
 [node name="Cancel" type="Button" parent="Sizer/HBoxContainer"]
-margin_left = 148.0
-margin_right = 218.0
+margin_left = 156.0
+margin_right = 226.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 70, 0 )
 text = "Cancel"

@@ -12,6 +12,3 @@ margin_right = 12.0
 margin_bottom = 20.0
 icon = SubResource( 1 )
 flat = true
-__meta__ = {
-"_edit_use_anchors_": false
-}

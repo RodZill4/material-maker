@@ -1,14 +1,11 @@
 [gd_scene format=2]
 
 [node name="ColorPickerPopup" type="PopupPanel"]
-margin_right = 318.0
+margin_right = 316.0
 margin_bottom = 470.0
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 314.0
+margin_right = 312.0
 margin_bottom = 466.0
-__meta__ = {
-"_edit_use_anchors_": false
-}

@@ -2,6 +2,11 @@ extends Button
 
 var path : String
 
+func _enter_tree() -> void:
+	var theme : Theme = mm_globals.main_window.theme
+	for stylebox in theme.get_stylebox_list("NodeSelectionButton"):
+		add_stylebox_override(stylebox, theme.get_stylebox(stylebox, "NodeSelectionButton"))
+
 func set_name(name: String) -> void:
 	$HBoxContainer/HBoxContainer/Name.text = name
 

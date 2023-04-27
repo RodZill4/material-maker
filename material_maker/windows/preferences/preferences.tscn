@@ -33,8 +33,8 @@ __meta__ = {
 }
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
-margin_right = 302.0
-margin_bottom = 320.0
+margin_right = 304.0
+margin_bottom = 322.0
 rect_min_size = Vector2( 289, 172 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -76,8 +76,8 @@ margin_bottom = 20.0
 text = "Install"
 
 [node name="DownloadLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
-margin_left = 100.0
-margin_right = 152.0
+margin_left = 156.0
+margin_right = 231.0
 margin_bottom = 20.0
 text = "Download"
 
@@ -405,16 +405,16 @@ text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 324.0
-margin_right = 302.0
-margin_bottom = 324.0
+margin_top = 326.0
+margin_right = 304.0
+margin_bottom = 326.0
 custom_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 114.0
-margin_top = 328.0
-margin_right = 302.0
-margin_bottom = 348.0
+margin_left = 116.0
+margin_top = 330.0
+margin_right = 304.0
+margin_bottom = 350.0
 size_flags_horizontal = 8
 
 [node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]

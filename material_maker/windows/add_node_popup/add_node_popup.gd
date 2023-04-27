@@ -25,7 +25,8 @@ func _ready() -> void:
 	update_list()
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), Color(1, 0.56, 0.56, 1), false, 2)
+	var current_theme : Theme = mm_globals.main_window.theme
+	draw_rect(Rect2(0, 0, rect_size.x, rect_size.y), current_theme.get_color("accent", "AddNodePopup"), false, 2)
 
 func filter_entered(_filter) -> void:
 	list.select_first()

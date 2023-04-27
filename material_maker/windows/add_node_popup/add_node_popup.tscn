@@ -191,14 +191,14 @@ default_library_item = "Filter/Normal map"
 [node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 margin_top = 28.0
 margin_right = 252.0
-margin_bottom = 52.0
+margin_bottom = 54.0
 rect_min_size = Vector2( 0, 20 )
 size_flags_horizontal = 3
 clear_button_enabled = true
 placeholder_text = "Search..."
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 56.0
+margin_top = 58.0
 margin_right = 252.0
 margin_bottom = 354.0
 size_flags_vertical = 3
@@ -206,7 +206,7 @@ scroll_horizontal_enabled = false
 
 [node name="List" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
 margin_right = 252.0
-margin_bottom = 298.0
+margin_bottom = 296.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 0
