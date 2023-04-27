@@ -79,8 +79,8 @@ func do_zoom(factor : float):
 	accept_event()
 	var old_zoom : float = zoom
 	zoom *= factor
-	var position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
-	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*position)
+	var global_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
+	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*global_position)
 
 var port_click_node : GraphNode
 var port_click_port_index : int = -1

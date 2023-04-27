@@ -35,27 +35,27 @@ func do_set_position(o : Vector2) -> void:
 	disable_undoredo_for_offset = false
 
 func get_input_slot(pos : Vector2) -> int:
-	var scale = get_global_transform().get_scale()
+	var global_scale = get_global_transform().get_scale()
 	if get_connection_input_count() > 0:
-		var input_1 : Vector2 = get_connection_input_position(0)-5*scale
-		var input_2 : Vector2 = get_connection_input_position(get_connection_input_count()-1)+5*scale
+		var input_1 : Vector2 = get_connection_input_position(0)-5*global_scale
+		var input_2 : Vector2 = get_connection_input_position(get_connection_input_count()-1)+5*global_scale
 		var new_show_inputs : bool = Rect2(input_1, input_2-input_1).has_point(pos)
 		if new_show_inputs:
 			for i in range(get_connection_input_count()):
-				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
+				if (get_connection_input_position(i)-pos).length() < 5*global_scale.x:
 					return i
 			return -1
 	return -2
 
 func get_output_slot(pos : Vector2) -> int:
-	var scale = get_global_transform().get_scale()
+	var global_scale = get_global_transform().get_scale()
 	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
+		var output_1 : Vector2 = get_connection_output_position(0)-5*global_scale
+		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*global_scale
 		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 		if new_show_outputs:
 			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
+				if (get_connection_output_position(i)-pos).length() < 5*global_scale.x:
 					return i
 			return -1
 	return -2
