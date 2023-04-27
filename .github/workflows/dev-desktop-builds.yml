@@ -53,9 +53,9 @@ jobs:
         with:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
-        run: Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+        run: Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
-        run: Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+        run: Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
