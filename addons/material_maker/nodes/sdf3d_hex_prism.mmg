@@ -1,0 +1,69 @@
+{
+	"name": "h",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"h": 0.25,
+		"r": 0.36
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float sdHexPrism( vec3 p, vec2 h )",
+			"{",
+			"\tconst vec3 k = vec3(-0.8660254, 0.5, 0.57735);",
+			"\tp = abs(p);",
+			"\tp.xy -= 2.0*min(dot(k.xy, p.xy), 0.0)*k.xy;",
+			"\tvec2 d = vec2(",
+			"\t\tlength(p.xy-vec2(clamp(p.x,-k.z*h.x,k.z*h.x), h.x))*sign(p.y-h.x),",
+			"\t\tp.z-h.y );",
+			"\treturn min(max(d.x,d.y),0.0) + length(max(d,0.0));",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a hexagonal prism as a signed distance function",
+		"name": "Hexagonal Prism",
+		"outputs": [
+			{
+				"longdesc": "Shows the hexagonal prism",
+				"sdf3d": "sdHexPrism($uv,vec2($r*0.866,$h))",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Radius1.r",
+				"default": 0.36,
+				"label": "Radius",
+				"longdesc": "Radius of the hexagonal prism",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Height",
+				"longdesc": "Height of the hexagonal prism",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"shortdesc": "Height",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Hexagonal Prism"
+	},
+	"type": "shader"
+}
