@@ -7479,7 +7479,71 @@
 			"seed_int": 0,
 			"tree_item": "Pattern/Cairo",
 			"type": "cairo"
-		}
+		},
+		{
+            "icon_data": "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",
+            "name": "sdf3d_link",
+            "parameters": {
+                "R": 0.15,
+                "le": 0.19,
+                "r": 0.07
+            },
+            "seed": 0,
+            "seed_locked": false,
+            "tree_item": "3D/SDF/Shapes/Link",
+            "type": "sdf3d_link"
+        },
+        {
+            "icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAA7RJREFUaIHVmjtyIjEQhn9N+Tg2gb0RgbnDVsEB7GB3/ZiCKmcbrg2pqwCfwUcgxM73UZAwPK6ybCAYZI3Uas1oZO+fgEdN96dHz/RIFlmWwSQhhPF6ObP6LJMqLt6dHoChA/8RPYAjjovxeOzl3aabmxsOk1OqZWJryBWKHsBoNLIBlZ6lxNZA/KaKin3wQi8aJ7SX8XgckF5K7UP19EiItjroOUxelkmclaNpNBqFujWZnwMAnp6e/KA8NRwOOWbOflo7EEHOPnBmydyBuoc/F9EH5hrTH2ReOj+/UuLtPnk/PeDN59uTE2FuY8gwA8zhn0xelZC7T15QnbDXe7C2kV6EEGK5XKpX+YsnH/6K9FJyEkrcmkomcVh6APP5NkAt5Ju7oeg9g1pqIb7k8Aenn83+lvBy6IBX7tYz9qLbvff1cuQVAUC//1wTPYCLi+++LnbFnCz6nZpMXuujl+r19EmgXYjVasWkB9BqXWnxaCxfemmvPtdC1kJx6AHM51u+i4S/eLR4NFZpeqlu957pgjsDg8FzNHoAl5fmbC4qub6+dhpNJq8x6aW63R8sR6vVCvutB5taLXcndzCB6GVjo+FwZ92ZU/X4+MiBCk4PgPNc280A7JPAG/7w9FK2SeBWo+9LD2A229LxDh0oZrP6ykLEq49eSstmLd5hCck2ddeJMfy102vPZqoa9a/WI9HT8fStRXUDeTD4RsQLRy9o+sXiFxGP2lpsNo9tIYPSGwMcvrfbZ35bi+okvLwU761R6RsNavMTnFro7u7zG+cR6bPsjzvSer02NphuR1HpATQa7vG1WhSyOTb9YvGbE49VTjebx5HpAdHpnLnjEcWcEOL29jb/s9//6vRmpzHYvI2lX1gsfrrC2Y9ZYVou9luqTladHkCn84kMRxZzKr06CdOp+YwxOD3nNSD/rneATlXTQgpMn2WO3KW2Fo306iQUFhKzzjFy6BfkR7t9Sv7KXswRsmRzsCott5Flj9mL5TCcW43mfdhPQnh6ALZbp2NrkbbIlaap/KJmc0B659ujUVQ1WvSSpmneDRONmcxuz41LyFHrGb2kaTqdDsPSG4e//DGrU2maPjx8sTR602eZIXe5tddms3FY2B3lu7A2sr0Hh01x+Pnvt45zYtpR6aPFIGagizmmo/elB5EDYemZCnZOHJy+vsks/1+LfNW6FP2q0erxKqpkMef0UtGyipm7nC4XrCIW38xvb/Sj0cOrGv2A9PCtRqNh8c1Y1ShfkekB/AMLJr54oDgbHQAAAABJRU5ErkJggg==",
+            "name": "sdf3d_hex_prism",
+            "parameters": {
+                "h": 0.25,
+                "r": 0.36
+            },
+            "seed": 0,
+            "seed_locked": false,
+            "tree_item": "3D/SDF/Shapes/Hexagonal Prism",
+            "type": "sdf3d_hex_prism"
+        },
+        {
+            "icon_data": "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",
+            "name": "sdf3d_cut_sphere",
+            "parameters": {
+                "h": 0.5,
+                "r": 0.4
+            },
+            "seed": 0,
+            "seed_locked": false,
+            "tree_item": "3D/SDF/Shapes/Cut Sphere",
+            "type": "sdf3d_cut_sphere"
+        },
+        {
+            "icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAqFJREFUaIHVmjtywjAQhleMr8MZwgWSg4DhDhluYB59kp4mNQ1daipmuAspnIeNpdW/q4fFluzq329ly1pkm8vlQjYzxlh/14Wli5yESIxOT0SWAh6InoYFPBY9EVUKiehMuOAwuHI5wpPlEaxSJMt5g1Vd3263UycIseVyyQcwGBPGl4eeiDabDePlMez7gHdYNvNiBG1kEc16ERAM/UYW3e5qADGUG1kia2swxuAYvQJKuO/5Bd21tk7nIh7RmqbxxvzNdcXHuWyxWKg3NWSOm6ZZrVaIJlTA8fj1+vrW/eV8vhHdfnX4Sm53eWezmo3/UdvvP+fzZ4u7PyP6Wwijd+V1hklVJoyPFYLyCbX/g6zxEZq5vno+eq4XwjP01YugJ6IKyXA4vJ/Pt466mU7toxA111NoNlt2R7crWNkLWbG8cx+4D0rnvjX0KRSLPvp/HdFjNB89bngBaenVtYX2QuPShzZzKen9ys6TOdBKoCd1AYXQU/gaANPAXhk9pSsgDz2pu1FpGtwrHTgJFAXTpJMVd6OtmjSN1O5kGFmoG91ut09Pi64afnaAQAwiBaOki1g5xYnoSdrMlUZPomYuJz1u0v8DMgtY0+hOP9pOzA/F9XsF1DV/5CRByEJPw1uormvvCx9cXTFUqm+u16vV133SH49f6/WHNyXzssrBwYWdTp91/WIb5W7muj7sOiD0jpEsvXuUu5kbmq8GkN7iU9C73np4ulF3DbnpXS5/N2qroRR6ahcx8tAo9kME7kV39GQpBKPtxKPQE1JAxEuERypfs+qERqT3NHPl01Pgxx7R/78rpkP/sYfwxVSqi5njY4+kt2JBXy3q1DT7wFgL19PMgUJF0ZP0bLQ0ehKdjRZIT/jZaJn0BHajuGWmJ6JvPLpKCtnxMTsAAAAASUVORK5CYII=",
+            "name": "sdf3d_box_frame",
+            "parameters": {
+                "r": 0,
+                "sx": 0.3,
+                "sy": 0.25,
+                "sz": 0.25,
+                "t": 0.04
+            },
+            "seed": 0,
+            "seed_locked": false,
+            "tree_item": "3D/SDF/Shapes/Box Frame",
+            "type": "sdf3d_box_frame"
+        },
+        {
+            "icon_data": "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",
+            "name": "sdf3d_solid_angle",
+            "parameters": {
+                "a": 90,
+                "r": 0.4
+            },
+            "seed": 0,
+            "seed_locked": false,
+            "tree_item": "3D/SDF/Shapes/Solid Angle",
+            "type": "sdf3d_solid_angle"
+        }
 	],
 	"name": "Base library"
 }
