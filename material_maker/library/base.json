@@ -359,9 +359,9 @@
 			"name": "sdisoscelestriangle",
 			"parameters": {
 				"cx": 0.0,
-				"cy": 0.0,
-				"height": 0.45,
-				"width": 0.2
+				"cy": 0.2,
+				"height": 0.2,
+				"width": 0.4
 			},
 			"tree_item": "Simple/SDF/Shapes/sdIsoscelesTriangle",
 			"type": "sdisoscelestriangle"

@@ -6,9 +6,9 @@
 	},
 	"parameters": {
 		"cx": 0.0,
-		"cy": 0.0,
-		"height": 0.45,
-		"width": 0.2
+		"cy": 0.2,
+		"height": 0.2,
+		"width": 0.4
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -61,7 +61,7 @@
 				"max": 1,
 				"min": 0,
 				"name": "height",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{
