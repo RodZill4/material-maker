@@ -35,7 +35,7 @@
 		"outputs": [
 			{
 				"longdesc": "The isosceles triangle as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sd_isosceles_triangle($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
