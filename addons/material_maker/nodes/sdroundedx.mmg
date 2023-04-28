@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.025852,
-		"cy": 0.009853,
-		"r": 0.121039,
-		"w": 0.484156
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.1,
+		"w": 0.5
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -19,7 +19,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A Rounded X described as a signed distance function",
 		"name": "sdRoundedX",
 		"outputs": [
 			{
@@ -34,6 +34,7 @@
 				"control": "Rect1.x",
 				"default": 0.15,
 				"label": "Radius",
+				"longdesc": "Radius of the rounded X",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -44,6 +45,7 @@
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Length",
+				"longdesc": "Length of the rounded X",
 				"max": 1,
 				"min": 0,
 				"name": "w",
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdRoundedX"
 	},
 	"type": "shader"
 }
