@@ -39,12 +39,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A regular star described as a signed distance function",
 		"name": "sdStar",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdStar($uv - 0.5 - vec2($cx, $cy), $r + $m, $n, 2.0 + (1.0 - ($m / ($r + $m))) * ($n - 2.0))",
+				"longdesc": "The regular star as a signed distance function",
+				"sdf2d": "sdStar($uv - 0.5 - vec2($cx, $cy), $r + $m, int($n), 2.0 + (1.0 - ($m / ($r + $m))) * ($n - 2.0))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -54,6 +54,7 @@
 				"control": "Radius11.r",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "Radius of the star",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -64,6 +65,7 @@
 				"control": "Radius1.r",
 				"default": 0.25,
 				"label": "Inner Radius",
+				"longdesc": "Inner radius of the star",
 				"max": 1,
 				"min": 0,
 				"name": "m",
@@ -74,8 +76,9 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Count",
+				"longdesc": "Number of sides of the star",
 				"max": 20,
-				"min": 1,
+				"min": 2,
 				"name": "n",
 				"step": 1,
 				"type": "float"
@@ -105,7 +108,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdStar"
 	},
 	"type": "shader"
 }
