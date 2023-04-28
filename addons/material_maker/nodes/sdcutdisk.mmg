@@ -7,8 +7,8 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
-		"h": -1.17098,
-		"r": 0.429327
+		"h": -1.1,
+		"r": 0.5
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -19,11 +19,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A cut disk described as a signed distance function",
 		"name": "sdCutDisk",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The cut disk as a signed distance function",
 				"sdf2d": "sdCutDisk($uv - 0.5 - vec2($cx, $cy), $r, clamp($h / 4.0, -$r, $r))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,6 +34,7 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "Radius of the cut disk",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -44,6 +45,7 @@
 				"control": "Scale1.y",
 				"default": -0.5,
 				"label": "Cut Height",
+				"longdesc": "Position of the cut of the disk",
 				"max": 1,
 				"min": -1,
 				"name": "h",
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdCutDisk"
 	},
 	"type": "shader"
 }

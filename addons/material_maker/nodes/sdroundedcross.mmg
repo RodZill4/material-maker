@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.025852,
-		"cy": 0.009853,
-		"h": 0.329495,
-		"w": 0.632092
+		"cx": 0.0,
+		"cy": 0.0,
+		"h": 0.3,
+		"w": 0.6
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -19,11 +19,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A rounded cross described as a signed distance function",
 		"name": "sdRoundedCross",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The rounded cross as a signed distance function",
 				"sdf2d": "sdRoundedCross(($uv - 0.5 - vec2($cx, $cy)) / $w, $h / $w) * $w",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,6 +34,7 @@
 				"control": "Rect1.y",
 				"default": 0.3,
 				"label": "Height",
+				"longdesc": "Height of the rounded cross",
 				"max": 1,
 				"min": 0,
 				"name": "h",
@@ -44,10 +45,11 @@
 				"control": "Rect1.x",
 				"default": 0.6,
 				"label": "Width",
+				"longdesc": "Width of the rounded cross",
 				"max": 1,
 				"min": 0,
 				"name": "w",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdRoundedCross"
 	},
 	"type": "shader"
 }

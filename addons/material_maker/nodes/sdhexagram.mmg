@@ -5,9 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": -0.059416,
-		"cy": -0.030061,
-		"r": 0.178974
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.2
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -18,11 +18,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A hexagram described as a signed distance function",
 		"name": "sdHexagram",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The hexagram as a signed distance function",
 				"sdf2d": "sdHexagram($uv - 0.5 - vec2($cx, $cy), $r)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -33,6 +33,7 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "The radius of the hexagram",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -64,7 +65,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdHexagram"
 	},
 	"type": "shader"
 }

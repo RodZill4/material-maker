@@ -5,13 +5,13 @@
 		"y": 0
 	},
 	"parameters": {
-		"bx": 0.410188,
-		"by": 0.242078,
-		"cx": -0.00777,
-		"cy": 0.016577,
+		"bx": 0.4,
+		"by": 0.25,
+		"cx": 0.0,
+		"cy": 0.0,
 		"rw": 0.1,
 		"rx": 0.2,
-		"ry": 0.19,
+		"ry": 0.2,
 		"rz": 0.1
 	},
 	"seed": 0,
@@ -23,11 +23,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "An rounded box described as a signed distance function",
 		"name": "sdRoundedBox",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The rounded box as a signed distance function",
 				"sdf2d": "sdRoundedBox($uv - 0.5 - vec2($cx, $cy), vec2($bx, $by), min(vec4($rx, $ry, $rz, $rw), min($bx, $by)))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -38,6 +38,7 @@
 				"control": "Rect1.x",
 				"default": 0.15,
 				"label": "Width",
+				"longdesc": "Width of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "bx",
@@ -48,6 +49,7 @@
 				"control": "Rect1.y",
 				"default": 0.1,
 				"label": "Height",
+				"longdesc": "Height of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "by",
@@ -58,6 +60,7 @@
 				"control": "None",
 				"default": 0.2,
 				"label": "Radius Bottom Right",
+				"longdesc": "Bottom-left corner radius of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "rx",
@@ -68,6 +71,7 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Radius Top Right",
+				"longdesc": "Top-right corner radius of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "ry",
@@ -78,6 +82,7 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Radius Bottom Left",
+				"longdesc": "Bottom-left corner radius of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "rz",
@@ -88,6 +93,7 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Radius Top Left",
+				"longdesc": "Top-left corner radius of the rounded box",
 				"max": 1,
 				"min": 0,
 				"name": "rw",
@@ -119,7 +125,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdRoundedBox"
 	},
 	"type": "shader"
 }

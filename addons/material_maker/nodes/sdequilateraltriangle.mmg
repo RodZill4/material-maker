@@ -5,9 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.020211,
-		"cy": 0.072986,
-		"r": 0.364409
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.4
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -18,11 +18,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "An equilateral triangle described as a signed distance function",
 		"name": "sdEquilateralTriangle",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The equilateral triangle as a signed distance function",
 				"sdf2d": "sdEquilateralTriangle(($uv - 0.5 - vec2($cx, $cy)) / $r) * $r",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -33,11 +33,11 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
-				"longdesc": "The rotation of the n-gon",
+				"longdesc": "Radius of the equilateral triangle",
 				"max": 1,
 				"min": 0,
 				"name": "r",
-				"shortdesc": "Rotation",
+				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -66,7 +66,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdEquilateralTriangle"
 	},
 	"type": "shader"
 }

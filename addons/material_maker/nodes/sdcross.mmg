@@ -5,11 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-		"bx": 0.49088,
-		"by": 0.154661,
-		"cx": 0.025852,
-		"cy": 0.009853,
-		"r": 0.150362
+		"bx": 0.5,
+		"by": 0.15,
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.15
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -20,11 +20,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A cross described as a signed distance function",
 		"name": "sdCross",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The cross as a signed distance function",
 				"sdf2d": "sdCross($uv - 0.5 - vec2($cx, $cy), vec2($bx, $by) + $r, $r)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -35,6 +35,7 @@
 				"control": "Radius1.r",
 				"default": 0.15,
 				"label": "Radius",
+				"longdesc": "Radius of the cross",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -45,6 +46,7 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
+				"longdesc": "Width of the cross",
 				"max": 1,
 				"min": 0,
 				"name": "bx",
@@ -55,6 +57,7 @@
 				"control": "Rect1.y",
 				"default": 0.15,
 				"label": "Height",
+				"longdesc": "Height of the cross",
 				"max": 1,
 				"min": 0,
 				"name": "by",
@@ -86,7 +89,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdCross"
 	},
 	"type": "shader"
 }

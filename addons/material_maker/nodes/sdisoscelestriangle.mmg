@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0.0,
+		"cy": 0.0,
+		"height": 0.45,
+		"width": 0.2
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -30,11 +30,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "An Isosceles Triangle described as a signed distance function",
 		"name": "sdIsoscelesTriangle",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The isosceles triangle as a signed distance function",
 				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -45,11 +45,11 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
+				"longdesc": "Width of the isosceles triangle",
 				"max": 1,
 				"min": 0,
 				"name": "width",
-				"shortdesc": "Rotation",
+				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -57,6 +57,7 @@
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Height",
+				"longdesc": "Height of the isosceles triangle",
 				"max": 1,
 				"min": 0,
 				"name": "height",
@@ -88,7 +89,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdIsoscelesTriangle"
 	},
 	"type": "shader"
 }

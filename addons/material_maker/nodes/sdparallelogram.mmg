@@ -5,11 +5,11 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.070722,
-		"cy": 0.004563,
+		"cx": 0.0,
+		"cy": 0.0,
 		"height": 0.4,
-		"skew": 0.104071,
-		"width": 0.287452
+		"skew": 0.1,
+		"width": 0.3
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -20,11 +20,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A parallelogram described as a signed distance function",
 		"name": "sdParallelogram",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The parallelogram as a signed distance function",
 				"sdf2d": "sdParallelogram($uv - 0.5 - vec2($cx, $cy), $width, $height, $skew)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -35,30 +35,33 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
+				"longdesc": "Width of the parallelogram",
 				"max": 1,
 				"min": 0,
 				"name": "width",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Rect1.y",
 				"default": 0.5,
 				"label": "Height",
+				"longdesc": "Height of the parallelogram",
 				"max": 1,
 				"min": 0,
 				"name": "height",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Skew",
+				"longdesc": "Amount of skew of the parallelogram",
 				"max": 1,
 				"min": 0,
 				"name": "skew",
-				"step": 0.1,
+				"step": 0.01,
 				"type": "float"
 			},
 			{
@@ -86,7 +89,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdParallelogram"
 	},
 	"type": "shader"
 }

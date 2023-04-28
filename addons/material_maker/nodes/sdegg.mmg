@@ -5,26 +5,35 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.025852,
-		"cy": 0.009853,
-		"ra": 0.426243,
-		"rb": 0.195568
+		"cx": 0,
+		"cy": 0,
+		"ra": 0.4,
+		"rb": 0.2
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdEgg( in vec2 p, in float ra, in float rb )\n{\n    float k = sqrt(3.0);\n    p.x = abs(p.x);\n    float r = ra - rb;\n    return ((p.y<0.0)       ? length(vec2(p.x,  p.y    )) - r :\n            ((k*(p.x+r)<p.y) ? length(vec2(p.x,  p.y-k*r)) :\n                              length(vec2(p.x+r,p.y    )) - 2.0*r)) - rb;\n}",
+		"global": [
+			"float sdEgg( in vec2 p, in float ra, in float rb )",
+			"{",
+			"\tfloat k = sqrt(3.0);",
+			"\tp.x = abs(p.x);",
+			"\tfloat r = ra - rb;",
+			"\treturn ((p.y<0.0)\t   ? length(vec2(p.x,  p.y\t)) - r :",
+			"\t\t\t((k*(p.x+r)<p.y) ? length(vec2(p.x,  p.y-k*r)) :",
+			"\t\t\t\t\t\t\t  length(vec2(p.x+r,p.y\t)) - 2.0*r)) - rb;",
+			"}"
+		],
 		"inputs": [
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "An egg described as a signed distance function",
 		"name": "sdEgg",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdEgg($uv - 0.5 - vec2($cx, $cy), $ra, $rb)",
+				"longdesc": "The egg as a signed distance function",
+				"sdf2d": "sdEgg($uv - 0.5 - vec2($cx, $cy), $ra, $rb*$ra)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -34,6 +43,7 @@
 				"control": "Radius1.r",
 				"default": 0.4,
 				"label": "Radius",
+				"longdesc": "Major radius of the egg",
 				"max": 1,
 				"min": 0,
 				"name": "ra",
@@ -44,6 +54,7 @@
 				"control": "Radius11.r",
 				"default": 0.2,
 				"label": "Small Radius",
+				"longdesc": "Minor radius of the egg",
 				"max": 1,
 				"min": 0,
 				"name": "rb",
@@ -75,7 +86,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdEgg"
 	},
 	"type": "shader"
 }

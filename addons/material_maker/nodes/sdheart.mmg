@@ -5,9 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.025852,
-		"cy": 0.009853,
-		"r": 0.393707
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.4
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -18,11 +18,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A heart described as a signed distance function",
 		"name": "sdHeart",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The heart as a signed distance function",
 				"sdf2d": "sdHeart(($uv - 0.5 - vec2($cx, $cy)) / radius_$(name_uv)) * radius_$(name_uv)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -33,6 +33,7 @@
 				"control": "Radius1.r",
 				"default": 0.4,
 				"label": "Radius",
+				"longdesc": "Radius of the heart",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -64,7 +65,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdHeart"
 	},
 	"type": "shader"
 }
