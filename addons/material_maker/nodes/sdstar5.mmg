@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0,
-		"cy": 0.03,
-		"r": 0.480218,
-		"rf": 0.443257
+		"cx": 0.0,
+		"cy": 0.0,
+		"r": 0.5,
+		"rf": 0.45
 	},
 	"seed": 0,
 	"seed_locked": false,
@@ -19,11 +19,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A 5-point star described as a signed distance function",
 		"name": "sdStar5",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The 5-point star as a signed distance function",
 				"sdf2d": "sdStar5($uv - 0.5 - vec2($cx, $cy), $r, $rf)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,6 +34,7 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
+				"longdesc": "Radius of the 5-point star",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -44,6 +45,7 @@
 				"control": "Radius11.r",
 				"default": 0.5,
 				"label": "Inner Radius",
+				"longdesc": "Inner radius of the 5-point star",
 				"max": 1,
 				"min": 0,
 				"name": "rf",
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdStar5"
 	},
 	"type": "shader"
 }
