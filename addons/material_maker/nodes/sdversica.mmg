@@ -5,26 +5,26 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.025852,
-		"cy": -0.01032,
-		"d": 0.392395,
-		"r": 0.64
+		"cx": 0,
+		"cy": 0,
+		"d": 0.2,
+		"r": 0.5
 	},
 	"seed": 0,
 	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": "float sdVesica(vec2 p, float r, float d)\n{\n    p = abs(p);\n    float b = sqrt(r*r-d*d);\n    return ((p.y-b)*d>p.x*b) ? length(p-vec2(0.0,b)) : (length(p-vec2(-d,0.0))-r);\n}",
+		"global": "float sdVesica(vec2 p, float r, float d)\n{\n    p = abs(p);\n    float b = sqrt(r*r-d*d);\n    return ((p.y-b)*d>p.x*b) ? length(p-vec2(0.0,b))*sign(d) : (length(p-vec2(-d,0.0))-r);\n}",
 		"inputs": [
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A versica described as a signed distance function",
 		"name": "sdVersica",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdVesica($uv - 0.5 - vec2($cx, $cy), $r, max($r - $d, 0.0))",
+				"longdesc": "The versica as a signed distance function",
+				"sdf2d": "sdVesica($uv - 0.5 - vec2($cx, $cy), $r, $r - $d)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -34,6 +34,7 @@
 				"control": "Rect1.y",
 				"default": 0.6,
 				"label": "Radius",
+				"longdesc": "Radius of the versica",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -44,6 +45,7 @@
 				"control": "Rect1.x",
 				"default": 0.4,
 				"label": "X Offset",
+				"longdesc": "Distance offset between the disks",
 				"max": 1,
 				"min": 0,
 				"name": "d",
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdVersica"
 	},
 	"type": "shader"
 }
