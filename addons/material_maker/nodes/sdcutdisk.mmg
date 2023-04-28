@@ -1,5 +1,5 @@
 {
-	"name": "sdstar",
+	"name": "sdcutdisk",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -7,51 +7,31 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
-		"m": 0.32174,
-		"n": 7,
-		"r": 0.123007
+		"h": -1.17098,
+		"r": 0.429327
 	},
-	"seed_int": 0,
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": [
-			"// The MIT License, Copyright © 2019 Inigo Quilez",
-			"// https://www.shadertoy.com/view/3tSGDy",
-			"",
-			"float sdStar(vec2 p, float r, int n, float m) {",
-			"\tfloat an = 3.141593/float(n);",
-			"\tfloat en = 3.141593/m;",
-			"\tvec2  acs = vec2(cos(an),sin(an));",
-			"\tvec2  ecs = vec2(cos(en),sin(en));",
-			"\tfloat bn = mod(atan(p.x,p.y),2.0*an) - an;",
-			"\tp = length(p)*vec2(cos(bn),abs(sin(bn)));",
-			"\tp -= r*acs;",
-			"\tp += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);",
-			"\treturn length(p)*sign(p.x);",
-			"}",
-			""
-		],
-		"includes": [
-			"sdrotate",
-			"sdcirclerepeat"
-		],
+		"global": "float sdCutDisk( in vec2 p, in float r, in float h )\n{\n    float w = sqrt(r*r-h*h); // constant for any given shape\n    p.x = abs(p.x);\n    float s = max( (h-r)*p.x*p.x+w*w*(h+r-2.0*p.y), h*p.x-w*p.y );\n    return (s<0.0) ? length(p)-r : ((p.x<w) ? h - p.y : length(p-vec2(w,h)));\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdStar",
+		"name": "sdCutDisk",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdStar($uv - 0.5 - vec2($cx, $cy), $r + $m, $n, 2.0 + (1.0 - ($m / ($r + $m))) * ($n - 2.0))",
+				"sdf2d": "sdCutDisk($uv - 0.5 - vec2($cx, $cy), $r, clamp($h / 4.0, -$r, $r))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Radius11.r",
+				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
 				"max": 1,
@@ -61,23 +41,13 @@
 				"type": "float"
 			},
 			{
-				"control": "Radius1.r",
-				"default": 0.25,
-				"label": "Inner Radius",
+				"control": "Scale1.y",
+				"default": -0.5,
+				"label": "Cut Height",
 				"max": 1,
-				"min": 0,
-				"name": "m",
+				"min": -1,
+				"name": "h",
 				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.5,
-				"label": "Count",
-				"max": 20,
-				"min": 1,
-				"name": "n",
-				"step": 1,
 				"type": "float"
 			},
 			{

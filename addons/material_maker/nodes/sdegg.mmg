@@ -1,66 +1,53 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdegg",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"cx": 0.025852,
+		"cy": 0.009853,
+		"ra": 0.426243,
+		"rb": 0.195568
 	},
-	"seed_int": 0,
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": [
-			"float sd_isosceles_triangle(vec2 uv, vec2 size)",
-			"{",
-			"\tuv.x = abs(uv.x);",
-			"\tuv.y += size.y; size.y *= 2.0;",
-			"\tvec2 a = uv - size*clamp(dot(uv,size)/dot(size,size), 0.0, 1.0);",
-			"\tvec2 b = uv - size*vec2(clamp(uv.x/size.x, 0.0, 1.0), 1.0);",
-			"\tfloat s = -sign(size.y);",
-			"\tvec2 d = min(vec2(dot(a,a), s*(uv.x*size.y-uv.y*size.x)),",
-			"\t\t\t\t vec2(dot(b,b), s*(uv.y-size.y)));",
-			"\treturn -sqrt(d.x)*sign(d.y);",
-			"}"
-		],
+		"global": "float sdEgg( in vec2 p, in float ra, in float rb )\n{\n    float k = sqrt(3.0);\n    p.x = abs(p.x);\n    float r = ra - rb;\n    return ((p.y<0.0)       ? length(vec2(p.x,  p.y    )) - r :\n            ((k*(p.x+r)<p.y) ? length(vec2(p.x,  p.y-k*r)) :\n                              length(vec2(p.x+r,p.y    )) - 2.0*r)) - rb;\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdEgg",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdEgg($uv - 0.5 - vec2($cx, $cy), $ra, $rb)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Rect1.x",
-				"default": 0.5,
-				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
+				"control": "Radius1.r",
+				"default": 0.4,
+				"label": "Radius",
 				"max": 1,
 				"min": 0,
-				"name": "width",
-				"shortdesc": "Rotation",
+				"name": "ra",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
-				"control": "Rect1.y",
-				"default": 0.5,
-				"label": "Height",
+				"control": "Radius11.r",
+				"default": 0.2,
+				"label": "Small Radius",
 				"max": 1,
 				"min": 0,
-				"name": "height",
-				"step": 0.1,
+				"name": "rb",
+				"step": 0.01,
 				"type": "float"
 			},
 			{

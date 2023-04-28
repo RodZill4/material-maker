@@ -1,65 +1,63 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdcross",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.043631,
-		"cy": -0.081585,
-		"height": 0.459028,
-		"width": 0.20141
+		"bx": 0.49088,
+		"by": 0.154661,
+		"cx": 0.025852,
+		"cy": 0.009853,
+		"r": 0.150362
 	},
-	"seed_int": 0,
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": [
-			"float sd_isosceles_triangle(vec2 uv, vec2 size)",
-			"{",
-			"\tuv.x = abs(uv.x);",
-			"\tuv.y += size.y; size.y *= 2.0;",
-			"\tvec2 a = uv - size*clamp(dot(uv,size)/dot(size,size), 0.0, 1.0);",
-			"\tvec2 b = uv - size*vec2(clamp(uv.x/size.x, 0.0, 1.0), 1.0);",
-			"\tfloat s = -sign(size.y);",
-			"\tvec2 d = min(vec2(dot(a,a), s*(uv.x*size.y-uv.y*size.x)),",
-			"\t\t\t\t vec2(dot(b,b), s*(uv.y-size.y)));",
-			"\treturn -sqrt(d.x)*sign(d.y);",
-			"}"
-		],
+		"global": "float sdCross( in vec2 p, in vec2 b, float r ) \n{\n    p = abs(p); p = (p.y>p.x) ? p.yx : p.xy;\n    vec2  q = p - b;\n    float k = max(q.y,q.x);\n    vec2  w = (k>0.0) ? q : vec2(b.y-p.x,-k);\n    return sign(k)*length(max(w,0.0)) + r;\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"name": "sdCross",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdTriangleIsosceles($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"sdf2d": "sdCross($uv - 0.5 - vec2($cx, $cy), vec2($bx, $by) + $r, $r)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Rect1.x",
-				"default": 0.5,
-				"label": "Width",
-				"longdesc": "The rotation of the n-gon",
+				"control": "Radius1.r",
+				"default": 0.15,
+				"label": "Radius",
 				"max": 1,
 				"min": 0,
-				"name": "width",
-				"shortdesc": "Rotation",
+				"name": "r",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
-				"control": "Rect1.y",
+				"control": "Rect1.x",
 				"default": 0.5,
+				"label": "Width",
+				"max": 1,
+				"min": 0,
+				"name": "bx",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0.15,
 				"label": "Height",
 				"max": 1,
 				"min": 0,
-				"name": "height",
+				"name": "by",
 				"step": 0.1,
 				"type": "float"
 			},

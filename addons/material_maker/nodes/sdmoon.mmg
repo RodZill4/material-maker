@@ -1,83 +1,64 @@
 {
-	"name": "sdstar",
+	"name": "sdmoon",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0,
-		"cy": 0,
-		"m": 0.32174,
-		"n": 7,
-		"r": 0.123007
+		"cx": -0.027943,
+		"cy": 0.023301,
+		"d": 0.368617,
+		"ra": 0.645541,
+		"rb": 0.450471
 	},
-	"seed_int": 0,
+	"seed": 0,
+	"seed_locked": false,
 	"shader_model": {
 		"code": "",
-		"global": [
-			"// The MIT License, Copyright © 2019 Inigo Quilez",
-			"// https://www.shadertoy.com/view/3tSGDy",
-			"",
-			"float sdStar(vec2 p, float r, int n, float m) {",
-			"\tfloat an = 3.141593/float(n);",
-			"\tfloat en = 3.141593/m;",
-			"\tvec2  acs = vec2(cos(an),sin(an));",
-			"\tvec2  ecs = vec2(cos(en),sin(en));",
-			"\tfloat bn = mod(atan(p.x,p.y),2.0*an) - an;",
-			"\tp = length(p)*vec2(cos(bn),abs(sin(bn)));",
-			"\tp -= r*acs;",
-			"\tp += ecs*clamp( -dot(p,ecs), 0.0, r*acs.y/ecs.y);",
-			"\treturn length(p)*sign(p.x);",
-			"}",
-			""
-		],
-		"includes": [
-			"sdrotate",
-			"sdcirclerepeat"
-		],
+		"global": "float sdMoon(vec2 p, float d, float ra, float rb )\n{\n    p.y = abs(p.y);\n    float a = (ra*ra - rb*rb + d*d)/(2.0*d);\n    float b = sqrt(max(ra*ra-a*a,0.0));\n    if( d*(p.x*b-p.y*a) > d*d*max(b-p.y,0.0) )\n          return length(p-vec2(a,b));\n    return max( (length(p          )-ra),\n               -(length(p-vec2(d,0))-rb));\n}",
 		"inputs": [
 
 		],
 		"instance": "",
 		"longdesc": "An n-gon described as a signed distance function",
-		"name": "sdStar",
+		"name": "sdMoon",
 		"outputs": [
 			{
 				"longdesc": "The n-gon as a signed distance function",
-				"sdf2d": "sdStar($uv - 0.5 - vec2($cx, $cy), $r + $m, $n, 2.0 + (1.0 - ($m / ($r + $m))) * ($n - 2.0))",
+				"sdf2d": "sdMoon($uv - 0.5 - vec2($cx, $cy), $d, $ra, $rb)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
 		],
 		"parameters": [
 			{
-				"control": "Radius11.r",
-				"default": 0.5,
+				"control": "Rect1.y",
+				"default": 0.6,
 				"label": "Radius",
 				"max": 1,
 				"min": 0,
-				"name": "r",
+				"name": "ra",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius11.r",
+				"default": 0.5,
+				"label": "Inner Radius",
+				"max": 1,
+				"min": 0,
+				"name": "rb",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.25,
-				"label": "Inner Radius",
+				"default": 0.4,
+				"label": "Distance",
 				"max": 1,
 				"min": 0,
-				"name": "m",
+				"name": "d",
 				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.5,
-				"label": "Count",
-				"max": 20,
-				"min": 1,
-				"name": "n",
-				"step": 1,
 				"type": "float"
 			},
 			{
