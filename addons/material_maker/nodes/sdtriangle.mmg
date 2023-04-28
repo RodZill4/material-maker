@@ -21,11 +21,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A triangle described as a signed distance function",
 		"name": "sdTriangle",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The triangle as a signed distance function",
 				"sdf2d": "sdTriangle($uv - 0.5, vec2($p1x, $p1y), vec2($p2x, $p2y), vec2($p3x, $p3y))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -36,7 +36,7 @@
 				"control": "P1.x",
 				"default": 0.2,
 				"label": "Point 1 X",
-				"longdesc": "The position of the center on the X axis",
+				"longdesc": "The position on the X axis of the first point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p1x",
@@ -48,7 +48,7 @@
 				"control": "P1.y",
 				"default": -0.25,
 				"label": "Point 1 Y",
-				"longdesc": "The position of the center on the Y axis",
+				"longdesc": "The position on the Y axis of the first point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p1y",
@@ -60,6 +60,7 @@
 				"control": "P2.x",
 				"default": 0.3,
 				"label": "Point 2 X",
+				"longdesc": "The position on the X axis of the second point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p2x",
@@ -70,6 +71,7 @@
 				"control": "P2.y",
 				"default": 0.3,
 				"label": "Point 2 Y",
+				"longdesc": "The position on the Y axis of the second point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p2y",
@@ -80,6 +82,7 @@
 				"control": "P3.x",
 				"default": -0.4,
 				"label": "Point 3 X",
+				"longdesc": "The position on the X axis of the third point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p3x",
@@ -90,6 +93,7 @@
 				"control": "P3.y",
 				"default": 0.2,
 				"label": "Point 3 Y",
+				"longdesc": "The position on the Y axis of the third point of the triangle",
 				"max": 0.5,
 				"min": -0.5,
 				"name": "p3y",
@@ -97,7 +101,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdTriangle"
 	},
 	"type": "shader"
 }
