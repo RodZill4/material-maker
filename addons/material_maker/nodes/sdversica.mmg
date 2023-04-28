@@ -45,7 +45,7 @@
 				"control": "Rect1.x",
 				"default": 0.4,
 				"label": "X Offset",
-				"longdesc": "Distance offset between the disks",
+				"longdesc": "X offset between the disks",
 				"max": 1,
 				"min": 0,
 				"name": "d",
