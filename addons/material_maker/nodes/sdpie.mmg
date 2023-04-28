@@ -19,11 +19,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "An n-gon described as a signed distance function",
+		"longdesc": "A pie described as a signed distance function",
 		"name": "sdPie",
 		"outputs": [
 			{
-				"longdesc": "The n-gon as a signed distance function",
+				"longdesc": "The pie as a signed distance function",
 				"sdf2d": "sdPie($uv - 0.5 - vec2($cx, $cy), vec2(sin(aperture_$(name_uv)), cos(aperture_$(name_uv))), $r)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,7 +34,8 @@
 				"control": "Radius1.r",
 				"default": 0.5,
 				"label": "Radius",
-				"max": 180,
+				"longdesc": "The radius of the pie",
+				"max": 1,
 				"min": 0,
 				"name": "r",
 				"step": 0.01,
@@ -44,10 +45,11 @@
 				"control": "Radius1.a",
 				"default": 0.5,
 				"label": "Aperture",
-				"max": 1,
-				"min": 0,
+				"longdesc": "The aperture of the sector",
+				"max": 90,
+				"min": -90,
 				"name": "a",
-				"step": 0.1,
+				"step": 1,
 				"type": "float"
 			},
 			{
@@ -75,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdNgon"
+		"shortdesc": "sdPie"
 	},
 	"type": "shader"
 }
