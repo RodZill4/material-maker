@@ -27,7 +27,7 @@ The **sdMoon** node accepts the following parameters:
 
 * **Distance** of the inner circle away from the origin.
 
-* the position of the center along X and Y axis.
+* The position of the center along X and Y axis.
 
 Example images
 ::::::::::::::

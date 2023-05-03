@@ -27,7 +27,7 @@ The **sdParallelogram** node accepts the following parameters:
 
 * **Skew** of the parallelogram.
 
-* the position of the center along X and Y axis.
+* The position of the center along X and Y axis.
 
 Example images
 ::::::::::::::

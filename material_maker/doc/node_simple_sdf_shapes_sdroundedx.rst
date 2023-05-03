@@ -25,7 +25,7 @@ The **sdRoundedX** node accepts the following parameters:
 
 * **Length** of the rounded X.
 
-* the position of the center along X and Y axis.
+* The position of the center along X and Y axis.
 
 Example images
 ::::::::::::::

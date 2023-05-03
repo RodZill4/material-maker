@@ -25,7 +25,7 @@ The **sdNGon** node accepts the following parameters:
 
 * **Height** of the isosceles triangle.
 
-* the position of the center along X and Y axis.
+* The position of the center along X and Y axis.
 
 Example images
 ::::::::::::::

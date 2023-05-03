@@ -25,7 +25,7 @@ The **sdVersica** node accepts the following parameters:
 
 * **X offset** of distance between the disks.
 
-* the position of the center along the X and Y axis.
+* The position of the center along the X and Y axis.
 
 Example images
 ::::::::::::::

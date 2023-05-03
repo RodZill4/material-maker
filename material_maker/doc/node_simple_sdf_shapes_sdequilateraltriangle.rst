@@ -23,7 +23,7 @@ The **sdEquilateralTriangle** node accepts the following parameters:
 
 * **Radius** of the equilateral triangle.
 
-* position of the center along X and Y axis.
+* Position of the center along X and Y axis.
 
 Example images
 ::::::::::::::

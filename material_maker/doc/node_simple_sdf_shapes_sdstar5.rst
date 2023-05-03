@@ -21,11 +21,11 @@ Parameters
 
 The **sdStar5** node accepts the following parameters:
 
-* **Radius** of the 5-point star
+* **Radius** of the 5-point star.
 
 * **Inner Radius** of the 5-point star.
 
-* the position of the center along X and Y axis.
+* The position of the center along X and Y axis.
 
 Example images
 ::::::::::::::
