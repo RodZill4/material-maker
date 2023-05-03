@@ -1,5 +1,5 @@
 sdRoundedX node
-..............
+...............
 
 The **sdRoundedX** node generates a signed distance image for a rounded X.
 
