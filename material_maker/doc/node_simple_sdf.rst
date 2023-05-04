@@ -53,6 +53,7 @@ Shapes
 	node_simple_sdf_shapes_sdversica
 	node_simple_sdf_shapes_sdstar
 	node_simple_sdf_shapes_sdpie
+	node_simple_sdf_shapes_sdarrow
 
 Operators
 +++++++++
