@@ -117,7 +117,7 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
-	get_viewport().gui_embed_subwindows = false
+	#get_window().gui_embed_subwindows = false
 	
 	get_window().close_requested.connect(self.on_close_requested)
 	
@@ -212,7 +212,13 @@ func _ready() -> void:
 		new_material()
 
 	# Create menus
-	mm_globals.menu_manager.create_menus(MENU, self, $VBoxContainer/TopBar/Menu)
+	var menu_bar_class
+	if false and DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
+		menu_bar_class = mm_globals.menu_manager.MenuBarDisplayServer
+	else:
+		menu_bar_class = mm_globals.menu_manager.MenuBarGodot
+	var menu_bar = menu_bar_class.new($VBoxContainer/TopBar/Menu)
+	mm_globals.menu_manager.create_menus(MENU, self, menu_bar)
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -243,7 +249,9 @@ func on_config_changed() -> void:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
 		# This prevents UI elements from being too small on hiDPI displays.
 		scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
-	# todo get_tree().set_screen_stretch(SceneTree.STRETCH_MODE_DISABLED, SceneTree.STRETCH_ASPECT_IGNORE, Vector2(), scale)
+	get_viewport().content_scale_factor = scale
+	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
+
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)

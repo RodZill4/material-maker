@@ -1,33 +1,185 @@
 extends Node
 
+class MenuBase:
+	func clear():
+		pass
+	
+	func connect_id_pressed(_callable : Callable):
+		pass
+	
+	func add_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
+		pass
+	
+	func add_check_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
+		pass
+	
+	func add_separator():
+		pass
+	
+	func set_item_disabled(_i : int, _disabled : bool):
+		pass
+	
+	func set_item_checked(_i : int, _checked : bool):
+		pass
+	
+	func add_submenu(_name : String, _update_callable = null) -> MenuBase:
+		return null
+
+class MenuBarBase:
+	func create_menus(_menu_def : Array, _object : Object):
+		pass
+
+
+class MenuGodot:
+	extends MenuBase
+	
+	var popup_menu : PopupMenu
+	
+	func _init(pm : PopupMenu):
+		popup_menu = pm
+	
+	func connect_id_pressed(callable : Callable):
+		popup_menu.connect("id_pressed", callable)
+	
+	func clear():
+		popup_menu.clear()
+	
+	func add_item(label: String, id: int = -1, accel: Key = 0 as Key):
+		popup_menu.add_item(label, id, accel)
+	
+	func add_check_item(label: String, id: int = -1, accel: Key = 0 as Key):
+		popup_menu.add_check_item(label, id, accel)
+	
+	func add_separator():
+		popup_menu.add_separator()
+	
+	func set_item_disabled(i : int, disabled : bool):
+		popup_menu.set_item_disabled(popup_menu.get_item_index(i), disabled)
+	
+	func set_item_checked(i : int, checked : bool):
+		popup_menu.set_item_checked(popup_menu.get_item_index(i), checked)
+	
+	func add_submenu(submenu_name : String, update_callable = null) -> MenuBase:
+		var submenu : PopupMenu
+		if popup_menu.has_node(submenu_name):
+			submenu = popup_menu.get_node(submenu_name)
+		else:
+			submenu = PopupMenu.new()
+			submenu.name = submenu_name
+			popup_menu.add_child(submenu)
+		popup_menu.add_submenu_item(submenu_name, submenu.get_name())
+		if update_callable != null:
+			submenu.connect("about_to_popup", update_callable.bind(submenu));
+		return MenuGodot.new(submenu)
+
+class MenuBarGodot:
+	extends MenuBarBase
+	
+	var menu_bar : Control
+	
+	func _init(mb : Control):
+		menu_bar = mb
+	
+	func create_menus(menu_def : Array, object : Object):
+		for md in menu_def:
+			var menu_name : String = md.menu.split("/")[0]
+			if ! menu_bar.has_node(menu_name):
+				var menu_button = MenuButton.new()
+				menu_button.name = menu_name
+				menu_button.text = menu_name
+				menu_button.switch_on_hover = true
+				menu_bar.add_child(menu_button)
+		for m in menu_bar.get_children():
+			if ! m is MenuButton:
+				continue
+			var menu = m.get_popup()
+			menu.connect("about_to_popup", Callable(self,"create_menu").bind(menu_def, object, menu, m.name+"/"))
+			mm_globals.menu_manager.create_menu(menu_def, object, m.name+"/", MenuGodot.new(menu))
+
+class MenuDisplayServer:
+	extends MenuBase
+	
+	var menu_name : String
+	var indexes : Dictionary
+	
+	func _init(m : String):
+		menu_name = m
+	
+	func clear():
+		pass
+	
+	func connect_id_pressed(callable : Callable):
+		mm_globals.menu_manager.menu_callables[get_instance_id()] = callable
+	
+	func add_item(label: String, id: int = -1, accel : Key = 0 as Key):
+		if accel & KEY_MASK_CTRL:
+			accel = ((accel & ~KEY_MASK_CTRL) | KEY_MASK_META) as Key
+		var key = str(get_instance_id())+","+str(id)
+		var index : int = DisplayServer.global_menu_add_item(menu_name, label, mm_globals.menu_manager.my_callback, mm_globals.menu_manager.my_callback, key, accel)
+		indexes[id] = index
+	
+	func add_check_item(label: String, id: int = -1, accel : Key = 0 as Key):
+		if accel & KEY_MASK_CTRL:
+			accel = ((accel & ~KEY_MASK_CTRL) | KEY_MASK_META) as Key
+		var key = str(get_instance_id())+","+str(id)
+		var index : int = DisplayServer.global_menu_add_check_item(menu_name, label, mm_globals.menu_manager.my_callback, mm_globals.menu_manager.my_callback, key, accel)
+		indexes[id] = index
+			
+	func add_separator():
+		DisplayServer.global_menu_add_separator(menu_name)
+	
+	func set_item_disabled(id : int, disabled : bool):
+		if indexes.has(id):
+			DisplayServer.global_menu_set_item_disabled(menu_name, indexes[id], disabled)
+	
+	func set_item_checked(id : int, checked : bool):
+		if indexes.has(id):
+			DisplayServer.global_menu_set_item_checked(menu_name, indexes[id], checked)
+	
+	func add_submenu(name : String, update_callable = null) -> MenuBase:
+		var full_name : String = menu_name+"/"+name
+		var index = DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
+		print(name+": "+str(index))
+		DisplayServer.global_menu_set_item_callback(menu_name, index, mm_globals.menu_manager.test)
+		return MenuDisplayServer.new(full_name)
+
+class MenuBarDisplayServer:
+	extends MenuBarBase
+	
+	func create_menus(menu_def : Array, object : Object):
+		DisplayServer.global_menu_clear("_main")
+		var menus : Array[String] = []
+		for md in menu_def:
+			var menu_name : String = md.menu.split("/")[0]
+			if menus.find(menu_name) == -1:
+				DisplayServer.global_menu_add_submenu_item("_main", menu_name, "_main/"+menu_name)
+				menus.append(menu_name)
+		for m in menus:
+			mm_globals.menu_manager.create_menu(menu_def, object, m+"/", MenuDisplayServer.new("_main/"+m))
+
 func _ready():
 	pass
 
-func create_menus(menu_def, object, menu_bar) -> void:
-	for md in menu_def:
-		var menu_name : String = md.menu.split("/")[0]
-		if ! menu_bar.has_node(menu_name):
-			var menu_button = MenuButton.new()
-			menu_button.name = menu_name
-			menu_button.text = menu_name
-			menu_button.switch_on_hover = true
-			menu_bar.add_child(menu_button)
-	for m in menu_bar.get_children():
-		if ! m is MenuButton:
-			continue
-		var menu = m.get_popup()
-		menu.connect("about_to_popup",Callable(self,"create_menu").bind( menu_def, object, menu, m.name+"/" ))
-		create_menu(menu_def, object, menu, m.name+"/")
+var menu_callables : Dictionary = {}
+func my_callback(param):
+	var split_param : PackedStringArray = param.split(",")
+	var callable : Callable = menu_callables[split_param[0].to_int()]
+	callable.call(split_param[1].to_int())
 
-func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name : String) -> PopupMenu:
+func test(x):
+	print("test test test")
+
+func create_menus(menu_def, object, menu_bar : MenuBarBase) -> void:
+	menu_bar.create_menus(menu_def, object)
+
+func create_menu(menu_def : Array, object : Object, menu_name : String, menu : MenuBase) -> MenuBase:
 	var mode = ""
 	if object.has_method("get_current_mode"):
 		mode = object.get_current_mode()
 	var submenus = {}
 	var menu_name_length = menu_name.length()
 	menu.clear()
-	if !menu.is_connected("id_pressed",Callable(self,"on_menu_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"on_menu_id_pressed").bind( menu_def, object ))
+	menu.connect_id_pressed(mm_globals.menu_manager.on_menu_id_pressed.bind(menu_def, object))
 	var last_is_separator : bool = false
 	for i in menu_def.size():
 		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
@@ -47,28 +199,18 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 		if menu_item_name.find("/") != -1:
 			var submenu_name = menu_item_name.split("/")[0]
 			if ! submenus.has(submenu_name):
-				var submenu : PopupMenu
-				if menu.has_node(submenu_name):
-					submenu = menu.get_node(submenu_name)
-				else:
-					submenu = PopupMenu.new()
-					submenu.name = submenu_name
-					menu.add_child(submenu)
-				create_menu(menu_def, object, submenu, menu_name+submenu_name+"/")
-				menu.add_submenu_item(submenu_name, submenu.get_name())
+				var submenu : MenuBase = menu.add_submenu(submenu_name)
+				create_menu(menu_def, object, menu_name+submenu_name+"/", submenu)
 				submenus[submenu_name] = submenu
 		elif menu_def[i].has("submenu"):
 			var submenu_name = "submenu_"+menu_def[i].submenu
-			if ! menu.has_node(submenu_name):
-				var submenu = PopupMenu.new()
-				submenu.name = submenu_name
-				var submenu_function = "create_menu_"+menu_def[i].submenu
-				if object.has_method(submenu_function):
-					submenu.connect("about_to_popup",Callable(object,submenu_function).bind( submenu ));
-				else:
-					submenu.connect("about_to_popup",Callable(self,"create_menu").bind( menu_def, object, submenu, menu_def[i].submenu ))
-				menu.add_child(submenu)
-			menu.add_submenu_item(menu_item_name, submenu_name)
+			var submenu_function = "create_menu_"+menu_def[i].submenu
+			var popup_callback : Callable
+			if object.has_method(submenu_function):
+				popup_callback = Callable(object, submenu_function)
+			else:
+				popup_callback = self.create_menu.bind(menu_def, object, menu_def[i].submenu)
+			menu.add_submenu(menu_item_name, popup_callback)
 		elif menu_item_name == "" or menu_item_name == "-":
 			if !last_is_separator:
 				menu.add_separator()
@@ -80,7 +222,7 @@ func create_menu(menu_def : Array, object : Object, menu : PopupMenu, menu_name 
 					if s == "Alt":
 						shortcut |= KEY_MASK_ALT
 					elif s == "Control":
-						shortcut |= KEY_MASK_CMD_OR_CTRL
+						shortcut |= KEY_MASK_CTRL
 					elif s == "Shift":
 						shortcut |= KEY_MASK_SHIFT
 					else:
@@ -106,7 +248,7 @@ func on_menu_id_pressed(id, menu_def, object) -> void:
 				parameters.append(!object.callv(command, parameters))
 			object.callv(command, parameters)
 
-func on_menu_about_to_show(menu_def, object, menu_name : String, menu : PopupMenu) -> void:
+func on_menu_about_to_show(menu_def, object, menu_name : String, menu : MenuBase) -> void:
 	var mode = ""
 	if object.has_method("get_current_mode"):
 		mode = object.get_current_mode()
@@ -117,18 +259,17 @@ func on_menu_about_to_show(menu_def, object, menu_name : String, menu : PopupMen
 		if menu_def[i].has("submenu"):
 			pass
 		elif menu_def[i].has("command"):
-			var item : int = menu.get_item_index(i)
 			var command = menu_def[i].command+"_is_disabled"
-			menu.set_item_disabled(item, false)
-			if object.has_method(command):
-				var is_disabled = object.call(command)
-				menu.set_item_disabled(item, is_disabled)
+			var is_disabled : bool = false
 			if menu_def[i].has("mode"):
-				menu.set_item_disabled(item, menu_def[i].mode != mode)
+				is_disabled = menu_def[i].mode != mode
+			if object.has_method(command):
+				is_disabled = is_disabled or object.call(command)
+			menu.set_item_disabled(i, is_disabled)
 			if menu_def[i].has("toggle") and menu_def[i].toggle:
 				command = menu_def[i].command
 				var parameters = []
 				if menu_def[i].has("command_parameter"):
 					parameters.append(menu_def[i].command_parameter)
 				if object.has_method(command):
-					menu.set_item_checked(item, object.callv(command, parameters))
+					menu.set_item_checked(i, object.callv(command, parameters))

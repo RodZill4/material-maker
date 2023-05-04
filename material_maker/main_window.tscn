@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="5"]
 [ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="6"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://clw8sb0p8webl" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
 [ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
@@ -20,7 +20,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aharp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nf53p"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -166,11 +166,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="File" type="MenuButton" parent="VBoxContainer/TopBar/Menu"]
-layout_mode = 2
-text = "File"
-switch_on_hover = true
-
 [node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource("12")]
 layout_mode = 2
 
@@ -216,7 +211,7 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_aharp")
+material = SubResource("ShaderMaterial_nf53p")
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0

@@ -40,7 +40,7 @@ func set_logged_out(message : String = "") -> void:
 	$ConnectButton.tooltip_text = "Click to log in and submit assets"
 	$SendButton.disabled = true
 	if message != "":
-		var status = await mm_globals.main_window.accept_dialog(message, false)
+		await mm_globals.main_window.accept_dialog(message, false)
 	connect_button.disabled = false
 
 func _on_ConnectButton_pressed() -> void:
@@ -97,7 +97,7 @@ func _on_ConnectButton_pressed() -> void:
 
 func update_preview_texture():
 	create_preview_viewport()
-	var status = await mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
+	await mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
 	preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
 	preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
 	preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
@@ -121,7 +121,7 @@ func _on_SendButton_pressed():
 		"material":
 			asset_type = "material"
 			create_preview_viewport()
-			var status = await main_window.update_preview_3d([ preview_viewport ], true)
+			await main_window.update_preview_3d([ preview_viewport ], true)
 			preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
 			preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
 			preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)

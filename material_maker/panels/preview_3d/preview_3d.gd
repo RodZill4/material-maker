@@ -50,7 +50,7 @@ func _exit_tree():
 
 func _ready() -> void:
 	ui = get_node(ui_path)
-	mm_globals.menu_manager.create_menus(MENU, self, ui)
+	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 

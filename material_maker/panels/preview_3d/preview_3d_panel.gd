@@ -39,7 +39,6 @@ func on_right_click():
 	new_pivot_position = -pos
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
-	$MaterialPreview.keep_3d_linear = false
 	$TextureRect.visible = false
 	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
 
