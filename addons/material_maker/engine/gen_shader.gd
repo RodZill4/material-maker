@@ -504,7 +504,7 @@ func replace_rnd(string : String, offset : int = 0) -> String:
 			string = string.replace(replace, with)
 	return string
 
-func replace_variables(string : String, variables : Dictionary) -> String:
+func replace_variables_old(string : String, variables : Dictionary) -> String:
 	while true:
 		var old_string : String = string
 		for variable in variables.keys():
@@ -532,6 +532,44 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 		if string == old_string:
 			break
 	return string
+
+const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+
+func replace_variables(string : String, variables : Dictionary) -> String:
+	var string_save = string
+	var string_end : String = ""
+	while true:
+		print(string)
+		var dollar_position = string.rfind("$")
+		print(dollar_position)
+		if dollar_position == -1:
+			break
+		print(string.right(-dollar_position))
+		var variable_end : int
+		var variable : String
+		if string[dollar_position+1] == "(":
+			variable_end = find_matching_parenthesis(string, dollar_position+1)
+			variable = string.substr(dollar_position+2, variable_end-2-dollar_position)
+		else:
+			variable_end = string.length() - string.right(-dollar_position-1).lstrip(WORD_LETTERS).length()
+			variable = string.substr(dollar_position+1, variable_end-dollar_position-1)
+		string_end = string.right(-variable_end-1)+string_end
+		string = string.left(dollar_position)
+		if variables.has(variable):
+			if variables[variable] is String:
+				string += variables[variable]
+			else:
+				string += str(variables[variable])
+		else:
+			string_end = "(error: "+variable+" not found)"+string_end
+		print("variable:"+variable)
+		print("string:"+string)
+		print("string_end:"+string_end)
+	print("RESULT: "+string+string_end)
+	return replace_variables_old(string_save, variables)
+
+func replace_input_call(input : String, parameters : Array[String], context : MMGenContext):
+	pass
 
 func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
 	var genname : String = "o"+str(get_instance_id())
