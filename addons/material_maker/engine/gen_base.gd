@@ -353,13 +353,12 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 	for v in mm_renderer.get_global_parameters():
 		var variable_name : String = "mm_global_"+v
 		var found : bool = false
-		if rv.has("code") and rv.code.find(variable_name) != -1:
+		if rv.code.find(variable_name) != -1:
 			found = true
-		if rv.has("globals"):
-			for g in rv.globals:
-				if g.find(variable_name) != -1:
-					found = true
-					break
+		for g in rv.globals:
+			if g.find(variable_name) != -1:
+				found = true
+				break
 		if found:
 			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
 			if rv.globals.find(declaration) == -1:
@@ -417,7 +416,7 @@ func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
-	await _deserialize(data)
+	_deserialize(data)
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):

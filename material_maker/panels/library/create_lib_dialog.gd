@@ -15,8 +15,8 @@ func _ready():
 func set_value(v) -> void:
 	$VBoxContainer/GridContainer/LineEdit.text = v
 
-func popup_centered_(size : Vector2i = Vector2i(0, 0)) -> void:
-	super.popup_centered(size)
+func popup_centered_(window_size : Vector2i = Vector2i(0, 0)) -> void:
+	super.popup_centered(window_size)
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()
 
 func _on_LineEdit_text_entered(_new_text) -> void:

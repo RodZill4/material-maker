@@ -190,5 +190,5 @@ func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : 
 			asset_info.type = 2
 		"node":
 			asset_info.type = 3
-	var request_status = await http_request.do_request(url, [ "Content-Type: application/json" ], HTTPClient.METHOD_POST, JSON.stringify(asset_info))
+	await http_request.do_request(url, [ "Content-Type: application/json" ], HTTPClient.METHOD_POST, JSON.stringify(asset_info))
 	update_my_assets()

@@ -81,12 +81,12 @@ func compare_item_usage(i1, i2) -> int:
 	var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
 	return u1 - u2
 
-func get_item(name : String):
+func get_item(item_name : String):
 	for skip_disabled in [ true, false ]:
 		for li in get_child_count():
 			var l = get_child(li)
 			if ! skip_disabled or disabled_libraries.find(l.library_path) == -1:
-				var item = l.get_item(name)
+				var item = l.get_item(item_name)
 				if item != null:
 					return item
 	return null
@@ -133,11 +133,11 @@ func has_library(path : String) -> bool:
 			return true
 	return false
 
-func create_library(path : String, name : String) -> void:
+func create_library(path : String, library_name : String) -> void:
 	if has_library(path):
 		return
 	var library = LIBRARY.new()
-	library.create_library(path, name)
+	library.create_library(path, library_name)
 	add_child(library)
 	save_library_list()
 
@@ -188,8 +188,8 @@ func rename_item_in_library(index : int, old_name : String, new_name : String) -
 	get_child(index).rename_item(old_name, new_name)
 	emit_signal("libraries_changed")
 
-func update_item_icon_in_library(index : int, name : String, icon : Image) -> void:
-	get_child(index).update_item_icon(name, icon)
+func update_item_icon_in_library(index : int, item_name : String, icon : Image) -> void:
+	get_child(index).update_item_icon(item_name, icon)
 	emit_signal("libraries_changed")
 
 # Section icons
@@ -218,7 +218,6 @@ func get_section_icon(section_name : String) -> Texture2D:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
-	var color = null
 	if section_colors.has(section_name):
 		return section_colors[section_name]
 	for s in section_colors.keys():

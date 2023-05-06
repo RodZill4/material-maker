@@ -50,7 +50,8 @@ func set_parameter(n : String, v) -> void:
 	super.set_parameter(n, v)
 	if n == "image":
 		filetime = get_filetime(v)
-		texture.load(v)
+		var image : Image = Image.load_from_file(v)
+		texture.set_image(image)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
 func _on_timeout() -> void:

@@ -241,7 +241,7 @@ func can_link_parameter(widget_name : String, generator : MMGenBase, param : Str
 				return false
 			match parameter.type:
 				"enum":
-					if JSON.new().stringify(linked_parameter.values) != JSON.new().stringify(parameter.values):
+					if JSON.stringify(linked_parameter.values) != JSON.stringify(parameter.values):
 						return false
 	return true
 

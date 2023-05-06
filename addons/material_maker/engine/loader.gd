@@ -67,7 +67,7 @@ func update_predefined_generators()-> void:
 	if false:
 		var file : FileAccess = FileAccess.open("predefined_nodes.json", FileAccess.WRITE)
 		if file.is_open():
-			file.store_string(JSON.new().stringify(predefined_generators))
+			file.store_string(JSON.stringify(predefined_generators))
 			file.close()
 
 func get_node_from_website(node_name : String) -> bool:

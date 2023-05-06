@@ -26,8 +26,6 @@ var _real_color : Color = Color(0.5, 0.5, 0.5)
 const STYLES : Array = [ "None", "Corners", "Lines", "Grid4x4", "Grid8x8", "Grid10x10", "Grid16x16" ]
 
 func _ready():
-	# todo
-	return
 	config_var_suffix = get_parent().config_var_suffix
 	if mm_globals.has_config("preview"+config_var_suffix+"_guides_style"):
 		_real_style = mm_globals.get_config("preview"+config_var_suffix+"_guides_style")
@@ -100,6 +98,7 @@ func set_style(s : int) -> void:
 		6:
 			mm_grid_size = 16
 		1000:
+			# warning-ignore:narrowing_conversion
 			mm_grid_size = _real_grid_size
 		_:
 			mm_grid_size = 128

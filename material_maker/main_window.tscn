@@ -20,7 +20,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nf53p"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uxe8w"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -211,7 +211,7 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_nf53p")
+material = SubResource("ShaderMaterial_uxe8w")
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
@@ -397,6 +397,7 @@ libraries = {
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_Projects_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="_on_Projects_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/TabBar" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="set_current_tab"]
+[connection signal="tab_close_pressed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/TabBar" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="close_tab"]
 [connection signal="timeout" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/CrashRecoveryTimer" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_CrashRecoveryTimer_timeout"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]

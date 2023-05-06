@@ -1,9 +1,9 @@
 extends MMGraphNodeMinimal
 
 func _ready() -> void:
-	var theme : Theme = mm_globals.main_window.theme
-	for stylebox in theme.get_stylebox_list("Reroute"):
-		add_theme_stylebox_override(stylebox, theme.get_stylebox(stylebox, "Reroute"))
+	var current_theme : Theme = mm_globals.main_window.theme
+	for stylebox in current_theme.get_stylebox_list("Reroute"):
+		add_theme_stylebox_override(stylebox, current_theme.get_stylebox(stylebox, "Reroute"))
 	call_deferred("on_connections_changed")
 
 func on_connections_changed():

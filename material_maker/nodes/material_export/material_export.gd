@@ -45,7 +45,7 @@ func _on_menu_id_pressed(id : int) -> void:
 	await get_tree().process_frame
 	match id:
 		MATERIAL_MENU_COPY:
-			DisplayServer.clipboard_set(JSON.new().stringify(get_parent().serialize_selection([ self ])))
+			DisplayServer.clipboard_set(JSON.stringify(get_parent().serialize_selection([ self ])))
 		MATERIAL_MENU_PASTE:
 			var test_json_conv = JSON.new()
 			test_json_conv.parse(DisplayServer.clipboard_get())

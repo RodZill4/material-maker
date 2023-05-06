@@ -8,13 +8,13 @@ signal color_changed_undo(c, previous)
 
 
 func _ready():
+	custom_minimum_size = Vector2(24, 24)
 	connect("color_changed",Callable(self,"on_color_changed"))
 	connect("picker_created",Callable(self,"on_picker_created"))
 	connect("popup_closed",Callable(self,"on_popup_closed"))
 
 func set_color(c):
-	print(c)
-	# todo super.set_color(c)
+	color = c
 
 func _get_drag_data(_position):
 	var preview = ColorRect.new()

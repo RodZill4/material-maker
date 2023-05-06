@@ -38,7 +38,7 @@ func _ready():
 			if environments[i].has("thumbnail"):
 				var image : Image = Image.new()
 				if image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail)) == OK:
-					texture.create_from_image(image)
+					texture.set_image(image)
 					print("created thumbnail")
 					print(texture.get_size())
 				else:
@@ -100,7 +100,7 @@ func set_value(index, variable, value, force = false):
 	if force or environments[index][variable] != serialized_value:
 		environments[index][variable] = serialized_value
 		if variable == "hdri_url":
-			var status = await read_hdr(index, value)
+			await read_hdr(index, value)
 			emit_signal("environment_updated", index)
 		elif variable == "name":
 			emit_signal("name_updated", index, value)
@@ -117,7 +117,7 @@ func apply_environment(index : int, e : Environment, s : DirectionalLight3D) -> 
 	e.background_color = MMType.deserialize_value(env.color)
 	if !e.has_meta("hdri") or e.get_meta("hdri") != env.hdri_url:
 		if !env_textures.has("hdri"):
-			var status = await read_hdr(index, env.hdri_url)
+			await read_hdr(index, env.hdri_url)
 		if env_textures.has("hdri"):
 			e.background_mode = Environment.BG_SKY
 			e.sky = Sky.new()
@@ -194,14 +194,14 @@ func set_hdr(index, hdr_path) -> bool:
 	return true
 
 func new_environment(index : int) -> void:
-	var new_environment : Dictionary
+	var new_env : Dictionary
 	if index >= 0:
-		new_environment = environments[index].duplicate()
+		new_env = environments[index].duplicate()
 	else:
-		new_environment = DEFAULT_ENVIRONMENT
-	environments.push_back(new_environment)
+		new_env = DEFAULT_ENVIRONMENT
+	environments.push_back(new_env)
 	environment_textures.push_back({ thumbnail=ImageTexture.new() })
-	emit_signal("name_updated", environments.size()-1, new_environment.name)
+	emit_signal("name_updated", environments.size()-1, new_env.name)
 	emit_signal("environment_updated", environments.size()-1)
 	update_thumbnail(environments.size()-1)
 
@@ -238,7 +238,7 @@ func do_update_thumbnail() -> void:
 		var image = await create_preview(index)
 		if image != null:
 			var t : ImageTexture = environment_textures[index].thumbnail
-			t.create_from_image(image)
+			t.set_image(image)
 			emit_signal("thumbnail_updated", index, t)
 	thumbnail_update_list = []
 	rendering = false

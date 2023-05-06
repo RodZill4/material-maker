@@ -10,9 +10,9 @@ var read_only : bool = false
 func _ready():
 	pass
 
-func create_library(path : String, name : String) -> void:
+func create_library(path : String, lib_name : String) -> void:
 	library_path = path
-	library_name = name
+	library_name = lib_name
 	library_items = []
 	library_items_by_name = {}
 	library_icons = {}
@@ -52,9 +52,9 @@ func load_library(path : String, ro : bool = false, raw_data : String = "") -> b
 		library_icons[i.tree_item] = texture
 	return true
 
-func get_item(name : String):
+func get_item(lib_name : String):
 	for i in library_items:
-		if name == i.tree_item:
+		if lib_name == i.tree_item:
 			return { name=i.tree_item, item=i, icon=library_icons[i.tree_item] }
 	return null
 
@@ -127,7 +127,7 @@ func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 	library_items = new_library_items
 	library_items_by_name[item_name] = data
 	var texture : ImageTexture = ImageTexture.new()
-	texture.create_from_image(image)
+	texture.set_image(image)
 	library_icons[item_name] = texture
 	save_library()
 
@@ -153,10 +153,10 @@ func rename_item(old_name : String, new_name : String) -> void:
 	library_icons.erase(old_name)
 	save_library()
 
-func update_item_icon(name : String, icon : Image) -> void:
+func update_item_icon(item_name : String, icon : Image) -> void:
 	if read_only:
 		return
-	var data = library_items_by_name[name]
+	var data = library_items_by_name[item_name]
 	data.icon_data = Marshalls.raw_to_base64(icon.save_png_to_buffer())
-	library_icons[name].create_from_image(icon)
+	library_icons[item_name].create_from_image(icon)
 	save_library()

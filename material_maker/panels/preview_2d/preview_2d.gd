@@ -149,7 +149,7 @@ func _on_Export_id_pressed(id : int) -> void:
 	if files.size() == 1:
 		export_as_image_file(files[0], 64 << id)
 
-func create_image(renderer_function : String, params : Array, size : int) -> void:
+func create_image(renderer_function : String, params : Array, image_size : int) -> void:
 	var source = MMGenBase.get_default_generated_shader()
 	if generator != null:
 		var gen_output_defs = generator.get_output_defs()
@@ -164,20 +164,20 @@ func create_image(renderer_function : String, params : Array, size : int) -> voi
 	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
 	mm_deps.material_update_params(tmp_material)
 	var renderer = await mm_renderer.request(self)
-	renderer = await renderer.render_material(self, tmp_material, size, source.output_type != "rgba")
+	renderer = await renderer.render_material(self, tmp_material, image_size, source.output_type != "rgba")
 	renderer.callv(renderer_function, params)
 	renderer.release(self)
 
-func export_as_image_file(file_name : String, size : int) -> void:
+func export_as_image_file(file_name : String, image_size : int) -> void:
 	mm_globals.config.set_value("path", "save_preview", file_name.get_base_dir())
-	create_image("save_to_file", [ file_name, is_greyscale ], size)
+	create_image("save_to_file", [ file_name, is_greyscale ], image_size)
 	last_export_filename = file_name
-	last_export_size = size
+	last_export_size = image_size
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), false)
 
 func _on_Reference_id_pressed(id : int):
 	var texture : ImageTexture = ImageTexture.new()
-	var status = await create_image("copy_to_texture", [ texture ], 64 << id)
+	await create_image("copy_to_texture", [ texture ], 64 << id)
 	mm_globals.main_window.get_panel("Reference").add_reference(texture)
 
 func _on_Preview2D_visibility_changed():

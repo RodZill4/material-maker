@@ -109,12 +109,12 @@ size_flags_horizontal = 0
 icon = SubResource("1")
 flat = true
 
-[node name="Main Code" type="TextEdit" parent="Sizer/TabBar"]
+[node name="Main Code" type="CodeEdit" parent="Sizer/TabBar"]
 visible = false
 layout_mode = 2
 mouse_default_cursor_shape = 0
 
-[node name="Instance Functions" type="TextEdit" parent="Sizer/TabBar"]
+[node name="Instance Functions" type="CodeEdit" parent="Sizer/TabBar"]
 visible = false
 layout_mode = 2
 mouse_default_cursor_shape = 0
@@ -134,7 +134,7 @@ text = "Includes:"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Functions" type="TextEdit" parent="Sizer/TabBar/Global Functions"]
+[node name="Functions" type="CodeEdit" parent="Sizer/TabBar/Global Functions"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_default_cursor_shape = 0

@@ -50,7 +50,6 @@ func _on_request_completed(result: int, response_code: int, headers: PackedStrin
 			emit_signal("return_request_result", { result=result, response_code=response_code, headers=headers, body=body.get_string_from_ascii() })
 		302:
 			# Redirection
-			var loc = ""
 			var header_dict = split_headers(headers)
 			if header_dict.has("location"):
 				website_request(header_dict.location)

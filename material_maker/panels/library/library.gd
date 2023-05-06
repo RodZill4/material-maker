@@ -62,7 +62,7 @@ func init_expanded_items() -> void:
 func _exit_tree() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.WRITE)
 	if f.is_open():
-		f.store_string(JSON.new().stringify(expanded_items))
+		f.store_string(JSON.stringify(expanded_items))
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.is_command_or_control_pressed() and event.keycode == KEY_F:
@@ -73,17 +73,17 @@ func get_selected_item_name() -> String:
 	return get_item_path(tree.get_selected())
 
 func get_selected_item_doc_name() -> String:
-	var name : String = ""
+	var doc_name : String = ""
 	var item : TreeItem = tree.get_selected()
 	if item == null:
 		return ""
 	while item != tree.get_root():
-		if name == "":
-			name = item.get_text(0).to_lower()
+		if doc_name == "":
+			doc_name = item.get_text(0).to_lower()
 		else:
-			name = item.get_text(0).to_lower()+"_"+name
+			doc_name = item.get_text(0).to_lower()+"_"+doc_name
 		item = item.get_parent()
-	return name.replace(" ", "_")
+	return doc_name.replace(" ", "_")
 
 func get_expanded_items(item : TreeItem = null) -> PackedStringArray:
 	var rv : PackedStringArray = PackedStringArray()
@@ -257,7 +257,7 @@ func _on_Libraries_about_to_show():
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
 
-func on_html5_load_file(file_name, file_type, file_data):
+func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
 		"json":
 			library_manager.load_library(file_name, file_data)
@@ -294,8 +294,8 @@ func _on_Libraries_Unload_id_pressed(id : int) -> void:
 
 var current_item : TreeItem
 
-func _on_Tree_item_rmb_selected(position):
-	current_item = $Tree.get_item_at_position(position)
+func _on_Tree_item_rmb_selected(mouse_position):
+	current_item = $Tree.get_item_at_position(mouse_position)
 	if current_item.get_metadata(1) != null:
 		item_menu.popup(Rect2(get_global_mouse_position(), item_menu.get_minimum_size()))
 
@@ -346,5 +346,5 @@ func _on_GetFromWebsite_pressed():
 	if result is Dictionary and result.has("index"):
 		var graph_edit : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 		if graph_edit != null:
-			var gens = mm_loader.get_generator_list()
-			graph_edit.create_gen_from_type("website:%d" % result.index)
+			mm_loader.get_generator_list()
+			await graph_edit.create_gen_from_type("website:%d" % result.index)

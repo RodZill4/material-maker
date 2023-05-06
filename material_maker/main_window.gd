@@ -175,15 +175,15 @@ func _ready() -> void:
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 	histogram = get_panel("Histogram")
 	preview_3d = get_panel("Preview3D")
-	preview_3d.connect("need_update",Callable(self,"update_preview_3d"))
+	preview_3d.connect("need_update", self.update_preview_3d)
 	hierarchy = get_panel("Hierarchy")
-	hierarchy.connect("group_selected",Callable(self,"on_group_selected"))
+	hierarchy.connect("group_selected", self.on_group_selected)
 	brushes = get_panel("Brushes")
 
 	# Load recent projects
 	load_recents()
 
-	get_tree().connect("files_dropped",Callable(self,"on_files_dropped"))
+	get_tree().connect("files_dropped", self.on_files_dropped)
 
 	do_load_projects(OS.get_cmdline_args())
 
@@ -206,9 +206,10 @@ func _ready() -> void:
 			var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 			dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
 			add_child(dialog)
-			var result = await dialog.ask()
+			await dialog.ask()
 	
 	if get_current_graph_edit() == null:
+		await get_tree().process_frame
 		new_material()
 
 	# Create menus
@@ -244,12 +245,12 @@ func on_config_changed() -> void:
 		TranslationServer.set_locale(locale)
 		get_tree().call_group("updated_from_locale", "update_from_locale")
 
-	var scale = mm_globals.get_config("ui_scale")
-	if scale <= 0:
+	var ui_scale = mm_globals.get_config("ui_scale")
+	if ui_scale <= 0:
 		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
 		# This prevents UI elements from being too small on hiDPI displays.
-		scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
-	get_viewport().content_scale_factor = scale
+		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
+	get_viewport().content_scale_factor = ui_scale
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
 
 
@@ -310,7 +311,7 @@ func load_recents() -> void:
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
 	if f.is_open():
-		f.store_string(JSON.new().stringify(recent_files))
+		f.store_string(JSON.stringify(recent_files))
 
 func add_recent(path, save = true) -> void:
 	remove_recent(path, false)
@@ -479,7 +480,7 @@ func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		var gens = mm_loader.get_generator_list()
-		graph_edit.create_gen_from_type(gens[id])
+		await graph_edit.create_gen_from_type(gens[id])
 
 
 func new_graph_panel() -> GraphEdit:
@@ -528,7 +529,7 @@ func load_project() -> void:
 		if files.size() > 0:
 			do_load_projects(files)
 
-func on_html5_load_file(file_name, file_type, file_data):
+func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
 		"ptex":
 			if do_load_material_from_data(file_name, file_data, false):
@@ -619,12 +620,12 @@ func save_project_as(project : Control = null) -> bool:
 	if project == null:
 		project = get_current_project()
 	if project != null:
-		return project.save_as()
+		return await project.save_as()
 	return false
 
 func save_all_projects() -> void:
 	for i in range(projects.get_tab_count()):
-		var result = await projects.get_tab(i).save()
+		await projects.get_tab(i).save()
 
 func close_project() -> void:
 	projects.close_tab()
@@ -1019,9 +1020,10 @@ func _on_Projects_tab_changed(_tab) -> void:
 			set_current_mode("paint")
 		current_tab = new_tab
 		if new_graph_edit != null:
-			new_graph_edit.connect("graph_changed",Callable(self,"update_preview"))
-			if !new_graph_edit.is_connected("preview_changed",Callable(self,"on_preview_changed")):
-				new_graph_edit.connect("preview_changed",Callable(self,"on_preview_changed"))
+			if ! new_graph_edit.is_connected("graph_changed", self.update_preview):
+				new_graph_edit.connect("graph_changed", self.update_preview)
+			if ! new_graph_edit.is_connected("preview_changed", self.on_preview_changed):
+				new_graph_edit.connect("preview_changed", self.on_preview_changed)
 			update_preview()
 		if new_tab is GraphEdit:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -1141,7 +1143,7 @@ func on_files_dropped(files : PackedStringArray, _screen) -> void:
 			"ptex":
 				do_load_material(f)
 			"obj":
-				var result = await new_paint_project(f)
+				await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				var controls : Array = get_controls_at_position(get_global_mouse_position(), self)
 				while ! controls.is_empty():
@@ -1212,3 +1214,7 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+
+func close_tab(tab):
+	pass # Replace with function body.

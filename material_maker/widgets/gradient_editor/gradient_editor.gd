@@ -22,7 +22,7 @@ class GradientCursor:
 		draw_colored_polygon(polygon, c)
 		draw_polyline(polygon, Color(0.0, 0.0, 0.0) if color.v > 0.5 else Color(1.0, 1.0, 1.0))
 
-	func _gui_input(ev) -> void:
+	func _gui_input(ev : InputEvent) -> void:
 		if ev is InputEventMouseButton:
 			if ev.button_index == MOUSE_BUTTON_LEFT:
 				if ev.double_click:
@@ -43,7 +43,7 @@ class GradientCursor:
 				queue_free()
 		elif ev is InputEventMouseMotion and (ev.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and sliding:
 			position.x += get_local_mouse_position().x
-			if ev.control:
+			if ev.is_command_or_control_pressed():
 				position.x = round(get_caret_column()*20.0)*0.05*(get_parent().size.x - WIDTH)
 			position.x = min(max(0, position.x), get_parent().size.x-size.x)
 			get_parent().update_from_value()
@@ -179,14 +179,14 @@ func _gui_input(ev) -> void:
 
 var active_cursor
 
-func select_color(cursor, position) -> void:
+func select_color(cursor, at_position) -> void:
 	active_cursor = cursor
 	var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
 	add_child(color_picker_popup)
 	var color_picker = color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color
 	color_picker.connect("color_changed",Callable(cursor,"set_color"))
-	color_picker_popup.position = position
+	color_picker_popup.position = at_position
 	color_picker_popup.connect("popup_hide",Callable(color_picker_popup,"queue_free"))
 	color_picker_popup.connect("popup_hide",Callable(self,"on_close_popup"))
 	color_picker_popup.popup()

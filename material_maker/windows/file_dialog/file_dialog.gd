@@ -54,8 +54,8 @@ func _on_FileDialog_popup_hide() -> void:
 	emit_signal("return_paths", [ ])
 
 func select_files() -> Array:
-	popup_centered()
 	mm_globals.main_window.add_dialog(self)
+	popup_centered()
 	var result = await self.return_paths
 	queue_free()
 	return result

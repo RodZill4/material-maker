@@ -34,16 +34,16 @@ func _ready() -> void:
 	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
 	var render_size = mm_globals.get_config("max_viewport_size")
 	for i in range(4):
-		var size : int = 512 << i
-		render_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
+		var item_render_size : int = 512 << i
+		render_menu.add_radio_check_item("%dx%d" % [ item_render_size, item_render_size ], item_render_size)
 	mm_renderer.max_viewport_size = render_size
 	render_menu.set_item_checked(render_menu.get_item_index(render_size), true)
 	# Buffer size limit menu
 	menu.add_submenu_item("Maximum buffer size", "MaxBufferSize")
 	buffers_menu.add_radio_check_item("Unlimited", 0)
 	for i in range(7):
-		var size : int = 32 << i
-		buffers_menu.add_radio_check_item("%dx%d" % [ size, size ], size)
+		var item_buffer_size : int = 32 << i
+		buffers_menu.add_radio_check_item("%dx%d" % [ item_buffer_size, item_buffer_size ], item_buffer_size)
 	buffers_menu.set_item_checked(buffers_menu.get_item_index(0), true)
 	if OS.is_debug_build():
 		menu.add_separator()
@@ -119,15 +119,15 @@ func _on_PopupMenu_id_pressed(id):
 			menu.set_item_checked(index, b)
 			mm_renderer.enable_renderers(b)
 		ITEM_MATERIAL_STATS:
-			var material = mm_globals.main_window.get_current_graph_edit().top_generator
-			print("Buffers: "+str(count_buffers(material)))
+			var generator = mm_globals.main_window.get_current_graph_edit().top_generator
+			print("Buffers: "+str(count_buffers(generator)))
 			mm_deps.print_stats()
 		ITEM_TRIGGER_DEPENDENCY_MANAGER:
 			mm_deps.update()
 
-func count_buffers(material) -> int:
+func count_buffers(generator) -> int:
 	var buffers = 0
-	for c in material.get_children():
+	for c in generator.get_children():
 		if c.get_type() == "buffer":
 			buffers += 1
 		elif c.get_type() == "iterate_buffer":

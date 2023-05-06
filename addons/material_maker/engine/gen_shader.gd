@@ -536,15 +536,12 @@ func replace_variables_old(string : String, variables : Dictionary) -> String:
 const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 
 func replace_variables(string : String, variables : Dictionary) -> String:
-	var string_save = string
+	return replace_variables_old(string, variables)
 	var string_end : String = ""
 	while true:
-		print(string)
 		var dollar_position = string.rfind("$")
-		print(dollar_position)
 		if dollar_position == -1:
 			break
-		print(string.right(-dollar_position))
 		var variable_end : int
 		var variable : String
 		if string[dollar_position+1] == "(":
@@ -562,11 +559,7 @@ func replace_variables(string : String, variables : Dictionary) -> String:
 				string += str(variables[variable])
 		else:
 			string_end = "(error: "+variable+" not found)"+string_end
-		print("variable:"+variable)
-		print("string:"+string)
-		print("string_end:"+string_end)
-	print("RESULT: "+string+string_end)
-	return replace_variables_old(string_save, variables)
+	return string+string_end
 
 func replace_input_call(input : String, parameters : Array[String], context : MMGenContext):
 	pass

@@ -5,10 +5,10 @@ extends Window
 @onready var input_list : VBoxContainer = $Sizer/TabBar/General/Inputs/Sizer
 @onready var output_list : VBoxContainer = $Sizer/TabBar/Outputs/Outputs/Sizer
 
-@onready var main_code_editor : TextEdit = $"Sizer/TabBar/Main Code"
-@onready var instance_functions_editor : TextEdit = $"Sizer/TabBar/Instance Functions"
+@onready var main_code_editor : CodeEdit = $"Sizer/TabBar/Main Code"
+@onready var instance_functions_editor : CodeEdit = $"Sizer/TabBar/Instance Functions"
 @onready var includes_editor : LineEdit = $"Sizer/TabBar/Global Functions/Includes/Includes"
-@onready var global_functions_editor : TextEdit = $"Sizer/TabBar/Global Functions/Functions"
+@onready var global_functions_editor : CodeEdit = $"Sizer/TabBar/Global Functions/Functions"
 
 @onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
@@ -23,8 +23,8 @@ signal editor_window_closed
 
 func _ready() -> void:
 	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:
-		e.add_color_region("//", "", Color(0, 0.5, 0), true)
-		e.add_color_region("/*", "*/", Color(0, 0.5, 0), false)
+		e.add_comment_delimiter("//", "", true)
+		e.add_comment_delimiter("/*", "*/", false)
 
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()

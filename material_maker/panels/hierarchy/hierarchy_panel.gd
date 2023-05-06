@@ -20,8 +20,7 @@ func _ready() -> void:
 	var default_image = Image.create(24, 24, false, Image.FORMAT_RGBA8)
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
 	default_texture = ImageTexture.new()
-	default_texture.create_from_image(default_image)
-
+	default_texture.set_image(default_image)
 	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
 
 func update_from_graph_edit(graph_edit) -> void:
@@ -74,8 +73,8 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	else:
 		result.release(self)
 
-func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, name = null) -> void:
-	item.set_text(0, name if name != null else generator.get_type_name())
+func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, item_name = null) -> void:
+	item.set_text(0, item_name if item_name != null else generator.get_type_name())
 	if generator == selected:
 		item.set_custom_color(0, Color(0.5, 0.5, 1))
 	else:

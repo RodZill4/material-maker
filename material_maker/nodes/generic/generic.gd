@@ -15,7 +15,7 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 
 
 func _ready() -> void:
-	super._ready()
+	#super._ready()
 	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
 
@@ -81,8 +81,8 @@ func get_generic_minimum():
 		rv = 1
 	return rv
 
-func update_generic(size : int) -> void:
-	if size == generator.generic_size:
+func update_generic(generic_size : int) -> void:
+	if generic_size == generator.generic_size:
 		return
 	await get_tree().process_frame
 	var generator_hier_name : String = generator.get_hier_name()
@@ -92,7 +92,7 @@ func update_generic(size : int) -> void:
 	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
 	var gi_count = generic_inputs.last-generic_inputs.first
 	var first_after_gi = generic_inputs.first+gi_count*generator.generic_size
-	var gi_ports_offset = gi_count*(size-generator.generic_size)
+	var gi_ports_offset = gi_count*(generic_size-generator.generic_size)
 	for i in range(first_after_gi, generator.get_input_defs().size()):
 		var source = generator.get_source(i)
 		if source != null:
@@ -101,7 +101,7 @@ func update_generic(size : int) -> void:
 	var generic_outputs = generator.get_generic_range(generator.shader_model.outputs, "type", 1)
 	var go_count = generic_outputs.last-generic_outputs.first
 	var first_after_go = generic_outputs.first+go_count*generator.generic_size
-	var go_ports_offset = go_count*(size-generator.generic_size)
+	var go_ports_offset = go_count*(generic_size-generator.generic_size)
 	for o in range(first_after_go, generator.get_output_defs().size()):
 		for target in generator.get_targets(o):
 			before_connections.append({from=generator.name, from_port=o, to=target.generator.name, to_port=target.input_index})
@@ -163,20 +163,20 @@ func on_parameter_changed(p : String, v) -> void:
 	if p == "__update_all__":
 		update_node()
 	else:
-		update_control_from_parameter(controls, p, v)
+		MMGraphNodeGeneric.update_control_from_parameter(controls, p, v)
 		update_parameter_tooltip(p, v)
 	get_parent().set_need_save()
 
-static func initialize_controls_from_generator(control_list, generator, object) -> void:
+static func initialize_controls_from_generator(control_list, gen, object) -> void:
 	var parameter_names = []
-	for p in generator.get_parameter_defs():
+	for p in gen.get_parameter_defs():
 		parameter_names.push_back(p.name)
 	for c in control_list.keys():
 		if parameter_names.find(c) == -1:
 			continue
 		var o = control_list[c]
-		if generator.parameters.has(c):
-			object.on_parameter_changed(c, generator.get_parameter(c))
+		if gen.parameters.has(c):
+			object.on_parameter_changed(c, gen.get_parameter(c))
 		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
 			o.connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
 		elif o is LineEdit:
@@ -203,14 +203,14 @@ static func initialize_controls_from_generator(control_list, generator, object) 
 			print("unsupported widget "+str(o))
 
 func initialize_properties() -> void:
-	initialize_controls_from_generator(controls, generator, self)
+	MMGraphNodeGeneric.initialize_controls_from_generator(controls, generator, self)
 
 func update_parameter_tooltip(p : String, v):
 	if ! controls.has(p):
 		return
 	for d in generator.get_parameter_defs():
 		if d.name == p:
-			controls[p].tooltip_text = get_parameter_tooltip(d, v)
+			controls[p].tooltip_text = MMGraphNodeGeneric.get_parameter_tooltip(d, v)
 			break
 
 func set_generator_parameter_ext(variable : String, value, old_value, merge_undo : bool = false):
@@ -466,7 +466,7 @@ func update_node() -> void:
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
-			var control = create_parameter_control(p, generator.accept_float_expressions())
+			var control = MMGraphNodeGeneric.create_parameter_control(p, generator.accept_float_expressions())
 			if control != null:
 				var label = p.name
 				control.name = label
@@ -531,8 +531,8 @@ func update_node() -> void:
 			hsizer.custom_minimum_size.y = 25 if !generator.minimized else 12
 	# Edit buttons
 	if generator.is_editable():
-		for theme in ["frame", "selected_frame"]:
-			add_theme_stylebox_override(theme, null)
+		for theme_stylebox in ["frame", "selected_frame"]:
+			add_theme_stylebox_override(theme_stylebox, null)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
@@ -586,7 +586,7 @@ func save_generator() -> void:
 		dialog.current_dir = mm_globals.config.get_value("path", "template")
 	var files = await dialog.select_files()
 	if files.size() > 0:
-		do_save_generator(files[0], generator)
+		MMGraphNodeGeneric.do_save_generator(files[0], generator)
 
 static func extract_verbose_values(path : String, data : Dictionary) -> Array:
 	var rv = []

@@ -127,7 +127,7 @@ func _process(delta) -> void:
 		_:
 			print("error "+str(status))
 
-func export_files(files, output_dir, target, size) -> void:
+func export_files(files, output_dir, target, image_size) -> void:
 	$VBoxContainer/ProgressBar.min_value = 0
 	$VBoxContainer/ProgressBar.max_value = files.size()
 	$VBoxContainer/ProgressBar.value = 0
@@ -145,7 +145,7 @@ func export_files(files, output_dir, target, size) -> void:
 					$VBoxContainer/Label.text = export_msg
 					print(export_msg)
 					var prefix : String = output_dir+"/"+f.get_file().get_basename()
-					var result = await c.export_material(prefix, target, size)
+					await c.export_material(prefix, target, image_size)
 			gen.queue_free()
 		$VBoxContainer/ProgressBar.value += 1
 	get_tree().quit()

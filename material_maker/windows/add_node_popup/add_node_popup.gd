@@ -179,10 +179,10 @@ func update_list(filter_text : String = "") -> void:
 			continue
 		var split: Array = obj.tree_item.rsplit("/", true, 1)
 		match split:
-			[var name]:
-				list.add_item(obj, "", name, i.icon)
-			[var path, var name]:
-				list.add_item(obj, path, name, i.icon)
+			[var item_name]:
+				list.add_item(obj, "", item_name, i.icon)
+			[var path, var item_name]:
+				list.add_item(obj, path, item_name, i.icon)
 
 func _input(event) -> void:
 	if event is InputEventMouseButton and event.is_pressed():

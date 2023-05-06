@@ -4,7 +4,7 @@ var current_tab : int = -1 :
 	get:
 		return current_tab
 	set(new_value):
-		if new_value == current_tab or new_value < 0 or new_value >= $TabBar.get_tab_count():
+		if new_value < 0 or new_value >= $TabBar.get_tab_count():
 			return
 		var node
 		if current_tab >= 0 && current_tab < $TabBar.get_tab_count():
@@ -27,6 +27,9 @@ func add_tab(control, legible_unique_name = false) -> void:
 	move_child(control, $TabBar.get_tab_count())
 	$TabBar.add_tab(control.name)
 	control.visible = false
+
+func set_current_tab(t : int):
+	current_tab = t
 
 func close_tab(tab = null) -> void:
 	if tab == null:
@@ -101,7 +104,9 @@ func set_tab_title(index, title) -> void:
 	$TabBar.set_tab_title(index, title)
 
 func get_current_tab_control() -> Node:
-	return get_child(current_tab)
+	if current_tab >= 0 and current_tab < $TabBar.get_tab_count():
+		return get_child(current_tab)
+	return null
 
 func _on_Tabs_tab_changed(tab) -> void:
 	current_tab = tab

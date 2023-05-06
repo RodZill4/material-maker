@@ -12,7 +12,7 @@ func _ready():
 func on_right_click():
 	# Hide viewport while we capture the position
 	var hide_texture : ImageTexture = ImageTexture.new()
-	hide_texture.create_from_image($MaterialPreview.get_texture().get_image())
+	hide_texture.set_image($MaterialPreview.get_texture().get_image())
 	$TextureRect.texture = hide_texture
 	$TextureRect.size = size
 	$TextureRect.visible = true
@@ -40,7 +40,7 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
-	$PopupMenu.popup(Rect2(get_global_mouse_position(), $PopupMenu.get_minimum_size()))
+	$PopupMenu.popup(Rect2(get_global_mouse_position(), Vector2(0.0, 0.0)))
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")

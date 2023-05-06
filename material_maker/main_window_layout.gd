@@ -72,11 +72,11 @@ func save_config() -> void:
 	for p in panels:
 		var config_panel_name = p.replace(" ", "_").replace("(", "_").replace(")", "_")
 		var location = panels[p].get_parent()
-		var hidden = false
+		var panel_hidden = false
 		if location == null:
-			hidden = panels[p].get_meta("hidden")
+			panel_hidden = panels[p].get_meta("hidden")
 			location = panels[p].get_meta("parent_tab_container")
-		mm_globals.config.set_value("layout", config_panel_name+"_hidden", hidden)
+		mm_globals.config.set_value("layout", config_panel_name+"_hidden", panel_hidden)
 		for l in PANEL_POSITIONS.keys():
 			if location == get_node(PANEL_POSITIONS[l]):
 				mm_globals.config.set_value("layout", config_panel_name+"_location", l)
@@ -157,6 +157,6 @@ func _on_tab_changed(_tab):
 	update_panels()
 
 func _on_Layout_resized():
-# warning-ignore:narrowing_conversion
+	# warning-ignore:narrowing_conversion
 	split_offset -= size.x - previous_width
 	previous_width = size.x

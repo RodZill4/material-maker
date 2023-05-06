@@ -158,7 +158,7 @@ func get_materials() -> Array:
 		return [ current_object.get_surface_override_material(0) ]
 	return []
 
-func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
+func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	var preview_material = current_object.get_surface_override_material(0)
 	preview_material.set_shader_parameter(parameter_name, value)
 	return false
@@ -170,16 +170,15 @@ func on_gui_input(event) -> void:
 	if event is InputEventPanGesture:
 		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		var camera_basis = camera.global_transform.basis
-		var rotation : Vector2 = event.delta
-		camera_stand.rotate(camera_basis.x.normalized(), -rotation.y)
-		camera_stand.rotate(camera_basis.y.normalized(), -rotation.x)
+		var camera_rotation : Vector2 = event.delta
+		camera_stand.rotate(camera_basis.x.normalized(), -camera_rotation.y)
+		camera_stand.rotate(camera_basis.y.normalized(), -camera_rotation.x)
 	elif event is InputEventMagnifyGesture:
 		zoom(event.factor)
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
 			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
 				if event.is_command_or_control_pressed():
@@ -242,7 +241,7 @@ func on_gui_input(event) -> void:
 func on_right_click():
 	pass
 
-func generate_map(generate_function : String, size : int) -> void:
+func generate_map(generate_function : String, image_size : int) -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -253,14 +252,14 @@ func generate_map(generate_function : String, size : int) -> void:
 		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
 	var files = await dialog.select_files()
 	if files.size() == 1:
-		call(generate_function, files[0], size)
+		call(generate_function, files[0], image_size)
 
-func do_generate_map(file_name : String, map : String, size : int) -> void:
+func do_generate_map(file_name : String, map : String, image_size : int) -> void:
 	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
 	add_child(map_renderer)
 	var id = objects.get_child_count()-1
 	var object : MeshInstance3D = objects.get_child(id)
-	var result = await map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], size)
+	await map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], image_size)
 	map_renderer.queue_free()
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
@@ -277,8 +276,8 @@ func create_menu_generate_normal_map(menu) -> void:
 func generate_normal_map(i : int) -> void:
 	generate_map("do_generate_normal_map", 256 << i)
 
-func do_generate_normal_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "normal", size)
+func do_generate_normal_map(file_name : String, image_size : int) -> void:
+	do_generate_map(file_name, "normal", image_size)
 
 func create_menu_generate_position_map(menu) -> void:
 	create_menu_map(menu, "generate_position_map")
@@ -286,8 +285,8 @@ func create_menu_generate_position_map(menu) -> void:
 func generate_position_map(i : int) -> void:
 	generate_map("do_generate_position_map", 256 << i)
 
-func do_generate_position_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "position", size)
+func do_generate_position_map(file_name : String, image_size : int) -> void:
+	do_generate_map(file_name, "position", image_size)
 
 func create_menu_generate_curvature_map(menu) -> void:
 	create_menu_map(menu, "generate_curvature_map")
@@ -295,8 +294,8 @@ func create_menu_generate_curvature_map(menu) -> void:
 func generate_curvature_map(i : int) -> void:
 	generate_map("do_generate_curvature_map", 256 << i)
 
-func do_generate_curvature_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "curvature", size)
+func do_generate_curvature_map(file_name : String, image_size : int) -> void:
+	do_generate_map(file_name, "curvature", image_size)
 
 func create_menu_generate_thickness_map(menu) -> void:
 	create_menu_map(menu, "generate_thickness_map")
@@ -304,8 +303,8 @@ func create_menu_generate_thickness_map(menu) -> void:
 func generate_thickness_map(i : int) -> void:
 	generate_map("do_generate_thickness_map", 256 << i)
 
-func do_generate_thickness_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "thickness", size)
+func do_generate_thickness_map(file_name : String, image_size : int) -> void:
+	do_generate_map(file_name, "thickness", image_size)
 
 func create_menu_generate_ao_map(menu) -> void:
 	create_menu_map(menu, "generate_ao_map")
@@ -313,5 +312,5 @@ func create_menu_generate_ao_map(menu) -> void:
 func generate_ao_map(i : int) -> void:
 	generate_map("do_generate_ao_map", 256 << i)
 
-func do_generate_ao_map(file_name : String, size : int) -> void:
-	do_generate_map(file_name, "ao", size)
+func do_generate_ao_map(file_name : String, image_size : int) -> void:
+	do_generate_map(file_name, "ao", image_size)

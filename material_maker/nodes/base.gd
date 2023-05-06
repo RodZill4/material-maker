@@ -88,7 +88,7 @@ func update():
 
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
-# warning-ignore:narrowing_conversion
+	# warning-ignore:narrowing_conversion
 	var button_x : int = size.x-40
 	for b in buttons:
 		if b.hidden:
@@ -97,21 +97,21 @@ func _draw() -> void:
 		button_x -= 16
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
-	var scale = get_global_transform().get_scale()
+	var global_scale = get_global_transform().get_scale()
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
 		if inputs[i].has("group_size") and inputs[i].group_size > 1:
 			var conn_pos1 = get_connection_input_position(i)
-# warning-ignore:narrowing_conversion
+			# warning-ignore:narrowing_conversion
 			var conn_pos2 = get_connection_input_position(min(i+inputs[i].group_size-1, inputs.size()-1))
-			conn_pos1 /= scale
-			conn_pos2 /= scale
+			conn_pos1 /= global_scale
+			conn_pos2 /= global_scale
 			draw_line(conn_pos1, conn_pos2, color)
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_connection_input_position(i)/scale-Vector2(string_size.x+12, -string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_connection_input_position(i)/global_scale-Vector2(string_size.x+12, -string_size.y*0.3), string, 0, -1, 16, color)
 	var outputs = generator.get_output_defs()
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
@@ -129,8 +129,8 @@ func _draw() -> void:
 # warning-ignore:narrowing_conversion
 			var conn_pos1 = get_connection_output_position(i)
 			var conn_pos2 = get_connection_output_position(min(i+outputs[i].group_size-1, outputs.size()-1))
-			conn_pos1 /= scale
-			conn_pos2 /= scale
+			conn_pos1 /= global_scale
+			conn_pos2 /= global_scale
 			draw_line(conn_pos1, conn_pos2, color)
 		var j = -1
 		if i == preview_port[0]:
@@ -139,12 +139,12 @@ func _draw() -> void:
 			j = 1
 		if j != -1:
 			var conn_pos = get_connection_output_position(i)
-			conn_pos /= scale
+			conn_pos /= global_scale
 			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
 		if show_outputs:
-			var string : String = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else (tr("Output")+" "+str(i))
+			var string : StringName = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else StringName(tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_connection_output_position(i)/scale+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_connection_output_position(i)/global_scale+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
 	if (selected):
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 
@@ -255,7 +255,7 @@ var doubleclicked : bool = false
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
-# warning-ignore:narrowing_conversion
+			# warning-ignore:narrowing_conversion
 			var button_x : int = size.x-40
 			for b in buttons:
 				if b.hidden:
@@ -286,7 +286,7 @@ func _on_gui_input(event) -> void:
 				edit_generator()
 	elif event is InputEventMouseMotion:
 		var epos : Vector2 = event.position
-# warning-ignore:narrowing_conversion
+		# warning-ignore:narrowing_conversion
 		var button_x : int = size.x-40
 		for b in buttons:
 			if b.hidden:
@@ -322,28 +322,28 @@ func get_output_slot(pos : Vector2) -> int:
 	return return_value
 
 func get_slot_from_position(pos : Vector2) -> Dictionary:
-	var scale = get_global_transform().get_scale()
+	var global_scale = get_global_transform().get_scale()
 	if get_connection_input_count() > 0:
-		var input_1 : Vector2 = get_connection_input_position(0)-5*scale
-		var input_2 : Vector2 = get_connection_input_position(get_connection_input_count()-1)+5*scale
+		var input_1 : Vector2 = get_connection_input_position(0)-5*global_scale
+		var input_2 : Vector2 = get_connection_input_position(get_connection_input_count()-1)+5*global_scale
 		var new_show_inputs : bool = Rect2(input_1, input_2-input_1).has_point(pos)
 		if new_show_inputs != show_inputs:
 			show_inputs = new_show_inputs
 			update()
 		if new_show_inputs:
 			for i in range(get_connection_input_count()):
-				if (get_connection_input_position(i)-pos).length() < 5*scale.x:
+				if (get_connection_input_position(i)-pos).length() < 5*global_scale.x:
 					return { type="input", index=i }
 	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*scale
+		var output_1 : Vector2 = get_connection_output_position(0)-5*global_scale
+		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*global_scale
 		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 		if new_show_outputs != show_outputs:
 			show_outputs = new_show_outputs
 			update()
 		if new_show_outputs:
 			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*scale.x:
+				if (get_connection_output_position(i)-pos).length() < 5*global_scale.x:
 					return { type="output", index=i }
 	return { type="none", index=-1 }
 
@@ -456,7 +456,7 @@ func _on_menu_id_pressed(id : int) -> void:
 			var share_button = mm_globals.main_window.get_share_button()
 			var preview = await generator.render(self, 0, 1024, true)
 			var preview_texture : ImageTexture = ImageTexture.new()
-			preview_texture.create_from_image(preview.get_image())
+			preview_texture.set_image(preview.get_image())
 			share_button.send_asset("node", node, preview_texture)
 
 var edit_generator_prev_state : Dictionary
