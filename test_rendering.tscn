@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmsgkoq8gwsdm"]
+
+[ext_resource type="Script" path="res://test_rendering.gd" id="1_3a83n"]
+
+[node name="TestRendering" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3a83n")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+columns = 2
+
+[node name="LabelColumns" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Columns"
+
+[node name="Columns" type="SpinBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 20.0
+value = 6.0
+
+[node name="LabelRows" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Rows"
+
+[node name="Rows" type="SpinBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 20.0
+value = 6.0
+
+[node name="LabelWidthX" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Width X"
+
+[node name="WidthX" type="SpinBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="LabelWidthY" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Width Y"
+
+[node name="WidthY" type="SpinBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="LabelStitch" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Stitch"
+
+[node name="Stitch" type="SpinBox" parent="VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+expand_mode = 1
+
+[connection signal="value_changed" from="VBoxContainer/GridContainer/Columns" to="." method="update"]
+[connection signal="value_changed" from="VBoxContainer/GridContainer/Rows" to="." method="update"]
+[connection signal="value_changed" from="VBoxContainer/GridContainer/WidthX" to="." method="update"]
+[connection signal="value_changed" from="VBoxContainer/GridContainer/WidthY" to="." method="update"]
+[connection signal="value_changed" from="VBoxContainer/GridContainer/Stitch" to="." method="update"]
