@@ -1064,7 +1064,6 @@ func show_background_preview_3d(button_pressed):
 	if button_pressed:
 		preview_2d_background_button.button_pressed = false
 
-
 func generate_screenshots():
 	var result = await library.generate_screenshots(get_current_graph_edit())
 	print(result)
@@ -1214,7 +1213,3 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
-
-func close_tab(tab):
-	pass # Replace with function body.

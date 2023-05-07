@@ -34,11 +34,11 @@ func generate(mesh: Mesh) -> ImageTexture:
 	print("Time to generate BVH: %f" % ((Time.get_ticks_msec() - time) / 1000.0))
 
 	var tex := ImageTexture.new()
-	tex.create_from_image(bvh.image) #,0
+	tex.set_image(bvh.image)
 	return tex
 
 
-# The BVH (Bounding Volume Hierarchy) is used to making ray tracing checked the GPU much more efficient.
+# The BVH (Bounding Volume Hierarchy) is used to making ray tracing on the GPU much more efficient.
 class BVHNode:
 	const MAX_TRIANGLES = 8
 	const DATA_HEADER_SIZE = 1
@@ -238,7 +238,7 @@ class BVHNode:
 						var tri_a = _get_data(j)
 						var tri_b = _get_data(j + 1)
 						var tri_c = _get_data(j + 2)
-						var tri_t = Geometry2D.ray_intersects_triangle(ray_start, ray_dir,
+						var tri_t = Geometry3D.ray_intersects_triangle(ray_start, ray_dir,
 							Vector3(tri_a[0], tri_a[1], tri_a[2]),
 							Vector3(tri_b[0], tri_b[1], tri_b[2]),
 							Vector3(tri_c[0], tri_c[1], tri_c[2])
@@ -330,15 +330,16 @@ class BVHNode:
 				curr_node_idx = node_stack[max(stack_point, 0)][2]
 
 		var tri_normal: Vector3 = (tri[2] - tri[0]).cross(tri[1] - tri[0])
-		var imm: ImmediateMesh = node_debug.get_node_or_null("../DebugBVHHit")
-		imm.clear()
-		imm.begin(Mesh.PRIMITIVE_TRIANGLES)
-		imm.set_normal(tri_normal)
-		imm.add_vertex(tri[0])
-		imm.add_vertex(tri[1])
-		imm.add_vertex(tri[2])
-		imm.end()
-#		print("min: " + str(min_node_idx))
+		var imm = node_debug.get_node_or_null("../DebugBVHHit")
+		if imm != null:
+			imm.clear()
+			imm.begin(Mesh.PRIMITIVE_TRIANGLES)
+			imm.set_normal(tri_normal)
+			imm.add_vertex(tri[0])
+			imm.add_vertex(tri[1])
+			imm.add_vertex(tri[2])
+			imm.end()
+	#		print("min: " + str(min_node_idx))
 
 		return t
 
@@ -362,7 +363,7 @@ class BVHNode:
 #		aabb_shape.name += str(level)
 
 		aabb_shape.shape = BoxShape3D.new()
-		aabb_shape.shape.extents = aabb.size * 0.5
+		aabb_shape.shape.size = aabb.size * 0.5
 		aabb_shape.position = aabb.position + aabb.size * 0.5
 		aabbs.append(aabb_shape)
 
@@ -428,12 +429,12 @@ class BVHNode:
 		return aabb.size[a] > aabb.size[b]
 
 	func _intersect_aabb(ray_origin: Vector3, ray_dir: Vector3, box_min: Vector3, box_max: Vector3, solid:=false) -> float:
-		var tMin := (box_min - ray_origin) / ray_dir
-		var tMax := (box_max - ray_origin) / ray_dir
-		var t1 := Vector3(min(tMin.x, tMax.x), min(tMin.y, tMax.y), min(tMin.z, tMax.z))
-		var t2 := Vector3(max(tMin.x, tMax.x), max(tMin.y, tMax.y), max(tMin.z, tMax.z))
-		var tNear := max(max(t1.x, t1.y), t1.z)
-		var tFar := min(min(t2.x, t2.y), t2.z)
+		var tMin : Vector3 = (box_min - ray_origin) / ray_dir
+		var tMax : Vector3 = (box_max - ray_origin) / ray_dir
+		var t1 : Vector3 = Vector3(min(tMin.x, tMax.x), min(tMin.y, tMax.y), min(tMin.z, tMax.z))
+		var t2 : Vector3 = Vector3(max(tMin.x, tMax.x), max(tMin.y, tMax.y), max(tMin.z, tMax.z))
+		var tNear : float = max(max(t1.x, t1.y), t1.z)
+		var tFar : float = min(min(t2.x, t2.y), t2.z)
 
 		if tNear > tFar or (tFar < 0.0 and tNear < 0.0):
 			return -1.0

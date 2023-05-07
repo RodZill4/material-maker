@@ -54,7 +54,7 @@ func generate(mesh: Mesh) -> Mesh:
 				break
 
 		if not found:
-		  vert_orig_index[vert_index] = vert_index
+			vert_orig_index[vert_index] = vert_index
 
 	# Make sure we always point to the very first orig vertex.
 	for vert_index in num_verts:

@@ -12,7 +12,7 @@ func _ready():
 	set_process(false)
 	var dir : DirAccess
 	# TODO: Fix this
-	if FileAccess.file_exists("res://material_maker/main_window.tscn"):
+	if ResourceLoader.exists("res://material_maker/main_window.tscn"):
 		print("loading MM")
 		print(size)
 		if ("--export" in OS.get_cmdline_args()) or ("--export-material" in OS.get_cmdline_args()):

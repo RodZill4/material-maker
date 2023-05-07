@@ -61,7 +61,7 @@ func _on_timeout() -> void:
 		filetime = new_filetime
 		var image : Image = Image.new()
 		image.load(file_path)
-		texture.create_from_image(image)
+		texture.set_image(image)
 		super.set_parameter("image", file_path)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 

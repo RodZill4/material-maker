@@ -1,13 +1,14 @@
-[gd_scene load_steps=27 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=28 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="5"]
 [ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="6"]
 [ext_resource type="PackedScene" uid="uid://clw8sb0p8webl" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
+[ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="8_4er2h"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
 [ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
 [ext_resource type="PackedScene" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
@@ -20,7 +21,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_uxe8w"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dmmtn"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -202,6 +203,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
+script = ExtResource("8_4er2h")
 
 [node name="BackgroundPreviews" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
 anchors_preset = 0
@@ -211,13 +213,12 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_uxe8w")
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+material = SubResource("ShaderMaterial_dmmtn")
+layout_mode = 1
 offset_right = 0.0
 offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
 const float preview_2d_scale = 1.2;
 const vec2 preview_2d_center = vec2(0.5);
@@ -234,15 +235,14 @@ void fragment() {
 
 [node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("4")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+layout_mode = 1
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
-ui_path = "../../PreviewUI/Panel/HBoxContainer/Preview3DUI"
+grow_horizontal = 2
+grow_vertical = 2
+ui_path = NodePath("../../PreviewUI/Panel/HBoxContainer/Preview3DUI")
 
 [node name="Projects" type="Panel" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
 self_modulate = Color(1, 1, 1, 0)
@@ -392,6 +392,7 @@ libraries = {
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="dragged" from="VBoxContainer/Layout/SplitRight" to="VBoxContainer/Layout" method="_on_Right_dragged"]
+[connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel" to="VBoxContainer/Layout/SplitRight/ProjectsPanel" method="_on_projects_panel_resized"]
 [connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D" to="." method="update_preview_3d"]
 [connection signal="no_more_tabs" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="new_material"]
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_Projects_resized"]

@@ -1,4 +1,7 @@
-extends SubViewport
+extends Node
+
+@onready var viewport : SubViewport = $Viewport
+@onready var mesh_instance : MeshInstance3D = $Viewport/MeshInstance3D
 
 @export var position_material: ShaderMaterial
 @export var normal_material: ShaderMaterial
@@ -28,14 +31,14 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		seams =     { first=white_material, second=seams_pass1, third=seams_pass2 }
 	}
 	var passes = bake_passes[map]
-	size = Vector2(map_size, map_size)
+	viewport.size = Vector2(map_size, map_size)
 	if map == "curvature":
-		$MeshInstance3D.mesh = $CurvatureGenerator.generate(mesh)
+		mesh_instance.mesh = $CurvatureGenerator.generate(mesh)
 	else:
-		$MeshInstance3D.mesh = mesh
-	$MeshInstance3D.set_surface_override_material(0, passes.first)
+		mesh_instance.mesh = mesh
+	mesh_instance.set_surface_override_material(0, passes.first)
 
-	var aabb = $MeshInstance3D.get_aabb()
+	var aabb = mesh_instance.get_aabb()
 	if map in ["ao", "thickness"]:
 		var main_window = mm_globals.main_window
 		var ray_count = mm_globals.get_config("bake_ray_count")
@@ -56,35 +59,29 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		for i in ray_count:
 			progress_dialog.set_progress(float(i)/ray_count)
 			passes.first.set_shader_parameter("iteration", i+1)
-			render_target_update_mode = SubViewport.UPDATE_ONCE
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			await get_tree().process_frame
-		$MeshInstance3D.set_surface_override_material(0, denoise_pass)
+		mesh_instance.set_surface_override_material(0, denoise_pass)
 		denoise_pass.set_shader_parameter("size", map_size)
 		denoise_pass.set_shader_parameter("radius", denoise_radius)
-		render_target_update_mode = SubViewport.UPDATE_ONCE
+		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 		await get_tree().process_frame
 		await get_tree().process_frame
 		progress_dialog.queue_free()
 	else:
 		inv_uv_material.set_shader_parameter("position", aabb.position)
 		inv_uv_material.set_shader_parameter("size", aabb.size)
-		render_target_update_mode = SubViewport.UPDATE_ONCE
+		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 		await get_tree().process_frame
 		await get_tree().process_frame
-	passes.second.set_shader_parameter("tex", get_texture())
+	passes.second.set_shader_parameter("tex", viewport.get_texture())
 	passes.second.set_shader_parameter("size", map_size)
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
-	renderer = renderer.render_material(self, passes.second, map_size)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	var renderer = await mm_renderer.request(self)
+	renderer = await renderer.render_material(self, passes.second, map_size)
 	var t : ImageTexture = ImageTexture.new()
 	renderer.copy_to_texture(t)
 	passes.third.set_shader_parameter("tex", t)
 	passes.third.set_shader_parameter("size", map_size)
-	renderer = renderer.render_material(self, passes.third, map_size)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	renderer = await renderer.render_material(self, passes.third, map_size)
 	renderer.callv(renderer_method, arguments)
 	renderer.release(self)

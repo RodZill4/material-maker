@@ -1,34 +1,27 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://brlp703awvxbn"]
 
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 7
-atlas = ExtResource( 2 )
-region = Rect2( 48, 64, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("2")
+region = Rect2(48, 64, 16, 16)
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 7
-atlas = ExtResource( 2 )
-region = Rect2( 48, 80, 16, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("2")
+region = Rect2(48, 80, 16, 16)
 
 [node name="Preview3DUI" type="HBoxContainer"]
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 20.0
 size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Model" type="MenuButton" parent="."]
-offset_right = 71.0
-offset_bottom = 22.0
+layout_mode = 2
 text = "Model"
-icon = SubResource( 1 )
+icon = SubResource("1")
 
 [node name="Environment" type="MenuButton" parent="."]
-offset_left = 75.0
-offset_right = 187.0
-offset_bottom = 22.0
+layout_mode = 2
 text = "Environment"
-icon = SubResource( 2 )
+icon = SubResource("2")

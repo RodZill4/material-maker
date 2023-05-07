@@ -158,5 +158,5 @@ func update_item_icon(item_name : String, icon : Image) -> void:
 		return
 	var data = library_items_by_name[item_name]
 	data.icon_data = Marshalls.raw_to_base64(icon.save_png_to_buffer())
-	library_icons[item_name].create_from_image(icon)
+	library_icons[item_name].set_image(icon)
 	save_library()

@@ -1,14 +1,12 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=3 uid="uid://cv706ip72t48u"]
 
-[ext_resource path="res://material_maker/tools/map_renderer/curvature_generator.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/tools/map_renderer/map_renderer.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/tools/map_renderer/bvh_generator.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://material_maker/tools/map_renderer/curvature_generator.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/tools/map_renderer/map_renderer.gd" id="2"]
+[ext_resource type="Script" path="res://material_maker/tools/map_renderer/bvh_generator.gd" id="3"]
 
-[sub_resource type="World" id=1]
-
-[sub_resource type="Shader" id=4]
+[sub_resource type="Shader" id="4"]
 code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+render_mode depth_test_disabled,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
 uniform vec3 position = vec3(0.0);
 uniform vec3 size = vec3(1.0);
@@ -26,14 +24,15 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
-shader_param/position = Vector3( 0, 0, 0 )
-shader_param/size = Vector3( 1, 1, 1 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nhogg"]
+render_priority = 0
+shader = SubResource("4")
+shader_parameter/position = Vector3(0, 0, 0)
+shader_parameter/size = Vector3(1, 1, 1)
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id="2"]
 code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+render_mode depth_test_disabled,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
 varying vec3 p;
 
@@ -47,12 +46,13 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3bmjr"]
+render_priority = 0
+shader = SubResource("2")
 
-[sub_resource type="Shader" id=24]
+[sub_resource type="Shader" id="24"]
 code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+render_mode depth_test_disabled,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
 varying vec3 p;
 
@@ -66,12 +66,19 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=25]
-shader = SubResource( 24 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_udwys"]
+render_priority = 0
+shader = SubResource("24")
 
-[sub_resource type="Shader" id=6]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t8lkf"]
+render_priority = 0
+shader = SubResource("4")
+shader_parameter/position = Vector3(0, 0, 0)
+shader_parameter/size = Vector3(1, 1, 1)
+
+[sub_resource type="Shader" id="6"]
 code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+render_mode depth_test_disabled,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
 uniform vec3 position = vec3(0.0);
 uniform vec3 size = vec3(1.0);
@@ -85,14 +92,15 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=7]
-shader = SubResource( 6 )
-shader_param/position = Vector3( 0, 0, 0 )
-shader_param/size = Vector3( 1, 1, 1 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wqg6s"]
+render_priority = 0
+shader = SubResource("6")
+shader_parameter/position = Vector3(0, 0, 0)
+shader_parameter/size = Vector3(1, 1, 1)
 
-[sub_resource type="Shader" id=8]
+[sub_resource type="Shader" id="8"]
 code = "shader_type spatial;
-render_mode depth_test_disable,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
+render_mode depth_test_disabled,depth_draw_always,unshaded,cull_disabled,world_vertex_coords;
 
 varying float curvature;
 
@@ -106,10 +114,11 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=9]
-shader = SubResource( 8 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1hip"]
+render_priority = 0
+shader = SubResource("8")
 
-[sub_resource type="Shader" id=10]
+[sub_resource type="Shader" id="10"]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded;
 
@@ -326,8 +335,6 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 }
 
 vec3 random_hemi_point(vec3 rand, vec3 norm) {
-	const float PI = 3.141592653;
-
 	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
 	float u = rand.y * 2.0 - 1.0; // [0..1), cos and acos(2v-1) cancel each other out, so we arrive at [-1..1)
 	float u2 = u * u;
@@ -374,18 +381,19 @@ void fragment() {
 }
 "
 
-[sub_resource type="ViewportTexture" id=11]
+[sub_resource type="ViewportTexture" id="11"]
 viewport_path = NodePath(".")
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0j43v"]
 resource_local_to_scene = true
-shader = SubResource( 10 )
-shader_param/max_dist = -2.0
-shader_param/bias_dist = null
-shader_param/iteration = 1
-shader_param/prev_iteration_tex = SubResource( 11 )
+render_priority = 0
+shader = SubResource("10")
+shader_parameter/max_dist = -2.0
+shader_parameter/bias_dist = null
+shader_parameter/iteration = 1
+shader_parameter/prev_iteration_tex = SubResource("11")
 
-[sub_resource type="Shader" id=26]
+[sub_resource type="Shader" id="26"]
 code = "shader_type spatial;
 render_mode cull_disabled, unshaded;
 
@@ -602,8 +610,6 @@ float intersects_bvh(vec3 ray_start, vec3 ray_dir, out vec3 normal_hit) {
 }
 
 vec3 random_hemi_point(vec3 rand, vec3 norm) {
-	const float PI = 3.141592653;
-
 	float ang1 = (rand.x * 2.0) * PI; // [0..1) -> [0..2*PI)
 	float u = rand.y * 2.0 - 1.0; // [0..1), cos and acos(2v-1) cancel each other out, so we arrive at [-1..1)
 	float u2 = u * u;
@@ -649,18 +655,19 @@ void fragment() {
 	ALBEDO = mix(texture(prev_iteration_tex, SCREEN_UV).rgb, vec3(hit), 1.0/float(iteration));
 }"
 
-[sub_resource type="ViewportTexture" id=27]
+[sub_resource type="ViewportTexture" id="27"]
 viewport_path = NodePath(".")
 
-[sub_resource type="ShaderMaterial" id=28]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_esyq5"]
 resource_local_to_scene = true
-shader = SubResource( 26 )
-shader_param/max_dist = -2.0
-shader_param/bias_dist = null
-shader_param/iteration = 1
-shader_param/prev_iteration_tex = SubResource( 27 )
+render_priority = 0
+shader = SubResource("26")
+shader_parameter/max_dist = -2.0
+shader_parameter/bias_dist = null
+shader_parameter/iteration = 1
+shader_parameter/prev_iteration_tex = SubResource("27")
 
-[sub_resource type="Shader" id=13]
+[sub_resource type="Shader" id="13"]
 code = "shader_type spatial;
 render_mode unshaded, cull_disabled;
 
@@ -689,14 +696,15 @@ void fragment() {
 	ALBEDO = color / weight;
 }"
 
-[sub_resource type="ShaderMaterial" id=14]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nu2ml"]
 resource_local_to_scene = true
-shader = SubResource( 13 )
-shader_param/radius = 0
-shader_param/size = 512.0
-shader_param/tex = SubResource( 11 )
+render_priority = 0
+shader = SubResource("13")
+shader_parameter/radius = 0
+shader_parameter/size = 512.0
+shader_parameter/tex = SubResource("11")
 
-[sub_resource type="Shader" id=15]
+[sub_resource type="Shader" id="15"]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -711,23 +719,23 @@ vec4 dilate_distance_h(vec2 uv) {
 	vec2 e = vec2(1.0/size, 0.0);
 	float d = float(STEPS)/size;
 	float rv = 0.0;
-	vec2 source_uv;
-	vec4 source_color;
+	vec2 src_uv;
+	vec4 src_color;
 	for (int i = 0; i < STEPS; ++i) {
-		source_uv = uv+float(i)*e;
-		source_color = texture(tex, source_uv);
-		if (source_color.a >= 1.0) {
+		src_uv = uv+float(i)*e;
+		src_color = texture(tex, src_uv);
+		if (src_color.a >= 1.0) {
 			rv = 1.0-float(i)*e.x/d;
 			break;
 		}
-		source_uv = uv-float(i)*e;
-		source_color = texture(tex, source_uv);
-		if (source_color.a >= 1.0) {
+		src_uv = uv-float(i)*e;
+		src_color = texture(tex, src_uv);
+		if (src_color.a >= 1.0) {
 			rv = 1.0-float(i)*e.x/d;
 			break;
 		}
 	}
-	return vec4(source_color.rgb, rv);
+	return vec4(src_color.rgb, rv);
 }
 
 void fragment() {
@@ -735,13 +743,13 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=16]
-shader = SubResource( 15 )
-shader_param/size = 512.0
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16geq"]
+shader = SubResource("15")
+shader_parameter/size = 512.0
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
-[sub_resource type="Shader" id=17]
+[sub_resource type="Shader" id="17"]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -777,13 +785,13 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=18]
-shader = SubResource( 17 )
-shader_param/size = 512.0
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4kns3"]
+shader = SubResource("17")
+shader_parameter/size = 512.0
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
-[sub_resource type="Shader" id=19]
+[sub_resource type="Shader" id="19"]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -799,20 +807,20 @@ vec4 dilate_distance_h(vec2 uv) {
 	float d = size/float(STEPS);
 	float rv = 0.0;
 	float found = 0.0;
-	vec2 source_uv;
-	vec4 source_color;
+	vec2 src_uv;
+	vec4 src_color;
 	int steps = min(STEPS, int(size)/2);
 	for (int i = 0; i < steps; ++i) {
-		source_uv = uv+float(i)*e;
-		source_color = texture(tex, source_uv);
-		if (source_color.a >= 0.5) {
+		src_uv = uv+float(i)*e;
+		src_color = texture(tex, src_uv);
+		if (src_color.a >= 0.5) {
 			rv = float(i);
 			found = 1.0;
 			break;
 		}
-		source_uv = uv-float(i)*e;
-		source_color = texture(tex, source_uv);
-		if (source_color.a >= 0.5) {
+		src_uv = uv-float(i)*e;
+		src_color = texture(tex, src_uv);
+		if (src_color.a >= 0.5) {
 			rv = -float(i);
 			found = 1.0;
 			break;
@@ -826,13 +834,13 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=20]
-shader = SubResource( 19 )
-shader_param/size = 512.0
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_buo36"]
+shader = SubResource("19")
+shader_parameter/size = 512.0
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
-[sub_resource type="Shader" id=21]
+[sub_resource type="Shader" id="21"]
 code = "shader_type canvas_item;
 render_mode blend_disabled;
 
@@ -880,50 +888,49 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=22]
-shader = SubResource( 21 )
-shader_param/size = 512.0
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvoip"]
+shader = SubResource("21")
+shader_parameter/size = 512.0
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
-[sub_resource type="PrismMesh" id=23]
+[sub_resource type="World3D" id="World3D_nlmkk"]
 
-[node name="MapRenderer" type="SubViewport"]
-size = Vector2( 2048, 2048 )
-own_world = true
-world = SubResource( 1 )
+[sub_resource type="PrismMesh" id="23"]
+
+[node name="MapRenderer" type="Node"]
+script = ExtResource("2")
+position_material = SubResource("ShaderMaterial_nhogg")
+normal_material = SubResource("ShaderMaterial_3bmjr")
+tangent_material = SubResource("ShaderMaterial_udwys")
+inv_uv_material = SubResource("ShaderMaterial_t8lkf")
+white_material = SubResource("ShaderMaterial_wqg6s")
+curvature_material = SubResource("ShaderMaterial_w1hip")
+ao_material = SubResource("ShaderMaterial_0j43v")
+thickness_material = SubResource("ShaderMaterial_esyq5")
+denoise_pass = SubResource("ShaderMaterial_nu2ml")
+dilate_pass1 = SubResource("ShaderMaterial_16geq")
+dilate_pass2 = SubResource("ShaderMaterial_4kns3")
+seams_pass1 = SubResource("ShaderMaterial_buo36")
+seams_pass2 = SubResource("ShaderMaterial_nvoip")
+
+[node name="Viewport" type="SubViewport" parent="."]
+own_world_3d = true
+world_3d = SubResource("World3D_nlmkk")
 transparent_bg = true
-keep_3d_linear = true
+size = Vector2i(2048, 2048)
 render_target_update_mode = 0
-script = ExtResource( 2 )
-position_material = SubResource( 5 )
-normal_material = SubResource( 3 )
-tangent_material = SubResource( 25 )
-inv_uv_material = SubResource( 5 )
-white_material = SubResource( 7 )
-curvature_material = SubResource( 9 )
-ao_material = SubResource( 12 )
-thickness_material = SubResource( 28 )
-denoise_pass = SubResource( 14 )
-dilate_pass1 = SubResource( 16 )
-dilate_pass2 = SubResource( 18 )
-seams_pass1 = SubResource( 20 )
-seams_pass2 = SubResource( 22 )
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Viewport"]
 extra_cull_margin = 16384.0
-mesh = SubResource( 23 )
-material/0 = SubResource( 5 )
-__meta__ = {
-"_editor_description_": ""
-}
+mesh = SubResource("23")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 6 )
+[node name="Camera3D" type="Camera3D" parent="Viewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 6)
 projection = 1
 
 [node name="CurvatureGenerator" type="Node" parent="."]
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="BVHGenerator" type="Node" parent="."]
-script = ExtResource( 3 )
+script = ExtResource("3")

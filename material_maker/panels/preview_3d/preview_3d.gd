@@ -5,7 +5,7 @@ const CAMERA_DISTANCE_MAX = 150.0
 const CAMERA_FOV_MIN = 10
 const CAMERA_FOV_MAX = 90
 
-@export var ui_path : String = "UI/Preview3DUI"
+@export var ui_path : NodePath = "UI/Preview3DUI"
 
 @onready var objects_pivot = $MaterialPreview/Preview3d/ObjectsPivot
 @onready var objects = $MaterialPreview/Preview3d/ObjectsPivot/Objects
@@ -147,7 +147,7 @@ func configure_model() -> void:
 
 func set_rotate_model_speed(speed: float) -> void:
 	var object_rotate = $MaterialPreview/Preview3d/ObjectRotate
-	object_rotate.playback_speed = speed
+	object_rotate.speed_scale = speed
 	if speed == 0:
 		object_rotate.stop(false)
 	else:

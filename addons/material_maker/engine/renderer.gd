@@ -84,7 +84,7 @@ func render_material(object : Object, material : Material, render_size : int, wi
 				await get_tree().process_frame
 				image.blit_rect(get_texture().get_image(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))
 		texture = ImageTexture.new()
-		texture.create_from_image(image)
+		texture.set_image(image)
 	$ColorRect.material = null
 	return self
 
@@ -107,9 +107,8 @@ func get_image() -> Image:
 	return image
 
 func save_to_file(fn : String, is_greyscale : bool = false) -> void:
-	var image : Image = texture.get_data()
+	var image : Image = texture.get_image()
 	if image != null:
-		false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 		var export_image : Image = image
 		match fn.get_extension():
 			"png":
@@ -122,7 +121,6 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 				else:
 					pass
 				export_image.save_exr(fn, is_greyscale)
-		false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 func release(object : Object) -> void:
 	assert(render_owner == object) #,"Invalid renderer release")
