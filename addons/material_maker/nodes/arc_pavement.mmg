@@ -26,7 +26,6 @@
 			"}",
 			"",
 			"vec4 arc_pavement(vec2 uv, float acount, float lcount, out vec2 seed) {",
-			"\tfloat PI = 3.141592654;",
 			"\tfloat radius = (0.5/sqrt(2.0));",
 			"\tfloat uvx = uv.x;",
 			"\tuv.x = 0.5*fract(uv.x+0.5)+0.25;",

@@ -15,6 +15,7 @@ var pallette_colors = [
 const AUTO_SIZE_PADDING : int = 22
 
 func _ready():
+	super._ready()
 	for s in [ "comment", "comment_focus" ]:
 		var frame : StyleBoxFlat = mm_globals.main_window.theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
 		add_theme_stylebox_override(s, frame);

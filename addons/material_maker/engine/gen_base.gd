@@ -215,33 +215,35 @@ func set_parameter(n : String, v) -> void:
 				mm_deps.dependency_update("p_o"+str(get_instance_id())+"_"+n, v)
 				return
 			elif parameter_def.type == "gradient":
-				if old_value is MMGradient and v is MMGradient and old_value != null and v.interpolation == old_value.interpolation and v.points.size() == old_value.points.size():
+				if old_value is MMGradient and v is MMGradient and old_value != null:
 					old_value.sort()
 					v.sort()
 					var parameter_changes = {}
-					for i in range(old_value.points.size()):
-						if v.points[i].v != old_value.points[i].v:
+					for i in range(v.points.size()):
+						if i >= old_value.points.size() or v.points[i].v != old_value.points[i].v:
 							var parameter_name = "p_o%d_%s_%d_pos" % [ get_instance_id(), n, i ]
 							parameter_changes[parameter_name] = v.points[i].v
-						if v.points[i].c != old_value.points[i].c:
+						if i >= old_value.points.size() or v.points[i].c != old_value.points[i].c:
 							var parameter_name = "p_o%d_%s_%d_col" % [ get_instance_id(), n, i ]
 							parameter_changes[parameter_name] = v.points[i].c
 					mm_deps.dependencies_update(parameter_changes)
-					return
+					if old_value.points.size() == v.points.size():
+						return
 			elif parameter_def.type == "curve":
-				if old_value is MMCurve and v is MMCurve and old_value != null and v.points.size() == old_value.points.size():
+				if old_value is MMCurve and v is MMCurve and old_value != null:
 					var parameter_changes = {}
-					for i in range(old_value.points.size()):
+					for i in range(v.points.size()):
 						for f in [ "x", "y" ]:
-							if v.points[i].p[f] != old_value.points[i].p[f]:
+							if i >= old_value.points.size() or v.points[i].p[f] != old_value.points[i].p[f]:
 								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i].p[f]
 						for f in [ "ls", "rs" ]:
-							if v.points[i][f] != old_value.points[i][f]:
+							if i >= old_value.points.size() or v.points[i][f] != old_value.points[i][f]:
 								var parameter_name = "p_o%d_%s_%d_%s" % [ get_instance_id(), n, i, f ]
 								parameter_changes[parameter_name] = v.points[i][f]
 					mm_deps.dependencies_update(parameter_changes)
-					return
+					if old_value.points.size() == v.points.size():
+						return
 		all_sources_changed()
 
 func notify_output_change(output_index : int) -> void:

@@ -63,6 +63,7 @@ func _init():
 	buffer_button.hidden = true
 
 func _ready() -> void:
+	super._ready()
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
 
@@ -232,7 +233,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 					menu.add_separator()
 					menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 				add_child(menu)
-				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+				menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 				menu.connect("popup_hide",Callable(menu,"queue_free"))
 				menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
 				return true

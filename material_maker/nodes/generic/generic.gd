@@ -15,7 +15,7 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 
 
 func _ready() -> void:
-	#super._ready()
+	super._ready()
 	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
 
@@ -56,7 +56,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 				add_child(popup_menu)
 				popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
 				popup_menu.connect("id_pressed",Callable(self,"update_generic"))
-				popup_menu.popup(Rect2(get_global_mouse_position(), popup_menu.get_minimum_size()))
+				popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 				accept_event()
 	else:
 		return super.on_node_button(b, event)
@@ -114,7 +114,7 @@ func update_generic(generic_size : int) -> void:
 	]
 	var redo_actions = [
 		{ type="remove_connections", parent=parent_hier_name, connections=before_connections },
-		{ type="setgenericsize", node=generator_hier_name, size=size },
+		{ type="setgenericsize", node=generator_hier_name, size=generic_size },
 		{ type="add_to_graph", parent=parent_hier_name, generators=[], connections=after_connections }
 	]
 	get_parent().undoredo.add("Disconnect nodes", undo_actions, redo_actions)

@@ -104,8 +104,8 @@ func update_preview_texture():
 	preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
 	preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	preview_viewport.update_worlds()
-	await get_tree().idle_frame
-	await get_tree().idle_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 func get_preview_texture():
 	return preview_viewport.get_texture()
@@ -127,9 +127,8 @@ func _on_SendButton_pressed():
 			preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
 			preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
 			preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-			preview_viewport.update_worlds()
-			await get_tree().idle_frame
-			await get_tree().idle_frame
+			await get_tree().process_frame
+			await get_tree().process_frame
 			preview_texture = preview_viewport.get_texture()
 		"paint":
 			asset_type = "brush"

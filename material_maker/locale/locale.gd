@@ -28,7 +28,7 @@ func read_translations():
 	var dir : DirAccess = DirAccess.open(LOCALE_DIR)
 	if dir != null:
 		var csv_files : Array = []
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir():

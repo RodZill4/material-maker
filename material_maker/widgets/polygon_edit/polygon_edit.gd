@@ -6,12 +6,13 @@ var value = null : set = set_value
 
 signal updated(polygon, old_value)
 
-func set_closed(c : bool = true):
-	closed = c
-	$PolygonView.set_closed(c)
 
 func _ready():
 	set_value(MMPolygon.new())
+
+func set_closed(c : bool = true):
+	closed = c
+	$PolygonView.set_closed(c)
 
 func set_value(v) -> void:
 	value = v.duplicate()

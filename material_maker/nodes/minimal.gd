@@ -7,7 +7,7 @@ var disable_undoredo_for_offset : bool = false
 
 
 func _ready() -> void:
-	connect("position_offset_changed",Callable(self,"_on_offset_changed"))
+	position_offset_changed.connect(self._on_offset_changed)
 	add_to_group("generator_node")
 
 func _on_offset_changed() -> void:

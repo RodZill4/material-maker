@@ -26,11 +26,6 @@ func _ready() -> void:
 	update_list()
 
 
-func _draw() -> void:
-	pass
-	# todo draw_rect(Rect2(0, 0, size.x, size.y), Color(1, 0.56, 0.56, 1), false, 2)
-
-
 func filter_entered(_filter) -> void:
 	list.select_first()
 
@@ -47,25 +42,25 @@ func add_node(node_data) -> void:
 				for new_slot in node.get_connection_output_count():
 					var slot_type : int = node.get_connection_output_type(new_slot)
 					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.connect_node(node.name, new_slot, qc_node, qc_slot)
+						current_graph.on_connect_node(node.name, new_slot, qc_node, qc_slot)
 						port_position = node.get_connection_output_position(new_slot)
 						break
 			else:
 				for new_slot in node.get_connection_input_count():
 					var slot_type : int = node.get_connection_input_type(new_slot)
 					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.connect_node(qc_node, qc_slot, node.name, new_slot)
+						current_graph.on_connect_node(qc_node, qc_slot, node.name, new_slot)
 						port_position = node.get_connection_input_position(new_slot)
 						break
 			node.position_offset -= port_position/current_graph.zoom
 	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
-	hide()
+	todo_renamed_hide()
 
 
 func object_selected(obj) -> void:
 	add_node(obj)
-	hide()
+	todo_renamed_hide()
 
 
 func todo_renamed_hide() -> void:
@@ -187,8 +182,8 @@ func update_list(filter_text : String = "") -> void:
 func _input(event) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
 		if false: #todo !get_rect().has_point(event.position):
-			hide()
+			todo_renamed_hide()
 
 func _unhandled_input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		hide()
+		todo_renamed_hide()

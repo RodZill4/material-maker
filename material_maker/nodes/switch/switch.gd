@@ -3,6 +3,7 @@ extends MMGraphNodeGeneric
 var fixed_lines : int = 0
 
 func _ready() -> void:
+	super._ready()
 	update_node()
 
 func update_node() -> void:

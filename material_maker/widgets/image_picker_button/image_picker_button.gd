@@ -8,15 +8,17 @@ var filetime : int = 0
 signal on_file_selected(f)
 
 
+func _init():
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	set_size(Vector2(64, 64))
+
 func update_image() -> void:
 	if texture_normal == null:
 		texture_normal = ImageTexture.new()
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	set_size(Vector2(64, 64))
 	var image : Image = Image.load_from_file(image_path)
 	texture_normal.set_image(image)
-	set_size(Vector2(64, 64))
-	size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	print(get_parent().get_size())
-	print(get_size())
 	queue_redraw()
 
 func do_set_image_path(path) -> void:

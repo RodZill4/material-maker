@@ -83,7 +83,7 @@ func enable_renderers(b : bool) -> void:
 	if b != renderers_enabled:
 		renderers_enabled = b
 		if renderers_enabled:
-			emit_signal("free_renderer")
+			free_renderer.emit()
 
 func request(object : Object) -> Object:
 	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
@@ -95,4 +95,4 @@ func request(object : Object) -> Object:
 
 func release(renderer : Object) -> void:
 	free_renderers.append(renderer)
-	emit_signal("free_renderer")
+	free_renderer.emit()

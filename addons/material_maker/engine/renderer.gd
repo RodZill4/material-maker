@@ -17,7 +17,7 @@ func request(object : Object) -> Object:
 
 var current_font : String = ""
 func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
-	assert(render_owner == object) # Invalid renderer use
+	assert(render_owner == object)
 	size = Vector2(2048, 2048)
 	$Font.visible = true
 	$Font.position = Vector2(0, 0)
@@ -43,7 +43,7 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	return self
 
 func render_material(object : Object, material : Material, render_size : int, with_hdr : bool = true) -> Object:
-	assert(render_owner == object) #,"Invalid renderer use")
+	assert(render_owner == object)
 	if mm_renderer.max_buffer_size != 0 and render_size > mm_renderer.max_buffer_size:
 		render_size = mm_renderer.max_buffer_size
 	var chunk_count : int = 1
@@ -123,7 +123,7 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 				export_image.save_exr(fn, is_greyscale)
 
 func release(object : Object) -> void:
-	assert(render_owner == object) #,"Invalid renderer release")
+	assert(render_owner == object)
 	render_owner = null
 	texture = null
 	get_parent().release(self)

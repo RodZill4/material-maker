@@ -159,12 +159,9 @@ func _on_ContextMenu_id_pressed(id):
 func _on_Download_pressed():
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
 	add_child(dialog)
-	var result = await dialog.select_material(2)
-	if result == "":
-		return
-	var json = JSON.new()
-	if json.parse(result) == OK:
-		var new_environment = json.get_data()
+	var result : Dictionary = await dialog.select_asset(2)
+	if result != {}:
+		var new_environment = result
 		new_environment.erase("thumbnail")
 		environment_manager.add_environment(new_environment)
 		read_environment_list(-1)

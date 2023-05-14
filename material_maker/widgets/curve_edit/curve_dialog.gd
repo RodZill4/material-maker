@@ -1,13 +1,12 @@
 extends Window
 
+
 var previous_value
+
 
 signal curve_changed(curve)
 signal return_curve(curve)
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
 
 func _on_CurveDialog_popup_hide():
 	emit_signal("return_curve", previous_value)
@@ -35,5 +34,4 @@ func _on_Invert_pressed() -> void:
 	new_curve.clear()
 	for p in old_curve.points:
 		new_curve.add_point(p.p.x, 1.0 - p.p.y, -p.ls, -p.rs)
-	
 	$VBoxContainer/EditorContainer/CurveEditor.set_curve(new_curve)

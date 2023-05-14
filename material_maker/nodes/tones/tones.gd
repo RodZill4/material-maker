@@ -55,6 +55,7 @@ var cursor_out_min : Cursor
 var cursor_out_max : Cursor
 
 func _ready() -> void:
+	super._ready()
 	var slot_color = mm_io_types.types["rgba"].color
 	var slot_type = mm_io_types.types["rgba"].slot_type
 	set_slot(0, true, slot_type, slot_color, true, slot_type, slot_color)

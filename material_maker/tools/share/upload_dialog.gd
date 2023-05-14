@@ -21,7 +21,7 @@ func _on_OKButton_pressed():
 func _on_UploadDialog_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
-func ask(data : Dictionary) -> String:
+func ask(data : Dictionary) -> Dictionary:
 	mm_globals.main_window.add_dialog(self)
 	print(data)
 	if data.type == "node":
@@ -38,7 +38,7 @@ func ask(data : Dictionary) -> String:
 	for l in data.licenses:
 		asset_license.add_item(l.name)
 	validate_form()
-	await get_tree().idle_frame
+	await get_tree().process_frame
 	_on_MarginContainer_minimum_size_changed()
 	popup_centered()
 	var result = await self.return_status

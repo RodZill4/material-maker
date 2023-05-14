@@ -97,7 +97,7 @@ func _on_MemUpdateTimer_timeout():
 	$GpuRam.text = e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
 	var tooltip : String = "Adapter: %s\nVendor: %s" % [ RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_vendor() ]
 	tooltip += "\nVideo mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED))
-	tooltip += "\nTexture mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))
+	tooltip += "\nBuffer mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED))
 	# todo tooltip += "\nVertex mem.: "+e3tok(Performance.get_monitor(Performance.RENDER_VERTEX_MEM_USED))
 	$GpuRam.tooltip_text = tooltip
 

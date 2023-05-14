@@ -5,6 +5,7 @@ signal value_changed(value)
 
 
 func _ready():
+	super._ready()
 	update_controls()
 
 func set_polygon(p : MMPolygon) -> void:

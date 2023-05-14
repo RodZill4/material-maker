@@ -1,5 +1,8 @@
 extends MMGraphNodeBase
 
+func _ready():
+	super._ready()
+
 func set_generator(g) -> void:
 	super.set_generator(g)
 	generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))

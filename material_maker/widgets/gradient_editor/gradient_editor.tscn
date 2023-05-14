@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ccm3h8eyt35f5"]
+[gd_scene load_steps=12 format=3 uid="uid://ccm3h8eyt35f5"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_editor.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bhr527b431n55" path="res://material_maker/icons/icons.png" id="2_pf6la"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -28,6 +29,22 @@ void fragment() { COLOR = gradient(UV.x); }"
 shader = SubResource("3")
 
 [sub_resource type="Theme" id="5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ajidi"]
+atlas = ExtResource("2_pf6la")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pqf16"]
+atlas = ExtResource("2_pf6la")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e2ase"]
+atlas = ExtResource("2_pf6la")
+region = Rect2(64, 16, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5yhn"]
+atlas = ExtResource("2_pf6la")
+region = Rect2(96, 16, 32, 16)
 
 [node name="Control" type="Control"]
 custom_minimum_size = Vector2(120, 32)
@@ -79,12 +96,33 @@ offset_top = -2.90374
 offset_right = 73.4185
 offset_bottom = 19.0963
 scale = Vector2(0.5, 0.5)
+item_count = 4
+popup/item_0/text = ""
+popup/item_0/icon = SubResource("AtlasTexture_ajidi")
+popup/item_0/id = 0
+popup/item_1/text = ""
+popup/item_1/icon = SubResource("AtlasTexture_pqf16")
+popup/item_1/id = 1
+popup/item_2/text = ""
+popup/item_2/icon = SubResource("AtlasTexture_e2ase")
+popup/item_2/id = 2
+popup/item_3/text = ""
+popup/item_3/icon = SubResource("AtlasTexture_w5yhn")
+popup/item_3/id = 3
 
 [node name="Value" type="Label" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
-offset_top = -1.0
-offset_bottom = 14.0
+offset_top = -5.0
+offset_bottom = 15.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="resized" from="." to="." method="_on_Control_resized"]
 [connection signal="item_selected" from="Interpolation" to="." method="_on_Interpolation_item_selected"]

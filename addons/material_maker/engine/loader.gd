@@ -25,7 +25,7 @@ func get_predefined_generators_from_dir(path : String) -> void:
 		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	var dir : DirAccess = DirAccess.open(path)
 	if dir != null:
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.get_extension() == "mmg":
@@ -269,7 +269,7 @@ func get_generator_list() -> Array:
 	for p in MMPaths.get_nodes_paths():
 		var dir : DirAccess = DirAccess.open(p)
 		if dir != null:
-			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+			dir.list_dir_begin()
 			var f = dir.get_next()
 			while f != "":
 				if f.right(4) == ".mmg":
@@ -295,7 +295,7 @@ func load_external_export_targets():
 		print("Cannot open "+USER_EXPORT_DIR)
 		return
 	var rv : Dictionary = {}
-	dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+	dir.list_dir_begin()
 	var file_name : String = dir.get_next()
 	while file_name != "":
 		if file_name.get_extension() == "mme":

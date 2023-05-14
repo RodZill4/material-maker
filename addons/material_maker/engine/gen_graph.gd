@@ -231,7 +231,7 @@ func remove_generator(generator : MMGenBase) -> bool:
 	connections = new_connections
 	# Notify target nodes that their input vanished
 	for c in old_connections:
-		get_node(c.to).source_changed(c.to_port)
+		get_node(NodePath(c.to)).source_changed(c.to_port)
 	remove_child(generator)
 	fix_remotes()
 	if generator.get_script() == get_script():

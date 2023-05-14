@@ -1,11 +1,17 @@
 extends MMGraphNodeGeneric
 class_name MMGraphNodeRemote
 
+
 var old_state : Dictionary
 
 var links = {}
 
+
 @onready var grid = $Controls
+
+
+func _ready():
+	super._ready()
 
 func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "", is_first : bool = false, is_last : bool = false) -> void:
 	var line_edit : LineEdit = LineEdit.new()

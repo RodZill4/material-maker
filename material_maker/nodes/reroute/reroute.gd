@@ -1,6 +1,7 @@
 extends MMGraphNodeMinimal
 
 func _ready() -> void:
+	super._ready()
 	var current_theme : Theme = mm_globals.main_window.theme
 	for stylebox in current_theme.get_stylebox_list("Reroute"):
 		add_theme_stylebox_override(stylebox, current_theme.get_stylebox(stylebox, "Reroute"))

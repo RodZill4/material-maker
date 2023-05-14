@@ -213,10 +213,6 @@ func get_globals(texture_name : String) -> Array[String]:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
-	match output_index:
-		1:
-			shader_code.globals.clear()
-			shader_code.globals.append("uniform int o%d_iteration = 0;" % get_instance_id())
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:

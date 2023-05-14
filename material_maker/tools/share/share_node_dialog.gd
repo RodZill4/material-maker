@@ -15,7 +15,7 @@ func _on_Share_pressed() -> void:
 	emit_signal("return_status", "ok")
 
 func _on_Share_popup_hide() -> void:
-	await get_tree().idle_frame
+	await get_tree().process_frame
 	emit_signal("return_status", "cancel")
 
 func ask(status : Array) -> String:

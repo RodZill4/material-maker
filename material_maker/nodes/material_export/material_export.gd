@@ -9,6 +9,9 @@ const MATERIAL_MENU_PASTE : int        = 10001
 const MATERIAL_MENU_EDIT_EXPORTS : int = 10002
 
 
+func _ready():
+	super._ready()
+
 func get_material_nodes() -> Array:
 	if material_nodes.is_empty():
 		material_nodes = mm_loader.get_material_nodes()

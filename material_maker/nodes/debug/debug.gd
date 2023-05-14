@@ -1,6 +1,10 @@
 extends MMGraphNodeBase
 
+func _ready():
+	super._ready()
+
 func _on_Button_pressed() -> void:
+	print("debug")
 	var src = generator.get_source(0)
 	if src != null:
 		var context : MMGenContext = MMGenContext.new()

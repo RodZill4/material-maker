@@ -16,6 +16,12 @@ focus_mode = 1
 script = ExtResource("1")
 
 [node name="CurveView" parent="." instance=ExtResource("2")]
-anchors_preset = 0
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="." to="." method="_on_CurveEdit_pressed"]

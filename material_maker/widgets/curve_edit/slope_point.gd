@@ -14,7 +14,7 @@ func _draw():
 	var color : Color = current_theme.get_color("font_color", "Label")
 	draw_circle(Vector2(3.0, 3.0), 3.0, color)
 
-func _on_ControlPoint_gui_input(event):
+func _on_ControlPoint_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -27,7 +27,7 @@ func _on_ControlPoint_gui_input(event):
 						vector = parent.get_parent().get_child(parent.get_index()+1).position-parent.position
 					vector = distance*vector.normalized()
 					position = vector-OFFSET
-					if event.control:
+					if event.is_control_or_command_pressed():
 						get_parent().get_child(1-get_index()).position = -vector-OFFSET
 					get_parent().update_tangents()
 				else:
@@ -39,6 +39,6 @@ func _on_ControlPoint_gui_input(event):
 		vector *= sign(vector.x)
 		vector = distance*vector.normalized()
 		position = vector-OFFSET
-		if event.control:
+		if event.is_command_or_control_pressed():
 			get_parent().get_child(1-get_index()).position = -vector-OFFSET
 		get_parent().update_tangents()

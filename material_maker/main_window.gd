@@ -183,7 +183,7 @@ func _ready() -> void:
 	# Load recent projects
 	load_recents()
 
-	get_tree().connect("files_dropped", self.on_files_dropped)
+	get_window().connect("files_dropped", self.on_files_dropped)
 
 	do_load_projects(OS.get_cmdline_args())
 
@@ -1131,7 +1131,7 @@ func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
 		return_value.append(parent)
 	return return_value
 
-func on_files_dropped(files : PackedStringArray, _screen) -> void:
+func on_files_dropped(files : PackedStringArray) -> void:
 	await get_tree().process_frame
 	for f in files:
 		var file : FileAccess = FileAccess.open(f, FileAccess.READ)
