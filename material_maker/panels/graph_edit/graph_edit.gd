@@ -125,6 +125,7 @@ func _gui_input(event) -> void:
 	):
 		# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 		# with the Ctrl + Space shortcut.
+		accept_event()
 		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
 	elif event.is_action_pressed("ui_hierarchy_up"):
@@ -709,7 +710,7 @@ func copy() -> void:
 func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
-		node_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
+		node_position = offset_from_global_position(get_global_mouse_position())
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = false

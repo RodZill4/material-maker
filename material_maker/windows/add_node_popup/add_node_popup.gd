@@ -69,7 +69,8 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
-	insert_position = Vector2(0, 0) # todo get_current_graph().offset_from_global_position(get_global_mouse_position())
+	var current_graph = get_current_graph()
+	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()
 	qc_node = node_name
 	qc_slot = slot
