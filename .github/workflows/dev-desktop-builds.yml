@@ -34,6 +34,7 @@ jobs:
           unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
           wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
           unzip -a Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
           chown root:root -R ~
