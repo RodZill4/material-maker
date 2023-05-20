@@ -2,7 +2,32 @@
 extends Node3D
 
 @export var material : Material : set = set_material
-@export var mode = 0 setget set_mode # (int, "Full", "ArrowOnly", "TorusOnly", "Nothing")
+@export var mode : int = 0:
+	get:
+		return mode
+	set(new_value):
+		mode = new_value
+		match mode:
+			0:
+				$Arrow.visible = true
+				$TranslateArea.visible = true
+				$Torus.visible = true
+				$RotateArea.visible = true
+			1:
+				$Arrow.visible = true
+				$TranslateArea.visible = true
+				$Torus.visible = false
+				$RotateArea.visible = false
+			2:
+				$Arrow.visible = false
+				$TranslateArea.visible = false
+				$Torus.visible = true
+				$RotateArea.visible = true
+			_:
+				$Arrow.visible = false
+				$TranslateArea.visible = false
+				$Torus.visible = false
+				$RotateArea.visible = false
 
 
 signal move(v)
@@ -11,30 +36,6 @@ signal rotate(v, a)
 
 func _ready():
 	set_material(material)
-
-func set_mode(m):
-	mode = m
-	match m:
-		0:
-			$Arrow.visible = true
-			$TranslateArea.visible = true
-			$Torus.visible = true
-			$RotateArea.visible = true
-		1:
-			$Arrow.visible = true
-			$TranslateArea.visible = true
-			$Torus.visible = false
-			$RotateArea.visible = false
-		2:
-			$Arrow.visible = false
-			$TranslateArea.visible = false
-			$Torus.visible = true
-			$RotateArea.visible = true
-		_:
-			$Arrow.visible = false
-			$TranslateArea.visible = false
-			$Torus.visible = false
-			$RotateArea.visible = false
 
 func set_material(m):
 	material = m
@@ -52,7 +53,7 @@ func _on_TranslateArea_input_event(camera, event, _position, _normal, _shape_idx
 		var direction_2d_length2 : float = direction_2d.length_squared()
 		if direction_2d_length2 != 0:
 			var amount : float = event.relative.dot(direction_2d)/direction_2d_length2
-			emit_signal("move", amount*global_transform.basis * Vector3(1, 0, 0))
+			emit_signal("move", amount * (global_transform.basis * Vector3(1, 0, 0)))
 
 var rotate_direction_2d : Vector2
 func _on_RotateArea_input_event(camera, event, position, _normal, _shape_idx):

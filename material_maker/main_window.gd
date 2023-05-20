@@ -211,7 +211,10 @@ func _ready() -> void:
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
 		new_material()
+	
+	update_menus()
 
+func update_menus() -> void:
 	# Create menus
 	var menu_bar_class
 	if false and DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
@@ -384,9 +387,10 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 		export_profiles = material_node.get_export_profiles()
 	for id in range(export_profiles.size()):
 		var p : String = export_profiles[id]
-		if p.left(prefix_len) != prefix:
-			continue
-		p = p.right(-prefix_len)
+		if prefix_len > 0:
+			if p.left(prefix_len) != prefix:
+				continue
+			p = p.right(-prefix_len)
 		var slash_position = p.find("/")
 		if slash_position == -1:
 			menu.add_item(p, id)
@@ -399,8 +403,8 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
 				menu.add_submenu_item(submenu_name, submenu_name, id)
 				submenus.push_back(submenu_name)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_ExportMaterial_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"_on_ExportMaterial_id_pressed"))
+	if ! menu.id_pressed.is_connected(self._on_ExportMaterial_id_pressed):
+		menu.id_pressed.connect(self._on_ExportMaterial_id_pressed)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var project = get_current_project()

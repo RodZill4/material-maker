@@ -1,13 +1,13 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://pyimsn2fnsa3"]
 
 [ext_resource type="Script" path="res://addons/material_maker/engine/gen_sdf.gd" id="1"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/preview_2d.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bf5k7ed5a8ny1" path="res://material_maker/windows/sdf_builder/preview_2d.tscn" id="2"]
 [ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder.gd" id="3"]
 [ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" id="4"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/preview_3d.tscn" id="5"]
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="6"]
+[ext_resource type="PackedScene" uid="uid://bsdj8r6ur5sja" path="res://material_maker/windows/sdf_builder/preview_3d.tscn" id="5"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="6"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -16,170 +16,114 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tbsrk"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+shader = SubResource("1")
 
-[sub_resource type="ButtonGroup" id=4]
-
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 6 )
-region = Rect2( 48, 0, 16, 16 )
-
-[sub_resource type="ButtonGroup" id=5]
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("6")
+region = Rect2(48, 0, 16, 16)
 
 [node name="Control" type="Window"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 106.503
-offset_top = 99.6447
-offset_right = -118.498
-offset_bottom = -96.3553
 exclusive = true
-window_title = "SDF Builder"
-resizable = true
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Toolbar" type="HBoxContainer" parent="VBoxContainer"]
-offset_right = 1054.0
+layout_mode = 2
 
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
-offset_top = 4.0
-offset_right = 1054.0
-offset_bottom = 500.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Tree" type="Tree" parent="VBoxContainer/Main"]
-offset_right = 302.0
-offset_bottom = 496.0
-custom_minimum_size = Vector2( 200, 200 )
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 3
 select_mode = 1
-script = ExtResource( 4 )
+script = ExtResource("4")
 
-[node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource( 2 )]
-material = SubResource( 2 )
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 306.0
-offset_right = 911.0
-offset_bottom = 496.0
+[node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_tbsrk")
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
-[node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource( 5 )]
+[node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource("5")]
 visible = false
-offset_left = 265.0
-offset_right = 265.0
-offset_bottom = 0.0
-custom_minimum_size = Vector2( 200, 200 )
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Main"]
-offset_left = 915.0
-offset_right = 1054.0
-offset_bottom = 496.0
-scroll_horizontal_enabled = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 
 [node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main/ScrollContainer"]
-offset_right = 139.0
-offset_bottom = 79.0
-custom_constants/separation = 1
+layout_mode = 2
 
 [node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_right = 139.0
-offset_bottom = 24.0
-group = SubResource( 4 )
+layout_mode = 2
 text = "Node Parameters"
 
 [node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_top = 25.0
-offset_right = 139.0
-offset_bottom = 25.0
+layout_mode = 2
 columns = 7
 
 [node name="Button" type="Button" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_top = 26.0
-offset_right = 28.0
-offset_bottom = 48.0
+layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-icon = SubResource( 3 )
+icon = SubResource("3")
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_top = 49.0
-offset_right = 139.0
-offset_bottom = 53.0
+layout_mode = 2
 
 [node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_top = 54.0
-offset_right = 139.0
-offset_bottom = 78.0
-group = SubResource( 5 )
+layout_mode = 2
 text = "Item Parameters"
 
 [node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
-offset_top = 79.0
-offset_right = 139.0
-offset_bottom = 79.0
+layout_mode = 2
 columns = 3
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-offset_left = 432.0
-offset_top = 504.0
-offset_right = 622.0
-offset_bottom = 524.0
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 5
-custom_constants/separation = 5
 
 [node name="Apply" type="Button" parent="VBoxContainer/Buttons"]
-offset_right = 60.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Apply"
 
 [node name="OK" type="Button" parent="VBoxContainer/Buttons"]
-offset_left = 65.0
-offset_right = 125.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
-offset_left = 130.0
-offset_right = 190.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Cancel"
 
 [node name="GenSDF" type="Node" parent="."]
-script = ExtResource( 1 )
+script = ExtResource("1")
 editor = true
 
-[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="button_pressed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_button_pressed"]
-[connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_collapsed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_edited" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_edited"]

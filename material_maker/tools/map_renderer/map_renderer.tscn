@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cv706ip72t48u"]
+[gd_scene load_steps=32 format=3 uid="uid://cv706ip72t48u"]
 
 [ext_resource type="Script" path="res://material_maker/tools/map_renderer/curvature_generator.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/map_renderer/map_renderer.gd" id="2"]
@@ -15,9 +15,8 @@ varying vec3 p;
 
 void vertex() {
 	p = (VERTEX-position)/size;
-	VERTEX=vec3(UV, 0.5);
+	VERTEX=vec3(UV.x, 1.0-UV.y, 0.5);
 }
-
 
 void fragment() {
 	ALBEDO = p;
@@ -38,7 +37,7 @@ varying vec3 p;
 
 void vertex() {
 	p = NORMAL;
-	VERTEX=vec3(UV, 0.5);
+	VERTEX=vec3(UV.x, 1.0-UV.y, 0.5);
 }
 
 void fragment() {
@@ -58,7 +57,7 @@ varying vec3 p;
 
 void vertex() {
 	p = TANGENT;
-	VERTEX=vec3(UV, 0.5);
+	VERTEX=vec3(UV.x, 1.0-UV.y, 0.5);
 }
 
 void fragment() {
@@ -69,12 +68,6 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_udwys"]
 render_priority = 0
 shader = SubResource("24")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t8lkf"]
-render_priority = 0
-shader = SubResource("4")
-shader_parameter/position = Vector3(0, 0, 0)
-shader_parameter/size = Vector3(1, 1, 1)
 
 [sub_resource type="Shader" id="6"]
 code = "shader_type spatial;
@@ -106,7 +99,7 @@ varying float curvature;
 
 void vertex() {
 	curvature = dot(COLOR, vec4(1.0, 1.0/255.0, 1.0/65025.0, 1.0/16581375.0));
-	VERTEX=vec3(UV, 0.5);
+	VERTEX=vec3(UV.x, 1.0-UV.y, 0.5);
 }
 
 void fragment() {
@@ -903,7 +896,6 @@ script = ExtResource("2")
 position_material = SubResource("ShaderMaterial_nhogg")
 normal_material = SubResource("ShaderMaterial_3bmjr")
 tangent_material = SubResource("ShaderMaterial_udwys")
-inv_uv_material = SubResource("ShaderMaterial_t8lkf")
 white_material = SubResource("ShaderMaterial_wqg6s")
 curvature_material = SubResource("ShaderMaterial_w1hip")
 ao_material = SubResource("ShaderMaterial_0j43v")
@@ -926,7 +918,7 @@ extra_cull_margin = 16384.0
 mesh = SubResource("23")
 
 [node name="Camera3D" type="Camera3D" parent="Viewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 10)
 projection = 1
 
 [node name="CurvatureGenerator" type="Node" parent="."]

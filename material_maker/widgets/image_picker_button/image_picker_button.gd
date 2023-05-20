@@ -9,14 +9,14 @@ signal on_file_selected(f)
 
 
 func _init():
-	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	set_size(Vector2(64, 64))
+	size_flags_horizontal = Control.SIZE_SHRINK_CENTER | Control.SIZE_EXPAND
 
 func update_image() -> void:
 	if texture_normal == null:
 		texture_normal = ImageTexture.new()
-	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	set_size(Vector2(64, 64))
+	size_flags_horizontal = Control.SIZE_SHRINK_CENTER | Control.SIZE_EXPAND
 	var image : Image = Image.load_from_file(image_path)
 	texture_normal.set_image(image)
 	queue_redraw()

@@ -52,11 +52,10 @@ func get_valid_children_types(parent : TreeItem):
 	var valid_children_types : Array = []
 	var parent_type : Object = get_sdf_item_type(parent)
 	if parent_type == null:
-		var first_child : TreeItem = get_root().get_children()
-		if first_child == null:
+		if get_root().get_children().is_empty():
 			valid_children_types = [ "SDF2D", "SDF3D" ]
 		else:
-			valid_children_types = [ get_sdf_item_type_name(first_child) ]
+			valid_children_types = [ get_sdf_item_type_name(get_root().get_children()[0]) ]
 	elif parent_type.has_method("get_children_types"):
 		valid_children_types = parent_type.get_children_types()
 	else:

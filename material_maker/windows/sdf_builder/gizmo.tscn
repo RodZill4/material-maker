@@ -1,40 +1,43 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://bkaug0arymhda"]
 
-[ext_resource path="res://material_maker/windows/sdf_builder/gizmo_arrow.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/windows/sdf_builder/gizmo.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/windows/sdf_builder/gizmo.gdshader" type="Shader" id=3]
+[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/gizmo_arrow.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/gizmo.gd" id="2"]
+[ext_resource type="Shader" path="res://material_maker/windows/sdf_builder/gizmo.gdshader" id="3"]
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = ExtResource( 3 )
-shader_param/color = Color( 1, 0, 0, 1 )
-shader_param/highlight = 0.0
+[sub_resource type="ShaderMaterial" id="4"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/color = Color(1, 0, 0, 1)
+shader_parameter/highlight = 0.0
 
-[sub_resource type="ShaderMaterial" id=5]
-shader = ExtResource( 3 )
-shader_param/color = Color( 0, 1, 0, 1 )
-shader_param/highlight = 0.0
+[sub_resource type="ShaderMaterial" id="5"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/color = Color(0, 1, 0, 1)
+shader_parameter/highlight = 0.0
 
-[sub_resource type="ShaderMaterial" id=6]
-shader = ExtResource( 3 )
-shader_param/color = Color( 0, 0, 1, 1 )
-shader_param/highlight = 0.0
+[sub_resource type="ShaderMaterial" id="6"]
+render_priority = 0
+shader = ExtResource("3")
+shader_parameter/color = Color(0, 0, 1, 1)
+shader_parameter/highlight = 0.0
 
 [node name="Gizmo" type="Node3D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 mode = 0
 
-[node name="ArrowX" parent="." instance=ExtResource( 1 )]
-material = SubResource( 4 )
+[node name="ArrowX" parent="." instance=ExtResource("1")]
+material = SubResource("4")
+mode = 3
+
+[node name="ArrowY" parent="." instance=ExtResource("1")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material = SubResource("5")
 mode = 1
 
-[node name="ArrowY" parent="." instance=ExtResource( 1 )]
-transform = Transform3D( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0 )
-material = SubResource( 5 )
-mode = 1
-
-[node name="ArrowZ" parent="." instance=ExtResource( 1 )]
-transform = Transform3D( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0 )
-material = SubResource( 6 )
+[node name="ArrowZ" parent="." instance=ExtResource("1")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+material = SubResource("6")
 mode = 1
 
 [connection signal="move" from="ArrowX" to="." method="_on_Arrow_move"]

@@ -2,7 +2,14 @@ extends SubViewportContainer
 
 
 @export var control_target : NodePath
-@export var mode = 1 setget set_mode # (int, "NONE", "SDF2D", "SDF3D")
+@export var mode : int = 1:
+	get:
+		return mode
+	set(new_value):
+		mode = new_value
+		$SubViewport/Gizmo.mode = mode
+		update_viewport()
+
 
 @onready var viewport = $SubViewport
 @onready var camera_position = $SubViewport/CameraPosition
@@ -16,6 +23,7 @@ var generator : MMGenBase = null
 
 var gizmo_is_local = false
 
+
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
 
@@ -24,28 +32,21 @@ func _ready():
 
 func update_viewport():
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	viewport.update_worlds()
-
-func set_mode(m):
-	mode = m
-	$SubViewport/Gizmo.mode = mode
-	update_viewport()
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	if is_instance_valid(g) and (force or g != generator):
 		generator = g
 		var context : MMGenContext = MMGenContext.new()
 		var source = g.get_shader_code("uv", o, context)
-		assert(!(source is GDScriptFunctionState))
-		if source.is_empty():
+		if source.output_type == "":
 			source = MMGenBase.get_default_generated_shader()
 		var material = plane.get_surface_override_material(0)
 		var variables : Dictionary = {}
-		variables.GENERATED_GLOBALS = PackedStringArray(source."\n".join(globals))
+		variables.GENERATED_GLOBALS = "\n".join(PackedStringArray(source.globals))
 		variables.GENERATED_INSTANCE = source.defs
 		variables.GENERATED_CODE = source.code
-		variables.GENERATED_OUTPUT = source.sdf3d
-		var node_prefix = source.sdf3d.left(source.sdf3d.find("_"))
+		variables.GENERATED_OUTPUT = source.output_values.sdf3d
+		var node_prefix = source.output_values.sdf3d.left(source.output_values.sdf3d.find("_"))
 		variables.DIST_FCT = node_prefix+"_d"
 		variables.COLOR_FCT = node_prefix+"_c"
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
@@ -66,9 +67,9 @@ var euler_2d : Vector3 = Vector3(0, 0, 0)
 func update_gizmo_position():
 	gizmo.position = (parent_transform*local_transform).origin
 	if gizmo_is_local:
-		gizmo.transform.basis = Basis((parent_transform.basis*local_transform.basis).get_euler())
+		gizmo.transform.basis = Basis.from_euler((parent_transform.basis*local_transform.basis).get_euler())
 	else:
-		gizmo.transform.basis = Basis(euler_2d)
+		gizmo.transform.basis = Basis.from_euler(euler_2d)
 
 func set_local_transform(t : Transform3D):
 	local_transform = t
@@ -113,6 +114,7 @@ func _on_Preview3D_resized():
 		update_viewport()
 
 func _input(ev):
+	return
 	_unhandled_input(ev)
 	
 func navigation_input(ev) -> bool:
@@ -129,7 +131,7 @@ func navigation_input(ev) -> bool:
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 			return true
 	elif ev is InputEventMouseButton:
-		if ev.control:
+		if ev.is_command_or_control_pressed():
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
 			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:

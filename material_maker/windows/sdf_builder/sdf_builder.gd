@@ -14,6 +14,7 @@ var node_parameter_mode : bool = true
 var scene : Array = []
 var controls : Dictionary = {}
 var ignore_parameter_change : String = ""
+var next_index : int = 0
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
@@ -38,6 +39,20 @@ func _ready():
 		tree.create_item()
 	set_node_parameter_mode(false)
 
+func get_next_index() -> int:
+	next_index += 1
+	return next_index
+
+func get_treeitem_by_index(index : int, parent : TreeItem = tree.get_root()) -> TreeItem:
+	var meta = parent.get_meta("scene")
+	if meta != null and meta is Dictionary and meta.has("index") and meta.index == index:
+		return parent
+	for i in parent.get_children():
+		var item : TreeItem = get_treeitem_by_index(index, i)
+		if item != null:
+			return item
+	return null
+
 func set_preview(s : Array):
 	if s.is_empty():
 		return
@@ -54,8 +69,9 @@ func set_preview(s : Array):
 			preview_3d.set_generator($GenSDF, 0, true)
 
 func select_first_item():
-	var top = tree.get_root().get_children()
-	if top != null:
+
+	if ! tree.get_root().get_children().is_empty():
+		var top : TreeItem = tree.get_root().get_children()[0]
 		top.select(0)
 		_on_Tree_item_selected()
 
@@ -93,7 +109,7 @@ func update_node_parameters_grid():
 		var description = preload("res://material_maker/widgets/desc_button/desc_button.tscn").instantiate()
 		description.short_description = p.shortdesc if p.has("shortdesc") else ""
 		description.long_description = p.longdesc if p.has("longdesc") else ""
-		description.connect("descriptions_changed",Callable(self,"on_node_parameter_descriptions_changed").bind( pi ))
+		description.descriptions_changed.connect(self.on_node_parameter_descriptions_changed.bind( pi ))
 		node_parameters_panel.add_child(description)
 		var control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instantiate()
 		control.min_value = p.min
@@ -101,11 +117,11 @@ func update_node_parameters_grid():
 		control.step = p.step
 		control.value = p.default
 		node_parameters_panel.add_child(control)
-		control.connect("value_changed_undo",Callable(self,"on_node_parameter_value_changed").bind( pi ].duplicate(true)))
+		control.value_changed_undo.connect(self.on_node_parameter_value_changed.bind([ pi ].duplicate(true)))
 		button = Button.new()
 		button.icon = preload("res://material_maker/icons/edit.tres")
 		node_parameters_panel.add_child(button)
-		button.connect("pressed",Callable(self,"edit_node_parameter").bind( pi ))
+		button.pressed.connect(self.edit_node_parameter.bind( pi ))
 		button.tooltip_text = "Configure parameter "+p.name
 		button = Button.new()
 		button.icon = preload("res://material_maker/icons/remove.tres")
@@ -183,9 +199,7 @@ func edit_node_parameter(param_index) -> void:
 	var p = $GenSDF.node_parameters[param_index]
 	var dialog = preload("res://material_maker/nodes/remote/named_parameter_dialog.tscn").instantiate()
 	add_child(dialog)
-	var result = dialog.configure_param(p.min, p.max, p.step, p.default)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	var result = await dialog.configure_param(p.min, p.max, p.step, p.default)
 	if result.keys().size() == 4:
 		p.min = result.min
 		p.max = result.max
@@ -231,7 +245,7 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	var item_icon = item_type.get("icon")
 	if item_icon != null:
 		item.set_icon(0, item_icon)
-	i.index = item.get_instance_id()
+	i.index = get_next_index()
 	item.add_button(2, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
 	item.set_meta("scene", i)
 	set_sdf_scene(i.children, item)
@@ -241,10 +255,8 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 
 func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 	var scene_list : Array = []
-	var child : TreeItem = item.get_children()
-	while child != null:
+	for child in item.get_children():
 		scene_list.push_back(rebuild_scene(child))
-		child = child.get_next()
 	if item == tree.get_root():
 		scene = scene_list
 		return {}
@@ -256,7 +268,7 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 func show_menu(current_item : TreeItem):
 	var menu : PopupMenu = PopupMenu.new()
 	var filter : Array = tree.get_valid_children_types(current_item)
-	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self, "_on_menu_add_shape", [ current_item ], filter)
+	var add_menu : PopupMenu = mm_sdf_builder.get_items_menu("", self._on_menu_add_shape.bind(current_item), filter)
 	menu.add_child(add_menu)
 	menu.add_submenu_item("Create", add_menu.name)
 	if current_item != null:
@@ -265,7 +277,7 @@ func show_menu(current_item : TreeItem):
 		menu.add_item("Cut", MENU_CUT)
 		menu.add_item("Copy", MENU_COPY)
 	var test_json_conv = JSON.new()
-	test_json_conv.parse(OS.clipboard)
+	test_json_conv.parse(DisplayServer.clipboard_get())
 	var json = test_json_conv.get_data()
 	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
 		if current_item == null:
@@ -275,10 +287,10 @@ func show_menu(current_item : TreeItem):
 		menu.add_separator()
 		menu.add_item("Delete", MENU_DELETE)
 		#menu.add_item("Dump", MENU_DUMP)
-	menu.connect("id_pressed",Callable(self,"_on_menu").bind( current_item ))
 	add_child(menu)
-	menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-	menu.connect("popup_hide",Callable(menu,"queue_free"))
+	menu.id_pressed.connect(self._on_menu.bind(current_item))
+	menu.popup_hide.connect(menu.queue_free)
+	menu.popup(Rect2($VBoxContainer.get_local_mouse_position()+$VBoxContainer.get_screen_position(), Vector2(0, 0)))
 
 func _on_Tree_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
@@ -288,7 +300,7 @@ func _on_Tree_gui_input(event : InputEvent):
 
 func delete_item(item : TreeItem):
 	item.get_parent().remove_child(item)
-	tree.update()
+	tree.queue_redraw()
 	rebuild_scene()
 	set_preview(scene)
 	select_first_item()
@@ -296,11 +308,11 @@ func delete_item(item : TreeItem):
 func copy_item(item : TreeItem):
 	var tmp_scene : Dictionary = mm_sdf_builder.serialize_scene([item.get_meta("scene")])[0]
 	tmp_scene.is_easysdf = true
-	OS.clipboard = JSON.stringify(tmp_scene)
+	DisplayServer.clipboard_set(JSON.stringify(tmp_scene))
 
 func paste_item(parent : TreeItem):
 	var test_json_conv = JSON.new()
-	test_json_conv.parse(OS.clipboard)
+	test_json_conv.parse(DisplayServer.clipboard_get())
 	var json = test_json_conv.get_data()
 	if json is Dictionary and json.has("is_easysdf") and json.is_easysdf:
 		if parent == null:
@@ -348,7 +360,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var item_icon = shape.get("icon")
 	if item_icon != null:
 		item.set_icon(0, item_icon)
-	data.index = item.get_instance_id()
+	data.index = get_next_index()
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
 	item.add_button(2, BUTTON_SHOWN, 0)
@@ -427,9 +439,9 @@ func get_local_item_transform_3d(item : TreeItem) -> Transform3D:
 			var parameters = item_scene.parameters
 			var t : Transform3D = Transform3D()
 			if parameters.has("angle_x") and parameters.has("angle_y") and parameters.has("angle_z"):
-				t = Transform3D(Basis(Vector3(deg_to_rad(parameters.angle_x), deg_to_rad(parameters.angle_y), deg_to_rad(parameters.angle_z))))
+				t = Transform3D(Basis.from_euler(Vector3(deg_to_rad(parameters.angle_x), deg_to_rad(parameters.angle_y), deg_to_rad(parameters.angle_z))))
 			elif parameters.has("angle"):
-				t = Transform3D(Basis(Vector3(0, 0, deg_to_rad(parameters.angle))))
+				t = Transform3D(Basis.from_euler(Vector3(0, 0, deg_to_rad(parameters.angle))))
 			if parameters.has("scale"):
 				t = t.scaled(Vector3(parameters.scale, parameters.scale, parameters.scale))
 			if parameters.has("position_x") and parameters.has("position_y"):
@@ -464,7 +476,9 @@ func show_node_parameters(_prefix : String):
 	node_parameters_panel.add_child(plus_button)
 
 func show_item_parameters(prefix : String):
-	var item : TreeItem = instance_from_id(prefix.right(-1).to_int())
+	var item : TreeItem = get_treeitem_by_index(prefix.right(-1).to_int())
+	if item == null:
+		return
 	var item_scene : Dictionary = item.get_meta("scene")
 	controls = {}
 	for c in item_parameters_panel.get_children():
@@ -474,13 +488,13 @@ func show_item_parameters(prefix : String):
 		if p.has("label"):
 			var label : Label = Label.new()
 			label.text = p.label if p.has("label") else ""
-			label.size_flags_horizontal = SIZE_EXPAND_FILL
+			label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			item_parameters_panel.add_child(label)
 		else:
 			item_parameters_panel.add_child(Control.new())
 		var control : Control = GENERIC.create_parameter_control(p, false)
 		control.name = p.name
-		control.size_flags_horizontal = SIZE_FILL
+		control.size_flags_horizontal = Control.SIZE_FILL
 		item_parameters_panel.add_child(control)
 		controls[p.name] = control
 		if p.type == "float":
@@ -499,7 +513,7 @@ func show_item_parameters(prefix : String):
 
 func on_parameter_expression_button(param_full_name : String):
 	var item_id : int = param_full_name.left(param_full_name.find("_")).right(-1).to_int()
-	var item : TreeItem = instance_from_id(item_id)
+	var item : TreeItem = get_treeitem_by_index(item_id)
 	if item != null:
 		var item_scene : Dictionary = item.get_meta("scene")
 		var param_name = param_full_name.right(-(param_full_name.find("_")+1))
@@ -522,7 +536,7 @@ func set_parameter_expression(value : String, item_scene : Dictionary, param_nam
 func _on_value_changed(new_value, variable : String) -> void:
 	var value = MMType.deserialize_value(new_value)
 	$GenSDF.set_parameter(variable, new_value)
-	var item : TreeItem = instance_from_id(variable.right(-1).to_int())
+	var item : TreeItem = get_treeitem_by_index(variable.right(-1).to_int())
 	var parameter_name : String = variable.right(-(variable.find("_")+1))
 	item.get_meta("scene").parameters[parameter_name] = value
 	set_preview(scene)
@@ -558,7 +572,7 @@ func _on_Tree_item_selected():
 		return
 	var item_scene = selected_item.get_meta("scene")
 	var index : int = item_scene.index
-	if index != selected_item.get_instance_id():
+	if index != selected_item.get_index():
 		print("index don't match")
 	show_item_parameters("n%d" % index)
 	match $GenSDF.get_scene_type():
@@ -610,7 +624,7 @@ func set_node_parameters(generator, parameters):
 		var value = MMType.deserialize_value(parameters[p])
 		generator.set_parameter(p, value)
 		var item_id : int = p.left(p.find("_")).right(-1).to_int()
-		var item : TreeItem = instance_from_id(item_id)
+		var item : TreeItem = get_treeitem_by_index(item_id)
 		if item != null:
 			var parameter_name : String = p.right(-(p.find("_")+1))
 			if item.get_meta("scene").parameters.has(parameter_name):
@@ -627,10 +641,8 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	new_item.set_icon(0, item.get_icon(0))
 	new_item.add_button(2, item.get_button(2, 0), 0)
 	new_item.set_meta("scene", item.get_meta("scene"))
-	var c : TreeItem = item.get_children()
-	while c != null:
+	for c in item.get_children():
 		duplicate_item(c, new_item)
-		c = c.get_next()
 	return new_item
 
 func move_item(item, dest, position):
@@ -710,7 +722,7 @@ func _input(event):
 						return
 				_:
 					return
-		accept_event()
+		$VBoxContainer.accept_event()
 
 func _on_VBoxContainer_minimum_size_changed():
 	min_size = $VBoxContainer.get_minimum_size()+Vector2(4, 4)
