@@ -13,7 +13,6 @@ on:
 
 env:
   GODOT_VERSION: 4.0.2
-  GODOT_VERSION_MAC: 4.0.2
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
@@ -106,7 +105,7 @@ jobs:
           submodules: true
       - name: Setup environment 🔧
         run: |
-          export GODOT_VERSION=${GODOT_VERSION_MAC}
+          export GODOT_VERSION=${GODOT_VERSION}
           export EXPORT_NAME=material_maker
       - name: Install the Apple certificate and provisioning profile
         if: ${{ github.event.inputs.sign_macos == 'true' }}
@@ -137,23 +136,20 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Download and extract export templates 💾
+      - name: Download and extract Godot and export templates 💾
         run: |
-          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
-          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_MAC}/Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
-          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
-          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
-      - name: Download Godot headless binary 🤖
-        run: |
-          wget https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
-          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
-      - name: Setup 💻
-        run: mkdir -v -p ./build/mac
+          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_macos.universal.zip
+          unzip -a Godot_v${GODOT_VERSION}-stable_macos.universal.zip
+          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+          unzip -a Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
       - name: Mac Build 🔧
         run: |
-          chown runner bin/godot
-          chmod +x bin/godot
-          bin/godot -v --export "Mac OSX" ./build/mac/material_maker.zip
+          chown runner Godot.app/Contents/MacOS/Godot
+          chmod +x Godot.app/Contents/MacOS/Godot
+          mkdir -v -p ./build/mac
+          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
