@@ -145,10 +145,9 @@ jobs:
           curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_macos.universal.zip
           unzip -a Godot_v${GODOT_VERSION}-stable_macos.universal.zip
           curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}.stable
           unzip -a Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-          mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          mkdir -v -p "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.stable"
+          mv ./templates/* "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.stable"
       - name: Mac Build 🔧
         run: |
           chown runner Godot.app/Contents/MacOS/Godot
