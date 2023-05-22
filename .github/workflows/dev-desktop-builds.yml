@@ -155,6 +155,7 @@ jobs:
           chmod +x Godot.app/Contents/MacOS/Godot
           mkdir -v -p ./build/mac
           Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
+          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
