@@ -12,7 +12,7 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 4.0.2
+  GODOT_VERSION: 4.0.3
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
@@ -55,9 +55,13 @@ jobs:
         with:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
-        run: ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+        run: |
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
-        run: ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+        run: |
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows

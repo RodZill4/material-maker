@@ -139,8 +139,6 @@ class MenuDisplayServer:
 	func add_submenu(name : String, _update_callable = null) -> MenuBase:
 		var full_name : String = menu_name+"/"+name
 		var index = DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
-		print(name+": "+str(index))
-		DisplayServer.global_menu_set_item_callback(menu_name, index, mm_globals.menu_manager.test)
 		return MenuDisplayServer.new(full_name)
 
 class MenuBarDisplayServer:
@@ -165,9 +163,6 @@ func my_callback(param):
 	var split_param : PackedStringArray = param.split(",")
 	var callable : Callable = menu_callables[split_param[0].to_int()]
 	callable.call(split_param[1].to_int())
-
-func test(_x):
-	print("test test test")
 
 func create_menus(menu_def, object, menu_bar : MenuBarBase) -> void:
 	menu_bar.create_menus(menu_def, object)

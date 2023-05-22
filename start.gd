@@ -109,7 +109,7 @@ func start_ui(scene):
 	progress_bar.value = 100.0
 	var instance = scene.instantiate()
 	root.add_child(instance)
-	
+
 var wait : float = 0.0
 func _process(delta) -> void:
 	wait += delta
