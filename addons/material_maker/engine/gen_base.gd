@@ -297,7 +297,7 @@ func get_shader(output_index : int, context) -> ShaderCode:
 static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
 	var code
 	code = "shader_type canvas_item;\n"
-	code += "render_mode blend_disabled;\n"
+	code += "render_mode blend_disabled, unshaded;\n"
 	code += "uniform float preview_size = 64;\n"
 	code += "uniform sampler2D mesh_inv_uv_tex;\n"
 	code += "uniform vec3 mesh_aabb_position;\n"

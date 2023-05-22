@@ -121,15 +121,13 @@ func _ready() -> void:
 	
 	get_window().close_requested.connect(self.on_close_requested)
 	
-	for m in MENU:
-		print(str(m)+",")
 	get_tree().set_auto_accept_quit(false)
-
+	
 	if mm_globals.get_config("locale") == "":
 		mm_globals.set_config("locale", TranslationServer.get_locale())
-
+	
 	on_config_changed()
-
+	
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
@@ -142,13 +140,13 @@ func _ready() -> void:
 			get_window().position = mm_globals.config.get_value("window", "position")
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
-
+	
 	# Restore the theme
 	var theme_name : String = "default"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
 	change_theme(theme_name)
-
+	
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
 		print("Copying samples")
@@ -163,13 +161,13 @@ func _ready() -> void:
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
 		print("Done")
-
+	
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
 	get_window().min_size = Vector2(1024, 600)
-
+	
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
-
+	
 	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
@@ -179,14 +177,14 @@ func _ready() -> void:
 	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self.on_group_selected)
 	brushes = get_panel("Brushes")
-
+	
 	# Load recent projects
 	load_recents()
-
+	
 	get_window().connect("files_dropped", self.on_files_dropped)
-
+	
 	do_load_projects(OS.get_cmdline_args())
-
+	
 	var dir : DirAccess = DirAccess.open("user://unsaved_projects")
 	if dir != null:
 		var files : Array = []

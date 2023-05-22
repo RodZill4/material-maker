@@ -51,7 +51,7 @@ func get_global_parameter_declaration(n : String) -> String:
 func generate_shader(src_code : MMGenBase.ShaderCode) -> String:
 	var code
 	code = "shader_type canvas_item;\n"
-	code += "render_mode blend_disabled;\n"
+	code += "render_mode blend_disabled, unshaded;\n"
 	code += common_shader
 	code += "\n"
 	for g in src_code.globals:

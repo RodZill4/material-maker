@@ -57,7 +57,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			if source.output_type == "":
 				source = MMGenBase.get_default_generated_shader()
 	# Update shader
-	var shader_code : String = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 size;void fragment() {COLOR = preview_2d(UV);}")
+	var shader_code : String = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 mm_texture_size;void fragment() {COLOR = preview_2d(UV);}")
 	$ViewportImage/ColorRect.material = mm_deps.buffer_create_shader_material(get_buffer_name(), $ViewportImage/ColorRect.material, shader_code)
 	mm_deps.update()
 

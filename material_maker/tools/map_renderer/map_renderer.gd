@@ -6,7 +6,6 @@ extends Node
 @export var position_material: ShaderMaterial
 @export var normal_material: ShaderMaterial
 @export var tangent_material: ShaderMaterial
-@export var inv_uv_material: ShaderMaterial
 @export var white_material: ShaderMaterial
 @export var curvature_material: ShaderMaterial
 @export var ao_material: ShaderMaterial
@@ -69,8 +68,8 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		await get_tree().process_frame
 		progress_dialog.queue_free()
 	else:
-		inv_uv_material.set_shader_parameter("position", aabb.position)
-		inv_uv_material.set_shader_parameter("size", aabb.size)
+		passes.first.set_shader_parameter("position", aabb.position)
+		passes.first.set_shader_parameter("size", aabb.size)
 		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 		await get_tree().process_frame
 		await get_tree().process_frame

@@ -330,7 +330,7 @@ func find_files(path, extensions):
 	var dir : DirAccess = DirAccess.open(path)
 	if dir!= null:
 		var dir_names : Array = []
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir() and file_name[0] != ".":
@@ -368,7 +368,7 @@ func _run():
 	var dir : DirAccess = DirAccess.open("res://material_maker/locale/translations")
 	if dir!= null:
 		var languages : Dictionary = {}
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			match file_name.get_extension():

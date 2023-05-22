@@ -464,8 +464,10 @@ static func subst_string(s : String, export_context : Dictionary) -> String:
 	return s
 
 static func get_template_text(template : String) -> String:
-	var in_file = FileAccess.open(MMPaths.STD_GENDEF_PATH+"/"+template, FileAccess.READ)
-	if ! in_file.is_open():
+	var file_path : String = MMPaths.STD_GENDEF_PATH+"/"+template
+	var in_file : FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	if in_file == null:
+		print("Failed to open "+file_path)
 		return template
 	return in_file.get_as_text()
 

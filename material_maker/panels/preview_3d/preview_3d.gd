@@ -53,12 +53,9 @@ func _ready() -> void:
 	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
-
 	# Required for supersampling to work.
-	#$MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
-
-	$MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
-
+	# $MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
+	# $MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
 	# Delay setting the sun shadow by one frame. Otherwise, the large 3D preview
 	# attempts to read the setting before the configuration file is loaded.
 	await get_tree().process_frame
@@ -137,8 +134,9 @@ func _on_Tonemaps_item_selected(id) -> void:
 	environment.tonemap_mode = id
 
 func _on_material_preview_size_changed() -> void:
+	pass
 	# Apply supersampling to the new viewport size.
-	$MaterialPreview.size = size * mm_globals.main_window.preview_rendering_scale_factor
+	#$MaterialPreview.size = size * mm_globals.main_window.preview_rendering_scale_factor
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instantiate()
