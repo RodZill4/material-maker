@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://t53vu231awns" path="res://material_maker/windows/about/epic_megagrant.svg" id="12"]
 
 [node name="About" type="Window"]
+title = "About Material Maker"
 size = Vector2i(600, 500)
 script = ExtResource("1")
 
@@ -68,6 +69,7 @@ text = "© 2018-2023 Rodolphe Suescun and contributors"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+tab_alignment = 1
 
 [node name="Authors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -98,6 +100,7 @@ size_flags_horizontal = 3
 text = "99% of Material Maker's code is the awesome Godot Engine"
 
 [node name="Donors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors"]
@@ -244,6 +247,7 @@ mouse_default_cursor_shape = 2
 texture_normal = ExtResource("9")
 stretch_mode = 4
 
+[connection signal="close_requested" from="." to="." method="queue_free"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot/Godot" to="." method="open_url" binds= ["https://godotengine.org/"]]
 [connection signal="pressed" from="HBoxContainer/SocialNetworks/Patreon" to="." method="open_url" binds= ["https://www.patreon.com/rodzlabs"]]
 [connection signal="pressed" from="HBoxContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]

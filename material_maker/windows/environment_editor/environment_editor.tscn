@@ -181,6 +181,7 @@ text = "Upload environment"
 layout_mode = 2
 text = "Close"
 
+[connection signal="close_requested" from="." to="." method="queue_free"]
 [connection signal="minimum_size_changed" from="Main" to="." method="_on_Main_minimum_size_changed"]
 [connection signal="gui_input" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_gui_input"]
 [connection signal="item_selected" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]

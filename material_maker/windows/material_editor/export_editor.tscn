@@ -1,328 +1,214 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=11 format=3 uid="uid://cwjtvrgb2al2x"]
 
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1")
+region = Rect2(48, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=9]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 48, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="9"]
+atlas = ExtResource("1")
+region = Rect2(48, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 16, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(16, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 48, 64, 16, 16 )
+[sub_resource type="AtlasTexture" id="7"]
+atlas = ExtResource("1")
+region = Rect2(48, 64, 16, 16)
 
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 32, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("1")
+region = Rect2(32, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 48, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(48, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 16 )
-
-[sub_resource type="FontFile" id=1]
-font_path = "res://material_maker/fonts/hack.ttf"
-
-[sub_resource type="FontFile" id=6]
-size = 12
-font_data = SubResource( 1 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("1")
+region = Rect2(32, 0, 16, 16)
 
 [node name="ExportEditor" type="Window"]
-anchor_right = 0.521
-anchor_bottom = 0.539
-offset_right = 0.119995
-offset_bottom = -0.0800171
-window_title = "Material Export Editor"
-resizable = true
-script = ExtResource( 2 )
+title = "Material Export Editor"
+script = ExtResource("2")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/offset_right = 3
-custom_constants/offset_top = 3
-custom_constants/offset_left = 3
-custom_constants/offset_bottom = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 690.0
-offset_bottom = 384.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Export" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-offset_right = 687.0
-offset_bottom = 24.0
+layout_mode = 2
 
 [node name="Create" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_right = 28.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "New export target"
-icon = SubResource( 2 )
+icon = SubResource("2")
 
 [node name="Load" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 32.0
-offset_right = 60.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Load export target from file"
-icon = SubResource( 9 )
+icon = SubResource("9")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 64.0
-offset_top = 5.0
-offset_right = 149.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Export target:"
 
 [node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 153.0
-offset_top = 2.0
-offset_right = 303.0
-offset_bottom = 22.0
-custom_minimum_size = Vector2( 150, 0 )
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 size_flags_vertical = 4
 
 [node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 307.0
-offset_right = 335.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Rename export target"
-icon = SubResource( 3 )
+icon = SubResource("3")
 
 [node name="External" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 339.0
-offset_right = 367.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Store as separate file"
 toggle_mode = true
-icon = SubResource( 7 )
+icon = SubResource("7")
 
 [node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 371.0
-offset_right = 399.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Save to file"
-icon = SubResource( 8 )
+icon = SubResource("8")
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 403.0
-offset_right = 407.0
-offset_bottom = 24.0
+layout_mode = 2
 
 [node name="Duplicate" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 411.0
-offset_right = 439.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Duplicate export target"
-icon = SubResource( 4 )
+icon = SubResource("4")
 
 [node name="Delete" type="Button" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 443.0
-offset_right = 471.0
-offset_bottom = 24.0
+layout_mode = 2
 tooltip_text = "Delete export target"
-icon = SubResource( 5 )
+icon = SubResource("5")
 
 [node name="Space" type="Control" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 475.0
-offset_right = 495.0
-offset_bottom = 24.0
-custom_minimum_size = Vector2( 20, 0 )
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="ExtensionLabel" type="Label" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 499.0
-offset_top = 5.0
-offset_right = 625.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Main file extension:"
 
 [node name="ExtensionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Export"]
-offset_left = 629.0
-offset_right = 687.0
-offset_bottom = 24.0
+layout_mode = 2
 size_flags_vertical = 4
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
-offset_top = 28.0
-offset_right = 687.0
-offset_bottom = 32.0
+layout_mode = 2
 
 [node name="TabBar" type="TabContainer" parent="MarginContainer/VBoxContainer"]
-offset_top = 36.0
-offset_right = 687.0
-offset_bottom = 408.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tab_alignment = 0
 
 [node name="Files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabBar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Files" type="ItemList" parent="MarginContainer/VBoxContainer/TabBar/Files"]
-offset_right = 200.0
-offset_bottom = 336.0
-custom_minimum_size = Vector2( 200, 0 )
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="File" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabBar/Files"]
-offset_left = 204.0
-offset_right = 679.0
-offset_bottom = 336.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Common" type="GridContainer" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
-offset_right = 475.0
-offset_bottom = 132.0
+layout_mode = 2
 columns = 2
 
 [node name="LabelName" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_top = 5.0
-offset_right = 115.0
-offset_bottom = 19.0
+layout_mode = 2
 text = "Name:"
 
 [node name="name" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_left = 119.0
-offset_right = 475.0
-offset_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelPromptOverwrite" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_top = 33.0
-offset_right = 115.0
-offset_bottom = 47.0
+layout_mode = 2
 text = "Prompt overwrite:"
 
 [node name="prompt_overwrite" type="CheckBox" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_left = 119.0
-offset_top = 28.0
-offset_right = 475.0
-offset_bottom = 52.0
+layout_mode = 2
 
 [node name="LabelCondition" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_top = 61.0
-offset_right = 115.0
-offset_bottom = 75.0
+layout_mode = 2
 text = "Condition:"
 
 [node name="conditions" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_left = 119.0
-offset_top = 56.0
-offset_right = 475.0
-offset_bottom = 80.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelType" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_top = 87.0
-offset_right = 115.0
-offset_bottom = 101.0
+layout_mode = 2
 text = "Type:"
 
 [node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_left = 119.0
-offset_top = 84.0
-offset_right = 475.0
-offset_bottom = 104.0
+layout_mode = 2
 size_flags_horizontal = 3
-text = "Texture2D"
-items = [ "Texture2D", null, false, 0, null, "Template", null, false, 1, null, "Buffers", null, false, 2, null, "Buffer templates", null, false, 3, null ]
-selected = 0
 
 [node name="LabelExpression" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
-offset_top = 113.0
-offset_right = 115.0
-offset_bottom = 127.0
+layout_mode = 2
 text = "Output:"
 
-[node name="expression" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" instance=ExtResource( 3 )]
+[node name="expression" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" instance=ExtResource("3")]
+layout_mode = 2
 
 [node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
-offset_top = 136.0
-offset_right = 475.0
-offset_bottom = 336.0
-custom_minimum_size = Vector2( 100, 200 )
-mouse_default_cursor_shape = 0
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = SubResource( 6 )
-syntax_highlighter = true
-show_line_numbers = true
-__meta__ = {
-"_editor_description_": ""
-}
+mouse_default_cursor_shape = 0
 
 [node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar"]
 visible = false
-offset_top = 136.0
-offset_right = 457.0
-offset_bottom = 336.0
-custom_minimum_size = Vector2( 100, 200 )
-mouse_default_cursor_shape = 0
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = SubResource( 6 )
-syntax_highlighter = true
-show_line_numbers = true
-__meta__ = {
-"_editor_description_": ""
-}
+mouse_default_cursor_shape = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-offset_left = 234.0
-offset_top = 412.0
-offset_right = 452.0
-offset_bottom = 432.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_right = 70.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Apply"
 
 [node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 74.0
-offset_right = 144.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-offset_left = 148.0
-offset_right = 218.0
-offset_bottom = 20.0
-custom_minimum_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Cancel"
 
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="MarginContainer" to="." method="_on_MarginContainer_minimum_size_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Create" to="." method="_on_Create_Export_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Load" to="." method="_on_Load_Export_pressed"]

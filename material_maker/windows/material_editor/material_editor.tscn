@@ -1,41 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://bk5gqlr6u8srf"]
 
-[ext_resource path="res://material_maker/windows/node_editor/node_editor.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/windows/material_editor/material_editor.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://cbpg2wtvf7fc1" path="res://material_maker/windows/node_editor/node_editor.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/material_editor/material_editor.gd" id="2"]
 
-[sub_resource type="FontFile" id=7]
-font_path = "res://material_maker/fonts/hack.ttf"
+[node name="MaterialEditor" instance=ExtResource("1")]
+title = "Material Editor"
+script = ExtResource("2")
 
-[sub_resource type="FontFile" id=2]
-size = 12
-font_data = SubResource( 7 )
-
-[node name="MaterialEditor" instance=ExtResource( 1 )]
-window_title = "Material Editor"
-script = ExtResource( 2 )
-
-[node name="LabelOutputs" parent="Sizer/TabBar/Outputs" index="0"]
-offset_right = 942.0
-
-[node name="Outputs" parent="Sizer/TabBar/Outputs" index="1"]
-offset_right = 942.0
-offset_bottom = 414.0
-
-[node name="Sizer" parent="Sizer/TabBar/Outputs/Outputs" index="0"]
-offset_right = 942.0
-
-[node name="Preview" type="TextEdit" parent="Sizer/TabBar" index="5"]
+[node name="Preview" type="TextEdit" parent="Sizer/TabBar" index="6"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 32.0
-offset_right = -4.0
-offset_bottom = -4.0
+layout_mode = 2
 mouse_default_cursor_shape = 0
-custom_fonts/font = SubResource( 2 )
-syntax_highlighter = true
-show_line_numbers = true
-__meta__ = {
-"_editor_description_": ""
-}
