@@ -103,7 +103,7 @@ func copy_to_texture(t : ImageTexture) -> void:
 
 func get_image() -> Image:
 	var image : Image = Image.new()
-	image.copy_from(texture.get_data())
+	image.copy_from(texture.get_image())
 	return image
 
 func save_to_file(fn : String, is_greyscale : bool = false) -> void:

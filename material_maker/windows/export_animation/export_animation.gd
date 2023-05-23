@@ -108,8 +108,7 @@ func _on_Export_pressed():
 			else:
 				spritesheet_columns = -spritesheet_lines
 				spritesheet_lines = (images-1)/spritesheet_columns+1
-			spritesheet = Image.new()
-			spritesheet.create(size * spritesheet_columns, size * spritesheet_lines, false, Image.FORMAT_RGBA8)
+			spritesheet = Image.create(size * spritesheet_columns, size * spritesheet_lines, false, Image.FORMAT_RGBA8)
 		else:
 			var regex : RegEx = RegEx.new()
 			regex.compile("#+")
