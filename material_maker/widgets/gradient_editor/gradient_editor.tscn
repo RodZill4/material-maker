@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://ccm3h8eyt35f5"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_editor.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://bhr527b431n55" path="res://material_maker/icons/icons.png" id="2_pf6la"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -31,19 +31,19 @@ shader = SubResource("3")
 [sub_resource type="Theme" id="5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ajidi"]
-atlas = ExtResource("2_pf6la")
+atlas = ExtResource("2")
 region = Rect2(64, 0, 32, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pqf16"]
-atlas = ExtResource("2_pf6la")
+atlas = ExtResource("2")
 region = Rect2(96, 0, 32, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e2ase"]
-atlas = ExtResource("2_pf6la")
+atlas = ExtResource("2")
 region = Rect2(64, 16, 32, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w5yhn"]
-atlas = ExtResource("2_pf6la")
+atlas = ExtResource("2")
 region = Rect2(96, 16, 32, 16)
 
 [node name="Control" type="Control"]
@@ -125,4 +125,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="resized" from="." to="." method="_on_Control_resized"]
-[connection signal="item_selected" from="Interpolation" to="." method="_on_Interpolation_item_selected"]
+[connection signal="pressed" from="Interpolation" to="." method="_on_interpolation_pressed"]
