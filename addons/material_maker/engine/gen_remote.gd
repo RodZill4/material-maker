@@ -55,7 +55,7 @@ func fix() -> void:
 			continue
 		var updated_linked_widgets : Array = []
 		for l in w.linked_widgets:
-			var linked_widget : MMGenBase = parent.get_node(l.node)
+			var linked_widget : MMGenBase = parent.get_node(NodePath(l.node))
 			if linked_widget != null and linked_widget.get_parameter_def(l.widget).size() > 0:
 				updated_linked_widgets.push_back(l)
 		if updated_linked_widgets.size() == 0:
@@ -99,7 +99,7 @@ func get_parameter_defs() -> Array:
 				if ! w.linked_widgets.is_empty():
 					var linked = w.linked_widgets[0]
 					if linked != null and is_inside_tree():
-						var gen = get_parent().get_node(linked.node)
+						var gen = get_parent().get_node(NodePath(linked.node))
 						if gen != null:
 							var gen_params = gen.get_parameter_defs()
 							for pd in gen_params:
@@ -129,7 +129,7 @@ func set_parameter(p : String, v) -> void:
 			match widget.type:
 				"linked_control":
 					for w in widget.linked_widgets:
-						var node = parent.get_node(w.node)
+						var node = parent.get_node(NodePath(w.node))
 						if node != null:
 							node.set_parameter(w.widget, v)
 				"config_control":
@@ -139,7 +139,7 @@ func set_parameter(p : String, v) -> void:
 						var configurations = widget.configurations.keys()
 						configurations.sort()
 						for w in widget.configurations[configurations[v]]:
-							var node = parent.get_node(w.node)
+							var node = parent.get_node(NodePath(w.node))
 							if node != null:
 								node.set_parameter(w.widget, MMType.deserialize_value(w.value))
 					else:
@@ -234,7 +234,7 @@ func can_link_parameter(widget_name : String, generator : MMGenBase, param : Str
 		# Check the parameter type
 		if widget.type == "linked_control":
 			var linked : Dictionary = widget.linked_widgets[0]
-			var linked_generator : MMGenBase = get_parent().get_node(linked.node)
+			var linked_generator : MMGenBase = get_parent().get_node(NodePath(linked.node))
 			var linked_parameter : Dictionary = linked_generator.get_parameter_def(linked.widget)
 			var parameter : Dictionary = generator.get_parameter_def(param)
 			if parameter.type != linked_parameter.type:
@@ -291,7 +291,7 @@ func update_configuration(widget_name : String, config_name : String) -> void:
 		var c = []
 		var parent = get_parent()
 		for w in widget.linked_widgets:
-			var g = parent.get_node(w.node)
+			var g = parent.get_node(NodePath(w.node))
 			if g != null:
 				var value = MMType.serialize_value(g.parameters[w.widget])
 				c.push_back({ node=w.node, widget=w.widget, value=value })

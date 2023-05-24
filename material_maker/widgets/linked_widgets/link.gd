@@ -85,4 +85,4 @@ func _input(event: InputEvent) -> void:
 				queue_free()
 				get_viewport().set_input_as_handled()
 				return
-	call_deferred("update")
+	queue_redraw.call_deferred()
