@@ -276,7 +276,8 @@ script = ExtResource( 6 )
 margin_right = 950.0
 margin_bottom = 24.0
 tab_align = 0
-tab_close_display_policy = 1
+tab_close_display_policy = 2
+drag_to_rearrange_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
