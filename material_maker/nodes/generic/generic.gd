@@ -578,7 +578,7 @@ func do_load_generator(file_name : String) -> void:
 
 func save_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	#dialog.custom_minimum_size = Vector2i(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")

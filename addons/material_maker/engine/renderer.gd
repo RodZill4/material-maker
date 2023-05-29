@@ -34,7 +34,6 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$ColorRect.visible = false
 	#hdr = true
 	render_target_update_mode = SubViewport.UPDATE_ONCE
-	#update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	texture = get_texture()
@@ -79,7 +78,6 @@ func render_material(object : Object, material : Material, render_size : int, wi
 			for y in range(chunk_count):
 				material.set_shader_parameter("mm_chunk_offset", render_scale*Vector2(x, y))
 				render_target_update_mode = SubViewport.UPDATE_ONCE
-				#update_worlds()
 				await get_tree().process_frame
 				await get_tree().process_frame
 				image.blit_rect(get_texture().get_image(), Rect2(0, 0, size.x, size.y), Vector2(x*size.x, y*size.y))

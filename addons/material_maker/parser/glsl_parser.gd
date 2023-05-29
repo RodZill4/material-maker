@@ -24,6 +24,7 @@ const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"sampler1dshadow", "sampler2dshadow" ]
 
 func _init():
+	super._init()
 	init_lexer(REGEXS)
 
 func create_token(type : String, value, pos_begin : int, pos_end : int) -> Token:

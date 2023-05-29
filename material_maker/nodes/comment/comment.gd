@@ -58,7 +58,7 @@ func resize_to_selection() -> void:
 		var min_bounds : Vector2 = Vector2(INF, INF)
 		var max_bounds : Vector2 = Vector2(-INF, -INF)
 		for node in selected_nodes:
-			var node_pos : Vector2 = node.offset
+			var node_pos : Vector2 = node.position_offset
 			var node_size : Vector2 = node.get_size()
 			
 			# Top-left corner
