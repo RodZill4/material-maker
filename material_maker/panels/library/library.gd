@@ -341,7 +341,6 @@ func update_from_locale() -> void:
 
 func _on_GetFromWebsite_pressed():
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
-	add_child(dialog)
 	var result = await dialog.select_asset(3, true)
 	if result is Dictionary and result.has("index"):
 		var graph_edit : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()

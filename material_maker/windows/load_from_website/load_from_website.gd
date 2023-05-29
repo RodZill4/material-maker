@@ -64,6 +64,9 @@ func fill_list(filter : String):
 			item_index += 1
 
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
+	# Hide the window until the asset list is loaded
+	visible = false
+	mm_globals.main_window.add_dialog(self)
 	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
 		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
@@ -71,6 +74,7 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 		if json.parse(data) == OK and json.get_data() is Array:
 			only_return_index = return_index
 			var parse_result : Array = json.get_data()
+			visible = true
 			popup_centered()
 			var tmp_assets = parse_result
 			tmp_assets.reverse()

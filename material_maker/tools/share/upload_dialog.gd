@@ -23,7 +23,6 @@ func _on_UploadDialog_popup_hide() -> void:
 
 func ask(data : Dictionary) -> Dictionary:
 	mm_globals.main_window.add_dialog(self)
-	print(data)
 	if data.type == "node":
 		asset_target.visible = false
 	else:

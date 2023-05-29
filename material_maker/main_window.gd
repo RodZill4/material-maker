@@ -504,9 +504,8 @@ func new_paint_project(obj_file_name = null) -> void:
 		return
 
 	var new_painter_dialog = preload("res://material_maker/windows/new_painter/new_painter.tscn").instantiate()
-	add_child(new_painter_dialog)
 	var result = await new_painter_dialog.ask(obj_file_name)
-	if result == null:
+	if ! result.has("mesh"):
 		return
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
 	projects.add_tab(paint_panel)
@@ -601,7 +600,6 @@ func do_load_painting(filename : String) -> bool:
 
 func load_material_from_website() -> void:
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
-	add_child(dialog)
 	var result = await dialog.select_asset()
 	if result == {}:
 		return

@@ -14,7 +14,6 @@ func _on_GetFromWebsite_pressed():
 	if not project_panel.has_method("set_brush"):
 		return
 	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
-	add_child(dialog)
 	var result : Dictionary = await dialog.select_asset(1)
 	if result != {}:
 		project_panel.set_brush(result)
