@@ -846,7 +846,7 @@ func get_shader_model_for_edit():
 func do_edit(node, edit_window_scene : PackedScene) -> void:
 	if shader_model != null:
 		var edit_window = edit_window_scene.instantiate()
-		node.get_parent().add_child(edit_window)
+		mm_globals.main_window.add_dialog(edit_window)
 		edit_window.set_model_data(get_shader_model_for_edit())
 		edit_window.connect("node_changed",Callable(node,"update_shader_generator"))
 		edit_window.connect("popup_hide",Callable(edit_window,"queue_free"))

@@ -21,11 +21,6 @@ signal node_changed(model_data)
 signal editor_window_closed
 
 
-func _ready() -> void:
-	for e in [ main_code_editor, instance_functions_editor, global_functions_editor ]:
-		e.add_comment_delimiter("//", "", true)
-		e.add_comment_delimiter("/*", "*/", false)
-
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
 	parent.add_child(object)
@@ -122,7 +117,7 @@ func _on_Functions_text_changed():
 	var text : String = global_functions_editor.text
 	var error_label = $"Sizer/TabBar/Global Functions/Functions/ErrorLabel"
 	if globals_error_line != -1:
-		global_functions_editor.set_line_as_safe(globals_error_line, false)
+		global_functions_editor.set_line_as_executing(globals_error_line, false)
 		error_label.visible = false
 	var result = parser.parse(global_functions_editor.text)
 	if result is Dictionary and result.has("status"):
@@ -134,7 +129,7 @@ func _on_Functions_text_changed():
 					error_label.text = "GLSL position unit expected (found %s)" % result.non_terminal
 			_:
 				globals_error_line = text.substr(0, result.pos).count("\n")
-				global_functions_editor.set_line_as_safe(globals_error_line, true)
+				global_functions_editor.set_line_as_executing(globals_error_line, true)
 				error_label.visible = true
 				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 

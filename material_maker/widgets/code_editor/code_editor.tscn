@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddgb7ul6fncx8"]
+
+[ext_resource type="FontFile" uid="uid://c4vhxy5kgdp8s" path="res://material_maker/fonts/hack.ttf" id="1_o6uhb"]
+[ext_resource type="Script" path="res://material_maker/widgets/code_editor/code_editor.gd" id="2_b3eoo"]
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_cib74"]
+number_color = Color(1, 0.756863, 0, 1)
+symbol_color = Color(0.447059, 0.752941, 0.776471, 1)
+function_color = Color(0.74902, 0.435294, 1, 1)
+member_variable_color = Color(0.419608, 1, 0.4, 1)
+
+[node name="Main Code" type="CodeEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 0
+theme_override_fonts/font = ExtResource("1_o6uhb")
+theme_override_font_sizes/font_size = 12
+highlight_all_occurrences = true
+highlight_current_line = true
+draw_tabs = true
+syntax_highlighter = SubResource("CodeHighlighter_cib74")
+minimap_draw = true
+auto_brace_completion_enabled = true
+auto_brace_completion_highlight_matching = true
+script = ExtResource("2_b3eoo")

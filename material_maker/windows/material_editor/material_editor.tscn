@@ -1,13 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bk5gqlr6u8srf"]
+[gd_scene load_steps=4 format=3 uid="uid://bk5gqlr6u8srf"]
 
 [ext_resource type="PackedScene" uid="uid://cbpg2wtvf7fc1" path="res://material_maker/windows/node_editor/node_editor.tscn" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/material_editor/material_editor.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="3_ifey0"]
 
 [node name="MaterialEditor" instance=ExtResource("1")]
 title = "Material Editor"
 script = ExtResource("2")
 
-[node name="Preview" type="TextEdit" parent="Sizer/TabBar" index="6"]
+[node name="Main Code" parent="Sizer/TabBar" index="3"]
+visible = false
+delimiter_strings = Array[String](["\" \"", "' '"])
+
+[node name="Instance Functions" parent="Sizer/TabBar" index="4"]
+visible = false
+delimiter_strings = Array[String](["\" \"", "' '"])
+
+[node name="Functions" parent="Sizer/TabBar/Global Functions" index="1"]
+delimiter_strings = Array[String](["\" \"", "' '"])
+
+[node name="Preview" parent="Sizer/TabBar" index="6" instance=ExtResource("3_ifey0")]
 visible = false
 layout_mode = 2
-mouse_default_cursor_shape = 0

@@ -1,17 +1,31 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbpg2wtvf7fc1"]
+[gd_scene load_steps=9 format=3 uid="uid://cbpg2wtvf7fc1"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 [ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="5_l5uxq"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("3")
 region = Rect2(48, 0, 16, 16)
 
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_g2tsy"]
+number_color = Color(0.341176, 0.352941, 1, 1)
+symbol_color = Color(0.768627, 0.776471, 0, 1)
+function_color = Color(0.792157, 0, 0.796078, 1)
+member_variable_color = Color(0, 0.639216, 0.635294, 1)
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_062tj"]
+number_color = Color(0.341176, 0.352941, 1, 1)
+symbol_color = Color(0.768627, 0.776471, 0, 1)
+function_color = Color(0.792157, 0, 0.796078, 1)
+member_variable_color = Color(0, 0.639216, 0.635294, 1)
+
 [node name="NodeEditor" type="Window"]
 initial_position = 2
 title = "Node Editor"
+size = Vector2i(950, 450)
 exclusive = true
 script = ExtResource("1")
 
@@ -110,15 +124,14 @@ size_flags_horizontal = 0
 icon = SubResource("1")
 flat = true
 
-[node name="Main Code" type="CodeEdit" parent="Sizer/TabBar"]
-visible = false
+[node name="Main Code" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 layout_mode = 2
-mouse_default_cursor_shape = 0
+delimiter_strings = Array[String](["' '", "\" \""])
 
-[node name="Instance Functions" type="CodeEdit" parent="Sizer/TabBar"]
-visible = false
+[node name="Instance Functions" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 layout_mode = 2
-mouse_default_cursor_shape = 0
+syntax_highlighter = SubResource("CodeHighlighter_g2tsy")
+delimiter_strings = Array[String](["' '", "\" \""])
 
 [node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
@@ -135,11 +148,11 @@ text = "Includes:"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Functions" type="CodeEdit" parent="Sizer/TabBar/Global Functions"]
+[node name="Functions" parent="Sizer/TabBar/Global Functions" instance=ExtResource("5_l5uxq")]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_default_cursor_shape = 0
-minimap_draw = true
+syntax_highlighter = SubResource("CodeHighlighter_062tj")
+delimiter_strings = Array[String](["' '", "\" \""])
 
 [node name="ErrorLabel" type="Label" parent="Sizer/TabBar/Global Functions/Functions"]
 visible = false
@@ -150,7 +163,7 @@ anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = -17.0
 offset_right = -2.0
-offset_bottom = -7.0
+offset_bottom = 6.0
 clip_text = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]

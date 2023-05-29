@@ -5,11 +5,6 @@ extends "res://material_maker/windows/node_editor/node_editor.gd"
 var exports : Dictionary = {}
 
 
-func _ready():
-	pass
-	#preview_editor.add_color_region("//", "", Color(0, 0.5, 0), true)
-
-
 func set_model_data(data) -> void:
 	super.set_model_data(data)
 	if data.has("preview_shader"):
